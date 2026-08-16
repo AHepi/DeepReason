@@ -672,7 +672,10 @@ def test_results_names_the_neural_backend_when_no_fallback_happened():
     assert embedder["backend"] in {"hashing", "neural"}
     assert isinstance(embedder["fingerprint"], str)
     rendered = render_results(summary)
-    assert "embedder:" in rendered
+    assert f"{embedder['backend']} ({embedder['model']})" in rendered
+    # The no-fallback line must NOT carry the alarm word, or "(fallback)"
+    # stops distinguishing anything.
+    assert "(fallback)" not in rendered
 
 
 def test_results_embedder_absence_is_typed_not_a_failure():

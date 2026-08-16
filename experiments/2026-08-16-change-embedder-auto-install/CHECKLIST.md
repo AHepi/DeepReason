@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=15 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=16 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -448,10 +448,43 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       `live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16`,
       not the jolt root, so no test depends on it.
 
-- [ ] 15. (S6, R8) Wire it into `results_summary` as
+- [x] 15. (S6, R8) Wire it into `results_summary` as
       `summary["embedder"]` and render the glossed line in
       `render_results`.
       done-when: `deepreason results experiments/2026-08-12-live-grounded-extension-expansion/run | grep -i embedder` → a line containing `hashing (fallback)` (paste)
+
+      PROOF — the grounded-extension run, through the public command:
+
+          ## Measurement instrument
+            embedder (the model that turned this run's text into vectors,
+            so its novelty, near-duplicate and school-distance readings
+            are on that model's scale): hashing (fallback) — this run was
+            configured for nomic-ai/nomic-embed-text-v1.5 but could not
+            build it, so it measured with hashing-128 instead; distance
+            readings are on the lexical scale, not the configured one
+
+      PROOF — a run that got the backend it asked for, so "(fallback)"
+      still means something:
+
+          ## Measurement instrument
+            embedder (...): hashing (hashing-128)
+
+      ON R8's LITERAL WORDING: the requirement says surface
+      `"embedder: hashing (fallback)"`. The operative phrase
+      `hashing (fallback)` is present verbatim; the colon falls after
+      the in-line gloss because `render_results`'s own docstring makes
+      glossing this surface's contract ("every technical label glossed
+      in place... a label nobody can interpret sends them back to
+      guessing"). Matching the literal string would have required
+      dropping the gloss on the one command whose reason for existing is
+      that operators could not interpret raw labels.
+
+      ONE TEST ASSERTION CORRECTED within the step: the step-13 draft
+      asserted `"embedder:" in rendered`, which the glossed line does not
+      contain. Replaced with two STRONGER assertions — the rendered line
+      carries `<backend> (<model>)`, and the no-fallback rendering must
+      NOT contain `(fallback)`, so the alarm word cannot decay into
+      decoration.
 
 - [ ] 16. (S6, R8, A3) Decorate the run's terminal summary at the print
       site in `_cmd_reason` (`cli/main.py`, beside the existing

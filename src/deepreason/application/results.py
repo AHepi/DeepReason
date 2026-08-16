@@ -422,6 +422,29 @@ def _show(value: Any) -> str:
     return str(value)
 
 
+def _embedder_line(embedder: dict[str, Any]) -> str:
+    """One line naming the geometry, and saying plainly when it is not the
+    one the run asked for.
+
+    The fallback is spelled out rather than implied by a differing model id:
+    a reader who does not already know that `hashing-128` is the degraded
+    backend learns nothing from seeing it, which is how a typed, recorded
+    substitution went unread through 24 live cycles.
+    """
+
+    if _is_absent(embedder):
+        return "not recorded (this run predates the embedder stamp)"
+    backend, model = embedder["backend"], embedder["model"]
+    if not embedder["fallback"]:
+        return f"{backend} ({model})"
+    configured = embedder["configured_model"] or "a neural model"
+    return (
+        f"{backend} (fallback) — this run was configured for {configured} "
+        f"but could not build it, so it measured with {model} instead; "
+        f"distance readings are on the lexical scale, not the configured one"
+    )
+
+
 def render_results(summary: dict[str, Any]) -> str:
     """The summary as reader-facing text, every technical label glossed in place.
 
@@ -480,6 +503,11 @@ def render_results(summary: dict[str, Any]) -> str:
         f"  trials declined (the case did not sustain): "
         f"{_show(adjudication['trial_declined'])}",
         f"  trials blocked by a guard: {_show(adjudication['trial_blocked'])}",
+        "",
+        "## Measurement instrument",
+        f"  embedder (the model that turned this run's text into vectors, so "
+        f"its novelty, near-duplicate and school-distance readings are on "
+        f"that model's scale): {_embedder_line(summary['embedder'])}",
         "",
         "## Verification",
         f"  verify_root verdict (the replay check that re-derives the whole run "
@@ -547,6 +575,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "run": _run(status, stop),
         "artifacts": _artifacts(positions, status, result),
         "adjudication": _adjudication(harness),
+        "embedder": embedder_summary(harness),
         "verification": _verification(root, replay, result, verify=verify),
         "amendment": _amendment(root),
         "terminal": _terminal(replay, stop),
