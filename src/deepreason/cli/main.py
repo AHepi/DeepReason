@@ -2323,7 +2323,7 @@ def _cmd_reason(args) -> int:
 
     from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
     from deepreason.application.intents import start_text_run_intent
-    from deepreason.application.results import embedder_summary
+    from deepreason.application.results import embedder_summary_for_root
     from deepreason.preparation import (
         PUBLIC_DEFAULT_CYCLES,
         PUBLIC_DEFAULT_TOKEN_BUDGET,
@@ -2406,7 +2406,7 @@ def _cmd_reason(args) -> int:
     # any surface that showed it to whoever launched the run. Derived here
     # beside run_id for the same reason run_id is — the durable sidecar is a
     # published artifact and this is a courtesy for the person reading stdout.
-    payload["embedder"] = embedder_summary(Harness(accepted.root, read_only=True))
+    payload["embedder"] = embedder_summary_for_root(accepted.root)
     print(json.dumps(payload, indent=2, sort_keys=True))
     return terminal.exit_code()
 

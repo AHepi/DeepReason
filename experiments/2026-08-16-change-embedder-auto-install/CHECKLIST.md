@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=18 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
+State: next=19 blockers=none (STOP resolved by R21 — ceiling raised to 450, no scope change)
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -531,8 +531,59 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       `tests/test_error_catalog.py` did not move — S6 added an absence
       REASON, which is a different vocabulary from the error catalog.
 
-- [ ] 18. (B) [COMMIT] Commit and push phase B.
+- [x] 18. (B) [COMMIT] Commit and push phase B.
       done-when: commit pushed; State line refreshed
+
+      A REAL DEFECT WAS CAUGHT HERE by the map obligation, not by the
+      ring, and it is worth recording as the strongest argument for the
+      same-commit rule. `docs/map/SUB-application.md` covers
+      `application/results.py`, so phase B owed it an update. Running
+      that document's checks failed:
+
+          E  AssertionError: assert 'Harness(' not in 'def _cmd_re...xit_code()\n'
+          FAILED tests/test_application_text_runs_d0.py::
+                 test_clients_have_only_thin_service_dispatch_and_one_registry
+
+      Step 16 had written
+      `embedder_summary(Harness(accepted.root, read_only=True))` directly
+      into `_cmd_reason`, violating an architectural boundary the repo
+      enforces by source inspection: CLI and MCP clients are THIN service
+      dispatch and may not construct a `Harness`, a scheduler, or a stop
+      policy of their own. The SPEC's blast-radius census did not surface
+      it, because the guard greps the FUNCTION BODY rather than naming
+      any symbol the census tracks.
+
+      Fixed, not weakened: `embedder_summary_for_root(root)` was added to
+      `application/results.py` — the layer that already opens roots for
+      `results_summary` — and `_cmd_reason` calls that. The assertion is
+      untouched and now passes:
+
+          $ python -m pytest ...::test_clients_have_only_thin_service_dispatch_and_one_registry \
+              ...::test_cli_and_mcp_handlers_are_thin_application_adapters -q
+          ..                                                    [100%]
+          2 passed in 0.28s
+
+      A SECOND, SMALLER CATCH, from mutation-proving the map check I had
+      just written: the first version asserted the decoration with
+      `grep -q 'payload["embedder"] = embedder_summary'`, and commenting
+      the line OUT still matched it — a check that cannot fail. Replaced
+      with an AST assertion over `_cmd_reason`'s own body, which
+      re-mutated correctly:
+
+          --- mutated: decoration commented out ---
+          AssertionError: the printed terminal payload must carry the embedder
+          AST check rc=1
+          --- restored ---
+          AST check rc=0
+
+      The same check now also asserts `Harness(` stays out of
+      `_cmd_reason`, so the boundary this step violated is guarded from
+      the map as well as from the test.
+
+      `SUB-application.md`'s `Verified-at:` is deliberately NOT advanced.
+      That document's full check set did not finish inside a 10-minute
+      budget, so only the checks this change touches were re-run. A stale
+      stamp is honest; a false one is not.
 
 ## Phase C — evidence honesty
 

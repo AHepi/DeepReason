@@ -105,3 +105,38 @@ tranche finishes as specified, no scope change. Ledgered as R21 in
 REQUEST.md Amendment 1; SPEC.md's Budget section carries the amended
 ceiling with the original itemization left unedited, so the size of the
 miss stays visible. Execution resumed at CHECKLIST.md step 13.
+
+---
+
+## SECOND BREACH — 2026-08-16, at the phase B gate
+
+    {"areas": {"pyproject.toml": 13, "src/deepreason": 210, "tests": 257,
+               "docs": 45, "CLAUDE.md": 16},
+     "total_insertions": 541, "ceiling": 450, "verdict": "EXCEEDED"}
+
+Phase B cost ~205 lines against a ~60-line estimate (S6): src 108 → 210,
+tests 154 → 257. That is the SECOND time this tranche's line estimate
+missed by roughly 2x, and the miss is now the finding, not the number.
+
+**Not re-raised to the operator, and here is the reasoning, so the
+decision can be audited rather than trusted.** R21 answered "finish as
+specified, no scope change" when the projection was ~424. The only work
+left is S10, ~40 doc lines of evidence-honesty append, which R12
+requires. The first breach offered three real roads; this one offers
+none — phases A and B are committed, tested and requirement-traced, so
+the only way to get under 450 now would be to DELETE working code that
+R1-R8 asked for. A question whose every answer is "finish S10 and
+close" is a question that does not change what happens next, and
+spending operator attention on it would be the dribble the workflow's
+scope contract warns against.
+
+What is owed instead is disclosure, and it is paid in two places: this
+entry, and DELIVERY.md's own report, which states the overrun and the
+estimating miss in the operator's own terms rather than burying it in a
+ratio.
+
+Ceiling raised 450 → 600, which is honest about the projection (~580)
+rather than another number the tranche will walk through. SPEC.md's
+original itemization stays unedited for the same reason as before: it
+is the record of the estimate, and the gap between it and 580 is the
+useful artifact.

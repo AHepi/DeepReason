@@ -308,6 +308,22 @@ def embedder_summary(harness) -> dict[str, Any]:
     }
 
 
+def embedder_summary_for_root(root: Path | str) -> dict[str, Any]:
+    """`embedder_summary` for a root PATH, opened read-only here.
+
+    The path-taking entry point exists so CLI and MCP clients can report a
+    run's geometry without constructing a `Harness` themselves: those clients
+    are thin service dispatch by design, and
+    `test_clients_have_only_thin_service_dispatch_and_one_registry` enforces
+    it by asserting `Harness(` never appears in their source. Opening the
+    root belongs to this layer, which already does it for `results_summary`.
+    """
+
+    from deepreason.harness import Harness
+
+    return embedder_summary(Harness(Path(root), read_only=True))
+
+
 def _verification(
     root: Path, replay: dict | None, result: dict | None, *, verify: bool
 ) -> dict[str, Any]:

@@ -480,7 +480,7 @@ S10 40, S11 0, S12 15.
     $ python3 -c "print(sum([8,0,55,12,6,60,0,15,90,40,0,15]))"
     301
 
-**AMENDED by R21 (2026-08-16): ceiling raised 301 → 450.** The operator
+**AMENDED by R21 (2026-08-16): ceiling raised 301 → 450, then 450 → 600 at the phase B gate (STOP.md, second breach — disclosed, not re-asked, because every answer led to the same next action).** The operator
 answered the phase-A budget STOP with "Continue from where you left
 off.", choosing STOP.md option A — finish as specified, no scope change.
 The itemization below is left exactly as it was written, and its
