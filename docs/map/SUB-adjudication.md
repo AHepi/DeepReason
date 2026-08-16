@@ -181,15 +181,4 @@ are never read back from the log — reopening a root replays the events and
 recomputes them, so a semantics change does not "improve" old runs, it makes them
 disagree with the `att+` and `status_changed` deltas they recorded at write time.
 Treat this package under `DR-INV-frozen-surfaces`: fix readers, not labels.
-    python -c "import json,pathlib; from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; rec={tuple(p) for l in pathlib.Path(r+'/log.jsonl').read_text().splitlines() for p in json.loads(l)['state_diff']['att+']}; h=Harness(r, read_only=True); assert rec and rec=={tuple(p) for p in h.state.att}; assert sum(1 for s in h.state.status.values() if s==Status.REFUTED)==1"
-
-**RETIRED 2026-08-15 — this claim was authenticated against a PRE-v2 run root,
-and v2 readers no longer parse it.** Deleting `SpawnTrigger.SUCCESSOR` (the
-decommissioned website pipeline's remnant, operator ruling 2026-08-15) means
-roots carrying `trigger: "successor"` no longer load. That is the 2026-08-14
-law working as written — "old runs do not need to be valid or returnable" — and
-NOT a defect to repair by widening a reader. The claim itself is unchanged and
-still believed; what it lost is its historical witness. It is re-authenticated
-the moment a current-version root exercises the same property, and the honest
-state until then is an unwitnessed claim, said so here rather than left as a
-green check over a root nobody can open.
+`check: python -c "import json,pathlib; from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; rec={tuple(p) for l in pathlib.Path(r+'/log.jsonl').read_text().splitlines() for p in json.loads(l)['state_diff']['att+']}; h=Harness(r, read_only=True); assert rec and rec=={tuple(p) for p in h.state.att}; assert sum(1 for s in h.state.status.values() if s==Status.REFUTED)==1"`

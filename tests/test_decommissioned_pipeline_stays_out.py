@@ -20,14 +20,24 @@ from deepreason.ontology import SpawnTrigger
 # --- the remnant is gone, and cannot come back quietly ----------------------
 
 
-def test_no_successor_trigger_exists_anywhere():
-    assert not hasattr(SpawnTrigger, "SUCCESSOR")
-    assert "successor" not in {trigger.value for trigger in SpawnTrigger}
+def test_the_successor_trigger_is_inert_vocabulary():
+    """The member is RETAINED and nothing produces it.
+
+    Deleting it was measured (Road A) and costs four tests that replay pre-v2
+    roots -- a cost the 2026-08-14 law permits but which buys nothing here,
+    because zero producers is what actually keeps the pipeline decommissioned.
+    The member is a dead name; the invariant that matters is the next test.
+    """
+    assert hasattr(SpawnTrigger, "SUCCESSOR")
 
 
 def test_no_source_file_produces_a_successor_problem():
-    """Producers = 0 is what licensed deleting the member. If a producer comes
-    back, this fails before the enum does."""
+    """THE load-bearing invariant: producers = 0.
+
+    The pipeline stays decommissioned because nothing mints a successor
+    problem, not because the vocabulary lost a word. If a producer comes back,
+    this fails -- which is the alarm that matters.
+    """
     import pathlib
 
     hits = [
@@ -38,6 +48,8 @@ def test_no_source_file_produces_a_successor_problem():
         or "trigger='successor'" in line
         or 'trigger="successor"' in line
         or "SpawnTrigger.SUCCESSOR" in line
+        # The enum's own declaration is the one legal mention.
+        if "ontology/problem.py" not in str(path)
     ]
     assert hits == [], hits
 

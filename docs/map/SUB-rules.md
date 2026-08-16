@@ -133,13 +133,15 @@ Every `Measure` tag this package emits (`arg-crit`, `scrutiny`, `gate:`,
 registered in `src/deepreason/signals.py`, which is AST-scanned by the gate.
 `check: for tag in arg-crit arg-crit-overridden-by-execution scrutiny conj-noregister synth-noregister "gate:" vision-crit browser-pass; do grep -q "\"$tag\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py -q`
 
-`scan_spawns` covers SIX of the EIGHT `SpawnTrigger` values. `SEED` is the
+`scan_spawns` covers SIX of the nine `SpawnTrigger` values. `SEED` is the
 operator's and `AUDIT_CRITIC` is raised by the response ladder (§11.4), not
-here. There is no seventh: `SUCCESSOR` was deleted from the enum entirely once
-its producers reached zero (Rung 3a removed the refuted⇒successor branch; Rung
-3d removed the decommissioned pipeline's remnant that had kept the member
-alive).
-`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 8 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC)" src/deepreason/rules/spawn.py && ! grep -q "SUCCESSOR" src/deepreason/ontology/problem.py`
+here. `SUCCESSOR` is the third absentee and the interesting one: it is INERT
+VOCABULARY with **zero producers anywhere** — Rung 3a removed the
+refuted⇒successor branch, Rung 3d removed the decommissioned website
+pipeline's remnant. The member was retained deliberately: deleting it fixes
+nothing and breaks four tests that replay pre-v2 roots, and what keeps the
+pipeline decommissioned is the absent producer, not the absent name.
+`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC|SUCCESSOR)" src/deepreason/rules/spawn.py && ! grep -rq "SpawnTrigger.SUCCESSOR" src/deepreason/rules/ src/deepreason/easy.py`
 
 ## Where to change what
 

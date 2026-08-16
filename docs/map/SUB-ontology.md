@@ -38,7 +38,7 @@ the bytes on disk.
 - `Interface`, `Ref`, `RefRole` — the attack/support surface: `dependence` builds `dep`, `evidence` feeds validity-node closure, `mention` is inert for edges.
 - `Provenance`, `ProvenanceRole` — generator role plus the school that conditioned it; never an input to status.
 - `Commitment`, `Budget` — a decidable test `eval` (`program:` / `predicate:` / `rubric:`) with a finite declared budget.
-- `Problem`, `ProblemProvenance`, `SpawnTrigger` — the frontier item and the EIGHT typed reasons a problem exists. There is no `SUCCESSOR`: a failed verdict mints nothing (H1), and the member was deleted once its last producer, a remnant of the decommissioned website pipeline, was removed.
+- `Problem`, `ProblemProvenance`, `SpawnTrigger` — the frontier item and the nine typed reasons a problem exists. `SUCCESSOR` is inert: a failed verdict mints nothing (H1) and the decommissioned website pipeline's remnant producer is gone, so the name survives with nothing behind it.
 - `Warrant`, `WarrantType` — a contentful attack; `validity_node` is the attackable claim that the test was sound and relevant.
 - `EpistemicState` — the materialized view `(A, Pi, carries, att, dep, addr, status, hv, reach, conn)` the harness rebuilds by replay.
 - `Status` — the four labels the two-pass adjudicator assigns.
@@ -128,7 +128,7 @@ that treats "not accepted" as refuted misreads three of the four labels.
 **`POPPER_BATTERY` is empty.** The auto-pinning mechanism in
 `Harness.register_problem` is structural and live, but it currently pins nothing;
 a test asserting battery contents would be asserting aspiration, not behaviour.
-`check: python -c "from deepreason.ontology.problem import POPPER_BATTERY, SpawnTrigger; assert POPPER_BATTERY == () and len(SpawnTrigger) == 8"`
+`check: python -c "from deepreason.ontology.problem import POPPER_BATTERY, SpawnTrigger; assert POPPER_BATTERY == () and len(SpawnTrigger) == 9"`
 
 **Every optional `Event` / `LLMCall` field carries `exclude_if=lambda value: value
 is None` so that a formal event still serializes to its historical key set.**

@@ -30,12 +30,12 @@ this document's reason to exist:
 **A policy consulted at LABEL time reinterprets committed evidence.**
 Making `final_labels` policy-dependent and reopening `run-f4fa6663`'s
 UNCHANGED bytes moves its recorded `REFUTED` count from 1 to 0.
-    python -W ignore -c "import deepreason.harness as H; from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; base=sum(1 for s in Harness(r,read_only=True).state.status.values() if s==Status.REFUTED); assert base==1, base; orig=H.final_labels; H.final_labels=(lambda o: lambda l,d: {k:(Status.ACCEPTED if v==Status.REFUTED else v) for k,v in o(l,d).items()})(orig); moved=sum(1 for s in Harness(r,read_only=True).state.status.values() if s==Status.REFUTED); H.final_labels=orig; assert moved==0, moved"
+`check: python -W ignore -c "import deepreason.harness as H; from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; base=sum(1 for s in Harness(r,read_only=True).state.status.values() if s==Status.REFUTED); assert base==1, base; orig=H.final_labels; H.final_labels=(lambda o: lambda l,d: {k:(Status.ACCEPTED if v==Status.REFUTED else v) for k,v in o(l,d).items()})(orig); moved=sum(1 for s in Harness(r,read_only=True).state.status.values() if s==Status.REFUTED); H.final_labels=orig; assert moved==0, moved"`
 
 **A policy consulted at MINT time cannot.** Sabotaging
 `register_fail_warrant` so that any execution raises, then reopening the
 same root, changes nothing — replay never executes `rules/`.
-    python -W ignore -c "import deepreason.rules.warrants as W; W.register_fail_warrant=lambda *a,**k: (_ for _ in ()).throw(AssertionError('mint executed during replay')); from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; h=Harness(r,read_only=True); assert len(h.state.att)==1, len(h.state.att); assert sum(1 for s in h.state.status.values() if s==Status.REFUTED)==1"
+`check: python -W ignore -c "import deepreason.rules.warrants as W; W.register_fail_warrant=lambda *a,**k: (_ for _ in ()).throw(AssertionError('mint executed during replay')); from deepreason.harness import Harness; from deepreason.ontology import Status; r='experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf'; h=Harness(r,read_only=True); assert len(h.state.att)==1, len(h.state.att); assert sum(1 for s in h.state.status.values() if s==Status.REFUTED)==1"`
 
 So the agreement, in one line: **authority may be consulted where a
 warrant is minted, and never where a label is computed.**
@@ -184,14 +184,3 @@ it is why the adjudication-blindness detector lives in
   the boundary is unguarded. Every such reason lives upstream, at the
   mint site, and `DR-SEAM-adjudication-x-rules` holds the guard-by-guard
   version of the same warning.
-
-**RETIRED 2026-08-15 — this claim was authenticated against a PRE-v2 run root,
-and v2 readers no longer parse it.** Deleting `SpawnTrigger.SUCCESSOR` (the
-decommissioned website pipeline's remnant, operator ruling 2026-08-15) means
-roots carrying `trigger: "successor"` no longer load. That is the 2026-08-14
-law working as written — "old runs do not need to be valid or returnable" — and
-NOT a defect to repair by widening a reader. The claim itself is unchanged and
-still believed; what it lost is its historical witness. It is re-authenticated
-the moment a current-version root exercises the same property, and the honest
-state until then is an unwitnessed claim, said so here rather than left as a
-green check over a root nobody can open.

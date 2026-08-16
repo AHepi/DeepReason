@@ -120,27 +120,29 @@ def test_every_other_structural_trigger_still_fires(tmp_path):
 
     assert SpawnTrigger.DISCRIMINATION in triggers, "two survivors, no rivalry"
     assert triggers, "the frontier must still grow by the structural routes"
-    # The route that closed cannot even be named any more: the trigger was
-    # deleted with the decommissioned pipeline that was its last producer.
-    assert not hasattr(SpawnTrigger, "SUCCESSOR")
+    # The route that closed: SUCCESSOR remains in the vocabulary as an inert
+    # name, and nothing -- here or anywhere -- produces it.
+    assert SpawnTrigger.SUCCESSOR not in triggers
 
 
-def test_the_successor_trigger_is_gone_entirely(tmp_path):
-    """RETIRED AND REPLACED — operator ruling 2026-08-15: "There was a website development pipeline that I decommissioned a while ago. That needs to stay decommissioned.""
+def test_the_successor_trigger_has_no_producer_left(tmp_path):
+    """RETIRED AND RE-FOUNDED — operator ruling 2026-08-15, the website
+    development pipeline stays decommissioned.
 
-    The earlier form of this test asserted that `SpawnTrigger.SUCCESSOR`
-    SURVIVED, because `easy.py::seed_component` still stamped it on a
-    staged-pipeline component repair problem. The operator's ruling reframed
-    that producer as a REMNANT of an already-decommissioned pipeline rather
-    than a feature to preserve, so the producer went, and with producers at
-    zero the member went too.
+    The earlier form asserted the member SURVIVED because `easy.py` still
+    stamped it on a staged-pipeline repair problem. The ruling reframed that
+    producer as a remnant, so the producer went. Deleting the member too was
+    measured and declined: it costs four tests that replay pre-v2 roots and
+    buys nothing, because what keeps the pipeline decommissioned is ZERO
+    PRODUCERS, not a shorter enum.
 
-    Retirement is the correct disposition here, not a weakening: the property
-    the old test protected (nothing breaks by deleting the member) was true
-    only while a producer existed, and asserting it now would be asserting the
-    remnant back into place.
+    Re-founding rather than deletion: the property worth protecting moved from
+    "the member survives" to "nothing produces it", which is the stronger claim.
     """
     from deepreason.ontology import SpawnTrigger
 
-    assert not hasattr(SpawnTrigger, "SUCCESSOR")
-    assert "successor" not in {t.value for t in SpawnTrigger}
+    assert hasattr(SpawnTrigger, "SUCCESSOR")   # inert vocabulary
+    from deepreason.rules.spawn import scan_spawns
+    import inspect
+
+    assert "SpawnTrigger.SUCCESSOR" not in inspect.getsource(scan_spawns)
