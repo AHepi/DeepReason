@@ -11,6 +11,13 @@ requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2.7",
     "pyyaml>=6.0",
+    # Neural embedder backend (src/deepreason/llm/embedder.py). CORE, not
+    # optional: config.EMBEDDER_MODEL defaults to a neural model, and an
+    # absent backend degrades every run to HashingEmbedder under
+    # EMBEDDER_FAILURE_POLICY="fallback" — a typed `embedder-fallback`
+    # measure that no reader was looking at. The default must be armed by
+    # the same install that arms the harness.
+    "fastembed>=0.3",
 ]
 
 [project.optional-dependencies]
@@ -23,14 +30,12 @@ dev = [
 browser = [
     "playwright>=1.45",
 ]
-# Neural embedder (src/deepreason/llm/embedder.py): ONNX/CPU semantic
-# embeddings via fastembed, enabled by the EMBEDDER_MODEL knob. Optional —
-# without it the harness keeps the zero-dependency hashing embedder, and a
-# configured-but-missing backend degrades visibly (embedder-fallback on the
-# log). Recalibrate distance thresholds when switching (deepreason calibrate).
-embed = [
-    "fastembed>=0.3",
-]
+# Neural embedder: EMPTY ALIAS. fastembed moved into the core dependency
+# list above, so `pip install -e .` already carries it. The group is kept
+# declared — not deleted — because `pip install 'deepreason[embed]'` appears
+# in committed ladders, handovers and experiment records; an undeclared
+# extra makes those a resolution error rather than a no-op.
+embed = []
 # Evidence admission adapters (docs/ADMISSION_SPEC.md §3a): first-party
 # PDF extraction behind the same plugin contract third parties use. A
 # missing extra is a typed admission refusal naming deepreason[admit].

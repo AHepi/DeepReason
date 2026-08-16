@@ -521,15 +521,25 @@ class Config(BaseModel):
     # experiments/results/e01_embedder_recalibration_report.json: hashing
     # novelty rankings demoted to unverified; contamination 1.0/1.0). Set to
     # None for the zero-dependency HashingEmbedder (lexical geometry) —
-    # controlled experiments and replay of old roots. Requires the optional
-    # dependency group (pip install 'deepreason[embed]'); first use fetches
-    # ~0.5 GB of ONNX weights. If the backend is unavailable at run start
+    # controlled experiments and replay of old roots. fastembed is a CORE
+    # dependency since 2026-08-16, so `pip install -e .` arms this default;
+    # first use fetches ~523 MB of ONNX weights into fastembed's cache
+    # (FASTEMBED_CACHE_PATH, else `fastembed_cache` under the system temp
+    # dir — on a container that is /tmp, which is routinely cleared). Run
+    # `deepreason embedder-warmup` in the setup phase so the fetch is not
+    # paid inside cycle 1. If the backend is still unavailable at run start
     # the scheduler falls back to hashing and records `embedder-fallback`
-    # on the log, so offline installs keep working. EVERY distance threshold
-    # (NEAR_DUP_EPS, RESEED_DIST_MIN, atlas radii) is scale-specific:
-    # recalibrate via `deepreason calibrate` (views/basin.threshold_calibration)
-    # before trusting a config on a new embedder — the adjudicated record in
-    # runs/embedder_design refuted every blind distribution-mapping shortcut.
+    # on the log, so offline installs keep working, and `deepreason results`
+    # surfaces the fallback. Distance thresholds are scale-specific per
+    # embedder, but NONE ship armed: NEAR_DUP_EPS and RESEED_DIST_MIN both
+    # default to None (their consumers treat that as off — see
+    # rules/guards/anti_relapse.py), and the two convergence knobs that DO
+    # ship armed are embedder-safe by construction (RESEED_RATIO_MAX is a
+    # ratio of distances; GATE_ORBIT_MIN is a count). Arming an absolute
+    # threshold therefore requires calibrating it first, via
+    # `deepreason calibrate` (views/basin.threshold_calibration) — the
+    # adjudicated record in runs/embedder_design refuted every blind
+    # distribution-mapping shortcut.
     EMBEDDER_MODEL: str | None = "nomic-ai/nomic-embed-text-v1.5"
     # "fallback" (interactive default): unavailable backend degrades to
     # hashing with an embedder-fallback measure. "error" (evidence mode):

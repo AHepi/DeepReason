@@ -88,13 +88,27 @@ No `Seams:` entries yet.
   `build`, `start`, `status`, `result`, `claims`, `inspect`, `validate` over a
   finished reasoning root (see `DR-SUB-bridge` for what a bridge is).
 - `application.results.results_summary` / `render_results` /
-  `resolve_results_root` — the ONE typed-outcome retrieval surface behind
+  `resolve_results_root` / `embedder_summary` — the ONE typed-outcome
+  retrieval surface behind
   `deepreason results`. A pure reader over durable sidecars, the log and the
   amendment chain; it composes `findings.findings_summary` rather than
   re-deriving status counts, reads the STORED verification verdict unless
   `verify=True`, and emits `{"absent": True, "reason": <code>}` for every fact
   a root does not carry. It writes nothing into a run root.
-`check: for s in results_summary render_results resolve_results_root; do grep -q "^def $s(" src/deepreason/application/results.py || exit 1; done; grep -q "from deepreason.findings import findings_summary" src/deepreason/application/results.py && python -m pytest tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay tests/test_results_command.py::test_top_level_help_names_the_results_verb -q`
+  `embedder_summary` / `embedder_summary_for_root` derive which embedder a run ACTUALLY measured with from
+  the log's own `embedder` / `embedder-fallback` Measure events (last stamp
+  wins, so an amended run reports the geometry its final cycles used), and is
+  the one fact here that is also decorated onto `deepreason reason`'s printed
+  terminal remark — printed to STDERR, never added as a key on the payload:
+  stdout's JSON is the durable result contract and MCP `run_result` must
+  return it byte-identically
+  (`wheel_operational_smoke.py`'s `STAGE_MCP_REQUEST` compares them for exact
+  equality, and caught the first attempt, which did add a key).
+  `run-result.json` is not modified either. The CLI calls the PATH-taking
+  `embedder_summary_for_root`, never the harness-taking one: clients are thin
+  service dispatch and may not construct a `Harness`
+  (`test_clients_have_only_thin_service_dispatch_and_one_registry`).
+`check: for s in results_summary render_results resolve_results_root embedder_summary embedder_summary_for_root; do grep -q "^def $s(" src/deepreason/application/results.py || exit 1; done; grep -q "from deepreason.findings import findings_summary" src/deepreason/application/results.py && python -c "import ast, pathlib; src = pathlib.Path('src/deepreason/cli/main.py').read_text(); f = [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and n.name == '_cmd_reason'][0]; body = ast.get_source_segment(src, f); assert 'embedder_line(embedder_summary_for_root(' in body, 'the run terminal must report the embedder it measured with'; assert not [n for n in ast.walk(f) if isinstance(n, ast.Assign) and any(isinstance(x, ast.Subscript) and getattr(x.value, 'id', '') == 'payload' and getattr(getattr(x, 'slice', None), 'value', None) == 'embedder' for x in n.targets)], 'the embedder must NOT become a key on the durable result payload: MCP run_result must stay byte-identical to CLI stdout'; assert 'Harness(' not in body, 'the client stays thin: the application layer opens the root'" && ! grep -rn "embedder" src/deepreason/runtime/terminal_authority.py && python -m pytest tests/test_results_command.py::test_results_summary_writes_nothing_into_a_committed_root tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys tests/test_results_command.py::test_verification_reads_the_stored_verdict_and_does_not_replay tests/test_results_command.py::test_top_level_help_names_the_results_verb tests/test_results_command.py::test_results_surfaces_the_embedder_and_names_a_fallback_loudly tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure -q`
 - `application.SCRATCH_QUERY_SERVICE.execute` — dispatches the closed scratch
   query union; every branch is read-only except the explicit record-direct-open.
 - `application.intents.start_text_run_intent` / `continue_text_run_intent` /

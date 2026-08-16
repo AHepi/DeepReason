@@ -78,6 +78,22 @@ vanish, commit and push the working branch at every phase boundary, and
 run a snapshot loop (see `experiments/live_research_2026-07-29/
 snapshot_loop.sh <driver>.sh`) during any long live run.
 
+The embedder costs DISK, and the container clears it. `pip install -e .`
+carries fastembed (core since 2026-08-16), so `EMBEDDER_MODEL`'s neural
+default is armed by the ordinary install — but its ~523 MB of ONNX
+weights are fetched on first use into `FASTEMBED_CACHE_PATH`, else
+`fastembed_cache` under the system temp dir, i.e. `/tmp` here, which a
+rollback wipes along with everything else gitignored. Run
+
+    deepreason embedder-warmup    # ~523 MB fetch, visible, once per cache
+
+in the setup phase of any session that will run the harness, so the
+download is paid where you can see it rather than inside cycle 1. It is
+idempotent and returns in seconds once the weights are present, and it
+prints the fingerprint the run will stamp on its log. Skipping it is not
+an error: a run whose backend cannot build falls back to hashing and
+says so — `deepreason results` prints `embedder: hashing (fallback)`.
+
 ## Build and test
 
     pip install -e . --break-system-packages    # editable install; the

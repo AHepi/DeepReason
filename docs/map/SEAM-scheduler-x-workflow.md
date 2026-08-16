@@ -31,12 +31,20 @@ controller-v1/v2 the scheduler itself carries the durable bracket
 (`ConjectureControlTrace`), under controller-v3 it carries none and verifies the
 transaction after the fact.
 
-Thirteen modules under `src/` name `deepreason.workflow` and mention the
-scheduler. Five files carry the agreement — and one of them,
+Fourteen modules under `src/` name `deepreason.workflow` and mention the
+scheduler. The count is a coincidence census, not a coupling measure, and it
+moved from thirteen on 2026-08-16 for a reason worth stating so the next
+reader does not hunt for new coupling: `application/results.py` already
+imported `workflow.lifecycle` for `RESUMABLE_STOP_REASONS`, and the embedder
+tranche added a DOCSTRING there naming the scheduler as the producer of the
+`embedder` Measure events its reader consumes. Prose, not an import — the
+load-bearing clauses of this check (which module owns the criticism planners,
+and that `workflow/` never imports `scheduler`) are unchanged. Five files
+carry the agreement — and one of them,
 `workflow/criticism.py`, never names the scheduler at all, so a grep-shaped
 search for this seam misses the module whose planners nothing but the scheduler
 calls.
-`check: test "$(for f in $(grep -rl "deepreason\.workflow" --include=*.py src/deepreason); do grep -qlE "scheduler" "$f" && echo x; done | wc -l)" -eq 13 && test "$(grep -rlE "plan_foreign_criticism|compile_criticism_assignments" --include=*.py src/deepreason | grep -v "workflow/criticism.py")" = "src/deepreason/scheduler/scheduler.py" && ! grep -rq "deepreason\.scheduler" --include=*.py src/deepreason/workflow/ && test "$(grep -c "deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 16 && test "$(grep -cE "^from deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 2 && grep -q "^def plan_foreign_criticism(" src/deepreason/workflow/criticism.py && ! grep -q "scheduler" src/deepreason/workflow/criticism.py && grep -q "plan_foreign_criticism(manifest" src/deepreason/scheduler/scheduler.py`
+`check: test "$(for f in $(grep -rl "deepreason\.workflow" --include=*.py src/deepreason); do grep -qlE "scheduler" "$f" && echo x; done | wc -l)" -eq 14 && test "$(grep -rlE "plan_foreign_criticism|compile_criticism_assignments" --include=*.py src/deepreason | grep -v "workflow/criticism.py")" = "src/deepreason/scheduler/scheduler.py" && ! grep -rq "deepreason\.scheduler" --include=*.py src/deepreason/workflow/ && test "$(grep -c "deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 16 && test "$(grep -cE "^from deepreason\.workflow" src/deepreason/scheduler/scheduler.py)" -eq 2 && grep -q "^def plan_foreign_criticism(" src/deepreason/workflow/criticism.py && ! grep -q "scheduler" src/deepreason/workflow/criticism.py && grep -q "plan_foreign_criticism(manifest" src/deepreason/scheduler/scheduler.py`
 
 ## Where it is expressed
 

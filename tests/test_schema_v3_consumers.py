@@ -102,6 +102,11 @@ def test_doctor_reports_policy_roles_and_visible_hashing_fallback(monkeypatch):
         "dependency_available": False,
         "fallback_active": True,
         "ready": True,
+        # Since 2026-08-16 fastembed is a core dependency, so reaching this
+        # state means an install that did not come from pyproject.toml. The
+        # readiness block names the setup step that fixes it rather than
+        # leaving the operator to find it.
+        "warmup_command": "deepreason embedder-warmup",
     }
 
 

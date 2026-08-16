@@ -1,5 +1,5 @@
 <!-- DR-SUB-llm -->
-Verified-at: 546544b5
+Verified-at: c904a879
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
 Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm
@@ -149,6 +149,7 @@ through the caller, including on the failure paths.
 | v6 transactional dispatch preconditions | `bind_v6_authority`, `_require_transactional_route_dispatchable`, `_transactional_profile_for` | `tests/test_adapter_workflow_authorization_c2.py`, `tests/test_v6_insufficient_capability_terminal.py` |
 | Which capabilities are probed, or the profile they select | `deterministic_probe_cases` + `probe_capabilities`; `select_profile` in `llm/profiles.py` | `tests/test_llm_repair_capabilities.py::test_capability_probes_are_deterministic_and_cached_by_revision`, `tests/test_compact_profiles.py::test_capable_route_selects_frontier_and_unknown_length_selects_standard` |
 | The embedding backend or its drift stamp | `build_embedder`, `HashingEmbedder.fingerprint`, `NeuralEmbedder` | `tests/test_embedder.py` |
+| Whether the configured backend can be BUILT at all | `pyproject.toml`'s core dependency list (fastembed), `deepreason embedder-warmup` | `tests/test_embedder.py::test_fastembed_is_a_core_dependency` |
 
 `check: python -m pytest tests/test_providers.py tests/test_compact_profiles.py tests/test_wire_contracts.py tests/test_schema_carries_every_prose_rule.py tests/test_llm_repair_capabilities.py tests/test_model_firewall.py tests/test_llm.py tests/test_budget.py tests/test_judge_ensemble_boundary.py tests/test_school_execution_binding_v4.py tests/test_adapter_workflow_authorization_c2.py tests/test_v6_insufficient_capability_terminal.py tests/test_embedder.py -q`
 
@@ -257,3 +258,23 @@ through the caller, including on the failure paths.
   it stays, is recorded in full under DR-CON-packs-and-token-economy — do not
   re-derive that here.
 `check: test "$(grep -rc "_document_excerpt" src/deepreason --include=*.py | grep -v ":0$")" = "src/deepreason/llm/packs.py:1"`
+- **A default that names a backend the install does not carry degrades every
+  run, typed and unread.** `config.EMBEDDER_MODEL` has defaulted to
+  `nomic-ai/nomic-embed-text-v1.5` since E0.1, while `fastembed` sat in the
+  optional `[embed]` extra — so every container preflight running the
+  documented plain `pip install -e .` produced runs where `NeuralEmbedder`
+  raised `EmbedderUnavailable`, `EMBEDDER_FAILURE_POLICY="fallback"` swapped
+  in `HashingEmbedder`, and the substitution was recorded as an
+  `embedder-fallback` Measure nobody read. The grounded-extension run
+  (`experiments/2026-08-12-live-grounded-extension-expansion/run/log.jsonl`)
+  carries both halves at seq 2 and seq 8, and again at 9969/10045/10092 for
+  its continuation epoch: a run that configured neural geometry and measured
+  with `hashing-128` for 24 cycles. FIXED 2026-08-16 — fastembed moved into
+  the core dependency list, `deepreason embedder-warmup` pays the ~523 MB
+  weight fetch in the setup phase where it is visible, and `deepreason
+  results` prints the fallback rather than leaving it on the log. The general
+  lesson: a default naming an OPTIONAL backend is a default that silently
+  isn't, and the typed degradation record only helps a reader who is looking
+  at it — arm the default by install, and surface the fallback where the
+  operator already looks.
+`check: python -c "import tomllib,pathlib; d=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); core=[r for r in d['project']['dependencies'] if r.split('[')[0].split('>')[0].split('<')[0].split('=')[0].strip()=='fastembed']; assert core, ('fastembed must stay in the CORE dependency list', d['project']['dependencies']); assert d['project']['optional-dependencies'].get('embed') == [], 'the [embed] extra must stay declared and empty'" && grep -q "\"embedder-warmup\"" src/deepreason/cli/main.py && python -m pytest tests/test_embedder.py::test_fastembed_is_a_core_dependency -q`

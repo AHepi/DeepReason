@@ -29,6 +29,7 @@ ABSENCE_REASONS = frozenset(
     {
         "AMENDMENT_CHAIN_UNREADABLE",
         "NO_CYCLE_RECORD",
+        "NO_EMBEDDER_RECORD",
         "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
         "NO_REPLAY_VALIDATION_JSON",
@@ -258,6 +259,71 @@ def _adjudication(harness) -> dict[str, Any]:
     }
 
 
+def embedder_summary(harness) -> dict[str, Any]:
+    """Which embedder the run ACTUALLY measured with, and whether it is the
+    one the run asked for.
+
+    Both facts already ride Measure events the scheduler stamps — the
+    `embedder` identity once per run (model, version, sentinel) and an
+    `embedder-fallback` whenever a configured backend could not be built. The
+    pair was typed, recorded, replayable, and read by nobody: a run could
+    configure neural geometry, measure with `hashing-128` for 24 cycles, and
+    publish results that never said so. Deriving it here puts it on the one
+    surface an operator already opens.
+
+    The LAST stamp wins. An amended run continues into a new epoch and stamps
+    again, so a root can carry several; the run's final geometry is the one
+    its final cycles used.
+    """
+
+    configured: Any = None
+    reason: Any = None
+    fell_back = False
+    stamp: list[str] | None = None
+    for event in harness.log.read():
+        inputs = [str(value) for value in (event.inputs or ())]
+        if not inputs:
+            continue
+        if inputs[0] == "embedder" and len(inputs) >= 2:
+            stamp = inputs
+        elif inputs[0] == "embedder-fallback":
+            fell_back = True
+            configured = inputs[1] if len(inputs) > 1 else None
+            reason = inputs[2] if len(inputs) > 2 else None
+    if stamp is None:
+        return _absent("NO_EMBEDDER_RECORD")
+
+    model = stamp[1]
+    return {
+        # `hashing-128` is the one model id the deterministic backend ever
+        # reports, so the backend label is derived from it rather than from a
+        # separate signal that could disagree with the stamp.
+        "backend": "hashing" if model.startswith("hashing") else "neural",
+        "model": model,
+        "version": stamp[2] if len(stamp) > 2 else None,
+        "fingerprint": stamp[3] if len(stamp) > 3 else None,
+        "fallback": fell_back,
+        "configured_model": configured,
+        "fallback_reason": reason,
+    }
+
+
+def embedder_summary_for_root(root: Path | str) -> dict[str, Any]:
+    """`embedder_summary` for a root PATH, opened read-only here.
+
+    The path-taking entry point exists so CLI and MCP clients can report a
+    run's geometry without constructing a `Harness` themselves: those clients
+    are thin service dispatch by design, and
+    `test_clients_have_only_thin_service_dispatch_and_one_registry` enforces
+    it by asserting `Harness(` never appears in their source. Opening the
+    root belongs to this layer, which already does it for `results_summary`.
+    """
+
+    from deepreason.harness import Harness
+
+    return embedder_summary(Harness(Path(root), read_only=True))
+
+
 def _verification(
     root: Path, replay: dict | None, result: dict | None, *, verify: bool
 ) -> dict[str, Any]:
@@ -372,6 +438,29 @@ def _show(value: Any) -> str:
     return str(value)
 
 
+def embedder_line(embedder: dict[str, Any]) -> str:
+    """One line naming the geometry, and saying plainly when it is not the
+    one the run asked for.
+
+    The fallback is spelled out rather than implied by a differing model id:
+    a reader who does not already know that `hashing-128` is the degraded
+    backend learns nothing from seeing it, which is how a typed, recorded
+    substitution went unread through 24 live cycles.
+    """
+
+    if _is_absent(embedder):
+        return "not recorded (this run predates the embedder stamp)"
+    backend, model = embedder["backend"], embedder["model"]
+    if not embedder["fallback"]:
+        return f"{backend} ({model})"
+    configured = embedder["configured_model"] or "a neural model"
+    return (
+        f"{backend} (fallback) — this run was configured for {configured} "
+        f"but could not build it, so it measured with {model} instead; "
+        f"distance readings are on the lexical scale, not the configured one"
+    )
+
+
 def render_results(summary: dict[str, Any]) -> str:
     """The summary as reader-facing text, every technical label glossed in place.
 
@@ -430,6 +519,11 @@ def render_results(summary: dict[str, Any]) -> str:
         f"  trials declined (the case did not sustain): "
         f"{_show(adjudication['trial_declined'])}",
         f"  trials blocked by a guard: {_show(adjudication['trial_blocked'])}",
+        "",
+        "## Measurement instrument",
+        f"  embedder (the model that turned this run's text into vectors, so "
+        f"its novelty, near-duplicate and school-distance readings are on "
+        f"that model's scale): {embedder_line(summary['embedder'])}",
         "",
         "## Verification",
         f"  verify_root verdict (the replay check that re-derives the whole run "
@@ -497,6 +591,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "run": _run(status, stop),
         "artifacts": _artifacts(positions, status, result),
         "adjudication": _adjudication(harness),
+        "embedder": embedder_summary(harness),
         "verification": _verification(root, replay, result, verify=verify),
         "amendment": _amendment(root),
         "terminal": _terminal(replay, stop),

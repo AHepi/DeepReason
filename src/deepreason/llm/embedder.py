@@ -104,8 +104,12 @@ class NeuralEmbedder:
         try:
             from fastembed import TextEmbedding
         except ImportError as e:
+            # fastembed is a CORE dependency: reaching this branch means the
+            # environment was not installed from pyproject.toml, so the fix
+            # names the install, not an extra to add.
             raise EmbedderUnavailable(
-                f"fastembed not installed (pip install 'deepreason[embed]'): {e}"
+                f"fastembed not importable — reinstall the package "
+                f"(pip install -e . / pip install deepreason): {e}"
             ) from e
         try:
             self._backend = TextEmbedding(model_name=model)
