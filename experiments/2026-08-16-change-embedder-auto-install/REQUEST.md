@@ -264,3 +264,31 @@ question for the operator.
 
 (append-only; later operator messages land here as R21... or
 "R2a supersedes R2", each with its verbatim quote)
+
+### Amendment 1 — 2026-08-16, resolving the phase-A budget STOP
+
+Context: STOP.md put three priced options to the operator after
+`tools/diff_budget.py` returned `EXCEEDED` (324 insertions against a
+301 ceiling) at the end of phase A, recommending option A — raise the
+ceiling and finish as specified. The operator's reply, verbatim and in
+full:
+
+> Continue from where you left off.
+
+R21 (process): "Continue from where you left off." — read as choosing
+STOP.md option A, the recommended one: the ceiling is raised and the
+tranche finishes as SPEC.md specifies, with no scope change. Read this
+way and not as a bare "carry on with whatever" because the message
+answers a question that offered exactly three roads and named a
+recommendation; the only road that IS "where I left off" is finishing
+the specified work — B and C both change the scope of what remains.
+
+Consequences, all recorded rather than assumed:
+- SPEC.md's Budget ceiling moves 301 → 450 (the STOP's projected ~424
+  plus headroom), noted in SPEC.md as amended by R21 rather than
+  silently rewritten. No SPEC item is added, removed, or altered.
+- Nothing in R1..R20 changes. S6 (the loud fallback) and S10 (the
+  evidence-honesty append) stay IN scope, which is the substance of
+  the choice: options B and C would each have dropped part of R8 or
+  deferred R8/R12 to a later tranche.
+- Execution resumes at CHECKLIST.md step 13.

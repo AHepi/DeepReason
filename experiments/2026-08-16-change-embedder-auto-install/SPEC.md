@@ -480,7 +480,17 @@ S10 40, S11 0, S12 15.
     $ python3 -c "print(sum([8,0,55,12,6,60,0,15,90,40,0,15]))"
     301
 
-**~301 lines, 3 code/doc commits** inside this one tranche (packaging +
+**AMENDED by R21 (2026-08-16): ceiling raised 301 → 450.** The operator
+answered the phase-A budget STOP with "Continue from where you left
+off.", choosing STOP.md option A — finish as specified, no scope change.
+The itemization below is left exactly as it was written, and its
+arithmetic still sums to 301: it is the record of what was ESTIMATED,
+and rewriting it to match the outturn would destroy the only evidence of
+how far the estimate missed. The outturn and its causes are in STOP.md.
+Every `[COMMIT]` gate from step 13 onward checks against 450.
+
+Original estimate, unedited: **~301 lines, 3 code/doc commits** inside
+this one tranche (packaging +
 warm-up + docs + map + their tests; the results/terminal surfacing +
 its tests; the evidence-honesty append), plus the artifact commits
 (REQUEST/SPEC/CHECKLIST/VALIDATION/DELIVERY). Frozen surfaces touched:

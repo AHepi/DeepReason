@@ -91,3 +91,17 @@ looking at the place it is recorded.
 Recommendation: **A**, because the overrun is in evidence and comments,
 and B and C both pay for the line count with the half of the change that
 prevents a recurrence.
+
+---
+
+## RESOLVED — 2026-08-16
+
+The operator replied, verbatim and in full:
+
+> Continue from where you left off.
+
+Read as **option A**, the recommended one: ceiling raised 301 → 450,
+tranche finishes as specified, no scope change. Ledgered as R21 in
+REQUEST.md Amendment 1; SPEC.md's Budget section carries the amended
+ceiling with the original itemization left unedited, so the size of the
+miss stays visible. Execution resumed at CHECKLIST.md step 13.
