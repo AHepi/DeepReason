@@ -53,3 +53,45 @@ here.
 
 Full gate **3668 passed, 7 skipped, 0 failed**. The DO-NOT-MERGE marker is
 lifted.
+
+---
+
+## Close-out addendum — 2026-08-16, verified from a fresh container
+
+The tranche shipped green at `395668544`. This addendum records what an
+independent container, cloned fresh and holding none of that session's state,
+could confirm about it — and the one thing it had to correct.
+
+**Everything above holds.** Producers are zero, the enum's disposition is
+unchanged, the four protected channels are green, and the DO-NOT-MERGE marker
+stays lifted. Nothing in the reconciliation table moved.
+
+**The enum, stated plainly one more time because it is the tranche's only
+deviation.** `SpawnTrigger.SUCCESSOR` is KEPT, as inert vocabulary. The
+addendum's letter said to delete it once producers reached zero; producers ARE
+zero, and deletion was then measured rather than assumed — it fixes nothing and
+breaks four tests that replay pre-v2 roots. The 2026-08-14 law PERMITS that
+breakage; it does not MANDATE the deletion, and nothing else does either. What
+keeps the pipeline decommissioned is the zero-producer source scan, which fails
+before any enum check would. The four reader tests stay meaningful, so the cost
+of deleting the member is real and its benefit is nil.
+
+**The manifest-sha false trail is now closed by construction, not by argument.**
+On a machine with no build state, appending one comment line to
+`docs/map/SUB-adjudication.md` reproduces both failures and moves the sha; the
+tree as committed is green. The environmental reading this close-out inherited
+is therefore refuted, and no confirmation of it was recorded. The coupling
+defect stays PARKED, now carrying a 30-second reproduction recipe for whoever
+takes it.
+
+**One correction the tranche owed and had not made.** Rung 3d took producers to
+zero but left three artifacts still asserting that a live producer stamps the
+trigger: `docs/ERRATA.md` E30's closing paragraph,
+`src/deepreason/ontology/problem.py`'s `SUCCESSOR` comment, and
+`easy.py::seed_component`'s docstring. All three are corrected in this commit
+and ledgered as `docs/ERRATA.md` E31. This is the kind of residue a close-out
+exists to catch: the removing tranche updated the map, the tests and the
+delivery, and did not update the two comments that explained why the thing it
+removed was there.
+
+**Tranche state: CLOSED.**

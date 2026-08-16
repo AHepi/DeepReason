@@ -40,6 +40,44 @@ regression. Two things that must both be free to change are welded together.
 
 **Not fixed here.** This tranche is the website-remnant removal, shipping alone.
 
+### Fourth measurement — 2026-08-16, fresh container, reproduced by construction
+
+The close-out session ran on a container cloned fresh from
+`origin/claude/calculus-rung2-step2-premise-pes36e`, with no build state, no
+prior test run, and no working-tree edits. This removes the environment as a
+variable entirely, and it settles the one hypothesis the first three
+measurements could not fully kill from inside a single container.
+
+| Tree state | Result | Wall time |
+|---|---|---|
+| as committed | **4 passed** | 19.7 s |
+| `docs/map/SUB-adjudication.md` + one comment line | **2 failed, 2 passed** | 7.9 s |
+
+The failing pair is exactly `test_run_identity_is_deterministic_through_the_one_road`
+and `test_the_grounded_tranche_config_enters_through_the_new_door`, and the sha
+moves `8e22d043...` → `711e3f31...` for one appended HTML comment. The probe
+file was reverted immediately; the tree is clean.
+
+Two things this fixes in the record:
+
+- **The environmental hypothesis is dead.** A one-line edit to a map document
+  reproduces both failures on a machine that has never built anything before,
+  so nothing about a stale container was ever required to explain them.
+- **`first == second` still held in the failing run** — the intra-run
+  determinism assert passes and only the PIN assert fails. A cache whose key
+  omitted builder identity cannot produce that pattern. Refuted for the second
+  time, now on clean ground.
+
+The 7.9 s-vs-19.7 s timing reproduces the "0.5 s vs 9.5 s" signal that
+originally suggested caching, and confirms its real cause: the failing run
+short-circuits at an early assert and never reaches the second build, so the
+faster run is the one doing LESS work, not the one skipping a rebuild.
+
+**The defect is unchanged and still parked.** What moved is its evidence: the
+coupling is now demonstrated on demand rather than inferred from a tranche's
+incidental edits, so whoever picks this up can reproduce it in 30 seconds with
+one appended line.
+
 ### Ready-to-send prompt
 
 ```
@@ -61,6 +99,17 @@ Reproduced 2026-08-15 (experiments/2026-08-15-change-rung3d-website-remnant):
 editing SUB-adjudication.md moved the sha from 8e22d043... to a437a833...;
 reverting that one file restored it. Determinism is NOT broken -- two builds in
 one process agree every time -- so this is a coupling defect, not a caching one.
+
+Reproduce it yourself in 30 seconds, on any tree, no build state needed:
+
+    printf '\n<!-- probe -->\n' >> docs/map/SUB-adjudication.md
+    python -m pytest tests/test_single_run_path.py -q -k "manifest or run_identity"
+    git checkout -- docs/map/SUB-adjudication.md
+
+Confirmed 2026-08-16 on a fresh container: green as committed (4 passed, 19.7s),
+both tests red with one appended comment line (2 failed, 7.9s, sha 8e22d043... ->
+711e3f31...). The environment is NOT a variable, and the intra-run determinism
+assert passes in the failing run -- so a cache-key hypothesis is refuted, twice.
 
 Roads: (a) freeze the dossier by copying those bytes into the tranche directory,
 so the fixture pins its own immutable evidence rather than living documentation;

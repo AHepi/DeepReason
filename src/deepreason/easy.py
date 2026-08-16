@@ -721,8 +721,10 @@ def seed_component(harness, description: str, design_id: str, manifest,
     survivor is known. Criteria: the fragment contract (component_wf, spec
     frozen in) + lineage binding to the design — candidates flow through the
     ordinary Conj -> Crit -> Adj machinery like any other problem. A repair
-    problem (suffix != "") is a SUCCESSOR spawned from the implicated
-    component artifact: prior history is never mutated."""
+    problem (suffix != "") carries the SEED trigger with the implicated
+    component as its lineage: the website pipeline is decommissioned, so no
+    site here -- this one included -- may stamp the successor trigger.
+    Prior history is never mutated."""
     from deepreason.manifest import component_commitment
     from deepreason.ontology import Problem, ProblemProvenance
     from deepreason.unification.isolation import lineage_ref_commitment

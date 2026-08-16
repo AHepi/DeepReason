@@ -661,3 +661,44 @@ not evidence against this entry: a live producer outside the reasoning
 loop still stamps it (`easy.py::seed_component`, staged-pipeline
 component repair), and whether H1 reaches that site is an open operator
 question.
+
+## 2026-08-16 (website-remnant close-out)
+
+**E31 — E30's own closing paragraph is FALSE as of Rung 3d, and two code
+comments carried the same claim.** E30 recorded that `SpawnTrigger.SUCCESSOR`
+survives H1's deletion because "a live producer outside the reasoning loop
+still stamps it (`easy.py::seed_component`, staged-pipeline component repair),
+and whether H1 reaches that site is an open operator question". The operator
+closed that question in ADDENDUM v2 (v2 program `REQUEST.md` Amendment 9, R66):
+the staged pipeline was already decommissioned, so the producer was a remnant,
+and Rung 3d removed it. `seed_component` now stamps `{"trigger": "seed"}` on
+both branches (`src/deepreason/easy.py:753-756`), and no source file mints a
+successor problem — asserted by
+`tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`.
+The enum member is retained as INERT VOCABULARY so pre-v2 roots still parse on
+replay; retention is not a producer claim. E30's substance stands — the
+calculus's successor sentences remain deliberately unimplemented — only its
+rationale for the member's survival is superseded. The same stale claim was
+carried in two comments and is corrected in this tranche's commit:
+`src/deepreason/ontology/problem.py`'s `SUCCESSOR` block ("the member stays
+because a LIVE producer still uses it") and `easy.py::seed_component`'s
+docstring ("A repair problem ... is a SUCCESSOR spawned from the implicated
+component artifact"). `docs/map/SUB-rules.md:193-194` was already corrected at
+Rung 3d and is not affected. The general lesson, recorded because it is the
+reusable half: an entry that explains why something SURVIVED a deletion is
+dated by the survival, not by the deletion — when the surviving reason is later
+removed, the entry becomes the last place the dead reason is still asserted,
+and nothing about the removing tranche points at it.
+
+**E31b — the manifest-sha attribution scan (the tranche's stated errata
+checkpoint) found nothing to correct.** `04da6c65f`'s report attributed two
+`test_single_run_path.py` failures to the container ("why the grounded-manifest
+builder returns a different sha in this container now"); `395668544` self-
+corrected that in its own commit message and in `VALIDATION.md`/`PARKED.md`,
+which name the real cause — the builder's evidence dossier digests
+`docs/map/SUB-adjudication.md`, so editing it moved a content address. No
+committed DOCUMENT carries the superseded attribution; it survives only in
+immutable commit messages that the correcting commit answers directly. The
+correction is confirmed by construction on a fresh container: see
+`experiments/2026-08-15-change-rung3d-website-remnant/VALIDATION.md`, close-out
+section.
