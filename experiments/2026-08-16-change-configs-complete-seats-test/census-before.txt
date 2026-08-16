@@ -1,0 +1,24 @@
+A1 V4_SCHOOL_ROLE_UNSUPPORTED                                  | REFUSES              | ValidationError: V4_SCHOOL_ROLE_UNSUPPORTED
+A2 V4_SCHOOL_BINDING_INCOMPLETE                                | REFUSES              | ValidationError: V4_SCHOOL_BINDING_INCOMPLETE
+A3 V4_SCHOOL_SHARED_SEAT_FORBIDDEN                             | REFUSES              | ValidationError: V4_SCHOOL_SHARED_SEAT_FORBIDDEN
+A4 V4_SCHOOL_DISTINCT_MODEL_REQUIRED                           | REFUSES              | ValidationError: V4_SCHOOL_DISTINCT_MODEL_REQUIRED
+A5 V4_SCHOOL_DISTINCT_FAMILY_REQUIRED                          | REFUSES              | ValidationError: V4_SCHOOL_DISTINCT_FAMILY_REQUIRED
+A6 CRITICISM_ACTIVE_CONJECTURE_REQUIRED (compile_run_manifest) | REFUSES              | RunManifestError: CRITICISM_ACTIVE_CONJECTURE_REQUIRED
+A7 V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE                    | REFUSES              | ValidationError: V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE
+A8 V4_CRITICISM_ROLE_UNSUPPORTED                               | REFUSES              | ValidationError: V4_CRITICISM_ROLE_UNSUPPORTED
+A9 V4_CRITICISM_BINDING_INCOMPLETE                             | REFUSES              | ValidationError: V4_CRITICISM_BINDING_INCOMPLETE
+A10 V4_CRITICISM_SHARED_SEAT_FORBIDDEN                         | REFUSES              | ValidationError: V4_CRITICISM_SHARED_SEAT_FORBIDDEN
+A11 V4_CRITICISM_DEFENDER_REQUIRED                             | REFUSES              | ValidationError: V4_CRITICISM_DEFENDER_REQUIRED
+A12 V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED                  | REFUSES              | ValidationError: V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED
+A13 V5_CAPABILITY_PROFILE_MISMATCH                             | REFUSES              | ValidationError: V5_CAPABILITY_PROFILE_MISMATCH
+A14 V6_CAPABILITY_PROFILE_MISMATCH                             | REFUSES              | ValidationError: V6_CAPABILITY_PROFILE_MISMATCH
+A15 RUBRIC_INPUT_FORBIDDEN (preflight_payload)                 | REFUSES              | RunManifestError: RUBRIC_INPUT_FORBIDDEN
+A16 SECOND_JUDGE_FAMILY_REQUIRED (preflight_payload)           | REFUSES              | RunManifestError: SECOND_JUDGE_FAMILY_REQUIRED
+A17 PROPERTY_RUBRIC_TRIAL_FORBIDDEN (preflight_harness)        | COMPILES (no notice) | 'raises_PROPERTY_RUBRIC_TRIAL_FORBIDDEN=True'
+A17b RUBRIC_INPUT_FORBIDDEN (preflight_harness)                | COMPILES (no notice) | 'raise_count=3'
+A18 SCRATCH_EMBEDDER_MODEL_UNRESOLVED                          | REFUSES              | RunManifestError: SCRATCH_EMBEDDER_MODEL_UNRESOLVED
+A19 ScratchpadConfig reserved attention fractions              | REFUSES              | ValidationError: 1 validation error for Config scratchpad Value error, reserved scratch attention fractions must not exceed one
+A20 INTAKE_CYCLES_CEILING_EXCEEDED                             | REFUSES              | ValidationError: INTAKE_CYCLES_CEILING_EXCEEDED
+A21 V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED                      | CRASHES UNTYPED      | IndexError: tuple index out of range
+A22 already-done? CALIBRATION_RECEIPT_* (_preflight_text_authority) | COMPILES (no notice) | 'raises=False'
+A23 already-done? V6_LAUNCH_DISABLED (runtime/launch_policy.py) | COMPILES (no notice) | 'raises=True'
