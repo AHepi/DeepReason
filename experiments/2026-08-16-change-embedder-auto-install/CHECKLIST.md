@@ -1,6 +1,6 @@
 # Checklist for: "the neural embedder installs automatically — no run silently measures with the hash fallback again"
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 Map ids: `DR-SUB-llm` (covering doc, `llm/embedder.py` — S12 owns it),
 `DR-SUB-application` (`application/results.py`, `cli/main.py`),
 `DR-SUB-periphery` (`pyproject.toml`), `DR-SUB-scheduler` (stamps the
@@ -59,12 +59,17 @@ C = evidence honesty (19-20), D = instruments + close (21-25).
       the one new key, which is what SPEC S3 predicted the field would
       do.
 
-- [ ] 2. (S1) Move `fastembed>=0.3` from `[project.optional-
+- [x] 2. (S1) Move `fastembed>=0.3` from `[project.optional-
       dependencies].embed` into `[project].dependencies` in
       `pyproject.toml`; leave `embed = []` declared with a comment
       naming it an alias retained so `pip install 'deepreason[embed]'`
       keeps resolving.
       done-when: `python -c "import tomllib,pathlib; d=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); assert any(r.startswith('fastembed') for r in d['project']['dependencies']); assert d['project']['optional-dependencies']['embed'] == []; print('ok')"` → `ok`
+
+      PROOF:
+
+          $ python -c "import tomllib,pathlib; d=tomllib.loads(...); ...; print('ok')"
+          ok
 
 - [ ] 3. (S1) Reinstall from the changed pyproject and prove a plain
       install carries fastembed.
