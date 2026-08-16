@@ -101,9 +101,24 @@ def test_similarity_threshold_must_be_finite(value):
         ScratchpadConfig(similarity_threshold=value)
 
 
-def test_reserved_attention_fractions_and_limits_are_bounded():
-    with pytest.raises(ValidationError, match="fractions must not exceed one"):
-        ScratchpadConfig(exploratory_fraction=0.6, underexposed_fraction=0.5)
+def test_reserved_attention_fractions_are_clamped_not_refused():
+    """All-configs-allowed completion (2026-08-16): two reserved fractions
+    claiming more than one whole pack is an R4 conflict inside ONE
+    configuration, so it resolves deterministically -- both are scaled to
+    sum to exactly 1.0 and their RATIO, the operator's actual preference, is
+    preserved. The single-field bound (<= 1.0 each) is a SHAPE check and
+    still refuses, which the next test keeps pinned."""
+
+    clamped = ScratchpadConfig(exploratory_fraction=0.6, underexposed_fraction=0.5)
+    assert clamped.exploratory_fraction + clamped.underexposed_fraction == 1.0
+    assert clamped.exploratory_fraction == pytest.approx(0.6 / 1.1)
+    assert clamped.underexposed_fraction == pytest.approx(0.5 / 1.1)
+    # A pair that already fits is untouched.
+    fits = ScratchpadConfig(exploratory_fraction=0.2, underexposed_fraction=0.3)
+    assert (fits.exploratory_fraction, fits.underexposed_fraction) == (0.2, 0.3)
+
+
+def test_reserved_attention_limits_are_bounded():
     with pytest.raises(ValidationError, match="greater than 0"):
         ScratchpadConfig(max_blocks_per_pack=0)
     with pytest.raises(ValidationError, match="greater than 0"):

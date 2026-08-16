@@ -43,10 +43,18 @@ def test_seat_alias_same_profile_is_not_a_conflict():
     assert form.seats == {"conjecture": "profile-a", "simulation": "profile-a"}
 
 
-def test_cycles_over_ceiling_raises():
-    with pytest.raises(ValidationError) as excinfo:
-        IntakeFormV1(question="Q", cycles=PUBLIC_MAX_CYCLES + 1)
-    assert INTAKE_CYCLES_CEILING_EXCEEDED in str(excinfo.value)
+def test_cycles_over_ceiling_clamps():
+    """All-configs-allowed completion (2026-08-16): asking for more cycles
+    than the engine accepts is a configuration, not a shape error, so it
+    resolves deterministically to the ceiling instead of refusing. The form
+    carries no manifest and so no notice sink -- the clamped value IS the
+    disclosure, and `error_catalog.py`'s entry for
+    INTAKE_CYCLES_CEILING_EXCEEDED describes the clamp."""
+
+    form = IntakeFormV1(question="Q", cycles=PUBLIC_MAX_CYCLES + 1)
+    assert form.cycles == PUBLIC_MAX_CYCLES
+    assert IntakeFormV1(question="Q", cycles=1).cycles == 1
+    assert IntakeFormV1(question="Q").cycles is None
 
 
 def test_cycles_at_ceiling_is_fine():
@@ -87,18 +95,31 @@ def test_cli_validate_intake_exits_zero_on_a_valid_file(tmp_path, capsys):
     assert "OK" in capsys.readouterr().out
 
 
-def test_cli_validate_intake_is_advisory_for_a_semantic_violation(tmp_path, capsys):
-    """All-configs-allowed (2026-08-12), R6: a typed CODE: violation (here,
-    INTAKE_CYCLES_CEILING_EXCEEDED) used to exit 1; validate-intake now
-    reports it and exits 0 -- disclosure, not a gate."""
+def test_cli_validate_intake_accepts_a_resolved_semantic_input(tmp_path, capsys):
+    """All-configs-allowed, both halves.
+
+    2026-08-12 (R6) made a typed `CODE:` violation advisory: reported, exit 0.
+    The 2026-08-16 completion went one step further for the cycles ceiling --
+    it resolves by CLAMPING inside the model, so it never becomes a violation
+    at all. Exit 0, and nothing to report.
+
+    Consequence recorded so nobody reads the empty stderr as a regression:
+    with `INTAKE_SEAT_CONFLICT` and `INTAKE_CYCLES_CEILING_EXCEEDED` both
+    resolving in-model, `IntakeFormV1` has no remaining semantic violation an
+    input can construct, so `_cmd_validate_intake`'s advisory branch is
+    currently unreachable. The branch stays: it is the contract every future
+    semantic check inherits. The shape-error half is pinned by the next test.
+    """
     from deepreason.cli.main import main
 
-    intake_path = tmp_path / "intake.json"
-    intake_path.write_text(
+    over_ceiling = tmp_path / "intake-cycles.json"
+    over_ceiling.write_text(
         f'{{"question": "Q", "cycles": {PUBLIC_MAX_CYCLES + 1}}}'
     )
-    assert main(["validate-intake", str(intake_path)]) == 0
-    assert "cycle budget exceeds" in capsys.readouterr().err
+    assert main(["validate-intake", str(over_ceiling)]) == 0
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert "OK" in captured.out
 
 
 def test_cli_validate_intake_still_exits_nonzero_for_a_shape_error(tmp_path, capsys):

@@ -247,6 +247,26 @@ what the test asserts today and what it asserts after.
 | T6 | `tests/test_intake_form.py::test_cycles_over_ceiling_raises` | `ValidationError` naming `INTAKE_CYCLES_CEILING_EXCEEDED` | `IntakeFormV1(cycles=PUBLIC_MAX_CYCLES+1).cycles == PUBLIC_MAX_CYCLES`; renamed `test_cycles_over_ceiling_clamps` |
 | T7 | `tests/test_error_catalog.py` | asserts `INTAKE_CYCLES_CEILING_EXCEEDED` is a real, catalogued code | unchanged as an assertion; the CATALOG ENTRY's prose is rewritten to describe the clamp, exactly as `INTAKE_SEAT_CONFLICT`'s was |
 
+**Addendum, recorded after execution — the enumeration was incomplete.**
+R7 asks for the pinned tests to be enumerated BEFORE any is touched, and §5's
+table was derived by grepping each converted CODE across `tests/`. That method
+missed every test that matches a code by SUBSTRING or by prose instead of the
+full identifier. Four more surfaced, three of them only when the boundary gate
+ran. They are listed here rather than folded silently into the table above,
+because the gap is in the METHOD and the next tranche should know it:
+
+| # | Test | Found by | Today | After |
+|---|---|---|---|---|
+| T8 | `tests/test_run_manifest_v4.py::test_route_bound_independent_diversity_requirements_reject_only_own_collision` | ring run (its `match=` is a regex, not the code) | raises on the diversity collision | compiles; the collided requirement's notice carries `explicit bindings win` |
+| T9 | `tests/test_config_scratch_bridge.py::test_reserved_attention_fractions_and_limits_are_bounded` | ring run (asserts on the message, not a code) | raises "fractions must not exceed one" | split in two: the pair CLAMPS proportionally; the single-field `<= 1.0` bound still refuses |
+| T10 | `tests/test_intake_form.py::test_cli_validate_intake_is_advisory_for_a_semantic_violation` | ring run | asserts the ceiling violation is REPORTED on stderr | the ceiling now clamps in-model and never becomes a violation; renamed, and the now-unreachable advisory branch is recorded in the test's own docstring |
+| T11 | `tests/test_foreign_criticism_policy_c3.py` (5 tests) | **the boundary gate**, not the ring | raises `ACTIVE_CONJECTURE_REQUIRED`, `BINDING_INCOMPLETE`, `ROLE_UNSUPPORTED`, `COVERAGE_IMPOSSIBLE`, `SHARED_SEAT_FORBIDDEN`, `DEFENDER_REQUIRED`, `CROSS_FAMILY_JUDGES_REQUIRED` — all matched by SUBSTRING, which is why the code-grep missed the whole file | compiles + notice for each; the one `SEAT_OUT_OF_RANGE` case in the same parametrize list stays raising, and the test now says why the two halves differ |
+
+Lesson for the enumeration method: grep the code, the code's SUFFIX after the
+`V4_`/`V5_`/`V6_` prefix, AND the gate's message text. Better still, run the
+full gate once after the first conversion lands rather than only at the
+boundary — three of these four cost a full 17-minute gate to discover.
+
 **Tests that must NOT move** (they pin the runtime guards R6 protects,
 and Part B leans on them): `tests/test_judge_ensemble_boundary.py:142`,
 `tests/test_prose_refutation_boundaries.py:440,883,1383` (all

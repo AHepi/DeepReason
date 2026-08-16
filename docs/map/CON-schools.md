@@ -1,5 +1,5 @@
 <!-- DR-CON-schools -->
-Verified-at: bdc476e8
+Verified-at: 69d3061e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py, src/deepreason/module_events.py
 Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools, DR-SEAM-schools-x-scheduler
@@ -224,10 +224,18 @@ but the plan refuses to advertise that as route diversity.
 
 - **Reading `SchoolRoleBindingV1` and not the validator.** The Pydantic model
   accepts `role="judge"` (the field's only constraint is `^[a-z][a-z0-9_]*$`);
-  both v4 validators reject it. The tranche in `experiments/2026-08-01-change-prose-can-refute/` wanted school-bound judge
+  both v4 validators refuse to bind it. The tranche in `experiments/2026-08-01-change-prose-can-refute/` wanted school-bound judge
   seats, read the model, and had to redesign the change to avoid the manifest
   entirely
   (`experiments/2026-08-01-change-prose-can-refute/DELIVERY.md`, A9).
+  **Changed 2026-08-16** (`experiments/2026-08-16-change-configs-complete-seats-test/`,
+  the all-configurations law): the two validators no longer RAISE — they emit
+  `V4_SCHOOL_ROLE_UNSUPPORTED` / `V4_CRITICISM_ROLE_UNSUPPORTED` as compile
+  notices and the manifest compiles. The trap itself is unchanged and, if
+  anything, sharper: the model is still not the gate, and now the refusal you
+  are looking for is at `llm/firewall.py::resolve_school_route`
+  (`SCHOOL_ROUTE_ROLE_UNSUPPORTED`) rather than at compile. A judge seat that
+  compiles is not a judge seat that can be dispatched.
 - **Mistaking `require_cross_school_judge_ensemble` for the live guarantee.**
   It and `LLMAdapter.school_judge_bindings` are retained but superseded —
   correct only for a manifest that authors judge bindings, which the validator

@@ -1129,7 +1129,11 @@ class TextRunApplicationService:
         credential_checker,
     ) -> RunStartedV1:
         from deepreason.ops import require_full_engine
-        from deepreason.run_manifest import bind_run_manifest, preflight_payload
+        from deepreason.run_manifest import (
+            bind_run_manifest,
+            preflight_payload,
+            report_preflight_notices,
+        )
         from deepreason.runtime.continuation import prepare_continuation
         from deepreason.runtime.launch_policy import (
             require_v6_launch_allowed,
@@ -1195,14 +1199,16 @@ class TextRunApplicationService:
             root=root,
             operation="text reasoning",
         )
-        preflight_payload(
-            manifest,
-            {
-                "problem": {"description": spec.problem.description},
-                "commitments": [
-                    item.model_dump(mode="json") for item in spec.criteria
-                ],
-            },
+        report_preflight_notices(
+            preflight_payload(
+                manifest,
+                {
+                    "problem": {"description": spec.problem.description},
+                    "commitments": [
+                        item.model_dump(mode="json") for item in spec.criteria
+                    ],
+                },
+            )
         )
         def notify(event) -> None:
             if progress_callback is None:

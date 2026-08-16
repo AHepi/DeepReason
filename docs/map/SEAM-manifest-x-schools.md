@@ -1,5 +1,5 @@
 <!-- DR-SEAM-manifest-x-schools -->
-Verified-at: 9fa394d9
+Verified-at: 69d3061e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/workflow/criticism.py, src/deepreason/v6_policy.py
 Sides: DR-CON-schools, DR-SUB-manifest
@@ -62,14 +62,24 @@ are held up by this check and by the root sweep alone.
 `SchoolRoleBindingV1` is ONE model serving TWO policies with different role
 rules, so the role restriction cannot live on the model — it would have to be
 two different restrictions on one field. The model therefore accepts any
-lowercase identifier, `judge` included, and the refusal sits in each policy's
+lowercase identifier, `judge` included, and the rule sits in each policy's
 validator: `V4_SCHOOL_ROLE_UNSUPPORTED` for conjecturer execution,
 `V4_CRITICISM_ROLE_UNSUPPORTED` for criticism. A 2026-08-01 tranche wanted
 school-bound judge seats, read the model, and had to redesign the change to
 avoid the manifest entirely
 (`experiments/2026-08-01-change-prose-can-refute/DELIVERY.md`, A9).
 
-`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolRoleBindingV1 as B, CriticismPolicyV1 as C, SchoolExecutionPolicyV1 as S, _validate_v4_criticism_policy as VC, _validate_v4_control_plane_policy as VS, Route; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); j=B(school_id='school-0',role='judge',seat=0,endpoint_id='ep'); assert j.role=='judge'; m=N(criticism_policy=C(minimum_foreign_school_coverage=1,bindings=(j,),max_batch_size=1,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True),control_plane_policy=N(mode='active_inquiry'),engine_config_json='{\"N_SCHOOLS\": 2}',roles={'argumentative_critic':(r,),'judge':(r,)}); assert 'V4_CRITICISM_ROLE_UNSUPPORTED' in str(pytest.raises(ValueError,VC,m).value); k=N(control_plane_policy=N(school_execution=S(mode='route_bound',bindings=(j,),allow_shared=True,require_distinct_models=False,require_distinct_families=False)),engine_config_json='{\"N_SCHOOLS\": 1}',roles={'judge':(r,),'conjecturer':(r,)}); assert 'V4_SCHOOL_ROLE_UNSUPPORTED' in str(pytest.raises(ValueError,VS,k).value)"`
+Since 2026-08-16 those two codes are DISCLOSURES, not refusals — the
+all-configurations law, completed in
+`experiments/2026-08-16-change-configs-complete-seats-test/` (see
+`DR-SUB-manifest`, "Compile never refuses a configuration"). The binding
+compiles, the notice carries the same code, and `resolve_school_route` is the
+point of use that refuses typed (`SCHOOL_ROUTE_ROLE_UNSUPPORTED`). What has
+NOT changed is what this section is about: the model still is not the gate.
+Reading `SchoolRoleBindingV1` still tells you nothing about which roles a
+policy accepts — only where the answer is recorded moved.
+
+`check: python -c "from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolRoleBindingV1 as B, CriticismPolicyV1 as C, SchoolExecutionPolicyV1 as S, _validate_v4_criticism_policy as VC, _validate_v4_control_plane_policy as VS, Route; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); j=B(school_id='school-0',role='judge',seat=0,endpoint_id='ep'); assert j.role=='judge'; n=[]; e=lambda c,*a,**k: n.append(c); m=N(criticism_policy=C(minimum_foreign_school_coverage=1,bindings=(j,),max_batch_size=1,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True),control_plane_policy=N(mode='active_inquiry'),engine_config_json='{\"N_SCHOOLS\": 2}',roles={'argumentative_critic':(r,),'judge':(r,)}); VC(m,emit=e); assert 'V4_CRITICISM_ROLE_UNSUPPORTED' in n, n; n.clear(); k=N(control_plane_policy=N(school_execution=S(mode='route_bound',bindings=(j,),allow_shared=True,require_distinct_models=False,require_distinct_families=False)),engine_config_json='{\"N_SCHOOLS\": 1}',roles={'judge':(r,),'conjecturer':(r,)}); VS(k,emit=e); assert 'V4_SCHOOL_ROLE_UNSUPPORTED' in n, n"`
 
 The same split runs the other way for `SchoolExecutionPolicyV1`: mode/topology
 consistency IS on the model (`conditioning_only` may carry no bindings), while
@@ -80,21 +90,30 @@ The `V4_` prefixes are historical, not conditional: both validators run for
 every schema version ≥ 4, and only version 6 loads at all. A manifest that
 reaches a run has passed both.
 
-`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolExecutionPolicyV1 as S, SchoolRoleBindingV1 as B, _validate_v4_control_plane_policy as V, Route; b=B(school_id='school-0',role='conjecturer',seat=0,endpoint_id='ep'); mk=lambda **kw: S(**{'mode':'route_bound','bindings':(),'allow_shared':True,'require_distinct_models':False,'require_distinct_families':False, **kw}); assert 'conditioning_only cannot carry route bindings' in str(pytest.raises(Exception,mk,mode='conditioning_only',bindings=(b,)).value); r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); mf=lambda p,n=1: N(control_plane_policy=N(school_execution=p),engine_config_json='{\"N_SCHOOLS\": %d}'%n,roles={'conjecturer':(r,)}); assert str(pytest.raises(ValueError,V,mf(mk())).value).startswith('V4_SCHOOL_BINDING_INCOMPLETE'); V(mf(mk(bindings=(b,)))); V(mf(mk(mode='conditioning_only'),9)); s=open('src/deepreason/run_manifest.py').read(); i=s.index('if self.schema_version >= 4:'); assert '_validate_v4_control_plane_policy(self)' in s[i:i+400] and '_validate_v4_criticism_policy(self)' in s[i:i+400]" && grep -q "if 1 <= schema_version <= 5:" src/deepreason/run_manifest.py && grep -q "class UnsupportedRunManifestVersionError" src/deepreason/run_manifest.py`
+`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolExecutionPolicyV1 as S, SchoolRoleBindingV1 as B, _validate_v4_control_plane_policy as V, Route; b=B(school_id='school-0',role='conjecturer',seat=0,endpoint_id='ep'); mk=lambda **kw: S(**{'mode':'route_bound','bindings':(),'allow_shared':True,'require_distinct_models':False,'require_distinct_families':False, **kw}); assert 'conditioning_only cannot carry route bindings' in str(pytest.raises(Exception,mk,mode='conditioning_only',bindings=(b,)).value); r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); mf=lambda p,n=1: N(control_plane_policy=N(school_execution=p),engine_config_json='{\"N_SCHOOLS\": %d}'%n,roles={'conjecturer':(r,)}); n=[]; e=lambda c,*a,**k: n.append(c); V(mf(mk()),emit=e); assert n==['V4_SCHOOL_BINDING_INCOMPLETE'], n; n.clear(); V(mf(mk(bindings=(b,))),emit=e); V(mf(mk(mode='conditioning_only'),9),emit=e); assert n==[], n; s=open('src/deepreason/run_manifest.py').read(); i=s.index('if self.schema_version >= 4:'); assert '_validate_v4_control_plane_policy(self, emit=_emit_deduped)' in s[i:i+400] and '_validate_v4_criticism_policy(self, emit=_emit_deduped)' in s[i:i+400]" && grep -q "if 1 <= schema_version <= 5:" src/deepreason/run_manifest.py && grep -q "class UnsupportedRunManifestVersionError" src/deepreason/run_manifest.py`
 
 ### The criticism validator's arithmetic
 
-Foreign criticism is impossible below two schools and refuses to pretend
-otherwise: `minimum_foreign_school_coverage` is `ge=1` on the model, and the
-validator compares it against `N_SCHOOLS - 1`. So `N_SCHOOLS` of 0 or 1 forbids
-any criticism policy at all, rather than compiling one that can never be
-satisfied. Above that, the binding set must equal the roster exactly — missing
-and extra are both `V4_CRITICISM_BINDING_INCOMPLETE`, an unknown id is
-`V4_CRITICISM_SCHOOL_UNKNOWN` — and `seat` and `endpoint_id` must BOTH name the
-same frozen route, because a school is not a property of a route and the pair is
-the only thing tying the two identities together.
+Foreign criticism is impossible below two schools and says so:
+`minimum_foreign_school_coverage` is `ge=1` on the model, and the validator
+compares it against `N_SCHOOLS - 1`. Since 2026-08-16 that mismatch DISCLOSES
+(`V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE` as a notice) rather than refusing,
+and no resolution is invented — a `ge=1` field cannot be clamped to zero, so
+the declared coverage stands and `workflow/criticism.py` refuses typed
+(`V4_CRITICISM_FOREIGN_COVERAGE_UNSATISFIED`) at the point of use. Above two
+schools, an incomplete binding set is also a notice — missing and extra are
+both `V4_CRITICISM_BINDING_INCOMPLETE`.
 
-`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolRoleBindingV1 as B, CriticismPolicyV1 as C, _validate_v4_criticism_policy as V, Route; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); ok=lambda i,s=0,e='ep': B(school_id='school-%d'%i,role='argumentative_critic',seat=s,endpoint_id=e); m=lambda n,bs,cov=1: N(criticism_policy=C(minimum_foreign_school_coverage=cov,bindings=bs,max_batch_size=1,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True),control_plane_policy=N(mode='active_inquiry'),engine_config_json='{\"N_SCHOOLS\": %d}'%n,roles={'argumentative_critic':(r,)}); V(m(2,(ok(0),ok(1)))); code=lambda *a: str(pytest.raises(ValueError,V,m(*a)).value).split(':')[0]; assert code(0,())=='V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE'; assert code(1,(ok(0),))=='V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE'; assert code(2,(ok(0),))=='V4_CRITICISM_BINDING_INCOMPLETE'; assert code(2,(ok(0),ok(1),ok(2)))=='V4_CRITICISM_SCHOOL_UNKNOWN'; assert code(2,(ok(0),ok(1,0,'other')))=='V4_CRITICISM_ENDPOINT_MISMATCH'; assert code(2,(ok(0),ok(1,5)))=='V4_CRITICISM_SEAT_OUT_OF_RANGE'"`
+Three sibling checks still REFUSE, and the distinction is the point: an
+unknown school id (`V4_CRITICISM_SCHOOL_UNKNOWN`), an out-of-range seat
+(`V4_CRITICISM_SEAT_OUT_OF_RANGE`) and a seat/endpoint disagreement
+(`V4_CRITICISM_ENDPOINT_MISMATCH`) are not configurations being denied — the
+first two name something that does not exist, and the third is a corrupted
+frozen identity. `seat` and `endpoint_id` must BOTH name the same frozen
+route, because a school is not a property of a route and the pair is the only
+thing tying the two identities together.
+
+`check: python -c "import pytest; from types import SimpleNamespace as N; from deepreason.run_manifest import SchoolRoleBindingV1 as B, CriticismPolicyV1 as C, _validate_v4_criticism_policy as V, Route; r=Route(endpoint_id='ep',base_url='http://x',model_id='m',provider='p',family='f'); ok=lambda i,s=0,e='ep': B(school_id='school-%d'%i,role='argumentative_critic',seat=s,endpoint_id=e); m=lambda n,bs,cov=1: N(criticism_policy=C(minimum_foreign_school_coverage=cov,bindings=bs,max_batch_size=1,target_eligibility='accepted_school_artifacts',authority='observe_only',allow_shared=True),control_plane_policy=N(mode='active_inquiry'),engine_config_json='{\"N_SCHOOLS\": %d}'%n,roles={'argumentative_critic':(r,)}); seen=[]; e=lambda c,*a,**k: seen.append(c); V(m(2,(ok(0),ok(1))),emit=e); assert seen==[], seen; notes=lambda *a: (seen.clear(), V(m(*a),emit=e), list(seen))[2]; assert notes(0,())==['V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE']; assert notes(1,(ok(0),))==['V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE']; assert notes(2,(ok(0),))==['V4_CRITICISM_BINDING_INCOMPLETE']; code=lambda *a: str(pytest.raises(ValueError,V,m(*a),emit=e).value).split(':')[0]; assert code(2,(ok(0),ok(1),ok(2)))=='V4_CRITICISM_SCHOOL_UNKNOWN'; assert code(2,(ok(0),ok(1,0,'other')))=='V4_CRITICISM_ENDPOINT_MISMATCH'; assert code(2,(ok(0),ok(1,5)))=='V4_CRITICISM_SEAT_OUT_OF_RANGE'"`
 
 ### The bindings are the universe at runtime too
 

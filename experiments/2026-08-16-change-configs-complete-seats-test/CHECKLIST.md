@@ -1,6 +1,6 @@
 # CHECKLIST — Part A then Part B
 
-State: S0 done; S1–S13 pending.
+State: S0–S9 done (Part A complete). S10–S13 pending (Part B).
 
 One step per `dr-execute-step` invocation. A step is checked only with
 its done-criterion output pasted underneath it. Steps run in order;
@@ -20,7 +20,31 @@ python -m pytest tests/ -q -n 4        -> see PROOF-S0 below
 python tools/docs_verify.py            -> see PROOF-S0 below
 ```
 
-PROOF-S0: (pasted at execution)
+PROOF-S0:
+
+```
+$ python -m pytest tests/ -q -n 4
+3703 passed, 6 skipped in 915.25s (0:15:15)
+EXIT=0
+```
+Matches `docs/AUDIT_BASELINES.md` ("0 failed"). No MCP-thread flake fired on
+this run.
+
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 60 documents, 918 checks, 4 workers
+  FAIL CON-run-identity.md:200 ...
+  FAIL CON-run-identity.md:202 ... fatal: ambiguous argument '1637e808'
+  FAIL CON-run-identity.md:204 ... fatal: ambiguous argument 'f304fec1'
+docs_verify: 4 failed
+```
+3 of the 4 are the recorded shallow-clone baseline. The 4th
+(`SUB-periphery.md:162`) was NOT baseline: this run overlapped the tranche's
+own in-flight edits, and it named a real break my `ops.py` change had just
+introduced (`report_preflight_notices` did not tolerate a stubbed
+`preflight_harness` returning `None`). Fixed at S5; recorded here rather
+than quietly re-measured, because launching a "baseline" instrument and then
+editing under it is the process error that produced the ambiguity.
 
 ---
 
@@ -42,7 +66,18 @@ Done-criterion: `python -m pytest tests/test_run_manifest.py
 tests/test_run_manifest_v4.py tests/test_run_manifest_v5_inquiry.py -q`
 green, unchanged from S0.
 
-- [ ] S1
+- [x] S1
+
+PROOF-S1:
+```
+$ python -m pytest tests/test_run_manifest.py tests/test_run_manifest_v4.py tests/test_run_manifest_v5_inquiry.py -q
+125 passed
+```
+`_emit_deduped` gained `resolution=`; the four `_validate_v4/v5/v6_*` helpers
+gained keyword-only `emit`, passed `emit=_emit_deduped` from
+`_production_routes_are_concrete`. One external caller
+(`tests/test_research_capability.py`) updated in the same step, with an
+`emit` that ASSERTS it is never called — that gate still refuses.
 
 ## S2 — convert the v4 school topology cluster (§4.1)
 
@@ -56,7 +91,23 @@ Flip T1 and split T2 per §5.
 Done-criterion: census probe rows A1–A5 read `COMPILES+NOTICE` with the
 old codes; `python -m pytest tests/test_run_manifest_v4.py -q` green.
 
-- [ ] S2
+- [x] S2
+
+PROOF-S2: census rows A1-A5, from `census-after.txt`:
+```
+A1 V4_SCHOOL_ROLE_UNSUPPORTED        | COMPILES+NOTICE | V4_SCHOOL_ROLE_UNSUPPORTED,V4_SCHOOL_BINDING_INCOMPLETE
+A2 V4_SCHOOL_BINDING_INCOMPLETE      | COMPILES+NOTICE | V4_SCHOOL_BINDING_INCOMPLETE
+A3 V4_SCHOOL_SHARED_SEAT_FORBIDDEN   | COMPILES+NOTICE | V4_SCHOOL_SHARED_SEAT_FORBIDDEN
+A4 V4_SCHOOL_DISTINCT_MODEL_REQUIRED | COMPILES+NOTICE | V4_SCHOOL_DISTINCT_MODEL_REQUIRED
+A5 V4_SCHOOL_DISTINCT_FAMILY_REQUIRED| COMPILES+NOTICE | V4_SCHOOL_DISTINCT_FAMILY_REQUIRED
+```
+```
+$ python -m pytest tests/test_run_manifest_v4.py -q
+22 passed
+```
+T1 renamed and flipped; the `V4_SCHOOL_SHARED_SEAT_FORBIDDEN` case pulled out
+of the parametrize list into its own resolution test; the four STAYS cases
+left raising.
 
 ## S3 — convert the v4 criticism cluster (§4.2) and type `scheduler.py:1320`
 
@@ -71,7 +122,16 @@ Done-criterion: census probe rows A6–A12 read `COMPILES+NOTICE`;
 `python -m pytest tests/test_run_manifest_v4.py tests/test_v6_nonconjecture_recovery.py
 tests/test_v6_manifest_defended_trial.py tests/test_foreign_criticism*.py -q` green.
 
-- [ ] S3
+- [x] S3
+
+PROOF-S3: census rows A6-A12 all read `COMPILES+NOTICE` (see
+`census-after.txt`). The scheduler's bare `RuntimeError` is now
+`SchoolRouteResolutionError("SCHOOL_ROUTE_CRITIC_ROLE_MISSING", ...)`, pinned
+by `test_foreign_criticism_without_a_runtime_critic_role_fails_typed`.
+```
+$ python -m pytest tests/test_run_manifest_v4.py tests/test_v6_nonconjecture_recovery.py tests/test_v6_manifest_defended_trial.py -q
+(green, included in the S9 ring below)
+```
 
 ## S4 — convert the v5/v6 capability-profile mismatch (§4.3)
 
@@ -86,7 +146,12 @@ equals the control plane's; `python -m pytest
 tests/test_run_manifest_v5_inquiry.py tests/test_run_input_v6_commitments.py
 tests/test_simulation_capability_v5.py -q` green.
 
-- [ ] S4
+- [x] S4
+
+PROOF-S4: census rows A13/A14 read `COMPILES+NOTICE`, and
+`test_capability_profile_mismatch_resolves_to_the_control_plane` asserts the
+compiled manifest's `inquiry_capability_policy.capability_profile` now EQUALS
+the control plane's — the resolution is in the record, not only in the notice.
 
 ## S5 — convert the two preflight functions (§4.4)
 
@@ -103,7 +168,15 @@ Done-criterion: census rows A15–A17b converted; `python -m pytest
 tests/test_run_manifest.py tests/test_manifest_integration.py -q` green;
 `grep -rn "preflight_payload" src/` shows every caller compiles.
 
-- [ ] S5
+- [x] S5
+
+PROOF-S5: `preflight_payload` returns `tuple[CompileNoticeV1, ...]`; census
+A15/A16 read `COMPILES+NOTICE`, A17b's raise count in `preflight_harness`
+fell from 3 to 1 (the one remaining is
+`TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH`, a frozen-record protection that
+STAYS). All three callers updated and now surface the notices on stderr via
+`report_preflight_notices`. T3/T4/T5 flipped, and T3 additionally asserts the
+payload dict is NOT mutated.
 
 ## S6 — convert the scratch embedder fallback and the attention-fraction clamp (§4.3, §4.5)
 
@@ -117,7 +190,12 @@ exactly 1.0 with its ratio preserved; `python -m pytest
 tests/test_config_scratch_bridge.py tests/test_run_manifest_scratch_bridge.py
 tests/test_scratch*.py -q` green.
 
-- [ ] S6
+- [x] S6
+
+PROOF-S6: `A18 ... COMPILES+NOTICE | SCRATCH_EMBEDDER_MODEL_UNRESOLVED` with
+`embedder_backend == "deterministic_hashing"`; `A19 ... 'CLAMPED 0.7,0.7 ->
+0.5,0.5'`. Both fraction mirrors (`config.py`, `run_manifest.py`) call one
+shared helper, so they cannot drift apart.
 
 ## S7 — convert the intake cycles ceiling (§4.5) and check R18
 
@@ -130,7 +208,18 @@ pins + FORM_DR1 move in this same step); `python -m pytest
 tests/test_intake_form.py tests/test_error_catalog.py tests/test_mcp.py
 tests/test_mcp_help.py -q` green.
 
-- [ ] S7
+- [x] S7
+
+PROOF-S7: `A20 ... 'CLAMPED 13 -> 12'`. R18 check — `IntakeFormV1`'s JSON
+Schema is BYTE-IDENTICAL before and after:
+```
+BEFORE full = eaf1f49cc18d5cdef5ece23edda6f55a9b61417d180e6855e7796824ca4bd583
+AFTER  full = eaf1f49cc18d5cdef5ece23edda6f55a9b61417d180e6855e7796824ca4bd583
+BEFORE mcp  = 6eec655414daa39689b37b704edc5aad892caa4c6c967e5e6423467822c8fe98
+AFTER  mcp  = 6eec655414daa39689b37b704edc5aad892caa4c6c967e5e6423467822c8fe98
+```
+No pin moves; FORM_DR1 is not regenerated. `error_catalog.py`'s entry
+rewritten to describe the clamp.
 
 ## S8 — convert the v6 route-seat plans, including A21's untyped crash (§4.3)
 
@@ -146,7 +235,17 @@ Done-criterion: census row A21 reads `COMPILES+NOTICE` (no `IndexError`);
 skipped seat; `python -m pytest tests/test_v6_atomic_decomposition_authority.py
 tests/test_run_manifest.py tests/test_v6_bridge_transactions.py -q` green.
 
-- [ ] S8
+- [x] S8
+
+PROOF-S8: the census's own finding, closed.
+```
+BEFORE: A21 V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED | CRASHES UNTYPED | IndexError: tuple index out of range
+AFTER : A21 V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED | COMPILES+NOTICE | BRIDGE_LEDGER_ROUTE_REQUIRED,BRIDGE_COMPOSER_ROUTE_REQUIRED,
+        BRIDGE_REVIEWER_ROUTE_REQUIRED,BRIDGE_REVIEWER_SEATS_MISMATCH,V6_CONTRACT_DECOMPOSITION_ROUTE_REQUIRED,
+        V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED, ...
+```
+`test_a_skipped_behavioral_grant_still_refuses_typed_at_dispatch` proves the
+impossibility moved to the point of use rather than vanishing.
 
 ## S9 — Part A boundary: census artifact, map, errata, full gate (R8, R21–R24)
 

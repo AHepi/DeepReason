@@ -178,13 +178,19 @@ def test_criticism_policy_is_v4_active_only():
             compiled_at=STAMP,
             criticism_policy=policy,
         )
-    with pytest.raises(RunManifestError, match="ACTIVE_CONJECTURE_REQUIRED"):
-        _manifest(
-            critic_routes=[_route("critic")],
-            bindings=policy.bindings,
-            schools=2,
-            control_mode="shadow",
-        )
+    # All-configs-allowed completion (2026-08-16): a control mode that never
+    # dispatches foreign criticism is a configuration, not a contradiction --
+    # it compiles and discloses. Both the compile-time gate and its
+    # model-validator twin record the same fact from their own site.
+    manifest = _manifest(
+        critic_routes=[_route("critic")],
+        bindings=policy.bindings,
+        schools=2,
+        control_mode="shadow",
+    )
+    codes = [n.code for n in (manifest.compile_notices or ())]
+    assert "CRITICISM_ACTIVE_CONJECTURE_REQUIRED" in codes, codes
+    assert "V4_CRITICISM_ACTIVE_REQUIRED" in codes, codes
 
 
 @pytest.mark.parametrize(
@@ -216,14 +222,31 @@ def test_criticism_policy_is_v4_active_only():
         ),
     ),
 )
-def test_policy_rejects_incomplete_or_impossible_topology(bindings, coverage, message):
-    with pytest.raises(ValidationError, match=message):
-        _manifest(
-            critic_routes=[_route("critic-a")],
-            bindings=bindings,
-            schools=2,
-            coverage=coverage,
-        )
+def test_policy_discloses_incomplete_or_impossible_topology(bindings, coverage, message):
+    """All-configs-allowed completion (2026-08-16). Three of these four are
+    CONFIGURATIONS and now compile with a notice; the fourth
+    (`SEAT_OUT_OF_RANGE`) is a dangling reference -- it names a seat that does
+    not exist -- so it is not a configuration and still refuses. The split is
+    the point of the parametrize list."""
+
+    refuses = message == "SEAT_OUT_OF_RANGE"
+    if refuses:
+        with pytest.raises(ValidationError, match=message):
+            _manifest(
+                critic_routes=[_route("critic-a")],
+                bindings=bindings,
+                schools=2,
+                coverage=coverage,
+            )
+        return
+    manifest = _manifest(
+        critic_routes=[_route("critic-a")],
+        bindings=bindings,
+        schools=2,
+        coverage=coverage,
+    )
+    codes = [n.code for n in (manifest.compile_notices or ())]
+    assert any(message in code for code in codes), (message, codes)
 
 
 def test_shared_critic_seat_requires_explicit_permission():
@@ -231,13 +254,21 @@ def test_shared_critic_seat_requires_explicit_permission():
         _binding(0, 0, "critic"),
         _binding(1, 0, "critic"),
     )
-    with pytest.raises(ValidationError, match="SHARED_SEAT_FORBIDDEN"):
-        _manifest(
-            critic_routes=[_route("critic")],
-            bindings=bindings,
-            schools=2,
-            allow_shared=False,
-        )
+    # R4 conflict, resolved deterministically (2026-08-16): the explicit
+    # bindings win over `allow_shared=False`, and the notice's `resolution`
+    # records which half was dropped. The seat is genuinely SHARED afterwards
+    # -- one lease serves both schools -- which is what the disclosure says.
+    shared = _manifest(
+        critic_routes=[_route("critic")],
+        bindings=bindings,
+        schools=2,
+        allow_shared=False,
+    )
+    notice = next(
+        n for n in shared.compile_notices if n.code == "V4_CRITICISM_SHARED_SEAT_FORBIDDEN"
+    )
+    assert "explicit bindings win" in notice.resolution
+    assert shared.criticism_policy.allow_shared is False
     assert _manifest(
         critic_routes=[_route("critic")],
         bindings=bindings,
@@ -246,27 +277,37 @@ def test_shared_critic_seat_requires_explicit_permission():
     ).criticism_policy.allow_shared
 
 
-def test_defended_trial_requires_defender_and_cross_family_judges():
+def test_defended_trial_discloses_a_missing_defender_or_single_family_judges():
     critic_routes = [_route("critic")]
     bindings = (_binding(0, 0, "critic"), _binding(1, 0, "critic"))
-    with pytest.raises(ValidationError, match="DEFENDER_REQUIRED"):
-        _manifest(
-            critic_routes=critic_routes,
-            bindings=bindings,
-            schools=2,
-            authority="defended_trial",
-        )
-    with pytest.raises(ValidationError, match="CROSS_FAMILY_JUDGES_REQUIRED"):
-        _manifest(
-            critic_routes=critic_routes,
-            bindings=bindings,
-            schools=2,
-            authority="defended_trial",
-            extra_roles={
-                "defender": _route("defender"),
-                "judge": [_route("judge-a"), _route("judge-b")],
-            },
-        )
+    # All-configs-allowed completion (2026-08-16): both shapes COMPILE and
+    # disclose. Neither can produce a warrant -- informal/trial.py declines
+    # typed on a missing defender role, and require_cross_family_judge_ensemble
+    # raises JudgeEnsemblePolicyError from the immutable leases before any
+    # judge call. The seats/evidence law is enforced at the point of use, not
+    # by refusing to compile.
+    no_defender = _manifest(
+        critic_routes=critic_routes,
+        bindings=bindings,
+        schools=2,
+        authority="defended_trial",
+    )
+    assert "V4_CRITICISM_DEFENDER_REQUIRED" in [
+        n.code for n in (no_defender.compile_notices or ())
+    ]
+    one_family = _manifest(
+        critic_routes=critic_routes,
+        bindings=bindings,
+        schools=2,
+        authority="defended_trial",
+        extra_roles={
+            "defender": _route("defender"),
+            "judge": [_route("judge-a"), _route("judge-b")],
+        },
+    )
+    assert "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED" in [
+        n.code for n in (one_family.compile_notices or ())
+    ]
     manifest = _manifest(
         critic_routes=critic_routes,
         bindings=bindings,

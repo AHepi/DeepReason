@@ -51,10 +51,17 @@ def probe(label: str):
             kind = "REFUSES" if isinstance(error, (RunManifestError, ValidationError, ValueError)) else "CRASHES UNTYPED"
             RESULTS.append((label, kind, f"{type(error).__name__}: {code[:110]}"))
         else:
-            notices = getattr(value, "compile_notices", None) if value is not None else None
+            if isinstance(value, tuple):
+                notices = value
+            else:
+                notices = (
+                    getattr(value, "compile_notices", None)
+                    if value is not None
+                    else None
+                )
             if notices:
                 codes = ",".join(n.code for n in notices)
-                RESULTS.append((label, "COMPILES+NOTICE", codes[:160]))
+                RESULTS.append((label, "COMPILES+NOTICE", codes[:300]))
             else:
                 RESULTS.append((label, "COMPILES (no notice)", repr(value)[:80]))
         return fn
@@ -322,8 +329,7 @@ def _():
     from tests.test_run_manifest import _compile_v6_manifest
 
     manifest = _compile_v6_manifest()
-    preflight_payload(manifest, {"standard": "rubric-standard"})
-    return None
+    return preflight_payload(manifest, {"standard": "rubric-standard"})
 
 
 @probe("A16 SECOND_JUDGE_FAMILY_REQUIRED (preflight_payload)")
@@ -332,8 +338,7 @@ def _():
 
     manifest = _compile_v6_manifest()
     allowed = manifest.model_copy(update={"rubric_policy": "allow"})
-    preflight_payload(allowed, {"standard": "rubric-standard"})
-    return None
+    return preflight_payload(allowed, {"standard": "rubric-standard"})
 
 
 @probe("A17 PROPERTY_RUBRIC_TRIAL_FORBIDDEN (preflight_harness)")
@@ -373,10 +378,14 @@ def _():
 
 @probe("A19 ScratchpadConfig reserved attention fractions")
 def _():
-    return Config(
+    config = Config(
         roles={"conjecturer": _route("route-a")},
         scratchpad={"enabled": True, "exploratory_fraction": 0.7,
                     "underexposed_fraction": 0.7},
+    )
+    pad = config.scratchpad
+    return (
+        f"CLAMPED 0.7,0.7 -> {pad.exploratory_fraction},{pad.underexposed_fraction}"
     )
 
 
@@ -385,7 +394,8 @@ def _():
 def _():
     from deepreason.intake_form import IntakeFormV1, PUBLIC_MAX_CYCLES
 
-    return IntakeFormV1(question="q?", cycles=PUBLIC_MAX_CYCLES + 1)
+    form = IntakeFormV1(question="q?", cycles=PUBLIC_MAX_CYCLES + 1)
+    return f"CLAMPED {PUBLIC_MAX_CYCLES + 1} -> {form.cycles}"
 
 
 # ------------------------------------------------- A21 v6 behavioral contract

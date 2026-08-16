@@ -141,6 +141,25 @@ class ImportPolicy(BaseModel):
         return value
 
 
+def clamp_reserved_attention_fractions(
+    exploratory: float, underexposed: float
+) -> tuple[float, float]:
+    """The one deterministic resolution reserved scratch attention needs.
+
+    Two reserved fractions summing above 1.0 claim more of a pack than
+    exists. Both are scaled by 1/(e+u), so they sum to exactly 1.0 and their
+    RATIO -- which is the operator's actual preference -- is preserved. The
+    same helper serves `ScratchpadConfig` and the manifest's `ScratchPolicy`
+    mirror: moving one side and not the other reintroduces exactly the
+    two-sided inconsistency the 2026-08-12 census warned about.
+    """
+
+    total = exploratory + underexposed
+    if total <= 1.0:
+        return exploratory, underexposed
+    return exploratory / total, underexposed / total
+
+
 class ScratchpadConfig(BaseModel):
     """Typed source policy for the advisory scratch workspace.
 
@@ -183,11 +202,33 @@ class ScratchpadConfig(BaseModel):
             raise ValueError("similarity_threshold must be finite")
         return value
 
-    @model_validator(mode="after")
-    def _reserved_attention_fractions_fit(self):
-        if self.exploratory_fraction + self.underexposed_fraction > 1.0:
-            raise ValueError("reserved scratch attention fractions must not exceed one")
-        return self
+    @model_validator(mode="before")
+    @classmethod
+    def _reserved_attention_fractions_fit(cls, data):
+        """R4 conflict, resolved deterministically instead of refused
+        (all-configs-allowed, CLAUDE.md 2026-08-12): two reserved fractions
+        that together claim more than one whole pack are scaled to fit.
+        Runs `before` so the constructed model already holds the normalized
+        pair -- `validate_assignment` is on, and reassigning from an `after`
+        validator would re-enter validation."""
+
+        if not isinstance(data, dict):
+            return data
+        exploratory = data.get("exploratory_fraction")
+        underexposed = data.get("underexposed_fraction")
+        if exploratory is None or underexposed is None:
+            return data
+        try:
+            clamped = clamp_reserved_attention_fractions(
+                float(exploratory), float(underexposed)
+            )
+        except (TypeError, ValueError):
+            return data  # shape error; the field validators refuse it
+        if clamped == (exploratory, underexposed):
+            return data
+        data = dict(data)
+        data["exploratory_fraction"], data["underexposed_fraction"] = clamped
+        return data
 
 
 class BridgeConfig(BaseModel):

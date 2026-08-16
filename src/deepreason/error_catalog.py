@@ -392,8 +392,12 @@ CATALOG: dict[str, ErrorCatalogEntry] = {
             "INTAKE_CYCLES_CEILING_EXCEEDED",
             "The requested cycle budget exceeds the V6 ceiling.",
             "Your intake form's `cycles` value is higher than the fixed "
-            "maximum the standard reasoning engine accepts.",
-            "Lower `cycles` to the ceiling or below.",
+            "maximum the standard reasoning engine accepts. The form no "
+            "longer refuses this (all-configs-allowed, completed 2026-08-16): "
+            "`cycles` is clamped down to the ceiling and the run proceeds "
+            "with the clamped value.",
+            "Nothing is required. Set `cycles` at or below the ceiling if you "
+            "want the value you wrote to be the value the run uses.",
         ),
         _entry(
             "RESULTS_ROOT_NOT_FOUND",
