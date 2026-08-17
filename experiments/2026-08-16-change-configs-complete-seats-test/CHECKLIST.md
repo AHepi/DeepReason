@@ -1,6 +1,6 @@
 # CHECKLIST — Part A then Part B
 
-State: S0–S9 done (Part A complete). S10–S13 pending (Part B).
+State: S0–S13 done. Tranche complete; see VALIDATION.md and DELIVERY.md.
 
 One step per `dr-execute-step` invocation. A step is checked only with
 its done-criterion output pasted underneath it. Steps run in order;
@@ -263,7 +263,31 @@ impossibility moved to the point of use rather than vanishing.
 Done-criterion: full gate 0 failed (MCP-thread flakes isolated serially
 before attribution); `docs_verify` 3 failures, all `CON-run-identity.md`.
 
-- [ ] S9
+- [x] S9
+
+PROOF-S9:
+```
+$ python -m pytest tests/ -q -n 4
+3726 passed, 6 skipped in 949.79s (0:15:49)
+EXIT=0
+```
+Baseline was 3703 passed / 0 failed; +23 are this tranche's own pins. 0
+failed, so no MCP-thread flake needed isolating.
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 60 documents, 921 checks, 4 workers
+  FAIL CON-run-identity.md:200 / :202 / :204   (shallow-clone git history)
+docs_verify: 3 failed
+```
+Exactly the recorded baseline. Check count 918 -> 921: the three new checks
+this tranche wrote. `CENSUS.md` + `census-after.txt` committed.
+
+**Gate discipline note, recorded against myself.** The FIRST run of this
+gate was RED — 6 failures in `tests/test_foreign_criticism_policy_c3.py`,
+a whole pinning file the R7 enumeration missed because its assertions match
+codes by SUBSTRING (`"BINDING_INCOMPLETE"`, not
+`"V4_CRITICISM_BINDING_INCOMPLETE"`). Flipped, and the method gap written
+into SPEC §5's addendum rather than quietly fixed.
 
 ---
 
@@ -279,7 +303,24 @@ green (or green-with-declared-xfail), and every assertion reads a typed
 record object, never model output — proven by `grep -n` showing no
 assertion on generated text.
 
-- [ ] S10
+- [x] S10
+
+PROOF-S10:
+```
+$ python -m pytest tests/test_seats_evidence_law.py -q
+11 passed in 0.29s
+```
+11 attack cases, no pytest marks, no `xfail`. Every assertion reads a typed
+record object — `harness.warrants`, `harness.state.status`, `harness.log`,
+`compile_notices`, `EndpointLease.route`, and the typed refusal classes.
+No assertion reads generated text.
+
+Three cases were WRONG on first run and were fixed rather than weakened:
+`single_model` needed a matching concrete route, `rubric_policy="allow"` is
+not a legal value (`forbid` / `require_cross_family` only), and
+`epistemic_boundary` lives on `ScratchAuthoringPolicyV1`, not `ScratchPolicy`
+— the third is the kind of mistake the law's own test must not make, since
+asserting a field that does not exist proves nothing.
 
 ## S11 — mutation proof (R14)
 
@@ -290,7 +331,52 @@ the real tree, record GREEN.
 Done-criterion: both runs pasted, RED then GREEN, with the exact mutation
 diff shown.
 
-- [ ] S11
+- [x] S11
+
+PROOF-S11 — the mutation, RED, restore, GREEN.
+
+Mutation applied to guard 1 (`Harness._validate_warrant`'s rubric branch),
+verbatim diff:
+```
+--- a/src/deepreason/harness.py
++++ b/src/deepreason/harness.py
+@@ -1979,9 +1979,7 @@ class Harness:
+         # §2: every rubric-derived demonstrative warrant's trace_ref must
+         # contain a conforming trial transcript (§3 guard, unbypassable).
+-        if warrant.commitment and self.commitments[warrant.commitment].eval.startswith(
+-            "rubric:"
+-        ):
++        if False:  # MUTATION (temporary): guard 1 disabled
+             from deepreason.informal.trial import conforming_transcript
+```
+
+RED with the guard disabled:
+```
+>       with pytest.raises(WellFormednessError):
+E       Failed: DID NOT RAISE WellFormednessError
+tests/test_seats_evidence_law.py:207: Failed
+FAILED tests/test_seats_evidence_law.py::test_b9_rubric_input_under_forbid_compiles_but_cannot_yield_a_warrant
+1 failed, 10 passed in 0.31s
+```
+
+Restored and verified byte-identical:
+```
+$ git checkout -- src/deepreason/harness.py && git diff --quiet src/deepreason/harness.py
+RESTORED CLEAN
+byte-identical to pre-mutation
+```
+
+GREEN on the real tree:
+```
+$ python -m pytest tests/test_seats_evidence_law.py -q
+11 passed in 0.25s
+```
+
+Note on what the mutation proves and what it does not: it proves the file
+detects the loss of guard 1 (the frozen rubric-transcript rule). Guards 2-4
+are each carried by their own case, but only guard 1 was mutated — one
+mutation was the requirement, and B9b is the discriminating control that
+shows guard 1 is not simply refusing everything.
 
 ## S12 — park anything Part B exposed (R16)
 
@@ -302,7 +388,16 @@ Done-criterion: `PARKED.md` written (P1 = `V6_LAUNCH_DISABLED` decision,
 P2 = seat-binding notice threading, plus any Part B finding), and every
 `xfail` in the new file points at a `PARKED.md` id.
 
-- [ ] S12
+- [x] S12
+
+PROOF-S12: `PARKED.md` written with four entries — P1 (the v6 launch kill
+switch, needs the operator's word), P2 (seat-binding notice threading,
+blast radius still unmeasured), P3 (`_cmd_validate_intake`'s now-unreachable
+advisory branch), P4 (preflight notices reach stderr but not the typed run
+record). **No attack case exposed a real violation of the law**, so R16's
+xfail-with-pointer branch did not fire; `grep -c xfail
+tests/test_seats_evidence_law.py` returns 0, and PARKED.md says so
+explicitly rather than leaving the absence to be inferred.
 
 ## S13 — tranche boundary: full gate, wheel smokes, validation
 
@@ -312,4 +407,32 @@ scripts/wheel_operational_smoke.py` exit 0 OR failing only at its
 `reason` stage with "terminal verification is incomplete" (the parked
 pre-existing flake). `VALIDATION.md` written.
 
-- [ ] S13
+- [x] S13
+
+PROOF-S13:
+```
+$ python -m pytest tests/ -q -n 4
+3737 passed, 6 skipped in 870.80s (0:14:30)     EXIT=0
+
+$ python tools/docs_verify.py
+docs_verify [full]: 60 documents, 922 checks, 4 workers
+  FAIL CON-run-identity.md:200 / :202 / :204   (shallow-clone git history)
+docs_verify: 3 failed                            <- the recorded baseline
+
+$ python scripts/wheel_smoke.py
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+points, module parity, MCP registration, and exact MCP schemas   EXIT=0
+
+$ python -u scripts/wheel_operational_smoke.py
+AssertionError: terminal verification is incomplete
+  ... _assert_resumable_terminal, scripts/wheel_operational_smoke.py:2061
+  envelope: "stage":"reason", "failure_kind":"assertion_failed",
+            "mcp_liveness":"exited", all terminalization counters 0
+                                                 EXIT=1
+```
+The operational-smoke failure is the PARKED pre-existing defect
+(`experiments/2026-08-16-change-embedder-auto-install/PARKED.md` P1), matched
+field by field, and REQUEST.md §3 named it in advance. `VALIDATION.md` gives
+the checkable reason it cannot be this tranche's.
+
+`VALIDATION.md` written; verdict PASS.

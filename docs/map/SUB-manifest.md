@@ -1,5 +1,5 @@
 <!-- DR-SUB-manifest -->
-Verified-at: 69d3061e
+Verified-at: bce018ae
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
 Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-schools
@@ -152,7 +152,7 @@ no sink: `ScratchpadConfig`'s reserved attention fractions (clamped
 proportionally, ratio preserved, by the same helper the `ScratchPolicy`
 mirror calls) and `IntakeFormV1.cycles` (clamped to `PUBLIC_MAX_CYCLES`).
 The resolved value is the disclosure there.
-`check: python -m pytest tests/test_all_configs_allowed_remainder.py -q && grep -q "^class CompileNoticeV1(BaseModel):" src/deepreason/run_manifest.py && test "$(grep -c 'payload.pop("compile_notices", None)' src/deepreason/run_manifest.py)" = 2 && python -c "import inspect, deepreason.run_manifest as m; assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_payload)), inspect.signature(m.preflight_payload); assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_harness))" && sh -c '! grep -q "raise ValueError(\"V4_SCHOOL_SHARED_SEAT_FORBIDDEN" src/deepreason/run_manifest.py' && sh -c '! grep -q "raise RunManifestError(\"CRITICISM_ACTIVE_CONJECTURE_REQUIRED" src/deepreason/run_manifest.py'`
+`check: python -m pytest tests/test_all_configs_allowed_remainder.py tests/test_seats_evidence_law.py -q && grep -q "^class CompileNoticeV1(BaseModel):" src/deepreason/run_manifest.py && test "$(grep -c 'payload.pop("compile_notices", None)' src/deepreason/run_manifest.py)" = 2 && python -c "import inspect, deepreason.run_manifest as m; assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_payload)), inspect.signature(m.preflight_payload); assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_harness))" && sh -c '! grep -q "raise ValueError(\"V4_SCHOOL_SHARED_SEAT_FORBIDDEN" src/deepreason/run_manifest.py' && sh -c '! grep -q "raise RunManifestError(\"CRITICISM_ACTIVE_CONJECTURE_REQUIRED" src/deepreason/run_manifest.py'`
 
 ## State it owns
 

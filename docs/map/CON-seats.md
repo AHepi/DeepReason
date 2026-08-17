@@ -1,5 +1,5 @@
 <!-- DR-CON-seats -->
-Verified-at: 47ec08a5
+Verified-at: bce018ae
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
@@ -195,6 +195,23 @@ one — no new manifest role, no change to the degrees-of-freedom count.
 `check: test "$(grep -rn '\.call(' src/deepreason --include='*.py' | wc -l)" = "45"`
 
 ## Traps
+
+- **"This configuration compiles" says nothing about what its seats may
+  do.** Since 2026-08-16 (`experiments/2026-08-16-change-configs-complete-
+  seats-test/`, completing the all-configurations law) a seat topology can
+  compile while being unable to dispatch at all: an incomplete school
+  binding roster, a criticism binding naming a generation role, a shared
+  seat under `allow_shared=False`, a `defended_trial` with no defender
+  route, a single-family judge matrix. Each carries a `CompileNoticeV1`
+  saying so. The seats/evidence law — "seats change how content is
+  GENERATED, never what counts as EVIDENCE" — is enforced entirely at the
+  POINT OF USE for these shapes: `resolve_school_role_lease`'s typed
+  codes, `require_cross_family_judge_ensemble` reading the immutable
+  leases, `informal/trial.py`'s typed `_block`/`_decline`, and
+  `Harness._validate_warrant`'s frozen rubric-transcript guard. Do not
+  read a clean compile as a working seat topology, and do not add a
+  compile-time refusal to "fix" one — read the notices.
+`check: python -m pytest tests/test_seats_evidence_law.py -q`
 
 - Reading `ProviderProfileV1.model_profile` (compact/standard/
   frontier — a presentation preset) and "the provider profile `setup`
