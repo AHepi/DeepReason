@@ -321,13 +321,92 @@ NOT delivered here.** The program's Amendment 3 table lands them "at Rung
 (5) plus the debt. Parked with a ready-to-send prompt, not dropped. Assumed; the
 operator may fold them in, which would roughly double the budget.
 
-## Questions for operator (STOP if non-empty)
+## Questions for operator (RESOLVED 2026-08-21)
 
-**Q-STOP-1 — frozen-surface contact.** `tools/blast_radius.py` reports
+**Q-STOP-1 — frozen-surface contact. GRANTED 2026-08-21** (REQUEST.md
+Amendment 1b, operator verbatim: "GRANTED: the 12-line reader fix in
+src/deepreason/invariants.py (_configured_role_cap), on three conditions.").
+Option A is taken. The three conditions become S11, S12 and S13 below, and are
+requirements R15, R16 and R17-R19 in REQUEST.md. R20 binds the whole tranche:
+"grep is not semantic proof ... proceed on the same standard."
+
+The grant was given against this already-committed design, which is the
+discipline the operator's prior message (Amendment 1a) demanded — the request
+and its reason were written into SPEC.md before any code, and nothing was
+granted verbally in chat. The original question text is kept below, unedited,
+because a resolved question that has been rewritten is no longer evidence of
+what was asked.
+
+**Q-STOP-1 (as asked) — frozen-surface contact.** `tools/blast_radius.py` reports
 `frozen_surface_verdict: CONTACT`. Per `dr-spec-change` step 3 this stops the
 tranche here until the operator's words are given. The computed list is pasted
 verbatim in "Frozen-surface contact forecast" below; the priced options and the
 recommendation are in "Decision sheet" below.
+
+### S11 (R15) — reader-only, proven not asserted
+
+Files: `experiments/.../proof/sweep_before.txt`, `proof/sweep_after.txt`,
+`tests/test_allocation_signal_consumption.py`.
+
+Two proofs, because the operator's condition names two distinct claims.
+
+1. **No verification verdict moved.** `python tools/root_sweep.py` — the
+   committed instrument — is run VERBATIM over all 107 openable roots under
+   `experiments/` before the reader fix and again after, and the two outputs are
+   diffed. Required result: `diff` is EMPTY. A committed root is immutable, so
+   its verdict can only move if the reader moved; the reader moves here, which
+   is exactly why the sweep is owed rather than inherited (CLAUDE.md's sweep
+   rule).
+2. **Role-keyed knobs resolve byte-identically.** The sweep proves verdicts did
+   not move; it does not prove WHY, because no committed root contains a
+   controller policy body at all (ERRATA E28). So a direct differential test
+   pins the function itself: for every role in a compiled manifest's role table,
+   plus every non-`cap:` knob, plus a `cap:` knob naming a role the manifest
+   does not bind, the pre-fix expression `manifest.roles.get(knob[5:])`-derived
+   value and the post-fix value are ASSERTED EQUAL. Only a knob containing `#`
+   resolves differently, and the test asserts that is the only difference.
+
+accept:
+    diff proof/sweep_before.txt proof/sweep_after.txt -> empty, exit 0
+    python -m pytest tests/test_allocation_signal_consumption.py -q -k reader_only -> passes
+
+### S12 (R16) — mutation-proven regression, RED first
+
+Files: `tests/test_allocation_signal_consumption.py`.
+
+The red case is the operator's own: a per-seat knob `cap:conjecturer#1` whose
+seat is bound to a route with `max_tokens=16384`. Under today's
+`_configured_role_cap`, `manifest.roles.get("conjecturer#1")` misses, the
+anchoring cap is `None`, `cap_envelope` returns the unanchored
+`DEFAULT_CAP_ENVELOPE` of `[500, 2500]`, and a legitimate 16,384-authorised
+limit is REFUSED. Under the fix the seat resolves to its own route and the limit
+is authorised.
+
+Ordering is a hard constraint on the checklist, not a preference: the test is
+written and run RED on the UNFIXED tree, both runs pasted, and only then is the
+reader fixed. A regression test first seen green proves nothing about the bug it
+names.
+
+accept:
+    (unfixed tree) python -m pytest tests/test_allocation_signal_consumption.py -q -k seat_anchored_ceiling -> FAILS (pasted)
+    (fixed tree)   same command -> passes (pasted)
+
+### S13 (R17, R18, R19) — ledger the contact
+
+Files: this SPEC.md, `docs/map/INV-frozen-surfaces.md`.
+
+- R17: the grant is recorded in this document, dated, above.
+- R18: `INV-frozen-surfaces.md` — the covering document for surface 3
+  (`invariants.py`) — gains a line naming this contact, the date, and why a
+  reader fix is the permitted kind, in the SAME COMMIT as the reader fix.
+- R19: the `run_manifest.py` alarm is rowed in that same line as
+  FALSE ALARM, with its grep proof (M3), and `run_manifest.py` is NOT TOUCHED.
+  The check that proves it: `git diff --name-only` never names that file.
+
+accept:
+    grep -q "cap:role#N\|_configured_role_cap" docs/map/INV-frozen-surfaces.md -> hit
+    git log --format= --name-only <reader-fix commit> | grep -c run_manifest.py -> 0
+    python tools/docs_verify.py -> baseline failures only
 
 ## Out of scope (explicit)
 
@@ -602,12 +681,18 @@ recorded the correction as belonging to the ESTIMATOR, not the work (its
 DELIVERY.md finding 3). The five commits are themselves the split: interface,
 consumption, notice, debt, map+delivery.
 
-Frozen surfaces touched: **`invariants.py` (reader only, 12 lines) — FLAGGED,
-operator's words required (Q-STOP-1).**
+Amended after the grant: S11, S12 and S13 add ~95 lines of proof and ledger
+(`python3 -c "print(sum([120,70,55,12,260,35,15,55,10,95]))"` -> 727), taking
+the tranche to **~727 lines, 6 commits**. Production code is unchanged at 257.
 
-Rubric: 6/6 yes — every R has a spec item with a machine-decidable accept (R1
+Frozen surfaces touched: **`invariants.py` (reader only, 12 lines) — GRANTED
+2026-08-21 on three conditions, discharged by S11/S12/S13.**
+`run_manifest.py` — **NOT TOUCHED**; the gate's alarm on it is a proven grep
+false positive (M3).
+
+Rubric: 6/6 yes (re-run after Amendment 1) — every R has a spec item with a machine-decidable accept (R1
 S1/S2, R2 S1, R3 S3, R4 S5, R5 S6, R6 S6, R7 S6, R8 S4, R9 S7, R10 S8, R11 S8,
-R12 S9, R13 S10); blast-radius census pasted and every hit classified;
+R12 S9, R13 S10, R14 Q-STOP-1 resolution, R15 S11, R16 S12, R17-R19 S13, R20 M3 and the S11 differential); blast-radius census pasted and every hit classified;
 frozen-surface contact forecast recorded with the tool's own list verbatim;
 every mechanism the request names traced to code it reaches (`seat-bindings.v1`
 traced and the substitution recorded in S2; `CompileNoticeV1` traced and reused
