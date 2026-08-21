@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=9 blockers=none
+State: next=13 blockers=none
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -61,7 +61,7 @@ step 5. A regression test first seen green proves nothing.
 - [x] 8. (S7) [COMMIT] Commit the registry declarations and the debt paydown.
       done-when: branch pushed; `git status --porcelain` empty
 
-- [ ] 9. (S1, S2) Rekey `Controller` by seat instance in
+- [x] 9. (S1, S2) Rekey `Controller` by seat instance in
       `src/deepreason/controller.py`: `_process_signals`, `_current_caps`,
       `_anchor_envelopes`, `_authority`, `_clean_streak`, `_propose`,
       `_apply_cap`; and teach `cap_envelope` to resolve its base envelope from
@@ -70,15 +70,15 @@ step 5. A regression test first seen green proves nothing.
       -> passes with no assertion weakened (diff of those two files is empty
       except the `_process_signals` key assertions SPEC.md predicted)
 
-- [ ] 10. (S4) Migrate the three `harness.state.status.get(...)` reads onto the
+- [x] 10. (S4) Migrate the three `harness.state.status.get(...)` reads onto the
       declared signal readers in `allocation.py`.
       done-when: `grep -c "state\.status" src/deepreason/controller.py` -> `0`
 
-- [ ] 11. (S6) Extend `_state_authority`'s `controller-authority` payload with
+- [x] 11. (S6) Extend `_state_authority`'s `controller-authority` payload with
       the sorted `open_loop` signal list.
       done-when: `python -m pytest tests/test_controller.py -q` -> passes
 
-- [ ] 12. (S1, S4, S6) [COMMIT] Commit the consumption side.
+- [x] 12. (S1, S4, S6) [COMMIT] Commit the consumption side.
       done-when: branch pushed; `git status --porcelain` empty
 
 - [ ] 13. (S12, S13/R18) Apply the granted 12-line reader fix to
@@ -276,3 +276,35 @@ observation may not read a signal whose staleness nobody stated).
 
     $ python -m pytest tests/test_signal_contract.py tests/test_signals.py -q
     18 passed in 4.83s
+
+**Step 9 (S1/S2) — the controller rekeyed by seat instance.** `_process_signals`,
+`_current_caps`, `_anchor_envelopes`, `_authority`, `_clean_streak`, `_propose`,
+`_apply_cap` and `_knob_needs_apply` all key on the seat instance;
+`cap_envelope` resolves a seat-suffixed knob's SHAPE from its role and its
+CEILING from its own seat. `_apply_cap` writes one seat's endpoint, never the
+role's whole ensemble — writing the ensemble is what made two asymmetric seats
+one throttle.
+
+    $ python -m pytest tests/test_controller.py tests/test_controller_steering_parity.py -q
+    26 passed in 33.91s
+
+Both files passed UNCHANGED — not one assertion weakened, not one fixture
+edited. SPEC.md's blast-radius census predicted `_process_signals`'s key
+assertions might move; they did not, because a single-seat role's instance name
+IS the bare role name. That is C1 demonstrated on 26 tests rather than argued.
+
+**Steps 10-11 (S4, S6) — the three graph reads migrated, the authority record
+extended.**
+
+    $ grep -c "state\.status" src/deepreason/controller.py
+    0
+
+`Status` is no longer imported by `controller.py` at all: the spelling of
+contestation lives in `allocation.py` alone. `_state_authority`'s payload gains
+a sorted `open_loop` list — the E28 record extended, as R6 asks, so a topology
+that cannot close a loop says so rather than being silent about it.
+
+    $ python -m pytest tests/test_controller.py tests/test_controller_steering_parity.py -q
+    26 passed in 19.60s
+    $ python -m pytest tests/test_signal_contract.py -q
+    10 passed in 0.08s

@@ -165,3 +165,31 @@ def test_no_policy_referenced_signal_carries_the_debt_marker():
         or declaration(s).staleness == "unspecified"
     ]
     assert not vague, f"policy-referenced signals still carry the marker: {vague}"
+
+
+def test_the_controller_reads_no_graph_status():
+    """The allocation controller asks whether a SIGNAL is true, never how the
+    graph spells it.
+
+    Three direct `harness.state.status.get(...)` reads used to live in
+    `controller.py` -- the fail-static check and the two last-accepted-policy
+    lookups. Each one taught the consumer that contestation is spelled
+    `Status.REFUTED`, which is the "consumer taught about a subsystem" the
+    operator's clause (1) forbids. They now go through
+    `allocation.policy_is_contested` / `policy_is_authorized`, and the
+    translation lives in exactly one place.
+
+    A grep, deliberately: the point is that the SPELLING is absent from the
+    consumer, and an import-level check would pass on a module that reached
+    for the status map through a local alias.
+    """
+    source = pathlib.Path(signals.__file__).parent / "controller.py"
+    text = source.read_text()
+    assert "state.status" not in text, (
+        "controller.py reads graph status directly; allocation consumes the "
+        "signal interface only"
+    )
+    assert "Status." not in text, (
+        "controller.py names an adjudication status; the spelling of "
+        "contestation belongs in allocation.py alone"
+    )

@@ -35,7 +35,8 @@ _process_signals below), and checked by the acceptance suite.
 
 import json
 
-from deepreason.ontology import Provenance, Rule, Status
+from deepreason import allocation
+from deepreason.ontology import Provenance, Rule
 
 # --- The constitution: which knobs the controller MAY write, and which it
 # may NEVER touch. Conservative by intent — anything adjudication, the
@@ -124,7 +125,16 @@ def cap_envelope(knob: str, configured_cap: int | None) -> dict | None:
     if base is None:
         if not (knob.startswith("cap:") and len(knob) > len("cap:")):
             return None
-        base = DEFAULT_CAP_ENVELOPE
+        # A seat instance inherits its ROLE's shape (floor, step, dwell) and
+        # anchors its ceiling to its own route. Falling straight through to
+        # the default here would hand every seat of a named role a shape its
+        # role never had, which is a different rule wearing the same name.
+        role, seat = allocation.split_seat_instance(knob[len("cap:"):])
+        base = (
+            ENVELOPES.get(f"cap:{role}", DEFAULT_CAP_ENVELOPE)
+            if seat is not None
+            else DEFAULT_CAP_ENVELOPE
+        )
     envelope = dict(base)
     if configured_cap is None:
         return envelope
@@ -173,15 +183,41 @@ class Controller:
         self._anchor_envelopes()
         self._rehydrate_process_state()
 
+    def _endpoints_for(self, role: str) -> tuple:
+        entry = self.adapter.endpoints.get(role)
+        if entry is None:
+            return ()
+        return tuple(entry) if isinstance(entry, (list, tuple)) else (entry,)
+
+    def _seat_instances(self) -> dict[str, tuple[str, int, object]]:
+        """Every seat the adapter binds, by seat-instance name.
+
+        The unit of allocation. A role bound to one seat keeps the bare role
+        name, so nothing about a single-seat run changes; a role bound to
+        several gets one entry per seat, which is what lets two structurally
+        asymmetric seats be throttled independently.
+        """
+        instances: dict[str, tuple[str, int, object]] = {}
+        for role in self.adapter.endpoints:
+            endpoints = self._endpoints_for(role)
+            for seat, endpoint in enumerate(endpoints):
+                name = allocation.seat_instance(role, seat, len(endpoints))
+                instances[name] = (role, seat, endpoint)
+        return instances
+
+    def _instance_of(self, role: str, seat: int) -> str:
+        return allocation.seat_instance(role, seat, len(self._endpoints_for(role)))
+
     def _anchor_envelopes(self) -> None:
-        """Give every bound role a barrier containing the cap it was assigned.
-        A role with no assigned limit keeps the unanchored shape — an assigned
+        """Give every bound SEAT a barrier containing the cap it was assigned.
+        A seat with no assigned limit keeps the unanchored shape — an assigned
         limit is optional, and its absence is a configuration, not a fault."""
         configured = self._current_caps()
-        for role in self.adapter.endpoints:
-            envelope = cap_envelope(f"cap:{role}", configured.get(role))
-            if envelope is not None and is_generator_knob(f"cap:{role}"):
-                self.envelopes[f"cap:{role}"] = envelope
+        for instance in self._seat_instances():
+            knob = allocation.cap_knob(instance)
+            envelope = cap_envelope(knob, configured.get(instance))
+            if envelope is not None and is_generator_knob(knob):
+                self.envelopes[knob] = envelope
 
     def _authority(self) -> tuple[list[str], dict[str, str]]:
         """Which roles this controller may actually move, and why not for the
@@ -190,16 +226,16 @@ class Controller:
         caps = self._current_caps()
         steerable: list[str] = []
         blocked: dict[str, str] = {}
-        for role in sorted(self.adapter.endpoints):
-            envelope = self.envelopes.get(f"cap:{role}")
-            if role not in caps:
-                blocked[role] = "no-assigned-limit"
+        for instance in sorted(self._seat_instances()):
+            envelope = self.envelopes.get(allocation.cap_knob(instance))
+            if instance not in caps:
+                blocked[instance] = "no-assigned-limit"
             elif envelope is None:
-                blocked[role] = "no-envelope"
-            elif envelope["min"] <= caps[role] <= envelope["max"]:
-                steerable.append(role)
+                blocked[instance] = "no-envelope"
+            elif envelope["min"] <= caps[instance] <= envelope["max"]:
+                steerable.append(instance)
             else:
-                blocked[role] = "outside-envelope"
+                blocked[instance] = "outside-envelope"
         return steerable, blocked
 
     def _state_authority(self) -> None:
@@ -209,8 +245,18 @@ class Controller:
         of a controller that can steer nothing."""
         steerable, blocked = self._authority()
         scope = "full" if not blocked else ("none" if not steerable else "partial")
+        # Which policy-referenced signals this topology cannot produce. Empty
+        # is the ordinary answer; a non-empty list says allocation is running
+        # open-loop on those signals and is a DISCLOSURE, never a refusal.
+        # Silence must never be the only record of a loop that cannot close.
         payload = json.dumps(
-            {"steerable": steerable, "unsteerable": blocked},
+            {
+                "steerable": steerable,
+                "unsteerable": blocked,
+                "open_loop": list(
+                    allocation.open_loop_signals(self.adapter.endpoints)
+                ),
+            },
             sort_keys=True,
             separators=(",", ":"),
         )
@@ -263,12 +309,10 @@ class Controller:
                 and endpoint.timeout_s != value
                 for endpoint in endpoints
             )
-        role = knob.split(":", 1)[1]
-        entry = self.adapter.endpoints.get(role)
-        if entry is None:
+        bound = self._seat_instances().get(knob.split(":", 1)[1])
+        if bound is None:
             return False
-        endpoints = entry if isinstance(entry, (list, tuple)) else [entry]
-        return any(getattr(endpoint, "max_tokens", None) != value for endpoint in endpoints)
+        return getattr(bound[2], "max_tokens", None) != value
 
     def _rehydrate_process_state(self) -> None:
         """Restore only logged, accepted controller process state on resume."""
@@ -301,7 +345,7 @@ class Controller:
             (
                 artifact_id
                 for artifact_id in reversed(self._policies)
-                if self.harness.state.status.get(artifact_id) == Status.ACCEPTED
+                if allocation.policy_is_authorized(self.harness, artifact_id)
             ),
             None,
         )
@@ -324,21 +368,28 @@ class Controller:
 
     # -- process signals: touches ONLY event.llm process fields ----------- #
     def _process_signals(self) -> dict[str, dict]:
-        per_role: dict[str, list] = {}
+        per_instance: dict[str, list] = {}
         for event in self.harness.log.read():
             call = event.llm
             if call is None:
                 continue
-            per_role.setdefault(call.role, []).append(call)
+            # The seat index is already in the record: every attempt carries
+            # it, and the school-route receipt is validated against it. An
+            # event with no trace predates the field and is seat 0.
+            trace = list(call.attempt_trace)
+            seat = trace[-1].seat if trace else 0
+            per_instance.setdefault(
+                self._instance_of(call.role, seat), []
+            ).append(call)
         out = {}
-        for role, calls in per_role.items():
+        for instance, calls in per_instance.items():
             recent = calls[-WINDOW_CALLS:]
             n = len(recent)
             if n < MIN_SAMPLES:
                 continue
             # Reads ONLY the two process fields; no adjudication input is
             # even in scope here (enforced by the acceptance suite).
-            out[role] = {
+            out[instance] = {
                 "n": n,
                 "truncation_rate": sum(1 for c in recent if c.truncated) / n,
                 "repair_rate": sum(1 for c in recent if c.attempts > 1) / n,
@@ -346,29 +397,28 @@ class Controller:
         return out
 
     def _current_caps(self) -> dict[str, int]:
-        # The WIDEST cap in force, not the first seat's: replay validation
-        # anchors to the widest route, and the two must agree to verify.
+        # Per SEAT INSTANCE. For a role bound to one seat this is that seat's
+        # cap under the bare role name, exactly as before; for a role bound to
+        # several it is each seat's own, which is the anchor replay validation
+        # re-derives through `allocation.route_cap_for_knob`. The two must
+        # agree or a steered run cannot verify.
         caps = {}
-        for role, entry in self.adapter.endpoints.items():
-            values = [
-                cap
-                for ep in (entry if isinstance(entry, (list, tuple)) else [entry])
-                if (cap := getattr(ep, "max_tokens", None)) is not None
-            ]
-            if values:
-                caps[role] = max(values)
+        for instance, (_role, _seat, endpoint) in self._seat_instances().items():
+            cap = getattr(endpoint, "max_tokens", None)
+            if cap is not None:
+                caps[instance] = cap
         return caps
 
     # -- update rule: process signals -> bounded knob deltas -------------- #
     def _propose(self, caps: dict[str, int], signals: dict[str, dict]) -> dict[str, int]:
         deltas: dict[str, int] = {}
-        for role, sig in signals.items():
-            knob = f"cap:{role}"
-            if knob not in self.envelopes or role not in caps:
+        for instance, sig in signals.items():
+            knob = allocation.cap_knob(instance)
+            if knob not in self.envelopes or instance not in caps:
                 continue
             if self._cycle - self._last_move.get(knob, -999) < self.envelopes[knob]["dwell"]:
                 continue  # damping: respect min-dwell
-            cur = caps[role]
+            cur = caps[instance]
             envelope = self.envelopes[knob]
             # A compiled route may intentionally start outside this legacy
             # controller's safe envelope (for example a 7k compact website
@@ -384,7 +434,7 @@ class Controller:
             elif sig["truncation_rate"] == 0 and sig["repair_rate"] == 0:
                 # Efficiency direction: settle a wasteful cap down, but only
                 # after CLEAN_WINDOWS of spotless signal and never below floor.
-                if self._clean_streak(role) >= CLEAN_WINDOWS:
+                if self._clean_streak(instance) >= CLEAN_WINDOWS:
                     new = clamp(knob, round(cur / envelope["step"]), envelope)
                     if new != cur:
                         deltas[knob] = new
@@ -435,11 +485,15 @@ class Controller:
         if new != cur:
             deltas[knob] = new
 
-    def _clean_streak(self, role: str) -> int:
+    def _clean_streak(self, instance: str) -> int:
         streak = 0
         for event in reversed(list(self.harness.log.read())):
             call = event.llm
-            if call is None or call.role != role:
+            if call is None:
+                continue
+            trace = list(call.attempt_trace)
+            seat = trace[-1].seat if trace else 0
+            if self._instance_of(call.role, seat) != instance:
                 continue
             if call.truncated or call.attempts > 1:
                 break
@@ -451,9 +505,7 @@ class Controller:
         return self._policies[-1] if self._policies else None
 
     def _under_unresolved_attack(self, aid) -> bool:
-        return self.harness.state.status.get(aid) in (
-            Status.REFUTED, Status.SUSPENDED_UNSUPPORTED,
-        )
+        return allocation.policy_is_contested(self.harness, aid)
 
     def step(self) -> dict | None:
         """Advance one cycle. Returns the applied knob vector, or None if the
@@ -492,16 +544,16 @@ class Controller:
                     if hasattr(e, "timeout_s"):
                         e.timeout_s = value
             return
-        role = knob.split(":", 1)[1]
-        ep = self.adapter.endpoints.get(role)
-        if ep is None:
+        bound = self._seat_instances().get(knob.split(":", 1)[1])
+        if bound is None:
             return
-        for e in (ep if isinstance(ep, (list, tuple)) else [ep]):
-            e.max_tokens = value
+        # One seat's endpoint, never the role's whole ensemble: writing the
+        # ensemble is what made two asymmetric seats one throttle.
+        bound[2].max_tokens = value
 
     def _revert_to_last_accepted(self) -> None:
         for aid in reversed(self._policies):
-            if self.harness.state.status.get(aid) != Status.ACCEPTED:
+            if not allocation.policy_is_authorized(self.harness, aid):
                 continue
             body = self._policy_payload(aid)
             if body is None:
