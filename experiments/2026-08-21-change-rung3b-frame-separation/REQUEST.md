@@ -106,4 +106,20 @@ by measured coupling and this pair has zero direct imports in either direction.
 
 ## 4. Amendments
 
-(none yet)
+### Amendment 1 (2026-08-21) — the budget STOP, answered
+
+Raised at CHECKLIST.md step 9: `tools/diff_budget.py` returned
+`verdict: "EXCEEDED"`, 312 insertions against SPEC.md's ledgered ceiling of 193.
+The stop was presented in the standard format with three priced options. The
+operator selected, verbatim:
+
+> Proceed at 312 (Recommended)
+
+| # | Requirement | Source |
+|---|---|---|
+| R15 | **312 insertions is this tranche's ceiling.** SPEC.md's 193 is superseded as a ceiling and RETAINED as the record of the estimate that missed. Steps 12-15 proceed. | Amendment 1 |
+| R16 | The line-for-line variance against SPEC.md's itemization is recorded in VALIDATION.md, with the evidence that no requirement grew and no Rung 4 machinery is present, so the ceiling keeps its meaning at Rung 4. | Amendment 1 |
+
+R10 is `superseded-by:R15` as a CEILING. Its other half — "say what grew" — was
+discharged before the answer was given: the variance table is in CHECKLIST.md
+step 9, and the two commands that would catch Rung 4 leakage both exit 0.
