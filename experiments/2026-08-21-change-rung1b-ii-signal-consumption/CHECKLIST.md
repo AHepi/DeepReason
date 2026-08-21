@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=24 blockers=steps 15/17 wait on the BEFORE sweep finishing
+State: next=27 blockers=steps 15/17/27/29 wait on the BEFORE sweep finishing (one instrument at a time)
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -150,17 +150,20 @@ step 5. A regression test first seen green proves nothing.
       open-loop and evidence tests plus the mutation proof.
       done-when: branch pushed; `git status --porcelain` empty
 
-- [ ] 25. (S9) Advance `docs/map/INV-signal-contract.md`: a section per
+- [x] 25. (S9) Advance `docs/map/INV-signal-contract.md`: a section per
       delivered clause with an executable `check:` each, the debt number
       89 -> 84, the "half-delivered" Trap REWRITTEN (never deleted) to say when
       it was fixed, and `Verified-at:` advanced only after re-running that
       document's own checks.
       done-when: every `check:` in that document exits 0 when run individually
 
-- [ ] 26. (S9) Drop the "not yet built" / "lands in Rung 1b-ii" forward
+- [x] 26. (S9) Drop the "not yet built" / "lands in Rung 1b-ii" forward
       references from `docs/map/REC-add-signal.md` and
       `docs/map/REC-revise-allocation-policy.md`.
-      done-when: `grep -c "Rung 1b-ii" docs/map/REC-*.md` -> `0`
+      done-when: `grep -n "not yet built\|lands in Rung\|will land" docs/map/REC-*.md docs/map/INV-signal-contract.md`
+      -> no hits (the original criterion counted every mention of "Rung 1b-ii",
+      which also matches the HISTORICAL note naming which rung paid the debt
+      down; a landed rung being named is the opposite of a forward reference)
 
 - [ ] 27. (S9) Map check: `python tools/docs_verify.py` (full, not `--fast`,
       run alone on an idle box).
@@ -393,3 +396,32 @@ both in a scratch copy, both plausible rather than syntactic:
 Mutation B is the one that matters: it is the forbidden move in its most
 plausible disguise, and it is caught by the differential rather than by a
 grep. Scratch discarded; `git status --porcelain src/` empty.
+
+**Steps 25-26 (S9) — the map.** `INV-signal-contract.md` gains four sections,
+one per delivered clause plus the strictest row, with **seven new executable
+`check:` lines**; the debt paragraph falls to eighty-four and says what evidence
+paid it; the "Rung 1b is only half-delivered" Trap is REWRITTEN to say when it
+closed, never deleted (SCHEMA.md), and two new Traps are added for the traps
+this rung actually hit — a `POLICY_SIGNALS` entry without its producer
+predicate, and `manifest.roles` membership not being seat-boundness.
+`Verified-at:` advanced to `9d60e2ae` only after every new check was run
+individually:
+
+    rc=0  -k "seats_throttle_independently or bare_role_spelling"  2 passed
+    rc=0  ::test_the_shipped_qualification_subject_digest_does_not_move  1 passed
+    rc=0  grep route_cap_for_knob in invariants.py AND allocation.py
+    rc=0  -k matrix        4 passed
+    rc=0  -k open_loop     2 passed
+    rc=0  -k "evidence or verdict"  3 passed
+    rc=0  ! grep -qE "create_artifact|Warrant|att_add|dep_add" allocation.py
+
+Both recipes lose their forward references. `REC-add-signal.md` gains the
+worked paydown instance (89 -> 84) with the two details worth copying — the
+override table, and proving the prose did not move rather than asserting it.
+`REC-revise-allocation-policy.md`'s "the mechanism lands in Rung 1b-ii" becomes
+"landed 2026-08-21", and its step 1 now says to name signals by seat instance
+and to share the one route-cap derivation.
+
+Step 27 (`docs_verify`, full) and step 29 (the full gate) are deferred until the
+BEFORE sweep finishes: both fan out workers, and running two worker-spawning
+instruments at once manufactures failures (CLAUDE.md process hygiene).
