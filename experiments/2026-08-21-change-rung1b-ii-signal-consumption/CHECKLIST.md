@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=1 blockers=none
+State: next=5 blockers=none
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -17,23 +17,23 @@ One step per dr-execute-step invocation.
 regression RED on the UNFIXED tree. No edit to `invariants.py` may happen before
 step 5. A regression test first seen green proves nothing.
 
-- [ ] 1. (S11) Capture the BEFORE root sweep on the unfixed tree.
+- [x] 1. (S11) Capture the BEFORE root sweep on the unfixed tree.
       done-when: `proof/sweep_before.txt` exists, has one line per openable
       root, and `grep -c "" proof/sweep_before.txt` equals the root count
       printed by `python -c "import pathlib;print(len({p.parent for p in pathlib.Path('experiments').rglob('log.jsonl')}))"`
 
-- [ ] 2. (S12) Write `tests/test_allocation_signal_consumption.py` containing
+- [x] 2. (S12) Write `tests/test_allocation_signal_consumption.py` containing
       ONLY the seat-anchoring regression `test_a_seat_knob_anchors_to_its_own_route_ceiling`
       (a manifest binding conjecturer to two routes, seat 1 at max_tokens=16384;
       assert `cap_envelope("cap:conjecturer#1", _configured_role_cap-equivalent)`
       admits 16384).
       done-when: the file exists and contains that test name
 
-- [ ] 3. (S12) Run it RED on the unfixed tree and save the output.
-      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k seat_anchored_ceiling`
+- [x] 3. (S12) Run it RED on the unfixed tree and save the output.
+      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q`
       exits non-zero AND its output is saved verbatim to `proof/s12_red.txt`
 
-- [ ] 4. (S12) [COMMIT] Commit the RED regression and its pasted failure.
+- [x] 4. (S12) [COMMIT] Commit the RED regression and its pasted failure.
       done-when: `git log -1 --name-only` names the test file and
       `proof/s12_red.txt`; branch pushed
 
@@ -87,7 +87,7 @@ step 5. A regression test first seen green proves nothing.
       (naming the contact, the 2026-08-21 grant, why a reader fix is the
       permitted kind, and the `run_manifest.py` false alarm with its grep
       proof).
-      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k seat_anchored_ceiling`
+      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k ceiling`
       -> passes (saved verbatim to `proof/s12_green.txt`) AND
       `grep -q "_configured_role_cap" docs/map/INV-frozen-surfaces.md`
 
@@ -183,3 +183,50 @@ step 5. A regression test first seen green proves nothing.
 
 - [ ] 31. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND branch head is on origin
+
+
+## Execution log
+
+**Step 1 (S11) — BEFORE sweep.** `python tools/root_sweep.py` launched over the
+107 openable roots under `experiments/`; still running at the time steps 2-4
+were executed. It reads roots read-only and writes only
+`proof/sweep_before.txt`, so it does not interact with the steps below. Its
+done-criterion is re-checked when it lands, and step 15 diffs it against the
+AFTER sweep.
+
+**Step 2 (S12) — the RED regression written.** `tests/test_allocation_signal_consumption.py`
+holds `test_a_seat_knob_anchors_to_its_own_route_ceiling` (the operator's
+16,384 case) and its bound-companion `test_a_seat_knob_is_still_bounded_by_its_own_route`.
+
+**Step 3 (S12) — run RED on the unfixed tree.** Saved verbatim to
+`proof/s12_red.txt`:
+
+    1 failed, 1 passed in 0.46s
+    FAILED ...::test_a_seat_knob_anchors_to_its_own_route_ceiling
+    AssertionError: a per-seat knob was refused a limit its own route
+    assigned: ['attempt-limits']
+
+`attempt-limits` is the ONLY violation the synthetic root reports, so the red
+is the operator's stated red — the fallback refusing a legitimate limit — and
+not incidental breakage. The companion test PASSES red-first too, proving the
+4,096 seat's ceiling still binds: the fix must widen per seat, not per role.
+
+**MEASURED REFINEMENT to the granted contact, disclosed rather than absorbed.**
+The grant names `_configured_role_cap`. Measuring the failure shows that
+function is one of TWO reader sites, and fixing it alone leaves the fix inert:
+
+    src/deepreason/invariants.py:3586  _configured_role_cap  — ANCHORING:
+        resolves the knob's ceiling by `manifest.roles.get(knob[len("cap:"):])`,
+        so `cap:conjecturer#1` misses and anchors to nothing.
+    src/deepreason/invariants.py:3985  the consumer — LOOKUP:
+        `allowed_caps = {route.max_tokens,
+                         *authorized_controller_limits.get(f"cap:{e.llm.role}")}`
+        asks only for the ROLE-keyed knob, so a value authorized under
+        `cap:conjecturer#1` is stored and never consulted.
+
+Both are reads in the same file, on the same path, in the granted reader; no
+writer, no record format, and no other file is involved. The second site is ONE
+added line. Total stays inside the granted 12. Recorded here and in SPEC.md S11
+because "the 12-line reader fix in `_configured_role_cap`" was the operator's
+own wording, and a second site found by measurement is exactly the kind of thing
+that must be said out loud rather than quietly folded in.

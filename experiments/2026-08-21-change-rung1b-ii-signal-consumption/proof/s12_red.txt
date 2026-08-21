@@ -1,0 +1,28 @@
+# S12 / R16 — the RED run on the UNFIXED tree
+# tree: 4f05e15b0, src/deepreason/invariants.py UNMODIFIED
+# verified unmodified: git diff --stat src/deepreason/invariants.py ->
+#
+$ python -m pytest tests/test_allocation_signal_consumption.py -q
+
+        anchored to seat 1's own 16,384-token route.
+    
+        Resolving `cap:conjecturer#1` by looking the whole string up as a role
+        misses, falls back to the unanchored default, and refuses a limit the
+        route itself authorized -- which makes per-seat throttling unreplayable.
+        """
+        checks = _root_with_seat_policy(
+            tmp_path / "seat-anchored", monkeypatch,
+            knob="cap:conjecturer#1", policy_cap=12_000, seat=1,
+            attempt_cap=12_000,
+        )
+>       assert "attempt-limits" not in checks, (
+            "a per-seat knob was refused a limit its own route assigned: "
+            f"{sorted(checks)}"
+        )
+E       AssertionError: a per-seat knob was refused a limit its own route assigned: ['attempt-limits']
+E       assert 'attempt-limits' not in {'attempt-limits'}
+
+tests/test_allocation_signal_consumption.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_allocation_signal_consumption.py::test_a_seat_knob_anchors_to_its_own_route_ceiling
+1 failed, 1 passed in 0.46s
