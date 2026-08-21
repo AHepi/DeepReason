@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 15498f72
+Verified-at: 95814d9e9
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
