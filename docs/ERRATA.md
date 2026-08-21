@@ -813,3 +813,73 @@ one label covers several assertions, "it failed at stage X twice and passed
 once" is not evidence of non-determinism until you have checked that the
 passing run reached the same assertion. Reading it as flakiness turns a
 one-line deterministic bug into a race hunt.
+
+## 2026-08-21 (Rung 3b, frame-separation)
+
+**E35 — `docs/COMPUTABLE_CALCULUS.md` Proposition 9.6's proof is incomplete,
+and Law 9.4's "this single interface constraint is the whole separation of
+the axes" is false as stated.** Prop 9.6 reads: "the attack targets b; fa
+carries no dependence on b (Law 9.4), so Pass 2 leaves fa's label untouched;
+the renderer keys on final(fa). ∎". The proof discharges PASS 2 only. Pass 1
+— the grounded attack pass — can move `fa`'s label with no dependence on `b`
+whatever, whenever `fa` and `b` sit in the same connected component of
+`att ∪ dep`: a new attack on `b` then reaches `fa` through pre-existing
+paths. `docs/POIETIC_CALCULUS_FORMALIZED.md` §7 already says so in prose
+("The source document's mention law is necessary but not sufficient for this
+theorem") and supplies the missing hypothesis as Definition 7.2, the
+frame-separation invariant. This entry exists because a reader of
+`COMPUTABLE_CALCULUS.md` §9 has no pointer from the wrong proof to the
+correction, and §9 is the section a frame-layer implementer reads.
+
+The gap is now EXECUTABLE rather than only argued:
+`tests/test_calculus_frame_separation.py::test_a_reach_case_that_depends_on_the_subject_is_unconsultable`
+builds a graph in which Law 9.4 is fully obeyed — the assertion `mention`s
+its subject and carries no dependence on it — and separation fails anyway,
+because a record the assertion depends on depends on the subject. Mention and
+separation are independent conditions; the first does not imply the second.
+Found and demonstrated 2026-08-21 by
+`experiments/2026-08-21-change-rung3b-frame-separation/`.
+
+Not corrected in place: `COMPUTABLE_CALCULUS.md` is committed theory
+authority and is left verbatim per the append-don't-rewrite rule. What Prop
+9.6 CONCLUDES survives — a wound really does leave standing untouched — but
+only under the added hypothesis, which is why Rung 3b ships the hypothesis
+before Rung 4 ships the frame layer that would otherwise violate it.
+
+The general lesson: a proof that discharges one of two passes reads exactly
+like a proof that discharges both. When a status semantics has more than one
+pass, a persistence argument names every pass or it is incomplete — and the
+missing one will be the pass that needs a GRAPH condition rather than an
+interface constraint, because interface constraints are the ones authors
+think to write down.
+
+**E36 — `docs/map/INV-frozen-surfaces.md`'s "The governing principle" still
+states the law CLAUDE.md retired on 2026-08-14.** The document opens with:
+
+> The append-only record itself: fix READERS so old roots stay valid; a change
+> that invalidates existing replay-valid roots is wrong by definition.
+
+CLAUDE.md's operator law "Old runs owe the future nothing; new versions
+optimise for new functions" quotes that exact sentence and marks it
+**SUPERSEDED**: "new versions owe old roots neither validity nor readability,
+and no tranche owes a replay-byte-unchanged proof over historical roots
+anymore." The same section of `INV-frozen-surfaces.md` also still calls the
+42-root sweep "the instrument" for measuring the difference, while
+`experiments/2026-08-14-change-calculus-reconciliation-v2/LADDER.md` §2
+removed it as a gate obligation and §4 reclassifies replay-validation formats
+as "free to change shape".
+
+Two committed documents therefore give opposite answers to "may I change this
+format?", and the one a reader is told to open FIRST (`dr-drive-harness` §4,
+"`INV-frozen-surfaces.md` — **first, always**") is the one carrying the
+retired law. CLAUDE.md wins: it is where operator law lives.
+
+The scope boundary the retired law did NOT touch, restated so this entry is
+not over-read: a CURRENT-version run's record stays typed, append-only, and
+replayable by the code that wrote it. Within-version integrity is the
+epistemology and is untouched.
+
+Found while reading `INV-frozen-surfaces.md` at the map preflight of
+`experiments/2026-08-21-change-rung3b-frame-separation/`. Not corrected in
+place — that rung's scope is one invariant and a defect found mid-change is
+parked, not fixed (`PARKED.md` P3 carries the ready-to-send prompt).

@@ -95,3 +95,54 @@ paste both. That mutation proof is the deliverable, not the rows.
 GATE: python tools/docs_verify.py FULL, baselines per docs/AUDIT_BASELINES.md
 (3 pre-existing CON-run-identity.md shallow-clone failures). No src/ change.
 ```
+
+---
+
+## P3 — `INV-frozen-surfaces.md` opens with the law CLAUDE.md retired
+
+**What.** `docs/map/INV-frozen-surfaces.md`'s "The governing principle" section
+still states "fix READERS so old roots stay valid; a change that invalidates
+existing replay-valid roots is wrong by definition" — the exact sentence
+CLAUDE.md quotes and marks SUPERSEDED under the 2026-08-14 operator law. The
+same section still names the 42-root sweep as the measuring instrument, which
+LADDER.md §2 removed as a gate obligation. Ledgered as `docs/ERRATA.md` E36.
+
+**Why parked, not fixed.** This tranche's scope is one invariant, and a defect
+found mid-change is parked. It also is not a one-line edit: the correction has
+to state the SCOPE BOUNDARY (within-version integrity survives; cross-version
+obligation is retired) without inviting the over-read that a current run's
+record may now drift, and it should carry a check that would fail if the two
+documents diverge again.
+
+**Ready-to-send prompt:**
+
+```
+Change tranche: reconcile docs/map/INV-frozen-surfaces.md with the 2026-08-14
+operator law. Route through dr-change-orchestrator.
+
+AUTHORITY: docs/ERRATA.md E36, and CLAUDE.md's operator law "Old runs owe the
+future nothing; new versions optimise for new functions".
+
+FINDING: INV-frozen-surfaces.md's "The governing principle" section states the
+law CLAUDE.md explicitly marks SUPERSEDED, and names the 42-root sweep as its
+instrument, which LADDER.md §2 removed as a gate obligation. A reader is told
+to open this document FIRST (dr-drive-harness §4), so it is the highest-traffic
+place in the map for a retired law to sit.
+
+SCOPE: (1) rewrite that section to state the CURRENT law, carrying the scope
+boundary explicitly — a current-version run's record stays typed, append-only
+and replayable by the code that wrote it; cross-version obligations are retired.
+(2) Surface 3's row (replay-validation formats) says what it is frozen against
+NOW: casual change, not shape change, with the in-advance SPEC.md grant still
+required. (3) Add a check at column 0 that would FAIL if this document and
+CLAUDE.md diverge again on this law — e.g. assert the retired sentence appears
+in CLAUDE.md only as a SUPERSEDED quotation and nowhere in docs/map/ as an
+active principle. Mutation-prove that check RED before writing it down.
+
+DO NOT weaken any of the five surfaces. This is a statement-of-law correction,
+not a permission change: nothing about what a tranche may touch changes without
+the operator's words.
+
+GATE: python tools/docs_verify.py FULL (baselines per docs/AUDIT_BASELINES.md),
+plus --audit 0 findings. No src/ change expected.
+```
