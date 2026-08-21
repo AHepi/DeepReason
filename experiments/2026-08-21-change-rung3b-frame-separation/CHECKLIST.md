@@ -1,6 +1,6 @@
 # Checklist for: Rung 3b — the frame-separation invariant
 
-State: next=1 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -13,7 +13,7 @@ No seam document exists for `calculus x adjudication` and none is created —
 SPEC.md A3 and REQUEST.md §3 record why; the pair is added to
 `SUB-calculus.md`'s `Seams-undocumented:` line in step 5.
 
-- [ ] 1. (S5, S6) Write `tests/test_calculus_frame_separation.py` — the gate,
+- [x] 1. (S5, S6) Write `tests/test_calculus_frame_separation.py` — the gate,
       BEFORE the module it guards. Four tests: the mention/separation exhibit,
       the Theorem 7.3 extension, the violation with its five-way before/after
       capture, the unregistered-endpoint refusal.
