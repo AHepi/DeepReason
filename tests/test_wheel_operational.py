@@ -4220,3 +4220,79 @@ def test_package_layout_ships_shallow_engine_and_excludes_smoke_fixture():
     project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert 'packages = ["src/deepreason", "mini/minireason"]' in project
     assert not (ROOT / "src" / "deepreason" / "deterministic_provider.py").exists()
+
+
+RESUMABLE_EVIDENCE = (
+    ROOT
+    / "experiments"
+    / "2026-08-21-fix-wheel-smoke-reason-stage"
+    / "evidence"
+)
+
+
+def _recorded_resumable_payload() -> dict:
+    """The verbatim terminal payload of the smoke's own resumable-stop run.
+
+    Recorded by `wheel_operational_smoke.py --keep` on 2026-08-21 at
+    c7e605553 from run-e9d4bb16796b8aa4b560c632b33d6500: converged, replay
+    valid, and carrying exactly one completion finding, the deliberate
+    `premise-demarcation-variation` deferral. A hand-built payload would
+    prove only that the assertion accepts what its author expected.
+    """
+
+    return json.loads(
+        (RESUMABLE_EVIDENCE / "run-e9d4bb16-run-result.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+def test_a_converged_terminal_with_only_deferral_debt_is_resumable():
+    """Regression (wheel operational smoke, run-e9d4bb16796b8aa4b560c632b33d6500):
+    the resumable-terminal assertion demanded zero completion debt, which the
+    public reason path cannot deliver -- `Scheduler._premise_rent_step` defers
+    `premise-demarcation-variation` on every v6 run that seats a variator
+    without `criticism_policy.authority == "defended_trial"`.
+    """
+
+    payload = _recorded_resumable_payload()
+    verification = payload["verification"]
+    # The record this pins: everything the terminal must be, it is.
+    assert payload["state"] == "completed"
+    assert payload["stop"]["reason"] == "converged"
+    assert verification["valid"] is True
+    assert verification["integrity_valid"] is True
+    assert verification["security_valid"] is True
+    assert verification["epistemic_checks_passed"] is True
+    assert verification["operational_checks_passed"] is True
+    # ... and the one thing it is not, is completion-debt-free.
+    assert verification["completion_satisfied"] is False
+    assert verification["finding_counts"]["completion"] == 1
+    assert payload["completion_status"] == "incomplete"
+
+    OPERATIONAL._assert_resumable_terminal(payload)
+
+
+def test_the_seated_variator_holds_no_behavioral_contract_without_a_trial():
+    """The deferral is structural, not incidental: the public reason path
+    seats a variator and sets no criticism policy, and
+    `_route_seat_behavioral_contract_assignments` grants the trial roles a
+    contract only under `authority == "defended_trial"`.
+    """
+
+    from deepreason.run_manifest import (
+        RunManifest,
+        _route_seat_behavioral_contract_assignments,
+    )
+
+    manifest = RunManifest.model_validate_json(
+        (RESUMABLE_EVIDENCE / "run-e9d4bb16-run-manifest.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert manifest.schema_version == 6
+    assert manifest.criticism_policy is None
+    assert len(manifest.roles["variator"]) == 1
+
+    assignments = _route_seat_behavioral_contract_assignments(manifest)
+    assert not [role for _contract, role, _seat in assignments if role == "variator"]
