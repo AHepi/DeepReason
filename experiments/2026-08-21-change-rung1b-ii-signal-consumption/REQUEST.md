@@ -194,3 +194,70 @@ continuation, with the discrepancy stated rather than resolved.
 ## Amendments
 
 (none yet)
+
+---
+
+### Amendment 1 — 2026-08-21, the frozen-surface STOP exchange
+
+Both operator messages are recorded, in order, with the supersession noted —
+the convention the operator themself set for the all-configurations law
+(`experiments/2026-08-12-change-all-configs-allowed/`).
+
+#### 1a — the operator's first answer to Q-STOP-1, verbatim
+
+> state digests, event application, verification formats, qualification digests
+> — is off-plan for this rung. The rung's design should not need them; a design
+> that does has grown beyond its scope, and the right move is the standing
+> discipline: the window writes the request and its reason into SPEC.md before
+> any code, and you (or I, on review) decide on the stated reason. Don't grant
+> it verbally in chat — "a STOP already written in prose is not a STOP that was
+> obeyed" is a ledgered trap for exactly this.
+
+#### 1b — the operator's grant, verbatim (SUPERSEDES 1a for this contact)
+
+> GRANTED: the 12-line reader fix in src/deepreason/invariants.py
+> (_configured_role_cap), on three conditions.
+>
+> 1. READER-ONLY, PROVEN NOT ASSERTED: no writer and no record format
+>    moves. Prove the old behavior is preserved where it was correct: a
+>    targeted verify pass over current-version committed roots showing
+>    no verification verdict moved — role-keyed knobs must resolve
+>    byte-identically before and after; only the new seat-keyed form
+>    (cap:role#N) resolves differently, and nothing recorded uses that
+>    form yet, so zero verdicts may change. Paste the before/after.
+>
+> 2. MUTATION-PROVEN REGRESSION: a test that constructs the per-seat
+>    knob with a route-authorised ceiling (the 16,384 case) and fails
+>    under today's code (the 2500-token default-fallback refusal),
+>    passes under the fix. Run it RED on the unfixed tree first and
+>    paste both runs — the fallback refusing a legitimate limit IS the
+>    red case.
+>
+> 3. LEDGER THE CONTACT: the grant lives in SPEC.md (already-committed
+>    design, note it granted with this date), the map moves in the same
+>    commit — INV-frozen-surfaces.md or the covering verification
+>    document gains a line naming this contact and why a reader fix is
+>    the permitted kind — and the run_manifest.py false alarm is rowed
+>    as false-alarm-with-grep-proof, with that file untouched.
+>
+> The blast-radius tool's self-description stands: grep is not semantic
+> proof. You proved the one real contact by measurement; proceed on the
+> same standard.
+
+| # | Requirement | Source |
+|---|---|---|
+| R14 | The 12-line reader fix in `src/deepreason/invariants.py` (`_configured_role_cap`) is **GRANTED**, 2026-08-21. | Amendment 1b preamble |
+| R15 | **READER-ONLY, PROVEN NOT ASSERTED**: "no writer and no record format moves ... a targeted verify pass over current-version committed roots showing no verification verdict moved — role-keyed knobs must resolve byte-identically before and after; only the new seat-keyed form (cap:role#N) resolves differently, and nothing recorded uses that form yet, so zero verdicts may change. Paste the before/after." | Amendment 1b (1) |
+| R16 | **MUTATION-PROVEN REGRESSION**: "a test that constructs the per-seat knob with a route-authorised ceiling (the 16,384 case) and fails under today's code (the 2500-token default-fallback refusal), passes under the fix. Run it RED on the unfixed tree first and paste both runs — the fallback refusing a legitimate limit IS the red case." | Amendment 1b (2) |
+| R17 | **LEDGER THE CONTACT**: "the grant lives in SPEC.md (already-committed design, note it granted with this date)". | Amendment 1b (3) |
+| R18 | "the map moves in the same commit — INV-frozen-surfaces.md or the covering verification document gains a line naming this contact and why a reader fix is the permitted kind". | Amendment 1b (3) |
+| R19 | "the run_manifest.py false alarm is rowed as false-alarm-with-grep-proof, with that file untouched." | Amendment 1b (3) |
+| R20 | "grep is not semantic proof. You proved the one real contact by measurement; proceed on the same standard." — every further contact claim in this tranche is settled by measurement, never by a grep hit alone. | Amendment 1b closing |
+
+**Supersession note.** 1a stated that a design needing a frozen surface "has
+grown beyond its scope" and refused a verbal grant. 1b grants the specific
+12-line reader fix on the record, after the reason was written into SPEC.md
+first. 1a's DISCIPLINE is therefore upheld, not overturned: the grant was given
+against a committed, measured design, which is exactly what 1a demanded. 1a's
+CONCLUSION for this contact — that it is off-plan — is superseded by 1b. No
+other frozen surface is granted by 1b, and none is touched.
