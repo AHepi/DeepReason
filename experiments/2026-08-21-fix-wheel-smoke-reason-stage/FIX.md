@@ -255,3 +255,27 @@ because absorbing it is the recorded failure (`dr-implement-fix` step 8: the
 2026-08-05 V1 tranche landed 193 insertions against a <=150 ceiling with no
 stop). The work is committed to the working branch so it is not lost to a
 container rollback; nothing is merged and the trim remains available.
+
+### OPERATOR RULING (2026-08-21) — the overage is ACCEPTED, tranche closes as is
+
+The EXCEEDED verdict was presented to the operator as a STOP, with the
+53/186/39 breakdown, the one compression pass already taken (304 -> 276), and
+three priced roads: keep it as is (recommended), trim the mutation table to
+its four highest-value cases (~245, and it deletes the cases proving the
+assertion still refuses a cancelled span, a broken integrity channel, a
+missing terminal commitment and a malformed marker), or split into two
+tranches (leaves the map temporarily saying something untrue, which
+CLAUDE.md's same-commit rule exists to prevent).
+
+The operator chose **keep it as is**. No trim, no split. The final measured
+verdict stands on the record as EXCEEDED at 278 insertions (the last two
+lines being the `Verified-at:` stamps advanced in the verification commit),
+accepted deliberately rather than absorbed silently — which is the whole
+point of the step-8 gate.
+
+The estimate itself remains a recorded miss: ~145 predicted, 278 actual, an
+error of roughly 90%. The lesson for a future tranche's `dr-set-goal`, stated
+so the next reader does not repeat it: a line budget written before the
+SHAPE OF THE PROOF is known is a guess about the fix, not about the commit.
+When the fix is an assertion, the proof is a mutation table, and a mutation
+table costs more lines than the assertion does.

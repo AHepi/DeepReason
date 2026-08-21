@@ -134,7 +134,7 @@ question is PARKED (P2), not answered.
 2. **P2 — `_premise_rent_step` skips its free half when the variator is
    seated but uncontracted.** Recorded as a QUESTION, not a finding. This
    tranche did not test it and must not be read as having done so.
-3. **Diff budget EXCEEDED and unresolved.** `tools/diff_budget.py` reports
+3. **Diff budget EXCEEDED — surfaced, and RESOLVED by the operator.** `tools/diff_budget.py` reports
    276 insertions against this tranche's own 150-line estimate (53 of them
    the semantic change; 186 the regression fixture and 14-case mutation
    table; 37 the map entries and baseline line CLAUDE.md requires in the same
@@ -142,9 +142,12 @@ question is PARKED (P2), not answered.
    comes out without removing proof, and no option reaches 150 without
    deleting obligations CLAUDE.md makes mandatory. Surfaced to the operator as
    a STOP rather than absorbed — the recorded failure mode is absorbing it
-   (2026-08-05 V1 tranche: 193 insertions against <=150, no stop). The work is
-   committed to the working branch, nothing is merged, and the trim remains
-   available on one word from the operator.
+   (2026-08-05 V1 tranche: 193 insertions against <=150, no stop). Presented
+   to the operator with three priced roads; the operator chose to KEEP IT AS
+   IS, so no trim and no split were taken. The verdict stays on the record as
+   EXCEEDED at 278 — accepted deliberately, not absorbed. The estimate itself
+   remains a recorded miss (~145 predicted, 278 actual); see FIX.md's operator
+   ruling for the lesson.
 4. **Coverage this fix does not add.** The continuation half of the
    `RESUMABLE_STOP_REASONS` contract still has the smoke as its only
    end-to-end witness (`SUB-application.md` Traps, "Still true and NOT
