@@ -29,9 +29,15 @@ from deepreason.signals import (
 )
 
 
-# Every entry that existed before the contract. The number is allowed to fall
-# and never to rise; see test_the_migration_debt_can_only_shrink.
-MIGRATION_DEBT = 89
+# Every entry that existed before the contract, less the ones a later tranche
+# has had the evidence to state. The number is allowed to fall and never to
+# rise; see test_the_migration_debt_can_only_shrink.
+#
+#   89  Rung 1b-i, the migration itself
+#   84  Rung 1b-ii paid down five: the four controller signals and
+#       `dropped-call`, whose emission points and staleness bounds that rung's
+#       consumption side defines. Semantics prose was left byte-identical.
+MIGRATION_DEBT = 84
 
 
 def test_every_declaration_is_complete():
@@ -123,3 +129,39 @@ def test_the_allocation_controller_consumes_only_the_interface():
         f"controller.py reaches into {reached}; allocation must consume the "
         f"signal interface only"
     )
+
+
+# --- the policy-referenced signals are declared, not improvised (SC-4) ----- #
+
+
+def test_every_policy_referenced_signal_is_declared():
+    """The allocation policy may read a signal only by DECLARING it.
+
+    `allocation.POLICY_SIGNALS` is what the controller consumes. If a name
+    there resolves to no declaration, the controller is reading something the
+    registry never promised -- which is the wiring the contract replaced, just
+    spelled as a string constant instead of an import.
+    """
+    from deepreason.allocation import POLICY_SIGNALS
+
+    undeclared = [s for s in POLICY_SIGNALS if declaration(s) is None]
+    assert not undeclared, (
+        f"the allocation policy reads {undeclared}, which the registry does "
+        f"not declare"
+    )
+
+
+def test_no_policy_referenced_signal_carries_the_debt_marker():
+    """`unspecified` records that nobody stated a unit. A signal the
+    ALLOCATION CONTROLLER actively reads may not be one of those: a consumer
+    deciding how long to believe an observation needs the bound stated, and an
+    unstated bound invites the stale read `REC-add-signal.md` warns about.
+    """
+    from deepreason.allocation import POLICY_SIGNALS
+
+    vague = [
+        s for s in POLICY_SIGNALS
+        if declaration(s).unit == "unspecified"
+        or declaration(s).staleness == "unspecified"
+    ]
+    assert not vague, f"policy-referenced signals still carry the marker: {vague}"

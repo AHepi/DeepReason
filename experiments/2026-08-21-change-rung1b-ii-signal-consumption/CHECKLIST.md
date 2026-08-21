@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=5 blockers=none
+State: next=9 blockers=none
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -37,7 +37,7 @@ step 5. A regression test first seen green proves nothing.
       done-when: `git log -1 --name-only` names the test file and
       `proof/s12_red.txt`; branch pushed
 
-- [ ] 5. (S1, S2, S4, S6) Create `src/deepreason/allocation.py`: seat-instance
+- [x] 5. (S1, S2, S4, S6) Create `src/deepreason/allocation.py`: seat-instance
       naming (`seat_instance`, `split_seat_instance`, `cap_knob`), the
       policy-referenced signal set `POLICY_SIGNALS`, the producer predicates,
       `open_loop_signals`, `open_loop_notices` (lazy `CompileNoticeV1` import),
@@ -45,7 +45,7 @@ step 5. A regression test first seen green proves nothing.
       done-when: `python -c "import deepreason.allocation as a; print(a.POLICY_SIGNALS)"`
       prints 5 names AND `python -m pytest tests/test_signal_contract.py -q` still passes
 
-- [ ] 6. (S4, S6, S7) Register in `src/deepreason/signals.py`: four new
+- [x] 6. (S4, S6, S7) Register in `src/deepreason/signals.py`: four new
       `SignalDeclaration`s (`allocation.seat-truncation.v1`,
       `allocation.seat-repair.v1`, `allocation.policy-authorized.v1`,
       `allocation.policy-contested.v1`) with real unit/staleness, and replace
@@ -54,11 +54,11 @@ step 5. A regression test first seen green proves nothing.
       done-when: `python -c "from deepreason.signals import unspecified_declarations as u;print(len(u()))"`
       prints `84`
 
-- [ ] 7. (S7) Lower `MIGRATION_DEBT` in `tests/test_signal_contract.py` from 89
+- [x] 7. (S7) Lower `MIGRATION_DEBT` in `tests/test_signal_contract.py` from 89
       to 84 and add `test_every_policy_referenced_signal_is_declared`.
       done-when: `python -m pytest tests/test_signal_contract.py -q` -> passes
 
-- [ ] 8. (S7) [COMMIT] Commit the registry declarations and the debt paydown.
+- [x] 8. (S7) [COMMIT] Commit the registry declarations and the debt paydown.
       done-when: branch pushed; `git status --porcelain` empty
 
 - [ ] 9. (S1, S2) Rekey `Controller` by seat instance in
@@ -230,3 +230,49 @@ added line. Total stays inside the granted 12. Recorded here and in SPEC.md S11
 because "the 12-line reader fix in `_configured_role_cap`" was the operator's
 own wording, and a second site found by measurement is exactly the kind of thing
 that must be said out loud rather than quietly folded in.
+
+**Step 5 (S1/S2/S4/S6) — `src/deepreason/allocation.py` created.**
+
+    $ python -c "import deepreason.allocation as a; print(a.POLICY_SIGNALS)"
+    ('allocation.seat-truncation.v1', 'allocation.seat-repair.v1',
+     'dropped-call', 'allocation.policy-authorized.v1',
+     'allocation.policy-contested.v1')
+    $ python -m pytest tests/test_signal_contract.py -q
+    7 passed in 0.10s
+
+    open loop, no critic:   ('allocation.policy-contested.v1',)
+    open loop, with critic: ()
+    notices: [('ALLOCATION_OPEN_LOOP',
+               'allocation open-loop for signal allocation.policy-contested.v1')]
+
+**Step 6 (S4/S6/S7) — registry.** Four declarations added, five debt entries
+paid down.
+
+    $ python -c "from deepreason.signals import unspecified_declarations as u;print(len(u()))"
+    84
+
+C1 proven rather than asserted (`proof/s7_registry_diff.txt`), by executing the
+PREVIOUS commit's `signals.py` alongside the new one and comparing declaration
+by declaration:
+
+    added: ['allocation.policy-authorized.v1', 'allocation.policy-contested.v1',
+            'allocation.seat-repair.v1', 'allocation.seat-truncation.v1']
+    removed: []
+    semantics prose moved: []
+    unit/staleness moved: ['controller-authority', 'controller-hold:',
+                           'controller-rehydration', 'controller-update',
+                           'dropped-call']
+    debt: 89 -> 84
+
+No name removed, no prose moved, exactly the five paydowns claimed. The
+paydown is an explicit `_PAID_DOWN` override table rather than retyped
+entries, so the prose CANNOT drift while a unit is being stated.
+
+**Step 7 (S7) — `MIGRATION_DEBT` 89 -> 84**, with the arithmetic recorded in
+the constant's own comment, plus two new contract tests: every
+policy-referenced signal is declared, and none of them still carries the
+`unspecified` debt marker (a consumer that must decide how long to believe an
+observation may not read a signal whose staleness nobody stated).
+
+    $ python -m pytest tests/test_signal_contract.py tests/test_signals.py -q
+    18 passed in 4.83s

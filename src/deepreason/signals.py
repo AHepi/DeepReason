@@ -67,6 +67,29 @@ class SignalDeclaration:
             raise ValueError(f"signal declaration incomplete: {self.name!r}")
 
 
+# Entries migrated before the contract whose unit and staleness this tranche
+# has the evidence to state (Rung 1b-ii). Their SEMANTICS PROSE IS UNTOUCHED --
+# the paydown replaces `unspecified` in place and nothing else, so no signal
+# name and no recorded meaning changes spelling. `REC-add-signal.md`'s paydown
+# rule: lower MIGRATION_DEBT by exactly the number fixed, and say in the commit
+# what evidence fixed it. Here the evidence is this rung's own consumption
+# side, which defines when each is emitted and how long a consumer may believe
+# it.
+_PAID_DOWN: dict[str, tuple[Unit, Staleness]] = {
+    # One bounded update; the next cycle's policy supersedes it.
+    "controller-update": ("event", "cycle"),
+    # Episode-deduplicated: the last statement stands for the run.
+    "controller-authority": ("event", "run"),
+    # A resume-time restatement of the limits already in force.
+    "controller-rehydration": ("event", "run"),
+    # One cycle's hold decision.
+    "controller-hold:": ("event", "cycle"),
+    # `Controller._new_transport_drops` counts these cumulatively across the
+    # whole log, so an occurrence stays usable for the life of the run.
+    "dropped-call": ("event", "run"),
+}
+
+
 def _migrated(entries: dict) -> dict:
     """Wrap a pre-contract registry literal as declarations.
 
@@ -77,8 +100,10 @@ def _migrated(entries: dict) -> dict:
 
     return {
         name: SignalDeclaration(
-            name=name, unit="unspecified", semantics=meaning,
-            staleness="unspecified",
+            name=name,
+            unit=_PAID_DOWN.get(name, ("unspecified", "unspecified"))[0],
+            semantics=meaning,
+            staleness=_PAID_DOWN.get(name, ("unspecified", "unspecified"))[1],
         )
         for name, meaning in entries.items()
     }
@@ -505,6 +530,51 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "premise falls, and a mark is an open question rather than a "
                   "status",
         staleness="permanent",
+    ),
+    SignalDeclaration(
+        name="allocation.seat-truncation.v1",
+        unit="ratio",
+        semantics="the share of one SEAT INSTANCE's recent provider calls that "
+                  "hit the completion length limit. Keyed by seat instance, "
+                  "not role: two structurally asymmetric seats filled by one "
+                  "conjecturer are two signals, because they may need "
+                  "throttling independently. A process fact about transport, "
+                  "never about the content that was truncated -- it may price "
+                  "a completion cap and may never reach a label",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="allocation.seat-repair.v1",
+        unit="ratio",
+        semantics="the share of one SEAT INSTANCE's recent provider calls that "
+                  "consumed more than one completion attempt (schema or "
+                  "transport repair). Keyed by seat instance for the same "
+                  "reason as the truncation share. Says the wire was expensive, "
+                  "never that the output was wrong: a repaired call and a "
+                  "first-pass call are equally admissible evidence",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="allocation.policy-authorized.v1",
+        unit="event",
+        semantics="a controller policy's limits are the ones currently in "
+                  "force. Read on resume to restore the limits a run was "
+                  "already operating under, and after a hold to revert to "
+                  "them. It is an adjudication outcome about the ALLOCATION "
+                  "layer's own artifact and confers nothing on any other "
+                  "artifact's status",
+        staleness="run",
+    ),
+    SignalDeclaration(
+        name="allocation.policy-contested.v1",
+        unit="event",
+        semantics="a controller policy is under an unresolved attack, so "
+                  "allocation must hold its current limits (fail-static). A "
+                  "topology binding no seat that can attack an artifact cannot "
+                  "produce this signal at all, which is a disclosed open loop "
+                  "rather than a fault. Reading it changes only how much a "
+                  "seat may spend, never what any artifact is",
+        staleness="run",
     ),
 )
 

@@ -1,0 +1,8 @@
+# S7 / C1 — no existing signal name or semantics prose changed spelling
+# baseline: signals.py at 1b40c5443 (the tranche's last commit before the registry step)
+
+added: ['allocation.policy-authorized.v1', 'allocation.policy-contested.v1', 'allocation.seat-repair.v1', 'allocation.seat-truncation.v1']
+removed: []
+semantics prose moved: []
+unit/staleness moved: ['controller-authority', 'controller-hold:', 'controller-rehydration', 'controller-update', 'dropped-call']
+debt: 89 -> 84
