@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=18 blockers=steps 15/17 wait on the BEFORE sweep finishing
+State: next=24 blockers=steps 15/17 wait on the BEFORE sweep finishing
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -109,37 +109,37 @@ step 5. A regression test first seen green proves nothing.
       `src/deepreason/invariants.py` and `docs/map/INV-frozen-surfaces.md`, and
       names no other `src/` file; branch pushed
 
-- [ ] 18. (S1) Add the seat-instance behaviour tests:
+- [x] 18. (S1) Add the seat-instance behaviour tests:
       `test_two_asymmetric_seats_throttle_independently`,
       `test_a_single_seat_role_keeps_the_bare_role_spelling`,
       `test_seat_identity_is_read_from_the_attempt_trace`.
       done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k seat_instance`
       -> passes
 
-- [ ] 19. (S3) Add `test_the_shipped_qualification_subject_digest_does_not_move`
+- [x] 19. (S3) Add `test_the_shipped_qualification_subject_digest_does_not_move`
       pinning `d47cb2bf27021474aa17933bc3dcfeeb5dfb1c23b0cfe49452941aace39088dc`.
       done-when: that test passes
 
-- [ ] 20. (S5) Add the compiled configuration matrix over solo / no-schools /
+- [x] 20. (S5) Add the compiled configuration matrix over solo / no-schools /
       judges-off / legacy-on: each compiles, the controller attaches, every
       policy-referenced signal has a producer.
       done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k matrix`
       -> 4 parametrised cases pass
 
-- [ ] 21. (S6) Add the open-loop tests: a critic-less topology compiles and
+- [x] 21. (S6) Add the open-loop tests: a critic-less topology compiles and
       yields a typed `ALLOCATION_OPEN_LOOP` notice naming
       `allocation.policy-contested.v1`, and the `controller-authority` record
       carries it.
       done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k open_loop`
       -> passes
 
-- [ ] 22. (S8) Add the efficiency-never-evidence tests: the differential
+- [x] 22. (S8) Add the efficiency-never-evidence tests: the differential
       (controller-stepped vs not: identical status maps, warrant sets, att/dep
       edges), the ledger check, and the architecture check.
-      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k evidence`
+      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k "evidence or verdict"`
       -> passes
 
-- [ ] 23. (S8/R11) MUTATION PROOF: in a scratch copy of the tree only, break
+- [x] 23. (S8/R11) MUTATION PROOF: in a scratch copy of the tree only, break
       `is_generator_knob`'s tribunal guard, run the evidence test, watch it go
       RED, discard the copy.
       done-when: both runs saved verbatim to `proof/s8_mutation.txt`, showing
@@ -347,3 +347,49 @@ move, so the first test cannot pass on a fix that changed nothing.
 
     $ git diff --name-only origin/main...HEAD | grep -c run_manifest.py
     0
+
+**Steps 18-22 — the behaviour, matrix, open-loop and evidence tests.**
+
+    $ python -m pytest tests/test_allocation_signal_consumption.py -q
+    17 passed in 0.74s
+
+Step 18 (S1). `test_two_asymmetric_seats_throttle_independently` is the
+operator's requirement made falsifiable: seat 0 roomy and clean, seat 1 starved
+and truncating, and the two move in OPPOSITE DIRECTIONS in one cycle — which no
+shared knob can do. The policy body's knobs are exactly
+`{cap:conjecturer#0, cap:conjecturer#1}`. The single-seat companion asserts the
+bare-role spelling, and the identity test asserts the seat comes from
+`LLMAttempt.seat` (no new role, no new record field).
+
+Step 19 (S3). The shipped qualification subject digest is pinned at
+`d47cb2bf…88dc` and `compile_notices is None` on that manifest, so nothing here
+costs a ~14-minute battery.
+
+Step 20 (S5). All four configuration classes compile, the controller attaches
+and states an authority naming EVERY bound seat, `steerable` is non-empty, and
+`open_loop_signals(bound) == ()`. `_bound_roles` reads routes rather than role
+KEYS, because the compiler emits all eleven canonical keys and a key with no
+routes is not a seat — asking `manifest.roles` for membership would report a
+judge in a run that binds none.
+
+Step 21 (S6). A critic-less topology COMPILES and yields exactly one typed
+`ALLOCATION_OPEN_LOOP` notice naming `allocation.policy-contested.v1`, whose
+`resolution` names the seat that would close the loop. The run still steers —
+nothing died.
+
+Step 22 (S8). The differential compares a real adjudication (3 artifacts, one
+refuted, one attack edge, one warrant carrier), not an empty graph, and the
+controller demonstrably split its two seats in the steered arm.
+
+**Step 23 (S8/R11) — MUTATION PROOF** (`proof/s8_mutation.txt`). Two mutations,
+both in a scratch copy, both plausible rather than syntactic:
+
+| | mutation | result |
+|---|---|---|
+| repo tree | — | **3 passed** |
+| A | `is_generator_knob` loses its `TRIBUNAL_LEDGER` check | **1 failed** — `test_evidence_never_admits_a_tribunal_knob_from_a_policy_body` |
+| B | `_emit_policy` mints an argumentative warrant against a conjecture whenever a SEAT-keyed knob moved ("a seat we had to throttle produced weaker work") | **1 failed** — `test_evidence_is_identical_whether_or_not_allocation_ran` |
+
+Mutation B is the one that matters: it is the forbidden move in its most
+plausible disguise, and it is caught by the differential rather than by a
+grep. Scratch discarded; `git status --porcelain src/` empty.

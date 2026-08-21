@@ -1,0 +1,67 @@
+# S8 / R11 — MUTATION PROOF of the efficiency-never-evidence guard
+#
+# Two mutations, each applied in a SCRATCH COPY of the tree under the
+# session scratchpad, never in the repo (CLAUDE.md: scratch files go in the
+# scratchpad). Each mutation is a plausible way for allocation to reach
+# evidence, not a syntactic break -- a guard that only catches nonsense
+# catches nothing.
+#
+# Repo tree: 8c4e3e450
+
+=============== 1. GREEN on the repo tree ===============
+$ python -m pytest tests/test_allocation_signal_consumption.py -q -k "evidence or verdict"
+...                                                                      [100%]
+3 passed, 14 deselected in 0.41s
+
+=============== 2. RED under mutation A: the ledger guard ===============
+# is_generator_knob loses its TRIBUNAL_LEDGER check, so a tribunal knob
+# (FLOOR, HV_MIN, ARG_CRIT_PER_CYCLE) passes as a generator cap.
+#
+#   -    if knob in TRIBUNAL_LEDGER:
+#   -        return False
+#   -    return knob in GENERATOR_LEDGER or (
+#   +    return knob in GENERATOR_LEDGER or knob in TRIBUNAL_LEDGER or (
+
+            }
+        })
+    
+        assert admitted == {"cap:conjecturer": 1600}, admitted
+        for knob in ("FLOOR", "HV_MIN", "ARG_CRIT_PER_CYCLE", "status"):
+>           assert not is_generator_knob(knob), knob
+E           AssertionError: FLOOR
+E           assert not True
+E            +  where True = is_generator_knob('FLOOR')
+
+tests/test_allocation_signal_consumption.py:696: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_allocation_signal_consumption.py::test_evidence_never_admits_a_tribunal_knob_from_a_policy_body
+1 failed, 2 passed, 14 deselected in 0.47s
+
+=============== 3. RED under mutation B: a seat key reaching a label ===============
+# _emit_policy mints an ARGUMENTATIVE warrant against a conjecture
+# whenever a SEAT-keyed knob moved -- the forbidden move in its most
+# plausible disguise: 'a seat we had to throttle produced weaker work,
+# so flag its output'. This is the mutation the differential exists for:
+# seat identity is provenance-shaped, and provenance reaching
+# adjudication is what the harness forbids by construction.
+
+            "touches efficiency, never evidence"
+        )
+E       AssertionError: an allocation decision changed the epistemic record: allocation touches efficiency, never evidence
+E       assert {'status': {'...-seat')], ...} == {'status': {'...ack:x')], ...}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'artifacts': ['0351490c05cfacfe57bbf4913a8172f69a2b0c21c7ede7e7608a40c258837311', '1f7358bae7217595ff336f67d2abecafea...4ba5df98265e683eef523578ac81407682259ffe780a74c7', 'a16b6ad0af19a9eaed11d08655ffdb6ccb9ec15a18fd517877c6e000e3b18255']} != {'artifacts': ['0351490c05cfacfe57bbf4913a8172f69a2b0c21c7ede7e7608a40c258837311', '76510884c8f33da86636449ea84103ce48c2efefec866c43409b4dd5d4a6688b', 'a16b6ad0af19a9eaed11d08655ffdb6ccb9ec15a18fd517877c6e000e3b18255']}
+E         {'carries': [('76510884c8f33da86636449ea84103ce48c2efe...
+E         
+E         ...Full output truncated (4 lines hidden), use '-vv' to show
+
+tests/test_allocation_signal_consumption.py:668: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_allocation_signal_consumption.py::test_evidence_is_identical_whether_or_not_allocation_ran
+1 failed, 2 passed, 14 deselected in 0.46s
+
+=============== 4. scratch discarded, repo tree unchanged ===============
+$ git status --porcelain src/
+(empty above = no mutation ever touched the repo)
