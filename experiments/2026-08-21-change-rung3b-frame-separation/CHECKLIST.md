@@ -1,8 +1,8 @@
 # Checklist for: Rung 3b — the frame-separation invariant
 
-State: next=12 blockers=STEP 9 STOP — diff_budget EXCEEDED (312 actual vs 193
-       ledgered). Awaiting the operator's word; nothing further is executed until
-       it arrives. Steps 3-8, 10, 11 are complete and green.
+State: next=15 blockers=none. Step 9's STOP is ANSWERED — operator, verbatim,
+       "Proceed at 312 (Recommended)", ledgered as REQUEST.md Amendment 1
+       (R15/R16). Steps 1-14 complete; VALIDATION.md verdict PASS.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -178,26 +178,67 @@ SPEC.md A3 and REQUEST.md §3 record why; the pair is added to
       the boundary working, not an omission." No drift against SPEC.md's
       forecast or census.
 
-- [ ] 12. (S10) Map gate, FULL: `python tools/docs_verify.py`
+- [x] 12. (S10) Map gate, FULL: `python tools/docs_verify.py`
       done-when: exactly the 3 pre-existing `CON-run-identity.md`
       shallow-clone failures from `docs/AUDIT_BASELINES.md`, 0 new; pasted.
       Then `python tools/docs_verify.py --audit` -> 0 findings on the
       documents this tranche touched
 
-- [ ] 13. (S11) Full gate: `python -m pytest tests/ -q -n 4`. Run it ALONE on
+      DONE. `python tools/docs_verify.py` (FULL):
+
+          docs_verify [full]: 60 documents, 928 checks, 4 workers
+            FAIL CON-run-identity.md:200 (git log -M --diff-filter=R ...)
+            FAIL CON-run-identity.md:202 -> fatal: ambiguous argument '1637e808'
+            FAIL CON-run-identity.md:204 -> fatal: ambiguous argument 'f304fec1'
+          docs_verify: 3 failed
+
+      Exactly the recorded baseline (`docs/AUDIT_BASELINES.md`: "3 pre-existing
+      failures, all CON-run-identity.md git-history checks — they require an
+      unshallowed clone"). 0 new.
+
+          python tools/docs_verify.py --audit -> 0 finding(s)
+
+      0 findings repo-wide, so none of this tranche's four new checks is
+      vacuous. Also run: `--links` -> 0 dangling, 60 documents; `--coverage`
+      -> 2 findings, identical to the same command run at base c8071fc34 in a
+      temporary worktree; `--stale` -> 6 documents, every entry judged in
+      VALIDATION.md (5 pre-existing at base, 1 the unavoidable self-reference).
+
+- [x] 13. (S11) Full gate: `python -m pytest tests/ -q -n 4`. Run it ALONE on
       an idle box — never concurrently with `docs_verify` (`dr-drive-harness`
       §5b).
       done-when: output ends `N passed, 0 failed`, pasted; N >= 3755 + 4.
       Any MCP-thread flake is isolated by re-running that file alone before
       it is attributed
 
-- [ ] 14. (S7/R8) MUTATION PROOF. Copy the tree to the session scratchpad,
+      DONE. `3759 passed, 6 skipped in 910.19s (0:15:10)`. 0 failed.
+      3759 = the 3755 baseline + this rung's 4 tests. No known-flaky MCP-thread
+      test fired, so no isolation run was owed. Run ALONE on an idle box; the
+      docs_verify runs above were sequenced after it, never concurrent.
+
+- [x] 14. (S7/R8) MUTATION PROOF. Copy the tree to the session scratchpad,
       clear `__pycache__`, neuter `frame_separated` to `return True` in the
       COPY, run the violation test there, observe RED; then re-run it on the
       real tree and observe GREEN. The copy is discarded; the repo is never
       mutated.
       done-when: both runs pasted into VALIDATION.md with the mutated line
       shown, RED then GREEN
+
+      DONE — TWO mutations, both pasted in VALIDATION.md S7.
+
+      Mutation A neutered `frame_separated` to `return True`:
+      `1 failed, 3 passed` (`AssertionError: assert not True` at
+      test_calculus_frame_separation.py:114), then `4 passed` restored.
+
+      Mutation A was NOT enough and the gap is recorded rather than glossed:
+      it left `consultability` green, because the enforcement computes its own
+      intersection from `_state_components` rather than calling
+      `frame_separated`. So the check was disabled one level down instead —
+      mutation B made `_components` forget every att/dep edge —
+      and the enforcement went RED too: `assert True is False, where True =
+      Consultability(consultable=True, code=None, detail=()).consultable`.
+      `2 failed, 2 passed`, then `4 passed` restored. Both copies discarded;
+      the repository was never mutated.
 
 - [ ] 15. (all) [COMMIT] Push and confirm clean tree.
       done-when: `git status --porcelain` empty AND
