@@ -1,6 +1,6 @@
 # Checklist for: Rung 3b — the frame-separation invariant
 
-State: next=15 blockers=none. Step 9's STOP is ANSWERED — operator, verbatim,
+State: COMPLETE (15/15). blockers=none. Step 9's STOP is ANSWERED — operator, verbatim,
        "Proceed at 312 (Recommended)", ledgered as REQUEST.md Amendment 1
        (R15/R16). Steps 1-14 complete; VALIDATION.md verdict PASS.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -240,7 +240,13 @@ SPEC.md A3 and REQUEST.md §3 record why; the pair is added to
       `2 failed, 2 passed`, then `4 passed` restored. Both copies discarded;
       the repository was never mutated.
 
-- [ ] 15. (all) [COMMIT] Push and confirm clean tree.
+- [x] 15. (all) [COMMIT] Push and confirm clean tree.
       done-when: `git status --porcelain` empty AND
       `git rev-parse HEAD origin/claude/calculus-rung3b-frame-separation-yqjxyt`
       prints the same sha twice
+
+      DONE. `git status --porcelain` -> empty.
+      `git rev-parse HEAD origin/claude/calculus-rung3b-frame-separation-yqjxyt`
+      -> `afc334a9e89f997ea30373e5b93dfb0618adeef8` twice.
+      VALIDATION.md verdict PASS; DELIVERY.md committed with errata E35/E36 in
+      the same commit, per `dr-deliver-change` step 5.
