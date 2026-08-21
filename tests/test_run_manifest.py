@@ -1,6 +1,8 @@
 """Compiled source config: concrete, immutable, secret-free routes."""
 
 import json
+from copy import deepcopy
+
 import pytest
 
 from deepreason.config import Config, EndpointSpec
@@ -699,17 +701,23 @@ def test_second_explicit_family_is_allowed_without_fallback():
     assert manifest.provider_fallback is False
 
 
-def test_rubric_forbid_rejects_rubric_input_before_runtime():
+def test_rubric_forbid_discloses_rubric_input_before_runtime():
+    """All-configs-allowed completion (2026-08-16): preflight DISCLOSES the
+    conflict instead of refusing, and never mutates the payload. Nothing is
+    lost -- `Harness._validate_warrant` still refuses a rubric-derived
+    warrant that carries no conforming trial transcript."""
     manifest = compile_run_manifest(
         _config(), single_model="gemma4:31b", rubric_policy="forbid",
         compiled_at=STAMP,
     )
-    with pytest.raises(RunManifestError, match="RUBRIC_INPUT_FORBIDDEN"):
-        preflight_payload(
-            manifest,
-            {"problem": {"description": "judge prose"},
-             "commitments": [{"id": "k", "eval": "rubric:std"}]},
-        )
+    payload = {
+        "problem": {"description": "judge prose"},
+        "commitments": [{"id": "k", "eval": "rubric:std"}],
+    }
+    before = deepcopy(payload)
+    notices = preflight_payload(manifest, payload)
+    assert "RUBRIC_INPUT_FORBIDDEN" in [n.code for n in notices]
+    assert payload == before
 
 
 def _materialized_problem(harness, commitment):
@@ -731,12 +739,13 @@ def test_materialized_rubric_reference_is_preflighted_on_resume(tmp_path):
     )
     harness = Harness(tmp_path / "run")
     _materialized_problem(harness, Commitment(id="k-rubric", eval="rubric:std"))
-    with pytest.raises(RunManifestError) as raised:
-        preflight_harness(manifest, harness, config_from_run_manifest(manifest))
-    assert raised.value.code == "RUBRIC_INPUT_FORBIDDEN"
+    notices = preflight_harness(
+        manifest, harness, config_from_run_manifest(manifest)
+    )
+    assert "RUBRIC_INPUT_FORBIDDEN" in [n.code for n in notices]
 
 
-def test_property_proposal_rubric_path_fails_before_any_model_call(tmp_path):
+def test_property_proposal_rubric_path_is_disclosed_before_any_model_call(tmp_path):
     configured = _config().model_copy(deep=True)
     configured.roles["property_designer"] = _route()
     manifest = compile_run_manifest(
@@ -748,9 +757,10 @@ def test_property_proposal_rubric_path_fails_before_any_model_call(tmp_path):
         harness,
         Commitment(id="k-property", eval="program:property_oracle"),
     )
-    with pytest.raises(RunManifestError) as raised:
-        preflight_harness(manifest, harness, config_from_run_manifest(manifest))
-    assert raised.value.code == "PROPERTY_RUBRIC_TRIAL_FORBIDDEN"
+    notices = preflight_harness(
+        manifest, harness, config_from_run_manifest(manifest)
+    )
+    assert "PROPERTY_RUBRIC_TRIAL_FORBIDDEN" in [n.code for n in notices]
 
 
 def test_manifest_is_immutable_canonical_and_hash_verified(tmp_path):

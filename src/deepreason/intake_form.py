@@ -144,13 +144,19 @@ class IntakeFormV1(BaseModel):
     @field_validator("cycles")
     @classmethod
     def _cycles_within_ceiling(cls, cycles: int | None) -> int | None:
-        """D2: cycles <= the V6 ceiling."""
+        """D2: cycles <= the V6 ceiling, by CLAMP rather than refusal.
+
+        All-configs-allowed (CLAUDE.md 2026-08-12) retires the ceiling as a
+        compile-time denial: asking for more cycles than the engine accepts
+        is a configuration, not a shape error, so it resolves deterministically
+        to the ceiling. The form carries no manifest and so no
+        `compile_notices` sink -- the clamped value IS the disclosure, the
+        same way `_no_conflicting_role_bindings` resolves in place; the code
+        survives in `error_catalog.py`, whose entry describes the clamp.
+        """
 
         if cycles is not None and cycles > PUBLIC_MAX_CYCLES:
-            raise ValueError(
-                f"{INTAKE_CYCLES_CEILING_EXCEEDED}: cycles={cycles} exceeds the "
-                f"V6 ceiling of {PUBLIC_MAX_CYCLES}"
-            )
+            return PUBLIC_MAX_CYCLES
         return cycles
 
 

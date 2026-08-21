@@ -18,7 +18,7 @@ import tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal
 from urllib.parse import urlsplit
 
 from pydantic import (
@@ -352,10 +352,34 @@ class ScratchPolicy(BaseModel):
             raise ValueError("per-channel limits must be integers from 1 through 10000")
         return _FrozenDict(dict(value))
 
+    @model_validator(mode="before")
+    @classmethod
+    def _reserved_fractions_are_clamped(cls, data):
+        """The manifest-side mirror of `ScratchpadConfig`'s clamp. Both sides
+        move together by construction -- they call the same helper."""
+
+        if not isinstance(data, dict):
+            return data
+        exploratory = data.get("exploratory_fraction")
+        underexposed = data.get("underexposed_fraction")
+        if exploratory is None or underexposed is None:
+            return data
+        from deepreason.config import clamp_reserved_attention_fractions
+
+        try:
+            clamped = clamp_reserved_attention_fractions(
+                float(exploratory), float(underexposed)
+            )
+        except (TypeError, ValueError):
+            return data
+        if clamped == (exploratory, underexposed):
+            return data
+        data = dict(data)
+        data["exploratory_fraction"], data["underexposed_fraction"] = clamped
+        return data
+
     @model_validator(mode="after")
     def _resolved_policy_is_consistent(self):
-        if self.exploratory_fraction + self.underexposed_fraction > 1.0:
-            raise ValueError("reserved attention fractions must not exceed one")
         if self.embedder_backend == "neural" and self.embedder_model is None:
             raise ValueError("neural embedder backend requires one exact model")
         if self.embedder_backend != "neural" and self.embedder_model is not None:
@@ -1177,6 +1201,14 @@ class CompileNoticeV1(BaseModel):
     resolution: str | None = None
 
 
+# A notice sink bound to one manifest construction. Helper validators
+# receive it as an argument rather than reaching for a module-global or a
+# contextvar: `compile_run_manifest` and the model's own "after" validator
+# each own a different sink, and a validator must never write into the
+# wrong one.
+CompileNoticeEmitter = Callable[..., None]
+
+
 def _emit_compile_notice(
     sink: list[CompileNoticeV1],
     code: str,
@@ -1342,12 +1374,25 @@ class RunManifest(BaseModel):
         new_notices: list[CompileNoticeV1] = []
         existing_keys = {(n.code, n.pointer) for n in (self.compile_notices or ())}
 
-        def _emit_deduped(code: str, message: str, pointer: str) -> None:
+        def _emit_deduped(
+            code: str,
+            message: str,
+            pointer: str,
+            *,
+            resolution: str | None = None,
+        ) -> None:
             key = (code, pointer)
             if key in existing_keys:
                 return
             existing_keys.add(key)
-            new_notices.append(CompileNoticeV1(code=code, message=message, pointer=pointer))
+            new_notices.append(
+                CompileNoticeV1(
+                    code=code,
+                    message=message,
+                    pointer=pointer,
+                    resolution=resolution,
+                )
+            )
 
         if (
             self.schema_version < 4
@@ -1459,8 +1504,8 @@ class RunManifest(BaseModel):
         if self.schema_version >= 4:
             if self.control_plane_policy is None:
                 raise ValueError("v4+ manifest requires complete control_plane_policy")
-            _validate_v4_control_plane_policy(self)
-            _validate_v4_criticism_policy(self)
+            _validate_v4_control_plane_policy(self, emit=_emit_deduped)
+            _validate_v4_criticism_policy(self, emit=_emit_deduped)
         if self.schema_version == 4:
             if (
                 not isinstance(self.control_plane_policy, ControlPlanePolicyV1)
@@ -1485,7 +1530,7 @@ class RunManifest(BaseModel):
                 raise ValueError("v5 manifest requires a bound run-input digest")
             if self.simulation_capability_policy is not None or self.frozen_evidence_policy is not None:
                 raise ValueError("v5 manifest cannot use prototype split capability fields")
-            _validate_v5_capability_policy(self)
+            _validate_v5_capability_policy(self, emit=_emit_deduped)
         if self.schema_version == 6:
             if (
                 not isinstance(self.control_plane_policy, ControlPlanePolicyV3)
@@ -1503,7 +1548,7 @@ class RunManifest(BaseModel):
                 or self.frozen_evidence_policy is not None
             ):
                 raise ValueError("v6 manifest cannot use prototype split capability fields")
-            _validate_v6_capability_policy(self)
+            _validate_v6_capability_policy(self, emit=_emit_deduped)
             if self.route_seat_presentation_plan is not None:
                 expected = tuple(
                     (role, seat, route.endpoint_id)
@@ -1715,6 +1760,7 @@ def _compile_route_seat_contract_decomposition_plan(
     manifest: RunManifest,
     *,
     source_config: dict[str, Any],
+    notices: list[CompileNoticeV1] | None = None,
 ) -> RouteSeatContractDecompositionPlanV1:
     """Freeze every repository-owned strong-to-smaller execution edge."""
 
@@ -1778,7 +1824,29 @@ def _compile_route_seat_contract_decomposition_plan(
                 "bridge_ledger_batch",
             ),
         ):
-            route = manifest.roles[role][0]
+            seats = manifest.roles.get(role, ())
+            if not seats:
+                # All-configurations-allowed made a grounded bridge with an
+                # unbound stage role COMPILE (BRIDGE_*_ROUTE_REQUIRED became a
+                # notice in the 2026-08-12 tranche), which walked this lookup
+                # into a bare IndexError -- neither a compile nor a typed
+                # refusal. The grant is skipped and disclosed; the point of use
+                # (`resolve_route_seat_contract_decomposition`) refuses typed
+                # because a skipped grant simply is not in the plan.
+                if notices is not None:
+                    _emit_compile_notice(
+                        notices,
+                        "V6_CONTRACT_DECOMPOSITION_ROUTE_REQUIRED",
+                        f"contract {source_contract} requires frozen route seat "
+                        f"{role}[0]",
+                        f"/roles/{role}/0",
+                        resolution=(
+                            "decomposition grant omitted from the plan; the "
+                            "contract cannot be decomposed at dispatch"
+                        ),
+                    )
+                continue
+            route = seats[0]
             entries.append(
                 RouteSeatContractDecompositionGrantV1(
                     role=role,
@@ -1882,6 +1950,8 @@ def resolve_route_seat_contract_decomposition(
 
 def _route_seat_behavioral_contract_assignments(
     manifest: RunManifest,
+    *,
+    notices: list[CompileNoticeV1] | None = None,
 ) -> tuple[tuple[str, str, int], ...]:
     """Return the closed set of real v6 provider contracts and route seats.
 
@@ -2053,14 +2123,27 @@ def _route_seat_behavioral_contract_assignments(
             }
         )
 
+    unbound = set()
     for contract_id, role, seat in assignments:
         routes = manifest.roles.get(role, ())
         if seat < 0 or seat >= len(routes):
-            raise RunManifestError(
-                "V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED",
-                f"contract {contract_id} requires frozen route seat {role}[{seat}]",
-                f"/roles/{role}/{seat}",
-            )
+            # Disclosed and skipped, never refused: the grant is omitted, so
+            # `resolve_route_seat_behavioral_capability` refuses typed at
+            # dispatch -- an unbound seat can never act on this contract.
+            unbound.add((contract_id, role, seat))
+            if notices is not None:
+                _emit_compile_notice(
+                    notices,
+                    "V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED",
+                    f"contract {contract_id} requires frozen route seat "
+                    f"{role}[{seat}]",
+                    f"/roles/{role}/{seat}",
+                    resolution=(
+                        "behavioral grant omitted from the plan; the seat "
+                        "carries no authority for this contract"
+                    ),
+                )
+    assignments -= unbound
     decomposition = manifest.route_seat_contract_decomposition_plan
     if decomposition is not None:
         assignments.update(
@@ -2081,6 +2164,8 @@ CONJECTURER_TURN_CONTRACTS = frozenset(
 
 def _compile_route_seat_behavioral_capability_plan(
     manifest: RunManifest,
+    *,
+    notices: list[CompileNoticeV1] | None = None,
 ) -> RouteSeatBehavioralCapabilityPlanV1:
     """Compile exact behavioral authority from already-frozen v6 policies."""
 
@@ -2106,7 +2191,7 @@ def _compile_route_seat_behavioral_capability_plan(
     }
     assignments: dict[tuple[str, int], list[str]] = {}
     for contract_id, role, seat in _route_seat_behavioral_contract_assignments(
-        manifest
+        manifest, notices=notices
     ):
         assignments.setdefault((role, seat), []).append(contract_id)
     decomposition_by_contract = {
@@ -2560,7 +2645,13 @@ def _source_feature_policies(data: dict[str, Any]):
     )
 
 
-def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any]):
+def _compile_scratch_policy(
+    source,
+    *,
+    model_profile: str,
+    data: dict[str, Any],
+    notices: list[CompileNoticeV1] | None = None,
+):
     max_blocks = source.max_blocks_per_pack
     max_guides = source.max_guides_per_pack
     similarity_top_k = source.similarity_top_k
@@ -2572,6 +2663,25 @@ def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any])
         similarity_top_k = min(similarity_top_k, 12)
         guide_open_threads = min(guide_open_threads, 8)
         guide_entry_points = min(guide_entry_points, 8)
+
+    if notices is not None:
+        from deepreason.config import clamp_reserved_attention_fractions
+
+        clamped = clamp_reserved_attention_fractions(
+            source.exploratory_fraction, source.underexposed_fraction
+        )
+        if clamped != (source.exploratory_fraction, source.underexposed_fraction):
+            _emit_compile_notice(
+                notices,
+                "SCRATCH_RESERVED_ATTENTION_FRACTIONS_EXCEED_ONE",
+                "reserved scratch attention fractions must not exceed one",
+                "/scratchpad/exploratory_fraction",
+                resolution=(
+                    "fractions scaled to sum to one, ratio preserved: "
+                    f"{source.exploratory_fraction},{source.underexposed_fraction}"
+                    f" -> {clamped[0]},{clamped[1]}"
+                ),
+            )
 
     semantic_active = source.enabled and source.semantic_retrieval
     configured_embedder = data.get("EMBEDDER_MODEL")
@@ -2586,11 +2696,23 @@ def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any])
         embedder_backend = "neural"
         embedder_model = str(configured_embedder)
         if embedder_model in _UNRESOLVED_MODELS or embedder_model == "unresolved":
-            raise RunManifestError(
-                "SCRATCH_EMBEDDER_MODEL_UNRESOLVED",
-                "semantic retrieval requires an exact embedder model or deterministic hashing",
-                "/EMBEDDER_MODEL",
-            )
+            # All-configurations-allowed: an unresolved model id falls back to
+            # the deterministic hashing backend -- the documented safe default
+            # every surface already degrades to -- instead of refusing.
+            if notices is not None:
+                _emit_compile_notice(
+                    notices,
+                    "SCRATCH_EMBEDDER_MODEL_UNRESOLVED",
+                    "semantic retrieval requires an exact embedder model or "
+                    "deterministic hashing",
+                    "/EMBEDDER_MODEL",
+                    resolution=(
+                        f"embedder model {embedder_model!r} is unresolved; the "
+                        "run falls back to the deterministic hashing backend"
+                    ),
+                )
+            embedder_backend = "deterministic_hashing"
+            embedder_model = None
     elif semantic_active:
         embedder_backend = "deterministic_hashing"
         embedder_model = None
@@ -2843,7 +2965,9 @@ def _normalized_model_identity(route: Route) -> tuple[str, str, str]:
     )
 
 
-def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
+def _validate_v4_control_plane_policy(
+    manifest: RunManifest, *, emit: CompileNoticeEmitter
+) -> None:
     """Bind every route-bound school assignment to the frozen role matrix."""
 
     policy = manifest.control_plane_policy
@@ -2882,8 +3006,14 @@ def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
                 f"V4_SCHOOL_ROLE_UNKNOWN: no frozen role {binding.role!r}"
             )
         if binding.role != "conjecturer":
-            raise ValueError(
-                "V4_SCHOOL_ROLE_UNSUPPORTED: v4 initially binds conjecturer only"
+            # All-configurations-allowed (CLAUDE.md 2026-08-12): the binding
+            # is kept verbatim in the frozen policy. `resolve_school_route`
+            # is the point of use and refuses typed
+            # (SCHOOL_ROUTE_ROLE_UNSUPPORTED) for any role v4 cannot drive.
+            emit(
+                "V4_SCHOOL_ROLE_UNSUPPORTED",
+                "v4 initially binds conjecturer only",
+                "/control_plane_policy/school_execution/bindings",
             )
         routes = manifest.roles[binding.role]
         if binding.seat >= len(routes):
@@ -2907,30 +3037,66 @@ def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
             detail.append("missing " + ", ".join(f"{school}/{role}" for school, role in missing))
         if extra:
             detail.append("extra " + ", ".join(f"{school}/{role}" for school, role in extra))
-        raise ValueError(
-            "V4_SCHOOL_BINDING_INCOMPLETE: " + "; ".join(detail)
+        emit(
+            "V4_SCHOOL_BINDING_INCOMPLETE",
+            "; ".join(detail),
+            "/control_plane_policy/school_execution/bindings",
         )
 
+    # The three checks below are R4 conflicts, not impossibilities: one part
+    # of the configuration (a coarse switch) contradicts another (the
+    # enumerated bindings). Resolution is fixed and stated in SPEC §4.1 --
+    # THE BINDINGS WIN, because they name the seats explicitly and the
+    # switch only describes them. The overridden switch is the notice's
+    # `resolution`, so the record says which half of the conflict was
+    # dropped and why.
     assigned_seats = [(binding.role, binding.seat) for binding, _route in resolved]
     if not school_policy.allow_shared and len(set(assigned_seats)) != len(assigned_seats):
-        raise ValueError(
-            "V4_SCHOOL_SHARED_SEAT_FORBIDDEN: allow_shared is false"
+        shared = sorted(
+            f"{role}[{seat}]"
+            for role, seat in {
+                pair for pair in assigned_seats if assigned_seats.count(pair) > 1
+            }
+        )
+        emit(
+            "V4_SCHOOL_SHARED_SEAT_FORBIDDEN",
+            "allow_shared is false",
+            "/control_plane_policy/school_execution/allow_shared",
+            resolution=(
+                "explicit bindings win over allow_shared=false; shared seats: "
+                + ", ".join(shared)
+            ),
         )
     if school_policy.require_distinct_models:
         models = {_normalized_model_identity(route) for _binding, route in resolved}
         if len(models) != len(resolved):
-            raise ValueError(
-                "V4_SCHOOL_DISTINCT_MODEL_REQUIRED: bound schools share a model"
+            emit(
+                "V4_SCHOOL_DISTINCT_MODEL_REQUIRED",
+                "bound schools share a model",
+                "/control_plane_policy/school_execution/require_distinct_models",
+                resolution=(
+                    "explicit bindings win over require_distinct_models; "
+                    "bound model identities: "
+                    + ", ".join(sorted(str(model) for model in models))
+                ),
             )
     if school_policy.require_distinct_families:
         families = {route.family.strip().casefold() for _binding, route in resolved}
         if len(families) != len(resolved):
-            raise ValueError(
-                "V4_SCHOOL_DISTINCT_FAMILY_REQUIRED: bound schools share a family"
+            emit(
+                "V4_SCHOOL_DISTINCT_FAMILY_REQUIRED",
+                "bound schools share a family",
+                "/control_plane_policy/school_execution/require_distinct_families",
+                resolution=(
+                    "explicit bindings win over require_distinct_families; "
+                    "bound families: " + ", ".join(sorted(families))
+                ),
             )
 
 
-def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
+def _validate_v4_criticism_policy(
+    manifest: RunManifest, *, emit: CompileNoticeEmitter
+) -> None:
     """Bind foreign critics to the frozen role matrix and trial topology."""
 
     policy = manifest.criticism_policy
@@ -2938,8 +3104,13 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
         return
     control = manifest.control_plane_policy
     if control is None or control.mode not in {"active_conjecture", "active_inquiry"}:
-        raise ValueError(
-            "V4_CRITICISM_ACTIVE_REQUIRED: criticism policy requires active_conjecture"
+        # A control mode that never dispatches foreign criticism simply never
+        # reaches this policy; the policy is compiled as given rather than
+        # refused (CLAUDE.md 2026-08-12).
+        emit(
+            "V4_CRITICISM_ACTIVE_REQUIRED",
+            "criticism policy requires active_conjecture",
+            "/criticism_policy",
         )
     try:
         engine_data = json.loads(manifest.engine_config_json)
@@ -2951,9 +3122,17 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
     if school_count < 0:
         raise ValueError("V4_SCHOOL_COUNT_INVALID: N_SCHOOLS cannot be negative")
     if policy.minimum_foreign_school_coverage > max(0, school_count - 1):
-        raise ValueError(
-            "V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE: minimum coverage exceeds "
-            "the number of foreign schools"
+        # No resolution is available: the field is `ge=1`, so an
+        # unsatisfiable requirement cannot be clamped to zero without
+        # inventing a value the operator did not ask for. The declared
+        # coverage is kept and workflow/criticism.py refuses typed
+        # (V4_CRITICISM_FOREIGN_COVERAGE_UNSATISFIED) at the point of use.
+        emit(
+            "V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE",
+            "minimum coverage exceeds the number of foreign schools "
+            f"(coverage={policy.minimum_foreign_school_coverage}, "
+            f"foreign schools={max(0, school_count - 1)})",
+            "/criticism_policy/minimum_foreign_school_coverage",
         )
 
     expected_schools = {f"school-{index}" for index in range(school_count)}
@@ -2971,8 +3150,10 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
                 f"V4_CRITICISM_SCHOOL_UNKNOWN: no configured school {binding.school_id!r}"
             )
         if binding.role != "argumentative_critic":
-            raise ValueError(
-                "V4_CRITICISM_ROLE_UNSUPPORTED: bindings must name argumentative_critic"
+            emit(
+                "V4_CRITICISM_ROLE_UNSUPPORTED",
+                "bindings must name argumentative_critic",
+                "/criticism_policy/bindings",
             )
         if binding.seat >= len(critic_routes):
             raise ValueError(
@@ -2994,20 +3175,38 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
             detail.append("missing " + ", ".join(missing))
         if extra:
             detail.append("extra " + ", ".join(extra))
-        raise ValueError(
-            "V4_CRITICISM_BINDING_INCOMPLETE: " + "; ".join(detail)
+        emit(
+            "V4_CRITICISM_BINDING_INCOMPLETE",
+            "; ".join(detail),
+            "/criticism_policy/bindings",
         )
 
     assigned_seats = [(binding.role, binding.seat) for binding, _route in resolved]
     if not policy.allow_shared and len(set(assigned_seats)) != len(assigned_seats):
-        raise ValueError(
-            "V4_CRITICISM_SHARED_SEAT_FORBIDDEN: allow_shared is false"
+        shared = sorted(
+            f"{role}[{seat}]"
+            for role, seat in {
+                pair for pair in assigned_seats if assigned_seats.count(pair) > 1
+            }
+        )
+        emit(
+            "V4_CRITICISM_SHARED_SEAT_FORBIDDEN",
+            "allow_shared is false",
+            "/criticism_policy/allow_shared",
+            resolution=(
+                "explicit bindings win over allow_shared=false; shared seats: "
+                + ", ".join(shared)
+            ),
         )
 
     if policy.authority == "defended_trial":
         if not manifest.roles.get("defender"):
-            raise ValueError(
-                "V4_CRITICISM_DEFENDER_REQUIRED: defended_trial requires a defender route"
+            # informal/trial.py declines typed (`no-defender-role`) before any
+            # call when the seat is absent; no warrant can be produced.
+            emit(
+                "V4_CRITICISM_DEFENDER_REQUIRED",
+                "defended_trial requires a defender route",
+                "/roles/defender",
             )
         judge_routes = manifest.roles.get("judge", ())
         judge_families = {
@@ -3025,19 +3224,24 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
         # manifest.roles["judge"] shape the manifest-compile CLI's
         # --blind-same-model-judges lever produces -- no separate lever
         # needed for this site.
-        if len(judge_routes) < 2:
-            raise ValueError(
-                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
-                "two frozen judge seats from distinct families"
-            )
-        if len(judge_families) < 2 and len(judge_models) != 1:
-            raise ValueError(
-                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
-                "two frozen judge seats from distinct families"
+        # require_cross_family_judge_ensemble refuses typed
+        # (JudgeEnsemblePolicyError) from the immutable leases before any
+        # judge call, so an insufficient ensemble cannot reach a status
+        # decision -- the seats/evidence law's own guard, not this one.
+        if len(judge_routes) < 2 or (
+            len(judge_families) < 2 and len(judge_models) != 1
+        ):
+            emit(
+                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED",
+                "defended_trial requires two frozen judge seats from distinct "
+                "families",
+                "/roles/judge",
             )
 
 
-def _validate_v5_capability_policy(manifest: RunManifest) -> None:
+def _validate_v5_capability_policy(
+    manifest: RunManifest, *, emit: CompileNoticeEmitter
+) -> None:
     """Validate the complete, finite Tranche-A capability topology."""
 
     capabilities = manifest.inquiry_capability_policy
@@ -3047,7 +3251,25 @@ def _validate_v5_capability_policy(manifest: RunManifest) -> None:
     if not isinstance(control, ControlPlanePolicyV2):
         raise ValueError("V5_ACTIVE_INQUIRY_REQUIRED")
     if capabilities.capability_profile != control.capability_profile:
-        raise ValueError("V5_CAPABILITY_PROFILE_MISMATCH")
+        # R4 conflict: two parts of one configuration disagree. The control
+        # plane wins -- it is the coarser, earlier-frozen authority, and the
+        # capability policy is the narrower statement made under it. The
+        # overwrite is recorded as the notice's resolution so the record
+        # says which half was dropped.
+        was = capabilities.capability_profile
+        capabilities = capabilities.model_copy(
+            update={"capability_profile": control.capability_profile}
+        )
+        object.__setattr__(manifest, "inquiry_capability_policy", capabilities)
+        emit(
+            "V5_CAPABILITY_PROFILE_MISMATCH",
+            "inquiry capability profile differs from the control-plane profile",
+            "/inquiry_capability_policy/capability_profile",
+            resolution=(
+                "control-plane policy wins; capability_profile overwritten "
+                f"{was} -> {control.capability_profile}"
+            ),
+        )
     if capabilities.formalization.enabled:
         raise ValueError(
             "V5_FORMALIZATION_UNAVAILABLE: Tranche A cannot enable formalization"
@@ -3076,7 +3298,9 @@ def _validate_v5_capability_policy(manifest: RunManifest) -> None:
         )
 
 
-def _validate_v6_capability_policy(manifest: RunManifest) -> None:
+def _validate_v6_capability_policy(
+    manifest: RunManifest, *, emit: CompileNoticeEmitter
+) -> None:
     """Validate v6 capability authority without weakening the v5 topology."""
 
     capabilities = manifest.inquiry_capability_policy
@@ -3086,7 +3310,25 @@ def _validate_v6_capability_policy(manifest: RunManifest) -> None:
     if not isinstance(control, ControlPlanePolicyV3):
         raise ValueError("V6_TRANSACTIONAL_INQUIRY_REQUIRED")
     if capabilities.capability_profile != control.capability_profile:
-        raise ValueError("V6_CAPABILITY_PROFILE_MISMATCH")
+        # R4 conflict: two parts of one configuration disagree. The control
+        # plane wins -- it is the coarser, earlier-frozen authority, and the
+        # capability policy is the narrower statement made under it. The
+        # overwrite is recorded as the notice's resolution so the record
+        # says which half was dropped.
+        was = capabilities.capability_profile
+        capabilities = capabilities.model_copy(
+            update={"capability_profile": control.capability_profile}
+        )
+        object.__setattr__(manifest, "inquiry_capability_policy", capabilities)
+        emit(
+            "V6_CAPABILITY_PROFILE_MISMATCH",
+            "inquiry capability profile differs from the control-plane profile",
+            "/inquiry_capability_policy/capability_profile",
+            resolution=(
+                "control-plane policy wins; capability_profile overwritten "
+                f"{was} -> {control.capability_profile}"
+            ),
+        )
     if capabilities.formalization.enabled:
         raise ValueError("V6_FORMALIZATION_UNAVAILABLE")
     if capabilities.research.enabled and (
@@ -3276,7 +3518,10 @@ def compile_run_manifest(
         and resolved_control_policy is not None
         and resolved_control_policy.mode not in {"active_conjecture", "active_inquiry"}
     ):
-        raise RunManifestError(
+        # Compile-time twin of `_validate_v4_criticism_policy`'s
+        # V4_CRITICISM_ACTIVE_REQUIRED; both disclose, neither refuses.
+        _emit_compile_notice(
+            notices,
             "CRITICISM_ACTIVE_CONJECTURE_REQUIRED",
             "criticism_policy requires active_conjecture control mode",
             "/criticism_policy",
@@ -3473,7 +3718,12 @@ def compile_run_manifest(
         raise RunManifestError("INVALID_CONCURRENCY", "concurrency must be at least 1")
 
     scratch_policy = (
-        _compile_scratch_policy(scratch_source, model_profile=model_profile, data=data)
+        _compile_scratch_policy(
+            scratch_source,
+            model_profile=model_profile,
+            data=data,
+            notices=notices,
+        )
         if schema_version >= 3
         else None
     )
@@ -3562,18 +3812,55 @@ def compile_run_manifest(
     )
     if schema_version != 6:
         return manifest
+    # The two v6 plan passes run AFTER the manifest exists, so anything they
+    # disclose has to be folded back into `compile_notices` before the next
+    # `model_validate` -- otherwise the record would carry a plan with a
+    # silently missing grant.
+    plan_notices: list[CompileNoticeV1] = []
     payload = manifest.model_dump(mode="python", by_alias=False)
     payload["route_seat_contract_decomposition_plan"] = (
         _compile_route_seat_contract_decomposition_plan(
             manifest,
             source_config=data,
+            notices=plan_notices,
         )
     )
+    payload["compile_notices"] = _merged_compile_notices(
+        manifest.compile_notices, plan_notices
+    )
     manifest = RunManifest.model_validate(payload)
-    behavioral_plan = _compile_route_seat_behavioral_capability_plan(manifest)
+    plan_notices = []
+    behavioral_plan = _compile_route_seat_behavioral_capability_plan(
+        manifest, notices=plan_notices
+    )
     payload = manifest.model_dump(mode="python", by_alias=False)
     payload["route_seat_behavioral_capability_plan"] = behavioral_plan
+    payload["compile_notices"] = _merged_compile_notices(
+        manifest.compile_notices, plan_notices
+    )
     return RunManifest.model_validate(payload)
+
+
+def _merged_compile_notices(
+    existing: tuple[CompileNoticeV1, ...] | None,
+    fresh: list[CompileNoticeV1],
+) -> tuple[CompileNoticeV1, ...] | None:
+    """Append plan-pass disclosures to a manifest's frozen notices.
+
+    Deduped on (code, pointer) for the same reason
+    `_production_routes_are_concrete` dedupes: the v6 tail re-validates the
+    manifest twice, and one disclosure must not be recorded twice.
+    """
+
+    merged = list(existing or ())
+    seen = {(n.code, n.pointer) for n in merged}
+    for notice in fresh:
+        key = (notice.code, notice.pointer)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(notice)
+    return tuple(merged) or None
 
 
 def write_run_manifest(manifest: RunManifest, path: Path | str) -> tuple[Path, Path]:
@@ -4057,10 +4344,27 @@ def _preflight_text_authority(
         )
 
 
-def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
-    """Reject workload/manifest policy conflicts before the first call."""
+def preflight_payload(
+    manifest: RunManifest, payload: dict[str, Any]
+) -> tuple[CompileNoticeV1, ...]:
+    """Disclose workload/manifest policy conflicts before the first call.
+
+    Retired as a refusal 2026-08-16 (all-configs-allowed completion):
+    every configuration compiles, so a payload the manifest's policy did
+    not anticipate is DISCLOSED here, not stopped. The payload is never
+    mutated -- preflight is read-only over the operator's own input, and
+    silently stripping a criterion would change what the run is about.
+
+    Nothing is lost by disclosing: a rubric-derived warrant without a
+    conforming trial transcript is refused by `Harness._validate_warrant`
+    (harness.py, frozen surface), and an insufficient judge ensemble is
+    refused by `require_cross_family_judge_ensemble` from the immutable
+    leases before any judge call. Those are the points of use.
+    """
+    notices: list[CompileNoticeV1] = []
     if payload_has_rubric(payload) and manifest.rubric_policy == "forbid":
-        raise RunManifestError(
+        _emit_compile_notice(
+            notices,
             "RUBRIC_INPUT_FORBIDDEN",
             "this run manifest permits program and predicate evaluation only",
             "/standard",
@@ -4068,11 +4372,31 @@ def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
     if payload_has_rubric(payload):
         families = {route.family for route in manifest.roles.get("judge", ())}
         if len(families) < 2:
-            raise RunManifestError(
+            _emit_compile_notice(
+                notices,
                 "SECOND_JUDGE_FAMILY_REQUIRED",
                 "rubric input requires two distinct frozen judge families",
                 "/roles/judge",
             )
+    return tuple(notices)
+
+
+def report_preflight_notices(
+    notices: tuple[CompileNoticeV1, ...] | None, *, stream=None
+) -> None:
+    """Surface preflight disclosures on the same channel `config compile`
+    uses for `compile_notices`. The manifest is frozen by preflight time, so
+    the return value is the only channel a disclosure has."""
+
+    import sys as _sys
+
+    # A stubbed preflight (test doubles do this) returns nothing; an absent
+    # disclosure channel is not a disclosure of nothing to say.
+    for notice in notices or ():
+        print(
+            f"NOTICE {notice.code}: {notice.message}",
+            file=_sys.stderr if stream is None else stream,
+        )
 
 
 def preflight_harness(
@@ -4130,7 +4454,8 @@ def preflight_harness(
             commitment.eval.startswith("rubric:")
             for commitment in active_commitments.values()
         ):
-            raise RunManifestError(
+            _emit_compile_notice(
+                notices,
                 "RUBRIC_INPUT_FORBIDDEN",
                 "this materialized run contains an active rubric criterion",
                 "/problems/*/criteria",
@@ -4151,7 +4476,8 @@ def preflight_harness(
             commitment.eval == f"program:{PROPERTY_PROGRAM}"
             for commitment in active_commitments.values()
         ):
-            raise RunManifestError(
+            _emit_compile_notice(
+                notices,
                 "PROPERTY_RUBRIC_TRIAL_FORBIDDEN",
                 "property proposals require the frozen cross-family judge "
                 "ensemble; disable PROP_PROPOSE_PERIOD explicitly or compile "

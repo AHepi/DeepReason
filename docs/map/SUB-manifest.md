@@ -1,5 +1,5 @@
 <!-- DR-SUB-manifest -->
-Verified-at: 08dcdf3c
+Verified-at: bce018ae
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
 Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-schools
@@ -119,6 +119,41 @@ The battery (`cli/doctor.py`):
   canonical atomic write and strict bounded read.
 `check: for s in qualification_subject_payload qualification_subject_digest resolve_completed_qualification resolve_qualification_tier project_qualification_report completed_bundle_from_report production_qualification_maximum_provider_calls default_qualification_executor qualification_executor_options shallow_tier_record_from_cases load_completed_qualification write_completed_qualification write_qualification_tier; do grep -q "^def $s(" src/deepreason/qualification.py || exit 1; done && for s in production_contract_pairs run_production_contract_doctor run_production_contract_doctor_cli validate_production_contract_qualification derive_route_seat_model_classification exercise_production_contract_case write_production_contract_report load_production_contract_report; do grep -q "^def $s(" src/deepreason/cli/doctor.py || exit 1; done`
 
+## Compile never refuses a configuration — it discloses
+
+The operator's standing law ("All configurations should be allowed",
+CLAUDE.md 2026-08-12) is fully delivered here as of 2026-08-16. Anything that
+PARSES into the configuration model compiles into a run; what used to be a
+compile-time semantic refusal is a `CompileNoticeV1` in
+`RunManifest.compile_notices`, carrying the retired gate's own code, message
+and pointer, plus a `resolution` string whenever two parts of one
+configuration contradicted each other and one had to be dropped.
+
+Three things this does NOT mean, each load-bearing:
+
+- **Impossibility does not disappear; it moves to the point of use.** An
+  unbound seat, an unsatisfiable ensemble, an unreachable model still fail
+  TYPED where they are dispatched — `resolve_school_route`'s nine
+  `SchoolRouteResolutionError` codes, `JudgeEnsemblePolicyError`,
+  `informal/trial.py`'s `_block`/`_decline`, and the three `resolve_route_seat_*`
+  resolvers, which have no fallback by design.
+- **Parse and shape errors are still refused.** They are not configurations.
+  So are dangling references (a binding naming a school or seat that does not
+  exist), frozen-record protections, and gates gating a capability whose
+  dispatch code does not exist yet — converting the last kind would trade a
+  typed compile refusal for an untyped runtime crash.
+- **A notice-free compile is byte-identical to before the field existed.**
+  `compile_notices` is popped from BOTH serializations when
+  `schema_version < 6 or not compile_notices`, so no previously-compilable
+  configuration's canonical bytes, digest, or qualification subject moved.
+
+Two surfaces resolve without a notice because they carry no manifest and so
+no sink: `ScratchpadConfig`'s reserved attention fractions (clamped
+proportionally, ratio preserved, by the same helper the `ScratchPolicy`
+mirror calls) and `IntakeFormV1.cycles` (clamped to `PUBLIC_MAX_CYCLES`).
+The resolved value is the disclosure there.
+`check: python -m pytest tests/test_all_configs_allowed_remainder.py tests/test_seats_evidence_law.py -q && grep -q "^class CompileNoticeV1(BaseModel):" src/deepreason/run_manifest.py && test "$(grep -c 'payload.pop("compile_notices", None)' src/deepreason/run_manifest.py)" = 2 && python -c "import inspect, deepreason.run_manifest as m; assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_payload)), inspect.signature(m.preflight_payload); assert 'tuple[CompileNoticeV1, ...]' in str(inspect.signature(m.preflight_harness))" && sh -c '! grep -q "raise ValueError(\"V4_SCHOOL_SHARED_SEAT_FORBIDDEN" src/deepreason/run_manifest.py' && sh -c '! grep -q "raise RunManifestError(\"CRITICISM_ACTIVE_CONJECTURE_REQUIRED" src/deepreason/run_manifest.py'`
+
 ## State it owns
 
 In the run root: `run-manifest.json` (canonical bytes) and the fixed-name
@@ -167,6 +202,22 @@ credential. The only mutable in-memory state is `_EXECUTOR_OPTIONS` in
 
 ## Traps
 
+- **A retired refusal can leave an unguarded lookup behind it.** Converting
+  `BRIDGE_*_ROUTE_REQUIRED` to a notice (2026-08-12) let a grounded-bridge
+  manifest with unbound stage roles compile — and walk straight into
+  `manifest.roles[role][0]` in
+  `_compile_route_seat_contract_decomposition_plan`, which raised a bare
+  `IndexError`: neither a compile nor a typed refusal, so nothing the record
+  could carry. The park that noticed the shape
+  (`experiments/2026-08-12-change-all-configs-allowed/PARKED.md` P2)
+  predicted a typed `V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED` and was wrong
+  about which site fires first. Fixed 2026-08-16
+  (`experiments/2026-08-16-change-configs-complete-seats-test/`): both plan
+  passes SKIP an unbound grant and disclose it, and the dispatch resolvers
+  refuse typed because a skipped grant is simply absent from the plan. When
+  you convert a refusal, check what the code does immediately AFTER the
+  branch you just removed.
+`check: python -m pytest "tests/test_all_configs_allowed_remainder.py::test_grounded_bridge_without_stage_routes_compiles_instead_of_crashing" "tests/test_all_configs_allowed_remainder.py::test_a_skipped_behavioral_grant_still_refuses_typed_at_dispatch" -q`
 - **The version gating is written twice.** `_versioned_serialization` (public
   `model_dump`) and `canonical_bytes` (hashed bytes) each pop the same
   version-absent fields. Editing one and not the other makes a manifest whose

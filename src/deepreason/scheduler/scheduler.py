@@ -20,6 +20,7 @@ from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import (
     RouteFirewallError,
+    SchoolRouteResolutionError,
     resolve_school_role_lease,
     route_fingerprint,
 )
@@ -1317,7 +1318,15 @@ class Scheduler:
         )
         if not self.adapter.has_role("argumentative_critic"):
             if criticism_policy is not None:
-                raise RuntimeError("manifest foreign criticism has no runtime critic role")
+                # Reachable since all-configs-allowed made an incomplete
+                # criticism binding compile: the impossibility must surface
+                # TYPED at the point of use, not as a bare RuntimeError.
+                # SchoolRouteResolutionError IS a RuntimeError, so every
+                # existing catcher still catches it.
+                raise SchoolRouteResolutionError(
+                    "SCHOOL_ROUTE_CRITIC_ROLE_MISSING",
+                    "manifest foreign criticism has no runtime critic role",
+                )
             return
         if criticism_policy is not None:
             self._foreign_arg_crit()

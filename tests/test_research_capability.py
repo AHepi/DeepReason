@@ -328,6 +328,10 @@ def test_v6_manifest_gate_accepts_only_the_contained_backend():
     from deepreason.run_manifest import _validate_v6_capability_policy
     from tests.test_cli_production_doctor_v6 import _manifest as v6_manifest
 
+    def _discard_notice(*_args, **_kwargs):
+        """This gate still REFUSES, so no notice can be emitted through it."""
+        raise AssertionError("V6_RESEARCH_UNAVAILABLE must refuse, not disclose")
+
     manifest = v6_manifest()
     contained = manifest.model_copy(
         update={
@@ -338,7 +342,7 @@ def test_v6_manifest_gate_accepts_only_the_contained_backend():
             )
         }
     )
-    _validate_v6_capability_policy(contained)  # must not raise
+    _validate_v6_capability_policy(contained, emit=_discard_notice)  # must not raise
 
     foreign = manifest.model_copy(
         update={
@@ -352,7 +356,7 @@ def test_v6_manifest_gate_accepts_only_the_contained_backend():
         }
     )
     with pytest.raises(ValueError, match="V6_RESEARCH_UNAVAILABLE"):
-        _validate_v6_capability_policy(foreign)
+        _validate_v6_capability_policy(foreign, emit=_discard_notice)
 
 
 def test_consumed_fetches_become_citable_byte_checked_blocks(tmp_path):

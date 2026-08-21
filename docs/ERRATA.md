@@ -740,3 +740,31 @@ digest covers, because the omitted class is the one a future reader will
 rule out first. "Pure function of X" invites exactly one diagnosis when the
 digest moves and X did not — look for corruption — and forbids the correct
 one, which is that some Y is also an input.
+
+## 2026-08-16 (all-configs completion)
+
+**E33 — "compile-time denial abolished" was a title claiming a completion
+its own body denies.** `experiments/2026-08-12-change-all-configs-allowed/
+DELIVERY.md`'s heading reads "Delivered: all configurations are allowed —
+compile-time denial abolished". That document's own "What changed" section
+states the opposite three paragraphs later: "roughly 60 sites total: the
+~13 converted above, and ~20 more fully designed but intentionally left for
+a follow-on tranche (SPEC.md §3, PARKED.md P1)". The body is accurate; the
+heading is not, and a reader scanning tranche titles — which is how the
+tranche index is read — would conclude the law was fully delivered on
+2026-08-12 and that the parked remainder did not exist.
+
+The claim is TRUE as of 2026-08-16, not 2026-08-12. The remaining sites
+were converted in `experiments/2026-08-16-change-configs-complete-seats-
+test/`, whose CENSUS.md holds the before/after evidence per site
+(`census-before.txt`: 20 sites still refusing and 1 crashing untyped on
+main at `5f648ebc9`; `census-after.txt`: all 21 compiling).
+
+Not corrected in place: the 2026-08-12 DELIVERY.md is a delivered tranche
+artifact and is left verbatim, per the append-don't-rewrite rule. This
+entry is the correction.
+
+The general lesson: a tranche heading is a claim, and it is the claim most
+readers will act on. When a tranche knowingly ships a subset, the heading
+says so — "a tier-1 subset of" costs four words and saves the next reader
+from believing a park does not exist.

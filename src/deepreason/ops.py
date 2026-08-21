@@ -367,9 +367,14 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     require_full_engine(effective_manifest or config, workload="full scheduler")
 
     if effective_manifest is not None:
-        from deepreason.run_manifest import preflight_harness
+        from deepreason.run_manifest import (
+            preflight_harness,
+            report_preflight_notices,
+        )
 
-        preflight_harness(effective_manifest, harness, config)
+        report_preflight_notices(
+            preflight_harness(effective_manifest, harness, config)
+        )
 
     from deepreason.llm.adapter import build_adapter
     from deepreason.llm.budget import TokenMeter

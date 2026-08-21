@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 import pytest
 from pydantic import ValidationError
@@ -22,6 +23,16 @@ from deepreason.run_manifest import (
 
 
 STAMP = "2026-07-16T00:00:00Z"
+
+
+def _one_notice(manifest: RunManifest, code: str):
+    """Exactly one compile notice with this code, or the assertion says which
+    codes were actually recorded -- a silent zero-notice compile is the
+    failure mode these tests exist to catch."""
+
+    matches = [n for n in (manifest.compile_notices or ()) if n.code == code]
+    assert len(matches) == 1, [n.code for n in (manifest.compile_notices or ())]
+    return matches[0]
 
 
 def _route(
@@ -341,7 +352,7 @@ def test_conditioning_only_keeps_many_schools_on_one_shared_route():
     assert json.loads(manifest.engine_config_json)["N_SCHOOLS"] == 4
 
 
-def test_route_bound_fails_closed_when_one_school_binding_is_missing():
+def test_route_bound_discloses_a_missing_school_binding():
     config = Config(
         N_SCHOOLS=2,
         roles={
@@ -359,11 +370,13 @@ def test_route_bound_fails_closed_when_one_school_binding_is_missing():
         )
     )
 
-    with pytest.raises(
-        (RunManifestError, ValidationError),
-        match="V4_SCHOOL_BINDING_INCOMPLETE|missing.*binding|every configured school",
-    ):
-        _compile_v4(config, policy)
+    # All-configs-allowed completion (2026-08-16): partial school coverage is
+    # a configuration, not a contradiction. It compiles with a notice; the
+    # unbound school refuses TYPED at dispatch
+    # (llm/firewall.py, SCHOOL_ROUTE_BINDING_MISSING).
+    manifest = _compile_v4(config, policy)
+    notice = _one_notice(manifest, "V4_SCHOOL_BINDING_INCOMPLETE")
+    assert "school-1" in notice.message
 
 
 def test_route_bound_fails_closed_on_out_of_range_seat():
@@ -430,14 +443,6 @@ def test_route_bound_fails_closed_on_out_of_range_seat():
             True,
             "V4_SCHOOL_BINDING_DUPLICATE",
         ),
-        (
-            (
-                _binding(0, 0, "route-a"),
-                _binding(1, 0, "route-a"),
-            ),
-            False,
-            "V4_SCHOOL_SHARED_SEAT_FORBIDDEN",
-        ),
     ),
 )
 def test_route_bound_rejects_invalid_binding_topology(
@@ -464,6 +469,43 @@ def test_route_bound_rejects_invalid_binding_topology(
 
     with pytest.raises((RunManifestError, ValidationError), match=message):
         _compile_v4(config, policy)
+
+
+def test_route_bound_shared_seat_resolves_to_the_explicit_bindings():
+    """R4 conflict, resolved deterministically: `allow_shared=False` and two
+    bindings on one seat contradict each other inside ONE configuration. The
+    BINDINGS win -- they name the seat explicitly, the switch only describes
+    it -- and the notice's `resolution` records which half was dropped."""
+
+    config = Config(
+        N_SCHOOLS=2,
+        roles={
+            "conjecturer": [
+                _route("route-a", endpoint="https://a.invalid/v1"),
+                _route("route-b", endpoint="https://b.invalid/v1"),
+            ]
+        },
+    )
+    policy = _control_policy(
+        _school_execution(
+            mode="route_bound",
+            bindings=(_binding(0, 0, "route-a"), _binding(1, 0, "route-a")),
+            allow_shared=False,
+        )
+    )
+
+    manifest = _compile_v4(config, policy)
+    notice = _one_notice(manifest, "V4_SCHOOL_SHARED_SEAT_FORBIDDEN")
+    assert notice.pointer == "/control_plane_policy/school_execution/allow_shared"
+    assert "explicit bindings win" in notice.resolution
+    assert "conjecturer[0]" in notice.resolution
+    # The resolution is what the frozen policy actually carries.
+    bindings = manifest.control_plane_policy.school_execution.bindings
+    assert [(b.school_id, b.seat) for b in bindings] == [
+        ("school-0", 0),
+        ("school-1", 0),
+    ]
+    assert manifest.control_plane_policy.school_execution.allow_shared is False
 
 
 @pytest.mark.parametrize(
@@ -579,11 +621,23 @@ def test_route_bound_independent_diversity_requirements_reject_only_own_collisio
         )
     )
 
-    with pytest.raises((RunManifestError, ValidationError), match=message):
-        _compile_v4(
-            Config(N_SCHOOLS=2, roles={"conjecturer": list(routes)}),
-            policy,
-        )
+    # All-configs-allowed completion (2026-08-16): the same R4 rule as the
+    # shared-seat case -- the explicit bindings win over the coarse
+    # diversity switch, and the dropped requirement is disclosed. `message`
+    # still selects WHICH requirement collided, so the parametrize case
+    # keeps proving the two switches are independent.
+    manifest = _compile_v4(
+        Config(N_SCHOOLS=2, roles={"conjecturer": list(routes)}),
+        policy,
+    )
+    code = (
+        "V4_SCHOOL_DISTINCT_MODEL_REQUIRED"
+        if require_distinct_models
+        else "V4_SCHOOL_DISTINCT_FAMILY_REQUIRED"
+    )
+    notice = _one_notice(manifest, code)
+    assert "explicit bindings win" in notice.resolution
+    assert re.search(message, notice.code + " " + notice.message)
 
 
 def test_v4_control_policy_is_deeply_immutable():

@@ -1,5 +1,5 @@
 <!-- DR-CON-criticism-source -->
-Verified-at: 445ca295
+Verified-at: 69d3061e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/crit.py
 Seams: DR-SEAM-rules-x-scratch
@@ -87,6 +87,20 @@ See `DR-SUB-rules`'s Traps for package-wide hazards and `DR-CON-authority`'s
 Traps for the authority vocabulary hazards, both of which bind this socket
 without being re-derived here. Socket-specific:
 
+- **A criticism topology that COMPILES is not one that can run.** Since
+  2026-08-16 (`experiments/2026-08-16-change-configs-complete-seats-test/`,
+  the all-configurations law) an incomplete critic binding roster, a
+  non-critic role in a binding, an unsatisfiable foreign-coverage number, a
+  `defended_trial` with no defender route, and a single-family judge matrix
+  all COMPILE, each carrying a typed compile notice. None of them can produce
+  a warrant: `informal/trial.py` `_block`s on a missing critic/defender/judge
+  role before any call, `require_cross_family_judge_ensemble` raises
+  `JudgeEnsemblePolicyError` from the immutable leases, and
+  `workflow/criticism.py` raises `V4_CRITICISM_FOREIGN_COVERAGE_UNSATISFIED`.
+  If you are diagnosing "the criticism policy compiled but nothing was
+  criticised", read `compile_notices` on the manifest FIRST — the answer is
+  usually already recorded there.
+`check: python -m pytest "tests/test_all_configs_allowed_remainder.py::test_defended_trial_without_a_defender_compiles_with_a_notice" "tests/test_all_configs_allowed_remainder.py::test_defended_trial_with_a_single_family_judge_matrix_compiles_with_a_notice" -q && grep -q "SCHOOL_ROUTE_CRITIC_ROLE_MISSING" src/deepreason/scheduler/scheduler.py`
 - **The two supremacy guards are not interchangeable.** `crit.py` consults
   `execution_backed` (narrow) because its guard also decides whether a case
   is RECORDED as scrutiny; `informal/trial.py` consults `formally_backed`

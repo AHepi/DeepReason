@@ -2863,6 +2863,7 @@ def _cmd_run(args) -> int:
         RunManifestError,
         load_run_manifest,
         preflight_payload,
+        report_preflight_notices,
         render_role_matrix,
     )
     from deepreason.workloads.text import ReasoningWorkloadSpec
@@ -2900,7 +2901,7 @@ def _cmd_run(args) -> int:
             payload = _read_problem_file(Path(args.problem))
             spec = ReasoningWorkloadSpec.model_validate(payload)
             _require_v6_workload_match(run_input, dossier, spec)
-            preflight_payload(manifest, payload)
+            report_preflight_notices(preflight_payload(manifest, payload))
     except (ProcessLockError, ValueError) as error:
         print(str(error), file=sys.stderr)
         return 1
