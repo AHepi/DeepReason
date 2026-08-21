@@ -45,6 +45,14 @@ Recorded 2026-08-12 at main 074ef1549.
   flight; until it lands, smoke failures naming MCP schema sha or
   tool-set pins are baseline-listed as pending that tranche, and any
   OTHER smoke failure is a finding.
+  The `reason`-stage failure `terminal verification is incomplete`
+  (`_assert_resumable_terminal`) was a FINDING from 2026-08-15
+  (`a476c564f`) and is FIXED as of 2026-08-21,
+  `experiments/2026-08-21-fix-wheel-smoke-reason-stage/`. It is recorded
+  here as a fixed value, NOT as a carve-out: seeing it again is a
+  finding, not a baseline. It never was flaky — the one contrary
+  observation died at an earlier stage that shares the `reason` label
+  in the failure envelope.
 
 ## Census anchors (move with the tree; verify before trusting)
 

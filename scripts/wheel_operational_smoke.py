@@ -2049,17 +2049,55 @@ def _inspect_operational_wheel(wheel: Path) -> None:
         raise AssertionError("repository-only fixture or tests entered the wheel")
 
 
-def _assert_resumable_terminal(payload: dict) -> None:
+def _declared_model_phase_deferrals(run_root: Path) -> int:
+    """Count the completion debt the run itself DECLARED in its log.
+
+    Mirrors ``verification/report.py::_deferred_model_phase_findings``, which
+    turns each well-formed ``v6-model-phase-deferred.v1`` marker into exactly
+    one COMPLETION finding.  The malformed branch is mirrored by omission and
+    that is load-bearing: a marker the reader cannot parse becomes an
+    INTEGRITY finding there, so counting it here would hide it behind an
+    equality that ``_assert_committed_terminal`` has already refused.
+    """
+
+    log = run_root / "log.jsonl"
+    if not _is_regular_file(log):
+        raise AssertionError("terminal run root has no readable event log")
+    declared = 0
+    with log.open(encoding="utf-8") as events:
+        for line in events:
+            if not line.strip():
+                continue
+            inputs = json.loads(line).get("inputs") or []
+            if (
+                len(inputs) == 6
+                and inputs[0] == "v6-model-phase-deferred.v1"
+                and all(isinstance(value, str) and value for value in inputs)
+            ):
+                declared += 1
+    return declared
+
+
+def _assert_resumable_terminal(payload: dict, *, run_root: Path) -> None:
     _assert_committed_terminal(payload)
     verification = payload.get("verification") or {}
-    required = (
-        "completion_satisfied",
-        "epistemic_checks_passed",
-        "operational_checks_passed",
-    )
-    if not all(verification.get(name) is True for name in required):
+    for name in ("epistemic_checks_passed", "operational_checks_passed"):
+        if verification.get(name) is not True:
+            raise AssertionError("terminal verification is incomplete")
+    # Zero completion debt is unreachable on the public reason path: a v6 run
+    # that seats a role with no behavioral contract defers every phase needing
+    # it, and `completion_satisfied` is `not self.completion`.  What must still
+    # be caught is debt the run did not DECLARE -- budget-denied work, a
+    # cancelled span, coverage debt -- so the count is compared, not the flag.
+    declared = _declared_model_phase_deferrals(run_root)
+    counts = verification.get("finding_counts") or {}
+    if counts.get("completion") != declared:
+        raise AssertionError("terminal carries undeclared completion debt")
+    if verification.get("completion_satisfied") is not (declared == 0):
         raise AssertionError("terminal verification is incomplete")
-    if payload.get("completion_status") != "satisfied":
+    if payload.get("completion_status") != (
+        "satisfied" if declared == 0 else "incomplete"
+    ):
         raise AssertionError("terminal completion was not satisfied")
     stop = payload.get("stop") or {}
     if stop.get("reason") != "converged":
@@ -3562,8 +3600,11 @@ def main(argv: list[str] | None = None) -> int:
         )
         outputs.extend((resumable.stdout, resumable.stderr))
         resumable_result = json.loads(resumable.stdout)
-        _assert_resumable_terminal(resumable_result)
         resumable_run_id = resumable_result["run_id"]
+        resumable_run_root = home / ".deepreason" / "runs" / resumable_run_id
+        _assert_resumable_terminal(
+            resumable_result, run_root=resumable_run_root
+        )
         stage = STAGE_CONTINUATION_RESUME
         calls_before_resumable_retrieval = _provider_counts(provider_state_path)[
             "total_calls"
@@ -3649,7 +3690,9 @@ def main(argv: list[str] | None = None) -> int:
             observations=continuation_observations,
             continuation_poll_profile=args.continuation_poll_profile,
         )
-        _assert_resumable_terminal(final_resumable_result)
+        _assert_resumable_terminal(
+            final_resumable_result, run_root=resumable_run_root
+        )
         transcripts.extend(continuation_client.transcript)
         continuation_client.close(stage=stage)
         continued_durable = _run_durable_inspection(diagnostic_context)

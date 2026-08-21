@@ -363,6 +363,15 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   reclassifying those stops empties the witness set and fails the guard
   rather than passing over nothing. **Still true and NOT fixed**: the
   continuation half's only end-to-end witness remains the smoke.
+  **RECURRED 2026-08-15, same shape, same reason** (`a476c564f` added
+  `Scheduler._premise_rent_step`, whose unconditional deferral made
+  `verification.completion_satisfied` unreachable on the public reason
+  path, while the smoke's `_assert_resumable_terminal` still demanded it;
+  fixed 2026-08-21, `experiments/2026-08-21-fix-wheel-smoke-reason-stage/`,
+  see `DR-SUB-verification`'s Traps). Twice now a `src/` change has moved a
+  property only `scripts/` asserted. The rule stands and is the reason this
+  entry is never deleted: changing what a stop, a phase, or a channel MEANS
+  means auditing `scripts/` too, and the map cannot route you there.
 `check: grep -q "^def _assert_continuation_accepted(" scripts/wheel_operational_smoke.py && grep -q "^def _await_cancellable_cycle(" scripts/wheel_operational_smoke.py && grep -q "^def _assert_non_resumable_rejection(" scripts/wheel_operational_smoke.py && python -m pytest tests/test_wheel_operational.py::test_operational_smoke_witnesses_an_accepted_continuation tests/test_wheel_operational.py::test_operational_smoke_requires_exact_non_resumable_rejection tests/test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation -q`
 - **An amendment epoch supersedes the question, and only from its own durable
   workload.** `_read_request` reads the newest epoch's workload for a

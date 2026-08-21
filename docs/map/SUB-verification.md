@@ -186,6 +186,26 @@ when `stats` was otherwise empty.
   `grounding-review`) are derived in `report.py` — they are not `verify_root`
   findings at all, so reading `verify_root` alone tells you nothing about them.
 `check: sh -c 'grep -q "return self.integrity_valid and self.security_valid" src/deepreason/verification/report.py && ! grep -q "\"adjudication-blindness\"" src/deepreason/invariants.py && grep -q "\"adjudication-blindness\"" src/deepreason/verification/report.py'`
+- **`completion_satisfied` is UNREACHABLE on the public `deepreason reason`
+  path, so any instrument demanding it is asserting against the design.**
+  `completion_satisfied` is `not self.completion`, and
+  `_deferred_model_phase_findings` turns every `v6-model-phase-deferred.v1`
+  marker into one completion finding.
+  `Scheduler._premise_rent_step` runs on every cycle with no state gate in
+  front of it, and a v6 manifest grants the `variator` a behavioral contract
+  only under `criticism_policy.authority == "defended_trial"` — which the
+  public path never sets — so cycle 0 of every such run declares a
+  `premise-demarcation-variation` deferral and the flag can never come back
+  true. Found 2026-08-21 by `scripts/wheel_operational_smoke.py`, whose
+  `_assert_resumable_terminal` had demanded exactly that since before
+  `a476c564f` (2026-08-15) added the deferral; the retained root
+  `run-e9d4bb16796b8aa4b560c632b33d6500` converged, replay-valid, with that
+  one marker at seq 34 and nothing else in any channel. FIXED in
+  `experiments/2026-08-21-fix-wheel-smoke-reason-stage/` by making the
+  instrument compare completion findings against the deferrals the run
+  DECLARED, so undeclared debt still fails. The enduring rule: completion
+  debt splits into declared and undeclared, and only the second is a defect.
+`check: grep -q "def _declared_model_phase_deferrals(" scripts/wheel_operational_smoke.py && grep -q "terminal carries undeclared completion debt" scripts/wheel_operational_smoke.py && ! grep -q '"completion_satisfied",' scripts/wheel_operational_smoke.py && grep -q "def _deferred_model_phase_findings(" src/deepreason/verification/report.py && grep -q '"v6-model-phase-deferred.v1"' src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_wheel_operational.py::test_a_converged_terminal_with_only_deferral_debt_is_resumable tests/test_wheel_operational.py::test_a_malformed_deferral_marker_is_not_declared_debt -q`
 - **A missing coverage target is debt; a malformed coverage receipt is a
   violation.** `foreign-criticism` is the one check name that splits by detail
   text: `target ... policy requires ...` is re-routed to `completion`, every

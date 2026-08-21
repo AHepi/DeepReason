@@ -205,3 +205,53 @@ GOAL.md's budget bounds the fix, not the proof that the fix is correct.
 
 GOAL.md class is `defect`; the estimate is at the budget, not over it; no
 frozen surface is touched. Proceeding to `dr-implement-fix`.
+
+---
+
+## AMENDMENT (dr-implement-fix, 2026-08-21) — the estimate was wrong; measured verdict is EXCEEDED
+
+The estimate above (~145 lines) was wrong, and it is corrected here rather
+than quietly absorbed. Measured against the tranche base with the same
+instrument `dr-implement-fix` step 8 requires:
+
+    python tools/diff_budget.py c7e605553 --ceiling 150 --paths \
+      scripts/wheel_operational_smoke.py tests/test_wheel_operational.py \
+      docs/map/SUB-verification.md docs/map/SUB-application.md \
+      docs/AUDIT_BASELINES.md
+
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "c7e605553",
+     "areas": {"scripts/wheel_operational_smoke.py": 53,
+               "tests/test_wheel_operational.py": 186,
+               "docs/map/SUB-verification.md": 20,
+               "docs/map/SUB-application.md": 9,
+               "docs/AUDIT_BASELINES.md": 8},
+     "total_insertions": 276, "ceiling": 150, "verdict": "EXCEEDED"}
+
+Where the 276 sits, so the number is not a headline:
+
+| Area | Insertions | What it is |
+|---|---|---|
+| `scripts/wheel_operational_smoke.py` | 53 | the whole semantic change: one new 22-line helper, one rewritten assertion, two call sites |
+| `tests/test_wheel_operational.py` | 186 | 66 from the dr-reproduce commit (the record-replay fixture + the structural variator check) and 120 here (the 14-case mutation table and its two helpers) |
+| `docs/map/SUB-verification.md` | 20 | the Traps entry CLAUDE.md requires in the same commit |
+| `docs/map/SUB-application.md` | 9 | the recurrence note on the existing out-of-map-instrument trap |
+| `docs/AUDIT_BASELINES.md` | 8 | the baseline line this tranche moved |
+
+One compression pass was already taken before recording this: the standalone
+negative tests were folded into the parametrized table and docstrings cut,
+which removed 28 insertions (304 -> 276) with no case lost. Nothing further
+comes out without removing proof.
+
+**No option reaches 150.** Deleting the two map entries and the baseline line
+(37 insertions) is forbidden by CLAUDE.md — the map moves in the same commit
+as the code, and the baseline moves in the tranche that moved the value.
+Trimming the mutation table to its four highest-value cases saves roughly 30
+and lands near 245. The 150 was this tranche's OWN estimate in GOAL.md, not
+an operator constraint, and it was set before the shape of the proof was
+known.
+
+The verdict is surfaced as a STOP to the operator rather than absorbed,
+because absorbing it is the recorded failure (`dr-implement-fix` step 8: the
+2026-08-05 V1 tranche landed 193 insertions against a <=150 ceiling with no
+stop). The work is committed to the working branch so it is not lost to a
+container rollback; nothing is merged and the trim remains available.

@@ -5,6 +5,7 @@ import importlib.util
 import inspect
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -4247,17 +4248,53 @@ def _recorded_resumable_payload() -> dict:
     )
 
 
-def test_a_converged_terminal_with_only_deferral_debt_is_resumable():
+def _root_declaring(tmp_path, *, deferrals, malformed=False):
+    """A run root whose log carries `deferrals` verbatim recorded markers."""
+
+    line, = (
+        RESUMABLE_EVIDENCE / "run-e9d4bb16-log-deferral-events.jsonl"
+    ).read_text(encoding="utf-8").splitlines()
+    if malformed:
+        event = json.loads(line)
+        event["inputs"] = event["inputs"][:5]
+        line = json.dumps(event, separators=(",", ":"))
+    root = tmp_path / "run-root"
+    root.mkdir()
+    (root / "log.jsonl").write_text(
+        "".join(f"{line}\n" for _ in range(deferrals)), encoding="utf-8"
+    )
+    return root
+
+
+def _mutated(payload, mutations):
+    for path, value in mutations:
+        target = payload
+        for key in path[:-1]:
+            target = target[key]
+        if value is ABSENT:
+            del target[path[-1]]
+        else:
+            target[path[-1]] = value
+    return payload
+
+
+ABSENT = object()
+COMPLETION = ("verification", "finding_counts", "completion")
+SATISFIED = ("verification", "completion_satisfied")
+
+
+def test_a_converged_terminal_with_only_deferral_debt_is_resumable(tmp_path):
     """Regression (wheel operational smoke, run-e9d4bb16796b8aa4b560c632b33d6500):
     the resumable-terminal assertion demanded zero completion debt, which the
     public reason path cannot deliver -- `Scheduler._premise_rent_step` defers
-    `premise-demarcation-variation` on every v6 run that seats a variator
-    without `criticism_policy.authority == "defended_trial"`.
+    `premise-demarcation-variation` on every v6 run seating a variator without
+    `criticism_policy.authority == "defended_trial"`, and each deferral is one
+    COMPLETION finding.
     """
 
     payload = _recorded_resumable_payload()
     verification = payload["verification"]
-    # The record this pins: everything the terminal must be, it is.
+    # The record this pins: everything the terminal must be, it is ...
     assert payload["state"] == "completed"
     assert payload["stop"]["reason"] == "converged"
     assert verification["valid"] is True
@@ -4270,7 +4307,80 @@ def test_a_converged_terminal_with_only_deferral_debt_is_resumable():
     assert verification["finding_counts"]["completion"] == 1
     assert payload["completion_status"] == "incomplete"
 
-    OPERATIONAL._assert_resumable_terminal(payload)
+    OPERATIONAL._assert_resumable_terminal(
+        payload, run_root=_root_declaring(tmp_path, deferrals=1)
+    )
+
+
+def test_a_terminal_declaring_nothing_must_still_report_it_satisfied(tmp_path):
+    """The original condition, kept in the form that is satisfiable."""
+
+    payload = _mutated(
+        _recorded_resumable_payload(),
+        [
+            (COMPLETION, 0),
+            (SATISFIED, True),
+            (("completion_status",), "satisfied"),
+        ],
+    )
+    OPERATIONAL._assert_resumable_terminal(
+        payload, run_root=_root_declaring(tmp_path, deferrals=0)
+    )
+
+
+@pytest.mark.parametrize(
+    "declared,malformed,mutations,message",
+    [
+        (1, False, [(("stop", "reason"), "budget_exhausted")],
+         "terminal is not a resumable convergence stop"),
+        (1, False, [(("verification", "epistemic_checks_passed"), False)],
+         "terminal verification is incomplete"),
+        (1, False, [(("verification", "operational_checks_passed"), False)],
+         "terminal verification is incomplete"),
+        (1, False, [(("verification", "integrity_valid"), False)],
+         "terminal verification failed"),
+        (1, False, [(("verification", "security_valid"), False)],
+         "terminal verification failed"),
+        (1, False, [(("verification", "valid"), False)],
+         "terminal verification failed"),
+        (1, False, [(("terminal_commitment_ref",), ABSENT)],
+         "terminal result lacks durable terminal authority"),
+        (1, False, [(("state",), "running")], "reasoning did not complete"),
+        (1, False, [(("schema",), "deepreason-run-result-v1")],
+         "terminal result schema is not V6"),
+        (1, False, [(COMPLETION, 2)],
+         "terminal carries undeclared completion debt"),
+        (0, False, [], "terminal carries undeclared completion debt"),
+        # The count agrees; the flag lies.
+        (0, False, [(COMPLETION, 0)], "terminal verification is incomplete"),
+        (1, False, [(("completion_status",), "satisfied")],
+         "terminal completion was not satisfied"),
+        # A malformed marker is an INTEGRITY finding on the report side, so the
+        # counter must not absorb it into the completion equality.
+        (1, True, [], "terminal carries undeclared completion debt"),
+    ],
+)
+def test_the_narrowed_resumable_assertion_still_refuses(
+    tmp_path, declared, malformed, mutations, message
+):
+    """Mutation proof: each case is the condition the assertion exists to
+    catch. `declared` is how many deferral markers the root carries, so the
+    completion rows exercise the count comparison in both directions.
+    """
+
+    payload = _mutated(_recorded_resumable_payload(), mutations)
+    root = _root_declaring(tmp_path, deferrals=declared, malformed=malformed)
+    with pytest.raises(AssertionError, match=re.escape(message)):
+        OPERATIONAL._assert_resumable_terminal(payload, run_root=root)
+
+
+def test_a_terminal_whose_root_has_no_event_log_is_refused(tmp_path):
+    with pytest.raises(
+        AssertionError, match="terminal run root has no readable event log"
+    ):
+        OPERATIONAL._assert_resumable_terminal(
+            _recorded_resumable_payload(), run_root=tmp_path / "absent"
+        )
 
 
 def test_the_seated_variator_holds_no_behavioral_contract_without_a_trial():
