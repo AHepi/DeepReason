@@ -1,0 +1,1 @@
+{"seq":34,"ts":"2026-08-21T13:01:58.288923+00:00","rule":"Measure","inputs":["v6-model-phase-deferred.v1","premise-demarcation-variation","variator","premise-rent","-","transaction-contract-unavailable"],"outputs":[],"llm":null,"state_diff":{"att+":[],"dep+":[],"A+":[],"Π+":[],"status_changed":[],"hv_set":{},"reach_set":{},"addr+":[],"carry+":[]}}
