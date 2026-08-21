@@ -1,9 +1,9 @@
 <!-- DR-SUB-calculus -->
-Verified-at: e901bb05
+Verified-at: 5deec374
 Verify: python -m pytest tests/test_calculus_claim_substrate.py -q
-Owns: src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/views.py
+Owns: src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/views.py
 Seams: 
-Seams-undocumented: calculus x ontology, calculus x problem-layer-lifecycle, calculus x evaluation
+Seams-undocumented: calculus x ontology, calculus x problem-layer-lifecycle, calculus x evaluation, calculus x adjudication
 
 # The typed claim substrate — closed bodies, one compiler
 
@@ -56,6 +56,25 @@ problem and criticism lands on a stale statement of the question.
 
 `check: python -m pytest tests/test_calculus_claim_substrate.py::test_each_recognition_condition_is_required tests/test_calculus_claim_substrate.py::test_criticising_the_companion_moves_the_problems_standing -q`
 
+## Frame-separation, and what a violation may do
+
+Definition 7.2 (`docs/POIETIC_CALCULUS_FORMALIZED.md` §7): an assertion `f` with
+subject `b` is SEPARATED when `Comp(f) ∩ Comp(b) = ∅` in the undirected graph
+obtained from `att ∪ dep`. Mention edges need no filtering out of that graph —
+`build_dep` emits `dep` from `RefRole.DEPENDENCE` and from nothing else — and
+that exclusion is what makes the invariant satisfiable at all. Components are
+recomputed from replayed state on every call; nothing is stored.
+
+`check: python -m pytest tests/test_calculus_frame_separation.py::test_a_mention_leaves_the_assertion_and_its_subject_separated tests/test_calculus_frame_separation.py::test_wound_persistence_holds_when_the_separation_does -q`
+
+A violation makes the assertion UNCONSULTABLE with a typed code and does nothing
+else — no attack edge, no warrant, no label change (R64). Enforced structurally
+rather than by review, so an edit that reaches for the write path fails here: the
+module holds no call that could write, and imports nothing from `adjudication` —
+it consumes that package's OUTPUT through replayed state, never its logic.
+
+`check: ! grep -qE "create_artifact|register_|record_|blobs\.put|Warrant" src/deepreason/calculus/separation.py && grep -q "def consultability" src/deepreason/calculus/separation.py && python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/separation.py').read_text()); mods=[(n.module or '') for n in ast.walk(t) if isinstance(n,ast.ImportFrom)]+[a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names]; assert not any('adjudication' in m for m in mods), mods"`
+
 ## State it owns
 
 **None that persists, and none added anywhere else.** No field was added to
@@ -69,10 +88,28 @@ found through `addr`.
 ## Entry points
 
 `decode`, `encode`, `compile_interface`, `ensure_problem_subject`,
-`problem_subject_of`, `problem_status`, `problem_subject_missing`.
+`problem_subject_of`, `problem_status`, `problem_subject_missing`,
+`adjudication_component`, `frame_separated`, `consultability`.
 
 ## Traps
 
+- **The mention law is necessary and NOT sufficient, and a green mention test
+  hides that.** `docs/COMPUTABLE_CALCULUS.md` derived wound persistence from the
+  frame assertion merely MENTIONING its subject; `docs/POIETIC_CALCULUS_FORMALIZED.md`
+  §7 corrects it — in a connected graph a new attack on the subject moves the
+  assertion's label through pre-existing paths. An assertion can mention its
+  subject and still share a component with it, whenever a record it DEPENDS on
+  depends on that subject. So the gate asserts DISJOINT COMPONENTS, never the
+  presence of a mention ref. Shipped 2026-08-21 (Rung 3b); the error corrected is
+  in the source documents, not in a run.
+`check: python -m pytest tests/test_calculus_frame_separation.py::test_a_reach_case_that_depends_on_the_subject_is_unconsultable -q`
+- **`consultability` has NO caller in `src/`, deliberately.** Frame assertions
+  arrive at Rung 4, which owns the consultation site. Do not read the absent
+  caller as an unfinished wire, and do not "finish" it by gating
+  `premises.py::standing_attributions` — that is a separate open question with
+  its own measurement obligation
+  (`experiments/2026-08-21-change-rung3b-frame-separation/PARKED.md` P1).
+`check: python -c "import pathlib; hits=[str(p) for p in sorted(pathlib.Path('src/deepreason').rglob('*.py')) if 'consultability' in p.read_text() and not str(p).startswith('src/deepreason/calculus/')]; assert hits == [], hits" && grep -q "SCOPE BOUNDARY" src/deepreason/calculus/separation.py && grep -q "def consultability" src/deepreason/calculus/separation.py && grep -q "def standing_attributions" src/deepreason/premises.py`
 - **Two-step registration leaves a gap, and the gap is the right trade.**
   `register_problem` then `ensure_problem_subject` can be interrupted between
   the writes. The result is a typed `problem_subject_missing` diagnostic and an

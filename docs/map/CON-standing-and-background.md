@@ -1,5 +1,5 @@
 <!-- DR-CON-standing-and-background -->
-Verified-at: 534bdaf7
+Verified-at: 5deec374
 Verify: python -m pytest tests/test_calculus_vocabulary.py -q
 Owns: src/deepreason/status_display.py
 Seams: 
@@ -93,6 +93,16 @@ enum value.
 `DR-INV-frozen-surfaces` — this module contacts none of the five surfaces. It
 renders; it never writes a stored label, an event payload, or a machine key.
 
+**Frame-separation (Definition 7.2)** is the invariant the mechanism must be
+BUILT against rather than prove afterwards, and it exists already: the axes are
+separated by EDGE ROLE, but edge role alone does not separate the adjudication
+COMPONENTS, and a frame sharing a component with its subject loses exactly the
+wound persistence this axis is for. The predicate and its enforcement live in
+`DR-SUB-calculus` (`calculus/separation.py`, Rung 3b); Rung 4 wires the
+consultation site and may then invoke Theorem 7.3 rather than re-argue it.
+
+`check: python -c "from deepreason.calculus import consultability, frame_separated" && python -m pytest tests/test_calculus_frame_separation.py -q`
+
 Prop 12.5 of the calculus (standing never adjudicates) is the invariant the
 mechanism will have to prove when it lands: label computation reads `att` and
 `dep` only, and standing is consumed by render and schedule alone.
@@ -105,6 +115,7 @@ mechanism will have to prove when it lands: label computation reads `att` and
 | add or reword a gloss | `status_display.py::_GLOSS` | `tests/test_calculus_vocabulary.py::test_every_status_has_a_gloss` |
 | render a status in a new view | call `display_status`, never `status.value` | `tests/test_calculus_vocabulary.py::test_views_render_the_calculus_vocabulary` |
 | add the standing axis itself | Rung 4 — not here yet | — |
+| change what separates a frame from its subject | `calculus/separation.py::frame_separated` (`DR-SUB-calculus`) | `tests/test_calculus_frame_separation.py` |
 
 ## Traps
 

@@ -17,6 +17,14 @@ from deepreason.calculus.claims import (
 )
 from deepreason.calculus.compiler import compile_interface
 from deepreason.calculus.operations import ensure_problem_subject
+from deepreason.calculus.separation import (
+    FRAME_ENDPOINT_UNREGISTERED,
+    FRAME_NOT_SEPARATED,
+    Consultability,
+    adjudication_component,
+    consultability,
+    frame_separated,
+)
 from deepreason.calculus.views import (
     problem_status,
     problem_subject_missing,
@@ -25,13 +33,19 @@ from deepreason.calculus.views import (
 
 __all__ = [
     "CLAIM_SCHEMAS",
+    "FRAME_ENDPOINT_UNREGISTERED",
+    "FRAME_NOT_SEPARATED",
     "ClaimDecodeError",
+    "Consultability",
     "PremiseAttributionV1",
     "ProblemSubjectV1",
+    "adjudication_component",
     "compile_interface",
+    "consultability",
     "decode",
     "encode",
     "ensure_problem_subject",
+    "frame_separated",
     "problem_status",
     "problem_subject_missing",
     "problem_subject_of",
