@@ -52,6 +52,38 @@ verdict.
 
 `check: grep -q "def verify_root" src/deepreason/invariants.py`
 
+**Granted contact, 2026-08-21 — the seat-instance anchor (Rung 1b-ii).** The
+operator granted a READER fix inside this surface, on the record and against a
+committed design, after the request and its reason were written into
+`experiments/2026-08-21-change-rung1b-ii-signal-consumption/SPEC.md` first (their
+own words: "Don't grant it verbally in chat"). What moved: `_configured_role_cap`
+and the one `allowed_caps` lookup beside it now resolve a SEAT-keyed cap knob
+(`cap:<role>#<seat>`) through `allocation.route_cap_for_knob`, so a per-seat
+limit anchors to that seat's own route instead of missing the role lookup and
+falling back to the unanchored `[500, 2500]` default. A reader fix is the
+permitted kind here precisely because it changes no OUTPUT: the same
+`verify_root` violation records, in the same shape, over the same logs — a
+role-keyed knob resolves byte-identically, and only the seat-keyed form, which
+no committed root uses, resolves differently. Proven, not asserted: a 107-root
+sweep before and after diffs empty
+(`.../proof/sweep_before.txt` vs `sweep_after.txt`), and the regression that
+motivated it was run RED on the unfixed tree first (`.../proof/s12_red.txt`).
+
+`check: grep -q "route_cap_for_knob" src/deepreason/invariants.py`
+`check: grep -q "cap:{e.llm.role}#{attempt.seat}" src/deepreason/invariants.py`
+
+**False alarm rowed, same date.** `tools/blast_radius.py` also reported
+`manifest schemas and validators (run_manifest.py)` as `SYMBOL_INDIRECT` contact
+for the symbol `clamp`. It is a substring false positive: every `clamp` in that
+file is `clamp_reserved_attention_fractions` /
+`_reserved_fractions_are_clamped`, imported from `deepreason.config` and
+unrelated to `controller.clamp`. `run_manifest.py` was NOT touched by that
+tranche. The gate states its own method in each detail string — "grep-based; not
+proof of semantic contact" — so this is the gate working as documented, and the
+disposal is by measurement rather than by assurance.
+
+`check: ! grep -q "controller import clamp\|from deepreason.controller" src/deepreason/run_manifest.py`
+
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 
 Not only the Pydantic models: the validators too. Admitting a value a validator

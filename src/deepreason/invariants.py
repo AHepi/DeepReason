@@ -15,6 +15,7 @@ from pathlib import Path
 from deepreason.adjudication.edges import DependenceCycleError, build_dep, toposort
 from deepreason.bridge.events import BridgeAction
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.allocation import route_cap_for_knob
 from deepreason.controller import cap_envelope, is_generator_knob
 from deepreason.harness import Harness
 from deepreason.llm.firewall import route_fingerprint
@@ -3584,18 +3585,20 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 compact_transition_seq_by_route_seat[key] = event.seq
 
     def _configured_role_cap(knob: str) -> int | None:
-        """The widest cap the manifest assigned this knob's role — the same
+        """The cap the manifest assigned this knob's SEAT INSTANCE — the same
         anchor `Controller._current_caps` reads off the live adapter. None for
-        a role with no assigned limit (optional by design) and for every
-        non-cap knob, which are never anchored."""
-        if manifest is None or not knob.startswith("cap:"):
+        a seat with no assigned limit (optional by design) and for every
+        non-cap knob, which are never anchored.
+
+        Derived through `route_cap_for_knob` rather than re-implemented here:
+        a steered cap survives replay only if the barrier is re-derived the
+        way it was written against, and two copies of that rule is how the
+        two silently stop agreeing. A role-keyed knob still answers with the
+        role's widest route, byte-identically to before seat keying existed.
+        """
+        if manifest is None:
             return None
-        caps = [
-            route.max_tokens
-            for route in (manifest.roles.get(knob[len("cap:"):], ()) or ())
-            if getattr(route, "max_tokens", None) is not None
-        ]
-        return max(caps) if caps else None
+        return route_cap_for_knob(manifest.roles, knob)
 
     for e in events:
         validate_school_route(e)
@@ -3986,6 +3989,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         route.max_tokens,
                         *authorized_controller_limits.get(
                             f"cap:{e.llm.role}", set()
+                        ),
+                        # A seat instance is throttled under its own knob, so
+                        # a role-only lookup would store the authorization and
+                        # never consult it.
+                        *authorized_controller_limits.get(
+                            f"cap:{e.llm.role}#{attempt.seat}", set()
                         ),
                     }
                     if attempt.max_tokens not in allowed_caps:

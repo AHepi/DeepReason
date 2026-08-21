@@ -26,3 +26,17 @@ tests/test_allocation_signal_consumption.py:130: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_allocation_signal_consumption.py::test_a_seat_knob_anchors_to_its_own_route_ceiling
 1 failed, 1 passed in 0.46s
+# S12 / R16 — RED re-confirmed immediately before the fix
+# tree: f42429de1
+# git diff --stat src/deepreason/invariants.py (empty = unmodified):
+#
+$ python -m pytest tests/test_allocation_signal_consumption.py -q
+
+        )
+E       AssertionError: a per-seat knob was refused a limit its own route assigned: ['attempt-limits']
+E       assert 'attempt-limits' not in {'attempt-limits'}
+
+tests/test_allocation_signal_consumption.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_allocation_signal_consumption.py::test_a_seat_knob_anchors_to_its_own_route_ceiling
+1 failed, 1 passed in 0.33s

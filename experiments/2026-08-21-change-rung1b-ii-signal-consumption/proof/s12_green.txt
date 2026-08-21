@@ -1,0 +1,12 @@
+# S12 / R16 — the GREEN run, same test, after the granted reader fix
+# tree: f42429de1 + the reader fix
+# the fix, measured (executable lines only, docstring/comment excluded):
+#   6 added, 7 removed, net -1 -- inside the granted 12
+# git diff --stat:
+ src/deepreason/invariants.py | 29 +++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
+#
+$ python -m pytest tests/test_allocation_signal_consumption.py -q
+
+....                                                                     [100%]
+4 passed in 0.35s

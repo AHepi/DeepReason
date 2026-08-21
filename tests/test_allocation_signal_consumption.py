@@ -143,3 +143,100 @@ def test_a_seat_knob_is_still_bounded_by_its_own_route(tmp_path, monkeypatch):
         attempt_cap=12_000,
     )
     assert "attempt-limits" in checks
+
+
+# --- S11 (R15): the reader fix is reader-only ---------------------------- #
+
+
+def _pre_seat_keying_anchor(roles, knob):
+    """The anchoring rule EXACTLY as it stood before seat keying.
+
+    Transcribed from the removed body of `invariants._configured_role_cap`, and
+    it is the rule the map states in prose: "the widest cap the manifest
+    assigned this knob's role ... None for a role with no assigned limit and
+    for every non-cap knob". Kept here rather than fetched from git history
+    because a test that greps a commit stops working the moment history is
+    rewritten, while a transcribed rule keeps failing for the right reason as
+    long as the rule is the claim.
+
+    The empirical half of this proof is the 107-root before/after sweep; this
+    is the analytic half, and it says WHY the sweep came back empty.
+    """
+    if not knob.startswith("cap:"):
+        return None
+    caps = [
+        route.max_tokens
+        for route in (roles.get(knob[len("cap:"):], ()) or ())
+        if getattr(route, "max_tokens", None) is not None
+    ]
+    return max(caps) if caps else None
+
+
+def test_a_role_keyed_knob_resolves_exactly_as_it_did_before_seat_keying():
+    """Every knob spelling that a committed root could contain resolves
+    byte-identically before and after the reader fix.
+
+    This is the operator's condition on the granted frozen-surface contact
+    (REQUEST.md Amendment 1b condition 1): the fix may only change what a
+    SEAT-keyed knob resolves to, and nothing recorded uses that form yet, so
+    zero verification verdicts may move.
+    """
+    from deepreason.allocation import route_cap_for_knob
+
+    endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
+    endpoint.max_tokens = WIDE_SEAT_CAP
+    roles = dict(_two_seat_manifest(endpoint).roles)
+    roles["judge"] = (
+        Route(
+            endpoint_id="judge-0", base_url=endpoint.name,
+            model_id=endpoint.model, provider="mock", family="mock-family",
+            max_tokens=2048,
+        ),
+    )
+    roles["summarizer"] = (
+        Route(
+            endpoint_id="sum-0", base_url=endpoint.name,
+            model_id=endpoint.model, provider="mock", family="mock-family",
+        ),
+    )
+
+    unchanged = [
+        # every bound role, including the multi-seat one and one with no
+        # assigned limit
+        "cap:conjecturer", "cap:judge", "cap:summarizer",
+        # a cap knob naming a role this manifest does not bind
+        "cap:vision_critic",
+        # non-cap knobs, which are never anchored
+        "VS_K", "PACK_TOKEN_BUDGET", "timeout:transport", "FLOOR", "HV_MIN",
+        # the degenerate spellings
+        "cap:", "not-a-knob", "",
+    ]
+    for knob in unchanged:
+        assert route_cap_for_knob(roles, knob) == _pre_seat_keying_anchor(
+            roles, knob
+        ), f"{knob!r} resolves differently than it did before seat keying"
+
+
+def test_only_the_seat_keyed_form_resolves_differently():
+    """The other half of the same claim: the fix is not inert.
+
+    `cap:conjecturer#0` and `cap:conjecturer#1` are the ONLY spellings whose
+    answer moves, and they move to their own seat's route rather than to the
+    role's widest one. Without this the previous test would pass on a fix that
+    changed nothing at all.
+    """
+    from deepreason.allocation import route_cap_for_knob
+
+    endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
+    endpoint.max_tokens = WIDE_SEAT_CAP
+    roles = _two_seat_manifest(endpoint).roles
+
+    assert route_cap_for_knob(roles, "cap:conjecturer") == WIDE_SEAT_CAP
+    assert route_cap_for_knob(roles, "cap:conjecturer#0") == NARROW_SEAT_CAP
+    assert route_cap_for_knob(roles, "cap:conjecturer#1") == WIDE_SEAT_CAP
+    # A seat the role does not have anchors to nothing rather than silently
+    # borrowing the role's widest route.
+    assert route_cap_for_knob(roles, "cap:conjecturer#9") is None
+    # And the pre-seat-keying rule disagrees on exactly these, which is what
+    # makes them the fix rather than a no-op.
+    assert _pre_seat_keying_anchor(roles, "cap:conjecturer#1") is None

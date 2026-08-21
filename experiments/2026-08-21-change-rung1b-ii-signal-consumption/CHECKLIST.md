@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=13 blockers=none
+State: next=18 blockers=steps 15/17 wait on the BEFORE sweep finishing
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -81,7 +81,7 @@ step 5. A regression test first seen green proves nothing.
 - [x] 12. (S1, S4, S6) [COMMIT] Commit the consumption side.
       done-when: branch pushed; `git status --porcelain` empty
 
-- [ ] 13. (S12, S13/R18) Apply the granted 12-line reader fix to
+- [x] 13. (S12, S13/R18) Apply the granted 12-line reader fix to
       `_configured_role_cap` in `src/deepreason/invariants.py` AND, in the same
       edit set, add the contact line to `docs/map/INV-frozen-surfaces.md`
       (naming the contact, the 2026-08-21 grant, why a reader fix is the
@@ -91,16 +91,16 @@ step 5. A regression test first seen green proves nothing.
       -> passes (saved verbatim to `proof/s12_green.txt`) AND
       `grep -q "_configured_role_cap" docs/map/INV-frozen-surfaces.md`
 
-- [ ] 14. (S11) Add the reader-only differential test: every knob WITHOUT `#`
+- [x] 14. (S11) Add the reader-only differential test: every knob WITHOUT `#`
       resolves identically pre- and post-fix; only `#`-bearing knobs differ.
-      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k reader_only`
+      done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k "before_seat_keying or resolves_differently"`
       -> passes
 
 - [ ] 15. (S11) Capture the AFTER root sweep and diff it against step 1.
       done-when: `diff proof/sweep_before.txt proof/sweep_after.txt` prints
       nothing and exits 0 (saved to `proof/sweep_diff.txt`, empty)
 
-- [ ] 16. (S13/R19) Prove `run_manifest.py` was not touched.
+- [x] 16. (S13/R19) Prove `run_manifest.py` was not touched.
       done-when: `git diff --name-only origin/main...HEAD | grep -c run_manifest.py`
       -> `0`
 
@@ -308,3 +308,42 @@ that cannot close a loop says so rather than being silent about it.
     26 passed in 19.60s
     $ python -m pytest tests/test_signal_contract.py -q
     10 passed in 0.08s
+
+**Step 13 (S12, S13/R18) — the granted reader fix, with its map line.**
+Measured rather than estimated (executable lines only, docstrings and comments
+excluded): **6 added, 7 removed, net -1** — inside the granted 12.
+
+    + from deepreason.allocation import route_cap_for_knob
+    +         if manifest is None:
+    +         return route_cap_for_knob(manifest.roles, knob)
+    +                         *authorized_controller_limits.get(
+    +                             f"cap:{e.llm.role}#{attempt.seat}", set()
+    +                         ),
+    -         if manifest is None or not knob.startswith("cap:"):
+    -         caps = [ ... manifest.roles.get(knob[len("cap:"):], ()) ... ]
+    -         return max(caps) if caps else None
+
+RED -> GREEN on the same command, both pasted (`proof/s12_red.txt`,
+`proof/s12_green.txt`):
+
+    before: 1 failed, 1 passed  — attempt-limits, the fallback refusing a
+                                  legitimate limit
+    after:  2 passed
+
+`docs/map/INV-frozen-surfaces.md` moved in the SAME edit set, gaining the
+granted-contact paragraph, the false-alarm row with its grep proof, and three
+new executable `check:` lines that would fail if either half of the fix were
+reverted.
+
+**Step 14 (S11) — the analytic half of reader-only.** Every knob spelling a
+committed root could contain resolves byte-identically to the pre-seat-keying
+rule; only `cap:<role>#<seat>` moves, and the companion test asserts it DOES
+move, so the first test cannot pass on a fix that changed nothing.
+
+    $ python -m pytest tests/test_allocation_signal_consumption.py -q
+    4 passed in 0.40s
+
+**Step 16 (S13/R19) — `run_manifest.py` untouched.**
+
+    $ git diff --name-only origin/main...HEAD | grep -c run_manifest.py
+    0
