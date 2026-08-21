@@ -768,3 +768,48 @@ The general lesson: a tranche heading is a claim, and it is the claim most
 readers will act on. When a tranche knowingly ships a subset, the heading
 says so — "a tier-1 subset of" costs four words and saves the next reader
 from believing a park does not exist.
+
+## 2026-08-21 (wheel-smoke reason-stage tranche)
+
+**E34 — the wheel operational smoke's `reason`-stage failure was recorded as
+FLAKY; it was deterministic, and the "pass" observation never evaluated the
+assertion.** `experiments/2026-08-16-change-embedder-auto-install/
+CHECKLIST.md` step 21 concludes "Across three observations of this stage on
+this container — my run 1 (passed), my run 2 (failed), base (failed) — the
+`reason` stage is FLAKY here", and `PARKED.md` P1 carries the same claim
+("Observed 3 times on this container at that stage — passed once, failed
+twice"), as does `experiments/2026-08-16-change-configs-complete-seats-test/`
+CHECKLIST S13 / REQUEST.md §3, which call it "the parked pre-existing flake".
+
+Run 1 did not pass `_assert_resumable_terminal`. It aborted at
+`scripts/wheel_operational_smoke.py:3447` (`AssertionError: durable CLI
+result changed when retrieved through MCP`), and that line lies inside
+`STAGE_MCP_REQUEST` — `stage = STAGE_MCP_REQUEST` at line 3435, next
+transition at line 3461 — which the smoke reaches BEFORE
+`_assert_resumable_terminal` at line 3565. Run 1 is silent about the
+assertion, not a pass. Step 21's own text records the two failures were "at
+the same stage", which is true of the STAGE LABEL and false of the
+assertions: four separate sub-stages of the smoke all set `stage =
+STAGE_REASON`, so the failure envelope's `"stage":"reason"` does not identify
+which one ran.
+
+The failure was deterministic from `a476c564f` (2026-08-15), which added
+`Scheduler._premise_rent_step` and its unconditional per-cycle deferral.
+Every evaluation of the assertion on a tree at or after that commit has
+failed: the prior tranche's run 2, its clean-worktree base run at
+`d52c739ff`, and two runs on `c7e605553` in this tranche. Diagnosis and
+mechanism: `experiments/2026-08-21-fix-wheel-smoke-reason-stage/DIAGNOSIS.md`;
+evidence root `run-e9d4bb16796b8aa4b560c632b33d6500`.
+
+Not corrected in place: both 2026-08-16 tranches are delivered artifacts and
+are left verbatim, per the append-don't-rewrite rule. Nothing those tranches
+CONCLUDED changes — the failure was pre-existing and correctly parked, and
+the embedder tranche's own ONNX-non-determinism hypothesis was already
+refuted in its own record. Only the word "flaky" is wrong.
+
+The general lesson, and the reason this is worth an entry rather than a
+shrug: a stage NAME in a failure envelope is not an assertion identity. When
+one label covers several assertions, "it failed at stage X twice and passed
+once" is not evidence of non-determinism until you have checked that the
+passing run reached the same assertion. Reading it as flakiness turns a
+one-line deterministic bug into a race hunt.
