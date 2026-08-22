@@ -134,6 +134,13 @@ def _run(label: str, *, home_criteria, foreign_criteria, content, note) -> dict:
     experiments/2026-08-22-reach-structural-programs-fix/rehearsal-as-shipped.json:
     S8a moving from "E4 criterion-fail" to "HIT full" is the fix's decisive
     regression, and S8c staying "E4 criterion-fail" is its control.
+
+    The exit ladder below mirrors reach_sweep's own order and gained E0
+    empty-own-battery on 2026-08-22 (tranche
+    experiments/2026-08-22-change-reach-p5-rulings). It must stay in that
+    order: E0 is decided on the REACHING artifact, before any foreign
+    criterion is read, so classifying it later would report S2 as a hit the
+    real sweep no longer returns.
     """
     root = pathlib.Path(tempfile.mkdtemp(prefix="reach-rehearsal-"))
     try:
@@ -190,7 +197,9 @@ def _run(label: str, *, home_criteria, foreign_criteria, content, note) -> dict:
             e for e in harness.log.read()
             if e.rule.value == "Measure" and (e.state_diff.reach_set or e.state_diff.addr_add)
         ]
-        if not foreign.criteria:
+        if not carried:
+            exit_ = "E0 empty-own-battery"
+        elif not foreign.criteria:
             exit_ = "E1 no-criteria"
         elif not qualifying:
             exit_ = "E2 non-qualifying"
@@ -239,7 +248,7 @@ SCENARIOS = [
         home_criteria=[],
         foreign_criteria=[WF, *P_SEED],
         content=PROSE,
-        note="was E4 as shipped; a prose artifact with an EMPTY own battery now reaches on the seed subject predicate at coverage exactly 0.5",
+        note="E4 as shipped -> HIT full after the structural fix -> E0 after the 2026-08-22 rulings: an empty own battery may not ground reach (experiments/2026-08-22-change-reach-p5-rulings)",
     ),
     # 3. The shape the hypothesis needs: two problems that BOTH mint
     #    envelopes but carry DIFFERENT subject predicates.

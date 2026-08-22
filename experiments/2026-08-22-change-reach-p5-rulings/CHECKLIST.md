@@ -1,5 +1,5 @@
 # Checklist for: codify two operator rulings on reach semantics (P5-reach)
-State: next=11 blockers=none
+State: next=17 blockers=none
 Map ids (from REQUEST.md's preflight, unchanged): DR-INV-frozen-surfaces,
 DR-SEAM-evaluation-x-rules (read before the subsystems; its shared
 `_substantive` surface is OUT of scope), DR-SUB-evaluation (the covering
@@ -135,36 +135,83 @@ One step per dr-execute-step invocation.
       src/deepreason/measures/reach.py, tests/test_reflexive_discipline.py,
       tests/test_review_fixes.py and docs/map/SUB-evaluation.md
 
-- [ ] 11. (S9) Mutation proof, ruling 1: delete the E0 guard, run the pin,
+- [x] 11. (S9) Mutation proof, ruling 1: delete the E0 guard, run the pin,
       restore, re-run.
       done-when: two pasted runs — RED (1 failed) then GREEN (1 passed)
 
-- [ ] 12. (S9) Mutation proof, ruling 2: break the floor the other way (make
+      PROOF (RULING 1 — delete the E0 guard):
+      GUARD DELETED
+      tests/test_reflexive_discipline.py:433: AssertionError
+      FAILED tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach
+      1 failed in 0.20s
+      --- restore ---
+      1 passed in 0.15s
+
+- [x] 12. (S9) Mutation proof, ruling 2: break the floor the other way (make
       coverage exactly 0.5 provisional), run the pin, restore, re-run.
       done-when: two pasted runs — RED (1 failed) then GREEN (1 passed) AND
       git diff -- src/ is empty after restore
 
-- [ ] 13. (S7) Add the E0 branch to rehearsal.py's own exit classifier, in the
+      PROOF (RULING 2 — break the boundary the other way):
+      BOUNDARY BROKEN: '<' -> '<=' (coverage exactly at the floor becomes provisional)
+      tests/test_reflexive_discipline.py:477: AssertionError
+      FAILED tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit
+      1 failed in 0.13s
+      --- restore ---
+      1 passed in 0.12s
+      --- tree clean? ---
+      (git diff --stat -- src/ empty == restored; the '<' comparison stands
+      in the delivered tree, per C2)
+
+- [x] 13. (S7) Add the E0 branch to rehearsal.py's own exit classifier, in the
       same position reach_sweep takes it, and update S2's `note` to record the
       ruling.
       done-when: python -c "import pathlib; s=pathlib.Path('experiments/2026-08-22-live-reach-rich-run/rehearsal.py').read_text(); assert 'E0 empty-own-battery' in s"
       -> exit 0
 
-- [ ] 14. (S7) Re-run the rehearsal against the fixed tree and paste S2, S8a,
+      PROOF: exit 0 — E0 label present in rehearsal.py
+
+- [x] 14. (S7) Re-run the rehearsal against the fixed tree and paste S2, S8a,
       S8c; copy the regenerated JSON into this tranche as
       rehearsal-after-p5-rulings.json.
       done-when: python experiments/2026-08-22-live-reach-rich-run/rehearsal.py
       -> S2 exit is the E0 label with 0 hits and 0 reach events, S8a exit is
       "HIT full", S8c exit is "E4 criterion-fail" (all three pasted)
 
-- [ ] 15. (S8) Add the E0 branch and label to
+      PROOF (full run against the fixed tree; the three required rows first):
+      S2 prose artifact vs wf-carrying seed        exit=E0 empty-own-battery       hits=0 reach_events=0 cov=0.5 novel=['uhi-energy-balance@r1']
+      S8a prose conn: candidate vs seed (as shipped) exit=HIT full                   hits=1 reach_events=1 cov=0.6666666666666666 novel=['uhi-energy-balance@r1', 'uhi-nocturnal-release@r1']
+      S8c prose OFF-subject candidate vs seed (P1 landed) exit=E4 criterion-fail          hits=0 reach_events=0 cov=0.6666666666666666 novel=['uhi-energy-balance@r1', 'uhi-nocturnal-release@r1']
+
+      and the rest of the ladder, unchanged by this tranche:
+      S1 same-criteria (seed vs ra:)               exit=E3 no-novel                hits=0 reach_events=0 cov=0.5 novel=[]
+      S3 two seeds, different subject criteria     exit=HIT full                   hits=1 reach_events=1 cov=0.5 novel=['uhi-nocturnal-release@r1']
+      S4 two seeds, foreign criterion unsatisfied  exit=E4 criterion-fail          hits=0 reach_events=0 cov=0.5 novel=['uhi-absent-subject@r1']
+      S5 envelope vs integ: [relation-form]        exit=E4 criterion-fail          hits=0 reach_events=0 cov=1.0 novel=['relation-form@578e42df713e']
+      S6 envelope vs conn: [hv,lineage,relation-form] exit=E4 criterion-fail          hits=0 reach_events=0 cov=0.3333333333333333 novel=['relation-form@578e42df713e']
+      S8b prose conn: candidate vs seed (P1 landed) exit=HIT full                   hits=1 reach_events=1 cov=0.6666666666666666 novel=['uhi-energy-balance@r1', 'uhi-nocturnal-release@r1']
+      S7 envelope vs disc: []                      exit=E1 no-criteria             hits=0 reach_events=0 cov=None novel=[]
+
+      Reading: S2 is the ONLY row this tranche moved. S3 is worth noting for
+      RULING 2 — it is a full hit at coverage exactly 0.5, so the boundary
+      the tranche pinned is live in the rehearsal ladder as well as in the
+      unit pin. S5/S6 still exit E4 on relation-form alone, so PARKED P2-reach
+      is untouched, as SPEC.md's out-of-scope section predicted.
+      Copied into this tranche as rehearsal-after-p5-rulings.json.
+
+- [x] 15. (S8) Add the E0 branch and label to
       experiments/2026-08-21-measure-reach-firing/census.py (module docstring
       vocabulary + rederived_census counters), plus the one-line note that the
       committed census JSON predates E0.
       done-when: python -c "import pathlib; s=pathlib.Path('experiments/2026-08-21-measure-reach-firing/census.py').read_text(); assert 'E0 empty-own-battery' in s"
       -> exit 0 AND git diff --stat -- experiments/2026-08-21-measure-reach-firing/census.json experiments/2026-08-21-measure-reach-firing/census-verdicts.json is empty
 
-- [ ] 16. (S7, S8) [COMMIT] Commit the two instruments and the pasted
+      PROOF:
+      exit 0 — E0 in census.py
+      (git diff --stat over the two committed JSON outputs: empty)
+      census.py imports and compiles clean with E0
+
+- [x] 16. (S7, S8) [COMMIT] Commit the two instruments and the pasted
       rehearsal evidence.
       done-when: git status --porcelain is empty AND git log -1 --stat names
       rehearsal.py, census.py and rehearsal-after-p5-rulings.json

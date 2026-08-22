@@ -23,6 +23,11 @@ Exits, in the order reach_sweep takes them:
 
   A-skip/status     artifact not ACCEPTED            (artifact-level)
   A-skip/unaddr     artifact addresses no problem    (artifact-level)
+  E0 empty-own-battery
+                    the reaching artifact declares no commitments of
+                    its own, so it forbids nothing and grounds no reach
+                    (operator ruling 2026-08-22, tranche
+                    experiments/2026-08-22-change-reach-p5-rulings)
   E1 no-criteria    foreign problem has no criteria
   E2 non-qualifying no criterion is substantive-and-evaluable
   E3 no-novel       every qualifying criterion is already in the
@@ -35,6 +40,13 @@ Exits, in the order reach_sweep takes them:
 E2 is sub-attributed: unregistered (criterion id absent from
 harness.commitments), rubric, non-evaluable (unknown program), or
 structural (in _STRUCTURAL_PROGRAMS).
+
+The committed census outputs (census.json, census-verdicts.json) were
+measured on 2026-08-21, BEFORE E0 existed; pairs this pass would now
+attribute to E0 are distributed across E1..E5/HIT in those files. They
+are left as measured rather than re-derived: they are the record of what
+that reader saw on that day, and re-deriving them is a 96-root
+measurement, not a vocabulary update.
 
 Usage:
     python census.py            # cheap pass: stops each pair at E3
@@ -166,6 +178,13 @@ def rederived_census(root: pathlib.Path) -> dict:
             if pid in addressed[aid]:
                 continue
             counts["pairs"] += 1
+            # Kept in reach_sweep's own order: E0 is decided on the REACHING
+            # artifact, before any foreign criterion is read, so attributing
+            # it later would credit these pairs to an exit the sweep never
+            # reached for them.
+            if not carried:
+                counts["E0 empty-own-battery"] += 1
+                continue
             if not problem.criteria:
                 counts["E1 no-criteria"] += 1
                 continue
