@@ -124,8 +124,12 @@ change.
     python scripts/wheel_smoke.py          passed: isolated V6-only contents, clean imports, exact
                                            entry points, module parity, MCP registration,
                                            and exact MCP schemas
-    python -u scripts/wheel_operational_smoke.py   launched, still running after ~1.5 h
-                                           when the tranche closed — see the note below
+    python -u scripts/wheel_operational_smoke.py   passed (rc=0, ~1.6 h): installed setup,
+                                           explicit qualification (80 qualification calls;
+                                           418 total), readiness, question-only reasoning,
+                                           replay-verified terminal retrieval, cache reuse,
+                                           opaque MCP restart, budget ceiling, and pre-V6
+                                           fail-closed admission
 
 The wheel smokes pin the public surface (console entry points, MCP tool set +
 schema sha, wheel layout). This tranche changes no entry point, no CLI
@@ -139,12 +143,14 @@ were run anyway rather than assumed:
     module parity, MCP registration, and exact MCP schemas". That is the
     evidence that the surface did not move.
   - `wheel_operational_smoke.py` — build-and-operate over a freshly installed
-    wheel — was launched and was still running after ~1.5 hours in this
-    container (it builds and pip-installs into a clean environment, and the
-    fastembed dependency makes that slow here). It was left running rather
-    than killed, and its result is NOT claimed. Recorded as residue, not as a
-    pass: nothing in this tranche can change what it exercises, but this
-    tranche did not observe it finish.
+    wheel — **passed, rc=0**, after ~1.6 hours (it builds and pip-installs
+    into a clean environment, and the fastembed dependency makes that slow in
+    this container). It reports: "installed setup, explicit qualification (80
+    qualification calls; 418 total calls), readiness, question-only reasoning,
+    replay-verified terminal retrieval, cache reuse, opaque MCP restart,
+    budget ceiling, and pre-V6 fail-closed admission". It was recorded as
+    UNCLAIMED at first close because it had not been observed to finish; it
+    finished afterwards and the result is entered here.
 
 Diff-budget gate: `EXCEEDED` — 265 insertions against the 150 ceiling GOAL.md
 set. Recorded in full, with the breakdown and three priced options, in FIX.md
@@ -187,9 +193,6 @@ determined offline.
   real change in what registering a program means, recorded in the
   `ProgramSpec` docstring and `SUB-evaluation.md` Traps rather than left
   implicit.
-- **`wheel_operational_smoke.py` was not observed to finish.** It was
-  launched and left running; no gate owes it and this tranche changes nothing
-  it exercises, but its result is unclaimed rather than assumed green.
 - **Accepted does not mean true.** Nothing here shows that any artifact
   genuinely explains a foreign problem — only that a well-formedness check is
   no longer what decides.
