@@ -1,0 +1,46 @@
+[
+  {
+    "check": "R1 declared structural class == reach's structural set",
+    "declared_minus_reach": [
+      "component_wf",
+      "generator_wf",
+      "integration_wf",
+      "manifest_wf",
+      "reasoning-envelope-wf"
+    ],
+    "holds": false,
+    "reach_minus_declared": []
+  },
+  {
+    "carried": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "check": "R2 a declared-structural gate never enters reach's qualifying set, so it can neither ground nor veto a hit",
+    "coverage": 1.0,
+    "hits": [],
+    "holds": false,
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "recorded_reach_events": 0,
+    "verdicts": {
+      "reasoning-envelope-wf": "fail",
+      "uhi-energy-balance@r1": "pass",
+      "uhi-nocturnal-release@r1": "pass"
+    },
+    "wf_in_qualifying": true
+  },
+  {
+    "check": "R3 a passing declared-structural gate confers no formally_backed prose immunity",
+    "commitments": [
+      "reasoning-envelope-wf"
+    ],
+    "formally_backed": true,
+    "holds": false,
+    "wf_verdict": "pass"
+  }
+]
