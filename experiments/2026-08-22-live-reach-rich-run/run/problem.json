@@ -1,0 +1,40 @@
+{
+  "criteria": [
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2",
+      "id": "uhi-energy-balance@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))",
+      "id": "uhi-nocturnal-release@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))",
+      "id": "uhi-cross-city-modulator@v1",
+      "observation_valued": false
+    }
+  ],
+  "problem": {
+    "description": "Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?",
+    "id": "question-4dd62735b90864a75220e09b302500bc"
+  },
+  "schema": "deepreason-text-workload-v1",
+  "sources": []
+}
