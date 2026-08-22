@@ -1,0 +1,24 @@
+[2026-08-22T14:15:17Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run ===
+{
+  "compile_notices": [],
+  "criteria": [
+    "uhi-energy-balance@v1",
+    "uhi-nocturnal-release@v1",
+    "uhi-cross-city-modulator@v1"
+  ],
+  "evidence_dossier_digest": "4997a80a8e6e6bebc29c5f93b3145781859c20d7fc0cf5a4d28e80f7295cd075",
+  "manifest_sha256": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+  "run_input_digest": "62e75cb5e85b0d477c1a42b2618a43ed0a66943cc520d31edc96a9ccb6a10f3a"
+}
+[2026-08-22T14:15:18Z] SETUP OK rc=0
+[2026-08-22T14:15:18Z] === PREFLIGHT: seeded criteria + discrimination ===
+reasoning-envelope-wf            evaluable=True  on=fail     off=fail     discriminates=False
+uhi-energy-balance@v1            evaluable=True  on=pass     off=fail     discriminates=True
+uhi-nocturnal-release@v1         evaluable=True  on=pass     off=fail     discriminates=True
+uhi-cross-city-modulator@v1      evaluable=True  on=pass     off=fail     discriminates=True
+
+seeded criteria: ['reasoning-envelope-wf', 'uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/preflight_seed.json
+[2026-08-22T14:15:18Z] PREFLIGHT OK rc=0
+[2026-08-22T14:15:18Z] === QUALIFY: production-contract doctor (concurrency=2) ===
