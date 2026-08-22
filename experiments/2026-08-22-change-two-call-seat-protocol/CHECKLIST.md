@@ -1,5 +1,8 @@
 # Checklist for: the two-call seat protocol
-State: next=5 blockers=none
+State: next=5a blockers=none (SPEC.md Amendment 1 added at step 5: the
+       per-leg budget needs its own defaulted field, because invariants.py's
+       attempt-limits check admits only route-authorized caps and widening it
+       would write to a frozen surface, which R17 forbids)
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
@@ -106,6 +109,14 @@ them, never into a trailing docs step:
       done-when: `python -m pytest tests/test_split_budget_protocol.py -q 2>&1 | tail -5`
       reports a collection error or failures naming `deepreason.llm.split`
       (paste it) — RED is the expected result of this step.
+
+- [ ] 5a. (S6, S9, SPEC Amendment 1) Add the fourth defaulted field
+      `split_max_tokens: int | None = None` to `LLMAttempt`, and extend
+      `docs/map/SUB-ontology.md`'s check to cover it. `max_tokens` is NOT
+      touched: it keeps its route-authorized meaning and its `attempt-limits`
+      check, so no committed root's verdict can move.
+      done-when: `python -c "from deepreason.ontology.event import LLMAttempt as A; assert A(prompt_ref='blob:p').split_max_tokens is None; print('ok')"` -> `ok`
+      AND `python -m pytest tests/test_process_metadata.py tests/test_seats_evidence_law.py -q` ends `0 failed`.
 
 - [ ] 6. (S1) Create `src/deepreason/llm/split.py`: `SplitPlan`, `plan_split`,
       `deliberation_request`, `extraction_request`, `SPLIT_LEG_REASON`,

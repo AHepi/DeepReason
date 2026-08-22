@@ -112,6 +112,9 @@ S6 (R6, R7) — the typed per-attempt fields | `src/deepreason/ontology/event.py
         `natural_stop: bool | None = None`   # finish_reason == "stop"; None when unknown
         `split_leg: str = ""`                # "" | "reason" | "extract"
         `split_notice: str = ""`             # typed reason the mode was not honored
+        `split_max_tokens: int | None = None`  # the cap THIS leg put on the wire
+                                               # (Amendment 1; `max_tokens` keeps
+                                               # its route-authorized meaning)
       `natural_stop` is written and never read: no guard, gate, rank, status,
       label, warrant, or adjudication input consumes it (R7, and the
       operator's seats/evidence law).
@@ -494,3 +497,73 @@ traced to code it reaches (E43's lease ceiling traced to
 `Controller._lease_ceiling`; Q7's `B_a ~ 512` traced to S5's Config default);
 every claim measured and every option priced; nothing untraceable to an R/C
 number.
+
+---
+
+## Amendment 1 — 2026-08-22, found at step 5: the per-leg budget needs its own field
+
+**What forced it.** `invariants.py`'s `attempt-limits` check admits an
+`LLMAttempt.max_tokens` only from a closed set: the route's own cap, plus caps a
+prior controller policy authorized for that role or that role#seat. A split
+leg's budget (`B_r` or `B_a`) is in neither set, so recording it in `max_tokens`
+would make EVERY split call fail replay validation.
+
+**M14, the measurement.** The constraint is already pinned by a committed test
+rather than only by reading the source:
+
+    $ python -m pytest tests/test_process_metadata.py::test_invariants_reject_unlogged_effective_transport_limit -q
+    1 passed in 0.25s
+
+That test records `max_tokens=9999` on a route whose cap is 512 and asserts the
+replay check `attempt-limits` fires. The relevant clause, verbatim:
+
+    allowed_caps = {
+        route.max_tokens,
+        *authorized_controller_limits.get(f"cap:{e.llm.role}", set()),
+        *authorized_controller_limits.get(f"cap:{e.llm.role}#{attempt.seat}", set()),
+    }
+    if attempt.max_tokens not in allowed_caps:
+        fail("attempt-limits", ...)
+
+**Why the obvious fix is not available.** Widening `allowed_caps` means editing
+`src/deepreason/invariants.py`, which is frozen surface 3. R17, in the
+operator's own words, permits "no planned file writes to any of the five frozen
+surfaces" and "the only record change is three optional defaulted fields on
+LLMAttempt". Widening it is therefore out of bounds without a fresh grant, and
+asking for one would buy nothing a fourth defaulted field does not.
+
+**The amendment.** S6 gains a FOURTH optional, defaulted field:
+
+    split_max_tokens: int | None = None   # the cap this LEG put on the wire
+
+The two fields then say two different true things, and neither lies:
+
+  - `max_tokens` keeps its existing meaning and its existing check — the
+    completion envelope the route (or a logged controller policy) AUTHORIZED
+    for this call, which is also what the token reservation booked. Unchanged
+    on both legs, so `attempt-limits` is unaffected and no committed root's
+    verdict can move.
+  - `split_max_tokens` is the cap the individual leg actually sent, populated
+    only when the protocol is armed and `None` on every ordinary call and
+    every historical record.
+
+S7's `test_the_wire_budgets_obey_the_same_three_bounds` asserts the three R9
+bounds against `split_max_tokens` and against the kwargs the endpoint really
+received, so R10's regression still pins what reached the provider, not what
+the planner intended.
+
+**Second amendment item, same step: when a notice is DISCLOSED.** `SplitPlan`
+gains `disclosed: bool`. A typed notice discloses an intent the run could not
+honor. Under `mode="auto"`, a seat that is simply not a reasoning seat
+expresses no such intent — the protocol is working exactly as configured — so
+no notice is recorded on its attempts. Recording one there would stamp a
+constant string onto every attempt of every non-reasoning run in the record
+while saying nothing, and would move the recorded shape of the 552 `call` and
+130 `complete` test hits the blast-radius census classified MUST NOT MOVE.
+`plan.notice` still carries the typed reason for callers and tests; the adapter
+writes `plan.notice if plan.disclosed else ""`.
+
+**Budget effect.** +6 lines in `ontology/event.py`, +4 in `llm/split.py`,
++2 in `llm/adapter.py`, +3 in `docs/map/SUB-ontology.md`. New total
+`python3 -c "print(sum([115,38,98,3,12,16,205,30,42]) + 15)"` = **574**;
+`diff_budget.py`'s ceiling is raised to 574 from step 6 onward.

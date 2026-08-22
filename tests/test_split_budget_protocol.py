@@ -1,0 +1,376 @@
+"""The two-call seat protocol: deliberate at B_r, then extract at B_a.
+
+Why this file exists. A reasoning model handed one completion budget must fit
+its hidden reasoning AND its schema-valid answer inside it; when the question is
+hard the reasoning consumes the whole cap and the seat emits nothing. Measured
+on this tree before the change (experiments/2026-08-22-change-two-call-seat-
+protocol/SPEC.md M10): an empty completion costs three full-cap provider calls
+and then `SchemaRepairError`, and a reasoning-only completion — content `null`,
+finish_reason `length` — costs an `EndpointError`. Either way the seat produces
+no answer at all.
+
+The fix, from the operator's scope S1: one seat call becomes two provider legs.
+Leg `reason` deliberates in prose at `B_r` with the route's own reasoning
+setting and tolerates an empty completion; leg `extract` is fed that
+possibly-truncated, possibly-empty trace and emits the schema-valid envelope at
+`B_a` with the reasoning knob turned off. `B_r + B_a == ceiling`, so neither leg
+nor their sum can escape the route lease ceiling (the E43 bound, R9).
+
+What these tests assert. Typed outcomes only: the compiled contract value, the
+`LLMAttempt` records both legs write, the `max_tokens` each leg actually put on
+the wire, and the typed `split_notice` recorded whenever the protocol could not
+be honored. No assertion reads model prose as evidence of anything.
+"""
+
+from __future__ import annotations
+
+import json
+
+import pytest
+
+from deepreason.llm.adapter import LLMAdapter, SchemaRepairError
+from deepreason.llm.contracts import ProseOutput
+from deepreason.llm.endpoints import EndpointError, MockEndpoint
+from deepreason.llm.split import (
+    SPLIT_LEG_EXTRACT,
+    SPLIT_LEG_REASON,
+    SplitPlan,
+    deliberation_request,
+    extraction_request,
+    plan_split,
+)
+from deepreason.storage.blobs import BlobStore
+
+ANSWER = json.dumps({"prose": "the extracted answer"})
+
+# A trace that stops mid-sentence: this is what a reasoning leg returns when it
+# runs out of budget, and it is deliberately NOT parseable as the contract.
+TRUNCATED_TRACE = (
+    "Working through it. The claim rests on three supports, of which the "
+    "second is the load-bearing one because"
+)
+
+
+def _endpoint(responses, *, provider="ollama", reasoning="high", max_tokens=4096):
+    endpoint = MockEndpoint(
+        responses,
+        name="https://ollama.com/v1",
+        model="glm-5.2",
+        max_tokens=max_tokens,
+    )
+    # route_from_endpoint reads both by getattr, so the frozen lease this
+    # adapter mints describes a real reasoning seat rather than a bare mock.
+    endpoint.provider = provider
+    endpoint.reasoning = reasoning
+    return endpoint
+
+
+def _adapter(endpoint, tmp_path, *, mode, extraction_tokens=512, **kwargs):
+    return LLMAdapter(
+        {"summarizer": endpoint},
+        BlobStore(tmp_path / "blobs"),
+        split_budget_mode=mode,
+        split_extraction_tokens=extraction_tokens,
+        **kwargs,
+    )
+
+
+def _legs(call):
+    return [a.split_leg for a in call.attempt_trace]
+
+
+# --- R2: what "auto" arms on -------------------------------------------------
+
+
+def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
+    """Implements R2: default ON for reasoning-model profiles, OFF where a
+    profile is non-thinking.
+
+    The seat's ROUTE is the only machine-readable statement of whether a model
+    thinks (SPEC.md A1): the presentation profile compact/standard/frontier
+    tunes rendering and transport and says nothing about reasoning.
+    """
+
+    thinking = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="high",
+    )
+    assert thinking.armed
+
+    # "none" is the neutral vocabulary's off token: this seat does not think,
+    # so there is nothing to split.
+    off = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="none",
+    )
+    assert not off.armed
+    assert off.notice
+
+    # A provider with no reasoning adapter cannot be asked to think or to stop
+    # thinking, so "auto" leaves it alone — and says why.
+    no_knob = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="generic", reasoning=None,
+    )
+    assert not no_knob.armed
+    assert no_knob.notice
+
+    # An unset knob is NOT off: a reasoning model with no explicit setting
+    # still thinks (llm/providers.py::reasoning_disabled), so auto arms.
+    unset = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning=None,
+    )
+    assert unset.armed
+
+    # "off" is off whatever the route says.
+    assert not plan_split(
+        mode="off", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="high",
+    ).armed
+
+
+# --- R9/R10: the ceiling law -------------------------------------------------
+
+
+@pytest.mark.parametrize("ceiling", [513, 1024, 4096, 20480, 32768])
+def test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling(ceiling):
+    """Implements R9/R10: both calls' budgets sit inside the lease ceiling.
+
+    The ceiling is the bound E43's fix put on the controller
+    (`Controller._lease_ceiling`, `EndpointLease.verify`'s max_tokens clause).
+    A split that spent B_r AND B_a on top of each other would escape it, so
+    the plan takes B_a out of the ceiling rather than adding to it.
+    """
+
+    plan = plan_split(
+        mode="on", ceiling=ceiling, extraction_tokens=512,
+        provider="ollama", reasoning="high",
+    )
+    assert plan.armed
+    assert 0 < plan.reason_max_tokens <= ceiling
+    assert 0 < plan.extract_max_tokens <= ceiling
+    assert plan.reason_max_tokens + plan.extract_max_tokens <= ceiling
+    # Q7: the optimal split is heavily skewed to reasoning, because extraction
+    # saturates around 256-512 tokens.
+    assert plan.reason_max_tokens >= plan.extract_max_tokens
+
+
+def test_a_ceiling_too_small_to_split_is_a_notice_not_a_split():
+    """Implements R3/R9: rather than hand the reasoning leg zero tokens, the
+    protocol stands down and records why."""
+
+    for ceiling in (0, 1, 256, 512):
+        plan = plan_split(
+            mode="on", ceiling=ceiling, extraction_tokens=512,
+            provider="ollama", reasoning="high",
+        )
+        assert not plan.armed, ceiling
+        assert plan.notice, ceiling
+
+    # An unbounded route cannot be divided into two bounded legs either.
+    assert not plan_split(
+        mode="on", ceiling=None, extraction_tokens=512,
+        provider="ollama", reasoning="high",
+    ).armed
+
+
+def test_the_wire_budgets_obey_the_same_three_bounds(tmp_path):
+    """Implements R10: the regression is on what reaches the provider, not
+    only on what the planner computed."""
+
+    ceiling = 4096
+    endpoint = _endpoint([TRUNCATED_TRACE, ANSWER], max_tokens=ceiling)
+    adapter = _adapter(endpoint, tmp_path, mode="on")
+    _out, call = adapter.call("summarizer", "PACK", ProseOutput)
+
+    sent = [c["max_tokens"] for c in endpoint.calls]
+    assert len(sent) == 2, endpoint.calls
+    assert all(0 < n <= ceiling for n in sent), sent
+    assert sum(sent) <= ceiling, sent
+    assert call.attempt_trace[0].max_tokens == sent[0]
+    assert call.attempt_trace[1].max_tokens == sent[1]
+
+
+# --- R4/R11: the failure this tranche exists to remove -----------------------
+
+
+def test_the_old_path_yields_the_empty_completion_typed_failure(tmp_path):
+    """Implements R11 (the 'before' half), pinning SPEC.md M10.
+
+    With the protocol off, an empty completion is spent three times over and
+    then becomes SchemaRepairError. This is the behaviour the split replaces,
+    and it must keep working exactly as before whenever the split is off.
+    """
+
+    endpoint = _endpoint(["", "", ""])
+    adapter = _adapter(endpoint, tmp_path, mode="off")
+    with pytest.raises(SchemaRepairError) as raised:
+        adapter.call("summarizer", "PACK", ProseOutput)
+    assert "no schema-valid output after bounded repair" in str(raised.value)
+    assert len(raised.value.spend.attempt_trace) == 3
+    # Nothing about the old path is split-shaped.
+    assert _legs(raised.value.spend) == ["", "", ""]
+
+
+def test_the_split_path_extracts_an_answer_from_a_truncated_trace(tmp_path):
+    """Implements R4/R11 (the 'after' half): a truncated reasoning trace yields
+    an answer instead of an empty seat failure.
+
+    MUTATION PROOF lives in this same test: the identical script with the
+    protocol switched off raises, so the assertion cannot pass vacuously.
+    """
+
+    armed = _endpoint([TRUNCATED_TRACE, ANSWER])
+    out, call = _adapter(armed, tmp_path / "on", mode="on").call(
+        "summarizer", "PACK", ProseOutput
+    )
+    assert out.prose == "the extracted answer"
+    assert _legs(call) == [SPLIT_LEG_REASON, SPLIT_LEG_EXTRACT]
+
+    # The reasoning leg is recorded as a real provider request that produced no
+    # contract-valid value; the extraction leg is the one that did.
+    assert [a.valid for a in call.attempt_trace] == [False, True]
+    # Both legs belong to the same attempt and the same frozen route.
+    assert {a.attempt for a in call.attempt_trace} == {0}
+    assert len({a.route_sha256 for a in call.attempt_trace}) == 1
+    assert call.tokens > 0
+
+    off = _endpoint([TRUNCATED_TRACE, ANSWER])
+    with pytest.raises(SchemaRepairError):
+        _adapter(off, tmp_path / "off", mode="off").call(
+            "summarizer", "PACK", ProseOutput
+        )
+
+
+def test_the_split_path_survives_a_null_completion_on_the_reasoning_leg(tmp_path):
+    """Implements R4: the reasoning-only shape — the ledgered glm-5.2 empty
+    seat failure — still reaches an answer.
+
+    A provider that burned the whole cap on hidden reasoning returns content
+    `null`. The old path turns that into EndpointError. The split feeds the
+    extraction leg whatever trace exists (here, none) and still emits.
+    """
+
+    endpoint = _endpoint([None, ANSWER])
+    out, call = _adapter(endpoint, tmp_path, mode="on").call(
+        "summarizer", "PACK", ProseOutput
+    )
+    assert out.prose == "the extracted answer"
+    assert _legs(call) == [SPLIT_LEG_REASON, SPLIT_LEG_EXTRACT]
+    # The reasoning leg terminated at the cap, not on its own (R6).
+    assert call.attempt_trace[0].natural_stop is False
+
+
+def test_the_extraction_leg_is_not_a_thinking_call(tmp_path):
+    """Implements R1: the extraction pass is non-thinking.
+
+    The knob travels in the request, never by mutating the endpoint — the
+    frozen lease still verifies the route's own reasoning value on every
+    dispatch, which is what keeps this a protocol property rather than a route
+    substitution (SPEC.md A2).
+    """
+
+    endpoint = _endpoint([TRUNCATED_TRACE, ANSWER], reasoning="high")
+    _adapter(endpoint, tmp_path, mode="on").call("summarizer", "PACK", ProseOutput)
+
+    assert endpoint.calls[0]["reasoning"] in (None, "high")
+    assert endpoint.calls[1]["reasoning"] == "none"
+    # The endpoint object itself was never touched.
+    assert endpoint.reasoning == "high"
+
+
+# --- R3: every configuration compiles ---------------------------------------
+
+
+def test_a_provider_that_cannot_disable_thinking_still_compiles(tmp_path):
+    """Implements R3: typed notice, never refusal, where a provider cannot
+    honor the mode.
+
+    `generic` has no reasoning adapter, so its extraction leg cannot be made
+    non-thinking. Asked explicitly for the protocol, the seat runs it anyway
+    and records what it could not honor.
+    """
+
+    plan = plan_split(
+        mode="on", ceiling=4096, extraction_tokens=512,
+        provider="generic", reasoning=None,
+    )
+    assert plan.armed
+    assert plan.notice
+    assert plan.extract_reasoning is None
+
+    endpoint = _endpoint([TRUNCATED_TRACE, ANSWER], provider="generic", reasoning=None)
+    out, call = _adapter(endpoint, tmp_path, mode="on").call(
+        "summarizer", "PACK", ProseOutput
+    )
+    assert out.prose == "the extracted answer"
+    assert call.attempt_trace[1].split_notice == plan.notice
+    # No reasoning field was forced onto a provider that cannot carry one.
+    assert endpoint.calls[1]["reasoning"] is None
+
+
+def test_a_seat_that_cannot_split_records_a_notice_and_behaves_as_before(tmp_path):
+    """Implements R3: standing down is recorded, and costs nothing else."""
+
+    endpoint = _endpoint([ANSWER], reasoning="none")
+    out, call = _adapter(endpoint, tmp_path, mode="auto").call(
+        "summarizer", "PACK", ProseOutput
+    )
+    assert out.prose == "the extracted answer"
+    assert _legs(call) == [""]
+    assert call.attempt_trace[0].split_notice
+
+
+# --- R8: the emission schema stays light ------------------------------------
+
+
+def test_the_extraction_request_is_the_minimal_envelope():
+    """Implements R8: the extraction call's schema is the minimal envelope; do
+    not move deliberation constraints into it.
+
+    The dose-response on schema weight is steep, so the emission call carries
+    the contract schema and the trace and nothing else. Asserted as an explicit
+    ABSENCE, because the failure mode here is accretion.
+    """
+
+    schema = json.dumps({"type": "object", "properties": {"prose": {}}})
+    deliberation = deliberation_request("PACK BODY")
+    extraction = extraction_request(schema=schema, trace=TRUNCATED_TRACE)
+
+    assert schema in extraction
+    assert TRUNCATED_TRACE in extraction
+
+    # Whatever the deliberation leg says to make the model think, the emission
+    # leg must not repeat: its whole job is to serialize.
+    added_by_deliberation = deliberation.replace("PACK BODY", "").strip()
+    assert added_by_deliberation
+    assert added_by_deliberation not in extraction
+
+    # And the emission request is genuinely small next to the deliberation one.
+    assert len(extraction) < len(deliberation) + len(schema) + len(TRUNCATED_TRACE)
+
+
+def test_an_empty_trace_still_produces_a_well_formed_extraction_request():
+    """Implements R4: 'possibly-truncated' includes 'entirely absent'."""
+
+    schema = json.dumps({"type": "object"})
+    request = extraction_request(schema=schema, trace="")
+    assert schema in request
+    assert request.strip()
+
+
+# --- R18: the operator's authorization guard --------------------------------
+
+
+def test_the_plan_is_a_frozen_value():
+    """A plan is computed once per attempt and then only read; nothing
+    downstream may retune a budget after the ceiling was divided."""
+
+    plan = plan_split(
+        mode="on", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="high",
+    )
+    assert isinstance(plan, SplitPlan)
+    with pytest.raises(Exception):
+        plan.reason_max_tokens = 1
