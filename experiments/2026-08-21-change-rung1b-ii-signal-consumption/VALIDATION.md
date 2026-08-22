@@ -233,3 +233,91 @@ check turns out to describe the anchor"); it does describe the anchor.
 Per `dr-validate-change`'s exit criteria, validation does not fix the thing it
 validates. Routed back to `dr-plan-steps` as steps 32-34: update both Traps,
 re-run their checks, re-validate. Nothing in the code changes.
+
+---
+
+# Validation round 2 — after the map fix
+
+Re-run scope: the round-1 finding was confined to two map documents' PROSE. No
+`src/` file changed between rounds, so the acceptance checks, the gate and the
+sweep are re-affirmed rather than re-derived, and the map section is re-run in
+full. `git diff --stat a3c45a268..HEAD -- src/` is empty, which is the evidence
+for that claim:
+
+    $ git diff --stat a3c45a268..HEAD -- src/
+    (no output)
+
+## Map — re-run
+
+    docs_verify:            60 documents, 940 checks, 3 failed             : PASS
+    docs_verify --stale:    5 document(s) worth re-reading                 : PASS
+
+The 3 failures are the baseline `CON-run-identity.md:200/202/204` shallow-clone
+failures (`docs/AUDIT_BASELINES.md` line 25, REQUEST.md C8).
+
+`--stale`'s 5 entries are the same 5 dismissed in round 1, all pre-existing and
+none naming a file this tranche touched:
+
+    CON-run-identity.md, CON-schools.md, SEAM-manifest-x-schools.md
+        -> bce018ae5 (all-configs-allowed, 2026-08-16)
+    SUB-calculus.md      -> 1da817eaa (Rung 3b frame-separation)
+    SUB-evidence.md      -> 1a32fb193 (three-layer citable evidence)
+
+**`SUB-verification.md` and `SUB-scheduler.md` no longer appear.** That is the
+round-1 FAIL discharged. Both documents' own checks were re-run individually
+before `Verified-at:` advanced to `c29785aa`:
+
+    SUB-scheduler.md, controller-barrier trap   3 passed
+    SUB-scheduler.md, authority-record trap     3 passed
+    SUB-verification.md, anchoring trap         rc=0 (now also pins the
+                                                delegation to route_cap_for_knob)
+
+## Packaging surface
+
+    $ python scripts/wheel_smoke.py
+    wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+    points, module parity, MCP registration, and exact MCP schemas
+
+    $ python -u scripts/wheel_operational_smoke.py
+    wheel operational smoke passed: installed setup, explicit qualification
+    (80 qualification calls; 418 total calls), readiness, question-only
+    reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+    restart, budget ceiling, and pre-V6 fail-closed admission
+
+Both owed and both run. `wheel_smoke` because the tranche adds
+`src/deepreason/allocation.py`, which moves the wheel layout that `module
+parity` pins; no pin needed changing, since the new module adds no console entry
+point and no MCP tool. The operational smoke was not strictly owed — the
+provider-facing surface did not move — and was run anyway as the stronger check.
+
+## R21 — the mid-tranche amendment
+
+    R21  the root sweep is removed  : PARTIAL, by design, and recorded
+
+REQUEST.md Amendment 2 argues the routing from a measured 50-reference census:
+R21 is a different goal with its own blast radius across `CLAUDE.md`, four
+skills, nine map documents and a test, and one tranche one goal is repo law. It
+is parked as P4 with a ready-to-send prompt.
+
+What this tranche DID do about it: `SUB-verification.md`'s anchoring trap
+mandated the sweep, and this tranche was editing that exact trap in step 32.
+The mandate is removed and replaced by the census. Nothing else was touched for
+R21, and `tools/root_sweep.py` still stands.
+
+What R21 does NOT retract: the sweep evidence already taken discharged grant
+condition 1 (R15) on the day it was asked for. Retiring an obligation going
+forward does not unmake a measurement already made — and the census, which is
+the half that survives R21 entirely, independently answers the same question.
+
+## Verdict: PASS
+
+Every acceptance check S1-S13 passed with pasted output. Full gate 0 failed.
+All three of the operator's grant conditions discharged: reader-only proven by
+an empty 107-root diff AND by the census that says why none could move
+(condition 1); the regression run RED on the unfixed tree and GREEN after, both
+pasted (condition 2); the grant dated in SPEC.md, the map moved in the same
+commit as the reader fix, and `run_manifest.py` rowed as a false alarm and left
+untouched (condition 3). The round-1 FAIL is discharged and its evidence is kept
+above rather than rewritten.
+
+Routed to `dr-deliver-change`.
