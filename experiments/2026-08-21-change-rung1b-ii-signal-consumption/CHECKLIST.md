@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=32 blockers=none (re-plan after VALIDATION round 1 FAIL)
+State: next=35 blockers=none
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -469,23 +469,62 @@ pass; `--audit` confirms none of them is a check that cannot fail.
 Only the steps implicated by the finding. Checked steps above are untouched;
 their pasted outputs are the audit trail.
 
-- [ ] 32. (S9) `docs/map/SUB-verification.md` Traps: the anchoring trap says the
+- [x] 32. (S9) `docs/map/SUB-verification.md` Traps: the anchoring trap says the
       barrier is "anchored per run to the cap the manifest assigned the ROLE".
       Make it the SEAT INSTANCE, name `allocation.route_cap_for_knob` as the one
       derivation both sides share, and record that the sweep this trap demands
       was run at 107 roots with an empty diff.
       done-when: that document's own `check:` line for the anchoring trap exits 0
 
-- [ ] 33. (S9) `docs/map/SUB-scheduler.md` Traps: "a role's assigned cap may
+- [x] 33. (S9) `docs/map/SUB-scheduler.md` Traps: "a role's assigned cap may
       only WIDEN the barrier" and the authority record's "steerable roles"
       become seat instances, with one sentence on why a single-seat role keeps
       the bare role spelling.
       done-when: both `check:` lines on those two traps exit 0
 
-- [ ] 34. (all) [COMMIT] Re-run `docs_verify` full + `--stale`, confirm the two
+- [x] 34. (all) [COMMIT] Re-run `docs_verify` full + `--stale`, confirm the two
       documents no longer appear as this tranche's stale entries, commit, push.
       done-when: `docs_verify` reports the 3 baseline failures and no others,
       and `--stale` lists neither `SUB-verification.md` nor `SUB-scheduler.md`
 
 - [ ] 35. (all) Re-validate: `dr-validate-change` round 2.
       done-when: VALIDATION.md carries a round-2 section with verdict PASS
+
+**Steps 32-34 (S9) — the two stale documents, fixed.**
+
+`SUB-verification.md`'s anchoring trap now says the barrier is anchored to the
+knob's SEAT INSTANCE, names `allocation.route_cap_for_knob` as the one
+derivation the controller and the validator must share, and says why two copies
+of that rule is how writer and reader silently stop agreeing. Its check gained
+a third clause pinning the delegation.
+
+`SUB-scheduler.md`'s two controller traps now say seat instance, with the
+sentence that explains why nothing recorded is re-spelled (a role bound to one
+seat keeps the bare role name), and the authority trap records the `open_loop`
+list and why silence there would repeat the E28 defect shape.
+
+**R21 handled in the one place it collided** (REQUEST.md Amendment 2):
+`SUB-verification.md`'s trap used to MANDATE the root sweep. That mandate is
+gone, replaced by the census — count the roots carrying the input the changed
+predicate reads; if zero, no verdict can move — with one line recording the
+operator's 2026-08-22 position that whether an old root still verifies is not a
+question this repo owes an answer to. The instrument's removal is P4, its own
+tranche.
+
+    $ python tools/docs_verify.py
+    docs_verify: 3 failed        <- the 3 baseline CON-run-identity failures
+    $ python tools/docs_verify.py --stale
+    docs_verify --stale: 5 document(s) worth re-reading
+      CON-run-identity.md, CON-schools.md, SEAM-manifest-x-schools.md,
+      SUB-calculus.md, SUB-evidence.md      <- all pre-existing; neither
+                                               SUB-verification.md nor
+                                               SUB-scheduler.md appears
+
+    $ python scripts/wheel_smoke.py
+    wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+    points, module parity, MCP registration, and exact MCP schemas
+    $ python -u scripts/wheel_operational_smoke.py
+    wheel operational smoke passed: installed setup, explicit qualification
+    (80 qualification calls; 418 total calls), readiness, question-only
+    reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+    restart, budget ceiling, and pre-V6 fail-closed admission

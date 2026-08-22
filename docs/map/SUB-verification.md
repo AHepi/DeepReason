@@ -1,5 +1,5 @@
 <!-- DR-SUB-verification -->
-Verified-at: 95814d9e9
+Verified-at: c29785aa
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
@@ -175,15 +175,17 @@ when `stats` was otherwise empty.
   a committed root changes meaning. The 2026-08-13 widening
   (`experiments/2026-08-13-defect-controller-steering-inert/`) was measurably a
   no-op on the past — zero of 104 committed logs contain a controller policy
-  body, so `authorized_controller_limits` is empty in all of them — and the
-  root sweep is the instrument that must confirm that before any future
-  change here. The 2026-08-21 seat-instance change did run it, at 107 roots,
-  before and after, with an EMPTY diff, and re-measured the same census on the
-  larger set: still zero policy bodies, so still nothing this predicate could
-  re-decide (`experiments/2026-08-21-change-rung1b-ii-signal-consumption/proof/`).
-  Note the census is the stronger half and the cheaper one — it says why no
-  verdict COULD move, in seconds, where the sweep takes about 100 minutes per
-  pass to say that none DID. Run the census first; run the sweep to confirm it.
+  body, so `authorized_controller_limits` is empty in all of them. The
+  instrument for that claim is the CENSUS, not a sweep: count the committed
+  roots whose log carries a controller policy body, because this predicate can
+  only re-decide a root that has one. The 2026-08-21 seat-instance change
+  re-measured it across all 107 roots and found zero, so nothing this predicate
+  reads exists in the record at all
+  (`experiments/2026-08-21-change-rung1b-ii-signal-consumption/proof/s11_targeted_census.txt`).
+  The census answers in seconds what a full replay sweep answers in about a
+  hundred minutes, and answers it more strongly: it says why no verdict COULD
+  move rather than that none DID. Whether an old root still verifies is, per the
+  operator (2026-08-22), not a question this repo owes an answer to.
 `check: grep -q "cap_envelope(knob, _configured_role_cap(knob))" src/deepreason/invariants.py && grep -q "def _configured_role_cap" src/deepreason/invariants.py && grep -q "route_cap_for_knob(manifest.roles, knob)" src/deepreason/invariants.py && python -m pytest tests/test_controller_steering_parity.py::test_replay_authorizes_a_cap_the_controller_could_legitimately_set tests/test_controller_steering_parity.py::test_replay_still_rejects_a_cap_beyond_the_anchored_barrier tests/test_process_metadata.py::test_invariants_reject_unlogged_effective_transport_limit -q`
 - **A new `fail()` name defaults to integrity, and integrity decides `valid`.**
   `_legacy_channel` routes anything it does not recognise to `integrity`, and

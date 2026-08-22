@@ -83,3 +83,94 @@ DO NOT weaken the gate without those words. The recorded reason the gate exists
 at all is docs/ERRATA_EXECUTOR.md X9/XE1 and the 2026-08-09 incident where a
 frozen-surface stop written in prose was silently outrun.
 ```
+
+## P3 — a sweep probe for the `open_loop` observable
+
+**What.** The `open_loop` key on the `controller-authority` Measure payload is a
+new typed-record observable. No sweep probe is owed today and the reason is
+recorded rather than assumed: zero of the 107 committed roots contain a
+controller policy body or an authority record at all, so any probe would read
+"-" on every row. It becomes owed the first time a live run records one. (See
+P4: the sweep itself is being retired, so this may be discharged by that tranche
+instead of by a probe.)
+
+## P4 — remove the root sweep (R21)
+
+**What.** The operator, 2026-08-22, verbatim: "ok. root sweep needs removal. It
+doesn't matter whether old records still verify." This is the 2026-08-14 law
+("old runs do not need to be valid or returnable") carried to its conclusion:
+the instrument goes, not just the obligation.
+
+Not done in the Rung 1b-ii tranche because it is a different goal with its own
+blast radius. Measured census, outside `experiments/` (whose committed tranche
+artifacts are immutable records and must not be edited): **50 references.**
+
+    tools/root_sweep.py                          the instrument itself
+    CLAUDE.md                                    the "42-root sweep" rule under
+                                                 Build and test
+    .claude/skills/dr-drive-harness/SKILL.md     §4 instruments
+    .claude/skills/dr-spec-change/SKILL.md       the sweep-probe rule in step 4
+    .claude/skills/dr-ask-the-right-question/SKILL.md
+    .claude/skills/dr-audit-broken/SKILL.md      an audit dimension runs it
+    docs/AUDIT_BASELINES.md                      its recorded baseline
+    docs/map/  INV-frozen-surfaces.md, SUB-verification.md,
+               SEAM-harness-x-verification.md, SEAM-harness-x-workflow.md,
+               SEAM-evaluation-x-rules.md, SEAM-manifest-x-schools.md,
+               SEAM-periphery-x-verification.md, SEAM-schools-x-scheduler.md,
+               SEAM-schools-x-scratch.md
+    docs/harness-spec-v1.7-amendment.md
+    docs/proposals/  DETERMINISTIC_GATES_PREPLAN.md,
+                     CRITICISM_SYMMETRY_RESEARCH_PREPLAN.md,
+                     RECORD_LIFECYCLE_DEFECT_PLAN.md
+    tests/test_diff_budget.py
+
+One reference was already handled, because it collided with work in flight:
+`SUB-verification.md`'s anchoring trap MANDATED the sweep, and that tranche was
+editing that exact trap. The mandate is gone; the census replaced it.
+
+### Ready-to-send prompt
+
+```
+Remove the root sweep. Route through dr-change-orchestrator.
+
+AUTHORITY: the operator, 2026-08-22, verbatim: "ok. root sweep needs removal.
+It doesn't matter whether old records still verify." This completes the
+2026-08-14 law already in CLAUDE.md ("old runs do not need to be valid or
+returnable by the way. What's important is that new versions are optimised for
+new functions") -- that law retired the OBLIGATION; this removes the
+INSTRUMENT.
+
+READ FIRST: experiments/2026-08-21-change-rung1b-ii-signal-consumption/
+PARKED.md P4, which carries the measured 50-reference census, and
+REQUEST.md Amendment 2 there, which carries the operator's words verbatim.
+
+SCOPE: delete tools/root_sweep.py and remove every live obligation to run it
+-- CLAUDE.md's "42-root sweep" rule, the four skills that name it
+(dr-drive-harness §4, dr-spec-change's sweep-probe rule in step 4,
+dr-ask-the-right-question, dr-audit-broken), docs/AUDIT_BASELINES.md's
+baseline row, nine docs/map documents, the v1.7 amendment, three
+docs/proposals plans, and tests/test_diff_budget.py.
+
+DO NOT EDIT experiments/*: committed tranche artifacts are immutable records
+of what was done at the time, and rewriting them to hide a retired
+instrument would be falsifying the ledger. They keep their sweep references
+and stay true.
+
+REPLACEMENT, not just deletion -- decide and record it: several map traps
+name the sweep as the instrument that must confirm a reader change moved
+nothing. SUB-verification.md's anchoring trap has already been converted to
+the CENSUS (count the committed roots carrying the input the changed
+predicate reads; if zero, no verdict can move). That is cheaper by two
+orders of magnitude and stronger -- it says why none COULD move rather than
+that none DID. Either generalise it or state, per the operator, that the
+question is no longer owed an answer at all.
+
+STOP AND ASK if removal would leave a gate with no instrument for a
+CURRENT-version claim: the operator retired old-root obligations, not
+within-version integrity, which is the epistemology itself (CLAUDE.md's
+scope boundary on that law).
+
+GATE: full gate 0 failed; docs_verify full (3 pre-existing CON-run-identity
+shallow-clone failures are baseline); both wheel smokes. Map moves in the
+same commits.
+```

@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: e6badeead
+Verified-at: c29785aa
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler
@@ -166,21 +166,32 @@ cell names a symbol the check greps for.
   is not the fix, it pins the seat where half its calls truncate and the widen
   path clamps back to the same number. FIXED 2026-08-13
   (`experiments/2026-08-13-defect-controller-steering-inert/`): barriers are
-  derived per run by `cap_envelope(knob, configured_cap)`, anchored so a role's
-  assigned cap may only WIDEN the barrier and the controller can never move a
-  cap past the operator's own setting. Coverage is derived rather than
-  enumerated, so a twelfth role cannot silently reintroduce this.
+  derived per run by `cap_envelope(knob, configured_cap)`, anchored so a SEAT
+  INSTANCE's assigned cap may only WIDEN the barrier and the controller can
+  never move a cap past the operator's own setting. Coverage is derived rather
+  than enumerated, so a twelfth role cannot silently reintroduce this.
+  SEAT INSTANCE, not role, since 2026-08-21 (Rung 1b-ii): a role bound to ONE
+  seat keeps the bare role name — which is why nothing in a committed root is
+  re-spelled and all 26 tests here passed unchanged — while a role bound to
+  several gets `cap:<role>#<seat>` per seat, so two structurally asymmetric
+  seats filled by one conjecturer throttle independently instead of sharing one
+  knob. `_apply_cap` writes that seat's endpoint alone; writing the role's whole
+  ensemble is what made them one throttle.
 `check: grep -q "^def cap_envelope" src/deepreason/controller.py && grep -q "^def is_generator_knob" src/deepreason/controller.py && python -m pytest tests/test_controller_steering_parity.py::test_every_manifest_bound_role_gets_a_barrier_containing_its_cap tests/test_controller_steering_parity.py::test_the_grounded_configuration_steers_instead_of_sitting_inert tests/test_controller.py::test_controller_does_not_normalize_an_explicit_cap_outside_its_envelope -q`
 - **A role the controller cannot steer must be named, not skipped.** Silence was
   the whole reason the defect above survived two live epochs: an inert
   controller and a healthy one wrote the same thing — nothing. `step()` now
   appends one `controller-authority` Measure record stating `full`/`partial`/
-  `none`, the steerable roles, and every unsteerable role with a typed reason,
-  episode-deduplicated the way `research-awaiting-agent` is (re-emitted only
-  when the authority set changes, never once per cycle). A role-assigned limit
-  is OPTIONAL — a manifest may bind a role with no `max_tokens` at all, which is
-  a configuration and not a fault; the controller does not invent a limit the
-  operator declined to assign, it records `no-assigned-limit`.
+  `none`, the steerable SEAT INSTANCES, and every unsteerable one with a typed
+  reason, episode-deduplicated the way `research-awaiting-agent` is (re-emitted
+  only when the authority set changes, never once per cycle). A seat-assigned
+  limit is OPTIONAL — a manifest may bind a role with no `max_tokens` at all,
+  which is a configuration and not a fault; the controller does not invent a
+  limit the operator declined to assign, it records `no-assigned-limit`.
+  The same record carries `open_loop` since 2026-08-21: the policy-referenced
+  signals this TOPOLOGY cannot produce at all. Silence was the defect shape
+  once; a controller whose fail-static branch can never fire, because no seat
+  bound to the run can attack a policy, must not be silent about that either.
 `check: grep -q "controller-authority" src/deepreason/controller.py && python -m pytest tests/test_controller_steering_parity.py::test_a_controller_with_nothing_to_steer_records_that_it_has_nothing tests/test_controller_steering_parity.py::test_partial_authority_names_which_roles_are_out_of_reach tests/test_controller_steering_parity.py::test_the_authority_record_is_episode_deduplicated -q`
 - **Cycle 0 fell to the bare id tie-break, and "solved" counted bookkeeping.**
   In `selfstudy run-9175f0ec` an attach-spawned `conn:<id>` sorted before
