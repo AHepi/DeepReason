@@ -1,5 +1,5 @@
 <!-- DR-INV-signal-contract -->
-Verified-at: 9d60e2ae
+Verified-at: 5e0d5bab
 Verify: python -m pytest tests/test_signal_contract.py tests/test_allocation_signal_consumption.py -q
 Owns: src/deepreason/signals.py, src/deepreason/allocation.py
 Seams: 
@@ -190,3 +190,21 @@ its most plausible disguise — turns the differential red.
   no skill.
 `check: test -f docs/map/REC-add-signal.md && test -f docs/map/REC-revise-allocation-policy.md`
 `check: ! test -d .claude/skills/dr-signals`
+- **An in-envelope, in-dwell, fully logged allocation decision can still be
+  illegal at the point of use.** The envelope bounds what the controller may
+  PROPOSE; it says nothing about what the consumer of that knob will ACCEPT.
+  `cap_envelope` anchors a seat's ceiling to `max(static_max, configured_cap)`,
+  so a seat leased below the static maximum keeps a barrier wider than its own
+  route — and its docstring's promise that the controller "can never move a cap
+  past" the operator's setting was false for exactly those seats. Reach-rich
+  epoch 2 (run `40e713b3…`) died on the mirror case: a lawful narrowing the
+  route firewall refused. FIXED 2026-08-22
+  (`experiments/2026-08-22-fix-route-lease-maxtokens/`) by bounding the
+  controller at the seat's lease in `Controller._lease_ceiling`, applied in
+  both `_propose` and `_apply_cap`. Deliberately NOT folded into
+  `cap_envelope`: `invariants.py` re-derives that function to decide what a
+  logged policy authorized, which is frozen surface 3, and the bound applied
+  beside it is a subset of the envelope the validator re-derives, so no steered
+  run can fail to verify. When adding a knob, ask what refuses it downstream —
+  `DR-SEAM-llm-x-scheduler` is the worked case.
+`check: grep -q "def _lease_ceiling" src/deepreason/controller.py && python -m pytest tests/test_route_lease_maxtokens_tuning.py::test_the_controller_never_calibrates_above_a_qualified_lease tests/test_route_lease_maxtokens_tuning.py::test_an_applied_policy_states_the_cap_the_seat_actually_got -q`

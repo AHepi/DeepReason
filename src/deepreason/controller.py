@@ -208,6 +208,34 @@ class Controller:
     def _instance_of(self, role: str, seat: int) -> str:
         return allocation.seat_instance(role, seat, len(self._endpoints_for(role)))
 
+    def _lease_ceiling(self, instance: str) -> int | None:
+        """The largest cap the route firewall will admit for this seat.
+
+        A route declaring `context_window_tokens` carries a qualified
+        completion allowance, and `EndpointLease.verify` binds the leased
+        `max_tokens` as its ceiling. Calibrating above that ceiling would be a
+        lawful controller move the firewall must refuse at the next dispatch —
+        a terminated run, not a throttle. A route declaring no allowance has
+        no ceiling and keeps the latitude it always had.
+
+        Deliberately NOT folded into `cap_envelope`: replay validation
+        re-derives that function to decide what a logged policy authorized, so
+        narrowing it would narrow a frozen surface's authorized set. The bound
+        applied here is a SUBSET of the envelope the validator re-derives, so
+        every value this controller can still emit remains authorizable.
+        """
+        bound = self._seat_instances().get(instance)
+        if bound is None:
+            return None
+        role, seat, _endpoint = bound
+        seats = (getattr(self.adapter, "leases", None) or {}).get(role) or ()
+        if seat >= len(seats):
+            return None
+        route = seats[seat].route
+        if getattr(route, "context_window_tokens", None) is None:
+            return None
+        return getattr(route, "max_tokens", None)
+
     def _anchor_envelopes(self) -> None:
         """Give every bound SEAT a barrier containing the cap it was assigned.
         A seat with no assigned limit keeps the unanchored shape — an assigned
@@ -429,6 +457,11 @@ class Controller:
                 continue
             if sig["truncation_rate"] > TRUNC_HI:
                 new = clamp(knob, round(cur * envelope["step"]), envelope)
+                # Bounded here rather than only at apply time: the emitted
+                # policy artifact must state the cap the seat actually got.
+                ceiling = self._lease_ceiling(instance)
+                if ceiling is not None:
+                    new = min(new, ceiling)
                 if new != cur:
                     deltas[knob] = new
             elif sig["truncation_rate"] == 0 and sig["repair_rate"] == 0:
@@ -544,9 +577,16 @@ class Controller:
                     if hasattr(e, "timeout_s"):
                         e.timeout_s = value
             return
-        bound = self._seat_instances().get(knob.split(":", 1)[1])
+        instance = knob.split(":", 1)[1]
+        bound = self._seat_instances().get(instance)
         if bound is None:
             return
+        # Every application path reaches the endpoint here — `step`, the
+        # fail-static revert, and the rehydration of a policy an earlier
+        # version logged — so the lease ceiling is enforced here too.
+        ceiling = self._lease_ceiling(instance)
+        if ceiling is not None:
+            value = min(value, ceiling)
         # One seat's endpoint, never the role's whole ensemble: writing the
         # ensemble is what made two asymmetric seats one throttle.
         bound[2].max_tokens = value

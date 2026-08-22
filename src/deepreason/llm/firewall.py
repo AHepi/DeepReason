@@ -250,11 +250,12 @@ class EndpointLease:
                 )
         # Optional endpoint attributes are checked when the endpoint exposes
         # them. This keeps MockEndpoint usable while freezing model-facing
-        # production knobs. ``max_tokens`` and ``timeout_s`` are intentionally
-        # absent: they are bounded process-health controls which the
-        # deterministic controller may tune and log as Measure events. They
-        # do not permit route, model, reasoning, temperature, or output-mode
-        # substitution.
+        # production knobs. ``max_tokens`` and ``timeout_s`` are absent from
+        # this equality set: they are bounded process-health controls which
+        # the deterministic controller may tune and log as policy artifacts.
+        # They do not permit route, model, reasoning, temperature, or
+        # output-mode substitution. ``max_tokens`` is not unbounded, though —
+        # a route declaring qualified capacity binds it as a CEILING below.
         optional = {
             "endpoint_id": route.endpoint_id,
             "family": route.family,
@@ -267,16 +268,28 @@ class EndpointLease:
             "request_logprobs": route.logprobs,
             "context_window_tokens": route.context_window_tokens,
         }
-        if route.context_window_tokens is not None:
-            # Qualified capacity binds the completion side of the envelope as
-            # well as the total. Legacy routes retain controller-owned tuning.
-            optional["max_tokens"] = route.max_tokens
         for attr, wanted in optional.items():
             if hasattr(endpoint, attr) and getattr(endpoint, attr) != wanted:
                 raise RouteFirewallError(
                     f"ROUTE_LEASE_MISMATCH role={self.role!r} seat={self.seat} "
                     f"field={attr} expected={wanted!r} "
                     f"actual={getattr(endpoint, attr)!r}"
+                )
+        # Qualified capacity binds the completion side of the envelope as well
+        # as the total, but binds it as a ceiling rather than an identity: a
+        # cap AT OR BELOW the leased allowance stays inside what qualification
+        # certified, while a cap above it escapes. An equality here would make
+        # the controller's own lawful settling of a wasteful cap terminal
+        # mid-run, which is not a stricter guarantee but a different one.
+        # Legacy routes declare no allowance and retain unbounded
+        # controller-owned tuning.
+        if route.context_window_tokens is not None and route.max_tokens is not None:
+            cap = getattr(endpoint, "max_tokens", None)
+            if cap is not None and cap > route.max_tokens:
+                raise RouteFirewallError(
+                    f"ROUTE_LEASE_MISMATCH role={self.role!r} seat={self.seat} "
+                    f"field=max_tokens expected<={route.max_tokens!r} "
+                    f"actual={cap!r}"
                 )
 
 

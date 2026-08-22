@@ -1,8 +1,8 @@
 <!-- DR-CON-seats -->
-Verified-at: bce018ae
+Verified-at: 5e0d5bab
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
-Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules
+Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-llm-x-scheduler
 Seams-undocumented: capabilities x seats, scratch x seats, workloads x seats, doctor x seats
 
 # Seats — how a role becomes a provider request today
@@ -226,3 +226,17 @@ one — no new manifest role, no change to the degrees-of-freedom count.
   routes directly, one case at a time, outside any run's token meter
   or attempt-trace machinery — conflating the two paths in a future
   change would silently change what qualification measures.
+- **A lease is not one uniform freeze — one field is a ceiling, the rest are
+  identities.** Everything `EndpointLease.verify` compares is an exact equality
+  except `max_tokens` on a route declaring `context_window_tokens`, where the
+  leased value bounds the seat from above and anything at or below it is
+  admitted. That asymmetry is deliberate and load-bearing: the completion cap
+  is a process-health control the allocation controller retunes mid-run, and
+  freezing it by identity terminated reach-rich epoch 2 (run `40e713b3…`) at
+  cycle 2 of 24. Reading the lease as "every field frozen" is the specific
+  mistake to avoid here, and reading it as "max_tokens is unchecked" is the
+  opposite one — an escape ABOVE the qualified allowance is still
+  `ROUTE_LEASE_MISMATCH`. FIXED 2026-08-22
+  (`experiments/2026-08-22-fix-route-lease-maxtokens/`); the two-sided
+  agreement is `DR-SEAM-llm-x-scheduler`.
+`check: python -m pytest tests/test_route_lease_maxtokens_tuning.py -q`
