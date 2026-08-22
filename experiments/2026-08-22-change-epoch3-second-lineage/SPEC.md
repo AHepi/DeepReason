@@ -496,18 +496,54 @@ pre-registration; epoch 3 gets its own, S5).
 
 ## Budget
 
-Itemized: build_manifest_epoch3.py 75; supplement-nocturnal-collapse.md 25;
+Itemized ESTIMATE, made before the instruments were written:
+build_manifest_epoch3.py 75; supplement-nocturnal-collapse.md 25;
 preflight_supplement.py 60; epoch3_run.sh 130; reach_run.sh fix 1.
 
     $ python3 -c "print(sum([75,25,60,130,1]))"
     291
 
-~291 changed lines of instrument, 6+ commits (one per phase boundary).
-Tranche ledger documents (REQUEST/SPEC/CHECKLIST/PREREG_EPOCH3/VALIDATION/
-DELIVERY/RESULTS/PARKED) are the workflow's own record and are excluded from
-this ceiling, as they are in every tranche. Frozen surfaces touched: none
-(CLEAR). No split into sub-tranches is proposed: a half-built ladder mints no
-evidence, and the instrument is not deliverable in halves.
+**Budget amendment 1 (2026-08-22, after step 10) — the estimate was
+exceeded and this records it rather than absorbing it.** Measured:
+
+    $ wc -l build_manifest_epoch3.py preflight_supplement.py epoch3_run.sh \
+            supplement-nocturnal-collapse.md
+    171  94  224  33
+    $ python3 -c "print(sum([171,94,224,33,1]))"
+    523
+
+523 against 291 — a 1.8x overrun. Where it went, measured rather than
+excused:
+
+    $ # non-comment, non-blank lines
+    build_manifest_epoch3.py  total=171  code=140
+    preflight_supplement.py   total= 94  code= 79
+    epoch3_run.sh             total=224  code=150
+    $ python3 -c "print(sum([140,79,150,33,1]))"
+    403
+
+So 120 of the 232 extra lines are explanatory headers, at the density this
+repo's committed experiment instruments already carry (the reach-rich
+`build_manifest.py` is 190 lines for comparable work, its `preflight_seed.py`
+109). The remaining ~112 are real: the estimate did not price the ladder's
+phase-1 stop-reason gate, its `AMENDED` branch, the two guards that keep the
+reach-rich tranche's committed artifacts unmoved, or the DRY_RUN path — all
+of which the checklist required and none of which existed in the one-phase
+ladder the estimate was anchored on.
+
+**No sub-tranche split is proposed, and the reason is not convenience.** The
+deliverable is one instrument that mints one root; half a ladder mints
+nothing, so a split would produce a first sub-tranche with no evidence and
+no acceptance check. The overrun is disclosed to the operator at the launch
+STOP alongside QO1, per REQUEST.md C4 ("the workflow's own stops apply") and
+dr-change-orchestrator's stop condition on exceeding the spec's budget. The
+ceiling this replaces is 523 lines; nothing in the plan may grow past it
+without a further amendment here.
+
+Commits: 8+ (one per phase boundary). Tranche ledger documents
+(REQUEST/SPEC/CHECKLIST/PREREG_EPOCH3/VALIDATION/DELIVERY/RESULTS/PARKED)
+are the workflow's own record and are excluded from this ceiling, as they
+are in every tranche. Frozen surfaces touched: none (CLEAR).
 
 Rubric: 6/6 yes — every R has an item with a machine-decidable accept
 (R1/R6→S1-S3+S5, R2 is the route itself, R3/R5/R14/R15→S6, R4→S7+QO1,

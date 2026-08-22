@@ -180,3 +180,68 @@ End state: the document exists, INDEX.md's matrix lists it, `python
 tools/docs_verify.py` passes with the new checks included, and
 `--audit` does not refuse any of them as unfailable.
 ```
+
+---
+
+## P4-epoch3 — in this container `docs_verify` reports three failures that say nothing about the tree
+
+**What:** the cloud container checks the repository out SHALLOW. Measured
+during this tranche's step 13:
+
+    $ git rev-parse --is-shallow-repository   -> true
+    $ git log --oneline | wc -l               -> 142
+
+`docs/map/CON-run-identity.md` carries three `check:` commands at lines 200,
+202 and 204 that address commits by hash (`1637e808`, `f304fec1`,
+`6a8758a5`) and walk rename history under
+`experiments/live_research_2026-07-29/selfstudy/runs/`. Outside the shallow
+window those objects do not exist, so the checks fail with
+`fatal: ambiguous argument '<hash>': unknown revision`, and
+`docs_verify` reports `3 failed` on a tree where nothing is wrong. After
+`git fetch --unshallow` (2223 commits) the same command reports
+`0 failed`.
+
+This is an ENVIRONMENT trap, not a defect in the document — the checks are
+correct and they do fail when the claim stops being true. But a session that
+runs `docs_verify` on a fresh container will see three red lines at a
+commit boundary and has no cheap way to know they are noise.
+
+```
+Route: dr-change-orchestrator (change, documentation only -- CLAUDE.md's
+"Environment (cloud container)" section, or docs/map/SCHEMA.md's guidance on
+history checks; no src/ or tests/ involvement).
+
+One goal: make a shallow-clone docs_verify failure legible at the moment it
+appears, so a session does not either chase it or -- worse -- learn to
+ignore docs_verify failures generally.
+
+Evidence, already committed:
+  - experiments/2026-08-22-change-epoch3-second-lineage/CHECKLIST.md step 13
+    -- the three FAIL lines, the shallow-clone measurement, and the 0-failed
+    rerun after --unshallow.
+  - docs/map/CON-run-identity.md lines 200/202/204 -- the three checks, each
+    addressing a commit by hash.
+
+Read first: docs/map/SCHEMA.md (the check: contract -- in particular whether
+a check MAY depend on git history depth), and CLAUDE.md's "Environment
+(cloud container -- read first, every session)" section, which already
+carries the resync recipe and is where a reader would look.
+
+Design question the tranche must answer, not assume: whether the fix is
+(a) one line in CLAUDE.md's environment section -- "run git fetch
+--unshallow before docs_verify; history checks fail on a shallow clone with
+'unknown revision'"; (b) a guard inside tools/docs_verify.py that detects a
+shallow clone and reports history checks as SKIPPED-SHALLOW rather than
+FAILED; or (c) rewriting the three checks so they do not need history
+outside a shallow window. (b) is the most useful and the most work; (a) is
+one line and loses nothing. Price them before choosing.
+
+Do NOT respond by deleting or weakening the three checks. They pin the
+rename discipline that CLAUDE.md's "Live runs" section makes law, and the
+--unshallow rerun proves they pass on a complete clone.
+
+End state: a session on a fresh container either does not see the three
+false failures, or reads why it is seeing them in the first place it would
+look. Whatever lands, docs_verify still reports 0 failed on a complete
+clone.
+```

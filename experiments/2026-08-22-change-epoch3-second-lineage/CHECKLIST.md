@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=11 blockers=none
+State: next=15 blockers=LAUNCH STOP - awaiting the operator env file (OLLAMA_API_KEY) and QO1
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -91,7 +91,7 @@ step 14 proves it.
       and `DRY RUN: stopping before qualify`, and no `run-status.json` was
       created (pasted).
 
-- [ ] 11. (S5) [COMMIT] Write `PREREG_EPOCH3.md`, frozen before any
+- [x] 11. (S5) [COMMIT] Write `PREREG_EPOCH3.md`, frozen before any
       provider call: hypothesis, vehicle with its M-number warrant, the
       two-phase budget, deviations D1/D2 as predictions, and the typed
       judgement table naming SUCCESS / UNSUPPORTED / PRECONDITION-BLOCKED /
@@ -101,16 +101,16 @@ step 14 proves it.
       `TRUNCATED-BEFORE-CARRIER`, `E0`, `coverage`, `M7`, `M9` >= 1
       (pasted).
 
-- [ ] 12. (S6) Prove the tree is untouched outside `experiments/`.
+- [x] 12. (S6) Prove the tree is untouched outside `experiments/`.
       done-when: `git diff --stat origin/main -- src/ tests/` prints
       nothing (pasted), and `git diff --stat origin/main --stat | tail -1`
       shows only `experiments/` paths.
 
-- [ ] 13. (S6) Map check — required because the tranche is being committed,
+- [x] 13. (S6) Map check — required because the tranche is being committed,
       even though no map document moved.
       done-when: `python tools/docs_verify.py` reports 0 failed (pasted).
 
-- [ ] 14. (S6) [COMMIT] No gate is owed for an untouched `src/`/`tests/`
+- [x] 14. (S6) [COMMIT] No gate is owed for an untouched `src/`/`tests/`
       tree (PREREG.md §5's standing rule, restated in SPEC.md S6); record
       that explicitly rather than silently skipping it, and push.
       done-when: step 12's empty diff is quoted in the commit message, and
@@ -299,3 +299,64 @@ One defect was found and fixed inside this step: the first rehearsal bound
 its manifest at `$HERE/run`, the exact path the live launch claims, so the
 rehearsal would have made the launch refuse with the leftover-root guard. A
 dry run now binds at `$HERE/.dry-run-root` and removes it on the way out.
+
+### Step 11 (S5) — the frozen pre-registration
+
+    $ grep -c each of: TRUNCATED-BEFORE-CARRIER 1 | E0 2 | coverage 1 | M7 1 | M9 1
+
+`PREREG_EPOCH3.md` registers the hypothesis verbatim from the census
+tranche's DIAGNOSIS.md, the two-phase design, the three declared deviations
+D1/D2/D3, and five typed outcome labels — the four the reach-rich tranche
+used plus AMEND-BLOCKED. TRUNCATED-BEFORE-CARRIER is registered IN ADVANCE
+this time; the reach-rich tranche had to invent it after the fact, and
+registering it removes that judgement from the post-hoc window.
+
+### Step 12 (S6) — the tree is untouched outside experiments/
+
+    $ git diff --stat origin/main -- src/ tests/
+    (empty)
+    $ git diff --stat origin/main --name-only | sed 's|/.*||' | sort -u
+    experiments
+
+### Step 13 (S6) — map check, and a container trap worth naming
+
+First run, 3 failed:
+
+    docs_verify [full]: 62 documents, 978 checks, 4 workers
+      FAIL CON-run-identity.md:200 -> (empty)
+      FAIL CON-run-identity.md:202 -> fatal: ambiguous argument '1637e808':
+           unknown revision or path not in the working tree
+      FAIL CON-run-identity.md:204 -> fatal: ambiguous argument 'f304fec1':
+           unknown revision or path not in the working tree
+    docs_verify: 3 failed
+
+Cause, measured not guessed:
+
+    $ git rev-parse --is-shallow-repository   -> true
+    $ git log --oneline | wc -l               -> 142
+    $ git cat-file -t 1637e808                -> fatal: Not a valid object name
+
+The container's checkout is a SHALLOW clone of 142 commits, and those three
+checks address commits by hash from outside that window. They are history
+checks over rename discipline in `experiments/live_research_2026-07-29/`,
+which this tranche does not touch. After `git fetch --unshallow` (2223
+commits):
+
+    docs_verify [full]: 62 documents, 978 checks, 4 workers
+    docs_verify: 0 failed
+
+So the map is clean and the three FAILs were an artifact of clone depth.
+Recorded here because it is reusable: in this container `docs_verify` can
+report failures that say nothing about the tree, and the tell is
+`unknown revision` rather than a substantive `-> ` mismatch. Parked as
+P4-epoch3 so the environment note lands where the next session reads it.
+
+### Step 14 (S6) — no pytest gate is owed, recorded rather than skipped
+
+`git diff --stat origin/main -- src/ tests/` is empty (step 12), so no
+production code or test changed and the full suite would re-prove an
+unchanged tree. PREREG_EPOCH3.md §6 and SPEC.md S6 both state this in
+advance. The instruments this tranche DID add are proven by their own
+executions, pasted above: the builder's compile (step 3), the behavior diff
+(step 4), both preflights (steps 5, 7), and the offline DRY_RUN of the whole
+ladder (step 10).
