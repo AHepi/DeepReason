@@ -1020,3 +1020,47 @@ the agreement. Recorded here rather than only in the map because the mistake
 is reusable: when a shared predicate has more than one consumer, the blast
 radius is the union of them, and a Traps entry that lists one reads as if it
 listed all.
+
+## 2026-08-22 (repair patch transport tranche)
+
+**E42 — a parked finding read every converging repair as an off-target patch,
+because the census asked the wrong record for the authority.**
+`experiments/2026-08-22-live-reach-rich-run/PARKED.md` P7-reach recorded that
+the reach-rich epoch-1 conjecturer seat "returned a well-formed patch addressed
+to a pointer OUTSIDE the authorized set, and both are the SIBLING INDEX of the
+authorized one", citing the diagnostic envelope `blobs/11/11659d8c…`
+(`authorized_pointers ["/candidate/checker_specs/1/id"]`) against the raw
+provider output `blobs/9b/9b29d126…`
+(`{"op":"remove","path":"/candidate/checker_specs/0/terms"}`).
+
+Both blobs are quoted correctly. The pairing is not. `blobs/11/11659d8c…` is
+not the envelope that turn was dispatched under; it is the diagnostic derived
+AFTER the patch was applied. `workflow/repair_transaction.py::_terminalize_invalid`
+writes a repair attempt's `diagnostic_ref` as `trace_ref or next_diagnostic_ref`,
+so a census keyed on that field compares attempt N's response with attempt N+1's
+authority. A convergent repair moves the pointer on by construction, so every
+convergent repair scores off-target.
+
+The authority frozen before issue is the work preparation's
+`repair.semantic-task.v1` payload. Read from there, the dispatched envelope for
+that turn (`blobs/43/433c086d…`) authorizes exactly
+`/candidate/checker_specs/0/terms` — the pointer the seat patched. Two
+independent confirmations that `11659d8c…` is post-patch: its `baseline_sha256`
+differs from the payload's (`1a478807191f3af7…`), and its `frozen_subtree_hashes`
+no longer list `/candidate/checker_specs/0/terms`, the subtree just removed.
+
+**Corrected reading:** all 13 repair turns of `run-40e713b30a147dfc` patched a
+pointer inside their own authorized set; the run recorded ZERO off-target
+patches (`experiments/2026-08-22-fix-repair-patch-transport/repair-turn-census.json`,
+re-derivable by `repair_turn_census.py`). The seat exhausted because six
+responses were unreadable at the wire on transport SPELLING, and a discarded
+response still consumes a grant. P7-reach's remaining content stands: it is not
+the ledgered glm-5.2 cap-burn (0 of 41 attempts had zero completion tokens),
+and raising the completion cap remains the wrong remedy.
+
+Fixed 2026-08-22 by tranche `experiments/2026-08-22-fix-repair-patch-transport`
+(commit `97a964583`). Recorded here rather than only in the map because the
+mistake is reusable: a record field named for a diagnostic does not say WHEN
+that diagnostic was derived, and in an append-only log the cheapest way to be
+wrong about causation is to join on the convenient key instead of the frozen
+one.
