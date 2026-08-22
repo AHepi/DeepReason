@@ -1,0 +1,32 @@
+# S11 / R15 — the TARGETED half: which committed roots could a verdict move for?
+#
+# The operator's condition asks for a targeted verify pass over CURRENT-VERSION
+# committed roots, and states the reason it must come back empty: "only the new
+# seat-keyed form (cap:role#N) resolves differently, and nothing recorded uses
+# that form yet, so zero verdicts may change."
+#
+# That reason is checkable directly, and checking it is stronger than the sweep
+# alone: the sweep says no verdict moved, this says WHY none could.
+#
+# The changed code is reached from exactly one place. `_configured_role_cap` is
+# called only inside `for knob, value in knobs.items()`, which iterates a
+# CONTROLLER POLICY ARTIFACT's `knobs` map. The second changed site adds one key
+# to a set built from `authorized_controller_limits`, which is populated only by
+# that same loop. So if no committed root contains a controller policy body,
+# neither changed line is ever executed against a committed root.
+
+$ python  # census over every openable root under experiments/
+total roots: 107
+roots whose log contains a controller policy body: 0
+roots whose log contains a 'knobs' map with a cap: knob: 0
+roots with a schema_version 6 run-manifest (current version): 93
+
+# This extends ERRATA E28's measurement (which counted 104 logs) to all 107 and
+# to the specific input this change reads. The targeted set — roots for which a
+# verdict COULD move — is EMPTY, and the current-version set is 93 of 107.
+#
+# The empirical confirmation is the before/after sweep in this directory:
+# sweep_before.txt was produced by a process that imported the PRE-tranche
+# invariants.py, controller.py and signals.py (it was launched before any edit
+# and Python imports once), sweep_after.txt by the delivered tree, and
+# sweep_diff.txt is their diff.
