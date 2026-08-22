@@ -120,26 +120,22 @@ P_OTHER = [
 ]
 
 
-def _run(label: str, *, home_criteria, foreign_criteria, content, note,
-         wf_structural: bool = False) -> dict:
+def _run(label: str, *, home_criteria, foreign_criteria, content, note) -> dict:
     """One scenario: an artifact on HOME, a foreign problem FOREIGN, real sweep.
 
-    ``wf_structural`` SIMULATES the already-parked fix P1
-    (experiments/2026-08-21-measure-reach-firing/PARKED.md): programs.PROGRAMS
-    declares reasoning-envelope-wf ``class_="structural"``, but
-    measures/reach.py::_STRUCTURAL_PROGRAMS does not list it, so _substantive
-    currently calls it substantive. The simulation is an in-process rebind of
-    that module constant for the duration of one scenario -- src/ is never
-    edited (git diff --stat proves it), and the rebind is undone in `finally`.
+    NOTHING is rebound. Until 2026-08-22 this function took a ``wf_structural``
+    flag that SIMULATED the then-parked fix P1 by rebinding
+    measures/reach.py::_STRUCTURAL_PROGRAMS in-process for one scenario, because
+    programs.PROGRAMS declared reasoning-envelope-wf ``class_="structural"``
+    while the reach set did not list it. Tranche
+    experiments/2026-08-22-reach-structural-programs-fix landed that fix, so the
+    flag and its two call sites are deleted and every scenario now runs against
+    the shipped module constant. The pre-fix results are preserved verbatim at
+    experiments/2026-08-22-reach-structural-programs-fix/rehearsal-as-shipped.json:
+    S8a moving from "E4 criterion-fail" to "HIT full" is the fix's decisive
+    regression, and S8c staying "E4 criterion-fail" is its control.
     """
-    import deepreason.measures.reach as reach_module
-
     root = pathlib.Path(tempfile.mkdtemp(prefix="reach-rehearsal-"))
-    shipped_structural = reach_module._STRUCTURAL_PROGRAMS
-    if wf_structural:
-        reach_module._STRUCTURAL_PROGRAMS = frozenset(
-            shipped_structural | {"reasoning-envelope-wf"}
-        )
     try:
         harness = Harness(root)
         # Register exactly the commitments this scenario names. An
@@ -208,7 +204,6 @@ def _run(label: str, *, home_criteria, foreign_criteria, content, note,
             exit_ = "HIT full"
         return {
             "scenario": label,
-            "wf_treated_structural": wf_structural,
             "note": note,
             "home_criteria": [c.id for c in home_criteria],
             "foreign_criteria": [c.id for c in foreign_criteria],
@@ -222,7 +217,6 @@ def _run(label: str, *, home_criteria, foreign_criteria, content, note,
             "recorded_reach_events": len(recorded),
         }
     finally:
-        reach_module._STRUCTURAL_PROGRAMS = shipped_structural
         shutil.rmtree(root, ignore_errors=True)
 
 
@@ -245,7 +239,7 @@ SCENARIOS = [
         home_criteria=[],
         foreign_criteria=[WF, *P_SEED],
         content=PROSE,
-        note="conn:/integ: artifacts are prose (conj.py:1462); wf rejects prose",
+        note="was E4 as shipped; a prose artifact with an EMPTY own battery now reaches on the seed subject predicate at coverage exactly 0.5",
     ),
     # 3. The shape the hypothesis needs: two problems that BOTH mint
     #    envelopes but carry DIFFERENT subject predicates.
@@ -289,33 +283,32 @@ SCENARIOS = [
     # 8 — the decisive pair. A conn:/integ: candidate is PROSE and carries
     #     only its own structural battery, so the seed problem's subject
     #     predicates are novel to it. As shipped, reasoning-envelope-wf is
-    #     also in the qualifying set and rejects prose outright (S8a). With
-    #     the parked P1 fix applied, the qualifying set is exactly the
-    #     subject predicates and the pair can survive (S8b).
+    #     also in the qualifying set and rejected prose outright (S8a, as
+    #     shipped before 2026-08-22). With P1 landed the qualifying set is
+    #     exactly the subject predicates and the pair survives -- so S8a and
+    #     S8b, which differ in nothing but their label, must now agree.
     dict(
         label="S8a prose conn: candidate vs seed (as shipped)",
         home_criteria=[HV_FLOOR, LINEAGE, RELATION_FORM],
         foreign_criteria=[WF, *P_SEED, *P_OTHER],
         content=PROSE,
-        note="as shipped: wf qualifies and rejects prose",
+        note="was E4 as shipped (wf qualified and rejected prose); must now equal S8b",
     ),
     dict(
-        label="S8b prose conn: candidate vs seed (P1 applied)",
+        label="S8b prose conn: candidate vs seed (P1 landed)",
         home_criteria=[HV_FLOOR, LINEAGE, RELATION_FORM],
         foreign_criteria=[WF, *P_SEED, *P_OTHER],
         content=PROSE,
-        wf_structural=True,
-        note="P1 applied: qualifying = the subject predicates only, coverage 2/4",
+        note="P1 landed: qualifying = the subject predicates only, coverage 2/3; identical to S8a by construction",
     ),
     dict(
-        label="S8c prose OFF-subject candidate vs seed (P1 applied)",
+        label="S8c prose OFF-subject candidate vs seed (P1 landed)",
         home_criteria=[HV_FLOOR, LINEAGE, RELATION_FORM],
         foreign_criteria=[WF, *P_SEED, *P_OTHER],
         content=(
             "Relation kind: dependence. The second account depends on the "
             "first. REFUTED IF the dependence does not hold."
         ),
-        wf_structural=True,
         note="control: an on-form but off-SUBJECT relation must still not hit",
     ),
     dict(

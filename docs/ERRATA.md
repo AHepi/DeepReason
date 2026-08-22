@@ -985,3 +985,38 @@ and is the one `INV-frozen-surfaces` already models for `clamp`: measure
 the diff, grep the hits, scan the imports, and record the disposal — never
 wave it away. The prompt remains
 `experiments/2026-08-21-change-rung1b-ii-signal-consumption/PARKED.md` P2.
+
+## 2026-08-22 (reach structural-set fix)
+
+**E41 — a map Traps entry named one consumer of a defect that had two, and
+called "not an observed live failure" the one thing that was blocking every
+text run.** `docs/map/SEAM-evaluation-x-rules.md` Traps recorded the
+`_STRUCTURAL_PROGRAMS`-vs-`ProgramSpec.class_` divergence correctly and even
+carried a check that would fail when it was closed. But it scoped the
+consequence to ONE consumer — "structural to the anti-relapse gate … and
+SUBSTANTIVE to `formally_backed` (a passing one confers prose immunity)" —
+and `measures/reach.py::reach_sweep` reads the same `_substantive` predicate.
+The entry's recorded residue then read: "this is a code-reading finding at the
+predicate level, not an observed live failure." On the `formally_backed` side
+that was right and stayed right —
+`experiments/2026-08-21-measure-reach-firing/probe_immunity.json` measures
+`backed_only_by_declared_structural` at 0 over 3 528 candidate artifacts,
+re-measured unchanged at 903 `formally_backed` per root before and after the
+fix. On the REACH side it was wrong, and wrong in the opposite direction from
+the one the entry anticipated: a qualifying criterion must PASS for a hit, and
+`reasoning-envelope-wf` fails on prose by construction, so counting it
+substantive VETOED hits rather than manufacturing them. It was the single
+reason no current-version root ever recorded a reach event
+(`experiments/2026-08-21-measure-reach-firing/census.json`: 0 `reach_set`
+events on 96 roots; `experiments/2026-08-22-live-reach-rich-run/rehearsal.json`
+S8a/S8b). A permissive-looking misclassification had a restrictive effect
+because the same predicate gates two directions.
+
+Corrected 2026-08-22 by tranche
+`experiments/2026-08-22-reach-structural-programs-fix` (commit `7b82206dc`):
+the Traps entry is rewritten to name both consumers and both discharged
+residues, and its check is inverted from asserting the divergence to asserting
+the agreement. Recorded here rather than only in the map because the mistake
+is reusable: when a shared predicate has more than one consumer, the blast
+radius is the union of them, and a Traps entry that lists one reads as if it
+listed all.
