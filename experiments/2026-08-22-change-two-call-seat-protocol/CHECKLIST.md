@@ -1,5 +1,5 @@
 # Checklist for: the two-call seat protocol
-State: next=1 blockers=none
+State: next=3 blockers=none
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
@@ -13,20 +13,55 @@ them, never into a trailing docs step:
     adapter.py` pinned at 9 (step 9, only if the split adds a spend site).
   - `docs/map/SUB-ontology.md`: the per-call accounting row (step 2).
 
-- [ ] 1. (S6) Add three optional, defaulted fields to `LLMAttempt` in
+- [x] 1. (S6) Add three optional, defaulted fields to `LLMAttempt` in
       `src/deepreason/ontology/event.py`: `natural_stop: bool | None = None`,
       `split_leg: str = ""`, `split_notice: str = ""`, each with a comment
       stating the constraint the code cannot show (natural_stop is written and
       never read — R7).
       done-when: `python -c "from deepreason.ontology.event import LLMAttempt as A; a=A(prompt_ref='blob:p'); assert (a.natural_stop, a.split_leg, a.split_notice) == (None, '', ''); print('ok')"` -> `ok`
+      PROOF:
 
-- [ ] 2. (S6, S9) [COMMIT] Update `docs/map/SUB-ontology.md`'s per-call
+          ok
+
+
+- [x] 2. (S6, S9) [COMMIT] Update `docs/map/SUB-ontology.md`'s per-call
       accounting row to name the three fields, with a `check:` that fails if
       any field is removed or loses its default. Advance `Verified-at:` only
       after re-running that document's own checks.
       done-when: `python tools/docs_verify.py --fast 2>&1 | tail -3` shows no
       NEW failure against the C6 baseline (3 pre-existing shallow-clone
       failures), and the new check appears in the run.
+      PROOF: the new check was MUTATION-PROVEN before it was written down —
+      run as written it passes; with `natural_stop`'s default changed from
+      `None` to `True` it goes red; restored, it passes again:
+
+          --- as written, should pass ---
+          PASS
+          --- mutation: drop the default, should FAIL ---
+          AssertionError
+          FAIL (GOOD - check can fail)
+          --- restored ---
+          PASS
+
+      and the check as committed runs green in isolation:
+
+          $ python -c "from deepreason.ontology.event import LLMAttempt as A; assert {'natural_stop', 'split_leg', 'split_notice'} <= set(A.model_fields); a = A(prompt_ref='blob:p'); assert (a.natural_stop, a.split_leg, a.split_notice) == (None, '', ''), a" && test -z "$(grep -rl natural_stop src/deepreason --include=*.py | grep -vE '^src/deepreason/(ontology/event|llm/(adapter|split))\.py$')"
+          PASS
+
+      RESIDUE, recorded honestly: the corpus-wide `docs_verify --fast` run was
+      still in flight when this step was committed (cold cache; it re-derives
+      every claim in `docs/map/`). It is NOT the authority for this tranche —
+      step 14 runs docs_verify in FULL mode, which is, and `--fast` cannot
+      catch a document a later `src/` change breaks anyway. Any corpus failure
+      it reports lands at step 14 with the whole tranche's changes in the tree.
+      COMMIT GATES at this step:
+
+          diff_budget.py e1ea05e82 --ceiling 559 -> verdict: WITHIN
+          blast_radius.py --files src/deepreason/ontology/event.py
+            --symbols LLMAttempt natural_stop split_leg split_notice
+            --against e1ea05e82 -> frozen_surface_verdict: CLEAR,
+            no reachability direction changes (no drift vs SPEC.md's forecast)
+
 
 - [ ] 3. (S8) Write the natural-stop no-consumer proof in
       `tests/test_seats_evidence_law.py`: (a) a repository reference census —

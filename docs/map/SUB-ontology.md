@@ -44,7 +44,7 @@ the bytes on disk.
 - `Status` — the four labels the two-pass adjudicator assigns.
 - `Event`, `Rule` — one append-only log line and the fifteen rules that can produce one.
 - `StateDiff` — the graph delta an event applies, under its on-record aliases (`att+`, `dep+`, `A+`, `Π+`, `addr+`, `carry+`).
-- `LLMCall`, `LLMAttempt` — provider accounting and per-attempt repair trace; process-only, never graph state.
+- `LLMCall`, `LLMAttempt` — provider accounting and per-attempt repair trace; process-only, never graph state. `LLMAttempt.natural_stop` (did the provider end this completion on its own, or at the cap?) is WRITTEN AND NEVER READ: it is a correctness signal, and letting a guard, rank, status, label or warrant consume it would make it an evidence signal, which the seats/evidence law forbids. `split_leg` / `split_notice` name which leg of the split-budget seat protocol (`llm/split.py`) produced the attempt, and the typed reason the protocol was not honored when it was not.
 - `SchoolRouteReceiptV1`, `ConjectureContextCallReceiptV1` — durable proof of the routing and the advisory scratch a conjecture call actually saw.
 - `deepreason.ontology.frozen` — compatibility re-export of `FrozenRecord`/`FrozenList`/`FrozenDict` from `deepreason.frozen`, used by the two process-payload modules (`scratch/events.py`, `bridge/events.py`) that reach back through the ontology package; the other three import `deepreason.frozen` directly.
 
@@ -80,7 +80,10 @@ persisted through the object store under the four registered schema names.
 | add an event rule | `Rule` in `ontology/event.py` + the dispatch in `Harness._apply_event` | `tests/test_ontology.py::test_event_round_trip` |
 | attach a new typed process payload to events | a new optional field on `Event` with `exclude_if`, plus a clause in `Event._process_payload_contract` | `tests/test_workflow_control_event_storage_c1.py::test_control_rule_and_payload_must_appear_together` |
 | record new per-call provider accounting | `LLMAttempt` / `LLMCall` in `ontology/event.py` (defaults required for replay) | `tests/test_workflow_control_event_storage_c1.py::test_work_order_call_binding_is_conjecturer_only_and_legacy_shape_is_unchanged` |
+| record a per-attempt provider signal that nothing may act on | a defaulted field on `LLMAttempt`, plus a no-consumer census pinning where its name may occur | `tests/test_seats_evidence_law.py::test_natural_stop_is_recorded_and_never_consumed` |
 | persist a new record type under `objects/` | `SCHEMAS` in `storage/objects.py` | `tests/test_workflow_control_event_storage_c1.py::test_every_workflow_record_round_trips_through_shared_store` |
+
+`check: python -c "from deepreason.ontology.event import LLMAttempt as A; assert {'natural_stop', 'split_leg', 'split_notice'} <= set(A.model_fields); a = A(prompt_ref='blob:p'); assert (a.natural_stop, a.split_leg, a.split_notice) == (None, '', ''), a" && test -z "$(grep -rl natural_stop src/deepreason --include=*.py | grep -vE '^src/deepreason/(ontology/event|llm/(adapter|split))\.py$')"`
 
 ## Traps
 

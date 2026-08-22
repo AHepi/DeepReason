@@ -88,6 +88,20 @@ class LLMAttempt(FrozenRecord):
     output_mechanism: str = "json_text"
     transport_attempts: int = 1
     transport_diagnostics: list[str] = Field(default_factory=FrozenList)
+    # Whether the provider ended this completion on its own rather than at the
+    # cap. WRITTEN AND NEVER READ: no guard, gate, rank, status, label, warrant
+    # or adjudication input may consume it, so a correctness signal can never
+    # become an evidence signal. None means the provider reported no finish
+    # reason, which is not the same as a truncated one.
+    natural_stop: bool | None = None
+    # Which leg of the split-budget seat protocol produced this attempt:
+    # "" for an undivided call, else "reason" or "extract" (llm/split.py).
+    # Both legs of one split share this attempt's index and route identity.
+    split_leg: str = ""
+    # Typed reason the split protocol was not honored on this call. Empty when
+    # the protocol ran as configured. A notice is never a refusal: the call
+    # proceeds undivided and records why.
+    split_notice: str = ""
 
     @field_validator("transport_diagnostics", mode="after")
     @classmethod
