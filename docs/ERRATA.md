@@ -932,3 +932,56 @@ before claiming contact is an operator decision about disclosure, not an
 implementation detail, so nothing was changed:
 `experiments/2026-08-21-change-rung1b-ii-signal-consumption/PARKED.md` P2
 carries the ready-to-send prompt and the measured evidence.
+
+**E39 — `LADDER.md`'s per-rung line estimates are systematically low, and
+Rungs 5–8 carry estimates produced the same way.** Rung 4 estimated
+500–700 lines; the delivered tranche is 2 290 insertions over `src`,
+`tests`, `docs/map` and `scripts`, and needed its ceiling raised twice
+mid-flight (963 → 1 850 → still exceeded at 2 290). The work did not
+grow — every line traces to a numbered requirement and no later rung's
+machinery is present — so the error is in the estimating method, and it
+has a measurable shape worth stating because it will recur:
+
+1. **New modules were priced at about half what existing modules in the
+   same package already run at.** `calculus/scope.py` was estimated at 85
+   and landed at 190; `calculus/standing.py` at 110 and landed at 248. The
+   existing `calculus/` modules average ~93 lines for far less behaviour,
+   at the docstring density CLAUDE.md's Conventions ask for. The line
+   count of the neighbouring modules is measurable before writing
+   anything, and was not measured.
+2. **A mandated multi-proof gate was priced at the size of a smaller
+   one.** Rung 4's gate carries seven named propositions across 34 tests
+   (983 lines); the estimate of 290 was scaled from Rung 3b's two-proof
+   gate (82 lines) without scaling for the proof count.
+3. **New map documents were priced from a guess.** Rung 3b's own SPEC
+   estimated the axiom document at "~60 extra lines" and Rung 4's at ~95;
+   `INV-axiom-basis.md` landed at 259, because eleven axioms each need a
+   statement, a proving rung, a preservation list and a check that can
+   fail — plus an explanation for each row that must NOT yet carry one.
+
+Not corrected in place: revising Rungs 5–8's numbers now would be
+replacing one guess with another. What is recorded instead is the method
+that would produce a defensible figure — measure the neighbouring
+modules, scale the gate by proof count, and price a map document per row
+— so the next rung's SPEC can be checked against something. Evidence:
+`experiments/2026-08-22-change-rung4-frame-assertions/` REQUEST.md
+Amendments 1 and 3 and VALIDATION.md's ceiling section.
+
+**E40 — E38's grep-based frozen-surface false positive recurred, on a
+second symbol, in the next tranche that ran the gate.** E38 recorded
+`clamp` matching `clamp_reserved_attention_fractions` inside
+`run_manifest.py`. Rung 4's boundary run reproduced the same shape with
+`consulted`: `tools/blast_radius.py` reported `manifest schemas and
+validators (run_manifest.py)` contact and a `PLAUSIBLE`
+qualification-digest consumer, where all three hits are English prose in
+comments predating the tranche ("consulted at mint sites", "consulted at
+scheduler dispatch sites", "is consulted"), the file has a zero-line
+diff, and it imports nothing from `deepreason.calculus`. Recorded as a
+SECOND measured instance rather than a repeat complaint, because E38's
+open question is whether the cost justifies resolving the symbol before
+claiming contact, and one instance is an anecdote while two on unrelated
+symbols in consecutive tranches is a rate. Disposal method is unchanged
+and is the one `INV-frozen-surfaces` already models for `clamp`: measure
+the diff, grep the hits, scan the imports, and record the disposal — never
+wave it away. The prompt remains
+`experiments/2026-08-21-change-rung1b-ii-signal-consumption/PARKED.md` P2.
