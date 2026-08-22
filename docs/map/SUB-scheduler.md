@@ -1,9 +1,9 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: c29785aa
+Verified-at: 5e0d5bab
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
-Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler
-Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, llm x scheduler, manifest x scheduler, scheduler x scratch
+Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler
+Seams-undocumented: authority x scheduler, capabilities x scheduler, harness x scheduler, manifest x scheduler, scheduler x scratch
 
 # The scheduler — what gets worked on, in what order, under what budget
 
@@ -167,8 +167,17 @@ cell names a symbol the check greps for.
   path clamps back to the same number. FIXED 2026-08-13
   (`experiments/2026-08-13-defect-controller-steering-inert/`): barriers are
   derived per run by `cap_envelope(knob, configured_cap)`, anchored so a SEAT
-  INSTANCE's assigned cap may only WIDEN the barrier and the controller can
-  never move a cap past the operator's own setting. Coverage is derived rather
+  INSTANCE's assigned cap may only WIDEN the barrier. The clause that used to
+  follow — "and the controller can never move a cap past the operator's own
+  setting" — was FALSE as written and is corrected here rather than deleted:
+  because the anchor only widens, a seat assigned a cap BELOW the static
+  ceiling (e.g. 3000 against `cap:conjecturer`'s 5000) kept a barrier wider
+  than its own route, and a truncation signal could widen it past the assigned
+  limit. True since 2026-08-22
+  (`experiments/2026-08-22-fix-route-lease-maxtokens/`) and only for seats whose
+  route declares `context_window_tokens`, where `Controller._lease_ceiling`
+  bounds the proposal at the lease; an unqualified seat still widens past its
+  configured cap by design. Coverage is derived rather
   than enumerated, so a twelfth role cannot silently reintroduce this.
   SEAT INSTANCE, not role, since 2026-08-21 (Rung 1b-ii): a role bound to ONE
   seat keeps the bare role name — which is why nothing in a committed root is
@@ -178,6 +187,24 @@ cell names a symbol the check greps for.
   knob. `_apply_cap` writes that seat's endpoint alone; writing the role's whole
   ensemble is what made them one throttle.
 `check: grep -q "^def cap_envelope" src/deepreason/controller.py && grep -q "^def is_generator_knob" src/deepreason/controller.py && python -m pytest tests/test_controller_steering_parity.py::test_every_manifest_bound_role_gets_a_barrier_containing_its_cap tests/test_controller_steering_parity.py::test_the_grounded_configuration_steers_instead_of_sitting_inert tests/test_controller.py::test_controller_does_not_normalize_an_explicit_cap_outside_its_envelope -q`
+- **The envelope bounds the proposal; it does not bound the consumer.** A
+  decision inside its barrier, past its dwell, and logged as a policy artifact
+  can still be refused at the point of use. Reach-rich epoch 2 (run
+  `40e713b3…`, `log.jsonl` seq 442 then 577) settled the conjecturer seat from
+  its leased 32768 to 20480 after three spotless windows — lawful on every axis
+  the controller answers to — and the route firewall, which bound `max_tokens`
+  for equality on any route declaring `context_window_tokens`, refused the next
+  dispatch and ended the run at cycle 2 of 24 with
+  `stop_reason=operational_failure`. Nothing in the map connected the two
+  sides; nothing in the import graph could, since `controller.py` imports no
+  `deepreason.llm` and reaches the leases duck-typed through
+  `self.adapter.leases`. FIXED 2026-08-22
+  (`experiments/2026-08-22-fix-route-lease-maxtokens/`): the firewall binds a
+  qualified route's cap as a ceiling, the controller never proposes above that
+  ceiling, and the agreement is written up at `DR-SEAM-llm-x-scheduler`. When
+  adding or widening a controller knob, the question the envelope does not
+  answer is what refuses the value downstream.
+`check: python -m pytest tests/test_route_lease_maxtokens_tuning.py -q && test -f docs/map/SEAM-llm-x-scheduler.md`
 - **A role the controller cannot steer must be named, not skipped.** Silence was
   the whole reason the defect above survived two live epochs: an inert
   controller and a healthy one wrote the same thing — nothing. `step()` now

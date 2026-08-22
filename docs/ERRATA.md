@@ -1064,3 +1064,52 @@ mistake is reusable: a record field named for a diagnostic does not say WHEN
 that diagnostic was derived, and in an append-only log the cheapest way to be
 wrong about causation is to join on the convenient key instead of the frozen
 one.
+
+---
+
+## 2026-08-22 (route lease vs controller-tuned max_tokens)
+
+**E43 — the map promised a bound the controller did not have.**
+`docs/map/SUB-scheduler.md`'s controller Traps entry, recording the
+2026-08-13 steering-inert fix, said barriers are "anchored so a SEAT
+INSTANCE's assigned cap may only WIDEN the barrier and the controller can
+never move a cap past the operator's own setting." The first clause is true;
+the second does not follow from it and was false. Because the anchor only
+ever widens — `cap_envelope` computes `envelope["max"] = max(static_max,
+configured_cap)` — a seat assigned a cap BELOW the static ceiling keeps a
+barrier wider than its own route, and a truncation signal moves it past the
+assigned limit. Measured, not reasoned: a seat leased at 3000 against
+`cap:conjecturer`'s static 5000 is widened to `round(3000 * 1.6) = 4800`
+(`experiments/2026-08-22-fix-route-lease-maxtokens/repro.json`, case B).
+The claim carried a check
+(`test_every_manifest_bound_role_gets_a_barrier_containing_its_cap`) which
+pins that the barrier CONTAINS the cap — a different assertion from the one
+the prose made, which is how the sentence survived.
+
+The mirror case is what surfaced it. Reach-rich epoch 2 (run
+`40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c`,
+`log.jsonl` seq 442 then 577) died on the NARROWING side: the controller
+settled the conjecturer seat from its leased 32768 to 20480 — lawful under
+every rule the controller answers to — and `EndpointLease.verify`, which
+bound `max_tokens` for equality on any route declaring
+`context_window_tokens`, refused the next dispatch and ended the run at cycle
+2 of 24 with `stop_reason=operational_failure`.
+
+Corrected 2026-08-22 by tranche
+`experiments/2026-08-22-fix-route-lease-maxtokens` (commit `8469d0669`): the
+Traps entry is rewritten in place — never deleted, per `SCHEMA.md` — to state
+which clause was false, why, and that the promise holds from 2026-08-22 and
+only for seats whose route declares `context_window_tokens`, where
+`Controller._lease_ceiling` bounds the proposal at the lease.
+
+Recorded here rather than only in the map because the mistake is reusable in
+two ways. First: a claim can carry a passing check and still be false, when
+the check pins a neighbouring assertion — "the barrier contains the cap" was
+verified; "the controller cannot exceed the cap" was not, and only the second
+was written down as the guarantee. Second: the same commit corrected a
+comment in `src/deepreason/llm/firewall.py` that asserted the opposite of the
+code six lines below it, and additionally described the controller's logging
+as "Measure events" when the record shows a `Refl` policy artifact
+(`objects/artifact/2e9009812fe9e3b6fd0b48ffd088d72d21bc09890ee21fd66f715bd8253cba52.json`).
+Two documents and one comment each described this controller's authority, and
+all three were wrong in a different direction.

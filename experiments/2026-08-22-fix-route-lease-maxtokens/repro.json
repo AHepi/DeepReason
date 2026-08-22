@@ -1,0 +1,35 @@
+[
+  {
+    "case": "A/recorded: qualified route, efficiency narrowing",
+    "context_window_tokens": 131072,
+    "leased_max_tokens": 32768,
+    "controller_applied": {
+      "cap:conjecturer": 20480
+    },
+    "endpoint_max_tokens_after_tune": 20480,
+    "next_dispatch_refused": true,
+    "error": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=32768 actual=20480"
+  },
+  {
+    "case": "B/predicted: qualified route, truncation widening",
+    "context_window_tokens": 131072,
+    "leased_max_tokens": 3000,
+    "controller_applied": {
+      "cap:conjecturer": 4800
+    },
+    "endpoint_max_tokens_after_tune": 4800,
+    "next_dispatch_refused": true,
+    "error": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=3000 actual=4800"
+  },
+  {
+    "case": "C/control: unqualified route, same narrowing",
+    "context_window_tokens": null,
+    "leased_max_tokens": 32768,
+    "controller_applied": {
+      "cap:conjecturer": 20480
+    },
+    "endpoint_max_tokens_after_tune": 20480,
+    "next_dispatch_refused": false,
+    "error": null
+  }
+]

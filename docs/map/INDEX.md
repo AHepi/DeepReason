@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: f2339ade
+Verified-at: 5e0d5bab
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -114,8 +114,9 @@ traffic at all.
 | — | capabilities × rules | `SEAM-capabilities-x-rules.md` |
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
+| — | llm × scheduler | `SEAM-llm-x-scheduler.md` |
 
-The last seven carry no import-count because at least one side is a concept
+The last eight carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification case — every import between the sides is
 function-local, which the coupling metric cannot see. The adjudication ×
@@ -124,6 +125,12 @@ traffic, and the measured consequence of breaking it is that committed roots
 change meaning.
 **That is exactly why they need documents**: coupling metrics cannot see them,
 so nothing but a written seam will tell the next reader they exist.
+The llm × scheduler case is the newest and was the most expensive: the
+`scheduler/` package does import `deepreason.llm`, but the agreement that
+document covers — the allocation controller against the route lease — is
+carried entirely by `controller.py`, which imports nothing from `llm/` and
+reaches the leases duck-typed off the adapter. A count taken over the packages
+would have read 10 and pointed at the wrong traffic.
 
 `check: python tools/docs_verify.py --links`
 

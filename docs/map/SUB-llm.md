@@ -2,8 +2,8 @@
 Verified-at: 97a964583
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
-Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm
-Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x scheduler, llm x schools, llm x scratch, llm x verification
+Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler
+Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x schools, llm x scratch, llm x verification
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 
@@ -302,3 +302,19 @@ through the caller, including on the failure paths.
   at it — arm the default by install, and surface the fallback where the
   operator already looks.
 `check: python -c "import tomllib,pathlib; d=tomllib.loads(pathlib.Path('pyproject.toml').read_text()); core=[r for r in d['project']['dependencies'] if r.split('[')[0].split('>')[0].split('<')[0].split('=')[0].strip()=='fastembed']; assert core, ('fastembed must stay in the CORE dependency list', d['project']['dependencies']); assert d['project']['optional-dependencies'].get('embed') == [], 'the [embed] extra must stay declared and empty'" && grep -q "\"embedder-warmup\"" src/deepreason/cli/main.py && python -m pytest tests/test_embedder.py::test_fastembed_is_a_core_dependency -q`
+- **A leased field the controller is licensed to tune was also frozen for
+  equality, and the two rules sat six lines apart in the same function.**
+  `EndpointLease.verify`'s comment said `max_tokens` was "intentionally absent"
+  from the frozen checks because the deterministic controller may tune it; the
+  conditional below it added `max_tokens` back whenever the route declared
+  `context_window_tokens`. Reach-rich epoch 2 (run `40e713b3…`) declared it,
+  the controller settled the conjecturer seat from 32768 to 20480, and the run
+  died at cycle 2 of 24 with `ROUTE_LEASE_MISMATCH` /
+  `stop_reason=operational_failure`. FIXED 2026-08-22
+  (`experiments/2026-08-22-fix-route-lease-maxtokens/`): a qualified route now
+  binds `max_tokens` as a CEILING — at or below the lease is admitted, above it
+  is still refused — and the comment was corrected in the same commit. The
+  general lesson outlives the field: when a comment and a check in one function
+  disagree, a live run will eventually pick the reading you did not test. Full
+  agreement is written up at `DR-SEAM-llm-x-scheduler`.
+`check: python -m pytest tests/test_route_lease_maxtokens_tuning.py::test_controller_settling_a_qualified_seat_does_not_terminate_the_run tests/test_route_lease_maxtokens_tuning.py::test_a_cap_above_the_qualified_lease_is_still_refused tests/test_v6_request_envelope.py::test_runtime_endpoint_cannot_widen_frozen_capacity -q`

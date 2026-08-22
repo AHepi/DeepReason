@@ -318,6 +318,19 @@ the same commit.
 
 ## P9-reach — a controller tuned the conjecturer seat's `max_tokens` below its lease, and the route firewall terminated the run
 
+**STATUS 2026-08-22: FIXED.** Landed by
+`experiments/2026-08-22-fix-route-lease-maxtokens`. The producer named below as
+"NOT known" is established: the allocation controller, recorded in this root's
+own `log.jsonl` at seq 442 as a `Refl` policy artifact
+(`492b4102…`) carrying `knobs {cap:conjecturer: 20480}`; `20480` is
+`round(32768 / 1.6)`, one step of its anchored envelope. The candidate this
+park named — the transport clamp at `adapter.py:1193` — is a reader downstream
+of the failing `lease.verify` and never executed on this run, which is why the
+park's own negative result (absent from every token-reservation record) held.
+A qualified route's `max_tokens` now binds as a ceiling and the controller
+never calibrates above it. The prompt below is kept as the record of what was
+asked for; it is not open work.
+
 **What:** the epoch-2 live run terminated at cycle 2 of 24 with
 `state=failed`, `stop_reason=operational_failure`, and the typed error
 
