@@ -124,7 +124,7 @@ change.
     python scripts/wheel_smoke.py          passed: isolated V6-only contents, clean imports, exact
                                            entry points, module parity, MCP registration,
                                            and exact MCP schemas
-    python -u scripts/wheel_operational_smoke.py   launched, still running at 22 min
+    python -u scripts/wheel_operational_smoke.py   launched, still running after ~1.5 h
                                            when the tranche closed — see the note below
 
 The wheel smokes pin the public surface (console entry points, MCP tool set +
@@ -139,7 +139,7 @@ were run anyway rather than assumed:
     module parity, MCP registration, and exact MCP schemas". That is the
     evidence that the surface did not move.
   - `wheel_operational_smoke.py` — build-and-operate over a freshly installed
-    wheel — was launched and was still running after 22 minutes in this
+    wheel — was launched and was still running after ~1.5 hours in this
     container (it builds and pip-installs into a clean environment, and the
     fastembed dependency makes that slow here). It was left running rather
     than killed, and its result is NOT claimed. Recorded as residue, not as a
