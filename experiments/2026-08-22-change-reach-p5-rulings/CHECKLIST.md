@@ -1,5 +1,5 @@
 # Checklist for: codify two operator rulings on reach semantics (P5-reach)
-State: next=17 blockers=none
+State: next=20 blockers=none
 Map ids (from REQUEST.md's preflight, unchanged): DR-INV-frozen-surfaces,
 DR-SEAM-evaluation-x-rules (read before the subsystems; its shared
 `_substantive` surface is OUT of scope), DR-SUB-evaluation (the covering
@@ -216,20 +216,48 @@ One step per dr-execute-step invocation.
       done-when: git status --porcelain is empty AND git log -1 --stat names
       rehearsal.py, census.py and rehearsal-after-p5-rulings.json
 
-- [ ] 17. (all) Wheel smokes as a control — the public surface is untouched
+- [x] 17. (all) Wheel smokes as a control — the public surface is untouched
       (SPEC.md: wheel_smoke_pins == []), so both must pass unchanged.
       done-when: python scripts/wheel_smoke.py -> exit 0 AND
       python -u scripts/wheel_operational_smoke.py -> exit 0 (both pasted)
 
-- [ ] 18. (all) Map check, FULL mode (not --fast: this tranche changed src/).
+      PROOF:
+      wheel smoke passed: isolated V6-only contents, clean imports, exact
+      entry points, module parity, MCP registration, and exact MCP schemas
+      wheel_smoke rc=0
+
+      wheel operational smoke passed: installed setup, explicit qualification
+      (80 qualification calls; 410 total calls), readiness, question-only
+      reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+      restart, budget ceiling, and pre-V6 fail-closed admission
+      wheel_operational_smoke rc=0
+
+      No pin moved, as SPEC.md forecast (wheel_smoke_pins == []).
+
+- [x] 18. (all) Map check, FULL mode (not --fast: this tranche changed src/).
       done-when: python tools/docs_verify.py -> failures are exactly C9's 3
       pre-existing shallow-clone ones (pasted)
 
-- [ ] 19. (all) Full gate: python -m pytest tests/ -q -n 4. Run it on an idle
+      PROOF (re-run at the boundary, on an idle box, alone):
+      docs_verify [full]: 61 documents, 969 checks, 4 workers
+        FAIL CON-run-identity.md:200
+        FAIL CON-run-identity.md:202 -> fatal: ambiguous argument '1637e808'
+        FAIL CON-run-identity.md:204 -> fatal: ambiguous argument 'f304fec1'
+      docs_verify: 3 failed
+
+- [x] 19. (all) Full gate: python -m pytest tests/ -q -n 4. Run it on an idle
       box, never concurrently with docs_verify.
       done-when: output ends "N passed, 0 failed" with N >= 3818 + 2 new
       tests, allowing for C9's 5 known MCP-thread flakes re-run serially and
       shown green (pasted)
+
+      PROOF:
+      3820 passed, 6 skipped in 861.17s (0:14:21)
+
+      3818 baseline + exactly the 2 new pins = 3820. 0 failed. C9's 5
+      MCP-thread flakes did not fire, so no serial re-run was needed. Run
+      alone: the wheel smokes and docs_verify had both finished first (the
+      one-instrument-at-a-time rule).
 
 - [ ] 20. (all) [COMMIT] Push and confirm clean tree.
       done-when: git status --porcelain is empty AND git rev-parse HEAD ==
