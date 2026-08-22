@@ -1,0 +1,51 @@
+# Reach-rich tranche: SOLO source configuration (PREREG.md §3).
+#
+# Every V3 canonical role sits on ONE route -- glm-5.2 on Ollama Cloud.
+# Config.roles defaults to {} and any role omitted here gets zero routes,
+# so every role is populated explicitly even though they share one profile.
+#
+# No judge seats, no school seats, no criticism policy: the brief's
+# "solo configuration, no judges". Nothing in this experiment needs
+# status-changing criticism -- the measure (reach) is what is under test,
+# and adding judge seats would change the qualification subject digest for
+# no gain (a cache miss worth ~14 min and ~1160 calls).
+#
+# max_tokens is 32768 rather than the 16384 the earlier live tranches
+# pinned: glm-5.2 is a reasoning model and a hard question can burn the
+# whole completion cap on hidden reasoning and emit nothing (typed seat
+# failure). The ledgered response to that is a bigger cap, not a diagnosis.
+
+roles:
+  conjecturer: &solo_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    reasoning: "none"
+    timeout_s: 180
+    output_mode: json_object
+  argumentative_critic: *solo_glm
+  defender: *solo_glm
+  variator: *solo_glm
+  judge: *solo_glm
+  summarizer: *solo_glm
+  synthesizer: *solo_glm
+  vision_critic: *solo_glm
+  property_designer: *solo_glm
+  thesis: *solo_glm
+  grounding_reviewer: *solo_glm
+
+# Shipped defaults, restated so the solo posture is explicit rather than
+# inherited: no judge seats, no school seats, legacy criticism, no
+# status authority. RESEARCH_BACKEND's own shipped default is "agent"
+# (ON), so turning it off must be written down.
+JUDGE_SEATS_ENABLED: false
+SCHOOL_SEATS_ENABLED: false
+LEGACY_CRITICISM_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: false
+RESEARCH_BACKEND: null
