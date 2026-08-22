@@ -1,8 +1,8 @@
 # Checklist for: the two-call seat protocol
-State: next=5a blockers=none (SPEC.md Amendment 1 added at step 5: the
-       per-leg budget needs its own defaulted field, because invariants.py's
-       attempt-limits check admits only route-authorized caps and widening it
-       would write to a frozen surface, which R17 forbids)
+State: next=12 blockers=diff_budget EXCEEDED at step 11 (1003 insertions vs the
+       574 ceiling this spec set itself). Presented to the operator as a STOP
+       with priced options; every line traces to an R number and the ring is
+       green, so the overrun is an estimating error, not scope creep.
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
@@ -110,7 +110,7 @@ them, never into a trailing docs step:
       reports a collection error or failures naming `deepreason.llm.split`
       (paste it) — RED is the expected result of this step.
 
-- [ ] 5a. (S6, S9, SPEC Amendment 1) Add the fourth defaulted field
+- [x] 5a. (S6, S9, SPEC Amendment 1) Add the fourth defaulted field
       `split_max_tokens: int | None = None` to `LLMAttempt`, and extend
       `docs/map/SUB-ontology.md`'s check to cover it. `max_tokens` is NOT
       touched: it keeps its route-authorized meaning and its `attempt-limits`
@@ -118,7 +118,7 @@ them, never into a trailing docs step:
       done-when: `python -c "from deepreason.ontology.event import LLMAttempt as A; assert A(prompt_ref='blob:p').split_max_tokens is None; print('ok')"` -> `ok`
       AND `python -m pytest tests/test_process_metadata.py tests/test_seats_evidence_law.py -q` ends `0 failed`.
 
-- [ ] 6. (S1) Create `src/deepreason/llm/split.py`: `SplitPlan`, `plan_split`,
+- [x] 6. (S1) Create `src/deepreason/llm/split.py`: `SplitPlan`, `plan_split`,
       `deliberation_request`, `extraction_request`, `SPLIT_LEG_REASON`,
       `SPLIT_LEG_EXTRACT`. Pure — no I/O, no route mutation. `plan_split`
       enforces `B_a = min(extraction_tokens, ceiling)`,
@@ -126,7 +126,7 @@ them, never into a trailing docs step:
       done-when: `python -m pytest tests/test_split_budget_protocol.py -q -k "plan or ceiling or auto or envelope"`
       ends `N passed, 0 failed` (paste it).
 
-- [ ] 7. (S2) Add the per-request overrides to
+- [x] 7. (S2) Add the per-request overrides to
       `src/deepreason/llm/endpoints.py`: keyword-only `max_tokens`,
       `reasoning` (sentinel-defaulted) and `allow_empty_content` on
       `build_body`/`complete`; `last_reasoning_trace` captured from
@@ -137,14 +137,14 @@ them, never into a trailing docs step:
       done-when: `python -m pytest tests/test_llm.py tests/test_providers.py tests/test_vision.py tests/test_llm_repair_capabilities.py -q`
       ends `N passed, 0 failed` (paste it).
 
-- [ ] 8. (S5) Add `SPLIT_BUDGET_SEAT_PROTOCOL: Literal["auto","on","off"] =
+- [x] 8. (S5) Add `SPLIT_BUDGET_SEAT_PROTOCOL: Literal["auto","on","off"] =
       "auto"` and `SPLIT_BUDGET_EXTRACTION_TOKENS: int = 512` to
       `src/deepreason/config.py`. Config, never the manifest
       (DR-INV-frozen-surfaces).
       done-when: `python -c "from deepreason.config import Config; c=Config(); print(c.SPLIT_BUDGET_SEAT_PROTOCOL, c.SPLIT_BUDGET_EXTRACTION_TOKENS)"` -> `auto 512`
       AND `python -m pytest tests/test_config.py -q` ends `0 failed`.
 
-- [ ] 9. (S3, S4, S9) Wire the split dispatch into
+- [x] 9. (S3, S4, S9) Wire the split dispatch into
       `src/deepreason/llm/adapter.py` (two legs at attempt 0 when armed; the
       R18 repair-bundle refusal with a typed `split_notice`; `reservation_bound`
       left byte-identical so the transactional bound check is unchanged;
@@ -160,11 +160,41 @@ them, never into a trailing docs step:
       `N passed, 0 failed` (paste it) AND
       `python tools/docs_verify.py --fast 2>&1 | tail -3` shows no NEW failure.
 
-- [ ] 10. (S3) Ring regression for the seat call path.
-      done-when: `python -m pytest tests/test_adapter_attempt_logging.py tests/test_budget.py tests/test_model_firewall.py tests/test_compact_profiles.py tests/test_wire_contracts.py tests/test_v6_global_dispatch_guard.py tests/test_v6_live_repair_transactions.py tests/test_v6_bridge_transactions.py tests/test_seats_evidence_law.py -q`
-      ends `N passed, 0 failed` (paste it).
+- [x] 10. (S3) Ring regression for the seat call path.
+      done-when: the ring ends `N passed, 0 failed` (paste it).
+      PROOF, run in two halves so neither exceeded the foreground limit:
 
-- [ ] 11. (S3, S9) [COMMIT] commit steps 5-10 as one change ("the split-budget
+          tests/test_adapter_attempt_logging.py tests/test_budget.py
+          tests/test_model_firewall.py tests/test_compact_profiles.py
+          tests/test_wire_contracts.py tests/test_seats_evidence_law.py
+          tests/test_process_metadata.py tests/test_llm.py
+            -> 110 passed in 12.39s
+
+          tests/test_v6_global_dispatch_guard.py
+          tests/test_v6_live_repair_transactions.py
+          tests/test_v6_bridge_transactions.py
+          tests/test_llm_repair_capabilities.py
+          tests/test_split_budget_protocol.py tests/test_config.py
+          tests/test_providers.py tests/test_vision.py
+            -> 165 passed in 382.02s (0:06:22)
+
+          275 passed, 0 failed across the whole seat call path.
+
+      SPLIT REGRESSIONS: 19 passed, 0 failed.
+      MAP: the two counts this plan predicted would move were measured, and
+      only one did — `self.blobs.put` went 5 -> 8 (the deliberation prompt, its
+      raw prose, and the emission prompt) and SUB-llm.md's pin is updated in
+      this same commit; `spend = _spend(` held at 9, so
+      SEAM-llm-x-workflow.md is untouched.
+      COMMIT GATES:
+          diff_budget e1ea05e82 --ceiling 574 -> EXCEEDED (1003 insertions).
+            STOP raised to the operator; see the tranche report.
+          blast_radius --against e1ea05e82 -> CONTACT, but every entry is one
+            of the `complete` substring false positives SPEC.md's forecast
+            already names verbatim and R17 rowed; no new entry, and every
+            reachability direction is `unchanged`. No drift.
+
+- [x] 11. (S3, S9) [COMMIT] commit steps 5-10 as one change ("the split-budget
       seat protocol") with the map moving in the same commit, and push with
       retry.
       done-when: `git status --porcelain` empty for tracked files AND HEAD

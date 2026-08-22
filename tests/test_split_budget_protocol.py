@@ -51,12 +51,22 @@ TRUNCATED_TRACE = (
 )
 
 
-def _endpoint(responses, *, provider="ollama", reasoning="high", max_tokens=4096):
+def _endpoint(
+    responses,
+    *,
+    provider="ollama",
+    reasoning="high",
+    max_tokens=4096,
+    finish_reasons=None,
+    reasoning_traces=None,
+):
     endpoint = MockEndpoint(
         responses,
         name="https://ollama.com/v1",
         model="glm-5.2",
         max_tokens=max_tokens,
+        finish_reasons=finish_reasons,
+        reasoning_traces=reasoning_traces,
     )
     # route_from_endpoint reads both by getattr, so the frozen lease this
     # adapter mints describes a real reasoning seat rather than a bare mock.
@@ -105,6 +115,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
     )
     assert not off.armed
     assert off.notice
+    assert not off.disclosed
 
     # A provider with no reasoning adapter cannot be asked to think or to stop
     # thinking, so "auto" leaves it alone — and says why.
@@ -114,6 +125,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
     )
     assert not no_knob.armed
     assert no_knob.notice
+    assert not no_knob.disclosed
 
     # An unset knob is NOT off: a reasoning model with no explicit setting
     # still thinks (llm/providers.py::reasoning_disabled), so auto arms.
@@ -133,7 +145,7 @@ def test_auto_arms_for_a_reasoning_route_and_not_for_a_non_thinking_one():
 # --- R9/R10: the ceiling law -------------------------------------------------
 
 
-@pytest.mark.parametrize("ceiling", [513, 1024, 4096, 20480, 32768])
+@pytest.mark.parametrize("ceiling", [512, 513, 1024, 4096, 20480, 32768])
 def test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling(ceiling):
     """Implements R9/R10: both calls' budgets sit inside the lease ceiling.
 
@@ -160,7 +172,9 @@ def test_a_ceiling_too_small_to_split_is_a_notice_not_a_split():
     """Implements R3/R9: rather than hand the reasoning leg zero tokens, the
     protocol stands down and records why."""
 
-    for ceiling in (0, 1, 256, 512):
+    # 511 is the boundary: the emission leg takes at most half the ceiling and
+    # needs 256 to close an envelope, so 512 is the smallest divisible one.
+    for ceiling in (0, 1, 256, 511):
         plan = plan_split(
             mode="on", ceiling=ceiling, extraction_tokens=512,
             provider="ollama", reasoning="high",
@@ -188,8 +202,16 @@ def test_the_wire_budgets_obey_the_same_three_bounds(tmp_path):
     assert len(sent) == 2, endpoint.calls
     assert all(0 < n <= ceiling for n in sent), sent
     assert sum(sent) <= ceiling, sent
-    assert call.attempt_trace[0].max_tokens == sent[0]
-    assert call.attempt_trace[1].max_tokens == sent[1]
+
+    # The record says the same three things about the wire (SPEC Amendment 1).
+    recorded = [a.split_max_tokens for a in call.attempt_trace]
+    assert recorded == sent
+    assert sum(recorded) <= ceiling
+
+    # And max_tokens keeps the route-authorized envelope on both legs, which is
+    # the only value invariants.py's attempt-limits check admits. Recording a
+    # leg's share there would make every split call fail replay validation.
+    assert [a.max_tokens for a in call.attempt_trace] == [ceiling, ceiling]
 
 
 # --- R4/R11: the failure this tranche exists to remove -----------------------
@@ -221,7 +243,15 @@ def test_the_split_path_extracts_an_answer_from_a_truncated_trace(tmp_path):
     protocol switched off raises, so the assertion cannot pass vacuously.
     """
 
-    armed = _endpoint([TRUNCATED_TRACE, ANSWER])
+    # The seat this tranche exists for: thinking, it spends the whole cap on
+    # hidden reasoning and emits nothing at all; not thinking, the same model
+    # serializes without difficulty. That difference is MODAL, not budgetary --
+    # which is why more tokens do not fix it and a second, non-thinking call
+    # does.
+    def _thinks_itself_dry(prompt, knobs):
+        return ANSWER if knobs.get("reasoning") == "none" else ""
+
+    armed = _endpoint(_thinks_itself_dry, reasoning_traces=[TRUNCATED_TRACE])
     out, call = _adapter(armed, tmp_path / "on", mode="on").call(
         "summarizer", "PACK", ProseOutput
     )
@@ -236,11 +266,20 @@ def test_the_split_path_extracts_an_answer_from_a_truncated_trace(tmp_path):
     assert len({a.route_sha256 for a in call.attempt_trace}) == 1
     assert call.tokens > 0
 
-    off = _endpoint([TRUNCATED_TRACE, ANSWER])
+    # The deliberation the emission leg actually worked from is the one the
+    # provider produced, recovered from its side channel rather than discarded
+    # at the wire.
+    assert TRUNCATED_TRACE in armed.calls[1]["prompt"]
+    assert len(armed.calls) == 2
+
+    # MUTATION PROOF: the SAME model, undivided, burns all three of its allowed
+    # completions and produces no answer at all -- SPEC.md M10 exactly.
+    off = _endpoint(_thinks_itself_dry, reasoning_traces=[TRUNCATED_TRACE])
     with pytest.raises(SchemaRepairError):
         _adapter(off, tmp_path / "off", mode="off").call(
             "summarizer", "PACK", ProseOutput
         )
+    assert len(off.calls) == 3
 
 
 def test_the_split_path_survives_a_null_completion_on_the_reasoning_leg(tmp_path):
@@ -252,7 +291,7 @@ def test_the_split_path_survives_a_null_completion_on_the_reasoning_leg(tmp_path
     extraction leg whatever trace exists (here, none) and still emits.
     """
 
-    endpoint = _endpoint([None, ANSWER])
+    endpoint = _endpoint([None, ANSWER], finish_reasons=["length", "stop"])
     out, call = _adapter(endpoint, tmp_path, mode="on").call(
         "summarizer", "PACK", ProseOutput
     )
@@ -298,6 +337,7 @@ def test_a_provider_that_cannot_disable_thinking_still_compiles(tmp_path):
     )
     assert plan.armed
     assert plan.notice
+    assert plan.disclosed
     assert plan.extract_reasoning is None
 
     endpoint = _endpoint([TRUNCATED_TRACE, ANSWER], provider="generic", reasoning=None)
@@ -313,13 +353,39 @@ def test_a_provider_that_cannot_disable_thinking_still_compiles(tmp_path):
 def test_a_seat_that_cannot_split_records_a_notice_and_behaves_as_before(tmp_path):
     """Implements R3: standing down is recorded, and costs nothing else."""
 
-    endpoint = _endpoint([ANSWER], reasoning="none")
-    out, call = _adapter(endpoint, tmp_path, mode="auto").call(
+    # The protocol was asked for and the ceiling cannot carry two legs.
+    endpoint = _endpoint([ANSWER], max_tokens=256)
+    out, call = _adapter(endpoint, tmp_path, mode="on").call(
         "summarizer", "PACK", ProseOutput
     )
     assert out.prose == "the extracted answer"
     assert _legs(call) == [""]
     assert call.attempt_trace[0].split_notice
+    assert call.attempt_trace[0].split_max_tokens is None
+
+
+def test_auto_says_nothing_about_a_seat_that_was_never_a_candidate(tmp_path):
+    """Implements SPEC Amendment 1: a notice discloses an intent the run could
+    not honor, and under `auto` a non-reasoning seat expresses no such intent.
+
+    This is what keeps the blast-radius census honest. Recording a notice here
+    would stamp a constant string onto every attempt of every non-reasoning run
+    in the append-only record while saying nothing at all.
+    """
+
+    endpoint = _endpoint([ANSWER], reasoning="none")
+    _out, call = _adapter(endpoint, tmp_path, mode="auto").call(
+        "summarizer", "PACK", ProseOutput
+    )
+    assert _legs(call) == [""]
+    assert call.attempt_trace[0].split_notice == ""
+
+    # The planner still knows why, for a caller that asks.
+    plan = plan_split(
+        mode="auto", ceiling=4096, extraction_tokens=512,
+        provider="ollama", reasoning="none",
+    )
+    assert plan.notice and not plan.disclosed
 
 
 # --- R8: the emission schema stays light ------------------------------------

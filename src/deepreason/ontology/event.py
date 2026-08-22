@@ -102,6 +102,12 @@ class LLMAttempt(FrozenRecord):
     # the protocol ran as configured. A notice is never a refusal: the call
     # proceeds undivided and records why.
     split_notice: str = ""
+    # The completion cap THIS leg put on the wire, which is a division of
+    # max_tokens rather than a substitute for it: max_tokens stays the envelope
+    # the route or a logged controller policy AUTHORIZED, because that is the
+    # value replay validation admits and the token reservation booked. None on
+    # every undivided call.
+    split_max_tokens: int | None = Field(default=None, gt=0)
 
     @field_validator("transport_diagnostics", mode="after")
     @classmethod
