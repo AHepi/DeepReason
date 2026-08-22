@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=15 blockers=LAUNCH STOP - awaiting the operator env file (OLLAMA_API_KEY) and QO1
+State: next=16 blockers=QO1 ANSWERED (two-phase ladder authorised, R16); still waiting on the OLLAMA_API_KEY env file at this tranche dir
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -116,7 +116,7 @@ step 14 proves it.
       done-when: step 12's empty diff is quoted in the commit message, and
       `git status --porcelain` is empty with the branch head on origin.
 
-- [ ] 15. (S7, R4, QO1) LAUNCH STOP. Report to the operator: the vehicle,
+- [~] 15. (S7, R4, QO1) LAUNCH STOP. Report to the operator: the vehicle,
       the two deviations D1/D2, the priced fork QO1, and the request for the
       `env` file carrying `OLLAMA_API_KEY` at
       `experiments/2026-08-22-change-epoch3-second-lineage/env`.
@@ -360,3 +360,22 @@ advance. The instruments this tranche DID add are proven by their own
 executions, pasted above: the builder's compile (step 3), the behavior diff
 (step 4), both preflights (steps 5, 7), and the offline DRY_RUN of the whole
 ladder (step 10).
+
+### Step 15 (S7, R4, QO1) — LAUNCH STOP, half discharged
+
+The fork is answered: **"Two-phase ladder (recommended)"**, ledgered verbatim
+as REQUEST.md Amendment 1 and numbered R16. SPEC.md's "Questions for
+operator" section is now closed, and deviations D1 (new root) and D2
+(inherited criteria) are accepted with it — both were in the option text the
+operator chose and in PREREG_EPOCH3.md §3, frozen beforehand.
+
+The credential is NOT supplied:
+
+    $ ls -la experiments/2026-08-22-change-epoch3-second-lineage/env
+    ENV STILL ABSENT
+    $ git check-ignore -v experiments/2026-08-22-change-epoch3-second-lineage/env
+    .gitignore:48:experiments/*/env
+
+So the step is marked `[~]`, not `[x]`. The ladder's first guard exits rc=1
+on a missing `env`, and nothing past this point may run. Step 16 begins the
+moment the file exists; no other work is outstanding.

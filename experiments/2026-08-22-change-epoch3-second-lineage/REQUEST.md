@@ -183,3 +183,53 @@ the brief asserts "state=failed is a typed terminal", and
 
 ## Amendments
 (append-only)
+
+### Amendment 1 — 2026-08-22, the launch-boundary fork (QO1) answered
+
+Asked at CHECKLIST.md step 15, after SPEC.md established that the vehicle
+R6a names is refused three ways on the root R6a names (M3/M4/M5) and that
+the property R1 wants is still deliverable on a new root (M7).
+
+The question put to the operator, verbatim as asked:
+
+> Epoch 3 is built and rehearsed offline. Which road do you want, and I
+> need the OLLAMA_API_KEY env file at
+> experiments/2026-08-22-change-epoch3-second-lineage/env before anything
+> launches.
+>
+> - Two-phase ladder (recommended): Launch as built: phase 1 (12 cycles),
+>   amend to add the second seed lineage, phase 2 (12 cycles). Delivers
+>   what you asked for. Cost: one extra qualification battery (~14 min,
+>   ~1160 calls) because enabling attached evidence moves the
+>   qualification subject. Two independent routes to a reach carrier.
+> - Phase 1 only, unchanged manifest: Relaunch the reach-rich design as-is
+>   on a retired root: qualification is a cache hit (~1s), no second
+>   lineage. The measured evidence says the reach carrier exists in a
+>   single-seed run that survives past cycle 2, so this alone may produce
+>   reach_set > 0 — but it does not deliver R1.
+> - Fix the amend defect first: Stop here and route P1-epoch3
+>   (question-only amendment cannot be continued) through the defect
+>   workflow before minting anything.
+
+The operator's answer, verbatim:
+
+> "Two-phase ladder (recommended)"
+
+R16 (behavior): the two-phase ladder as built is AUTHORISED to launch —
+phase 1 (12 cycles / 200 000 tokens), the amendment adding the second seed
+lineage, phase 2 (12 cycles / 200 000 tokens). This settles SPEC.md's QO1
+and, with it, deviations D1 (the lineage lands in a new root
+`bb0455384ea09b5b…`, not in `40e713b3…`) and D2 (the second lineage's
+criteria are inherited, not distinct) — both were stated in the question's
+own framing ("Delivers what you asked for", "adds the second seed
+lineage") and in PREREG_EPOCH3.md §3, frozen before the question was put.
+
+The re-qualification cost (~14 min, ~1160 calls) is accepted with the
+answer, having been priced in the option text.
+
+NOT settled by this answer, and still outstanding: the OLLAMA_API_KEY env
+file. The same message asked for it and it has not appeared at
+`experiments/2026-08-22-change-epoch3-second-lineage/env`. The ladder's own
+first guard exits rc=1 without it (C3: "THE OPERATOR SUPPLIES the
+OLLAMA_API_KEY env file at the launch step"), so CHECKLIST.md step 15
+remains the tranche's blocker.

@@ -399,6 +399,12 @@ says the carrier exists either way)? Recommendation: proceed with the
 two-phase ladder — R1 is explicit, the added cost is one battery, and the
 operator's own law prices provider calls below agent work.
 
+**ANSWERED 2026-08-22: "Two-phase ladder (recommended)."** Ledgered verbatim
+as REQUEST.md Amendment 1 / R16. QO1 is closed and deviations D1 and D2 are
+accepted with it. This section is now empty of open questions; the tranche's
+only remaining blocker is the credential file, which is C3's obligation and
+not a question.
+
 ---
 
 ## Out of scope (explicit)
