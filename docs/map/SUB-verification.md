@@ -159,8 +159,15 @@ when `stats` was otherwise empty.
   wrote against, or every steered run verifies as invalid.** A per-attempt
   `max_tokens` differing from its route's is authorized only by a prior
   controller policy whose value sits inside that knob's barrier. That barrier is
-  anchored per run to the cap the manifest assigned the role, so the check calls
-  `cap_envelope(knob, _configured_role_cap(knob))`; reading the static
+  anchored per run to the cap the manifest assigned the knob's SEAT INSTANCE
+  (Rung 1b-ii, 2026-08-21) — a role bound to one seat anchors to that seat under
+  the bare role name, a role bound to several anchors `cap:<role>#<seat>` to
+  that seat's own route — so the check calls
+  `cap_envelope(knob, _configured_role_cap(knob))`, and
+  `_configured_role_cap` delegates to `allocation.route_cap_for_knob`, the ONE
+  derivation the controller and this validator must share. Two copies of that
+  rule is how the writer and the reader silently stop agreeing, and a steered
+  cap survives replay only while they agree. Reading the static
   `ENVELOPES` table instead restores the pre-2026-08-13 state where the widest
   ceiling was 5,000 and a production run that actually steered — every one of
   them pins 16,384 — would fail replay. The asymmetry to respect when touching
@@ -169,9 +176,15 @@ when `stats` was otherwise empty.
   (`experiments/2026-08-13-defect-controller-steering-inert/`) was measurably a
   no-op on the past — zero of 104 committed logs contain a controller policy
   body, so `authorized_controller_limits` is empty in all of them — and the
-  42-root sweep is the instrument that must confirm that before any future
-  change here.
-`check: grep -q "cap_envelope(knob, _configured_role_cap(knob))" src/deepreason/invariants.py && grep -q "def _configured_role_cap" src/deepreason/invariants.py && python -m pytest tests/test_controller_steering_parity.py::test_replay_authorizes_a_cap_the_controller_could_legitimately_set tests/test_controller_steering_parity.py::test_replay_still_rejects_a_cap_beyond_the_anchored_barrier tests/test_process_metadata.py::test_invariants_reject_unlogged_effective_transport_limit -q`
+  root sweep is the instrument that must confirm that before any future
+  change here. The 2026-08-21 seat-instance change did run it, at 107 roots,
+  before and after, with an EMPTY diff, and re-measured the same census on the
+  larger set: still zero policy bodies, so still nothing this predicate could
+  re-decide (`experiments/2026-08-21-change-rung1b-ii-signal-consumption/proof/`).
+  Note the census is the stronger half and the cheaper one — it says why no
+  verdict COULD move, in seconds, where the sweep takes about 100 minutes per
+  pass to say that none DID. Run the census first; run the sweep to confirm it.
+`check: grep -q "cap_envelope(knob, _configured_role_cap(knob))" src/deepreason/invariants.py && grep -q "def _configured_role_cap" src/deepreason/invariants.py && grep -q "route_cap_for_knob(manifest.roles, knob)" src/deepreason/invariants.py && python -m pytest tests/test_controller_steering_parity.py::test_replay_authorizes_a_cap_the_controller_could_legitimately_set tests/test_controller_steering_parity.py::test_replay_still_rejects_a_cap_beyond_the_anchored_barrier tests/test_process_metadata.py::test_invariants_reject_unlogged_effective_transport_limit -q`
 - **A new `fail()` name defaults to integrity, and integrity decides `valid`.**
   `_legacy_channel` routes anything it does not recognise to `integrity`, and
   `valid` is `integrity_valid and security_valid`. Adding a check without

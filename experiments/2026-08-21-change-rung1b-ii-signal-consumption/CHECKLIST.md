@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=29 blockers=none
+State: next=32 blockers=none (re-plan after VALIDATION round 1 FAIL)
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -146,7 +146,7 @@ step 5. A regression test first seen green proves nothing.
       RED on the mutated copy and GREEN on the repo tree, and
       `git status --porcelain` is empty
 
-- [ ] 24. (S1, S3, S5, S6, S8) [COMMIT] Commit the behaviour, matrix,
+- [x] 24. (S1, S3, S5, S6, S8) [COMMIT] Commit the behaviour, matrix,
       open-loop and evidence tests plus the mutation proof.
       done-when: branch pushed; `git status --porcelain` empty
 
@@ -171,20 +171,20 @@ step 5. A regression test first seen green proves nothing.
       `CON-run-identity.md` shallow-clone failures named in C8, and no others;
       `--audit` reports no newly-refused check
 
-- [ ] 28. (S9) [COMMIT] Commit the map.
+- [x] 28. (S9) [COMMIT] Commit the map.
       done-when: branch pushed; `git status --porcelain` empty
 
-- [ ] 29. (all) Full gate: `python -m pytest tests/ -q -n 4`, run alone.
+- [x] 29. (all) Full gate: `python -m pytest tests/ -q -n 4`, run alone.
       done-when: output ends `0 failed` (pasted). Any MCP-thread failure is
       re-run isolated before attribution, per C8.
 
-- [ ] 30. (all) Wheel smokes: `python scripts/wheel_smoke.py` and
+- [x] 30. (all) Wheel smokes: `python scripts/wheel_smoke.py` and
       `python -u scripts/wheel_operational_smoke.py`.
       done-when: both exit 0 (pasted). This tranche adds a module but no
       console entry point or MCP tool, so no pin is expected to move; if one
       does, the pin is updated in THIS step's commit.
 
-- [ ] 31. (all) [COMMIT] push and confirm clean tree.
+- [x] 31. (all) [COMMIT] push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND branch head is on origin
 
 
@@ -462,3 +462,30 @@ All three failures are on git history this container's shallow clone does not
 carry, not on any claim this tranche touched. The 7 new checks in
 `INV-signal-contract.md` and the 2 in `REC-add-signal.md` are inside the 940 and
 pass; `--audit` confirms none of them is a check that cannot fail.
+
+
+## Re-plan — appended after VALIDATION.md round 1 verdict FAIL
+
+Only the steps implicated by the finding. Checked steps above are untouched;
+their pasted outputs are the audit trail.
+
+- [ ] 32. (S9) `docs/map/SUB-verification.md` Traps: the anchoring trap says the
+      barrier is "anchored per run to the cap the manifest assigned the ROLE".
+      Make it the SEAT INSTANCE, name `allocation.route_cap_for_knob` as the one
+      derivation both sides share, and record that the sweep this trap demands
+      was run at 107 roots with an empty diff.
+      done-when: that document's own `check:` line for the anchoring trap exits 0
+
+- [ ] 33. (S9) `docs/map/SUB-scheduler.md` Traps: "a role's assigned cap may
+      only WIDEN the barrier" and the authority record's "steerable roles"
+      become seat instances, with one sentence on why a single-seat role keeps
+      the bare role spelling.
+      done-when: both `check:` lines on those two traps exit 0
+
+- [ ] 34. (all) [COMMIT] Re-run `docs_verify` full + `--stale`, confirm the two
+      documents no longer appear as this tranche's stale entries, commit, push.
+      done-when: `docs_verify` reports the 3 baseline failures and no others,
+      and `--stale` lists neither `SUB-verification.md` nor `SUB-scheduler.md`
+
+- [ ] 35. (all) Re-validate: `dr-validate-change` round 2.
+      done-when: VALIDATION.md carries a round-2 section with verdict PASS

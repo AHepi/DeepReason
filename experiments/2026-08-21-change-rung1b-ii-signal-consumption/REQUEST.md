@@ -261,3 +261,40 @@ first. 1a's DISCIPLINE is therefore upheld, not overturned: the grant was given
 against a committed, measured design, which is exactly what 1a demanded. 1a's
 CONCLUSION for this contact — that it is off-plan — is superseded by 1b. No
 other frozen surface is granted by 1b, and none is touched.
+
+### Amendment 2 — 2026-08-22, retire the root sweep
+
+Operator, verbatim, mid-tranche:
+
+> ok. root sweep needs removal. It doesn't matter whether old records still
+> verify.
+
+| # | Requirement | Source |
+|---|---|---|
+| R21 | The **root sweep is removed**. "It doesn't matter whether old records still verify" — the instrument, and every obligation to run it, goes. | Amendment 2 |
+
+**Routing decision, argued rather than assumed.** R21 is not the consumption
+side of the signal contract; it is its own change, and CLAUDE.md's law is one
+tranche, one goal. Measured blast radius outside `experiments/` (whose committed
+tranche artifacts are immutable records and are never edited): **50 references
+across `tools/root_sweep.py`, `CLAUDE.md`, four skills
+(`dr-drive-harness`, `dr-spec-change`, `dr-ask-the-right-question`,
+`dr-audit-broken`), `docs/AUDIT_BASELINES.md`, seven `docs/map/` documents,
+`docs/harness-spec-v1.7-amendment.md`, three `docs/proposals/` plans, and
+`tests/test_diff_budget.py`.** That is a tranche, not a step. Parked as P4 with
+a ready-to-send prompt and the census above.
+
+**What this tranche DOES do about it, because the collision is immediate.**
+Step 32 was editing the one map trap that MANDATES the sweep
+(`SUB-verification.md`: "the 42-root sweep is the instrument that must confirm
+that before any future change here"). Writing that sentence forward now would
+ship a document contradicting a standing operator instruction, so the mandate is
+removed there and replaced with the census, which is the cheaper and stronger
+instrument for the same question. No other document is touched for R21, and
+`tools/root_sweep.py` is left in place for its own tranche.
+
+**What this does NOT retract.** The sweep evidence already taken in this tranche
+(`proof/sweep_before.txt`, `sweep_after.txt`, empty diff) stays in the record as
+what it was: a measurement taken while the instrument still stood, discharging
+grant condition 1 (R15) on the day it was asked for. R21 retires the
+obligation going forward; it does not unmake a measurement already made.
