@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=1 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -13,7 +13,7 @@ not created here — writing a map document is not in this tranche's scope
 No `src/` or `tests/` step appears anywhere in this plan. That is C1, and
 step 14 proves it.
 
-- [ ] 1. (S4) Fix the P8-reach ladder invocation: in
+- [x] 1. (S4) Fix the P8-reach ladder invocation: in
       `experiments/2026-08-22-live-reach-rich-run/reach_run.sh` line 101,
       replace `python -m deepreason --root "$ROOT" results` with
       `python -m deepreason results "$ROOT"`.
@@ -23,7 +23,7 @@ step 14 proves it.
       AND `bash -n experiments/2026-08-22-live-reach-rich-run/reach_run.sh`
       -> rc=0
 
-- [ ] 2. (S4) [COMMIT] Prove the corrected invocation answers, against the
+- [x] 2. (S4) [COMMIT] Prove the corrected invocation answers, against the
       retired epoch-2 root, and commit the one-line fix.
       done-when: `python -m deepreason results
       experiments/2026-08-22-live-reach-rich-run/run` prints a summary whose
@@ -153,3 +153,36 @@ step 14 proves it.
       requirement-by-requirement reconciliation.
       done-when: VALIDATION.md verdict line is PASS and DELIVERY.md carries
       an R1-R15 table with no unaddressed row.
+
+---
+
+## Step outputs (pasted; the audit trail)
+
+### Step 1 (S4) — P8-reach ladder invocation fixed
+
+    $ grep -c -- '--root "$ROOT" results' experiments/2026-08-22-live-reach-rich-run/reach_run.sh
+    0
+    $ grep -c 'deepreason results "$ROOT"' experiments/2026-08-22-live-reach-rich-run/reach_run.sh
+    1
+    $ bash -n experiments/2026-08-22-live-reach-rich-run/reach_run.sh
+    rc=0
+    reach_run.sh:101  python -m deepreason results "$ROOT" > "$HERE/results.txt" 2>&1 || true
+
+### Step 2 (S4) — the corrected invocation answers, against the retired root
+
+    $ python -m deepreason results experiments/2026-08-22-live-reach-rich-run/run
+    # Results for .../experiments/2026-08-22-live-reach-rich-run/run
+      (resolved from a root)
+    ## Run
+      run id: 40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c
+      state: failed
+      stop_reason: operational_failure
+      cycles completed: 2
+      tokens spent vs budget: 0 / 400000
+    ## Artifacts
+      accepted / refuted / suspended: 55 / 1 / 0
+
+Not `RESULTS_ROOT_NOT_FOUND`. The committed `epoch1-results.txt` of the
+reach-rich tranche is left exactly as it was: it is that tranche's honest
+record of what its ladder captured, and rewriting it would erase the
+evidence for P8-reach.
