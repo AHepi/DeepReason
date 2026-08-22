@@ -147,7 +147,7 @@ Supports: R6b has no surface. P4-reach's claim is re-derived, not assumed.
 **M7 — the vehicle that DOES exist: a manifest with attached evidence
 enabled, compiled offline, zero notices.**
 
-    EVIDENCE-ON manifest_sha256 685990000eea3d73b762d3d25bd9997abcca3e36cf9c577cfd8196f8bf1666bb
+    EVIDENCE-ON manifest_sha256 bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4
     baseline                    40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c
     attached enabled            True
     notices                     []
@@ -156,6 +156,25 @@ Built by passing `inquiry_capability_policy=<baseline policy>.model_copy(
 update={"attached_evidence": engaged_attached_evidence_policy(attached=True)})`
 to `compile_run_manifest`. Nothing in `src/` changes; the policy object is
 already public (`v6_policy.py:434`).
+
+Two corrections to this measurement, made when the builder was written and
+recorded rather than quietly absorbed:
+
+- The baseline policy cannot be hand-assembled. `engaged_inquiry_capability_policy()`
+  turns simulation ON, and flipping `enabled` back to False leaves its
+  non-zero bounds behind, which the model refuses
+  (`disabled simulation capability must have zero bounds`). The builder
+  therefore compiles ONCE without an inquiry policy — the same derivation
+  the reach-rich builder gets — reads the derived policy back, and moves the
+  one field.
+- The manifest sha first measured here, `685990000eea3d73…`, came from a
+  throwaway evidence-dossier provenance string. The committed builder names
+  itself honestly in `creation_provenance.supplied_by`, which moves the
+  dossier digest and hence the `run_input_digest`
+  (`62e75cb5…` -> `84832aad…`) and the manifest sha. The sha above is the
+  committed builder's actual output. This does NOT weaken M8: the
+  qualification subject payload excludes `run_input_digest`
+  (`qualification.py:265-266`), and the behavior diff below is unchanged.
 
 **M8 — the price of M7, measured not guessed: a full re-qualification.**
 `qualification.py:248-282` puts the whole manifest dump (minus `compiled_at`
@@ -171,7 +190,7 @@ manifests' behavior payloads:
 
 So the qualification subject digest moves and the ~14-minute / ~1160-call
 battery reruns once. Run identity also moves: the epoch-3 root is
-`685990000eea3d73…`, which is why no `RUN_ALREADY_STARTED` retirement of the
+`bb0455384ea09b5b…`, which is why no `RUN_ALREADY_STARTED` retirement of the
 reach-rich roots is needed.
 
 **M9 — the operator's stated blocker is a property of TRUNCATION, not of
@@ -237,7 +256,7 @@ manifest authorizes attached evidence (M7, M8). So this spec DELIVERS THE
 PROPERTY R1 asks for (a second problem lineage in the root, via an
 amendment epoch) and records the two deviations it costs:
 
-- **D1**: the lineage lands in a NEW root (`685990000eea3d73…`), not in
+- **D1**: the lineage lands in a NEW root (`bb0455384ea09b5b…`), not in
   `40e713b3…`. That root stays retired and untouched (C6).
 - **D2**: the second lineage's criteria are the seed's three predicates
   verbatim (M2), not "distinct predicates". The reach path this buys is
@@ -260,7 +279,7 @@ After: a sibling builder importing `QUESTION`, `CRITERIA`, `CONFIG_PATH`,
 the inquiry capability policy's `attached_evidence`, enabled via the public
 `v6_policy.engaged_attached_evidence_policy(attached=True)`.
 accept: `python build_manifest_epoch3.py <root>` prints
-`"manifest_sha256": "685990000eea3d73b762d3d25bd9997abcca3e36cf9c577cfd8196f8bf1666bb"`,
+`"manifest_sha256": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"`,
 `"compile_notices": []`, and a `manifest_behavior` diff against the
 reach-rich manifest touching ONLY the five `attached_evidence` fields of M8.
 

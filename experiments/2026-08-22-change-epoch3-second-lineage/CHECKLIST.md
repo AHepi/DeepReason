@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=3 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -30,23 +30,23 @@ step 14 proves it.
       state is `failed`, stop_reason `operational_failure`, violations 0
       (pasted) — NOT `RESULTS_ROOT_NOT_FOUND`.
 
-- [ ] 3. (S1) Write `build_manifest_epoch3.py`: import `QUESTION`,
+- [x] 3. (S1) Write `build_manifest_epoch3.py`: import `QUESTION`,
       `CRITERIA`, `CONFIG_PATH`, `COMPILED_AT` from the reach-rich
       `build_manifest.py` unchanged, and compile with the baseline inquiry
       capability policy `model_copy`d to carry
       `engaged_attached_evidence_policy(attached=True)`.
       done-when: `python build_manifest_epoch3.py <scratch-root>` prints
-      `"manifest_sha256": "685990000eea3d73b762d3d25bd9997abcca3e36cf9c577cfd8196f8bf1666bb"`
+      `"manifest_sha256": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"`
       and `"compile_notices": []` (pasted).
 
-- [ ] 4. (S1) Prove the epoch-3 manifest differs from the reach-rich one in
+- [x] 4. (S1) Prove the epoch-3 manifest differs from the reach-rich one in
       exactly the five `attached_evidence` fields and nothing else.
       done-when: a behavior-payload diff (manifest dump minus `compiled_at`
       and `run_input_digest`) lists exactly the five
       `/inquiry_capability_policy/attached_evidence/*` lines of SPEC.md M8
       and no other line (pasted).
 
-- [ ] 5. (S1) [COMMIT] Prove the epoch-3 root's seeded problem still carries
+- [x] 5. (S1) [COMMIT] Prove the epoch-3 root's seeded problem still carries
       the three subject predicates, by running the reach-rich tranche's OWN
       `preflight_seed.py` against the epoch-3 scratch root (no new code).
       done-when: `python
@@ -186,3 +186,57 @@ Not `RESULTS_ROOT_NOT_FOUND`. The committed `epoch1-results.txt` of the
 reach-rich tranche is left exactly as it was: it is that tranche's honest
 record of what its ladder captured, and rewriting it would erase the
 evidence for P8-reach.
+
+### Step 3 (S1) — the epoch-3 manifest builder compiles clean
+
+    $ python build_manifest_epoch3.py <scratch-root>
+    {
+      "attached_evidence_enabled": true,
+      "compile_notices": [],
+      "criteria": ["uhi-energy-balance@v1", "uhi-nocturnal-release@v1",
+                   "uhi-cross-city-modulator@v1"],
+      "evidence_dossier_digest": "9250d2a65525d09b209b60c348207b948a585f5b878eb1652ba9b68e6abaef95",
+      "manifest_sha256": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+      "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+      "run_input_digest": "84832aad24a47c15da7127c5588c37d7efc4ee8d246f2c441d48f780720fcae6"
+    }
+
+Two things were learned writing it, both corrected in SPEC.md M7 rather
+than absorbed: the baseline inquiry policy cannot be hand-assembled
+(`disabled simulation capability must have zero bounds`), so the builder
+compiles once without one and reads the derived policy back; and the
+manifest sha first measured in M7 came from a throwaway dossier provenance
+string, so the committed builder's honest `supplied_by` moves the
+`run_input_digest` and the sha. `qualification.py:265-266` drops
+`run_input_digest` from the subject payload, so step 4 is unaffected.
+
+### Step 4 (S1) — exactly the five attached_evidence fields moved
+
+    $ # manifest dump minus compiled_at and run_input_digest, reach-rich vs epoch-3
+    DIFF /inquiry_capability_policy/attached_evidence/enabled :: False -> True
+    DIFF /inquiry_capability_policy/attached_evidence/maximum_excerpt_bytes_per_source :: 0 -> 262144
+    DIFF /inquiry_capability_policy/attached_evidence/maximum_sources :: 0 -> 16
+    DIFF /inquiry_capability_policy/attached_evidence/maximum_sources_per_pack :: 0 -> 8
+    DIFF /inquiry_capability_policy/attached_evidence/maximum_total_bytes :: 0 -> 8388608
+    behavior payloads identical: False
+
+No other line. The qualification subject therefore moves for exactly the
+reason SPEC.md M8 predicted and for no other.
+
+### Step 5 (S1) — the three subject predicates still reach the seeded problem
+
+    $ python experiments/2026-08-22-live-reach-rich-run/preflight_seed.py <epoch-3 root>
+    reasoning-envelope-wf       evaluable=True  on=fail  off=fail  discriminates=False
+    uhi-energy-balance@v1       evaluable=True  on=pass  off=fail  discriminates=True
+    uhi-nocturnal-release@v1    evaluable=True  on=pass  off=fail  discriminates=True
+    uhi-cross-city-modulator@v1 evaluable=True  on=pass  off=fail  discriminates=True
+    seeded criteria: ['reasoning-envelope-wf', 'uhi-energy-balance@v1',
+                      'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+    rc=0
+
+Run with the reach-rich tranche's OWN script, no new code. It writes its
+report into its own tranche directory; `git status --porcelain
+experiments/2026-08-22-live-reach-rich-run/` is EMPTY afterwards, so the
+regenerated `preflight_seed.json` is byte-identical and no committed
+artifact of that tranche moved. The epoch-3 ladder re-checks that after
+every invocation (step 8).
