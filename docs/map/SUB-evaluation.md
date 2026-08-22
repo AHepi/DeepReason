@@ -1,5 +1,5 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: 7b82206d
+Verified-at: 7cae749c
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
 Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
@@ -166,7 +166,8 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
 | Sandbox CPU/memory/IPC limits or the worker protocol | `MEMORY_CAP_BYTES`, `IPC_CAP_BYTES`, `CPU_SECONDS_MAX`, `_cpu_seconds`, `oracle_sandbox.py` | `python -m pytest tests/test_oracle.py -k "sandbox or memory_bomb" -q` |
 | Which passing verdicts are immune to a preference or a prose case | `EXEC_PROGRAMS` in `oracle.py`; `_STRUCTURAL_PROGRAMS` in `measures/reach.py` | `python -m pytest tests/test_prose_refutation_boundaries.py -q` |
 | Which criteria are too weak to ground reach | `_STRUCTURAL_PROGRAMS` / `_substantive`, `measures/reach.py` | `python -m pytest "tests/test_reflexive_discipline.py::test_structural_programs_never_ground_reach" -q` |
-| The reach coverage threshold or the provisional rule | `reach_sweep`'s `coverage_min`; `Config.REACH_COVERAGE_MIN` | `python -m pytest "tests/test_reflexive_discipline.py::test_thin_coverage_yields_provisional_not_reach" -q` |
+| Which ARTIFACTS are too weak to ground reach | `reach_sweep`'s `E0` guard on `carried`, `measures/reach.py` | `python -m pytest "tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach" -q` |
+| The reach coverage threshold or the provisional rule | `reach_sweep`'s `coverage_min`; `Config.REACH_COVERAGE_MIN` | `python -m pytest "tests/test_reflexive_discipline.py::test_thin_coverage_yields_provisional_not_reach" "tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit" -q` |
 | HV parameters, the variation kernel, or how equivalence is decided | `hv_floor_commitment` (`HV_K`/`HV_MIN`), `_sample_edits`, `_equivalent`, `_equivalence_battery`, `measures/hv.py` | `python -m pytest tests/test_hv.py "tests/test_reflexive_discipline.py::test_hv_equivalence_decided_by_verdict_vectors" -q` |
 | Add or loosen a rubric-trial guard | `_trial_steps` and `_paraphrase_screen`, `informal/trial.py` | `python -m pytest tests/test_trial.py -q` |
 | Whether a trial mints a warrant or only an observation | the `TrialAuthority` branches in `informal/trial.py` — the mode itself belongs to `DR-CON-authority` | `python -m pytest tests/test_prose_refutation_boundaries.py -q` |
@@ -214,17 +215,52 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   across 46 roots). Adding the five names would have left two sources; the
   check below fails if a literal set is ever reintroduced.
 `check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); a=[n for n in t.body if isinstance(n,ast.Assign) and any(getattr(x,'id','')=='_STRUCTURAL_PROGRAMS' for x in n.targets)]; raise SystemExit(0 if len(a) == 1 and 'programs_by_class' in ast.unparse(a[0].value) else 1)" && python -m pytest "tests/test_reflexive_discipline.py::test_declared_structural_programs_are_never_substantive" "tests/test_reflexive_discipline.py::test_a_well_formedness_gate_cannot_veto_a_reach_hit" "tests/test_prose_refutation_boundaries.py::test_a_declared_structural_program_confers_no_formal_backing" -q`
-- **`reach_sweep` takes SIX pair-level exits, and the module docstring named
-  three of them.** `E1 no-criteria` and `E4 criterion-fail` went undocumented,
+- **`reach_sweep` takes SEVEN pair-level exits, and the module docstring once
+  named three of them.** `E1 no-criteria` and `E4 criterion-fail` went undocumented,
   and a census over 96 committed roots put 870 166 of 1 178 430 pairs on
   exactly those two — so every reader who trusted the docstring misattributed
   the bulk of the corpus
   (`experiments/2026-08-21-measure-reach-firing/CENSUS.md`; documented
   2026-08-22 by tranche
-  `experiments/2026-08-22-reach-structural-programs-fix`). The check counts the
-  inner loop's rejection branches against the docstring's labels, so a sixth
-  exit added without documenting it fails.
-`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); doc=ast.get_docstring(t); f=next(n for n in t.body if isinstance(n,ast.FunctionDef) and n.name=='reach_sweep'); outer=next(n for n in f.body if isinstance(n,ast.For) and any(isinstance(x,ast.For) for x in n.body)); inner=next(x for x in outer.body if isinstance(x,ast.For)); conts=[n for n in ast.walk(inner) if isinstance(n,ast.Continue)]; labels=['E1 no-criteria','E2 non-qualifying','E3 no-novel','E4 criterion-fail','E5 coverage','HIT full']; raise SystemExit(0 if len(conts) == 4 and all(l in doc for l in labels) else 1)"`
+  `experiments/2026-08-22-reach-structural-programs-fix`). The seventh, `E0
+  empty-own-battery`, was added on 2026-08-22 by tranche
+  `experiments/2026-08-22-change-reach-p5-rulings` and is documented in the
+  same commit that introduced it, which is what this check exists to force.
+  The check counts the inner loop's rejection branches against the docstring's
+  labels, so an eighth exit added without documenting it fails, and so does
+  deleting a label the branches still take.
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); doc=ast.get_docstring(t); f=next(n for n in t.body if isinstance(n,ast.FunctionDef) and n.name=='reach_sweep'); outer=next(n for n in f.body if isinstance(n,ast.For) and any(isinstance(x,ast.For) for x in n.body)); inner=next(x for x in outer.body if isinstance(x,ast.For)); conts=[n for n in ast.walk(inner) if isinstance(n,ast.Continue)]; labels=['E0 empty-own-battery','E1 no-criteria','E2 non-qualifying','E3 no-novel','E4 criterion-fail','E5 coverage','HIT full']; raise SystemExit(0 if len(conts) == 5 and all(l in doc for l in labels) else 1)"`
+- **Both ends of reach's battery discipline are OPERATOR RULINGS, not
+  implementer defaults — do not re-decide either from the code.** The Bronze
+  Age sentence "no reach from an empty, trivial, or unguarded battery" was
+  enforced only against the FOREIGN battery; every guard in `reach_sweep` read
+  `problem.criteria`. When the structural-programs fix landed, a rehearsal
+  scenario that nobody had pre-registered moved with it: a prose artifact whose
+  own battery was EMPTY went from `E4 criterion-fail` to `HIT full` at coverage
+  exactly 0.500 against a floor of 0.5
+  (`experiments/2026-08-22-live-reach-rich-run/rehearsal.json` S2, versus
+  `experiments/2026-08-22-reach-structural-programs-fix/rehearsal-as-shipped.json`
+  S2 before it). That surfaced two questions the code had never answered, and
+  the operator answered both on 2026-08-22
+  (`experiments/2026-08-22-change-reach-p5-rulings/REQUEST.md`):
+  **(1)** an artifact carrying an EMPTY own commitment battery may NOT ground
+  reach — it forbids nothing, so it earns no promotion signal. Enforced as the
+  `E0` exit. This is explicitly NOT a formalism-kind penalty: emptiness of
+  commitments is not informality, and nothing outside reach eligibility moves
+  (the operator law "Formalism is an option, never an obligation").
+  **(2)** coverage exactly EQUAL to `REACH_COVERAGE_MIN` remains a FULL hit —
+  a floor means "at least", so `< coverage_min` stands as written.
+  The second had never been exercised by anything: `E5` rejected 0 of 1 178 430
+  pairs over 96 committed roots
+  (`experiments/2026-08-21-measure-reach-firing/census-verdicts.json`), so the
+  boundary was inherited rather than chosen until the pin below was written.
+  Reversing either is an operator's call, not a refactor's.
+  Placement is load-bearing and was measured: `E0` sits INSIDE the per-pair
+  loop although it is loop-invariant, because hoisting it to the per-artifact
+  loop skips `reach_sweep`'s clear-to-zero accounting and an empty-battery
+  artifact holding a stale reach count would stay ranked on it forever
+  (`test_reach_clears_to_zero` goes red).
+`check: python -m pytest "tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach" "tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit" "tests/test_review_fixes.py::test_reach_clears_to_zero" -q && python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); f=next(n for n in t.body if isinstance(n,ast.FunctionDef) and n.name=='reach_sweep'); outer=next(n for n in f.body if isinstance(n,ast.For) and any(isinstance(x,ast.For) for x in n.body)); inner=next(x for x in outer.body if isinstance(x,ast.For)); raise SystemExit(0 if any(isinstance(n,ast.If) and ast.unparse(n.test)=='not carried' for n in inner.body) and not any(isinstance(n,ast.If) and ast.unparse(n.test)=='not carried' for n in outer.body) else 1)"`
 - **`hv_floor` is deliberately absent from `PROGRAMS`.** It needs the variator,
   and keeping it unregistered is what makes B0 stratification structural: an
   HV battery containing itself would not terminate. `evaluable` returning False

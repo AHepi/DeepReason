@@ -428,7 +428,26 @@ artifacts excluded, as they are the workflow's own record):
     $ python3 -c "print(sum([8,24,30,4,12,26,8,10,28]))"
     150
 
-~150 changed lines, 3 commits:
+**AMENDED at step 10 (REQUEST.md Amendment 1, R12): the ceiling is 210.**
+Measured insertions at step 10, from `tools/diff_budget.py`:
+
+    {"areas": {"src": 25, "tests": 108, "docs/map": 44},
+     "total_insertions": 177, "ceiling": 150, "verdict": "EXCEEDED"}
+
+Re-itemisation against the measurement: `src` came in at 25 against an
+estimated 36, `docs/map` at 44 against 50, and `tests` at 108 against 70. The
+whole overrun is in the test file, and all of it is docstring prose: each pin
+names the ruling it implements, that ruling's approval date, and the recorded
+rehearsal scenario that forced the question, as the durable-test rules
+require. Steps 13 and 15 add ~18 more (rehearsal.py + census.py), so:
+
+    $ python3 -c "print(177 + 18)"
+    195
+
+195 measured-plus-planned, ceiling 210 with headroom for the validation and
+delivery artifacts. Operator approved the raise at step 10.
+
+~150 changed lines (ORIGINAL estimate, superseded above), 3 commits:
 1. S1+S2+S3+S4+S5+S6 — the rulings, their docstring, their check, their
    tests, their map. R3 requires the exit and its documentation in ONE commit,
    and S5's fixtures must land with S1 or the tree is red between commits.

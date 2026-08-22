@@ -1,5 +1,5 @@
 # Checklist for: codify two operator rulings on reach semantics (P5-reach)
-State: next=2 blockers=none
+State: next=11 blockers=none
 Map ids (from REQUEST.md's preflight, unchanged): DR-INV-frozen-surfaces,
 DR-SEAM-evaluation-x-rules (read before the subsystems; its shared
 `_substantive` surface is OUT of scope), DR-SUB-evaluation (the covering
@@ -31,43 +31,73 @@ One step per dr-execute-step invocation.
       carried == [] reaches. The floor pin is GREEN before anything moves,
       so RULING 2 is pinned as a PRESERVED property, not a manufactured one.
 
-- [ ] 2. (S1, S3) [COMMIT] Commit the two tests alone, red-then-green order
+- [x] 2. (S1, S3) [COMMIT] Commit the two tests alone, red-then-green order
       preserved in history.
       done-when: git status --porcelain is empty AND git log -1 --stat names
       only tests/test_reflexive_discipline.py
 
-- [ ] 3. (S1, S4) Add the E0 guard to reach_sweep's inner loop as its FIRST
+- [x] 3. (S1, S4) Add the E0 guard to reach_sweep's inner loop as its FIRST
       branch, with the comment stating why it is deliberately loop-invariant
       (it must not be hoisted above the clear-to-zero accounting), and add the
       inline deliberate-`<` comment at the coverage comparison.
       done-when: python -m pytest "tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach" "tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit" "tests/test_review_fixes.py::test_reach_clears_to_zero" -q
       -> 3 passed
 
-- [ ] 4. (S2, S4) Rewrite the reach.py module docstring: SIX -> SEVEN exits,
+      PROOF: 3 passed in 0.18s
+      The third node id is the invariant the INNER placement protects; step 8's
+      mutation run shows it going red under the outer placement.
+
+- [x] 4. (S2, S4) Rewrite the reach.py module docstring: SIX -> SEVEN exits,
       a new FIRST bullet "E0 empty-own-battery" carrying the ruling and its
       basis, and the one-line deliberate-floor note in the E5 bullet. Both
       cite this tranche.
       done-when: python -c "import pathlib; d=pathlib.Path('src/deepreason/measures/reach.py').read_text(); assert 'SEVEN exits' in d and 'E0 empty-own-battery' in d and d.count('2026-08-22-change-reach-p5-rulings') >= 2"
       -> exit 0
 
-- [ ] 5. (S2) Update docs/map/SUB-evaluation.md's exit-documentation trap: its
+      PROOF: exit 0 - SEVEN exits, E0 label, tranche cited 3 times
+
+- [x] 5. (S2) Update docs/map/SUB-evaluation.md's exit-documentation trap: its
       prose gains E0, and its `check:` asserts len(conts) == 5 and all SEVEN
       labels. Run the amended check standalone.
       done-when: the amended check command copied out of SUB-evaluation.md and
       run in a shell -> exit 0 (pasted)
 
-- [ ] 6. (S2) Prove the amended check still bites in BOTH directions: with the
+      PROOF: amended check exit=0
+      (len(conts) == 5 and all SEVEN labels present in the module docstring)
+
+- [x] 6. (S2) Prove the amended check still bites in BOTH directions: with the
       E0 guard removed the count is 4 and the check must FAIL; with the E0
       label removed from the docstring it must FAIL. Restore after each.
       done-when: two pasted runs, each exit 1, and a third run after restore
       -> exit 0
 
-- [ ] 7. (S5) Update the four fixtures SPEC.md M2 names, giving each reaching
+      PROOF:
+      --- MUTATION A: remove the E0 guard (branch count falls to 4) ---
+      check exit=1  (expected 1)
+      --- MUTATION B: remove the E0 label from the docstring (branch still there) ---
+      check exit=1  (expected 1)
+      --- RESTORED ---
+      check exit=0  (expected 0)
+
+      The step-8 placement check was mutation-proven the same way, and the
+      mutation also proves the claim the trap makes about it:
+      --- MUTATION: hoist E0 to the outer loop (the placement the trap forbids) ---
+      placement check exit=1  (expected 1)
+      FAILED tests/test_review_fixes.py::test_reach_clears_to_zero - AssertionError...
+      1 failed in 0.11s
+      --- RESTORED ---
+      placement check exit=0  (expected 0)
+
+- [x] 7. (S5) Update the four fixtures SPEC.md M2 names, giving each reaching
       artifact the battery compile_interface would pin. No assertion touched.
       done-when: python -m pytest tests/test_reflexive_discipline.py tests/test_review_fixes.py tests/test_prose_refutation_boundaries.py -q
       -> 0 failed (pasted) AND git diff -- tests/ | grep -E "^-[[:space:]]+assert" is empty
 
-- [ ] 8. (S6) Add the new Traps entry to docs/map/SUB-evaluation.md for this
+      PROOF: 85 passed in 4.21s
+      $ git diff -- tests/ | grep -E "^-[[:space:]]+assert"   -> empty
+      Exactly the four tests SPEC.md M2 predicted, and no others.
+
+- [x] 8. (S6) Add the new Traps entry to docs/map/SUB-evaluation.md for this
       ruling pair (both rulings, their authority date, this tranche id) with a
       `check:` that runs the two new tests and asserts the E0 label is in the
       docstring; and extend the "Where to change what" coverage-threshold row
@@ -77,11 +107,27 @@ One step per dr-execute-step invocation.
       exactly the 3 pre-existing shallow-clone ones named in REQUEST.md C9
       (pasted)
 
-- [ ] 9. (S2, S6) Map link and audit gates.
+      PROOF:
+      docs_verify [full]: 61 documents, 969 checks, 4 workers
+        FAIL CON-run-identity.md:200  (git log over renamed run roots)
+        FAIL CON-run-identity.md:202  -> fatal: ambiguous argument '1637e808'
+        FAIL CON-run-identity.md:204  -> fatal: ambiguous argument 'f304fec1'
+      docs_verify: 3 failed
+
+      All three are C9's pre-existing shallow-clone failures: they resolve
+      commit hashes this clone does not carry. No SUB-evaluation.md check
+      fails. Verified-at advanced 7b82206d -> 7cae749c only after this
+      document's own Verify: line was re-run: 112 passed in 22.29s.
+
+- [x] 9. (S2, S6) Map link and audit gates.
       done-when: python tools/docs_verify.py --links -> 0 unresolved AND
       python tools/docs_verify.py --audit -> no NEW un-failable check (pasted)
 
-- [ ] 10. (S1..S6) [COMMIT] Commit the rulings, their docstring, their check,
+      PROOF:
+      docs_verify --links: 0 dangling reference(s), 61 document(s)
+      docs_verify --audit: 0 finding(s)
+
+- [x] 10. (S1..S6) [COMMIT] Commit the rulings, their docstring, their check,
       their fixtures and their map together — R3 requires the new exit and its
       documentation in ONE commit, and the fixtures must land with the guard
       or the tree is red between commits.

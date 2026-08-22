@@ -8,15 +8,25 @@ FULL hit registers the artifact as ADDRESSING the foreign problem, recorded
 in the Measure event's addr_add so replay applies it.
 
 Discipline (the Bronze Age postmortem): no reach from an empty, trivial, or
-unguarded battery.
+unguarded battery. That sentence governs BOTH batteries -- the foreign one a
+pair must survive, and the reaching artifact's own (E0).
 
-Each (artifact, foreign problem) pair takes exactly one of SIX exits, and
-``reach_sweep`` takes them in this order. All five rejections are listed
+Each (artifact, foreign problem) pair takes exactly one of SEVEN exits, and
+``reach_sweep`` takes them in this order. All six rejections are listed
 because a reader who knows only some of them misattributes the rest: a census
 over 96 committed roots put 285 070 of 1 178 430 pairs at E1 and 585 096 at
 E4, the two that went undocumented longest
 (``experiments/2026-08-21-measure-reach-firing/CENSUS.md``).
 
+  - **E0 empty-own-battery** — the reaching artifact declares no commitments
+    of its own, so it forbids nothing and earns no promotion signal. This is
+    the Bronze Age discipline applied to the reaching side, and it is a
+    property of the ARTIFACT: every pair it appears in takes this exit
+    (operator ruling 2026-08-22,
+    ``experiments/2026-08-22-change-reach-p5-rulings``). It is NOT a
+    formalism-kind penalty — emptiness of commitments is not informality, and
+    nothing outside reach eligibility moves: admission, rank and criticism
+    outcomes are untouched.
   - **E1 no-criteria** — the foreign problem declares no criteria at all, so
     there is nothing to survive. Discovery problems spawn this way.
   - **E2 non-qualifying** — no criterion is both evaluable AND substantive.
@@ -37,7 +47,10 @@ E4, the two that went undocumented longest
     no reach count, no addressing, and no explanation debt. Rubric criteria
     count toward the total but are not machine-evaluated here, so rubric-heavy
     problems yield provisional hits until their guarded procedures (trials,
-    holdouts, audits) put survivals on the record.
+    holdouts, audits) put survivals on the record. Coverage exactly EQUAL to
+    ``coverage_min`` is a FULL hit, not this exit: a floor means "at least",
+    so the comparison is ``<`` deliberately (operator ruling 2026-08-22,
+    ``experiments/2026-08-22-change-reach-p5-rulings``).
   - **HIT full** — everything above is cleared: recorded as a reach count and
     as addressing.
 
@@ -112,6 +125,11 @@ def reach_sweep(harness, coverage_min: float = 0.5) -> list[tuple[str, str]]:
         count = 0
         carried = set(artifact.interface.commitments)
         for pid, problem in harness.state.problems.items():
+            # E0. Loop-INVARIANT on purpose: hoisting it above this loop skips
+            # the reach-count accounting below, so an empty-battery artifact
+            # holding a stale reach count would stay ranked on it forever.
+            if not carried:
+                continue
             if pid in addressed[aid] or not problem.criteria:
                 continue
             qualifying = [
@@ -127,6 +145,9 @@ def reach_sweep(harness, coverage_min: float = 0.5) -> list[tuple[str, str]]:
                 for c in qualifying
             ):
                 continue
+            # Strictly LESS THAN: coverage exactly equal to the floor is a
+            # FULL hit, because a floor means "at least" (operator ruling
+            # 2026-08-22, experiments/2026-08-22-change-reach-p5-rulings).
             if len(qualifying) / len(problem.criteria) < coverage_min:
                 provisional.append((aid, pid))
                 continue

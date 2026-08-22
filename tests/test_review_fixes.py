@@ -14,7 +14,7 @@ from deepreason.llm.adapter import LLMAdapter, _usage_tokens
 from deepreason.llm.budget import TokenBudgetExceeded, TokenMeter
 from deepreason.llm.contracts import ConjecturerOutput
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.ontology import Commitment, Problem, ProblemProvenance, Status
+from deepreason.ontology import Commitment, Interface, Problem, ProblemProvenance, Status
 from deepreason.storage.merge import merge
 from deepreason.storage.objects import ObjectStore
 from tests.conftest import art
@@ -471,7 +471,10 @@ def test_reach_verdict_cache_consistent(tmp_path):
     h.register_problem(Problem(
         id="foreign", description="foreign", criteria=["k-b"],
         provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []})))
-    x = h.create_artifact("the moon pulls the sea", problem_id="home")
+    # E0: the reaching artifact must carry its own battery, as
+    # compile_interface gives a production artifact.
+    x = h.create_artifact("the moon pulls the sea", problem_id="home",
+                          interface=Interface(commitments=["k-a"]))
     first = reach_sweep(h)
     assert first == [(x.id, "foreign")]
     assert h.state.reach[x.id] == 1.0

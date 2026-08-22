@@ -77,8 +77,12 @@ def test_genuine_cross_problem_survival_registers_addressing(tmp_path):
     h.register_commitment(Commitment(id="k-sea", eval="predicate:'sea' in content"))
     _problem(h, "home", ["k-moon"])
     _problem(h, "foreign", ["k-sea"])
+    # E0: the reaching artifact must carry its own battery. compile_interface
+    # pins the home problem's criteria on a production artifact; this fixture
+    # predates that guard and states it explicitly.
     a = h.create_artifact("the moon pulls the sea",
                           provenance=Provenance(role="conjecturer"),
+                          interface=Interface(commitments=["k-moon"]),
                           problem_id="home")
     hits = reach_sweep(h)
     assert hits == [(a.id, "foreign")]
@@ -97,8 +101,10 @@ def test_thin_coverage_yields_provisional_not_reach(tmp_path):
     _problem(h, "home", ["k-moon"])
     # foreign: 1 substantive evaluable of 3 total criteria -> coverage 1/3
     _problem(h, "foreign", ["k-sea", "k-rubric", "k-missing"])
+    # E0: the reaching artifact must carry its own battery (see above).
     a = h.create_artifact("the moon pulls the sea",
                           provenance=Provenance(role="conjecturer"),
+                          interface=Interface(commitments=["k-moon"]),
                           problem_id="home")
     hits = reach_sweep(h, coverage_min=0.5)
     assert hits == []
@@ -115,8 +121,10 @@ def test_debt_problem_asks_the_genuine_question(tmp_path):
     h.register_commitment(Commitment(id="k-sea", eval="predicate:'sea' in content"))
     _problem(h, "home", ["k-moon"])
     _problem(h, "foreign", ["k-sea"])
+    # E0: the reaching artifact must carry its own battery (see above).
     a = h.create_artifact("the moon pulls the sea",
                           provenance=Provenance(role="conjecturer"),
+                          interface=Interface(commitments=["k-moon"]),
                           problem_id="home")
     reach_sweep(h)
     scan_spawns(h, Config(N_SCHOOLS=0))

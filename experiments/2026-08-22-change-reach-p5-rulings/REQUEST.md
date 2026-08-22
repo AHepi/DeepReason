@@ -237,3 +237,17 @@ Q4: Whether the 08-21 census tooling change (R8) is in-scope as an EDIT to a
 ## Amendments
 
 (append-only; later operator messages land here)
+
+**Amendment 1 (2026-08-22).** Raised at CHECKLIST.md step 10, where
+`tools/diff_budget.py` returned `EXCEEDED` (177 insertions against SPEC.md's
+ledgered ceiling of 150, with ~18 more planned). Presented to the operator as
+a stop in the standard format with three priced options. The operator chose,
+verbatim:
+
+> Raise ceiling to 210, continue (Recommended)
+
+R12 (process): the SPEC.md insertion ceiling is 210, not 150. The overrun is
+entirely test-docstring prose recording each pin's ruling authority and its
+motivating record; production insertions (25) and map insertions (44) both
+came in UNDER their per-item estimates. No requirement, file or behaviour
+changes. SPEC.md's Budget section carries the re-itemisation.
