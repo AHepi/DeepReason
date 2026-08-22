@@ -211,3 +211,36 @@ boundary, or a test that mutates the field and shows no outcome moves)?
 ## Amendments
 
 (append-only)
+
+### Amendment 1 — 2026-08-22, the operator's answers to SPEC.md's two STOPs
+
+Asked as a two-question batch with the blast-radius gate's verbatim contact
+list and all thirteen measurements committed in SPEC.md first. The operator's
+selections, verbatim:
+
+QO1 (frozen-surface contact gate) -> **"Row it and proceed (Recommended)"**
+> "Record the disposal in SPEC.md on the pasted M1-M5 measurements and resume
+> at dr-plan-steps. No planned file writes to any of the five frozen surfaces;
+> the only record change is three optional defaulted fields on LLMAttempt,
+> which SUB-ontology.md documents as the ordinary recipe for new per-call
+> accounting."
+
+QO2 (transactional authorization) -> **"Yes — ride the bundle (Recommended)"**
+> "Zero lines outside llm/. The bundle keeps binding leg one's prompt; both
+> legs' prompts, raw bytes, token counts and notices land in the append-only
+> attempt trace, so the record stays complete and replayable
+> (record_provider_attempt does no bound reconciliation — M11). Gives up 'one
+> authorization = one model-facing prompt'. Guard shipped with it: refused,
+> with a typed notice, on any repair bundle, so it can never become a second
+> bite at the contract."
+
+R17 (behavior, from QO1): the eight `frozen_surface_contacts` the blast-radius
+gate reports are ROWED as measured substring false positives; the tranche
+resumes at `dr-plan-steps`. No file may write to any of the five frozen
+surfaces; the only record-shape change permitted is the three optional,
+defaulted `LLMAttempt` fields.
+
+R18 (behavior, from QO2): the extraction leg rides the existing authorization
+bundle. Mandatory guard, in the operator's own words: "refused, with a typed
+notice, on any repair bundle, so it can never become a second bite at the
+contract."

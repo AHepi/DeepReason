@@ -1,9 +1,10 @@
 # Spec for: the two-call seat protocol — deliberation and emission become separate calls
 Traces: every item cites R/C numbers from REQUEST.md. Untraceable items are bugs.
 
-Status: **STOPPED at the frozen-surface contact gate** (dr-spec-change step 3)
-and at one material design fork (Q2). See "Questions for operator". Nothing
-below this line has been implemented.
+Status: **RESOLVED 2026-08-22** — both STOPs answered by the operator and
+ledgered at REQUEST.md Amendment 1 (R17, R18). QO1: rowed, proceed. QO2: the
+extraction leg rides the existing authorization bundle, with the repair-bundle
+guard. The tranche resumes at `dr-plan-steps`.
 
 ## Design summary (one paragraph, for the reader who reads nothing else)
 
@@ -69,7 +70,15 @@ S3 (R1, R3, R4, R6) — the split dispatch | `src/deepreason/llm/adapter.py`
       fails at run time (extraction request over the frozen envelope, no
       meter headroom for the extraction leg), the call proceeds exactly as
       today and the reason is recorded as `split_notice` — never a refusal
-      (R3). Repair attempts (attempt >= 1) never split (A3).
+      (R3). Repair attempts (attempt >= 1) never split (A3). **R18 guard,
+      mandatory:** the extraction leg is refused, with a typed
+      `split_notice`, on any REPAIR authorization bundle, so riding the
+      bundle can never become a second bite at the contract. Under an
+      ordinary (non-repair) transactional bundle the leg rides the bundle:
+      `reservation_bound` keeps naming the full ceiling, so the existing
+      `reservation.amount != reservation_bound` check is unchanged, and
+      `B_r + B_a == ceiling` keeps the completion side exactly within what
+      was booked.
     accept: `python -m pytest tests/test_split_budget_protocol.py tests/test_adapter_attempt_logging.py tests/test_budget.py tests/test_llm_repair_capabilities.py -q`
       -> 0 failed.
 
@@ -132,6 +141,12 @@ S7 (R10, R11) — the regressions | `tests/test_split_budget_protocol.py` (new)
       `"on"` against a provider with no reasoning adapter -> armed, with a
       typed `split_notice`, and no exception.
     - `test_auto_is_on_for_a_reasoning_route_and_off_for_a_non_thinking_one` (R2).
+    - `test_the_extraction_leg_is_refused_on_a_repair_bundle` (R18): a repair
+      authorization bundle -> no second leg, a typed `split_notice`, and the
+      old single-leg behavior. MUTATION PROOF: removing the guard makes it fail.
+    - `test_a_split_call_under_one_bundle_never_exceeds_its_booked_completion`
+      (R18, R9): the two legs' reported completion tokens sum to at most the
+      reservation's `completion_bound_tokens`.
     - `test_the_extraction_schema_is_the_minimal_envelope` (R8): the extraction
       request contains the wire contract's schema and NOT the deliberation
       directives, pinned by an explicit absence assertion.
@@ -204,7 +219,15 @@ A5: `B_a` defaults to 512, the mid-point of Q7's "extraction saturates by
 `B_a ~ 256-512`", and is a Config value so a home can move it without code.
 Assumed, operator may override.
 
-## Questions for operator (STOP if non-empty) — TWO
+## Questions for operator — ANSWERED 2026-08-22 (REQUEST.md Amendment 1)
+
+Both were put to the operator as one batch, priced, after this spec was
+committed. Both recommendations were taken: QO1 -> "Row it and proceed";
+QO2 -> "Yes — ride the bundle". They become R17 and R18. The two questions are
+kept below unedited, because the reasoning they were answered over is the
+authority for what may now be built.
+
+## Questions as asked (STOP was non-empty) — TWO
 
 **QO1 — the frozen-surface contact gate returned CONTACT. Row it, or halt?**
 `tools/blast_radius.py` reports `frozen_surface_verdict: CONTACT`. Its computed
@@ -304,7 +327,7 @@ is ever actually exercised at runtime -- a symbol can be syntactically
 reachable and still never fire because of a runtime precondition this gate does
 not evaluate."
 
-**Author's disposal, by measurement (M1-M8), pending the operator's word (QO1).**
+**Disposal, by measurement (M1-M8), ROWED by the operator 2026-08-22 (R17).**
 No file in the plan writes to any of the five frozen surfaces. The only
 record-shape change is three optional, defaulted fields on `LLMAttempt`, which
 `DR-SUB-ontology` documents as the ordinary recipe for new per-call accounting.
@@ -427,8 +450,8 @@ C — two legs inside one `adapter.call`, sharing the authorization and the
   `llm/__init__.py`, `config.py`, `ontology/event.py`. Frozen contact: none
   (M1-M7). ~324 lines of code+map, ~235 of tests. Risk: medium — concentrated
   in the two-leg dispatch inside `call`.
-  CHOSEN, cites M11 (no `workflow/` reconciliation to break), M6/M7 (no record
-  format or digest moves), M9 (no requalification price). Subject to QO2.
+  cites M11 (no `workflow/` reconciliation to break), M6/M7 (no record
+  format or digest moves), M9 (no requalification price).
 
 ## Budget
 
@@ -458,7 +481,7 @@ fields are written by S3's legs and cannot be delivered independently:
                the same commits"); listed separately only for the budget.
 
 Frozen surfaces touched: **none** (gate says CONTACT; measured disposal M1-M7;
-operator's word requested at QO1).
+rowed by the operator at R17).
 
 Rubric: 6/6 yes — every R has a spec item with a machine-decidable accept
 (R1→S1/S2/S3, R2→S5, R3→S2/S3/S7, R4→S3/S7, R5→REQUEST.md AUTHORITY block +
