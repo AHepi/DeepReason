@@ -1,0 +1,253 @@
+# Checklist for: Rung 4 — frame assertions and the standing view
+State: next=1 blockers=none
+Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
+One step per dr-execute-step invocation.
+
+Map ids this plan was scoped from (`docs/map/INDEX.md`, seam before subsystems):
+`DR-INV-frozen-surfaces` (read first) → `DR-SEAM-adjudication-x-authority` (the
+seam whose content is the ABSENCE of traffic; Prop 12.5 is its property) →
+`DR-SUB-calculus`, `DR-CON-standing-and-background`, `DR-SUB-adjudication`,
+`DR-SUB-verification`, `DR-SUB-ontology`, `DR-SUB-periphery`, `DR-SUB-manifest`.
+New id created by this tranche: `DR-INV-axiom-basis` (R7 — the map has no id for
+the axiom basis; per `dr-drive-harness` §4 step 5 that is a finding, and
+creating it is part of the tranche).
+
+Ceiling: **963** (REQUEST.md R17, operator's "Proceed at 963").
+`python tools/diff_budget.py origin/main --ceiling 963` at every `[COMMIT]`.
+
+Frozen-surface grant in force: surface 3, ONE additive `standing-integrity`
+clause plus the check name in `_EPISTEMIC_CHECKS`, and nothing else (REQUEST.md
+Amendment 2). Any wider contact is a NEW stop.
+
+---
+
+## Phase A — the scope predicate σ (S5)
+
+- [ ] 1. (S5) Write `tests/test_calculus_scope_predicate.py`: the four named
+      tests of S5, against a `scope` module that does not exist yet.
+      done-when: `python -m pytest tests/test_calculus_scope_predicate.py -q`
+      fails on `ModuleNotFoundError: deepreason.calculus.scope` — RED for the
+      right reason, pasted.
+
+- [ ] 2. (S5) Create `src/deepreason/calculus/scope.py`: `declarative-scope.v1`,
+      the closed nine-op vocabulary, `ScopeError` with a `code`, depth/node
+      bounds, `compile_scope`, `scope_admits`. Evaluates; emits no code.
+      done-when: `python -m pytest tests/test_calculus_scope_predicate.py -q`
+      -> 0 failed.
+
+- [ ] 3. (S5) [COMMIT] Commit Phase A.
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase B — the frame assertion, the mention law, the compiler (S1, S2)
+
+- [ ] 4. (S1, S2) Write `tests/test_calculus_frame_assertions.py` — the body,
+      bounded-validity-as-content, no-kind-field/no-new-event-rule, the
+      mention-law failure with its own reason code, and the compiler's ref
+      roles. Consult/exit/promotion tests come at step 10.
+      done-when: `python -m pytest tests/test_calculus_frame_assertions.py -q`
+      RED with `claim-schema-not-implemented` (the current, correct refusal),
+      pasted.
+
+- [ ] 5. (S1) Add `FrameAssertionV1` to `src/deepreason/calculus/claims.py`
+      with its `model_validator`, and to `_MODELS`/`_IMPLEMENTED`.
+      done-when: `python -c "from deepreason.calculus.claims import
+      FrameAssertionV1, CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS)==9"` -> exit 0
+      (the closed name set does NOT grow).
+
+- [ ] 6. (S2) Add the frame rule to `src/deepreason/calculus/compiler.py`:
+      subject → MENTION, each reach case → DEPENDENCE, each succeeded wound →
+      MENTION.
+      done-when: `python -m pytest tests/test_calculus_frame_assertions.py::test_the_compiler_makes_the_subject_a_mention_and_the_case_a_dependence -q`
+      -> 1 passed.
+
+- [ ] 7. (S2) Add `frame_assertion_wf` + `FRAME_ASSERTION_COMMITMENT` to
+      `src/deepreason/calculus/programs.py`, mention-law limb FIRST with reason
+      `frame-assertion-depends-on-subject`; register the program wherever
+      `problem_subject_wf` is registered.
+      done-when: `python -m pytest tests/test_calculus_frame_assertions.py -q`
+      -> 0 failed.
+
+- [ ] 8. (S2) Add `frame_assertion_wf` to `_STRUCTURAL_PROGRAMS` in
+      `src/deepreason/measures/reach.py`.
+      done-when: `python -c "from deepreason.measures.reach import
+      _STRUCTURAL_PROGRAMS as S; assert 'frame_assertion_wf' in S"` -> exit 0.
+
+- [ ] 9. (S1, S2, S12) Update `docs/map/SUB-calculus.md` in this same commit:
+      the frame-assertion body, its compiler rule, the structural-program
+      membership check widened to three names.
+      done-when: `python tools/docs_verify.py --fast` -> no NEW failure over
+      the 3-failure baseline.
+
+- [ ] 10. (S1, S2) [COMMIT] Commit Phase B (code + tests + map together,
+      SCHEMA.md rule 1).
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase C — promotion problems, the consult path, the standing view
+## (S3, S4, S8)
+
+- [ ] 11. (S3, S4, S8) Extend `tests/test_calculus_frame_assertions.py` with the
+      consult, promotion-problem and exit tests, and write
+      `tests/test_calculus_standing.py` with the derived-view, Prop 12.5,
+      Prop 12.4 and revocation tests. Amend/continue (S11 L-2) comes at 17.
+      done-when: both files RED on the absent `deepreason.calculus.standing`,
+      pasted.
+
+- [ ] 12. (S8) Add `SpawnTrigger.PROMOTION` to
+      `src/deepreason/ontology/problem.py`, and update the THREE map checks
+      pinning `len(SpawnTrigger) == 9` (`SUB-rules.md:144`,
+      `SUB-ontology.md:131`, `SEAM-rules-x-scratch.md:142`) in the same commit.
+      done-when: `python -c "from deepreason.ontology import SpawnTrigger;
+      assert len(SpawnTrigger)==10 and SpawnTrigger.PROMOTION"` -> exit 0.
+
+- [ ] 13. (S8) Add `ensure_promotion_problem` and `file_frame_assertion` to
+      `src/deepreason/calculus/operations.py`, in the idempotent
+      `ensure_problem_subject` shape.
+      done-when: `python -m pytest tests/test_calculus_frame_assertions.py::test_ensure_promotion_problem_is_idempotent -q`
+      -> 1 passed.
+
+- [ ] 14. (S3, S4) Create `src/deepreason/calculus/standing.py`:
+      `consultability_of` (Def 9.2's four conditions, the fourth CALLING
+      `separation.consultability` verbatim), `consulted`, `StandingGrant`,
+      `standing_of`, `frames`, `standing_view`. Export from
+      `src/deepreason/calculus/__init__.py`.
+      done-when: `git diff --stat origin/main --
+      src/deepreason/calculus/separation.py` is EMPTY (Rung 3b invoked, not
+      re-implemented) AND `python -m pytest tests/test_calculus_standing.py
+      tests/test_calculus_frame_assertions.py -q` -> 0 failed.
+
+- [ ] 15. (S3, S4, S12) Update `docs/map/SUB-calculus.md` (the "`consultability`
+      has NO caller in `src/`" trap row REWRITTEN to say when it gained one,
+      never deleted) and `docs/map/CON-standing-and-background.md` (advanced
+      from rationale to MECHANISM; the `RECRIT_STANDING` trap row rewritten per
+      A4) in this same commit.
+      done-when: `python tools/docs_verify.py --fast` -> no NEW failure over
+      the 3-failure baseline.
+
+- [ ] 16. (S9) Mutation proof for Prop 12.5 (R13): in the session scratchpad
+      copy, make `final_labels` consult the standing view; run the test; restore
+      the tree; run again.
+      done-when: both runs pasted — RED under the mutation, GREEN restored —
+      and `git status --porcelain` shows the tree unmodified.
+
+- [ ] 17. (S11) Add the L-2 operations-parity test: `amend` then `continue` over
+      a root carrying a frame assertion.
+      done-when: `python -m pytest tests/test_calculus_standing.py::test_amend_then_continue_over_a_root_carrying_a_frame_assertion -q`
+      -> 1 passed.
+
+- [ ] 18. (S3, S4, S8, S9, S10, S11) [COMMIT] Commit Phase C.
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase D — the public surface and all four pins (S6)
+
+- [ ] 19. (S6) Add `deepreason standing [--json]` to `src/deepreason/cli/main.py`
+      on the `frontier`/`why` pattern.
+      done-when: `deepreason --root <tmp root> standing` prints the view and
+      exits 0 on a root carrying a frame assertion (pasted).
+
+- [ ] 20. (S6) Add the `run_standing` MCP tool to
+      `src/deepreason/mcp_server.py`, mirroring `run_findings`.
+      done-when: `python -m pytest tests/test_mcp.py tests/test_mcp_help.py -q`
+      FAILS on the tool-set pins — the pins are what step 21 moves, and seeing
+      them fail first proves they are real (pasted).
+
+- [ ] 21. (S6) Move ALL FOUR pins in this one step: `EXPECTED_MCP_TOOLS` +
+      `EXPECTED_MCP_SCHEMA_SHA256` in `scripts/wheel_smoke.py`, the same two in
+      `scripts/wheel_operational_smoke.py`, `SUPPORTED_TOOLS` in
+      `tests/test_mcp.py`, `SUPPORTED_TOOL_NAMES` in `tests/test_mcp_help.py`.
+      done-when: `python -m pytest tests/test_mcp.py tests/test_mcp_help.py -q`
+      -> 0 failed.
+
+- [ ] 22. (S6) Run BOTH wheel smokes — the third instrument, which no gate runs.
+      done-when: `python scripts/wheel_smoke.py` -> exit 0 AND
+      `python -u scripts/wheel_operational_smoke.py` -> exit 0 (both pasted).
+
+- [ ] 23. (S6) Add the read-only/no-model test and update `DR-SUB-periphery`'s
+      tool inventory if it pins one.
+      done-when: `python -m pytest tests/test_calculus_standing.py::test_the_standing_surface_is_read_only_and_calls_no_model -q`
+      -> 1 passed.
+
+- [ ] 24. (S6) [COMMIT] Commit Phase D — surface and all four pins in ONE commit.
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase E — the standing-integrity check (S13, S14) — FROZEN SURFACE 3
+
+- [ ] 25. (S13) Write the check's own RED test first: a hand-registered frame
+      assertion whose interface carries a DEPENDENCE on its subject, asserted to
+      produce a `standing-integrity` finding.
+      done-when: `python -m pytest tests/test_calculus_standing.py::test_standing_integrity_fires_on_a_violated_mention_law -q`
+      -> 1 failed, because the check does not exist (pasted).
+
+- [ ] 26. (S13) Add the ONE additive `fail("standing-integrity", …)` clause to
+      `src/deepreason/invariants.py` and the name to `_EPISTEMIC_CHECKS` in
+      `src/deepreason/verification/report.py`. Nothing else in either file.
+      done-when: `git diff --stat origin/main -- src/deepreason/invariants.py
+      src/deepreason/verification/report.py` shows insertions only, no
+      deletions in existing finding shapes, AND the step-25 test -> 1 passed.
+
+- [ ] 27. (S13, S14) Absence-tolerance: `verify_root` over an existing committed
+      root reports NO `standing-integrity` finding.
+      done-when: `python -c "<verify_root over a committed root>; assert no
+      standing-integrity check in violations"` -> exit 0 (pasted).
+
+- [ ] 28. (S12, S13) Record the granted contact in
+      `docs/map/INV-frozen-surfaces.md` surface 3, in the shape of the
+      2026-08-21 seat-instance grant, and extend
+      `docs/map/SEAM-adjudication-x-authority.md` — the agreement now also says
+      standing never reaches label computation, with S9's test as its
+      instrument. Same commit as the code.
+      done-when: `python tools/docs_verify.py --fast` -> no NEW failure over
+      the 3-failure baseline.
+
+- [ ] 29. (S13, S14) [COMMIT] Commit Phase E.
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase F — the axiom-basis map document (S7)
+
+- [ ] 30. (S7) Create `docs/map/INV-axiom-basis.md`: A1–A10 plus Ax 4.1
+      (Genesis Inertness), each with the compressed statement, the rung that
+      PROVES it, the rungs that PRESERVE it, and an executable `check:` that
+      would fail if the axiom stopped holding. A4, A5 (frame-assertion half) and
+      A7 carry this rung's proofs; A1, A3, A6 carry preservation checks (R14).
+      done-when: `python tools/docs_verify.py --fast` -> no NEW failure, AND
+      `python tools/docs_verify.py --audit` refuses none of the new checks.
+
+- [ ] 31. (S7) Add the `DR-INV-axiom-basis` routing row to
+      `docs/map/INDEX.md`.
+      done-when: `python tools/docs_verify.py --links` -> `DR-INV-axiom-basis`
+      resolves.
+
+- [ ] 32. (S7) [COMMIT] Commit Phase F.
+      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+## Phase G — the boundary gates (C9, C10, S14)
+
+- [ ] 33. (all) Map gate, FULL (not `--fast`) — `--fast` reuses cached results
+      and cannot catch a document this tranche's `src/` change just broke.
+      Run it ALONE; never concurrently with the test gate.
+      done-when: `python tools/docs_verify.py` -> exactly 3 failed, all
+      `CON-run-identity.md` shallow-clone (the C10 baseline), 0 new (pasted).
+
+- [ ] 34. (all) Full gate. Run it ALONE on an otherwise idle box.
+      done-when: `python -m pytest tests/ -q -n 4` -> "N passed, 0 failed"
+      (pasted). Any MCP-thread failure is ISOLATED with a single-worker re-run
+      before being attributed to this tranche (C10).
+
+- [ ] 35. (S14, C7) Root sweep — for INFORMATION only, because S13 changed a
+      current-version reader. Not a gate obligation (2026-08-14 law); report
+      what moved rather than requiring empty.
+      done-when: the sweep output is captured and the diff against a
+      pre-change capture is pasted, with an account of every line that moved.
+
+- [ ] 36. (S6) Re-run BOTH wheel smokes at the boundary — the public surface
+      moved this rung (C9).
+      done-when: both exit 0 (pasted).
+
+- [ ] 37. (all) [COMMIT] Push and confirm clean tree.
+      done-when: `git status --porcelain` is empty AND the branch head is on
+      origin.
