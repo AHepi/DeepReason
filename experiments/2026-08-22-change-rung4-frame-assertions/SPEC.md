@@ -443,6 +443,13 @@ three roads, and the operator chose "Proceed at 963". 963 is the ceiling
 `tools/diff_budget.py` is checked against at every `[COMMIT]` step. No
 requirement grew and no Rung 5/6/7 machinery is present.
 
+**Declared areas, for `tools/diff_budget.py --paths`:** `src tests docs/map
+scripts`. The ceiling measures THE CHANGE, not the tranche's own ledger
+(REQUEST.md, SPEC.md, CHECKLIST.md, PARKED.md, VALIDATION.md, DELIVERY.md);
+without `--paths` the tool sums those too and reports EXCEEDED on documents the
+itemization above never counted. `dr-execute-step` prescribes the flag; naming
+the areas here is what makes it usable.
+
 Frozen surfaces touched: **surface 3 (`invariants.py`), additive, grant
 requested above.**
 

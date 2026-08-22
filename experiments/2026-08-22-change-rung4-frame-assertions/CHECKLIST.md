@@ -1,5 +1,5 @@
 # Checklist for: Rung 4 — frame assertions and the standing view
-State: next=1 blockers=none
+State: next=4 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -13,7 +13,9 @@ the axiom basis; per `dr-drive-harness` §4 step 5 that is a finding, and
 creating it is part of the tranche).
 
 Ceiling: **963** (REQUEST.md R17, operator's "Proceed at 963").
-`python tools/diff_budget.py origin/main --ceiling 963` at every `[COMMIT]`.
+`python tools/diff_budget.py origin/main --ceiling 963 --paths src tests docs/map scripts`
+at every `[COMMIT]`. The `--paths` restriction is SPEC.md's declared areas: the
+ceiling measures the change, not the tranche's own ledger documents.
 
 Frozen-surface grant in force: surface 3, ONE additive `standing-integrity`
 clause plus the check name in `_EPISTEMIC_CHECKS`, and nothing else (REQUEST.md
@@ -23,21 +25,35 @@ Amendment 2). Any wider contact is a NEW stop.
 
 ## Phase A — the scope predicate σ (S5)
 
-- [ ] 1. (S5) Write `tests/test_calculus_scope_predicate.py`: the four named
+- [x] 1. (S5) Write `tests/test_calculus_scope_predicate.py`: the four named
       tests of S5, against a `scope` module that does not exist yet.
       done-when: `python -m pytest tests/test_calculus_scope_predicate.py -q`
       fails on `ModuleNotFoundError: deepreason.calculus.scope` — RED for the
       right reason, pasted.
 
-- [ ] 2. (S5) Create `src/deepreason/calculus/scope.py`: `declarative-scope.v1`,
+- [x] 2. (S5) Create `src/deepreason/calculus/scope.py`: `declarative-scope.v1`,
       the closed nine-op vocabulary, `ScopeError` with a `code`, depth/node
       bounds, `compile_scope`, `scope_admits`. Evaluates; emits no code.
       done-when: `python -m pytest tests/test_calculus_scope_predicate.py -q`
       -> 0 failed.
 
-- [ ] 3. (S5) [COMMIT] Commit Phase A.
+          ....                                                          [100%]
+          4 passed in 0.06s
+
+- [x] 3. (S5) [COMMIT] Commit Phase A.
       done-when: `python tools/diff_budget.py origin/main --ceiling 963`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+          {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "origin/main",
+           "areas": {"src": 190, "tests": 89, "docs/map": 0, "scripts": 0},
+           "total_insertions": 279, "ceiling": 963, "verdict": "WITHIN"}
+
+      VARIANCE NOTED, tracked from here: `scope.py` landed at 190 src lines
+      against SPEC.md's 85-line estimate. The module is the estimated shape --
+      no extra feature -- but the repo's docstring and typed-error-code idiom
+      costs more lines than the estimate allowed. Carried forward and re-checked
+      at every [COMMIT]; a projection that cannot fit 963 is a STOP with real
+      numbers, not a projection from one data point.
 
 ## Phase B — the frame assertion, the mention law, the compiler (S1, S2)
 
