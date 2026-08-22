@@ -10,10 +10,11 @@ in the Measure event's addr_add so replay applies it.
 Discipline (the Bronze Age postmortem): no reach from an empty, trivial, or
 unguarded battery.
 
-  - QUALIFYING commitments are evaluable AND substantive: structural
-    well-formedness programs (json-wf, skeleton_wf, lineage_ref, checker_wf)
-    qualify anything well-formed and prove nothing about the foreign
-    problem's subject — they never ground reach.
+  - QUALIFYING commitments are evaluable AND substantive: a structural
+    well-formedness program — every program `programs.PROGRAMS` declares
+    ``class_="structural"``, which is where this module reads the set from —
+    qualifies anything well-formed and proves nothing about the foreign
+    problem's subject, so it never grounds reach.
   - A hit requires passing EVERY qualifying foreign criterion, at least one
     of which is novel to the artifact's own battery.
   - COVERAGE: qualifying criteria must cover at least ``coverage_min`` of
@@ -33,18 +34,25 @@ from deepreason import programs
 from deepreason.ontology.state import Status
 
 # Structural well-formedness programs: passing them says the CONTENT IS
-# WELL-FORMED, not that it answers the problem — they can never carry reach.
-_STRUCTURAL_PROGRAMS = frozenset(
-    # presupposition_wf/premise_resolution_wf prove an attribution or resolution
-    # is WELL FORMED, never that its claim holds -- structural like the rest, so
-    # passing one grounds no reach and immunises nothing (rules/warrants.py).
-    # frame_assertion_wf is structural for the same reason and one more: an
-    # artifact that could ground reach by being a well-formed frame assertion
-    # would let the standing axis buy its own promotion case.
-    {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf",
-     "presupposition_wf", "premise_resolution_wf",
-     "problem_subject_wf", "premise_attribution_wf", "frame_assertion_wf"}
-)
+# WELL-FORMED, not that it answers the problem -- they can never carry reach.
+#
+# DERIVED, never hand-listed. A second copy of this set drifted five names
+# deep (component_wf, generator_wf, integration_wf, manifest_wf,
+# reasoning-envelope-wf declared themselves structural and were still counted
+# substantive here), so the registry's own declaration is the single source.
+# Every consumer of the class reads the same answer: rules/warrants.py for
+# prose immunity, rules/guards/anti_relapse.py for relapse equivalence.
+#
+# What the class means, program by program, is the reason it is load-bearing
+# rather than clerical. presupposition_wf/premise_resolution_wf prove an
+# attribution or resolution is WELL FORMED, never that its claim holds.
+# frame_assertion_wf is structural for that reason and one more: an artifact
+# that could ground reach by being a well-formed frame assertion would let the
+# standing axis buy its own promotion case. reasoning-envelope-wf is the seed
+# problem's own envelope gate, so counting it substantive let a well-formedness
+# check decide -- in either direction -- a reach outcome the subject criteria
+# had already settled.
+_STRUCTURAL_PROGRAMS = frozenset(programs.programs_by_class()["structural"])
 
 
 def _substantive(commitment) -> bool:

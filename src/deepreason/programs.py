@@ -34,10 +34,16 @@ ProgramFunction = Callable[[str, object, object | None], tuple[str, dict]]
 
 @dataclass(frozen=True)
 class ProgramSpec:
-    """Registered program plus process-only classification metadata.
+    """Registered program plus its classification metadata.
 
-    ``class_`` and ``external_toolchain`` are reporting and scheduling facts.
-    They do not alter commitment syntax, verdict interpretation, or labels.
+    ``external_toolchain`` is a scheduling fact. ``class_`` is not merely
+    reporting: it never alters commitment syntax, verdict interpretation, or
+    labels, but two gates read it and act on it. ``rules/guards/anti_relapse``
+    refuses relapse equivalence from an all-``structural`` battery, and
+    ``measures/reach._STRUCTURAL_PROGRAMS`` derives from it, so declaring a
+    program ``structural`` is what stops it grounding reach or conferring
+    prose immunity (``rules/warrants.formally_backed``). Declaring one is
+    therefore a decision about what the program PROVES, not a label.
     Calling a spec delegates to its function so existing direct uses of
     ``PROGRAMS[name](...)`` remain compatible.
     """
@@ -364,7 +370,14 @@ PROGRAMS: dict[str, ProgramSpec] = {
 
 
 def programs_by_class() -> dict[ProgramClass, tuple[str, ...]]:
-    """Stable process-reporting inventory; never feeds adjudication."""
+    """Stable classification inventory; never feeds adjudication directly.
+
+    No label or verdict is computed from this map. It reaches a Status only
+    through the two gates that consume the class as a decision about what a
+    program proves -- the anti-relapse gate and the substantive/structural
+    boundary in ``measures/reach`` -- both of which only ever WITHHOLD
+    protection or a measure, never grant one.
+    """
 
     classes: dict[ProgramClass, list[str]] = {
         "structural": [],

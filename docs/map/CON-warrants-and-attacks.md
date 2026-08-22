@@ -1,5 +1,5 @@
 <!-- DR-CON-warrants-and-attacks -->
-Verified-at: 69f89d21
+Verified-at: 981e677e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/ontology/warrant.py
 Seams: 
@@ -138,8 +138,12 @@ compilation turns a conjecturer's own forbidden cases into `program:`
 commitments, so a candidate could otherwise attach `program:json-wf` and
 immunise itself against all criticism by being well-formed. Structural
 well-formedness proves nothing about the subject, so it protects nothing about
-the subject; `_STRUCTURAL_PROGRAMS` is disjoint from `EXEC_PROGRAMS`.
-`check: python -c "from deepreason.oracle import EXEC_PROGRAMS; from deepreason.measures.reach import _substantive, _STRUCTURAL_PROGRAMS as sp; from deepreason.ontology import Commitment; assert EXEC_PROGRAMS == {'exec_oracle','property_oracle','dataset_oracle'}; assert not (EXEC_PROGRAMS & sp); assert not _substantive(Commitment(id='k', eval='program:json-wf')); assert _substantive(Commitment(id='k', eval=\"predicate:'x' in content\"))"`
+the subject; `_STRUCTURAL_PROGRAMS` is disjoint from `EXEC_PROGRAMS`. The set is
+DERIVED from `programs.PROGRAMS`' declared `class_`, never hand-listed beside it
+— a second copy of it drifted five names deep and let a well-formedness gate
+immunise prose (`DR-SUB-evaluation` Traps; tranche
+`experiments/2026-08-22-reach-structural-programs-fix`).
+`check: python -c "from deepreason.oracle import EXEC_PROGRAMS; from deepreason.measures.reach import _substantive, _STRUCTURAL_PROGRAMS as sp; from deepreason.ontology import Commitment; from deepreason.programs import programs_by_class; assert EXEC_PROGRAMS == {'exec_oracle','property_oracle','dataset_oracle'}; assert not (EXEC_PROGRAMS & sp); assert set(programs_by_class()['structural']) == set(sp); assert all(not _substantive(Commitment(id='k', eval='program:' + n)) for n in sp); assert not _substantive(Commitment(id='k', eval='program:json-wf')); assert _substantive(Commitment(id='k', eval=\"predicate:'x' in content\"))"`
 
 **`formally_backed` has exactly ONE call site — `_argument_trial_steps`.** The
 defended trial is the only path where a free-form textual case against a single

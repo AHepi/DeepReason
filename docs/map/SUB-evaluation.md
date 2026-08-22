@@ -1,5 +1,5 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: 461cf287
+Verified-at: 981e677e
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
 Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
@@ -198,6 +198,22 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   against all prose criticism, and `formally_backed` reuses the same set.
   `formally_backed` is a strict superset of `execution_backed`.
 `check: python -m pytest "tests/test_prose_refutation_boundaries.py::test_formal_backing_covers_the_whole_formal_set_not_only_execution" "tests/test_prose_refutation_boundaries.py::test_a_structural_program_confers_no_formal_backing" "tests/test_prose_refutation_boundaries.py::test_a_structural_only_target_is_still_refutable_by_prose" -q`
+- **The structural set is DERIVED from the declared class, and a second copy of
+  it is the defect.** `_STRUCTURAL_PROGRAMS` was hand-written and fell five
+  names behind `programs.PROGRAMS` (`component_wf`, `generator_wf`,
+  `integration_wf`, `manifest_wf`, `reasoning-envelope-wf`), so each of those
+  was counted SUBSTANTIVE while declaring itself structural. Both consumers
+  read the wrong answer: a well-formedness gate could confer prose immunity,
+  and in `reach_sweep` it entered the QUALIFYING set — where every criterion
+  must pass — so `reasoning-envelope-wf` VETOED, on prose, every hit the seed
+  problem's subject criteria had already settled. That was the single reason no
+  text run could record a reach event. Fixed by tranche
+  `experiments/2026-08-22-reach-structural-programs-fix`; evidence
+  `experiments/2026-08-22-live-reach-rich-run/rehearsal.json` S8a/S8b/S8c and
+  `experiments/2026-08-21-measure-reach-firing/CENSUS.md` (793 gate pairs
+  across 46 roots). Adding the five names would have left two sources; the
+  check below fails if a literal set is ever reintroduced.
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); a=[n for n in t.body if isinstance(n,ast.Assign) and any(getattr(x,'id','')=='_STRUCTURAL_PROGRAMS' for x in n.targets)]; raise SystemExit(0 if len(a) == 1 and 'programs_by_class' in ast.unparse(a[0].value) else 1)" && python -m pytest "tests/test_reflexive_discipline.py::test_declared_structural_programs_are_never_substantive" "tests/test_reflexive_discipline.py::test_a_well_formedness_gate_cannot_veto_a_reach_hit" "tests/test_prose_refutation_boundaries.py::test_a_declared_structural_program_confers_no_formal_backing" -q`
 - **`hv_floor` is deliberately absent from `PROGRAMS`.** It needs the variator,
   and keeping it unregistered is what makes B0 stratification structural: an
   HV battery containing itself would not terminate. `evaluable` returning False
@@ -255,11 +271,18 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   discipline that bites elsewhere is unchanged: `skeleton_wf` failing an
   artifact that forbids nothing.
 `check: python -c "import inspect; from deepreason.measures import demarcation as D; assert 'crit(artifact, commitments) and load(artifact, variator)' in inspect.getsource(D.demarcated); assert 'any(cid in commitments' in inspect.getsource(D.crit); assert not hasattr(D, 'mod') and not hasattr(D, 'active')" && python -m pytest "tests/test_informal.py::test_forbid_nothing_fails_skeleton_wf_refuted_by_program" tests/test_premise_channel.py::test_crit_is_the_weak_declaration_test tests/test_premise_channel.py::test_a_structural_battery_is_not_load_bearing tests/test_premise_channel.py::test_demarcated_is_both_readings -q`
-- **`ProgramSpec.class_` and `external_toolchain` are reporting facts only.**
-  They never alter commitment syntax, verdict interpretation, or labels. The one
-  consumer with teeth is the anti-relapse gate, which refuses to establish
-  relapse equivalence from an all-`structural` battery.
-`check: grep -q "never feeds adjudication" src/deepreason/programs.py && grep -q 'programs.program_class(lookup\[cid\]) == "structural"' src/deepreason/rules/guards/anti_relapse.py`
+- **`ProgramSpec.class_` is a decision about what a program PROVES, not a
+  label.** It never alters commitment syntax, verdict interpretation, or labels
+  — `external_toolchain` beside it really is reporting only — but TWO gates
+  consume the class and act on it, and both only ever WITHHOLD: the anti-relapse
+  gate refuses to establish relapse equivalence from an all-`structural`
+  battery, and `measures/reach._STRUCTURAL_PROGRAMS` DERIVES from the class, so
+  declaring a program `structural` is what stops it grounding reach or
+  conferring prose immunity (`rules/warrants.formally_backed`). The trap that
+  earned this rewrite: while the reach side kept its own hand-written copy of
+  the class instead of deriving, the two disagreed by five names and nothing
+  noticed.
+`check: python -c "from deepreason.programs import programs_by_class; from deepreason.measures.reach import _STRUCTURAL_PROGRAMS; raise SystemExit(0 if set(programs_by_class()['structural']) == set(_STRUCTURAL_PROGRAMS) else 1)" && grep -q 'programs.program_class(lookup\[cid\]) == "structural"' src/deepreason/rules/guards/anti_relapse.py`
 - **A `lean_*` program is an `overrun`, never a failed proof.** Invoking a kernel
   is not a pure in-process text function, so generic evaluation defers to the
   pinned verifier (`DR-SUB-verification`) and returns

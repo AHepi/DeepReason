@@ -554,6 +554,52 @@ def test_a_structural_program_confers_no_formal_backing(harness):
     assert formally_backed(harness, structural.id) is False
 
 
+def test_a_declared_structural_program_confers_no_formal_backing(harness):
+    """Regression (tranche experiments/2026-08-22-reach-structural-programs-fix,
+    reproduction R3): the sibling of the json-wf test above, over the DECLARED
+    class rather than over a name.
+
+    `formally_backed` reads `measures/reach._substantive`, which read a
+    hand-kept copy of the structural class that had drifted five names behind
+    `programs.PROGRAMS` -- so an artifact whose only commitment was a PASSING
+    `program:reasoning-envelope-wf` was prose-immune purely for being a
+    well-formed envelope.  Asserting over `programs_by_class()` rather than
+    over a fixed list keeps this true as programs are added: a newly
+    registered structural program is covered the day it is declared.
+    """
+
+    from deepreason.ontology import Commitment
+    from deepreason.programs import PROGRAMS, evaluate, programs_by_class
+    from deepreason.rules.warrants import formally_backed
+
+    declared = programs_by_class()["structural"]
+    assert "reasoning-envelope-wf" in declared
+
+    envelope = json.dumps({
+        "schema": "deepreason-reasoning-envelope-v1",
+        "claim": "Dense masonry stores daytime solar gain and releases it later.",
+        "mechanism": "High thermal mass and low albedo raise daytime storage.",
+        "premises": [{"claim": "Urban surfaces have higher heat capacity."}],
+        "counterconditions": [{"case": "an arid city shows no gap",
+                               "eval": "observation"}],
+    })
+    kappa = Commitment(id="k-envelope", eval="program:reasoning-envelope-wf")
+    target = _target_with(harness, kappa, envelope)
+
+    # It really does pass -- the protection is withheld on the CLASS, not
+    # because the gate happens to fail on this content.
+    assert evaluate(kappa, target, harness.blobs)[0] == "pass"
+    assert formally_backed(harness, target.id) is False
+
+    # And no declared-structural program is substantive, whatever its name.
+    from deepreason.measures.reach import _STRUCTURAL_PROGRAMS, _substantive
+
+    assert set(declared) == set(_STRUCTURAL_PROGRAMS)
+    for name in declared:
+        assert name in PROGRAMS
+        assert _substantive(Commitment(id=f"k-{name}", eval=f"program:{name}")) is False
+
+
 def test_a_challenged_relatedness_claim_strips_only_its_own_commitment(harness):
     """Implements R43 (D2 rev 2 protection-semantics correction): a
     ``program:candidate_checker`` commitment with no linked relatedness
