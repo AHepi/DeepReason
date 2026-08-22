@@ -68,7 +68,7 @@ grants were wasted; it does not make waste free.
 
 | instrument | result |
 |---|---|
-| `python -m pytest tests/ -q -n 4` | PENDING — running at time of writing; this row is updated in the closing commit, and the tranche is not complete until it reads 0 failed |
+| `python -m pytest tests/ -q -n 4` | **3824 passed, 6 skipped, 0 failed** in 877.87s. Baseline at `32492cdb8` was 3820 passed; the four added tests account for the whole delta. None of the five MCP-thread tests known to flake under `-n 4` flaked on this run. |
 | `python -m pytest tests/test_v6_patch_repair_and_wire.py -q` | 24 passed |
 | `python tools/docs_verify.py` (full) | 970 checks, 3 failed — the three pre-existing `CON-run-identity.md` git-archaeology checks that cannot pass in a shallow clone. No new failure. |
 
@@ -101,3 +101,9 @@ It is refused, exactly as before: `apply_repair_patch` raises
 run's record, and it consumes one of the contract's metered repair grants —
 nothing about that path was changed, and nothing may now reach a pointer
 outside the dispatched `authorized_pointers`.
+
+## Verdict
+
+**PASS.** Every criterion in `GOAL.md` is met, with one residue stated above and
+not papered over: `conjecturer.turn.v6` repair #4 is proven to be APPLIED
+rather than discarded, not proven to have completed the turn.
