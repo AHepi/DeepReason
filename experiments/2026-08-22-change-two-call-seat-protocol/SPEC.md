@@ -178,13 +178,25 @@ S9 (R14) — the map moves in the same commits | `docs/map/SUB-llm.md`,
       `python tools/docs_verify.py --audit` -> no new unfailable check.
 
 S10 (R13) — the requalification cost report | DELIVERY.md
-    Measured, not reasoned (M9): `qualification_subject_payload(manifest,
-    profile)` is a closed function of the RunManifest, the ProviderProfileV1
-    and the policy preset. `Config` is not an input. This change adds no
-    manifest field and no provider-profile field, so **no qualification
-    subject digest moves and the requalification price is zero per home**.
+    SUPERSEDED at step 12 by measurement; see RESULTS.md. The claim below was
+    WRONG and is kept unedited because the reasoning that produced it is the
+    lesson: M9 measured the SIGNATURE of `qualification_subject_payload` and
+    concluded from the absence of a `Config` parameter that no digest moves.
+    `Config` reaches the subject INDIRECTLY, through the manifest's
+    `engine_config_json` and `source_config_hash`, both of which the subject
+    embeds. The measured price is ONE full qualification battery per
+    `DEEPREASON_HOME` (~14 min, ~1160 calls), paid once. Reported, not
+    stopped, per R13.
+
+    ORIGINAL CLAIM (wrong): "Measured, not reasoned (M9):
+    `qualification_subject_payload(manifest, profile)` is a closed function of
+    the RunManifest, the ProviderProfileV1 and the policy preset. `Config` is
+    not an input. This change adds no manifest field and no provider-profile
+    field, so no qualification subject digest moves and the requalification
+    price is zero per home."
     accept: a pasted before/after `qualification_subject_digest` over the same
-    manifest+profile fixture, identical.
+    committed fixture, with the payload diff localising every key that moved.
+    -> DONE, RESULTS.md 2026-08-22: two keys moved, nothing else.
 
 S11 (R16) — R-by-R delivery | DELIVERY.md, per `dr-deliver-change`.
 
@@ -392,7 +404,13 @@ M8 — the manual census for the UNKNOWN reachability entries; results tabled in
 M9 — `inspect.signature(qualification_subject_payload)` ->
 `(manifest: 'RunManifest', profile: 'ProviderProfileV1') -> 'dict'`;
 `'Config' in source or 'config' in source` -> `False`.
-Supports: S10 — no profile moves, requalification price zero per home (R13).
+Supported: S10's original claim — which step 12 REFUTED. The measurement is
+accurate and the inference from it was not: a signature that does not name
+`Config` does not mean `Config` is absent from the subject, because the
+manifest the signature DOES name carries `engine_config_json` and
+`source_config_hash`. Superseded by the before/after digest comparison in
+RESULTS.md. Kept here because "the check passed and the claim was still false"
+is the same failure shape as E43.
 
 M10 — today's behavior on an empty completion, ordinary path, `MockEndpoint`
 returning `""` three times through `LLMAdapter.call`:

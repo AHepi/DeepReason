@@ -161,8 +161,18 @@ governing the proposing side only.
 `check: grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/config.py`
 `check: ! grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/run_manifest.py`
 
-A `Config` value costs nothing to add and is invisible to replay. A manifest
-field is permanent.
+A `Config` value is invisible to replay. A manifest field is permanent, so
+`Config` remains the right home for a new per-run mode — but the older form of
+this sentence read "a `Config` value costs nothing to add", and that half was
+FALSE. Measured 2026-08-22 by the two-call seat protocol tranche: `Config` is
+serialized into every v6 manifest's `engine_config_json` and hashed into its
+`source_config_hash`, both of which the qualification subject embeds, so adding
+a `Config` field MOVES every qualification subject digest and costs one full
+battery per home (~14 min, ~1160 calls), paid once. Invisible to replay, not
+invisible to qualification. See `docs/ERRATA.md` E44 and
+`experiments/2026-08-22-change-two-call-seat-protocol/RESULTS.md`.
+
+`check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); assert 'SPLIT_BUDGET_SEAT_PROTOCOL' in c, sorted(c)"`
 
 ## The instruments that prove you did not break anything
 

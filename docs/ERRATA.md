@@ -1113,3 +1113,31 @@ as "Measure events" when the record shows a `Refl` policy artifact
 (`objects/artifact/2e9009812fe9e3b6fd0b48ffd088d72d21bc09890ee21fd66f715bd8253cba52.json`).
 Two documents and one comment each described this controller's authority, and
 all three were wrong in a different direction.
+
+**E44 — "a Config value costs nothing to add" was false, and a signature is not
+a subject.** `docs/map/INV-frozen-surfaces.md`, under "Where authority is
+allowed to live instead", said: "A `Config` value costs nothing to add and is
+invisible to replay." The second clause is true; the first is not. Measured
+2026-08-22 by `experiments/2026-08-22-change-two-call-seat-protocol/`
+(RESULTS.md): adding two `Config` fields moved the qualification subject digest
+over a committed fixture from `b9038b84efdea313...` to `a5d81e5d34f51635...`,
+and diffing the subject payload localises the move to exactly two keys —
+`engine_config_json`, which carries a serialized `Config` dump, and
+`source_config_hash`, which hashes it. Nothing else in a 1268-line payload
+moved. The real price is one full qualification battery per `DEEPREASON_HOME`
+(~14 min, ~1160 calls), paid once. `Config` is still the right home for a new
+per-run mode — a manifest field is permanent — but it is invisible to REPLAY,
+not to QUALIFICATION, and the sentence conflated the two. Corrected in place per
+`SCHEMA.md`, with a check that fails if a `Config` field stops reaching
+`engine_config_json`.
+
+Recorded here rather than only in the map because the WAY it was got wrong
+recurs. This tranche's own SPEC.md M9 ran
+`inspect.signature(qualification_subject_payload)`, saw `(manifest, profile)`
+with no `Config` parameter, and concluded the price was zero. The measurement
+was accurate and the inference from it was not: the manifest the signature DOES
+name is what carries `Config` in. That is the same shape as E43 — a claim
+carrying a passing check while being false about the neighbouring assertion the
+check does not make. When the question is "does X enter this digest", the
+admissible answer is a before/after digest over a committed fixture plus a
+payload diff, never a signature or a grep.
