@@ -132,6 +132,7 @@ ROOT_COMMANDS = {
     "schools": ("schools",),
     "signals": ("signals",),
     "skills": ("skills", "--capsule", "missing", "--query", "q", "--school", "s"),
+    "standing": ("standing",),
     "submit-evidence": (
         "submit-evidence",
         "problem",

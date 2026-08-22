@@ -1,5 +1,5 @@
 # Checklist for: Rung 4 — frame assertions and the standing view
-State: next=30 blockers=none
+State: next=33 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -316,7 +316,28 @@ Amendment 2). Any wider contact is a NEW stop.
 
 ## Phase F — the axiom-basis map document (S7)
 
-- [ ] 30. (S7) Create `docs/map/INV-axiom-basis.md`: A1–A10 plus Ax 4.1
+- [x] 30. (S7) Create `docs/map/INV-axiom-basis.md`
+
+      FOUR more checks moved, and only two were in the census:
+
+      - `SEAM-harness-x-verification.md:49` pins the EXACT count of `fail(`
+        calls in `invariants.py` (218 -> 220, exactly the two clauses S13 adds).
+        NOT in the census -- the same under-declaration as the
+        `SEAM-evaluation-x-ontology` miss: a file was declared as a target
+        without its count-pinning consumers being looked for.
+      - `tests/test_v6_only_cli_admission.py::ROOT_COMMANDS` pins the exact set
+        of commands requiring v6 root admission. NOT in the census. Adding
+        `standing` there is not bookkeeping: it enrols the new command in two
+        parametrized admission tests, so `standing` is now proven to reject a
+        historical manifest and to require qualification like every other
+        root command.
+      - My OWN Ax 4.1 check was too blunt and failed on correct code: it
+        refused any `provenance` or `role` in `standing.py`, but the module
+        legitimately reads `problem.provenance.trigger` (a field of the problem
+        record -- what the problem IS) and `ref.role` (an EDGE role). Rewritten
+        to permit exactly those and refuse provenance-as-origin, with the
+        `.role` receivers anchored to being bound from a `.refs` loop rather
+        than to how they are spelled.: A1–A10 plus Ax 4.1
       (Genesis Inertness), each with the compressed statement, the rung that
       PROVES it, the rungs that PRESERVE it, and an executable `check:` that
       would fail if the axiom stopped holding. A4, A5 (frame-assertion half) and
@@ -324,12 +345,12 @@ Amendment 2). Any wider contact is a NEW stop.
       done-when: `python tools/docs_verify.py --fast` -> no NEW failure, AND
       `python tools/docs_verify.py --audit` refuses none of the new checks.
 
-- [ ] 31. (S7) Add the `DR-INV-axiom-basis` routing row to
+- [x] 31. (S7) Add the `DR-INV-axiom-basis` routing row to
       `docs/map/INDEX.md`.
       done-when: `python tools/docs_verify.py --links` -> `DR-INV-axiom-basis`
       resolves.
 
-- [ ] 32. (S7) [COMMIT] Commit Phase F.
+- [x] 32. (S7) [COMMIT] Commit Phase F.
       done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 

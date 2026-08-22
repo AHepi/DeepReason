@@ -48,3 +48,34 @@ still open and carries its own measurement obligation. Untouched here.
 **Ready-to-send prompt:** see
 `experiments/2026-08-21-change-rung3b-frame-separation/PARKED.md` P1 —
 unchanged and still current.
+
+
+## P3 — `INV-signal-contract.md` is not listed in `INDEX.md`
+
+**What.** Noticed while adding the `DR-INV-axiom-basis` routing row: the
+"Invariants and recipes" table in `docs/map/INDEX.md` lists
+`INV-frozen-surfaces.md` and `REC-change-a-seam.md` but not
+`INV-signal-contract.md`, `REC-add-signal.md` or
+`REC-revise-allocation-policy.md`, all three of which exist (Rung 1b). The
+documents are reachable by filename and `--links` passes, so nothing is broken;
+the routing table is simply incomplete, which costs a reader who is routing
+rather than grepping.
+
+Not fixed here: it is not in this tranche's request, and the scope contract
+parks what it did not ask for. Three lines of work.
+
+**Ready-to-send prompt:**
+
+```
+Small map fix, no code. docs/map/INDEX.md's "Invariants and recipes" table
+omits three documents that exist: INV-signal-contract.md, REC-add-signal.md
+and REC-revise-allocation-policy.md (all delivered at Rung 1b). Add a row
+for each, in the style of the two rows already there, and check whether the
+"Route by what you are trying to do" table wants a row pointing at the
+add-signal recipe.
+
+GATE: python tools/docs_verify.py --links, then the full docs_verify.
+No src change; no test change.
+END STATE: every document in docs/map/ is reachable from INDEX.md's tables,
+not only by filename.
+```
