@@ -1,0 +1,39 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal UHI gap is best explained by differential longwave radiative cooling driven by sky view factor: urban street canyons trap outgoing longwave radiation, and the cross-city variation in this effect scales with building height and built density, making the night-time gap larger in denser, taller cities.",
+    "mechanism": "During the day, urban materials absorb solar shortwave radiation. After sunset on a clear, calm night, the primary cooling mechanism is outgoing longwave radiation. In the countryside, a high sky view factor allows efficient radiative loss to the cold sky. In a city, a low sky view factor in street canyons means much of the outgoing longwave radiation is intercepted by opposing building walls and re-emitted back toward the street, drastically slowing the cooling rate. This radiative trapping directly modulates the nocturnal UHI magnitude, and the effect is more pronounced in cities with greater built density and taller buildings, as these geometric features reduce the sky view factor further.",
+    "counterconditions": [
+      "If radiative cooling were the dominant single mechanism, then two cities with identical sky view factors but different levels of anthropogenic heat and impervious surfaces would exhibit the same nocturnal UHI gap",
+      "If two cities have the same built density but one is significantly drier (lower humidity, higher aridity), the drier city would need to exhibit the same nocturnal UHI magnitude if longwave trapping alone is the best single explanation",
+      "If longwave radiation trapping is the primary cause, cities with low building density but high impervious surface cover should show a significantly smaller nocturnal UHI than dense cities regardless of their thermal mass"
+    ],
+    "analogy": {
+      "source_memory_refs": ["6c67d0f1e7f3c7110f46d1029fc1f6b57a612252f83e9eff09fb25528be5eedd"],
+      "shared_structure": [
+        "Both a greenhouse and an urban street canyon permit incoming shortwave solar radiation to enter and warm internal surfaces.",
+        "Both structures impede the efficient outward escape of longwave thermal radiation from their interiors.",
+        "In both systems, the trapped longwave radiation is absorbed and re-emitted by surrounding materials (glass/ground or building walls), warming the enclosed space.",
+        "The degree of warming in both systems depends on the opacity and geometric obstruction of the enclosure to outgoing radiation."
+      ],
+      "disanalogies": [
+        "A greenhouse relies on a physical barrier (glass) that is largely transparent to shortwave but opaque to longwave, while a city relies on geometric obstruction and view factor reduction without a physical gas barrier.",
+        "Greenhouses typically have active or passive ventilation and humidity control, whereas street canyons are open systems subject to urban micro-advection.",
+        "The greenhouse effect is a well-mixed volumetric radiative transfer process, whereas the urban canyon effect is a surface-to-surface radiative exchange mediated by complex 3D geometry."
+      ],
+      "transfer_claims": [
+        "Just as reducing the transparency of a greenhouse to longwave radiation (e.g., adding thermal screens) increases interior nighttime temperatures, decreasing the sky view factor in a city by increasing building height increases nocturnal temperatures.",
+        "Just as the greenhouse effect is stronger on clear nights when radiative loss to space is most efficient, the nocturnal UHI is largest on clear, calm nights when radiative cooling dominates.",
+        "Just as greenhouses with higher internal thermal mass release stored heat more slowly at night, the radiative trapping in street canyons compounds the slow release of stored heat from urban materials."
+      ],
+      "overturn_conditions": [
+        "If field measurements show that nocturnal UHI magnitude does not strongly correlate with sky view factor variations across different cities",
+        "If it is demonstrated that anthropogenic heat flux or evapotranspiration deficits explain more of the cross-city variance in nocturnal UHI than geometric radiative trapping",
+        "If a clear, calm night UHI is found to be larger in low-density cities than in high-density cities with significantly smaller sky view factors"
+      ],
+      "adopted_commitment_refs": ["ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"]
+    },
+    "typicality": 0.7
+  }
+}
+```

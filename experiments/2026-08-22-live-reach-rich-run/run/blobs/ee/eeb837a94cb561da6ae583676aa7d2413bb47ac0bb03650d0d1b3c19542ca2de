@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1": {"baseline_sha256": "eb06b2035d35185936739733a38e5861e8c19477c710b57204da1d47f7d67e81", "patches": [{"op": "replace", "path": "/candidate/checker_specs/0/id", "old": "uhi-energy-balance@v1", "new": null}]}}
+```
