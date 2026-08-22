@@ -1,0 +1,2989 @@
+{
+  "coverage_min": 0.5,
+  "roots": [
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 600,
+        "measures": 149
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1300,
+        "E4 criterion-fail": 380,
+        "_E4 first-nonpass:fail": 380,
+        "_crit_kinds": {
+          "structural:lineage_ref": 19,
+          "substantive-predicate": 19,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 19
+        },
+        "addr_pairs": 20,
+        "artifacts_candidate": 20,
+        "artifacts_total": 42,
+        "commitments_registered": 87,
+        "pairs": 1680,
+        "problems_total": 85,
+        "reached-verdict-gate": 380
+      },
+      "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+      "seconds": 3.37
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1297,
+        "measures": 641
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 54,
+        "E1 no-criteria": 7502,
+        "E3 no-novel": 704,
+        "E4 criterion-fail": 2086,
+        "_E4 first-nonpass:fail": 2086,
+        "_crit_kinds": {
+          "structural:lineage_ref": 45,
+          "substantive-predicate": 45,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 45
+        },
+        "addr_pairs": 63,
+        "artifacts_candidate": 62,
+        "artifacts_total": 117,
+        "commitments_registered": 153,
+        "pairs": 10292,
+        "problems_total": 167,
+        "reached-verdict-gate": 2086
+      },
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+      "seconds": 3.23
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1099,
+        "measures": 533
+      },
+      "rederived": {
+        "A-skip/unaddr": 49,
+        "E1 no-criteria": 3621,
+        "E3 no-novel": 621,
+        "E4 criterion-fail": 807,
+        "_E4 first-nonpass:fail": 807,
+        "_crit_kinds": {
+          "structural:lineage_ref": 28,
+          "substantive-predicate": 28,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 28
+        },
+        "addr_pairs": 51,
+        "artifacts_candidate": 51,
+        "artifacts_total": 100,
+        "commitments_registered": 102,
+        "pairs": 5049,
+        "problems_total": 100,
+        "reached-verdict-gate": 807
+      },
+      "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+      "seconds": 3.4
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 786,
+        "measures": 305
+      },
+      "rederived": {
+        "A-skip/unaddr": 36,
+        "E1 no-criteria": 3150,
+        "E3 no-novel": 168,
+        "E4 criterion-fail": 847,
+        "_E4 first-nonpass:fail": 847,
+        "_crit_kinds": {
+          "structural:lineage_ref": 29,
+          "substantive-predicate": 29,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 29
+        },
+        "addr_pairs": 35,
+        "artifacts_candidate": 35,
+        "artifacts_total": 71,
+        "commitments_registered": 116,
+        "pairs": 4165,
+        "problems_total": 120,
+        "reached-verdict-gate": 847
+      },
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "seconds": 2.38
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 388,
+        "measures": 146
+      },
+      "rederived": {
+        "A-skip/unaddr": 20,
+        "E1 no-criteria": 414,
+        "E3 no-novel": 492,
+        "E4 criterion-fail": 264,
+        "_E4 first-nonpass:fail": 264,
+        "_crit_kinds": {
+          "structural:lineage_ref": 6,
+          "substantive-predicate": 42,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 6
+        },
+        "addr_pairs": 18,
+        "artifacts_candidate": 18,
+        "artifacts_total": 38,
+        "commitments_registered": 26,
+        "pairs": 1170,
+        "problems_total": 66,
+        "reached-verdict-gate": 264
+      },
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "seconds": 1.44
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 518,
+        "measures": 188
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1196,
+        "E3 no-novel": 85,
+        "E4 criterion-fail": 329,
+        "_E4 first-nonpass:fail": 329,
+        "_crit_kinds": {
+          "structural:lineage_ref": 18,
+          "substantive-predicate": 18,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 18
+        },
+        "addr_pairs": 23,
+        "artifacts_candidate": 23,
+        "artifacts_total": 45,
+        "commitments_registered": 68,
+        "pairs": 1610,
+        "problems_total": 71,
+        "reached-verdict-gate": 329
+      },
+      "root": "experiments/2026-08-05-testphase-live-validation/home-testphase/runs/run-a518e33a75507207633f864ba6a864b1",
+      "seconds": 1.98
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1381,
+        "measures": 626
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 41,
+        "E1 no-criteria": 7424,
+        "E3 no-novel": 470,
+        "E4 criterion-fail": 2314,
+        "_E4 first-nonpass:fail": 2314,
+        "_crit_kinds": {
+          "structural:lineage_ref": 48,
+          "substantive-predicate": 48,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 48
+        },
+        "addr_pairs": 59,
+        "artifacts_candidate": 58,
+        "artifacts_total": 100,
+        "commitments_registered": 178,
+        "pairs": 10208,
+        "problems_total": 177,
+        "reached-verdict-gate": 2314
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+      "seconds": 4.34
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1198,
+        "measures": 585
+      },
+      "rederived": {
+        "A-skip/status": 2,
+        "A-skip/unaddr": 42,
+        "E1 no-criteria": 3498,
+        "E3 no-novel": 729,
+        "E4 criterion-fail": 755,
+        "_E4 first-nonpass:fail": 755,
+        "_crit_kinds": {
+          "structural:lineage_ref": 28,
+          "substantive-predicate": 28,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 28
+        },
+        "addr_pairs": 55,
+        "artifacts_candidate": 53,
+        "artifacts_total": 97,
+        "commitments_registered": 83,
+        "pairs": 4982,
+        "problems_total": 95,
+        "reached-verdict-gate": 755
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+      "seconds": 4.27
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1079,
+        "measures": 505
+      },
+      "rederived": {
+        "A-skip/status": 2,
+        "A-skip/unaddr": 35,
+        "E1 no-criteria": 3312,
+        "E3 no-novel": 594,
+        "E4 criterion-fail": 750,
+        "_E4 first-nonpass:fail": 750,
+        "_crit_kinds": {
+          "structural:lineage_ref": 28,
+          "substantive-predicate": 28,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 28
+        },
+        "addr_pairs": 50,
+        "artifacts_candidate": 48,
+        "artifacts_total": 85,
+        "commitments_registered": 93,
+        "pairs": 4656,
+        "problems_total": 98,
+        "reached-verdict-gate": 750
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+      "seconds": 3.7
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1245,
+        "measures": 646
+      },
+      "rederived": {
+        "A-skip/unaddr": 32,
+        "E1 no-criteria": 5133,
+        "E3 no-novel": 805,
+        "E4 criterion-fail": 1319,
+        "_E4 first-nonpass:fail": 1319,
+        "_crit_kinds": {
+          "structural:lineage_ref": 36,
+          "substantive-predicate": 36,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 36
+        },
+        "addr_pairs": 59,
+        "artifacts_candidate": 59,
+        "artifacts_total": 91,
+        "commitments_registered": 124,
+        "pairs": 7257,
+        "problems_total": 124,
+        "reached-verdict-gate": 1319
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+      "seconds": 3.65
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1261,
+        "measures": 583
+      },
+      "rederived": {
+        "A-skip/unaddr": 41,
+        "E1 no-criteria": 5130,
+        "E3 no-novel": 492,
+        "E4 criterion-fail": 1776,
+        "_E4 first-nonpass:fail": 1776,
+        "_crit_kinds": {
+          "structural:lineage_ref": 42,
+          "substantive-predicate": 42,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 42
+        },
+        "addr_pairs": 54,
+        "artifacts_candidate": 54,
+        "artifacts_total": 95,
+        "commitments_registered": 143,
+        "pairs": 7398,
+        "problems_total": 138,
+        "reached-verdict-gate": 1776
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+      "seconds": 4.13
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1760,
+        "measures": 955
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 39,
+        "E1 no-criteria": 7372,
+        "E3 no-novel": 6265,
+        "E4 criterion-fail": 7415,
+        "_E4 first-nonpass:fail": 7415,
+        "_crit_kinds": {
+          "structural:lineage_ref": 42,
+          "substantive-predicate": 180,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 42
+        },
+        "addr_pairs": 77,
+        "artifacts_candidate": 76,
+        "artifacts_total": 116,
+        "commitments_registered": 144,
+        "pairs": 21052,
+        "problems_total": 278,
+        "reached-verdict-gate": 7415
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+      "seconds": 4.37
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1549,
+        "measures": 711
+      },
+      "rederived": {
+        "A-skip/unaddr": 39,
+        "E1 no-criteria": 6405,
+        "E3 no-novel": 1404,
+        "E4 criterion-fail": 3415,
+        "_E4 first-nonpass:fail": 3415,
+        "_crit_kinds": {
+          "structural:lineage_ref": 43,
+          "substantive-predicate": 79,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 43
+        },
+        "addr_pairs": 61,
+        "artifacts_candidate": 61,
+        "artifacts_total": 100,
+        "commitments_registered": 161,
+        "pairs": 11224,
+        "problems_total": 185,
+        "reached-verdict-gate": 3415
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+      "seconds": 5.06
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1369,
+        "measures": 698
+      },
+      "rederived": {
+        "A-skip/status": 3,
+        "A-skip/unaddr": 52,
+        "E1 no-criteria": 5568,
+        "E3 no-novel": 840,
+        "E4 criterion-fail": 1248,
+        "_E4 first-nonpass:fail": 1248,
+        "_crit_kinds": {
+          "structural:lineage_ref": 36,
+          "substantive-predicate": 36,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 36
+        },
+        "addr_pairs": 61,
+        "artifacts_candidate": 58,
+        "artifacts_total": 113,
+        "commitments_registered": 127,
+        "pairs": 7656,
+        "problems_total": 133,
+        "reached-verdict-gate": 1248
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+      "seconds": 4.14
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1294,
+        "measures": 627
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 37,
+        "E1 no-criteria": 4592,
+        "E3 no-novel": 784,
+        "E4 criterion-fail": 840,
+        "_E4 first-nonpass:fail": 840,
+        "_crit_kinds": {
+          "structural:lineage_ref": 29,
+          "substantive-predicate": 29,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 29
+        },
+        "addr_pairs": 57,
+        "artifacts_candidate": 56,
+        "artifacts_total": 94,
+        "commitments_registered": 112,
+        "pairs": 6216,
+        "problems_total": 112,
+        "reached-verdict-gate": 840
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+      "seconds": 4.45
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1576,
+        "measures": 745
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 11147,
+        "E3 no-novel": 990,
+        "E4 criterion-fail": 5471,
+        "_E4 first-nonpass:fail": 5471,
+        "_crit_kinds": {
+          "structural:lineage_ref": 61,
+          "substantive-predicate": 91,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 61
+        },
+        "addr_pairs": 72,
+        "artifacts_candidate": 71,
+        "artifacts_total": 94,
+        "commitments_registered": 232,
+        "pairs": 17608,
+        "problems_total": 249,
+        "reached-verdict-gate": 5471
+      },
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+      "seconds": 4.16
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1179,
+        "measures": 564
+      },
+      "rederived": {
+        "A-skip/unaddr": 37,
+        "E1 no-criteria": 5278,
+        "E3 no-novel": 260,
+        "E4 criterion-fail": 2814,
+        "_E4 first-nonpass:fail": 2814,
+        "_crit_kinds": {
+          "structural:lineage_ref": 53,
+          "substantive-predicate": 53,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 53
+        },
+        "addr_pairs": 58,
+        "artifacts_candidate": 58,
+        "artifacts_total": 95,
+        "commitments_registered": 155,
+        "pairs": 8352,
+        "problems_total": 145,
+        "reached-verdict-gate": 2814
+      },
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+      "seconds": 3.36
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1979,
+        "measures": 1089
+      },
+      "rederived": {
+        "A-skip/unaddr": 86,
+        "E1 no-criteria": 11648,
+        "E3 no-novel": 1736,
+        "E4 criterion-fail": 3997,
+        "_E4 first-nonpass:fail": 3997,
+        "_crit_kinds": {
+          "structural:lineage_ref": 63,
+          "substantive-predicate": 63,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 63
+        },
+        "addr_pairs": 91,
+        "artifacts_candidate": 91,
+        "artifacts_total": 177,
+        "commitments_registered": 202,
+        "pairs": 17381,
+        "problems_total": 192,
+        "reached-verdict-gate": 3997
+      },
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+      "seconds": 5.18
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1045,
+        "measures": 566
+      },
+      "rederived": {
+        "A-skip/unaddr": 50,
+        "E1 no-criteria": 3536,
+        "E3 no-novel": 644,
+        "E4 criterion-fail": 604,
+        "_E4 first-nonpass:fail": 604,
+        "_crit_kinds": {
+          "structural:lineage_ref": 24,
+          "substantive-predicate": 24,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 24
+        },
+        "addr_pairs": 52,
+        "artifacts_candidate": 52,
+        "artifacts_total": 102,
+        "commitments_registered": 89,
+        "pairs": 4784,
+        "problems_total": 93,
+        "reached-verdict-gate": 604
+      },
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+      "seconds": 2.94
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 34,
+        "measures": 3
+      },
+      "rederived": {
+        "A-skip/unaddr": 4,
+        "_crit_kinds": {
+          "substantive-predicate": 1
+        },
+        "addr_pairs": 23,
+        "artifacts_candidate": 23,
+        "artifacts_total": 27,
+        "commitments_registered": 1,
+        "problems_total": 1
+      },
+      "root": "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7",
+      "seconds": 0.15
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 2129,
+        "measures": 1105
+      },
+      "rederived": {
+        "A-skip/unaddr": 65,
+        "E1 no-criteria": 7360,
+        "E3 no-novel": 11628,
+        "E4 criterion-fail": 12932,
+        "_E4 first-nonpass:fail": 12932,
+        "_crit_kinds": {
+          "structural:lineage_ref": 42,
+          "substantive-predicate": 307,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 42
+        },
+        "addr_pairs": 80,
+        "artifacts_candidate": 80,
+        "artifacts_total": 145,
+        "commitments_registered": 133,
+        "pairs": 31920,
+        "problems_total": 400,
+        "reached-verdict-gate": 12932
+      },
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-o/runs/run-6bca5a31141b3f0ea6140501146f5646",
+      "seconds": 5.73
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1517,
+        "measures": 808
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 49,
+        "E1 no-criteria": 4503,
+        "E3 no-novel": 1496,
+        "E4 criterion-fail": 3577,
+        "_E4 first-nonpass:fail": 3577,
+        "_crit_kinds": {
+          "structural:lineage_ref": 41,
+          "substantive-predicate": 89,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 41
+        },
+        "addr_pairs": 58,
+        "artifacts_candidate": 57,
+        "artifacts_total": 107,
+        "commitments_registered": 138,
+        "pairs": 9576,
+        "problems_total": 169,
+        "reached-verdict-gate": 3577
+      },
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-v/runs/run-7906485ce1cfc314a653c185cbf61d75",
+      "seconds": 4.4
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 622,
+        "measures": 248
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1984,
+        "E4 criterion-fail": 961,
+        "_E4 first-nonpass:fail": 961,
+        "_crit_kinds": {
+          "structural:lineage_ref": 31,
+          "substantive-predicate": 31,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 31
+        },
+        "addr_pairs": 31,
+        "artifacts_candidate": 31,
+        "artifacts_total": 53,
+        "commitments_registered": 91,
+        "pairs": 2945,
+        "problems_total": 96,
+        "reached-verdict-gate": 961
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "seconds": 1.99
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1943,
+        "measures": 1029
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 66,
+        "E1 no-criteria": 6734,
+        "E3 no-novel": 8365,
+        "E4 criterion-fail": 9395,
+        "_E4 first-nonpass:fail": 9395,
+        "_crit_kinds": {
+          "structural:lineage_ref": 40,
+          "substantive-predicate": 240,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 40
+        },
+        "addr_pairs": 75,
+        "artifacts_candidate": 74,
+        "artifacts_total": 141,
+        "commitments_registered": 134,
+        "pairs": 24494,
+        "problems_total": 332,
+        "reached-verdict-gate": 9395
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-050dd9ed53fdd1a30a0cec59f50d5baa",
+      "seconds": 5.12
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1699,
+        "measures": 828
+      },
+      "rederived": {
+        "A-skip/unaddr": 66,
+        "E1 no-criteria": 10564,
+        "E3 no-novel": 650,
+        "E4 criterion-fail": 4366,
+        "_E4 first-nonpass:fail": 4366,
+        "_crit_kinds": {
+          "structural:lineage_ref": 66,
+          "substantive-predicate": 66,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 66
+        },
+        "addr_pairs": 76,
+        "artifacts_candidate": 76,
+        "artifacts_total": 142,
+        "commitments_registered": 218,
+        "pairs": 15580,
+        "problems_total": 206,
+        "reached-verdict-gate": 4366
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-341a3a3e618715f7023e822cdff510f2",
+      "seconds": 4.55
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1573,
+        "measures": 786
+      },
+      "rederived": {
+        "A-skip/unaddr": 56,
+        "E1 no-criteria": 7500,
+        "E3 no-novel": 1269,
+        "E4 criterion-fail": 2331,
+        "_E4 first-nonpass:fail": 2331,
+        "_crit_kinds": {
+          "structural:lineage_ref": 48,
+          "substantive-predicate": 48,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 48
+        },
+        "addr_pairs": 75,
+        "artifacts_candidate": 75,
+        "artifacts_total": 131,
+        "commitments_registered": 162,
+        "pairs": 11100,
+        "problems_total": 149,
+        "reached-verdict-gate": 2331
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "seconds": 4.87
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1578,
+        "measures": 776
+      },
+      "rederived": {
+        "A-skip/unaddr": 66,
+        "E1 no-criteria": 8418,
+        "E3 no-novel": 531,
+        "E4 criterion-fail": 3609,
+        "_E4 first-nonpass:fail": 3609,
+        "_crit_kinds": {
+          "structural:lineage_ref": 60,
+          "substantive-predicate": 60,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 60
+        },
+        "addr_pairs": 69,
+        "artifacts_candidate": 69,
+        "artifacts_total": 135,
+        "commitments_registered": 190,
+        "pairs": 12558,
+        "problems_total": 183,
+        "reached-verdict-gate": 3609
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "seconds": 4.27
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 67,
+        "measures": 11
+      },
+      "rederived": {
+        "A-skip/unaddr": 4,
+        "_crit_kinds": {
+          "substantive-program:reasoning-envelope-wf": 1
+        },
+        "addr_pairs": 4,
+        "artifacts_candidate": 4,
+        "artifacts_total": 8,
+        "commitments_registered": 11,
+        "problems_total": 1
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "seconds": 0.4
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1769,
+        "measures": 892
+      },
+      "rederived": {
+        "A-skip/unaddr": 63,
+        "E1 no-criteria": 7548,
+        "E3 no-novel": 962,
+        "E4 criterion-fail": 4138,
+        "_E4 first-nonpass:fail": 4138,
+        "_crit_kinds": {
+          "structural:lineage_ref": 55,
+          "substantive-predicate": 75,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 55
+        },
+        "addr_pairs": 68,
+        "artifacts_candidate": 68,
+        "artifacts_total": 131,
+        "commitments_registered": 190,
+        "pairs": 12648,
+        "problems_total": 187,
+        "reached-verdict-gate": 4138
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-944946f53dee4b636672677a0a534469",
+      "seconds": 4.98
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 601,
+        "measures": 224
+      },
+      "rederived": {
+        "A-skip/unaddr": 23,
+        "E1 no-criteria": 2112,
+        "E4 criterion-fail": 1089,
+        "_E4 first-nonpass:fail": 1089,
+        "_crit_kinds": {
+          "structural:lineage_ref": 33,
+          "substantive-predicate": 33,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 33
+        },
+        "addr_pairs": 33,
+        "artifacts_candidate": 33,
+        "artifacts_total": 56,
+        "commitments_registered": 95,
+        "pairs": 3201,
+        "problems_total": 98,
+        "reached-verdict-gate": 1089
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a200f0c471f1225d9379d502e249976e",
+      "seconds": 1.68
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1687,
+        "measures": 853
+      },
+      "rederived": {
+        "A-skip/unaddr": 65,
+        "E1 no-criteria": 8280,
+        "E3 no-novel": 1106,
+        "E4 criterion-fail": 4414,
+        "_E4 first-nonpass:fail": 4414,
+        "_crit_kinds": {
+          "structural:lineage_ref": 55,
+          "substantive-predicate": 80,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 55
+        },
+        "addr_pairs": 69,
+        "artifacts_candidate": 69,
+        "artifacts_total": 134,
+        "commitments_registered": 207,
+        "pairs": 13800,
+        "problems_total": 201,
+        "reached-verdict-gate": 4414
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a529cbb6b02be078a09592449fadc502",
+      "seconds": 4.3
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1784,
+        "measures": 879
+      },
+      "rederived": {
+        "A-skip/unaddr": 71,
+        "E1 no-criteria": 11850,
+        "E3 no-novel": 640,
+        "E4 criterion-fail": 4235,
+        "_E4 first-nonpass:fail": 4235,
+        "_crit_kinds": {
+          "structural:lineage_ref": 65,
+          "substantive-predicate": 65,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 65
+        },
+        "addr_pairs": 75,
+        "artifacts_candidate": 75,
+        "artifacts_total": 146,
+        "commitments_registered": 243,
+        "pairs": 16725,
+        "problems_total": 224,
+        "reached-verdict-gate": 4235
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "seconds": 4.57
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 562,
+        "measures": 217
+      },
+      "rederived": {
+        "A-skip/unaddr": 25,
+        "E1 no-criteria": 1711,
+        "E4 criterion-fail": 841,
+        "_E4 first-nonpass:fail": 841,
+        "_crit_kinds": {
+          "structural:lineage_ref": 29,
+          "substantive-predicate": 29,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 29
+        },
+        "addr_pairs": 29,
+        "artifacts_candidate": 29,
+        "artifacts_total": 54,
+        "commitments_registered": 86,
+        "pairs": 2552,
+        "problems_total": 89,
+        "reached-verdict-gate": 841
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b7514714c3310b6f805f466ff39915be",
+      "seconds": 1.57
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1815,
+        "measures": 902
+      },
+      "rederived": {
+        "A-skip/unaddr": 60,
+        "E1 no-criteria": 9922,
+        "E3 no-novel": 1484,
+        "E4 criterion-fail": 2944,
+        "_E4 first-nonpass:fail": 2944,
+        "_crit_kinds": {
+          "structural:lineage_ref": 54,
+          "substantive-predicate": 54,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 54
+        },
+        "addr_pairs": 82,
+        "artifacts_candidate": 82,
+        "artifacts_total": 142,
+        "commitments_registered": 183,
+        "pairs": 14350,
+        "problems_total": 176,
+        "reached-verdict-gate": 2944
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+      "seconds": 5.71
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 2102,
+        "measures": 1146
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 66,
+        "E1 no-criteria": 8715,
+        "E3 no-novel": 5856,
+        "E4 criterion-fail": 9416,
+        "_E4 first-nonpass:fail": 9416,
+        "_crit_kinds": {
+          "structural:lineage_ref": 52,
+          "substantive-predicate": 184,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 52
+        },
+        "addr_pairs": 84,
+        "artifacts_candidate": 83,
+        "artifacts_total": 150,
+        "commitments_registered": 183,
+        "pairs": 23987,
+        "problems_total": 290,
+        "reached-verdict-gate": 9416
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "seconds": 5.22
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 180,
+        "measures": 41
+      },
+      "rederived": {
+        "A-skip/unaddr": 8,
+        "_crit_kinds": {
+          "substantive-program:reasoning-envelope-wf": 1
+        },
+        "addr_pairs": 16,
+        "artifacts_candidate": 16,
+        "artifacts_total": 24,
+        "commitments_registered": 34,
+        "problems_total": 1
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "seconds": 0.94
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 609,
+        "measures": 222
+      },
+      "rederived": {
+        "A-skip/unaddr": 26,
+        "E1 no-criteria": 2240,
+        "E4 criterion-fail": 1024,
+        "_E4 first-nonpass:fail": 1024,
+        "_crit_kinds": {
+          "structural:lineage_ref": 32,
+          "substantive-predicate": 32,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 32
+        },
+        "addr_pairs": 32,
+        "artifacts_candidate": 32,
+        "artifacts_total": 58,
+        "commitments_registered": 101,
+        "pairs": 3264,
+        "problems_total": 103,
+        "reached-verdict-gate": 1024
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "seconds": 1.7
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1634,
+        "measures": 865
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 60,
+        "E1 no-criteria": 7104,
+        "E3 no-novel": 1248,
+        "E4 criterion-fail": 2378,
+        "_E4 first-nonpass:fail": 2378,
+        "_crit_kinds": {
+          "structural:lineage_ref": 49,
+          "substantive-predicate": 49,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 49
+        },
+        "addr_pairs": 75,
+        "artifacts_candidate": 74,
+        "artifacts_total": 135,
+        "commitments_registered": 144,
+        "pairs": 10730,
+        "problems_total": 146,
+        "reached-verdict-gate": 2378
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "seconds": 4.69
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 264,
+        "measures": 67
+      },
+      "rederived": {
+        "A-skip/unaddr": 8,
+        "E1 no-criteria": 320,
+        "E4 criterion-fail": 100,
+        "_E4 first-nonpass:fail": 100,
+        "_crit_kinds": {
+          "structural:lineage_ref": 10,
+          "substantive-predicate": 10,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 10
+        },
+        "addr_pairs": 10,
+        "artifacts_candidate": 10,
+        "artifacts_total": 18,
+        "commitments_registered": 42,
+        "pairs": 420,
+        "problems_total": 43,
+        "reached-verdict-gate": 100
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "seconds": 1.06
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 515,
+        "measures": 158
+      },
+      "rederived": {
+        "A-skip/unaddr": 28,
+        "_crit_kinds": {
+          "substantive-program:reasoning-envelope-wf": 1
+        },
+        "addr_pairs": 30,
+        "artifacts_candidate": 30,
+        "artifacts_total": 58,
+        "commitments_registered": 91,
+        "problems_total": 1
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "seconds": 2.39
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1390,
+        "measures": 613
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 55,
+        "E1 no-criteria": 9462,
+        "E3 no-novel": 594,
+        "E4 criterion-fail": 3225,
+        "_E4 first-nonpass:fail": 3225,
+        "_crit_kinds": {
+          "structural:lineage_ref": 49,
+          "substantive-predicate": 67,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 49
+        },
+        "addr_pairs": 58,
+        "artifacts_candidate": 57,
+        "artifacts_total": 113,
+        "commitments_registered": 216,
+        "pairs": 13281,
+        "problems_total": 234,
+        "reached-verdict-gate": 3225
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "seconds": 3.66
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 591,
+        "measures": 245
+      },
+      "rederived": {
+        "A-skip/unaddr": 26,
+        "E1 no-criteria": 2220,
+        "E3 no-novel": 138,
+        "E4 criterion-fail": 582,
+        "_E4 first-nonpass:fail": 582,
+        "_crit_kinds": {
+          "structural:lineage_ref": 24,
+          "substantive-predicate": 24,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 24
+        },
+        "addr_pairs": 30,
+        "artifacts_candidate": 30,
+        "artifacts_total": 56,
+        "commitments_registered": 98,
+        "pairs": 2940,
+        "problems_total": 99,
+        "reached-verdict-gate": 582
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "seconds": 1.55
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 970,
+        "measures": 354
+      },
+      "rederived": {
+        "A-skip/unaddr": 38,
+        "E1 no-criteria": 3895,
+        "E3 no-novel": 204,
+        "E4 criterion-fail": 1231,
+        "_E4 first-nonpass:fail": 1231,
+        "_crit_kinds": {
+          "structural:lineage_ref": 35,
+          "substantive-predicate": 35,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 35
+        },
+        "addr_pairs": 41,
+        "artifacts_candidate": 41,
+        "artifacts_total": 79,
+        "commitments_registered": 131,
+        "pairs": 5330,
+        "problems_total": 131,
+        "reached-verdict-gate": 1231
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+      "seconds": 3.51
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 388,
+        "measures": 127
+      },
+      "rederived": {
+        "A-skip/unaddr": 19,
+        "E1 no-criteria": 799,
+        "E4 criterion-fail": 289,
+        "_E4 first-nonpass:fail": 289,
+        "_crit_kinds": {
+          "structural:lineage_ref": 17,
+          "substantive-predicate": 17,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 17
+        },
+        "addr_pairs": 17,
+        "artifacts_candidate": 17,
+        "artifacts_total": 36,
+        "commitments_registered": 66,
+        "pairs": 1088,
+        "problems_total": 65,
+        "reached-verdict-gate": 289
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-a200f0c471f1225d9379d502e249976e",
+      "seconds": 1.29
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1237,
+        "measures": 518
+      },
+      "rederived": {
+        "A-skip/unaddr": 49,
+        "E1 no-criteria": 6656,
+        "E3 no-novel": 468,
+        "E4 criterion-fail": 1612,
+        "_E4 first-nonpass:fail": 1612,
+        "_crit_kinds": {
+          "structural:lineage_ref": 40,
+          "substantive-predicate": 40,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 40
+        },
+        "addr_pairs": 52,
+        "artifacts_candidate": 52,
+        "artifacts_total": 101,
+        "commitments_registered": 171,
+        "pairs": 8736,
+        "problems_total": 169,
+        "reached-verdict-gate": 1612
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "seconds": 4.11
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 399,
+        "measures": 114
+      },
+      "rederived": {
+        "A-skip/unaddr": 19,
+        "E1 no-criteria": 867,
+        "E4 criterion-fail": 289,
+        "_E4 first-nonpass:fail": 289,
+        "_crit_kinds": {
+          "structural:lineage_ref": 17,
+          "substantive-predicate": 17,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 17
+        },
+        "addr_pairs": 17,
+        "artifacts_candidate": 17,
+        "artifacts_total": 36,
+        "commitments_registered": 70,
+        "pairs": 1156,
+        "problems_total": 69,
+        "reached-verdict-gate": 289
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b7514714c3310b6f805f466ff39915be",
+      "seconds": 1.35
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1108,
+        "measures": 393
+      },
+      "rederived": {
+        "A-skip/unaddr": 36,
+        "E1 no-criteria": 5082,
+        "E3 no-novel": 210,
+        "E4 criterion-fail": 1302,
+        "_E4 first-nonpass:fail": 1302,
+        "_crit_kinds": {
+          "structural:lineage_ref": 36,
+          "substantive-predicate": 36,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 36
+        },
+        "addr_pairs": 42,
+        "artifacts_candidate": 42,
+        "artifacts_total": 78,
+        "commitments_registered": 166,
+        "pairs": 6594,
+        "problems_total": 158,
+        "reached-verdict-gate": 1302
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "seconds": 3.95
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 492,
+        "measures": 180
+      },
+      "rederived": {
+        "A-skip/unaddr": 26,
+        "E1 no-criteria": 1587,
+        "E4 criterion-fail": 529,
+        "_E4 first-nonpass:fail": 529,
+        "_crit_kinds": {
+          "structural:lineage_ref": 23,
+          "substantive-predicate": 23,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 23
+        },
+        "addr_pairs": 23,
+        "artifacts_candidate": 23,
+        "artifacts_total": 49,
+        "commitments_registered": 89,
+        "pairs": 2116,
+        "problems_total": 93,
+        "reached-verdict-gate": 529
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "seconds": 1.3
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 352,
+        "measures": 87
+      },
+      "rederived": {
+        "A-skip/unaddr": 14,
+        "E1 no-criteria": 816,
+        "E4 criterion-fail": 289,
+        "_E4 first-nonpass:fail": 289,
+        "_crit_kinds": {
+          "structural:lineage_ref": 17,
+          "substantive-predicate": 17,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 17
+        },
+        "addr_pairs": 17,
+        "artifacts_candidate": 17,
+        "artifacts_total": 31,
+        "commitments_registered": 65,
+        "pairs": 1105,
+        "problems_total": 66,
+        "reached-verdict-gate": 289
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "seconds": 1.24
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1628,
+        "measures": 785
+      },
+      "rederived": {
+        "A-skip/status": 2,
+        "A-skip/unaddr": 64,
+        "E1 no-criteria": 8905,
+        "E3 no-novel": 1184,
+        "E4 criterion-fail": 3691,
+        "_E4 first-nonpass:fail": 3691,
+        "_crit_kinds": {
+          "structural:lineage_ref": 51,
+          "substantive-predicate": 75,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 51
+        },
+        "addr_pairs": 67,
+        "artifacts_candidate": 65,
+        "artifacts_total": 131,
+        "commitments_registered": 200,
+        "pairs": 13780,
+        "problems_total": 213,
+        "reached-verdict-gate": 3691
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "seconds": 4.42
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 231,
+        "measures": 86
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 11,
+        "E4 criterion-fail": 11,
+        "_E4 first-nonpass:fail": 11,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 11,
+        "artifacts_candidate": 11,
+        "artifacts_total": 23,
+        "commitments_registered": 23,
+        "pairs": 22,
+        "problems_total": 3,
+        "reached-verdict-gate": 11
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-168a41157d05ca53431f268fba264b4c",
+      "seconds": 0.99
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 155,
+        "measures": 30
+      },
+      "rederived": {
+        "A-skip/unaddr": 9,
+        "E1 no-criteria": 6,
+        "E4 criterion-fail": 6,
+        "_E4 first-nonpass:fail": 6,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 6,
+        "artifacts_candidate": 6,
+        "artifacts_total": 15,
+        "commitments_registered": 16,
+        "pairs": 12,
+        "problems_total": 3,
+        "reached-verdict-gate": 6
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-649323b4f264ac6b69fb87736d40fb27",
+      "seconds": 0.98
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 276,
+        "measures": 109
+      },
+      "rederived": {
+        "A-skip/unaddr": 15,
+        "E1 no-criteria": 13,
+        "E4 criterion-fail": 13,
+        "_E4 first-nonpass:fail": 13,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 13,
+        "artifacts_candidate": 13,
+        "artifacts_total": 28,
+        "commitments_registered": 32,
+        "pairs": 26,
+        "problems_total": 3,
+        "reached-verdict-gate": 13
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-7f93a0955557fa490e1b1ead01ed459e",
+      "seconds": 1.09
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 206,
+        "measures": 66
+      },
+      "rederived": {
+        "A-skip/unaddr": 10,
+        "E1 no-criteria": 8,
+        "E4 criterion-fail": 8,
+        "_E4 first-nonpass:fail": 8,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 8,
+        "artifacts_candidate": 8,
+        "artifacts_total": 18,
+        "commitments_registered": 20,
+        "pairs": 16,
+        "problems_total": 3,
+        "reached-verdict-gate": 8
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-89d6f536c4daeee986e44a68042afded",
+      "seconds": 0.99
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 220,
+        "measures": 75
+      },
+      "rederived": {
+        "A-skip/unaddr": 8,
+        "E1 no-criteria": 9,
+        "E4 criterion-fail": 9,
+        "_E4 first-nonpass:fail": 9,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 9,
+        "artifacts_candidate": 9,
+        "artifacts_total": 17,
+        "commitments_registered": 29,
+        "pairs": 18,
+        "problems_total": 3,
+        "reached-verdict-gate": 9
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-97623b8fecfdf79fdace40e46cb7ac0c",
+      "seconds": 0.95
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 322,
+        "measures": 133
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 16,
+        "E4 criterion-fail": 16,
+        "_E4 first-nonpass:fail": 16,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 16,
+        "artifacts_candidate": 16,
+        "artifacts_total": 28,
+        "commitments_registered": 43,
+        "pairs": 32,
+        "problems_total": 3,
+        "reached-verdict-gate": 16
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-a277abb13327846e13fb3124c1804aa8",
+      "seconds": 1.27
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 283,
+        "measures": 114
+      },
+      "rederived": {
+        "A-skip/unaddr": 11,
+        "E1 no-criteria": 14,
+        "E4 criterion-fail": 14,
+        "_E4 first-nonpass:fail": 14,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 14,
+        "artifacts_candidate": 14,
+        "artifacts_total": 25,
+        "commitments_registered": 38,
+        "pairs": 28,
+        "problems_total": 3,
+        "reached-verdict-gate": 14
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-b212590cf2957821796b560163e1941e",
+      "seconds": 1.18
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 136,
+        "measures": 25
+      },
+      "rederived": {
+        "A-skip/unaddr": 8,
+        "E1 no-criteria": 5,
+        "E4 criterion-fail": 5,
+        "_E4 first-nonpass:fail": 5,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 5,
+        "artifacts_candidate": 5,
+        "artifacts_total": 13,
+        "commitments_registered": 13,
+        "pairs": 10,
+        "problems_total": 3,
+        "reached-verdict-gate": 5
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+      "seconds": 0.89
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 212,
+        "measures": 72
+      },
+      "rederived": {
+        "A-skip/unaddr": 8,
+        "E1 no-criteria": 8,
+        "E4 criterion-fail": 8,
+        "_E4 first-nonpass:fail": 8,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 8,
+        "artifacts_candidate": 8,
+        "artifacts_total": 16,
+        "commitments_registered": 21,
+        "pairs": 16,
+        "problems_total": 3,
+        "reached-verdict-gate": 8
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-db8194b08518dd3afc2b78c533170ab3",
+      "seconds": 1.01
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 313,
+        "measures": 154
+      },
+      "rederived": {
+        "A-skip/unaddr": 18,
+        "E1 no-criteria": 17,
+        "E4 criterion-fail": 17,
+        "_E4 first-nonpass:fail": 17,
+        "_crit_kinds": {
+          "structural:lineage_ref": 1,
+          "substantive-predicate": 1,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 1
+        },
+        "addr_pairs": 17,
+        "artifacts_candidate": 17,
+        "artifacts_total": 35,
+        "commitments_registered": 36,
+        "pairs": 34,
+        "problems_total": 3,
+        "reached-verdict-gate": 17
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-ecf3ce54012a3df4eef08d0cdb772f41",
+      "seconds": 1.12
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 410,
+        "measures": 132
+      },
+      "rederived": {
+        "A-skip/unaddr": 18,
+        "E1 no-criteria": 900,
+        "E4 criterion-fail": 324,
+        "_E4 first-nonpass:fail": 324,
+        "_crit_kinds": {
+          "structural:lineage_ref": 18,
+          "substantive-predicate": 18,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 18
+        },
+        "addr_pairs": 18,
+        "artifacts_candidate": 18,
+        "artifacts_total": 36,
+        "commitments_registered": 69,
+        "pairs": 1224,
+        "problems_total": 69,
+        "reached-verdict-gate": 324
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "seconds": 1.32
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 592,
+        "measures": 237
+      },
+      "rederived": {
+        "A-skip/unaddr": 27,
+        "E1 no-criteria": 2100,
+        "E3 no-novel": 92,
+        "E4 criterion-fail": 580,
+        "_E4 first-nonpass:fail": 580,
+        "_crit_kinds": {
+          "structural:lineage_ref": 24,
+          "substantive-predicate": 24,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 24
+        },
+        "addr_pairs": 28,
+        "artifacts_candidate": 28,
+        "artifacts_total": 55,
+        "commitments_registered": 98,
+        "pairs": 2772,
+        "problems_total": 100,
+        "reached-verdict-gate": 580
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "seconds": 1.63
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 493,
+        "measures": 178
+      },
+      "rederived": {
+        "A-skip/unaddr": 27,
+        "E1 no-criteria": 1725,
+        "E4 criterion-fail": 529,
+        "_E4 first-nonpass:fail": 529,
+        "_crit_kinds": {
+          "structural:lineage_ref": 23,
+          "substantive-predicate": 23,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 23
+        },
+        "addr_pairs": 23,
+        "artifacts_candidate": 23,
+        "artifacts_total": 50,
+        "commitments_registered": 100,
+        "pairs": 2254,
+        "problems_total": 99,
+        "reached-verdict-gate": 529
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598",
+      "seconds": 1.2
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 68,
+        "measures": 4
+      },
+      "rederived": {
+        "A-skip/unaddr": 4,
+        "_crit_kinds": {
+          "substantive-program:reasoning-envelope-wf": 1
+        },
+        "addr_pairs": 0,
+        "artifacts_candidate": 0,
+        "artifacts_total": 4,
+        "commitments_registered": 1,
+        "problems_total": 1
+      },
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-f5aee6107cb0de151e72bf282c86d166",
+      "seconds": 0.6
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 12991,
+        "measures": 6556
+      },
+      "rederived": {
+        "A-skip/status": 17,
+        "A-skip/unaddr": 42,
+        "E1 no-criteria": 4497,
+        "E3 no-novel": 250038,
+        "E4 criterion-fail": 454250,
+        "_E4 first-nonpass:fail": 454250,
+        "_crit_kinds": {
+          "structural:lineage_ref": 61,
+          "substantive-predicate": 2875,
+          "unknown-program:hv_floor": 61
+        },
+        "addr_pairs": 262,
+        "artifacts_candidate": 245,
+        "artifacts_total": 304,
+        "commitments_registered": 51,
+        "pairs": 708785,
+        "problems_total": 2894,
+        "reached-verdict-gate": 454250
+      },
+      "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+      "seconds": 40.69
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 64,
+        "measures": 6
+      },
+      "rederived": {
+        "A-skip/unaddr": 10,
+        "E1 no-criteria": 12,
+        "E4 criterion-fail": 72,
+        "_E4 first-nonpass:fail": 72,
+        "_crit_kinds": {
+          "structural:lineage_ref": 6,
+          "substantive-predicate": 6,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 6
+        },
+        "addr_pairs": 12,
+        "artifacts_candidate": 12,
+        "artifacts_total": 22,
+        "commitments_registered": 5,
+        "pairs": 84,
+        "problems_total": 8,
+        "reached-verdict-gate": 72
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+      "seconds": 0.26
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 79,
+        "measures": 6
+      },
+      "rederived": {
+        "A-skip/unaddr": 10,
+        "E1 no-criteria": 12,
+        "E4 criterion-fail": 72,
+        "_E4 first-nonpass:fail": 72,
+        "_crit_kinds": {
+          "structural:lineage_ref": 6,
+          "substantive-predicate": 6,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 6
+        },
+        "addr_pairs": 12,
+        "artifacts_candidate": 12,
+        "artifacts_total": 22,
+        "commitments_registered": 5,
+        "pairs": 84,
+        "problems_total": 8,
+        "reached-verdict-gate": 72
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+      "seconds": 0.39
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 114,
+        "measures": 6
+      },
+      "rederived": {
+        "A-skip/unaddr": 10,
+        "E1 no-criteria": 12,
+        "E4 criterion-fail": 72,
+        "_E4 first-nonpass:fail": 72,
+        "_crit_kinds": {
+          "structural:lineage_ref": 6,
+          "substantive-predicate": 6,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 6
+        },
+        "addr_pairs": 12,
+        "artifacts_candidate": 12,
+        "artifacts_total": 22,
+        "commitments_registered": 5,
+        "pairs": 84,
+        "problems_total": 8,
+        "reached-verdict-gate": 72
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+      "seconds": 0.67
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 441,
+        "measures": 334
+      },
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 427,
+        "measures": 327
+      },
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required",
+      "seconds": 0.0
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 648,
+        "measures": 338
+      },
+      "rederived": {
+        "A-skip/status": 11,
+        "A-skip/unaddr": 23,
+        "_crit_kinds": {
+          "rubric": 7,
+          "structural:skeleton_wf": 7
+        },
+        "addr_pairs": 6,
+        "artifacts_candidate": 0,
+        "artifacts_total": 34,
+        "commitments_registered": 273,
+        "problems_total": 7
+      },
+      "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+      "seconds": 0.31
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1591,
+        "measures": 646
+      },
+      "rederived": {
+        "A-skip/status": 4,
+        "A-skip/unaddr": 11,
+        "_crit_kinds": {
+          "rubric": 5,
+          "structural:skeleton_wf": 5
+        },
+        "addr_pairs": 4,
+        "artifacts_candidate": 0,
+        "artifacts_total": 15,
+        "commitments_registered": 927,
+        "problems_total": 5
+      },
+      "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+      "seconds": 0.93
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 565,
+        "measures": 355
+      },
+      "rederived": {
+        "A-skip/status": 8,
+        "A-skip/unaddr": 17,
+        "_crit_kinds": {
+          "rubric": 4,
+          "structural:skeleton_wf": 4
+        },
+        "addr_pairs": 3,
+        "artifacts_candidate": 0,
+        "artifacts_total": 25,
+        "commitments_registered": 183,
+        "problems_total": 4
+      },
+      "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b",
+      "seconds": 0.22
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 75,
+        "measures": 52
+      },
+      "root": "experiments/bronze_pilot_2026-07-14",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 304,
+        "measures": 233
+      },
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 512,
+        "measures": 279
+      },
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 327,
+        "measures": 235
+      },
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 370,
+        "measures": 253
+      },
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 24,
+        "events": 186,
+        "measure_addr_events": 3,
+        "measure_addr_pairs": 24,
+        "measures": 121,
+        "reach_nonzero_entries": 10,
+        "reach_set_events": 4,
+        "reach_zero_entries": 5
+      },
+      "root": "experiments/gemma4_dna_unattended_2026-07-12",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 11,
+        "events": 103,
+        "measure_addr_events": 2,
+        "measure_addr_pairs": 11,
+        "measures": 65,
+        "reach_nonzero_entries": 4,
+        "reach_set_events": 2,
+        "reach_zero_entries": 0
+      },
+      "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 721,
+        "measures": 452
+      },
+      "root": "experiments/glm_judge_2026-07-14",
+      "seconds": 0.0
+    },
+    {
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted",
+      "open_traceback": [
+        "  File \"/home/user/DeepReason/src/deepreason/run_manifest.py\", line 4177, in _discriminate_raw_run_manifest_version",
+        "    raise UnsupportedRunManifestVersionError(schema_version)",
+        "deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted"
+      ],
+      "opens": false,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 224,
+        "measures": 45
+      },
+      "root": "experiments/jolt_architecture_2026-07-16/run",
+      "seconds": 0.0
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 364,
+        "measures": 92
+      },
+      "rederived": {
+        "A-skip/unaddr": 15,
+        "E1 no-criteria": 406,
+        "E4 criterion-fail": 168,
+        "_E4 first-nonpass:fail": 168,
+        "_crit_kinds": {
+          "structural:lineage_ref": 12,
+          "substantive-predicate": 12,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 12
+        },
+        "addr_pairs": 14,
+        "artifacts_candidate": 14,
+        "artifacts_total": 29,
+        "commitments_registered": 42,
+        "pairs": 574,
+        "problems_total": 42,
+        "reached-verdict-gate": 168
+      },
+      "root": "experiments/live_coin_canonicity_2026-07-31/home/runs/run-c5f901f38208e862f4ce2fe60a26e551",
+      "seconds": 1.57
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 49,
+        "measures": 1
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 3,
+        "_crit_kinds": {},
+        "addr_pairs": 25,
+        "artifacts_candidate": 24,
+        "artifacts_total": 28,
+        "commitments_registered": 37,
+        "problems_total": 1
+      },
+      "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+      "seconds": 0.07
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 820,
+        "measures": 303
+      },
+      "rederived": {
+        "A-skip/status": 1,
+        "A-skip/unaddr": 33,
+        "E1 no-criteria": 3850,
+        "E3 no-novel": 150,
+        "E4 criterion-fail": 935,
+        "_E4 first-nonpass:fail": 935,
+        "_crit_kinds": {
+          "structural:lineage_ref": 31,
+          "substantive-predicate": 31,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 31
+        },
+        "addr_pairs": 36,
+        "artifacts_candidate": 35,
+        "artifacts_total": 69,
+        "commitments_registered": 140,
+        "pairs": 4935,
+        "problems_total": 142,
+        "reached-verdict-gate": 935
+      },
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+      "seconds": 2.15
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1155,
+        "measures": 456
+      },
+      "rederived": {
+        "A-skip/unaddr": 25,
+        "E1 no-criteria": 3465,
+        "E3 no-novel": 780,
+        "E4 criterion-fail": 2190,
+        "_E4 first-nonpass:fail": 2190,
+        "_crit_kinds": {
+          "structural:lineage_ref": 30,
+          "substantive-predicate": 66,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 30
+        },
+        "addr_pairs": 45,
+        "artifacts_candidate": 45,
+        "artifacts_total": 70,
+        "commitments_registered": 110,
+        "pairs": 6435,
+        "problems_total": 144,
+        "reached-verdict-gate": 2190
+      },
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+      "seconds": 4.6
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 561,
+        "measures": 197
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1056,
+        "E4 criterion-fail": 480,
+        "_E4 first-nonpass:fail": 480,
+        "_crit_kinds": {
+          "structural:lineage_ref": 20,
+          "substantive-predicate": 20,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 20
+        },
+        "addr_pairs": 24,
+        "artifacts_candidate": 24,
+        "artifacts_total": 46,
+        "commitments_registered": 67,
+        "pairs": 1536,
+        "problems_total": 65,
+        "reached-verdict-gate": 480
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "seconds": 2.0
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 280,
+        "measures": 80
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 200,
+        "E4 criterion-fail": 80,
+        "_E4 first-nonpass:fail": 80,
+        "_crit_kinds": {
+          "structural:lineage_ref": 8,
+          "substantive-predicate": 8,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 8
+        },
+        "addr_pairs": 10,
+        "artifacts_candidate": 10,
+        "artifacts_total": 22,
+        "commitments_registered": 29,
+        "pairs": 280,
+        "problems_total": 29,
+        "reached-verdict-gate": 80
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+      "seconds": 1.2
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 188,
+        "measures": 52
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 10,
+        "E4 criterion-fail": 20,
+        "_E4 first-nonpass:fail": 20,
+        "_crit_kinds": {
+          "structural:lineage_ref": 2,
+          "substantive-predicate": 2,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 2
+        },
+        "addr_pairs": 10,
+        "artifacts_candidate": 10,
+        "artifacts_total": 22,
+        "commitments_registered": 20,
+        "pairs": 30,
+        "problems_total": 4,
+        "reached-verdict-gate": 20
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+      "seconds": 0.97
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 499,
+        "measures": 165
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1040,
+        "E4 criterion-fail": 340,
+        "_E4 first-nonpass:fail": 340,
+        "_crit_kinds": {
+          "structural:lineage_ref": 17,
+          "substantive-predicate": 17,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 17
+        },
+        "addr_pairs": 20,
+        "artifacts_candidate": 20,
+        "artifacts_total": 42,
+        "commitments_registered": 68,
+        "pairs": 1380,
+        "problems_total": 70,
+        "reached-verdict-gate": 340
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+      "seconds": 1.71
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 285,
+        "measures": 68
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 210,
+        "E4 criterion-fail": 80,
+        "_E4 first-nonpass:fail": 80,
+        "_crit_kinds": {
+          "structural:lineage_ref": 8,
+          "substantive-predicate": 8,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 8
+        },
+        "addr_pairs": 10,
+        "artifacts_candidate": 10,
+        "artifacts_total": 22,
+        "commitments_registered": 29,
+        "pairs": 290,
+        "problems_total": 30,
+        "reached-verdict-gate": 80
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+      "seconds": 1.4
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 550,
+        "measures": 180
+      },
+      "rederived": {
+        "A-skip/unaddr": 22,
+        "E1 no-criteria": 1675,
+        "E4 criterion-fail": 550,
+        "_E4 first-nonpass:fail": 550,
+        "_crit_kinds": {
+          "structural:lineage_ref": 22,
+          "substantive-predicate": 22,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 22
+        },
+        "addr_pairs": 25,
+        "artifacts_candidate": 25,
+        "artifacts_total": 47,
+        "commitments_registered": 91,
+        "pairs": 2225,
+        "problems_total": 90,
+        "reached-verdict-gate": 550
+      },
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "seconds": 1.62
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 294,
+        "measures": 75
+      },
+      "rederived": {
+        "A-skip/unaddr": 9,
+        "E1 no-criteria": 330,
+        "E4 criterion-fail": 110,
+        "_E4 first-nonpass:fail": 110,
+        "_crit_kinds": {
+          "structural:lineage_ref": 10,
+          "substantive-predicate": 10,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 10
+        },
+        "addr_pairs": 11,
+        "artifacts_candidate": 11,
+        "artifacts_total": 20,
+        "commitments_registered": 39,
+        "pairs": 440,
+        "problems_total": 41,
+        "reached-verdict-gate": 110
+      },
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "seconds": 1.33
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 468,
+        "measures": 148
+      },
+      "rederived": {
+        "A-skip/unaddr": 16,
+        "E1 no-criteria": 512,
+        "E3 no-novel": 54,
+        "E4 criterion-fail": 106,
+        "_E4 first-nonpass:fail": 106,
+        "_crit_kinds": {
+          "structural:lineage_ref": 10,
+          "substantive-predicate": 10,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 10
+        },
+        "addr_pairs": 16,
+        "artifacts_candidate": 16,
+        "artifacts_total": 32,
+        "commitments_registered": 43,
+        "pairs": 672,
+        "problems_total": 43,
+        "reached-verdict-gate": 106
+      },
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+      "seconds": 2.24
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 754,
+        "measures": 423
+      },
+      "rederived": {
+        "A-skip/unaddr": 21,
+        "E1 no-criteria": 116,
+        "E3 no-novel": 192,
+        "E4 criterion-fail": 98,
+        "_E4 first-nonpass:fail": 98,
+        "_crit_kinds": {
+          "structural:lineage_ref": 5,
+          "substantive-predicate": 5,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 5
+        },
+        "addr_pairs": 58,
+        "artifacts_candidate": 58,
+        "artifacts_total": 79,
+        "commitments_registered": 4,
+        "pairs": 406,
+        "problems_total": 8,
+        "reached-verdict-gate": 98
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+      "seconds": 2.78
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 594,
+        "measures": 276
+      },
+      "rederived": {
+        "A-skip/unaddr": 20,
+        "E1 no-criteria": 897,
+        "E3 no-novel": 230,
+        "E4 criterion-fail": 199,
+        "_E4 first-nonpass:fail": 199,
+        "_crit_kinds": {
+          "structural:lineage_ref": 11,
+          "substantive-predicate": 11,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 11
+        },
+        "addr_pairs": 39,
+        "artifacts_candidate": 39,
+        "artifacts_total": 59,
+        "commitments_registered": 27,
+        "pairs": 1326,
+        "problems_total": 35,
+        "reached-verdict-gate": 199
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "seconds": 2.34
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 406,
+        "measures": 221
+      },
+      "rederived": {
+        "A-skip/unaddr": 19,
+        "E1 no-criteria": 68,
+        "E3 no-novel": 96,
+        "E4 criterion-fail": 74,
+        "_E4 first-nonpass:fail": 74,
+        "_crit_kinds": {
+          "structural:lineage_ref": 5,
+          "substantive-predicate": 5,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 5
+        },
+        "addr_pairs": 34,
+        "artifacts_candidate": 34,
+        "artifacts_total": 53,
+        "commitments_registered": 4,
+        "pairs": 238,
+        "problems_total": 8,
+        "reached-verdict-gate": 74
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+      "seconds": 1.57
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 161,
+        "measures": 77
+      },
+      "rederived": {
+        "A-skip/unaddr": 12,
+        "E1 no-criteria": 22,
+        "E3 no-novel": 48,
+        "E4 criterion-fail": 62,
+        "_E4 first-nonpass:fail": 62,
+        "_crit_kinds": {
+          "structural:lineage_ref": 5,
+          "substantive-predicate": 5,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 5
+        },
+        "addr_pairs": 22,
+        "artifacts_candidate": 22,
+        "artifacts_total": 34,
+        "commitments_registered": 4,
+        "pairs": 132,
+        "problems_total": 7,
+        "reached-verdict-gate": 62
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+      "seconds": 0.38
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 486,
+        "measures": 134
+      },
+      "rederived": {
+        "A-skip/unaddr": 21,
+        "E1 no-criteria": 792,
+        "E4 criterion-fail": 374,
+        "_E4 first-nonpass:fail": 374,
+        "_crit_kinds": {
+          "structural:lineage_ref": 17,
+          "substantive-predicate": 17,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 17
+        },
+        "addr_pairs": 22,
+        "artifacts_candidate": 22,
+        "artifacts_total": 43,
+        "commitments_registered": 50,
+        "pairs": 1166,
+        "problems_total": 54,
+        "reached-verdict-gate": 374
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+      "seconds": 2.18
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 276,
+        "measures": 107
+      },
+      "rederived": {
+        "A-skip/unaddr": 13,
+        "_crit_kinds": {
+          "substantive-program:reasoning-envelope-wf": 1
+        },
+        "addr_pairs": 17,
+        "artifacts_candidate": 17,
+        "artifacts_total": 30,
+        "commitments_registered": 42,
+        "problems_total": 1
+      },
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+      "seconds": 1.09
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 300,
+        "measures": 76
+      },
+      "rederived": {
+        "A-skip/unaddr": 10,
+        "E1 no-criteria": 230,
+        "E4 criterion-fail": 100,
+        "_E4 first-nonpass:fail": 100,
+        "_crit_kinds": {
+          "structural:lineage_ref": 10,
+          "substantive-predicate": 10,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 10
+        },
+        "addr_pairs": 10,
+        "artifacts_candidate": 10,
+        "artifacts_total": 20,
+        "commitments_registered": 33,
+        "pairs": 330,
+        "problems_total": 34,
+        "reached-verdict-gate": 100
+      },
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+      "seconds": 1.32
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 985,
+        "measures": 367
+      },
+      "rederived": {
+        "A-skip/unaddr": 33,
+        "E1 no-criteria": 3800,
+        "E3 no-novel": 198,
+        "E4 criterion-fail": 1162,
+        "_E4 first-nonpass:fail": 1162,
+        "_crit_kinds": {
+          "structural:lineage_ref": 34,
+          "substantive-predicate": 34,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 34
+        },
+        "addr_pairs": 40,
+        "artifacts_candidate": 40,
+        "artifacts_total": 73,
+        "commitments_registered": 127,
+        "pairs": 5160,
+        "problems_total": 130,
+        "reached-verdict-gate": 1162
+      },
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+      "seconds": 3.26
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 607,
+        "measures": 174
+      },
+      "rederived": {
+        "A-skip/unaddr": 15,
+        "E1 no-criteria": 2544,
+        "E4 criterion-fail": 576,
+        "_E4 first-nonpass:fail": 576,
+        "_crit_kinds": {
+          "structural:lineage_ref": 24,
+          "substantive-predicate": 24,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 24
+        },
+        "addr_pairs": 24,
+        "artifacts_candidate": 24,
+        "artifacts_total": 39,
+        "commitments_registered": 128,
+        "pairs": 3120,
+        "problems_total": 131,
+        "reached-verdict-gate": 576
+      },
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+      "seconds": 1.84
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 373,
+        "measures": 87
+      },
+      "rederived": {
+        "A-skip/unaddr": 15,
+        "E1 no-criteria": 528,
+        "E4 criterion-fail": 144,
+        "_E4 first-nonpass:fail": 144,
+        "_crit_kinds": {
+          "structural:lineage_ref": 12,
+          "substantive-predicate": 12,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 12
+        },
+        "addr_pairs": 12,
+        "artifacts_candidate": 12,
+        "artifacts_total": 27,
+        "commitments_registered": 56,
+        "pairs": 672,
+        "problems_total": 57,
+        "reached-verdict-gate": 144
+      },
+      "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+      "seconds": 1.47
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 1202,
+        "measures": 531
+      },
+      "rederived": {
+        "A-skip/unaddr": 44,
+        "E1 no-criteria": 6760,
+        "E3 no-novel": 270,
+        "E4 criterion-fail": 2122,
+        "_E4 first-nonpass:fail": 2122,
+        "_crit_kinds": {
+          "structural:lineage_ref": 46,
+          "substantive-predicate": 46,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 46
+        },
+        "addr_pairs": 52,
+        "artifacts_candidate": 52,
+        "artifacts_total": 96,
+        "commitments_registered": 188,
+        "pairs": 9152,
+        "problems_total": 177,
+        "reached-verdict-gate": 2122
+      },
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+      "seconds": 3.19
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 508,
+        "measures": 140
+      },
+      "rederived": {
+        "A-skip/unaddr": 19,
+        "E1 no-criteria": 1062,
+        "E4 criterion-fail": 324,
+        "_E4 first-nonpass:fail": 324,
+        "_crit_kinds": {
+          "structural:lineage_ref": 18,
+          "substantive-predicate": 18,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 18
+        },
+        "addr_pairs": 18,
+        "artifacts_candidate": 18,
+        "artifacts_total": 37,
+        "commitments_registered": 77,
+        "pairs": 1386,
+        "problems_total": 78,
+        "reached-verdict-gate": 324
+      },
+      "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+      "seconds": 1.88
+    },
+    {
+      "opens": true,
+      "recorded": {
+        "_full_hit_pairs": 0,
+        "events": 581,
+        "measures": 184
+      },
+      "rederived": {
+        "A-skip/unaddr": 23,
+        "E1 no-criteria": 1752,
+        "E4 criterion-fail": 576,
+        "_E4 first-nonpass:fail": 576,
+        "_crit_kinds": {
+          "structural:lineage_ref": 24,
+          "substantive-predicate": 24,
+          "substantive-program:reasoning-envelope-wf": 1,
+          "unknown-program:hv_floor": 24
+        },
+        "addr_pairs": 24,
+        "artifacts_candidate": 24,
+        "artifacts_total": 47,
+        "commitments_registered": 93,
+        "pairs": 2328,
+        "problems_total": 98,
+        "reached-verdict-gate": 576
+      },
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "seconds": 1.9
+    }
+  ],
+  "totals": {
+    "recorded._full_hit_pairs": 35,
+    "recorded.events": 92247,
+    "recorded.measure_addr_events": 5,
+    "recorded.measure_addr_pairs": 35,
+    "recorded.measures": 42676,
+    "recorded.reach_nonzero_entries": 14,
+    "recorded.reach_set_events": 6,
+    "recorded.reach_zero_entries": 5,
+    "rederived.A-skip/status": 61,
+    "rederived.A-skip/unaddr": 2781,
+    "rederived.E1 no-criteria": 285070,
+    "rederived.E3 no-novel": 308264,
+    "rederived.E4 criterion-fail": 585096,
+    "rederived._E4 first-nonpass:fail": 585096,
+    "rederived.addr_pairs": 3579,
+    "rederived.artifacts_candidate": 3528,
+    "rederived.artifacts_total": 6370,
+    "rederived.commitments_registered": 9880,
+    "rederived.pairs": 1178430,
+    "rederived.problems_total": 11773,
+    "rederived.reached-verdict-gate": 585096,
+    "roots_open": 96,
+    "roots_out_of_scope": 11,
+    "roots_total": 107
+  },
+  "with_verdicts": true
+}

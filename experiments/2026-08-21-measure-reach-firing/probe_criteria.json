@@ -1,0 +1,55 @@
+[
+  {
+    "coverage_histogram": {
+      "0.33": 72
+    },
+    "criteria_never_passing": 1,
+    "criteria_passing_sometimes": 0,
+    "distinct_qualifying_criteria": 1,
+    "examples_passing_all": [],
+    "gate_pairs": 72,
+    "pairs_passing_every_qualifying_criterion": 0,
+    "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+    "top_rejectors": [
+      {
+        "criterion": "relation-form@578e42df713e",
+        "eval": "predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'",
+        "nonpass": 72,
+        "verdicts": {
+          "fail": 72
+        }
+      }
+    ]
+  },
+  {
+    "coverage_histogram": {
+      "0.33": 50,
+      "1.0": 48
+    },
+    "criteria_never_passing": 2,
+    "criteria_passing_sometimes": 0,
+    "distinct_qualifying_criteria": 2,
+    "examples_passing_all": [],
+    "gate_pairs": 98,
+    "pairs_passing_every_qualifying_criterion": 0,
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+    "top_rejectors": [
+      {
+        "criterion": "relation-form@578e42df713e",
+        "eval": "predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'",
+        "nonpass": 50,
+        "verdicts": {
+          "fail": 50
+        }
+      },
+      {
+        "criterion": "reasoning-envelope-wf",
+        "eval": "program:reasoning-envelope-wf",
+        "nonpass": 48,
+        "verdicts": {
+          "fail": 48
+        }
+      }
+    ]
+  }
+]
