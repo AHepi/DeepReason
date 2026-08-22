@@ -1,0 +1,1 @@
+{"commitment":"uhi-nocturnal-release@v1","eval":"predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))","verdict":"fail"}
