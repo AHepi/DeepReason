@@ -1,5 +1,5 @@
 # Checklist for: Rung 4 — frame assertions and the standing view
-State: next=36 blockers=none
+State: next=37 (final push) blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -413,7 +413,7 @@ Amendment 2). Any wider contact is a NEW stop.
       No sweep output is recorded, because none should exist. The cost was
       wall-clock only; nothing was written and no artifact depends on it.
 
-- [ ] 36. (S6) Re-run BOTH wheel smokes at the boundary — the public surface
+- [x] 36. (S6) Re-run BOTH wheel smokes at the boundary — the public surface
       moved this rung (C9).
       done-when: both exit 0 (pasted).
 
