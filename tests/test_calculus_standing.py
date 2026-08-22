@@ -1,0 +1,364 @@
+"""The standing view: Def 9.3, Prop 12.4 and Prop 12.5.
+
+Implements R4, R8, R9, R12 (v2 calculus program, Rung 4). The claim these
+tests exist to make falsifiable is Prop 12.5 -- **standing never adjudicates**.
+Label computation reads `att` and `dep` only; standing is consumed by render
+and schedule alone. Its strongest form is here: two runs over the same graph,
+one carrying frame assertions and one carrying none, produce IDENTICAL labels.
+
+Prop 12.4's two directions are the companion. If both held only in one
+direction the axes would be coupled and nobody would notice, because the
+single-direction test passes under coupling in the other.
+"""
+
+import json
+
+from deepreason.calculus import operations
+from deepreason.calculus.standing import (
+    consulted,
+    frames,
+    standing_of,
+    standing_view,
+)
+from deepreason.harness import Harness
+from deepreason.ontology import (
+    Interface,
+    Problem,
+    ProblemProvenance,
+    Provenance,
+    Ref,
+    SpawnTrigger,
+    Status,
+)
+from deepreason.ontology.artifact import RefRole
+from tests.conftest import attack
+
+
+SCOPE = {
+    "schema": "declarative-scope.v1",
+    "predicate": {"op": "contains",
+                  "args": [{"field": "description"}, {"text": "tides"}]},
+}
+
+
+def _art(harness, text, refs=()):
+    return harness.create_artifact(
+        text,
+        interface=Interface(refs=list(refs)),
+        provenance=Provenance(role="critic"),
+    )
+
+
+def _shared_graph(harness):
+    """The graph the labels are computed over, identical in both roots.
+
+    Deliberately non-trivial: a supported claim, a premise it depends on, and
+    a refuted rival. A graph of isolated nodes would make Prop 12.5's test pass
+    for the wrong reason -- there would be nothing for standing to perturb.
+    """
+    premise = _art(harness, "p: the moon exerts a tidal force")
+    subject = _art(
+        harness, "b: the lunar theory of tides",
+        refs=[Ref(target=premise.id, role=RefRole.DEPENDENCE)],
+    )
+    rival = _art(harness, "r: the solar theory of tides")
+    attack(harness, rival.id, "the-solar-theory-mispredicts-the-spring-tide")
+    return premise, subject, rival
+
+
+def _frame(harness, subject, *, description="why do tides follow the moon"):
+    case = _art(harness, "reach record: three lineages cite this subject")
+    problem = operations.ensure_promotion_problem(harness, subject.id, description)
+    assertion = operations.file_frame_assertion(
+        harness, problem=problem, subject_ref=subject.id, scope=SCOPE,
+        reach_case_refs=(case.id,),
+        departure_protocol="declare the departure in the pack and cite this id",
+    )
+    return case, problem, assertion
+
+
+# --- R8: Prop 12.5, in its strongest form ------------------------------------
+
+def test_frame_assertions_do_not_move_a_single_label(tmp_path):
+    """R8, Prop 12.5. Two runs, the same graph, one WITH frame assertions and
+    one WITHOUT. Every label, every attack edge and every support edge over the
+    shared artifacts is identical.
+
+    Restricting to the shared ids is not a weakening: the frame assertion, its
+    reach case and its promotion problem are extra NODES, and the claim is that
+    they perturb nothing already there. A comparison over all nodes would
+    compare a node against its own absence and prove nothing.
+
+    THE SUBJECT IS REFUTED IN BOTH ROOTS, deliberately, and this is the part
+    the mutation proof forced. An earlier version framed an ACCEPTED subject,
+    and a mutation that leaked standing into `compute_label0` -- setting every
+    consulted subject to `accepted` -- passed it, because the subject was
+    already accepted. A run where standing could only agree with the label
+    cannot detect standing overriding it. "Refuted and still framing" is both
+    the interesting case for the calculus and the only one with anything to
+    catch.
+    """
+    plain = Harness(tmp_path / "plain")
+    framed = Harness(tmp_path / "framed")
+
+    plain_premise, plain_subject, plain_rival = _shared_graph(plain)
+    attack(plain, plain_subject.id, "the-lunar-theory-mispredicts-the-neap-tide")
+    plain_ids = {plain_premise.id, plain_subject.id, plain_rival.id}
+
+    framed_premise, framed_subject, framed_rival = _shared_graph(framed)
+    attack(framed, framed_subject.id, "the-lunar-theory-mispredicts-the-neap-tide")
+    _frame(framed, framed_subject)
+    assert framed.state.status[framed_subject.id] == Status.REFUTED
+
+    common = plain_ids & {framed_premise.id, framed_subject.id, framed_rival.id}
+    assert len(common) == 3, "both roots must build the same content-addressed graph"
+
+    def restrict(harness):
+        return (
+            {a: harness.state.status[a] for a in sorted(common)},
+            sorted(tuple(e) for e in harness.state.att
+                   if set(e) <= set(harness.state.artifacts)),
+            sorted(tuple(e) for e in harness.state.dep if e[0] in common),
+        )
+
+    assert consulted(framed) != ()
+    assert consulted(plain) == ()
+    assert restrict(plain) == restrict(framed)
+
+
+def test_label_computation_names_no_standing_symbol():
+    """R8, Prop 12.5, structurally. `Harness._adjudicate` is the sole writer of
+    `state.status`; asserted on its AST rather than its text so a rename or a
+    deletion fails instead of passing. The positive anchors are what stop this
+    becoming a check that passes on an empty function.
+
+    This is the companion to the behavioural test above: that one would still
+    pass if standing were consulted in a way that happened not to move a label
+    on this particular graph.
+    """
+    import ast
+    import inspect
+    import textwrap
+
+    tree = ast.parse(textwrap.dedent(inspect.getsource(Harness._adjudicate)))
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)} | {
+        n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)
+    }
+    assert "build_att" in names and "final_labels" in names
+    assert not any("standing" in n.lower() or "consult" in n.lower()
+                   or "frame" in n.lower() for n in names), sorted(names)
+
+
+def test_no_adjudication_module_imports_the_standing_view():
+    """R8, Prop 12.5. The seam whose content is the ABSENCE of traffic
+    (DR-SEAM-adjudication-x-authority) now also holds for standing. Read from
+    the AST so a relative or aliased import cannot slip past."""
+    import ast
+    import pathlib
+
+    for path in sorted(pathlib.Path("src/deepreason/adjudication").glob("*.py")):
+        tree = ast.parse(path.read_text())
+        modules = [
+            (n.module or "") for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+        ] + [
+            a.name for n in ast.walk(tree) if isinstance(n, ast.Import)
+            for a in n.names
+        ]
+        assert not any("calculus" in m or "standing" in m for m in modules), (
+            path.name, modules
+        )
+
+
+# --- R9: Prop 12.4, both directions ------------------------------------------
+
+def test_status_changes_without_standing_changing(harness):
+    """R9, Prop 12.4, first direction. Refuting the SUBJECT moves its status
+    and leaves its standing exactly where it was -- refuted and still framing,
+    which is the ordinary condition of mature knowledge and the whole reason
+    the second axis exists. The assertion only MENTIONS b, so pass two never
+    reaches it."""
+    _premise, subject, _rival = _shared_graph(harness)
+    _case, _problem, assertion = _frame(harness, subject)
+
+    before = standing_of(harness, subject.id)
+    assert {g.assertion_id for g in before} == {assertion.id}
+    assert harness.state.status[subject.id] == Status.ACCEPTED
+
+    attack(harness, subject.id, "the-lunar-theory-mispredicts-the-neap-tide")
+
+    assert harness.state.status[subject.id] == Status.REFUTED
+    assert standing_of(harness, subject.id) == before
+
+
+def test_standing_changes_without_status_changing(harness):
+    """R9, Prop 12.4, second direction, and R11's behavioural half. Attacking
+    the REACH CASE -- "contaminated", "shallow", "not held-out" -- cuts the
+    assertion's support, so it falls to suspended_unsupported and stops being
+    consulted. The subject's own status never moves. Revocation says unearned,
+    not wrong."""
+    _premise, subject, _rival = _shared_graph(harness)
+    case, _problem, assertion = _frame(harness, subject)
+
+    assert standing_of(harness, subject.id) != ()
+    status_before = harness.state.status[subject.id]
+
+    attack(harness, case.id, "the-reach-record-is-not-held-out")
+
+    assert harness.state.status[assertion.id] == Status.SUSPENDED_UNSUPPORTED
+    assert standing_of(harness, subject.id) == ()
+    assert harness.state.status[subject.id] == status_before == Status.ACCEPTED
+
+
+# --- R4: derived, never stored -----------------------------------------------
+
+def test_standing_is_recomputed_from_the_log_and_never_stored(tmp_path):
+    """R4, C4. Reopening the root read-only rebuilds the identical view from
+    the log alone, and READING it writes nothing -- no repair, no new event.
+    A view that were stored would survive this test while being a second
+    record able to fall out of step with the first."""
+    root = tmp_path / "run"
+    harness = Harness(root)
+    _premise, subject, _rival = _shared_graph(harness)
+    _frame(harness, subject)
+    first = standing_view(harness)
+    lines = len((root / "log.jsonl").read_text().splitlines())
+
+    reopened = Harness(root, read_only=True)
+    second = standing_view(reopened)
+
+    assert json.dumps(first, sort_keys=True) == json.dumps(second, sort_keys=True)
+    assert first["subjects"] == [subject.id]
+    assert len((root / "log.jsonl").read_text().splitlines()) == lines
+
+
+def test_no_field_was_added_to_problem_state_or_event():
+    """R4. The standing axis added no stored field anywhere. A relation table
+    would be a second graph whose interactions with att, dep, replay and status
+    would all need re-proving."""
+    from deepreason.ontology import Event, EpistemicState
+
+    for model in (Problem, EpistemicState, Event):
+        assert not any(
+            "standing" in f or "frame" in f or "consult" in f
+            for f in model.model_fields
+        ), (model.__name__, sorted(model.model_fields))
+
+
+def test_the_scope_predicate_selects_which_problems_are_framed(harness):
+    """R4/R5. sigma is what makes standing SCOPED rather than global: the same
+    consulted assertion frames the problems its predicate admits and no
+    others."""
+    _premise, subject, _rival = _shared_graph(harness)
+    _frame(harness, subject)
+    in_scope = harness.register_problem(Problem(
+        id="pi-in", description="what sets the tides at the equinox",
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": SpawnTrigger.SEED, "from": []}),
+    ))
+    out_of_scope = harness.register_problem(Problem(
+        id="pi-out", description="why is the sky blue",
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": SpawnTrigger.SEED, "from": []}),
+    ))
+    assert frames(harness, subject.id, in_scope.id) is True
+    assert frames(harness, subject.id, out_of_scope.id) is False
+    # The promotion problem is itself in scope, and correctly so: its
+    # description states the question the subject frames. Naming it here rather
+    # than filtering it out keeps the test honest about what sigma admits.
+    framed_problems = standing_view(harness)["grants"][0]["framed_problems"]
+    assert "pi-in" in framed_problems and "pi-out" not in framed_problems
+    assert framed_problems == sorted(framed_problems)
+
+
+# --- R12 / L-2: operations parity over a root carrying a frame assertion -----
+
+def test_amend_then_continue_over_a_root_carrying_a_frame_assertion(
+    tmp_path, monkeypatch
+):
+    """R12, L-2. The operator's standing law: "The flags and operations
+    available to the newer reason runs should be available to all
+    configurations." A run whose record contains a frame assertion reaches the
+    same typed terminal and accepts the same operations as one that does not --
+    amend appends an epoch, continue prepares, and the log is appended to and
+    never edited.
+
+    The assertion is filed DURING the run rather than bolted on afterwards,
+    because writing to a terminalized root would be testing a state no
+    operator can reach.
+    """
+    from deepreason.runtime.continuation import prepare_continuation
+    from tests.test_lifecycle_operation_parity import (
+        ORIGINAL_QUESTION,
+        _bind_v6_root,
+        _launch_through_cli,
+        _no_provider_scheduler,
+        _supplement,
+    )
+    from tests.test_amendment_epochs import _problem_id
+
+    filed = {}
+
+    def scheduler_that_files_a_frame_assertion(harness, config, cycles, budget, **kw):
+        subject = harness.create_artifact(
+            "b: loop gain above unity sustains the oscillation",
+            provenance=Provenance(role="conjecturer"),
+            problem_id=_problem_id(ORIGINAL_QUESTION),
+        )
+        case = harness.create_artifact(
+            "reach record: three lineages cite this subject",
+            provenance=Provenance(role="conjecturer"),
+        )
+        problem = operations.ensure_promotion_problem(
+            harness, subject.id, "what sets the tides at the equinox"
+        )
+        assertion = operations.file_frame_assertion(
+            harness, problem=problem, subject_ref=subject.id, scope=SCOPE,
+            reach_case_refs=(case.id,), departure_protocol="cite this id",
+        )
+        filed.update(subject=subject.id, assertion=assertion.id)
+        return _no_provider_scheduler()(harness, config, cycles, budget, **kw)
+
+    root, manifest, _spec, problem_file = _bind_v6_root(
+        tmp_path, name="frame-parity-root"
+    )
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler", scheduler_that_files_a_frame_assertion
+    )
+    from deepreason.cli.main import main
+    from deepreason.run_manifest import MANIFEST_NAME
+
+    assert main([
+        "--root", str(root), "run", "--budget", "1",
+        "--problem", str(problem_file),
+        "--run-manifest", str(root / MANIFEST_NAME),
+    ]) == 0
+
+    stopped = Harness(root, read_only=True)
+    assert {g.assertion_id for g in consulted(stopped)} == {filed["assertion"]}
+
+    from deepreason.amendment import amend_run, load_amendments
+    from deepreason.invariants import verify_root
+
+    log_before = (root / "log.jsonl").read_bytes()
+    result = amend_run(root, attach=(str(_supplement(tmp_path)),))
+    assert result["epoch"] == 1
+    assert len(load_amendments(root)) == 1
+    # Appended, never edited -- the amendment epoch does not rewrite the frame
+    # assertion's own registration.
+    assert (root / "log.jsonl").read_bytes().startswith(log_before)
+
+    amended = Harness(root, read_only=True)
+    assert {g.assertion_id for g in consulted(amended)} == {filed["assertion"]}
+    # Checked HERE, before the continuation is prepared. Preparing one moves the
+    # root off its committed terminal by design, so `verify_root` then reports
+    # TERMINAL_COMMITMENT_REQUIRED on any root, framed or not -- asserting an
+    # empty violation list after that point would be asserting a property no
+    # continued run has.
+    assert verify_root(root)["violations"] == []
+
+    record = prepare_continuation(
+        root, cycles="2", tokens="unlimited", check_operator_lock=False
+    )
+    assert record["schema"] == "deepreason-continuation-v1"
+    continued = Harness(root, read_only=True)
+    assert {g.assertion_id for g in consulted(continued)} == {filed["assertion"]}

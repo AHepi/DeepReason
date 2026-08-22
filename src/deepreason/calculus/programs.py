@@ -9,21 +9,27 @@ itself by being a well-formed claim.
 from __future__ import annotations
 
 from deepreason.calculus.claims import (
+    FRAME_ASSERTION_V1,
     PREMISE_ATTRIBUTION_V1,
     PROBLEM_SUBJECT_V1,
     ClaimDecodeError,
+    FrameAssertionV1,
     decode,
 )
 from deepreason.ontology import Commitment
 
 PROBLEM_SUBJECT_WF = "problem_subject_wf"
 PREMISE_ATTRIBUTION_WF = "premise_attribution_wf"
+FRAME_ASSERTION_WF = "frame_assertion_wf"
 
 PROBLEM_SUBJECT_COMMITMENT = Commitment(
     id="claim:problem-subject-wf@v1", eval=f"program:{PROBLEM_SUBJECT_WF}"
 )
 PREMISE_ATTRIBUTION_COMMITMENT = Commitment(
     id="claim:premise-attribution-wf@v1", eval=f"program:{PREMISE_ATTRIBUTION_WF}"
+)
+FRAME_ASSERTION_COMMITMENT = Commitment(
+    id="claim:frame-assertion-wf@v1", eval=f"program:{FRAME_ASSERTION_WF}"
 )
 
 
@@ -57,3 +63,31 @@ def problem_subject_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
 
 def premise_attribution_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     return _wf(text, PREMISE_ATTRIBUTION_V1, artifact)
+
+
+def frame_assertion_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Law 9.4 as a well-formedness commitment.
+
+    The mention law is checked FIRST, ahead of the shared controller-compiled
+    comparison. That comparison would also reject a dependence on the subject
+    -- the compiler never emits one -- but its reason reads
+    "claim-interface-not-controller-compiled", which is what a reader sees for
+    ANY mis-registered artifact. Naming the law is what lets them tell a
+    violated separation from a botched registration, and this program's verdict
+    is the record's only account of which happened.
+    """
+    try:
+        body = decode(text)
+    except ClaimDecodeError as error:
+        return "fail", {"reason": error.code, "detail": error.detail}
+    if isinstance(body, FrameAssertionV1) and artifact is not None:
+        depended = {
+            ref.target for ref in artifact.interface.refs
+            if ref.role.value == "dependence"
+        }
+        if body.subject_ref in depended:
+            return "fail", {
+                "reason": "frame-assertion-depends-on-subject",
+                "detail": body.subject_ref,
+            }
+    return _wf(text, FRAME_ASSERTION_V1, artifact)

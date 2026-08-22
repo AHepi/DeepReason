@@ -404,6 +404,28 @@ by literal; **EXPECTED TO MOVE** to name three.
 **`src/deepreason/cli/main.py`, `src/deepreason/mcp_server.py`.** The four
 wheel-smoke/MCP pins. **EXPECTED TO MOVE**, all four in one commit (R6).
 
+## Blast-radius census — ADDENDUM, recorded at execution (2026-08-22)
+
+The census above missed ONE map check, and it is recorded rather than quietly
+fixed, because a census that is corrected silently stops being an instrument.
+
+**`docs/map/SEAM-evaluation-x-ontology.md:54` — the program-call census inside
+`programs.py::evaluate`.** It pins the exact sorted list of functions that
+`evaluate` calls with an `artifact` argument, and registering
+`frame_assertion_wf` in `PROGRAMS` adds a name to it. **EXPECTED TO MOVE**,
+updated in the same commit as the code.
+
+Why the census missed it: the declared target list named
+`src/deepreason/calculus/programs.py` but NOT `src/deepreason/programs.py` —
+the top-level program registry a new program must also be registered in. The
+gate reported consumers only for files it was given, and it was not given that
+one. The lesson is the census's own: declare the registry a new entry lands in,
+not only the module that defines the entry.
+
+What caught it: `docs_verify --fast` at the Phase B/C map step, which is where
+the plan put it — three commits before the boundary gate would have. That is
+the census working through its backstop rather than failing.
+
 ## Budget
 
     python3 -c "print(sum([45, 22, 30, 3, 85, 110, 55, 6, 15, 28, 1, 25, 40]))"   -> 465   # src

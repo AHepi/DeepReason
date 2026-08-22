@@ -128,7 +128,7 @@ that treats "not accepted" as refuted misreads three of the four labels.
 **`POPPER_BATTERY` is empty.** The auto-pinning mechanism in
 `Harness.register_problem` is structural and live, but it currently pins nothing;
 a test asserting battery contents would be asserting aspiration, not behaviour.
-`check: python -c "from deepreason.ontology.problem import POPPER_BATTERY, SpawnTrigger; assert POPPER_BATTERY == () and len(SpawnTrigger) == 9"`
+`check: python -c "from deepreason.ontology.problem import POPPER_BATTERY, SpawnTrigger; assert POPPER_BATTERY == () and len(SpawnTrigger) == 10 and SpawnTrigger.PROMOTION"`
 
 **Every optional `Event` / `LLMCall` field carries `exclude_if=lambda value: value
 is None` so that a formal event still serializes to its historical key set.**

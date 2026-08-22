@@ -16,7 +16,11 @@ synthesizer to guess.
 from __future__ import annotations
 
 from deepreason.calculus import claims
-from deepreason.calculus.claims import PremiseAttributionV1, ProblemSubjectV1
+from deepreason.calculus.claims import (
+    FrameAssertionV1,
+    PremiseAttributionV1,
+    ProblemSubjectV1,
+)
 from deepreason.ontology import Interface, Ref
 from deepreason.ontology.artifact import RefRole
 
@@ -24,6 +28,7 @@ from deepreason.ontology.artifact import RefRole
 def compile_interface(body) -> Interface:
     """Body -> Interface. Raises on a body this compiler has no rule for."""
     from deepreason.calculus.programs import (
+        FRAME_ASSERTION_COMMITMENT,
         PREMISE_ATTRIBUTION_COMMITMENT,
         PROBLEM_SUBJECT_COMMITMENT,
     )
@@ -57,6 +62,28 @@ def compile_interface(body) -> Interface:
         return Interface(
             commitments=[PREMISE_ATTRIBUTION_COMMITMENT.id], refs=refs
         )
+    if isinstance(body, FrameAssertionV1):
+        refs = [
+            # MENTION, and this single assignment IS the separation of the two
+            # axes (Law 9.4). Because the assertion merely mentions its
+            # subject, pass two does not drag it down when the subject is
+            # refuted -- the wound does not touch the frame role.
+            Ref(target=body.subject_ref, role=RefRole.MENTION),
+        ]
+        refs += [
+            # DEPENDENCE on each reach record cited as the case: refuting the
+            # case cuts the assertion's support, which is what makes
+            # revocation need no rule of its own (S-10).
+            Ref(target=case, role=RefRole.DEPENDENCE)
+            for case in body.reach_case_refs
+        ]
+        refs += [
+            # MENTION on an incumbent's wounds (Def 9.2). A dependence would
+            # suspend the successor the moment a wound was reinstated away.
+            Ref(target=wound, role=RefRole.MENTION)
+            for wound in body.succeeded_wound_refs
+        ]
+        return Interface(commitments=[FRAME_ASSERTION_COMMITMENT.id], refs=refs)
     raise claims.ClaimDecodeError(
         "claim-no-compiler-rule", type(body).__name__
     )

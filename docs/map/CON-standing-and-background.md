@@ -1,7 +1,7 @@
 <!-- DR-CON-standing-and-background -->
 Verified-at: 5deec374
 Verify: python -m pytest tests/test_calculus_vocabulary.py -q
-Owns: src/deepreason/status_display.py
+Owns: src/deepreason/status_display.py, src/deepreason/calculus/standing.py
 Seams: 
 Seams-undocumented: application x standing-and-background, scheduler x standing-and-background
 
@@ -17,11 +17,19 @@ conjecture in a scope is written in? An artifact can be refuted and still
 framing — that is the ordinary condition of mature science, and a single-axis
 system cannot represent it.
 
-This document exists ahead of the mechanism. The standing axis arrives at Rung 4
-of the v2 calculus program
-(`experiments/2026-08-14-change-calculus-reconciliation-v2/LADDER.md`); what
-exists today is the **vocabulary groundwork** that had to precede it, because
-the word "standing" was already taken three times over.
+**The mechanism landed 2026-08-22 (Rung 4).** This document used to say "exists
+ahead of the mechanism"; what remains true of that sentence is only the
+vocabulary half — the word "standing" was already taken three times over, which
+is why the groundwork had to precede the axis.
+
+`standing(b)` now exists, in `DR-SUB-calculus` (`calculus/standing.py`), as
+Def 9.3's DERIVED relation: b is background over sigma exactly when some
+consulted frame assertion has b as its subject. Nothing is stored. The four
+conditions for "consulted" are Def 9.2's — recognised as a frame assertion,
+addressed to a promotion problem, `final(fa) = unrefuted`, and separated from
+its subject (Def 7.2, via Rung 3b's own predicate).
+
+`check: python -c "from deepreason.calculus import standing_of, standing_view, consultability_of, frames" && python -m pytest tests/test_calculus_standing.py -q`
 
 ## Why one axis cannot carry it
 
@@ -46,8 +54,12 @@ frame's support. Both axes stay inside `att`/`dep`.
 
 ## State it owns
 
-None that persists. Standing will be a DERIVED view (calculus C4: computed,
-never stored), and the vocabulary mapping this module owns is pure rendering.
+**None that persists**, and the mechanism did not change that. Standing IS a
+derived view (calculus C4: computed, never stored) — no field was added to
+`Problem`, `EpistemicState` or `Event`, and no relation table was introduced.
+The vocabulary mapping `status_display.py` owns remains pure rendering.
+
+`check: python -m pytest tests/test_calculus_standing.py::test_no_field_was_added_to_problem_state_or_event tests/test_calculus_standing.py::test_standing_is_recomputed_from_the_log_and_never_stored -q`
 
 ## The two vocabularies
 
@@ -98,14 +110,37 @@ BUILT against rather than prove afterwards, and it exists already: the axes are
 separated by EDGE ROLE, but edge role alone does not separate the adjudication
 COMPONENTS, and a frame sharing a component with its subject loses exactly the
 wound persistence this axis is for. The predicate and its enforcement live in
-`DR-SUB-calculus` (`calculus/separation.py`, Rung 3b); Rung 4 wires the
-consultation site and may then invoke Theorem 7.3 rather than re-argue it.
+`DR-SUB-calculus` (`calculus/separation.py`, Rung 3b), and **Rung 4 wired the
+consultation site on 2026-08-22**: `standing.py::consultability_of` CALLS
+`separation.consultability` and returns its `FRAME_NOT_SEPARATED` code
+unchanged, so Theorem 7.3 is invoked rather than re-argued. A consulted
+assertion sharing an adjudication component with its subject is UNCONSULTABLE
+and moves no edge, no warrant and no label.
 
-`check: python -c "from deepreason.calculus import consultability, frame_separated" && python -m pytest tests/test_calculus_frame_separation.py -q`
+`check: python -c "from deepreason.calculus import consultability, frame_separated" && python -m pytest tests/test_calculus_frame_separation.py tests/test_calculus_frame_assertions.py::test_an_unseparated_assertion_is_unconsultable_with_rung3bs_own_code tests/test_calculus_frame_assertions.py::test_an_unconsultable_assertion_moves_no_edge_no_warrant_no_label -q`
 
-Prop 12.5 of the calculus (standing never adjudicates) is the invariant the
-mechanism will have to prove when it lands: label computation reads `att` and
-`dep` only, and standing is consumed by render and schedule alone.
+**Prop 12.5 (standing never adjudicates) — PROVED at Rung 4**, in the strongest
+form the tranche instruction asked for: two runs over the same graph, one
+carrying frame assertions and one carrying none, produce IDENTICAL labels. The
+subject is REFUTED in both roots deliberately — an earlier version framed an
+accepted subject and a mutation leaking standing into `compute_label0` passed
+it, because the subject was already accepted. "Refuted and still framing" is
+both the interesting case and the only one with anything to catch.
+
+Two structural companions guard what the behavioural test cannot: `_adjudicate`
+names no standing symbol, and nothing in `adjudication/` imports the view.
+
+`check: python -m pytest tests/test_calculus_standing.py::test_frame_assertions_do_not_move_a_single_label tests/test_calculus_standing.py::test_label_computation_names_no_standing_symbol tests/test_calculus_standing.py::test_no_adjudication_module_imports_the_standing_view -q`
+
+**Prop 12.4 (axis independence) — PROVED at Rung 4, both directions.** Status
+moves without standing moving (refute the SUBJECT: it only MENTIONS b, so pass
+two never reaches the assertion). Standing moves without status moving (attack
+the REACH CASE: the assertion loses support, falls to
+`suspended_unsupported`, and stops being consulted, while b's own label is
+untouched). One direction alone proves nothing — it passes under coupling in
+the other.
+
+`check: python -m pytest tests/test_calculus_standing.py::test_status_changes_without_standing_changing tests/test_calculus_standing.py::test_standing_changes_without_status_changing -q`
 
 ## Where to change what
 
@@ -114,7 +149,9 @@ mechanism will have to prove when it lands: label computation reads `att` and
 | change how a status reads to a human | `status_display.py::display_status` | `tests/test_calculus_vocabulary.py` |
 | add or reword a gloss | `status_display.py::_GLOSS` | `tests/test_calculus_vocabulary.py::test_every_status_has_a_gloss` |
 | render a status in a new view | call `display_status`, never `status.value` | `tests/test_calculus_vocabulary.py::test_views_render_the_calculus_vocabulary` |
-| add the standing axis itself | Rung 4 — not here yet | — |
+| add a scope-predicate operation | `calculus/scope.py::OPS` (`DR-SUB-calculus`) | `tests/test_calculus_scope_predicate.py` |
+| change what makes an assertion consulted | `calculus/standing.py::consultability_of` | `tests/test_calculus_frame_assertions.py` |
+| change what the standing view shows | `calculus/standing.py::standing_view` | `tests/test_calculus_standing.py` |
 | change what separates a frame from its subject | `calculus/separation.py::frame_separated` (`DR-SUB-calculus`) | `tests/test_calculus_frame_separation.py` |
 
 ## Traps
@@ -130,12 +167,24 @@ mechanism will have to prove when it lands: label computation reads `att` and
   pool of still-*standing* survivors to re-criticize. **Deliberately NOT
   renamed**: `RECRIT_STANDING` is a `Config` field name, pinned by a check in
   `DR-SUB-scheduler` and readable from profile YAML, so renaming it is a
-  compatibility decision rather than vocabulary work. It is parked to Rung 4,
-  where the collision becomes real. Until then, a reader meeting "standing" in
-  the scheduler should read it as "still standing", not as frame role.
+  compatibility decision rather than vocabulary work. **The collision became REAL on 2026-08-22**, when Rung 4 gave "standing" its
+  calculus meaning. The rename did NOT happen and was not supposed to: it is a
+  compatibility decision, not vocabulary work, and it was not in that tranche's
+  scope (`experiments/2026-08-22-change-rung4-frame-assertions/SPEC.md` A4;
+  parked with its price at that tranche's PARKED.md P1). So the disambiguation
+  is now the standing rule rather than a waiting period, and it has TWO senses
+  to keep apart, not one:
+
+  - `Config.RECRIT_STANDING` / `scheduler._standing_recrit_pool` mean **still
+    standing** — a survivor not yet re-criticized. Nothing to do with frames.
+  - `calculus/standing.py` means **frame role** (Def 9.3) — the calculus sense,
+    and the only one the word carries in `DR-SUB-calculus`.
+
+  The two never meet in code: the scheduler imports nothing from `calculus/`,
+  which is also `DR-SUB-calculus`'s own NO SCHEDULER INTEGRATION row.
 `check: ! grep -q '"standing"' src/deepreason/status_display.py`
 `check: ! grep -q "_under_standing_attack" src/deepreason/controller.py`
-`check: grep -q "_standing_recrit_pool" src/deepreason/scheduler/scheduler.py`
+`check: grep -q "_standing_recrit_pool" src/deepreason/scheduler/scheduler.py && grep -q "def standing_of" src/deepreason/calculus/standing.py && ! grep -rq "deepreason.calculus" src/deepreason/scheduler/`
 - **Rendering is not the whole story: packs render to the MODEL, not to a
   reader.** Pack vocabulary was deliberately left alone by Rung 1 — changing
   what the generator is shown is a behavioural change with live-run

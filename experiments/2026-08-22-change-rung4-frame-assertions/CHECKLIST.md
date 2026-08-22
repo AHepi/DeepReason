@@ -1,5 +1,5 @@
 # Checklist for: Rung 4 — frame assertions and the standing view
-State: next=4 blockers=none
+State: next=19 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -57,7 +57,7 @@ Amendment 2). Any wider contact is a NEW stop.
 
 ## Phase B — the frame assertion, the mention law, the compiler (S1, S2)
 
-- [ ] 4. (S1, S2) Write `tests/test_calculus_frame_assertions.py` — the body,
+- [x] 4. (S1, S2) Write `tests/test_calculus_frame_assertions.py` — the body,
       bounded-validity-as-content, no-kind-field/no-new-event-rule, the
       mention-law failure with its own reason code, and the compiler's ref
       roles. Consult/exit/promotion tests come at step 10.
@@ -65,37 +65,48 @@ Amendment 2). Any wider contact is a NEW stop.
       RED with `claim-schema-not-implemented` (the current, correct refusal),
       pasted.
 
-- [ ] 5. (S1) Add `FrameAssertionV1` to `src/deepreason/calculus/claims.py`
+- [x] 5. (S1) Add `FrameAssertionV1` to `src/deepreason/calculus/claims.py`
       with its `model_validator`, and to `_MODELS`/`_IMPLEMENTED`.
       done-when: `python -c "from deepreason.calculus.claims import
       FrameAssertionV1, CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS)==9"` -> exit 0
       (the closed name set does NOT grow).
 
-- [ ] 6. (S2) Add the frame rule to `src/deepreason/calculus/compiler.py`:
+- [x] 6. (S2) Add the frame rule to `src/deepreason/calculus/compiler.py`:
       subject → MENTION, each reach case → DEPENDENCE, each succeeded wound →
       MENTION.
       done-when: `python -m pytest tests/test_calculus_frame_assertions.py::test_the_compiler_makes_the_subject_a_mention_and_the_case_a_dependence -q`
       -> 1 passed.
 
-- [ ] 7. (S2) Add `frame_assertion_wf` + `FRAME_ASSERTION_COMMITMENT` to
+- [x] 7. (S2) Add `frame_assertion_wf` + `FRAME_ASSERTION_COMMITMENT` to
       `src/deepreason/calculus/programs.py`, mention-law limb FIRST with reason
       `frame-assertion-depends-on-subject`; register the program wherever
       `problem_subject_wf` is registered.
-      done-when: `python -m pytest tests/test_calculus_frame_assertions.py -q`
-      -> 0 failed.
+      done-when: **RE-PLANNED at execution** (dr-execute-step rule 2 — the tree
+      contradicted the step). Step 4 wrote the WHOLE of
+      `tests/test_calculus_frame_assertions.py`, consult and exit tests
+      included, rather than only the Phase-B half the plan assumed. The file
+      therefore imports `deepreason.calculus.standing`, which Phase C creates,
+      so whole-file green cannot be this step's criterion. Splitting the file
+      to match the plan would be worse: the consult tests would be written
+      twice or held outside version control. Corrected criterion — the Phase-B
+      nodes alone go green:
+      `python -m pytest tests/test_calculus_frame_assertions.py -q -k
+      "compiler or wound or well_formedness or closed_name_set"`
+      -> 0 failed, with the rest still RED on the absent module. Whole-file
+      green moves to step 14, which already asserts it.
 
-- [ ] 8. (S2) Add `frame_assertion_wf` to `_STRUCTURAL_PROGRAMS` in
+- [x] 8. (S2) Add `frame_assertion_wf` to `_STRUCTURAL_PROGRAMS` in
       `src/deepreason/measures/reach.py`.
       done-when: `python -c "from deepreason.measures.reach import
       _STRUCTURAL_PROGRAMS as S; assert 'frame_assertion_wf' in S"` -> exit 0.
 
-- [ ] 9. (S1, S2, S12) Update `docs/map/SUB-calculus.md` in this same commit:
+- [x] 9. (S1, S2, S12) Update `docs/map/SUB-calculus.md` in this same commit:
       the frame-assertion body, its compiler rule, the structural-program
       membership check widened to three names.
       done-when: `python tools/docs_verify.py --fast` -> no NEW failure over
       the 3-failure baseline.
 
-- [ ] 10. (S1, S2) [COMMIT] Commit Phase B (code + tests + map together,
+- [x] 10. (S1, S2) [COMMIT] Commit Phase B (code + tests + map together,
       SCHEMA.md rule 1).
       done-when: `python tools/diff_budget.py origin/main --ceiling 963`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
@@ -103,27 +114,27 @@ Amendment 2). Any wider contact is a NEW stop.
 ## Phase C — promotion problems, the consult path, the standing view
 ## (S3, S4, S8)
 
-- [ ] 11. (S3, S4, S8) Extend `tests/test_calculus_frame_assertions.py` with the
+- [x] 11. (S3, S4, S8) Extend `tests/test_calculus_frame_assertions.py` with the
       consult, promotion-problem and exit tests, and write
       `tests/test_calculus_standing.py` with the derived-view, Prop 12.5,
       Prop 12.4 and revocation tests. Amend/continue (S11 L-2) comes at 17.
       done-when: both files RED on the absent `deepreason.calculus.standing`,
       pasted.
 
-- [ ] 12. (S8) Add `SpawnTrigger.PROMOTION` to
+- [x] 12. (S8) Add `SpawnTrigger.PROMOTION` to
       `src/deepreason/ontology/problem.py`, and update the THREE map checks
       pinning `len(SpawnTrigger) == 9` (`SUB-rules.md:144`,
       `SUB-ontology.md:131`, `SEAM-rules-x-scratch.md:142`) in the same commit.
       done-when: `python -c "from deepreason.ontology import SpawnTrigger;
       assert len(SpawnTrigger)==10 and SpawnTrigger.PROMOTION"` -> exit 0.
 
-- [ ] 13. (S8) Add `ensure_promotion_problem` and `file_frame_assertion` to
+- [x] 13. (S8) Add `ensure_promotion_problem` and `file_frame_assertion` to
       `src/deepreason/calculus/operations.py`, in the idempotent
       `ensure_problem_subject` shape.
       done-when: `python -m pytest tests/test_calculus_frame_assertions.py::test_ensure_promotion_problem_is_idempotent -q`
       -> 1 passed.
 
-- [ ] 14. (S3, S4) Create `src/deepreason/calculus/standing.py`:
+- [x] 14. (S3, S4) Create `src/deepreason/calculus/standing.py`:
       `consultability_of` (Def 9.2's four conditions, the fourth CALLING
       `separation.consultability` verbatim), `consulted`, `StandingGrant`,
       `standing_of`, `frames`, `standing_view`. Export from
@@ -133,7 +144,7 @@ Amendment 2). Any wider contact is a NEW stop.
       re-implemented) AND `python -m pytest tests/test_calculus_standing.py
       tests/test_calculus_frame_assertions.py -q` -> 0 failed.
 
-- [ ] 15. (S3, S4, S12) Update `docs/map/SUB-calculus.md` (the "`consultability`
+- [x] 15. (S3, S4, S12) Update `docs/map/SUB-calculus.md` (the "`consultability`
       has NO caller in `src/`" trap row REWRITTEN to say when it gained one,
       never deleted) and `docs/map/CON-standing-and-background.md` (advanced
       from rationale to MECHANISM; the `RECRIT_STANDING` trap row rewritten per
@@ -141,20 +152,42 @@ Amendment 2). Any wider contact is a NEW stop.
       done-when: `python tools/docs_verify.py --fast` -> no NEW failure over
       the 3-failure baseline.
 
-- [ ] 16. (S9) Mutation proof for Prop 12.5 (R13): in the session scratchpad
+- [x] 16. (S9) Mutation proof for Prop 12.5 (R13): in the session scratchpad
       copy, make `final_labels` consult the standing view; run the test; restore
       the tree; run again.
       done-when: both runs pasted — RED under the mutation, GREEN restored —
       and `git status --porcelain` shows the tree unmodified.
 
-- [ ] 17. (S11) Add the L-2 operations-parity test: `amend` then `continue` over
+- [x] 17. (S11) Add the L-2 operations-parity test: `amend` then `continue` over
       a root carrying a frame assertion.
       done-when: `python -m pytest tests/test_calculus_standing.py::test_amend_then_continue_over_a_root_carrying_a_frame_assertion -q`
       -> 1 passed.
 
-- [ ] 18. (S3, S4, S8, S9, S10, S11) [COMMIT] Commit Phase C.
+- [x] 18. (S3, S4, S8, S9, S10, S11) [COMMIT] Commit Phase C.
       done-when: `python tools/diff_budget.py origin/main --ceiling 963`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
+
+      EXECUTION NOTES, recorded because each changed what the plan assumed:
+
+      (a) **Steps 7-18 ran as ONE block.** Step 4 wrote the whole frame-assertion
+      test file, so its module-level import of `deepreason.calculus.standing`
+      made even `-k` selection fail at collection. Splitting the file to match
+      the plan's phase boundary would have written the consult tests twice.
+
+      (b) **The Prop 12.5 mutation proof (step 16) found a VACUOUS TEST, twice,
+      which is what the rule is for.** First mutation (leak `consulted` into
+      `compute_label0`) passed: the framed subject was ACCEPTED, so setting it
+      to accepted changed nothing. Fixed by refuting the subject in both roots
+      -- "refuted and still framing" is the only case with anything to catch.
+      Second mutation still passed: `consulted` reads `state.status`, which
+      during `_adjudicate` is the PREVIOUS state and does not yet contain the
+      assertion, so the leak never fired. Fixed by leaking `frame_assertions`
+      instead -- status-independent, and the real hazard. That mutation turned
+      the test RED. Both runs are pasted in VALIDATION.md.
+
+      (c) **`docs_verify --fast` caught a fourth map check the census missed**
+      (`SEAM-evaluation-x-ontology.md:54`). Recorded as an addendum in SPEC.md
+      rather than quietly fixed. Three predicted checks moved as forecast.
 
 ## Phase D — the public surface and all four pins (S6)
 

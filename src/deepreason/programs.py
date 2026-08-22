@@ -173,6 +173,12 @@ def _premise_attribution_wf(text: str, budget, artifact=None) -> tuple[str, dict
     return premise_attribution_wf(text, budget, artifact)
 
 
+def _frame_assertion_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.calculus.programs import frame_assertion_wf
+
+    return frame_assertion_wf(text, budget, artifact)
+
+
 def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
@@ -320,6 +326,9 @@ PROGRAMS: dict[str, ProgramSpec] = {
     ),
     "premise_attribution_wf": ProgramSpec(
         "premise_attribution_wf", _premise_attribution_wf, "structural"
+    ),
+    "frame_assertion_wf": ProgramSpec(
+        "frame_assertion_wf", _frame_assertion_wf, "structural"
     ),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
