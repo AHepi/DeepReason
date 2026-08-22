@@ -270,31 +270,23 @@ def test_the_scope_predicate_selects_which_problems_are_framed(harness):
     assert framed_problems == sorted(framed_problems)
 
 
-# --- R12 / L-2: operations parity over a root carrying a frame assertion -----
+# --- a manifest-bound root that carries a frame assertion --------------------
 
-def test_amend_then_continue_over_a_root_carrying_a_frame_assertion(
-    tmp_path, monkeypatch
-):
-    """R12, L-2. The operator's standing law: "The flags and operations
-    available to the newer reason runs should be available to all
-    configurations." A run whose record contains a frame assertion reaches the
-    same typed terminal and accepts the same operations as one that does not --
-    amend appends an epoch, continue prepares, and the log is appended to and
-    never edited.
+def _framed_manifest_root(tmp_path, monkeypatch, *, name):
+    """A real v6 root, launched through `deepreason run --run-manifest`, whose
+    record contains a frame assertion filed DURING the run.
 
-    The assertion is filed DURING the run rather than bolted on afterwards,
-    because writing to a terminalized root would be testing a state no
-    operator can reach.
+    Filed during the run rather than bolted on after, because writing to a
+    terminalized root would be exercising a state no operator can reach.
     """
-    from deepreason.runtime.continuation import prepare_continuation
+    from tests.test_amendment_epochs import _problem_id
     from tests.test_lifecycle_operation_parity import (
         ORIGINAL_QUESTION,
         _bind_v6_root,
-        _launch_through_cli,
         _no_provider_scheduler,
-        _supplement,
     )
-    from tests.test_amendment_epochs import _problem_id
+    from deepreason.cli.main import main
+    from deepreason.run_manifest import MANIFEST_NAME
 
     filed = {}
 
@@ -318,20 +310,38 @@ def test_amend_then_continue_over_a_root_carrying_a_frame_assertion(
         filed.update(subject=subject.id, assertion=assertion.id)
         return _no_provider_scheduler()(harness, config, cycles, budget, **kw)
 
-    root, manifest, _spec, problem_file = _bind_v6_root(
-        tmp_path, name="frame-parity-root"
-    )
+    root, _manifest, _spec, problem_file = _bind_v6_root(tmp_path, name=name)
     monkeypatch.setattr(
         "deepreason.ops.run_scheduler", scheduler_that_files_a_frame_assertion
     )
-    from deepreason.cli.main import main
-    from deepreason.run_manifest import MANIFEST_NAME
-
     assert main([
         "--root", str(root), "run", "--budget", "1",
         "--problem", str(problem_file),
         "--run-manifest", str(root / MANIFEST_NAME),
     ]) == 0
+    return root, filed
+
+
+# --- R12 / L-2: operations parity over a root carrying a frame assertion -----
+
+def test_amend_then_continue_over_a_root_carrying_a_frame_assertion(
+    tmp_path, monkeypatch
+):
+    """R12, L-2. The operator's standing law: "The flags and operations
+    available to the newer reason runs should be available to all
+    configurations." A run whose record contains a frame assertion reaches the
+    same typed terminal and accepts the same operations as one that does not --
+    amend appends an epoch, continue prepares, and the log is appended to and
+    never edited.
+
+    The assertion is filed DURING the run rather than bolted on afterwards,
+    because writing to a terminalized root would be testing a state no
+    operator can reach.
+    """
+    from deepreason.runtime.continuation import prepare_continuation
+    from tests.test_lifecycle_operation_parity import _supplement
+
+    root, filed = _framed_manifest_root(tmp_path, monkeypatch, name="frame-parity-root")
 
     stopped = Harness(root, read_only=True)
     assert {g.assertion_id for g in consulted(stopped)} == {filed["assertion"]}
@@ -362,3 +372,171 @@ def test_amend_then_continue_over_a_root_carrying_a_frame_assertion(
     assert record["schema"] == "deepreason-continuation-v1"
     continued = Harness(root, read_only=True)
     assert {g.assertion_id for g in consulted(continued)} == {filed["assertion"]}
+
+
+# --- R6: the read-only surface -----------------------------------------------
+
+def test_the_standing_surface_is_read_only_and_calls_no_model(
+    tmp_path, monkeypatch, capsys
+):
+    """R6, and C4's condition on frozen surface 5. The `standing` CLI command
+    and the `run_standing` MCP tool render a derived view and nothing else.
+
+    Three properties, and the third is the one that keeps qualification digests
+    still: neither path opens its root writably (a writable open REPAIRS a root,
+    which would alter the evidence a reader asked to see), neither writes a byte
+    to the log, and neither reaches an LLM seat. A new role would change the
+    pair inventory and cost a ~14-minute qualification battery per home.
+    """
+    import ast
+    import pathlib
+
+    from deepreason.cli.main import main
+
+    root, filed = _framed_manifest_root(tmp_path, monkeypatch, name="surface-root")
+    before = (root / "log.jsonl").read_bytes()
+    capsys.readouterr()
+
+    assert main(["--root", str(root), "standing"]) == 0
+    text = capsys.readouterr().out
+    assert filed["subject"] in text and "frames" in text
+    assert filed["assertion"] in text
+
+    assert main(["--root", str(root), "standing", "--json"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["view"] == "standing.v1"
+    assert payload["subjects"] == [filed["subject"]]
+
+    # Reading wrote nothing.
+    assert (root / "log.jsonl").read_bytes() == before
+
+    # Both handlers open read-only, asserted on the source rather than trusted.
+    # Read from the AST: a keyword argument is the meaning, and a text search
+    # would also match `read_only=True` belonging to some neighbouring call.
+    for path in ("src/deepreason/cli/main.py", "src/deepreason/mcp_server.py"):
+        tree = ast.parse(pathlib.Path(path).read_text())
+        opens = [
+            node for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and ast.unparse(node.func) == "standing_view"
+        ]
+        assert opens, path
+        for call in opens:
+            inner = call.args[0]
+            assert isinstance(inner, ast.Call) and ast.unparse(inner.func) == "Harness"
+            assert any(
+                k.arg == "read_only" and getattr(k.value, "value", None) is True
+                for k in inner.keywords
+            ), (path, ast.unparse(call))
+
+    # No LLM seat: the module graph the view depends on reaches no adapter,
+    # route or seat. Read from the AST so an aliased import cannot slip past.
+    tree = ast.parse(pathlib.Path("src/deepreason/calculus/standing.py").read_text())
+    modules = [
+        (n.module or "") for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+    ] + [
+        a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names
+    ]
+    assert not any(
+        part in m for m in modules
+        for part in ("llm", "adapter", "seat", "provider", "qualification")
+    ), modules
+
+
+# --- R15: the standing-integrity epistemic check ------------------------------
+
+def _bad_mention_law_root(tmp_path, name="integrity-root"):
+    """A root whose log contains a frame assertion with a DEPENDENCE on its own
+    subject — Law 9.4 violated on the record.
+
+    Hand-registered on purpose. The compiler cannot emit this interface and the
+    authoring operation cannot produce it, so the only way such a record exists
+    is a path that bypassed the controller — which is exactly the case a
+    replay-time check has to catch, because by then nobody is around to refuse
+    it at authoring time.
+    """
+    from deepreason.calculus.claims import FrameAssertionV1, encode
+    from deepreason.calculus.programs import FRAME_ASSERTION_COMMITMENT
+
+    root = tmp_path / name
+    harness = Harness(root)
+    subject = _art(harness, "b: the lunar theory of tides")
+    case = _art(harness, "reach record: three lineages cite this subject")
+    body = FrameAssertionV1(
+        subject_ref=subject.id, scope=SCOPE, departure_protocol="cite this id",
+        reach_case_refs=[case.id],
+    )
+    harness.register_commitment(FRAME_ASSERTION_COMMITMENT)
+    problem = operations.ensure_promotion_problem(harness, subject.id, "tides")
+    bad = harness.create_artifact(
+        encode(body), codec="json",
+        interface=Interface(
+            commitments=[FRAME_ASSERTION_COMMITMENT.id],
+            refs=[
+                # The violation: DEPENDENCE where Law 9.4 requires MENTION.
+                Ref(target=subject.id, role=RefRole.DEPENDENCE),
+                Ref(target=case.id, role=RefRole.DEPENDENCE),
+            ],
+        ),
+        problem_id=problem.id,
+        provenance=Provenance(role="import"),
+    )
+    return root, subject.id, bad.id
+
+
+def test_standing_integrity_fires_on_a_violated_mention_law(tmp_path):
+    """R15. The epistemic check reports a frame assertion whose recorded
+    interface DEPENDS on its own subject.
+
+    Why a replay-time check when a well-formedness program already refuses it:
+    the program's verdict refutes the artifact, which is a fact about that
+    artifact. This check is a fact about the ROOT — that its record contains a
+    violated separation at all — and it is the reader of a finished run, not
+    the author of a live one, who needs to be told.
+    """
+    from deepreason.invariants import verify_root
+
+    root, subject_id, bad_id = _bad_mention_law_root(tmp_path)
+    findings = [
+        v for v in verify_root(root)["violations"]
+        if v["check"] == "standing-integrity"
+    ]
+    assert len(findings) == 1, verify_root(root)["violations"]
+    assert bad_id in findings[0]["detail"]
+    assert "mention law" in findings[0]["detail"]
+
+
+def test_standing_integrity_is_silent_on_a_clean_root(tmp_path, monkeypatch):
+    """R15. The positive half. Without it the test above would pass on a check
+    that fired on every root, which would be a louder way of saying nothing."""
+    from deepreason.invariants import verify_root
+
+    root, _filed = _framed_manifest_root(tmp_path, monkeypatch, name="clean-root")
+    assert [
+        v for v in verify_root(root)["violations"]
+        if v["check"] == "standing-integrity"
+    ] == []
+
+
+def test_standing_integrity_reports_nothing_on_a_root_that_predates_it():
+    """R15, and the reader-before-writer guardrail. Every committed root
+    predates the frame layer entirely, so the check must be SILENT on them —
+    absence of frame assertions is valid, never a finding.
+
+    Pinned to a committed root (`git ls-files` knows it) rather than a fixture,
+    per the durable-probe rule: a session-local root would die with the session
+    and take this claim's meaning with it.
+    """
+    from pathlib import Path
+
+    from deepreason.invariants import verify_root
+
+    root = Path(
+        "experiments/live_engaged_2026-07-27/"
+        "run-f4fa6663e5412d64df943a5a22342baf"
+    )
+    assert root.exists(), "the pinned committed root moved; repoint this probe"
+    assert [
+        v for v in verify_root(root)["violations"]
+        if v["check"] == "standing-integrity"
+    ] == []

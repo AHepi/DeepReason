@@ -40,6 +40,7 @@ SUPPORTED_TOOL_NAMES = {
     "run_status",
     "run_result",
     "run_findings",
+    "run_standing",
     "amend_run",
     "continue_run",
     "cancel_run",

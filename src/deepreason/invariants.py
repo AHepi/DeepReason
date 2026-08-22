@@ -4182,7 +4182,59 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         "max_problem_desc_len": max(
             (len(p.description) for p in h.state.problems.values()), default=0),
     }
+
+    # Standing integrity (v2 calculus program, Rung 4). ADDITIVE: a root with no
+    # frame assertions produces no finding here, which is every root recorded
+    # before this layer existed. Two limbs, and both are facts about the ROOT
+    # rather than about one artifact -- a well-formedness program already
+    # refutes a malformed assertion, but only a reader of the finished run needs
+    # telling that the record contains a violated separation at all.
+    for artifact_id, body in _declared_frame_assertions(h):
+        depended = {
+            ref.target for ref in h.state.artifacts[artifact_id].interface.refs
+            if ref.role.value == "dependence"
+        }
+        if body.subject_ref in depended:
+            fail(
+                "standing-integrity",
+                f"{artifact_id} violates the mention law (Law 9.4): it declares "
+                f"a dependence on its own subject {body.subject_ref}",
+            )
+    for grant in _consulted_grants(h):
+        problem = h.state.problems.get(grant.problem_id)
+        if problem is None or problem.provenance.trigger.value != "promotion":
+            fail(
+                "standing-integrity",
+                f"{grant.assertion_id} is consulted but is not addressed to a "
+                f"promotion problem ({grant.problem_id})",
+            )
+
     return {"violations": violations, "stats": stats}
+
+
+
+def _declared_frame_assertions(harness):
+    """Everything CLAIMING to be a frame assertion, by body and commitment only.
+
+    Deliberately the LOOSE reading. The strict recogniser additionally requires
+    the interface to match the controller's compiler, so an assertion that
+    violates the mention law is not recognised by it -- and a check built on the
+    strict reading could only ever report a clean bill.
+
+    Imported inside the function so this module holds no calculus import at
+    module scope, the same cycle discipline `verify_root_report` uses below. A
+    root written before the frame layer existed yields nothing here, which is
+    what makes the check additive.
+    """
+    from deepreason.calculus.standing import declared_frame_assertions
+
+    return declared_frame_assertions(harness)
+
+
+def _consulted_grants(harness):
+    from deepreason.calculus.standing import consulted
+
+    return consulted(harness)
 
 
 def verify_root_report(root: Path, meter_total: int | None = None):

@@ -40,6 +40,30 @@ same root, changes nothing — replay never executes `rules/`.
 So the agreement, in one line: **authority may be consulted where a
 warrant is minted, and never where a label is computed.**
 
+**Extended 2026-08-22 to STANDING (Rung 4), and the extension is the same
+shape.** Standing — an artifact's frame role, `DR-CON-standing-and-background`
+— is the second thing that must never reach label computation, for the same
+reason authority must not: labels are RECOMPUTED on every open, so anything the
+computation consults becomes part of what a committed root MEANS,
+retroactively. Prop 12.5 of the calculus states it ("label computation reads
+`att` and `dep` only; standing is consumed by render and schedule alone"), and
+what makes it a property of this seam rather than a sentence in a paper is that
+it is measured the same way the authority half is:
+
+- **Behaviourally.** Two runs over the same graph, one carrying frame
+  assertions and one carrying none, produce IDENTICAL labels — with the subject
+  REFUTED in both, because a run where standing could only agree with the label
+  has nothing to catch.
+- **Structurally.** `_adjudicate` names no standing symbol, and nothing in
+  `adjudication/` imports the view.
+
+The behavioural half was mutation-proven RED before it was trusted, and the
+mutation had to be revised twice before it bit — the record of that is in
+`experiments/2026-08-22-change-rung4-frame-assertions/VALIDATION.md`.
+
+`check: python -m pytest tests/test_calculus_standing.py::test_frame_assertions_do_not_move_a_single_label tests/test_calculus_standing.py::test_label_computation_names_no_standing_symbol tests/test_calculus_standing.py::test_no_adjudication_module_imports_the_standing_view -q`
+`check: python -c "import ast,pathlib; ok=[p for p in sorted(pathlib.Path('src/deepreason/adjudication').glob('*.py'))]; assert len(ok)==4, ok; mods=[(n.module or '') for p in ok for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom)]+[a.name for p in ok for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.Import) for a in n.names]; assert not any('calculus' in m or 'standing' in m for m in mods), mods"`
+
 This document carries no `Sweep:` header, deliberately. A sweep follows
 one FIELD across an agreement (`DR-SCHEMA`); here the agreement is the
 ABSENCE of traffic between the two sides, so there is no field to
@@ -175,6 +199,14 @@ it is why the adjudication-blindness detector lives in
   and no supremacy guard. `DR-CON-warrants-and-attacks` records the same
   fact from the warrant side; this seam records it because it is where
   the authority story is incomplete.
+- **Reading Prop 12.5 as a claim about the standing MODULE rather than
+  about `adjudication/`.** The module being read-only is necessary and
+  nowhere near sufficient: a perfectly read-only view still breaks the
+  seam the moment `_adjudicate` consults it. The load-bearing assertions
+  point at `harness.py` and `adjudication/`, not at
+  `calculus/standing.py`. Rung 4's own mutation proof is the evidence:
+  the standing module was unchanged throughout, and the test went RED
+  purely from a three-line leak in `_adjudicate`.
 - **Assuming the absence of an `authority` import in `adjudication/`
   means the seam is unimportant.** It is the opposite: the absence IS
   the agreement, which is precisely why the coupling metric cannot see

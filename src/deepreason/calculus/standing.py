@@ -84,6 +84,31 @@ def frame_assertion_body(harness, artifact) -> FrameAssertionV1 | None:
     return body
 
 
+def declared_frame_assertions(harness) -> tuple[tuple[str, FrameAssertionV1], ...]:
+    """Everything that CLAIMS to be a frame assertion: the body decodes and the
+    structural commitment is present, with NO interface check.
+
+    The loose reading exists because the strict one below cannot see the case
+    that matters most to a reader of a finished run. `frame_assertion_body`
+    requires the declared interface to match the compiler's output, so an
+    assertion that violates the mention law is not recognised by it at all --
+    and a violated separation would then be invisible to any check built on it.
+    Recognition for CONSULT must be strict; recognition for INTEGRITY must not
+    be, or the integrity check can only ever report a clean bill.
+    """
+    found = []
+    for aid, artifact in harness.state.artifacts.items():
+        if FRAME_ASSERTION_COMMITMENT.id not in artifact.interface.commitments:
+            continue
+        try:
+            body = decode(content_text(artifact, harness.blobs))
+        except (ClaimDecodeError, UnicodeDecodeError, KeyError):
+            continue
+        if isinstance(body, FrameAssertionV1):
+            found.append((aid, body))
+    return tuple(found)
+
+
 def frame_assertions(harness) -> tuple[tuple[str, FrameAssertionV1], ...]:
     """Every recognised frame assertion in the run, in registration order."""
     return tuple(

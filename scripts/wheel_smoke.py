@@ -22,7 +22,7 @@ import zipfile
 
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "ebd7397074c3aa9640658e74fc0d56f16d2a11f1b6898b7887c961f79c04e17e"
+    "3c47bb1fbcc52eeb172cd965ec11d47f9495fd2608e4e9cb9ceb2f8ff9ad5818"
 )
 # Every entry-point group the wheel is expected to ship, and its exact
 # contents. Pinning the GROUP SET as well as each group's entries is what
@@ -60,6 +60,7 @@ EXPECTED_MCP_TOOLS = {
     "get_request_requirements",
     "amend_run",
     "run_findings",
+    "run_standing",
 }
 REQUIRED_MODULES = {
     "deepreason/__main__.py",

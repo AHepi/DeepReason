@@ -175,6 +175,27 @@ def _run_tools() -> list[dict]:
             },
         },
         {
+            "name": "run_standing",
+            "description": (
+                "Read-only standing view for one managed run (Def 9.3): "
+                "which artifacts currently FRAME which problems, and on what "
+                "case. Standing is the second axis and is not truth -- an "
+                "artifact can be refuted and still framing. It is derived "
+                "from the log on every call, never stored, and it never "
+                "enters label computation. Text by default; structured JSON "
+                "with json=true."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_RUN_ID,
+                    "json": {"type": "boolean", "default": False},
+                },
+                "required": ["run_id"],
+                "additionalProperties": False,
+            },
+        },
+        {
             "name": "amend_run",
             "description": (
                 "Append an amendment epoch to a stopped run: admit more "
@@ -628,6 +649,7 @@ _RUN_TOOL_NAMES = frozenset(
         "run_status",
         "run_result",
         "run_findings",
+        "run_standing",
         "amend_run",
         "continue_run",
         "cancel_run",
@@ -747,6 +769,28 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
             _managed_response(arguments["run_id"], _read_run_result(root)),
             indent=2,
             sort_keys=True,
+        )
+
+    if name == "run_standing":
+        from deepreason.calculus.standing import standing_view
+        from deepreason.harness import Harness
+
+        # read_only=True is load-bearing, not decorative: a writable open
+        # REPAIRS a root, which would alter the evidence a reader asked to see.
+        view = standing_view(Harness(root, read_only=True))
+        if arguments.get("json"):
+            return json.dumps(
+                _managed_response(arguments["run_id"], view),
+                indent=2,
+                sort_keys=True,
+            )
+        if not view["grants"]:
+            return "(no artifact is currently framing any problem)"
+        return "\n".join(
+            f"{g['subject']} frames {len(g['framed_problems'])} problem(s), "
+            f"validity {g['validity']}, via assertion {g['assertion']} "
+            f"(promotion problem {g['promotion_problem']})"
+            for g in view["grants"]
         )
 
     if name == "run_findings":

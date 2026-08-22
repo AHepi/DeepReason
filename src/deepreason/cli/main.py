@@ -462,6 +462,12 @@ def build_parser() -> argparse.ArgumentParser:
         "cancel", help="request cancellation at the next completed-cycle boundary"
     )
     sub.add_parser("frontier", help="show the problem frontier")
+    standing_cmd = sub.add_parser(
+        "standing",
+        help="show which artifacts frame which problems (read-only, Def 9.3)",
+    )
+    standing_cmd.add_argument("--json", action="store_true",
+                              help="emit the structured view instead of text")
     run = sub.add_parser("run", help="run the full scheduler (Conj->Crit->Adj, schools, capture)")
     run.add_argument("--budget", required=True, help="cycles=<N> or plain <N>")
     run.add_argument("--problem", default=None, help="problem file (json/yaml) to register first")
@@ -606,6 +612,7 @@ _ROOT_ADMISSION_COMMANDS = frozenset(
         "schools",
         "signals",
         "skills",
+        "standing",
         "submit-evidence",
         "theory",
         "trace",
@@ -969,6 +976,35 @@ def _main(argv: list[str] | None = None) -> int:
             print("(no problems registered)")
         for pid, problem in harness.state.problems.items():
             print(f"{pid}  [{problem.provenance.trigger.value}]  {problem.description}")
+        return 0
+
+    if args.command == "standing":
+        from deepreason.calculus.standing import standing_view
+
+        # READ-ONLY, and read_only=True says so to the harness rather than only
+        # in the help text: opening a root writable REPAIRS it, which would
+        # destroy the evidence a reader opened it to look at.
+        view = standing_view(Harness(Path(args.root), read_only=True))
+        if args.json:
+            print(json.dumps(view, indent=2, sort_keys=True))
+            return 0
+        if not view["grants"]:
+            print("(no artifact is currently framing any problem)")
+            return 0
+        for grant in view["grants"]:
+            validity = grant["validity"]
+            if validity == "bounded":
+                validity = (
+                    f"bounded to {grant['validity_domain']} "
+                    f"(tolerance {grant['validity_tolerance']})"
+                )
+            print(f"{grant['subject']}  frames, {validity}")
+            print(f"    via assertion   {grant['assertion']}")
+            print(f"    promotion       {grant['promotion_problem']}")
+            print(f"    reach case      {', '.join(grant['reach_case_refs']) or '(none)'}")
+            print(f"    departure       {grant['departure_protocol']}")
+            for pid in grant["framed_problems"]:
+                print(f"    in scope        {pid}")
         return 0
 
     if args.command == "why":

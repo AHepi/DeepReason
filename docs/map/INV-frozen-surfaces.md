@@ -72,6 +72,36 @@ motivated it was run RED on the unfixed tree first (`.../proof/s12_red.txt`).
 `check: grep -q "route_cap_for_knob" src/deepreason/invariants.py`
 `check: grep -q "cap:{e.llm.role}#{attempt.seat}" src/deepreason/invariants.py`
 
+**Granted contact, 2026-08-22 — the `standing-integrity` check (Rung 4).** The
+operator FORECAST this contact in the tranche instruction itself, named its
+exact content, and directed that the grant be requested in SPEC.md rather than
+in chat: "surface 3 (verification) — FORECAST ADDITIVE CONTACT: a
+standing-integrity check (mention law held; every consulted assertion addressed
+to a promotion problem). Request the grant in SPEC.md BEFORE code, per the
+discipline; the monitor reviews it there." The request was written into
+`experiments/2026-08-22-change-rung4-frame-assertions/SPEC.md` S13 with
+`tools/blast_radius.py`'s own `frozen_surface_contacts` list pasted verbatim,
+before a line of the check existed, and the disposition with its three
+checkable facts is ledgered at that tranche's REQUEST.md Amendment 2.
+
+What moved: ONE additive `fail("standing-integrity", …)` clause at the end of
+`verify_root`, plus the check's name in `_EPISTEMIC_CHECKS`. **Insertions only —
+52 and 1, zero deletions** — so no existing finding's shape, name, order or
+detail string changed. Additive is provable rather than asserted here: the check
+recognises frame assertions by a body and a commitment that no root written
+before 2026-08-22 contains, so every committed root yields nothing from it,
+pinned by a probe against a committed root rather than a fixture.
+
+One design point worth keeping, because the obvious implementation is wrong: the
+check recognises assertions by the LOOSE reading (body plus commitment), not the
+strict one the consult path uses. The strict recogniser additionally requires
+the interface to match the controller's compiler — so an assertion violating the
+mention law is not recognised by it at all, and a check built on it could only
+ever report a clean bill. The first implementation here did exactly that and
+reported nothing on a root purpose-built to violate the law.
+
+`check: grep -q "standing-integrity" src/deepreason/invariants.py && grep -q "standing-integrity" src/deepreason/verification/report.py && grep -q "_declared_frame_assertions" src/deepreason/invariants.py && python -m pytest tests/test_calculus_standing.py::test_standing_integrity_fires_on_a_violated_mention_law tests/test_calculus_standing.py::test_standing_integrity_reports_nothing_on_a_root_that_predates_it -q`
+
 **False alarm rowed, same date.** `tools/blast_radius.py` also reported
 `manifest schemas and validators (run_manifest.py)` as `SYMBOL_INDIRECT` contact
 for the symbol `clamp`. It is a substring false positive: every `clamp` in that
