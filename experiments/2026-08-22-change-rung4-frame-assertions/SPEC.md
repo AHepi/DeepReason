@@ -234,13 +234,25 @@ with no frame assertions produces no new finding and its report is unchanged.
     `verify_root` over a pre-existing committed root reports no
     `standing-integrity` finding (S14).
 
-**S14 (C7) — reader-before-writer, and what the sweep is for.**
-No new instrument. Per the 2026-08-14 law and C7 the root sweep is NOT a gate
-obligation. S13 changes a CURRENT-version reader, so the sweep is run ONCE for
-information and WHAT MOVED is reported, not required empty.
-    accept: `python tools/root_sweep.py <out.txt>` before and after; the diff is
-    pasted in VALIDATION.md with an account of every line that moved (expected:
-    none, because the new clause is silent on roots with no frame assertions).
+**S14 (C7) — reader-before-writer. CORRECTED at execution: no sweep.**
+S13 changes a current-version reader, and this item originally planned an
+informational root sweep on C7's wording ("run it only if you change a
+current-version reader"). **That was wrong**: CLAUDE.md's standing law, operator
+ruling 2026-08-22 and the literal HEAD commit of `main`, RETIRES the sweep as an
+instrument outright — "A reader change is proven by targeted, mutation-proven
+regression tests on fixtures or single-root replays committed in the same
+tranche; that is both cheaper and stronger than a sweep, because a sweep can
+only confirm what a targeted test already explains." A sweep was started and the
+operator killed it mid-run. C7 permits; the law forbids; the law wins.
+
+The proof the law asks for instead is what this tranche already commits, and it
+is the stronger one: a single-root replay against a COMMITTED root predating the
+frame layer, asserting the new check is silent on it — plus the mutation-proven
+Prop 12.5 test, which a sweep could not have produced at all.
+    accept: `python -m pytest tests/test_calculus_standing.py::test_standing_integrity_reports_nothing_on_a_root_that_predates_it -q`
+    -> 1 passed, against a `git ls-files`-tracked root.
+    accept: no `root_sweep.py` invocation appears anywhere in this tranche's
+    artifacts as a required step.
 
 ## Assumptions (operator may override)
 

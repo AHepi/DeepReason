@@ -1,5 +1,5 @@
 <!-- DR-SUB-calculus -->
-Verified-at: 5deec374
+Verified-at: c5a4206b
 Verify: python -m pytest tests/test_calculus_claim_substrate.py -q
 Owns: src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/scope.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/views.py
 Seams: 

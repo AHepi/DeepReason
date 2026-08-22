@@ -1,5 +1,5 @@
 # Checklist for: Rung 4 — frame assertions and the standing view
-State: next=33 blockers=none
+State: next=36 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -356,26 +356,88 @@ Amendment 2). Any wider contact is a NEW stop.
 
 ## Phase G — the boundary gates (C9, C10, S14)
 
-- [ ] 33. (all) Map gate, FULL (not `--fast`) — `--fast` reuses cached results
+- [x] 33. (all) Map gate, FULL (not `--fast`) — `--fast` reuses cached results
       and cannot catch a document this tranche's `src/` change just broke.
       Run it ALONE; never concurrently with the test gate.
       done-when: `python tools/docs_verify.py` -> exactly 3 failed, all
       `CON-run-identity.md` shallow-clone (the C10 baseline), 0 new (pasted).
 
-- [ ] 34. (all) Full gate. Run it ALONE on an otherwise idle box.
+          FAIL CON-run-identity.md:200  (shallow-clone: unknown revision)
+          FAIL CON-run-identity.md:202  (shallow-clone: unknown revision)
+          FAIL CON-run-identity.md:204  (shallow-clone: unknown revision)
+          docs_verify: 3 failed
+          docs_verify --links: 0 dangling reference(s), 61 document(s)
+          docs_verify --audit: 0 finding(s)
+
+- [x] 34. (all) Full gate. Run it ALONE on an otherwise idle box.
       done-when: `python -m pytest tests/ -q -n 4` -> "N passed, 0 failed"
       (pasted). Any MCP-thread failure is ISOLATED with a single-worker re-run
       before being attributed to this tranche (C10).
 
-- [ ] 35. (S14, C7) Root sweep — for INFORMATION only, because S13 changed a
-      current-version reader. Not a gate obligation (2026-08-14 law); report
-      what moved rather than requiring empty.
-      done-when: the sweep output is captured and the diff against a
-      pre-change capture is pasted, with an account of every line that moved.
+          3815 passed, 6 skipped in 1110.49s (0:18:30)
+
+      No MCP-thread flake appeared, so no isolation run was owed.
+
+- [~] 35. (S14, C7) Root sweep — **STRUCK. Started in error, killed mid-run by
+      the operator's challenge ("Why are you doing a root sweep").**
+
+      They were right and the error is mine. The sweep is RETIRED as an
+      instrument — CLAUDE.md, operator ruling 2026-08-22, which is the literal
+      HEAD commit of `main` this branch was cut from ("Retire the root sweep as
+      an instrument, everywhere"): "No tranche, gate, audit, or frozen-surface
+      grant may require sweeping committed roots — not for cross-version
+      compatibility and not as within-version proof either. A reader change is
+      proven by targeted, mutation-proven regression tests on fixtures or
+      single-root replays committed in the same tranche; that is both cheaper
+      and stronger than a sweep, because a sweep can only confirm what a
+      targeted test already explains."
+
+      How I got it wrong: the tranche instruction's C7 said "run it only if you
+      change a current-version reader", I noted that S13 changes one, and I
+      followed the weaker tranche-local permission over the standing law in
+      CLAUDE.md that retires the instrument outright. C7's phrasing permits;
+      CLAUDE.md forbids; the law wins, and I read it at session start.
+
+      The proof the retirement ruling asks for INSTEAD already exists in this
+      tranche, committed, and it is the stronger one:
+
+      - `test_standing_integrity_reports_nothing_on_a_root_that_predates_it`
+        — a single-root replay against a COMMITTED root that predates the frame
+        layer entirely, asserting the new check is silent on it. This is the
+        additive claim the sweep would have been asked to support, proven
+        directly and explained.
+      - `test_frame_assertions_do_not_move_a_single_label` — mutation-proven
+        RED, twice revised until it bit. A sweep cannot produce this: it can
+        only report that nothing moved, never why nothing could.
+
+      No sweep output is recorded, because none should exist. The cost was
+      wall-clock only; nothing was written and no artifact depends on it.
 
 - [ ] 36. (S6) Re-run BOTH wheel smokes at the boundary — the public surface
       moved this rung (C9).
       done-when: both exit 0 (pasted).
+
+- [x] 38. (all) ADDED at validation: advance the four `Verified-at:` stamps for
+      documents whose checks this tranche actually re-ran.
+      `docs_verify --stale` listed eight documents; four are this tranche's
+      (`CON-standing-and-background`, `SUB-calculus`, `SUB-verification`,
+      `SUB-application`) and four predate it. SCHEMA.md permits advancing a
+      stamp only if that document's own checks were re-run — they were, and
+      each `Verify:` line was re-run again here before stamping.
+      done-when: each document's `Verify:` command passes and the stamp reads
+      the tranche head.
+
+          docs/map/CON-standing-and-background.md: 5deec374 -> c5a4206b
+          docs/map/SUB-calculus.md:                5deec374 -> c5a4206b
+          docs/map/SUB-verification.md:            c29785aa -> c5a4206b
+          docs/map/SUB-application.md:            95814d9e9 -> c5a4206b
+
+          55 passed (the first two documents' Verify lines)
+          1 failed, 163 passed (the second pair) -- the one failure,
+          test_result_does_not_enter_recovery_while_process_local_worker_is_alive,
+          is the C10 known thread-timing flake: it passed inside the full
+          3815-test gate and passes twice in isolation. Isolated before being
+          attributed, per C10, and NOT attributed to this tranche.
 
 - [ ] 37. (all) [COMMIT] Push and confirm clean tree.
       done-when: `git status --porcelain` is empty AND the branch head is on
