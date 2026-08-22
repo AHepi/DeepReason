@@ -1,0 +1,621 @@
+{
+  "roots": [
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+      "candidates": 20,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+      "candidates": 62,
+      "formally_backed": 16,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+      "candidates": 51,
+      "formally_backed": 23,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "candidates": 35,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "candidates": 18,
+      "formally_backed": 12,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-05-testphase-live-validation/home-testphase/runs/run-a518e33a75507207633f864ba6a864b1",
+      "candidates": 23,
+      "formally_backed": 5,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+      "candidates": 58,
+      "formally_backed": 10,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+      "candidates": 53,
+      "formally_backed": 27,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+      "candidates": 48,
+      "formally_backed": 22,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+      "candidates": 59,
+      "formally_backed": 23,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+      "candidates": 54,
+      "formally_backed": 12,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+      "candidates": 76,
+      "formally_backed": 35,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+      "candidates": 61,
+      "formally_backed": 18,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+      "candidates": 58,
+      "formally_backed": 24,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+      "candidates": 56,
+      "formally_backed": 28,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+      "candidates": 71,
+      "formally_backed": 11,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+      "candidates": 58,
+      "formally_backed": 5,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+      "candidates": 91,
+      "formally_backed": 28,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+      "candidates": 52,
+      "formally_backed": 28,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7",
+      "candidates": 23,
+      "formally_backed": 23,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-o/runs/run-6bca5a31141b3f0ea6140501146f5646",
+      "candidates": 80,
+      "formally_backed": 38,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-v/runs/run-7906485ce1cfc314a653c185cbf61d75",
+      "candidates": 57,
+      "formally_backed": 17,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "candidates": 31,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-050dd9ed53fdd1a30a0cec59f50d5baa",
+      "candidates": 74,
+      "formally_backed": 35,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-341a3a3e618715f7023e822cdff510f2",
+      "candidates": 76,
+      "formally_backed": 10,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "candidates": 75,
+      "formally_backed": 27,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "candidates": 69,
+      "formally_backed": 9,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 4,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-944946f53dee4b636672677a0a534469",
+      "candidates": 68,
+      "formally_backed": 13,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a200f0c471f1225d9379d502e249976e",
+      "candidates": 33,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a529cbb6b02be078a09592449fadc502",
+      "candidates": 69,
+      "formally_backed": 14,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "candidates": 75,
+      "formally_backed": 10,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b7514714c3310b6f805f466ff39915be",
+      "candidates": 29,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+      "candidates": 82,
+      "formally_backed": 28,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "candidates": 83,
+      "formally_backed": 32,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 16,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "candidates": 32,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "candidates": 74,
+      "formally_backed": 26,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "candidates": 10,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "candidates": 30,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "candidates": 57,
+      "formally_backed": 9,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 30,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+      "candidates": 41,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-a200f0c471f1225d9379d502e249976e",
+      "candidates": 17,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "candidates": 52,
+      "formally_backed": 12,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b7514714c3310b6f805f466ff39915be",
+      "candidates": 17,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "candidates": 42,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 23,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "candidates": 17,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "candidates": 65,
+      "formally_backed": 16,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-168a41157d05ca53431f268fba264b4c",
+      "candidates": 11,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-649323b4f264ac6b69fb87736d40fb27",
+      "candidates": 6,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-7f93a0955557fa490e1b1ead01ed459e",
+      "candidates": 13,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-89d6f536c4daeee986e44a68042afded",
+      "candidates": 8,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-97623b8fecfdf79fdace40e46cb7ac0c",
+      "candidates": 9,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-a277abb13327846e13fb3124c1804aa8",
+      "candidates": 16,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-b212590cf2957821796b560163e1941e",
+      "candidates": 14,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+      "candidates": 5,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-db8194b08518dd3afc2b78c533170ab3",
+      "candidates": 8,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-ecf3ce54012a3df4eef08d0cdb772f41",
+      "candidates": 17,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 18,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 28,
+      "formally_backed": 4,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598",
+      "candidates": 23,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-f5aee6107cb0de151e72bf282c86d166",
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+      "candidates": 245,
+      "formally_backed": 87,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b",
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/bronze_pilot_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/glm_judge_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/jolt_architecture_2026-07-16/run",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/live_coin_canonicity_2026-07-31/home/runs/run-c5f901f38208e862f4ce2fe60a26e551",
+      "candidates": 14,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+      "candidates": 24,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+      "candidates": 35,
+      "formally_backed": 5,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+      "candidates": 45,
+      "formally_backed": 12,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "candidates": 24,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+      "candidates": 10,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+      "candidates": 10,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+      "candidates": 20,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+      "candidates": 10,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "candidates": 25,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "candidates": 11,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+      "candidates": 16,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 58,
+      "formally_backed": 48,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 39,
+      "formally_backed": 23,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 34,
+      "formally_backed": 24,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 22,
+      "formally_backed": 12,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 22,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+      "candidates": 17,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+      "candidates": 10,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+      "candidates": 40,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+      "candidates": 24,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+      "candidates": 12,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+      "candidates": 52,
+      "formally_backed": 6,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+      "candidates": 18,
+      "formally_backed": 0,
+      "_culprits": {}
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "candidates": 24,
+      "formally_backed": 0,
+      "_culprits": {}
+    }
+  ],
+  "totals": {
+    "candidates": 3528,
+    "formally_backed": 903
+  },
+  "culprit_evals": {}
+}

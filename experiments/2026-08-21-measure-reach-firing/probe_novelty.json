@@ -1,0 +1,667 @@
+{
+  "roots": [
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+      "relation-form@578e42df713e: carries=False passes=False": 20,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 18
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+      "relation-form@578e42df713e: carries=False passes=False": 46,
+      "relation-form@578e42df713e: carries=True passes=True": 16,
+      "reasoning-envelope-wf: carries=False passes=False": 18,
+      "reasoning-envelope-wf: carries=True passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=True": 42
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+      "relation-form@578e42df713e: carries=False passes=False": 28,
+      "relation-form@578e42df713e: carries=True passes=True": 23,
+      "reasoning-envelope-wf: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=False passes=False": 23
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "relation-form@578e42df713e: carries=False passes=False": 29,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 29,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "relation-form@578e42df713e: carries=False passes=False": 6,
+      "relation-form@578e42df713e: carries=True passes=True": 12,
+      "reasoning-envelope-wf: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=False passes=False": 12
+    },
+    {
+      "root": "experiments/2026-08-05-testphase-live-validation/home-testphase/runs/run-a518e33a75507207633f864ba6a864b1",
+      "relation-form@578e42df713e: carries=False passes=False": 18,
+      "relation-form@578e42df713e: carries=True passes=True": 5,
+      "reasoning-envelope-wf: carries=True passes=True": 18,
+      "reasoning-envelope-wf: carries=False passes=False": 5
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+      "relation-form@578e42df713e: carries=False passes=False": 48,
+      "relation-form@578e42df713e: carries=True passes=True": 10,
+      "reasoning-envelope-wf: carries=True passes=True": 48,
+      "reasoning-envelope-wf: carries=False passes=False": 10
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+      "relation-form@578e42df713e: carries=False passes=False": 26,
+      "relation-form@578e42df713e: carries=True passes=True": 27,
+      "reasoning-envelope-wf: carries=True passes=True": 26,
+      "reasoning-envelope-wf: carries=False passes=False": 27
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+      "relation-form@578e42df713e: carries=False passes=False": 26,
+      "relation-form@578e42df713e: carries=True passes=True": 22,
+      "reasoning-envelope-wf: carries=True passes=True": 26,
+      "reasoning-envelope-wf: carries=False passes=False": 22
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+      "relation-form@578e42df713e: carries=False passes=False": 36,
+      "relation-form@578e42df713e: carries=True passes=True": 23,
+      "reasoning-envelope-wf: carries=True passes=True": 36,
+      "reasoning-envelope-wf: carries=False passes=False": 23
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+      "relation-form@578e42df713e: carries=False passes=False": 42,
+      "relation-form@578e42df713e: carries=True passes=True": 12,
+      "reasoning-envelope-wf: carries=True passes=True": 42,
+      "reasoning-envelope-wf: carries=False passes=False": 12
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+      "relation-form@578e42df713e: carries=False passes=False": 41,
+      "relation-form@578e42df713e: carries=True passes=True": 35,
+      "reasoning-envelope-wf: carries=True passes=True": 41,
+      "reasoning-envelope-wf: carries=False passes=False": 35
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+      "relation-form@578e42df713e: carries=False passes=False": 43,
+      "relation-form@578e42df713e: carries=True passes=True": 18,
+      "reasoning-envelope-wf: carries=True passes=True": 43,
+      "reasoning-envelope-wf: carries=False passes=False": 18
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+      "relation-form@578e42df713e: carries=False passes=False": 34,
+      "relation-form@578e42df713e: carries=True passes=True": 24,
+      "reasoning-envelope-wf: carries=True passes=True": 34,
+      "reasoning-envelope-wf: carries=False passes=False": 24
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+      "relation-form@578e42df713e: carries=False passes=False": 28,
+      "relation-form@578e42df713e: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=False passes=False": 28
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+      "relation-form@578e42df713e: carries=False passes=False": 60,
+      "relation-form@578e42df713e: carries=True passes=True": 11,
+      "reasoning-envelope-wf: carries=True passes=True": 60,
+      "reasoning-envelope-wf: carries=False passes=False": 11
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+      "relation-form@578e42df713e: carries=False passes=False": 53,
+      "relation-form@578e42df713e: carries=True passes=True": 5,
+      "reasoning-envelope-wf: carries=True passes=True": 53,
+      "reasoning-envelope-wf: carries=False passes=False": 5
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+      "relation-form@578e42df713e: carries=False passes=False": 63,
+      "relation-form@578e42df713e: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=True passes=True": 63,
+      "reasoning-envelope-wf: carries=False passes=False": 28
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "relation-form@578e42df713e: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=True passes=True": 24,
+      "reasoning-envelope-wf: carries=False passes=False": 28
+    },
+    {
+      "root": "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7",
+      "relation-form@578e42df713e: not-registered-in-this-root": 23,
+      "reasoning-envelope-wf: not-registered-in-this-root": 23
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-o/runs/run-6bca5a31141b3f0ea6140501146f5646",
+      "relation-form@578e42df713e: carries=False passes=False": 42,
+      "relation-form@578e42df713e: carries=True passes=True": 38,
+      "reasoning-envelope-wf: carries=True passes=True": 42,
+      "reasoning-envelope-wf: carries=False passes=False": 38
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-v/runs/run-7906485ce1cfc314a653c185cbf61d75",
+      "relation-form@578e42df713e: carries=False passes=False": 40,
+      "relation-form@578e42df713e: carries=True passes=True": 17,
+      "reasoning-envelope-wf: carries=True passes=True": 40,
+      "reasoning-envelope-wf: carries=False passes=False": 17
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "relation-form@578e42df713e: carries=False passes=False": 31,
+      "reasoning-envelope-wf: carries=True passes=True": 31
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-050dd9ed53fdd1a30a0cec59f50d5baa",
+      "relation-form@578e42df713e: carries=False passes=False": 39,
+      "relation-form@578e42df713e: carries=True passes=True": 35,
+      "reasoning-envelope-wf: carries=True passes=True": 39,
+      "reasoning-envelope-wf: carries=False passes=False": 35
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-341a3a3e618715f7023e822cdff510f2",
+      "relation-form@578e42df713e: carries=False passes=False": 66,
+      "relation-form@578e42df713e: carries=True passes=True": 10,
+      "reasoning-envelope-wf: carries=True passes=True": 66,
+      "reasoning-envelope-wf: carries=False passes=False": 10
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "relation-form@578e42df713e: carries=False passes=False": 48,
+      "relation-form@578e42df713e: carries=True passes=True": 27,
+      "reasoning-envelope-wf: carries=True passes=True": 48,
+      "reasoning-envelope-wf: carries=False passes=False": 27
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "relation-form@578e42df713e: carries=False passes=False": 60,
+      "relation-form@578e42df713e: carries=True passes=True": 9,
+      "reasoning-envelope-wf: carries=True passes=True": 60,
+      "reasoning-envelope-wf: carries=False passes=False": 9
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "relation-form@578e42df713e: not-registered-in-this-root": 4,
+      "reasoning-envelope-wf: carries=True passes=True": 4
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-944946f53dee4b636672677a0a534469",
+      "relation-form@578e42df713e: carries=False passes=False": 55,
+      "relation-form@578e42df713e: carries=True passes=True": 13,
+      "reasoning-envelope-wf: carries=True passes=True": 55,
+      "reasoning-envelope-wf: carries=False passes=False": 13
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a200f0c471f1225d9379d502e249976e",
+      "relation-form@578e42df713e: carries=False passes=False": 33,
+      "reasoning-envelope-wf: carries=True passes=True": 33
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a529cbb6b02be078a09592449fadc502",
+      "relation-form@578e42df713e: carries=False passes=False": 55,
+      "relation-form@578e42df713e: carries=True passes=True": 14,
+      "reasoning-envelope-wf: carries=True passes=True": 55,
+      "reasoning-envelope-wf: carries=False passes=False": 14
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "relation-form@578e42df713e: carries=False passes=False": 65,
+      "relation-form@578e42df713e: carries=True passes=True": 10,
+      "reasoning-envelope-wf: carries=True passes=True": 65,
+      "reasoning-envelope-wf: carries=False passes=False": 10
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b7514714c3310b6f805f466ff39915be",
+      "relation-form@578e42df713e: carries=False passes=False": 29,
+      "reasoning-envelope-wf: carries=True passes=True": 29
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+      "relation-form@578e42df713e: carries=False passes=False": 54,
+      "relation-form@578e42df713e: carries=True passes=True": 28,
+      "reasoning-envelope-wf: carries=True passes=True": 54,
+      "reasoning-envelope-wf: carries=False passes=False": 28
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "relation-form@578e42df713e: carries=False passes=False": 51,
+      "relation-form@578e42df713e: carries=True passes=True": 32,
+      "reasoning-envelope-wf: carries=True passes=True": 51,
+      "reasoning-envelope-wf: carries=False passes=False": 32
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "relation-form@578e42df713e: not-registered-in-this-root": 16,
+      "reasoning-envelope-wf: carries=True passes=True": 16
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "relation-form@578e42df713e: carries=False passes=False": 32,
+      "reasoning-envelope-wf: carries=True passes=True": 32
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "relation-form@578e42df713e: carries=False passes=False": 48,
+      "relation-form@578e42df713e: carries=True passes=True": 26,
+      "reasoning-envelope-wf: carries=True passes=True": 48,
+      "reasoning-envelope-wf: carries=False passes=False": 26
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "reasoning-envelope-wf: carries=True passes=True": 10
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "relation-form@578e42df713e: not-registered-in-this-root": 30,
+      "reasoning-envelope-wf: carries=True passes=True": 30
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "relation-form@578e42df713e: carries=False passes=False": 48,
+      "relation-form@578e42df713e: carries=True passes=True": 9,
+      "reasoning-envelope-wf: carries=True passes=True": 48,
+      "reasoning-envelope-wf: carries=False passes=False": 9
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 24,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+      "relation-form@578e42df713e: carries=False passes=False": 35,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 35,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-a200f0c471f1225d9379d502e249976e",
+      "relation-form@578e42df713e: carries=False passes=False": 17,
+      "reasoning-envelope-wf: carries=True passes=True": 17
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "relation-form@578e42df713e: carries=False passes=False": 40,
+      "relation-form@578e42df713e: carries=True passes=True": 12,
+      "reasoning-envelope-wf: carries=True passes=True": 40,
+      "reasoning-envelope-wf: carries=False passes=False": 12
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b7514714c3310b6f805f466ff39915be",
+      "relation-form@578e42df713e: carries=False passes=False": 17,
+      "reasoning-envelope-wf: carries=True passes=True": 17
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "relation-form@578e42df713e: carries=False passes=False": 36,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 36,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "relation-form@578e42df713e: carries=False passes=False": 23,
+      "reasoning-envelope-wf: carries=True passes=True": 23
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "relation-form@578e42df713e: carries=False passes=False": 17,
+      "reasoning-envelope-wf: carries=True passes=True": 17
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "relation-form@578e42df713e: carries=False passes=False": 49,
+      "relation-form@578e42df713e: carries=True passes=True": 16,
+      "reasoning-envelope-wf: carries=True passes=True": 49,
+      "reasoning-envelope-wf: carries=False passes=False": 16
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-168a41157d05ca53431f268fba264b4c",
+      "relation-form@578e42df713e: carries=False passes=False": 11,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 9
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-649323b4f264ac6b69fb87736d40fb27",
+      "relation-form@578e42df713e: carries=False passes=False": 6,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 4
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-7f93a0955557fa490e1b1ead01ed459e",
+      "relation-form@578e42df713e: carries=False passes=False": 13,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 11
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-89d6f536c4daeee986e44a68042afded",
+      "relation-form@578e42df713e: carries=False passes=False": 8,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-97623b8fecfdf79fdace40e46cb7ac0c",
+      "relation-form@578e42df713e: carries=False passes=False": 9,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 7
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-a277abb13327846e13fb3124c1804aa8",
+      "relation-form@578e42df713e: carries=False passes=False": 16,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 14
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-b212590cf2957821796b560163e1941e",
+      "relation-form@578e42df713e: carries=False passes=False": 14,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 12
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+      "relation-form@578e42df713e: carries=False passes=False": 5,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 3
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-db8194b08518dd3afc2b78c533170ab3",
+      "relation-form@578e42df713e: carries=False passes=False": 8,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-ecf3ce54012a3df4eef08d0cdb772f41",
+      "relation-form@578e42df713e: carries=False passes=False": 17,
+      "reasoning-envelope-wf: carries=False passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=False": 1,
+      "reasoning-envelope-wf: carries=True passes=True": 15
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "relation-form@578e42df713e: carries=False passes=False": 18,
+      "reasoning-envelope-wf: carries=True passes=True": 18
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "relation-form@578e42df713e: carries=True passes=True": 4,
+      "reasoning-envelope-wf: carries=True passes=True": 24,
+      "reasoning-envelope-wf: carries=False passes=False": 4
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598",
+      "relation-form@578e42df713e: carries=False passes=False": 23,
+      "reasoning-envelope-wf: carries=True passes=True": 23
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-f5aee6107cb0de151e72bf282c86d166"
+    },
+    {
+      "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+      "relation-form@578e42df713e: carries=False passes=False": 158,
+      "relation-form@578e42df713e: carries=True passes=True": 87,
+      "reasoning-envelope-wf: not-registered-in-this-root": 245
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+      "relation-form@578e42df713e: carries=False passes=False": 12,
+      "reasoning-envelope-wf: carries=False passes=False": 6,
+      "reasoning-envelope-wf: carries=True passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+      "relation-form@578e42df713e: carries=False passes=False": 12,
+      "reasoning-envelope-wf: carries=False passes=False": 6,
+      "reasoning-envelope-wf: carries=True passes=False": 6
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+      "relation-form@578e42df713e: carries=False passes=False": 12,
+      "reasoning-envelope-wf: carries=False passes=False": 6,
+      "reasoning-envelope-wf: carries=True passes=False": 6
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro"
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6"
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b"
+    },
+    {
+      "root": "experiments/bronze_pilot_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/glm_judge_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/jolt_architecture_2026-07-16/run",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/live_coin_canonicity_2026-07-31/home/runs/run-c5f901f38208e862f4ce2fe60a26e551",
+      "relation-form@578e42df713e: carries=False passes=False": 14,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=True": 10
+    },
+    {
+      "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+      "relation-form@578e42df713e: not-registered-in-this-root": 24,
+      "reasoning-envelope-wf: not-registered-in-this-root": 24
+    },
+    {
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+      "relation-form@578e42df713e: carries=False passes=False": 30,
+      "relation-form@578e42df713e: carries=True passes=True": 5,
+      "reasoning-envelope-wf: carries=True passes=True": 30,
+      "reasoning-envelope-wf: carries=False passes=False": 5
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+      "relation-form@578e42df713e: carries=False passes=False": 33,
+      "relation-form@578e42df713e: carries=True passes=True": 12,
+      "reasoning-envelope-wf: carries=True passes=True": 30,
+      "reasoning-envelope-wf: carries=True passes=False": 3,
+      "reasoning-envelope-wf: carries=False passes=False": 12
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 4,
+      "reasoning-envelope-wf: carries=True passes=True": 18
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+      "relation-form@578e42df713e: carries=False passes=False": 20,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 3,
+      "reasoning-envelope-wf: carries=True passes=True": 15
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "reasoning-envelope-wf: carries=False passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=False": 2,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "relation-form@578e42df713e: carries=False passes=False": 25,
+      "reasoning-envelope-wf: carries=True passes=True": 22,
+      "reasoning-envelope-wf: carries=True passes=False": 3
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "relation-form@578e42df713e: carries=False passes=False": 11,
+      "reasoning-envelope-wf: carries=True passes=True": 10,
+      "reasoning-envelope-wf: carries=True passes=False": 1
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 10,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "relation-form@578e42df713e: carries=True passes=True": 48,
+      "reasoning-envelope-wf: carries=False passes=False": 53,
+      "reasoning-envelope-wf: carries=True passes=False": 5
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "relation-form@578e42df713e: carries=False passes=False": 16,
+      "relation-form@578e42df713e: carries=True passes=True": 23,
+      "reasoning-envelope-wf: carries=False passes=False": 28,
+      "reasoning-envelope-wf: carries=True passes=False": 5,
+      "reasoning-envelope-wf: carries=True passes=True": 6
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "relation-form@578e42df713e: carries=True passes=True": 24,
+      "reasoning-envelope-wf: carries=False passes=False": 29,
+      "reasoning-envelope-wf: carries=True passes=False": 5
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "relation-form@578e42df713e: carries=True passes=True": 12,
+      "reasoning-envelope-wf: carries=False passes=False": 17,
+      "reasoning-envelope-wf: carries=True passes=False": 5
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+      "relation-form@578e42df713e: carries=False passes=False": 22,
+      "reasoning-envelope-wf: carries=False passes=False": 5,
+      "reasoning-envelope-wf: carries=True passes=False": 5,
+      "reasoning-envelope-wf: carries=True passes=True": 12
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+      "relation-form@578e42df713e: not-registered-in-this-root": 17,
+      "reasoning-envelope-wf: carries=True passes=True": 16,
+      "reasoning-envelope-wf: carries=True passes=False": 1
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+      "relation-form@578e42df713e: carries=False passes=False": 10,
+      "reasoning-envelope-wf: carries=True passes=True": 10
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+      "relation-form@578e42df713e: carries=False passes=False": 34,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 34,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "reasoning-envelope-wf: carries=True passes=True": 24
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+      "relation-form@578e42df713e: carries=False passes=False": 12,
+      "reasoning-envelope-wf: carries=True passes=True": 12
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+      "relation-form@578e42df713e: carries=False passes=False": 46,
+      "relation-form@578e42df713e: carries=True passes=True": 6,
+      "reasoning-envelope-wf: carries=True passes=True": 46,
+      "reasoning-envelope-wf: carries=False passes=False": 6
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+      "relation-form@578e42df713e: carries=False passes=False": 18,
+      "reasoning-envelope-wf: carries=True passes=True": 18
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "relation-form@578e42df713e: carries=False passes=False": 24,
+      "reasoning-envelope-wf: carries=True passes=True": 24
+    }
+  ],
+  "totals": {
+    "reasoning-envelope-wf: carries=False passes=False": 861,
+    "reasoning-envelope-wf: carries=True passes=False": 79,
+    "reasoning-envelope-wf: carries=True passes=True": 2296,
+    "reasoning-envelope-wf: not-registered-in-this-root": 292,
+    "relation-form@578e42df713e: carries=False passes=False": 2534,
+    "relation-form@578e42df713e: carries=True passes=True": 880,
+    "relation-form@578e42df713e: not-registered-in-this-root": 114
+  }
+}

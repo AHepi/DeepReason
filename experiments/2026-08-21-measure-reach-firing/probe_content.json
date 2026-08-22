@@ -1,0 +1,1091 @@
+{
+  "roots": [
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+      "candidates": 20,
+      "nonempty_content": 20,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1014,
+      "content_len_median": 2855,
+      "content_len_max": 5558
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+      "candidates": 62,
+      "nonempty_content": 62,
+      "has_refuted_if": 16,
+      "has_relation_kind": 20,
+      "would_pass_relation_form": 16,
+      "content_len_min": 406,
+      "content_len_median": 1490,
+      "content_len_max": 5738
+    },
+    {
+      "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+      "candidates": 51,
+      "nonempty_content": 51,
+      "has_refuted_if": 23,
+      "has_relation_kind": 23,
+      "would_pass_relation_form": 23,
+      "content_len_min": 474,
+      "content_len_median": 1107,
+      "content_len_max": 4870
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "candidates": 35,
+      "nonempty_content": 35,
+      "has_refuted_if": 6,
+      "has_relation_kind": 8,
+      "would_pass_relation_form": 6,
+      "content_len_min": 713,
+      "content_len_median": 1680,
+      "content_len_max": 3154
+    },
+    {
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "candidates": 18,
+      "nonempty_content": 18,
+      "has_refuted_if": 12,
+      "has_relation_kind": 14,
+      "would_pass_relation_form": 12,
+      "content_len_min": 447,
+      "content_len_median": 515,
+      "content_len_max": 3882
+    },
+    {
+      "root": "experiments/2026-08-05-testphase-live-validation/home-testphase/runs/run-a518e33a75507207633f864ba6a864b1",
+      "candidates": 23,
+      "nonempty_content": 23,
+      "has_refuted_if": 5,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 5,
+      "content_len_min": 368,
+      "content_len_median": 1806,
+      "content_len_max": 4480
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+      "candidates": 58,
+      "nonempty_content": 58,
+      "has_refuted_if": 10,
+      "has_relation_kind": 12,
+      "would_pass_relation_form": 10,
+      "content_len_min": 353,
+      "content_len_median": 1128,
+      "content_len_max": 3408
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+      "candidates": 53,
+      "nonempty_content": 53,
+      "has_refuted_if": 27,
+      "has_relation_kind": 27,
+      "would_pass_relation_form": 27,
+      "content_len_min": 293,
+      "content_len_median": 652,
+      "content_len_max": 1651
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+      "candidates": 48,
+      "nonempty_content": 48,
+      "has_refuted_if": 22,
+      "has_relation_kind": 22,
+      "would_pass_relation_form": 22,
+      "content_len_min": 308,
+      "content_len_median": 951,
+      "content_len_max": 1664
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+      "candidates": 59,
+      "nonempty_content": 59,
+      "has_refuted_if": 23,
+      "has_relation_kind": 25,
+      "would_pass_relation_form": 23,
+      "content_len_min": 532,
+      "content_len_median": 924,
+      "content_len_max": 2672
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+      "candidates": 54,
+      "nonempty_content": 54,
+      "has_refuted_if": 12,
+      "has_relation_kind": 12,
+      "would_pass_relation_form": 12,
+      "content_len_min": 297,
+      "content_len_median": 964,
+      "content_len_max": 3461
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+      "candidates": 76,
+      "nonempty_content": 76,
+      "has_refuted_if": 35,
+      "has_relation_kind": 36,
+      "would_pass_relation_form": 35,
+      "content_len_min": 279,
+      "content_len_median": 875,
+      "content_len_max": 2473
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+      "candidates": 61,
+      "nonempty_content": 61,
+      "has_refuted_if": 18,
+      "has_relation_kind": 18,
+      "would_pass_relation_form": 18,
+      "content_len_min": 255,
+      "content_len_median": 816,
+      "content_len_max": 3187
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+      "candidates": 58,
+      "nonempty_content": 58,
+      "has_refuted_if": 24,
+      "has_relation_kind": 30,
+      "would_pass_relation_form": 24,
+      "content_len_min": 457,
+      "content_len_median": 1024,
+      "content_len_max": 1776
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+      "candidates": 56,
+      "nonempty_content": 56,
+      "has_refuted_if": 28,
+      "has_relation_kind": 30,
+      "would_pass_relation_form": 28,
+      "content_len_min": 327,
+      "content_len_median": 754,
+      "content_len_max": 3300
+    },
+    {
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+      "candidates": 71,
+      "nonempty_content": 71,
+      "has_refuted_if": 11,
+      "has_relation_kind": 14,
+      "would_pass_relation_form": 11,
+      "content_len_min": 367,
+      "content_len_median": 845,
+      "content_len_max": 1781
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+      "candidates": 58,
+      "nonempty_content": 58,
+      "has_refuted_if": 5,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 5,
+      "content_len_min": 470,
+      "content_len_median": 1053,
+      "content_len_max": 1704
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+      "candidates": 91,
+      "nonempty_content": 91,
+      "has_refuted_if": 28,
+      "has_relation_kind": 31,
+      "would_pass_relation_form": 28,
+      "content_len_min": 272,
+      "content_len_median": 990,
+      "content_len_max": 1773
+    },
+    {
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+      "candidates": 52,
+      "nonempty_content": 52,
+      "has_refuted_if": 28,
+      "has_relation_kind": 31,
+      "would_pass_relation_form": 28,
+      "content_len_min": 528,
+      "content_len_median": 1282,
+      "content_len_max": 4460
+    },
+    {
+      "root": "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7",
+      "candidates": 23,
+      "nonempty_content": 23,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 114,
+      "content_len_median": 267,
+      "content_len_max": 423
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-o/runs/run-6bca5a31141b3f0ea6140501146f5646",
+      "candidates": 80,
+      "nonempty_content": 80,
+      "has_refuted_if": 38,
+      "has_relation_kind": 39,
+      "would_pass_relation_form": 38,
+      "content_len_min": 242,
+      "content_len_median": 840,
+      "content_len_max": 1827
+    },
+    {
+      "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-v/runs/run-7906485ce1cfc314a653c185cbf61d75",
+      "candidates": 57,
+      "nonempty_content": 57,
+      "has_refuted_if": 17,
+      "has_relation_kind": 18,
+      "would_pass_relation_form": 17,
+      "content_len_min": 215,
+      "content_len_median": 748,
+      "content_len_max": 1664
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "candidates": 31,
+      "nonempty_content": 31,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1040,
+      "content_len_median": 1204,
+      "content_len_max": 2074
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-050dd9ed53fdd1a30a0cec59f50d5baa",
+      "candidates": 74,
+      "nonempty_content": 74,
+      "has_refuted_if": 35,
+      "has_relation_kind": 37,
+      "would_pass_relation_form": 35,
+      "content_len_min": 264,
+      "content_len_median": 1020,
+      "content_len_max": 1867
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-341a3a3e618715f7023e822cdff510f2",
+      "candidates": 76,
+      "nonempty_content": 76,
+      "has_refuted_if": 10,
+      "has_relation_kind": 17,
+      "would_pass_relation_form": 10,
+      "content_len_min": 299,
+      "content_len_median": 1112,
+      "content_len_max": 1818
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "candidates": 75,
+      "nonempty_content": 75,
+      "has_refuted_if": 27,
+      "has_relation_kind": 29,
+      "would_pass_relation_form": 27,
+      "content_len_min": 257,
+      "content_len_median": 1046,
+      "content_len_max": 1849
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "candidates": 69,
+      "nonempty_content": 69,
+      "has_refuted_if": 9,
+      "has_relation_kind": 15,
+      "would_pass_relation_form": 9,
+      "content_len_min": 250,
+      "content_len_median": 1099,
+      "content_len_max": 1903
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 4,
+      "nonempty_content": 4,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1182,
+      "content_len_median": 1317,
+      "content_len_max": 1480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-944946f53dee4b636672677a0a534469",
+      "candidates": 68,
+      "nonempty_content": 68,
+      "has_refuted_if": 13,
+      "has_relation_kind": 15,
+      "would_pass_relation_form": 13,
+      "content_len_min": 309,
+      "content_len_median": 1131,
+      "content_len_max": 1441
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a200f0c471f1225d9379d502e249976e",
+      "candidates": 33,
+      "nonempty_content": 33,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 941,
+      "content_len_median": 1156,
+      "content_len_max": 1362
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a529cbb6b02be078a09592449fadc502",
+      "candidates": 69,
+      "nonempty_content": 69,
+      "has_refuted_if": 14,
+      "has_relation_kind": 19,
+      "would_pass_relation_form": 14,
+      "content_len_min": 317,
+      "content_len_median": 1146,
+      "content_len_max": 2170
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "candidates": 75,
+      "nonempty_content": 75,
+      "has_refuted_if": 10,
+      "has_relation_kind": 18,
+      "would_pass_relation_form": 10,
+      "content_len_min": 373,
+      "content_len_median": 1227,
+      "content_len_max": 1896
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b7514714c3310b6f805f466ff39915be",
+      "candidates": 29,
+      "nonempty_content": 29,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 987,
+      "content_len_median": 1144,
+      "content_len_max": 1464
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+      "candidates": 82,
+      "nonempty_content": 82,
+      "has_refuted_if": 28,
+      "has_relation_kind": 35,
+      "would_pass_relation_form": 28,
+      "content_len_min": 321,
+      "content_len_median": 1082,
+      "content_len_max": 1965
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "candidates": 83,
+      "nonempty_content": 83,
+      "has_refuted_if": 32,
+      "has_relation_kind": 38,
+      "would_pass_relation_form": 32,
+      "content_len_min": 291,
+      "content_len_median": 1063,
+      "content_len_max": 1865
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 16,
+      "nonempty_content": 16,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1020,
+      "content_len_median": 1153,
+      "content_len_max": 1390
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "candidates": 32,
+      "nonempty_content": 32,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 942,
+      "content_len_median": 1076,
+      "content_len_max": 1627
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "candidates": 74,
+      "nonempty_content": 74,
+      "has_refuted_if": 26,
+      "has_relation_kind": 26,
+      "would_pass_relation_form": 26,
+      "content_len_min": 297,
+      "content_len_median": 1169,
+      "content_len_max": 2155
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-0321107a895b02654cb44044aa2cf68d",
+      "candidates": 10,
+      "nonempty_content": 10,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1449,
+      "content_len_median": 4105,
+      "content_len_max": 5553
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+      "candidates": 30,
+      "nonempty_content": 30,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1458,
+      "content_len_median": 1817,
+      "content_len_max": 4299
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+      "candidates": 57,
+      "nonempty_content": 57,
+      "has_refuted_if": 9,
+      "has_relation_kind": 19,
+      "would_pass_relation_form": 9,
+      "content_len_min": 448,
+      "content_len_median": 1904,
+      "content_len_max": 5374
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 30,
+      "nonempty_content": 30,
+      "has_refuted_if": 6,
+      "has_relation_kind": 11,
+      "would_pass_relation_form": 6,
+      "content_len_min": 845,
+      "content_len_median": 1610,
+      "content_len_max": 3979
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+      "candidates": 41,
+      "nonempty_content": 41,
+      "has_refuted_if": 6,
+      "has_relation_kind": 11,
+      "would_pass_relation_form": 6,
+      "content_len_min": 358,
+      "content_len_median": 1814,
+      "content_len_max": 5218
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-a200f0c471f1225d9379d502e249976e",
+      "candidates": 17,
+      "nonempty_content": 17,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1331,
+      "content_len_median": 1896,
+      "content_len_max": 3398
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+      "candidates": 52,
+      "nonempty_content": 52,
+      "has_refuted_if": 12,
+      "has_relation_kind": 21,
+      "would_pass_relation_form": 12,
+      "content_len_min": 491,
+      "content_len_median": 1765,
+      "content_len_max": 4968
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b7514714c3310b6f805f466ff39915be",
+      "candidates": 17,
+      "nonempty_content": 17,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1347,
+      "content_len_median": 2721,
+      "content_len_max": 4064
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c52837bd8f673cea80c20db89758ea80",
+      "candidates": 42,
+      "nonempty_content": 42,
+      "has_refuted_if": 6,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 6,
+      "content_len_min": 314,
+      "content_len_median": 1792,
+      "content_len_max": 5546
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 23,
+      "nonempty_content": 23,
+      "has_refuted_if": 0,
+      "has_relation_kind": 6,
+      "would_pass_relation_form": 0,
+      "content_len_min": 2781,
+      "content_len_median": 3170,
+      "content_len_max": 5085
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+      "candidates": 17,
+      "nonempty_content": 17,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1563,
+      "content_len_median": 1764,
+      "content_len_max": 4716
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+      "candidates": 65,
+      "nonempty_content": 65,
+      "has_refuted_if": 16,
+      "has_relation_kind": 18,
+      "would_pass_relation_form": 16,
+      "content_len_min": 443,
+      "content_len_median": 1639,
+      "content_len_max": 4183
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-168a41157d05ca53431f268fba264b4c",
+      "candidates": 11,
+      "nonempty_content": 11,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1401,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-649323b4f264ac6b69fb87736d40fb27",
+      "candidates": 6,
+      "nonempty_content": 6,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1597,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-7f93a0955557fa490e1b1ead01ed459e",
+      "candidates": 13,
+      "nonempty_content": 13,
+      "has_refuted_if": 0,
+      "has_relation_kind": 4,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1513,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-89d6f536c4daeee986e44a68042afded",
+      "candidates": 8,
+      "nonempty_content": 8,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1571,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-97623b8fecfdf79fdace40e46cb7ac0c",
+      "candidates": 9,
+      "nonempty_content": 9,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 2317,
+      "content_len_max": 4123
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-a277abb13327846e13fb3124c1804aa8",
+      "candidates": 16,
+      "nonempty_content": 16,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1011,
+      "content_len_median": 1399,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-b212590cf2957821796b560163e1941e",
+      "candidates": 14,
+      "nonempty_content": 14,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1356,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+      "candidates": 5,
+      "nonempty_content": 5,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1922,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-db8194b08518dd3afc2b78c533170ab3",
+      "candidates": 8,
+      "nonempty_content": 8,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1026,
+      "content_len_median": 1499,
+      "content_len_max": 3053
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-ecf3ce54012a3df4eef08d0cdb772f41",
+      "candidates": 17,
+      "nonempty_content": 17,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 995,
+      "content_len_median": 1253,
+      "content_len_max": 2480
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+      "candidates": 18,
+      "nonempty_content": 18,
+      "has_refuted_if": 0,
+      "has_relation_kind": 4,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1314,
+      "content_len_median": 1772,
+      "content_len_max": 4059
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+      "candidates": 28,
+      "nonempty_content": 28,
+      "has_refuted_if": 4,
+      "has_relation_kind": 10,
+      "would_pass_relation_form": 4,
+      "content_len_min": 626,
+      "content_len_median": 2341,
+      "content_len_max": 3549
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598",
+      "candidates": 23,
+      "nonempty_content": 23,
+      "has_refuted_if": 0,
+      "has_relation_kind": 8,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1957,
+      "content_len_median": 3621,
+      "content_len_max": 4451
+    },
+    {
+      "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-f5aee6107cb0de151e72bf282c86d166",
+      "content_len_min": null,
+      "content_len_median": null,
+      "content_len_max": null
+    },
+    {
+      "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+      "candidates": 245,
+      "nonempty_content": 245,
+      "has_refuted_if": 87,
+      "has_relation_kind": 99,
+      "would_pass_relation_form": 87,
+      "content_len_min": 284,
+      "content_len_median": 565,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "nonempty_content": 12,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 972,
+      "content_len_median": 5004,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "nonempty_content": 12,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 972,
+      "content_len_median": 5004,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+      "candidates": 12,
+      "nonempty_content": 12,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 972,
+      "content_len_median": 5004,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+      "content_len_min": null,
+      "content_len_median": null,
+      "content_len_max": null
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+      "content_len_min": null,
+      "content_len_median": null,
+      "content_len_max": null
+    },
+    {
+      "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b",
+      "content_len_min": null,
+      "content_len_median": null,
+      "content_len_max": null
+    },
+    {
+      "root": "experiments/bronze_pilot_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/glm_judge_2026-07-14",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/jolt_architecture_2026-07-16/run",
+      "open_error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted"
+    },
+    {
+      "root": "experiments/live_coin_canonicity_2026-07-31/home/runs/run-c5f901f38208e862f4ce2fe60a26e551",
+      "candidates": 14,
+      "nonempty_content": 14,
+      "has_refuted_if": 0,
+      "has_relation_kind": 4,
+      "would_pass_relation_form": 0,
+      "content_len_min": 996,
+      "content_len_median": 1702,
+      "content_len_max": 4755
+    },
+    {
+      "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+      "candidates": 24,
+      "nonempty_content": 24,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 999,
+      "content_len_median": 1349,
+      "content_len_max": 1869
+    },
+    {
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+      "candidates": 35,
+      "nonempty_content": 35,
+      "has_refuted_if": 5,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 5,
+      "content_len_min": 510,
+      "content_len_median": 1529,
+      "content_len_max": 2559
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+      "candidates": 45,
+      "nonempty_content": 45,
+      "has_refuted_if": 12,
+      "has_relation_kind": 22,
+      "would_pass_relation_form": 12,
+      "content_len_min": 323,
+      "content_len_median": 1458,
+      "content_len_max": 71944
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "candidates": 24,
+      "nonempty_content": 24,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 965,
+      "content_len_median": 1418,
+      "content_len_max": 17648
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+      "candidates": 10,
+      "nonempty_content": 10,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1003,
+      "content_len_median": 2010,
+      "content_len_max": 5052
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+      "candidates": 10,
+      "nonempty_content": 10,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1003,
+      "content_len_median": 1907,
+      "content_len_max": 5052
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+      "candidates": 20,
+      "nonempty_content": 20,
+      "has_refuted_if": 0,
+      "has_relation_kind": 5,
+      "would_pass_relation_form": 0,
+      "content_len_min": 936,
+      "content_len_median": 2625,
+      "content_len_max": 31909
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+      "candidates": 10,
+      "nonempty_content": 10,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1003,
+      "content_len_median": 1816,
+      "content_len_max": 5052
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "candidates": 25,
+      "nonempty_content": 25,
+      "has_refuted_if": 0,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1923,
+      "content_len_median": 2335,
+      "content_len_max": 71944
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "candidates": 11,
+      "nonempty_content": 11,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1254,
+      "content_len_median": 2201,
+      "content_len_max": 66387
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+      "candidates": 16,
+      "nonempty_content": 16,
+      "has_refuted_if": 6,
+      "has_relation_kind": 7,
+      "would_pass_relation_form": 6,
+      "content_len_min": 443,
+      "content_len_median": 1700,
+      "content_len_max": 4193
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 58,
+      "nonempty_content": 58,
+      "has_refuted_if": 48,
+      "has_relation_kind": 50,
+      "would_pass_relation_form": 48,
+      "content_len_min": 262,
+      "content_len_median": 535,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 39,
+      "nonempty_content": 39,
+      "has_refuted_if": 23,
+      "has_relation_kind": 26,
+      "would_pass_relation_form": 23,
+      "content_len_min": 233,
+      "content_len_median": 836,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 34,
+      "nonempty_content": 34,
+      "has_refuted_if": 24,
+      "has_relation_kind": 26,
+      "would_pass_relation_form": 24,
+      "content_len_min": 281,
+      "content_len_median": 828,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 22,
+      "nonempty_content": 22,
+      "has_refuted_if": 12,
+      "has_relation_kind": 14,
+      "would_pass_relation_form": 12,
+      "content_len_min": 628,
+      "content_len_median": 912,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+      "candidates": 22,
+      "nonempty_content": 22,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 950,
+      "content_len_median": 2143,
+      "content_len_max": 61178
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+      "candidates": 17,
+      "nonempty_content": 17,
+      "has_refuted_if": 0,
+      "has_relation_kind": 3,
+      "would_pass_relation_form": 0,
+      "content_len_min": 970,
+      "content_len_median": 1818,
+      "content_len_max": 22779
+    },
+    {
+      "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+      "candidates": 10,
+      "nonempty_content": 10,
+      "has_refuted_if": 0,
+      "has_relation_kind": 0,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1380,
+      "content_len_median": 1903,
+      "content_len_max": 3803
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+      "candidates": 40,
+      "nonempty_content": 40,
+      "has_refuted_if": 6,
+      "has_relation_kind": 11,
+      "would_pass_relation_form": 6,
+      "content_len_min": 884,
+      "content_len_median": 1640,
+      "content_len_max": 2854
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+      "candidates": 24,
+      "nonempty_content": 24,
+      "has_refuted_if": 0,
+      "has_relation_kind": 8,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1497,
+      "content_len_median": 2249,
+      "content_len_max": 4091
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+      "candidates": 12,
+      "nonempty_content": 12,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1356,
+      "content_len_median": 1768,
+      "content_len_max": 3648
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+      "candidates": 52,
+      "nonempty_content": 52,
+      "has_refuted_if": 6,
+      "has_relation_kind": 8,
+      "would_pass_relation_form": 6,
+      "content_len_min": 402,
+      "content_len_median": 1491,
+      "content_len_max": 2585
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+      "candidates": 18,
+      "nonempty_content": 18,
+      "has_refuted_if": 0,
+      "has_relation_kind": 1,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1482,
+      "content_len_median": 1648,
+      "content_len_max": 1784
+    },
+    {
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "candidates": 24,
+      "nonempty_content": 24,
+      "has_refuted_if": 0,
+      "has_relation_kind": 2,
+      "would_pass_relation_form": 0,
+      "content_len_min": 1343,
+      "content_len_median": 1510,
+      "content_len_max": 1840
+    }
+  ],
+  "totals": {
+    "candidates": 3528,
+    "has_refuted_if": 880,
+    "has_relation_kind": 1139,
+    "nonempty_content": 3528,
+    "would_pass_relation_form": 880
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+    "reach_sweep_hits": [],
+    "log_lines_before": 114,
+    "log_lines_after": 114,
+    "appended_events": []
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+    "reach_sweep_hits": [],
+    "log_lines_before": 754,
+    "log_lines_after": 754,
+    "appended_events": []
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "reach_sweep_hits": [],
+    "log_lines_before": 1202,
+    "log_lines_after": 1202,
+    "appended_events": []
+  },
+  {
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+    "reach_sweep_hits": [],
+    "log_lines_before": 12991,
+    "log_lines_after": 12991,
+    "appended_events": []
+  }
+]
