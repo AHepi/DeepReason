@@ -1,5 +1,5 @@
 # Checklist for: codify two operator rulings on reach semantics (P5-reach)
-State: next=1 blockers=none
+State: next=2 blockers=none
 Map ids (from REQUEST.md's preflight, unchanged): DR-INV-frozen-surfaces,
 DR-SEAM-evaluation-x-rules (read before the subsystems; its shared
 `_substantive` surface is OUT of scope), DR-SUB-evaluation (the covering
@@ -8,7 +8,7 @@ DR-CON-warrants-and-attacks (consulted only).
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
-- [ ] 1. (S1, S3) Write BOTH new tests in tests/test_reflexive_discipline.py,
+- [x] 1. (S1, S3) Write BOTH new tests in tests/test_reflexive_discipline.py,
       against the UNCHANGED tree: test_an_empty_own_battery_grounds_no_reach
       (currently must FAIL — the behaviour it demands does not exist yet) and
       test_coverage_exactly_at_the_floor_is_a_full_hit (currently must PASS —
@@ -16,6 +16,20 @@ One step per dr-execute-step invocation.
       done-when: python -m pytest "tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach" "tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit" -q
       -> exactly 1 failed, 1 passed (the empty-battery one RED, the floor pin
       GREEN) — pasted
+
+      PROOF (unchanged tree, before any src/ edit):
+      $ python -m pytest "tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach" \
+          "tests/test_reflexive_discipline.py::test_coverage_exactly_at_the_floor_is_a_full_hit" -q
+      >       assert reach_sweep(empty) == []
+      E       AssertionError: assert [('47b8d9f1d4...', 'foreign')] == []
+      E         Left contains one more item: ('47b8d9f1d4f30c99192320338945306...', 'foreign')
+      tests/test_reflexive_discipline.py:425: AssertionError
+      FAILED tests/test_reflexive_discipline.py::test_an_empty_own_battery_grounds_no_reach
+      1 failed, 1 passed in 0.19s
+
+      The RED line is the whole point of RULING 1: today an artifact with
+      carried == [] reaches. The floor pin is GREEN before anything moves,
+      so RULING 2 is pinned as a PRESERVED property, not a manufactured one.
 
 - [ ] 2. (S1, S3) [COMMIT] Commit the two tests alone, red-then-green order
       preserved in history.

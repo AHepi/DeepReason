@@ -377,3 +377,98 @@ def test_a_well_formedness_gate_cannot_veto_a_reach_hit(tmp_path):
     assert hits2 == []
     assert (a2.id, "foreign") not in h2.state.addr
     assert h2.state.reach.get(a2.id, 0.0) == 0.0
+
+
+def _reaching_pair(tmp_path, name, *, carried, foreign_criteria):
+    """One (artifact, foreign problem) pair, identical in every respect except
+    the reaching artifact's OWN battery. Returning the harness lets each caller
+    assert on typed outcomes rather than on the sweep's return value alone."""
+    h = Harness(tmp_path / name)
+    h.register_commitment(Commitment(id="k-moon", eval="predicate:'moon' in content"))
+    h.register_commitment(Commitment(id="k-sea", eval="predicate:'sea' in content"))
+    h.register_commitment(Commitment(id="k-rubric", eval="rubric:std-x"))
+    _problem(h, "home", ["k-moon"])
+    _problem(h, "foreign", list(foreign_criteria))
+    a = h.create_artifact(
+        "the moon pulls the sea",
+        provenance=Provenance(role="conjecturer"),
+        interface=Interface(commitments=list(carried)),
+        problem_id="home",
+    )
+    assert h.state.status[a.id] == Status.ACCEPTED
+    return h, a
+
+
+def _provisional_events(h):
+    return [e for e in h.log.read()
+            if e.rule == Rule.MEASURE and e.inputs
+            and e.inputs[0] == "reach-provisional"]
+
+
+def test_an_empty_own_battery_grounds_no_reach(tmp_path):
+    """Implements operator RULING 1 (approved 2026-08-22, tranche
+    experiments/2026-08-22-change-reach-p5-rulings): an artifact carrying an
+    EMPTY own commitment battery may not ground reach -- the Bronze Age
+    discipline's "no reach from an empty, trivial, or unguarded battery" read
+    against the REACHING artifact, not only the foreign one. An artifact that
+    forbids nothing earns no promotion signal.
+
+    Motivating record: experiments/2026-08-22-live-reach-rich-run/rehearsal.json
+    S2, where a prose artifact with carried == [] took "HIT full" and recorded
+    one reach event.
+
+    The two halves differ in NOTHING but `carried`, so a guard that keyed on
+    the content, the verdicts or the coverage instead would fail this test.
+    """
+    empty, a_empty = _reaching_pair(
+        tmp_path, "empty", carried=[], foreign_criteria=["k-sea"])
+    assert reach_sweep(empty) == []
+    assert (a_empty.id, "foreign") not in empty.state.addr
+    assert empty.state.reach.get(a_empty.id, 0.0) == 0.0
+    # E0 is a REJECTION, not a provisional hit: nothing is logged for later
+    # re-evaluation, because there is no battery for a later cycle to re-read.
+    assert _provisional_events(empty) == []
+
+    # Control: the same pair, same content, same criteria, one commitment of
+    # its own -- and it reaches. Without this the test would also pass if reach
+    # had been broken outright.
+    guarded, a_guarded = _reaching_pair(
+        tmp_path, "guarded", carried=["k-moon"], foreign_criteria=["k-sea"])
+    assert reach_sweep(guarded) == [(a_guarded.id, "foreign")]
+    assert (a_guarded.id, "foreign") in guarded.state.addr
+    assert guarded.state.reach[a_guarded.id] == 1.0
+
+
+def test_coverage_exactly_at_the_floor_is_a_full_hit(tmp_path):
+    """Implements operator RULING 2 (approved 2026-08-22, tranche
+    experiments/2026-08-22-change-reach-p5-rulings): coverage exactly EQUAL to
+    REACH_COVERAGE_MIN is a FULL hit, not a provisional one. A floor means "at
+    least", so `reach_sweep`'s `< coverage_min` comparison is deliberate.
+
+    The boundary had never been exercised: the census over 96 committed roots
+    (experiments/2026-08-21-measure-reach-firing/census-verdicts.json) put 0 of
+    1 178 430 pairs at E5, so nothing in the corpus had ever decided it. This
+    pin is what makes the answer deliberate rather than inherited.
+
+    The premise is re-derived, never assumed: the test asserts the constructed
+    coverage EQUALS the configured floor before asserting the outcome, so if
+    REACH_COVERAGE_MIN ever moves this fails as a false premise rather than
+    silently testing a different boundary.
+    """
+    floor = Config().REACH_COVERAGE_MIN
+    # 2 criteria, exactly 1 of them substantive-and-evaluable: a rubric counts
+    # toward the total but is never machine-evaluated here.
+    h, a = _reaching_pair(
+        tmp_path, "floor", carried=["k-moon"],
+        foreign_criteria=["k-sea", "k-rubric"])
+    foreign = h.state.problems["foreign"]
+    qualifying = [c for c in foreign.criteria if _substantive(h.commitments[c])]
+    assert qualifying == ["k-sea"]
+    assert len(qualifying) / len(foreign.criteria) == floor
+
+    assert reach_sweep(h, coverage_min=floor) == [(a.id, "foreign")]
+    assert (a.id, "foreign") in h.state.addr
+    assert h.state.reach[a.id] == 1.0
+    # A full hit, so nothing was parked for attention. This is the assertion
+    # that goes red if the boundary is ever moved to `<=`.
+    assert _provisional_events(h) == []
