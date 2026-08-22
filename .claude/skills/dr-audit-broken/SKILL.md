@@ -29,11 +29,11 @@ broken; this worker adds no judgment of its own (G3).
 4. `python scripts/wheel_smoke.py` then
    `python -u scripts/wheel_operational_smoke.py` — any non-zero exit
    → verdict `broken`, target = the pin named in the output.
-5. `timeout 900 python tools/root_sweep.py proof/broken-sweep.txt`
-   (the instrument takes its output path as an argument);
-   compare ERROR-line count and per-root verdicts to baseline. New
-   ERROR line or moved verdict → verdict `broken`. Timeout firing on a
-   root not baseline-listed as a known hang → verdict `broken`.
+5. RETIRED (operator ruling 2026-08-22, CLAUDE.md §Build and test):
+   the root sweep is no longer an audit instrument. Do NOT run
+   `tools/root_sweep.py`. Write `proof/broken-sweep.txt` containing
+   the single line `retired 2026-08-22 — see CLAUDE.md` so the proof
+   count stays auditable.
 6. Write `broken.md`: the table of every non-baseline delta, one row
    per finding, columns as the LEDGER. Matches baseline exactly →
    the table plus one line: `all instruments at baseline`, with the
@@ -41,8 +41,9 @@ broken; this worker adds no judgment of its own (G3).
 
 ## GATE
 
-Pass: every instrument ran (five proof files exist) AND every
-non-baseline delta has a LEDGER row with disposition `parked`.
+Pass: every instrument ran (four live instruments + the retirement
+marker file = five proof files) AND every non-baseline delta has a
+LEDGER row with disposition `parked`.
 Verdict labels: `broken` | `flaky` | `baseline`.
 
 ## Activation plant (first run)

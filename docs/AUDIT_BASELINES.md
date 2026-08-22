@@ -33,7 +33,12 @@ Recorded 2026-08-12 at main 074ef1549.
   lines appearing because a format moved on are the law working, not a
   finding. Replay-byte-unchanged proofs over historical roots are no
   longer gate obligations anywhere.
-- **root_sweep** (`python tools/root_sweep.py`): 11 ERROR lines, all
+- **root_sweep — RETIRED as an instrument** (operator ruling
+  2026-08-22, ledgered in CLAUDE.md §Build and test): no audit, gate,
+  or grant runs it anymore; reader changes are proven by targeted
+  regression tests instead. The historical baseline below is kept only
+  so old tranche artifacts that cite it remain interpretable.
+- ~~**root_sweep**~~ (`python tools/root_sweep.py`): 11 ERROR lines, all
   `UnsupportedRunManifestVersionError`. Known hang (pre-existing,
   parked): `experiments/live_tri_2026-07-27/
   run-c5ab654afd1b4aa131aede83bdca0f03` — run the sweep under

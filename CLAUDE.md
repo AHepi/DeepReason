@@ -115,9 +115,14 @@ four times (9:17, 9:19, 10:53, 14:02 — ~44 minutes) to learn about roughly
 forty tests that could have been affected, with `--lf` available and unused
 throughout. Preserve results and re-derive only what moved.
 
-The 42-root sweep obeys the same rule for the same reason. A committed root
-is immutable, so its verdict can only move if the READER moved; when no
-reader changed, the previous sweep IS the current answer.
+The root sweep is RETIRED as an instrument (operator ruling 2026-08-22:
+"it just wastes time"). No tranche, gate, audit, or frozen-surface grant
+may require sweeping committed roots — not for cross-version
+compatibility (retired 2026-08-14) and not as within-version proof
+either. A reader change is proven by targeted, mutation-proven
+regression tests on fixtures or single-root replays committed in the
+same tranche; that is both cheaper and stronger than a sweep, because a
+sweep can only confirm what a targeted test already explains.
 
 The wheel smokes (`python scripts/wheel_smoke.py`; `python -u
 scripts/wheel_operational_smoke.py`) are the third instrument, and NO
