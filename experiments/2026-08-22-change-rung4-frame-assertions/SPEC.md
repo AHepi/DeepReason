@@ -289,12 +289,17 @@ pure computation over replayed state; the CLI and MCP surfaces render it. No
 seat, no pack section, no provider call. Nothing in this plan needs the
 operator's ~14-minute STOP.
 
-## Questions for operator (STOP — non-empty)
+## Questions for operator — ASKED AND ANSWERED 2026-08-22
 
-**Q-OP-1 — the frozen-surface grant (R15).** See the pasted contact list below.
-**Q-OP-2 — the budget ceiling (C6).** See the Budget section.
+**Q-OP-1 — the frozen-surface grant (R15).** GIVEN, on the path R15 itself
+prescribes: the computed contact is exactly the one R15 forecast, the request
+was recorded in SPEC.md before any code, and the operator answered against this
+committed document. Bounded to one additive clause plus the check name; any
+wider contact is a new stop. Full reasoning: REQUEST.md Amendment 2.
 
-Both are presented together in one batch; neither has a further fork inside it.
+**Q-OP-2 — the budget ceiling (C6).** ANSWERED. Operator, verbatim: "Proceed at
+963 (Recommended)". **963 is this tranche's ledgered ceiling** (R17); C6's ~900
+is `superseded-by:R17`. Variance recorded at REQUEST.md R18.
 
 ## Out of scope (explicit)
 
@@ -431,10 +436,12 @@ promotion problem, (3) the public surface + all four pins, (4) the
 `standing-integrity` check. Map documents ride the commit that changes their
 code (SCHEMA.md rule 1). Validation artifacts follow.
 
-**Stated against C6.** LADDER estimates 500–700; `src/` at **465 is BELOW the
-ladder's own lower bound**. The total of **963 exceeds the ~900 STOP threshold
-by 63 lines**, and what accounts for every line of the excess is itemized in the
-STOP below. No requirement grew and no Rung 5/6/7 machinery is present.
+**Stated against C6, and answered.** LADDER estimates 500–700; `src/` at **465
+is BELOW the ladder's own lower bound**. The total of **963 exceeded the ~900
+STOP threshold by 63 lines**; the tranche stopped, itemized the variance, priced
+three roads, and the operator chose "Proceed at 963". 963 is the ceiling
+`tools/diff_budget.py` is checked against at every `[COMMIT]` step. No
+requirement grew and no Rung 5/6/7 machinery is present.
 
 Frozen surfaces touched: **surface 3 (`invariants.py`), additive, grant
 requested above.**

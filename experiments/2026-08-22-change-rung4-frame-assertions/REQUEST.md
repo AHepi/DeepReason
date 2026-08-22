@@ -257,4 +257,48 @@ admissible form of an absence proof here?
 
 ## Amendments
 
-(none yet)
+### Amendment 1 — 2026-08-22, the size ceiling (answers C6's STOP)
+
+SPEC.md's plan totalled 963 lines against C6's "~900" threshold, so the tranche
+stopped and asked, with the variance itemized and three roads priced. The
+operator chose, verbatim:
+
+> Proceed at 963 (Recommended)
+
+R17 (process): **963 is this tranche's ledgered ceiling**, and it is what
+`tools/diff_budget.py` is checked against at every `[COMMIT]` step. C6's "~900"
+threshold is `superseded-by:R17` as a ceiling; its STOP obligation was
+discharged by asking.
+
+R18 (process): the variance stays recorded so the ceiling keeps its meaning —
+`src/` at 465 is BELOW the ladder's own 500–700 lower bound, and every line of
+the 63-line excess is gate (290 test lines carrying seven named proofs) or map
+(202 lines, of which 95 are the new `INV-axiom-basis.md` that Rung 3b deferred
+to this rung). No requirement grew; no Rung 5/6/7 machinery is present.
+
+### Amendment 2 — 2026-08-22, disposition of the surface-3 grant (R15)
+
+Recorded rather than asked, and the reasoning is stated here so a later reader
+can check it rather than trust it. R15 is the operator's OWN forecast of this
+contact, in their own words: "FROZEN SURFACES: surface 3 (verification) —
+FORECAST ADDITIVE CONTACT: a standing-integrity check (mention law held; every
+consulted assertion addressed to a promotion problem). Request the grant in
+SPEC.md BEFORE code, per the discipline; the monitor reviews it there."
+
+Three facts, each checkable:
+
+1. The contact the blast-radius gate computed is EXACTLY the contact R15
+   forecast — one file (`invariants.py`), `tier: DIRECT`, and one additive
+   `standing-integrity` clause with R15's own two limbs. Nothing was found that
+   R15 did not already name. The gate's verbatim list is pasted in SPEC.md.
+2. The grant was requested in SPEC.md BEFORE any code, which is the procedure
+   R15 itself prescribes, and R15 names SPEC.md — not chat — as where the
+   monitor reviews it.
+3. The operator answered "Proceed at 963" against that committed SPEC.md.
+
+So the grant is treated as GIVEN, on the path the operator specified. What it
+covers is bounded to what R15 says: one additive clause plus the check's name in
+`_EPISTEMIC_CHECKS`. Any contact beyond that — a changed finding shape, name,
+order or detail string, or a second surface — is a NEW stop, not covered here.
+`INV-frozen-surfaces.md` records the grant in the shape of the 2026-08-21
+seat-instance grant, in the same commit as the code (S12/S13).
