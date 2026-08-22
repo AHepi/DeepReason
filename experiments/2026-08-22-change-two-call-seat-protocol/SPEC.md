@@ -574,8 +574,15 @@ writes `plan.notice if plan.disclosed else ""`.
 
 `tools/diff_budget.py e1ea05e82 --ceiling 574` returned **EXCEEDED** at step 11:
 1003 insertions. Raised to the operator as a STOP with priced options; they
-chose "Ledger the overrun, keep the tests". The ceiling is raised to **1003**
+chose "Ledger the overrun, keep the tests". The ceiling is raised to **1223**
 from step 12 onward.
+
+CORRECTION, made before this amendment was acted on: the first breakdown below
+read 1003 and omitted `src/deepreason/llm/split.py` entirely, because the
+`git diff --stat` behind it was taken while that file was still untracked. The
+true total is 1223. An untracked new file is invisible to `git diff` and this
+is the shape of miss it produces; `diff_budget.py` itself was right both times,
+and re-running it against the corrected ceiling is what caught it.
 
 Measured breakdown, `git diff --stat e1ea05e82` over the declared areas:
 
@@ -585,11 +592,12 @@ Measured breakdown, `git diff --stat e1ea05e82` over the declared areas:
     src/deepreason/config.py              11
     src/deepreason/llm/adapter.py        278
     src/deepreason/llm/endpoints.py      104
+    src/deepreason/llm/split.py          220
     src/deepreason/ontology/event.py      20
     tests/test_seats_evidence_law.py     135
     tests/test_split_budget_protocol.py  442
     ----                                ----
-                                        1003 insertions, 20 deletions
+                                        1223 insertions, 20 deletions
 
 Estimate vs actual, and why each moved. This is an estimating error in this
 spec, not scope creep: every line traces to an R number and the anti-invention
@@ -605,6 +613,11 @@ pass finds nothing untraceable.
     prompt headroom, enforce the frozen envelope on both legs, fall back to an
     empty trace rather than a failed leg, record the deliberation attempt, and
     release its reserve on every exit path. The estimate priced the happy path.
+  - **split.py 115 -> 220.** The estimate priced a planner and two renderers.
+    The shipped module also carries nine typed notice constants, the
+    `MIN_EXTRACT_TOKENS` floor the `[513]` case forced, and the docstrings that
+    say why B_a is taken out of the ceiling rather than added to it — which is
+    the one thing a later reader must not get wrong.
   - **endpoints 38 -> 104.** The `_Unset` sentinel, the two override
     parameters threaded through `build_body` and `complete`, the side-channel
     trace capture, and the `MockEndpoint` work the offline regression needs
