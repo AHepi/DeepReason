@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=6 blockers=none
+State: next=11 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -55,13 +55,13 @@ step 14 proves it.
       each PASSing an on-subject answer and FAILing an off-subject one
       (pasted).
 
-- [ ] 6. (S2) Write `supplement-nocturnal-collapse.md`, the source the
+- [x] 6. (S2) Write `supplement-nocturnal-collapse.md`, the source the
       amendment attaches to the second lineage.
       done-when: the file exists, is non-empty, and is under 8 KiB
       (`wc -c` pasted; the manifest's frozen authority is 8 MiB total, so
       this is far inside it).
 
-- [ ] 7. (S2) [COMMIT] Write `preflight_supplement.py` and run it: the
+- [x] 7. (S2) [COMMIT] Write `preflight_supplement.py` and run it: the
       supplement's OWN bytes must FAIL at least one of the three subject
       predicates, so a later reach hit cannot be attributed to the model
       copying the attached document.
@@ -70,7 +70,7 @@ step 14 proves it.
       verdict is FAIL (pasted). If all three PASS the step FAILS and the
       supplement is rewritten before proceeding.
 
-- [ ] 8. (S3) Write `epoch3_run.sh`: setup -> preflights -> qualify ->
+- [x] 8. (S3) Write `epoch3_run.sh`: setup -> preflights -> qualify ->
       phase 1 `run --budget cycles=12 --token-budget 200000` -> assert the
       phase-1 stop reason is resumable -> `amend --attach <supplement>
       --reshape-question <sibling question>` -> phase 2 `continue --budget
@@ -80,10 +80,10 @@ step 14 proves it.
       `PHASE2_CYCLES=12`, and the two token budgets summing to 400000
       (grep output pasted).
 
-- [ ] 9. (S3) `chmod +x epoch3_run.sh` and confirm the executable bit.
+- [x] 9. (S3) `chmod +x epoch3_run.sh` and confirm the executable bit.
       done-when: `test -x epoch3_run.sh` -> rc=0.
 
-- [ ] 10. (S3) [COMMIT] DRY_RUN the ladder end-to-end offline: setup,
+- [x] 10. (S3) [COMMIT] DRY_RUN the ladder end-to-end offline: setup,
       both preflights, and the audit invocation must all run and the script
       must stop before `qualify` without a provider call.
       done-when: `DRY_RUN=1 ./epoch3_run.sh` exits 0, its driver log shows
@@ -240,3 +240,62 @@ experiments/2026-08-22-live-reach-rich-run/` is EMPTY afterwards, so the
 regenerated `preflight_seed.json` is byte-identical and no committed
 artifact of that tranche moved. The epoch-3 ladder re-checks that after
 every invocation (step 8).
+
+### Step 6 (S2) — the amendment's attached source
+
+    $ wc -c supplement-nocturnal-collapse.md
+    1656
+
+Field-campaign notes: instrumentation, transect geometry, timing window,
+reference pairing, weather screening, rejection rules, scope. Deliberately
+procedural — it records contrasts and the conditions they were measured
+under, and proposes no mechanism.
+
+### Step 7 (S2) — the control holds: the attachment passes NONE of the three
+
+    $ python preflight_supplement.py
+    uhi-energy-balance@v1            evaluable=True  verdict=fail
+    uhi-nocturnal-release@v1         evaluable=True  verdict=fail
+    uhi-cross-city-modulator@v1      evaluable=True  verdict=fail
+    supplement: .../supplement-nocturnal-collapse.md (1656 bytes)
+    passing the seed's subject predicates: none
+    control holds (not all three pass): True
+    rc=0
+
+The step required at least one FAIL; all three fail. So no lineage-2
+artifact can clear the seed problem's battery by quoting the attachment —
+any reach hit has to come from the model's own account.
+
+### Step 8-9 (S3) — the two-phase ladder
+
+    $ bash -n epoch3_run.sh                        -> rc=0
+    $ test -x epoch3_run.sh                        -> rc=0
+    $ grep -c 'deepreason results "$ROOT"' epoch3_run.sh
+    2                                              (phase-1 audit + final audit)
+    27:PHASE1_CYCLES="${PHASE1_CYCLES:-12}"
+    28:PHASE1_TOKENS="${PHASE1_TOKENS:-200000}"
+    29:PHASE2_CYCLES="${PHASE2_CYCLES:-12}"
+    30:PHASE2_TOKENS="${PHASE2_TOKENS:-200000}"
+
+12 + 12 = 24 cycles and 200 000 + 200 000 = 400 000 tokens: PREREG's frozen
+bound SPLIT across the phases, not added to (R9).
+
+The ladder refuses to amend unless phase 1's `run-stop.json` reason is
+`converged` or `budget_exhausted`, and says so in the driver log instead of
+issuing an amendment `continue` could never accept.
+
+### Step 10 (S3) — DRY_RUN passes end to end, offline
+
+    $ DRY_RUN=1 ./epoch3_run.sh    -> rc=0
+    [.] SETUP OK rc=0
+    [.] PREFLIGHT OK rc=0
+    [.] SUPPLEMENT PREFLIGHT OK rc=0
+    [.] DRY RUN: stopping before qualify -- no provider call made,
+        rehearsal root removed, rc=0
+    leftovers: (none)
+    git status --porcelain experiments/2026-08-22-live-reach-rich-run/: []
+
+One defect was found and fixed inside this step: the first rehearsal bound
+its manifest at `$HERE/run`, the exact path the live launch claims, so the
+rehearsal would have made the launch refuse with the leftover-root guard. A
+dry run now binds at `$HERE/.dry-run-root` and removes it on the way out.
