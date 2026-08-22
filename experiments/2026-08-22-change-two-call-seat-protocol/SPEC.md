@@ -567,3 +567,51 @@ writes `plan.notice if plan.disclosed else ""`.
 +2 in `llm/adapter.py`, +3 in `docs/map/SUB-ontology.md`. New total
 `python3 -c "print(sum([115,38,98,3,12,16,205,30,42]) + 15)"` = **574**;
 `diff_budget.py`'s ceiling is raised to 574 from step 6 onward.
+
+---
+
+## Amendment 2 — 2026-08-22, the diff-budget ceiling was wrong
+
+`tools/diff_budget.py e1ea05e82 --ceiling 574` returned **EXCEEDED** at step 11:
+1003 insertions. Raised to the operator as a STOP with priced options; they
+chose "Ledger the overrun, keep the tests". The ceiling is raised to **1003**
+from step 12 onward.
+
+Measured breakdown, `git diff --stat e1ea05e82` over the declared areas:
+
+    docs/map/CON-seats.md                 13
+    docs/map/SUB-llm.md                   15
+    docs/map/SUB-ontology.md               5
+    src/deepreason/config.py              11
+    src/deepreason/llm/adapter.py        278
+    src/deepreason/llm/endpoints.py      104
+    src/deepreason/ontology/event.py      20
+    tests/test_seats_evidence_law.py     135
+    tests/test_split_budget_protocol.py  442
+    ----                                ----
+                                        1003 insertions, 20 deletions
+
+Estimate vs actual, and why each moved. This is an estimating error in this
+spec, not scope creep: every line traces to an R number and the anti-invention
+pass finds nothing untraceable.
+
+  - **tests 235 -> 577.** The largest single miss. R10 and R11 ask for a
+    mutation-proven ceiling regression AND a mutation-proven before/after pair;
+    R18 then added two more tests at Amendment 1. A mutation-proven test is
+    roughly twice the size of an asserting one, because the control has to be
+    built and shown red in the same file. Nineteen tests, not the eight the
+    estimate imagined.
+  - **adapter 98 -> 278.** `_dispatch_split` has to reserve the emission leg's
+    prompt headroom, enforce the frozen envelope on both legs, fall back to an
+    empty trace rather than a failed leg, record the deliberation attempt, and
+    release its reserve on every exit path. The estimate priced the happy path.
+  - **endpoints 38 -> 104.** The `_Unset` sentinel, the two override
+    parameters threaded through `build_body` and `complete`, the side-channel
+    trace capture, and the `MockEndpoint` work the offline regression needs
+    (per-dispatch `calls`, scripted finish reasons and traces, the
+    two-parameter callable that lets a test model the modal difference).
+
+Nothing was trimmed to fit, and no assertion was weakened. The alternative the
+operator declined would have cut the ceiling sweep (R9/R10), the repair-bundle
+guard (R18) and the every-configuration-compiles cases (R3) — each requested by
+name.

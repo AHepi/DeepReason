@@ -1,8 +1,8 @@
 # Checklist for: the two-call seat protocol
-State: next=12 blockers=diff_budget EXCEEDED at step 11 (1003 insertions vs the
-       574 ceiling this spec set itself). Presented to the operator as a STOP
-       with priced options; every line traces to an R number and the ring is
-       green, so the overrun is an estimating error, not scope creep.
+State: next=12 blockers=none (the step-11 diff_budget EXCEEDED was raised to
+       the operator and closed: they chose "Ledger the overrun, keep the
+       tests". SPEC.md Amendment 2 records the measured breakdown and raises
+       the ceiling to 1003. Nothing trimmed, no assertion weakened.
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
