@@ -1,5 +1,5 @@
 # Checklist for: the two-call seat protocol
-State: next=3 blockers=none
+State: next=5 blockers=none
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
@@ -63,7 +63,7 @@ them, never into a trailing docs step:
             no reachability direction changes (no drift vs SPEC.md's forecast)
 
 
-- [ ] 3. (S8) Write the natural-stop no-consumer proof in
+- [x] 3. (S8) Write the natural-stop no-consumer proof in
       `tests/test_seats_evidence_law.py`: (a) a repository reference census —
       `natural_stop` occurs only under `src/deepreason/ontology/`,
       `src/deepreason/llm/`, `tests/`, `docs/`; (b) a behavioral mutation test
@@ -72,8 +72,29 @@ them, never into a trailing docs step:
       true, not merely if a file is renamed.
       done-when: `python -m pytest tests/test_seats_evidence_law.py -q` ends
       `N passed, 0 failed` (paste it).
+      PROOF:
 
-- [ ] 4. (S8) [COMMIT] commit steps 1-3 as one change ("the natural-stop typed
+          .............                                             [100%]
+          13 passed in 0.52s
+
+      MUTATION PROOF — three separate breaks, each red, tree restored clean
+      (`git diff --stat src/deepreason/` empty afterwards):
+
+          MUTATION A: a consumer appears outside the allowed set
+            (append "# natural_stop" to scheduler/scheduler.py)
+            -> FAILED test_natural_stop_is_recorded_and_never_consumed
+          MUTATION B: the field stops being written, so the census could go
+            vacuous (rename natural_stop -> natural_stop_renamed)
+            -> FAILED test_natural_stop_is_recorded_and_never_consumed
+          MUTATION C: a replay check consumes the field (invariants.py emits a
+            violation when natural_stop is False)
+            -> FAILED test_flipping_natural_stop_moves_no_typed_outcome
+
+      Mutation C is the one that matters: it is the exact shape R7 forbids —
+      a gate reading the signal — and the test catches it through the replay
+      verdict, which a reference census alone could not.
+
+- [x] 4. (S8) [COMMIT] commit steps 1-3 as one change ("the natural-stop typed
       field and its no-consumer proof") and push with retry.
       done-when: `git status --porcelain` empty for tracked files AND
       `git rev-parse HEAD` equals `git rev-parse origin/claude/two-call-seat-protocol-mmaaf5`.
