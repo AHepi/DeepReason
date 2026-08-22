@@ -1,0 +1,20 @@
+# S11 / R15 — the EMPIRICAL half: 107-root sweep, before and after
+#
+# BEFORE was produced by a process launched before any edit in this tranche,
+# so it imported the pre-tranche invariants.py, controller.py and signals.py.
+# AFTER was produced by the delivered tree.
+
+$ wc -l sweep_before.txt sweep_after.txt
+  107 sweep_before.txt
+  107 sweep_after.txt
+  214 total
+
+$ diff sweep_before.txt sweep_after.txt
+(no output)
+rc=0
+
+# Zero verdicts moved. Baseline composition, so the emptiness is not vacuous:
+#   valid=True   87
+#   valid=False  9
+#   unopenable   11
+# A reader change that moved a verdict in EITHER direction would show here.

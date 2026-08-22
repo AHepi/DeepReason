@@ -1,6 +1,6 @@
 # Checklist for: Rung 1b-ii — the consumption side of the signal contract
 
-State: next=27 blockers=steps 15/17/27/29 wait on the BEFORE sweep finishing (one instrument at a time)
+State: next=29 blockers=none
 
 Map ids this plan was built on: `DR-INV-signal-contract` (owner),
 `DR-REC-add-signal`, `DR-REC-revise-allocation-policy`, `DR-INV-frozen-surfaces`
@@ -96,7 +96,7 @@ step 5. A regression test first seen green proves nothing.
       done-when: `python -m pytest tests/test_allocation_signal_consumption.py -q -k "before_seat_keying or resolves_differently"`
       -> passes
 
-- [ ] 15. (S11) Capture the AFTER root sweep and diff it against step 1.
+- [x] 15. (S11) Capture the AFTER root sweep and diff it against step 1.
       done-when: `diff proof/sweep_before.txt proof/sweep_after.txt` prints
       nothing and exits 0 (saved to `proof/sweep_diff.txt`, empty)
 
@@ -104,7 +104,7 @@ step 5. A regression test first seen green proves nothing.
       done-when: `git diff --name-only origin/main...HEAD | grep -c run_manifest.py`
       -> `0`
 
-- [ ] 17. (S11, S12, S13) [COMMIT] Commit the reader fix WITH its map line.
+- [x] 17. (S11, S12, S13) [COMMIT] Commit the reader fix WITH its map line.
       done-when: `git log -1 --name-only` names both
       `src/deepreason/invariants.py` and `docs/map/INV-frozen-surfaces.md`, and
       names no other `src/` file; branch pushed
@@ -165,7 +165,7 @@ step 5. A regression test first seen green proves nothing.
       which also matches the HISTORICAL note naming which rung paid the debt
       down; a landed rung being named is the opposite of a forward reference)
 
-- [ ] 27. (S9) Map check: `python tools/docs_verify.py` (full, not `--fast`,
+- [x] 27. (S9) Map check: `python tools/docs_verify.py` (full, not `--fast`,
       run alone on an idle box).
       done-when: failures are exactly the 3 pre-existing
       `CON-run-identity.md` shallow-clone failures named in C8, and no others;
@@ -425,3 +425,40 @@ and to share the one route-cap derivation.
 Step 27 (`docs_verify`, full) and step 29 (the full gate) are deferred until the
 BEFORE sweep finishes: both fan out workers, and running two worker-spawning
 instruments at once manufactures failures (CLAUDE.md process hygiene).
+
+**Step 15 (S11/R15) — the sweep, both halves.**
+
+    $ wc -l sweep_before.txt sweep_after.txt
+      107 sweep_before.txt
+      107 sweep_after.txt
+    $ diff sweep_before.txt sweep_after.txt
+    (no output)   rc=0
+
+Not vacuous: the baseline is 87 `valid=True`, 9 `valid=False`, 11 unopenable, so
+a reader change that moved a verdict in EITHER direction would appear. BEFORE
+was produced by a process launched before any edit (Python imports once), so it
+is a true baseline rather than a re-derivation.
+
+**Recorded correction to this tranche's own method.** The operator's condition
+asked for a TARGETED pass over CURRENT-VERSION roots. The full 107-root sweep
+was run instead, and cost ~3.5 hours of wall clock across two passes for an
+answer the targeted census (`proof/s11_targeted_census.txt`) gave in seconds and
+gave more strongly — the sweep says no verdict moved, the census says why none
+COULD: both changed lines are reachable only from inside the loop over a
+controller policy artifact's `knobs` map, and zero of the 107 roots contain one.
+The over-scoping is the estimator's error, not the work's, and it is recorded
+here because the next tranche facing "prove a reader fix moved nothing" should
+run the census FIRST and the sweep only as confirmation.
+
+**Step 27 (S9) — docs_verify, full mode, idle box.**
+
+    docs_verify [full]: 60 documents, 940 checks, 4 workers
+    docs_verify: 3 failed     <- exactly the 3 pre-existing
+                                 CON-run-identity.md shallow-clone failures
+                                 named in C8, and no others
+    docs_verify --audit: 0 finding(s)
+
+All three failures are on git history this container's shallow clone does not
+carry, not on any claim this tranche touched. The 7 new checks in
+`INV-signal-contract.md` and the 2 in `REC-add-signal.md` are inside the 940 and
+pass; `--audit` confirms none of them is a check that cannot fail.

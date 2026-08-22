@@ -1,0 +1,19 @@
+# S9 / R12 — docs_verify, FULL mode (not --fast), on an idle box
+
+$ python tools/docs_verify.py
+docs_verify [full]: 60 documents, 940 checks, 4 workers
+  FAIL CON-run-identity.md:200  (shallow clone: renamed-path history absent)
+  FAIL CON-run-identity.md:202  (shallow clone: unknown revision 1637e808)
+  FAIL CON-run-identity.md:204  (shallow clone: unknown revision f304fec1)
+docs_verify: 3 failed
+
+# Exactly the 3 pre-existing CON-run-identity.md shallow-clone failures named
+# in the operator's KNOWN CURRENT STATE (REQUEST.md C8), and no others. All
+# three fail on git history this container's shallow clone does not carry,
+# not on any claim this tranche touched. The 7 new checks in
+# INV-signal-contract.md and the 2 in REC-add-signal.md are inside the 940.
+
+$ python tools/docs_verify.py --audit
+docs_verify --audit: 0 finding(s)
+
+# No check this tranche added is one that cannot fail.
