@@ -134,6 +134,7 @@ _EPISTEMIC_CHECKS = frozenset(
         "bridge-epistemic",
         "bridge-grounding",
         "grounding-review",
+        "standing-integrity",
     }
 )
 

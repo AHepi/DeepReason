@@ -15,9 +15,9 @@ rather than accepting it into a shape nothing can create.
 from __future__ import annotations
 
 import json
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # The closed name set. Adding a name here is an ontology change and belongs in
 # the rung that supplies its producer, never in a convenience commit.
@@ -35,11 +35,14 @@ CLAIM_SCHEMAS: tuple[str, ...] = (
 
 PROBLEM_SUBJECT_V1 = "poietic.problem-subject.v1"
 PREMISE_ATTRIBUTION_V1 = "poietic.premise-attribution.v1"
+FRAME_ASSERTION_V1 = "poietic.frame-assertion.v1"
 
-# The two with a producer in this rung. The rest are declared above and refused
-# below, with their names on the record so a reader sees the intended shape of
-# the substrate rather than only the built part of it.
-_IMPLEMENTED: tuple[str, ...] = (PROBLEM_SUBJECT_V1, PREMISE_ATTRIBUTION_V1)
+# The three with a producer. The rest are declared above and refused below,
+# with their names on the record so a reader sees the intended shape of the
+# substrate rather than only the built part of it.
+_IMPLEMENTED: tuple[str, ...] = (
+    PROBLEM_SUBJECT_V1, PREMISE_ATTRIBUTION_V1, FRAME_ASSERTION_V1,
+)
 
 
 class ClaimDecodeError(ValueError):
@@ -96,9 +99,57 @@ class PremiseAttributionV1(_Body):
     citation_ref: str | None = None
 
 
+class FrameAssertionV1(_Body):
+    """Def 9.2's frame claim: <subject b, scope sigma, validity v, departure>.
+
+    An ORDINARY artifact carrying this body. There is no `kind` field and no
+    event rule of its own, because the two axes are separated by EDGE ROLE
+    rather than by a node type -- a frame layer with its own graph would need
+    its interactions with att, dep, replay and status re-proven from scratch.
+
+    Like every body here, not one field names its own ref role: the compiler
+    assigns MENTION to the subject (Law 9.4) and DEPENDENCE to each reach
+    record cited as the case, and that assignment is the whole separation.
+    """
+
+    schema_: Literal["poietic.frame-assertion.v1"] = Field(
+        default=FRAME_ASSERTION_V1, alias="schema"
+    )
+    subject_ref: str
+    # A `declarative-scope.v1` document (`calculus/scope.py`). Carried as data
+    # rather than as a compiled object because it is artifact CONTENT: the
+    # content address that names the assertion is taken over these bytes.
+    scope: dict[str, Any]
+    validity: Literal["universal", "bounded"] = "universal"
+    validity_domain: str | None = None
+    validity_tolerance: str | None = None
+    departure_protocol: str
+    reach_case_refs: list[str] = Field(default_factory=list)
+    succeeded_wound_refs: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _bounded_is_content(self):
+        """C3: instrument standing is not a third value. It is a consulted
+        assertion whose validity reads `bounded`, and a bounded grant without
+        its declared domain and tolerance would be an unqualified one wearing
+        the word -- the tolerance is what a successor authors and attacks."""
+        declared = self.validity_domain is not None and self.validity_tolerance is not None
+        if (self.validity == "bounded") != declared:
+            raise ValueError(
+                "bounded validity requires both a domain and a tolerance, "
+                "and universal validity permits neither"
+            )
+        if self.subject_ref in self.reach_case_refs:
+            # A case that IS the subject is a dependence on the subject under
+            # another name, which is exactly what Law 9.4 forbids.
+            raise ValueError("a reach case may not be the subject itself")
+        return self
+
+
 _MODELS: dict[str, type[_Body]] = {
     PROBLEM_SUBJECT_V1: ProblemSubjectV1,
     PREMISE_ATTRIBUTION_V1: PremiseAttributionV1,
+    FRAME_ASSERTION_V1: FrameAssertionV1,
 }
 
 

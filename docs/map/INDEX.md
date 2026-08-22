@@ -23,6 +23,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | know whether you are allowed to change it | `INV-frozen-surfaces.md` — **first, always** |
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
+| know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -71,6 +72,7 @@ than you need.
 | Document | Covers |
 |---|---|
 | `INV-frozen-surfaces.md` | the five surfaces you may not change, and the two instruments that prove you did not |
+| `INV-axiom-basis.md` | the eleven axioms the calculus rests on, which rung proves each, and which rungs must not break it |
 | `REC-change-a-seam.md` | the recipe for the commonest large change, worked on schools × scratchpad |
 
 ## Seam matrix

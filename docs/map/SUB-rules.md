@@ -141,7 +141,7 @@ refuted⇒successor branch, Rung 3d removed the decommissioned website
 pipeline's remnant. The member was retained deliberately: deleting it fixes
 nothing and breaks four tests that replay pre-v2 roots, and what keeps the
 pipeline decommissioned is the absent producer, not the absent name.
-`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 9 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC|SUCCESSOR)" src/deepreason/rules/spawn.py && ! grep -rq "SpawnTrigger.SUCCESSOR" src/deepreason/rules/ src/deepreason/easy.py`
+`check: for t in DISCRIMINATION REMOVE_ARBITRARINESS EXPLANATION_DEBT CONNECTION RESEARCH INTEGRATION; do grep -q "SpawnTrigger.$t" src/deepreason/rules/spawn.py || exit 1; done && test "$(python -c 'from deepreason.ontology import SpawnTrigger; print(len(list(SpawnTrigger)))')" -eq 10 && ! grep -qE "SpawnTrigger\.(SEED|AUDIT_CRITIC|SUCCESSOR|PROMOTION)" src/deepreason/rules/spawn.py && ! grep -rq "SpawnTrigger.SUCCESSOR" src/deepreason/rules/ src/deepreason/easy.py`
 
 ## Where to change what
 

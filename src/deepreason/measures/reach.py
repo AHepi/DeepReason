@@ -38,9 +38,12 @@ _STRUCTURAL_PROGRAMS = frozenset(
     # presupposition_wf/premise_resolution_wf prove an attribution or resolution
     # is WELL FORMED, never that its claim holds -- structural like the rest, so
     # passing one grounds no reach and immunises nothing (rules/warrants.py).
+    # frame_assertion_wf is structural for the same reason and one more: an
+    # artifact that could ground reach by being a well-formed frame assertion
+    # would let the standing axis buy its own promotion case.
     {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf",
      "presupposition_wf", "premise_resolution_wf",
-     "problem_subject_wf", "premise_attribution_wf"}
+     "problem_subject_wf", "premise_attribution_wf", "frame_assertion_wf"}
 )
 
 

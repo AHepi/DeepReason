@@ -35,6 +35,12 @@ class SpawnTrigger(str, Enum):
     CONNECTION = "connection"                  # iso(a) > 0 (§7)
     INTEGRATION = "integration"                # overlapping accepted, no declared relation
     RESEARCH = "research"                      # observation-valued, no covering evidence (§12)
+    # §9.4. Promotion is purchase of exposure: an ordinary Conj->Crit->Adj pass
+    # whose problem is the one a frame assertion must address to be consulted
+    # at all (Def 9.2). Rung 4 defines what such a problem IS, because the
+    # consult predicate is undefined without it; Rung 5 owns WHEN one is
+    # spawned -- nomination is a measure-rule that detects and never decides.
+    PROMOTION = "promotion"
 
 
 class ProblemProvenance(FrozenRecord):

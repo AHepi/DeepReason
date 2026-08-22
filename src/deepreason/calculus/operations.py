@@ -9,11 +9,15 @@ simply running it again.
 
 from __future__ import annotations
 
-from deepreason.calculus.claims import ProblemSubjectV1, encode
+from deepreason.calculus.claims import FrameAssertionV1, ProblemSubjectV1, encode
 from deepreason.calculus.compiler import compile_interface
-from deepreason.calculus.programs import PROBLEM_SUBJECT_COMMITMENT
+from deepreason.calculus.programs import (
+    FRAME_ASSERTION_COMMITMENT,
+    PROBLEM_SUBJECT_COMMITMENT,
+)
+from deepreason.calculus.scope import compile_scope
 from deepreason.calculus.views import problem_subject_of
-from deepreason.ontology import Provenance
+from deepreason.ontology import Problem, ProblemProvenance, Provenance, SpawnTrigger
 
 
 def problem_subject_body(problem) -> ProblemSubjectV1:
@@ -41,6 +45,77 @@ def ensure_problem_subject(harness, problem):
         return existing
     harness.register_commitment(PROBLEM_SUBJECT_COMMITMENT)
     body = problem_subject_body(problem)
+    return harness.create_artifact(
+        encode(body),
+        codec="json",
+        interface=compile_interface(body),
+        problem_id=problem.id,
+        provenance=Provenance(role="import"),
+    )
+
+
+def ensure_promotion_problem(harness, subject_id: str, description: str):
+    """Register the promotion problem for a subject, once (§9.4).
+
+    Deterministic and idempotent for the same reason
+    `ensure_problem_subject` is: the id is a pure function of the subject, so
+    re-running after a crash between the two writes registers nothing new.
+
+    This rung defines what a promotion problem IS, because Def 9.2's consult
+    condition -- "addressed to a promotion problem" -- is otherwise undefined
+    and the standing view would have nothing to gate on. It does NOT decide
+    when one should exist: nomination is Rung 5's measure-rule, and it will
+    call this operation rather than mint its own shape.
+    """
+    pid = f"{SpawnTrigger.PROMOTION.value}:{subject_id[:12]}"
+    existing = harness.state.problems.get(pid)
+    if existing is not None:
+        return existing
+    return harness.register_problem(
+        Problem(
+            id=pid,
+            description=description,
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": SpawnTrigger.PROMOTION, "from": [subject_id]}
+            ),
+        )
+    )
+
+
+def file_frame_assertion(
+    harness,
+    *,
+    problem,
+    subject_ref: str,
+    scope: dict,
+    departure_protocol: str,
+    validity: str = "universal",
+    validity_domain: str | None = None,
+    validity_tolerance: str | None = None,
+    reach_case_refs=(),
+    succeeded_wound_refs=(),
+):
+    """Register a frame assertion as an ORDINARY artifact (Def 9.2).
+
+    `scope` is compiled here and the compiled form is discarded: compiling is
+    a VALIDATION, and its result must not be stored, because the artifact's
+    content address is taken over the document rather than over whatever a
+    given version of the compiler makes of it. A scope that cannot compile is
+    refused at authoring time rather than at membership time, which is what
+    keeps sigma total (C1).
+    """
+    compile_scope(scope)
+    harness.register_commitment(FRAME_ASSERTION_COMMITMENT)
+    body = FrameAssertionV1(
+        subject_ref=subject_ref,
+        scope=scope,
+        validity=validity,
+        validity_domain=validity_domain,
+        validity_tolerance=validity_tolerance,
+        departure_protocol=departure_protocol,
+        reach_case_refs=list(reach_case_refs),
+        succeeded_wound_refs=list(succeeded_wound_refs),
+    )
     return harness.create_artifact(
         encode(body),
         codec="json",

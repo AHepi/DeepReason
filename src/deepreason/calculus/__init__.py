@@ -9,6 +9,7 @@ evidence. Bodies are proposable; semantics are not.
 
 from deepreason.calculus.claims import (
     CLAIM_SCHEMAS,
+    FrameAssertionV1,
     ClaimDecodeError,
     PremiseAttributionV1,
     ProblemSubjectV1,
@@ -16,7 +17,12 @@ from deepreason.calculus.claims import (
     encode,
 )
 from deepreason.calculus.compiler import compile_interface
-from deepreason.calculus.operations import ensure_problem_subject
+from deepreason.calculus.operations import (
+    ensure_problem_subject,
+    ensure_promotion_problem,
+    file_frame_assertion,
+)
+from deepreason.calculus.scope import ScopeError, compile_scope, scope_admits
 from deepreason.calculus.separation import (
     FRAME_ENDPOINT_UNREGISTERED,
     FRAME_NOT_SEPARATED,
@@ -24,6 +30,18 @@ from deepreason.calculus.separation import (
     adjudication_component,
     consultability,
     frame_separated,
+)
+from deepreason.calculus.standing import (
+    FRAME_NOT_ADDRESSED_TO_PROMOTION,
+    FRAME_NOT_A_FRAME_ASSERTION,
+    FRAME_NOT_UNREFUTED,
+    StandingGrant,
+    consulted,
+    consultability_of,
+    frame_assertions,
+    frames,
+    standing_of,
+    standing_view,
 )
 from deepreason.calculus.views import (
     problem_status,
@@ -33,6 +51,22 @@ from deepreason.calculus.views import (
 
 __all__ = [
     "CLAIM_SCHEMAS",
+    "FRAME_NOT_ADDRESSED_TO_PROMOTION",
+    "FRAME_NOT_A_FRAME_ASSERTION",
+    "FRAME_NOT_UNREFUTED",
+    "FrameAssertionV1",
+    "ScopeError",
+    "StandingGrant",
+    "compile_scope",
+    "consultability_of",
+    "consulted",
+    "ensure_promotion_problem",
+    "file_frame_assertion",
+    "frame_assertions",
+    "frames",
+    "scope_admits",
+    "standing_of",
+    "standing_view",
     "FRAME_ENDPOINT_UNREGISTERED",
     "FRAME_NOT_SEPARATED",
     "ClaimDecodeError",

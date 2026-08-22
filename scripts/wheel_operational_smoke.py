@@ -28,7 +28,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
-    "ebd7397074c3aa9640658e74fc0d56f16d2a11f1b6898b7887c961f79c04e17e"
+    "3c47bb1fbcc52eeb172cd965ec11d47f9495fd2608e4e9cb9ceb2f8ff9ad5818"
 )
 EXPECTED_MCP_TOOLS = (
     "get_readiness",
@@ -37,6 +37,7 @@ EXPECTED_MCP_TOOLS = (
     "run_status",
     "run_result",
     "run_findings",
+    "run_standing",
     "amend_run",
     "continue_run",
     "cancel_run",

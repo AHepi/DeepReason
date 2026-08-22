@@ -156,13 +156,36 @@ workspace root when a patch is applied.
 | school roster, seats per problem, cross-examiner injection | `init_schools` / `allocate` / `_with_cross_examiner` in `capture/schools.py` | `tests/test_schools.py` |
 | which capture flags fire, and the response to each | `raw_flags` in `capture/detection.py`; `respond` in `capture/ladder.py` | `tests/test_orbit.py::test_ladder_rotates_the_orbiting_school` |
 | the arithmetic a model-authored simulation may use | `_compile_expression` / `compile_declarative_numeric` in `simulation/compiler.py` | `tests/test_simulation_compiler.py` |
-| the MCP tool surface (add, remove, or retype a tool) | `_run_tools` / `_tools` / `call_tool` in `mcp_server.py` | `tests/test_mcp.py::test_initialize_and_tools_list_are_truthful_and_exact` |
+| the MCP tool surface (add, remove, or retype a tool) | `_run_tools` / `_tools` / `call_tool` in `mcp_server.py` — and FOUR pins move with it, in the same commit | `tests/test_mcp.py::test_initialize_and_tools_list_are_truthful_and_exact` |
 | what stops a campaign's later waves | `AuditDimensions` / `classify_dimensions` in `experiments/campaign.py` | `tests/test_campaign_coordinator.py` |
 | the browser page or its containment rules | `_Handler` in `webapp.py` | `tests/test_webapp.py::test_nonlocal_host_header_is_rejected` |
 `check: grep -q "^def _compile_expression(" src/deepreason/simulation/compiler.py && grep -q "^def _with_cross_examiner(" src/deepreason/capture/schools.py && grep -q "^def _safe_target(" src/deepreason/workloads/code.py && grep -q "^def _run_tools(" src/deepreason/mcp_server.py && grep -q "^def _tools(" src/deepreason/mcp_server.py && grep -q "^class _Handler(BaseHTTPRequestHandler)" src/deepreason/webapp.py && grep -q "^def classify_dimensions(" src/deepreason/experiments/campaign.py && grep -q "^class AuditDimensions" src/deepreason/experiments/campaign.py && grep -q "^def main(" src/deepreason/admission/adapter_host.py && grep -q "deepreason.admission.adapter_host" src/deepreason/admission/adapters.py && test -f src/deepreason/admission/adapters_pdf.py && test -f src/deepreason/admission/adapters_epub.py && grep -q "^class ReasoningWorkloadSpec" src/deepreason/workloads/text.py && grep -q "WORKLOADS.register(_adapter)" src/deepreason/workloads/__init__.py && grep -q "^    droppable: bool" src/deepreason/packs/ir.py && grep -q "^    compressible: bool" src/deepreason/packs/ir.py && python -m pytest tests/test_pack_ir.py::test_mandatory_criteria_and_output_contract_are_never_clipped tests/test_runtime_workload_integration.py::test_ops_forwards_bound_v6_workload_and_stop_policy tests/test_workload_text.py tests/test_workload_code.py::test_source_change_and_symlink_are_rejected_after_snapshot tests/test_persistence_invariants.py::test_object_store_is_namespaced_and_rejects_cross_schema_collision tests/test_admission.py::test_parser_version_binds_into_the_dossier_digest tests/test_admission.py::test_registered_adapter_runs_sandboxed_and_binds_into_the_digest tests/test_evidence_citations.py::test_unrecoverable_block_text_never_passes_silently tests/test_research.py::test_backend_modes_are_distinct_and_invalid_values_fail_loudly tests/test_schools.py tests/test_orbit.py::test_ladder_rotates_the_orbiting_school tests/test_simulation_compiler.py tests/test_mcp.py::test_initialize_and_tools_list_are_truthful_and_exact tests/test_campaign_coordinator.py tests/test_webapp.py::test_nonlocal_host_header_is_rejected -q`
 
 ## Traps
 
+- **Adding one MCP tool moves FOUR pins, and no gate runs two of them.**
+  `tests/test_mcp.py::SUPPORTED_TOOLS` and
+  `tests/test_mcp_help.py::SUPPORTED_TOOL_NAMES` fail in the ordinary suite; the
+  two wheel smokes (`scripts/wheel_smoke.py`,
+  `scripts/wheel_operational_smoke.py`) pin the same inventory PLUS a
+  `sha256` over the whole tool-schema list, and nothing runs them for you. The
+  two smokes also differ in how they compare: `wheel_smoke` compares a SET, so
+  order is free, while `wheel_operational_smoke` compares a TUPLE, so declaring
+  the new tool in a different position than the pin lists it fails there and
+  passes everywhere else. Landing `run_standing` (Rung 4, 2026-08-22) hit
+  exactly that: the tool was declared before `run_findings` and pinned after it.
+`check: python -c "
+import hashlib, json, pathlib
+from deepreason import mcp_server
+tools = mcp_server.handle({'jsonrpc':'2.0','id':1,'method':'tools/list','params':{}})['result']['tools']
+sha = hashlib.sha256(json.dumps(tools, sort_keys=True, separators=(',',':')).encode()).hexdigest()
+names = [t['name'] for t in tools]
+for f in ('scripts/wheel_smoke.py','scripts/wheel_operational_smoke.py','tests/test_mcp.py','tests/test_mcp_help.py'):
+    src = pathlib.Path(f).read_text()
+    assert all(('\"%s\"' % n) in src for n in names), f
+for f in ('scripts/wheel_smoke.py','scripts/wheel_operational_smoke.py'):
+    assert sha in pathlib.Path(f).read_text(), f
+"`
 - **A crash mid-append used to swallow the NEXT event.** A torn final line has
   no trailing newline, so a post-recovery append wrote onto the fragment and the
   merged line was dropped as torn on the following read — an acknowledged,
