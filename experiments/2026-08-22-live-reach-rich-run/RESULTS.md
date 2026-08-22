@@ -160,3 +160,123 @@ guard would exit rc=1. The launch waits on it and on nothing else.
 
 **Scope kept.** `git diff --stat` is empty for `src/` and `tests/`; the only
 file this segment adds is this narrative.
+
+---
+
+## 2026-08-22 — the live run: two epochs, both terminated at cycle 2 of 24, zero reach, and the carrier never existed
+
+**What the record shows.** The frozen design was executed unchanged, twice —
+the second launch being the ONE repeat `PREREG.md` §4 pre-authorises. Both
+epochs reached a typed terminal and both replay-validate clean. Neither
+recorded a `reach_set` event, and neither reached a state in which one was
+possible.
+
+| | epoch 1 (`failed-epoch1-run-40e713b3…`) | epoch 2 (`run`, id `40e713b3…`) |
+|---|---|---|
+| state / stop_reason | `failed` / `operational_failure` | `failed` / `operational_failure` |
+| cycles | 2 of 24 | 2 of 24 |
+| `verify_root` violations | **0** | **0** |
+| accepted / refuted | 42 / 4 | 55 / 1 |
+| artifacts / problems | 50 / 58 | 60 / 105 |
+| logged tokens | 117 017 | — (budget 400 000, untouched) |
+| embedder | neural (`nomic-ai/nomic-embed-text-v1.5`) | neural (same) |
+| `reach_set` events | **0** | **0** |
+| typed failure | `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` | `ROUTE_LEASE_MISMATCH … max_tokens expected=32768 actual=20480` |
+
+Run identity is deterministic, so both epochs carry the same run id
+`40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c`; epoch 1
+was retired by rename with the rename committed first (`4cdf3a5a9`) before
+epoch 2 was launched.
+
+**The P1-reach fix held live, and that is a positive result.** `PREREG.md`
+§2 predicted that as the code then stood, `reasoning-envelope-wf` would
+reject every prose candidate before a single subject criterion was read, and
+§4 named that outcome PRECONDITION-BLOCKED. **That signature is absent from
+both records.** Each census reports `reasoning-envelope-wf` exactly once, in
+`_crit_kinds`, classified `structural:` — it entered no qualifying set and
+vetoed no pair. The offline rehearsal's claim now has a live counterpart:
+the gate that blocked reach in every text run no longer does.
+
+`verify_root` returning **0 violations on both roots** discharges a second
+residue this tranche had carried since before launch: no root in the corpus
+had ever carried operator-authored `predicate:` criteria on its seed problem,
+and it was unknown whether replay validation would accept one. It does.
+
+**Why reach is zero, established rather than inferred.** The census alone
+does not say WHOSE criteria sat on the foreign side of each pair, and the
+tranche's hypothesis is about one specific foreign side. `carrier_probe.py`
+(committed here; opens each root READ-ONLY and walks `reach_sweep`'s own pair
+construction, `measures/reach.py:108-124`) answers it directly:
+
+    epoch 1   accepted 46   accepted-and-addressed 14
+              artifacts_that_could_have_seed_as_foreign  0
+    epoch 2   accepted 59   accepted-and-addressed 23
+              artifacts_that_could_have_seed_as_foreign  0
+
+**Every accepted, addressed artifact in both runs is addressed to the seed
+problem itself.** `reach_sweep` skips a problem the artifact already
+addresses, so the seed problem was never on the foreign side of any pair, in
+either run. The candidate the hypothesis requires — a prose `conn:`/`integ:`
+candidate, accepted, addressed elsewhere, meeting the seed's subject
+predicates (rehearsal scenario S8a) — was never minted. Consistently, every
+gate pair that did reach a verdict qualified on `relation-form@578e42df713e`
+alone (196 pairs in epoch 1, 529 in epoch 2), at coverage 0.33, capped below
+`REACH_COVERAGE_MIN` and therefore provisional at best. That is the P2-reach
+form gate doing exactly what P2-reach says it does.
+
+Nothing falls under **P5-reach**: with zero reach events in both roots, no
+reach event involved an artifact with an empty own battery and none landed at
+coverage exactly 0.500. Reported as required, not reinterpreted.
+
+**The verdict, and the one judgement this tranche will not make for you.**
+`PREREG.md` §4's literal branch for zero reach on both runs is UNSUPPORTED.
+On this evidence that label would over-claim, and the honest ledger says so:
+UNSUPPORTED means the prediction was tested and not borne out, and this
+prediction was never tested. Both runs stopped at cycle 2 of 24, on two
+UNRELATED typed operational failures, before the connection/integration
+cascade produced a single accepted candidate addressed to a spawned problem.
+`PREREG.md` created PRECONDITION-BLOCKED for exactly this distinction —
+between a hypothesis that failed and a hypothesis that never ran — but
+defined it narrowly, as the §2 `reasoning-envelope-wf` blockage, which is now
+cleared. The outcome here is a third thing the pre-registration did not
+anticipate: **TRUNCATED-BEFORE-CARRIER**. The pre-registration is frozen, so
+this tranche records both readings and does not relabel §4 on its own
+authority. Which label the record carries is the operator's call, and so is
+whether the two operational failures are fixed before a third epoch.
+
+**Residue — what remains unproven.**
+
+- **The registered hypothesis is untested.** Whether a real `glm-5.2`
+  connection candidate survives the seed problem's subject predicates is
+  exactly as unknown as it was before launch. The rehearsal's S8a remains a
+  hand-written stand-in, and the offline regression remains the only proof
+  that the mechanism can fire at all.
+- **Both failures are stochastic in kind and unquantified in rate.** Two runs
+  of an identical configuration failed at the same cycle for two unrelated
+  reasons. Whether either is reliable, intermittent, or a coincidence of this
+  question's shape is not established by n=2.
+- **`20480` has no established producer.** P9-reach records the negative
+  result (absent from `src/` as a literal, absent from every token-reservation
+  record in the root) so a fix tranche does not re-derive it, but the
+  component that computed it is unidentified.
+- **P4-reach is untouched and still bounds Rung 5.** Even a run that produced
+  reach events would give one problem lineage plus its spawn cascade;
+  nomination counts reach across DISTINCT lineages, and a text run still
+  cannot seed a second problem with its own criteria.
+- **No cycle-budget observation exists.** Neither run spent more than 117 017
+  of its 400 000 tokens or got past cycle 2, so the frozen budget has never
+  been exercised and nothing here says whether 24 cycles would have sufficed.
+- **Accepted does not mean true**, and zero reach does not mean no artifact
+  explains a foreign problem. It means no artifact was ever asked.
+
+**Scope kept.** `git diff --stat origin/main -- src/ tests/` is empty; no
+production code or test was touched. Three findings are PARKED with
+ready-to-send prompts and none was fixed: **P7-reach** (the conjecturer seat
+exhausts its repair budget by patching the sibling pointer of the authorized
+one — with `epoch1-repair-census.json` establishing that the ledgered
+glm-5.2 completion-cap burn did NOT occur: 0 of 41 provider attempts emitted
+zero completion tokens), **P8-reach** (the ladder addresses `deepreason
+results` with `--root` instead of positionally, so its committed audit
+artifact was a path error), and **P9-reach** (the route-lease `max_tokens`
+disagreement that ended epoch 2). New read-only tooling committed with the
+tranche: `repair_census.py`, `carrier_probe.py`.

@@ -313,3 +313,96 @@ re-run (or a replay against a retired root) produces a results.txt carrying
 the run summary, and any sibling ladder with the same invocation is fixed in
 the same commit.
 ```
+
+---
+
+## P9-reach — a controller tuned the conjecturer seat's `max_tokens` below its lease, and the route firewall terminated the run
+
+**What:** the epoch-2 live run terminated at cycle 2 of 24 with
+`state=failed`, `stop_reason=operational_failure`, and the typed error
+
+    ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens
+    expected=32768 actual=20480
+
+(`error_type: RouteFirewallError`, recorded in `run-result.json` and
+`objects/workflow-run-terminal-result-draft-v1/6a26a525…`). This is a
+DIFFERENT failure from epoch 1's P7-reach seat exhaustion, on an identical
+configuration and an identical run id — two runs of the same frozen design
+died at the same cycle for two unrelated typed reasons.
+
+**Where the tension sits.** `llm/firewall.py::EndpointLease.verify` carries a
+comment saying `max_tokens` and `timeout_s` are "intentionally absent" from
+the frozen checks because they are "bounded process-health controls which the
+deterministic controller may tune and log as Measure events" — and then, six
+lines later, adds `max_tokens` to the checked set whenever the route declares
+`context_window_tokens`:
+
+    if route.context_window_tokens is not None:
+        # Qualified capacity binds the completion side of the envelope as
+        # well as the total. Legacy routes retain controller-owned tuning.
+        optional["max_tokens"] = route.max_tokens
+
+This tranche's `run-config.yaml` sets `context_window_tokens: 131072`
+(PREREG.md §3), so the strict branch applies and controller tuning of
+`max_tokens` is fatal for this configuration. The two halves may both be
+deliberate — the comment describing legacy routes, the code describing
+qualified ones — but on this route they contradict each other in effect: one
+component is licensed to tune a field another component refuses to see tuned.
+
+**What is NOT known and must not be assumed.** `20480` appears nowhere as a
+literal in `src/`, and it is absent from every
+`objects/workflow-token-reservation-v2/` record in the root, so WHO computed
+it is not established by this tranche. It is a runtime value; the candidate
+path suggested by the record but NOT verified is the transport-limit
+clamp at `llm/adapter.py:1193` (`max_tokens=transport_limits["max_tokens"]`).
+Establishing the producer is the first step of the fix tranche, not an input
+to it.
+
+**Why it is parked.** This tranche is READ-ONLY on `src/` and `tests/` by
+operator instruction, and `llm/firewall.py` is route-admission code. It is
+also not a reach defect: like P7-reach it ended the run before the reach
+hypothesis's carrier could exist.
+
+```
+Route: deepreason-orchestrator (defect).
+
+One goal: establish which component reduces a leased seat's max_tokens below
+its route value, and make the firewall's contract and the controller's
+licence agree -- so a configuration that declares context_window_tokens
+cannot be terminated mid-run by its own tuning.
+
+Evidence, already committed:
+  - experiments/2026-08-22-live-reach-rich-run/run/run-result.json and
+    objects/workflow-run-terminal-result-draft-v1/6a26a5259d06be47ee9394a4bb086f0a6891662c789205d1f18d1717cd43e69f.json
+    -- the typed error, error_type RouteFirewallError, completion_status
+    incomplete, at cycle 2 of 24.
+  - experiments/2026-08-22-live-reach-rich-run/run-config.yaml -- the route
+    declaring context_window_tokens 131072 and max_tokens 32768, which is
+    what selects the strict branch.
+  - src/deepreason/llm/firewall.py::EndpointLease.verify -- the comment and
+    the conditional that disagree about whether max_tokens is tunable.
+  - The negative result, so it is not re-derived: 20480 is not a literal
+    anywhere in src/ and appears in no workflow-token-reservation-v2 record
+    in the root.
+
+Read first: docs/map/INDEX.md for the llm/firewall and workflow transaction
+subsystems and the seam between them, docs/map/INV-frozen-surfaces.md, and
+the operator law "All configurations should be allowed" (CLAUDE.md,
+2026-08-12) together with its stated boundary -- that law makes COMPILE
+never refuse, and explicitly leaves runtime failing typed at the point of
+use. A route firewall refusing a mutated lease at runtime is therefore
+within the law; the question is whether the mutation should have happened,
+not whether the refusal should have been a disclosure.
+
+Do NOT respond by dropping context_window_tokens from the config to dodge the
+strict branch. That changes the qualification subject digest and the run
+identity, and it hides the disagreement rather than resolving it.
+
+End state: DIAGNOSIS.md naming the component that produced 20480 and one of
+-- (a) the controller must not tune max_tokens on a route declaring
+context_window_tokens, with the guard named; (b) the firewall should accept a
+downward tune within the envelope, with the bound named; (c) correct as
+written and the configuration is at fault, with the reason recorded. A
+regression test pinning whichever answer is chosen, naming this run id in its
+docstring. Implementation only on explicit operator approval.
+```
