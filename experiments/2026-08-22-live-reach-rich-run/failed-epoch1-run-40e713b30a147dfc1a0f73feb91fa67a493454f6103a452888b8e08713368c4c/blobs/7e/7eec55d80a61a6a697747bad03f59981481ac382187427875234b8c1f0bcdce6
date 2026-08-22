@@ -1,0 +1,35 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@458eefb0300d46a33c33e28c: program:reasoning_observation_pending
+- reason-counter@c119832073d4fc89b66e8489: program:reasoning_observation_pending
+- reason-counter@1664f4fd24b1100c528ddc26: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The nocturnal UHI gap is not primarily a surface energy balance phenomenon but an atmospheric boundary-layer dynamics phenomenon: on a clear calm night, the urban canopy layer remains warmer because urban roughness and the persistent weak sensible heat flux from stored thermal energy prevent the formation of the strong, shallow stable boundary layer that forms over rural surfaces. The single best cross-city modulator is wind speed: cities with lower nocturnal wind speeds develop a larger gap because the rural stable boundary layer intensifies (faster rural cooling) while urban turbulence from roughness and stored-heat flux mixes the near-surface air, preventing equally strong stabilization.","counterconditions":[{"case":"If the nocturnal gap persisted or increased at moderate wind speeds, the boundary-layer stability mechanism would be undermined.","checker_spec":null,"eval":"observation"},{"case":"If urban and rural cooling rates were found to be similar in the first hour after sunset but diverge later, the initial stable-layer formation mechanism would need revision.","checker_spec":null,"eval":"observation"},{"case":"If the gap correlated more strongly with surface thermal properties than with wind speed or roughness, the boundary-layer-dynamics primacy would be weakened.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Over rural surfaces on a calm night, a stable nocturnal boundary layer forms: the surface cools rapidly by longwave radiation, the near-surface air becomes stably stratified, vertical mixing is suppressed, and cooling accelerates because the cold air is not mixed with warmer air above. Over urban surfaces, the combination of roughness elements (buildings), delayed sensible heat flux from stored thermal energy, and anthropogenic heat maintains weak turbulent mixing that prevents the formation of a comparably stable layer, so the near-surface air does not cool as fast. The gap is thus a differential in boundary-layer stability, not just surface flux. Cross-city, the modulator is wind speed: at very low wind speeds the rural stable layer intensifies while urban mixing persists (due to roughness and heat injection), maximizing the differential. As wind speed increases, both environments become well-mixed and the gap collapses.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, uhi-e

@@ -1,0 +1,3 @@
+```json
+{"cases":[{"target_alias":"SRC_001","attack":true,"case":"The target states that the nighttime UHI is caused by the high emissivity of urban materials. This reverses the actual physics. High emissivity accelerates radiative cooling at night, so high-emissivity surfaces cool faster, not slower. The established cause is reduced sky view factor and thermal storage, not enhanced emissivity.","premise":"For a given stored heat content, higher emissivity increases net longwave radiative loss at night, so high emissivity does not explain why urban surfaces stay warmer.","premise_evidence":null}]}
+```

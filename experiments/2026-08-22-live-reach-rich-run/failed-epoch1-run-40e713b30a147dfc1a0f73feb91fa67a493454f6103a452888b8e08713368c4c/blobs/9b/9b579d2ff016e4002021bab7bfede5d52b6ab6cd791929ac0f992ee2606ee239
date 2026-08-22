@@ -1,0 +1,23 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Cross-city mechanism contradicts its stated countercondition and ignores the dominant sky-view-factor explanation.",
+      "counterexample": null,
+      "premise": "The target names reduced sky view factor as the specific mechanism that makes the nocturnal UHI gap larger in denser cities, but it then flags any dominance of sky-view effects as a failure mode of its own emissivity mechanism.",
+      "premise_evidence": [
+        {
+          "block": "62d49411a3ba758b333114c1",
+          "quote": "the gap scales with impervious surface fraction"
+        },
+        {
+          "block": "62d49411a3ba758b333114c1",
+          "quote": "If material emissivity variations are dwarfed by sky view factor effects, this mechanism is secondary."
+        }
+      ]
+    }
+  ]
+}
+```

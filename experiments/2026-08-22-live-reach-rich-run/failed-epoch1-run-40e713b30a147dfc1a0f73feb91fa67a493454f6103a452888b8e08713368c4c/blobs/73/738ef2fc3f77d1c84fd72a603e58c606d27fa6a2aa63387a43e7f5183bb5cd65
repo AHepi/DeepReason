@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "claim": "The nocturnal UHI and its cross-city variation are fundamentally governed by sky view factor and street canyon geometry: dense urban canyons trap longwave radiation and obstruct radiative cooling to the sky, so cities with lower sky view factors and deeper canyons exhibit a significantly larger night-time temperature gap relative to open countryside.",
+    "mechanism": "Urban building geometry creates a canyon effect where the effective sky view factor is reduced. At night, surfaces cool by emitting longwave radiation. In a city with deep street canyons, much of this emitted radiation is intercepted by opposing walls rather than escaping to the cold sky. This radiation is absorbed and re-emitted, trapping heat in the urban canopy layer. Because the countryside has an unobstructed sky view (approaching a factor of 1), it radiatively cools much faster after sunset. Therefore, the magnitude of the nocturnal UHI strongly depends on the three-dimensional built density and building height-to-width ratio of the city.",
+    "counterconditions": [
+      "If a city is characterized by low-density, sprawling single-story suburban development with high sky view factors, radiative trapping would be minimal and fail to explain a significant nocturnal UHI gap.",
+      "If field measurements demonstrate that daytime surface material heat capacity and thermal mass storage dominate the delayed cooling curve over radiative geometry, the sky view factor mechanism would be superseded.",
+      "If anthropogenic heat emissions in a specific city are proven to be an order of magnitude larger than the radiative flux deficit, geometry alone cannot be the primary driver.",
+      "If high-rise cities in arid climates consistently show lower nocturnal UHI gaps than low-rise cities in humid climates, the model must be extended or discarded in favor of an evapotranspiration framework."
+    ],
+    "optional_refs": ["SRC_001", "SRC_003"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_003"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.85
+  }
+}

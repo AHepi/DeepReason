@@ -1,0 +1,14 @@
+```json
+{
+  "schema": "repair.patch.v1",
+  "baseline_sha256": "34b0d5540b57e4127d40680f600730067479652e279658a1cc67b00c6fcadc3a",
+  "contract": "batch-critic.v2",
+  "patches": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "3d9a28f19e34d2e3e3c1be3e8a5e0d6c5f9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b"
+    }
+  ]
+}
+```

@@ -1,0 +1,13 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's single cross-city mechanism is mis-specified: it attributes the varying night-time gap primarily to sky view factor / suppressed longwave cooling in deep canyons, but the dominant single driver of the nocturnal UHI intensity is city size/contiguous urban extent (Oke's heat island scaling), with the gap increasing in proportion to the urban dimension because stored heat is released over a larger area and the internal boundary layer retains it. The target enumerates several modulators (sky view, thermal mass, heat capacity) yet never names city size as the main scaler, so it fails to answer the second part of the problem.",
+      "premise": "Oke's canonical model states that the maximum nocturnal UHI intensity scales approximately with the logarithm of city population / built-up extent (a proxy for urban diameter), so the cross-city variation of the night-time gap is governed primarily by how big the city is, not by sky view factor.",
+      "premise_evidence": null
+    }
+  ]
+}
+```

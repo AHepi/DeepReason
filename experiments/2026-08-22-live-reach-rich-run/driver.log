@@ -1,0 +1,96 @@
+[2026-08-22T13:57:20Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run ===
+{
+  "compile_notices": [],
+  "criteria": [
+    "uhi-energy-balance@v1",
+    "uhi-nocturnal-release@v1",
+    "uhi-cross-city-modulator@v1"
+  ],
+  "evidence_dossier_digest": "4997a80a8e6e6bebc29c5f93b3145781859c20d7fc0cf5a4d28e80f7295cd075",
+  "manifest_sha256": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+  "run_input_digest": "62e75cb5e85b0d477c1a42b2618a43ed0a66943cc520d31edc96a9ccb6a10f3a"
+}
+[2026-08-22T13:57:22Z] SETUP OK rc=0
+[2026-08-22T13:57:22Z] === PREFLIGHT: seeded criteria + discrimination ===
+reasoning-envelope-wf            evaluable=True  on=fail     off=fail     discriminates=False
+uhi-energy-balance@v1            evaluable=True  on=pass     off=fail     discriminates=True
+uhi-nocturnal-release@v1         evaluable=True  on=pass     off=fail     discriminates=True
+uhi-cross-city-modulator@v1      evaluable=True  on=pass     off=fail     discriminates=True
+
+seeded criteria: ['reasoning-envelope-wf', 'uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/preflight_seed.json
+[2026-08-22T13:57:23Z] PREFLIGHT OK rc=0
+[2026-08-22T13:57:23Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-22T14:01:03Z] QUALIFY OK rc=0
+[2026-08-22T14:01:03Z] === REASON: deepreason run --budget cycles=24 --token-budget 400000 ===
+[2026-08-22T14:11:31Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.log and /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.stderr.log (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-22T14:11:31Z] === AUDIT: verify_root + findings + the reach census ===
+root                         /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run
+recorded reach_set events    0
+recorded addr pairs          0
+recorded reach-provisional   0
+  A-skip/status                      4
+  A-skip/unaddr                      32
+  E1 no-criteria                     602
+  E4 criterion-fail                  196
+  addr_pairs                         18
+  artifacts_candidate                14
+  artifacts_total                    50
+  commitments_registered             69
+  gate/coverage-caps-at-provisional  196
+  pairs                              798
+  problems_total                     58
+  reached-verdict-gate               196
+
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reach-census.json
+[2026-08-22T14:11:56Z] REACH CENSUS: zero reach_set events -- judge per PREREG.md §4 (UNSUPPORTED vs PRECONDITION-BLOCKED)
+[2026-08-22T14:11:56Z] === DONE: see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/{reason.log,verify_root.json,reach-census.json,findings.json} ===
+[2026-08-22T14:15:17Z] === SETUP: build_manifest.py -> /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run ===
+{
+  "compile_notices": [],
+  "criteria": [
+    "uhi-energy-balance@v1",
+    "uhi-nocturnal-release@v1",
+    "uhi-cross-city-modulator@v1"
+  ],
+  "evidence_dossier_digest": "4997a80a8e6e6bebc29c5f93b3145781859c20d7fc0cf5a4d28e80f7295cd075",
+  "manifest_sha256": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+  "run_input_digest": "62e75cb5e85b0d477c1a42b2618a43ed0a66943cc520d31edc96a9ccb6a10f3a"
+}
+[2026-08-22T14:15:18Z] SETUP OK rc=0
+[2026-08-22T14:15:18Z] === PREFLIGHT: seeded criteria + discrimination ===
+reasoning-envelope-wf            evaluable=True  on=fail     off=fail     discriminates=False
+uhi-energy-balance@v1            evaluable=True  on=pass     off=fail     discriminates=True
+uhi-nocturnal-release@v1         evaluable=True  on=pass     off=fail     discriminates=True
+uhi-cross-city-modulator@v1      evaluable=True  on=pass     off=fail     discriminates=True
+
+seeded criteria: ['reasoning-envelope-wf', 'uhi-energy-balance@v1', 'uhi-nocturnal-release@v1', 'uhi-cross-city-modulator@v1']
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/preflight_seed.json
+[2026-08-22T14:15:18Z] PREFLIGHT OK rc=0
+[2026-08-22T14:15:18Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-22T14:18:15Z] QUALIFY OK rc=0
+[2026-08-22T14:18:15Z] === REASON: deepreason run --budget cycles=24 --token-budget 400000 ===
+[2026-08-22T14:27:54Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.log and /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.stderr.log (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-22T14:27:54Z] === AUDIT: verify_root + findings + the reach census ===
+root                         /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run
+recorded reach_set events    0
+recorded addr pairs          0
+recorded reach-provisional   0
+  A-skip/status                      1
+  A-skip/unaddr                      36
+  E1 no-criteria                     1863
+  E4 criterion-fail                  529
+  addr_pairs                         24
+  artifacts_candidate                23
+  artifacts_total                    60
+  commitments_registered             108
+  gate/coverage-caps-at-provisional  529
+  pairs                              2392
+  problems_total                     105
+  reached-verdict-gate               529
+
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reach-census.json
+[2026-08-22T14:28:25Z] REACH CENSUS: zero reach_set events -- judge per PREREG.md §4 (UNSUPPORTED vs PRECONDITION-BLOCKED)
+[2026-08-22T14:28:25Z] === DONE: see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/{reason.log,verify_root.json,reach-census.json,findings.json} ===

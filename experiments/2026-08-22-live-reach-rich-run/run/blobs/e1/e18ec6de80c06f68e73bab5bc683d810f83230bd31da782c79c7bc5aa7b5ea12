@@ -1,0 +1,36 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@b5cc517e9d70624e038ca2aa: program:reasoning_observation_pending
+- reason-counter@215f9e8de215362b18319cc6: program:reasoning_observation_pending
+- reason-counter@bc22e7d093c087172a1522b5: program:reasoning_observation_pending
+- reason-counter@420d6c5dd66b09d04ac7e618: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The nighttime UHI is dominated by differential cooling rates driven by urban thermal storage: dense, impervious materials with high heat capacity absorb daytime sensible heat and release it as longwave radiation after sunset, keeping cities warmer than vegetation-covered countryside. The single best cross-city modulator is sky view factor: dense building geometry traps outgoing longwave radiation, so cities with deeper street canyons retain more stored heat and exhibit a larger nocturnal gap.","counterconditions":[{"case":"If radiative cooling measurements show rural and urban surfaces cool at the same rate per unit thermal mass after normalizing for sky view, the thermal-storage explanation is insufficient","checker_spec":null,"eval":"observation"},{"case":"If cities with identical thermal mass but different sky view factors show no difference in nocturnal UHI magnitude, sky view is not the dominant modulator","checker_spec":null,"eval":"observation"},{"case":"If anthropogenic heat input is found to exceed stored heat release on calm nights, stored heat cannot be the primary driver","checker_spec":null,"eval":"observation"},{"case":"If the cross-city variation is better predicted by total impervious surface area than by building height or sky view, geometry is secondary to material composition","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"During the day, concrete, asphalt, and masonry with high thermal mass and heat capacity absorb solar radiation and store it as sensible heat. After sunset, rural vegetation \u2014 with low heat capacity and active evapotranspiration \u2014 cools rapidly via outgoing longwave radiation and latent heat transfer. Urban surfaces cool more slowly because they must first exhaust their larger stored heat reservoir, and because reduced sky view in street canyons traps a fraction of the emitted longwave, reabsorbing it on opposing facades. The nocturnal temperature gap is therefore set by how much heat was stored and how effectively it is retained, both of which scale with built density and street-canyon geometry.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1, reason-counter@b5cc517e9d70624e038ca2aa, reason-

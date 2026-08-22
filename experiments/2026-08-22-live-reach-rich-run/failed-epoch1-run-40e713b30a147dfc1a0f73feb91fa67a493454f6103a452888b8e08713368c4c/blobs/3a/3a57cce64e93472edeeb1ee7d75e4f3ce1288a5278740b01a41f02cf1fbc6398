@@ -1,0 +1,11 @@
+{
+  "contract": "batch-critic.v2",
+  "operations": [
+    {
+      "operation": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "a1b2c3d4e5f6a7b8"
+    }
+  ],
+  "schema": "repair.patch.v1"
+}

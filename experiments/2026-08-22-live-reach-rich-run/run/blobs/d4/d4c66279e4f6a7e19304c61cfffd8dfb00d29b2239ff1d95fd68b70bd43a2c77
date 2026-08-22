@@ -1,0 +1,5 @@
+{
+  "op": "replace",
+  "path": "/cases/0/premise_evidence/1/block",
+  "value": "SRC00100000000000000000"
+}

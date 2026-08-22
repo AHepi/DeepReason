@@ -6,6 +6,12 @@ This tranche is READ-ONLY on `src/` and `tests/` by operator instruction.
 
 ## P1-reach — `_STRUCTURAL_PROGRAMS` omitting `reasoning-envelope-wf` is what blocks reach in every text run
 
+**STATUS 2026-08-22: FIXED.** Landed by
+`experiments/2026-08-22-reach-structural-programs-fix` and confirmed live in
+this tranche's epoch-1 root: the reach census records
+`reasoning-envelope-wf` once, classified `structural`, blocking nothing. The
+prompt below is kept as the record of what was asked for; it is not open work.
+
 This is not a new finding. It is
 `experiments/2026-08-21-measure-reach-firing/PARKED.md` **P1**, upgraded:
 that tranche measured P1 as *latent* ("the direction of this defect is
@@ -144,4 +150,259 @@ problems? a typed seed operation on the running root? nothing, with the
 reason recorded), its effect on run identity and the qualification subject
 digest, and the measurement that would prove it. Implementation only on
 explicit operator approval.
+```
+
+---
+
+## P7-reach — the conjecturer seat exhausts its repair budget by patching the SIBLING pointer, and ends the run
+
+**What:** the epoch-1 live run terminated at cycle 2 of 24 with
+`state=failed`, `stop_reason=operational_failure`, message
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at
+/workflow/insufficient_capability_by_route_seat: route seat has terminally
+exhausted its smallest authorized contract`. The typed cause object
+(`objects/workflow-route-seat-insufficient-capability-v1/80f0c2db…`) gives
+`reason: smallest_authorized_contract_schema_exhausted`, role `conjecturer`,
+seat 0, `contract_id conjecturer.atomic-candidate.v1`,
+`observed_provider_calls 5 / maximum 5`, `attempt_index 4 /
+maximum_schema_repairs 4`, after the same seat had already spent five calls
+on `conjecturer.turn.v6`.
+
+**This is NOT the ledgered glm-5.2 cap-burn, and the ledgered remedy does not
+apply.** CLAUDE.md's known provider fact — a reasoning model can burn the
+whole completion cap on hidden reasoning and emit nothing — has a signature:
+zero completion tokens. `epoch1-repair-census.json` (produced by
+`repair_census.py`, read-only over the committed root) records
+`attempts_with_zero_completion_tokens: 0` across all 41 provider attempts.
+The seat emitted output every time.
+
+What it emitted is the finding. Of the 17 attempts carrying a repair
+diagnostic, **2 returned a well-formed patch addressed to a pointer OUTSIDE
+the authorized set, and both are the SIBLING INDEX of the authorized one**:
+
+    attempt 3  conjecturer.turn.v6
+      authorized  /scratch_proposal/unresolved_questions/1/related_refs
+      patched     /scratch_proposal/unresolved_questions/0/related_refs
+      completion_tokens 40
+
+    attempt 4  conjecturer.atomic-candidate.v1
+      authorized  /candidate/checker_specs/1/id
+      patched     /candidate/checker_specs/0/terms
+      completion_tokens 23
+
+Both are the FINAL repair attempt of their contract, so each off-target patch
+is what actually consumed the last repair and drove the seat to terminal
+exhaustion. The diagnostic envelope for the second
+(`blobs/11/11659d8c…`, `repair.diagnostic-envelope.v2`) asked for exactly one
+thing — `extra field at /candidate/checker_specs/1/id` — and the raw provider
+output (`blobs/9b/9b29d126…`) is verbatim
+`{"op": "remove", "path": "/candidate/checker_specs/0/terms"}`.
+
+**Why this is parked and not fixed here.** This tranche is READ-ONLY on
+`src/` and `tests/` by operator instruction, and it is a live-run tranche
+with one goal. It is also NOT a reach defect: it ended the run before the
+reach hypothesis could be exercised over its 24-cycle budget, which is a
+different failure from reach not firing.
+
+```
+Route: deepreason-orchestrator (defect, design-first -- expect to stop at
+DIAGNOSIS.md and report; the cause may be prompt-side, contract-side, or
+simply a provider limitation to be absorbed rather than fixed).
+
+One goal: decide and record why a repair-authorized seat returns a patch for
+the sibling index of its authorized pointer, and whether the repair loop
+should reject an off-target patch WITHOUT consuming a repair attempt -- so a
+model that answers the wrong question does not spend the budget reserved for
+answering the right one.
+
+Evidence, already committed:
+  - experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c/
+    objects/workflow-route-seat-insufficient-capability-v1/80f0c2db472148a39df59dc3c641e585a836e8ff54f6b5253328d8ee1036a00c.json
+    -- the typed cause: reason smallest_authorized_contract_schema_exhausted,
+    role conjecturer, seat 0, 5/5 provider calls, attempt 4/4 repairs.
+  - .../blobs/11/11659d8c45a0c60c2391062e1ad671c14534ee655873156c81940f3e316a40e5
+    -- the repair.diagnostic-envelope.v2 with authorized_pointers
+    ["/candidate/checker_specs/1/id"].
+  - .../blobs/9b/9b29d126c95169f48b657bb5f61c7260cb7ae58500f71a912c6be6d2b7d58471
+    -- the verbatim provider output patching /candidate/checker_specs/0/terms.
+  - experiments/2026-08-22-live-reach-rich-run/epoch1-repair-census.json and
+    repair_census.py -- re-derive both off-target repairs and the
+    attempts_with_zero_completion_tokens = 0 fact in one command:
+      python repair_census.py <root> out.json
+
+Read first: docs/map/INDEX.md for the workflow subsystem and the
+route-seat/contract-decomposition seam, docs/map/INV-frozen-surfaces.md
+(the workflow v6 transaction record formats are not to be reshaped), and
+CLAUDE.md's known provider fact about glm-5.2 -- the point of this finding is
+that the signature does NOT match it, so do not reach for a bigger completion
+cap.
+
+Do NOT respond by raising --maximum-completion-tokens or max_tokens. The
+census shows every attempt emitted output and none emitted zero tokens; a
+bigger cap addresses a failure that did not occur here, and it would change
+the provider profile, the qualification subject digest and the run identity
+for no reason.
+
+Constraint the design must respect: whatever is decided, an off-target patch
+must remain a TYPED outcome in the record. Silently retrying it, or widening
+authorized_pointers so the wrong patch becomes acceptable, would trade a
+recorded refusal for an unrecorded one.
+
+End state: DIAGNOSIS.md naming one cause and one of -- (a) correct as
+written, the seat is simply not capable and the typed terminal is the right
+answer, with the reason recorded; (b) an off-target patch should be rejected
+without consuming a repair attempt, with the guard named; (c) the repair
+prompt does not make the authorized pointer unambiguous, with the change
+named. Implementation only on explicit operator approval.
+```
+
+---
+
+## P8-reach — the ladder asks `deepreason results` for a root with `--root`, and records a path error instead of the run summary
+
+**What:** `reach_run.sh`'s audit block runs
+
+    python -m deepreason --root "$ROOT" results > "$HERE/results.txt"
+
+but `results` takes its target as a POSITIONAL argument (`deepreason results
+ROOT-OR-HOME`, README / dr-drive-harness §2). With none given it falls back
+to `DEEPREASON_HOME`, which the ladder points at `$HERE/home` — a
+qualification home holding no run. `epoch1-results.txt` therefore reads, in
+full:
+
+    RESULTS_ROOT_NOT_FOUND: /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/home
+    is neither a run root (no log.jsonl) nor a home holding one
+
+The typed retrieval surface answered correctly; the ladder asked it the wrong
+question. Running `python -m deepreason results <root>` by hand against the
+same root returns the full summary, so nothing was lost — but the committed
+audit artifact of a live run is an error string, and the ONE retrieval
+surface the driving manual names is the one the ladder failed to capture.
+
+Not fixed here: this tranche's ladder is part of a frozen pre-registered
+design, and editing it mid-tranche would change the instrument between epoch
+1 and epoch 2 of the same experiment.
+
+```
+Route: dr-change-orchestrator (change, one-line, experiment tooling only --
+no src/ or tests/ involvement).
+
+One goal: make the reach-rich ladder capture the run's typed results instead
+of a path error, so the committed audit artifact of a live run carries the
+run summary.
+
+Evidence, already committed:
+  - experiments/2026-08-22-live-reach-rich-run/reach_run.sh, the AUDIT block:
+    `python -m deepreason --root "$ROOT" results` -- --root is not how
+    results is addressed.
+  - experiments/2026-08-22-live-reach-rich-run/epoch1-results.txt -- the
+    resulting RESULTS_ROOT_NOT_FOUND line, naming $HERE/home.
+  - The same root answered correctly when addressed positionally
+    (state failed, stop_reason operational_failure, verify_root violations 0,
+    embedder neural) -- quoted in RESULTS.md's epoch-1 segment.
+
+Read first: README.md's public CLI lifecycle and .claude/skills/
+dr-drive-harness/SKILL.md section 2, which both give the positional form.
+
+Check whether any OTHER committed ladder carries the same invocation before
+fixing just this one; a one-line defect copied across experiment scripts is
+worth fixing everywhere it was copied.
+
+End state: the ladder invokes `python -m deepreason results "$ROOT"`, a
+re-run (or a replay against a retired root) produces a results.txt carrying
+the run summary, and any sibling ladder with the same invocation is fixed in
+the same commit.
+```
+
+---
+
+## P9-reach — a controller tuned the conjecturer seat's `max_tokens` below its lease, and the route firewall terminated the run
+
+**What:** the epoch-2 live run terminated at cycle 2 of 24 with
+`state=failed`, `stop_reason=operational_failure`, and the typed error
+
+    ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens
+    expected=32768 actual=20480
+
+(`error_type: RouteFirewallError`, recorded in `run-result.json` and
+`objects/workflow-run-terminal-result-draft-v1/6a26a525…`). This is a
+DIFFERENT failure from epoch 1's P7-reach seat exhaustion, on an identical
+configuration and an identical run id — two runs of the same frozen design
+died at the same cycle for two unrelated typed reasons.
+
+**Where the tension sits.** `llm/firewall.py::EndpointLease.verify` carries a
+comment saying `max_tokens` and `timeout_s` are "intentionally absent" from
+the frozen checks because they are "bounded process-health controls which the
+deterministic controller may tune and log as Measure events" — and then, six
+lines later, adds `max_tokens` to the checked set whenever the route declares
+`context_window_tokens`:
+
+    if route.context_window_tokens is not None:
+        # Qualified capacity binds the completion side of the envelope as
+        # well as the total. Legacy routes retain controller-owned tuning.
+        optional["max_tokens"] = route.max_tokens
+
+This tranche's `run-config.yaml` sets `context_window_tokens: 131072`
+(PREREG.md §3), so the strict branch applies and controller tuning of
+`max_tokens` is fatal for this configuration. The two halves may both be
+deliberate — the comment describing legacy routes, the code describing
+qualified ones — but on this route they contradict each other in effect: one
+component is licensed to tune a field another component refuses to see tuned.
+
+**What is NOT known and must not be assumed.** `20480` appears nowhere as a
+literal in `src/`, and it is absent from every
+`objects/workflow-token-reservation-v2/` record in the root, so WHO computed
+it is not established by this tranche. It is a runtime value; the candidate
+path suggested by the record but NOT verified is the transport-limit
+clamp at `llm/adapter.py:1193` (`max_tokens=transport_limits["max_tokens"]`).
+Establishing the producer is the first step of the fix tranche, not an input
+to it.
+
+**Why it is parked.** This tranche is READ-ONLY on `src/` and `tests/` by
+operator instruction, and `llm/firewall.py` is route-admission code. It is
+also not a reach defect: like P7-reach it ended the run before the reach
+hypothesis's carrier could exist.
+
+```
+Route: deepreason-orchestrator (defect).
+
+One goal: establish which component reduces a leased seat's max_tokens below
+its route value, and make the firewall's contract and the controller's
+licence agree -- so a configuration that declares context_window_tokens
+cannot be terminated mid-run by its own tuning.
+
+Evidence, already committed:
+  - experiments/2026-08-22-live-reach-rich-run/run/run-result.json and
+    objects/workflow-run-terminal-result-draft-v1/6a26a5259d06be47ee9394a4bb086f0a6891662c789205d1f18d1717cd43e69f.json
+    -- the typed error, error_type RouteFirewallError, completion_status
+    incomplete, at cycle 2 of 24.
+  - experiments/2026-08-22-live-reach-rich-run/run-config.yaml -- the route
+    declaring context_window_tokens 131072 and max_tokens 32768, which is
+    what selects the strict branch.
+  - src/deepreason/llm/firewall.py::EndpointLease.verify -- the comment and
+    the conditional that disagree about whether max_tokens is tunable.
+  - The negative result, so it is not re-derived: 20480 is not a literal
+    anywhere in src/ and appears in no workflow-token-reservation-v2 record
+    in the root.
+
+Read first: docs/map/INDEX.md for the llm/firewall and workflow transaction
+subsystems and the seam between them, docs/map/INV-frozen-surfaces.md, and
+the operator law "All configurations should be allowed" (CLAUDE.md,
+2026-08-12) together with its stated boundary -- that law makes COMPILE
+never refuse, and explicitly leaves runtime failing typed at the point of
+use. A route firewall refusing a mutated lease at runtime is therefore
+within the law; the question is whether the mutation should have happened,
+not whether the refusal should have been a disclosure.
+
+Do NOT respond by dropping context_window_tokens from the config to dodge the
+strict branch. That changes the qualification subject digest and the run
+identity, and it hides the disagreement rather than resolving it.
+
+End state: DIAGNOSIS.md naming the component that produced 20480 and one of
+-- (a) the controller must not tune max_tokens on a route declaring
+context_window_tokens, with the guard named; (b) the firewall should accept a
+downward tune within the envelope, with the bound named; (c) correct as
+written and the configuration is at fault, with the reason recorded. A
+regression test pinning whichever answer is chosen, naming this run id in its
+docstring. Implementation only on explicit operator approval.
 ```
