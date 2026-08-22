@@ -1,5 +1,5 @@
 # Checklist for: codify two operator rulings on reach semantics (P5-reach)
-State: next=20 blockers=none
+State: COMPLETE (all 20 steps checked) blockers=none
 Map ids (from REQUEST.md's preflight, unchanged): DR-INV-frozen-surfaces,
 DR-SEAM-evaluation-x-rules (read before the subsystems; its shared
 `_substantive` surface is OUT of scope), DR-SUB-evaluation (the covering
@@ -259,6 +259,6 @@ One step per dr-execute-step invocation.
       alone: the wheel smokes and docs_verify had both finished first (the
       one-instrument-at-a-time rule).
 
-- [ ] 20. (all) [COMMIT] Push and confirm clean tree.
+- [x] 20. (all) [COMMIT] Push and confirm clean tree.
       done-when: git status --porcelain is empty AND git rev-parse HEAD ==
       git rev-parse origin/claude/reach-p5-rulings-codify-097nkz
