@@ -1,0 +1,21 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target identifies reduced ventilation as the primary cross-city modulator, but the problem asks for the single mechanism that best explains cross-city variation. For clear, calm nights, wind speeds are already near zero in both city and countryside, so the differential ventilation mechanism is minimal. Under calm conditions, the dominant cross-city modulator is sky-view factor (reduced radiative cooling in dense geometry), not wind-speed reduction. The target's own counterconditions acknowledge this vulnerability: if UHI is larger on windy nights than calm nights, the ventilation-trapping mechanism fails. The target's claim that 'the gap scales with city size and built density' does not specify whether scaling is driven by stored-heat capacity or ventilation, and the mechanism section asserts ventilation as the primary modulator, which is subordinate to radiative trapping under the stated calm conditions.",
+      "premise": "Under clear, calm nocturnal conditions, cross-city UHI variation is governed primarily by sky-view factor and the resulting longwave radiative flux divergence, not by wind-speed differences.",
+      "premise_evidence": [
+        {
+          "block": "b1af492ad45157f180affbcb",
+          "quote": "On a calm night, this reduced ventilation means that the sensible heat being released from the thermal mass of buildings and roads is not advected away but accumulates in the urban canopy layer."
+        }
+      ],
+      "counterexample": [
+        "A sprawling low-rise city with minimal street canyons but extensive impervious surface area will have good sky-view factors yet still exhibit a strong nocturnal UHI due to thermal mass alone, contradicting the target's claim that the cross-city modulator is the product of stored heat and inverse ventilation rate."
+      ]
+    }
+  ]
+}
+```

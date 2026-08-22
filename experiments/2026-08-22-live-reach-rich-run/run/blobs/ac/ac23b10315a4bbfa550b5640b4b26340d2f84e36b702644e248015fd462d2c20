@@ -1,0 +1,17 @@
+```json
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target identifies wind-speed reduction as the single critical modulator of the cross-city nighttime UHI gap, asserting that the gap is larger in dense cities because higher building height and built density slow the wind, trap released stored heat, and decouple the canopy from regional air. But the most strongly evidenced cross-city predictor of nighttime UHI intensity is not urban roughness/wind speed; it is city size/population, with larger cities exhibiting greater nighttime heat islands independent of density. By pinning the single mechanism to built-density/wind-speed decoupling and explicitly asserting the gap is larger specifically in dense cities, the target omits the dominant cross-city scaling variable, so it fails to correctly identify the single mechanism that best explains why the gap is larger in some cities than in others.",
+      "counterexample": [
+        "A sprawling, low-density city of very large population/area can exhibit a larger nighttime heat island than a compact, high-density city of small population/area, because nocturnal UHI intensity scales strongly with city size/population rather than with built density or wind-speed reduction.",
+        "A dense high-rise city with strong regional winds and low atmospheric moisture can have a weaker nighttime UHI than a less dense city in calm, humid conditions, contradicting the claim that larger gaps occur in cities with higher built density and lower wind speeds."
+      ],
+      "premise": "The single mechanism that best explains the cross-city variation in nighttime UHI intensity is city size/population scaling (larger cities develop stronger nighttime heat islands), not wind-speed reduction caused by dense built geometry.",
+      "premise_evidence": null,
+      "target_alias": "SRC_001"
+    }
+  ]
+}
+```
