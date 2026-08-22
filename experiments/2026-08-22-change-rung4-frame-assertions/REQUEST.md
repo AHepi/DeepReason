@@ -302,3 +302,33 @@ covers is bounded to what R15 says: one additive clause plus the check's name in
 order or detail string, or a second surface — is a NEW stop, not covered here.
 `INV-frozen-surfaces.md` records the grant in the shape of the 2026-08-21
 seat-instance grant, in the same commit as the code (S12/S13).
+
+### Amendment 3 — 2026-08-22, the ceiling raised after the estimate proved wrong
+
+`tools/diff_budget.py` reported EXCEEDED at the Phase B/C `[COMMIT]`: 1595
+insertions over the declared areas against R17's 963. The tranche stopped in the
+standard format, itemized the variance, priced three roads, and the operator
+chose, verbatim:
+
+> Raise the ceiling to 1850 (Recommended)
+
+R19 (process): **1850 is this tranche's ceiling.** R17's 963 is
+`superseded-by:R19`.
+
+R20 (process): the variance stays recorded, and the cause is named plainly
+rather than softened — **the estimate was wrong; the work did not grow.** Every
+line traces to an R, no Rung 5/6/7 machinery is present, and `src/` at 664 is
+INSIDE the ladder's own 500–700 estimate. Where the 632-line gap went:
+
+| Item | Planned | Actual | Why |
+|---|---|---|---|
+| `tests/` | 290 | 802 | 21 test functions carrying the seven mandated proofs, each with a docstring naming its proposition — repo convention, and what makes the R-by-R delivery traceable |
+| `calculus/scope.py` | 85 | 190 | nine typed refusal codes and the module docstring the surrounding package uses |
+| `calculus/standing.py` | 110 | 223 | the consult path, the derived view AND the whole read-only projection, at the same comment density |
+| `calculus/operations.py` | 55 | 78 | two authoring operations, not one |
+| the rest of `src/` | 215 | 173 | under |
+
+The estimating error to carry forward: SPEC.md priced NEW modules at roughly
+half the line count the existing `calculus/` modules already run at, and priced
+a mandated seven-proof gate at the size of Rung 3b's two-proof one. Both are
+measurable from the tree before writing a line, and neither was measured.

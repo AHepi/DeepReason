@@ -12,8 +12,9 @@ New id created by this tranche: `DR-INV-axiom-basis` (R7 — the map has no id f
 the axiom basis; per `dr-drive-harness` §4 step 5 that is a finding, and
 creating it is part of the tranche).
 
-Ceiling: **963** (REQUEST.md R17, operator's "Proceed at 963").
-`python tools/diff_budget.py origin/main --ceiling 963 --paths src tests docs/map scripts`
+Ceiling: **1850** (REQUEST.md R19, operator's "Raise the ceiling to 1850").
+R17's 963 is superseded; the variance and its cause are recorded at R20.
+`python tools/diff_budget.py origin/main --ceiling 1850 --paths src tests docs/map scripts`
 at every `[COMMIT]`. The `--paths` restriction is SPEC.md's declared areas: the
 ceiling measures the change, not the tranche's own ledger documents.
 
@@ -41,7 +42,7 @@ Amendment 2). Any wider contact is a NEW stop.
           4 passed in 0.06s
 
 - [x] 3. (S5) [COMMIT] Commit Phase A.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
           {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "origin/main",
@@ -108,7 +109,7 @@ Amendment 2). Any wider contact is a NEW stop.
 
 - [x] 10. (S1, S2) [COMMIT] Commit Phase B (code + tests + map together,
       SCHEMA.md rule 1).
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase C — promotion problems, the consult path, the standing view
@@ -164,7 +165,7 @@ Amendment 2). Any wider contact is a NEW stop.
       -> 1 passed.
 
 - [x] 18. (S3, S4, S8, S9, S10, S11) [COMMIT] Commit Phase C.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
       EXECUTION NOTES, recorded because each changed what the plan assumed:
@@ -219,7 +220,7 @@ Amendment 2). Any wider contact is a NEW stop.
       -> 1 passed.
 
 - [ ] 24. (S6) [COMMIT] Commit Phase D — surface and all four pins in ONE commit.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase E — the standing-integrity check (S13, S14) — FROZEN SURFACE 3
@@ -252,7 +253,7 @@ Amendment 2). Any wider contact is a NEW stop.
       the 3-failure baseline.
 
 - [ ] 29. (S13, S14) [COMMIT] Commit Phase E.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase F — the axiom-basis map document (S7)
@@ -271,7 +272,7 @@ Amendment 2). Any wider contact is a NEW stop.
       resolves.
 
 - [ ] 32. (S7) [COMMIT] Commit Phase F.
-      done-when: `python tools/diff_budget.py origin/main --ceiling 963`
+      done-when: `python tools/diff_budget.py origin/main --ceiling 1850`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase G — the boundary gates (C9, C10, S14)
