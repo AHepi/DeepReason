@@ -883,3 +883,52 @@ Found while reading `INV-frozen-surfaces.md` at the map preflight of
 `experiments/2026-08-21-change-rung3b-frame-separation/`. Not corrected in
 place — that rung's scope is one invariant and a defect found mid-change is
 parked, not fixed (`PARKED.md` P3 carries the ready-to-send prompt).
+
+## 2026-08-22 (Rung 1b-ii, signal consumption)
+
+**E37 — "the 42-root sweep" names a root count that has been wrong for
+weeks; the sweep covers 107.** `CLAUDE.md` ("The 42-root sweep obeys the
+same rule for the same reason"), `docs/map/INV-frozen-surfaces.md`,
+`SEAM-evaluation-x-rules.md`, `SEAM-harness-x-verification.md` and
+`SEAM-harness-x-workflow.md` all name the instrument by a fixed count of
+42. `tools/root_sweep.py` takes no such number: it sweeps
+`{p.parent for p in pathlib.Path("experiments").rglob("log.jsonl")}`,
+which is **107** as of this commit, and grows every time a tranche
+commits a root. Measured, not inferred — this tranche ran the sweep twice
+and both passes wrote 107 rows
+(`experiments/2026-08-21-change-rung1b-ii-signal-consumption/proof/`).
+The number matters because it is quoted to price the instrument: a reader
+budgeting for "42 roots" budgets for well under half the real cost, which
+in this tranche was about 100 minutes per pass. This is the same failure
+mode E27 recorded in its own general lesson — "a prose number beside a
+pinned number is a second, unguarded copy" — except here the second copy
+is beside a value nothing pins at all, so nothing could catch it drifting.
+Not corrected in place: the operator retired the instrument itself on
+2026-08-22 ("root sweep needs removal. It doesn't matter whether old
+records still verify"), so every sentence carrying the wrong number is due
+for deletion rather than repair. Recorded here so that nobody re-trusts
+"42" in the interval, and so the removal tranche has the census
+(`experiments/2026-08-21-change-rung1b-ii-signal-consumption/PARKED.md`
+P4 lists all 50 live references).
+
+**E38 — `tools/blast_radius.py` reports `frozen_surface_verdict: CONTACT`
+for changes that touch no frozen surface, and will do so for every future
+controller tranche.** Its `SYMBOL_INDIRECT` tier is decided by grep, so a
+declared target symbol contacts a frozen surface whenever its NAME appears
+in that surface's file. `Controller`, `cap_envelope` and
+`is_generator_knob` all appear inside `src/deepreason/invariants.py`, so
+any tranche declaring one of them stops at `dr-spec-change`'s mandatory
+operator STOP whether or not it intends to touch that file. Worse, the
+match is on substrings of unrelated identifiers: this tranche's gate run
+reported `manifest schemas and validators (run_manifest.py)` contact for
+the symbol `clamp`, where every `clamp` in that file is
+`clamp_reserved_attention_fractions` / `_reserved_fractions_are_clamped`,
+imported from `deepreason.config` and unrelated to `controller.clamp`. The
+tool is not lying — each detail string says "grep-based; not proof of
+semantic contact" — and the disclosure is deliberately over-wide by
+design. But the cost is real and lands on every controller tranche, and an
+alarm that always fires informs nobody. Whether to resolve the symbol
+before claiming contact is an operator decision about disclosure, not an
+implementation detail, so nothing was changed:
+`experiments/2026-08-21-change-rung1b-ii-signal-consumption/PARKED.md` P2
+carries the ready-to-send prompt and the measured evidence.
