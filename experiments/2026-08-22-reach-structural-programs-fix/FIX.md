@@ -182,3 +182,60 @@ events get written, which is the measure's purpose, not its wire contract.
 Estimated diff: ~125 lines across 6 files (2 src, 2 tests, 2 map), plus this
 tranche's own artifacts. Under the 150-line budget. Proceed to
 `dr-implement-fix`.
+
+---
+
+## Amendment 1 (during dr-implement-fix): a change site FIX.md missed
+
+`python tools/docs_verify.py` failed on a FOURTH document beyond the three
+this FIX.md named:
+
+    FAIL SEAM-evaluation-x-rules.md:259
+      assert _STRUCTURAL_PROGRAMS < reg; gap=sorted(reg-_STRUCTURAL_PROGRAMS);
+      assert gap==['component_wf','generator_wf','integration_wf','manifest_wf',
+                   'reasoning-envelope-wf']
+      -> AssertionError
+
+`docs/map/SEAM-evaluation-x-rules.md` `Owns:` exactly the three files this
+tranche touches — `rules/warrants.py`, `measures/reach.py`, `programs.py` —
+and its `Traps` section already carries this defect, written up on
+2026-07-10/11 with the drift dated to commit `1634b35f`. Its check ASSERTS THE
+DIVERGENCE deliberately: "The check below asserts the divergence as it stands
+today, so closing the gap fails it and forces this paragraph to be rewritten."
+The check did its job.
+
+**Owning the miss plainly:** GOAL.md's map preflight read `SUB-evaluation.md`,
+`CON-warrants-and-attacks.md` and `INV-frozen-surfaces.md`, and recorded the
+undocumented `evaluation x warrants-and-attacks` pair as a finding. It never
+read `SEAM-evaluation-x-rules.md`, which is the DOCUMENTED seam owning all
+three files. `dr-drive-harness` §4 step 3 says to read the seam document
+BEFORE either subsystem, and that is the step that was skipped. The trap had
+the whole diagnosis in it — the five names, the two-consumer split, the
+originating commit — a day of work before this tranche started.
+
+**The additional change site:**
+
+  - `docs/map/SEAM-evaluation-x-rules.md` Traps, the entry "The registry's
+    'structural' and the seam's 'structural' are two different sets" — rewritten
+    to say it WAS true and when it was fixed, per the map rule that a Traps
+    entry is never deleted. Its check is inverted from asserting the divergence
+    to asserting the agreement, so the entry cannot silently rot back.
+
+**The one substantive question the trap raises, answered:** it recorded a
+residue — "whether these five *should* be structural for backing is an
+operator's call, not an implementer's" — and correctly refused to decide it.
+That call has since been made, by the operator, in this tranche's own brief:
+"make measures/reach.py::_substantive agree with the structural class that
+programs.PROGRAMS already declares, so a well-formedness gate can never ground
+reach or confer prose immunity." The residue is discharged by authority, not by
+an implementer's judgement, and the rewritten entry records that it was.
+
+The trap's other residue — "no recorded root has been shown to carry a passing
+`manifest_wf` that then defeated a prose case" — is now measured rather than
+open: `immunity_before.json` puts `backed_only_by_declared_structural` at 0
+over 3 528 candidate artifacts on every root carrying a `log.jsonl`. It never
+happened, and after the fix it cannot.
+
+Revised estimated diff: ~140 lines across 7 files (2 src, 2 tests, 3 map).
+Still under the 150-line budget; re-checked mechanically with
+`tools/diff_budget.py` before the commit.

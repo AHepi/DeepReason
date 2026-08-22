@@ -1,14 +1,8 @@
 [
   {
     "check": "R1 declared structural class == reach's structural set",
-    "declared_minus_reach": [
-      "component_wf",
-      "generator_wf",
-      "integration_wf",
-      "manifest_wf",
-      "reasoning-envelope-wf"
-    ],
-    "holds": false,
+    "declared_minus_reach": [],
+    "holds": true,
     "reach_minus_declared": []
   },
   {
@@ -18,29 +12,32 @@
       "relation-form@578e42df713e"
     ],
     "check": "R2 a declared-structural gate never enters reach's qualifying set, so it can neither ground nor veto a hit",
-    "coverage": 1.0,
-    "hits": [],
-    "holds": false,
+    "coverage": 0.6666666666666666,
+    "hits": [
+      [
+        "6b7747a9a4bcef7c2f3a7ff8233688e37d32e6a279cef9bdd5c4bdd1c7395148",
+        "foreign"
+      ]
+    ],
+    "holds": true,
     "qualifying": [
-      "reasoning-envelope-wf",
       "uhi-energy-balance@r1",
       "uhi-nocturnal-release@r1"
     ],
-    "recorded_reach_events": 0,
+    "recorded_reach_events": 1,
     "verdicts": {
-      "reasoning-envelope-wf": "fail",
       "uhi-energy-balance@r1": "pass",
       "uhi-nocturnal-release@r1": "pass"
     },
-    "wf_in_qualifying": true
+    "wf_in_qualifying": false
   },
   {
     "check": "R3 a passing declared-structural gate confers no formally_backed prose immunity",
     "commitments": [
       "reasoning-envelope-wf"
     ],
-    "formally_backed": true,
-    "holds": false,
+    "formally_backed": false,
+    "holds": true,
     "wf_verdict": "pass"
   }
 ]
