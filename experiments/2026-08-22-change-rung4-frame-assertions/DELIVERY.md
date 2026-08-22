@@ -34,6 +34,30 @@ record; support is cut; pass two makes the assertion `suspended_unsupported`;
 it stops being consulted. Orphaned ≠ false does the work — revocation says
 unearned, not wrong.
 
+## What `deepreason standing` shows an operator
+
+On a run with no frame assertions — every committed root, and every run made
+before this tranche:
+
+    $ deepreason --root experiments/live_engaged_2026-07-27/run-f4fa6663... standing
+    (no artifact is currently framing any problem)
+
+On a run that HAS them:
+
+    $ deepreason --root <root> standing
+    1356cc46e397...  frames, universal
+        via assertion   85352cea43d8...
+        promotion       promotion:1356cc46e397
+        reach case      3d310d5c5163...
+        departure       cite this id
+        in scope        promotion:1356cc46e397
+
+Read left to right: this artifact frames its scope without qualification; the
+assertion that says so; the promotion problem it had to be addressed to before
+anyone would consult it; the reach record its case rests on — attack that and
+the framing stops; the protocol for departing from it; and the problems its
+scope predicate actually admits.
+
 ## Reconciliation
 
 | R | Operator's words (short) | Disposition | Proof |
@@ -63,7 +87,7 @@ Two dispositions a reader should not skim past. **R19 is exceeded**, not met:
 the final figure is 2 290 against a ceiling of 1 850, and the entire post-raise
 overrun is one document — the mandated axiom ledger at 259 lines against my
 ~95 estimate. **C7's root-sweep instruction was not followed**, deliberately: a
-sweep was started, the operator killed it, and they were right — CLAUDE.M's
+sweep was started, the operator killed it, and they were right — CLAUDE.md's
 standing law retires the instrument and names a single-root replay as the
 stronger substitute, which this tranche already commits.
 
