@@ -990,7 +990,7 @@ class RepairPatchWireContract(WireContract[RepairPatchV1]):
         # Keep exact agreement with V6PatchRepairSession.candidate_from_raw:
         # both boundaries strip the same unambiguous patch wrappers, so a
         # patch the session applies is never re-rejected at admission.
-        return super().validate_value(tolerant_patch_value(value))
+        return super().validate_value(tolerant_patch_value(value, self.envelope))
 
     def compile(self, wire: RepairPatchV1) -> RepairPatchV1:
         # The generic identity compiler dumps defaults before revalidation.

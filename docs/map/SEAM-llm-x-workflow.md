@@ -258,6 +258,19 @@ The tests that catch you, cheapest first:
 
 ## Traps
 
+- **A repair attempt's own `diagnostic_ref` is the diagnostic that came AFTER
+  it.** `_terminalize_invalid` writes it as `trace_ref or next_diagnostic_ref`,
+  so reading the authorized set from a repair attempt compares that attempt's
+  response against the NEXT turn's authority. Every converging repair moves the
+  pointer on, so every converging repair scores as off-target. That is how the
+  first reading of reach-rich `run-40e713b30a147dfc` recorded two
+  "sibling-index" patches that the record does not contain — its 13 repair
+  turns were all on target. The authority a turn was dispatched under is its
+  work preparation's `repair.semantic-task.v1` payload
+  (`authorized_pointers`, `diagnostic_ref`, `baseline_sha256`), frozen before
+  issue; join `provider_attempt.work_id -> preparation.id` to read it.
+  Census: `experiments/2026-08-22-fix-repair-patch-transport/repair_turn_census.py`.
+`check: grep -q "diagnostic_ref=trace_ref or next_diagnostic_ref," src/deepreason/workflow/repair_transaction.py && grep -q '"authorized_pointers": list(turn.authorized_pointers),' src/deepreason/workflow/repair_transaction.py && grep -q '"schema": "repair.semantic-task.v1",' src/deepreason/workflow/repair_transaction.py`
 - **Preview/dispatch digest agreement proves identity, never correctness.**
   Both `preview_request` and `call` render through the same `_render_request`,
   so the bundle's `prompt_sha256` matches whatever that helper produces — even

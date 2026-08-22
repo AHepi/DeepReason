@@ -155,6 +155,30 @@ through the caller, including on the failure paths.
 
 ## Traps
 
+- **A repair grant is spent by the provider CALL, so a spelling the harness
+  cannot read costs the same as a wrong answer.** In reach-rich
+  `run-40e713b30a147dfc` the conjecturer seat exhausted
+  `conjecturer.turn.v6` at 4/4 grants and killed the run at cycle 2 — while
+  holding a correct final patch. All 13 repair turns patched a pointer inside
+  their own dispatched authorized set (there were NO off-target patches), but
+  six responses died at the wire: the patch wrapped under `patch` / `patches` /
+  `operations`, the envelope's own `contract` / `baseline_sha256` echoed back
+  beside it, or the pointer field spelled `pointer`. `tolerant_patch_value` now
+  takes the dispatched envelope and absorbs exactly what costs no information —
+  a container that could never be a valid patch, bytes the harness itself sent
+  (exact equality only), and a synonym for an absent field. It still refuses
+  `old`/`new` in place of `value`, which would mean inventing the value, and it
+  does not widen `authorized_pointers`: an off-target patch is still a
+  `RepairScopeViolation` in the record.
+  **Diagnostic trap in the same run:** a repair attempt's own `diagnostic_ref`
+  is written by `repair_transaction._terminalize_invalid` as
+  `trace_ref or next_diagnostic_ref` — the diagnostic derived AFTER the
+  response. Scoring a response against it compares attempt N to attempt N+1's
+  authority and makes every converging repair look off-target, which is how the
+  first reading of this run recorded two "sibling-index" patches that never
+  happened. The dispatched authority is the work preparation's
+  `repair.semantic-task.v1` payload.
+`check: python -m pytest tests/test_v6_patch_repair_and_wire.py::test_recorded_epoch1_patch_spellings_are_tolerated tests/test_v6_patch_repair_and_wire.py::test_recorded_epoch1_substantive_patch_loss_is_still_rejected tests/test_v6_patch_repair_and_wire.py::test_off_target_patch_remains_a_typed_scope_violation -q && grep -q "def tolerant_patch_value(value, envelope=None)" src/deepreason/llm/repair.py`
 - **A repair loop can have no legal exit, and the recorded reason will hide
   it.** In turmite `run-bc3e8797b3e0609eddb324299c8257bd` a scratch link's
   `to_ref` had no satisfiable value: every candidate was either a self-link or

@@ -561,7 +561,9 @@ def test_schema_name_keyed_patch_wrappers_are_tolerated():
         "repair.patch.v1": dict(patch),
         "extra": 1,
     }
-    assert tolerant_patch_value({"patch": dict(patch)}) == {"patch": dict(patch)}
+    # A "patch" container key IS unwrapped since run-40e713b30a147dfc; see
+    # test_recorded_epoch1_patch_spellings_are_tolerated below.
+    assert tolerant_patch_value({"patch": dict(patch)}) == dict(patch)
     two = {"repair.patch.v1": [dict(patch), dict(patch)]}
     assert tolerant_patch_value(two) == two
 
@@ -692,3 +694,188 @@ def test_a_repair_that_cycles_is_named_in_the_exhaustion_reason():
     )
     assert not healthy.oscillation
     assert "repair_oscillation" not in str(healthy.exhaustion_error())
+
+
+# --- Regression (selfstudy run-40e713b30a147dfc, epoch 1) ------------------
+# The reach-rich epoch-1 run ended at cycle 2 of 24 with
+# V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY.  All 13 of its repair turns patched a
+# pointer inside their own dispatched authorized set — there were no
+# off-target patches — but six responses never reached apply_repair_patch
+# because the harness could not read the envelope they were written in, and
+# each discard still consumed one of the contract's finite repair grants.
+# Diagnosis and re-derivation:
+# experiments/2026-08-22-fix-repair-patch-transport/.
+#
+# Each fixture below is the verbatim recorded response, with the contract and
+# baseline digest of the envelope that turn was dispatched under.
+
+_EPOCH1_LOSSLESS_SPELLINGS = (
+    (
+        "batch-critic.v2",
+        "d37bbb39c61a38480f58cbc04c955607ba9bbdde8dcac41fc3758da7d59f4259",
+        '```json\n{\n  "patch": [\n    {\n      "op": "replace",\n'
+        '      "path": "/cases/0/premise_evidence/0/block",\n'
+        '      "value": "f3d5a2c81b9e4760"\n    }\n  ]\n}\n```',
+        "replace",
+        "/cases/0/premise_evidence/0/block",
+    ),
+    (
+        "batch-critic.v2",
+        "0e50b84e40215879d4266175ed71cc96c07e986fdf0b7b2ed8d9edbb98fdc3ec",
+        '```json\n{\n  "patch": {\n    "op": "replace",\n'
+        '    "path": "/cases/0/premise_evidence/1/block",\n'
+        '    "value": "000000000001"\n  }\n}\n```',
+        "replace",
+        "/cases/0/premise_evidence/1/block",
+    ),
+    (
+        "batch-critic.v2",
+        "d37bbb39c61a38480f58cbc04c955607ba9bbdde8dcac41fc3758da7d59f4259",
+        '{\n  "contract": "batch-critic.v2",\n  "operations": [\n    {\n'
+        '      "operation": "replace",\n'
+        '      "path": "/cases/0/premise_evidence/0/block",\n'
+        '      "value": "a1b2c3d4e5f6a7b8"\n    }\n  ],\n'
+        '  "schema": "repair.patch.v1"\n}',
+        "replace",
+        "/cases/0/premise_evidence/0/block",
+    ),
+    (
+        "conjecturer.atomic-candidate.v1",
+        "1a478807191f3af799852157d524713220bddc67b99becfe1e69b0e510e6b7de",
+        '```json\n{\n  "repair.patch.v1": {\n'
+        '    "pointer": "/candidate/checker_specs/0/terms",\n'
+        '    "op": "remove"\n  }\n}\n```',
+        "remove",
+        "/candidate/checker_specs/0/terms",
+    ),
+    (
+        # The grant that ended the run: the last of four on a perfectly
+        # convergent chain, structurally identical to the patch accepted one
+        # grant earlier, discarded for spelling "path" as "pointer".
+        "conjecturer.turn.v6",
+        "f96659780f186b1336da4054149d5ce5fe97c4f8d90cf695004e0e25f7105e3e",
+        '```json\n{"repair.patch.v1": {"contract": "conjecturer.turn.v6", '
+        '"pointer": "/scratch_proposal/unresolved_questions/1/related_refs", '
+        '"operation": "replace", "value": ["NEW_002"]}}\n```',
+        "replace",
+        "/scratch_proposal/unresolved_questions/1/related_refs",
+    ),
+)
+
+# The one epoch-1 loss that is NOT a spelling: "old"/"new" in place of the
+# contract's "value".  Reading "new" as "value" would be an inference about
+# intent, not a rename of a field the harness itself supplied.
+_EPOCH1_SUBSTANTIVE_LOSS = (
+    "conjecturer.atomic-candidate.v1",
+    "eb06b2035d35185936739733a38e5861e8c19477c710b57204da1d47f7d67e81",
+    '```json\n{"repair.patch.v1": {"baseline_sha256": '
+    '"eb06b2035d35185936739733a38e5861e8c19477c710b57204da1d47f7d67e81", '
+    '"patches": [{"op": "replace", "path": "/candidate/checker_specs/0/id", '
+    '"old": "uhi-energy-balance@v1", "new": null}]}}\n```',
+)
+
+
+def _epoch1_envelope(contract: str, baseline: str, pointer: str):
+    from deepreason.llm.repair import RepairDiagnosticEnvelopeV2
+
+    return RepairDiagnosticEnvelopeV2(
+        contract=contract,
+        baseline_sha256=baseline,
+        diagnostics=(
+            {"path": pointer, "code": "extra_forbidden", "message": "recorded"},
+        ),
+        authorized_pointers=(pointer,),
+    )
+
+
+def test_recorded_epoch1_patch_spellings_are_tolerated():
+    """Regression (selfstudy run-40e713b30a147dfc): five repair grants were
+    spent on responses the harness could not read, and the conjecturer seat
+    exhausted its smallest authorized contract holding a correct patch."""
+
+    from deepreason.llm.repair import (
+        RepairPatchV1,
+        parse_one_json_value,
+        tolerant_patch_value,
+    )
+
+    for contract, baseline, raw, op, pointer in _EPOCH1_LOSSLESS_SPELLINGS:
+        envelope = _epoch1_envelope(contract, baseline, pointer)
+        parsed = RepairPatchV1.model_validate(
+            tolerant_patch_value(parse_one_json_value(raw).value, envelope)
+        )
+        assert (parsed.op, parsed.path) == (op, pointer), raw
+        # The pointer the seat named is the pointer it was authorized to name:
+        # the run recorded no off-target patch at all.
+        assert parsed.path in envelope.authorized_pointers
+
+
+def test_recorded_epoch1_substantive_patch_loss_is_still_rejected():
+    """Regression (selfstudy run-40e713b30a147dfc): the one recorded response
+    the harness must NOT read, because doing so would supply a value the model
+    never gave. A fix that swallows this has widened past losslessness."""
+
+    from deepreason.llm.repair import (
+        RepairPatchV1,
+        parse_one_json_value,
+        tolerant_patch_value,
+    )
+
+    contract, baseline, raw = _EPOCH1_SUBSTANTIVE_LOSS
+    envelope = _epoch1_envelope(contract, baseline, "/candidate/checker_specs/0/id")
+    with pytest.raises(ValidationError):
+        RepairPatchV1.model_validate(
+            tolerant_patch_value(parse_one_json_value(raw).value, envelope)
+        )
+
+
+def test_envelope_echoes_are_dropped_only_when_they_match():
+    """An echo is dropped because the harness sent those exact bytes; a value
+    the model authored is never removed, so it still fails validation."""
+
+    from deepreason.llm.repair import RepairPatchV1, tolerant_patch_value
+
+    baseline = "a" * 64
+    envelope = _epoch1_envelope("c.v1", baseline, "/x")
+    patch = {"op": "remove", "path": "/x"}
+
+    echoed = dict(patch, contract="c.v1", baseline_sha256=baseline, schema="repair.patch.v1")
+    assert RepairPatchV1.model_validate(tolerant_patch_value(echoed, envelope)).path == "/x"
+
+    for foreign in (
+        dict(patch, contract="a-different-contract"),
+        dict(patch, baseline_sha256="b" * 64),
+        dict(patch, schema="some.other.schema"),
+    ):
+        with pytest.raises(ValidationError):
+            RepairPatchV1.model_validate(tolerant_patch_value(dict(foreign), envelope))
+
+    # Without an envelope only the self-describing schema literal is an echo.
+    assert tolerant_patch_value(dict(patch, contract="c.v1")) == dict(patch, contract="c.v1")
+
+
+def test_off_target_patch_remains_a_typed_scope_violation():
+    """Widening the transport tolerance must not widen the authorized set: a
+    now-readable patch aimed outside it is still a recorded refusal."""
+
+    from deepreason.llm.repair import (
+        RepairPatchV1,
+        RepairScopeViolation,
+        apply_repair_patch,
+        parse_one_json_value,
+        tolerant_patch_value,
+    )
+
+    envelope = _epoch1_envelope("c.v1", "a" * 64, "/candidate/checker_specs/1/id")
+    raw = (
+        '{"patch": {"operation": "remove", '
+        '"pointer": "/candidate/checker_specs/0/terms"}}'
+    )
+    patch = RepairPatchV1.model_validate(
+        tolerant_patch_value(parse_one_json_value(raw).value, envelope)
+    )
+    assert patch.path == "/candidate/checker_specs/0/terms"
+    baseline = {"candidate": {"checker_specs": [{"terms": ["t"]}, {"id": "x"}]}}
+    with pytest.raises(RepairScopeViolation) as caught:
+        apply_repair_patch(baseline, patch, envelope)
+    assert caught.value.code == "REPAIR_SCOPE_VIOLATION"

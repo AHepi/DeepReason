@@ -70,39 +70,111 @@ class SchemaExhaustedError(SchemaRepairError):
         super().__init__(message, spend=spend)
 
 
-def tolerant_patch_value(value):
-    """Strip one unambiguous transport wrapper from a patch payload.
+# Container names a model has used to wrap the single patch object it was
+# asked for.  None of them is a RepairPatchV1 field and the model forbids
+# extra fields, so a dict whose sole key is one of these can never itself be
+# a valid patch: unwrapping cannot lose information.  Record-driven — every
+# name here appears in a recorded response, none is added speculatively
+# (run-40e713b30a147dfc, epoch 1).
+_PATCH_CONTAINER_KEYS = frozenset(
+    {"repair.patch.v1", "patch", "patches", "operations"}
+)
 
-    Observed live: a fully qualified model answered patch turns with
-    ``{"repair.patch.v1": {...}}`` — the schema name from the prompt used
-    as a wrapper key — sometimes with the patch inside a single-element
-    array.  Both wrappers are lossless and unambiguous, the same tolerance
-    class as narrated code fences.  Anything else (several keys, several
-    elements, nested wrappers beyond one of each) is returned unchanged
-    and fails exact validation as before.
-    """
+# Field names a model has used for RepairPatchV1's own fields.  Renaming is
+# lossless only while the real field is absent, which the caller checks.
+_PATCH_FIELD_SYNONYMS = {"operation": "op", "pointer": "path"}
+
+
+def _unwrap_patch_container(value):
+    """Strip one list-of-one and one known container key, in either order."""
 
     if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict):
         value = value[0]
     if isinstance(value, dict) and len(value) == 1:
         key = next(iter(value))
-        if key == "repair.patch.v1":
+        if key in _PATCH_CONTAINER_KEYS:
             inner = value[key]
             if isinstance(inner, list) and len(inner) == 1 and isinstance(inner[0], dict):
                 inner = inner[0]
             if isinstance(inner, dict):
                 value = inner
-    if (
-        isinstance(value, dict)
-        and "op" not in value
-        and value.get("operation") in {"add", "remove", "replace"}
-    ):
-        # Two distinct models spelled the RFC-6902 field "operation"; the
-        # one-key rename is lossless when "op" is absent and the value is a
-        # legal operation.
-        value = {("op" if key == "operation" else key): item for key, item in value.items()}
     return value
 
+
+def _drop_envelope_echoes(value, envelope):
+    """Remove only bytes the harness itself put in the dispatched envelope.
+
+    Exact equality is the whole safety argument: a key whose value differs
+    from what was sent is the model's own and survives, so a wrong ``schema``
+    literal or a mismatched baseline still fails validation as before.
+    """
+
+    if not isinstance(value, dict):
+        return value
+    echoes = {"schema": "repair.patch.v1"}
+    if envelope is not None:
+        echoes["contract"] = envelope.contract
+        echoes["baseline_sha256"] = envelope.baseline_sha256
+    dropped = {
+        key: item
+        for key, item in value.items()
+        if not (key in echoes and item == echoes[key])
+    }
+    return dropped if len(dropped) != len(value) else value
+
+
+def _rename_patch_field_synonyms(value):
+    """Rename a synonym onto its RepairPatchV1 field when that field is absent."""
+
+    if not isinstance(value, dict):
+        return value
+    renames = {
+        source: target
+        for source, target in _PATCH_FIELD_SYNONYMS.items()
+        if source in value and target not in value
+    }
+    if "operation" in renames and value["operation"] not in {"add", "remove", "replace"}:
+        del renames["operation"]
+    if "pointer" in renames and not (
+        isinstance(value["pointer"], str) and value["pointer"]
+    ):
+        del renames["pointer"]
+    if not renames:
+        return value
+    return {renames.get(key, key): item for key, item in value.items()}
+
+
+def tolerant_patch_value(value, envelope=None):
+    """Strip lossless transport packaging from a patch payload.
+
+    Observed live: models answer patch turns with the patch wrapped in a
+    container key (the schema name from the prompt, or ``patch`` /
+    ``patches`` / ``operations``), sometimes inside a single-element array;
+    with the envelope's own ``contract`` / ``baseline_sha256`` echoed back
+    alongside the patch; and with RFC-6902 fields spelled ``operation`` or
+    ``pointer``.  Each of those is lossless and unambiguous, the same
+    tolerance class as narrated code fences, and each discarded response
+    still consumed one of the contract's finite repair grants — the epoch-1
+    conjecturer seat exhausted itself holding a correct final patch
+    (run-40e713b30a147dfc; experiments/2026-08-22-fix-repair-patch-transport).
+
+    What is NOT absorbed: anything requiring the harness to supply a value
+    the model did not give.  ``{"op": "replace", "old": …, "new": …}`` has no
+    ``value`` and stays a typed rejection, because reading ``new`` as
+    ``value`` would be an inference about intent rather than a rename.
+
+    ``envelope`` is the dispatched :class:`RepairDiagnosticEnvelopeV2`.  Both
+    boundaries that call this must pass the same one, so a patch the session
+    applies is never re-rejected at admission.  Without it the echo rule is
+    inert and every other tolerance is unchanged.
+    """
+
+    value = _unwrap_patch_container(value)
+    value = _drop_envelope_echoes(value, envelope)
+    # The echo drop can leave a lone container key behind, e.g. the recorded
+    # {"contract": …, "operations": [ … ], "schema": …}.
+    value = _unwrap_patch_container(value)
+    return _rename_patch_field_synonyms(value)
 
 
 class RepairPatchV1(BaseModel):
@@ -1440,7 +1512,10 @@ class V6PatchRepairSession:
             return parsed.value
         if not self.invalid_value_parseable or turn.diagnostic_envelope is None:
             raise UnrepairableDiagnosticError("patch turn has no parseable baseline")
-        patch_value = tolerant_patch_value(parse_one_json_value(raw).value)
+        patch_value = tolerant_patch_value(
+            parse_one_json_value(raw).value,
+            turn.diagnostic_envelope,
+        )
         patch = RepairPatchV1.model_validate(patch_value)
         candidate = apply_repair_patch(
             self.invalid_value,

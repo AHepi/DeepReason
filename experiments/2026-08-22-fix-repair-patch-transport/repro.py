@@ -18,6 +18,7 @@ import pathlib
 import sys
 
 from deepreason.llm.repair import (
+    RepairDiagnosticEnvelopeV2,
     RepairPatchV1,
     parse_one_json_value,
     tolerant_patch_value,
@@ -66,7 +67,10 @@ def main() -> int:
     ):
         key = (payload.get("contract_id"), payload.get("repair_index"))
         authorized = tuple(payload.get("authorized_pointers") or ())
-        value = tolerant_patch_value(parse_one_json_value(raw).value)
+        envelope = RepairDiagnosticEnvelopeV2.model_validate_json(
+            _blob(root, payload["diagnostic_ref"]) or "{}"
+        )
+        value = tolerant_patch_value(parse_one_json_value(raw).value, envelope)
         try:
             patch = RepairPatchV1.model_validate(value)
         except (TypeError, ValueError):
