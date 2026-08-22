@@ -1,5 +1,5 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: 981e677e
+Verified-at: 7b82206d
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
 Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
@@ -214,6 +214,17 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
   across 46 roots). Adding the five names would have left two sources; the
   check below fails if a literal set is ever reintroduced.
 `check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); a=[n for n in t.body if isinstance(n,ast.Assign) and any(getattr(x,'id','')=='_STRUCTURAL_PROGRAMS' for x in n.targets)]; raise SystemExit(0 if len(a) == 1 and 'programs_by_class' in ast.unparse(a[0].value) else 1)" && python -m pytest "tests/test_reflexive_discipline.py::test_declared_structural_programs_are_never_substantive" "tests/test_reflexive_discipline.py::test_a_well_formedness_gate_cannot_veto_a_reach_hit" "tests/test_prose_refutation_boundaries.py::test_a_declared_structural_program_confers_no_formal_backing" -q`
+- **`reach_sweep` takes SIX pair-level exits, and the module docstring named
+  three of them.** `E1 no-criteria` and `E4 criterion-fail` went undocumented,
+  and a census over 96 committed roots put 870 166 of 1 178 430 pairs on
+  exactly those two — so every reader who trusted the docstring misattributed
+  the bulk of the corpus
+  (`experiments/2026-08-21-measure-reach-firing/CENSUS.md`; documented
+  2026-08-22 by tranche
+  `experiments/2026-08-22-reach-structural-programs-fix`). The check counts the
+  inner loop's rejection branches against the docstring's labels, so a sixth
+  exit added without documenting it fails.
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/measures/reach.py').read_text()); doc=ast.get_docstring(t); f=next(n for n in t.body if isinstance(n,ast.FunctionDef) and n.name=='reach_sweep'); outer=next(n for n in f.body if isinstance(n,ast.For) and any(isinstance(x,ast.For) for x in n.body)); inner=next(x for x in outer.body if isinstance(x,ast.For)); conts=[n for n in ast.walk(inner) if isinstance(n,ast.Continue)]; labels=['E1 no-criteria','E2 non-qualifying','E3 no-novel','E4 criterion-fail','E5 coverage','HIT full']; raise SystemExit(0 if len(conts) == 4 and all(l in doc for l in labels) else 1)"`
 - **`hv_floor` is deliberately absent from `PROGRAMS`.** It needs the variator,
   and keeping it unregistered is what makes B0 stratification structural: an
   HV battery containing itself would not terminate. `evaluable` returning False
