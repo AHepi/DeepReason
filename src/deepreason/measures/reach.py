@@ -10,20 +10,36 @@ in the Measure event's addr_add so replay applies it.
 Discipline (the Bronze Age postmortem): no reach from an empty, trivial, or
 unguarded battery.
 
-  - QUALIFYING commitments are evaluable AND substantive: structural
-    well-formedness programs (json-wf, skeleton_wf, lineage_ref, checker_wf)
-    qualify anything well-formed and prove nothing about the foreign
-    problem's subject — they never ground reach.
-  - A hit requires passing EVERY qualifying foreign criterion, at least one
-    of which is novel to the artifact's own battery.
-  - COVERAGE: qualifying criteria must cover at least ``coverage_min`` of
-    the foreign problem's total criteria. Below that the hit is PROVISIONAL
-    — logged (reach-provisional) for attention and later re-evaluation, but
-    it grounds no reach count, no addressing, and no explanation debt.
-    Rubric criteria count toward the total but are not machine-evaluated
-    here, so rubric-heavy problems yield provisional hits until their
-    guarded procedures (trials, holdouts, audits) put survivals on the
-    record.
+Each (artifact, foreign problem) pair takes exactly one of SIX exits, and
+``reach_sweep`` takes them in this order. All five rejections are listed
+because a reader who knows only some of them misattributes the rest: a census
+over 96 committed roots put 285 070 of 1 178 430 pairs at E1 and 585 096 at
+E4, the two that went undocumented longest
+(``experiments/2026-08-21-measure-reach-firing/CENSUS.md``).
+
+  - **E1 no-criteria** — the foreign problem declares no criteria at all, so
+    there is nothing to survive. Discovery problems spawn this way.
+  - **E2 non-qualifying** — no criterion is both evaluable AND substantive.
+    QUALIFYING excludes structural well-formedness programs: every program
+    `programs.PROGRAMS` declares ``class_="structural"``, which is where this
+    module reads the set from, qualifies anything well-formed and proves
+    nothing about the foreign problem's subject, so it never grounds reach.
+  - **E3 no-novel** — every qualifying criterion is already in the artifact's
+    own battery. Reach means surviving what it was NOT built for, so at least
+    one qualifying foreign criterion must be novel to it.
+  - **E4 criterion-fail** — some qualifying criterion does not PASS. A hit
+    requires passing EVERY one of them, so this is where a genuine content
+    failure lands, and where a criterion wrongly counted qualifying can veto
+    a pair the rest of the battery had already settled.
+  - **E5 coverage** — qualifying criteria cover less than ``coverage_min`` of
+    the foreign problem's total criteria. The hit is PROVISIONAL: logged
+    (reach-provisional) for attention and later re-evaluation, but it grounds
+    no reach count, no addressing, and no explanation debt. Rubric criteria
+    count toward the total but are not machine-evaluated here, so rubric-heavy
+    problems yield provisional hits until their guarded procedures (trials,
+    holdouts, audits) put survivals on the record.
+  - **HIT full** — everything above is cleared: recorded as a reach count and
+    as addressing.
 
 The event log timestamps what an artifact was built for, so "accounts for
 something it wasn't built for" stays verifiable in the trace.
@@ -33,18 +49,25 @@ from deepreason import programs
 from deepreason.ontology.state import Status
 
 # Structural well-formedness programs: passing them says the CONTENT IS
-# WELL-FORMED, not that it answers the problem — they can never carry reach.
-_STRUCTURAL_PROGRAMS = frozenset(
-    # presupposition_wf/premise_resolution_wf prove an attribution or resolution
-    # is WELL FORMED, never that its claim holds -- structural like the rest, so
-    # passing one grounds no reach and immunises nothing (rules/warrants.py).
-    # frame_assertion_wf is structural for the same reason and one more: an
-    # artifact that could ground reach by being a well-formed frame assertion
-    # would let the standing axis buy its own promotion case.
-    {"json-wf", "skeleton_wf", "lineage_ref", "checker_wf",
-     "presupposition_wf", "premise_resolution_wf",
-     "problem_subject_wf", "premise_attribution_wf", "frame_assertion_wf"}
-)
+# WELL-FORMED, not that it answers the problem -- they can never carry reach.
+#
+# DERIVED, never hand-listed. A second copy of this set drifted five names
+# deep (component_wf, generator_wf, integration_wf, manifest_wf,
+# reasoning-envelope-wf declared themselves structural and were still counted
+# substantive here), so the registry's own declaration is the single source.
+# Every consumer of the class reads the same answer: rules/warrants.py for
+# prose immunity, rules/guards/anti_relapse.py for relapse equivalence.
+#
+# What the class means, program by program, is the reason it is load-bearing
+# rather than clerical. presupposition_wf/premise_resolution_wf prove an
+# attribution or resolution is WELL FORMED, never that its claim holds.
+# frame_assertion_wf is structural for that reason and one more: an artifact
+# that could ground reach by being a well-formed frame assertion would let the
+# standing axis buy its own promotion case. reasoning-envelope-wf is the seed
+# problem's own envelope gate, so counting it substantive let a well-formedness
+# check decide -- in either direction -- a reach outcome the subject criteria
+# had already settled.
+_STRUCTURAL_PROGRAMS = frozenset(programs.programs_by_class()["structural"])
 
 
 def _substantive(commitment) -> bool:

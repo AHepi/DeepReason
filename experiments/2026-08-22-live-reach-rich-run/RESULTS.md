@@ -91,3 +91,27 @@ against `origin/main` shows changes only under
 `experiments/2026-08-22-live-reach-rich-run/`. No map document moved, so no
 `docs_verify` run is owed. No threshold, program list, or criterion
 classification was changed anywhere.
+
+---
+
+## 2026-08-22 (appended by the P1 fix tranche) — the rehearsal was re-run in place
+
+`experiments/2026-08-22-reach-structural-programs-fix` landed P1-reach, so
+`rehearsal.py`'s `wf_structural` parameter — which simulated the fix by
+rebinding `measures/reach.py::_STRUCTURAL_PROGRAMS` in-process — and its two
+call sites are DELETED, and every scenario now runs against the shipped module
+constant. `rehearsal.json` is regenerated in place.
+
+The pre-fix results this tranche's narrative above describes are preserved
+verbatim at
+`experiments/2026-08-22-reach-structural-programs-fix/rehearsal-as-shipped.json`
+(and in git at `29b0d9638`). The decisive delta: **S8a moved from
+`E4 criterion-fail` / 0 reach events to `HIT full` / 1**, and is now identical
+to S8b on every recorded field but its label; **S8c stayed
+`E4 criterion-fail` / 0**, so the control still holds. S2 also moved to
+`HIT full`, which this tranche's prediction did not name — recorded as
+P5-reach in the fix tranche's PARKED.md.
+
+`PREREG.md` §4's PRECONDITION-BLOCKED outcome is therefore discharged: the
+precondition is cleared. Nothing else about this tranche's verdict changes,
+and nothing live has still been run.

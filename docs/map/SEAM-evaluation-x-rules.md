@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-rules -->
-Verified-at: 461cf287
+Verified-at: 7b82206d
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/measures/reach.py, src/deepreason/programs.py, src/deepreason/informal/trial.py
 Sides: DR-SUB-evaluation, DR-SUB-rules
@@ -241,22 +241,36 @@ out.
 
 ## Traps
 
-- **The registry's "structural" and the seam's "structural" are two different
-  sets, and they currently disagree on five programs.** `ProgramSpec.class_ ==
-  "structural"` covers nine names; `_STRUCTURAL_PROGRAMS` covers four. So
-  `component_wf`, `generator_wf`, `integration_wf`, `manifest_wf` and
-  `reasoning-envelope-wf` are structural to the anti-relapse gate (they
-  establish no equivalence) and SUBSTANTIVE to `formally_backed` (a passing one
-  confers prose immunity). The set was written on 2026-07-10 (`aea0b9a0`); the
+- **The registry's "structural" and the seam's "structural" WERE two different
+  sets, disagreeing on five programs. Fixed 2026-08-22; they are now one set.**
+  `_STRUCTURAL_PROGRAMS` was hand-written on 2026-07-10 (`aea0b9a0`); the
   chunked-website programs landed on 2026-07-11 (`1634b35f`) and were never
-  added to it, and its comment still names only the original four.
-  **Residue: this is a code-reading finding at the predicate level, not an
-  observed live failure** — no recorded root has been shown to carry a passing
-  `manifest_wf` that then defeated a prose case, and whether these five *should*
-  be structural for backing is an operator's call, not an implementer's. The
-  check below asserts the divergence as it stands today, so closing the gap
-  fails it and forces this paragraph to be rewritten.
-`check: python -c "from deepreason.programs import programs_by_class; from deepreason.measures.reach import _STRUCTURAL_PROGRAMS, _substantive; from deepreason.ontology import Commitment; reg=set(programs_by_class()['structural']); assert _STRUCTURAL_PROGRAMS < reg; gap=sorted(reg-_STRUCTURAL_PROGRAMS); assert gap==['component_wf','generator_wf','integration_wf','manifest_wf','reasoning-envelope-wf'], gap; assert all(_substantive(Commitment(id='k', eval='program:'+p)) for p in gap)"`
+  added, so `component_wf`, `generator_wf`, `integration_wf`, `manifest_wf` and
+  `reasoning-envelope-wf` were structural to the anti-relapse gate (they
+  establish no equivalence) and SUBSTANTIVE to `formally_backed` (a passing one
+  conferred prose immunity) and to `reach_sweep`. Tranche
+  `experiments/2026-08-22-reach-structural-programs-fix` closed the gap by
+  DERIVING the set from `ProgramSpec.class_` rather than adding the five names,
+  so there is no longer a second set to disagree with.
+  Both residues this entry recorded are discharged, and neither by an
+  implementer's judgement:
+  **(1)** "whether these five *should* be structural for backing is an
+  operator's call" — the operator made it, in that tranche's brief: "make
+  measures/reach.py::_substantive agree with the structural class that
+  programs.PROGRAMS already declares, so a well-formedness gate can never
+  ground reach or confer prose immunity."
+  **(2)** "not an observed live failure" — it was measured rather than left
+  open. On the prose-immunity side it never fired:
+  `experiments/2026-08-21-measure-reach-firing/probe_immunity.json` puts
+  `backed_only_by_declared_structural` at 0 over 3 528 candidate artifacts, so
+  no root's adjudication moved. On the REACH side it was load-bearing in the
+  opposite direction — a qualifying criterion must PASS, and
+  `reasoning-envelope-wf` fails on prose, so it vetoed hits rather than
+  manufacturing them: `experiments/2026-08-22-live-reach-rich-run/rehearsal.json`
+  S8a/S8b/S8c, and 793 gate pairs across 46 roots in that tranche's `CENSUS.md`.
+  The check below is inverted from asserting the divergence to asserting the
+  agreement, so the entry cannot rot back to the old claim unnoticed.
+`check: python -c "from deepreason.programs import programs_by_class; from deepreason.measures.reach import _STRUCTURAL_PROGRAMS, _substantive; from deepreason.ontology import Commitment; reg=set(programs_by_class()['structural']); assert reg == set(_STRUCTURAL_PROGRAMS), sorted(reg ^ set(_STRUCTURAL_PROGRAMS)); assert {'component_wf','generator_wf','integration_wf','manifest_wf','reasoning-envelope-wf'} <= reg; assert not any(_substantive(Commitment(id='k', eval='program:'+p)) for p in reg)"`
 - **Assuming the guard is on the side you are editing.** The prose-immunity
   guard is in `informal/trial.py`, not in `rules/crit.py`, because the two
   answer different questions — one decides what CHANGES A STATUS, the other what
