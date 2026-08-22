@@ -1,0 +1,1252 @@
+[
+  {
+    "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+    "log_lines": 600,
+    "opened": true,
+    "open_seconds": 2.75,
+    "nodes": 42,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 42
+    }
+  },
+  {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "log_lines": 1297,
+    "opened": true,
+    "open_seconds": 3.64,
+    "nodes": 117,
+    "att": 1,
+    "dep": 87,
+    "status": {
+      "accepted": 116,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+    "log_lines": 1099,
+    "opened": true,
+    "open_seconds": 3.54,
+    "nodes": 100,
+    "att": 0,
+    "dep": 115,
+    "status": {
+      "accepted": 100
+    }
+  },
+  {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "log_lines": 786,
+    "opened": true,
+    "open_seconds": 2.56,
+    "nodes": 71,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 71
+    }
+  },
+  {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "log_lines": 388,
+    "opened": true,
+    "open_seconds": 1.42,
+    "nodes": 38,
+    "att": 0,
+    "dep": 64,
+    "status": {
+      "accepted": 38
+    }
+  },
+  {
+    "root": "experiments/2026-08-05-testphase-live-validation/home-testphase/runs/run-a518e33a75507207633f864ba6a864b1",
+    "log_lines": 518,
+    "opened": true,
+    "open_seconds": 1.99,
+    "nodes": 45,
+    "att": 0,
+    "dep": 25,
+    "status": {
+      "accepted": 45
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "log_lines": 1381,
+    "opened": true,
+    "open_seconds": 4.29,
+    "nodes": 100,
+    "att": 1,
+    "dep": 63,
+    "status": {
+      "accepted": 99,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+    "log_lines": 1198,
+    "opened": true,
+    "open_seconds": 4.22,
+    "nodes": 97,
+    "att": 2,
+    "dep": 175,
+    "status": {
+      "accepted": 95,
+      "refuted": 2
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+    "log_lines": 1079,
+    "opened": true,
+    "open_seconds": 3.87,
+    "nodes": 85,
+    "att": 2,
+    "dep": 120,
+    "status": {
+      "accepted": 83,
+      "refuted": 2
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+    "log_lines": 1245,
+    "opened": true,
+    "open_seconds": 3.79,
+    "nodes": 91,
+    "att": 0,
+    "dep": 133,
+    "status": {
+      "accepted": 91
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "log_lines": 1261,
+    "opened": true,
+    "open_seconds": 3.97,
+    "nodes": 95,
+    "att": 0,
+    "dep": 79,
+    "status": {
+      "accepted": 95
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+    "log_lines": 1760,
+    "opened": true,
+    "open_seconds": 4.31,
+    "nodes": 116,
+    "att": 1,
+    "dep": 180,
+    "status": {
+      "accepted": 115,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+    "log_lines": 1549,
+    "opened": true,
+    "open_seconds": 5.09,
+    "nodes": 100,
+    "att": 0,
+    "dep": 111,
+    "status": {
+      "accepted": 100
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "log_lines": 1369,
+    "opened": true,
+    "open_seconds": 4.27,
+    "nodes": 113,
+    "att": 3,
+    "dep": 135,
+    "status": {
+      "accepted": 110,
+      "refuted": 3
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "log_lines": 1294,
+    "opened": true,
+    "open_seconds": 4.58,
+    "nodes": 94,
+    "att": 1,
+    "dep": 150,
+    "status": {
+      "accepted": 93,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "log_lines": 1576,
+    "opened": true,
+    "open_seconds": 4.38,
+    "nodes": 94,
+    "att": 1,
+    "dep": 66,
+    "status": {
+      "accepted": 93,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+    "log_lines": 1179,
+    "opened": true,
+    "open_seconds": 3.39,
+    "nodes": 95,
+    "att": 0,
+    "dep": 25,
+    "status": {
+      "accepted": 95
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "log_lines": 1979,
+    "opened": true,
+    "open_seconds": 5.25,
+    "nodes": 177,
+    "att": 0,
+    "dep": 140,
+    "status": {
+      "accepted": 177
+    }
+  },
+  {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "log_lines": 1045,
+    "opened": true,
+    "open_seconds": 2.8,
+    "nodes": 102,
+    "att": 0,
+    "dep": 140,
+    "status": {
+      "accepted": 102
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7",
+    "log_lines": 34,
+    "opened": true,
+    "open_seconds": 0.15,
+    "nodes": 27,
+    "att": 0,
+    "dep": 39,
+    "status": {
+      "accepted": 27
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-o/runs/run-6bca5a31141b3f0ea6140501146f5646",
+    "log_lines": 2129,
+    "opened": true,
+    "open_seconds": 5.36,
+    "nodes": 145,
+    "att": 0,
+    "dep": 190,
+    "status": {
+      "accepted": 145
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-change-hard-question-set/pilot-tier-v/runs/run-7906485ce1cfc314a653c185cbf61d75",
+    "log_lines": 1517,
+    "opened": true,
+    "open_seconds": 4.21,
+    "nodes": 107,
+    "att": 1,
+    "dep": 90,
+    "status": {
+      "accepted": 106,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-0321107a895b02654cb44044aa2cf68d",
+    "log_lines": 622,
+    "opened": true,
+    "open_seconds": 1.69,
+    "nodes": 53,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 53
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-050dd9ed53fdd1a30a0cec59f50d5baa",
+    "log_lines": 1943,
+    "opened": true,
+    "open_seconds": 4.71,
+    "nodes": 141,
+    "att": 1,
+    "dep": 180,
+    "status": {
+      "accepted": 140,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-341a3a3e618715f7023e822cdff510f2",
+    "log_lines": 1699,
+    "opened": true,
+    "open_seconds": 4.69,
+    "nodes": 142,
+    "att": 0,
+    "dep": 50,
+    "status": {
+      "accepted": 142
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+    "log_lines": 1573,
+    "opened": true,
+    "open_seconds": 4.88,
+    "nodes": 131,
+    "att": 0,
+    "dep": 135,
+    "status": {
+      "accepted": 131
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+    "log_lines": 1578,
+    "opened": true,
+    "open_seconds": 4.15,
+    "nodes": 135,
+    "att": 0,
+    "dep": 45,
+    "status": {
+      "accepted": 135
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+    "log_lines": 67,
+    "opened": true,
+    "open_seconds": 0.4,
+    "nodes": 8,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 8
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-944946f53dee4b636672677a0a534469",
+    "log_lines": 1769,
+    "opened": true,
+    "open_seconds": 5.06,
+    "nodes": 131,
+    "att": 0,
+    "dep": 65,
+    "status": {
+      "accepted": 131
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a200f0c471f1225d9379d502e249976e",
+    "log_lines": 601,
+    "opened": true,
+    "open_seconds": 1.74,
+    "nodes": 56,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 56
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-a529cbb6b02be078a09592449fadc502",
+    "log_lines": 1687,
+    "opened": true,
+    "open_seconds": 4.75,
+    "nodes": 134,
+    "att": 0,
+    "dep": 70,
+    "status": {
+      "accepted": 134
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+    "log_lines": 1784,
+    "opened": true,
+    "open_seconds": 4.77,
+    "nodes": 146,
+    "att": 0,
+    "dep": 50,
+    "status": {
+      "accepted": 146
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-b7514714c3310b6f805f466ff39915be",
+    "log_lines": 562,
+    "opened": true,
+    "open_seconds": 1.7,
+    "nodes": 54,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 54
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-bf30545893db661ec4d3c8da3a3f7f65",
+    "log_lines": 1815,
+    "opened": true,
+    "open_seconds": 5.85,
+    "nodes": 142,
+    "att": 0,
+    "dep": 140,
+    "status": {
+      "accepted": 142
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c52837bd8f673cea80c20db89758ea80",
+    "log_lines": 2102,
+    "opened": true,
+    "open_seconds": 5.52,
+    "nodes": 150,
+    "att": 1,
+    "dep": 165,
+    "status": {
+      "accepted": 149,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+    "log_lines": 180,
+    "opened": true,
+    "open_seconds": 0.92,
+    "nodes": 24,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 24
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+    "log_lines": 609,
+    "opened": true,
+    "open_seconds": 1.69,
+    "nodes": 58,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 58
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-cross/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+    "log_lines": 1634,
+    "opened": true,
+    "open_seconds": 4.92,
+    "nodes": 135,
+    "att": 1,
+    "dep": 135,
+    "status": {
+      "accepted": 134,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-0321107a895b02654cb44044aa2cf68d",
+    "log_lines": 264,
+    "opened": true,
+    "open_seconds": 1.14,
+    "nodes": 18,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 18
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-4faa222fd2fb014e56c7005107f84ad3",
+    "log_lines": 515,
+    "opened": true,
+    "open_seconds": 2.46,
+    "nodes": 58,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 58
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6927465d9ac5bfae2aa06dbb983aebea",
+    "log_lines": 1390,
+    "opened": true,
+    "open_seconds": 3.57,
+    "nodes": 113,
+    "att": 1,
+    "dep": 50,
+    "status": {
+      "accepted": 112,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+    "log_lines": 591,
+    "opened": true,
+    "open_seconds": 1.55,
+    "nodes": 56,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 56
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-944946f53dee4b636672677a0a534469",
+    "log_lines": 970,
+    "opened": true,
+    "open_seconds": 3.41,
+    "nodes": 79,
+    "att": 0,
+    "dep": 32,
+    "status": {
+      "accepted": 79
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-a200f0c471f1225d9379d502e249976e",
+    "log_lines": 388,
+    "opened": true,
+    "open_seconds": 1.44,
+    "nodes": 36,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 36
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b74e71aa434dd8b09a6451d23fd83c7a",
+    "log_lines": 1237,
+    "opened": true,
+    "open_seconds": 3.96,
+    "nodes": 101,
+    "att": 0,
+    "dep": 60,
+    "status": {
+      "accepted": 101
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-b7514714c3310b6f805f466ff39915be",
+    "log_lines": 399,
+    "opened": true,
+    "open_seconds": 1.47,
+    "nodes": 36,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 36
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c52837bd8f673cea80c20db89758ea80",
+    "log_lines": 1108,
+    "opened": true,
+    "open_seconds": 3.92,
+    "nodes": 78,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 78
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+    "log_lines": 492,
+    "opened": true,
+    "open_seconds": 1.45,
+    "nodes": 49,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 49
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-d04b1ded7e35b8a2d6dc0336554f0e33",
+    "log_lines": 352,
+    "opened": true,
+    "open_seconds": 1.31,
+    "nodes": 31,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 31
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-a-criticism-symmetry/home-self/runs/run-ec7f3cdd63e1c39951be34d17e482e9a",
+    "log_lines": 1628,
+    "opened": true,
+    "open_seconds": 4.79,
+    "nodes": 131,
+    "att": 2,
+    "dep": 90,
+    "status": {
+      "accepted": 129,
+      "refuted": 2
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-168a41157d05ca53431f268fba264b4c",
+    "log_lines": 231,
+    "opened": true,
+    "open_seconds": 1.12,
+    "nodes": 23,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 23
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-649323b4f264ac6b69fb87736d40fb27",
+    "log_lines": 155,
+    "opened": true,
+    "open_seconds": 0.95,
+    "nodes": 15,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 15
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-7f93a0955557fa490e1b1ead01ed459e",
+    "log_lines": 276,
+    "opened": true,
+    "open_seconds": 1.11,
+    "nodes": 28,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 28
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-89d6f536c4daeee986e44a68042afded",
+    "log_lines": 206,
+    "opened": true,
+    "open_seconds": 0.98,
+    "nodes": 18,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 18
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-97623b8fecfdf79fdace40e46cb7ac0c",
+    "log_lines": 220,
+    "opened": true,
+    "open_seconds": 0.99,
+    "nodes": 17,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 17
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-a277abb13327846e13fb3124c1804aa8",
+    "log_lines": 322,
+    "opened": true,
+    "open_seconds": 1.42,
+    "nodes": 28,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 28
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-b212590cf2957821796b560163e1941e",
+    "log_lines": 283,
+    "opened": true,
+    "open_seconds": 1.15,
+    "nodes": 25,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 25
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-d63e92d295084b9d303eec6f76e1a34e",
+    "log_lines": 136,
+    "opened": true,
+    "open_seconds": 0.87,
+    "nodes": 13,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 13
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-db8194b08518dd3afc2b78c533170ab3",
+    "log_lines": 212,
+    "opened": true,
+    "open_seconds": 1.02,
+    "nodes": 16,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 16
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-b-capability-stochasticity/home-b/runs/run-ecf3ce54012a3df4eef08d0cdb772f41",
+    "log_lines": 313,
+    "opened": true,
+    "open_seconds": 1.14,
+    "nodes": 35,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 35
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-6ffa0a9e06186d5e5d2bb19ad68d25d2",
+    "log_lines": 410,
+    "opened": true,
+    "open_seconds": 1.42,
+    "nodes": 36,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 36
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-16384/runs/run-c6f6a743c5f6f2b49db7acf5edb8fb43",
+    "log_lines": 592,
+    "opened": true,
+    "open_seconds": 1.59,
+    "nodes": 55,
+    "att": 0,
+    "dep": 20,
+    "status": {
+      "accepted": 55
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-370ab72342ecd4a23ebaf983d0828598",
+    "log_lines": 493,
+    "opened": true,
+    "open_seconds": 1.35,
+    "nodes": 50,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 50
+    }
+  },
+  {
+    "root": "experiments/2026-08-09-overnight-omnibus/block-c-completion-cap-curve/home-4096/runs/run-f5aee6107cb0de151e72bf282c86d166",
+    "log_lines": 68,
+    "opened": true,
+    "open_seconds": 0.56,
+    "nodes": 4,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 4
+    }
+  },
+  {
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+    "log_lines": 12991,
+    "opened": true,
+    "open_seconds": 39.47,
+    "nodes": 304,
+    "att": 16,
+    "dep": 807,
+    "status": {
+      "accepted": 287,
+      "refuted": 16,
+      "suspended_unsupported": 1
+    }
+  },
+  {
+    "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+    "log_lines": 64,
+    "opened": true,
+    "open_seconds": 0.32,
+    "nodes": 22,
+    "att": 0,
+    "dep": 6,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+    "log_lines": 79,
+    "opened": true,
+    "open_seconds": 0.4,
+    "nodes": 22,
+    "att": 0,
+    "dep": 6,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+    "log_lines": 114,
+    "opened": true,
+    "open_seconds": 0.67,
+    "nodes": 22,
+    "att": 0,
+    "dep": 6,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/observe_only",
+    "log_lines": 441,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.04
+  },
+  {
+    "root": "experiments/bronze_feedback_v1_superseded_2026-07-14/trial_required",
+    "log_lines": 427,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+    "log_lines": 648,
+    "opened": true,
+    "open_seconds": 0.39,
+    "nodes": 34,
+    "att": 11,
+    "dep": 0,
+    "status": {
+      "accepted": 23,
+      "refuted": 11
+    }
+  },
+  {
+    "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+    "log_lines": 1591,
+    "opened": true,
+    "open_seconds": 1.16,
+    "nodes": 15,
+    "att": 4,
+    "dep": 10,
+    "status": {
+      "accepted": 11,
+      "refuted": 4
+    }
+  },
+  {
+    "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b",
+    "log_lines": 565,
+    "opened": true,
+    "open_seconds": 0.24,
+    "nodes": 25,
+    "att": 8,
+    "dep": 3,
+    "status": {
+      "accepted": 17,
+      "refuted": 8
+    }
+  },
+  {
+    "root": "experiments/bronze_pilot_2026-07-14",
+    "log_lines": 75,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/bronze_repertoire_v2_2026-07-14/deepseek-v4-pro",
+    "log_lines": 304,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/bronze_repertoire_v2_2026-07-14/gpt-oss_120b",
+    "log_lines": 512,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/bronze_repertoire_v2_2026-07-14/kimi-k2_6",
+    "log_lines": 327,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.04
+  },
+  {
+    "root": "experiments/bronze_repertoire_v2_2026-07-14/qwen3_5_397b",
+    "log_lines": 370,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/gemma4_dna_unattended_2026-07-12",
+    "log_lines": 186,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+    "log_lines": 103,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 1 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/glm_judge_2026-07-14",
+    "log_lines": 721,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 2 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.04
+  },
+  {
+    "root": "experiments/jolt_architecture_2026-07-16/run",
+    "log_lines": 224,
+    "opened": false,
+    "error": "UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted",
+    "open_seconds": 0.0
+  },
+  {
+    "root": "experiments/live_coin_canonicity_2026-07-31/home/runs/run-c5f901f38208e862f4ce2fe60a26e551",
+    "log_lines": 364,
+    "opened": true,
+    "open_seconds": 1.75,
+    "nodes": 29,
+    "att": 0,
+    "dep": 2,
+    "status": {
+      "accepted": 29
+    }
+  },
+  {
+    "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+    "log_lines": 49,
+    "opened": true,
+    "open_seconds": 0.08,
+    "nodes": 28,
+    "att": 1,
+    "dep": 0,
+    "status": {
+      "accepted": 27,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+    "log_lines": 820,
+    "opened": true,
+    "open_seconds": 2.37,
+    "nodes": 69,
+    "att": 1,
+    "dep": 30,
+    "status": {
+      "accepted": 68,
+      "refuted": 1
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+    "log_lines": 1155,
+    "opened": true,
+    "open_seconds": 4.75,
+    "nodes": 70,
+    "att": 0,
+    "dep": 63,
+    "status": {
+      "accepted": 70
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+    "log_lines": 561,
+    "opened": true,
+    "open_seconds": 2.11,
+    "nodes": 46,
+    "att": 0,
+    "dep": 4,
+    "status": {
+      "accepted": 46
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+    "log_lines": 280,
+    "opened": true,
+    "open_seconds": 1.23,
+    "nodes": 22,
+    "att": 0,
+    "dep": 2,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+    "log_lines": 188,
+    "opened": true,
+    "open_seconds": 0.97,
+    "nodes": 22,
+    "att": 0,
+    "dep": 2,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+    "log_lines": 499,
+    "opened": true,
+    "open_seconds": 1.89,
+    "nodes": 42,
+    "att": 0,
+    "dep": 3,
+    "status": {
+      "accepted": 42
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+    "log_lines": 285,
+    "opened": true,
+    "open_seconds": 1.39,
+    "nodes": 22,
+    "att": 0,
+    "dep": 2,
+    "status": {
+      "accepted": 22
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "log_lines": 550,
+    "opened": true,
+    "open_seconds": 1.71,
+    "nodes": 47,
+    "att": 0,
+    "dep": 3,
+    "status": {
+      "accepted": 47
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+    "log_lines": 294,
+    "opened": true,
+    "open_seconds": 1.24,
+    "nodes": 20,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 20
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+    "log_lines": 468,
+    "opened": true,
+    "open_seconds": 2.27,
+    "nodes": 32,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 32
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+    "log_lines": 754,
+    "opened": true,
+    "open_seconds": 2.87,
+    "nodes": 79,
+    "att": 0,
+    "dep": 249,
+    "status": {
+      "accepted": 79
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+    "log_lines": 594,
+    "opened": true,
+    "open_seconds": 2.34,
+    "nodes": 59,
+    "att": 0,
+    "dep": 129,
+    "status": {
+      "accepted": 59
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+    "log_lines": 406,
+    "opened": true,
+    "open_seconds": 1.52,
+    "nodes": 53,
+    "att": 0,
+    "dep": 158,
+    "status": {
+      "accepted": 53
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+    "log_lines": 161,
+    "opened": true,
+    "open_seconds": 0.44,
+    "nodes": 34,
+    "att": 0,
+    "dep": 68,
+    "status": {
+      "accepted": 34
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+    "log_lines": 486,
+    "opened": true,
+    "open_seconds": 2.18,
+    "nodes": 43,
+    "att": 0,
+    "dep": 5,
+    "status": {
+      "accepted": 43
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+    "log_lines": 276,
+    "opened": true,
+    "open_seconds": 1.09,
+    "nodes": 30,
+    "att": 0,
+    "dep": 1,
+    "status": {
+      "accepted": 30
+    }
+  },
+  {
+    "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+    "log_lines": 300,
+    "opened": true,
+    "open_seconds": 1.46,
+    "nodes": 20,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 20
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+    "log_lines": 985,
+    "opened": true,
+    "open_seconds": 3.4,
+    "nodes": 73,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 73
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+    "log_lines": 607,
+    "opened": true,
+    "open_seconds": 2.04,
+    "nodes": 39,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 39
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+    "log_lines": 373,
+    "opened": true,
+    "open_seconds": 1.69,
+    "nodes": 27,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 27
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "log_lines": 1202,
+    "opened": true,
+    "open_seconds": 3.22,
+    "nodes": 96,
+    "att": 0,
+    "dep": 30,
+    "status": {
+      "accepted": 96
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+    "log_lines": 508,
+    "opened": true,
+    "open_seconds": 1.83,
+    "nodes": 37,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 37
+    }
+  },
+  {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "log_lines": 581,
+    "opened": true,
+    "open_seconds": 1.97,
+    "nodes": 47,
+    "att": 0,
+    "dep": 0,
+    "status": {
+      "accepted": 47
+    }
+  }
+]
