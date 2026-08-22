@@ -1,0 +1,325 @@
+[
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": 1.0,
+    "exit": "E3 no-novel",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "ra:/succ: spawn with criteria=parent.criteria (rules/spawn.py:104,140)",
+    "novel": [],
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S1 same-criteria (seed vs ra:)",
+    "verdicts": {
+      "reasoning-envelope-wf": "pass",
+      "uhi-energy-balance@r1": "pass"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [],
+    "coverage": 1.0,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "home_criteria": [],
+    "note": "conn:/integ: artifacts are prose (conj.py:1462); wf rejects prose",
+    "novel": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S2 prose artifact vs wf-carrying seed",
+    "verdicts": {
+      "reasoning-envelope-wf": "fail",
+      "uhi-energy-balance@r1": "pass"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": 1.0,
+    "exit": "HIT full",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-nocturnal-release@r1"
+    ],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "the reach-rich shape: novel substantive criterion, survivable",
+    "novel": [
+      "uhi-nocturnal-release@r1"
+    ],
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-nocturnal-release@r1"
+    ],
+    "reach_sweep_hits": [
+      [
+        "b597323bafe96d912c5cc3be4b4c85dc6b5c8474864662e35bcc7a243b8853d7",
+        "foreign"
+      ]
+    ],
+    "recorded_reach_events": 1,
+    "scenario": "S3 two seeds, different subject criteria",
+    "verdicts": {
+      "reasoning-envelope-wf": "pass",
+      "uhi-nocturnal-release@r1": "pass"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": 1.0,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-absent-subject@r1"
+    ],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "control: a subject predicate the artifact does not satisfy must NOT hit",
+    "novel": [
+      "uhi-absent-subject@r1"
+    ],
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-absent-subject@r1"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S4 two seeds, foreign criterion unsatisfied",
+    "verdicts": {
+      "reasoning-envelope-wf": "pass",
+      "uhi-absent-subject@r1": "fail"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": 1.0,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "relation-form@578e42df713e"
+    ],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "integ: coverage is 1/1; relation-form is a FORM gate (PARKED P2)",
+    "novel": [
+      "relation-form@578e42df713e"
+    ],
+    "qualifying": [
+      "relation-form@578e42df713e"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S5 envelope vs integ: [relation-form]",
+    "verdicts": {
+      "relation-form@578e42df713e": "fail"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": 0.3333333333333333,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "conn: coverage is 1/3 -> provisional at best, never a full hit",
+    "novel": [
+      "relation-form@578e42df713e"
+    ],
+    "qualifying": [
+      "relation-form@578e42df713e"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S6 envelope vs conn: [hv,lineage,relation-form]",
+    "verdicts": {
+      "relation-form@578e42df713e": "fail"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "coverage": 1.0,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "home_criteria": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "note": "as shipped: wf qualifies and rejects prose",
+    "novel": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "qualifying": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S8a prose conn: candidate vs seed (as shipped)",
+    "verdicts": {
+      "reasoning-envelope-wf": "fail",
+      "uhi-energy-balance@r1": "pass",
+      "uhi-nocturnal-release@r1": "pass"
+    },
+    "wf_treated_structural": false
+  },
+  {
+    "carried": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "coverage": 0.6666666666666666,
+    "exit": "HIT full",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "home_criteria": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "note": "P1 applied: qualifying = the subject predicates only, coverage 2/4",
+    "novel": [
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "qualifying": [
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "reach_sweep_hits": [
+      [
+        "80cfa7ee42a3fbf6ca3874406baa38cd8f910096e42ff83c3bd1acd6bdbb24e0",
+        "foreign"
+      ]
+    ],
+    "recorded_reach_events": 1,
+    "scenario": "S8b prose conn: candidate vs seed (P1 applied)",
+    "verdicts": {
+      "uhi-energy-balance@r1": "pass",
+      "uhi-nocturnal-release@r1": "pass"
+    },
+    "wf_treated_structural": true
+  },
+  {
+    "carried": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "coverage": 0.6666666666666666,
+    "exit": "E4 criterion-fail",
+    "foreign_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "home_criteria": [
+      "hv-floor@2a45b7988522",
+      "lineage-ref@5adb8c3d4260",
+      "relation-form@578e42df713e"
+    ],
+    "note": "control: an on-form but off-SUBJECT relation must still not hit",
+    "novel": [
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "qualifying": [
+      "uhi-energy-balance@r1",
+      "uhi-nocturnal-release@r1"
+    ],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S8c prose OFF-subject candidate vs seed (P1 applied)",
+    "verdicts": {
+      "uhi-energy-balance@r1": "fail",
+      "uhi-nocturnal-release@r1": "fail"
+    },
+    "wf_treated_structural": true
+  },
+  {
+    "carried": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "coverage": null,
+    "exit": "E1 no-criteria",
+    "foreign_criteria": [],
+    "home_criteria": [
+      "reasoning-envelope-wf",
+      "uhi-energy-balance@r1"
+    ],
+    "note": "disc: spawns with no criteria (rules/spawn.py:73-81)",
+    "novel": [],
+    "qualifying": [],
+    "reach_sweep_hits": [],
+    "recorded_reach_events": 0,
+    "scenario": "S7 envelope vs disc: []",
+    "verdicts": {},
+    "wf_treated_structural": false
+  }
+]
