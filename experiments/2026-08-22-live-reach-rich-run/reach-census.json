@@ -1,0 +1,39 @@
+{
+  "opens": true,
+  "recorded": {
+    "_full_hit_pairs": 0,
+    "events": 580,
+    "measures": 72
+  },
+  "rederived": {
+    "A-skip/status": 1,
+    "A-skip/unaddr": 36,
+    "E1 no-criteria": 1863,
+    "E4 criterion-fail": 529,
+    "_E4 first-nonpass:fail": 529,
+    "_crit_kinds": {
+      "structural:lineage_ref": 23,
+      "structural:reasoning-envelope-wf": 1,
+      "substantive-predicate": 26,
+      "unknown-program:hv_floor": 23
+    },
+    "_gate_coverage": {
+      "0.33": 529
+    },
+    "_qualifying_vocab": {
+      "relation-form@578e42df713e": {
+        "eval": "predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contr",
+        "gate_pairs": 529
+      }
+    },
+    "addr_pairs": 24,
+    "artifacts_candidate": 23,
+    "artifacts_total": 60,
+    "commitments_registered": 108,
+    "gate/coverage-caps-at-provisional": 529,
+    "pairs": 2392,
+    "problems_total": 105,
+    "reached-verdict-gate": 529
+  },
+  "root": "/home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run"
+}

@@ -24,3 +24,25 @@ wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/preflight
 [2026-08-22T14:15:18Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-22T14:18:15Z] QUALIFY OK rc=0
 [2026-08-22T14:18:15Z] === REASON: deepreason run --budget cycles=24 --token-budget 400000 ===
+[2026-08-22T14:27:54Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.log and /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reason.stderr.log (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-22T14:27:54Z] === AUDIT: verify_root + findings + the reach census ===
+root                         /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/run
+recorded reach_set events    0
+recorded addr pairs          0
+recorded reach-provisional   0
+  A-skip/status                      1
+  A-skip/unaddr                      36
+  E1 no-criteria                     1863
+  E4 criterion-fail                  529
+  addr_pairs                         24
+  artifacts_candidate                23
+  artifacts_total                    60
+  commitments_registered             108
+  gate/coverage-caps-at-provisional  529
+  pairs                              2392
+  problems_total                     105
+  reached-verdict-gate               529
+
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reach-census.json
+[2026-08-22T14:28:25Z] REACH CENSUS: zero reach_set events -- judge per PREREG.md §4 (UNSUPPORTED vs PRECONDITION-BLOCKED)
+[2026-08-22T14:28:25Z] === DONE: see /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/{reason.log,verify_root.json,reach-census.json,findings.json} ===

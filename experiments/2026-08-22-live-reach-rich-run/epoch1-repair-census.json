@@ -1,0 +1,43 @@
+{
+  "attempts_with_repair_diagnostic": 17,
+  "attempts_with_zero_completion_tokens": 0,
+  "diagnostic_codes": {
+    "extra_forbidden": 2,
+    "string_pattern_mismatch": 2,
+    "value_error": 5
+  },
+  "off_target_repairs": [
+    {
+      "attempt_index": 3,
+      "authorized_pointers": [
+        "/scratch_proposal/unresolved_questions/1/related_refs"
+      ],
+      "completion_tokens": 40,
+      "contract_id": "conjecturer.turn.v6",
+      "patched_paths": [
+        "/scratch_proposal/unresolved_questions/0/related_refs"
+      ],
+      "role": "conjecturer"
+    },
+    {
+      "attempt_index": 4,
+      "authorized_pointers": [
+        "/candidate/checker_specs/1/id"
+      ],
+      "completion_tokens": 23,
+      "contract_id": "conjecturer.atomic-candidate.v1",
+      "patched_paths": [
+        "/candidate/checker_specs/0/terms"
+      ],
+      "role": "conjecturer"
+    }
+  ],
+  "provider_attempts": 41,
+  "provider_attempts_by_role_contract": {
+    "argumentative_critic::batch-critic.v2": 22,
+    "argumentative_critic::critic.atomic-target.v1": 2,
+    "conjecturer::conjecturer.atomic-candidate.v1": 8,
+    "conjecturer::conjecturer.turn.v6": 9
+  },
+  "root": "failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c"
+}
