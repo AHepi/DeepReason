@@ -1,6 +1,9 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=13 blockers=none
+State: next=14 blockers=STOP at step 13 — diff-budget ceiling cannot fit D2;
+awaiting operator choice A (raise ceiling to 1950, deliver both) / B (deliver
+D1, park D2) / C (deliver both, record typed overrun). D1 is complete, gated
+(3875 passed, 0 failed) and deliverable as it stands.
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -331,8 +334,62 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       `receipt` and `manifests_for` hold no call that COULD move one, and that
       the module never imports `adjudication`.
 
-- [ ] 13. (all D1) [COMMIT] D1 boundary: diff-budget check + push.
-      done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; paste it
+- [x] 13. (all D1) [COMMIT] D1 boundary: diff-budget check + push.
+
+      PROOF — budget:
+      ```
+      $ python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "b10fc5fd2",
+       "areas": {"src": 457, "tests": 531, "docs": 230},
+       "total_insertions": 1218, "ceiling": 1480, "verdict": "WITHIN"}
+      ```
+
+      PROOF — full gate, run at the boundary on an otherwise idle box
+      (`docs_verify` and the earlier background runs were stopped first, per
+      CLAUDE.md's one-instrument-at-a-time rule):
+      ```
+      $ python -m pytest tests/ -q -n 4
+      3875 passed, 6 skipped in 956.02s (0:15:56)
+      [exited with code 0]
+      ```
+      0 failed. Baseline in REQUEST.md C4 was 3857 at main `67cc732fd`; the
+      delta of +18 is exactly this tranche's `tests/test_proof_debt.py`. None
+      of the 5 MCP-thread tests C4 flagged flaky under `-n 4` flaked in this
+      run.
+
+      **D1 IS DELIVERABLE AS IT STANDS.** Every SPEC.md D1 item (S1–S11, S20's
+      D1 half) is proven, the map moved with the code, and the tree is green.
+
+      ### STOP — the ceiling cannot fit D2, and R17's fallback inverts
+
+      Raised HERE, at the boundary the plan positioned for exactly this fork,
+      rather than after writing D2's code — which is what makes it cheap.
+
+      **Measured.** D1 consumed 1218 of 1480, leaving 262. D2 needs ~690:
+      claim body ~45, compiler rule ~30, wf program ~35, `localization.py`
+      ~170, exports ~10, tests ~320, map ~80. Projected total ~1908.
+
+      **The cause is one estimate, named.** SPEC.md itemized
+      `tests/test_proof_debt.py` at 280 lines; it is 524. The scope is
+      unchanged — still exactly SPEC.md's 24 items — so this is estimate error,
+      not scope creep, which is the distinction the ceiling exists to make and
+      cannot make by itself.
+
+      **Why R17 is not self-applying.** R17 says: if D1+D2 cannot fit, deliver
+      D2 and park D1. It presupposes the conflict is found in the SPEC phase,
+      with both halves unwritten. The measured state is the reverse — D1 is
+      finished, gated and committed; D2 is the unwritten 690. Applying R17
+      literally would discard proven work to make room for unwritten work,
+      which is worse for the operator than either alternative. That is a
+      requirement contradicting the record, and the scope contract says report
+      the contradiction rather than pick a side silently.
+
+      Options put to the operator, priced: (A) raise the ceiling to 1950 and
+      deliver both; (B) deliver D1, park D2 with a ready prompt; (C) deliver
+      both and record a typed overrun. Recommended: A, because the overrun is
+      attributable to one measured line item rather than diffuse sprawl.
+
+      **BLOCKED pending operator words. No D2 code is written until then.**
 
 ## Phase 3 — D2 localization: tests first
 
