@@ -573,3 +573,138 @@ def test_b14_b15_generation_seat_bindings_never_supply_a_criticism_seat(
     # generation binding cannot populate it.
     assert resolve_criticism_seats(environ=environ) == {}
     assert not criticism.exists()
+
+
+# --- natural-stop: recorded, never consumed ---------------------------------
+#
+# Q7's split-budget finding (docs/RESEARCH_FINDINGS_Q1Q10_2026-08-22.md) hands
+# the harness a free ~99% PPV correctness oracle: a completion that ends on its
+# own is very likely right. The two-call seat protocol tranche RECORDS it and
+# stops there, because acting on it would make a seat's generation behaviour
+# decide what counts as evidence — exactly what the seats/evidence law forbids.
+# The operator's own words for the scope: "Recorded, not acted on — no gate or
+# label may consume it (seats/evidence law)." These two tests are what make
+# that a mechanism rather than an intention.
+
+
+def test_natural_stop_is_recorded_and_never_consumed():
+    """Implements R7: no gate or label may consume LLMAttempt.natural_stop.
+
+    A reference census, not a behavioural probe, because the claim is a
+    NEGATIVE over the whole engine: the only way to show nothing consumes a
+    field is to show nothing but its writers can even name it. Anchored to the
+    module that owns the record and the package allowed to write it, so a
+    rename inside those files keeps the test green and a new reader anywhere
+    else turns it red.
+    """
+
+    import pathlib
+
+    root = pathlib.Path(__file__).resolve().parents[1] / "src" / "deepreason"
+    allowed = {
+        # Owns the record shape.
+        root / "ontology" / "event.py",
+        # The only package that speaks to a provider, and therefore the only
+        # one that can observe a finish reason at all.
+        root / "llm" / "adapter.py",
+        root / "llm" / "split.py",
+    }
+    readers = {
+        path
+        for path in root.rglob("*.py")
+        if "natural_stop" in path.read_text(encoding="utf-8")
+    }
+    assert readers <= allowed, sorted(str(p) for p in readers - allowed)
+
+    # The census would be vacuous if the name never appeared at all: pin that
+    # the writer side really does carry it, so deleting the field cannot make
+    # this test pass.
+    from deepreason.ontology.event import LLMAttempt
+
+    assert "natural_stop" in LLMAttempt.model_fields
+    assert LLMAttempt(prompt_ref="blob:p").natural_stop is None
+
+
+def test_flipping_natural_stop_moves_no_typed_outcome(tmp_path, monkeypatch):
+    """Implements R7: the field is inert in replay, not merely unread.
+
+    The census above proves no module names the field. This proves the
+    stronger property the law actually cares about: two runs identical except
+    for natural_stop replay to the same state and the same verify_root
+    verdict, so the signal cannot leak into a status, a label or a violation
+    through any path a census could miss.
+    """
+
+    from deepreason.invariants import verify_root
+    from deepreason.llm.firewall import route_fingerprint
+    from deepreason.ontology.event import LLMAttempt, LLMCall
+    from deepreason.run_manifest import persist_run_manifest
+    from tests.test_process_metadata import (
+        _manifest as _process_manifest,
+        _patch_legacy_manifest_consumers,
+    )
+
+    def _root(name: str, natural_stop: bool | None):
+        root = tmp_path / name
+        endpoint = MockEndpoint([], name="mock://natural-stop", model="model-1")
+        manifest = _process_manifest(endpoint)
+        persist_run_manifest(manifest, root)
+        _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
+        route = manifest.roles["conjecturer"][0]
+        harness = Harness(root)
+        prompt_ref = harness.blobs.put(b"natural stop prompt")
+        raw_ref = harness.blobs.put(b"{}")
+        harness.record_measure(
+            inputs=["natural-stop-test"],
+            llm=LLMCall(
+                role="conjecturer",
+                model=route.model_id,
+                endpoint=route.base_url,
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                attempt_trace=[LLMAttempt(
+                    prompt_ref=prompt_ref,
+                    raw_ref=raw_ref,
+                    contract_id="conjecturer.direct.v1",
+                    endpoint_id=route.endpoint_id,
+                    route_sha256=route_fingerprint(route),
+                    model_profile=manifest.model_profile,
+                    transport_profile=manifest.model_profile,
+                    max_tokens=route.max_tokens,
+                    timeout_s=route.timeout_s,
+                    valid=True,
+                    output_mechanism=route.output_mechanism,
+                    natural_stop=natural_stop,
+                )],
+            ),
+        )
+        return root, harness
+
+    stopped_root, stopped = _root("stopped", True)
+    truncated_root, truncated = _root("truncated", False)
+
+    # The applied view is the thing every status and label is computed from.
+    assert stopped.state.model_dump_json() == truncated.state.model_dump_json()
+
+    # And the replay verdict, which is what a run is judged by.
+    def _verdict(root):
+        report = verify_root(root)
+        return (
+            sorted(v["check"] for v in report["violations"]),
+            json.dumps(report["stats"], sort_keys=True),
+        )
+
+    assert _verdict(stopped_root) == _verdict(truncated_root)
+
+    # Mutation guard: the two roots must genuinely differ in the field, or the
+    # equalities above are comparing a run against itself.
+    def _stops(harness):
+        return [
+            attempt.natural_stop
+            for event in harness.recent_events(1000)
+            if getattr(event, "llm", None) is not None
+            for attempt in event.llm.attempt_trace
+        ]
+
+    assert _stops(stopped) == [True]
+    assert _stops(truncated) == [False]

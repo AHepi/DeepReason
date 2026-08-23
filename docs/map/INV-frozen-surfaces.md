@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: 6a033fa2
+Verified-at: 23bb8bf66
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -143,6 +143,27 @@ until the map's falsification pass flagged it (see
 
 `check: grep -q "def route_fingerprint" src/deepreason/llm/firewall.py`
 
+**Granted contact, 2026-08-23 — the split-budget knobs in the source-config
+echo.** The two-call seat protocol tranche added two `Config` fields and the
+full gate went red in 40 places: the qualification subject digest moved, and
+with it 22 frozen manifest wire-byte goldens and the shipped-digest pin. The
+grant was requested with `tools/blast_radius.py`'s own `DIRECT` contact verdict
+pasted and the fix already measured, and the operator gave it in those terms
+("Insertions only, 11 and 0 ... Its effect is to PRESERVE digests, not move
+them").
+
+What moved: two `data.pop("SPLIT_BUDGET_*", None)` lines in
+`_versioned_source_config_data`, joining the eight knobs already there.
+**Insertions only — 11 and 0** — and no schema, validator or Pydantic model was
+touched. Additive is provable rather than asserted here: the qualification
+subject digest over a committed fixture returns to
+`b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386`, which is
+byte-identical to the value the tranche base produces, so this contact makes
+the surface MORE stable rather than less. Ledgered at
+`experiments/2026-08-22-change-two-call-seat-protocol/REQUEST.md` Amendment 2.
+
+`check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && test "$(grep -c 'data.pop(\"SPLIT_BUDGET_' src/deepreason/run_manifest.py)" -eq 2`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the
@@ -161,8 +182,23 @@ governing the proposing side only.
 `check: grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/config.py`
 `check: ! grep -q "ARGUMENTATIVE_AUTHORITY" src/deepreason/run_manifest.py`
 
-A `Config` value costs nothing to add and is invisible to replay. A manifest
-field is permanent.
+A `Config` value is invisible to replay, and a manifest field is permanent, so
+`Config` is the right home for a new per-run mode. But the older form of this
+sentence — "a `Config` value costs nothing to add" — is true only WITH ONE STEP
+that sentence did not mention, and this is the correction: `Config` is
+serialized into every manifest's `engine_config_json` and hashed into its
+`source_config_hash`, both of which the qualification subject embeds. A new
+field therefore moves every qualification subject digest and every frozen
+manifest golden UNLESS it is dropped in
+`run_manifest.py::_versioned_source_config_data`, which is what that function
+exists for and what its eight prior entries did. Measured 2026-08-22 by the
+two-call seat protocol tranche: without the drop, the subject digest over a
+committed fixture moved from `b9038b84efdea313...` to `a5d81e5d34f51635...` and
+the full gate went red in 40 places; with it, byte-identical and green. Add the
+mode to `Config`, and add its key here in the same commit. See `docs/ERRATA.md`
+E44.
+
+`check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && grep -q 'data.pop("SPLIT_BUDGET_SEAT_PROTOCOL", None)' src/deepreason/run_manifest.py`
 
 ## The instruments that prove you did not break anything
 

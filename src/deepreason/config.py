@@ -602,6 +602,17 @@ class Config(BaseModel):
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2
+    # The split-budget seat protocol (llm/split.py): deliberate at B_r, then
+    # serialize at B_a. A per-run mode lives here rather than on the manifest
+    # because a Config value is invisible to replay and moves no qualification
+    # subject digest, while a manifest field is permanent.
+    # "auto" splits exactly the seats whose ROUTE says they think -- the
+    # presentation profile tunes rendering and transport and says nothing about
+    # reasoning, so the neutral knob and its provider realization are the test.
+    SPLIT_BUDGET_SEAT_PROTOCOL: Literal["auto", "on", "off"] = "auto"
+    # Q7: emission saturates around 256-512 tokens, so spending more on it only
+    # takes budget away from the leg that needs it.
+    SPLIT_BUDGET_EXTRACTION_TOKENS: int = Field(default=512, gt=0)
     roles: dict[
         str,
         dict[str, Any] | list[dict[str, Any]] | None,

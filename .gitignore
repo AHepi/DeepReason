@@ -39,10 +39,17 @@ experiments/2026-08-04-change-rung5-dumb-alternative-backend/qualify.err
 experiments/2026-08-04-change-rung5-dumb-alternative-backend/*-reason.err
 experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab_driver.log
 
-
 # Subagent git worktrees. Created by Workflow isolation: 'worktree' and removed
 # when the agent finishes; committing one would commit a second checkout of the
 # repository into itself.
 .claude/worktrees/
 .docs_verify_cache.json
 experiments/*/env
+
+# Large experiment outputs (keep manifests, but ignore transient runs)
+experiments/*/home/
+experiments/*/.deepreason/
+experiments/*/qualification-cache/
+
+# Build and wheel outputs
+*.whl
