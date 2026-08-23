@@ -546,7 +546,28 @@ dr-change-orchestrator's stop condition on exceeding the spec's budget. The
 ceiling this replaces is 523 lines; nothing in the plan may grow past it
 without a further amendment here.
 
-Commits: 8+ (one per phase boundary). Tranche ledger documents
+**Budget amendment 2 (2026-08-23, at launch) — the snapshot loop.**
+SPEC.md S7 requires the snapshot loop to be armed and CHECKLIST.md step 16
+makes it a done-criterion, but neither item priced a FILE for it: the
+estimate assumed the reach-rich tranche's `snapshot_loop.sh` could be reused
+by path, as `preflight_seed.py` and the census shim are. It cannot — that
+script hard-codes its own `TRANCHE_REL` and `BRANCH`, so pointing it at this
+tranche would commit the wrong directory to the wrong branch.
+
+    $ wc -l snapshot_loop.sh
+    35
+    $ python3 -c "print(523 + 35)"
+    558
+
+The ceiling moves 523 -> 558. The 35 lines are not a copy: the reach-rich
+loop exits on `pgrep -f <driver-name>`, which dr-drive-harness §5b warns can
+match the watcher's own command line; this one takes the driver's PID and
+asks the kernel with `kill -0`, which no substring can fool. The explicit
+`git reset -- <tranche>/env` guard is carried over deliberately — the env
+file is already gitignored, and a credential leak is not a risk worth
+trusting to one glob pattern.
+
+Commits: 9+ (one per phase boundary). Tranche ledger documents
 (REQUEST/SPEC/CHECKLIST/PREREG_EPOCH3/VALIDATION/DELIVERY/RESULTS/PARKED)
 are the workflow's own record and are excluded from this ceiling, as they
 are in every tranche. Frozen surfaces touched: none (CLEAR).
