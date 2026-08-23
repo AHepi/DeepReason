@@ -167,3 +167,52 @@ tests/` proves it at every phase boundary. A defect found mid-run is PARKED
 with a ready-to-send prompt, never fixed here. No pytest gate is owed for an
 untouched tree; `tools/docs_verify.py` runs because the tranche commits, not
 because a map document moved — none does.
+
+
+---
+
+# PREREG AMENDMENT 1 — 2026-08-23, after attempt 2
+
+Sections 1-6 above are FROZEN and are not rewritten. This amendment records
+what changed, on whose authority, and what it predicts — appended, so the
+original registration and the revision can both be read.
+
+**Authority.** REQUEST.md Amendment 2 / R17, the operator's answer to a fork
+put after attempt 2's typed failure: *"Single phase, full 400k, cycles=4
+(recommended)"*.
+
+**What changes against §4.** The budget is no longer split. Epoch 3 runs as
+ONE phase, `--budget cycles=4 --token-budget 400000`. The registered bound of
+400 000 tokens is unchanged; only its division is. The amendment step and
+phase 2 are DISABLED for this attempt (`SECOND_LINEAGE=0`), so the second
+problem lineage is deferred and R1 is not delivered by this run.
+
+**What does NOT change.** The question, the three subject predicates, the
+solo glm-5.2 configuration, the manifest (`bb0455384ea09b5b…`, still with
+attached evidence enabled so a later amendment remains possible), the
+supplement and its control, and every judgement label in §5.
+
+**Registered prediction, made before launch.** The measured burn rate
+(165 466 tokens across 56 calls, ~2 955 per call, cycle 0 not finished)
+predicts that 400 000 tokens buy roughly 124 calls — on the order of two
+cycles, not four. The token budget is therefore expected to bind before the
+cycle budget, which under P5-epoch3 yields `operational_failure` rather than
+`budget_exhausted`. The run is expected to be UNRESUMABLE. This is
+registered rather than discovered so that outcome cannot later be presented
+as a surprise.
+
+**What the prediction does not threaten.** §5's SUCCESS is a typed terminal,
+`verify_root` with no violations, and `reach_set > 0`. None requires a
+resumable stop reason. If the run produces an accepted artifact addressed to
+a spawned problem and that artifact passes the seed's three predicates, the
+hypothesis is exercised whatever the stop reason.
+
+**The label to watch.** If the run again dies before any accepted artifact is
+addressed to a non-seed problem, the outcome is TRUNCATED-BEFORE-CARRIER for
+the second time, and the honest reading shifts: twice is no longer an
+accident of one budget, and the question becomes whether this question and
+configuration can reach the carrier at all inside any bound the operator
+wants to spend. That judgement is the operator's and is not pre-empted here.
+
+**AMEND-BLOCKED** remains defined in §5 and simply does not apply to this
+attempt: the amendment is not attempted, so it cannot be blocked.

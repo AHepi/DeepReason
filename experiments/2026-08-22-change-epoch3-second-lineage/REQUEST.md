@@ -233,3 +233,61 @@ file. The same message asked for it and it has not appeared at
 first guard exits rc=1 without it (C3: "THE OPERATOR SUPPLIES the
 OLLAMA_API_KEY env file at the launch step"), so CHECKLIST.md step 15
 remains the tranche's blocker.
+
+
+### Amendment 2 — 2026-08-23, the budget fork answered after attempt 2
+
+Asked after attempt 2 terminated typed at cycle 0 with `WorkBudgetDenied`,
+and after RESULTS.md established the arithmetic: 165 466 logged tokens in
+56 calls against a 200 000 phase-1 budget, with the 57th reservation
+(~35 700) unable to fit the remaining 34 534.
+
+The question put to the operator, verbatim as asked:
+
+> Phase 1 needs more tokens than the frozen 200,000 split allows. One
+> partial cycle cost 165k. How should epoch 3 proceed?
+>
+> - Single phase, full 400k, cycles=4 (recommended): Drop the second
+>   lineage for now. Spend the whole frozen 400,000 bound on one phase with
+>   a small cycle budget it can actually finish, so the run reaches
+>   'budget_exhausted' via CYCLES — a resumable terminal. Tests the reach
+>   hypothesis (measured: a surviving single-seed run does produce
+>   foreign-problem carriers) and leaves a root that CAN be amended later.
+> - Raise the bound to ~2M tokens, keep 12+12: Keep the two-phase design as
+>   frozen but give it fuel matched to the measured burn rate. Delivers the
+>   second lineage in one go. Costs roughly 5x the registered bound — your
+>   call, since R9 froze it at 400,000.
+> - Fix P5-epoch3 first, then relaunch: Route the budget/lifecycle finding
+>   through the defect workflow: a token-exhausted run should probably stop
+>   resumably instead of being denied. Delays evidence, but makes
+>   token-budgeted runs amendable for every future tranche, not just this
+>   one.
+
+The operator's answer, verbatim:
+
+> "Single phase, full 400k, cycles=4 (recommended)"
+
+R17 (behavior): epoch 3 runs as a SINGLE phase — `--budget cycles=4
+--token-budget 400000`. The registered bound of 400 000 is unchanged and is
+no longer split. The second lineage is DEFERRED: the ladder does not amend
+in this attempt, and R1 is therefore not delivered by it. R16's
+authorization of the two-phase ladder is superseded for execution purposes
+by this answer; the amendment vehicle itself is unchanged and still the one
+SPEC.md M1/M7 established.
+
+R17a (recorded honestly, not silently absorbed): the option text reasons
+that four cycles will be reached and the run will stop `budget_exhausted`
+via CYCLES, leaving an amendable root. This tranche's own measurement
+predicts otherwise and says so before launching rather than after. Tokens
+are charged on ACTUAL usage (165 466 across 56 calls, ~2 955 per call), so
+400 000 buys roughly 2.2x the work attempt 2 managed — on the order of 124
+calls — while cycle 0 alone consumed at least 56. Four cycles are therefore
+unlikely to fit, and the token budget is likely to bind first, which under
+P5-epoch3 means `operational_failure` rather than `budget_exhausted`.
+
+That prediction does NOT put the tranche's success criterion at risk. PREREG
+SUCCESS is a typed terminal, `verify_root` clean, and `reach_set > 0`; none
+of the three requires resumability. Resumability matters only for the
+deferred second lineage, which this answer defers anyway. The operator's
+instruction is executed as given, with the expected terminal registered in
+advance.

@@ -32,12 +32,21 @@ fi
 LOG="$HERE/driver.log"
 SUPPLEMENT="$HERE/supplement-nocturnal-collapse.md"
 
-# PREREG_EPOCH3.md: the reach-rich tranche's frozen 24 cycles / 400 000
-# tokens, SPLIT across the two phases rather than added to.
-PHASE1_CYCLES="${PHASE1_CYCLES:-12}"
-PHASE1_TOKENS="${PHASE1_TOKENS:-200000}"
+# PREREG AMENDMENT 1 (operator R17, 2026-08-23): ONE phase, the whole frozen
+# 400 000-token bound, no longer split. Attempt 2 died at cycle 0 with
+# WorkBudgetDenied because reserve_dispatch books the full 32 768 completion
+# cap up front and the 57th reservation could not fit the 34 534 left of a
+# 200 000 budget (RESULTS.md, attempt-2 segment).
+#
+# SECOND_LINEAGE=0 defers the amendment: the operator's answer was "drop the
+# second lineage for now". The manifest still enables attached evidence, so a
+# later tranche can amend this root if it ends resumably. Set SECOND_LINEAGE=1
+# to re-enable the two-phase shape without editing this file.
+PHASE1_CYCLES="${PHASE1_CYCLES:-4}"
+PHASE1_TOKENS="${PHASE1_TOKENS:-400000}"
 PHASE2_CYCLES="${PHASE2_CYCLES:-12}"
 PHASE2_TOKENS="${PHASE2_TOKENS:-200000}"
+SECOND_LINEAGE="${SECOND_LINEAGE:-0}"
 
 SIBLING_QUESTION="Why does the night-time warmth gap between a large city and its surrounding countryside collapse on a windy or overcast night, and what single mechanism best explains why some cities lose that gap at lower wind speeds than others?"
 
@@ -132,7 +141,7 @@ else
   exit "$rc"
 fi
 
-log "=== PHASE 1: run --budget cycles=$PHASE1_CYCLES --token-budget $PHASE1_TOKENS ==="
+log "=== REASON: run --budget cycles=$PHASE1_CYCLES --token-budget $PHASE1_TOKENS (single phase, R17) ==="
 if python -m deepreason --root "$ROOT" run \
     --run-manifest "$ROOT/run-manifest.json" \
     --problem "$ROOT/problem.json" \
@@ -159,7 +168,9 @@ print(json.loads(p.read_text())['reason'] if p.exists() else 'NO_STOP_RECORD')
 log "PHASE 1 stop_reason=$STOP_REASON"
 
 AMENDED=0
-if [ "$STOP_REASON" = "converged" ] || [ "$STOP_REASON" = "budget_exhausted" ]; then
+if [ "$SECOND_LINEAGE" != "1" ]; then
+  log "AMEND DEFERRED: SECOND_LINEAGE=0 (operator R17) -- this attempt runs one phase and does not add the second lineage"
+elif [ "$STOP_REASON" = "converged" ] || [ "$STOP_REASON" = "budget_exhausted" ]; then
   log "=== AMEND: second seed lineage (attach supplement + reshape question) ==="
   if python -m deepreason --root "$ROOT" amend \
       --attach "$SUPPLEMENT" \
@@ -174,6 +185,7 @@ if [ "$STOP_REASON" = "converged" ] || [ "$STOP_REASON" = "budget_exhausted" ]; 
 else
   log "AMEND SKIPPED: stop_reason '$STOP_REASON' does not authorize continuation (workflow/lifecycle.py:28) -- phase 2 cannot run"
 fi
+log "AMENDABLE-LATER: stop_reason=$STOP_REASON -- a resumable reason (converged|budget_exhausted) means a follow-up tranche can still add the second lineage to this root"
 
 if [ "$AMENDED" = "1" ]; then
   log "=== PHASE 2: continue --budget cycles=$PHASE2_CYCLES --token-budget $PHASE2_TOKENS ==="
