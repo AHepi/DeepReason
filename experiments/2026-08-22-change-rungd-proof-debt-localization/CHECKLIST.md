@@ -1,6 +1,13 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=3 blockers=none
+State: next=4 blockers=none
+BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
+`tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
+(20 tests, richer than planned). Running total after step 2 is 714/1480. If
+D2's tests land at the same ratio the tranche will EXCEED, which is what the
+D1 boundary at step 13 is positioned to catch — R17's fork fires there, and
+the answer is to park, not to raise the ceiling.
+
 Diff-budget base AMENDED 2026-08-23: origin/main was merged into this branch
 (merge commit `b10fc5fd2`, bringing the two-call seat-protocol tranche, llm/ only,
 no conflicts). The ceiling is measured from `b10fc5fd2`, NOT from `e1ea05e82`,
@@ -86,9 +93,18 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
 
 ## Phase 2 — D1 code, with its map, in the same commits
 
-- [ ] 3. (S1) Add `DerivationManifestV1` + `KernelCheckV1` to
+- [x] 3. (S1) Add `DerivationManifestV1` + `KernelCheckV1` to
       `calculus/claims.py`; extend `_IMPLEMENTED`. `CLAIM_SCHEMAS` unchanged.
-      done-when: `python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS)==9 and 'poietic.derivation-manifest.v1' in _IMPLEMENTED; print('ok')"` -> ok
+      done-when: `python -c "..."` -> ok
+
+      PROOF:
+      ```
+      $ python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS)==9 and 'poietic.derivation-manifest.v1' in _IMPLEMENTED; print('ok')"
+      ok
+      ```
+      `KernelCheckV1` is a `_Part`, not a `_Body`: it carries no `schema` name
+      and `decode` cannot reach it, so a body's internal part can never widen
+      the closed set.
 
 - [ ] 4. (S2) Add the `DerivationManifestV1` rule to `calculus/compiler.py`:
       `DEPENDENCE` per open certificate, `MENTION` on the subject.

@@ -34,14 +34,16 @@ CLAIM_SCHEMAS: tuple[str, ...] = (
 )
 
 PROBLEM_SUBJECT_V1 = "poietic.problem-subject.v1"
+DERIVATION_MANIFEST_V1 = "poietic.derivation-manifest.v1"
 PREMISE_ATTRIBUTION_V1 = "poietic.premise-attribution.v1"
 FRAME_ASSERTION_V1 = "poietic.frame-assertion.v1"
 
-# The three with a producer. The rest are declared above and refused below,
+# The names with a producer. The rest are declared above and refused below,
 # with their names on the record so a reader sees the intended shape of the
 # substrate rather than only the built part of it.
 _IMPLEMENTED: tuple[str, ...] = (
     PROBLEM_SUBJECT_V1, PREMISE_ATTRIBUTION_V1, FRAME_ASSERTION_V1,
+    DERIVATION_MANIFEST_V1,
 )
 
 
@@ -57,6 +59,30 @@ class ClaimDecodeError(ValueError):
 
 class _Body(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class _Part(BaseModel):
+    """A body's internal part. Not a claim: it carries no `schema` name and
+    cannot be decoded on its own, so it never widens the closed set."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class KernelCheckV1(_Part):
+    """One deterministic check a judgment rests on, and where to re-run it.
+
+    `recorded_verdict` is what the judgment's author observed. It is kept for
+    the record and is NEVER what a reader is told: `proof_debt.receipt` re-runs
+    `program` against `target_ref` and reports the current verdict, because a
+    recorded verdict that has stopped being true is the failure mode the whole
+    receipt exists to catch. An empty `program` means the check is not
+    re-runnable here, and the receipt says so rather than silently trusting it.
+    """
+
+    name: str
+    program: str = ""
+    target_ref: str = ""
+    recorded_verdict: str = ""
 
 
 class ProblemSubjectV1(_Body):
@@ -146,10 +172,46 @@ class FrameAssertionV1(_Body):
         return self
 
 
+class DerivationManifestV1(_Body):
+    """The itemized bill a derived judgment rests on (E-1).
+
+    Three kinds, and they differ in what a critic can DO about them, which is
+    why they are three fields and not one list. `kernel_checks` are re-derived,
+    so arguing with one means changing its input. `open_certificate_refs` are
+    registered artifacts the judgment leans on but has not proved -- the
+    compiler makes each a DEPENDENCE, which is what puts them inside
+    `edges.py`'s evidence lineage and makes them the attackable half.
+    `axiom_debt` names what is assumed and left unproved; an axiom has no
+    attack surface by construction, so naming it IS the deliverable.
+
+    The subject is a MENTION, never a dependence: a manifest that fell with its
+    own subject would be unreadable at exactly the moment someone wanted the
+    bill of materials.
+    """
+
+    schema_: Literal["poietic.derivation-manifest.v1"] = Field(
+        default=DERIVATION_MANIFEST_V1, alias="schema"
+    )
+    subject_ref: str
+    kernel_checks: list[KernelCheckV1] = Field(default_factory=list)
+    open_certificate_refs: list[str] = Field(default_factory=list)
+    axiom_debt: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _the_subject_is_not_its_own_certificate(self):
+        """A certificate that IS the subject is a dependence on the subject
+        under another name, which is what the mention law forbids here for the
+        same reason it forbids it for a frame assertion."""
+        if self.subject_ref in self.open_certificate_refs:
+            raise ValueError("an open certificate may not be the subject itself")
+        return self
+
+
 _MODELS: dict[str, type[_Body]] = {
     PROBLEM_SUBJECT_V1: ProblemSubjectV1,
     PREMISE_ATTRIBUTION_V1: PremiseAttributionV1,
     FRAME_ASSERTION_V1: FrameAssertionV1,
+    DERIVATION_MANIFEST_V1: DerivationManifestV1,
 }
 
 
