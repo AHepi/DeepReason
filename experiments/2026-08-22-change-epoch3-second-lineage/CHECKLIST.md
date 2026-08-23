@@ -1,5 +1,5 @@
 # Checklist for: "reach epoch 3 — put a SECOND problem lineage in the root, then launch"
-State: next=16 blockers=QO1 ANSWERED (two-phase ladder authorised, R16); still waiting on the OLLAMA_API_KEY env file at this tranche dir
+State: next=16 blockers=the OLLAMA_API_KEY VALUE is absent from this container - no env file, no environment variable, nothing in the resume message. Cannot be recreated; must be supplied.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -379,3 +379,43 @@ The credential is NOT supplied:
 So the step is marked `[~]`, not `[x]`. The ladder's first guard exits rc=1
 on a missing `env`, and nothing past this point may run. Step 16 begins the
 moment the file exists; no other work is outstanding.
+
+### Step 15 (continued) — resumed session 2026-08-23, re-rehearsed, still blocked on the key
+
+The container did NOT roll back: `git log --oneline -1` is `9da5b8964`, this
+tranche's own last commit, and `git rev-parse HEAD
+origin/claude/epoch3-second-lineage-907gie` agree. Nothing was merged or
+rebased onto `main`; the design launches against the base it was frozen on.
+
+Re-installed and re-warmed on the fresh container, then re-rehearsed the
+whole ladder offline to prove the instrument still runs here:
+
+    $ DRY_RUN=1 ./epoch3_run.sh          -> rc=0
+    [2026-08-23T10:10:59Z] SETUP OK rc=0
+      "manifest_sha256": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    [2026-08-23T10:11:00Z] PREFLIGHT OK rc=0
+    [2026-08-23T10:11:01Z] SUPPLEMENT PREFLIGHT OK rc=0
+    [2026-08-23T10:11:01Z] DRY RUN: stopping before qualify -- no provider call
+                           made, rehearsal root removed, rc=0
+    $ deepreason embedder-warmup
+    ready in 57.7s -- nomic-ai/nomic-embed-text-v1.5, sentinel d6e3599ce0377000
+
+Same manifest sha as the frozen design, both preflights green, no leftovers.
+
+**The credential is still absent, and this session cannot manufacture it.**
+The resume message says the operator supplies it and instructs "recreate it
+where the ladder expects it", but a key is a secret VALUE, not a derivable
+one — CLAUDE.md's "recreate it from the operator's handover" presupposes the
+handover carries the value, and this one does not. Searched, all negative:
+
+    $ env | grep -ic OLLAMA                          -> 0
+    $ ls -la experiments/*/env                       -> no env file under experiments/
+    $ ls -la /home/user/*.env /home/user/env ~/.ollama -> no key file in home
+    $ find /home/user /run/secrets /etc/secrets -maxdepth 3 \
+        \( -name "*.env" -o -name env -o -name "*secret*" \) -> (nothing)
+    $ grep -rl OLLAMA_API_KEY /home/user             -> only source, config and
+                                                        docs referencing the
+                                                        variable NAME
+
+Step 16 runs the moment `experiments/2026-08-22-change-epoch3-second-lineage/env`
+exists carrying `OLLAMA_API_KEY=<value>`. Nothing else is outstanding.
