@@ -32,3 +32,5 @@ passing the seed's subject predicates: none
 control holds (not all three pass): True
 [2026-08-23T18:35:41Z] SUPPLEMENT PREFLIGHT OK rc=0
 [2026-08-23T18:35:41Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-23T18:37:57Z] QUALIFY OK rc=0
+[2026-08-23T18:37:57Z] === REASON: run --budget cycles=4 --token-budget 400000 (single phase, R17) ===
