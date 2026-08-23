@@ -9,6 +9,7 @@ itself by being a well-formed claim.
 from __future__ import annotations
 
 from deepreason.calculus.claims import (
+    DERIVATION_MANIFEST_V1,
     FRAME_ASSERTION_V1,
     PREMISE_ATTRIBUTION_V1,
     PROBLEM_SUBJECT_V1,
@@ -21,6 +22,7 @@ from deepreason.ontology import Commitment
 PROBLEM_SUBJECT_WF = "problem_subject_wf"
 PREMISE_ATTRIBUTION_WF = "premise_attribution_wf"
 FRAME_ASSERTION_WF = "frame_assertion_wf"
+DERIVATION_MANIFEST_WF = "derivation_manifest_wf"
 
 PROBLEM_SUBJECT_COMMITMENT = Commitment(
     id="claim:problem-subject-wf@v1", eval=f"program:{PROBLEM_SUBJECT_WF}"
@@ -30,6 +32,9 @@ PREMISE_ATTRIBUTION_COMMITMENT = Commitment(
 )
 FRAME_ASSERTION_COMMITMENT = Commitment(
     id="claim:frame-assertion-wf@v1", eval=f"program:{FRAME_ASSERTION_WF}"
+)
+DERIVATION_MANIFEST_COMMITMENT = Commitment(
+    id="claim:derivation-manifest-wf@v1", eval=f"program:{DERIVATION_MANIFEST_WF}"
 )
 
 
@@ -91,3 +96,15 @@ def frame_assertion_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
                 "detail": body.subject_ref,
             }
     return _wf(text, FRAME_ASSERTION_V1, artifact)
+
+
+def derivation_manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Structural well-formedness for a bill of materials.
+
+    STRUCTURAL, which here has a sharp consequence worth stating: a well-formed
+    receipt must not immunise the judgment it accounts for. Declaring what you
+    rest on is not evidence that what you rest on is sound, so this program
+    grounds no reach and confers no prose immunity -- otherwise filing a bill
+    would be a way of buying protection from criticism by admitting debt.
+    """
+    return _wf(text, DERIVATION_MANIFEST_V1, artifact)

@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=4 blockers=none
+State: next=6 blockers=none
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -106,14 +106,45 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       and `decode` cannot reach it, so a body's internal part can never widen
       the closed set.
 
-- [ ] 4. (S2) Add the `DerivationManifestV1` rule to `calculus/compiler.py`:
+- [x] 4. (S2) Add the `DerivationManifestV1` rule to `calculus/compiler.py`:
       `DEPENDENCE` per open certificate, `MENTION` on the subject.
-      done-when: `python -m pytest tests/test_proof_debt.py::test_open_certificates_are_dependences_and_the_subject_is_a_mention -q` -> 1 passed
 
-- [ ] 5. (S3) Add `derivation_manifest_wf` + `DERIVATION_MANIFEST_COMMITMENT`
+      **Done-criterion form CORRECTED at execution.** The pytest form cannot
+      run yet: `tests/test_proof_debt.py` imports `deepreason.proof_debt` at
+      module level, which step 6 creates, so the whole file fails collection
+      and the criterion could only ever report an unrelated error. The CLAIM is
+      proved directly instead, and the pytest form is re-run at step 6 where it
+      can actually execute. Nothing was weakened — the assertion is identical.
+
+      PROOF:
+      ```
+      $ python -c "...compile_interface(DerivationManifestV1(...))..."
+      compiler rule ok: certificates DEPENDENCE, subject MENTION,
+      debt+checks no refs
+      ```
+      Asserted: refs == {(subject-1, MENTION), (cert-1, DEPENDENCE),
+      (cert-2, DEPENDENCE)}; commitments == [claim:derivation-manifest-wf@v1];
+      and a body with kernel checks + axiom debt emits the subject mention and
+      nothing else.
+
+- [x] 5. (S3) Add `derivation_manifest_wf` + `DERIVATION_MANIFEST_COMMITMENT`
       to `calculus/programs.py` and register it `"structural"` in
       `src/deepreason/programs.py`.
-      done-when: `python -c "from deepreason.programs import PROGRAMS; assert PROGRAMS['derivation_manifest_wf'].kind=='structural'; print('ok')"` -> ok
+
+      **Field name CORRECTED at execution:** `ProgramSpec` names the
+      classification `class_`, not `kind`; the plan's criterion said `kind` and
+      raised `AttributeError`. The property checked is unchanged.
+
+      PROOF:
+      ```
+      $ python -c "from deepreason.programs import PROGRAMS; s=PROGRAMS['derivation_manifest_wf']; print('class_ =', s.class_); assert s.class_=='structural'; print('ok')"
+      class_ = structural
+      ok
+      ```
+      `structural` is load-bearing, not reporting: `measures/reach._STRUCTURAL_PROGRAMS`
+      derives from it, so a well-formed receipt grounds no reach and buys no
+      prose immunity. Filing a bill must not become a way of purchasing
+      protection by admitting debt.
 
 - [ ] 6. (S4, S5) [COMMIT] Create `src/deepreason/proof_debt.py`:
       `file_derivation_manifest`, `manifests_for`, `receipt`, the three

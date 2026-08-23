@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from deepreason.calculus import claims
 from deepreason.calculus.claims import (
+    DerivationManifestV1,
     FrameAssertionV1,
     PremiseAttributionV1,
     ProblemSubjectV1,
@@ -28,6 +29,7 @@ from deepreason.ontology.artifact import RefRole
 def compile_interface(body) -> Interface:
     """Body -> Interface. Raises on a body this compiler has no rule for."""
     from deepreason.calculus.programs import (
+        DERIVATION_MANIFEST_COMMITMENT,
         FRAME_ASSERTION_COMMITMENT,
         PREMISE_ATTRIBUTION_COMMITMENT,
         PROBLEM_SUBJECT_COMMITMENT,
@@ -84,6 +86,25 @@ def compile_interface(body) -> Interface:
             for wound in body.succeeded_wound_refs
         ]
         return Interface(commitments=[FRAME_ASSERTION_COMMITMENT.id], refs=refs)
+    if isinstance(body, DerivationManifestV1):
+        refs = [
+            # MENTION on the subject, for the mention law's own reason: a
+            # manifest that DEPENDED on the judgment it accounts for would be
+            # suspended by pass two the moment that judgment's subject fell --
+            # i.e. exactly when a reader wants the bill of materials.
+            Ref(target=body.subject_ref, role=RefRole.MENTION),
+        ]
+        refs += [
+            # DEPENDENCE, and this is the whole attackable half of proof debt:
+            # `edges.py`'s evidence closure walks dependence lineage from the
+            # validity node, so a certificate reached this way is an item a
+            # critic can actually attack. Neither kernel checks nor axiom debt
+            # gets an edge -- a kernel check is re-derived, and an axiom has no
+            # attack surface by construction.
+            Ref(target=certificate, role=RefRole.DEPENDENCE)
+            for certificate in body.open_certificate_refs
+        ]
+        return Interface(commitments=[DERIVATION_MANIFEST_COMMITMENT.id], refs=refs)
     raise claims.ClaimDecodeError(
         "claim-no-compiler-rule", type(body).__name__
     )
