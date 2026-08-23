@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-rules -->
-Verified-at: 7b82206d
+Verified-at: 6721010d
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/measures/reach.py, src/deepreason/programs.py, src/deepreason/informal/trial.py
 Sides: DR-SUB-evaluation, DR-SUB-rules
@@ -36,6 +36,15 @@ same-package, rules-side sibling, not a new evaluation-side dependency) for
 the one per-commitment check that can strip a `candidate_checker`
 commitment's protection on a sustained relatedness challenge — see
 `DR-CON-conjecture-kinds`'s own section on this.
+
+Rung D added a FOURTH in-function import, to `register_fail_warrant` rather than
+to either predicate: `deepreason.ontology.artifact.RefRole`, used only when a
+caller passes `manifest_ref` (`DR-CON-proof-debt-and-localization`). It is
+in-function for the reason the check below pins — this module's TOP-LEVEL
+imports stay `{deepreason.ontology}` exactly, so the one shared warrant
+constructor never grows a dependency web that every mint site then inherits.
+The check catches a module-level regression because it asserts the top-level
+set, not merely the presence of the name.
 `check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/rules/warrants.py').read_text()); f={n.name:{i.module for i in ast.walk(n) if isinstance(i,ast.ImportFrom)} for n in ast.walk(t) if isinstance(n,ast.FunctionDef)}; assert f['execution_backed']=={'deepreason','deepreason.oracle'}; assert f['formally_backed']=={'deepreason','deepreason.measures.reach','deepreason.oracle','deepreason.rules.relatedness'}; assert {i.module for i in t.body if isinstance(i,ast.ImportFrom)}=={'deepreason.ontology'}" && test "$(grep -rl "EXEC_PROGRAMS\|_STRUCTURAL_PROGRAMS" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && python -c "from deepreason.ontology import Commitment; assert set(Commitment.model_fields)=={'id','eval','budget','observation_valued'}"`
 
 `formally_backed` is a superset of `execution_backed` **by construction, not by

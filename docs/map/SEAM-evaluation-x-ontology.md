@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-ontology -->
-Verified-at: 9fa394d9
+Verified-at: 6721010d
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/programs.py, src/deepreason/ontology/commitment.py, src/deepreason/ontology/artifact.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/hv.py, src/deepreason/informal/skeleton.py
 Sides: DR-SUB-evaluation, DR-SUB-ontology

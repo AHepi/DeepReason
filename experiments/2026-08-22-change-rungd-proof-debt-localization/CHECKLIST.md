@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=27 blockers=none. STOP at step 13 RESOLVED by operator ruling
+State: next=27 (final push) blockers=none. STOP at step 13 RESOLVED by operator ruling
 (REQUEST.md Amendment 1, R20): option B — D1 delivered, D2 parked. Steps 14-22
 and 24 are struck as PARKED; PARKED.md carries the ready-to-send prompt.
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
@@ -482,6 +482,40 @@ is `PARKED.md`.
       in `docs/map/` and the tranche directory — no `src/` or `tests/` file has
       moved — so the gate result still covers the shipped code. `dr-validate-change`
       re-runs it as the authority regardless.
+
+- [x] 28. (S23) RE-PLANNED IN, 2026-08-23, by `dr-validate-change`'s map
+      obligation: `docs_verify --stale` lists two documents this tranche made
+      stale — `SEAM-evaluation-x-rules.md` (owns `rules/warrants.py` and
+      `programs.py`, both changed) and `SUB-evaluation.md` (its
+      `programs.evaluate` caller pin was edited without advancing the stamp).
+      Validation may not edit the map it validates, so this is a step.
+      done-when: `python tools/docs_verify.py --stale` no longer lists either
+      document, and `python tools/docs_verify.py` still reports 3 failed
+
+      `SEAM-evaluation-x-rules.md` was not merely re-stamped — it gained the
+      paragraph its stamp would otherwise have vouched for: Rung D added a
+      FOURTH in-function import to `rules/warrants.py`, `RefRole`, used only on
+      the `manifest_ref` path, and the document now says why it is in-function
+      (the top-level set stays `{deepreason.ontology}` so the one shared
+      warrant constructor never grows a dependency web every mint site
+      inherits). Advancing a stamp without reading the document is the failure
+      mode `SCHEMA.md` names; a stale stamp is honest, a false one is not.
+
+      PROOF:
+      ```
+      $ python tools/docs_verify.py --stale
+      CON-run-identity.md: 1 commit(s) ... bce018ae5 all-configs-allowed
+      SEAM-llm-x-scheduler.md: 1 commit(s) ... 8469d0669 route max_tokens
+      SUB-scheduler.md: 1 commit(s) ... 8469d0669 route max_tokens
+      docs_verify --stale: 3 document(s) worth re-reading
+      ```
+      Neither of this tranche's two entries remains. All three survivors name
+      commits from OTHER tranches (`bce018ae5`, `8469d0669`) and touch no file
+      this change went near.
+      ```
+      $ python tools/docs_verify.py
+      docs_verify: 3 failed        # the pre-existing shallow-clone lookups
+      ```
 
 - [ ] 27. (S23, R16) [COMMIT] Final diff-budget check and push.
       done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; `git status --porcelain` empty; branch head on origin
