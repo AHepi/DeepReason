@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "claim": "The nocturnal UHI is primarily a storage-release phenomenon: urban materials (concrete, asphalt, stone) with high thermal mass and heat capacity absorb more solar radiation during the day and re-radiate it as longwave sensible heat after sunset, while rural vegetation cools rapidly via evapotranspiration and sky view. The cross-city gap scales most strongly with built density (building height and impervious surface fraction) because denser street canyons trap this released longwave radiation by reducing sky view, slowing nocturnal cooling.",
+      "mechanism": "During daytime, low-albedo, high thermal-mass urban surfaces store sensible heat. After sunset, rural areas cool efficiently through direct longwave loss to the sky (high sky view factor) and latent heat loss (evapotranspiration from vegetation). Urban areas cannot cool as efficiently because the stored heat is released into street canyons with low sky view factors, which radiatively traps the longwave energy. The cross-city variance in this gap is dominated by urban geometry: denser cities with taller buildings and deeper street canyons have lower sky view factors, which increasingly attenuates radiative cooling, making the nocturnal UHI more pronounced.",
+      "counterconditions": [
+        "If a city has extensive green space and irrigation matching rural evapotranspiration, the nocturnal gap would shrink.",
+        "If wind speed is sufficiently high, turbulent mixing would override radiative trapping and equalize temperatures.",
+        "If anthropogenic heat emissions dominate the energy balance (e.g., winter heating in dense cities), the gap would correlate more with population density than sky view."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_008", "SRC_005"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.95
+    },
+    {
+      "claim": "While thermal storage sets the stage, the single best explanation for why the nocturnal UHI is larger in some cities than others is the difference in evapotranspiration potential. Cities in arid climates have a larger nocturnal gap because the rural countryside lacks moisture for latent heat cooling, while cities in humid climates with irrigation and green space show a smaller gap because rural vegetation continues to cool efficiently at night.",
+      "mechanism": "All cities store heat in impervious surfaces, but the nocturnal temperature gap depends on how fast the rural reference cools. In arid environments, rural land has little moisture, so evapotranspiration is suppressed and rural cooling relies solely on sensible heat flux and longwave radiation. In humid environments, rural vegetation provides strong latent heat cooling after sunset. Therefore, the cross-city modulation is driven by aridity and humidity: the more arid the setting, the less rural evapotranspiration, and the larger the nocturnal UHI gap.",
+      "counterconditions": [
+        "If two cities share identical aridity but differ in building height and sky view, the denser city should still show a larger gap, contradicting the claim that evapotranspiration is the single best modulator.",
+        "If irrigated urban green space creates an urban oasis effect, the aridity-driven gap could reverse or disappear.",
+        "If coastal or topographic effects dominate rural cooling, humidity alone would not explain the variance."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.75
+    },
+    {
+      "claim": "The nocturnal UHI is primarily sustained by anthropogenic heat emissions (traffic, industry, building HVAC), and the cross-city variance in the night-time gap is best explained by population density: cities with higher population emit more anthropogenic heat, which directly increases urban nocturnal temperatures.",
+      "mechanism": "After sunset, stored heat from daytime absorption dissipates over a few hours, but anthropogenic heat release is continuous through the night. The energy balance of the urban canopy layer includes a significant anthropogenic heat flux term that has no rural equivalent. Cities with higher population density and activity levels inject more sensible heat into the urban atmosphere, maintaining higher nocturnal temperatures. The cross-city gap thus scales with population density and city size.",
+      "counterconditions": [
+        "If the nocturnal UHI persists well past midnight when anthropogenic activity drops sharply, storage-release must dominate over continuous emissions.",
+        "If a small but extremely dense city shows a larger gap than a sprawling megacity, population alone is insufficient.",
+        "If summer nocturnal UHI (low heating demand) is as strong as winter UHI (high heating demand), anthropogenic heat is not the primary driver."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.65
+    },
+    {
+      "claim": "The single best cross-city modulator of the nocturnal UHI is city size itself: larger cities have a greater aggregate thermal mass and a deeper, more persistent urban heat island because the volume of stored heat scales with impervious surface area, and the resulting warm dome is thicker and more resistant to nocturnal cooling.",
+      "mechanism": "The total heat stored during daytime is proportional to the impervious surface area and thermal mass of urban materials. Larger cities accumulate more total heat, and the urban boundary layer dome that forms over them is deeper. After sunset, this larger heat reservoir releases sensible heat over a longer period, sustaining nocturnal warming. The cross-city gap scales with city size because the total heat storage and boundary layer depth increase with the horizontal extent of the urban area.",
+      "counterconditions": [
+        "If a small, extremely dense city (e.g., Hong Kong) has a larger nocturnal UHI than a large, low-density city (e.g., Los Angeles), city size is not the primary modulator.",
+        "If coastal breezes or regional winds ventilate large cities more effectively than small cities in sheltered valleys, the scaling with size would break down.",
+        "If built density and sky view explain the variance better than total area, city size is a proxy rather than the mechanism."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.55
+    },
+    {
+      "claim": "The nocturnal UHI is primarily caused by reduced radiative cooling due to the urban greenhouse effect: urban surfaces and pollutants re-absorb outgoing longwave radiation, and the single best cross-city modulator is the sky view factor determined by building height and street canyon geometry. Cities with deeper canyons trap more longwave radiation, producing a larger nocturnal gap regardless of thermal storage differences.",
+      "mechanism": "After sunset, cooling is dominated by net longwave radiation loss. In rural areas with high sky view, radiation escapes freely to the cold sky. In urban street canyons, outgoing longwave radiation from the surface is intercepted by opposing walls and re-radiated back, drastically reducing net radiative cooling. The mechanism is purely geometric: the lower the sky view factor, the more longwave radiation is trapped. Cross-city variance is thus governed by building height and street canyon geometry, which determine the sky view factor and the radiative trapping efficiency.",
+      "counterconditions": [
+        "If two cities have identical sky view factors but different thermal mass or anthropogenic heat, and their nocturnal UHI differs significantly, geometry alone is insufficient.",
+        "If the nocturnal UHI is strongest in the early evening (within 2-3 hours of sunset), thermal storage release rather than steady-state radiative trapping is the dominant mechanism.",
+        "If high-altitude cities with deep canyons show smaller gaps due to low atmospheric back-radiation, the pure geometry model fails."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_005", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.45
+    },
+    {
+      "claim": "The nocturnal UHI gap is primarily a rural phenomenon, not an urban one: rural areas cool faster at night because of unobstructed sky view and evapotranspiration, and the cross-city variance is best explained by the rural cooling rate modulated by regional humidity and vegetation. Cities are simply warm; the countryside cools variably, and the gap scales with how effectively rural land radiates and evaporates.",
+      "mechanism": "Urban surfaces maintain a relatively stable nocturnal cooling rate regardless of city because impervious surfaces and street canyons universally slow heat release. The variance in the nocturnal UHI gap is instead driven by the rural reference: in dry regions, rural land cools rapidly via unimpeded longwave radiation (high sky view, no clouds), maximizing the gap. In humid, vegetated regions, rural evapotranspiration and atmospheric moisture back-radiation slow rural cooling, shrinking the gap. The single best modulator is rural humidity and vegetation cover, not urban form.",
+      "counterconditions": [
+        "If paired urban and rural stations show that urban cooling rates vary more than rural cooling rates across cities, the claim that variance is rural-driven fails.",
+        "If irrigation in arid cities creates rural-like evapotranspiration within the city, the gap could be urban-driven.",
+        "If the gap increases with building height within the same rural setting, urban form must be the primary modulator."
+      ],
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {"requested_context_aliases": [], "search_signal": "productive"},
+      "typicality": 0.3
+    }
+  ]
+}
