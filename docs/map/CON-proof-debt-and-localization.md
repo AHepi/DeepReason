@@ -1,18 +1,29 @@
 <!-- DR-CON-proof-debt-and-localization -->
-Verified-at: unverified
-Verify: python -m pytest tests/test_proof_debt.py tests/test_localization.py -q
-Owns: src/deepreason/proof_debt.py, src/deepreason/localization.py
+Verified-at: 03b1edf4
+Verify: python -m pytest tests/test_proof_debt.py -q
+Owns: src/deepreason/proof_debt.py
 Seams: 
 Seams-undocumented: calculus x adjudication, calculus x problem-layer-lifecycle
 
 # Proof debt and Duhem localization — what a judgment owes, and who may be blamed
 
-**Checks deferred.** This document was written at the START of the Rung D
-tranche, before its code, because writing down the agreement is how you find out
-whether you understand it. Its `check:` lines and its `Verified-at:` stamp are
-added by the tranche's step 23, once there is something to check. A stamp
-claiming verification against code that does not exist would be the one thing
-`docs/map/SCHEMA.md` forbids outright.
+**One half is BUILT, one half is DESIGNED AND PARKED, and the split is stated
+here so no reader mistakes an agreement for a mechanism.**
+
+- **Proof debt (E-1) is built.** Every claim about it below carries a `check:`
+  that runs today.
+- **Duhem localization (E-2) is designed and PARKED** — no `localization.py`
+  exists, and the sections describing it carry NO checks, deliberately: there
+  is nothing to authenticate. The operator parked it at the Rung D tranche's
+  step-13 diff-budget stop and ruled that a future window should resume at
+  `dr-plan-steps` rather than re-spec, so this document IS that window's
+  entry artifact. See
+  `experiments/2026-08-22-change-rungd-proof-debt-localization/PARKED.md`.
+
+Nothing in the parked half is speculative in the sense of unexamined — the
+design was measured against the tree before it was written down (both claim
+names are already in the closed set; `dep` already supplies bundle membership).
+It is simply not code yet, and this document says which sentences are which.
 
 ## What it is
 
@@ -94,7 +105,7 @@ Out, each for a reason rather than for brevity:
   no warrant blames nobody. `receipt()` will READ a warrant a measure produced;
   no measure gains a receipt of its own.
 
-## What a bundle is
+## What a bundle is — DESIGNED, PARKED
 
 **A bundle is any artifact that DEPENDS on its members.** Dependence already is
 composition here: an artifact whose interface carries `DEPENDENCE` refs to a
@@ -110,7 +121,7 @@ Note the direction, because it is the whole of Duhem: `dep` licenses the fall of
 a DEPENDENT when a dependency falls. It does not license the converse. From a
 failed whole to a faulty part is not a calculus step; it is adjudicated work.
 
-## The two locks
+## The two locks — DESIGNED, PARKED
 
 Implication requires all three of: a CONSULTED localization naming the member, a
 PROBLEMATIC bundle (`REFUTED` → `BUNDLE_REFUTED`, `SUSPENDED_UNSUPPORTED` →
@@ -124,7 +135,7 @@ PROBLEMATIC bundle (`REFUTED` → `BUNDLE_REFUTED`, `SUSPENDED_UNSUPPORTED` →
 Lock 2 is the one the harness would break first, and it is the one held by a
 permanent mutation-proven guard test rather than by intention.
 
-## Why both endpoints of a localization are MENTIONS
+## Why both endpoints of a localization are MENTIONS — DESIGNED, PARKED
 
 This is `premises.py`'s shape reused, not re-derived, and each half of it fails
 differently if got wrong:
@@ -146,42 +157,64 @@ falls, the localization should lose its support.
 | file a bill of materials for a judgment | `proof_debt.file_derivation_manifest` |
 | read what a judgment still rests on | `proof_debt.receipt(harness, warrant_id)` |
 | attach a bill to a fail warrant | `rules/warrants.register_fail_warrant(..., manifest_ref=...)` |
-| file a blame statement | `localization.file_localization` |
-| read a bundle's members | `localization.bundle_members` |
-| read who is implicated | `localization.implicated(harness)` |
+| file a blame statement | `localization.file_localization` — **parked** |
+| read a bundle's members | `localization.bundle_members` — **parked** |
+| read who is implicated | `localization.implicated(harness)` — **parked** |
+
+`check: python -c "from deepreason.proof_debt import file_derivation_manifest, receipt, manifests_for; import inspect; from deepreason.rules.warrants import register_fail_warrant; assert 'manifest_ref' in inspect.signature(register_fail_warrant).parameters"`
+`check: python -c "import importlib.util; assert importlib.util.find_spec('deepreason.localization') is None, 'localization is parked; if it now exists this document is stale'"`
 
 ## State it owns
 
-None. Both modules are pure functions over replayed state plus two authoring
-operations that call `harness.create_artifact`. Nothing here writes a `Status`,
-and neither module imports `adjudication` — the same structural guard
-`calculus/standing.py` carries, for the same reason.
+None. The module is pure functions over replayed state plus one authoring
+operation that calls `harness.create_artifact`. Nothing here writes a `Status`,
+and it does not import `adjudication` — the same structural guard
+`calculus/standing.py` carries, for the same reason. The parked module inherits
+the identical obligation.
+
+`check: python -m pytest tests/test_proof_debt.py -k "moves_no_label or read_path" -q`
 
 ## Invariants
 
-`DR-INV-frozen-surfaces` — no surface is touched. `DR-INV-axiom-basis` — this
-concept PROVES `A5` at a third site (the mention law, for localizations) and
-`A1`/`A2` in the form the receipt demands; it PRESERVES `A3`, `A9` and `Ax 4.1`.
+`DR-INV-frozen-surfaces` — no surface is touched. `DR-INV-axiom-basis` — the
+BUILT half proves `A1`/`A2` in the form the receipt demands (a receipt is a
+pure fold over the log, recomputed under a finite deterministic budget) and
+preserves `A3`, `A9` and `Ax 4.1`. The parked half would prove `A5` at a third
+site (the mention law, for localizations); it does not yet.
+
+`check: python -m pytest tests/test_proof_debt.py -k "replays_identically or recomputation_not_retroactively" -q`
 
 ## Where to change what
 
 | to do X | edit Y | test Z |
 |---|---|---|
 | add an item kind to a receipt | `calculus/claims.py` + `calculus/compiler.py` | `tests/test_proof_debt.py` |
-| change what makes a bundle problematic | `localization.py` | `tests/test_localization.py` |
+| change what makes a bundle problematic | `localization.py` (parked) | `tests/test_localization.py` (parked) |
 | give another warrant site a manifest | that site only; `register_fail_warrant` already takes it | that site's own tests |
 | add a reader for `implicated()` | a new consumer; nothing here | its own tests |
 
 ## Traps
 
-- **The tempting automatic version is one line away.** Because members are read
-  off `dep`, "the bundle fell, so implicate everything under it" is trivially
-  writable. It is wrong, and the only thing standing between the harness and it
-  is `test_a_problematic_bundle_implicates_no_member_without_a_localization`.
-  That test is mutation-proven; do not weaken it to make a feature convenient.
+- **The tempting automatic version is one line away, and NOTHING GUARDS IT
+  TODAY.** Because members are read off `dep`, "the bundle fell, so implicate
+  everything under it" is trivially writable. The guard that must stop it —
+  `test_a_problematic_bundle_implicates_no_member_without_a_localization`,
+  mutation-proven — is parked with the rest of E-2. Until that test exists,
+  this trap is a warning to a future author and not a live protection, and
+  saying so is the difference between a limitation and a defect.
 - **A receipt is not a warrant.** Filing a manifest changes no label. If a
   change makes a manifest move a label directly, the change is wrong however
   useful it looks — only attacks move labels.
+- **`structural` on `derivation_manifest_wf` is load-bearing.** Reach derives
+  its structural set from it, so a well-formed receipt grounds no reach and
+  confers no prose immunity. Reclassifying it would let an artifact buy
+  protection from criticism by admitting debt.
+  `check: python -c "from deepreason.programs import PROGRAMS; assert PROGRAMS['derivation_manifest_wf'].class_ == 'structural'"`
+- **Only the SAMPLED rent path files a bill.** A premise felled for an empty
+  attack surface rests on `crit` alone, which is re-derivable and owes no
+  certificate. A bill filed there would be debt against a judgment that needs
+  none.
+  `check: python -m pytest tests/test_proof_debt.py -k "undecided_rent_verdict_files_no_manifest" -q`
 - **Membership is checked in the derived predicate, not in the
   well-formedness program.** The program is handed `(text, budget, artifact)`
   and no harness state, so it cannot see whether the member is in the bundle.

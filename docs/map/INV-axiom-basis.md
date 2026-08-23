@@ -1,6 +1,6 @@
 <!-- DR-INV-axiom-basis -->
-Verified-at: 5582d00f
-Verify: python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py -q
+Verified-at: 03b1edf4
+Verify: python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py tests/test_proof_debt.py -q
 Owns: 
 Seams: 
 Seams-undocumented: 
@@ -35,17 +35,17 @@ check is worse than an admitted gap, because it reports success.
 
 | Axiom | Statement (compressed) | Proved at | Preserved by |
 |---|---|---|---|
-| **A1** | the log is append-only; state is a pure fold over it | already true — recorded Rung 1 | every rung |
-| **A2** | all verdicts are finite-budget deterministic results | already true | every rung |
-| **A3** | status = grounded attack pass, then the acyclic support pass | already true | Rungs 2, 3, 4, 6 |
+| **A1** | the log is append-only; state is a pure fold over it | already true — recorded Rung 1 | every rung; **Rung D** re-proves it for receipts |
+| **A2** | all verdicts are finite-budget deterministic results | already true | every rung; **Rung D** re-proves it for a re-run kernel check |
+| **A3** | status = grounded attack pass, then the acyclic support pass | already true | Rungs 2, 3, 4, 6, **D** |
 | **A4** | standing is a derived consultation relation and never enters status computation | **Rung 4** | Rungs 5, 6, 7 |
-| **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (attributions), **Rung 4** (frame assertions) | Rung 3b |
+| **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (attributions), **Rung 4** (frame assertions) | Rung 3b, **Rung D** (derivation manifests mention their subject). Rung D's THIRD site — localizations — is PARKED and does not yet answer for it |
 | **A6** | consulted frame assertions satisfy frame-separation | **Rung 3b** | Rungs 4, 7 |
 | **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
 | **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** — NOT YET LANDED | Rung 8 |
-| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) — NOT YET LANDED | Rungs 2, 5 |
-| **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung |
-| **Ax 4.1** | **Genesis Inertness** — appraisal predicates are invariant under permutation of provenance; origin confers neither warrant nor stigma | stated here; **no rung may violate it** | every rung |
+| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) — NOT YET LANDED | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
+| **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung; **Rung D** logs the rent sample as a canonical artifact rather than a blob |
+| **Ax 4.1** | **Genesis Inertness** — appraisal predicates are invariant under permutation of provenance; origin confers neither warrant nor stigma | stated here; **no rung may violate it** | every rung; **Rung D** — neither `receipt()` nor a manifest reads provenance |
 
 ## A1 — append-only log, state a pure fold
 
@@ -56,6 +56,15 @@ determinism.
 `check: grep -q "two replays of the same log produced different state" src/deepreason/invariants.py`
 `check: python -m pytest tests/test_calculus_standing.py::test_standing_is_recomputed_from_the_log_and_never_stored -q`
 
+**Rung D extends the fold to proof debt.** A receipt is built on every call from
+replayed state and stored nowhere, so there is no receipt record that could
+disagree with the log implying it; and because nothing is rewritten, a
+judgment's dependents are invalidated ON RECOMPUTATION rather than
+retroactively — the log's prefix before an attack replays to exactly what it
+always replayed to.
+
+`check: python -m pytest tests/test_proof_debt.py -k "recomputed_from_the_log or replays_identically or recomputation_not_retroactively" -q`
+
 ## A2 — finite-budget deterministic verdicts
 
 Every program in the registry is a pure function returning a typed verdict, and
@@ -65,6 +74,18 @@ fail part-way through and cannot run long.
 
 `check: python -c "from deepreason.calculus.scope import _MAX_DEPTH, _MAX_NODES; assert _MAX_DEPTH > 0 and _MAX_NODES > 0"`
 `check: python -m pytest tests/test_calculus_scope_predicate.py::test_the_same_problem_and_state_give_the_same_answer -q`
+
+**Rung D adds the case a recorded verdict cannot settle.** A derivation
+manifest records what its author observed, but `proof_debt.receipt` never reads
+that back: it RE-RUNS every re-runnable kernel check and reports the current
+verdict beside the recorded one. A check with no runnable program is reported
+`not-rerunnable`, never as a pass — "we could not check" must not look like "we
+checked and it was fine", which is the same typed abstention the rent sweep
+records with no variator. That is A2 in its sharpest form: a verdict is what
+the budgeted function returns now, not what somebody wrote down.
+
+`check: python -m pytest tests/test_proof_debt.py::test_a_receipt_reruns_its_kernel_checks_rather_than_reading_them_back -q`
+`check: python -c "from deepreason.proof_debt import NOT_RERUNNABLE; assert NOT_RERUNNABLE == 'not-rerunnable'"`
 
 ## A3 — two passes, in that order
 

@@ -1,5 +1,5 @@
 <!-- DR-CON-warrants-and-attacks -->
-Verified-at: 7b82206d
+Verified-at: 03b1edf4
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py, src/deepreason/adjudication/grounded.py, src/deepreason/adjudication/support.py, src/deepreason/ontology/warrant.py
 Seams: 

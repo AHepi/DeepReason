@@ -1,5 +1,5 @@
 <!-- DR-CON-problem-layer-lifecycle -->
-Verified-at: 6a86a1f0
+Verified-at: 03b1edf4
 Verify: python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py -q
 Owns: src/deepreason/premises.py, src/deepreason/measures/demarcation.py, src/deepreason/measures/attention.py
 Seams: 

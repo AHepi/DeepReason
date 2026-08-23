@@ -204,3 +204,40 @@ tranche (`dr-drive-harness` §4.5).
 ## Amendments
 
 (append-only; later operator messages land here)
+
+### Amendment 1 — 2026-08-23, the step-13 STOP ruling
+
+Verbatim:
+
+> Ruling on the step-13 STOP: option B — deliver D1 now, park D2.
+> The checklist's own step-2 pre-registration ("the answer is to park,
+> not to raise the ceiling") stands; one tranche, one goal. Close out
+> D1 through validate and deliver as-is, and write D2's park with a
+> ready-to-send prompt that inherits the committed SPEC §D2 items, the
+> premises.py-shape constraint, and the never-automatic mutation-proof
+> requirement — a future window should start at dr-plan-steps, not
+> re-spec.
+
+| id | kind | the operator's words for this obligation |
+|---|---|---|
+| **R20** | process | "option B — deliver D1 now, park D2." |
+| **R21** | process | "The checklist's own step-2 pre-registration (\"the answer is to park, not to raise the ceiling\") stands; one tranche, one goal." |
+| **R22** | process | "Close out D1 through validate and deliver as-is" |
+| **R23** | artifact | "write D2's park with a ready-to-send prompt that inherits the committed SPEC §D2 items, the premises.py-shape constraint, and the never-automatic mutation-proof requirement" |
+| **R24** | artifact | "a future window should start at dr-plan-steps, not re-spec." |
+
+**Disposition of the D2 requirements, applied by R20.** None is deleted; each is
+marked `deferred (operator approved: REQUEST.md Amendment 1, R20)`:
+
+| id | disposition |
+|---|---|
+| **R7** (bundle-level problematicity projects only through a standing localization) | deferred — R20 |
+| **R8** (reuse `premises.py`'s shape) | deferred — R20; the constraint is carried into the park prompt by R23 |
+| **R9** (blame never automatic; no measure, no default, no cascade) | deferred — R20; carried into the park prompt by R23 |
+| **R11** (a localization is attackable and its defeat un-implicates) | deferred — R20 |
+| **R13** (MUTATION PROOF on the non-automatic constraint) | deferred — R20; carried into the park prompt by R23 |
+| **R12** (no label moves from a receipt **or localization** alone) | **half delivered.** The receipt half is proven (SPEC S20's D1 tests); the localization half is deferred with R7 |
+| **R17** (if D1+D2 cannot fit, deliver D2 and park D1) | **SUPERSEDED by R20.** R17 presupposed the conflict would surface in the SPEC phase with both halves unwritten; it surfaced at the D1 boundary with D1 finished and gated. The operator ruled the other way on the measured facts. Recorded rather than silently reinterpreted |
+| **R19** (deliver R-by-R with the two closing lines) | delivered, with the localization line stating what the PARKED design requires rather than what ships |
+
+Every other requirement (R1–R6, R10, R14–R16, R18) is unaffected and delivered.

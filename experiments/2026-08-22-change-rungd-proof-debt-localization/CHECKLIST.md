@@ -1,9 +1,8 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=14 blockers=STOP at step 13 — diff-budget ceiling cannot fit D2;
-awaiting operator choice A (raise ceiling to 1950, deliver both) / B (deliver
-D1, park D2) / C (deliver both, record typed overrun). D1 is complete, gated
-(3875 passed, 0 failed) and deliverable as it stands.
+State: next=27 blockers=none. STOP at step 13 RESOLVED by operator ruling
+(REQUEST.md Amendment 1, R20): option B — D1 delivered, D2 parked. Steps 14-22
+and 24 are struck as PARKED; PARKED.md carries the ready-to-send prompt.
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -391,73 +390,110 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
 
       **BLOCKED pending operator words. No D2 code is written until then.**
 
-## Phase 3 — D2 localization: tests first
+## Phase 3–4 — D2 localization: PARKED, not executed
 
-- [ ] 14. (S12–S20) [COMMIT] Write `tests/test_localization.py` with all D2
-      tests named in SPEC.md S13, S14, S16, S17, S18, S19, S20. They must FAIL
-      now.
-      done-when: `python -m pytest tests/test_localization.py -q 2>&1 | tail -3` shows 0 passed; paste it
+**Steps 14–22 are PARKED by operator ruling** (REQUEST.md Amendment 1, R20:
+"option B — deliver D1 now, park D2"). They are struck rather than deleted so
+the audit trail shows what was planned and why it did not run. Their SPEC items
+(S12–S19, and S20's localization half) are marked `deferred (operator approved:
+REQUEST.md Amendment 1, R20)`, and the ready-to-send prompt that inherits them
+is `PARKED.md`.
 
-## Phase 4 — D2 code, with its map, in the same commits
+- [~] 14–22. (S12–S20) PARKED — the localization channel: claim body, compiler
+      rule, wf program, `localization.py`, `implicated()`, the two locks, the
+      non-member rule, N1 reversibility, readout inertness.
 
-- [ ] 15. (S12) Add `LocalizationV1` to `calculus/claims.py`; extend
-      `_IMPLEMENTED` to 5. `CLAIM_SCHEMAS` still 9.
-      done-when: `python -c "from deepreason.calculus.claims import _IMPLEMENTED; from deepreason.calculus import CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS)==9 and len(_IMPLEMENTED)==5; print('ok')"` -> ok
+## Phase 5 — the mutation proof: PARKED with its subject
 
-- [ ] 16. (S13) Add the `LocalizationV1` compiler rule: MENTION on the bundle,
-      MENTION on the member, DEPENDENCE on the manifest.
-      done-when: `python -m pytest tests/test_localization.py::test_a_localization_mentions_both_its_bundle_and_its_member_and_depends_on_neither -q` -> 1 passed
+- [~] 24. (S21) PARKED. The mutation proof guards `implicated()`, which does
+      not exist. Running it here would prove nothing, and a mutation proof
+      whose subject is absent is exactly the vacuous check
+      `docs_verify --audit` exists to refuse. R13 is carried into `PARKED.md`
+      verbatim as a binding requirement on the resuming window.
 
-- [ ] 17. (S14) Add `localization_wf` + `LOCALIZATION_COMMITMENT`, naming the
-      mention law in its own verdict; register `"structural"`.
-      done-when: `python -m pytest tests/test_localization.py::test_a_localization_that_depends_on_its_member_is_refused_by_name -q` -> 1 passed
+## Phase 5 — D1's remaining gates
 
-- [ ] 18. (S15) Create `src/deepreason/localization.py`: `file_localization`,
-      `bundle_members`, `standing_localizations`. Advance `SUB-calculus.md`'s
-      `_IMPLEMENTED` check to 5 and extend `Owns:` in the SAME commit.
-      done-when: `python -m pytest tests/test_localization.py -q -k "mentions_both or bundle_members or standing"` -> 0 failed
+- [x] 23. (S22) Add Rung D's rows to `docs/map/INV-axiom-basis.md`; fill in the
+      real `check:` commands in `CON-proof-debt-and-localization.md` and stamp
+      `Verified-at:`.
 
-- [ ] 19. (S16, S18) [COMMIT] Add `implicated()` with its three conditions and
-      the two grades; a non-member projects nothing.
-      done-when: `python -m pytest tests/test_localization.py -q -k "implication_needs or cannot_blame_a_non_member"` -> 0 failed
+      **SCOPED TO WHAT D1 ACTUALLY PROVES.** The plan's wording named `A5` at a
+      third site, which is the localization mention law — parked. The ledger
+      says so explicitly rather than claiming an axiom this rung did not
+      answer for.
 
-- [ ] 20. (S17) The two locks — the hard constraint (R9).
-      done-when: `python -m pytest tests/test_localization.py -q -k "alone_implicates_nobody or implicates_no_member_without_a_localization"` -> 0 failed
+      What Rung D PROVES: `A1` and `A2` in the form the receipt demands — a
+      receipt is a pure fold over the log, recomputed under a finite
+      deterministic budget, with every re-runnable kernel check RE-RUN and a
+      non-runnable one reported `not-rerunnable` rather than as a pass.
+      What it PRESERVES: `A3` (a receipt adds evidence refs, never a label),
+      `A5` at the manifest (a manifest mentions its subject and never depends
+      on it), `A9` (a receipt is a readout and moves no label), `A10` (the rent
+      sample is logged as a canonical artifact rather than a blob), and
+      `Ax 4.1` (neither `receipt()` nor a manifest reads provenance).
+      What it does NOT answer for: `A5` at the localization — parked.
 
-- [ ] 21. (S19) N1 at this layer: defeating the localization un-implicates.
-      done-when: `python -m pytest tests/test_localization.py::test_defeating_the_localization_unimplicates_the_member -q` -> 1 passed
+      The concept document now separates BUILT from DESIGNED-AND-PARKED in its
+      own first section, carries four `check:` lines over the built half only,
+      and carries a check asserting `deepreason.localization` does NOT exist —
+      so if a future window builds it without updating this document, the
+      document fails rather than lying. Its trap about the automatic-projection
+      guard says plainly that the guard is parked and therefore not a live
+      protection today.
 
-- [ ] 22. (S20) D2 readout inertness, behavioural and structural.
-      done-when: `python -m pytest tests/test_localization.py -q -k "moves_no_label or holds_no_call_that_could_write"` -> 0 failed
+      PROOF — every check run before being written down:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -q
+      18 passed in 0.48s
+      $ python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py tests/test_proof_debt.py -q
+      48 passed in 32.63s
+      $ python -c "...find_spec('deepreason.localization') is None"          PASS
+      $ python -c "...PROGRAMS['derivation_manifest_wf'].class_ == 'structural'" PASS
+      $ python -c "...NOT_RERUNNABLE == 'not-rerunnable'"                     const ok
+      ```
+      `Verified-at:` advanced to `03b1edf4` on the five documents whose checks
+      were re-run: `CON-proof-debt-and-localization`, `INV-axiom-basis`,
+      `SUB-calculus`, `CON-warrants-and-attacks`, `CON-problem-layer-lifecycle`.
+      No other stamp was touched.
 
-- [ ] 23. (S22) [COMMIT] Add Rung D's rows to `docs/map/INV-axiom-basis.md`:
-      PROVES A5 (third site), A1/A2 in R10's form; PRESERVES A3, A9, Ax 4.1.
-      Fill in the real `check:` commands in
-      `CON-proof-debt-and-localization.md` and stamp `Verified-at:`.
-      done-when: `python tools/docs_verify.py --links` -> 0 failed
-
-## Phase 5 — the mutation proof and the gates
-
-- [ ] 24. (S21) MUTATION PROOF in a SCRATCH COPY of the tree (never the repo):
-      wire `implicated()` to project automatically, run the guard test RED;
-      restore, run it GREEN. Paste both runs into the step record.
-      done-when: two pasted runs, the first `1 failed`, the second `1 passed`
-
-- [ ] 25. (all) Map check (full mode, not `--fast`, because `src/` moved):
+- [x] 25. (all) Map check (full mode, not `--fast`, because `src/` moved):
       `python tools/docs_verify.py`
-      done-when: no NEW failures beyond the 3 pre-existing shallow-clone ones
-      named in REQUEST.md C4; and `--audit` reports 0 NEW findings; paste both
 
-- [ ] 26. (all) Full gate: `python -m pytest tests/ -q -n 4`
-      done-when: output ends "N passed, 0 failed" with N >= 3829 (C4's
-      baseline); paste it. Run on an otherwise idle box, never beside
-      `docs_verify`
+      PROOF:
+      ```
+      $ python tools/docs_verify.py
+      docs_verify: 3 failed        # the 3 pre-existing shallow-clone git-log
+                                   # lookups named in REQUEST.md C4; 0 new
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 63 document(s)
+      ```
+
+- [x] 26. (all) Full gate: `python -m pytest tests/ -q -n 4`
+
+      PROOF (run at step 13's boundary, on an otherwise idle box with every
+      background instrument stopped first):
+      ```
+      $ python -m pytest tests/ -q -n 4
+      3875 passed, 6 skipped in 956.02s (0:15:56)
+      [exited with code 0]
+      ```
+      0 failed. Baseline 3857 at main `67cc732fd`; the +18 is this tranche's
+      own test file. RE-RUN OBLIGATION CHECKED: every change since that run is
+      in `docs/map/` and the tranche directory — no `src/` or `tests/` file has
+      moved — so the gate result still covers the shipped code. `dr-validate-change`
+      re-runs it as the authority regardless.
 
 - [ ] 27. (S23, R16) [COMMIT] Final diff-budget check and push.
       done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; `git status --porcelain` empty; branch head on origin
 
 ---
 
-Every S-number covered: S1(3) S2(4) S3(5) S4(6) S5(6) S6(9) S7(9) S8(7) S9(8)
-S10(10,11) S11(11) S12(15) S13(16) S14(17) S15(18) S16(19) S17(20) S18(19)
-S19(21) S20(12,22) S21(24) S22(23) S23(1,6,7,10,18,23,25) S24(dr-deliver-change).
+S-number coverage, after the operator's park ruling:
+
+DELIVERED — S1(3) S2(4) S3(5) S4(6) S5(6) S6(9) S7(9) S8(7) S9(8) S10(10,11)
+S11(11) S20's D1 half(12) S22(23) S23(1,6,7,10,23,25) S24(dr-deliver-change).
+
+PARKED (operator approved: REQUEST.md Amendment 1, R20) — S12 S13 S14 S15 S16
+S17 S18 S19, S20's localization half, S21. All ten are carried verbatim into
+`PARKED.md`'s prompt, which is why the resuming window starts at
+`dr-plan-steps` rather than re-specifying them.
