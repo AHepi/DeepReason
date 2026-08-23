@@ -944,9 +944,12 @@ class LLMAdapter:
             # would put a request it never authorized on the wire, and on a
             # repair bundle that is a second bite at the contract.
             return stand_down(NOTICE_REPAIR_BUNDLE)
-        if mechanism != OutputMechanism.JSON_TEXT or getattr(
-            endpoint, "json_mode", False
-        ):
+        if mechanism != OutputMechanism.JSON_TEXT:
+            # A grammar or a native schema is enforced at the sampler, so the
+            # deliberation leg could not be free of it and the split would buy
+            # nothing. `json_object` is NOT in this class: it is one response
+            # -format field, which the deliberation leg omits per request while
+            # the emission leg carries the route's mode in full.
             return stand_down(NOTICE_OUTPUT_MECHANISM)
         return plan_split(
             mode=self.split_budget_mode,
@@ -1025,8 +1028,18 @@ class LLMAdapter:
             # protocol exists for, and whatever the provider thought is
             # recovered from its side channel.
             started = time.monotonic()
+            # UNCONSTRAINED, and this is the whole mechanism: the tax that
+            # empties a seat is paid for constraining the DELIBERATION, so a
+            # leg that still had to emit JSON would buy nothing. No schema, no
+            # mechanism, no response_format -- and none of it by mutating the
+            # endpoint, so the frozen lease still verifies the route's own
+            # values on this dispatch and the emission leg below carries the
+            # route's output mode in full.
             spoken, spent, stopped = _send(
-                deliberation, plan.reason_max_tokens, allow_empty_content=True
+                deliberation,
+                plan.reason_max_tokens,
+                json_mode=False,
+                allow_empty_content=True,
             )
             trace = spoken or getattr(endpoint, "last_reasoning_trace", None) or ""
             legs.append(LLMAttempt(

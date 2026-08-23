@@ -208,6 +208,7 @@ class MockEndpoint:
             "prompt": prompt,
             "max_tokens": self.max_tokens if override is _UNSET else override,
             "reasoning": _resolve(kwargs.get("reasoning", _UNSET), None),
+            "kwargs": dict(kwargs),
         })
         if self._fn is not None:
             # A two-parameter script also sees the request knobs, so a test can
@@ -302,6 +303,7 @@ class OpenAICompatEndpoint:
         stop: list[str] | None = None,
         max_tokens=_UNSET,
         reasoning=_UNSET,
+        json_mode=_UNSET,
     ) -> dict:
         from deepreason.llm.providers import reasoning_body
 
@@ -349,7 +351,7 @@ class OpenAICompatEndpoint:
             # Grammar is a fixed lease property. Unsupported providers reject
             # the request; this method never falls back to a different mode.
             body["grammar"] = JSON_GBNF
-        elif self.json_mode and mechanism is None:
+        elif _resolve(json_mode, self.json_mode) and mechanism is None:
             body["response_format"] = {"type": "json_object"}
         if stop:
             body["stop"] = list(stop)
@@ -368,6 +370,7 @@ class OpenAICompatEndpoint:
         stop: list[str] | None = None,
         max_tokens=_UNSET,
         reasoning=_UNSET,
+        json_mode=_UNSET,
         allow_empty_content: bool = False,
     ) -> str:
         self.last_usage = None
@@ -384,6 +387,7 @@ class OpenAICompatEndpoint:
             stop=stop,
             max_tokens=max_tokens,
             reasoning=reasoning,
+            json_mode=json_mode,
         )
         headers = {"Content-Type": "application/json"}
         if self.api_key:

@@ -1074,13 +1074,22 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
     _write_bridge_qualification(harness, manifest)
     _write_eligible_v6_run_result(root, manifest)
 
-    # The public bridge makes three provider calls: the frozen summarizer
-    # builds the claim ledger, the frozen thesis route composes the
-    # grounded output, and the frozen judge route reviews its grounding.
-    # Every canonical role rides one endpoint, so a single ordered script
-    # serves all three dispatches. The third response is the direct cost
-    # of seating the reviewer: review is a provider call, not free.
+    # The public bridge does three units of provider WORK: the frozen
+    # summarizer builds the claim ledger, the frozen thesis route composes the
+    # grounded output, and the frozen judge route reviews its grounding. The
+    # third is the direct cost of seating the reviewer: review is a provider
+    # call, not free.
+    #
+    # Each of those is now TWO dispatches, not one. The public preset is a
+    # reasoning route, so the split-budget seat protocol (llm/split.py) arms
+    # under its shipped default: a deliberation leg at B_r whose prose is never
+    # validated, then a non-thinking emission leg at B_a that produces the wire
+    # value. The script therefore interleaves -- prose, value, prose, value,
+    # prose, value -- and the deliberation responses are deliberately not
+    # JSON, because nothing parses them.
+    deliberation = "Weighing the record before serialising."
     responses = [
+        deliberation,
         json.dumps(
             {
                 "entries": [
@@ -1093,6 +1102,7 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
                 ]
             }
         ),
+        deliberation,
         json.dumps(
             {
                 "sections": [
@@ -1108,6 +1118,7 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
                 "resolution_reason": "The record supports a conjecture, not a fact.",
             }
         ),
+        deliberation,
         json.dumps({"finding": "supported"}),
     ]
     dispatched = []
@@ -1148,13 +1159,11 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
     result = mcp.call_tool("bridge_result", {"run_id": run_id, "limit": 5})
     assert result["terminal"]["process_status"] == "success"
     assert result["output"]["resolution"] == "partially_answered"
-    # Exactly the three scripted calls, no more: ledger, composition,
-    # grounding review. The third is what seating the reviewer costs.
-    assert dispatched == [
-        profile.endpoint_id,
-        profile.endpoint_id,
-        profile.endpoint_id,
-    ]
+    # Exactly the six scripted dispatches, no more: three units of work at
+    # two legs each. The three units are ledger, composition and grounding
+    # review; the second leg of each is what the split-budget protocol costs
+    # in round trips, and it buys a seat that answers when its cap runs out.
+    assert dispatched == [profile.endpoint_id] * 6
     assert responses == []
     actions = [
         event.bridge.action

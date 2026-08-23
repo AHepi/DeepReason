@@ -440,3 +440,82 @@ def test_the_plan_is_a_frozen_value():
     assert isinstance(plan, SplitPlan)
     with pytest.raises(Exception):
         plan.reason_max_tokens = 1
+
+
+# --- the mechanism, pinned where it can actually regress -------------------
+
+
+def test_the_deliberation_leg_is_genuinely_unconstrained(tmp_path):
+    """Implements R1, and pins the ONE thing that makes the split work.
+
+    The tax that empties a seat is paid for constraining the DELIBERATION, so
+    a first leg that still had to emit JSON would buy nothing at all. This
+    caught a real defect: the guard originally stood the protocol down on any
+    `json_object` route, and every profile `deepreason setup` mints is
+    `json_object` by default -- so the feature would have shipped and never
+    once fired.
+    """
+
+    endpoint = _endpoint([TRUNCATED_TRACE, ANSWER])
+    endpoint.json_mode = True  # what a json_object route gives a real endpoint
+    _adapter(endpoint, tmp_path, mode="on").call("summarizer", "PACK", ProseOutput)
+
+    deliberation, emission = endpoint.calls
+    assert deliberation["kwargs"].get("json_mode") is False
+    assert "response_schema" not in deliberation["kwargs"]
+    assert "output_mechanism" not in deliberation["kwargs"]
+
+    # The emission leg carries the route's own output mode in full: the
+    # override is per request and never mutates the endpoint.
+    assert "json_mode" not in emission["kwargs"]
+    assert endpoint.json_mode is True
+
+
+def test_a_route_enforced_at_the_sampler_stands_down(tmp_path):
+    """Implements R3: a grammar or native schema constrains every completion at
+    the sampler, so no leg of it could be free and the split buys nothing.
+    Standing down is recorded, never refused."""
+
+    from deepreason.llm.split import NOTICE_OUTPUT_MECHANISM, stand_down
+
+    assert stand_down(NOTICE_OUTPUT_MECHANISM).notice == NOTICE_OUTPUT_MECHANISM
+    assert stand_down(NOTICE_OUTPUT_MECHANISM).disclosed
+    assert not stand_down(NOTICE_OUTPUT_MECHANISM).armed
+
+
+def test_the_shipped_glm_seat_actually_arms():
+    """Implements R2, end to end on a REAL profile rather than a hand-made one.
+
+    R2 names glm-5.2 by name, so the regression that matters is whether the
+    seat a `deepreason setup` profile actually compiles to arms under the
+    shipped default. Pinned because the answer was NO until the deliberation
+    leg was allowed to be unconstrained.
+    """
+
+    from deepreason.preparation import build_preparation_manifest
+    from deepreason.provider_profile import ProviderProfileV1
+
+    profile = ProviderProfileV1.create(
+        provider="ollama",
+        endpoint="https://ollama.com/v1",
+        model_id="glm-5.2",
+        model_revision="r1",
+        family="glm",
+        context_window_tokens=131_072,
+        maximum_completion_tokens=32_768,
+        credential_env="OLLAMA_API_KEY",
+    )
+    manifest = build_preparation_manifest(
+        profile, question="q", compiled_at="2026-07-11T00:00:00Z"
+    )
+    route = manifest.roles["conjecturer"][0]
+    plan = plan_split(
+        mode="auto",
+        ceiling=route.max_tokens,
+        extraction_tokens=512,
+        provider=route.provider,
+        reasoning=route.reasoning,
+    )
+    assert plan.armed, (route.provider, route.reasoning, route.output_mode)
+    assert plan.extract_reasoning == "none"
+    assert plan.reason_max_tokens + plan.extract_max_tokens == route.max_tokens
