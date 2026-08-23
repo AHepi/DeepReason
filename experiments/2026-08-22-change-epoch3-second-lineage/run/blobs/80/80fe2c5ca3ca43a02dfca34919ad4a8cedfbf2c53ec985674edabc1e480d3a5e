@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001's stated cross-city modulator is self-contradictory. The mechanism claims the nocturnal gap 'depends on the extent of vegetation and green space' and that 'greener cities have a smaller night-time temperature gap,' yet the claim sentence frames the effect as scaling WITH vegetation/irrigation ('the cross-city gap scales with vegetation and irrigation'), which reads as a positive relationship (more vegetation → larger gap). The 'scales with' phrasing directly conflicts with the intended inverse relationship, making the proposed single cross-city mechanism internally inconsistent.",
+      "premise": "The problem asks what single mechanism best explains why the night-time gap is LARGER in some cities than others. A candidate answer must state the modulator with a consistent direction.",
+      "premise_evidence": [
+        {
+          "block": "000000000000",
+          "quote": "the cross-city gap scales with vegetation and irrigation—greener cities have a smaller night-time temperature gap."
+        },
+        {
+          "block": "000000000000",
+          "quote": "The cross-city magnitude of this effect depends on the extent of vegetation and green space: cities with more irrigation and green space exhibit stronger daytime evapotranspiration, reducing the nocturnal heat island gap."
+        }
+      ]
+    }
+  ]
+}
