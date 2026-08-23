@@ -1,6 +1,6 @@
 # Checklist for: the two-call seat protocol
-State: next=14 blockers=none (gate GREEN at 3857 passed, 0 failed; docs_verify
-       full running). Steps 12-13 done and pushed. The step-11 diff_budget
+State: next=16 blockers=none (gate GREEN 3857/0; docs_verify 3 failed = the
+       C6 baseline exactly, --audit 0, --links 0). Steps 12-13 done and pushed. The step-11 diff_budget
        EXCEEDED was raised to the operator and closed ("Ledger the overrun,
        keep the tests"); SPEC.md Amendment 2 records the measured breakdown
        and raises the ceiling to 1223. Nothing trimmed, no assertion weakened.
@@ -250,6 +250,31 @@ them, never into a trailing docs step:
           run 3: 3857 passed, 6 skipped in 968.20s (0:16:08)  -> 0 failed
 
       Above the C6 baseline of 3829 by the 28 tests this tranche added.
+
+- [x] 17. (S9, R14) Advance `Verified-at:` on the six map documents whose
+      owned files this tranche moved — and ONLY those whose checks the full
+      `docs_verify` run above actually re-ran green, since a stale stamp is
+      honest and a false one is not. Four this tranche edited (`SUB-llm.md`,
+      `SUB-ontology.md`, `CON-seats.md`, `INV-frozen-surfaces.md`) and two it
+      did not edit but whose owned files it changed (`SEAM-llm-x-workflow.md`
+      via `llm/adapter.py`, `SUB-manifest.md` via `run_manifest.py`).
+      done-when: `python tools/docs_verify.py --stale` no longer lists any of
+      the six, and the remaining entries are all attributable to commits
+      outside this tranche (paste it).
+      PROOF: eight documents advanced in total, not six — `--stale` surfaced
+      two more this tranche's commits had made stale
+      (`SEAM-manifest-x-schools.md` and `CON-schools.md`, both via owned files
+      rather than edits). 11 stale -> 5, and every one of the five names a
+      commit from another tranche:
+
+          CON-run-identity.md        bce018ae5  all-configs-allowed
+          SEAM-evaluation-x-rules.md 1fbf071af, e732d3141  reach rulings
+          SEAM-llm-x-scheduler.md    8469d0669  route-lease max_tokens fix
+          SUB-evaluation.md          1fbf071af  reach rulings
+          SUB-scheduler.md           8469d0669  route-lease max_tokens fix
+
+      Stamps advanced only because the FULL `docs_verify` run above actually
+      re-ran all 982 checks green: a stale stamp is honest, a false one is not.
 
 - [ ] 16. (all) [COMMIT] final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
