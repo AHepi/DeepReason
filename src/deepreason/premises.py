@@ -32,7 +32,7 @@ from __future__ import annotations
 import json
 
 from deepreason.canonical import canonical_json
-from deepreason.ontology import Commitment, Interface, Ref, Status
+from deepreason.ontology import Commitment, Interface, Provenance, Ref, Status
 from deepreason.ontology.artifact import RefRole
 from deepreason.programs import content_text
 
@@ -74,6 +74,11 @@ PREMISE_UNACCREDITED = "premise-unaccredited"  # the premise lost its support
 
 
 PREMISE_CITATION_SCHEMA = "premise-citation-record.v1"
+
+# The sampled role variants a rent verdict's second reading rests on, promoted
+# from a trace-blob payload to a registered artifact so the sample is
+# ATTACKABLE (Rung D / E-1, R58).
+PREMISE_SAMPLE_SCHEMA = "premise-rent-sample.v1"
 
 
 def attribution_content(
@@ -358,6 +363,7 @@ def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
     provider call and is a spot-check rather than a fixed point.
     """
     from deepreason.measures.demarcation import crit, load
+    from deepreason.proof_debt import KernelCheckV1, file_derivation_manifest
     from deepreason.rules.warrants import register_fail_warrant
 
     settled = decided if decided is not None else set()
@@ -383,10 +389,50 @@ def premise_rent_sweep(harness, variator=None, *, decided=None) -> list:
                 )
                 continue
             sampled = list(getattr(variator, "sampled", ()))
+        # The bill this verdict rests on (Rung D / E-1). Only the SAMPLED path
+        # files one, because only it has an open certificate: a premise felled
+        # for an empty attack surface rests on `crit` alone, which is
+        # re-derivable and owes no certificate. The sample is registered as an
+        # ORDINARY artifact so "your sample was unrepresentative" finally has
+        # somewhere to land -- before this it lived only in the trace blob,
+        # which is readable and inert.
+        manifest_ref = None
+        if declares:
+            certificate = harness.create_artifact(
+                canonical_json(
+                    {
+                        "schema": PREMISE_SAMPLE_SCHEMA,
+                        "premise": artifact.id,
+                        "variants": sampled,
+                    }
+                ),
+                codec="json",
+                provenance=Provenance(role="variator"),
+            )
+            manifest = file_derivation_manifest(
+                harness,
+                artifact.id,
+                kernel_checks=[
+                    KernelCheckV1(
+                        name="demarcation.crit",
+                        program="",  # crit reads the interface, not the bytes
+                        recorded_verdict="pass" if declares else "fail",
+                    )
+                ],
+                open_certificate_refs=[certificate.id],
+                # A2: the verdict is a finite-budget deterministic result.
+                # A10: the sample is canonically ordered and serialized. Both
+                # are ASSUMED here rather than proved, which is exactly what
+                # axiom debt is for.
+                axiom_debt=["A2", "A10"],
+                provenance=Provenance(role="critic"),
+            )
+            manifest_ref = manifest.id
         critic = register_fail_warrant(
             harness,
             commitment_id=PREMISE_RENT.id,
             target_id=artifact.id,
+            manifest_ref=manifest_ref,
             nu_content=(
                 f"nu: the demarcation verdict on {artifact.id} is sound and "
                 "relevant -- it fails demarcation: "

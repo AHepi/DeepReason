@@ -69,6 +69,21 @@ variants are logged rather than the kernel seeded. Without a variator seat the
 sweep fells nothing and records `premise.rent-undecided.v1` instead: "we could
 not check" must never look like "we checked and it was fine".
 
+**Since Rung D the sample is an ARTIFACT, not only a blob**
+(`DR-CON-proof-debt-and-localization`). ν declaring that the verdict rested on
+a sample made the fact readable; it did not make the sample attackable, so
+"your sample was unrepresentative" had nowhere to land. The sweep now registers
+the sampled variants as a `premise-rent-sample.v1` artifact and files a
+derivation manifest naming it as the one OPEN CERTIFICATE, with
+`demarcation.crit` as the kernel check and `A2`/`A10` as the axiom debt. The
+manifest hangs off ν as EVIDENCE, so attacking the sample reinstates the
+premise through the ordinary closures — and un-marks its problem by the same
+computed predicate that marked it (N1). Only the SAMPLED path files a bill: a
+premise felled for an empty attack surface rests on `crit` alone, which is
+re-derivable and owes no certificate.
+`check: python -m pytest tests/test_proof_debt.py -k "rent_sweep" -q`
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/premises.py').read_text()); assert any(isinstance(n,ast.Call) and 'file_derivation_manifest' in ast.unparse(n.func) for n in ast.walk(t))"`
+
 `check: python -c "from deepreason.premises import PREMISE_RENT; from deepreason import programs; assert not programs.evaluable(PREMISE_RENT)"`
 `check: python -m pytest tests/test_premise_channel.py::test_crit_is_the_weak_declaration_test tests/test_premise_channel.py::test_a_structural_battery_is_not_load_bearing tests/test_premise_channel.py::test_the_rent_battery_never_enters_its_own_battery tests/test_premise_channel.py::test_demarcated_is_both_readings tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation tests/test_premise_channel.py::test_a_prose_premise_that_is_load_bearing_survives tests/test_premise_channel.py::test_without_a_variator_nothing_falls_and_the_record_says_why -q`
 

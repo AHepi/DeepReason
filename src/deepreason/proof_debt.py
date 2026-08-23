@@ -46,6 +46,24 @@ from deepreason.programs import content_text
 
 # E-1's format, verbatim. Constants rather than literals because the writer of
 # a bill and the reader of a receipt must agree on the words.
+# Re-exported so a CHANNEL module (premises.py, and any later producer) builds
+# a bill through this module rather than reaching into the claim substrate.
+# `DR-SUB-calculus` pins that separation: the substrate is the controller's, and
+# a channel that imports it directly is a second authority on claim shape.
+__all__ = [
+    "AXIOM_DEBT",
+    "KERNEL_CHECK",
+    "NOT_RERUNNABLE",
+    "OPEN_CERTIFICATES",
+    "CertificateItem",
+    "KernelCheckV1",
+    "KernelVerdict",
+    "Receipt",
+    "file_derivation_manifest",
+    "manifests_for",
+    "receipt",
+]
+
 KERNEL_CHECK = "KERNEL_CHECK"
 OPEN_CERTIFICATES = "OPEN_CERTIFICATES"
 AXIOM_DEBT = "AXIOM_DEBT"

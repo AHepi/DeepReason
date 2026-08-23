@@ -10,7 +10,6 @@ trace payload unchanged — the helper is plumbing, not policy.
 """
 
 from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Warrant, WarrantType
-from deepreason.ontology.artifact import RefRole
 
 
 def verdict_on_record(harness, commitment_id: str, target_id: str) -> bool:
@@ -150,6 +149,12 @@ def register_fail_warrant(
     if skip_if_on_record and verdict_on_record(harness, commitment_id, target_id):
         return None
     if manifest_ref is not None:
+        # Imported in-function: this module's TOP-LEVEL imports are pinned to
+        # `deepreason.ontology` alone (DR-SEAM-evaluation-x-rules), and the pin
+        # is what keeps the shared warrant package from acquiring a dependency
+        # web every mint site then inherits.
+        from deepreason.ontology.artifact import RefRole
+
         # Merged, never replaced: a caller that supplied its own nu_interface
         # (case law mentions a standard on it) must keep every ref it declared.
         base = nu_interface or Interface()

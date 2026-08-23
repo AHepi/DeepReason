@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=10 blockers=none
+State: next=13 blockers=none
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -263,17 +263,73 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       A read-only replay of the whole log re-derives the live labels exactly,
       and the receipt built from replayed state equals the live one.
 
-- [ ] 10. (S10) Teach `premises.py::premise_rent_sweep` to register the sample
+- [x] 10. (S10) Teach `premises.py::premise_rent_sweep` to register the sample
       certificate + manifest on the sampled path and pass `manifest_ref`.
       Update `CON-problem-layer-lifecycle.md` in the SAME commit.
-      done-when: `python -m pytest tests/test_proof_debt.py::test_the_rent_sweep_files_a_manifest_whose_sample_is_attackable -q` -> 1 passed
 
-- [ ] 11. (S10, S11) Ring: the premise/calculus/warrant consumers the census
+      PROOF:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -q
+      ..................                                              [100%]
+      18 passed in 0.54s
+      ```
+      Only the SAMPLED path files a bill: a premise felled for an empty attack
+      surface rests on `crit` alone, which is re-derivable and owes no
+      certificate.
+
+      **TWO ARCHITECTURAL PINS CAUGHT BY THE MAP, and both were right.**
+      `docs_verify` went from 3 to 5 failures on the first attempt:
+      - `SUB-calculus.md:163` asserts `! grep -q "deepreason.calculus"
+        src/deepreason/premises.py`. The first draft imported `KernelCheckV1`
+        straight from the claim substrate. The pin is correct: a CHANNEL module
+        that imports the substrate becomes a second authority on claim shape.
+        Fixed by re-exporting `KernelCheckV1` from `proof_debt.py`, which is the
+        channel `premises.py` is actually talking to.
+      - `SEAM-evaluation-x-rules.md:39` pins `rules/warrants.py`'s TOP-LEVEL
+        imports to `{deepreason.ontology}` exactly. The first draft added a
+        module-level `RefRole` import. The pin is correct: the shared warrant
+        package must not grow a dependency web every mint site then inherits.
+        Fixed by importing `RefRole` inside the branch that needs it, with the
+        constraint stated in a comment.
+
+      Neither pin was weakened. Map moved in the same commit
+      (`CON-problem-layer-lifecycle.md`), and both its new checks were run
+      before being written down:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -k "rent_sweep" -q
+      2 passed, 16 deselected in 0.14s
+      $ python -c "...ast: premises.py calls file_derivation_manifest..."
+      check ok
+      $ python tools/docs_verify.py
+      docs_verify: 3 failed        # back to the pre-existing three
+      ```
+
+- [x] 11. (S10, S11) Ring: the premise/calculus/warrant consumers the census
       named EXPECTED TO MOVE or MUST NOT MOVE.
-      done-when: `python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py tests/test_calculus_frame_separation.py tests/test_calculus_claim_substrate.py tests/test_calculus_frame_assertions.py tests/test_easy.py tests/test_evidence_view.py tests/test_scheduler.py tests/test_simulation_backend.py tests/test_workload_formal.py -q` -> 0 failed; paste it
 
-- [ ] 12. (S20) Prove D1's readout inertness: filing a manifest moves no label.
-      done-when: `python -m pytest tests/test_proof_debt.py::test_filing_a_manifest_moves_no_label -q` -> 1 passed
+      PROOF:
+      ```
+      $ python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py tests/test_calculus_frame_separation.py tests/test_calculus_claim_substrate.py tests/test_calculus_frame_assertions.py tests/test_easy.py tests/test_evidence_view.py tests/test_scheduler.py tests/test_simulation_backend.py tests/test_workload_formal.py -q
+      125 passed, 1 skipped in 7.76s
+      ```
+      **A census prediction that was conservative rather than wrong:**
+      SPEC.md marked `test_premise_channel.py` EXPECTED TO MOVE on artifact
+      counts, because the sweep now registers two more artifacts. It did NOT
+      move — those tests assert on VERDICTS and on named events, never on a
+      total artifact count. Recorded because an over-broad prediction is a
+      weaker instrument than a precise one, even when it costs nothing.
+
+- [x] 12. (S20) Prove D1's readout inertness: filing a manifest moves no label.
+
+      PROOF (both halves, behavioural and structural):
+      ```
+      $ python -m pytest tests/test_proof_debt.py -k "moves_no_label or read_path" -q
+      2 passed, 16 deselected
+      ```
+      Structural because behavioural alone is weak: a behavioural test proves a
+      label did not move on the one input it tried, while the AST guard proves
+      `receipt` and `manifests_for` hold no call that COULD move one, and that
+      the module never imports `adjudication`.
 
 - [ ] 13. (all D1) [COMMIT] D1 boundary: diff-budget check + push.
       done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; paste it
