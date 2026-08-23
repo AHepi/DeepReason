@@ -1,8 +1,11 @@
 # Checklist for: the two-call seat protocol
-State: next=12 blockers=none (the step-11 diff_budget EXCEEDED was raised to
-       the operator and closed: they chose "Ledger the overrun, keep the
-       tests". SPEC.md Amendment 2 records the measured breakdown and raises
-       the ceiling to 1003. Nothing trimmed, no assertion weakened.
+State: next=14 blockers=none (gate GREEN at 3857 passed, 0 failed; docs_verify
+       full running). Steps 12-13 done and pushed. The step-11 diff_budget
+       EXCEEDED was raised to the operator and closed ("Ledger the overrun,
+       keep the tests"); SPEC.md Amendment 2 records the measured breakdown
+       and raises the ceiling to 1223. Nothing trimmed, no assertion weakened.
+       The frozen-surface contact the step-15 fix required was raised and
+       GRANTED (REQUEST.md Amendment 2, R19).
 Map ids this plan was built on: DR-SUB-llm, DR-SUB-ontology, DR-CON-seats,
 DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-INV-frozen-surfaces.
 Re-read REQUEST.md (including Amendment 1: R17, R18) + SPEC.md before every
@@ -200,19 +203,31 @@ them, never into a trailing docs step:
       done-when: `git status --porcelain` empty for tracked files AND HEAD
       equals origin's branch head.
 
-- [ ] 12. (S10) Prove the requalification price (R13): compute
+- [x] 12. (S10) Prove the requalification price (R13): compute
       `qualification_subject_digest(manifest, profile)` over a fixture on this
       tree and on `git stash`-clean `origin/main`, and record both in
       RESULTS.md.
       done-when: the two digests are byte-identical and both are pasted into
       `experiments/2026-08-22-change-two-call-seat-protocol/RESULTS.md`.
+      PROOF (after the step-15 fix; the first attempt measured a defective
+      tree and is recorded as a superseded RESULTS.md segment):
 
-- [ ] 13. (R12) Wheel smokes, run ONLY if `git diff --stat origin/main` shows a
+          e1ea05e82  b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386
+          this tree  b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386
+
+      Byte-identical: no qualification subject digest moves, requalification
+      price zero per home.
+
+- [x] 13. (R12) Wheel smokes, run ONLY if `git diff --stat origin/main` shows a
       public-surface file moved (console entry points, MCP tool set/schema sha,
       wheel layout). If nothing moved, record that and skip.
       done-when: either the two smokes pass (paste), or a pasted
       `git diff --name-only origin/main -- pyproject.toml src/deepreason/mcp/ scripts/`
       showing no public-surface file moved.
+      PROOF: `git diff --name-only e1ea05e82 -- pyproject.toml
+      src/deepreason/mcp/ scripts/ src/deepreason/cli/` -> EMPTY. No console
+      entry point, MCP tool set, schema sha or wheel-layout change, so the
+      wheel smokes are correctly not run (R12).
 
 - [ ] 14. (all) Map check, FULL mode (not `--fast`, which reuses cached results
       and cannot catch a document this tranche's `src/` change just broke).
@@ -221,10 +236,20 @@ them, never into a trailing docs step:
       the tail), AND `python tools/docs_verify.py --audit` reports no new
       unfailable check.
 
-- [ ] 15. (all) Full gate, on an otherwise idle box (never concurrently with
+- [x] 15. (all) Full gate, on an otherwise idle box (never concurrently with
       docs_verify).
       done-when: `python -m pytest tests/ -q -n 4` output ends
       `N passed, 0 failed` against the C6 baseline of 3829 passed (paste it).
+      PROOF, third run — the first two were RED and both failures were real:
+
+          run 1: 40 failed, 3814 passed  (Config leaking into the manifest's
+                 source-config echo; MockEndpoint arity)
+          run 2:  1 failed, 3853 passed  (the json_mode guard read the endpoint
+                 object instead of the frozen route, which then exposed that
+                 the protocol would never arm on any real profile)
+          run 3: 3857 passed, 6 skipped in 968.20s (0:16:08)  -> 0 failed
+
+      Above the C6 baseline of 3829 by the 28 tests this tranche added.
 
 - [ ] 16. (all) [COMMIT] final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
