@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "The target correctly answers both parts of the problem. It identifies slow nighttime release of stored daytime heat from high thermal-mass urban surfaces as the mechanism keeping city air warmer than the countryside, and names a single mechanism—impervious-surface thermal-mass fraction—for cross-city variation. The reasoning is mechanistically coherent and directly on-scope.", "premise": null, "premise_evidence": null, "counterexample": null}]}
+```

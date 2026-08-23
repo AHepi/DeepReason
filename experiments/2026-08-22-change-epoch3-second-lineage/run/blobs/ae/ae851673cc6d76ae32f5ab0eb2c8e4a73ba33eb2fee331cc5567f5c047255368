@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target correctly answers both parts of the problem: it identifies the release of stored daytime heat from high heat capacity urban materials as the reason cities stay warmer at night, and it identifies sky view factor reduction (driven by building height and density) as the single mechanism modulating the cross-city variation of the nighttime gap. The reasoning is physically sound and directly addresses the scope of the problem as stated.",
+      "counterexample": null,
+      "premise": null,
+      "premise_evidence": null
+    }
+  ]
+}
