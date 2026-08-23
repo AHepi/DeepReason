@@ -34,3 +34,22 @@ control holds (not all three pass): True
 [2026-08-23T10:22:26Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-23T10:23:21Z] QUALIFY OK rc=0
 [2026-08-23T10:23:21Z] === PHASE 1: run --budget cycles=12 --token-budget 200000 ===
+[2026-08-23T10:31:34Z] PHASE 1 rc=4 -- see /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/phase1-reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-23T10:31:42Z] PHASE 1 stop_reason=operational_failure
+[2026-08-23T10:31:42Z] AMEND SKIPPED: stop_reason 'operational_failure' does not authorize continuation (workflow/lifecycle.py:28) -- phase 2 cannot run
+[2026-08-23T10:31:42Z] === AUDIT: verify_root + findings + results + the reach census ===
+root                         /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run
+recorded reach_set events    0
+recorded addr pairs          0
+recorded reach-provisional   0
+  A-skip/status                      3
+  A-skip/unaddr                      35
+  addr_pairs                         24
+  artifacts_candidate                21
+  artifacts_total                    59
+  commitments_registered             87
+  problems_total                     1
+
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reach-census.json
+[2026-08-23T10:32:32Z] REACH CENSUS: zero reach_set events -- judge per PREREG_EPOCH3.md §5
+[2026-08-23T10:32:32Z] === DONE: see /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/{phase1-reason.log,phase2-continue.log,verify_root.json,epoch3-reach-census.json,findings.json,results.txt} ===
