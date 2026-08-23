@@ -1,5 +1,5 @@
 # Checklist for: the two-call seat protocol
-State: next=16 blockers=none (gate GREEN 3857/0; docs_verify 3 failed = the
+State: next=none blockers=none — tranche CLOSED, VALIDATION PASS, delivered.
        C6 baseline exactly, --audit 0, --links 0). Steps 12-13 done and pushed. The step-11 diff_budget
        EXCEEDED was raised to the operator and closed ("Ledger the overrun,
        keep the tests"); SPEC.md Amendment 2 records the measured breakdown
@@ -229,12 +229,20 @@ them, never into a trailing docs step:
       entry point, MCP tool set, schema sha or wheel-layout change, so the
       wheel smokes are correctly not run (R12).
 
-- [ ] 14. (all) Map check, FULL mode (not `--fast`, which reuses cached results
+- [x] 14. (all) Map check, FULL mode (not `--fast`, which reuses cached results
       and cannot catch a document this tranche's `src/` change just broke).
       done-when: `python tools/docs_verify.py` failures are exactly the 3
       pre-existing shallow-clone failures of the C6 baseline, none new (paste
       the tail), AND `python tools/docs_verify.py --audit` reports no new
       unfailable check.
+      PROOF:
+
+          docs_verify [full]: 62 documents, 982 checks, 4 workers
+          docs_verify: 3 failed
+            -- CON-run-identity.md:200, :202, :204, all three git-history
+               checks a shallow clone cannot satisfy = the C6 baseline exactly
+          docs_verify --audit: 0 finding(s)
+          docs_verify --links: 0 dangling reference(s), 62 document(s)
 
 - [x] 15. (all) Full gate, on an otherwise idle box (never concurrently with
       docs_verify).
@@ -276,10 +284,13 @@ them, never into a trailing docs step:
       Stamps advanced only because the FULL `docs_verify` run above actually
       re-ran all 982 checks green: a stale stamp is honest, a false one is not.
 
-- [ ] 16. (all) [COMMIT] final push and clean-tree confirmation.
+- [x] 16. (all) [COMMIT] final push and clean-tree confirmation.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD` equals
       `git rev-parse origin/claude/two-call-seat-protocol-mmaaf5`.
+      PROOF: tree clean; HEAD and origin both
+      4df372339bc094d7f34f42a90d506bef18aaaf96 at validation, advanced by the
+      delivery commit and pushed.
 
 ## Coverage
 
