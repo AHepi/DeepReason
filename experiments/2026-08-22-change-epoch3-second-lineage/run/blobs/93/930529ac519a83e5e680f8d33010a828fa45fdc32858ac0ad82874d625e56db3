@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "The nocturnal UHI gap scales primarily with sky view factor: cities with deeper, denser street canyons trap longwave radiation and impede nocturnal cooling, so the gap is more pronounced in denser, taller cities.",
+    "mechanism": "On a clear, calm night, rural surfaces cool efficiently by radiating longwave energy to the cold sky. In a city, the urban canopy layer is bounded by buildings that reduce the effective sky view factor, trapping upwelling longwave radiation via repeated inter-surface reflections and re-absorption. Because the radiative sink—the cold night sky—is occluded, the urban fabric cools more slowly. The daytime heat stored in masonry and asphalt is thus released more gradually and retained longer after sunset. Cross-city, the gap scales inversely with sky view factor: cities with taller buildings and narrower streets have smaller SVF, weaker nocturnal longwave loss, and a stronger nocturnal UHI.",
+    "counterconditions": [
+      "The nocturnal UHI is dominated by anthropogenic heat output (traffic, heating, industry) rather than by radiative geometry.",
+      "Cloudy or windy conditions negate the calm, clear-sky assumption and collapse the SVF mechanism.",
+      "The gap is better explained by a rural evaporative cooling deficit from aridity and impervious surfaces than by urban radiation trapping.",
+      "Rural surfaces have lower heat capacity and therefore cool faster regardless of urban SVF.",
+      "The cross-city variance is driven by city size and total impervious area, not by street-canyon geometry."
+    ],
+    "typicality": 0.75,
+    "optional_refs": ["SRC_001", "SRC_006"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_002", "SRC_007"],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "candidate": {
+    "claim": "The nocturnal UHI is controlled by differential longwave radiative cooling: dense urban street canyons trap longwave radiation via reduced sky view factors, and the cross-city magnitude of the UHI gap scales inversely with the sky view factor, being larger in denser, taller cities where radiative escape is most obstructed.",
+    "mechanism": "On clear, calm nights, surfaces cool primarily by emitting longwave radiation to the cold sky. In the countryside, a high sky view factor allows unimpeded radiative heat loss. In cities, the three-dimensional geometry of street canyons created by building height and built density reduces the effective sky view factor. This geometrical obstruction traps longwave radiation, causing urban surfaces and the overlying air to retain heat and cool more slowly. The cross-city variation in the night-time gap depends on this geometry: cities with taller buildings and denser street networks have smaller sky view factors, which more strongly suppress nocturnal radiative cooling, resulting in a larger and more pronounced UHI.",
+    "counterconditions": [
+      "If rural and urban surfaces exhibit identical sky view factors, the nocturnal UHI would be substantially diminished, indicating geometry is not the primary driver.",
+      "If the nocturnal UHI gap is found to increase during periods of high wind speed, the street canyon radiative trapping mechanism would be invalidated as the dominant explanation.",
+      "If the UHI is maximized during the daytime rather than at night, this mechanism fails to explain the nocturnal specific phenomenon."
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_002"]
+    },
+    "typicality": 0.55
+  }
+}

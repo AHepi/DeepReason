@@ -1,0 +1,9 @@
+```json
+{
+  "patch": {
+    "pointer": "/scratch_proposal/unresolved_questions/0/related_refs",
+    "operation": "replace",
+    "value": ["NEW_001", "NEW_002"]
+  }
+}
+```

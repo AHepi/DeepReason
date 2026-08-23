@@ -1,0 +1,25 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target misidentifies the dominant mechanism for nocturnal UHI. On a clear, calm night, the primary driver of the urban-rural temperature gap is differential radiative cooling: rural areas with high sky view factor cool rapidly via longwave radiation to space, while urban street canyons trap heat (reduced sky view) and release stored thermal mass, slowing their cooling rate. Anthropogenic heat is typically a secondary contributor to nocturnal UHI magnitude. Crucially, for the cross-city variation question, the dominant single mechanism is urban geometry (sky view factor / street canyon effects), not anthropogenic heat. Cities with deeper street canyons and lower sky view factors exhibit larger nocturnal UHI regardless of population density or energy consumption. The target's own counterconditions concede this vulnerability — e.g., 'If the UHI persists in cities with minimal nighttime human activity, storage-release mechanisms would dominate instead' — and observational evidence from arid, low-population-density cities confirms large nocturnal UHI driven by geometry and thermal storage, not energy use. Thus the target fails the problem's request for the single best explanatory mechanism.",
+      "premise": "The dominant single mechanism explaining cross-city variation in nocturnal UHI intensity on clear, calm nights is urban geometry (sky view factor / street canyon effects), not anthropogenic heat emissions.",
+      "premise_evidence": [
+        {
+          "block": "000000000000",
+          "quote": "The magnitude of this nocturnal warming scales with population density and per-capita energy use. Therefore, the cross-city variation in the night-time UHI is best explained by the intensity of anthropogenic heat emissions"
+        },
+        {
+          "block": "000000000000",
+          "quote": "If the UHI persists in cities with minimal nighttime human activity, storage-release mechanisms would dominate instead."
+        }
+      ],
+      "counterexample": [
+        "A low-population-density arid city (e.g., Phoenix, AZ) with deep street canyons and high thermal mass exhibits a nocturnal UHI of similar or greater magnitude than a high-population-density city in a humid climate with comparable energy consumption, because the sky view factor and delayed surface cooling dominate the nighttime gap."
+      ]
+    }
+  ]
+}
+```
