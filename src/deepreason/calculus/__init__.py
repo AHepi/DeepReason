@@ -9,6 +9,8 @@ evidence. Bodies are proposable; semantics are not.
 
 from deepreason.calculus.claims import (
     CLAIM_SCHEMAS,
+    DerivationManifestV1,
+    KernelCheckV1,
     FrameAssertionV1,
     ClaimDecodeError,
     PremiseAttributionV1,
@@ -51,6 +53,8 @@ from deepreason.calculus.views import (
 
 __all__ = [
     "CLAIM_SCHEMAS",
+    "DerivationManifestV1",
+    "KernelCheckV1",
     "FRAME_NOT_ADDRESSED_TO_PROMOTION",
     "FRAME_NOT_A_FRAME_ASSERTION",
     "FRAME_NOT_UNREFUTED",

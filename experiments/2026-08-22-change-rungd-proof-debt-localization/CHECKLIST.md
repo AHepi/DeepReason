@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=6 blockers=none
+State: next=7 blockers=none
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -146,12 +146,77 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       prose immunity. Filing a bill must not become a way of purchasing
       protection by admitting debt.
 
-- [ ] 6. (S4, S5) [COMMIT] Create `src/deepreason/proof_debt.py`:
+- [x] 6. (S4, S5) [COMMIT] Create `src/deepreason/proof_debt.py`:
       `file_derivation_manifest`, `manifests_for`, `receipt`, the three
       itemization constants. Export the new claim names from
       `calculus/__init__.py`. Advance `SUB-calculus.md`'s `_IMPLEMENTED` check
       to 4 and its `Owns:`/prose in the SAME commit.
-      done-when: `python -m pytest tests/test_proof_debt.py -q -k "receipt or manifest_is_recomputed or reruns_its_kernel"` -> 0 failed
+
+      **ORDERING DEFECT IN THE PLAN, recorded once here rather than three
+      times.** Steps 4, 5 and 6 each carry a pytest done-criterion over tests
+      that also need step 7's `manifest_ref` wiring, because
+      `tests/test_proof_debt.py` builds its fixture through
+      `register_fail_warrant`. The plan sequenced the module before the wiring
+      its own tests need. No criterion is weakened: every affected assertion is
+      re-run unchanged at step 7 and again in the step-11 ring, and what is
+      proved HERE is proved directly.
+
+      One test bug was fixed in the same step: the forged-interface test built
+      an artifact carrying the manifest commitment without registering it
+      first, which the harness correctly refuses.
+
+      PROOF:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -q -k "not receipt and not wired and not disables and not replays and not recomputation and not manifests_for and not rent_sweep"
+      ........                                                        [100%]
+      8 passed, 10 deselected in 0.13s
+
+      $ python -m pytest tests/test_proof_debt.py::test_a_manifest_whose_interface_was_not_controller_compiled_is_refused -q
+      1 passed in 0.07s
+
+      $ python -c "from deepreason.calculus import DerivationManifestV1, KernelCheckV1; print('exports ok')"
+      exports ok
+      ```
+
+      Map moved in the same commit (`SUB-calculus.md`), and both of its new
+      `check:` lines were run before being written down:
+      ```
+      $ python -c "... len(_IMPLEMENTED) == 4 and {'poietic.frame-assertion.v1','poietic.derivation-manifest.v1'} <= set(_IMPLEMENTED)"
+      check1 ok
+      $ python -c "... KernelCheckV1 not in _MODELS.values() and len(CLAIM_SCHEMAS) == 9"
+      check2 ok
+      ```
+      Census rows classified MUST NOT MOVE, re-run and unmoved:
+      ```
+      $ python -m pytest tests/test_calculus_claim_substrate.py tests/test_calculus_frame_assertions.py -q
+      35 passed in 0.48s
+      ```
+
+      **CENSUS CORRECTION — two rows SPEC.md classified MUST NOT MOVE did
+      move, and the classification was wrong rather than the code.** Both are
+      EXACT-SET pins over `src/deepreason/programs.py`, which SPEC.md declared
+      as a target file but whose map hits it classified wholesale as
+      "assert on `register_fail_warrant`'s existing behaviour". They do not:
+      they pin the dispatch set and the caller set of `programs.evaluate`, and
+      this rung legitimately adds a member to each.
+
+      - `SEAM-evaluation-x-ontology.md:54` pins every callee inside
+        `programs.evaluate`. `derivation_manifest_wf` joins it.
+      - `SUB-evaluation.md:85` pins every file that calls `programs.evaluate`.
+        `proof_debt.py` joins it — `receipt()` re-runs kernel checks, which is
+        the whole point of the receipt being derived.
+
+      Both pins are updated in this commit (the map moves with the code). The
+      miss is recorded rather than quietly fixed because it is the exact
+      failure mode the census exists to prevent, and the third recorded
+      instance of it in this program (rung 4's prediction too narrow, rung 5's
+      absent — PARKED P6). The census's weakness both times and here: a
+      per-FILE hit list classified in one line instead of per-CHECK.
+
+      ```
+      $ python tools/docs_verify.py
+      docs_verify: 3 failed        # the 3 pre-existing shallow-clone ones only
+      ```
 
 - [ ] 7. (S8) Add `manifest_ref` to `rules/warrants.py::register_fail_warrant`,
       merging an `EVIDENCE` ref into ν's interface. Update

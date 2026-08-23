@@ -161,6 +161,7 @@ def test_a_manifest_whose_interface_was_not_controller_compiled_is_refused(harne
     """The compiler is the only authority on ref roles. An artifact whose
     interface the compiler would not have produced is not this claim, whatever
     its content says."""
+    harness.register_commitment(DERIVATION_MANIFEST_COMMITMENT)
     body = DerivationManifestV1(
         subject_ref="subject-1", open_certificate_refs=["cert-1"], axiom_debt=[]
     )

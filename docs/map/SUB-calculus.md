@@ -23,7 +23,7 @@ become ontology, and each one would need its interaction with `att`, `dep`,
 replay and status re-proven. `decode` refuses an unknown schema name with
 `claim-schema-unknown`.
 
-Six of the nine names are DECLARED AND UNBUILT, refused with
+Five of the nine names are DECLARED AND UNBUILT, refused with
 `claim-schema-not-implemented`. That split is deliberate: shipping body models
 with no producers is `docs/ERRATA.md` E28's pattern — a mechanism nobody
 triggers — while closing the NAME set is what actually stops the drift.
@@ -35,7 +35,15 @@ closed set ALREADY declared. The set did not grow, and that is the property
 worth checking: an ontology addition riding in on a rung meant only to build
 one is exactly what the closure exists to stop.
 
-`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 9 and len(_IMPLEMENTED) == 3 and 'poietic.frame-assertion.v1' in _IMPLEMENTED"`
+`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 9 and len(_IMPLEMENTED) == 4 and {'poietic.frame-assertion.v1', 'poietic.derivation-manifest.v1'} <= set(_IMPLEMENTED)"`
+
+Rung D repeats the pattern for `poietic.derivation-manifest.v1` (`DR-CON-proof-debt-and-localization`):
+a producer for a name the set already held, so the closure is exercised twice
+over and the count is still 9. `KernelCheckV1` is deliberately a `_Part` and not
+a `_Body` — it carries no `schema` name and `decode` cannot reach it, so a
+body's internal parts can never widen the closed set by the back door.
+
+`check: python -c "from deepreason.calculus.claims import KernelCheckV1, _MODELS, CLAIM_SCHEMAS; assert KernelCheckV1 not in _MODELS.values() and len(CLAIM_SCHEMAS) == 9"`
 
 ## The compiler is the only authority on ref roles
 
