@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=2 blockers=none
+State: next=3 blockers=none
 Diff-budget base AMENDED 2026-08-23: origin/main was merged into this branch
 (merge commit `b10fc5fd2`, bringing the two-call seat-protocol tranche, llm/ only,
 no conflicts). The ceiling is measured from `b10fc5fd2`, NOT from `e1ea05e82`,
@@ -69,9 +69,20 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
 
 ## Phase 1 — D1 proof debt: tests first, against the unchanged tree
 
-- [ ] 2. (S1–S11) [COMMIT] Write `tests/test_proof_debt.py` with all D1 tests
+- [x] 2. (S1–S11) [COMMIT] Write `tests/test_proof_debt.py` with all D1 tests
       named in SPEC.md S2, S5, S6, S7, S8, S9, S10, S20. They must FAIL now.
       done-when: `python -m pytest tests/test_proof_debt.py -q 2>&1 | tail -3` shows collection or assertion failures, 0 passed; paste it
+
+      PROOF:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -q
+      E   ImportError: cannot import name 'DERIVATION_MANIFEST_V1' from
+          'deepreason.calculus.claims'
+      ERROR tests/test_proof_debt.py
+      !!!! Interrupted: 1 error during collection !!!!
+      1 error in 0.20s
+      ```
+      0 passed. 20 tests written; every SPEC.md D1 accept-command has its test.
 
 ## Phase 2 — D1 code, with its map, in the same commits
 
