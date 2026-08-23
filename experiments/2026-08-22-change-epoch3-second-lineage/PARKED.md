@@ -344,3 +344,101 @@ regression test pinning whichever answer is chosen and naming run
 bb0455384ea09b5b... in its docstring; verify_root clean on the resulting
 root; full gate 0 failed.
 ```
+
+---
+
+## P6-epoch3 — the dispatch guard compares two quantities the record cannot both recover
+
+**What:** `llm/adapter.py:1176-1187` re-computes a work item's reservation
+bound at dispatch as `conservative_prompt_bound(request) +
+transport_limits["max_tokens"]` and raises
+`WorkflowAuthorizationError("transactional reservation bound differs from
+rendered request")` when it disagrees with the amount
+`workflow/transaction_service.py::reserve_dispatch` already booked from
+`conservative_prompt_bound(prompt) + max_tokens`. Epoch-3 attempt 3 died on
+that guard at cycle 2 of 4 with 290 025 of 400 000 tokens unspent (root
+`bb0455384ea09b5b…`, retired as `failed-attempt3-run-…`).
+
+Two candidate causes are ELIMINATED against the record, so a fix tranche
+does not re-derive them:
+
+- **Not a controller cap re-tune** (the E43 shape): no policy artifact
+  carrying a `knobs`/`cap:` entry exists in `log.jsonl`, and `max_tokens`
+  appears as `32768` and no other value across every object in the root. All
+  50 reservations booked `completion_bound_tokens 32768`.
+- **Not prompt drift between reserve and authorize**: all 50 dispatch
+  authorizations resolve to their reservation and `prompt_sha256` agrees in
+  50 of 50.
+
+**The gap that makes this hard, and which is the finding's real content.**
+The guard compares a bound over the service's `prompt` with a bound over the
+adapter's rendered `request`. The record stores a hash of the FORMER only;
+the rendered request bytes are never persisted. So the two quantities the
+guard exists to compare cannot both be recovered from a committed root, and
+a post-hoc diagnosis cannot say which string was longer or why. A guard
+whose failure is not reconstructible from the record is in tension with the
+repo's own epistemology — the record is the only admissible evidence.
+
+Note the shape it shares with `docs/ERRATA.md` E42: there, a census joined a
+repair response to the WRONG authority because the convenient key was not
+the frozen one. Here there is no wrong key — there is no key at all for one
+side.
+
+```
+Route: deepreason-orchestrator (defect).
+
+One goal: establish why a work item's dispatch-time reservation bound can
+differ from the bound its transaction booked, and make that difference
+reconstructible from the record when it happens -- so the guard's own
+failure is diagnosable without re-running the model.
+
+Evidence, already committed:
+  - experiments/2026-08-22-change-epoch3-second-lineage/RESULTS.md, the
+    attempt-3 segment, and .../failed-attempt3-run-bb0455384ea09b5b.../
+    run-result.json -- error_type WorkflowAuthorizationError, message
+    "transactional reservation bound differs from rendered request",
+    cycles 2 of 4, verify_root 0 violations.
+  - The two eliminations, re-derivable in one command each over that root:
+      python -c "import pathlib,re,collections; v=collections.Counter();
+      [v.update(int(m.group(1)) for m in
+      re.finditer(r'\"max_tokens\"\s*:\s*([0-9]+)', f.read_text()))
+      for f in pathlib.Path('<root>').rglob('*.json')]; print(dict(v))"
+      -> {32768: 11}   (no re-tuned cap anywhere)
+    and the reservation/authorization prompt_sha256 join over
+    objects/workflow-token-reservation-v2/ and
+    objects/workflow-dispatch-authorization-v1/ -> 50 of 50 agree.
+  - src/deepreason/llm/adapter.py:1160-1190 -- transport_limits, the
+    reservation_bound arithmetic, and the raise.
+  - src/deepreason/workflow/transaction_service.py:364-396 --
+    reserve_dispatch, where prompt_sha256 and prompt_bound are computed.
+
+Read first: docs/map/INDEX.md for the llm and workflow-transaction
+subsystems and docs/map/SEAM-llm-x-workflow.md -- this is exactly that seam.
+Then docs/map/INV-frozen-surfaces.md (the workflow v6 transaction record
+formats are frozen; ADDING a field to a record is a format change and needs
+the operator's word), and docs/ERRATA.md E42/E43, both of which are prior
+corrections on this same reserve-vs-dispatch agreement.
+
+Design question the tranche must answer, not assume: whether (a) the two
+call sites should bound the SAME string, with the divergence named and one
+of them corrected; (b) the guard should compare a value the record already
+carries (the prompt hash) rather than a recomputed length; or (c) the
+failure envelope should record both bounds and both string lengths so the
+next occurrence is diagnosable, which is the smallest change that makes the
+OTHER two decidable. Consider doing (c) FIRST regardless: without it, a fix
+for (a) cannot be verified against a live recurrence.
+
+Do NOT respond by relaxing the guard to a tolerance window. It exists so
+concurrent dispatchers cannot jointly push the logged total past the
+ceiling; a fuzzy bound reintroduces exactly the overspend it prevents.
+
+Constraint the design must respect: reservation booking happens BEFORE
+dispatch by design (llm/budget.py reserve-settle). Any fix that moves the
+booking after rendering must show it still fails closed on an unboundable
+call.
+
+End state: DIAGNOSIS.md naming one cause and one of (a)/(b)/(c); whatever
+lands, a recurrence of this error must be diagnosable from the committed
+root alone. A regression test naming run bb0455384ea09b5b... in its
+docstring; full gate 0 failed.
+```

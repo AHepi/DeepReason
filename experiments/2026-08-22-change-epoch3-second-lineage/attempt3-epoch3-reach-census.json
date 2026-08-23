@@ -1,0 +1,39 @@
+{
+  "opens": true,
+  "recorded": {
+    "_full_hit_pairs": 0,
+    "events": 558,
+    "measures": 67
+  },
+  "rederived": {
+    "A-skip/status": 2,
+    "A-skip/unaddr": 33,
+    "E1 no-criteria": 1584,
+    "E4 criterion-fail": 484,
+    "_E4 first-nonpass:fail": 484,
+    "_crit_kinds": {
+      "structural:lineage_ref": 22,
+      "structural:reasoning-envelope-wf": 1,
+      "substantive-predicate": 25,
+      "unknown-program:hv_floor": 22
+    },
+    "_gate_coverage": {
+      "0.33": 484
+    },
+    "_qualifying_vocab": {
+      "relation-form@578e42df713e": {
+        "eval": "predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contr",
+        "gate_pairs": 484
+      }
+    },
+    "addr_pairs": 24,
+    "artifacts_candidate": 22,
+    "artifacts_total": 57,
+    "commitments_registered": 103,
+    "gate/coverage-caps-at-provisional": 484,
+    "pairs": 2068,
+    "problems_total": 95,
+    "reached-verdict-gate": 484
+  },
+  "root": "/home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run"
+}

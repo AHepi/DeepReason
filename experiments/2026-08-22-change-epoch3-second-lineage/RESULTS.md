@@ -155,3 +155,104 @@ empty. Reported as required, not reinterpreted.
 
 **Scope kept.** `git diff --stat origin/main -- src/ tests/` is empty. No
 production code or test was touched at any point in this tranche.
+
+---
+
+## 2026-08-23 — attempt 3: one phase, 400 000 tokens; a THIRD distinct operational death, and the registered prediction refuted
+
+**What the record shows.** Qualification passed 80/80 with no redraw. The
+single reasoning phase (R17: `cycles=4 --token-budget 400000`) ran nine
+minutes and terminated typed at cycle 2 of 4:
+
+    state            failed
+    stop_reason      operational_failure
+    error_type       WorkflowAuthorizationError
+    message          transactional reservation bound differs from rendered request
+    cycles completed 2 of 4
+    verify_root      0 violations
+    reach_set events 0
+
+**The registered prediction is REFUTED, and it was mine.** PREREG AMENDMENT
+1 predicted the token budget would bind first, around cycle 2, producing
+`WorkBudgetDenied`. It did not. The run died with **290 025 of 400 000
+tokens unspent** (49 calls, 109 975 logged) on a completely different cause.
+Recording that plainly: the forecast was registered before launch precisely
+so it could be scored, and it was wrong.
+
+**The new cause, narrowed by measurement and NOT fully resolved.**
+`llm/adapter.py:1187` re-computes the reservation bound at dispatch as
+`conservative_prompt_bound(request) + transport_limits["max_tokens"]` and
+refuses if it differs from the amount the transaction service already
+booked. Two candidate explanations were eliminated against the record:
+
+- **Not a controller cap re-tune** (the E43 shape). No policy artifact with
+  a `knobs`/`cap:` entry exists anywhere in the log, and `max_tokens` appears
+  as `32768` and nothing else across every object in the root. All 50
+  reservations booked `completion_bound_tokens 32768`.
+- **Not prompt drift between reserve and authorize.** Every one of the 50
+  dispatch authorizations resolves to its reservation, and
+  `prompt_sha256` agrees in **50 of 50** pairs.
+
+What remains is the prompt-bound term computed over two different strings:
+the transaction service bounds its `prompt`, the adapter bounds its rendered
+`request`. **The record cannot settle it**, and that is itself a finding: the
+adapter's rendered request bytes are never stored, only a hash of the
+service's prompt, so the two quantities the guard compares cannot both be
+recovered afterwards. Parked as P6-epoch3 with that gap named.
+
+**Typed outcome under PREREG_EPOCH3.md §5: TRUNCATED-BEFORE-CARRIER, for the
+third time.** Attempt 3 got materially further than attempt 2 — 95 problems
+instead of 1, and `reach_sweep` actually evaluated 2 068 pairs (1 584 `E1
+no-criteria`, 484 `E4 criterion-fail`, every qualifying pair at coverage
+0.33). But the committed `carrier_probe.py` settles whose criteria sat on the
+foreign side:
+
+    accepted_artifacts                          55
+    accepted_artifacts_addressed                22
+    artifacts_that_could_have_seed_as_foreign    0
+    pairs_surviving_reach_novelty_gate_against_seed  []
+    problems_total                              95
+
+**All 22 accepted, addressed artifacts address the seed problem itself.**
+`reach_sweep` skips a problem an artifact already addresses, so the seed was
+never on the foreign side of any pair. The 484 `E4` pairs qualified on
+`relation-form` alone at coverage 0.33 — the P2-reach form gate, capped below
+`REACH_COVERAGE_MIN` and provisional at best. The hypothesis was not tested.
+
+**The pattern across four live runs, which is now the real result.**
+
+| run | died at | accepted+addressed | with seed as foreign |
+|---|---|---|---|
+| reach-rich epoch 1 | cycle 2 | 14 | **0** |
+| reach-rich epoch 2 | cycle 2 | 23 | **0** |
+| epoch-3 attempt 2 | cycle 0 | 24 | **0** |
+| epoch-3 attempt 3 | cycle 2 | 22 | **0** |
+
+Four runs, four DIFFERENT typed operational causes
+(`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`, `ROUTE_LEASE_MISMATCH`,
+`WorkBudgetDenied`, `WorkflowAuthorizationError`), and not one has put an
+accepted artifact on a spawned problem. Against SPEC.md M9 — a committed
+single-seed root that reached **cycle 8** carries 186 such artifacts — the
+carrier appears somewhere between cycle 2 and cycle 8, and no run of this
+configuration has ever survived past cycle 2.
+
+**P1-reach still holds.** `reasoning-envelope-wf` recorded once, classified
+`structural`, vetoing nothing. **Nothing falls under the P5 rulings**: no
+`E0` empty-battery event and no pair at coverage exactly 0.500 — the only
+coverage observed is 0.33. Reported as required, not reinterpreted.
+
+**verify_root: 0 violations**, a third time, on a root carrying
+operator-authored `predicate:` criteria and an attached-evidence manifest.
+
+**Residue.**
+
+- **The hypothesis remains untested after three attempts and four runs.**
+- **The pre-authorised repeat is now SPENT.** PREREG_EPOCH3.md §5 authorised
+  one; attempts 2 and 3 are it. Under R11 the tranche STOPS here and the
+  decision returns to the operator.
+- **Whether cycle 2 is a coincidence is unknown.** Four deaths at or before
+  cycle 2 from four unrelated causes is either bad luck or a pressure that
+  peaks there; n=4 with distinct causes does not separate those.
+- **The second lineage has still never existed in a live root.**
+
+**Scope kept.** `git diff --stat origin/main -- src/ tests/` is empty.
