@@ -245,3 +245,102 @@ false failures, or reads why it is seeing them in the first place it would
 look. Whatever lands, docs_verify still reports 0 failed on a complete
 clone.
 ```
+
+---
+
+## P5-epoch3 — a token-bounded run cannot reach a resumable terminal, because the last reservation never fits
+
+**What:** `deepreason continue` accepts only
+`RESUMABLE_STOP_REASONS = {"converged", "budget_exhausted"}`
+(`workflow/lifecycle.py:28`). Exhausting a token budget does not produce
+`budget_exhausted`. `workflow/transaction_service.py::reserve_dispatch`
+books the FULL completion cap up front for every call, so as the budget
+drains the remainder eventually becomes smaller than one reservation;
+`meter.reserve` then raises `TokenBudgetExceeded` and the service writes a
+`budget_denied` terminal, which surfaces as `WorkBudgetDenied` and
+`stop_reason=operational_failure` — unresumable.
+
+Measured on epoch-3 attempt 2 (root
+`bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4`):
+
+    logged LLM calls           56
+    logged tokens             165 466
+    phase-1 token budget      200 000
+    headroom remaining         34 534
+    next reservation needed   ~35 700  (32 768 completion bound + ~2 900 prompt)
+    terminal                  status budget_denied, reason_code
+                              token_budget_denied, prompt/completion tokens 0
+
+The consequence is general, not particular to this budget: ANY finite token
+budget ends this way unless the run first exhausts its CYCLES or converges.
+A run whose token budget binds before its cycle budget can therefore never
+be amended or continued, however healthy its record — this one's
+`verify_root` reports 0 violations.
+
+Whether that is correct as written is a real question, not a rhetorical
+one. A denied reservation IS impossibility at the point of use, which the
+all-configurations law explicitly leaves as a typed runtime failure. But
+"the operator's token budget ran out" and "the seat cannot do its job" are
+different facts wearing one stop reason, and only the second should cost
+the run its resumability.
+
+```
+Route: deepreason-orchestrator (defect, design-first -- expect to stop at
+DIAGNOSIS.md; the answer may legitimately be "correct as written").
+
+One goal: decide and record whether a run that stops because its TOKEN
+budget is spent should reach a resumable terminal, so an operator who
+budgets tokens rather than cycles is not locked out of amend and continue.
+
+Evidence, already committed:
+  - experiments/2026-08-22-change-epoch3-second-lineage/RESULTS.md, the
+    attempt-2 segment -- the arithmetic above, re-derivable in one command:
+      python -c "import json;
+      t=sum((e.get('llm') or {}).get('tokens',0) for e in
+      map(json.loads, open('<root>/log.jsonl')) if e.get('llm')); print(t)"
+    -> 165466 against a 200000 budget.
+  - <root>/run-result.json -- error_type WorkBudgetDenied, completion_status
+    incomplete, cycles completed 0 of 12.
+  - <root>/objects/workflow-work-terminal-v1/ -- the budget_denied terminal
+    for work sha256:32af1d16..., reason_code token_budget_denied, prompt and
+    completion tokens 0 (the call never went out).
+  - <root>/objects/workflow-token-reservation-v2/ -- 56 reservations, each
+    booking completion_bound_tokens 32768 plus a prompt bound.
+  - src/deepreason/workflow/lifecycle.py:28 and :273 -- the resumable set
+    and the refusal it drives.
+  - src/deepreason/workflow/transaction_service.py:364-396 -- reserve_dispatch
+    and the budget_denied terminal it writes.
+
+Read first: docs/map/INDEX.md for the workflow-transaction and scheduler
+subsystems and the seam between them; docs/map/INV-frozen-surfaces.md (the
+workflow v6 transaction record formats are not to be reshaped); and
+CLAUDE.md's operator law "Operations are available to every configuration"
+(2026-08-13), which is the standard this is judged against -- a run launched
+with a token budget must reach the same typed terminal and accept the same
+operations as one launched with a cycle budget.
+
+Design question the tranche must answer, not assume: whether (a) a
+reservation denial caused by budget exhaustion should terminalize as
+`budget_exhausted` rather than `operational_failure`, since the run is
+complete-as-far-as-it-got rather than broken; (b) the scheduler should stop
+cleanly BEFORE issuing a reservation it can see will not fit, leaving the
+remainder unspent and the stop reason resumable; or (c) correct as written,
+and a token-bounded run is simply not amendable, with the reason recorded
+and the CLI saying so at launch. (b) is the most honest to the record --
+nothing is denied, the run just stops -- and is probably the smallest.
+
+Do NOT respond by telling operators to budget cycles instead of tokens. That
+is the workaround this finding exists to remove, and it silently makes one
+of two documented budget forms second-class.
+
+Constraint the design must respect: whatever is decided, the denial must
+remain a TYPED outcome in the record. Silently retrying a denied reservation,
+or shrinking one to fit the remaining headroom, would trade a recorded
+refusal for an unrecorded one and would let a seat's completion cap be
+violated by budget pressure.
+
+End state: DIAGNOSIS.md naming one cause and one of (a)/(b)/(c); a
+regression test pinning whichever answer is chosen and naming run
+bb0455384ea09b5b... in its docstring; verify_root clean on the resulting
+root; full gate 0 failed.
+```
