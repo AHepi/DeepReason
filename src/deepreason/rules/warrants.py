@@ -9,7 +9,8 @@ exactly once. Every site passes its own ν wording, critic wording, and
 trace payload unchanged — the helper is plumbing, not policy.
 """
 
-from deepreason.ontology import Artifact, Interface, Provenance, Rule, Warrant, WarrantType
+from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Warrant, WarrantType
+from deepreason.ontology.artifact import RefRole
 
 
 def verdict_on_record(harness, commitment_id: str, target_id: str) -> bool:
@@ -125,15 +126,39 @@ def register_fail_warrant(
     critic_content: str,
     trace_ref: str,
     nu_interface: Interface | None = None,
+    manifest_ref: str | None = None,
     warrant_id: str | None = None,
     llm=None,
     skip_if_on_record: bool = False,
     critic_school_id: str | None = None,
 ) -> Artifact | None:
     """Register ν + DEMONSTRATIVE fail warrant + critic; returns the critic
-    (None when skip_if_on_record and the verdict is already on the graph)."""
+    (None when skip_if_on_record and the verdict is already on the graph).
+
+    `manifest_ref` names a derivation manifest — the itemized bill this verdict
+    rests on (`deepreason.proof_debt`, Rung D / E-1) — and mounts it on ν as
+    EVIDENCE. That role and no other: `adjudication/edges.py`'s evidence
+    closure walks the manifest's dependence lineage, so an attack on any open
+    certificate beneath it attacks ν, and the ordinary validity-node closure
+    then disables every carrier of this warrant BEFORE the grounded pass. A
+    MENTION would be readable and inert; the trace blob already is.
+
+    Default None, and every existing site keeps its unchanged path: carrying a
+    bill is a capacity, not an obligation, and a site with nothing sampled has
+    no open certificate to declare.
+    """
     if skip_if_on_record and verdict_on_record(harness, commitment_id, target_id):
         return None
+    if manifest_ref is not None:
+        # Merged, never replaced: a caller that supplied its own nu_interface
+        # (case law mentions a standard on it) must keep every ref it declared.
+        base = nu_interface or Interface()
+        nu_interface = base.model_copy(
+            update={
+                "refs": list(base.refs)
+                + [Ref(target=manifest_ref, role=RefRole.EVIDENCE)]
+            }
+        )
     nu = harness.create_artifact(
         nu_content,
         interface=nu_interface,

@@ -1,6 +1,6 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=7 blockers=none
+State: next=10 blockers=none
 BUDGET FORECAST, recorded at step 2 rather than discovered at step 27:
 `tests/test_proof_debt.py` came in at 524 insertions against a 280 estimate
 (20 tests, richer than planned). Running total after step 2 is 714/1480. If
@@ -218,16 +218,50 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       docs_verify: 3 failed        # the 3 pre-existing shallow-clone ones only
       ```
 
-- [ ] 7. (S8) Add `manifest_ref` to `rules/warrants.py::register_fail_warrant`,
+- [x] 7. (S8) Add `manifest_ref` to `rules/warrants.py::register_fail_warrant`,
       merging an `EVIDENCE` ref into ν's interface. Update
       `CON-warrants-and-attacks.md` in the SAME commit.
-      done-when: `python -m pytest tests/test_proof_debt.py::test_a_manifest_is_wired_to_the_validity_node_as_evidence -q` -> 1 passed
 
-- [ ] 8. (S9) Prove R58's pinned regression end to end.
-      done-when: `python -m pytest tests/test_proof_debt.py::test_attacking_a_manifest_item_disables_the_attack_before_pass_one -q` -> 1 passed
+      PROOF (steps 7, 8 and 9 together — one wiring change unblocked all three,
+      and the step-6 note records why their criteria could not run earlier):
+      ```
+      $ python -m pytest tests/test_proof_debt.py -q -k "wired or disables or receipt or reruns or manifests_for or replays or recomputation or moves_no_label or read_path"
+      ..........                                                      [100%]
+      10 passed, 8 deselected in 0.36s
+      ```
+      The interface is MERGED, never replaced: a caller that supplied its own
+      `nu_interface` (case law mentions its standard there) keeps every ref it
+      declared.
 
-- [ ] 9. (S6, S7) Prove recomputation-not-retroactivity and replay determinism.
-      done-when: `python -m pytest tests/test_proof_debt.py -q -k "replays_identically or recomputation_not_retroactively"` -> 0 failed
+      Map moved in the same commit — `CON-warrants-and-attacks.md` gains the
+      evidence-declaration paragraph, and both its new checks were run before
+      being written down:
+      ```
+      $ python -m pytest tests/test_proof_debt.py -k "wired_to_the_validity_node or disables_the_attack_before_pass_one" -q
+      2 passed, 16 deselected in 0.12s
+      $ python -c "...manifest_ref default is None and KEYWORD_ONLY..."
+      signature check ok
+      ```
+
+      One more test bug fixed in this step: the append-only prefix assertion
+      read `Event.id`, which does not exist. It now compares the canonical JSON
+      of every event in the prefix — a strictly stronger claim than the id
+      comparison intended — and additionally asserts the log actually grew, so
+      the test cannot pass vacuously on an empty attack.
+
+- [x] 8. (S9) Prove R58's pinned regression end to end.
+      done-when: 1 passed — included in step 7's pasted run
+      (`test_attacking_a_manifest_item_disables_the_attack_before_pass_one`).
+      target REFUTED -> certificate attacked -> critic REFUTED -> target
+      ACCEPTED, all through the ordinary closures with zero lines changed in
+      `adjudication/`.
+
+- [x] 9. (S6, S7) Prove recomputation-not-retroactivity and replay determinism.
+      done-when: 0 failed — included in step 7's pasted run
+      (`test_the_log_replays_identically_after_a_certificate_is_attacked`,
+      `test_dependents_are_invalidated_on_recomputation_not_retroactively`).
+      A read-only replay of the whole log re-derives the live labels exactly,
+      and the receipt built from replayed state equals the live one.
 
 - [ ] 10. (S10) Teach `premises.py::premise_rent_sweep` to register the sample
       certificate + manifest on the sampled path and pass `manifest_ref`.

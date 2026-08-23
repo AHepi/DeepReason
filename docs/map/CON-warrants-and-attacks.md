@@ -119,6 +119,19 @@ derived from the fixpoint, never curated — the closures run to convergence, so
 refuted standard reinstates its victims in the same pass.
 `check: python -m pytest tests/test_adjudication.py -q`
 
+**A verdict may declare what it rests on, and that declaration is the evidence
+closure's only entry point** (Rung D / E-1, `DR-CON-proof-debt-and-localization`).
+`register_fail_warrant(..., manifest_ref=...)` mounts a derivation manifest on ν
+as `RefRole.EVIDENCE` — that role and no other, because a MENTION would be
+readable and inert exactly like the `trace_ref` blob beside it. Attacking any
+open certificate the manifest DEPENDS on therefore attacks ν, and the base
+closure disables every carrier BEFORE the grounded pass, so the target
+reinstates in pass one rather than by a later view-level check. The keyword
+defaults to `None` and every pre-existing mint site is byte-unchanged: carrying
+a bill is a capacity, not an obligation.
+`check: python -m pytest tests/test_proof_debt.py -k "wired_to_the_validity_node or disables_the_attack_before_pass_one" -q`
+`check: python -c "import inspect; from deepreason.rules.warrants import register_fail_warrant as r; p=inspect.signature(r).parameters['manifest_ref']; assert p.default is None and p.kind is inspect.Parameter.KEYWORD_ONLY"`
+
 **Nothing in the adjudicator knows about supremacy, and nothing is deleted.**
 The guards decide only whether an edge is CREATED; once on the graph an edge is
 adjudicated like any other, and execution can still refute later.

@@ -18,6 +18,7 @@ machinery at all.
 
 import pytest
 
+from deepreason.canonical import canonical_json
 from deepreason.calculus.claims import (
     DERIVATION_MANIFEST_V1,
     ClaimDecodeError,
@@ -346,7 +347,9 @@ def test_dependents_are_invalidated_on_recomputation_not_retroactively(harness):
     """
     target, certificate, _, _ = _judged(harness)
     warrant_id = next(iter(harness.warrants))
-    before_events = [e.id for e in harness.log.read()]
+    before_events = [
+        canonical_json(event.model_dump(mode="json")) for event in harness.log.read()
+    ]
 
     assert receipt(harness, warrant_id).standing is True
     assert harness.state.status[target.id] == Status.REFUTED
@@ -357,8 +360,11 @@ def test_dependents_are_invalidated_on_recomputation_not_retroactively(harness):
     assert harness.state.status[target.id] == Status.ACCEPTED
     # Append-only: the prefix is byte-identical, so the earlier verdict was not
     # retroactively unmade — it was superseded by a later recomputation.
-    after_events = [e.id for e in harness.log.read()]
+    after_events = [
+        canonical_json(event.model_dump(mode="json")) for event in harness.log.read()
+    ]
     assert after_events[: len(before_events)] == before_events
+    assert len(after_events) > len(before_events)  # the attack really landed
 
 
 # --- readout inertness (S20, R12) ------------------------------------------
