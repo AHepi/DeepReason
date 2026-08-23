@@ -1,0 +1,24 @@
+{
+  "opens": true,
+  "recorded": {
+    "_full_hit_pairs": 0,
+    "events": 453,
+    "measures": 36
+  },
+  "rederived": {
+    "A-skip/status": 3,
+    "A-skip/unaddr": 35,
+    "_crit_kinds": {
+      "structural:reasoning-envelope-wf": 1,
+      "substantive-predicate": 3
+    },
+    "_gate_coverage": {},
+    "_qualifying_vocab": {},
+    "addr_pairs": 24,
+    "artifacts_candidate": 21,
+    "artifacts_total": 59,
+    "commitments_registered": 87,
+    "problems_total": 1
+  },
+  "root": "/home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run"
+}

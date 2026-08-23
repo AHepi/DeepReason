@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal urban heat island is primarily driven by the sky view factor: dense urban geometry traps longwave radiation, slowing nocturnal cooling, and the cross-city UHI gap is larger in cities with deeper street canyons and greater built density.",
+    "mechanism": "On a clear, calm night, cooling occurs by longwave radiation to the sky. Rural surfaces have an unobstructed view of the cold sky and radiate efficiently. In cities, tall buildings and narrow streets reduce the effective sky view factor, so upward longwave radiation is intercepted by walls and re-radiated back, retaining heat. The difference in nocturnal UHI between cities scales with built density and building height because denser, taller canyons further restrict the view of the sky and suppress radiative cooling.",
+    "counterconditions": [
+      "If rural and urban sites are measured with equivalent sky view factors, the nocturnal temperature gap should shrink sharply.",
+      "If measurements are made above roof level, outside the street canyon, the canyon-trapping effect should vanish and the gap should decrease.",
+      "If the nocturnal UHI persists strongly on overcast nights when longwave trapping is already saturated by cloud cover, then sky view is not the dominant mechanism.",
+      "If the cross-city variation in UHI is better predicted by anthropogenic heat flux or impervious cover than by canyon geometry, sky view is not the single best explanation."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "typicality": 0.75
+  }
+}
+```

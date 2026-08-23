@@ -1,0 +1,25 @@
+{
+  "candidate": {
+    "claim": "The nocturnal UHI is primarily an evapotranspiration deficit: urban impervious surfaces lack moisture, so daytime sensible heat storage is larger and nocturnal cooling is slower, with the cross-city gap scaling with vegetation (green space and irrigation) and aridity.",
+    "mechanism": "On a clear, calm night, rural surfaces cool rapidly by longwave emission to the sky and by latent heat flux from evapotranspiration from moist soils and vegetation. Urban impervious surfaces are drier, so they partition more daytime net radiation into sensible heat rather than latent heat, storing more heat in surface materials during the day. After sunset this stored heat is released as sensible heat, slowing the urban cooling rate. The cross-city modulation arises because green space, irrigation, and aridity determine the rural reference cooling rate: in drier, less vegetated landscapes the urban–rural evaporative contrast is smaller, so the nocturnal UHI is weaker, whereas well-watered, vegetated surroundings produce a larger gap.",
+    "counterconditions": [
+      "If rural and urban longwave cooling rates are measured to be equal on calm nights after accounting for emissivity, evapotranspiration does not dominate the nocturnal gap.",
+      "If latent heat flux from rural surfaces ceases shortly after sunset and does not contribute meaningfully to nighttime cooling, then evapotranspiration cannot explain the persistent nocturnal UHI.",
+      "If cities in arid regions consistently show nocturnal UHI magnitudes equal to or larger than cities in humid regions, the evaporative deficit explanation is contradicted."
+    ],
+    "typicality": 0.85,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003",
+      "SRC_005"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_005"
+      ]
+    }
+  }
+}

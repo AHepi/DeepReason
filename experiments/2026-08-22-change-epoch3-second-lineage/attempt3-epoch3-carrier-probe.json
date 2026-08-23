@@ -1,0 +1,11 @@
+{
+  "accepted_artifacts": 55,
+  "accepted_artifacts_addressed": 22,
+  "artifacts_that_could_have_seed_as_foreign": 0,
+  "pairs_surviving_reach_novelty_gate_against_seed": [],
+  "problems_carrying_seed_criteria": [
+    "question-4dd62735b90864a75220e09b302500bc"
+  ],
+  "problems_total": 95,
+  "root": "/home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run"
+}

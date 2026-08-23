@@ -1,0 +1,43 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+## problem-context
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@2d24ddcc87421d65856e0c2e: program:reasoning_observation_pending
+- reason-counter@dd138f9aad5f0ad466f60f4e: program:reasoning_observation_pending
+- reason-counter@435521e62234fabbf3eba3c6: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET c01ce26608a7e3738fc83c7eeeb9a50ebc8a52b4d006cea941fba173476e4667
+{"analogy":null,"claim":"The single best cross-city modulator of the nocturnal UHI is city size itself: larger cities have a greater aggregate thermal mass and a deeper, more persistent urban heat island because the volume of stored heat scales with impervious surface area, and the resulting warm dome is thicker and more resistant to nocturnal cooling.","counterconditions":[{"case":"If a small, extremely dense city (e.g., Hong Kong) has a larger nocturnal UHI than a large, low-density city (e.g., Los Angeles), city size is not the primary modulator.","checker_spec":null,"eval":"observation"},{"case":"If coastal breezes or regional winds ventilate large cities more effectively than small cities in sheltered valleys, the scaling with size would break down.","checker_spec":null,"eval":"observation"},{"case":"If built density and sky view explain the variance better than total area, city size is a proxy rather than the mechanism.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The total heat stored during daytime is proportional to the impervious surface area and thermal mass of urban materials. Larger cities accumulate more total heat, and the urban boundary layer dome that forms over them is deeper. After sunset, this larger heat reservoir releases sensible heat over a longer period, sustaining nocturnal warming. The cross-city gap scales with city size because the total heat storage and boundary layer depth increase with the horizontal extent of the urban area.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 3259581ef13b8d83f6789eea95e14a3e91cfc6a780dc720f8acecc5d8d5d5444 [mention]
+
+## target-support-content
+SUPPORT CONTENT:
+- 3259581ef13b8d83f6789eea95e14a3e91cfc6a780dc720f8acecc5d8d5d5444: {"analogy":null,"claim":"The nocturnal UHI emerges because urban materials have a lower albedo than rural vegetation, causing them to absorb more solar radiatio
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

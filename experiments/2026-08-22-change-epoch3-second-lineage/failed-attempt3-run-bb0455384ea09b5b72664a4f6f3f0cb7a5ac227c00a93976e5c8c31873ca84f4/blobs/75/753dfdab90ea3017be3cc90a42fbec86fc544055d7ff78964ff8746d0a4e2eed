@@ -1,0 +1,6 @@
+{
+  "patch": {
+    "op": "remove",
+    "path": "/cases/1"
+  }
+}

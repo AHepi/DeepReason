@@ -1,0 +1,10 @@
+{
+  "type": "repair.patch.v1",
+  "authorized_pointers": ["/cases/0/preise"],
+  "operations": [
+    {
+      "op": "remove",
+      "path": "/cases/0/preise"
+    }
+  ]
+}

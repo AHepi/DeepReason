@@ -1,0 +1,1 @@
+{"commitment":"uhi-energy-balance@v1","eval":"predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2","verdict":"fail"}

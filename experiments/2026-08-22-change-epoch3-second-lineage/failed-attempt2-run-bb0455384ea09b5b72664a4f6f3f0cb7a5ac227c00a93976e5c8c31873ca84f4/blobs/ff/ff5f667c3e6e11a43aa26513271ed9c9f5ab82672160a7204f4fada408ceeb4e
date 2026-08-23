@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal UHI gap is primarily a radiative-geometry effect: dense urban street canyons have a lower sky view factor, which traps longwave radiation and suppresses radiative cooling after sunset; the cross-city variation scales with built density and building height.",
+    "mechanism": "During the day, urban and rural surfaces both absorb shortwave energy. After sunset, rural surfaces with unobstructed views of the cold sky cool rapidly via net outgoing longwave radiation. In cities, the street canyon geometry restricts the sky view factor, so urban surfaces exchange longwave radiation mostly with other warm surfaces rather than the cold sky. This reduces the effective radiative cooling rate, producing a night-time temperature gap that scales with building height and built density, with thermal mass playing a secondary role.",
+    "counterconditions": [
+      "If sky view factor does not measurably correlate with nocturnal UHI intensity across cities, this mechanism is undermined.",
+      "If nocturnal UHI persists strongly in low-density, high-sky-view urban areas, the mechanism is insufficient."
+    ],
+    "typicality": 0.4,
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "evidence_refs": [
+      {
+        "block": "0fbf9215ae21376bdb25706f32652929a22c80e39cfc08994ad41f164e935a5f",
+        "quote": "The night-time UHI gap is an artifact of different cooling rates driven by surface emissivity and aridity"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

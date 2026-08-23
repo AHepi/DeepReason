@@ -1,0 +1,23 @@
+## problem-context
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@57c556c85d2c4699819e33bb: program:reasoning_observation_pending
+- reason-counter@b4c25bd37acaa9d8bf87bbb2: program:reasoning_observation_pending
+- reason-counter@d84058fa7c5dd9e40de814d3: program:reasoning_observation_pending
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET d5522d0ffff30a289f4f772c1b39279531ad9c1d712fdaa85f3dd9bb27263941
+{"analogy":null,"claim":"The night-time UHI is primarily an aerodynamic and radiative trapping effect: dense, tall building canopies with low sky view factors trap longwave radiation and retard cooling, so cross-city night-time UHI intensity scales most strongly with built density and building height.","counterconditions":[{"case":"If measured UHI is large in low-density cities with high sky view factor, this geometry-only account fails.","checker_spec":null,"eval":"observation"},{"case":"If the cross-city gap correlates more strongly with aridity or vegetation deficit than with building height, the claimed modulator is wrong.","checker_spec":null,"eval":"observation"},{"case":"If rural and urban cooling rates match under equal sky view conditions, geometry is not the dominant mechanism.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"After sunset, urban surfaces cool primarily by emitting longwave radiation to the sky. In dense street canyons with low sky view factor, much of that radiation is intercepted by opposing walls and reradiated, so net longwave loss is reduced. Dense canopies also impose greater aerodynamic roughness, which can weaken wind speeds and further suppress sensible and latent heat removal. The cross-city modulator is geometry: cities with deeper canyons and denser buildings retain more stored heat and cool more slowly, producing a larger nocturnal gap.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

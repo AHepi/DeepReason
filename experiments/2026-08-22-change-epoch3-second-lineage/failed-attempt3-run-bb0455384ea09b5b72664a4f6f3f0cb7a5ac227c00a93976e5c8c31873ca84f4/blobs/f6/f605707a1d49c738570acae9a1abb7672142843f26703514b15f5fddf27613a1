@@ -1,0 +1,11 @@
+```json
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "000000000000"
+    }
+  ]
+}
+```

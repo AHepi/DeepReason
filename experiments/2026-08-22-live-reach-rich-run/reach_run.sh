@@ -98,7 +98,7 @@ from deepreason.invariants import verify_root
 print(json.dumps(verify_root('$ROOT'), indent=1, sort_keys=True, default=str))
 " > "$HERE/verify_root.json" 2>&1 || true
 python -m deepreason --root "$ROOT" findings --json > "$HERE/findings.json" 2>&1 || true
-python -m deepreason --root "$ROOT" results > "$HERE/results.txt" 2>&1 || true
+python -m deepreason results "$ROOT" > "$HERE/results.txt" 2>&1 || true
 
 # The census exits 0 only when the record itself carries reach_set events.
 # That exit code IS the tranche's success criterion; nothing downstream may

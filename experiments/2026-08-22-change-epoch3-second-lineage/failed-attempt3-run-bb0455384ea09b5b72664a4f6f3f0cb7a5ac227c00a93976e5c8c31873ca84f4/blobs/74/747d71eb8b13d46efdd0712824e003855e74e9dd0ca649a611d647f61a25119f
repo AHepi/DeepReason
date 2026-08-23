@@ -1,0 +1,189 @@
+{
+  "candidates": [
+    {
+      "claim": "The nocturnal UHI is primarily a thermal-storage release phenomenon: urban impervious materials with high heat capacity absorb more solar radiation during the day and then release stored sensible heat via longwave radiation throughout the night, warming the urban boundary layer; the cross-city variation in the nighttime gap scales with built density and building height because denser, taller urban geometry traps this released longwave radiation by reducing the sky view factor, slowing nocturnal cooling.",
+      "mechanism": "During daytime, urban surfaces (concrete, asphalt) with high thermal mass and low albedo store a large fraction of incoming solar radiation as sensible heat. After sunset, the countryside cools rapidly because vegetation has low heat capacity and unobstructed sky view allows efficient longwave radiative loss. In the city, stored heat is conducted back to the surface and radiated as longwave, but the reduced sky view factor in dense street canyons traps this radiation, preventing it from escaping to the sky. This combines to maintain warmer nighttime air temperatures. The gap is larger in cities with taller buildings and denser street canyons because the effective sky view factor is smaller, so the radiative cooling rate is suppressed more strongly, and the total thermal mass available to release heat is greater.",
+      "counterconditions": [
+        "If the sky view factor is measured and does not correlate with UHI intensity across cities, the geometric trapping mechanism is falsified",
+        "If rural and urban thermal mass per unit area are measured to be comparable, the heat-storage-release mechanism is falsified",
+        "If the nighttime UHI is strongest in cities with high wind speed, the radiative trapping mechanism is insufficient and advection must dominate",
+        "If the UHI is larger in cities with more green space and irrigation, the thermal-mass mechanism is insufficient and evapotranspiration deficit must dominate"
+      ],
+      "typicality": 0.92,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_008", "SRC_005"],
+      "analogy": {
+        "source_memory_refs": ["SRC_005"],
+        "shared_structure": [
+          "Both the solar kiln and the city store energy during the day and release it at night",
+          "Both have a high-heat-capacity medium that buffers temperature swings",
+          "Both exhibit a time lag between peak input and peak output temperature",
+          "The nighttime release is governed by thermal diffusion from depth to surface"
+        ],
+        "disanalogies": [
+          "The solar kiln stores heat by changing the thermodynamic state of a working fluid, while the city stores heat in the thermal mass of solid materials",
+          "The solar kiln releases heat to a controlled working fluid, while the city releases heat to the atmosphere via radiation and convection",
+          "The solar kiln is an enclosed system, while the city is an open system with advection and wind effects",
+          "The solar kiln has no geometric trapping of radiation, while the city's street canyons trap longwave radiation"
+        ],
+        "transfer_claims": [
+          "The principle that stored daytime heat drives nocturnal temperature excess transfers from the solar kiln to the city",
+          "The time-lag between peak input and peak output temperature transfers directly",
+          "The dependence of nighttime release on the thermal mass of the storage medium transfers directly"
+        ],
+        "overturn_conditions": [
+          "If the nocturnal UHI is shown to be driven primarily by anthropogenic heat rather than stored solar heat",
+          "If the thermal mass of urban materials is shown to be insufficient to account for the observed nighttime temperature excess",
+          "If the time lag between solar input and peak UHI is inconsistent with thermal diffusion timescales"
+        ]
+      },
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is best explained by the suppression of latent heat removal: rural vegetation cools at night through continued evapotranspiration and dew formation, while urban impervious surfaces lack moisture and thus cannot lose heat via the latent heat pathway, so all cooling must occur through less efficient sensible and longwave channels; the cross-city variation scales with aridity and the extent of impervious surface, with drier, more impervious cities showing a larger nighttime gap because the latent heat deficit is more pronounced.",
+      "mechanism": "After sunset, rural areas with vegetation and soil moisture lose substantial heat through evapotranspiration and dew formation, converting sensible heat to latent heat that does not warm the air. Urban impervious surfaces have a severe moisture deficit, so this latent heat pathway is largely unavailable. All nocturnal urban cooling must proceed through sensible heat flux and longwave radiation, which are less efficient because the urban surface cannot evaporate. The result is a slower cooling rate in the city and a persistent nighttime temperature excess. Cities with more arid climates or more impervious cover have a more complete suppression of the latent heat pathway, producing a larger UHI.",
+      "counterconditions": [
+        "If rural and urban latent heat fluxes are measured to be comparable at night, the moisture-deficit mechanism is falsified",
+        "If the largest UHI intensities occur in humid, well-irrigated cities, the aridity scaling is falsified",
+        "If the nighttime UHI is well explained by sensible and longwave flux differences alone without invoking latent heat, this mechanism is unnecessary",
+        "If dew formation is negligible in rural areas at night, the rural latent-cooling pathway is not the key differentiator"
+      ],
+      "typicality": 0.72,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006"],
+      "analogy": {
+        "source_memory_refs": ["SRC_006"],
+        "shared_structure": [
+          "Both the desert oasis and the rural countryside cool through evaporation of available moisture",
+          "Both the surrounding desert and the urban core lack moisture and thus cool less efficiently",
+          "Both exhibit a temperature differential driven by the presence or absence of latent heat removal",
+          "Both show that the sensible heat flux alone is insufficient to achieve rapid nighttime cooling"
+        ],
+        "disanalogies": [
+          "The desert oasis has an active moisture source driving cooling, while the urban moisture deficit is a passive absence",
+          "The oasis effect can produce temperatures below the dry-bulb, while the urban UHI is always a relative excess",
+          "The desert has very high daytime temperatures driving strong radiative cooling at night, while the city has moderate temperatures",
+          "The oasis is a local phenomenon, while the UHI is a city-scale phenomenon"
+        ],
+        "transfer_claims": [
+          "The principle that the absence of latent heat removal slows nighttime cooling transfers from the oasis-desert contrast to the urban-rural contrast",
+          "The dependence of the temperature differential on moisture availability transfers directly",
+          "The prediction that irrigating urban areas would reduce the UHI transfers from the oasis cooling effect"
+        ],
+        "overturn_conditions": [
+          "If the latent heat flux in rural areas at night is shown to be negligible compared to sensible and longwave fluxes",
+          "If urban irrigation is shown to have no effect on the nocturnal UHI",
+          "If the cross-city variation in UHI does not correlate with moisture availability or impervious cover"
+        ]
+      },
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is dominated by anthropogenic heat emissions: industrial, transportation, and building HVAC sources continuously inject sensible heat into the urban atmosphere that persists after sunset, and the nighttime gap scales with population density because higher-density cities emit more anthropogenic heat per unit area, maintaining a larger temperature differential against the cooling countryside.",
+      "mechanism": "Anthropogenic heat from vehicles, industry, and buildings constitutes a continuous source of sensible heat in the urban environment. After sunset, the rural environment has negligible anthropogenic heat input, so it cools unimpeded. In the city, anthropogenic heat flux partially offsets radiative and convective cooling, maintaining a warmer air temperature. The cross-city variation in the nocturnal UHI is driven by population density, which serves as a proxy for total anthropogenic heat emission: denser cities emit more waste heat per unit area, sustaining a larger nighttime temperature gap.",
+      "counterconditions": [
+        "If total anthropogenic heat flux is measured to be less than 10% of the net longwave radiative flux loss at night, it is insufficient to be the dominant mechanism",
+        "If the nocturnal UHI is not correlated with population density across cities, the anthropogenic-heat scaling is falsified",
+        "If cities with similar population densities but different urban geometry show very different UHI intensities, anthropogenic heat alone is insufficient",
+        "If the nocturnal UHI persists in cities with negligible nighttime human activity, stored heat must dominate over anthropogenic heat"
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_007"],
+      "analogy": {
+        "source_memory_refs": ["SRC_007"],
+        "shared_structure": [
+          "Both the CPU and the city are artificial systems that generate waste heat continuously",
+          "Both maintain a steady-state temperature above their surroundings due to internal heat generation",
+          "Both show a temperature differential proportional to the rate of internal heat generation",
+          "Both rely on the surrounding environment as a heat sink"
+        ],
+        "disanalogies": [
+          "The CPU relies on active convective cooling to maintain steady state, while the city relies on passive radiative and convective cooling",
+          "The CPU heat generation is purely anthropogenic, while the city heat includes both anthropogenic and stored solar contributions",
+          "The CPU has a fixed power input, while the city has diurnally varying anthropogenic heat input",
+          "The CPU is a compact device, while the city is a sprawling system with complex geometry"
+        ],
+        "transfer_claims": [
+          "The principle that internal heat generation maintains a temperature excess transfers from the CPU to the city",
+          "The proportionality between heat generation rate and temperature differential transfers directly",
+          "The prediction that reducing anthropogenic heat emissions would reduce the UHI transfers from CPU thermal management"
+        ],
+        "overturn_conditions": [
+          "If anthropogenic heat is shown to be a minor contributor compared to stored solar heat release",
+          "If the UHI does not scale with population density or energy consumption across cities",
+          "If the UHI is strongest in cities with low nighttime energy consumption"
+        ]
+      },
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The single dominant cross-city modulator of the nocturnal UHI is the sky view factor: cities with deeper, denser street canyons have a smaller effective sky view, which suppresses longwave radiative cooling because emitted radiation is intercepted by facing walls rather than escaping to the cold sky, so the nighttime gap scales with building height and built density through their control of sky view.",
+      "mechanism": "Nocturnal cooling in both urban and rural environments is primarily driven by net longwave radiative flux to the sky. In the countryside, the sky view factor is near unity, so surfaces radiate efficiently to the cold atmospheric sink. In cities, buildings partially obscure the sky, reducing the effective sky view factor. Radiation from street surfaces is intercepted by building walls, which re-radiate part of it back, creating a radiative trapping effect. This slows the urban cooling rate. Cities with taller buildings and narrower streets have a smaller sky view factor, so radiative cooling is more strongly suppressed, producing a larger nocturnal UHI. The thermal storage of building walls amplifies this by providing a warm radiative source facing the street.",
+      "counterconditions": [
+        "If the nocturnal UHI does not correlate with sky view factor across cities, the geometric mechanism is falsified",
+        "If cities with tall buildings but wide streets show the same UHI as cities with short buildings, building height alone is not the driver",
+        "If radiative flux measurements show that net longwave loss is similar in urban and rural areas, the trapping mechanism is negligible",
+        "If the UHI is larger in cities with high sky view but high thermal mass, sky view is not the dominant modulator"
+      ],
+      "typicality": 0.80,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_008"],
+      "analogy": null,
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The nocturnal UHI and its cross-city variation are best explained by a single coupled mechanism: the product of thermal mass and sky view factor determines the nocturnal cooling rate, so cities with both high thermal mass (impervious surfaces) and low sky view (dense street canyons) cool most slowly, and the gap scales with the product of these two factors rather than either alone.",
+      "mechanism": "The nocturnal UHI is not driven by a single factor but by the coupling between thermal storage and radiative geometry. Urban surfaces store more heat during the day (high thermal mass, impervious cover) and release it at night as longwave radiation. However, the rate at which this released heat escapes depends critically on the sky view factor: a low sky view traps the radiation, keeping the heat within the urban canyon. A city with high thermal mass but high sky view (e.g., a sprawling city with low buildings) would release stored heat efficiently and cool rapidly. A city with low sky view but low thermal mass (e.g., a dense city in a hot, arid climate with thin walls) would have little stored heat to trap. The largest nocturnal UHI occurs in cities where both factors are high, so the nighttime gap scales with their product or interaction term.",
+      "counterconditions": [
+        "If a regression of nocturnal UHI on the interaction of thermal mass and sky view factor does not outperform regressions on either factor alone, the coupled mechanism is unnecessary",
+        "If cities with high thermal mass and high sky view show the same UHI as cities with high thermal mass and low sky view, the coupling is falsified",
+        "If the interaction term does not improve predictive power across a sample of cities, the single-factor explanations are sufficient"
+      ],
+      "typicality": 0.55,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_005", "SRC_008"],
+      "analogy": null,
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is primarily an emergent effect of urban surface emissivity and moisture: impervious urban surfaces have higher emissivity and zero evapotranspiration compared to vegetated rural surfaces, so at night they radiate longwave more efficiently but cannot cool via latent heat, creating a net warming relative to the countryside; the cross-city gap scales with impervious surface fraction because it controls the trade-off between enhanced longwave loss and suppressed latent heat loss, with the latent suppression dominating.",
+      "mechanism": "Urban impervious surfaces typically have high emissivity (0.90-0.95), comparable to or higher than vegetation, so they radiate longwave efficiently. However, they completely lack the evapotranspiration pathway that dominates rural nighttime cooling. The result is that the total cooling rate of urban surfaces is lower because the latent heat flux is zero, even though the longwave flux is comparable or higher. The net effect is a warmer urban surface and air. The cross-city variation scales with impervious surface fraction: cities with more impervious cover have a larger area where the latent cooling pathway is suppressed, producing a larger integrated nighttime warming. This reframes the UHI as a moisture-removal phenomenon rather than a heat-storage or geometry phenomenon.",
+      "counterconditions": [
+        "If urban emissivity is measured to be significantly lower than rural emissivity, the enhanced-longwave premise is wrong",
+        "If the latent heat flux at night is negligible in both urban and rural areas, the moisture-removal mechanism is irrelevant",
+        "If the UHI does not correlate with impervious surface fraction across cities, the scaling claim is falsified",
+        "If the longwave flux difference between urban and rural surfaces is larger than the latent flux difference, the latent-suppression mechanism is not dominant"
+      ],
+      "typicality": 0.38,
+      "evidence_refs": [],
+      "optional_refs": ["SRC_006"],
+      "analogy": null,
+      "checker_specs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      }
+    }
+  ]
+}

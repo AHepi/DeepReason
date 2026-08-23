@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target contradicts itself on the cross-city modulator: the claim states the gap scales with aridity (drier → larger), but the mechanism body flips and says humid cities show a larger UHI because rural evapotranspiration is stronger there. It cannot be both.",
+      "counterexample": null,
+      "premise": "The claim and the mechanism assign opposite sign to the aridity/humidity modulation of the nocturnal UHI gap.",
+      "premise_evidence": [
+        {
+          "block": "000000000000",
+          "quote": "the gap scales with aridity—drier cities show a larger nocturnal excess."
+        },
+        {
+          "block": "000000000000",
+          "quote": "In humid climates, rural evapotranspiration is stronger, increasing the contrast and thus the UHI."
+        }
+      ]
+    }
+  ]
+}

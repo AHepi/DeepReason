@@ -1,0 +1,14 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target answers why the air stays warmer at night by naming anthropogenic heat emissions and their persistence after sunset. But for the cross-city half of the question it asserts the nighttime gap scales with population density/anthropogenic heat output, treating higher emissions as the single mechanism that makes the gap larger in some cities. That causal priority is backwards for nocturnal UHI: the dominant, well-supported cross-city modulator of the nighttime temperature gap is urban geometry and surface materials via reduced sky-view factor and thermal mass, which slows radiative cooling and stored-heat release. Anthropogenic heat is a secondary contributor and is often a smaller term than stored solar heat and reduced longwave loss, so it cannot be the single best explanation for why the gap is larger in some cities than in others.",
+      "counterexample": [
+        "Two cities with identical population density and anthropogenic heat flux but different street geometry (deep canyons vs. open sprawl) and building materials would exhibit markedly different nocturnal UHI intensities under the target's own stated conditions, falsifying the claim that the nighttime gap scales with population density/anthropogenic heat as the single best mechanism."
+      ],
+      "premise": "Reduced nighttime longwave radiative cooling due to urban geometry (low sky view factor) and release of heat stored during the day in urban materials is the dominant mechanism explaining why nocturnal UHI is larger in some cities than in others, with anthropogenic heat as a secondary contributor.",
+      "premise_evidence": null
+    }
+  ]
+}

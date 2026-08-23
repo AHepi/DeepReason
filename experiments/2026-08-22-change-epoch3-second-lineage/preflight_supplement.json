@@ -1,0 +1,23 @@
+{
+  "control_holds": true,
+  "criteria": [
+    {
+      "evaluable": true,
+      "id": "uhi-energy-balance@v1",
+      "verdict": "fail"
+    },
+    {
+      "evaluable": true,
+      "id": "uhi-nocturnal-release@v1",
+      "verdict": "fail"
+    },
+    {
+      "evaluable": true,
+      "id": "uhi-cross-city-modulator@v1",
+      "verdict": "fail"
+    }
+  ],
+  "passing": [],
+  "supplement": "experiments/2026-08-22-change-epoch3-second-lineage/supplement-nocturnal-collapse.md",
+  "supplement_bytes": 1656
+}

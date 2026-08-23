@@ -1,0 +1,22 @@
+```json
+{
+  "candidate": {
+    "claim": "The night-time UHI is primarily an aerodynamic and radiative trapping effect: dense, tall building canopies with low sky view factors trap longwave radiation and retard cooling, so cross-city night-time UHI intensity scales most strongly with built density and building height.",
+    "mechanism": "After sunset, urban surfaces cool primarily by emitting longwave radiation to the sky. In dense street canyons with low sky view factor, much of that radiation is intercepted by opposing walls and reradiated, so net longwave loss is reduced. Dense canopies also impose greater aerodynamic roughness, which can weaken wind speeds and further suppress sensible and latent heat removal. The cross-city modulator is geometry: cities with deeper canyons and denser buildings retain more stored heat and cool more slowly, producing a larger nocturnal gap.",
+    "counterconditions": [
+      "If measured UHI is large in low-density cities with high sky view factor, this geometry-only account fails.",
+      "If the cross-city gap correlates more strongly with aridity or vegetation deficit than with building height, the claimed modulator is wrong.",
+      "If rural and urban cooling rates match under equal sky view conditions, geometry is not the dominant mechanism."
+    ],
+    "typicality": 0.7,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003"
+      ]
+    }
+  }
+}
+```
