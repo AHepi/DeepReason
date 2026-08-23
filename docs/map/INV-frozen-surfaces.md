@@ -143,6 +143,27 @@ until the map's falsification pass flagged it (see
 
 `check: grep -q "def route_fingerprint" src/deepreason/llm/firewall.py`
 
+**Granted contact, 2026-08-23 — the split-budget knobs in the source-config
+echo.** The two-call seat protocol tranche added two `Config` fields and the
+full gate went red in 40 places: the qualification subject digest moved, and
+with it 22 frozen manifest wire-byte goldens and the shipped-digest pin. The
+grant was requested with `tools/blast_radius.py`'s own `DIRECT` contact verdict
+pasted and the fix already measured, and the operator gave it in those terms
+("Insertions only, 11 and 0 ... Its effect is to PRESERVE digests, not move
+them").
+
+What moved: two `data.pop("SPLIT_BUDGET_*", None)` lines in
+`_versioned_source_config_data`, joining the eight knobs already there.
+**Insertions only — 11 and 0** — and no schema, validator or Pydantic model was
+touched. Additive is provable rather than asserted here: the qualification
+subject digest over a committed fixture returns to
+`b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386`, which is
+byte-identical to the value the tranche base produces, so this contact makes
+the surface MORE stable rather than less. Ledgered at
+`experiments/2026-08-22-change-two-call-seat-protocol/REQUEST.md` Amendment 2.
+
+`check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && test "$(grep -c 'data.pop(\"SPLIT_BUDGET_' src/deepreason/run_manifest.py)" -eq 2`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the

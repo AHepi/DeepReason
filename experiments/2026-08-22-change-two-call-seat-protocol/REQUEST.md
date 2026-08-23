@@ -244,3 +244,24 @@ R18 (behavior, from QO2): the extraction leg rides the existing authorization
 bundle. Mandatory guard, in the operator's own words: "refused, with a typed
 notice, on any repair bundle, so it can never become a second bite at the
 contract."
+
+### Amendment 2 — 2026-08-23, the frozen-surface grant for `run_manifest.py`
+
+Asked after the full gate came back red in 40 places, with the blast-radius
+gate's own DIRECT contact verdict pasted and the fix already measured. The
+operator's selection, verbatim:
+
+**"Grant the contact (Recommended)"**
+> "Insertions only, 11 and 0, into the function that exists for exactly this and
+> already carries eight prior knobs (ENGAGED_CRITICISM_AUTHORITY,
+> LEGACY_CRITICISM_ENABLED, ADJUDICATION_STATUS_AUTHORITY_ENABLED,
+> JUDGE_SEATS_ENABLED and its two throttles, SCHOOL_SEATS_ENABLED). Its effect
+> is to PRESERVE digests, not move them: proven, the subject digest returns
+> byte-identical to the tranche base. No schema, no validator, no Pydantic
+> model touched."
+
+R19 (behavior, from Amendment 2): `src/deepreason/run_manifest.py` — frozen
+surface 4 — may gain the two `data.pop("SPLIT_BUDGET_*", None)` lines in
+`_versioned_source_config_data`, and nothing else. This SUPERSEDES R17's "no
+planned file writes to any of the five frozen surfaces" for this one function
+and these two lines only; every other frozen surface remains untouched.
