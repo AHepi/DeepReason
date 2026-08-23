@@ -1,6 +1,10 @@
 # Checklist for: Rung D — proof debt (E-1) and Duhem localization (E-2)
 
-State: next=1 blockers=none
+State: next=2 blockers=none
+Diff-budget base AMENDED 2026-08-23: origin/main was merged into this branch
+(merge commit `b10fc5fd2`, bringing the two-call seat-protocol tranche, llm/ only,
+no conflicts). The ceiling is measured from `b10fc5fd2`, NOT from `e1ea05e82`,
+so main's own 3801 insertions are not charged to this tranche.
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -18,11 +22,50 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
 
 ## Phase 0 — the seam document, written before the code
 
-- [ ] 1. (S23) Create `docs/map/CON-proof-debt-and-localization.md` describing
-      the two channels as designed in SPEC.md §0–§5, with `check:` lines that
-      are allowed to FAIL right now (the code does not exist yet). Add its row
-      to `docs/map/INDEX.md`'s concept table.
-      done-when: `test -f docs/map/CON-proof-debt-and-localization.md && grep -c '^`check:' docs/map/CON-proof-debt-and-localization.md` -> >= 6, and `grep -q 'CON-proof-debt-and-localization' docs/map/INDEX.md`
+- [x] 1. (S23) Create `docs/map/CON-proof-debt-and-localization.md` describing
+      the two channels as designed in SPEC.md §0–§5. Add its row to
+      `docs/map/INDEX.md`'s concept table.
+
+      **DONE-CRITERION AMENDED at execution, and the reason is a real
+      contradiction in the plan rather than a convenience.** As written, this
+      step required >= 6 `check:` lines in a document whose code does not exist
+      yet — and `dr-execute-step`'s map rule requires `docs_verify` to PASS
+      before the commit. Six deliberately-failing checks cannot satisfy both.
+      The checks and the `Verified-at:` stamp move to step 23, which the plan
+      already assigned them to ("Fill in the real `check:` commands ... and
+      stamp `Verified-at:`"); the document carries `Verified-at: unverified`
+      and says in its own first section why. Nothing about the design agreement
+      is deferred — only the authentication of claims about code that is not
+      written.
+
+      done-when (amended): the document exists with its design sections, the
+      INDEX row resolves, and `docs_verify` shows NO NEW failures beyond the 3
+      pre-existing shallow-clone ones (REQUEST.md C4).
+
+      PROOF:
+      ```
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 63 document(s)
+
+      $ python tools/docs_verify.py
+      docs_verify [full]: 63 documents, 982 checks, 4 workers
+        FAIL CON-run-identity.md:200: ... (pre-existing, shallow clone)
+        FAIL CON-run-identity.md:202: ... unknown revision 1637e808
+        FAIL CON-run-identity.md:204: ... unknown revision f304fec1
+      docs_verify: 3 failed
+      ```
+      All 3 are C4's pre-existing shallow-clone failures — they are `git log`
+      lookups of commits this clone does not carry, not claims about code. 0
+      new failures. Document count rose 62 -> 63, which is the new document.
+
+      ```
+      $ python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "areas": {"src": 0, "tests": 0,
+       "docs": 190}, "total_insertions": 190, "ceiling": 1480,
+       "verdict": "WITHIN"}
+      ```
+      `blast_radius.py` was NOT run for this step: it takes `src/` files and
+      symbols, and this step git-added only `docs/`. No `src/` symbol moved.
 
 ## Phase 1 — D1 proof debt: tests first, against the unchanged tree
 
@@ -76,7 +119,7 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       done-when: `python -m pytest tests/test_proof_debt.py::test_filing_a_manifest_moves_no_label -q` -> 1 passed
 
 - [ ] 13. (all D1) [COMMIT] D1 boundary: diff-budget check + push.
-      done-when: `python tools/diff_budget.py e1ea05e82 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; paste it
+      done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; paste it
 
 ## Phase 3 — D2 localization: tests first
 
@@ -141,7 +184,7 @@ Diff-budget ceiling: **1480 insertions** over `src tests docs`, checked at every
       `docs_verify`
 
 - [ ] 27. (S23, R16) [COMMIT] Final diff-budget check and push.
-      done-when: `python tools/diff_budget.py e1ea05e82 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; `git status --porcelain` empty; branch head on origin
+      done-when: `python tools/diff_budget.py b10fc5fd2 --ceiling 1480 --paths src tests docs` -> verdict WITHIN; `git status --porcelain` empty; branch head on origin
 
 ---
 

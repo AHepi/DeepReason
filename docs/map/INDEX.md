@@ -66,6 +66,7 @@ than you need.
 | `CON-scheduler-ranking.md` | which problem a cycle works on (`Scheduler._select_problem`) |
 | `CON-seats.md` | how a role becomes a provider request: `select_lease`, `EndpointLease`, and today's one-profile-per-run mint |
 | `CON-conjecture-kinds.md` | formal vs informal, where kind is signaled, and the R-g guardrail against ranking/admission/acceptance on kind |
+| `CON-proof-debt-and-localization.md` | what a derived judgment rests on (`KERNEL_CHECK`/`OPEN_CERTIFICATES`/`AXIOM_DEBT`), and what it takes to blame one member of a bundle |
 
 ## Invariants and recipes
 
