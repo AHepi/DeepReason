@@ -14,10 +14,12 @@ retired as `failed-attempt3-run-bb0455384ea09b5b…` under
 
 ## The cause, in one sentence
 
-The two sides of the guard differ **only in their completion-cap term**, because
-`preview_request` and `call` compute that cap with two structurally different
-expressions over the same inputs; the prompt term is provably identical on both
-sides, and the dispatch-side cap is the one quantity the record never stores.
+At cycle 2 the controller lawfully settled the conjecturer seat's cap from its
+route ceiling 32768 to 20480; `preview_request` booked the **ceiling** while
+`call` dispatched against the **settled cap**, so the guard compared 41101
+against 28813 and refused — a disagreement of exactly 12288, the ceiling minus
+the settled cap. The prompt term is provably identical on both sides and cannot
+contribute; the dispatch-side cap is the one quantity the record never stores.
 
 ## Step 1 — the prompt term cannot differ. This is proven, not assumed.
 
@@ -109,6 +111,45 @@ default never fires; `int(None or 0)` is `0`. The fallback in that expression is
 unreachable for the production endpoint — it is dead in a way that reads as
 protective.
 
+## Step 3b — attempt 3 was in that configuration, and the arithmetic closes
+
+Measured over the committed root by `repro/attempt3_census.py`, no re-run:
+
+    reservations 50  authorizations 50  provider attempts 49
+    authorized-never-dispatched 1        <- the call the guard refused
+
+    refused dispatch: role=conjecturer seat=0 contract=conjecturer.turn.v6
+      prompt digest matches its reservation: True
+      booked  prompt_bound=8333 completion_bound=32768 reserved=41101
+
+    controller policy artifacts: 1
+      cycle=2 knobs={'cap:argumentative_critic': 20480, 'cap:conjecturer': 20480}
+
+Every route in this run's manifest declares `context_window_tokens=131072` with
+`max_tokens=32768`, so **every seat sat on the divergent branch** for the whole
+run:
+
+`check: python -c "import json; m=json.load(open('experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4/run-manifest.json')); r=[x for v in m['roles'].values() for x in (v or [])]; assert r and all(x['context_window_tokens'] == 131072 and x['max_tokens'] == 32768 for x in r), 'attempt-3 route shape moved'"`
+
+The controller emitted one policy, at **cycle 2** — the cycle the run died at —
+settling `cap:conjecturer` to 20480. The refused work item is `conjecturer`
+seat 0. Putting the two together:
+
+| side | expression | value |
+|---|---|---|
+| booked (`reservation.amount`, recorded) | `conservative_prompt_bound(prompt)` + route **ceiling** | 8333 + 32768 = **41101** |
+| dispatched (`reservation_bound`, never recorded) | `conservative_prompt_bound(request)` + **settled** cap | 8333 + 20480 = **28813** |
+| disagreement | ceiling − settled | **12288** |
+
+41101 ≠ 28813, so `WorkflowAuthorizationError` fired. The disagreement is
+exactly `32768 − 20480`, to the token. Nothing about the prompt is involved:
+its bound, 8333, is the same number on both sides, and it is in the record.
+
+**This is E43's own scenario, one layer further in — the same seat, the same
+32768 → 20480.** E43 changed `EndpointLease.verify` so that narrowing would stop
+killing runs at the firewall. It now kills them at the reservation guard
+instead, because the booking still reads the ceiling.
+
 ## Step 4 — why the record could not settle it, and what exactly is missing
 
 `TokenReservationV2` (`workflow/transaction.py:244-266`) already stores the
@@ -147,18 +188,28 @@ is 32768 across every stored object, and `prompt_sha256` agrees in 50 of 50
 reservation/authorization pairs. Step 1 explains why that last one had to agree:
 a disagreement there raises a different exception.
 
-Those eliminations also mean the record cannot tell us *which* of the two
-divergent configurations attempt 3 was in — a controller-settled cap or an
-absent one — because neither leaves a trace. That is the gap, restated as its
-own consequence, and it is what obligation (2) closes.
+4. **P6-epoch3's first elimination — "not a controller cap re-tune" — is
+   false.** The policy artifact exists. It is not in `log.jsonl`, which is where
+   that elimination looked; it is a content-addressed artifact under
+   `objects/artifact/` with `provenance.role: "controller"`, and its knobs live
+   inside an `inline:` JSON **string**, so a `"max_tokens": <n>` scan over the
+   root cannot see them — the settled value is spelled `"cap:conjecturer": 20480`
+   and the literal `20480` appears nowhere as a `max_tokens` field. That is
+   precisely why "32768 everywhere, therefore no re-tune" read as conclusive and
+   was not. The other two eliminations (prompt drift; 50 of 50 `prompt_sha256`
+   agreement) stand, and Step 1 explains why the second had to.
+
+`repro/attempt3_census.py <root>` re-derives all of it from the committed root.
 
 ## One cause, named
 
 > `preview_request` and `call` compute the completion cap with two different
-> expressions. The bound the workflow books is therefore not the bound the
-> adapter checks, on every route that declares `context_window_tokens` and whose
-> endpoint cap is not equal to its route ceiling. The prompt term is identical by
-> construction and cannot contribute.
+> expressions. On any route declaring `context_window_tokens`, the workflow books
+> the route CEILING while the adapter dispatches against the endpoint's SETTLED
+> cap, so the moment the controller lawfully narrows a seat — which E43 exists to
+> permit — the two numbers part by exactly the amount of the narrowing and the
+> guard refuses the call. The prompt term is identical by construction and cannot
+> contribute.
 
 The fix is not to reconcile the two expressions — that is parity by agreement,
 the E26 shape, and it would leave the same defect one refactor away. One
