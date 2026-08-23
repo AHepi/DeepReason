@@ -213,10 +213,14 @@ class MockEndpoint:
             # A two-parameter script also sees the request knobs, so a test can
             # model the one thing that actually distinguishes the emission leg:
             # the same model behaves differently when it is not thinking.
+            # Callable OBJECTS (a class with __call__) have no __code__, and
+            # several suites script this endpoint with one; they keep the
+            # one-parameter contract.
+            wants_knobs = getattr(
+                getattr(self._fn, "__code__", None), "co_argcount", 1
+            ) >= 2
             response = (
-                self._fn(prompt, dict(kwargs))
-                if self._fn.__code__.co_argcount >= 2
-                else self._fn(prompt)
+                self._fn(prompt, dict(kwargs)) if wants_knobs else self._fn(prompt)
             )
         elif self._responses:
             response = self._responses.pop(0)
