@@ -1148,3 +1148,42 @@ only the gate's 40 red goldens told it the move was avoidable. When the question
 is "does X enter this digest", the admissible answer is a before/after digest
 plus a payload diff plus the full gate — never a signature, a grep, or a digest
 comparison alone.
+
+---
+
+**E45 — a blast-radius census classified per FILE, and two per-CHECK hits moved
+under a wholesale "MUST NOT MOVE".**
+`experiments/2026-08-22-change-rungd-proof-debt-localization/SPEC.md`'s
+"Blast-radius census" table declared `src/deepreason/programs.py` as a target
+and then classified every map document that references it in one row — "they
+assert on `register_fail_warrant`'s existing behaviour, which S8 leaves
+default-unchanged". Two of those documents assert nothing of the kind. They
+carry EXACT-SET pins over `programs.evaluate`, and Rung D adds a member to each:
+`SEAM-evaluation-x-ontology.md:54` pins every callee inside `evaluate`
+(`derivation_manifest_wf` joins it), and `SUB-evaluation.md:85` pins every file
+that CALLS `evaluate` (`proof_debt.py` joins it, because `receipt()` re-runs
+kernel checks). Both went red at step 6 and were correctly updated in the same
+commit as the code; the error is the classification, not the tree.
+
+Recorded because the SHAPE recurs and this is its third instance in one program.
+Rung 4's census predicted too narrowly; Rung 5's predicted nothing and missed a
+test pinning "exactly one backend" — the exact state that rung existed to change
+(`experiments/2026-08-14-change-calculus-reconciliation-v2/` PARKED P6). Both
+times the full gate caught it three commits later than the census would have.
+Here the map caught it one commit later.
+
+The correctable lesson is narrower than "be more careful". `blast_radius.py`
+reports consumers per TARGET — a file or a symbol — and a reader naturally
+writes one classification per row it returns. But a map document can hold many
+independent checks over the same file, and the ones that bite are exact-set pins
+(`assert found == {...}`, `assert D[0] == [...]`), which move whenever a set
+gains a member for any reason. **A census row that names a FILE must be expanded
+to the CHECKS in that file before it is classified**, and any check containing
+`==` against a literal set or list is EXPECTED TO MOVE by default unless the
+change demonstrably adds no member. The same tranche also found two
+architectural pins the census never looked at at all — `premises.py` must not
+import the calculus substrate (`SUB-calculus.md:163`) and `rules/warrants.py`'s
+top-level imports are pinned to `{deepreason.ontology}`
+(`SEAM-evaluation-x-rules.md:39`) — both of which caught real first-draft
+violations. Neither was weakened; both fixes are better code. But a census that
+had enumerated checks rather than files would have predicted all four.
