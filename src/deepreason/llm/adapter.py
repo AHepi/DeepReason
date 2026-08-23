@@ -37,6 +37,19 @@ from deepreason.llm.firewall import (
 )
 from deepreason.llm.packs import AllocatedPack, apply_model_profile
 from deepreason.llm.profiles import ModelProfile, get_profile
+from deepreason.llm.split import (
+    SPLIT_LEG_EXTRACT,
+    SPLIT_LEG_REASON,
+    NOTICE_ENVELOPE,
+    NOTICE_NO_HEADROOM,
+    NOTICE_OUTPUT_MECHANISM,
+    NOTICE_REPAIR_BUNDLE,
+    UNARMED_PLAN,
+    deliberation_request,
+    extraction_request,
+    plan_split,
+    stand_down,
+)
 from deepreason.llm.repair import (
     BoundedRepairSession,
     OutputMechanism,
@@ -114,6 +127,20 @@ class V6ModelProfileOverrideForbidden(RuntimeError):
             f"{self.code}: role={role!r} must use its frozen model profile"
         )
 
+
+
+def _natural_stop_field(endpoint, split_fields: dict) -> dict:
+    """Per-attempt provider fields, split-aware.
+
+    A split call already knows its emission leg's finish reason; an undivided
+    one reads the endpoint's. Either way natural_stop is RECORDED ONLY: no
+    guard, gate, rank, status or label may consume it (the seats/evidence law).
+    """
+
+    if split_fields:
+        return dict(split_fields)
+    finish = getattr(endpoint, "last_finish_reason", None)
+    return {"natural_stop": None if finish is None else finish == "stop"}
 
 def _enforce_request_envelope(role: str, prompt: str, lease: EndpointLease) -> None:
     """Apply the route's conservative complete-request bound after rendering."""
@@ -230,6 +257,8 @@ class LLMAdapter:
         leases: dict[str, tuple[EndpointLease, ...]] | None = None,
         transaction_authority_required: bool = False,
         school_judge_bindings: Sequence[SchoolRoleBindingV1] = (),
+        split_budget_mode: str = "auto",
+        split_extraction_tokens: int = 512,
     ) -> None:
         self.endpoints = endpoints
         self.blobs = blob_store
@@ -245,6 +274,10 @@ class LLMAdapter:
         )
         self.leases = leases if leases is not None else leases_from_endpoints(endpoints)
         self.transaction_authority_required = bool(transaction_authority_required)
+        # The split-budget seat protocol (llm/split.py). Run-level policy: the
+        # per-seat decision is the route's, and is taken per attempt.
+        self.split_budget_mode = str(split_budget_mode)
+        self.split_extraction_tokens = int(split_extraction_tokens)
         # Opt-in only. Supplying school-to-judge-seat bindings makes the
         # cross-school ensemble available; it does not make it govern. Route
         # topology decides that, below.
@@ -885,6 +918,186 @@ class LLMAdapter:
         _enforce_request_envelope(role, prompt, lease)
         return prompt, wire_contract, lease, endpoint, profile
 
+
+    def _split_plan(
+        self,
+        *,
+        attempt: int,
+        lease: EndpointLease,
+        mechanism: "OutputMechanism",
+        endpoint,
+        pre_rendered_request: str | None,
+    ):
+        """This attempt's division of the completion ceiling, or a stand-down.
+
+        Everything decidable before a token is spent is decided here, so the
+        dispatch below either runs two legs or runs exactly as it always did.
+        """
+
+        if attempt != 0:
+            # A repair turn already carries a diagnostic and a prior value: it
+            # is extraction-shaped by construction, and under a transactional
+            # authorization it is the only attempt in its own session.
+            return UNARMED_PLAN
+        if pre_rendered_request is not None:
+            # The workflow authored and bound this exact request. Dividing it
+            # would put a request it never authorized on the wire, and on a
+            # repair bundle that is a second bite at the contract.
+            return stand_down(NOTICE_REPAIR_BUNDLE)
+        if mechanism != OutputMechanism.JSON_TEXT:
+            # A grammar or a native schema is enforced at the sampler, so the
+            # deliberation leg could not be free of it and the split would buy
+            # nothing. `json_object` is NOT in this class: it is one response
+            # -format field, which the deliberation leg omits per request while
+            # the emission leg carries the route's mode in full.
+            return stand_down(NOTICE_OUTPUT_MECHANISM)
+        return plan_split(
+            mode=self.split_budget_mode,
+            ceiling=getattr(endpoint, "max_tokens", lease.route.max_tokens),
+            extraction_tokens=self.split_extraction_tokens,
+            provider=lease.route.provider,
+            reasoning=lease.route.reasoning,
+        )
+
+    def _dispatch_split(
+        self,
+        *,
+        endpoint,
+        lease: EndpointLease,
+        role: str,
+        request: str,
+        schema_json: str,
+        plan,
+        base_kwargs: dict,
+        schema_kwargs: dict,
+        trace_identity: dict,
+        transport_limits: dict,
+        mechanism: "OutputMechanism",
+        attempt_started: float,
+    ):
+        """Two provider legs against one route, one lease, one authorization.
+
+        Returns ``(raw, plan, legs, usage, fields, prompt_ref)``.  ``raw`` is
+        the emission leg's output, which the caller validates exactly as it
+        validates an undivided one -- so the emission leg is NOT recorded here:
+        it becomes whichever attempt the caller goes on to build, valid or not,
+        stamped with ``fields``.  Only the deliberation leg, which no validator
+        will ever see, is recorded here.  A ``plan`` that comes back unarmed
+        means a run-time precondition failed BEFORE anything was spent and the
+        caller should dispatch normally.
+        """
+
+        deliberation = deliberation_request(request)
+        try:
+            _enforce_request_envelope(role, deliberation, lease)
+        except RequestEnvelopeExceeded:
+            return None, stand_down(NOTICE_ENVELOPE), [], None, None, None
+
+        # The emission leg's prompt is not covered by the reservation the
+        # caller already booked, so book its upper bound before spending
+        # anything. The trace can be at most the reasoning leg's own budget,
+        # and conservative_prompt_bound over-counts in the safe direction.
+        extra_reserve = None
+        if self.meter is not None:
+            bound = conservative_prompt_bound(
+                extraction_request(schema=schema_json, trace="")
+            ) + -(-plan.reason_max_tokens * 4 // 3)
+            try:
+                extra_reserve = self.meter.reserve(prompt_tokens=bound, max_tokens=0)
+            except TokenBudgetExceeded:
+                return None, stand_down(NOTICE_NO_HEADROOM), [], None, None, None
+
+        try:
+            legs: list[LLMAttempt] = []
+            usage = {"prompt_tokens": 0, "completion_tokens": 0}
+
+            def _send(text: str, cap: int, **extra):
+                raw = endpoint.complete(
+                    text, **base_kwargs, max_tokens=cap, **extra
+                )
+                spent = _usage_tokens(
+                    getattr(endpoint, "last_usage", None), text, raw
+                )
+                usage["prompt_tokens"] += spent["prompt_tokens"]
+                usage["completion_tokens"] += spent["completion_tokens"]
+                finish = getattr(endpoint, "last_finish_reason", None)
+                return raw, spent, (None if finish is None else finish == "stop")
+
+            # Leg one deliberates and is allowed to be cut off. An empty
+            # completion here is not a failure: it is the exact case the
+            # protocol exists for, and whatever the provider thought is
+            # recovered from its side channel.
+            started = time.monotonic()
+            # UNCONSTRAINED, and this is the whole mechanism: the tax that
+            # empties a seat is paid for constraining the DELIBERATION, so a
+            # leg that still had to emit JSON would buy nothing. No schema, no
+            # mechanism, no response_format -- and none of it by mutating the
+            # endpoint, so the frozen lease still verifies the route's own
+            # values on this dispatch and the emission leg below carries the
+            # route's output mode in full.
+            spoken, spent, stopped = _send(
+                deliberation,
+                plan.reason_max_tokens,
+                json_mode=False,
+                allow_empty_content=True,
+            )
+            trace = spoken or getattr(endpoint, "last_reasoning_trace", None) or ""
+            legs.append(LLMAttempt(
+                prompt_ref=self.blobs.put(deliberation.encode()),
+                raw_ref=self.blobs.put(spoken.encode()),
+                attempt=0,
+                **trace_identity,
+                **transport_limits,
+                split_leg=SPLIT_LEG_REASON,
+                split_max_tokens=plan.reason_max_tokens,
+                split_notice=plan.notice if plan.disclosed else "",
+                natural_stop=stopped,
+                tokens=spent["prompt_tokens"] + spent["completion_tokens"],
+                ms=int((time.monotonic() - started) * 1000),
+                # Prose is not a contract value and was never asked to be one.
+                valid=False,
+                output_mechanism=mechanism.value,
+                transport_attempts=max(
+                    1, int(getattr(endpoint, "last_transport_attempts", 1) or 1)
+                ),
+                transport_diagnostics=list(
+                    getattr(endpoint, "last_transport_diagnostics", ())
+                ),
+            ))
+
+            emission = extraction_request(schema=schema_json, trace=trace)
+            notice = plan.notice
+            try:
+                _enforce_request_envelope(role, emission, lease)
+            except RequestEnvelopeExceeded:
+                # A trace too large to carry is dropped rather than the leg:
+                # a non-thinking emission pass with no trace still answers,
+                # where a thinking one cut off at the cap answers nothing.
+                emission = extraction_request(schema=schema_json, trace="")
+                notice = NOTICE_ENVELOPE
+
+            extract_kwargs = dict(schema_kwargs)
+            if plan.extract_reasoning is not None:
+                extract_kwargs["reasoning"] = plan.extract_reasoning
+            emission_ref = self.blobs.put(emission.encode())
+            raw, _spent, stopped = _send(
+                emission, plan.extract_max_tokens, **extract_kwargs
+            )
+            fields = {
+                "split_leg": SPLIT_LEG_EXTRACT,
+                "split_max_tokens": plan.extract_max_tokens,
+                "split_notice": (
+                    notice if (plan.disclosed or notice != plan.notice) else ""
+                ),
+                "natural_stop": stopped,
+            }
+            return raw, plan, legs, usage, fields, emission_ref
+        finally:
+            if extra_reserve is not None:
+                # The real usage of both legs settles through the caller's own
+                # reservation; this one only held the headroom.
+                extra_reserve.release()
+
     def call(
         self,
         role: str,
@@ -1224,16 +1437,64 @@ class LLMAdapter:
                         "active workflow dispatch was not durably authorized"
                     ) from authorization_error
             prompt_ref = request_prompt_ref
+            split_usage = None
+            # Stamped onto whichever attempt the emission leg becomes, valid or
+            # not, so a split call records the same shape on every exit path.
+            split_fields: dict = {}
             try:
-                kwargs = {}
-                if images:
-                    kwargs["images"] = images
+                base_kwargs = {"images": images} if images else {}
+                schema_kwargs = {}
                 if mechanism != OutputMechanism.JSON_TEXT:
-                    kwargs.update(
+                    schema_kwargs.update(
                         response_schema=response_schema,
                         output_mechanism=mechanism,
                     )
-                raw = endpoint.complete(request, **kwargs)
+                plan = self._split_plan(
+                    attempt=attempt,
+                    lease=lease,
+                    mechanism=mechanism,
+                    endpoint=endpoint,
+                    pre_rendered_request=pre_rendered_request,
+                )
+                if plan.armed:
+                    (
+                        raw,
+                        plan,
+                        split_legs,
+                        split_usage,
+                        split_fields,
+                        emission_ref,
+                    ) = self._dispatch_split(
+                        endpoint=endpoint,
+                        lease=lease,
+                        role=role,
+                        request=request,
+                        schema_json=json.dumps(response_schema, sort_keys=True),
+                        plan=plan,
+                        base_kwargs=base_kwargs,
+                        schema_kwargs=schema_kwargs,
+                        trace_identity=trace_identity,
+                        transport_limits=transport_limits,
+                        mechanism=mechanism,
+                        attempt_started=attempt_started,
+                    )
+                    # The deliberation leg is a provider request in its own
+                    # right and is recorded before the emission leg's outcome
+                    # is known, so a failure below still shows both.
+                    attempt_trace.extend(split_legs)
+                    prompt_ref = emission_ref
+                    exact_prompt_tokens += 0  # totals settle from split_usage
+                if not plan.armed:
+                    # Either the seat was never a candidate, or a run-time
+                    # precondition failed before anything was spent. Both are
+                    # an ordinary undivided call that records why.
+                    split_usage = None
+                    split_fields = (
+                        {"split_notice": plan.notice} if plan.disclosed else {}
+                    )
+                    raw = endpoint.complete(
+                        request, **base_kwargs, **schema_kwargs
+                    )
             except EndpointError as e:
                 if reservation is not None:
                     # Usage unknown: return the reserve without recording
@@ -1283,7 +1544,17 @@ class LLMAdapter:
                 raise
             if getattr(endpoint, "last_finish_reason", None) == "length":
                 truncated_any = True  # process signal for the controller
-            usage = _usage_tokens(getattr(endpoint, "last_usage", None), request, raw)
+            if split_fields:
+                truncated_any = truncated_any or any(
+                    a.natural_stop is False for a in attempt_trace
+                )
+            usage = (
+                split_usage
+                if split_usage is not None
+                else _usage_tokens(
+                    getattr(endpoint, "last_usage", None), request, raw
+                )
+            )
             attempt_tokens = usage["prompt_tokens"] + usage["completion_tokens"]
             tokens_used += attempt_tokens
             exact_prompt_tokens += usage["prompt_tokens"]
@@ -1330,6 +1601,7 @@ class LLMAdapter:
                     **trace_identity,
                     repair_scope=diagnostic.repair_scope,
                     **transport_limits,
+                    **_natural_stop_field(endpoint, split_fields),
                     tokens=attempt_tokens,
                     ms=int((time.monotonic() - attempt_started) * 1000),
                     valid=False,
@@ -1370,6 +1642,7 @@ class LLMAdapter:
                 **trace_identity,
                 repair_scope=turn.repair_scope,
                 **transport_limits,
+                **_natural_stop_field(endpoint, split_fields),
                 tokens=attempt_tokens,
                 ms=int((time.monotonic() - attempt_started) * 1000),
                 valid=True,
@@ -1389,7 +1662,7 @@ class LLMAdapter:
                 raw_ref=raw_ref,
                 tokens=tokens_used,
                 ms=int((time.monotonic() - started) * 1000),
-                attempts=attempt + 1,
+                attempts=max(attempt + 1, len(attempt_trace)),
                 truncated=truncated_any,
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
                 attempt_trace=attempt_trace,
@@ -1507,6 +1780,10 @@ def build_adapter(
         leases=leases,
         transaction_authority_required=(
             run_manifest is not None and run_manifest.schema_version == 6
+        ),
+        split_budget_mode=getattr(config, "SPLIT_BUDGET_SEAT_PROTOCOL", "auto"),
+        split_extraction_tokens=getattr(
+            config, "SPLIT_BUDGET_EXTRACTION_TOKENS", 512
         ),
     )
     if process_events is not None:

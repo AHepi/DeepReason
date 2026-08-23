@@ -1113,3 +1113,38 @@ as "Measure events" when the record shows a `Refl` policy artifact
 (`objects/artifact/2e9009812fe9e3b6fd0b48ffd088d72d21bc09890ee21fd66f715bd8253cba52.json`).
 Two documents and one comment each described this controller's authority, and
 all three were wrong in a different direction.
+
+**E44 — "a Config value costs nothing to add" omitted the step that makes it
+true, and a signature is not a subject.** `docs/map/INV-frozen-surfaces.md`,
+under "Where authority is allowed to live instead", said: "A `Config` value
+costs nothing to add and is invisible to replay." Invisible to replay, yes.
+Costs nothing, only if you also drop the key in
+`run_manifest.py::_versioned_source_config_data` — because `Config` is
+serialized into every manifest's `engine_config_json` and hashed into its
+`source_config_hash`, both of which the qualification subject embeds. Eight
+prior knobs are already in that drop list for exactly this reason
+(`ENGAGED_CRITICISM_AUTHORITY`, `LEGACY_CRITICISM_ENABLED`,
+`ADJUDICATION_STATUS_AUTHORITY_ENABLED`, `JUDGE_SEATS_ENABLED` and its two
+throttles, `SCHOOL_SEATS_ENABLED`); the sentence never mentioned them, so a
+reader who took it at face value would skip the step. Measured 2026-08-22 by
+`experiments/2026-08-22-change-two-call-seat-protocol/`: without the drop, the
+subject digest over a committed fixture moved from `b9038b84efdea313...` to
+`a5d81e5d34f51635...` and the full gate went red in 40 places, 22 of them
+frozen manifest goldens; with it, byte-identical and green. Corrected in place
+per `SCHEMA.md`, with a check that fails if a `SPLIT_BUDGET_` key reaches
+`engine_config_json`.
+
+Recorded here rather than only in the map because the WAY it was got wrong
+recurs, and because the first correction written for it was ALSO wrong. That
+tranche's SPEC.md M9 ran `inspect.signature(qualification_subject_payload)`, saw
+`(manifest, profile)` with no `Config` parameter, and inferred the price was
+zero; the measurement was accurate and the inference was not, since the manifest
+the signature DOES name is what carries `Config` in. Then, on measuring the
+digest actually move, the same window wrote up "the price is one battery per
+home" as an inherent cost — which was a description of a DEFECTIVE
+implementation, not of the design. The full gate is what separated the two: a
+before/after digest over a committed fixture told it something had moved, and
+only the gate's 40 red goldens told it the move was avoidable. When the question
+is "does X enter this digest", the admissible answer is a before/after digest
+plus a payload diff plus the full gate — never a signature, a grep, or a digest
+comparison alone.

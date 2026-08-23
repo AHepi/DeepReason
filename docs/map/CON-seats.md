@@ -1,5 +1,5 @@
 <!-- DR-CON-seats -->
-Verified-at: 5e0d5bab
+Verified-at: 23bb8bf66
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-llm-x-scheduler
@@ -110,6 +110,7 @@ of information the manifest already froze at mint time.
 | The seat lookup itself: `(role, seat) -> EndpointLease` | `llm/firewall.py` | `select_lease` |
 | Building the frozen table once per adapter | `llm/firewall.py` | `leases_from_endpoints` (legacy `config.roles`), `leases_from_manifest` (v6 `RunManifest.roles`) |
 | Ordinary dispatch: render, resolve seat, call the provider | `llm/adapter.py` | `LLMAdapter.call`, `LLMAdapter._render_request` |
+| Split dispatch: one seat call, two provider legs on one lease and one authorization (deliberate at `B_r`, then serialize at `B_a` with thinking off) | `llm/split.py`, `llm/adapter.py` | `plan_split`, `LLMAdapter._split_plan`, `LLMAdapter._dispatch_split` |
 | Presentation profile (compact/standard/frontier) — per-run today; per-`(role, seat, endpoint_id)` already possible in v6 | `llm/adapter.py`, `run_manifest.py` | `LLMAdapter.profile_for`/`base_profile_for` (legacy, one `self.base_model_profile`); `resolve_route_seat_base_profile` (v6, already seat-scoped) |
 | Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
 | Whether the compiled manifest's criticism goes through a school seat at all — a Config-driven branch, not a seat mechanism itself (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10; full detail in `DR-CON-authority`) | `preparation.py` | `build_preparation_manifest`; `Config.LEGACY_CRITICISM_ENABLED` |
@@ -122,6 +123,18 @@ of information the manifest already froze at mint time.
 | Whether that diversity guarantee itself must be cross-FAMILY, or may instead be a same-model ensemble relying on judge-pack blindness (Amendment 9/R24, 2026-08-10 — a structural substitute keyed off the frozen route shape, same pattern as the pre-existing cross-school substitute just above: no separate boolean flag, unlocked only by actually constructing >=2 identical-model judge seats via `--blind-same-model-judges` on the manifest-compile CLI) | `llm/firewall.py`, `run_manifest.py` | `require_cross_family_judge_ensemble`; `compile_run_manifest`'s `blind_same_model_judges` parameter |
 
 ## The rules it obeys
+
+**A split seat call is still ONE seat, ONE lease and ONE authorization.** The
+two legs share the route, the frozen envelope and the token reservation; the
+emission leg's budget is taken OUT of the completion ceiling rather than added
+to it, so a split can never spend past the bound `EndpointLease.verify` binds
+and the controller is clamped to. The protocol stands down — recording a typed
+notice, never refusing — where it cannot be honored: on a repair authorization
+(the workflow authored and bound that exact request), on a route that
+constrains every completion to the contract (there is no room for a
+deliberation leg), on a ceiling too small to divide, and on a provider whose
+neutral reasoning knob has no realization.
+`check: python -m pytest tests/test_split_budget_protocol.py -q && python -c "from deepreason.llm.split import plan_split; p = plan_split(mode='on', ceiling=4096, extraction_tokens=512, provider='ollama', reasoning='high'); assert p.armed and p.reason_max_tokens + p.extract_max_tokens == 4096 and p.reason_max_tokens >= p.extract_max_tokens" && grep -q "NOTICE_REPAIR_BUNDLE" src/deepreason/llm/adapter.py && grep -q "NOTICE_OUTPUT_MECHANISM" src/deepreason/llm/adapter.py`
 
 **`select_lease` is a pure `(role, seat) -> EndpointLease` lookup; nothing
 else keys it.** No call-site identity, workload kind, or profile

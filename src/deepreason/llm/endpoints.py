@@ -136,6 +136,27 @@ def mean_surprisal(logprobs_block: dict | None) -> float | None:
     return -sum(values) / len(values)
 
 
+class _Unset:
+    """Distinguishes "no per-request override" from an override OF None.
+
+    ``reasoning=None`` is a real neutral value meaning "send no reasoning
+    field", so a plain None default could not express "leave the endpoint's own
+    setting alone".
+    """
+
+    __slots__ = ()
+
+    def __repr__(self) -> str:  # pragma: no cover - diagnostics only
+        return "<unset>"
+
+
+_UNSET = _Unset()
+
+
+def _resolve(override, configured):
+    return configured if override is _UNSET else override
+
+
 class MockEndpoint:
     """Returns scripted responses in order (raises when exhausted), or — when
     given a callable — computes each response from the prompt. Reports an
@@ -147,6 +168,8 @@ class MockEndpoint:
         name: str = "mock",
         model: str = "mock",
         max_tokens: int | None = 512,
+        finish_reasons: list[str] | None = None,
+        reasoning_traces: list[str] | None = None,
     ) -> None:
         if callable(responses):
             self._fn = responses
@@ -160,11 +183,18 @@ class MockEndpoint:
         # finite pre-dispatch bound (llm/budget.py fails closed on an
         # unknown bound whenever a hard ceiling is set).
         self.max_tokens = max_tokens
+        self._finish_reasons = list(finish_reasons) if finish_reasons else None
+        self._reasoning_traces = list(reasoning_traces) if reasoning_traces else None
         self.last_usage: dict | None = None
         self.last_images: list[bytes] = []
         self.last_kwargs: dict = {}
+        self.last_finish_reason: str | None = None
+        self.last_reasoning_trace: str | None = None
         self.last_transport_attempts = 0
         self.last_transport_diagnostics: list[str] = []
+        # One entry per dispatch, so a test can inspect BOTH legs of a split
+        # call rather than only the last one.
+        self.calls: list[dict] = []
 
     def complete(self, prompt: str, images: list[bytes] | None = None, **kwargs) -> str:
         self.last_usage = None
@@ -172,12 +202,44 @@ class MockEndpoint:
         self.last_transport_diagnostics = []
         self.last_images = list(images) if images else []  # test-inspectable
         self.last_kwargs = dict(kwargs)
+        self.last_reasoning_trace = None
+        override = kwargs.get("max_tokens", _UNSET)
+        self.calls.append({
+            "prompt": prompt,
+            "max_tokens": self.max_tokens if override is _UNSET else override,
+            "reasoning": _resolve(kwargs.get("reasoning", _UNSET), None),
+            "kwargs": dict(kwargs),
+        })
         if self._fn is not None:
-            response = self._fn(prompt)
+            # A two-parameter script also sees the request knobs, so a test can
+            # model the one thing that actually distinguishes the emission leg:
+            # the same model behaves differently when it is not thinking.
+            # Callable OBJECTS (a class with __call__) have no __code__, and
+            # several suites script this endpoint with one; they keep the
+            # one-parameter contract.
+            wants_knobs = getattr(
+                getattr(self._fn, "__code__", None), "co_argcount", 1
+            ) >= 2
+            response = (
+                self._fn(prompt, dict(kwargs)) if wants_knobs else self._fn(prompt)
+            )
         elif self._responses:
             response = self._responses.pop(0)
         else:
             raise RuntimeError("MockEndpoint exhausted")
+        if self._reasoning_traces:
+            self.last_reasoning_trace = self._reasoning_traces.pop(0)
+        # None scripts the reasoning-only shape: the provider spent the cap
+        # thinking and returned null content.
+        if response is None:
+            self.last_finish_reason = "length"
+            if not kwargs.get("allow_empty_content"):
+                raise EndpointError("null content (finish_reason='length')")
+            response = ""
+        elif self._finish_reasons:
+            self.last_finish_reason = self._finish_reasons.pop(0)
+        else:
+            self.last_finish_reason = "stop"
         self.last_usage = {
             "prompt_tokens": max(1, len(prompt) // 4),
             "completion_tokens": max(1, len(response) // 4),
@@ -223,6 +285,11 @@ class OpenAICompatEndpoint:
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
         self.last_mean_surprisal: float | None = None
+        # A reasoning model that spends its whole cap thinking returns null
+        # content and its trace in a side channel. Keeping it is what lets a
+        # second, non-thinking leg answer from work that would otherwise be
+        # discarded at the wire.
+        self.last_reasoning_trace: str | None = None
         self.last_transport_attempts = 0
         self.last_transport_diagnostics: list[str] = []
 
@@ -234,6 +301,9 @@ class OpenAICompatEndpoint:
         response_schema: dict | None = None,
         output_mechanism: str | OutputMechanism | None = None,
         stop: list[str] | None = None,
+        max_tokens=_UNSET,
+        reasoning=_UNSET,
+        json_mode=_UNSET,
     ) -> dict:
         from deepreason.llm.providers import reasoning_body
 
@@ -259,8 +329,12 @@ class OpenAICompatEndpoint:
         body: dict = {"model": self.model, "messages": [{"role": "user", "content": content}]}
         if self.temperature is not None:
             body["temperature"] = self.temperature
-        if self.max_tokens is not None:
-            body["max_tokens"] = self.max_tokens
+        # Per-request overrides travel in the body and never mutate the
+        # endpoint, so the frozen lease still verifies the route's own values
+        # on every dispatch (llm/firewall.py::EndpointLease.verify).
+        effective_max_tokens = _resolve(max_tokens, self.max_tokens)
+        if effective_max_tokens is not None:
+            body["max_tokens"] = effective_max_tokens
         mechanism = OutputMechanism(output_mechanism) if output_mechanism else None
         if mechanism == OutputMechanism.NATIVE_JSON_SCHEMA:
             if not response_schema:
@@ -277,13 +351,13 @@ class OpenAICompatEndpoint:
             # Grammar is a fixed lease property. Unsupported providers reject
             # the request; this method never falls back to a different mode.
             body["grammar"] = JSON_GBNF
-        elif self.json_mode and mechanism is None:
+        elif _resolve(json_mode, self.json_mode) and mechanism is None:
             body["response_format"] = {"type": "json_object"}
         if stop:
             body["stop"] = list(stop)
         if self.request_logprobs:
             body["logprobs"] = True
-        body.update(reasoning_body(self.provider, self.reasoning))
+        body.update(reasoning_body(self.provider, _resolve(reasoning, self.reasoning)))
         return body
 
     def complete(
@@ -294,10 +368,15 @@ class OpenAICompatEndpoint:
         response_schema: dict | None = None,
         output_mechanism: str | OutputMechanism | None = None,
         stop: list[str] | None = None,
+        max_tokens=_UNSET,
+        reasoning=_UNSET,
+        json_mode=_UNSET,
+        allow_empty_content: bool = False,
     ) -> str:
         self.last_usage = None
         self.last_finish_reason = None
         self.last_mean_surprisal = None
+        self.last_reasoning_trace = None
         self.last_transport_attempts = 0
         self.last_transport_diagnostics = []
         body = self.build_body(
@@ -306,6 +385,9 @@ class OpenAICompatEndpoint:
             response_schema=response_schema,
             output_mechanism=output_mechanism,
             stop=stop,
+            max_tokens=max_tokens,
+            reasoning=reasoning,
+            json_mode=json_mode,
         )
         headers = {"Content-Type": "application/json"}
         if self.api_key:
@@ -373,7 +455,10 @@ class OpenAICompatEndpoint:
             # are usually transient server faults: surface them as retryable;
             # the post-retry guards below still catch the persistent case.
             try:
-                if data["choices"][0]["message"]["content"] is None:
+                if (
+                    data["choices"][0]["message"]["content"] is None
+                    and not allow_empty_content
+                ):
                     error = _TransientBody(
                         f"null content (finish_reason="
                         f"{data['choices'][0].get('finish_reason')!r})"
@@ -394,13 +479,22 @@ class OpenAICompatEndpoint:
         except (KeyError, IndexError, TypeError) as e:
             detail = data.get("error") if isinstance(data, dict) else data
             raise EndpointError(f"malformed completion response: {detail!r}") from e
+        message = choice.get("message") or {}
+        # Providers spell the side channel differently; neither is the answer,
+        # both are the deliberation that produced it.
+        trace = message.get("reasoning") or message.get("reasoning_content")
+        self.last_reasoning_trace = trace if isinstance(trace, str) else None
         if content is None:
             # Legal per the API (content filter; reasoning-only replies) —
             # surface as an endpoint failure so the caller's drop/retry
-            # handling applies instead of crashing on None.
-            raise EndpointError(
-                f"null content (finish_reason={choice.get('finish_reason')!r})"
-            )
+            # handling applies instead of crashing on None. A caller running a
+            # deliberation leg declares it tolerable and takes the empty
+            # string, because an empty answer there is still a leg that ran.
+            if not allow_empty_content:
+                raise EndpointError(
+                    f"null content (finish_reason={choice.get('finish_reason')!r})"
+                )
+            content = ""
         self.last_usage = data.get("usage") or None
         self.last_finish_reason = choice.get("finish_reason")
         self.last_mean_surprisal = mean_surprisal(choice.get("logprobs"))

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-workflow -->
-Verified-at: 97a964583
+Verified-at: 23bb8bf66
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/workflow/transaction.py, src/deepreason/workflow/transaction_service.py, src/deepreason/workflow/repair_transaction.py, src/deepreason/bridge/transactional_adapter.py
 Sides: DR-SUB-llm, DR-SUB-workflow
