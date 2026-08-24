@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-workflow -->
-Verified-at: 23bb8bf66
+Verified-at: a7ace954e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/workflow/transaction.py, src/deepreason/workflow/transaction_service.py, src/deepreason/workflow/repair_transaction.py, src/deepreason/bridge/transactional_adapter.py
 Sides: DR-SUB-llm, DR-SUB-workflow
@@ -48,9 +48,9 @@ or a space, and every import-shape count matches `import` as well as `from`.)
 | Binding | `llm/adapter.py` | `bind_v6_authority(harness, manifest)` | one adapter, one harness, one manifest; refuses without durable model classification or a route-seat behavioral plan |
 | The capability object | `workflow/transaction.py` | `AuthorizedDispatch` (preparation, reservation record, exposure receipt, bundle, live `Reservation`) | the only type `call` accepts as authority |
 | Dispatch identity | `workflow/transaction.py` | `DispatchAuthorizationBundleV1.verify_dispatch` | "dispatch differs from its authorization bundle" |
-| Prompt freeze | `llm/adapter.py` | `preview_request` / `call`, both through `_render_request` | the digest bound at `WORK_ISSUED` is the digest dispatched |
+| Prompt freeze | `llm/adapter.py` | `preview_request` / `call`, both through `_render_request` | the digest bound at `WORK_ISSUED` is the digest dispatched — so the two sides' `conservative_prompt_bound` are equal by construction |
 | Atomic issue | `workflow/transaction_service.py` | `reserve_dispatch` → `finalize_dispatch` (`issue`) | plans, reservation, exposure and bundle land in one append or none |
-| Meter ownership | `workflow/transaction_service.py`, `llm/budget.py` | `TokenMeter.reserve` at `reserve_dispatch`; bound equality in `call` | the workflow books; the adapter only checks the arithmetic |
+| Meter ownership | `workflow/transaction_service.py`, `llm/budget.py` | `TokenMeter.reserve` at `reserve_dispatch`; `call` consumes `reservation_record.completion_bound_tokens` | the workflow books; the adapter SPENDS WHAT WAS BOOKED and checks the arithmetic |
 | Repair ceiling | `llm/adapter.py`, `workflow/repair_transaction.py` | `retry_max=(0 if dispatch_authorization ...)`; `repair_schema_failure`, which builds the `V6PatchRepairSession` defined in `llm/repair.py` | one bundle, one request; the ceiling is the manifest's grant |
 | Route/contract agreement | `llm/adapter.py`, `workflow/transaction_service.py`, `workflow/profiles.py`, `workflow/replay.py` | `resolve_route_seat_behavioral_capability` (defined in `run_manifest.py`; called once each at preparation, render and replay), `resolve_conjecture_route`, `_manifest_route` | the contract is frozen for the seat, and the seat is the manifest's route |
 | Live route liveness | `llm/adapter.py` | `_require_transactional_route_dispatchable` | a route seat that exhausted its smallest contract cannot be dispatched, even mid-transaction |
@@ -88,16 +88,31 @@ inline probe in the check below, which is why the probe is there.
 `check: grep -q "if self.transaction_authority_required and dispatch_authorization is None:" src/deepreason/llm/adapter.py && python -c "import json, tempfile, pathlib, pytest; from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError; from deepreason.llm.contracts import ConjecturerOutput; from deepreason.llm.endpoints import MockEndpoint; from deepreason.storage.blobs import BlobStore; e=MockEndpoint([json.dumps({'candidates': [{'content': 'x', 'typicality': 0.5}]})]); a=LLMAdapter({'conjecturer': e}, BlobStore(pathlib.Path(tempfile.mkdtemp()) / 'b'), transaction_authority_required=True); pytest.raises(WorkflowAuthorizationError, a.call, 'conjecturer', 'PACK', ConjecturerOutput).match('RunManifest v6 provider dispatch requires a bound transaction'); assert e.last_transport_attempts == 0" && python -c "import re, pathlib; q=chr(34); s=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); msgs=['RunManifest v6 provider dispatch requires a bound transaction','dispatch_authorization must be an AuthorizedDispatch','transactional authorization replaces legacy work callbacks','pre-rendered requests require transactional dispatch authorization','workflow dispatch observation requires an unbound conjecturer call','transactional adapter is already bound to another harness','transactional adapter is already bound to another manifest']; missing=[m for m in msgs if not re.search(r'raise \w+\(\s*' + re.escape(q + m + q), s)]; assert not missing, missing" && grep -q "self._adapter.transaction_authority_required = True" src/deepreason/bridge/transactional_adapter.py && grep -q "self._adapter.bind_v6_authority(harness, manifest)" src/deepreason/bridge/transactional_adapter.py && python -m pytest tests/test_v6_global_dispatch_guard.py::test_transaction_required_adapter_rejects_unbound_dispatch tests/test_v6_global_dispatch_guard.py::test_legacy_adapter_keeps_unbound_dispatch_compatibility tests/test_v6_bridge_transactions.py::test_every_v6_bridge_call_has_an_independent_complete_transaction -q`
 
 Under an authorization the adapter's own meter gate and its own reservation are
-both skipped, and the workflow's booked bound must match the one the rendered
-request implies. The behavioural half is the ceiling test: work items, logged
-calls and metered calls are equal, and nothing is left reserved. **Residue: no
-test constructs an `AuthorizedDispatch` whose reservation amount disagrees with
-the rendered request, so the bound-equality refusal itself is held only by the
-source-shape check below plus the proof that both sides compute the bound from
-the same `conservative_prompt_bound`.** Disabling the comparison leaves the
-whole suite green — that is why the check pins the statement's shape rather
-than just its message.
-`check: grep -q "if self.meter is not None and dispatch_authorization is None:" src/deepreason/llm/adapter.py && grep -q "^            elif self.meter is not None:" src/deepreason/llm/adapter.py && python -c "import re, pathlib; q=chr(34); s=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); assert re.search(r'reservation_bound = conservative_prompt_bound\(request\) \+ int\(', s); assert re.search(r'reservation = dispatch_authorization\.reservation\n\s+if reservation\.amount != reservation_bound:\n\s+raise WorkflowAuthorizationError\(\n\s+' + re.escape(q + 'transactional reservation bound differs from rendered request' + q), s)" && python -c "from deepreason.llm.budget import TokenMeter, conservative_prompt_bound; t='hello world ' * 40; r=TokenMeter(budget=10**9).reserve(prompt_text=t, max_tokens=77); assert r.amount == conservative_prompt_bound(t) + 77, r.amount" && grep -q "conservative_prompt_bound," src/deepreason/workflow/transaction_service.py && grep -q "prompt_bound = conservative_prompt_bound(prompt)" src/deepreason/workflow/transaction_service.py && python -m pytest "tests/test_v6_contract_schema_repair_runtime.py::test_manifest_grant_is_the_exact_provider_call_ceiling" -q`
+both skipped, and **the completion cap is CONSUMED from the reservation, never
+recomputed**: `transport_limits["max_tokens"]` reads
+`reservation_record.completion_bound_tokens`, the number the workflow already
+booked and already recorded. One cap per dispatch, defined once in
+`LLMAdapter._completion_cap` and returned by `preview_request`. The behavioural
+half is the ceiling test: work items, logged calls and metered calls are equal,
+and nothing is left reserved.
+
+That consumption is the whole guarantee, and it is structural. A second
+expression reading the live endpoint would part from the booked number the
+moment a controller settles a seat between issue and dispatch — which is
+exactly what killed epoch-3 attempt 3 (see Traps). The prompt term cannot
+contribute either: `verify_dispatch` pins the rendered bytes to the bundle
+digest before the guard runs, so both sides bound the same string. The guard
+therefore survives as a corruption detector — reachable only if a live
+`Reservation` disagrees with its own `TokenReservationV2` — and when it fires
+it writes a diagnostic blob carrying both bounds, both prompt bounds, the
+request length and digest, and the live endpoint cap, so the refusal is
+diagnosable from the committed root alone.
+
+**Residue closed 2026-08-23:** `tests/test_v6_reservation_bound_authority.py`
+now constructs the disagreeing `AuthorizedDispatch` this seam previously
+recorded as untested, and pins the consumption shape so reintroducing a second
+cap expression fails the suite rather than a live run.
+`check: grep -q "if self.meter is not None and dispatch_authorization is None:" src/deepreason/llm/adapter.py && grep -q "^            elif self.meter is not None:" src/deepreason/llm/adapter.py && python -c "import inspect, re; from deepreason.llm.adapter import LLMAdapter; prev=inspect.getsource(LLMAdapter.preview_request); call=inspect.getsource(LLMAdapter.call); assert '_completion_cap(endpoint, lease)' in prev, 'preview stopped using the shared cap'; assert isinstance(inspect.getattr_static(LLMAdapter, '_completion_cap'), staticmethod); cap=re.search(r'transport_limits = \{\n\s+.max_tokens.: \((.*?)\),\n\s+.timeout_s.', call, re.S); assert cap, 'call no longer consumes a cap expression'; body=' '.join(cap.group(1).split()); assert 'reservation_record.completion_bound_tokens' in body, body; assert 'getattr(endpoint,' not in body, body; assert re.search(r'if reservation\.amount != reservation_bound:', call), 'guard removed'; assert 'transactional reservation bound differs from rendered ' in call, 'refusal message moved'; assert 'diagnostic_ref=self.blobs.put(' in call, 'refusal no longer records both sides'" && python -c "from deepreason.llm.budget import TokenMeter, conservative_prompt_bound; t='hello world ' * 40; r=TokenMeter(budget=10**9).reserve(prompt_text=t, max_tokens=77); assert r.amount == conservative_prompt_bound(t) + 77, r.amount" && grep -q "conservative_prompt_bound," src/deepreason/workflow/transaction_service.py && grep -q "prompt_bound = conservative_prompt_bound(prompt)" src/deepreason/workflow/transaction_service.py && python -m pytest "tests/test_v6_contract_schema_repair_runtime.py::test_manifest_grant_is_the_exact_provider_call_ceiling" tests/test_v6_reservation_bound_authority.py -q`
 
 One bundle authorizes one request: the repair session is built with
 `retry_max=0`, which is exactly one attempt, and a second pass raises before
@@ -114,7 +129,7 @@ A typed failure carries its spend, seven caller modules convert that spend into 
 durable transport-failure attempt rather than losing it, and whichever way the
 call ends its `LLMCall` crosses into the control plane at exactly one action —
 where replay re-checks it against the issued authority.
-`check: python -c "import inspect; from deepreason.llm.repair import SchemaRepairError as E; assert 'spend' in inspect.signature(E.__init__).parameters" && test "$(grep -c "spend = _spend(\|spend=_spend(" src/deepreason/llm/adapter.py)" -eq 9 && test "$(grep -rl 'outcome="transport_failure"' --include=*.py src/deepreason | wc -l)" -eq 7 && python -c "import re, pathlib; R=pathlib.Path('src/deepreason/workflow/replay.py').read_text(); H=pathlib.Path('src/deepreason/harness.py').read_text(); assert re.search(r'if \(llm is not None\) != \(\n\s+transition\.transition_kind == WorkTransitionKind\.PROVIDER_RESULT\n\s+\):\n\s+raise ValueError\(.only provider_result may carry an LLM call.\)', H), 'one-action'; assert re.search(r'if call is None or call\.work_order_id != transition\.work_id:\n\s+raise ValueError\(.provider result requires its work-bound LLM call.\)', R), 'pairing'; assert re.search(r'or call\.dispatch_authorization_ref != item\.authorization\.id\n\s+or attempt\.authorization_bundle_ref != item\.authorization\.id\n\s+or attempt\.contract_id != item\.authorization\.contract_id\n\s+or attempt\.route_lease != item\.authorization\.route_lease\n\s+or attempt\.prompt_sha256 != item\.authorization\.prompt_sha256\n\s+or attempt\.raw_ref != \(call\.raw_ref or None\)\n\s+\):\n\s+raise ValueError\(.provider result differs from issued authority.\)', R), 'six agreements'; assert re.search(r'!= call\.tokens\n\s+\):\n\s+raise ValueError\(.provider result usage differs from its LLM call.\)', R), 'token total'" && python -m pytest tests/test_v6_controller3_replay_verification.py::test_provider_result_without_authorized_attempt_fails_closed tests/test_v6_bridge_transactions.py::test_v6_bridge_transport_failure_is_durably_terminalized -q`
+`check: python -c "import inspect; from deepreason.llm.repair import SchemaRepairError as E; assert 'spend' in inspect.signature(E.__init__).parameters" && test "$(grep -c "spend = _spend(\|spend=_spend(" src/deepreason/llm/adapter.py)" -eq 10 && test "$(grep -rl 'outcome="transport_failure"' --include=*.py src/deepreason | wc -l)" -eq 7 && python -c "import re, pathlib; R=pathlib.Path('src/deepreason/workflow/replay.py').read_text(); H=pathlib.Path('src/deepreason/harness.py').read_text(); assert re.search(r'if \(llm is not None\) != \(\n\s+transition\.transition_kind == WorkTransitionKind\.PROVIDER_RESULT\n\s+\):\n\s+raise ValueError\(.only provider_result may carry an LLM call.\)', H), 'one-action'; assert re.search(r'if call is None or call\.work_order_id != transition\.work_id:\n\s+raise ValueError\(.provider result requires its work-bound LLM call.\)', R), 'pairing'; assert re.search(r'or call\.dispatch_authorization_ref != item\.authorization\.id\n\s+or attempt\.authorization_bundle_ref != item\.authorization\.id\n\s+or attempt\.contract_id != item\.authorization\.contract_id\n\s+or attempt\.route_lease != item\.authorization\.route_lease\n\s+or attempt\.prompt_sha256 != item\.authorization\.prompt_sha256\n\s+or attempt\.raw_ref != \(call\.raw_ref or None\)\n\s+\):\n\s+raise ValueError\(.provider result differs from issued authority.\)', R), 'six agreements'; assert re.search(r'!= call\.tokens\n\s+\):\n\s+raise ValueError\(.provider result usage differs from its LLM call.\)', R), 'token total'" && python -m pytest tests/test_v6_controller3_replay_verification.py::test_provider_result_without_authorized_attempt_fails_closed tests/test_v6_bridge_transactions.py::test_v6_bridge_transport_failure_is_durably_terminalized -q`
 
 A refused reservation is terminalized before it becomes an exception. Eight
 modules handle `WorkBudgetDenied`, and each handler's shape is load-bearing:
@@ -239,7 +254,10 @@ callers; going the other way produces a record whose authority does not exist.
 What breaks first, in the order you will see it:
 `"dispatch differs from its authorization bundle"` (the adapter refused before
 sending); then `"transactional reservation bound differs from rendered
-request"` (the prompt changed after issue); then, on reopen,
+request"` — **NOT "the prompt changed after issue", which it cannot be**: that
+check runs first and would have raised the previous message, so this one means
+a live `Reservation` disagrees with its own recorded `TokenReservationV2`, and
+its diagnostic blob names both sides; then, on reopen,
 `"provider result differs from issued authority"` from `replay.py`; and finally
 `verify_root`'s `workflow-replay` failure, which re-derives the process state
 twice and compares digests — the expensive one, because by then the root is
@@ -257,6 +275,34 @@ The tests that catch you, cheapest first:
 `check: python -c "import pathlib; tests=('tests/test_adapter_workflow_authorization_c2.py','tests/test_v6_global_dispatch_guard.py','tests/test_v6_profile_authority.py','tests/test_v6_contract_schema_repair_runtime.py','tests/test_v6_live_repair_transactions.py','tests/test_v6_controller3_replay_verification.py','tests/test_v6_nonconjecture_recovery.py','tests/test_v6_bridge_transactions.py'); gone=[t for t in tests if not pathlib.Path(t).is_file()]; assert not gone, gone; assert 'fail(' + chr(34) + 'workflow-replay' + chr(34) in pathlib.Path('src/deepreason/invariants.py').read_text(), 'verify_root check name'"`
 
 ## Traps
+
+- **The reservation bound is ONE number, and the adapter must not compute a
+  second one.** Until 2026-08-23 `preview_request` returned a route's CEILING
+  for any route declaring `context_window_tokens`, while `call` recomputed the
+  cap from the endpoint's currently SETTLED value. Both are lawful readings —
+  `EndpointLease.verify` binds `max_tokens` as a ceiling precisely so a
+  controller may settle below it (`ERRATA` E43) — so the two agreed until a
+  controller moved, and then parted by exactly the amount of the narrowing.
+  Epoch-3 attempt 3 (run
+  `bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4`) died at
+  cycle 2 of 4 with 290 025 of 400 000 tokens unspent and `verify_root` clean:
+  the cycle-2 policy settled `cap:conjecturer` to 20480 against a 32768
+  ceiling, and the next dispatch compared a booked `8333 + 32768 = 41101`
+  against a recomputed `8333 + 20480 = 28813`. Fixed by
+  `experiments/2026-08-23-fix-reservation-bound-authority/`: the cap is defined
+  once in `_completion_cap`, returned by `preview_request`, booked by the
+  workflow, and CONSUMED at dispatch off `reservation_record`.
+  Two things this trap teaches beyond its own fix. First, **the prompt was
+  never a candidate** — `verify_dispatch` pins the rendered bytes to the bundle
+  digest before the guard runs, so the two prompt bounds are equal by
+  construction; the error message and this document both said "the rendered
+  request" for months and both were wrong (`ERRATA` E46). Second, **the
+  eliminations in a parked finding are evidence, not axioms**: P6-epoch3 ruled
+  out a controller re-tune by scanning `log.jsonl` for `max_tokens`, but the
+  policy lives under `objects/artifact/` with `provenance.role: "controller"`
+  and spells the value `"cap:conjecturer": 20480` inside an `inline:` JSON
+  string, so the scan could not have found it (`ERRATA` E47).
+`check: python -c "import inspect, re; from deepreason.llm.adapter import LLMAdapter; call=inspect.getsource(LLMAdapter.call); cap=re.search(r'transport_limits = \{\n\s+.max_tokens.: \((.*?)\),\n\s+.timeout_s.', call, re.S); assert cap, 'cap is not a consumed expression'; body=' '.join(cap.group(1).split()); assert 'reservation_record.completion_bound_tokens' in body and 'getattr(endpoint,' not in body, body; assert len(re.findall(r'def _completion_cap', inspect.getsource(LLMAdapter))) == 1" && grep -q "route.context_window_tokens is not None and route.max_tokens is not None" src/deepreason/llm/firewall.py && python -m pytest tests/test_v6_reservation_bound_authority.py -q`
 
 - **A repair attempt's own `diagnostic_ref` is the diagnostic that came AFTER
   it.** `_terminalize_invalid` writes it as `trace_ref or next_diagnostic_ref`,

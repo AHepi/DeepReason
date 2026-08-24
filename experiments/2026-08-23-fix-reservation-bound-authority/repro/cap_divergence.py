@@ -1,7 +1,13 @@
-"""Evaluate the two committed completion-cap expressions over identical inputs.
+"""Evaluate the two completion-cap expressions AS THEY WERE over identical inputs.
 
-Pure arithmetic over the expressions as they appear in llm/adapter.py --
-preview_request's `maximum` and call's `transport_limits["max_tokens"]`.
+Historical: this reproduces the defect's arithmetic, not the current tree. Both
+expressions existed in llm/adapter.py before 2026-08-23 -- preview_request's
+`maximum` and call's `transport_limits["max_tokens"]`. The fix left only the
+first (now `LLMAdapter._completion_cap`) and made `call` consume the booked
+number instead of evaluating the second, so `dispatched_cap` below no longer
+corresponds to anything in the source. Kept because it is the cheapest
+statement of what "two computations" cost.
+
 No provider, no adapter construction, no I/O.
 """
 

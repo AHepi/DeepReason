@@ -182,11 +182,11 @@ a silent edit:
 3. `PARKED.md` P6-epoch3: "the prompt-bound term computed over two different
    strings". The strings are provably one string.
 
-The eliminations P6-epoch3 *did* make hold and are not re-derived here: no
-policy artifact carrying a `knobs`/`cap:` entry exists in the log, `max_tokens`
-is 32768 across every stored object, and `prompt_sha256` agrees in 50 of 50
-reservation/authorization pairs. Step 1 explains why that last one had to agree:
-a disagreement there raises a different exception.
+P6-epoch3's *other* elimination holds and is not re-derived here:
+`prompt_sha256` agrees in 50 of 50 reservation/authorization pairs, so there was
+no prompt drift between reserve and authorize. Step 1 explains why it had to
+agree — a disagreement there raises a different exception before this guard is
+reached.
 
 4. **P6-epoch3's first elimination — "not a controller cap re-tune" — is
    false.** The policy artifact exists. It is not in `log.jsonl`, which is where

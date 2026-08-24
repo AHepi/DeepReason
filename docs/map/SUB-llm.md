@@ -1,5 +1,5 @@
 <!-- DR-SUB-llm -->
-Verified-at: 23bb8bf66
+Verified-at: a7ace954e
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
 Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler
@@ -123,7 +123,7 @@ outstanding `reserved` bound, all under one lock. Per endpoint object:
 after `complete()`, to build the attempt trace. There is also a module-level
 `_MODEL_CACHE` in `endpoints.py` memoizing `/models` per `(base_url, api_key)`
 for the `auto` / `auto-alt` sentinels; it is process-global, not per-run.
-`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && test "$(grep -rlE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/ --include=*.py)" = "src/deepreason/llm/capabilities.py" && grep -q "^_MODEL_CACHE: dict\[tuple\[str, str | None\]" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 8`
+`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && test "$(grep -rlE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/ --include=*.py)" = "src/deepreason/llm/capabilities.py" && grep -q "^_MODEL_CACHE: dict\[tuple\[str, str | None\]" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 9`
 
 **Typed records it constructs** (shapes owned by DR-SUB-ontology): `LLMCall`,
 one per completed or abandoned call; `LLMAttempt`, one per provider request

@@ -1,0 +1,776 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_settled_cap_below_the_route_ceiling_still_dispatches ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_settled_cap_below_the_rou0')
+
+    def test_settled_cap_below_the_route_ceiling_still_dispatches(tmp_path):
+        """A controller narrowing a seat mid-cycle no longer refuses the next call.
+    
+        Regression (epoch-3 attempt 3, run bb0455384ea09b5b...).
+        """
+        root = tmp_path / "run"
+        manifest = _manifest()
+        _persist_manifest(manifest, root)
+        harness = Harness(root)
+        adapter, endpoints = _adapter(harness, manifest)
+    
+        ceiling = manifest.roles["conjecturer"][0].max_tokens
+        # Exactly what Controller._apply_cap does, and what attempt 3's cycle-2
+        # policy artifact records. Lawful: EndpointLease.verify binds max_tokens as
+        # a ceiling, not an identity (ERRATA E43).
+        endpoints["conjecturer"].max_tokens = ceiling // 2
+    
+        prompt, booked_cap, authorized, aliases, contract, base_profile = _issue(
+            adapter, harness, manifest
+        )
+        assert booked_cap == ceiling
+        assert authorized.reservation.amount == conservative_prompt_bound(prompt) + ceiling
+    
+>       _output, call = _call(adapter, authorized, aliases, contract, base_profile)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v6_reservation_bound_authority.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v6_reservation_bound_authority.py:114: in _call
+    return adapter.call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <deepreason.llm.adapter.LLMAdapter object at 0x7f81386df610>
+role = 'conjecturer'
+pack = 'CRITERIA (operator-authored):\n  predicate: reach(x, y) and not addressed(x, y)\n  predicate: coverage(pair) >= 0.5\n... sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet '
+output_model = <class 'deepreason.conjecture_turn.ConjectureTurnV6'>
+endpoint_index = 0, template_role = None, images = None
+wire_contract = <deepreason.llm.wire.ConjecturerTurnWireContractV6 object at 0x7f8138565d50>
+model_profile = 'standard', aliases = AliasTable(aliases=mappingproxy({}))
+output_mechanism = None, endpoint_lease = None, school_id = None
+conjecture_context = None
+work_order_id = 'sha256:85d4a41fb93ab8bb6f583e6b0cc47522e87604170113a514d9115eaed64ff313'
+workflow_dispatch_observer = None, workflow_repair_observer = None
+workflow_dispatch_required = False, repair_scope_required = False
+dispatch_authorization = AuthorizedDispatch(preparation=WorkPreparationV1(id='sha256:85d4a41fb93ab8bb6f583e6b0cc47522e87604170113a514d9115eaed6...888e198722d1223b5a3c71baa0a30922a9942da2c4'), reservation=<deepreason.llm.budget.Reservation object at 0x7f8138760340>)
+pre_rendered_request = None
+
+    def call(
+        self,
+        role: str,
+        pack: str,
+        output_model: type[BaseModel],
+        endpoint_index: int = 0,
+        template_role: str | None = None,
+        images: list[bytes] | None = None,
+        wire_contract: WireContract | None = None,
+        model_profile: str | None = None,
+        aliases: AliasTable | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        endpoint_lease: EndpointLease | None = None,
+        school_id: str | None = None,
+        conjecture_context: ConjectureContextCallReceiptV1 | None = None,
+        work_order_id: str | None = None,
+        workflow_dispatch_observer: Callable[[int], str | None] | None = None,
+        workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
+        workflow_dispatch_required: bool = False,
+        repair_scope_required: bool = False,
+        dispatch_authorization=None,
+        pre_rendered_request: str | None = None,
+    ) -> tuple[BaseModel, LLMCall]:
+        """endpoint_index selects within a role's ensemble (§9: the judge
+        MUST run on >=2 endpoints from different families). template_role
+        lets an auxiliary contract (e.g. spec generation) reuse a configured
+        endpoint with a different prompt template. ``images`` (PNG bytes)
+        makes the request multimodal (vision roles): image bytes are NOT
+        duplicated into the log — callers pass content-addressed evidence
+        artifacts and the pack text names their ids, so prompt_ref still
+        honestly reconstructs the exchange (§0)."""
+        if self.transaction_authority_required and dispatch_authorization is None:
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 provider dispatch requires a bound transaction"
+            )
+        if role not in self.endpoints:
+            raise KeyError(f"no endpoint configured for role {role!r}")
+        if dispatch_authorization is not None:
+            from deepreason.workflow.transaction import AuthorizedDispatch
+    
+            if not isinstance(dispatch_authorization, AuthorizedDispatch):
+                raise TypeError("dispatch_authorization must be an AuthorizedDispatch")
+            if work_order_id is not None or workflow_dispatch_observer is not None:
+                raise ValueError(
+                    "transactional authorization replaces legacy work callbacks"
+                )
+            work_order_id = dispatch_authorization.bundle.work_id
+        elif pre_rendered_request is not None:
+            raise ValueError(
+                "pre-rendered requests require transactional dispatch authorization"
+            )
+        if work_order_id is not None and (
+            (
+                dispatch_authorization is None
+                and role != "conjecturer"
+            )
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", work_order_id) is None
+        ):
+            raise ValueError(
+                "work_order_id requires canonical provider-work authority"
+            )
+        if workflow_dispatch_observer is not None and (
+            role != "conjecturer" or work_order_id is not None
+        ):
+            raise ValueError(
+                "workflow dispatch observation requires an unbound conjecturer call"
+            )
+        if workflow_repair_observer is not None and (
+            role != "conjecturer" or workflow_dispatch_observer is None
+        ):
+            raise ValueError(
+                "workflow repair observation requires conjecture dispatch observation"
+            )
+        if workflow_dispatch_required and workflow_dispatch_observer is None:
+            raise ValueError(
+                "required workflow dispatch needs an authorization callback"
+            )
+        if school_id is not None and endpoint_lease is None:
+            raise ValueError("school-routed calls require an explicit endpoint lease")
+        if conjecture_context is not None:
+            conjecture_context = ConjectureContextCallReceiptV1.model_validate(
+                conjecture_context
+            )
+            if role != "conjecturer":
+                raise ValueError("only conjecturer calls accept advisory context")
+            if school_id != conjecture_context.school_id:
+                raise ValueError("school route and advisory context must name one school")
+        prompt, wire_contract, lease, endpoint, profile = self._render_request(
+            role,
+            pack,
+            output_model,
+            endpoint_index=endpoint_index,
+            template_role=template_role,
+            wire_contract=wire_contract,
+            model_profile=model_profile,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            conjecture_context=conjecture_context,
+            pre_rendered_request=pre_rendered_request,
+        )
+        schema_value = wire_contract.model_json_schema()
+        if dispatch_authorization is not None:
+            from deepreason.workflow.models import RouteLeaseRefV1
+    
+            prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+            route_ref = RouteLeaseRefV1(
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=route_fingerprint(lease.route),
+            )
+            dispatch_authorization.bundle.verify_dispatch(
+                work_id=dispatch_authorization.preparation.id,
+                attempt_index=dispatch_authorization.preparation.attempt_index,
+                contract_id=wire_contract.contract_id,
+                route_lease=route_ref,
+                prompt_sha256=prompt_sha256,
+                reservation_ref=dispatch_authorization.reservation_record.id,
+            )
+            if not dispatch_authorization.reservation.is_open:
+                raise ValueError("transactional token reservation is no longer open")
+            self._require_transactional_route_dispatchable(route_ref)
+        fixed_mechanism = OutputMechanism(lease.route.output_mechanism)
+        requested_mechanism = (
+            OutputMechanism(output_mechanism)
+            if output_mechanism
+            else self.output_mechanism
+        )
+        if requested_mechanism is not None and requested_mechanism != fixed_mechanism:
+            raise ValueError(
+                f"output mechanism is frozen by endpoint lease as "
+                f"{fixed_mechanism.value!r}, not {requested_mechanism.value!r}"
+            )
+        mechanism = fixed_mechanism
+        started = time.monotonic()
+        tokens_used = 0
+        exact_prompt_tokens = 0
+        exact_completion_tokens = 0
+        truncated_any = False
+        raw_ref = ""
+        prompt_ref = self.blobs.put(prompt.encode())
+        attempt_trace: list[LLMAttempt] = []
+        frozen_profile = self.base_profile_for(
+            role,
+            endpoint_index,
+            endpoint_lease=lease,
+        )
+        if frozen_profile is None:
+            frozen_profile = profile
+        trace_identity = {
+            "contract_id": wire_contract.contract_id,
+            "endpoint_id": lease.route.endpoint_id,
+            "route_sha256": route_fingerprint(lease.route),
+            "seat": endpoint_index,
+            # This is manifest/base process identity, not the effective wire
+            # recovery path. A later direct -> compact scheduler cycle is
+            # visible through contract_id without pretending the frozen run
+            # profile mutated.
+            "model_profile": str(
+                getattr(frozen_profile, "value", frozen_profile) or ""
+            ),
+            "transport_profile": str(
+                getattr(profile, "value", profile) or ""
+            ),
+        }
+        school_route = (
+            SchoolRouteReceiptV1(
+                school_id=school_id,
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=trace_identity["route_sha256"],
+                contract_id=wire_contract.contract_id,
+            )
+            if school_id is not None
+            else None
+        )
+        repair = BoundedRepairSession(
+            contract=wire_contract.contract_id,
+            schema=schema_value,
+            initial_request=prompt,
+            # Each v6 patch attempt is separately prepared, reserved, issued,
+            # and dispatched.  One authorization bundle can never silently
+            # cover an internally generated repair request.
+            retry_max=(0 if dispatch_authorization is not None else self.retry_max),
+            enforce_scope=(
+                workflow_dispatch_required
+                or repair_scope_required
+                or wire_contract.contract_id
+                == "bridge.claim-ledger.compact.v2"
+            ),
+        )
+        effective_work_order_id = work_order_id
+        dispatch_authorization_ref = (
+            dispatch_authorization.bundle.id
+            if dispatch_authorization is not None
+            else None
+        )
+    
+        def _spend(attempts: int) -> LLMCall | None:
+            if not tokens_used and not attempt_trace:
+                return None
+            return LLMCall(
+                role=role,
+                model=lease.route.model_id,
+                endpoint=lease.route.base_url,
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                tokens=tokens_used,
+                ms=int((time.monotonic() - started) * 1000),
+                attempts=max(attempts, len(attempt_trace)),
+                truncated=truncated_any,
+                mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
+                attempt_trace=attempt_trace,
+                school_route=school_route,
+                conjecture_context=conjecture_context,
+                work_order_id=effective_work_order_id,
+                dispatch_authorization_ref=dispatch_authorization_ref,
+                prompt_tokens=(
+                    exact_prompt_tokens if dispatch_authorization is not None else None
+                ),
+                completion_tokens=(
+                    exact_completion_tokens if dispatch_authorization is not None else None
+                ),
+            )
+    
+        for attempt in range(repair.attempt_count):
+            attempt_started = time.monotonic()
+            if self.meter is not None and dispatch_authorization is None:
+                try:
+                    self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
+                except TokenBudgetExceeded as e:
+                    # Exhaustion mid-retry: prior attempts already spent
+                    # tokens that no LLMCall will carry — hand the caller
+                    # the spend record (found live by the in-band
+                    # accounting check: 833-token delta on first outing).
+                    e.spend = _spend(attempt)
+                    raise
+            turn = repair.turn(attempt)
+            request = turn.request
+            response_schema = turn.response_schema
+            # Repair turns are model-visible provider requests too. Apply the
+            # same frozen envelope immediately before any reservation or
+            # provider-attempt work, even when the first turn was already
+            # checked by the shared renderer.
+            try:
+                _enforce_request_envelope(role, request, lease)
+            except RequestEnvelopeExceeded as error:
+                # A later repair can exceed the frozen envelope after earlier
+                # provider work has already settled. Preserve only that
+                # completed spend: prompt_ref is intentionally not advanced
+                # to the generated-but-unsent repair request until below.
+                error.spend = _spend(attempt)
+                raise
+            # Re-check immediately before every provider request, including
+            # both repair forms. A mid-call mutation is terminal, but its
+            # exception carries prior spend for append-only process logging.
+            try:
+                lease.verify(endpoint)
+            except RouteFirewallError as e:
+                e.spend = _spend(attempt)
+                raise
+            # Prepare the next prompt reference without advancing the
+            # top-level call pointer yet.  If reservation fails, ``_spend``
+            # must continue to name the last request that actually reached
+            # the provider, not this generated-but-unsent repair prompt.
+            request_prompt_ref = (
+                prompt_ref if attempt == 0 else self.blobs.put(request.encode())
+            )
+            # Snapshot the effective process-health limits at the wire
+            # boundary. A logged controller may have adjusted either value
+            # since manifest compilation; the attempt trace must describe
+            # the request that was actually sent, not only the base route.
+            transport_limits = {
+                "max_tokens": getattr(
+                    endpoint, "max_tokens", lease.route.max_tokens
+                ),
+                "timeout_s": getattr(
+                    endpoint, "timeout_s", lease.route.timeout_s
+                ),
+            }
+            # Reserve-settle (llm/budget.py): book the call's conservative
+            # upper bound (chars/3 prompt estimate + the transport
+            # max_tokens cap) BEFORE dispatch.  Against a finite ceiling an
+            # unboundable call fails closed; concurrent dispatchers can
+            # never jointly push the logged total past the ceiling.
+            reservation = None
+            reservation_bound = conservative_prompt_bound(request) + int(
+                transport_limits["max_tokens"] or 0
+            )
+            if dispatch_authorization is not None:
+                if attempt != 0:
+                    raise WorkflowAuthorizationError(
+                        "transactional repair requires a new authorization bundle",
+                        spend=_spend(attempt),
+                    )
+                reservation = dispatch_authorization.reservation
+                if reservation.amount != reservation_bound:
+>                   raise WorkflowAuthorizationError(
+                        "transactional reservation bound differs from rendered request"
+E                       deepreason.llm.adapter.WorkflowAuthorizationError: transactional reservation bound differs from rendered request
+
+src/deepreason/llm/adapter.py:1399: WorkflowAuthorizationError
+_________________ test_attempt3_shape_books_and_spends_one_cap _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_attempt3_shape_books_and_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f8138522610>
+
+    def test_attempt3_shape_books_and_spends_one_cap(tmp_path, monkeypatch):
+        """Booked cap, recorded attempt cap and the guard's cap are ONE number.
+    
+        Regression (epoch-3 attempt 3, run bb0455384ea09b5b...): with that run's
+        own numbers the two sides differed by 12288, the ceiling minus the settled
+        cap. They may not differ by anything now.
+        """
+        root = tmp_path / "run"
+        manifest = _attempt3_manifest(monkeypatch)
+        _persist_manifest(manifest, root)
+        harness = Harness(root)
+        adapter, endpoints = _adapter(harness, manifest)
+    
+        assert manifest.roles["conjecturer"][0].max_tokens == 32_768
+        assert manifest.roles["conjecturer"][0].context_window_tokens == 131_072
+        endpoints["conjecturer"].max_tokens = 20_480  # the cycle-2 policy
+    
+        prompt, booked_cap, authorized, aliases, contract, base_profile = _issue(
+            adapter, harness, manifest
+        )
+        assert booked_cap == 32_768
+        assert (
+            authorized.reservation_record.completion_bound_tokens
+            == booked_cap
+            == 32_768
+        )
+        assert authorized.reservation.amount == conservative_prompt_bound(prompt) + 32_768
+    
+>       _output, call = _call(adapter, authorized, aliases, contract, base_profile)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_v6_reservation_bound_authority.py:193: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_v6_reservation_bound_authority.py:114: in _call
+    return adapter.call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <deepreason.llm.adapter.LLMAdapter object at 0x7f8138531a10>
+role = 'conjecturer'
+pack = 'CRITERIA (operator-authored):\n  predicate: reach(x, y) and not addressed(x, y)\n  predicate: coverage(pair) >= 0.5\n... sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet '
+output_model = <class 'deepreason.conjecture_turn.ConjectureTurnV6'>
+endpoint_index = 0, template_role = None, images = None
+wire_contract = <deepreason.llm.wire.ConjecturerTurnWireContractV6 object at 0x7f81388d5210>
+model_profile = 'standard', aliases = AliasTable(aliases=mappingproxy({}))
+output_mechanism = None, endpoint_lease = None, school_id = None
+conjecture_context = None
+work_order_id = 'sha256:a9ea7af0b787138f056775ca7f6f5fcd68bd6e0d16c9cf42bb444cbba6ba955a'
+workflow_dispatch_observer = None, workflow_repair_observer = None
+workflow_dispatch_required = False, repair_scope_required = False
+dispatch_authorization = AuthorizedDispatch(preparation=WorkPreparationV1(id='sha256:a9ea7af0b787138f056775ca7f6f5fcd68bd6e0d16c9cf42bb444cbba6...528bfe542ce8630adad7ec19f959fd9ed8805c7c42'), reservation=<deepreason.llm.budget.Reservation object at 0x7f813856c280>)
+pre_rendered_request = None
+
+    def call(
+        self,
+        role: str,
+        pack: str,
+        output_model: type[BaseModel],
+        endpoint_index: int = 0,
+        template_role: str | None = None,
+        images: list[bytes] | None = None,
+        wire_contract: WireContract | None = None,
+        model_profile: str | None = None,
+        aliases: AliasTable | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        endpoint_lease: EndpointLease | None = None,
+        school_id: str | None = None,
+        conjecture_context: ConjectureContextCallReceiptV1 | None = None,
+        work_order_id: str | None = None,
+        workflow_dispatch_observer: Callable[[int], str | None] | None = None,
+        workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
+        workflow_dispatch_required: bool = False,
+        repair_scope_required: bool = False,
+        dispatch_authorization=None,
+        pre_rendered_request: str | None = None,
+    ) -> tuple[BaseModel, LLMCall]:
+        """endpoint_index selects within a role's ensemble (§9: the judge
+        MUST run on >=2 endpoints from different families). template_role
+        lets an auxiliary contract (e.g. spec generation) reuse a configured
+        endpoint with a different prompt template. ``images`` (PNG bytes)
+        makes the request multimodal (vision roles): image bytes are NOT
+        duplicated into the log — callers pass content-addressed evidence
+        artifacts and the pack text names their ids, so prompt_ref still
+        honestly reconstructs the exchange (§0)."""
+        if self.transaction_authority_required and dispatch_authorization is None:
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 provider dispatch requires a bound transaction"
+            )
+        if role not in self.endpoints:
+            raise KeyError(f"no endpoint configured for role {role!r}")
+        if dispatch_authorization is not None:
+            from deepreason.workflow.transaction import AuthorizedDispatch
+    
+            if not isinstance(dispatch_authorization, AuthorizedDispatch):
+                raise TypeError("dispatch_authorization must be an AuthorizedDispatch")
+            if work_order_id is not None or workflow_dispatch_observer is not None:
+                raise ValueError(
+                    "transactional authorization replaces legacy work callbacks"
+                )
+            work_order_id = dispatch_authorization.bundle.work_id
+        elif pre_rendered_request is not None:
+            raise ValueError(
+                "pre-rendered requests require transactional dispatch authorization"
+            )
+        if work_order_id is not None and (
+            (
+                dispatch_authorization is None
+                and role != "conjecturer"
+            )
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", work_order_id) is None
+        ):
+            raise ValueError(
+                "work_order_id requires canonical provider-work authority"
+            )
+        if workflow_dispatch_observer is not None and (
+            role != "conjecturer" or work_order_id is not None
+        ):
+            raise ValueError(
+                "workflow dispatch observation requires an unbound conjecturer call"
+            )
+        if workflow_repair_observer is not None and (
+            role != "conjecturer" or workflow_dispatch_observer is None
+        ):
+            raise ValueError(
+                "workflow repair observation requires conjecture dispatch observation"
+            )
+        if workflow_dispatch_required and workflow_dispatch_observer is None:
+            raise ValueError(
+                "required workflow dispatch needs an authorization callback"
+            )
+        if school_id is not None and endpoint_lease is None:
+            raise ValueError("school-routed calls require an explicit endpoint lease")
+        if conjecture_context is not None:
+            conjecture_context = ConjectureContextCallReceiptV1.model_validate(
+                conjecture_context
+            )
+            if role != "conjecturer":
+                raise ValueError("only conjecturer calls accept advisory context")
+            if school_id != conjecture_context.school_id:
+                raise ValueError("school route and advisory context must name one school")
+        prompt, wire_contract, lease, endpoint, profile = self._render_request(
+            role,
+            pack,
+            output_model,
+            endpoint_index=endpoint_index,
+            template_role=template_role,
+            wire_contract=wire_contract,
+            model_profile=model_profile,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            conjecture_context=conjecture_context,
+            pre_rendered_request=pre_rendered_request,
+        )
+        schema_value = wire_contract.model_json_schema()
+        if dispatch_authorization is not None:
+            from deepreason.workflow.models import RouteLeaseRefV1
+    
+            prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+            route_ref = RouteLeaseRefV1(
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=route_fingerprint(lease.route),
+            )
+            dispatch_authorization.bundle.verify_dispatch(
+                work_id=dispatch_authorization.preparation.id,
+                attempt_index=dispatch_authorization.preparation.attempt_index,
+                contract_id=wire_contract.contract_id,
+                route_lease=route_ref,
+                prompt_sha256=prompt_sha256,
+                reservation_ref=dispatch_authorization.reservation_record.id,
+            )
+            if not dispatch_authorization.reservation.is_open:
+                raise ValueError("transactional token reservation is no longer open")
+            self._require_transactional_route_dispatchable(route_ref)
+        fixed_mechanism = OutputMechanism(lease.route.output_mechanism)
+        requested_mechanism = (
+            OutputMechanism(output_mechanism)
+            if output_mechanism
+            else self.output_mechanism
+        )
+        if requested_mechanism is not None and requested_mechanism != fixed_mechanism:
+            raise ValueError(
+                f"output mechanism is frozen by endpoint lease as "
+                f"{fixed_mechanism.value!r}, not {requested_mechanism.value!r}"
+            )
+        mechanism = fixed_mechanism
+        started = time.monotonic()
+        tokens_used = 0
+        exact_prompt_tokens = 0
+        exact_completion_tokens = 0
+        truncated_any = False
+        raw_ref = ""
+        prompt_ref = self.blobs.put(prompt.encode())
+        attempt_trace: list[LLMAttempt] = []
+        frozen_profile = self.base_profile_for(
+            role,
+            endpoint_index,
+            endpoint_lease=lease,
+        )
+        if frozen_profile is None:
+            frozen_profile = profile
+        trace_identity = {
+            "contract_id": wire_contract.contract_id,
+            "endpoint_id": lease.route.endpoint_id,
+            "route_sha256": route_fingerprint(lease.route),
+            "seat": endpoint_index,
+            # This is manifest/base process identity, not the effective wire
+            # recovery path. A later direct -> compact scheduler cycle is
+            # visible through contract_id without pretending the frozen run
+            # profile mutated.
+            "model_profile": str(
+                getattr(frozen_profile, "value", frozen_profile) or ""
+            ),
+            "transport_profile": str(
+                getattr(profile, "value", profile) or ""
+            ),
+        }
+        school_route = (
+            SchoolRouteReceiptV1(
+                school_id=school_id,
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=trace_identity["route_sha256"],
+                contract_id=wire_contract.contract_id,
+            )
+            if school_id is not None
+            else None
+        )
+        repair = BoundedRepairSession(
+            contract=wire_contract.contract_id,
+            schema=schema_value,
+            initial_request=prompt,
+            # Each v6 patch attempt is separately prepared, reserved, issued,
+            # and dispatched.  One authorization bundle can never silently
+            # cover an internally generated repair request.
+            retry_max=(0 if dispatch_authorization is not None else self.retry_max),
+            enforce_scope=(
+                workflow_dispatch_required
+                or repair_scope_required
+                or wire_contract.contract_id
+                == "bridge.claim-ledger.compact.v2"
+            ),
+        )
+        effective_work_order_id = work_order_id
+        dispatch_authorization_ref = (
+            dispatch_authorization.bundle.id
+            if dispatch_authorization is not None
+            else None
+        )
+    
+        def _spend(attempts: int) -> LLMCall | None:
+            if not tokens_used and not attempt_trace:
+                return None
+            return LLMCall(
+                role=role,
+                model=lease.route.model_id,
+                endpoint=lease.route.base_url,
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                tokens=tokens_used,
+                ms=int((time.monotonic() - started) * 1000),
+                attempts=max(attempts, len(attempt_trace)),
+                truncated=truncated_any,
+                mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
+                attempt_trace=attempt_trace,
+                school_route=school_route,
+                conjecture_context=conjecture_context,
+                work_order_id=effective_work_order_id,
+                dispatch_authorization_ref=dispatch_authorization_ref,
+                prompt_tokens=(
+                    exact_prompt_tokens if dispatch_authorization is not None else None
+                ),
+                completion_tokens=(
+                    exact_completion_tokens if dispatch_authorization is not None else None
+                ),
+            )
+    
+        for attempt in range(repair.attempt_count):
+            attempt_started = time.monotonic()
+            if self.meter is not None and dispatch_authorization is None:
+                try:
+                    self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
+                except TokenBudgetExceeded as e:
+                    # Exhaustion mid-retry: prior attempts already spent
+                    # tokens that no LLMCall will carry — hand the caller
+                    # the spend record (found live by the in-band
+                    # accounting check: 833-token delta on first outing).
+                    e.spend = _spend(attempt)
+                    raise
+            turn = repair.turn(attempt)
+            request = turn.request
+            response_schema = turn.response_schema
+            # Repair turns are model-visible provider requests too. Apply the
+            # same frozen envelope immediately before any reservation or
+            # provider-attempt work, even when the first turn was already
+            # checked by the shared renderer.
+            try:
+                _enforce_request_envelope(role, request, lease)
+            except RequestEnvelopeExceeded as error:
+                # A later repair can exceed the frozen envelope after earlier
+                # provider work has already settled. Preserve only that
+                # completed spend: prompt_ref is intentionally not advanced
+                # to the generated-but-unsent repair request until below.
+                error.spend = _spend(attempt)
+                raise
+            # Re-check immediately before every provider request, including
+            # both repair forms. A mid-call mutation is terminal, but its
+            # exception carries prior spend for append-only process logging.
+            try:
+                lease.verify(endpoint)
+            except RouteFirewallError as e:
+                e.spend = _spend(attempt)
+                raise
+            # Prepare the next prompt reference without advancing the
+            # top-level call pointer yet.  If reservation fails, ``_spend``
+            # must continue to name the last request that actually reached
+            # the provider, not this generated-but-unsent repair prompt.
+            request_prompt_ref = (
+                prompt_ref if attempt == 0 else self.blobs.put(request.encode())
+            )
+            # Snapshot the effective process-health limits at the wire
+            # boundary. A logged controller may have adjusted either value
+            # since manifest compilation; the attempt trace must describe
+            # the request that was actually sent, not only the base route.
+            transport_limits = {
+                "max_tokens": getattr(
+                    endpoint, "max_tokens", lease.route.max_tokens
+                ),
+                "timeout_s": getattr(
+                    endpoint, "timeout_s", lease.route.timeout_s
+                ),
+            }
+            # Reserve-settle (llm/budget.py): book the call's conservative
+            # upper bound (chars/3 prompt estimate + the transport
+            # max_tokens cap) BEFORE dispatch.  Against a finite ceiling an
+            # unboundable call fails closed; concurrent dispatchers can
+            # never jointly push the logged total past the ceiling.
+            reservation = None
+            reservation_bound = conservative_prompt_bound(request) + int(
+                transport_limits["max_tokens"] or 0
+            )
+            if dispatch_authorization is not None:
+                if attempt != 0:
+                    raise WorkflowAuthorizationError(
+                        "transactional repair requires a new authorization bundle",
+                        spend=_spend(attempt),
+                    )
+                reservation = dispatch_authorization.reservation
+                if reservation.amount != reservation_bound:
+>                   raise WorkflowAuthorizationError(
+                        "transactional reservation bound differs from rendered request"
+E                       deepreason.llm.adapter.WorkflowAuthorizationError: transactional reservation bound differs from rendered request
+
+src/deepreason/llm/adapter.py:1399: WorkflowAuthorizationError
+_____________ test_call_never_recomputes_a_cap_under_authorization _____________
+
+    def test_call_never_recomputes_a_cap_under_authorization():
+        """The mutation guard: one cap definition, consumed at dispatch.
+    
+        Regression (epoch-3 attempt 3, run bb0455384ea09b5b...). Reintroducing a
+        second expression -- any endpoint read for the completion cap inside call
+        -- is the defect, so it fails here rather than in a live run.
+        """
+        source = inspect.getsource(LLMAdapter.call)
+        limits = re.search(
+            r'transport_limits = \{(.*?)\n            \}', source, re.S
+        )
+        assert limits, "transport_limits block not found in call"
+        cap = re.search(r'"max_tokens": \((.*?)\),\n\s+"timeout_s"', limits.group(1), re.S)
+>       assert cap, "the completion cap is no longer a consumed expression"
+E       AssertionError: the completion cap is no longer a consumed expression
+E       assert None
+
+tests/test_v6_reservation_bound_authority.py:216: AssertionError
+____________________ test_bound_refusal_records_both_sides _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-6/test_bound_refusal_records_bot0')
+
+    def test_bound_refusal_records_both_sides(tmp_path):
+        """A refusal that survives the fix is diagnosable from the record alone.
+    
+        Regression (epoch-3 attempt 3, run bb0455384ea09b5b...): the failure that
+        killed that run left no trace of the quantity it refused on. Corruption
+        between the live Reservation and its recorded TokenReservationV2 is the
+        only way to reach the guard now, and it must carry both sides.
+        """
+        root = tmp_path / "run"
+        manifest = _manifest()
+        _persist_manifest(manifest, root)
+        harness = Harness(root)
+        adapter, endpoints = _adapter(harness, manifest)
+    
+        _prompt, _cap, authorized, aliases, contract, base_profile = _issue(
+            adapter, harness, manifest
+        )
+        # Corrupt the live reservation so it disagrees with what was recorded.
+        authorized.reservation.amount += 7
+    
+        with pytest.raises(WorkflowAuthorizationError) as caught:
+            _call(adapter, authorized, aliases, contract, base_profile)
+    
+        error = caught.value
+        assert "transactional reservation bound differs from rendered request" in str(error)
+>       assert error.diagnostic_ref, "the refusal must carry a diagnostic blob"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'WorkflowAuthorizationError' object has no attribute 'diagnostic_ref'
+
+tests/test_v6_reservation_bound_authority.py:254: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_v6_reservation_bound_authority.py::test_settled_cap_below_the_route_ceiling_still_dispatches
+FAILED tests/test_v6_reservation_bound_authority.py::test_attempt3_shape_books_and_spends_one_cap
+FAILED tests/test_v6_reservation_bound_authority.py::test_call_never_recomputes_a_cap_under_authorization
+FAILED tests/test_v6_reservation_bound_authority.py::test_bound_refusal_records_both_sides
+4 failed in 3.30s

@@ -1187,3 +1187,53 @@ top-level imports are pinned to `{deepreason.ontology}`
 (`SEAM-evaluation-x-rules.md:39`) — both of which caught real first-draft
 violations. Neither was weakened; both fixes are better code. But a census that
 had enumerated checks rather than files would have predicted all four.
+
+**E46 — three committed statements said this refusal meant the prompt changed;
+it cannot mean that.** `WorkflowAuthorizationError("transactional reservation
+bound differs from rendered request")` names the request, and two documents
+glossed it the same way: `docs/map/SEAM-llm-x-workflow.md`'s "What breaks first"
+list read *"(the prompt changed after issue)"*, and
+`experiments/2026-08-22-change-epoch3-second-lineage/PARKED.md` P6-epoch3
+described "the prompt-bound term computed over two different strings". None was
+careless — the message invites exactly that reading — but the guard cannot fire
+on the prompt. `DispatchAuthorizationBundleV1.verify_dispatch` compares the
+bundle's `prompt_sha256` against the adapter's freshly rendered prompt at
+`llm/adapter.py`, ahead of the reservation block, and raises `"dispatch differs
+from its authorization bundle"` on any difference; equal digests are equal
+bytes, equal bytes are an equal `conservative_prompt_bound`. Any run reaching
+the bound guard has already proven its two prompt bounds equal. The divergence
+was always the COMPLETION CAP: `preview_request` booked a route's ceiling while
+`call` recomputed the cap from the endpoint's settled value. Corrected
+2026-08-23 by `experiments/2026-08-23-fix-reservation-bound-authority/`, which
+makes the cap a single consumed number, rewrites the seam's gloss and its
+Traps entry, and widens the message itself to print both bounds and both
+prompt bounds — so the next reader is told what disagreed instead of inferring
+it. Recorded because the mistake is reusable: **an error message is not
+evidence about its own cause**, and this one misdirected a map document and a
+parked finding for a day.
+
+**E47 — a parked finding's elimination was false, and the search that produced
+it could not have succeeded.** `PARKED.md` P6-epoch3 ruled out a controller cap
+re-tune as the cause of epoch-3 attempt 3's death — "no policy artifact
+carrying a `knobs`/`cap:` entry exists in `log.jsonl`, and `max_tokens` appears
+as `32768` and no other value across every object in the root", with a pasted
+one-liner regexing `"max_tokens"\s*:\s*([0-9]+)` over the root. The policy
+artifact exists. It is a content-addressed artifact under
+`objects/artifact/` with `provenance.role: "controller"`, its body is an
+`inline:` JSON **string** rather than a nested object, and it spells the value
+`"cap:conjecturer": 20480` — never as a `max_tokens` field. So the regex was
+looking for a shape the record does not use, and "32768 everywhere" was the
+true answer to a question that could not have returned anything else. The
+settled cap is what killed the run: booked `8333 + 32768 = 41101` against a
+dispatched `8333 + 20480 = 28813`, a gap of 12288 that is exactly the
+narrowing. Found 2026-08-23 by
+`experiments/2026-08-23-fix-reservation-bound-authority/`, whose
+`repro/attempt3_census.py` re-derives it from the committed root; P6-epoch3's
+other elimination — no prompt drift between reserve and authorize, 50 of 50
+`prompt_sha256` agreeing — stands, and E46 explains why it had to. Recorded because the failure mode generalises and
+has now cost two tranches (see E42, where a census joined on the convenient key
+rather than the frozen one): **a negative result from a search is only as
+strong as the proof that the search could have found the thing.** A census over
+typed records must enumerate the record types it means to cover and say which
+it read, not pattern-match a field name across a directory tree.
+

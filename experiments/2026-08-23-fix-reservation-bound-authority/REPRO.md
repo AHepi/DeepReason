@@ -23,15 +23,15 @@ Reads only typed records from the committed
       reservation_bound  (dispatch, NOT recorded) = 8333 + 20480 = 28813
       disagreement = 12288 = route ceiling 32768 - settled cap 20480
 
-## 2. `repro/test_repro_bound_divergence.py` — the live seam, offline
+## 2. The live seam, offline (now `tests/test_v6_reservation_bound_authority.py`)
 
 Drives the real `preview_request` → `service.issue` → `adapter.call` path
 against `MockEndpoint`, in the attempt-3 seat shape: a route declaring
 qualified capacity, then the endpoint cap settled below its ceiling exactly as
 `Controller._apply_cap` does it.
 
-    python -m pytest experiments/2026-08-23-fix-reservation-bound-authority/repro/ -q
-    2 passed
+    python -m pytest <the repro file, on the UNFIXED tree> -q
+    2 passed   # both asserting the DEFECT
 
 `test_settled_cap_below_the_route_ceiling_kills_the_next_dispatch` prints the
 two sides:
@@ -75,3 +75,24 @@ the same `conservative_prompt_bound`."*
 The proof it rests on is true of the prompt term and false of the cap term. And
 every v6 fixture builds its `MockEndpoint` with `max_tokens=route.max_tokens`,
 so the two expressions coincide in every test in the suite.
+
+
+## After the fix
+
+The two reproductions above assert the *defect*, so on the fixed tree they stop
+raising and fail:
+
+    E       Failed: DID NOT RAISE WorkflowAuthorizationError
+    2 failed
+
+That inversion is the proof, and it is why the file does not stay here. It was
+rewritten as `tests/test_v6_reservation_bound_authority.py`, whose four tests
+assert the fixed behaviour, name run `bb0455384ea09b5b…` in their docstrings,
+and are shown RED on the unfixed tree and GREEN on the fixed one:
+
+    proof/regression_red_on_unfixed_tree.txt    4 failed
+    proof/regression_green_on_fixed_tree.txt    4 passed
+
+`repro/cap_divergence.py` and `repro/attempt3_census.py` stay: they are analyses
+of the record and of the two committed expressions, and both remain runnable and
+true as descriptions of what the defect was.

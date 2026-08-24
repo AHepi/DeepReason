@@ -81,9 +81,19 @@ from deepreason.run_manifest import (
 class WorkflowAuthorizationError(RuntimeError):
     """Active workflow authority could not be persisted before dispatch."""
 
-    def __init__(self, message: str, *, spend: LLMCall | None = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        spend: LLMCall | None = None,
+        diagnostic_ref: str | None = None,
+    ) -> None:
         super().__init__(message)
         self.spend = spend
+        # Blob holding both sides of a refused comparison and their inputs, so
+        # the refusal is diagnosable from the committed root without re-running
+        # the model. None on refusals that compare nothing.
+        self.diagnostic_ref = diagnostic_ref
 
 
 class RequestEnvelopeExceeded(RuntimeError):
@@ -763,12 +773,31 @@ class LLMAdapter:
             conjecture_context=conjecture_context,
             pre_rendered_request=pre_rendered_request,
         )
+        return prompt, contract, lease, self._completion_cap(endpoint, lease)
+
+    @staticmethod
+    def _completion_cap(endpoint, lease) -> int:
+        """The completion envelope ONE dispatch books and is checked against.
+
+        The single definition: `preview_request` returns it, the workflow books
+        it, and `call` reads it back off the reservation rather than recomputing
+        it. A second expression anywhere is the defect this replaced (epoch-3
+        attempt 3, run bb0455384ea09b5b...), because the two reads happen at
+        different instants and a controller may settle a seat between them.
+
+        A route declaring qualified capacity binds its CEILING, not the
+        endpoint's currently settled cap: the ceiling is the only value stable
+        across the booking window, and `Controller._lease_ceiling` bounds every
+        controller proposal at it, so nothing the seat may later be raised to
+        can escape a bound booked from it.
+        """
+
         maximum = (
             lease.route.max_tokens
             if lease.route.context_window_tokens is not None
             else getattr(endpoint, "max_tokens", lease.route.max_tokens)
         )
-        return prompt, contract, lease, int(maximum or 0)
+        return int(maximum or 0)
 
     def _render_request(
         self,
@@ -1371,9 +1400,18 @@ class LLMAdapter:
             # boundary. A logged controller may have adjusted either value
             # since manifest compilation; the attempt trace must describe
             # the request that was actually sent, not only the base route.
+            #
+            # The completion cap is the exception, and deliberately so: under
+            # an authorization it is CONSUMED from the reservation rather than
+            # recomputed here. The workflow booked that number before this call
+            # existed; recomputing a second one from the live endpoint is what
+            # let a controller settling a seat mid-cycle part the two sides of
+            # the guard below by exactly the amount of the narrowing.
             transport_limits = {
-                "max_tokens": getattr(
-                    endpoint, "max_tokens", lease.route.max_tokens
+                "max_tokens": (
+                    dispatch_authorization.reservation_record.completion_bound_tokens
+                    if dispatch_authorization is not None
+                    else self._completion_cap(endpoint, lease)
                 ),
                 "timeout_s": getattr(
                     endpoint, "timeout_s", lease.route.timeout_s
@@ -1396,8 +1434,58 @@ class LLMAdapter:
                     )
                 reservation = dispatch_authorization.reservation
                 if reservation.amount != reservation_bound:
+                    # Unreachable by drift: both sides now read one booked cap,
+                    # and verify_dispatch above already pinned the prompt bytes
+                    # to the bundle digest, so their prompt bounds are equal by
+                    # construction. Reaching here means the live Reservation and
+                    # its recorded TokenReservationV2 disagree - corruption, not
+                    # a stale read. Record both sides so the NEXT reader does
+                    # not have to re-derive them from a run that no longer
+                    # exists (epoch-3 attempt 3, run bb0455384ea09b5b...).
+                    booked = dispatch_authorization.reservation_record
                     raise WorkflowAuthorizationError(
-                        "transactional reservation bound differs from rendered request"
+                        "transactional reservation bound differs from rendered "
+                        f"request: booked {reservation.amount} "
+                        f"(prompt {booked.prompt_bound_tokens} + completion "
+                        f"{booked.completion_bound_tokens}), dispatch "
+                        f"{reservation_bound} (prompt "
+                        f"{conservative_prompt_bound(request)} + completion "
+                        f"{int(transport_limits['max_tokens'] or 0)})",
+                        spend=_spend(attempt),
+                        diagnostic_ref=self.blobs.put(
+                            json.dumps(
+                                {
+                                    "reservation_ref": booked.id,
+                                    # The live Reservation and its durable
+                                    # record, separately: the only way to reach
+                                    # this raise is for them to disagree, so
+                                    # both are the evidence.
+                                    "live_reserved_tokens": reservation.amount,
+                                    "recorded_reserved_tokens": booked.reserved_tokens,
+                                    "booked_prompt_bound": booked.prompt_bound_tokens,
+                                    "booked_completion_bound": booked.completion_bound_tokens,
+                                    "dispatch_bound": reservation_bound,
+                                    "dispatch_prompt_bound": conservative_prompt_bound(
+                                        request
+                                    ),
+                                    "dispatch_completion_bound": int(
+                                        transport_limits["max_tokens"] or 0
+                                    ),
+                                    "request_chars": len(request),
+                                    "request_sha256": hashlib.sha256(
+                                        request.encode("utf-8")
+                                    ).hexdigest(),
+                                    "endpoint_max_tokens_live": getattr(
+                                        endpoint, "max_tokens", None
+                                    ),
+                                    "route_max_tokens": lease.route.max_tokens,
+                                    "route_context_window_tokens": (
+                                        lease.route.context_window_tokens
+                                    ),
+                                },
+                                sort_keys=True,
+                            ).encode()
+                        ),
                     )
             elif self.meter is not None:
                 try:
