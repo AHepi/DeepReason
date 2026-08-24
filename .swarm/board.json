@@ -72,21 +72,34 @@
     "PIL-SpecDriftJudgment": {
       "accept": "F=experiments/2026-08-23-treadle-pilot/T4/ANSWER.md; test -f $F && grep -qx 'verdict: HOLDS' $F && grep -qx 'request_budget: ORDINAL' $F && grep -qx 'execution_budget: COUNT' $F && grep -qx 'filter: isinstance' $F && grep -q 'SimulationProposalV1' $F && grep -q 'SimulationWorkOrderV1' $F",
       "base": "70d5bb80e5bb7563c742c2c00e73101e653d7a93",
-      "claim_token": 0,
+      "claim_token": 1,
       "cone": [
         "experiments/2026-08-23-treadle-pilot/T4/*"
       ],
       "depends_on": [],
       "goal": "Write experiments/2026-08-23-treadle-pilot/T4/ANSWER.md. INPUT_claim_and_code.txt holds one documentation claim from CLAUDE.md and the code it is about, verbatim. Decide whether the code still satisfies the claim, and say exactly how it does it. No instrument in this repository reports this; the answer comes only from reading the code. Your file must contain, each on its own line and with no other text on that line, exactly these four lines: 'verdict: HOLDS' or 'verdict: DRIFTED'; 'request_budget: ORDINAL' or 'request_budget: COUNT'; 'execution_budget: ORDINAL' or 'execution_budget: COUNT'; and 'filter: <the Python builtin the code uses to keep one capability's records out of the other's budget>'. ORDINAL means the budget is decided by an item's position in a sorted sequence; COUNT means it is decided by how many items there are. Below those four lines, justify each one by quoting the exact expression from the code that decides it, and name the two class names the filter tests against. State plainly anything you could not establish.",
-      "notes": [],
+      "notes": [
+        {
+          "by": "monitor",
+          "note": "monitor: all four required lines correct and correctly justified against PREDICTION.md, which was committed before the run. First attempt, no refinement, no escalation. The pre-registered prediction that this rung would break is FALSIFIED.",
+          "result": "PASS"
+        }
+      ],
       "out_of_scope": "Do not rewrite INPUT_claim_and_code.txt. Do not touch anything outside the cone. You cannot run any command; the excerpt you were given is all the evidence there is.",
-      "reads": [],
-      "reviewer": "",
-      "shas": [],
-      "state": "READY",
-      "state_ts": 1787545283.028772,
+      "reads": [
+        [
+          "skills/pilot-task/SKILL.md",
+          "c759e965b0dc072af26febcbb08306f87cea536e27d10d234f8aa0c9355b367e"
+        ]
+      ],
+      "reviewer": "monitor",
+      "shas": [
+        "6382e220a737843d404b52edc6ef0af3b5d86b34"
+      ],
+      "state": "DONE",
+      "state_ts": 1787545385.2776003,
       "verify": "",
-      "worker": ""
+      "worker": "treadle"
     },
     "REV-RungD": {
       "accept": "# Claim/check pairs from the delivering tranche, verbatim from its own VALIDATION.md.\n# Each line is CLAIM -> the command the tranche ran -> the result it recorded.\n# Judge whether the DIFF supports each claim. These lines are context, not a script.\n# S1  the closed claim-name set did not grow -> python -c \"len(CLAIM_SCHEMAS)==9 and poietic.derivation-manifest.v1 in _IMPLEMENTED\" -> S1 ok\n# S2  open certificates are dependences and the subject is a mention -> pytest test_open_certificates_are_dependences_and_the_subject_is_a_mention -> 1 passed\n# S3  the derivation-manifest wf program is structural -> python -c \"PROGRAMS[derivation_manifest_wf].class_==structural\" -> S3 ok\n# S4  the new module is covered -> pytest tests/test_proof_debt.py -q -> 18 passed\n# S5  a receipt is recomputed from the log and never stored, and reruns its kernel checks rather than reading them back -> pytest test_a_receipt_is_recomputed_from_the_log_and_never_stored test_a_receipt_reruns_its_kernel_checks_rather_than_reading_them_back -> 2 passed\n# S6  the log replays identically after a certificate is attacked -> pytest test_the_log_replays_identically_after_a_certificate_is_attacked -> 1 passed\n# S7  dependents are invalidated on recomputation, not retroactively -> pytest test_dependents_are_invalidated_on_recomputation_not_retroactively -> 1 passed\n# S8  a manifest is wired to the validity node as EVIDENCE -> pytest test_a_manifest_is_wired_to_the_validity_node_as_evidence -> 1 passed\n# S9  attacking a manifest item disables the attack before pass one -> pytest test_attacking_a_manifest_item_disables_the_attack_before_pass_one -> 1 passed\n# S10 the rent sweep files a manifest whose sample is attackable -> pytest tests/test_premise_channel.py test_the_rent_sweep_files_a_manifest_whose_sample_is_attackable -> 26 passed\n# S20 filing a manifest moves no label, and the read path holds no call that could write -> pytest test_filing_a_manifest_moves_no_label test_the_read_path_holds_no_call_that_could_write -> 2 passed\n# DELIVERY.md also claims: not one line of adjudication/ changed; 457 insertions in src/ whose 4 deletions are one reworded comment, two extended import lines and one extended docstring line - no behaviour removed.",

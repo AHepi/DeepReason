@@ -29,8 +29,11 @@ Recorded 2026-08-12 at main 074ef1549.
 - **treadle doctor** (`tools/treadle/.venv/bin/treadle --repo . doctor`,
   with `OLLAMA_API_KEY` exported): expected **exit 0 and every line OK**
   — no `MISS`, no `WARN`. Recorded 2026-08-23 at install: 5 environment
-  lines, 2 stage lines (`pilot`, `review`), credentials, and 3 model-tag
-  lines (`gpt-oss:120b`, `deepseek-v4-pro:0813` twice). A `WARN
+  lines, 3 stage lines (`pilot`, `review`, `review_full`), credentials,
+  and 4 model-tag lines (`gpt-oss:120b`, `deepseek-v4-pro:0813` three
+  times). The line COUNT moves whenever `treadle.toml` gains or loses a
+  stage or a `context_files` entry — compare the OK/WARN/MISS verdicts,
+  not the arithmetic. A `WARN
   credentials` line is baseline ONLY when the key is unset — with the key
   exported it is a finding. A `WARN model tag ... NOT on endpoint` is
   always a finding: hosted checkpoints are retired without notice, and
