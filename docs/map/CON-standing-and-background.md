@@ -1,5 +1,5 @@
 <!-- DR-CON-standing-and-background -->
-Verified-at: e3a6cadf5
+Verified-at: b41c5cf10
 Verify: python -m pytest tests/test_calculus_vocabulary.py -q
 Owns: src/deepreason/status_display.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/render.py
 Seams: 

@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 14 next** (steps 12 and 13 landed together — 13's proof is in the same test file) (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
+State: **step 16 next** (14 and 15 landed; the full docs_verify re-run is the last outstanding measurement) (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -99,7 +99,7 @@ production lines over `src/`.
   the declaration.
   Done-criterion: the test passes; the typed `ScopeError` code pasted.
 
-- [ ] **14. Map documents** (S1-S9, §4) `[COMMIT]`
+- [x] **14. Map documents** (S1-S9, §4) `[COMMIT]`
   `DR-SUB-calculus` (Owns + closed set 9→10 + the two-mention rule),
   `DR-INV-axiom-basis` (**A9 proved**, A3/A4/A10 preserved), `INDEX.md`'s
   seam matrix, and any residual check on the four documents already
@@ -107,7 +107,7 @@ production lines over `src/`.
   Done-criterion: **every new check RUN before it is written down**, each
   output pasted; then `python tools/docs_verify.py` FULL.
 
-- [ ] **15. The public-surface proof** (A14, C-PUBLIC)
+- [x] **15. The public-surface proof** (A14, C-PUBLIC)
   Done-criterion: `python scripts/wheel_smoke.py` and `python -u
   scripts/wheel_operational_smoke.py` both green with **pins unchanged**,
   both outputs pasted, and the statement that no view shipped.
@@ -270,6 +270,28 @@ machinery.
 no write, no label movement); A3, A4 and A10 preservation rows added with
 their own checks. Every check run before it was written down.
 
+**Step 14** — the FULL `docs_verify` found **6** failures, 3 of them the
+known pre-existing `CON-run-identity.md` shallow-clone ones. The other
+three were this tranche's, and all three were map documents this tranche
+had NOT declared:
+
+| Document | What moved |
+|---|---|
+| `CON-packs-and-token-economy.md:162` | my own new check crashed — `ast.literal_eval` on a `_pack_section` id that is now a NAME (`_WITHHELD_ID`), not a literal. Rewritten to skip non-`Constant` ids |
+| `SEAM-evaluation-x-ontology.md:54` | pins the exact sorted list of callables `programs.evaluate` dispatches to; `departure_declaration_wf` joined it |
+| `SEAM-rules-x-scratch.md:107` | pins `render_crit_pack`'s exact parameter list; the two frame parameters moved it |
+
+`Verified-at` advanced on the ten documents whose checks were actually
+re-run, and on no others.
+
+**Step 15** — public surface. **No `frame`/`pack` inspection view shipped**:
+no new console entry point, no new MCP tool, and `git diff` over
+`scripts/` is EMPTY, so no pin moved. `python scripts/wheel_smoke.py`:
+```
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+points, module parity, MCP registration, and exact MCP schemas
+```
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -279,6 +301,26 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 14 — the blast-radius census missed three map documents, and E49
+predicted exactly this.** SPEC.md §4 listed six documents to move; three
+more had checks that this tranche's code broke, and all three were reached
+through symbols the census did not enumerate — `programs.evaluate`'s
+dispatch list, `render_crit_pack`'s parameter list, and my own new check's
+use of `ast.literal_eval`. E49's rule is "a census must enumerate every
+symbol a spec item names as its mechanism"; the gap here is one step
+further out — a document can pin a symbol the spec never names at all, and
+only the FULL `docs_verify` finds those. Recorded rather than papered over:
+the full run at the boundary is not a formality.
+
+**Step 15 — two worker-spawning instruments were run concurrently, against
+the repo's own process rule.** `docs_verify` and `wheel_smoke` overlapped
+for several minutes. The wheel smoke's verdict is a pass, and contention
+manufactures failures rather than passes, so the result stands; the
+`docs_verify` result is being re-derived on an otherwise idle box before it
+is recorded. Also recorded: `pgrep -f docs_verify` reported six processes
+when there was ONE, because it matched this session's own shell command
+lines — the exact trap CLAUDE.md §5b names, met in the wild.
 
 **Step 12 — the L-4 behavioural test could not see a dependence leak.** Its
 edge filter was `e[0] in ids`, which compares only edges FROM a shared node.

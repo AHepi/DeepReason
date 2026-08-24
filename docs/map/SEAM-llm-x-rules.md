@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-rules -->
-Verified-at: 08dcdf3c
+Verified-at: b41c5cf10
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/llm/firewall.py, src/deepreason/llm/packs.py, src/deepreason/llm/wire.py, src/deepreason/llm/contracts.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py
 Sides: DR-SUB-llm, DR-SUB-rules

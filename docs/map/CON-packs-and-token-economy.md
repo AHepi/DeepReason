@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: 69f89d21
+Verified-at: b41c5cf10
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: 
@@ -159,7 +159,7 @@ decay in context regardless of placement, so the load-bearing parts are the
 allocator flags here and the deterministic `held_frame_obligations` subtraction
 in `calculus/render.py` — neither of which depends on the model honouring
 anything it was shown.
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(ast.literal_eval(c.args[0]),[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and ast.literal_eval(c.args[0]) in ('frame-slice','frame-crisis')];assert len(K['frame-slice'])==2 and all(k['droppable'] is False and k['compressible'] is True for k in K['frame-slice']), K;assert len(K['frame-crisis'])==2 and all(k['droppable'] is False and k['compressible'] is False for k in K['frame-crisis']), K"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(c.args[0].value,[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and isinstance(c.args[0],ast.Constant) and c.args[0].value in ('frame-slice','frame-crisis')];assert len(K['frame-slice'])==2 and all(k['droppable'] is False and k['compressible'] is True for k in K['frame-slice']), K;assert len(K['frame-crisis'])==2 and all(k['droppable'] is False and k['compressible'] is False for k in K['frame-crisis']), K"`
 `check: python -m pytest tests/test_frame_render.py::test_the_frame_slice_survives_a_budget_that_drops_everything_optional tests/test_frame_render.py::test_the_exact_crisis_section_is_bounded_by_construction -q`
 
 **NEGATIVE — the critic's target may never be excerpted.** The `target` section

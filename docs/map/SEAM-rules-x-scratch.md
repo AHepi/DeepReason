@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: f092ab36
+Verified-at: b41c5cf10
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
@@ -104,7 +104,7 @@ the operator's R5/R6 requirement: the scratchpad authority chain and the
 conjecture/criticism adjudication chain must not exist together. Reading the
 absence as an oversight and "wiring the critic to the workshop" is the specific
 mistake this section exists to prevent.
-`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context','frame_slice_context','frame_crisis_context'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
