@@ -106,21 +106,35 @@ pasted in the step's record.
 
 GREEN (shipped tree):
 
+```
+tests/test_calculus_wound_persistence.py ......   6 passed in 0.36s
+```
 
+MUTATION APPLIED — `standing.py::consultability_of` gains a clause making a
+REFUTED subject remove its own standing, which is exactly what Prop 9.6
+forbids:
 
-MUTATION APPLIED —  gains a clause making a
-REFUTED subject remove its own standing, which is exactly what Prop 9.6 forbids:
-
-
+```python
+    if harness.state.status.get(body.subject_ref) is Status.REFUTED:
+        return Consultability(False, FRAME_NOT_UNREFUTED, (body.subject_ref,))
+```
 
 RED:
 
+```
+FAILED tests/test_calculus_wound_persistence.py::test_a_wound_changes_status_and_leaves_standing_untouched
+FAILED tests/test_calculus_wound_persistence.py::test_the_wound_renders_in_frame_across_the_scope
+FAILED tests/test_calculus_wound_persistence.py::test_many_wounds_still_leave_standing_untouched
+3 failed, 3 passed in 0.38s
+```
 
+RESTORED from the scratch copy — `git diff src/deepreason/calculus/standing.py`
+prints nothing — then GREEN again:
 
-RESTORED from the scratch copy (
-prints nothing), then GREEN again:
-
-
+```
+......                                                                   [100%]
+6 passed in 0.36s
+```
 
 The mutation kills three of the six: the end-to-end proposition, the in-frame
 wound render, and the many-wounds quantitative form. The three it does NOT kill
@@ -141,19 +155,25 @@ diff-budget JSON for the commit.
 
 **DONE 2026-08-24.**
 
+```
+tests/test_premise_batch_offers.py ...........        11 passed in 0.51s
+tests/test_signal_contract.py tests/test_signals.py   19 passed in 3.66s
+blast radius: {"frozen_surface_verdict": "CLEAR"}
+diff budget:  {"areas": {"src": 300}, "ceiling": 700, "verdict": "WITHIN"}
+```
 
-
-**One near miss, recorded rather than absorbed.** The first 
+**One near miss, recorded rather than absorbed.** The first `orphan_causes`
 compared GRADE STRINGS to decide which cause explains a mark — a second place
 where a grade was being decided, which
- caught in the same session. It now
+`test_there_is_no_second_marking_mechanism` caught in the same session. It now
 expresses precedence on the LABEL, exactly as the marking function does, and
-READS the grade from the mark.
+READS the grade from the mark, so the two cannot disagree.
 
-Map moved in this commit:  (batch offers, the
-sixth signal, the new entry points).  needed no change
-— it pins no signal count — and 's own gate
-() is green.
+Map moved in this commit: `DR-CON-problem-layer-lifecycle` (batch offers, the
+sixth signal, the new entry points). `DR-INV-signal-contract` needed NO change —
+it pins no signal count — and `DR-REC-add-signal`'s own gate
+(`tests/test_signal_contract.py tests/test_signals.py`) is green, which is that
+recipe's step 4.
 
 ## Step 6 — N3 at scale (S10; G4)
 
@@ -168,14 +188,17 @@ DONE-CRITERION: `python -m pytest tests/test_cascade_n3_at_scale.py -q`
 
 **DONE 2026-08-24.**
 
-
+```
+tests/test_cascade_n3_at_scale.py .......   7 passed in 11.15s
+under the gate's own parallelism:           7 passed in 12.23s   (-n 4)
+```
 
 **Restructured mid-step for a real defect, not a style preference.** The first
 version had tests that depended on earlier tests' mutations of a module-scoped
-fixture. That passes serially and FAILS under , which scatters tests
+fixture. That passes serially and FAILS under `-n 4`, which scatters tests
 across workers by default — the gate's own configuration. The fixture now
 builds the final state and every test is a pure read, so the file is
-order-independent by construction. Verified under  above, not assumed.
+order-independent by construction. Verified under `-n 4` above, not assumed.
 
 ## Step 7 — succession detection and the render exception (S4; R4)
 
