@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **STOPPED at the step-9 [COMMIT] gate — diff budget EXCEEDED (759/560). Awaiting the operator. Step 10 next if continued.**
+State: **step 10 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -214,7 +214,10 @@ record rather than silently.
 
 **Step 9 — DIFF BUDGET EXCEEDED, and the tranche STOPPED here.** 759
 insertions over `src` against a ledgered ceiling of 560. Raised to the
-operator with the breakdown rather than re-baselined.
+operator with the per-file breakdown rather than re-baselined.
+**RESOLVED**: the operator ruled *continue and disclose* — REQUEST.md
+Amendment 1, new requirement R8. The ceiling stands unre-baselined and
+DELIVERY.md carries the overrun as a result.
 
 **Step 9 — the seam document's first draft asserted an acyclic edge; it is
 a cycle.** `calculus/promotion.py` has imported

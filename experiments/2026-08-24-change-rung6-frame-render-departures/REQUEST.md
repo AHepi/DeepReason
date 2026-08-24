@@ -308,4 +308,40 @@ a finding to record, not a blocker.
 
 ## 5. Amendments
 
-(none yet)
+### Amendment 1 (2026-08-24) — the diff-budget overrun, disposed
+
+At the step-9 `[COMMIT]` checkpoint `tools/diff_budget.py` reported **759**
+insertions over `src/` against SPEC.md's ledgered ceiling of **560**, with
+~820 projected at completion against the ladder's 360-550 estimate. That is
+`dr-change-orchestrator`'s stop condition ("the estimated diff exceeds
+SPEC.md's budget"), so the tranche stopped and put three priced roads to
+the operator.
+
+**The operator chose: continue and disclose.** Their selection, verbatim
+from the option they picked:
+
+> Continue and disclose (Recommended) — Finish steps 10-16 and land ~820
+> lines, with the overrun and its per-file breakdown recorded in
+> DELIVERY.md rather than the ceiling re-baselined. This is P4's own
+> precedent (it exceeded 504/420 and disclosed). Nothing is cut.
+
+**R8 (new).** The 560 ceiling is NOT re-baselined. DELIVERY.md carries the
+overrun, its per-file breakdown, and the three causes below, as a disclosed
+result rather than a corrected estimate.
+
+**What grew, measured at the stop:**
+
+| File | Insertions | SPEC estimate | Why |
+|---|---|---|---|
+| `calculus/render.py` | 380 | 185 | the step-7 crisis/digest split added a second renderer and a third cap; 125 of the 380 lines are docstrings and 18 are comments, per the repo's own convention that a comment states the constraint the code cannot show |
+| `llm/packs.py` | 165 | 80 | the split doubled the section blocks, and the step-8 disclosure loop grew a helper plus the corrected termination argument |
+| `rules/crit.py` | 57 | ~18 | two helpers, plus the THIRD `render_crit_pack` call site SPEC.md did not know about |
+| everything else | 157 | ~222 | under estimate |
+
+Three causes, two of them forced by measurement rather than chosen: the
+crisis/digest split (a failing test, step 7), the third crit-pack call site
+(the census check, step 9), and documentation density.
+
+**C-SIZE is therefore DISCHARGED BY DECISION, not by staying inside it.**
+The stop fired, the options were priced, the operator ruled. No later phase
+may cite the 560 number as a constraint still in force.
