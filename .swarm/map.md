@@ -1,19 +1,20 @@
 # Repo map (generated -- do not edit; regenerate with: swarm_gate.py map)
 branch: claude/treadle-install-pilot-fqwjt5
-head: 5a57ddd3c457c1db4b1726e950de21eefbd312ef
-tree_sha: 798f57d68fc45e0e76130b38d8465cb2e1891003
-tracked_files: 130190
+head: f50be1bd5a0b775ad8093135f36cda79f5da69d2
+tree_sha: eb0351fed2e2de23299ae8948ce92b83f9741d7d
+tracked_files: 130217
 
 ## Directories
 - `.claude/` -- 24 files
 - `.claude/skills/` -- 24 files
 - `.github/` -- 1 files
 - `.github/workflows/` -- 1 files
+- `.swarm/` -- 3 files
 - `config/` -- 3 files
 - `docs/` -- 129 files
 - `docs/map/` -- 63 files
 - `docs/proposals/` -- 13 files
-- `experiments/` -- 128600 files
+- `experiments/` -- 128609 files
 - `experiments/2026-07-30-change-amendment-epochs/` -- 5 files
 - `experiments/2026-07-30-fix-citation-quote-check/` -- 7 files
 - `experiments/2026-07-30-fix-sandbox-contract/` -- 8 files
@@ -126,7 +127,7 @@ tracked_files: 130190
 - `experiments/2026-08-22-measure-grounded-flip-rate/` -- 18 files
 - `experiments/2026-08-22-reach-structural-programs-fix/` -- 13 files
 - `experiments/2026-08-23-audit-invention-inventory/` -- 1 files
-- `experiments/2026-08-23-treadle-pilot/` -- 3 files
+- `experiments/2026-08-23-treadle-pilot/` -- 12 files
 - `experiments/autonomous_inquiry_preflight_2026-07-16/` -- 5 files
 - `experiments/bronze_feedback_v1_superseded_2026-07-14/` -- 1315 files
 - `experiments/bronze_flat_2026-07-13/` -- 2205 files
@@ -166,16 +167,30 @@ tracked_files: 130190
 - `mini/tests/` -- 13 files
 - `runs/` -- 660 files
 - `runs/jolt_positive_headroom_v3_1/` -- 660 files
-- `scripts/` -- 60 files
+- `scripts/` -- 61 files
 - `scripts/e31_benchmark/` -- 7 files
+- `skills/` -- 12 files
+- `skills/assembly/` -- 1 files
+- `skills/deduction/` -- 1 files
+- `skills/denotation-tests/` -- 1 files
+- `skills/discharge-typing/` -- 1 files
+- `skills/example-battery/` -- 1 files
+- `skills/mapping-table/` -- 1 files
+- `skills/minimal-pair-review/` -- 1 files
+- `skills/model-zoo-discipline/` -- 1 files
+- `skills/pilot-task/` -- 1 files
+- `skills/refutation-first/` -- 1 files
+- `skills/semantic-round-trip/` -- 1 files
+- `skills/term-pinning/` -- 1 files
 - `src/` -- 310 files
 - `src/deepreason/` -- 310 files
 - `tests/` -- 328 files
 - `tests/fixtures/` -- 8 files
-- `tools/` -- 37 files
-- `tools/treadle/` -- 32 files
+- `tools/` -- 38 files
+- `tools/treadle/` -- 33 files
 
 ## Key documents (tracked .md, first heading)
+- `.swarm/map.md` -- Repo map (generated -- do not edit; regenerate with: swarm_gate.py map)
 - `CLAUDE.md` -- CLAUDE.md — operating DeepReason
 - `README.md` -- DeepReason
 - `docs/ADMISSION_SPEC.md` -- Evidence Admission (draft for review)
@@ -255,4 +270,3 @@ tracked_files: 130190
 - `experiments/2026-07-30-fix-citation-quote-check/GOAL.md` -- Goal: a quoted citation of a hard-wrapped admitted block can verify
 - `experiments/2026-07-30-fix-citation-quote-check/PARKED.md` -- Parked — out of this tranche's goal
 - `experiments/2026-07-30-fix-citation-quote-check/REPRO.md` -- Reproduction
-- `experiments/2026-07-30-fix-citation-quote-check/VERIFY.md` -- Verification

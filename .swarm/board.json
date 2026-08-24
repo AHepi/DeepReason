@@ -4,5 +4,32 @@
     "require_remote": "auto",
     "wip_limit": 2
   },
-  "tasks": {}
+  "tasks": {
+    "PIL-DocsVerifyDelta": {
+      "accept": "F=experiments/2026-08-23-treadle-pilot/T1/DELTA.md; test -f $F && grep -q 'CON-run-identity.md:200' $F && grep -q 'CON-run-identity.md:202' $F && grep -q 'CON-run-identity.md:204' $F && grep -q '3 failed' $F && grep -qi 'baseline' $F",
+      "base": "f50be1bd5a0b775ad8093135f36cda79f5da69d2",
+      "claim_token": 1,
+      "cone": [
+        "experiments/2026-08-23-treadle-pilot/T1/*"
+      ],
+      "depends_on": [],
+      "goal": "Write experiments/2026-08-23-treadle-pilot/T1/DELTA.md: a delta table comparing the docs_verify run in INPUT_docs_verify.txt against the recorded baseline in INPUT_baselines_excerpt.md. One row per failing check, giving the document and line number exactly as the output prints them (for example CON-run-identity.md:200), the check's subject in a few words, and the disposition against the baseline. Disposition is the word baseline when the recorded baseline already accounts for the failure, and finding when it does not. State the run's total in the form '3 failed' and state, in one sentence, why the baseline accounts for these three. Quote every value from INPUT_docs_verify.txt; do not compute or infer any number that is not printed there.",
+      "notes": [],
+      "out_of_scope": "Do not rewrite the INPUT_ files. Do not touch anything outside the cone. Do not re-run or claim to have re-run any instrument: you have the output you were given and nothing else.",
+      "reads": [
+        [
+          "skills/pilot-task/SKILL.md",
+          "c759e965b0dc072af26febcbb08306f87cea536e27d10d234f8aa0c9355b367e"
+        ]
+      ],
+      "reviewer": "",
+      "shas": [
+        "9a858856b745dfd0e53b51e45d605446dad6cb12"
+      ],
+      "state": "COMMITTED",
+      "state_ts": 1787544798.6466808,
+      "verify": "",
+      "worker": "treadle"
+    }
+  }
 }
