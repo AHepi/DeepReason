@@ -256,3 +256,169 @@ operator-authored `predicate:` criteria and an attached-evidence manifest.
 - **The second lineage has still never existed in a live root.**
 
 **Scope kept.** `git diff --stat origin/main -- src/ tests/` is empty.
+
+
+---
+
+## 2026-08-24 — attempt 4: the run survived to cycle 8, and the registered hypothesis FIRED
+
+**What the record shows. SUCCESS by PREREG_EPOCH3.md §5**, on all three
+required conditions and nothing softened:
+
+    state             completed
+    stop_reason       budget_exhausted        (the CYCLE budget bound, as predicted)
+    cycles completed  8 of 8
+    tokens            371 169 of 1 200 000    (31 percent)
+    verify_root       0 violations            (violations: [])
+    REPLAY_VALIDATION valid: true
+    reach_set events  1                       (reach_nonzero_entries 1, zero entries 0)
+
+This is the first live run of this configuration ever to reach a healthy
+typed terminal. The four before it — reach-rich epochs 1 and 2, epoch-3
+attempts 2 and 3 — died at or before cycle 2 on four unrelated typed
+operational causes. Attempt 4 recorded none.
+
+**The reach hit, in full, because it is the whole point of the tranche.**
+One Measure event, `seq=1539`:
+
+    reach_set  {dd15f0da59cbec86c1bf837221740c10f30b07808345087941bc627a7866a7ed: 1.0}
+    addr+      [(dd15f0da59cb…, question-4dd62735b90864a75220e09b302500bc)]
+
+Read it exactly: the `1.0` is a COUNT of full hits for that artifact, not a
+coverage fraction (`reach.py:157`, `reach_counts[aid] = float(count)`). The
+mechanism, re-derived from the record:
+
+- The artifact `dd15f0da59cb…` was conjectured under school-2
+  (`provenance role=conjecturer school=school-2 event_seq=1484`) and was
+  ACCEPTED and addressed to `conn:0793267d0d4d` — a SPAWNED connection
+  problem, not the seed.
+- Its own battery is that problem's: `hv-floor@2a45b7988522`,
+  `lineage-ref@41981e2f67d3`, `relation-form@578e42df713e`. None of the
+  three subject predicates is in it, so all three are NOVEL to it —
+  `reach_sweep`'s "at least one qualifying foreign criterion must be novel
+  to its own battery" is satisfied three times over.
+- The seed problem was FOREIGN to it (`pid not in addressed[aid]`), and the
+  seed carries four criteria of which three are substantive:
+  `uhi-energy-balance@v1`, `uhi-nocturnal-release@v1`,
+  `uhi-cross-city-modulator@v1` (the fourth, `reasoning-envelope-wf`, is
+  structural and never enters the qualifying set).
+- All three qualifying criteria evaluated PASS. Coverage 3/4 = **0.75**,
+  above the 0.5 floor, so this is a FULL hit rather than provisional, and
+  the artifact now also addresses the seed.
+
+That is the registered hypothesis, unmodified since the reach-rich tranche
+registered it, firing live: *a run whose problems carry at least one
+subject-substantive machine-evaluable criterion that the candidate
+conjecturer is NOT instructed to satisfy will move pairs out of `E4` and
+produce non-zero `reach_set` events.* The conjecturer working on
+`conn:0793267d0d4d` was instructed to propose a substantive relation. It was
+never instructed to satisfy the seed's energy-balance, nocturnal-release and
+cross-city-modulator predicates. It satisfied all three anyway, and the
+sweep found it.
+
+**The carrier finally existed, which is what the previous four runs lacked.**
+The committed `carrier_probe.py`, run unmodified on this root:
+
+    accepted_artifacts                              190
+    accepted_artifacts_addressed                     62
+    artifacts_that_could_have_seed_as_foreign        15
+    pairs_surviving_reach_novelty_gate_against_seed  15
+    problems_total                                  210
+
+Against the table this tranche has been keeping:
+
+| run | died/ended at | accepted+addressed | with seed as foreign |
+|---|---|---|---|
+| reach-rich epoch 1 | cycle 2 | 14 | **0** |
+| reach-rich epoch 2 | cycle 2 | 23 | **0** |
+| epoch-3 attempt 2 | cycle 0 | 24 | **0** |
+| epoch-3 attempt 3 | cycle 2 | 22 | **0** |
+| **epoch-3 attempt 4** | **cycle 8, completed** | **62** | **15** |
+
+Fifteen candidates, one full hit. The other fourteen sat at coverage 0.75
+and failed the `all(PASS)` test on at least one predicate — visible in the
+census as `_gate_coverage {"0.75": 15}` against a single `_full_hit_pairs`.
+
+**The census, whole.** `pairs 12 957`, of which `E1 no-criteria 8 618`,
+`E4 criterion-fail 3 235`, `E3 no-novel 1 104`, `A-skip/unaddr 128`,
+`A-skip/status 26`. Criterion kinds reaching the verdict gate:
+`substantive-predicate 73`, `structural:lineage_ref 46`,
+`unknown-program:hv_floor 46`, `structural:reasoning-envelope-wf 1`.
+
+**P1-reach holds, a fourth time.** `reasoning-envelope-wf` is recorded once
+and classified `structural`, so `_substantive` excludes it from every
+qualifying set and it vetoed nothing. **PRECONDITION-BLOCKED is absent.**
+
+**Reporting the P5 rulings as required, not reinterpreting them.** No `E0`
+empty-own-battery exit appears anywhere in the census — the vocabulary knows
+the exit and recorded none. No reach event landed at coverage exactly 0.500:
+the single hit is at 0.75, and the observed gate coverages are 0.33 (2 116
+pairs), 0.75 (15) and 1.00 (1 104). Neither P5 signature occurred, which is
+stated here because the ruling requires saying so either way.
+
+**Attempt 4a: a qualification refusal that never became a run.** The first
+launch was refused by the production-contract battery before cycle 0, on the
+same pair that refused attempt 1 — `critic.atomic-target.v1` /
+`argumentative_critic` seat 0, first draw 19/20 with one scope violation,
+its single permitted redraw 18/20 with two more. The doctor failed closed as
+designed (`doctor.py:41-48`: one fresh draw per failing pair, unqualified
+after two consecutive failing blocks). The root carries no `log.jsonl` and
+no `run-status.json`; it is retired as
+`unqualified-attempt4a-run-bb045538…` with the rename committed first. The
+relaunch (4b) qualified 80/80, zero scope violations, zero redraws. Six
+batteries have now run this pair: two refused, four passed. Note for future
+readers of the JSON: `pair_re_exercise_limit: 3` caps how many PAIRS may
+redraw in a battery, not how many draws a pair gets.
+
+**The budget prediction was right this time, and the burn estimate was
+low.** PREREG AMENDMENT 2 registered ~55 000 tokens per completed cycle and
+predicted the cycle budget would bind. Measured: 371 169 tokens over 8
+cycles, ~46 000 per cycle — lower than the estimate, and the estimate's
+direction (cycle budget binds, terminal is `budget_exhausted`, root stays
+resumable) was correct on every point. AMENDMENT 1's prediction, by
+contrast, was refuted; both are now scored.
+
+**The root is amendable.** `stop reason is resumable: yes`, `stands at a
+valid typed terminal: yes (terminal epoch 0)`, `amendment epochs: 0`. The
+second problem lineage — R1, deferred since attempt 3 — can still be added
+to THIS root by a follow-up tranche without minting anything new. Every
+previous attempt ended unresumable, which is why R1 kept being deferred
+permanently rather than postponed.
+
+**Named as Rung 5's gate fixture**, per PREREG_EPOCH3.md §5's SUCCESS
+clause: `experiments/2026-08-22-change-epoch3-second-lineage/run`, run id
+`bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4`,
+manifest sha256 identical, committed with its full record.
+
+**Residue — what remains unproven, and it is not small.**
+
+- **n=1 for the hit.** ONE reach event in 12 957 pairs. The hypothesis is
+  now supported by a single live firing, not by a rate. Whether a rerun
+  produces one, none, or ten is unknown, and capability/spawn behaviour is
+  stochastic across identical runs by the record's own standing caution.
+- **The 14 near-misses are not analysed here.** Fifteen artifacts could have
+  had the seed as foreign; fourteen failed at least one predicate. Which
+  predicate, and whether the failures share a cause, is not measured in this
+  tranche.
+- **The second lineage still has never existed in a live root.** SPEC.md M1
+  remains proven only on an offline scratch copy. This run makes it
+  reachable; it does not deliver it.
+- **The run left typed work undone**, in non-authority channels that do not
+  affect validity (`integrity` and `security` are both empty, which is why
+  `verify_root` is clean): `completion` carries 86 findings — 80 of them
+  `variator` phases (`hv-spot-check`, `premise-demarcation-variation`)
+  DEFERRED with `transaction-contract-unavailable`, 5 conjecture work items
+  abandoned `context_capability_not_granted`, and 1 outstanding completion
+  debt — and `operational` carries 31, all repair/criticism work terminated
+  `rejected` or `schema_exhausted`. A run can be replay-valid and still have
+  left a role structurally idle. PARKED, not diagnosed here.
+- **Whether cycle 2 was ever a real barrier is now answerable and not
+  answered.** Four deaths at or before it came from four unrelated causes;
+  this run passed it without incident once both were fixed. That is
+  consistent with "two bugs, both now fixed" and does not by itself rule out
+  a pressure that peaks there.
+
+**Scope kept.** `git diff --stat origin/main -- src/ tests/` is empty. No
+production code or test was touched at any point in this attempt, and the
+other tranches' committed artifacts (`2026-08-22-live-reach-rich-run`,
+`2026-08-21-measure-reach-firing`) are clean after their tooling was read.
