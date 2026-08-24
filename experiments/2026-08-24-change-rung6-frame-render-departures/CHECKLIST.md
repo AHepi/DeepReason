@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 1 next**
+State: **step 7 next**
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -9,7 +9,7 @@ production lines over `src/`.
 
 ---
 
-- [ ] **1. The departure claim body** (S2)
+- [x] **1. The departure claim body** (S2)
   Add `poietic.departure-declaration.v1` to `CLAIM_SCHEMAS` and
   `_IMPLEMENTED`; add `DEPARTURE_DECLARATION_V1` and
   `DepartureDeclarationV1` with its validator.
@@ -17,31 +17,31 @@ production lines over `src/`.
   tests/test_proof_debt.py -q` — green, with the predicted
   `len(CLAIM_SCHEMAS) == 10` fixture update and nothing else changed.
 
-- [ ] **2. The compiler rule and its two mentions** (S3, R4)
+- [x] **2. The compiler rule and its two mentions** (S3, R4)
   `compile_interface` handles `DepartureDeclarationV1` → two MENTIONs,
   no dependence.
   Done-criterion: a pasted `python -c` showing the compiled interface's
   ref roles are exactly `{(subject, mention), (departing, mention)}`.
 
-- [ ] **3. Well-formedness program and registration** (S4)
+- [x] **3. Well-formedness program and registration** (S4)
   `calculus/programs.py` commitment + `departure_declaration_wf`;
   `programs.py` `_departure_declaration_wf` + `"structural"` ProgramSpec.
   Done-criterion: `python -m pytest tests/test_calculus_claim_substrate.py
   -q` green, plus a pasted evaluation returning `pass` on a well-formed
   body and `fail` on a mis-registered one.
 
-- [ ] **4. The authoring operation** (S5) `[COMMIT]`
+- [x] **4. The authoring operation** (S5) `[COMMIT]`
   `operations.file_departure_declaration`, idempotent by content address.
   Done-criterion: pasted transcript registering one declaration twice and
   getting one artifact; `python -m pytest tests/test_calculus*.py -q`.
   Then commit: claim substrate half of the departure protocol.
 
-- [ ] **5. `calculus/render.py`** (S1) — the frame render layer
+- [x] **5. `calculus/render.py`** (S1) — the frame render layer
   Every symbol in SPEC.md S1's table. Writes nothing; imports no seat.
   Done-criterion: `python -c` printing a rendered slice for a framed
   problem and `None` for an unframed one, pasted.
 
-- [ ] **6. Regression tests for the slice** (A1, A3, A10, A11)
+- [x] **6. Regression tests for the slice** (A1, A3, A10, A11)
   `tests/test_frame_render.py`: digest + attackers render, out-of-scope
   renders nothing, departure directive present, byte-identical across
   renders, no provenance-shaped slot.
@@ -120,6 +120,66 @@ production lines over `src/`.
 
 ---
 
+## Proof, per step
+
+**Step 1** — `python -m pytest tests/test_calculus_claim_substrate.py
+tests/test_proof_debt.py -q` → `36 passed`.
+
+**Step 2** — compiled interface of a `DepartureDeclarationV1`:
+```
+  commitments: ['claim:departure-declaration-wf@v1']
+  refs       : [('CAND', 'mention'), ('SUBJ', 'mention')]
+  dependence refs: [] -> none, L-4 by construction
+```
+
+**Step 3** — `departure_declaration_wf` on a well-formed body:
+`('pass', {'schema': 'poietic.departure-declaration.v1'})`; on a
+mis-registered one:
+`('fail', {'reason': 'claim-interface-not-controller-compiled', 'detail': []})`;
+a self-departure is refused at construction.
+
+**Step 4** — the same declaration filed twice returns one artifact
+(`907e9001…`, count unchanged). Ring: `tests/test_calculus_*.py
+tests/test_proof_debt.py tests/test_promotion_criteria.py` → `115 passed`.
+`tools/diff_budget.py` over `src`: **144** insertions, well under 560.
+`tools/blast_radius.py` over the six touched files and five symbols:
+`"frozen_surface_verdict": "CLEAR"`, no contacts, no adjacent contacts.
+
+**Step 5** — the rendered slice for a problem in scope carries the
+articulation head, the subject's commitment ids, its standing attackers
+under a self-stating cap, the departure directive, the assertion's
+protocol string and the already-declared departures; for a problem out of
+scope `render_frame_slice_context` returns `None`.
+
+**Step 6** — five mutations, each shown to APPLY before it was run
+(mutations 2 and 3 silently no-op'd on the first attempt and proved
+nothing; the retry asserts the replacement landed):
+
+| Mutation | Result |
+|---|---|
+| the slice stops rendering standing attackers | **2 failed** (R1 test + the cap test) |
+| the departure directive is dropped | **1 failed** (R2 test) |
+| attackers render in `state.att` order | **1 failed** (the ordering test, after it was rewritten — see below) |
+| a `school:` slot is emitted | **1 failed** (N1 test) |
+| declaring a departure subtracts nothing | **1 failed** (R3 test) |
+
+Restored: `10 passed`.
+
 ## Failures and re-plans
 
-(none yet)
+**Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
+`tests/test_proof_debt.py:108` was the only count assertion over
+`CLAIM_SCHEMAS`; `tests/test_calculus_frame_assertions.py:192` carries the
+same one and went red. The blast-radius census DID list that line and it
+was mis-read as a membership assertion — E45's own lesson recurring inside
+a spec that cites it. Both fixtures updated, SPEC.md corrected on the
+record rather than silently.
+
+**Step 6 — the first ordering test could not fail.** It registered three
+attacks and asserted the render was id-sorted. `Harness._adjudicate` does
+`self.state.att = sorted(att)` before any reader sees it, so the test
+passed with the sort in `subject_attackers` DELETED: it measured the
+harness, not this module. Replaced with one that hands the renderer a
+reversed `att` and fails if the module leans on someone else's
+sortedness; `render.py`'s own comment corrected in the same edit, since it
+had claimed `att` was "a set" and "in log order" — it is neither.
