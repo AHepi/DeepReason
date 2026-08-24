@@ -246,10 +246,16 @@
       ],
       "depends_on": [],
       "goal": "Independent review of the delivered Rung D tranche (proof debt / Duhem localization), commits b10fc5fd2..c1a2f09a1 on main, shas recorded oldest-first so the review diff reaches the tranche tip.",
-      "notes": [],
+      "notes": [
+        {
+          "by": "treadle",
+          "note": "All S1-S10, S20, and DELIVERY.md claims are supported by the diff with no misclassification found.",
+          "result": "PASS"
+        }
+      ],
       "out_of_scope": "You are reviewing a diff that is already committed and pushed. Do not propose rewrites. Your one output is the verdict block. A claim you cannot check against the diff you were shown is CANNOT_DECIDE, not a guess.",
       "reads": [],
-      "reviewer": "",
+      "reviewer": "treadle",
       "shas": [
         "098a0b0bc8c485d530abf7f3aeaf16938e24e2eb",
         "78636e68f987c4260f7834480ad77be08c650033",
@@ -264,8 +270,8 @@
         "d2732ea701bd09b97b47af03b3253ea6de76fff4",
         "c1a2f09a158ef43f5a30af2b9de08d36daf188be"
       ],
-      "state": "COMMITTED",
-      "state_ts": 1787545110.980059,
+      "state": "DONE",
+      "state_ts": 1787545129.9711988,
       "verify": "",
       "worker": "monitor"
     }
