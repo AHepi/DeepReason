@@ -111,7 +111,7 @@ census below is what makes that reversal visible — a third importer would mean
 demarcation had drifted back onto the declaration test
 (`DR-CON-problem-layer-lifecycle`; `experiments/2026-08-14-change-calculus-
 reconciliation-v2/RECONCILIATION.md` S-1).
-`check: grep -q "from deepreason.measures.reach import _substantive" src/deepreason/rules/warrants.py && test "$(grep -rl _substantive --include=*.py src/deepreason | wc -l)" -eq 2 && python -m pytest "tests/test_reflexive_discipline.py::test_structural_programs_never_ground_reach" tests/test_prose_refutation_boundaries.py::test_a_structural_program_confers_no_formal_backing tests/test_guards.py::test_structural_only_does_not_block -q`
+`check: grep -q "from deepreason.measures.reach import _substantive" src/deepreason/rules/warrants.py && test "$(grep -rl _substantive --include=*.py src/deepreason | wc -l)" -eq 3 && python -m pytest "tests/test_reflexive_discipline.py::test_structural_programs_never_ground_reach" tests/test_prose_refutation_boundaries.py::test_a_structural_program_confers_no_formal_backing tests/test_guards.py::test_structural_only_does_not_block -q`
 
 Execution supremacy holds in all three directions it is claimed in: a preference
 cannot unseat a running loser, a counterexample still refutes under
@@ -394,4 +394,4 @@ out.
   `informal/audits.py`). A change to the ν wording, the `w:<κ>:<target>` id
   scheme or the critic provenance is not local to `rules/`; it moves the HV
   floor's warrants and the judge audits' findings too.
-`check: test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 9 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
+`check: test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -cv "rules/warrants.py")" -eq 10 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason/measures src/deepreason/informal | wc -l)" -eq 3 && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`

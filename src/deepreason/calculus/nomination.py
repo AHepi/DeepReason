@@ -291,8 +291,6 @@ def _environment(harness, config, problem_ids):
         FrozenCommitmentV1(
             id=cid,
             eval=harness.commitments[cid].eval,
-            budget_steps=harness.commitments[cid].budget.steps,
-            budget_time_ms=harness.commitments[cid].budget.time_ms,
             observation_valued=harness.commitments[cid].observation_valued,
         )
         for cid in sorted(commitment_ids)
@@ -331,8 +329,6 @@ def _environment(harness, config, problem_ids):
         FrozenCommitmentV1(
             id=cid,
             eval=harness.commitments[cid].eval,
-            budget_steps=harness.commitments[cid].budget.steps,
-            budget_time_ms=harness.commitments[cid].budget.time_ms,
             observation_valued=harness.commitments[cid].observation_valued,
         )
         for cid in sorted(commitment_ids)

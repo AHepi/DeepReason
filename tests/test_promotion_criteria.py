@@ -377,9 +377,17 @@ def test_every_criterion_overruns_on_a_zero_budget(nominated, harness):
                            cases=[certificate.id])
     for name in promotion.PROMOTION_PROGRAMS:
         kappa = _criterion(harness, criteria, name)
+        # Starve the bound that actually GOVERNS. `Budget.steps` is read by
+        # nothing in this tree (`DR-SEAM-evaluation-x-ontology`) because it is
+        # outside the commitment's content address; the real bound is
+        # `extra["spec"]["step_limit"]`, so that is what a budget test must
+        # take away.
+        spec = json.loads(kappa.budget.extra["spec"])
+        spec["step_limit"] = 0
         starved = Commitment(
             id=f"{kappa.id}#starved", eval=kappa.eval,
-            budget=Budget(steps=0, time_ms=0, extra=dict(kappa.budget.extra)),
+            budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True,
+                                                    separators=(",", ":"))}),
         )
         verdict, detail = evaluate(starved, candidate, harness.blobs)
         assert verdict == "overrun", (name, verdict, detail)

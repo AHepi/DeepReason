@@ -1,5 +1,5 @@
 <!-- DR-SEAM-adjudication-x-rules -->
-Verified-at: 08dcdf3c
+Verified-at: 121536b05
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/adjudication/edges.py
 Sides: DR-SUB-adjudication, DR-SUB-rules
@@ -58,7 +58,7 @@ One constructor, thirteen call sites, and exactly three hand-built warrants
 inside `rules/` — all `ARGUMENTATIVE` (D2 rev 2 added
 `rules/relatedness.py::relatedness_trial`'s own, reusing `relevance_trial`'s
 shape), because `DEMONSTRATIVE` is written in one file.
-`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 13 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 9 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 3 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
+`check: test "$(grep -rn "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "def register_fail_warrant")" -eq 14 && test "$(grep -rl "register_fail_warrant(" --include=*.py src/deepreason | grep -vc "src/deepreason/rules/warrants.py")" -eq 10 && test "$(grep -rn "Warrant(" --include=*.py src/deepreason/rules | grep -vc "src/deepreason/rules/warrants.py")" -eq 3 && test "$(grep -rl "WarrantType.DEMONSTRATIVE" --include=*.py src/deepreason/rules)" = src/deepreason/rules/warrants.py && grep -A4 "warrant = Warrant(" src/deepreason/rules/vision.py | grep -q "WarrantType.ARGUMENTATIVE"`
 
 `nu_interface` is a single optional parameter and the whole propagation surface a
 rule has; four sites in the tree pass it.

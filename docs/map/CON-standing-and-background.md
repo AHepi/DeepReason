@@ -205,11 +205,30 @@ demonstrative warrant, and the assertion stops being unrefuted.
   - `calculus/standing.py` means **frame role** (Def 9.3) — the calculus sense,
     and the only one the word carries in `DR-SUB-calculus`.
 
-  The two never meet in code: the scheduler imports nothing from `calculus/`,
-  which is also `DR-SUB-calculus`'s own NO SCHEDULER INTEGRATION row.
+  The two never meet in code: the scheduler imports nothing from
+  `calculus/standing.py`, which is also `DR-SUB-calculus`'s own NO SCHEDULER
+  SELECTION row.
+
+  **NARROWED at Rung 5, and narrowed to what the claim was always about.** The
+  check used to forbid the scheduler importing anything from `calculus/` at
+  all, which was a proxy for the collision rather than the collision itself.
+  Rung 5 wires `calculus/nomination.py` and `calculus/promotion.py` into the
+  cycle — the measure that spawns promotion problems and the sweep that fires
+  their criteria — and neither has anything to do with the word "standing".
+  What must stay true is that the scheduler never reaches the module carrying
+  the calculus sense of the word, and that is what is asserted now. The
+  narrower form is also SHARPER: it names the module and the accessors, so it
+  cannot be satisfied by importing the same functions under another path.
 `check: ! grep -q '"standing"' src/deepreason/status_display.py`
 `check: ! grep -q "_under_standing_attack" src/deepreason/controller.py`
-`check: grep -q "_standing_recrit_pool" src/deepreason/scheduler/scheduler.py && grep -q "def standing_of" src/deepreason/calculus/standing.py && ! grep -rq "deepreason.calculus" src/deepreason/scheduler/`
+`check: python -c "
+import ast, pathlib
+for path in sorted(pathlib.Path('src/deepreason/scheduler').rglob('*.py')):
+    tree = ast.parse(path.read_text())
+    mods = [(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)] + [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
+    bad = [m for m in mods if 'calculus.standing' in m or 'calculus.views' in m]
+    assert not bad, (str(path), bad)
+" && grep -q "_standing_recrit_pool" src/deepreason/scheduler/scheduler.py && grep -q "def standing_of" src/deepreason/calculus/standing.py && ! grep -rq "standing_of\|standing_view\|problem_status" src/deepreason/scheduler/`
 - **Rendering is not the whole story: packs render to the MODEL, not to a
   reader.** Pack vocabulary was deliberately left alone by Rung 1 — changing
   what the generator is shown is a behavioural change with live-run

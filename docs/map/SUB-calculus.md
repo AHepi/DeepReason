@@ -50,7 +50,7 @@ closed set ALREADY declared. The set did not grow, and that is the property
 worth checking: an ontology addition riding in on a rung meant only to build
 one is exactly what the closure exists to stop.
 
-`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 9 and len(_IMPLEMENTED) == 4 and {'poietic.frame-assertion.v1', 'poietic.derivation-manifest.v1'} <= set(_IMPLEMENTED)"`
+`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 9 and len(_IMPLEMENTED) == 5 and {'poietic.frame-assertion.v1', 'poietic.derivation-manifest.v1', 'poietic.reach-certificate.v1'} <= set(_IMPLEMENTED)"`
 
 Rung D repeats the pattern for `poietic.derivation-manifest.v1` (`DR-CON-proof-debt-and-localization`):
 a producer for a name the set already held, so the closure is exercised twice
@@ -255,11 +255,27 @@ found through `addr`.
   a very small recoverable window. The operation is idempotent because the body
   is a pure function of the `Problem` record, so its content address is too.
 `check: python -m pytest tests/test_calculus_claim_substrate.py::test_ensure_problem_subject_is_idempotent tests/test_calculus_claim_substrate.py::test_the_missing_companion_diagnostic_names_the_gap_and_clears -q`
-- **NO SCHEDULER INTEGRATION, deliberately.** Nothing selects on
-  `problem_status` yet. When it does, it must schedule accepted unresolved
-  subjects and must NOT silently drop refuted or orphaned problems from
-  history.
-`check: ! grep -rq "deepreason.calculus" src/deepreason/scheduler/`
+- **NO SCHEDULER SELECTION, deliberately — and this row was NARROWED at Rung 5
+  rather than retired.** Nothing selects on `problem_status`, and when something
+  does it must schedule accepted unresolved subjects and must NOT silently drop
+  refuted or orphaned problems from history. That is the claim. The old check
+  was a proxy for it — "the scheduler imports nothing from `calculus/`" — and
+  Rung 5 broke the proxy without touching the claim: `_promotion_step` calls
+  `nominate` and `promotion_criteria_sweep`, which spawn a problem and fire its
+  criteria, and neither reads a problem's status to decide what to work on
+  next. The check now asserts the claim itself — the scheduler reaches no
+  derived problem-status view and no standing view — which is what a future
+  reader needs it to say.
+`check: python -c "
+import ast, pathlib
+forbidden = {'problem_status', 'problem_subject_of', 'problem_subject_missing', 'standing_of', 'standing_view'}
+for path in sorted(pathlib.Path('src/deepreason/scheduler').rglob('*.py')):
+    tree = ast.parse(path.read_text())
+    names = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) for a in n.names}
+    assert not (names & forbidden), (str(path), sorted(names & forbidden))
+    mods = [(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+    assert not [m for m in mods if 'calculus.standing' in m or 'calculus.views' in m], str(path)
+"`
 - **All three programs are STRUCTURAL.** Passing says the body is well formed and
   controller-compiled, never that its claim holds — so they are in
   `measures/reach.py::_STRUCTURAL_PROGRAMS`, ground no reach, and confer no

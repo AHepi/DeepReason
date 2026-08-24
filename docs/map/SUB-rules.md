@@ -1,5 +1,5 @@
 <!-- DR-SUB-rules -->
-Verified-at: 546544b5
+Verified-at: 121536b05
 Verify: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_crit_batch.py tests/test_act.py tests/test_vision.py -q
 Owns: src/deepreason/rules/
 Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-capabilities-x-rules, DR-SEAM-evaluation-x-rules, DR-SEAM-llm-x-rules, DR-SEAM-ontology-x-rules, DR-SEAM-rules-x-scratch, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-rules
@@ -161,7 +161,7 @@ pipeline decommissioned is the absent producer, not the absent name.
 | Giving criticism any scratchpad context | refused by contract — see `DR-SEAM-rules-x-scratch` | `python -m pytest tests/test_prose_refutation_boundaries.py -k scratch` |
 
 `check: python -m pytest tests/test_relapse_domains.py tests/test_criticism_authority.py tests/test_harness_fixes.py::test_connection_problem_pins_lineage_ref_commitment tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria tests/test_chaos_invariants.py::test_successor_descriptions_do_not_nest tests/test_experiment.py::test_refuted_generators_are_never_used tests/test_experiment.py::test_fuzz_kills_trap_with_a_proposed_generator tests/test_act.py::test_fail_registers_demonstrative_warrant tests/test_act.py::test_overrun_is_a_spec_defect_not_a_refutation tests/test_vision.py::test_supremacy_boundary_in_process_oracle_blocks_visual_argument -q`
-`check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "scratch or formal_backing or structural_program or execution_guard" && test "$(grep -rl 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc 'rules/warrants.py')" -eq 9 && test "$(grep -rn 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc '^src/deepreason/rules/warrants.py:')" -eq 13 && test "$(grep -rl 'WarrantType.DEMONSTRATIVE' --include=*.py src/deepreason)" = "src/deepreason/rules/warrants.py"`
+`check: python -m pytest tests/test_prose_refutation_boundaries.py -q -k "scratch or formal_backing or structural_program or execution_guard" && test "$(grep -rl 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc 'rules/warrants.py')" -eq 10 && test "$(grep -rn 'register_fail_warrant(' --include=*.py src/deepreason | grep -vc '^src/deepreason/rules/warrants.py:')" -eq 14 && test "$(grep -rl 'WarrantType.DEMONSTRATIVE' --include=*.py src/deepreason)" = "src/deepreason/rules/warrants.py"`
 
 ## Traps
 

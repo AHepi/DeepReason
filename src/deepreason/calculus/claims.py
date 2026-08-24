@@ -230,16 +230,16 @@ class FrozenCommitmentV1(_Part):
     """A criterion's spec, frozen whole so a criterion program can re-evaluate
     it against a candidate without resolving anything through the harness.
 
-    `budget_steps`/`budget_time_ms` are carried rather than the whole `Budget`
-    because a criterion re-runs the commitment under the FROZEN bound; letting
-    the bound move would let a candidate pass tomorrow on a budget it failed on
-    today, which is a verdict depending on something other than content.
+    NO budget is carried. An earlier draft froze `Budget.steps`/`time_ms` here,
+    and `DR-SEAM-evaluation-x-ontology` is why it does not: both are read by
+    nothing in the tree, because neither is part of any spec digest, and a
+    criterion's real bound lives in `extra["spec"]`. Freezing a number no
+    consumer reads would put a second, authoritative-looking bound on the
+    record beside the one that actually governs.
     """
 
     id: str
     eval: str
-    budget_steps: int | None = None
-    budget_time_ms: int | None = None
     observation_valued: bool = False
 
 

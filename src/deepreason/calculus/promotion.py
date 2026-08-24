@@ -46,6 +46,14 @@ PROMOTION_PROGRAMS: tuple[str, ...] = (
 # Prop 12.1: a criterion terminates inside a DECLARED bound, and `overrun` means
 # unobtainable rather than slow. The bound is a step count over the frozen
 # environment, so it is a property of content and never of the machine.
+#
+# It lives in `extra["spec"]["step_limit"]` and NOT in `Budget.steps`, which is
+# the tree's own rule and not a preference: `DR-SEAM-evaluation-x-ontology`
+# records that `Budget.steps` is read by nothing, because it is not part of any
+# spec digest, while `extra["spec"]` is inside the commitment's content address.
+# A bound outside the content address would let a verdict move without the
+# commitment moving, which is exactly what §0 determinism forbids. The
+# `dataset_oracle` adapter takes the same road for the same reason.
 PROMOTION_STEPS = 4_000
 
 
@@ -58,13 +66,14 @@ def criteria_for(certificate_ref: str) -> tuple[Commitment, ...]:
     no longer name it.
     """
     spec = json.dumps(
-        {"certificate_ref": certificate_ref}, sort_keys=True, separators=(",", ":")
+        {"certificate_ref": certificate_ref, "step_limit": PROMOTION_STEPS},
+        sort_keys=True, separators=(",", ":"),
     )
     return tuple(
         Commitment(
             id=f"promotion:{name}@{certificate_ref[:12]}",
             eval=f"program:{name}",
-            budget=Budget(steps=PROMOTION_STEPS, time_ms=2_000, extra={"spec": spec}),
+            budget=Budget(extra={"spec": spec}),
         )
         for name in PROMOTION_PROGRAMS
     )
@@ -82,13 +91,7 @@ def _load_certificate(budget, blobs):
     """
     from deepreason.calculus.claims import ClaimDecodeError, ReachCertificateV1, decode
 
-    spec = {}
-    if budget is not None and getattr(budget, "extra", None):
-        try:
-            spec = json.loads(budget.extra.get("spec", "{}"))
-        except ValueError:
-            spec = {}
-    ref = spec.get("certificate_ref")
+    ref = _spec(budget).get("certificate_ref")
     if not ref:
         return None, {"reason": "promotion-criterion-has-no-certificate"}
     try:
@@ -117,8 +120,20 @@ def _frame_claim(text):
     return body if isinstance(body, FrameAssertionV1) else None
 
 
+def _spec(budget) -> dict:
+    """The frozen commitment spec, or an empty one. Reads `extra["spec"]` and
+    NEVER `Budget.steps` — see `PROMOTION_STEPS` above for why the distinction
+    is load-bearing rather than stylistic."""
+    if budget is None or not getattr(budget, "extra", None):
+        return {}
+    try:
+        return json.loads(budget.extra.get("spec", "{}"))
+    except ValueError:
+        return {}
+
+
 def _steps(budget) -> int:
-    declared = getattr(budget, "steps", None)
+    declared = _spec(budget).get("step_limit")
     return PROMOTION_STEPS if declared is None else int(declared)
 
 
@@ -263,12 +278,11 @@ def reach_integrity(text, budget, artifact=None, blobs=None):
     from deepreason.calculus.compiler import compile_interface
     from deepreason.ontology import Artifact
 
-    spec = json.loads(budget.extra["spec"])
     # The certificate's own artifact id, RE-DERIVED rather than carried: an id
     # written inside the document it names could not be part of that document's
     # content address without a fixed point.
     certificate_id = Artifact.compute_id(
-        spec["certificate_ref"], "json", compile_interface(certificate)
+        _spec(budget)["certificate_ref"], "json", compile_interface(certificate)
     )
     known = {certificate_id} | {s.artifact_id for s in certificate.subjects}
     unknown = [ref for ref in claim.reach_case_refs if ref not in known]
@@ -523,7 +537,7 @@ def promotion_criteria_sweep(harness, config) -> list:
     the criteria over those would be evaluating a problem's evidence against the
     problem's own demands.
     """
-    from deepreason import programs as registry
+    from deepreason import programs
     from deepreason.calculus.programs import FRAME_ASSERTION_COMMITMENT
     from deepreason.canonical import canonical_json
     from deepreason.ontology import SpawnTrigger
@@ -550,7 +564,7 @@ def promotion_criteria_sweep(harness, config) -> list:
                 continue
             for cid in criteria:
                 kappa = harness.commitments[cid]
-                verdict, trace = registry.evaluate(kappa, artifact, harness.blobs)
+                verdict, trace = programs.evaluate(kappa, artifact, harness.blobs)
                 if verdict != FAIL:
                     continue
                 critic = register_fail_warrant(
