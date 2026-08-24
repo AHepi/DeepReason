@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 10 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
+State: **step 11 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -73,7 +73,7 @@ production lines over `src/`.
   `DR-SEAM-llm-x-rules` and the NEW `DR-SEAM-calculus-x-rules` in the
   same commit.
 
-- [ ] **10. N2's terminal-persistence test** (A2, G6)
+- [x] **10. N2's terminal-persistence test** (A2, G6)
   Multi-cycle offline run; the attacker registered at cycle k appears in
   the pack rendered at the terminal cycle.
   Done-criterion: the test passes and is shown RED under a mutation that
@@ -202,6 +202,21 @@ New map document `DR-SEAM-calculus-x-rules` created (the pair had no row in
 updated in the same commit. `docs_verify --links` → 0 dangling, 64
 documents. Ring → **61 passed**.
 
+**Step 10** — G6/N2. Eight cycles of accumulating ACCEPTED state, the wound
+injected at cycle 2, the question asked only at cycle **8**, and asked of
+the real `render_conj_pack` output at a budget that has already dropped the
+neighbourhood. Mutation: make `frame-crisis` droppable →
+**2 failed** (the budget-survival test AND the terminal-persistence test).
+Restored → `22 passed`. A second mutation — defeated attackers occupy
+crisis slots — → **1 failed**.
+
+Two limits recorded as their own tests rather than left implicit: a
+REFUTED attacker no longer occupies a crisis slot (it is a defeated attack,
+not an open indictment, and under the cap it would displace a live one),
+and the cap CAN displace an individual early attacker, which is disclosed
+by the count rather than silent — so G6 is unconditional only while the
+total is within the cap.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -211,6 +226,13 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 10 — the first terminal-persistence test could not fail either.**
+Written at `token_budget=300`, it passed with `frame-crisis` made
+droppable, so it measured nothing about what keeps the wound in the pack.
+The budget was MEASURED (60/100/150/200 lose the wound under the mutation;
+300 does not) and set to 200. Same class of error as step 6's ordering
+test: a test that passes for a reason other than the one it names.
 
 **Step 9 — DIFF BUDGET EXCEEDED, and the tranche STOPPED here.** 759
 insertions over `src` against a ledgered ceiling of 560. Raised to the

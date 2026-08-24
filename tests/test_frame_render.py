@@ -610,3 +610,105 @@ def test_the_frame_reaches_a_conjecture_pack_end_to_end(harness):
     assert "STANDING ATTACKERS" in pack
     assert "DEPARTURES ARE PERMITTED" in pack
     assert pack.index("## frame-crisis") < pack.index("## frame-slice")
+
+
+# --- N2 / G6: the pack renderer is the memory policy -------------------------
+
+def test_a_standing_attacker_at_cycle_k_still_renders_at_the_terminal_cycle(tmp_path):
+    """G6 (N2). Persistence asserted AT THE TERMINAL step, never at injection.
+
+    The convergence note's finding is that the record forgetting nothing does
+    not make the pack remember: content that must keep ACTING has to keep
+    RENDERING inside the horizon. So this drives eight cycles of accumulating
+    state, injects the wound at cycle 2, and asks the question only at cycle
+    8 -- the cycle where a renderer that had quietly stopped carrying it would
+    look identical to one that never carried it at all.
+    """
+    from deepreason.llm.packs import render_conj_pack
+
+    harness = Harness(tmp_path / "run")
+    subject, _, _, _ = _framed(harness)
+    problem = _problem(harness, "p-tides", "predict the spring tides here")
+
+    wound = None
+    packs_by_cycle = {}
+    for cycle in range(1, 9):
+        if cycle == 2:
+            wound, _ = attack(harness, subject.id, "mispredicts-the-neap-tide")
+        # Every later cycle adds ACCEPTED state, so the neighbourhood grows
+        # and the pack competes for budget exactly as a real run's does. A
+        # terminal render over a static graph would prove nothing: the whole
+        # failure mode is a section that survives an empty pack and loses to
+        # a full one.
+        _art(harness, f"candidate produced at cycle {cycle} " + "detail " * 40)
+        packs_by_cycle[cycle] = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            # 200, not a comfortable number: measured as the budget where a
+            # DROPPABLE crisis section would be cut outright. A test run at
+            # 300 passes with the section made droppable, and would therefore
+            # have proved nothing about what keeps the wound in the pack.
+            vs_k=2, token_budget=200,
+            frame_slice_context=render_frame_slice_context(harness, "p-tides"),
+            frame_crisis_context=render_frame_crisis_context(harness, "p-tides"),
+        )
+
+    assert wound is not None
+    assert wound.id not in packs_by_cycle[1]
+    for cycle in range(2, 9):
+        assert wound.id in packs_by_cycle[cycle], cycle
+    # The claim, made where it counts -- at the terminal cycle, in the PACK,
+    # under a budget that has already dropped optional sections.
+    assert wound.id in packs_by_cycle[8]
+    assert "STANDING ATTACKERS" in packs_by_cycle[8]
+    assert "## neighbourhood" not in packs_by_cycle[8]
+
+
+def test_a_defeated_attacker_stops_occupying_a_crisis_slot(harness):
+    """The cap makes "standing" load-bearing rather than decorative.
+
+    A REFUTED attacker is an attack that was made and defeated -- not an open
+    indictment. Rendering it would merely mislead if the list were unbounded;
+    under the cap it would displace a LIVE attacker, so the crisis would
+    understate itself in exactly the case where it matters most.
+    """
+    subject, _, _, _ = _framed(harness)
+    _problem(harness, "p-tides", "predict the spring tides here")
+    doomed, _ = attack(harness, subject.id, "an-objection-that-will-not-survive")
+    assert doomed.id in render_frame_crisis_context(harness, "p-tides")
+
+    attack(harness, doomed.id, "the-objection-misreads-the-tide-table")
+    assert harness.state.status[doomed.id] == Status.REFUTED
+    crisis = render_frame_crisis_context(harness, "p-tides")
+    assert doomed.id not in crisis
+    # And with no surviving attacker the block is ABSENT, not empty (N1).
+    assert "STANDING ATTACKERS" not in crisis
+    assert frame_slices(harness, "p-tides")[0].attackers_total == 0
+
+
+def test_the_cap_can_displace_an_individual_attacker_and_says_so(harness):
+    """The limit of G6, stated rather than left for a reader to discover.
+
+    What persists is the CRISIS, not any particular attacker: under the cap,
+    an early wound can be displaced by later ones whose ids sort lower. That
+    is not a silent loss -- the count discloses it ("5 of 9 shown, by id") --
+    but "a standing attacker present at cycle k still renders at cycle n" is
+    true unconditionally only while the total is within the cap, and this
+    test is what stops that being read as an unconditional guarantee.
+    """
+    subject, _, _, _ = _framed(harness)
+    _problem(harness, "p-tides", "predict the spring tides here")
+    made = [
+        attack(harness, subject.id, f"fault-{i}")[0].id
+        for i in range(FRAME_SLICE_ATTACKERS_N + 4)
+    ]
+    crisis = render_frame_crisis_context(harness, "p-tides")
+
+    # `shown` is in registration order here, so compare as a SET against the
+    # id-ordered prefix -- the claim is WHICH attackers survive the cap, not
+    # the order this list comprehension happened to visit them in.
+    shown = {a for a in made if a in crisis}
+    assert len(shown) == FRAME_SLICE_ATTACKERS_N
+    assert shown == set(sorted(made)[:FRAME_SLICE_ATTACKERS_N])
+    # Displaced, but not silently: the total is in the pack.
+    assert f"{FRAME_SLICE_ATTACKERS_N} of {len(made)} shown" in crisis
+    assert set(made) - set(shown)

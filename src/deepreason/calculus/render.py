@@ -116,6 +116,15 @@ def subject_attackers(harness, subject_id: str) -> tuple[tuple[str, str, str], .
         if target != subject_id:
             continue
         status = harness.state.status.get(attacker)
+        # STANDING, and the word is doing work: a REFUTED attacker is an
+        # attack that was made and defeated, which is not an open indictment.
+        # Rendering it would be merely misleading if the list were unbounded;
+        # under the cap it is worse, because a dead attack would occupy a slot
+        # and displace a live one. `suspended` and `suspended_unsupported`
+        # DO render -- an unresolved attack and an unsupported one are both
+        # still open, and Prop 12.5 forbids this render deciding otherwise.
+        if status is Status.REFUTED:
+            continue
         artifact = harness.state.artifacts.get(attacker)
         head = ""
         if artifact is not None:
