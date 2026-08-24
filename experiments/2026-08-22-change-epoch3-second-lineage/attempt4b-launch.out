@@ -34,3 +34,4 @@ control holds (not all three pass): True
 [2026-08-24T04:00:24Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-24T04:02:37Z] QUALIFY OK rc=0
 [2026-08-24T04:02:37Z] === REASON: run --budget cycles=8 --token-budget 1200000 (single phase, R17) ===
+[2026-08-24T04:30:38Z] PHASE 1 rc=0
