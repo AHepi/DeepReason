@@ -35,3 +35,7 @@ control holds (not all three pass): True
 [2026-08-24T04:02:37Z] QUALIFY OK rc=0
 [2026-08-24T04:02:37Z] === REASON: run --budget cycles=8 --token-budget 1200000 (single phase, R17) ===
 [2026-08-24T04:30:38Z] PHASE 1 rc=0
+[2026-08-24T04:30:56Z] PHASE 1 stop_reason=budget_exhausted
+[2026-08-24T04:30:56Z] AMEND DEFERRED: SECOND_LINEAGE=0 (operator R17) -- this attempt runs one phase and does not add the second lineage
+[2026-08-24T04:30:56Z] AMENDABLE-LATER: stop_reason=budget_exhausted -- a resumable reason (converged|budget_exhausted) means a follow-up tranche can still add the second lineage to this root
+[2026-08-24T04:30:56Z] === AUDIT: verify_root + findings + results + the reach census ===
