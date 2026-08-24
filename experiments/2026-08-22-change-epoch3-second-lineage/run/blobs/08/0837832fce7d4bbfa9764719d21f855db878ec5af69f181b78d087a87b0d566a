@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts a substantive abstraction relation (thermos physics → generic radiation-trapping framework) but the refutation condition is malformed: it hinges on 'sky view factor does not correlate with nocturnal UHI intensity after controlling for thermal mass' AND 'geometric obstruction is the dominant radiative variable'. If sky-view-factor correlation fails after controlling for thermal mass, that means thermal mass (not geometric obstruction) is dominant, so both disjuncts cannot be false simultaneously. This conjunction structure makes the abstraction unfalsifiable rather than refuted by any single empirical outcome.",
+      "premise": "A substantive relation must state a genuine refutation condition; the target's refuted-if combines two sub-conditions ('no correlation after controlling for thermal mass' and 'geometric obstruction is dominant') that are mutually dependent, so falsifying the first undermines the second rather than cleanly refuting the abstraction.",
+      "premise_evidence": [
+        {
+          "block": "2a45b7988522",
+          "quote": "SRC_001 abstracts from thermos physics to a generic radiation-trapping framework, and it is refuted if empirical studies show sky view factor does not correlate with nocturnal UHI intensity after controlling for thermal mass; the abstraction is valid only if geometric obstruction is the dominant radiative variable."
+        }
+      ]
+    }
+  ]
+}
+```

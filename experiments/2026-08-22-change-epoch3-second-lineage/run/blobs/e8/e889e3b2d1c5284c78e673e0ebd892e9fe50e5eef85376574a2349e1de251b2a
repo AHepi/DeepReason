@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "SRC_001 asserts that differences in thermal mass and heat capacity across cities dictate the magnitude of the nighttime temperature gap, but cross-city variation in nocturnal UHI is most strongly controlled by sky view factor and urban canyon geometry, which govern longwave radiative cooling; the target names neither factor, so its single-mechanism answer does not match the best explanation the problem asks for.", "premise": "The problem asks for the single mechanism that best explains why the nighttime gap is larger in some cities than in others.", "premise_evidence": null, "counterexample": null}]}
+```
