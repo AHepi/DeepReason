@@ -21,6 +21,7 @@ from deepreason.calculus.claims import (
     FrameAssertionV1,
     PremiseAttributionV1,
     ProblemSubjectV1,
+    ReachCertificateV1,
 )
 from deepreason.ontology import Interface, Ref
 from deepreason.ontology.artifact import RefRole
@@ -33,6 +34,7 @@ def compile_interface(body) -> Interface:
         FRAME_ASSERTION_COMMITMENT,
         PREMISE_ATTRIBUTION_COMMITMENT,
         PROBLEM_SUBJECT_COMMITMENT,
+        REACH_CERTIFICATE_COMMITMENT,
     )
 
     if isinstance(body, ProblemSubjectV1):
@@ -105,6 +107,17 @@ def compile_interface(body) -> Interface:
             for certificate in body.open_certificate_refs
         ]
         return Interface(commitments=[DERIVATION_MANIFEST_COMMITMENT.id], refs=refs)
+    if isinstance(body, ReachCertificateV1):
+        # MENTION on the subject and NOTHING else. A certificate is a frozen
+        # READING of the record, not a claim resting on artifacts: a dependence
+        # would suspend it by pass two at exactly the moment a promotion
+        # criterion needed to read the input it froze. The subject is mentioned
+        # for the mention law's own reason -- a wound to the subject must not
+        # drag down the evidence about how far it reached.
+        return Interface(
+            commitments=[REACH_CERTIFICATE_COMMITMENT.id],
+            refs=[Ref(target=body.subject_ref, role=RefRole.MENTION)],
+        )
     raise claims.ClaimDecodeError(
         "claim-no-compiler-rule", type(body).__name__
     )

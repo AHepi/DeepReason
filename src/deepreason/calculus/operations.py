@@ -54,7 +54,9 @@ def ensure_problem_subject(harness, problem):
     )
 
 
-def ensure_promotion_problem(harness, subject_id: str, description: str):
+def ensure_promotion_problem(
+    harness, subject_id: str, description: str, criteria=()
+):
     """Register the promotion problem for a subject, once (§9.4).
 
     Deterministic and idempotent for the same reason
@@ -64,8 +66,17 @@ def ensure_promotion_problem(harness, subject_id: str, description: str):
     This rung defines what a promotion problem IS, because Def 9.2's consult
     condition -- "addressed to a promotion problem" -- is otherwise undefined
     and the standing view would have nothing to gate on. It does NOT decide
-    when one should exist: nomination is Rung 5's measure-rule, and it will
-    call this operation rather than mint its own shape.
+    when one should exist: nomination is Rung 5's measure-rule, and it calls
+    this operation rather than minting its own shape.
+
+    `criteria` is Rung 5's addition and carries §9.4's five pinned criteria.
+    They are passed at REGISTRATION because `Problem` is immutable: a promotion
+    problem that existed for one event without its criteria would be a problem a
+    candidate could be addressed to before anything could refuse it, which is
+    the exact hole Remark 9.5's closure exists to shut. The early return above
+    keeps idempotency intact -- an existing problem is returned unexamined, so a
+    caller that passes criteria to a problem Rung 4's own tests created without
+    them gets that problem back rather than a well-formedness conflict.
     """
     pid = f"{SpawnTrigger.PROMOTION.value}:{subject_id[:12]}"
     existing = harness.state.problems.get(pid)
@@ -75,6 +86,7 @@ def ensure_promotion_problem(harness, subject_id: str, description: str):
         Problem(
             id=pid,
             description=description,
+            criteria=list(criteria),
             provenance=ProblemProvenance.model_validate(
                 {"trigger": SpawnTrigger.PROMOTION, "from": [subject_id]}
             ),

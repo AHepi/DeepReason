@@ -351,6 +351,20 @@ class Config(BaseModel):
     # batteries (rubric-heavy problems stay provisional until their guarded
     # procedures put survivals on the record).
     REACH_COVERAGE_MIN: float = 0.5
+    # Promotion nomination (§9.4, v2 calculus Rung 5). K_FRAME is the number
+    # of DISTINCT problem lineages one subject's reach must span before a
+    # promotion problem is spawned. Two is the floor at which "spanning" means
+    # anything at all: one lineage is the run's own descent from its seed, which
+    # every artifact in a single-question run shares. The measure DETECTS at
+    # this threshold and decides nothing -- promotion is an ordinary
+    # Conj->Crit->Adj pass on the problem it spawns.
+    K_FRAME: int = 2
+    # How many problems and candidate subjects one reach certificate may freeze.
+    # A bound is required because the certificate is a frozen input a criterion
+    # re-evaluates against: an unbounded environment would make Prop 12.1's
+    # "terminates inside its declared budget" unprovable. What the cap drops is
+    # RECORDED in the certificate's `truncated` list -- never silently.
+    PROMOTION_ENVIRONMENT_MAX: int = 64
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # Research service mode (§12; research/backends.py:build_service):

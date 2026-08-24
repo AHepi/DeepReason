@@ -1,5 +1,5 @@
 # Checklist for: Rung 5 — promotion problems and their criteria as programs
-State: next=1 blockers=none
+State: next=6 blockers=none
 Map ids this plan was built on: `DR-SUB-calculus`, `DR-SUB-evaluation`,
 `DR-SUB-rules`, `DR-SEAM-evaluation-x-rules` (read first, per the map's own
 seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
@@ -8,35 +8,42 @@ seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
-- [ ] 1. (S1, S11) Write `tests/test_calculus_nomination.py` — lineage
+- [x] 1. (S1, S11) Write `tests/test_calculus_nomination.py` — lineage
       derivation and the K_FRAME boundary, both sides — against the
       not-yet-existing `calculus/nomination.py`.
       done-when: `python -m pytest tests/test_calculus_nomination.py -q` fails
       with a collection/import error naming `nomination` (the test exists and
       guards nothing yet).
 
-- [ ] 2. (S3) Add `ReachCertificateV1` to `calculus/claims.py`, its rule to
+- [x] 2. (S3) Add `ReachCertificateV1` to `calculus/claims.py`, its rule to
       `calculus/compiler.py`, and `reach_certificate_wf` to
       `calculus/programs.py`.
       done-when: `python -c "from deepreason.calculus.claims import decode; import json; b=decode(json.dumps({'schema':'poietic.reach-certificate.v1','subject_ref':'b','scope':{'schema':'declarative-scope.v1','predicate':{'const':True}},'k_frame':2})); assert b.subject_ref=='b'"`
       exits 0.
 
-- [ ] 3. (S2) Add `Config.K_FRAME` and `Config.PROMOTION_ENVIRONMENT_MAX`, each
+- [x] 3. (S2) Add `Config.K_FRAME` and `Config.PROMOTION_ENVIRONMENT_MAX`, each
       with its `data.pop(..., None)` line and reason comment in
       `run_manifest.py::_versioned_source_config_data`.
       done-when: `python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; c=json.loads(_manifest(_profile()).engine_config_json); leaked=sorted(k for k in c if k in ('K_FRAME','PROMOTION_ENVIRONMENT_MAX')); assert not leaked, leaked"`
       exits 0.
 
-- [ ] 4. (S1, S3) Write `src/deepreason/calculus/nomination.py`: `problem_parents`,
+- [x] 4. (S1, S3) Write `src/deepreason/calculus/nomination.py`: `problem_parents`,
       `lineage_root`, `lineage_span`, the canonical scope builder, the
       certificate builder, and `nominate`.
       done-when: `python -m pytest tests/test_calculus_nomination.py -q` ends
       "N passed" with 0 failed.
 
-- [ ] 5. (S1) [COMMIT] Prove the measure cannot decide: it reads and writes no
-      label.
-      done-when: `python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/nomination.py').read_text()); names={n.attr for n in ast.walk(t) if isinstance(n,ast.Attribute)}; assert not {'status','hv'} & names, sorted(names)"`
-      exits 0, and the commit lands.
+- [x] 5. (S1) [COMMIT] Prove the measure cannot decide, STRUCTURALLY AND
+      BEHAVIOURALLY (Rung 4's A5: either alone is satisfiable by the wrong
+      thing). Re-planned before execution — the first draft asserted the module
+      never NAMES `status` or `hv`, which is wrong: nomination must READ both
+      (only ACCEPTED artifacts nominate, and the certificate freezes the `hv`
+      readings). What R2 forbids is WRITING a label, so that is what is
+      asserted.
+      done-when: (a) `python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/nomination.py').read_text()); mods=[(n.module or '') for n in ast.walk(t) if isinstance(n,ast.ImportFrom)]; assert not any(k in m for m in mods for k in ('adjudication','warrants','llm','trial')), mods; W=[ast.unparse(tg) for n in ast.walk(t) if isinstance(n,ast.Assign) for tg in n.targets if any(k in ast.unparse(tg) for k in ('state.status','state.hv','state.reach'))]; assert not W, W"`
+      exits 0; and (b) a test in `tests/test_calculus_nomination.py` asserts
+      `state.status` and `state.hv` are byte-identical across a `nominate` call
+      that DOES spawn.
 
 - [ ] 6. (S11, S15) Write `tests/test_promotion_nomination_live.py` — M-4's
       NEGATIVE half on the committed attempt-4 root, opened `read_only=True`,
@@ -147,3 +154,45 @@ One step per dr-execute-step invocation.
 - [ ] 24. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND the branch head is on
       `origin/claude/rung-5-promotion-criteria-wu31d8`.
+
+
+## Step records
+
+**1.** `python -m pytest tests/test_calculus_nomination.py -q` →
+`ImportError: cannot import name 'nomination' from 'deepreason.calculus'` —
+the test exists and guards nothing yet, as planned.
+
+**2.** `decode(...)` on a `poietic.reach-certificate.v1` body → `ok b 2`; the
+compiler rule emits `[('b', 'mention')]` and `['claim:reach-certificate-wf@v1']`.
+The declared-but-unbuilt name in `CLAIM_SCHEMAS` now has a producer.
+
+**3.** `engine_config_json` leak check → exit 0, `no leak; engine_config keys: 71`;
+`Config().K_FRAME` = 2, `Config().PROMOTION_ENVIRONMENT_MAX` = 64.
+
+**4.** `python -m pytest tests/test_calculus_nomination.py -q` → `15 passed`.
+Two small in-step corrections, both recorded rather than silent: (a) the test
+called a non-existent `harness.recompute()` — status is computed at
+registration in this tree, so the calls were removed; (b) `calculus/promotion.py`
+was created one step early, holding ONLY `criteria_for` and the program-name
+constants, because step 4's `nominate` must pin the five criteria to register
+the problem. The five criterion FUNCTIONS remain step 10's work.
+`operations.ensure_promotion_problem` gained an optional `criteria=()`
+parameter — passed at registration because `Problem` is immutable, so a
+promotion problem cannot acquire its criteria after the fact.
+
+**5.** Structural half → exit 0:
+`STRUCTURAL OK; imports: ['__future__', 'deepreason', 'deepreason.calculus.claims',
+'deepreason.calculus.compiler', 'deepreason.calculus.operations',
+'deepreason.calculus.programs', 'deepreason.calculus.promotion',
+'deepreason.calculus.scope', 'deepreason.calculus.standing',
+'deepreason.measures.demarcation', 'deepreason.measures.reach',
+'deepreason.ontology', 'deepreason.ontology.event', 'deepreason.ontology.state']`
+— no adjudication, warrants, llm or trial import, and no assignment into
+`state.status`/`state.hv`/`state.reach`.
+Behavioural half → `test_nomination_changes_no_label_and_no_measure` passes.
+Its assertion was TIGHTENED during the step rather than weakened: nomination
+registers the certificate artifact, so a new id appears in `state.status`. The
+test now asserts every PRE-EXISTING label is identical and that the only
+additions are reach certificates — registration, never adjudication.
+Ring: `python -m pytest tests/test_calculus*.py tests/test_reflexive_discipline.py
+tests/test_prose_refutation_boundaries.py -q` → `139 passed`.

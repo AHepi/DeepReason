@@ -2420,6 +2420,18 @@ def _versioned_source_config_data(
     # qualification battery for a subject whose behaviour contract is unchanged.
     data.pop("SPLIT_BUDGET_SEAT_PROTOCOL", None)
     data.pop("SPLIT_BUDGET_EXTRACTION_TOKENS", None)
+    # The promotion-nomination knobs (v2 calculus Rung 5) postdate every schema
+    # version's frozen wire-byte goldens, and belong here for the same reason as
+    # every gate above: they are consulted at one measure site inside the run
+    # and are never written to the manifest. Their effect IS recorded, and more
+    # precisely than a Config echo would record it -- the reach certificate each
+    # nomination registers carries its own `k_frame` and its own `truncated`
+    # list, so the record says what threshold fired and what the environment cap
+    # dropped, per nomination rather than per manifest. Omitting the drop would
+    # move every qualification subject digest for a measure threshold, which is
+    # the ENGAGED_CRITICISM_AUTHORITY incident exactly (docs/ERRATA.md E44).
+    data.pop("K_FRAME", None)
+    data.pop("PROMOTION_ENVIRONMENT_MAX", None)
     return data
 
 

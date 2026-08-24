@@ -37,13 +37,14 @@ PROBLEM_SUBJECT_V1 = "poietic.problem-subject.v1"
 DERIVATION_MANIFEST_V1 = "poietic.derivation-manifest.v1"
 PREMISE_ATTRIBUTION_V1 = "poietic.premise-attribution.v1"
 FRAME_ASSERTION_V1 = "poietic.frame-assertion.v1"
+REACH_CERTIFICATE_V1 = "poietic.reach-certificate.v1"
 
 # The names with a producer. The rest are declared above and refused below,
 # with their names on the record so a reader sees the intended shape of the
 # substrate rather than only the built part of it.
 _IMPLEMENTED: tuple[str, ...] = (
     PROBLEM_SUBJECT_V1, PREMISE_ATTRIBUTION_V1, FRAME_ASSERTION_V1,
-    DERIVATION_MANIFEST_V1,
+    DERIVATION_MANIFEST_V1, REACH_CERTIFICATE_V1,
 )
 
 
@@ -207,11 +208,125 @@ class DerivationManifestV1(_Body):
         return self
 
 
+class FrozenProblemV1(_Part):
+    """A problem record as it stood at nomination.
+
+    COPIED, never referenced: a criterion that read the live `Problem` would be
+    reading graph state that can grow between nomination and evaluation, and
+    two evaluations of one candidate could then disagree. `sources` and
+    `lineage_root` travel with it so a reader can re-derive the span without
+    the harness.
+    """
+
+    id: str
+    description: str
+    trigger: str
+    sources: list[str] = Field(default_factory=list)
+    criteria: list[str] = Field(default_factory=list)
+    lineage_root: str = ""
+
+
+class FrozenCommitmentV1(_Part):
+    """A criterion's spec, frozen whole so a criterion program can re-evaluate
+    it against a candidate without resolving anything through the harness.
+
+    `budget_steps`/`budget_time_ms` are carried rather than the whole `Budget`
+    because a criterion re-runs the commitment under the FROZEN bound; letting
+    the bound move would let a candidate pass tomorrow on a budget it failed on
+    today, which is a verdict depending on something other than content.
+    """
+
+    id: str
+    eval: str
+    budget_steps: int | None = None
+    budget_time_ms: int | None = None
+    observation_valued: bool = False
+
+
+class FrozenSubjectV1(_Part):
+    """One candidate subject as the record held it at nomination.
+
+    This is the frozen candidate POOL, and its boundary is deliberate: a
+    subject conjectured after nomination is absent, and a criterion asked about
+    it answers `overrun` -- unobtainable -- rather than guessing. The
+    alternative, reading the live graph, is what Rider 5 clause (4) forbids.
+
+    `demarcation` is one of `load-bearing`, `declared-only` or `undecided`, and
+    the third is Rung 2's typed abstention carried forward: with no variator
+    seat the second reading cannot be taken, and "we could not check" must
+    never look like "we checked and it was fine".
+    """
+
+    artifact_id: str
+    registered_seq: int = 0
+    commitments: list[str] = Field(default_factory=list)
+    demarcation: Literal["load-bearing", "declared-only", "undecided"] = "undecided"
+    hv: float | None = None
+    accounted: list[str] = Field(default_factory=list)
+    wound_refs: list[str] = Field(default_factory=list)
+
+
+class ReachRecordV1(_Part):
+    """One reach hit, with the LOG's own ordering attached.
+
+    `subject_seq < measure_seq` is what reach-integrity checks, and it is the
+    only novel-fact evidence the informal side can produce (§10.5): the log
+    timestamps prove the artifact predates what it went on to survive.
+    """
+
+    problem_id: str
+    lineage_root: str
+    measure_seq: int
+    subject_seq: int
+    reveal_seq: int | None = None
+
+
+class FrozenGrantV1(_Part):
+    """A consulted frame assertion at nomination -- an incumbent's claim on a
+    region of problem space, which is what a rival must not silently share."""
+
+    assertion_id: str
+    subject_ref: str
+    scope: dict[str, Any] = Field(default_factory=dict)
+
+
+class ReachCertificateV1(_Body):
+    """The frozen, fence-stamped input every promotion criterion reads.
+
+    Rider 5 clause (4): "programs consume frozen fence-stamped input artifacts
+    ... never live graph state". This is that artifact. It is built ONCE, by
+    nomination, from a pure fold over the log, and registered as an ordinary
+    content-addressed artifact -- so "your certificate is wrong" has somewhere
+    to land, which a reading that lived only inside a program would not.
+
+    The subject is a MENTION and the certificate depends on NOTHING (compiler
+    rule). A dependence would suspend the frozen input at exactly the moment a
+    criterion needed to read it, and a certificate is a reading of the record
+    rather than a claim resting on artifacts.
+    """
+
+    schema_: Literal["poietic.reach-certificate.v1"] = Field(
+        default=REACH_CERTIFICATE_V1, alias="schema"
+    )
+    subject_ref: str
+    scope: dict[str, Any]
+    k_frame: int
+    reach_records: list[ReachRecordV1] = Field(default_factory=list)
+    problems: list[FrozenProblemV1] = Field(default_factory=list)
+    commitments: list[FrozenCommitmentV1] = Field(default_factory=list)
+    subjects: list[FrozenSubjectV1] = Field(default_factory=list)
+    consulted: list[FrozenGrantV1] = Field(default_factory=list)
+    # What the environment cap dropped. Present and empty rather than absent
+    # when nothing was dropped: a silent cap reads as full coverage.
+    truncated: list[str] = Field(default_factory=list)
+
+
 _MODELS: dict[str, type[_Body]] = {
     PROBLEM_SUBJECT_V1: ProblemSubjectV1,
     PREMISE_ATTRIBUTION_V1: PremiseAttributionV1,
     FRAME_ASSERTION_V1: FrameAssertionV1,
     DERIVATION_MANIFEST_V1: DerivationManifestV1,
+    REACH_CERTIFICATE_V1: ReachCertificateV1,
 }
 
 

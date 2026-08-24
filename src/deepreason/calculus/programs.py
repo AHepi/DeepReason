@@ -13,6 +13,7 @@ from deepreason.calculus.claims import (
     FRAME_ASSERTION_V1,
     PREMISE_ATTRIBUTION_V1,
     PROBLEM_SUBJECT_V1,
+    REACH_CERTIFICATE_V1,
     ClaimDecodeError,
     FrameAssertionV1,
     decode,
@@ -23,6 +24,7 @@ PROBLEM_SUBJECT_WF = "problem_subject_wf"
 PREMISE_ATTRIBUTION_WF = "premise_attribution_wf"
 FRAME_ASSERTION_WF = "frame_assertion_wf"
 DERIVATION_MANIFEST_WF = "derivation_manifest_wf"
+REACH_CERTIFICATE_WF = "reach_certificate_wf"
 
 PROBLEM_SUBJECT_COMMITMENT = Commitment(
     id="claim:problem-subject-wf@v1", eval=f"program:{PROBLEM_SUBJECT_WF}"
@@ -35,6 +37,9 @@ FRAME_ASSERTION_COMMITMENT = Commitment(
 )
 DERIVATION_MANIFEST_COMMITMENT = Commitment(
     id="claim:derivation-manifest-wf@v1", eval=f"program:{DERIVATION_MANIFEST_WF}"
+)
+REACH_CERTIFICATE_COMMITMENT = Commitment(
+    id="claim:reach-certificate-wf@v1", eval=f"program:{REACH_CERTIFICATE_WF}"
 )
 
 
@@ -108,3 +113,16 @@ def derivation_manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]
     would be a way of buying protection from criticism by admitting debt.
     """
     return _wf(text, DERIVATION_MANIFEST_V1, artifact)
+
+
+def reach_certificate_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Structural well-formedness for the frozen promotion input.
+
+    STRUCTURAL for the reason `frame_assertion_wf` is: an artifact that could
+    ground reach by being a well-formed reach certificate would let the
+    promotion machinery manufacture the very signal that nominates -- reach
+    spawning a promotion problem whose paperwork spawns more reach. A8 says
+    reach spawns promotion problems and cannot alter labels; a certificate that
+    grounded reach would close that loop from the other side.
+    """
+    return _wf(text, REACH_CERTIFICATE_V1, artifact)
