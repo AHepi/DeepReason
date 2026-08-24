@@ -25,13 +25,13 @@ max_tokens = 16000              # reasoning models spend the budget on the trace
 [stage.review]                  # adversarial review of committed work -- SHIPPED stage, unmodified
 kind = "review"                 # except for the endpoint's tag form: the shipped
 model = "deepseek-v4-pro:0813"  # deepseek-v4-pro:0813-cloud is this same dated checkpoint
-skill = "skills/minimal-pair-review/SKILL.md"
+skill = "experiments/2026-08-23-treadle-pilot/pinned/minimal-pair-review-0.4.1-SKILL.md"
 max_tokens = 8000
 
 [stage.review_full]             # same shipped reviewer and model, context budget
 kind = "review"                 # raised past the default 24000 chars so a whole
 model = "deepseek-v4-pro:0813"  # delivered tranche diff fits: Rung D's is 167628
-skill = "skills/minimal-pair-review/SKILL.md"   # chars, i.e. 7x the default
+skill = "experiments/2026-08-23-treadle-pilot/pinned/minimal-pair-review-0.4.1-SKILL.md"   # chars, i.e. 7x the default
 context_budget_chars = 200000
 max_tokens = 8000
 
