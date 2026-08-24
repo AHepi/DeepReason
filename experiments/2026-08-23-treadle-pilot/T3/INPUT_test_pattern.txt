@@ -1,4 +1,4 @@
-=== tests/test_trial.py: imports and the pairwise fixture pattern (lines 1-40) ===
+=== tests/test_trial.py: imports (lines 1-40) ===
 """P5 acceptance (c) (spec §16): a rubric warrant registers only with a
 conforming trial transcript; an order-swap inconsistency blocks a pairwise
 warrant. Plus: referential integrity, paraphrase flips, ensemble splits."""
@@ -40,15 +40,7 @@ PARAPHRASES = json.dumps(
 
 def _setup(harness) -> tuple[str, Commitment]:
 
-=== tests/test_trial.py: _pairwise_setup and two pairwise tests (lines 160-245) ===
-    assert harness.state.status[target_id] == Status.ACCEPTED
-    assert any(
-        "trial-blocked:ensemble-split" in event.inputs
-        for event in harness.log.read()
-    )
-    logged_calls = [event.llm for event in harness.log.read() if event.llm]
-    assert meter.calls == len(logged_calls) == 7
-    assert sum(call.tokens for call in logged_calls) == meter.total
+=== tests/test_trial.py: _pairwise_setup and the pairwise tests (lines 168-245) ===
 
 
 def test_ensemble_split_blocks_and_logs(harness):
