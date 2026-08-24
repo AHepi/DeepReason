@@ -1,0 +1,36 @@
+# treadle configuration for DeepReason.
+# ADAPTED from tools/treadle/repo-assets/treadle.toml (deviation D4, recorded
+# in tools/treadle/VENDORED.md): the shipped file's context_files point at
+# another programme's tree and its model tags carry a ':cloud' suffix that
+# https://ollama.com/v1 does not use, so both would print WARN lines at doctor.
+# Only the stages this repository actually routes are declared; the shipped
+# original is preserved verbatim beside the vendored source.
+
+[driver]
+base_url = "https://ollama.com/v1"   # env TREADLE_BASE_URL overrides (doctor shows the source)
+worker = "treadle"
+seed = 17
+push = "auto"            # auto | true | false -- false/failed pushes grade reviews REVIEWED_LOCAL_OBJECTS
+recover_stale = true     # requeue this driver's orphaned CLAIMED tasks at startup
+max_tokens_cap = 32000   # ceiling for empty-reply auto-raise
+
+[stage.pilot]                   # DeepReason instrument/generation tasks (deviation D5)
+model = "gpt-oss:120b"
+escalate_model = "deepseek-v4-pro:0813"
+skill = "skills/pilot-task/SKILL.md"
+candidates = 2
+max_refinements = 2
+max_tokens = 16000              # reasoning models spend the budget on the trace first (defect #1)
+
+[stage.review]                  # adversarial review of committed work -- SHIPPED stage, unmodified
+kind = "review"                 # except for the endpoint's tag form: the shipped
+model = "deepseek-v4-pro:0813"  # deepseek-v4-pro:0813-cloud is this same dated checkpoint
+skill = "skills/minimal-pair-review/SKILL.md"
+max_tokens = 8000
+
+[[routing]]
+prefix = "PIL-"
+stage = "pilot"
+[[routing]]
+prefix = "REV-"
+stage = "review"

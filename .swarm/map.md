@@ -1,0 +1,258 @@
+# Repo map (generated -- do not edit; regenerate with: swarm_gate.py map)
+branch: claude/treadle-install-pilot-fqwjt5
+head: 5a57ddd3c457c1db4b1726e950de21eefbd312ef
+tree_sha: 798f57d68fc45e0e76130b38d8465cb2e1891003
+tracked_files: 130190
+
+## Directories
+- `.claude/` -- 24 files
+- `.claude/skills/` -- 24 files
+- `.github/` -- 1 files
+- `.github/workflows/` -- 1 files
+- `config/` -- 3 files
+- `docs/` -- 129 files
+- `docs/map/` -- 63 files
+- `docs/proposals/` -- 13 files
+- `experiments/` -- 128600 files
+- `experiments/2026-07-30-change-amendment-epochs/` -- 5 files
+- `experiments/2026-07-30-fix-citation-quote-check/` -- 7 files
+- `experiments/2026-07-30-fix-sandbox-contract/` -- 8 files
+- `experiments/2026-07-31-change-critic-seats-and-thinking/` -- 3 files
+- `experiments/2026-07-31-schema-sweep/` -- 2 files
+- `experiments/2026-08-01-change-prose-can-refute/` -- 7 files
+- `experiments/2026-08-01-fix-adjudication-blindness/` -- 6 files
+- `experiments/2026-08-01-fix-decomposition-merge-pairing/` -- 6 files
+- `experiments/2026-08-02-map-falsification/` -- 2 files
+- `experiments/2026-08-02-stress-triplet/` -- 4107 files
+- `experiments/2026-08-03-change-driving-skill/` -- 6 files
+- `experiments/2026-08-03-change-executor-errata/` -- 3 files
+- `experiments/2026-08-03-change-modularisation-handover/` -- 5 files
+- `experiments/2026-08-03-change-question-skill/` -- 5 files
+- `experiments/2026-08-03-change-rung1-sockets-on-paper/` -- 6 files
+- `experiments/2026-08-03-change-rung2-bridge-unification/` -- 6 files
+- `experiments/2026-08-03-change-rung2-config-inventory/` -- 7 files
+- `experiments/2026-08-03-change-rung2-engaged-criticism-switch/` -- 6 files
+- `experiments/2026-08-03-change-rung3-registry-in-front-of-school-population/` -- 6 files
+- `experiments/2026-08-03-change-rung3b-registry-call-site-migration/` -- 6 files
+- `experiments/2026-08-03-fix-attached-evidence-integrity/` -- 9 files
+- `experiments/2026-08-04-change-rung4-module-fingerprints/` -- 6 files
+- `experiments/2026-08-04-change-rung5-dumb-alternative-backend/` -- 1750 files
+- `experiments/2026-08-04-change-rung6-plugin-conformance/` -- 2 files
+- `experiments/2026-08-04-change-rung7-authority-as-declared-policy/` -- 6 files
+- `experiments/2026-08-04-change-spec-judgment-guardrails/` -- 3 files
+- `experiments/2026-08-04-change-workflow-guardrails/` -- 3 files
+- `experiments/2026-08-05-change-budget-ceiling-at-commit/` -- 2 files
+- `experiments/2026-08-05-change-smoke-instrument-visibility/` -- 3 files
+- `experiments/2026-08-05-change-unstick-guardrails/` -- 3 files
+- `experiments/2026-08-05-fix-continue-refusal-coverage/` -- 7 files
+- `experiments/2026-08-05-fix-continue-run-rejection/` -- 7 files
+- `experiments/2026-08-05-fix-expired-census-readers/` -- 8 files
+- `experiments/2026-08-05-fix-loopback-fixture-daemon/` -- 6 files
+- `experiments/2026-08-05-fix-qualification-inventory-pins/` -- 5 files
+- `experiments/2026-08-05-fix-resumable-reason-guard-coverage/` -- 6 files
+- `experiments/2026-08-05-fix-smoke-entry-point-reader/` -- 8 files
+- `experiments/2026-08-05-fix-smoke-failure-reporting/` -- 6 files
+- `experiments/2026-08-05-testphase-live-validation/` -- 835 files
+- `experiments/2026-08-06-change-qualification-per-seat-s4/` -- 14 files
+- `experiments/2026-08-06-change-seat-binding-design-s2/` -- 2 files
+- `experiments/2026-08-06-change-seat-binding-wired-s3/` -- 8 files
+- `experiments/2026-08-06-change-seat-census-s1/` -- 7 files
+- `experiments/2026-08-07-change-seats-in-record-s5/` -- 6 files
+- `experiments/2026-08-08-change-grounded-overlay-o1/` -- 15 files
+- `experiments/2026-08-08-change-grounded-overlay-o2/` -- 3 files
+- `experiments/2026-08-08-change-load-dials-d4/` -- 2 files
+- `experiments/2026-08-08-change-pipeline-census-d1/` -- 7 files
+- `experiments/2026-08-08-change-pipeline-design-d2/` -- 6 files
+- `experiments/2026-08-08-change-rung-g1-actual-diff-budget/` -- 6 files
+- `experiments/2026-08-08-corpus-enrichment-patrol-pilot/` -- 17833 files
+- `experiments/2026-08-08-fix-l1-continue-resumable-crash/` -- 8 files
+- `experiments/2026-08-08-fix-module-fingerprints-double-stamp/` -- 6 files
+- `experiments/2026-08-08-live-two-seat-ab-s6/` -- 4934 files
+- `experiments/2026-08-08-parked-bronze-census-env/` -- 1 files
+- `experiments/2026-08-09-change-adjudication-judge-seats-optins/` -- 6 files
+- `experiments/2026-08-09-change-errata-sweep-and-automation/` -- 6 files
+- `experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/` -- 112 files
+- `experiments/2026-08-09-change-hard-question-set/` -- 3985 files
+- `experiments/2026-08-09-change-judge-evidence-review/` -- 8 files
+- `experiments/2026-08-09-change-llm-probe-apparatus/` -- 3 files
+- `experiments/2026-08-09-cp1m-stratification-retrodiction/` -- 22 files
+- `experiments/2026-08-09-overnight-omnibus/` -- 44492 files
+- `experiments/2026-08-09-parked-full-power-matrix/` -- 1 files
+- `experiments/2026-08-10-change-blast-radius-analysis/` -- 7 files
+- `experiments/2026-08-11-change-docs-reorg-steps-3-4/` -- 6 files
+- `experiments/2026-08-11-change-qualification-messages-s4b/` -- 11 files
+- `experiments/2026-08-11-change-remove-token-ceiling/` -- 5 files
+- `experiments/2026-08-11-change-spec-v17-and-docs-index/` -- 5 files
+- `experiments/2026-08-11-errata-checkpoint-audit/` -- 1 files
+- `experiments/2026-08-11-program-closeout/` -- 2 files
+- `experiments/2026-08-11-spec-drift-measurement/` -- 3 files
+- `experiments/2026-08-11-sweep-smoke-currency/` -- 2 files
+- `experiments/2026-08-12-change-all-configs-allowed/` -- 8 files
+- `experiments/2026-08-12-change-skills-overhaul/` -- 7 files
+- `experiments/2026-08-12-change-skills-parked-followups/` -- 4 files
+- `experiments/2026-08-12-live-grounded-extension-expansion/` -- 15111 files
+- `experiments/2026-08-13-audit/` -- 1118 files
+- `experiments/2026-08-13-change-calibration-receipt-notice/` -- 6 files
+- `experiments/2026-08-13-change-defended-trial-wiring/` -- 5 files
+- `experiments/2026-08-13-change-lifecycle-operation-parity/` -- 18 files
+- `experiments/2026-08-13-change-results-retrieval-surface/` -- 9 files
+- `experiments/2026-08-13-change-single-run-path-unification/` -- 8 files
+- `experiments/2026-08-13-change-smoke-currency-audit/` -- 6 files
+- `experiments/2026-08-13-defect-controller-steering-inert/` -- 737 files
+- `experiments/2026-08-14-change-calculus-reconciliation-v2/` -- 5 files
+- `experiments/2026-08-14-change-rung1-vocabulary-groundwork/` -- 8 files
+- `experiments/2026-08-15-change-rung1b-signal-contract/` -- 6 files
+- `experiments/2026-08-15-change-rung2-premise-channel/` -- 6 files
+- `experiments/2026-08-15-change-rung3a-h1-successor-deletion/` -- 6 files
+- `experiments/2026-08-15-change-rung3c-claim-substrate/` -- 5 files
+- `experiments/2026-08-15-change-rung3d-website-remnant/` -- 3 files
+- `experiments/2026-08-16-change-configs-complete-seats-test/` -- 10 files
+- `experiments/2026-08-16-change-embedder-auto-install/` -- 7 files
+- `experiments/2026-08-16-change-p4-citable-evidence/` -- 5 files
+- `experiments/2026-08-16-defect-manifest-sha-doc-coupling/` -- 8 files
+- `experiments/2026-08-21-change-rung1b-ii-signal-consumption/` -- 16 files
+- `experiments/2026-08-21-change-rung3b-frame-separation/` -- 6 files
+- `experiments/2026-08-21-fix-wheel-smoke-reason-stage/` -- 13 files
+- `experiments/2026-08-21-measure-reach-firing/` -- 19 files
+- `experiments/2026-08-22-audit-scalarization/` -- 5 files
+- `experiments/2026-08-22-change-epoch3-second-lineage/` -- 2286 files
+- `experiments/2026-08-22-change-reach-p5-rulings/` -- 7 files
+- `experiments/2026-08-22-change-rung4-frame-assertions/` -- 6 files
+- `experiments/2026-08-22-change-rungd-proof-debt-localization/` -- 6 files
+- `experiments/2026-08-22-change-two-call-seat-protocol/` -- 7 files
+- `experiments/2026-08-22-fix-repair-patch-transport/` -- 9 files
+- `experiments/2026-08-22-fix-route-lease-maxtokens/` -- 10 files
+- `experiments/2026-08-22-live-reach-rich-run/` -- 2039 files
+- `experiments/2026-08-22-measure-grounded-flip-rate/` -- 18 files
+- `experiments/2026-08-22-reach-structural-programs-fix/` -- 13 files
+- `experiments/2026-08-23-audit-invention-inventory/` -- 1 files
+- `experiments/2026-08-23-treadle-pilot/` -- 3 files
+- `experiments/autonomous_inquiry_preflight_2026-07-16/` -- 5 files
+- `experiments/bronze_feedback_v1_superseded_2026-07-14/` -- 1315 files
+- `experiments/bronze_flat_2026-07-13/` -- 2205 files
+- `experiments/bronze_pilot_2026-07-14/` -- 116 files
+- `experiments/bronze_repertoire_v2_2026-07-14/` -- 2296 files
+- `experiments/court_calibration_items/` -- 1 files
+- `experiments/court_calibration_run/` -- 2 files
+- `experiments/court_cross_run/` -- 4 files
+- `experiments/critic_spec_items/` -- 2 files
+- `experiments/critic_spec_run/` -- 2 files
+- `experiments/defended_trial_run/` -- 3 files
+- `experiments/e02_t1_items/` -- 8 files
+- `experiments/e02_t2_items/` -- 3 files
+- `experiments/e02_t2b_run/` -- 2 files
+- `experiments/e02_t3_run/` -- 3 files
+- `experiments/e31_demo_benchmark/` -- 30 files
+- `experiments/gemma4_dna_unattended_2026-07-12/` -- 168 files
+- `experiments/gemma4_dna_unattended_3_2026-07-12/` -- 105 files
+- `experiments/glm_judge_2026-07-14/` -- 1045 files
+- `experiments/jolt_architecture_2026-07-16/` -- 284 files
+- `experiments/live_20b_schema_2026-07-31/` -- 14 files
+- `experiments/live_coin_canonicity_2026-07-31/` -- 699 files
+- `experiments/live_coin_thinkingoff_2026-07-31/` -- 19 files
+- `experiments/live_compare_2026-07-28/` -- 143 files
+- `experiments/live_engaged_2026-07-27/` -- 1173 files
+- `experiments/live_gemma4_schema_2026-07-31/` -- 5 files
+- `experiments/live_jolt_2026-07-31/` -- 31 files
+- `experiments/live_research_2026-07-29/` -- 12254 files
+- `experiments/live_tri_2026-07-27/` -- 6540 files
+- `experiments/live_turmite_2026-07-31/` -- 14 files
+- `experiments/results/` -- 48 files
+- `experiments/schema_comparator_run/` -- 3 files
+- `experiments/tier_v_checkers/` -- 20 files
+- `mini/` -- 32 files
+- `mini/minireason/` -- 11 files
+- `mini/scripts/` -- 7 files
+- `mini/tests/` -- 13 files
+- `runs/` -- 660 files
+- `runs/jolt_positive_headroom_v3_1/` -- 660 files
+- `scripts/` -- 60 files
+- `scripts/e31_benchmark/` -- 7 files
+- `src/` -- 310 files
+- `src/deepreason/` -- 310 files
+- `tests/` -- 328 files
+- `tests/fixtures/` -- 8 files
+- `tools/` -- 37 files
+- `tools/treadle/` -- 32 files
+
+## Key documents (tracked .md, first heading)
+- `CLAUDE.md` -- CLAUDE.md — operating DeepReason
+- `README.md` -- DeepReason
+- `docs/ADMISSION_SPEC.md` -- Evidence Admission (draft for review)
+- `docs/AGENT.md` -- Operating DeepReason V6
+- `docs/AUDIT_BASELINES.md` -- Audit baselines — expected instrument outputs
+- `docs/AUTONOMICS_REPORT.md` -- The Self-Calibrating Harness — Run Report and the Solo Showdown
+- `docs/AUTONOMOUS_SIMULATION_MIGRATION.md` -- Autonomous Simulation Migration
+- `docs/BASIN_REPORT.md` -- When Conjecture Circles: Repertoire Exhaustion and Refuted-Attractor
+- `docs/CACHE_DESIGN.md` -- Caching-Layer Design — What Survived Its Own Criticism
+- `docs/CAN_LLMS_EXPLORE.md` -- Can an LLM explore past its own repertoire? (And can a harness push it to?)
+- `docs/COMPUTABLE_CALCULUS.md` -- A Computable Calculus of Conjecture, Criticism, and Background
+- `docs/CONTROLLER_SPEC.md` -- Controller Implementation Spec — The Self-Calibrating Harness
+- `docs/ERRATA.md` -- Errata — corrections to committed documents
+- `docs/ERRATA_EXECUTOR.md` -- Errata — the less-capable-executor infrastructure
+- `docs/EXPERIMENT_PROGRAM_2026-07.md` -- Full-Scale Experiment Program, July 2026
+- `docs/FORM_DR1_RUN_APPLICATION.md` -- FORM DR-1 — APPLICATION TO REASON ON A QUESTION
+- `docs/HANDOVER_2026-07-27.md` -- Handover — engaged-preset stabilization session, 2026-07-27
+- `docs/HANDOVER_2026-08-02.md` -- Handover — 2026-08-02, end of session
+- `docs/HANDOVER_2026-08-03.md` -- Handover — 2026-08-03: the modularisation ladder
+- `docs/HANDOVER_MONITOR_2026-08-06.md` -- Monitor-session handover — 2026-08-06
+- `docs/HANDOVER_MONITOR_2026-08-10.md` -- Monitor-session handover — 2026-08-10
+- `docs/HIDDEN_LEGACY_INVENTORY.md` -- Hidden-legacy inventory: designed architecture currently disconnected or buried
+- `docs/INDEX.md` -- docs/ — navigation index
+- `docs/JOLT_CONTROL_PLANE_MIGRATION.md` -- Jolt boundary and RunManifest v4 migration
+- `docs/LESSONS_LEARNED_2026-08-17.md` -- Lessons learned — DeepReason, through 2026-08-17
+- `docs/MINI_PLAN.md` -- MiniReason — construction plan
+- `docs/MINI_STRESS_REPORT.md` -- MiniReason stress report
+- `docs/OLLAMA_CLOUD_OPERATIONS.md` -- Ollama Cloud: Concurrency & Error Handling
+- `docs/OPERATOR_DIAGNOSIS.md` -- Why Only One Agent Has Driven This Pipeline
+- `docs/POIETIC_CALCULUS_FORMALIZED.md` -- The Poietic Calculus, Formalized
+- `docs/POIETIC_CALCULUS_v0.1.md` -- The Poietic Calculus (𝔓), v0.1
+- `docs/REPORT.md` -- DeepReason — What We Built, What Happened, and Why It Matters
+- `docs/RESEARCH_BACKEND.md` -- The research backend (owner decisions resolved 2026-07-28)
+- `docs/RESEARCH_CONVERGENCE_LOOPS_2026-08-22.md` -- Convergence, conformity, and basin escape in LLM loops — external research note
+- `docs/RESEARCH_FINDINGS_Q1Q10_2026-08-22.md` -- Research findings Q1-Q10 — external research note
+- `docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md` -- Judge blinding and provenance leakage — external research note
+- `docs/RESEARCH_PROGRAM_2026-08-22.md` -- External research program — open questions, by the decision each feeds
+- `docs/RESEARCH_SHAPE_CRITIQUE_2026-08-22.md` -- Statefulness, and is the harness's shape optimal — external research note (Q11-Q12)
+- `docs/RESEARCH_STRUCTURED_OUTPUT_COERCION_2026-08-22.md` -- Structured-output coercion and the scratchpad — external research note
+- `docs/RUNTIME_IMPORTS.md` -- Run-local website imports
+- `docs/RUN_PLAN_TEMPLATE.md` -- Run Plan: ______________________________________
+- `docs/SCRATCHPAD_GROUNDED_BRIDGE.md` -- Advisory scratchpad and grounded final output
+- `docs/SELF_IMPROVEMENT.md` -- Driver Instructions: Improving the Harness From Its Own Record
+- `docs/SMALL_MODEL_COMPATIBILITY.md` -- Small-model compatibility status
+- `docs/STATE_OF_THE_PROGRAM_2026-08-14.md` -- State of the Program — 2026-08-14
+- `docs/STATE_OF_THE_THEORY.md` -- What the Machine Currently Holds
+- `docs/STRESS_INSIGHTS.md` -- Stress-Test Campaign — Insights Report
+- `docs/TOKEN_ECONOMY.md` -- Reducing Token Burn Without Sacrificing the Epistemology
+- `docs/TRANCHE_A_AUTONOMOUS_SIMULATION.md` -- Tranche A autonomous simulation
+- `docs/harness-spec-v1.3.md` -- Conjecture–Criticism Harness — Formal Build Spec
+- `docs/harness-spec-v1.4-amendment.md` -- Conjecture–Criticism Harness — v1.4 normative amendment
+- `docs/harness-spec-v1.5-amendment.md` -- Conjecture–Criticism Harness — v1.5 normative amendment
+- `docs/harness-spec-v1.6-amendment.md` -- Harness Specification v1.6 Amendment
+- `docs/harness-spec-v1.7-amendment.md` -- Conjecture–Criticism Harness — v1.7 documentation amendment
+- `docs/map/INDEX.md` -- The map — start here
+- `docs/map/SCHEMA.md` -- The map schema — how to read these documents, and how to change them
+- `docs/proposals/AMENDMENT_EPOCHS.md` -- Proposal: amendment epochs — reshape the question and inject evidence
+- `docs/proposals/BEHAVIOR_MODES_PREPLAN.md` -- Pre-plan: behavior modes and behavior bundles (system-wide dials)
+- `docs/proposals/CALCULUS_IMPLEMENTATION_ADVICE.md` -- DeepReason Implementation Advice
+- `docs/proposals/CODER_AS_TOOL_PREPLAN.md` -- Pre-plan: the coder seat as a tool — delegated executable authoring
+- `docs/proposals/CRITICISM_SYMMETRY_RESEARCH_PREPLAN.md` -- Pre-plan: criticism symmetry — is an LLM critic blind to who generated?
+- `docs/proposals/DETERMINISTIC_GATES_PREPLAN.md` -- Pre-plan: deterministic gates — mechanizing the checks the skills only say
+- `docs/proposals/DUAL_MODE_CONJECTURE_PREPLAN.md` -- Pre-plan: dual-mode conjecture (informal + formal) and the load dials
+- `docs/proposals/GATES_AND_PACKAGES_PREPLAN.md` -- Pre-plan: gates and packages — signals driving behavior through typed on/off valves
+- `docs/proposals/GROUNDED_OVERLAY_PREPLAN.md` -- Pre-plan: grounded-extension overlays — catching what the acceptance pass cannot see
+- `docs/proposals/HARD_QUESTION_SET_PROMPT.md` -- Paste-ready executor prompt: the two-tier hard question set
+- `docs/proposals/README.md` -- docs/proposals/ — pre-acceptance decision queue
+- `docs/proposals/RECORD_LIFECYCLE_DEFECT_PLAN.md` -- Defect program: the log — a run's record can end invalid, and the repair path can crash
+- `docs/proposals/ROLE_SEAT_SEPARATION_PLAN.md` -- Pre-plan: role-seat separation — any model on any seat, then packages
+- `experiments/2026-07-30-change-amendment-epochs/CHECKLIST.md` -- Checklist — re-plan after VALIDATION.md FAIL
+- `experiments/2026-07-30-change-amendment-epochs/DELIVERY.md` -- Delivered: implement amendment epochs
+- `experiments/2026-07-30-change-amendment-epochs/PARKED.md` -- Parked — noticed in this tranche, deliberately not done
+- `experiments/2026-07-30-change-amendment-epochs/REQUEST.md` -- Request: implement amendment epochs
+- `experiments/2026-07-30-change-amendment-epochs/VALIDATION.md` -- Validation for: implement amendment epochs
+- `experiments/2026-07-30-fix-citation-quote-check/DIAGNOSIS.md` -- Diagnosis: the quote check tests line-layout agreement, not textual agreement
+- `experiments/2026-07-30-fix-citation-quote-check/FIX.md` -- Fix: compare a quote to the block's words, not to its line layout
+- `experiments/2026-07-30-fix-citation-quote-check/GOAL.md` -- Goal: a quoted citation of a hard-wrapped admitted block can verify
+- `experiments/2026-07-30-fix-citation-quote-check/PARKED.md` -- Parked — out of this tranche's goal
+- `experiments/2026-07-30-fix-citation-quote-check/REPRO.md` -- Reproduction
+- `experiments/2026-07-30-fix-citation-quote-check/VERIFY.md` -- Verification

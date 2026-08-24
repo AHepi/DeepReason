@@ -1,0 +1,2 @@
+{"action":"init","actor":"monitor","detail":{"wip_limit":2},"gate_v":"0.4.1","prev":"0000000000000000000000000000000000000000000000000000000000000000","schema":3,"task":"-","ts":"2026-08-24T03:30:55Z"}
+{"action":"map","actor":"monitor","detail":{"tree_sha":"798f57d68fc45e0e76130b38d8465cb2e1891003"},"gate_v":"0.4.1","prev":"499f17a6991d8b5b14e4d25b03fc74cb840ca6961c3e8d3b7869e3a7ce9ac6b0","schema":3,"task":"-","ts":"2026-08-24T03:30:56Z"}
