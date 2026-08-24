@@ -1,0 +1,237 @@
+{
+  "accepted_artifacts": 190,
+  "accepted_artifacts_addressed": 62,
+  "artifacts_that_could_have_seed_as_foreign": 15,
+  "pairs_surviving_reach_novelty_gate_against_seed": [
+    {
+      "artifact": "d6de55479e4fccac194a6d72cb2420d515aea32fee964847ef61377849d2cae1",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "a40be3ceda4b9af5f3946c1573af62c73a68fe8852a480b6d5a47dff4d6c6984",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "81a77f45f17cc451ce0ef7a26f97855cae39eb0270fe0d5474ee841c061662f6",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "374b1789711b0e2d1386352a98bedfbd282bcb2b19c4d2028c4f5fb2e5cb5080",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "8177d615782113b6d639a9e9806fff4e9b02f4f707cea997756682a0935bf64f",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "e9f636d62a13eb1d29ecc47bdd6fb1b798b4541e90e353d499453be43ec89aaf",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "986e1812ccd472c1e51ebecb058a158b8d67fb8cc19de25e50f9e920f070e0ff",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "a2b8c891abaa9a2542d0b1004e98751ff9be451f23435f84aeb00422f6c871c0",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "9446ca1b470809b621efbadab004d2bd95f3831d9bbc178d885301812c5ca562",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "f5886ef3976bc48094d42dab911f3e62bad57115beab7eb31d432ac95a98de49",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "83c0b16b9cd612a978c5e7c85a3ad74f12da5b4b46b03710c04746e9fce5db45",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "5d05e4ff8eac4b4cd7a2ae929fb8d432188947c2ed42e3df3287695c1695e56b",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "7d228d4a2c736da80c6dec5e6d950566d38a0014e0c8acd2a5061acd161a69a0",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "4872ff1efa483dcb3b0449d9f1c5ccee92ab118e4b538543441c085be7dcc911",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    },
+    {
+      "artifact": "e0e38fdffeede1889b986e415b18e7b7afaa668737fa9ee930a2d792aac6428b",
+      "coverage": 0.75,
+      "novel": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ],
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "qualifying": [
+        "uhi-cross-city-modulator@v1",
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1"
+      ]
+    }
+  ],
+  "problems_carrying_seed_criteria": [
+    "question-4dd62735b90864a75220e09b302500bc"
+  ],
+  "problems_total": 210,
+  "root": "experiments/2026-08-22-change-epoch3-second-lineage/run"
+}

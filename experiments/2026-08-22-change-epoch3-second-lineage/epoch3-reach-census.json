@@ -1,0 +1,60 @@
+{
+  "opens": true,
+  "recorded": {
+    "_full_hit_pairs": 1,
+    "events": 1548,
+    "measure_addr_events": 1,
+    "measure_addr_pairs": 1,
+    "measures": 194,
+    "reach_nonzero_entries": 1,
+    "reach_set_events": 1,
+    "reach_zero_entries": 0
+  },
+  "rederived": {
+    "A-skip/status": 26,
+    "A-skip/unaddr": 128,
+    "E1 no-criteria": 8618,
+    "E3 no-novel": 1104,
+    "E4 criterion-fail": 3235,
+    "_E4 first-nonpass:fail": 3235,
+    "_crit_kinds": {
+      "structural:lineage_ref": 46,
+      "structural:reasoning-envelope-wf": 1,
+      "substantive-predicate": 73,
+      "unknown-program:hv_floor": 46
+    },
+    "_gate_coverage": {
+      "0.33": 2116,
+      "0.75": 15,
+      "1.00": 1104
+    },
+    "_qualifying_vocab": {
+      "relation-form@578e42df713e": {
+        "eval": "predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contr",
+        "gate_pairs": 3220
+      },
+      "uhi-cross-city-modulator@v1": {
+        "eval": "predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind spee",
+        "gate_pairs": 15
+      },
+      "uhi-energy-balance@v1": {
+        "eval": "predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if ",
+        "gate_pairs": 15
+      },
+      "uhi-nocturnal-release@v1": {
+        "eval": "predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'",
+        "gate_pairs": 15
+      }
+    },
+    "addr_pairs": 89,
+    "artifacts_candidate": 62,
+    "artifacts_total": 216,
+    "commitments_registered": 271,
+    "gate/coverage-caps-at-provisional": 2116,
+    "gate/coverage-would-allow-full": 1119,
+    "pairs": 12957,
+    "problems_total": 210,
+    "reached-verdict-gate": 3235
+  },
+  "root": "/home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run"
+}

@@ -39,3 +39,25 @@ control holds (not all three pass): True
 [2026-08-24T04:30:56Z] AMEND DEFERRED: SECOND_LINEAGE=0 (operator R17) -- this attempt runs one phase and does not add the second lineage
 [2026-08-24T04:30:56Z] AMENDABLE-LATER: stop_reason=budget_exhausted -- a resumable reason (converged|budget_exhausted) means a follow-up tranche can still add the second lineage to this root
 [2026-08-24T04:30:56Z] === AUDIT: verify_root + findings + results + the reach census ===
+root                         /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/run
+recorded reach_set events    1
+recorded addr pairs          1
+recorded reach-provisional   0
+  A-skip/status                      26
+  A-skip/unaddr                      128
+  E1 no-criteria                     8618
+  E3 no-novel                        1104
+  E4 criterion-fail                  3235
+  addr_pairs                         89
+  artifacts_candidate                62
+  artifacts_total                    216
+  commitments_registered             271
+  gate/coverage-caps-at-provisional  2116
+  gate/coverage-would-allow-full     1119
+  pairs                              12957
+  problems_total                     210
+  reached-verdict-gate               3235
+
+wrote /home/user/DeepReason/experiments/2026-08-22-live-reach-rich-run/reach-census.json
+[2026-08-24T04:32:38Z] REACH CENSUS: reach_set events > 0 -- SUCCESS by PREREG_EPOCH3.md §5
+[2026-08-24T04:32:38Z] === DONE: see /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/{phase1-reason.log,phase2-continue.log,verify_root.json,epoch3-reach-census.json,findings.json,results.txt} ===
