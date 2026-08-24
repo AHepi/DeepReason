@@ -105,7 +105,8 @@ alternatives, and the operator ruled *continue and disclose*.
 
 ## Residue — what this did NOT prove
 
-Six items in VALIDATION §8. The two worth reading before building on this:
+Seven items in VALIDATION §8. The three worth reading before building on
+this:
 
 - **What persists past the attacker cap is the CRISIS, not any particular
   attacker.** Beyond `FRAME_SLICE_ATTACKERS_N`, an early wound can be
@@ -116,6 +117,12 @@ Six items in VALIDATION §8. The two worth reading before building on this:
   directive is untested, and per Q1 should not be assumed. That is exactly
   why the load-bearing parts are the allocator flags and the record-side
   subtraction rather than the directive's wording.
+- **One defect shipped and was caught by review, not by the gate.**
+  `declared_departures` overwrote instead of unioning, so a candidate that
+  departed on two counts silently un-declared one. Fixed and pinned — but
+  every test in the file filed one declaration per candidate, so the suite
+  as written would not have found it. Do not read this file's coverage as
+  exhaustive.
 
 ## The two closing lines the operator asked for
 

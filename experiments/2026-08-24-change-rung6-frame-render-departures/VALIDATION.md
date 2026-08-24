@@ -229,7 +229,14 @@ is a place a later reader could over-read the result.
 5. **`DISCLOSED_ON_DROP` is four sections, not all of them.** A dropped
    `neighbourhood` or `crossover` is still silent. The line drawn is
    "absence changes what the model may DO", and it is a judgement.
-6. **The disclosure loop's convergence is MEASURED, not proved.** At most
+6. **One defect shipped and was caught by REVIEW, not by the gate.**
+   `declared_departures` originally assigned rather than unioned, so two
+   declarations by one candidate against one subject overwrote each other.
+   It is fixed and pinned, but the honest reading is that the test suite as
+   written would not have found it — every test filed one declaration per
+   candidate. What found it was re-reading the diff. Recorded because the
+   next reader should not assume this file's coverage is exhaustive.
+7. **The disclosure loop's convergence is MEASURED, not proved.** At most
    three passes across 115 budgets from 1 to 799. The obvious monotonicity
    argument is false and is corrected in place; the bound-exhaustion path
    over-names rather than under-reporting.
