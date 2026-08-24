@@ -305,6 +305,15 @@ candidate had already given up. Fixed to UNION, pinned by
 mutation-proven: reverting to assignment → **1 failed**; restored →
 `36 passed`.
 
+**Post-step-15 review, second finding** — the `context-withheld` notice was
+written at priority 1, and allocation order is `(priority, id)`, so
+`"context-withheld"` sorted ahead of `"problem"` and `"problem-context"`: a
+per-call volatile section leading every pack that carries one, invalidating
+exactly the cacheable prefix `DR-CON-packs-and-token-economy`'s own ordering
+rule exists to protect. Moved to `_WITHHELD_PRIORITY = 99`. A mandatory
+section is retained in full at any priority, so the move costs nothing it
+was doing. Pinned and mutation-proven: priority back to 1 → **1 failed**.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said

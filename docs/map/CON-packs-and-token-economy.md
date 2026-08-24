@@ -94,6 +94,15 @@ always-present "withheld: none" line is the empty slot
 `docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md` measured as worse than a populated
 one.
 
+The notice sorts LAST (`_WITHHELD_PRIORITY = 99`), and that is a caching
+decision rather than an emphasis one. Allocation order is `(priority, id)`, so
+at priority 1 — where it was first written — `"context-withheld"` sorts ahead of
+`"problem"` and `"problem-context"`, and a per-call volatile section leading
+every pack invalidates exactly the cacheable prefix the ordering rule above
+exists to protect. A mandatory section is retained in full at any priority, so
+moving it costs nothing it was doing.
+`check: python -m pytest tests/test_frame_render.py::test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact -q`
+
 Convergence is MEASURED, not proved, and the distinction is recorded because
 the obvious argument is wrong: the dropped set is not monotone in `remaining`,
 since `allocate_pack` admits droppable sections greedily and `continue`s past

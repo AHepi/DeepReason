@@ -1179,3 +1179,38 @@ def test_a_second_declaration_adds_to_the_first_rather_than_replacing_it(harness
     assert held_frame_obligations(harness, subject.id, candidate.id) == ()
     crisis = render_frame_crisis_context(harness, "p-tides")
     assert SUBJECT_COMMITMENT.id in crisis and second.id in crisis
+
+
+def test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact(harness):
+    """The notice must not lead the pack.
+
+    Allocation order is `(priority, id)`, so at priority 1 "context-withheld"
+    sorts ahead of "problem" and "problem-context" — and the notice is
+    per-call volatile, so it would invalidate the whole cacheable prefix that
+    the section ordering exists to protect (`DR-CON-packs-and-token-economy`,
+    "slow-changing sections precede volatile ones"). This is a caching claim,
+    not a claim about where a model reads best: a mandatory section is
+    retained in full at any priority, so moving it costs nothing it was doing.
+    """
+    from deepreason.llm.packs import render_conj_pack, render_crit_pack
+
+    problem = _problem(harness, "p-cite", "a problem with admitted evidence")
+    target = _art(harness, "an ordinary candidate")
+    legend = "CITABLE EVIDENCE BLOCKS\n" + "\n".join(
+        f"[{i:016x}] an admitted passage about the tides" for i in range(12)
+    )
+
+    conj = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=1, citable_evidence_context=legend,
+    )
+    crit = render_crit_pack(
+        target.id, harness.state, harness.commitments, harness.blobs,
+        token_budget=1, premise_invitation="p-cite",
+        citable_evidence_context=legend,
+    )
+    for pack in (conj, crit):
+        headers = [l for l in pack.splitlines() if l.startswith("## ")]
+        assert "## context-withheld" in headers, headers
+        assert headers[-1] == "## context-withheld", headers
+        assert headers[0] != "## context-withheld", headers

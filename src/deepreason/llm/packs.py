@@ -280,6 +280,9 @@ DISCLOSED_ON_DROP = frozenset(
 )
 
 _WITHHELD_ID = "context-withheld"
+# Above every declared priority in either renderer, so the notice always
+# sorts last however many sections a future pack grows.
+_WITHHELD_PRIORITY = 99
 
 
 def _withheld_notice(dropped: tuple[str, ...]) -> str:
@@ -337,7 +340,16 @@ def _allocate_sections(
                 _pack_section(
                     _WITHHELD_ID,
                     _withheld_notice(disclosed),
-                    1,
+                    # LAST, and the reason is caching rather than emphasis.
+                    # Allocation order is `(priority, id)`, so at priority 1
+                    # "context-withheld" sorts ahead of "problem" and
+                    # "problem-context" -- the notice would lead every pack
+                    # carrying one and, being per-call volatile, would
+                    # invalidate the whole cacheable prefix the section
+                    # ordering exists to protect. A mandatory section is
+                    # retained in full at any priority, so moving it costs
+                    # nothing it was doing.
+                    _WITHHELD_PRIORITY,
                     droppable=False,
                     compressible=False,
                 )
