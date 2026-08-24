@@ -43,7 +43,7 @@ check is worse than an admitted gap, because it reports success.
 | **A6** | consulted frame assertions satisfy frame-separation | **Rung 3b** | Rungs 4, 7 |
 | **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
 | **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** | Rung 8 |
-| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) — NOT YET LANDED | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
+| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render) — **LANDED 2026-08-24**; **Rung 8** (diagnostics) — not yet | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
 | **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung; **Rung D** logs the rent sample as a canonical artifact rather than a blob |
 | **Ax 4.1** | **Genesis Inertness** — appraisal predicates are invariant under permutation of provenance; origin confers neither warrant nor stigma | stated here; **no rung may violate it** | every rung; **Rung D** — neither `receipt()` nor a manifest reads provenance |
 
@@ -95,6 +95,22 @@ acyclic support pass (`final_labels` over `dep`). One writer, one call.
 
 `check: python -c "src=open('src/deepreason/harness.py').read(); assert src.count('self.state.status = ')==1; assert src.count('final_labels(')==1; assert 'compute_label0' in src"`
 
+**PRESERVED at Rung 6.** The frame render adds no third pass and no second
+writer: no assignment target anywhere in `calculus/render.py` is rooted at `harness`,
+so it cannot write `state.status`, `state.att` or `state.dep`, and the
+one-writer-one-call property above is untouched.
+
+The check took two rewrites, both recorded because each failure was the check
+being wrong rather than the code: a name-based version flagged a local variable
+called `status`, and a shape-based version flagged a legitimate local dict
+write. What it now asserts is the actual property — nothing assigns THROUGH the
+harness — and it was proven non-vacuous by running it against the leak mutation,
+where it fails naming the offending target. The three exit grades are a
+pure function OF the labels the two passes already produced, never an input to
+them.
+
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/render.py').read_text()); root=lambda n: root(n.value) if isinstance(n,(ast.Attribute,ast.Subscript)) else getattr(n,'id',None); tgt=[x for n in ast.walk(t) if isinstance(n,ast.Assign) for x in n.targets]+[n.target for n in ast.walk(t) if isinstance(n,(ast.AugAssign,ast.AnnAssign))]; bad=[ast.dump(x) for x in tgt if root(x)=='harness']; assert not bad, bad; assert 'harness' in pathlib.Path('src/deepreason/calculus/render.py').read_text()"`
+
 ## A4 — standing is derived, and never enters status computation
 
 **PROVED at Rung 4**, in the strongest form available: two runs over the same
@@ -107,6 +123,18 @@ nothing in `adjudication/` imports the view.
 The behavioural test was mutation-proven RED before it was trusted, and the
 mutation had to be revised twice before it bit
 (`experiments/2026-08-22-change-rung4-frame-assertions/VALIDATION.md`).
+
+**PRESERVED at Rung 6, and re-proved one layer out.** Rung 4 proved that
+CARRYING a frame moves no label; Rung 6 proves that RENDERING one does not
+either — which is a different claim, because the render is the first thing that
+reads standing and hands it to a generation seat. Two roots over one graph, one
+rendering a non-empty slice and one not, produce identical labels, attack edges
+and support edges over the shared artifacts, with the subject REFUTED in both
+for Rung 4's own reason. Mutation-proven: leaking the slice into adjudication
+(a consulted subject marked `accepted` because it frames) turns the label from
+`refuted` to `accepted` and the test RED.
+
+`check: python -m pytest tests/test_frame_render.py::test_rendering_the_frame_slice_moves_no_label tests/test_frame_render.py::test_rendering_writes_nothing_to_the_log -q`
 
 **How a later rung breaks this by accident:** by making render or schedule read
 standing and then letting that value flow back into anything `_adjudicate`
@@ -241,14 +269,38 @@ for name in ('nomination.py', 'promotion.py'):
 
 ## A9 — render, measures and diagnostics act only through attention
 
-**NOT YET PROVED — Rung 6 (render) and Rung 8 (diagnostics) own it.** Rung 4's
-contribution is negative and worth stating: the standing view is consumed by
-render and schedule ALONE, it is read-only, and it reaches no LLM seat, so
-nothing this rung added can act other than through attention.
+**RENDER HALF PROVED — Rung 6.** Diagnostics remain Rung 8's. Rung 4's
+contribution was negative and still holds: the standing view is consumed by
+render and schedule ALONE, it is read-only, and it reaches no LLM seat.
 
 `check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/standing.py').read_text()); mods=[(n.module or '') for n in ast.walk(t) if isinstance(n,ast.ImportFrom)]+[a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names]; assert not any(p in m for m in mods for p in ('llm','adapter','seat','provider','qualification','adjudication')), mods"`
 
-Rung 6 must add the render-side check here in the same commit.
+Rung 6 adds the render side, and it takes three checks rather than one because
+"acts only through attention" has three distinct failure modes and an import
+check catches only the first.
+
+**It reaches no seat.** `calculus/render.py` imports nothing from `llm`,
+`adapter`, `seat`, `provider`, `qualification` or `adjudication`. The
+articulation digest is a deterministic head plus the subject's declared
+commitment ids — NOT a summarizer call, which is also why frozen surface 5
+stays at zero across this rung.
+
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/render.py').read_text()); mods=[(n.module or '') for n in ast.walk(t) if isinstance(n,ast.ImportFrom)]+[a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names]; assert not any(p in m for m in mods for p in ('llm','adapter','seat','provider','qualification','adjudication')), mods"`
+
+**It writes nothing.** No `create_*`, `register_*`, `commit_*` or `append_*`
+call anywhere in the module, and a root's `log.jsonl` is byte-identical across
+repeated renders.
+
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/render.py').read_text()); bad=[n.func.attr for n in ast.walk(t) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr.startswith(('create_','register_','commit_','append_'))]; assert not bad, bad"`
+`check: python -m pytest tests/test_frame_render.py::test_rendering_writes_nothing_to_the_log -q`
+
+**It moves no label**, which is the failure an import check cannot see: a
+render could compute a label leak without importing anything new. Two roots
+over one graph, one rendering the slice and one not, produce identical labels,
+attack edges and support edges over the shared artifacts — and the claim was
+MUTATION-PROVEN, not asserted (the tranche's VALIDATION.md pastes the RED).
+
+`check: python -m pytest tests/test_frame_render.py::test_rendering_the_frame_slice_moves_no_label -q`
 
 ## A10 — canonical ordering, evaluation, sampling, serialization
 
@@ -258,6 +310,17 @@ byte for byte, and the scope document is stored as authored bytes rather than as
 a compiled object, so its content address does not move when the compiler does.
 
 `check: python -c "import inspect; from deepreason.calculus.standing import standing_view; assert 'sorted(' in inspect.getsource(standing_view)"`
+
+**PRESERVED at Rung 6.** Every ordering the frame slice introduces is canonical:
+slices sort by assertion id, attackers by attacker id, declared departures by
+departing-artifact id, and exits by assertion id. So one problem over one state
+renders byte-identical packs, and two independently replayed harnesses over one
+root agree. The attacker sort is kept even though `Harness._adjudicate` already
+sorts `state.att`, because under the render's cap the order decides WHICH
+attackers a pack shows — a property this module must own rather than borrow from
+a frozen surface.
+
+`check: python -m pytest tests/test_frame_render.py::test_the_slice_is_byte_identical_across_renders tests/test_frame_render.py::test_attackers_render_in_id_order_whatever_order_the_state_holds -q`
 `check: python -c "
 from deepreason.calculus.claims import FrameAssertionV1, encode
 s = {'schema': 'declarative-scope.v1', 'predicate': {'const': True}}

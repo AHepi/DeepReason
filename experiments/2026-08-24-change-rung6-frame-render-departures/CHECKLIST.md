@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 12 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
+State: **step 14 next** (steps 12 and 13 landed together — 13's proof is in the same test file) (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -86,7 +86,7 @@ production lines over `src/`.
   three separate registrations. Then commit with
   `DR-CON-standing-and-background` updated in the same commit.
 
-- [ ] **12. L-4 and L-5 proofs** (A5, A9, G2, G3)
+- [x] **12. L-4 and L-5 proofs** (A5, A9, G2, G3)
   The no-label-moves test for the slice AND for a declared departure;
   the grep-based no-scoring absence check; the compiler-output absence
   check.
@@ -94,7 +94,7 @@ production lines over `src/`.
   slice leaked into adjudication in a scratch copy, RED pasted, restored,
   GREEN pasted.
 
-- [ ] **13. R5's scope-blindness proof** (A6)
+- [x] **13. R5's scope-blindness proof** (A6)
   The scope DSL cannot name a departure; `scope.py` imports nothing from
   the declaration.
   Done-criterion: the test passes; the typed `ScopeError` code pasted.
@@ -233,6 +233,43 @@ claim) → **3 failed**. Restored → `27 passed`.
 means. Ring incl. `test_calculus_standing.py`,
 `test_promotion_solo.py`, `test_calculus_vocabulary.py` → green.
 
+**Steps 12-13** — L-5 and L-4, each mutation-proven.
+
+**G2 MUTATION PROOF** (required verbatim by the operator). Mutation: the
+slice leaks into adjudication — a consulted subject is marked `accepted`
+because it frames, not because it survived criticism.
+
+RED:
+```
+E  AssertionError: assert ({'c6f2aa8e6b...ed'>}, [], []) == ({'c6f2aa8e6b...ed'>}, [], [])
+E    At index 0 diff: {'c6f2aa8e...': <Status.ACCEPTED: 'accepted'>}
+E                  != {'c6f2aa8e...': <Status.REFUTED: 'refuted'>}
+FAILED tests/test_frame_render.py::test_rendering_the_frame_slice_moves_no_label
+1 failed, 34 passed
+```
+Restored, GREEN: `35 passed in 2.36s`.
+
+**L-4 MUTATION PROOF.** Mutation: the departure declaration compiles with a
+DEPENDENCE on the departing artifact instead of a mention. RED:
+```
+FAILED tests/test_frame_render.py::test_a_declared_departure_moves_no_label
+FAILED tests/test_frame_render.py::test_a_departure_declaration_carries_no_dependence_edge
+2 failed, 33 passed
+```
+Restored, GREEN: `35 passed`.
+
+Also landed: rendering writes nothing to `log.jsonl` (byte-compared across
+five renders); no scheduler/rules/adjudication/informal module names the
+departure body, its commitment or `broken_ids` (negative greps, each paired
+with a positive anchor); and R5 — sigma's evaluation domain is five
+`Problem` fields, a scope naming a departure is a typed
+`scope-field-unknown`, and `scope.py` knows nothing of the departure
+machinery.
+
+`DR-INV-axiom-basis`: **A9's render half PROVED** (three checks — no seat,
+no write, no label movement); A3, A4 and A10 preservation rows added with
+their own checks. Every check run before it was written down.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -242,6 +279,21 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 12 — the L-4 behavioural test could not see a dependence leak.** Its
+edge filter was `e[0] in ids`, which compares only edges FROM a shared node.
+A penalty arrives the other way — an extra node the candidate is made to
+depend on, or that depends on the candidate — so the dependence mutation
+left it green while only the structural test failed. Widened to edges
+INCIDENT on the shared ids in either direction; the mutation then takes both.
+
+**Step 12 — the A3 preservation check was wrong twice, and both times it was
+the check.** A name-based version ("no assignment target mentioning
+`status`") flagged a local variable called `status`; a shape-based version
+("no attribute or subscript targets") flagged a legitimate local dict write.
+It now asserts the actual property — no assignment target rooted at
+`harness` — and was proven non-vacuous by running it against the leak
+mutation, where it fails naming the offending target.
 
 **Step 11 — the first contestation fixture produced `refuted`, not
 `suspended`.** It built a CHAIN — assertion ← critic ← counter ← rebuttal —

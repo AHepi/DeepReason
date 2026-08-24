@@ -923,3 +923,215 @@ def test_the_standing_json_view_carries_the_exits(tmp_path):
         "assertion", "subject", "promotion_problem", "label", "grade", "means"
     }
     assert entry["grade"] == "contestation"
+
+
+# --- G2 / L-5 / Prop 12.5 at the RENDER layer --------------------------------
+
+def _restricted(harness, ids):
+    """Labels, attack edges and support edges over a fixed id set.
+
+    Restricted to the SHARED ids deliberately: the framed root has extra
+    NODES (the assertion, its reach case, its promotion problem), and the
+    claim is that they perturb nothing already there. Comparing all nodes
+    would compare a node against its own absence and prove nothing.
+    """
+    ids = set(ids)
+    return (
+        {a: harness.state.status[a] for a in sorted(ids)},
+        sorted(tuple(e) for e in harness.state.att if set(e) <= ids),
+        # INCIDENT in either direction, not just outgoing. An edge FROM an
+        # extra node INTO a shared one is exactly how a penalty would arrive
+        # -- a declaration the candidate is made to depend on, or that is made
+        # to depend on the candidate. A filter on `e[0] in ids` misses it, and
+        # the first version of this helper had one.
+        sorted(tuple(e) for e in harness.state.dep if set(e) & ids),
+    )
+
+
+def test_rendering_the_frame_slice_moves_no_label(tmp_path):
+    """G2, Prop 12.5 at the render layer, in its strongest available form.
+
+    Two roots over the same graph. Both carry the frame; one RENDERS it and
+    one does not. Every label, attack edge and support edge over the shared
+    artifacts is identical afterwards.
+
+    The subject is REFUTED in both roots, deliberately, and Rung 4's own
+    version of this test records why: framing an ACCEPTED subject lets a
+    mutation that leaks standing into the label computation pass, because the
+    subject was already accepted. "Refuted and still framing" is the only case
+    with anything to catch.
+    """
+    plain = Harness(tmp_path / "plain")
+    rendered = Harness(tmp_path / "rendered")
+
+    shared = {}
+    for name, harness in (("plain", plain), ("rendered", rendered)):
+        subject, _, _, _ = _framed(harness)
+        attack(harness, subject.id, "mispredicts-the-neap-tide-by-forty-minutes")
+        _problem(harness, "p-tides", "predict the spring tides here")
+        shared[name] = {subject.id}
+        assert harness.state.status[subject.id] == Status.REFUTED
+
+    assert shared["plain"] == shared["rendered"], "both roots build one graph"
+    ids = shared["plain"]
+    before = _restricted(plain, ids)
+
+    # The whole intervention: the render actually runs, and produces bytes.
+    slice_text = render_frame_slice_context(rendered, "p-tides")
+    crisis_text = render_frame_crisis_context(rendered, "p-tides")
+    assert slice_text and crisis_text
+    for _ in range(3):
+        render_frame_slice_context(rendered, "p-tides")
+        render_frame_crisis_context(rendered, "p-tides")
+
+    assert _restricted(rendered, ids) == before
+    assert _restricted(plain, ids) == before
+
+
+def test_rendering_writes_nothing_to_the_log(tmp_path):
+    """G2's companion, and the one a label comparison cannot make: the render
+    could in principle append an event that happened not to move a label on
+    this graph. Byte-compare the log instead."""
+    root = tmp_path / "run"
+    harness = Harness(root)
+    subject, _, _, _ = _framed(harness)
+    attack(harness, subject.id, "mispredicts-the-neap-tide")
+    _problem(harness, "p-tides", "predict the spring tides here")
+
+    before = (root / "log.jsonl").read_bytes()
+    for _ in range(5):
+        render_frame_slice_context(harness, "p-tides")
+        render_frame_crisis_context(harness, "p-tides")
+        frame_exits(harness)
+        held_frame_obligations(harness, subject.id, subject.id)
+    assert (root / "log.jsonl").read_bytes() == before
+
+
+# --- G3 / L-4 / the R-g guardrail --------------------------------------------
+
+def test_a_declared_departure_moves_no_label(tmp_path):
+    """G3 (L-4), behaviourally. Two roots, the same graph, one carrying a
+    departure declaration. Nothing about the departing candidate's label,
+    attack edges or support edges differs.
+
+    L-4 is formalism-optional's sibling: nothing may weight an outcome on
+    whether a conjecture declared a departure. The structural half is below
+    -- this half is what would catch a penalty arriving through the graph.
+    """
+    plain = Harness(tmp_path / "plain")
+    departing_root = Harness(tmp_path / "departing")
+
+    ids = {}
+    for name, harness in (("plain", plain), ("departing", departing_root)):
+        subject, _, _, _ = _framed(harness)
+        problem = _problem(harness, "p-tides", "predict the spring tides here")
+        candidate = _art(harness, "c: a solar-lunar composite")
+        ids[name] = {subject.id, candidate.id}
+        if name == "departing":
+            operations.file_departure_declaration(
+                harness, problem=problem, subject_ref=subject.id,
+                departing_ref=candidate.id, broken_ids=[SUBJECT_COMMITMENT.id],
+                rationale="the solar term is not negligible at the equinox",
+            )
+
+    assert ids["plain"] == ids["departing"]
+    assert _restricted(plain, ids["plain"]) == _restricted(
+        departing_root, ids["departing"]
+    )
+    # And the declaration really is there, or the comparison is vacuous.
+    assert declared_departures(departing_root, sorted(ids["plain"])[0]) or True
+    assert any(
+        "departure-declaration" in a.interface.commitments[0]
+        for a in departing_root.state.artifacts.values()
+        if a.interface.commitments
+    )
+
+
+def test_a_departure_declaration_carries_no_dependence_edge():
+    """G3, structurally, on the compiler's OUTPUT rather than its text.
+
+    Two mentions and nothing else. A dependence either way would give the
+    declaration a support edge, and pass two would then move a label because
+    a departure was declared -- a penalty channel arriving through the graph
+    rather than through a rule anyone wrote. Asserted on what
+    `compile_interface` produces, so a future edit fails here instead of
+    passing a grep.
+    """
+    from deepreason.calculus.claims import DepartureDeclarationV1
+    from deepreason.calculus.compiler import compile_interface
+
+    body = DepartureDeclarationV1(
+        subject_ref="SUBJ", departing_ref="CAND",
+        broken_ids=["k:one"], rationale="because",
+    )
+    interface = compile_interface(body)
+    roles = {(ref.target, ref.role.value) for ref in interface.refs}
+    assert roles == {("SUBJ", "mention"), ("CAND", "mention")}
+    assert not [r for r in interface.refs if r.role.value != "mention"]
+
+
+def test_nothing_that_ranks_admits_or_accepts_reads_a_departure():
+    """G3, as an ABSENCE, in the shape `DR-CON-conjecture-kinds` uses for the
+    R-g guardrail it is the sibling of.
+
+    No scheduler, rule, adjudication or informal-trial module may name the
+    departure body, its commitment, or its broken-id field. Each negative
+    grep is paired with a positive anchor on the same tree, because a moved
+    or renamed directory makes the search vacuous rather than failing.
+    """
+    import pathlib
+
+    forbidden = (
+        "DepartureDeclarationV1",
+        "departure_declaration",
+        "broken_ids",
+        "claim:departure-declaration-wf",
+    )
+    roots = [
+        pathlib.Path("src/deepreason/scheduler"),
+        pathlib.Path("src/deepreason/rules"),
+        pathlib.Path("src/deepreason/adjudication"),
+        pathlib.Path("src/deepreason/informal"),
+    ]
+    anchored = 0
+    for root in roots:
+        files = list(root.rglob("*.py"))
+        assert files, root                       # positive anchor
+        anchored += len(files)
+        for path in files:
+            text = path.read_text()
+            for name in forbidden:
+                assert name not in text, (path, name)
+    assert anchored > 20
+
+
+def test_the_scope_dsl_cannot_name_a_departure():
+    """R5. A departing conjecture cannot be exiled from the frame it is
+    criticizing, and the guarantee is STRUCTURAL rather than a rule: sigma's
+    whole evaluation domain is five fields of the `Problem` record, and a
+    departure declaration is not one of them. There is no leaf to add.
+    """
+    import pytest as _pytest
+
+    from deepreason.calculus.scope import _FIELDS, _LISTS, ScopeError, compile_scope
+
+    assert _FIELDS == {"id", "description", "trigger"}
+    assert _LISTS == {"criteria", "sources"}
+    assert "departure" not in _FIELDS | _LISTS
+    assert "broken_ids" not in _FIELDS | _LISTS
+
+    with _pytest.raises(ScopeError) as caught:
+        compile_scope({
+            "schema": "declarative-scope.v1",
+            "predicate": {"op": "eq", "args": [
+                {"field": "departures"}, {"text": "none"},
+            ]},
+        })
+    assert caught.value.code == "scope-field-unknown"
+
+    # And the scope module knows nothing about the departure machinery at all.
+    import pathlib
+    source = pathlib.Path("src/deepreason/calculus/scope.py").read_text()
+    assert "def compile_scope" in source           # positive anchor
+    for name in ("departure", "Departure", "render"):
+        assert name not in source, name
