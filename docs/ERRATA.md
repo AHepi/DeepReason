@@ -1237,3 +1237,38 @@ strong as the proof that the search could have found the thing.** A census over
 typed records must enumerate the record types it means to cover and say which
 it read, not pattern-match a field name across a directory tree.
 
+
+**E48 — the ladder and the operator's brief both cite drift row S-5 for §12.2's
+empirical-scope clause; S-5 is a different row.**
+`experiments/2026-08-14-change-calculus-reconciliation-v2/LADDER.md`'s Rung 5
+work list ends its demarcation paragraph with "for empirical scopes, at least
+one commitment must be observation-valued (drift row S-5)", and the operator's
+Rung 5 brief repeats the citation verbatim. `RECONCILIATION.md`'s **S-5** row
+says something else entirely: "Def 9.3 standing is derived, never stored;
+instrument standing is not a third value but a `bounded` validity". No row in
+that table carries the observation-valued clause; it comes from the
+Formalization's §12.2 closing sentence, which the same paragraph also names.
+The OBLIGATION was never ambiguous and was implemented as stated — only the
+pointer is wrong, which matters because a reader who follows it lands on a
+requirement Rung 3 already discharged and may conclude the clause was already
+done. Found 2026-08-24 by `experiments/2026-08-24-change-rung5-promotion-criteria/`
+(SPEC.md A9), which reported the mismatch rather than resolving it, and shipped
+against §12.2 directly:
+`tests/test_promotion_criteria.py::test_an_empirical_scope_needs_an_observation_valued_commitment`.
+
+**E49 — E45's census lesson recurred, one tranche later, in its own shape.**
+E45 recorded a blast-radius census that classified per FILE where the hits were
+per CHECK. `experiments/2026-08-24-change-rung5-promotion-criteria/SPEC.md`
+repeated the family error from the other side: it declared the FILES it planned
+to edit and not the SYMBOL its own spec item named as the mechanism.
+`tools/blast_radius.py` reports `consumers` only for declared targets, so
+`register_fail_warrant` — named in SPEC.md S9 as the one warrant constructor the
+promotion sweep would mint through — never entered `--symbols`, and the three
+call-site count pins in `SUB-rules.md`, `SEAM-adjudication-x-rules.md` and
+`SEAM-evaluation-x-rules.md` went unpredicted. The full `docs_verify` at the
+boundary caught all three, four commits later than the census would have. The
+rule the two entries jointly support, stated so the third occurrence has
+somewhere to have been prevented: **a census must enumerate every symbol a spec
+item names as its mechanism, not only the files it plans to edit, and must
+classify per CHECK rather than per file.** Recorded 2026-08-24 by the same
+tranche, against itself.
