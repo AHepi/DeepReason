@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 9 next**
+State: **STOPPED at the step-9 [COMMIT] gate — diff budget EXCEEDED (759/560). Awaiting the operator. Step 10 next if continued.**
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -65,7 +65,7 @@ production lines over `src/`.
   withheld; and a pasted argument-by-measurement that the loop converges
   in ≤2 passes on the real renderers.
 
-- [ ] **9. The two call sites** (S7) `[COMMIT]`
+- [x] **9. The two call sites** (S7) `[COMMIT]`
   `rules/conj.py` and `rules/crit.py` compute and pass the slice.
   Done-criterion: `python -m pytest tests/test_pack_prefix.py
   tests/test_crit_batch.py tests/test_harness_fixes.py
@@ -192,6 +192,16 @@ passes across 115 budgets from 1 to 799, bound `len(sections)+1`. Ring
 (incl. `test_v6_request_envelope.py`, `test_v6_context_continuation.py`) →
 **191 passed**. Both new map checks run before being written down.
 
+**Step 9** — both rules now compute the slice and pass both halves. The
+call-site census found a THIRD site SPEC.md did not know about: the
+atomic-decomposition path in `crit.py`, reached only after a batch critic
+exhausts its schema, which renders one crit pack per target. Wired.
+New map document `DR-SEAM-calculus-x-rules` created (the pair had no row in
+`INDEX.md`'s matrix because it did not interact before this rung);
+`DR-SEAM-llm-x-rules`, `INDEX.md`, `SUB-calculus.md` and `SUB-rules.md`
+updated in the same commit. `docs_verify --links` → 0 dangling, 64
+documents. Ring → **61 passed**.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -201,6 +211,18 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 9 — DIFF BUDGET EXCEEDED, and the tranche STOPPED here.** 759
+insertions over `src` against a ledgered ceiling of 560. Raised to the
+operator with the breakdown rather than re-baselined.
+
+**Step 9 — the seam document's first draft asserted an acyclic edge; it is
+a cycle.** `calculus/promotion.py` has imported
+`rules.warrants.register_fail_warrant` since Rung 5, so `rules` ×
+`calculus` runs both ways. The claim was written before its check was run
+and the check refuted it in the same commit. Corrected to pin both
+directions by name, plus a third check that the two directions never meet
+(`render.py` imports no rule; `promotion.py` imports no render).
 
 **Step 8 — my own termination argument was wrong, and the first two tests
 failed against correct code.** SPEC.md S6.3 claimed the dropped set is

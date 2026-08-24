@@ -1224,6 +1224,44 @@ def _crit_proposed_properties(
     return None
 
 
+def _frame_context(harness, problem_id: str | None) -> tuple[str | None, str | None]:
+    """The frame slice for a problem, as the two pack sections take it.
+
+    The critic needs the frame for a reason the conjecturer does not: an
+    UNDECLARED conflict with a consulted frame is criticisable as a silent
+    assumption, and a critic who cannot see what the candidate DECLARED cannot
+    tell a departure from a hidden premise. `held_frame_obligations` does that
+    subtraction from the record, so what is left is a fact rather than a claim
+    in a reply.
+    """
+    if problem_id is None:
+        return None, None
+    from deepreason.calculus.render import (
+        render_frame_crisis_context,
+        render_frame_slice_context,
+    )
+
+    return (
+        render_frame_slice_context(harness, problem_id),
+        render_frame_crisis_context(harness, problem_id),
+    )
+
+
+def _target_problem(harness, target_id: str) -> str | None:
+    """The FIRST problem this target is addressed to, in `addr` order.
+
+    The first, not all of them, and it is the same one `_problem_context`
+    leads its pack with -- so the frame a critic is shown agrees with the
+    standard it is told to measure against. A target addressed to two problems
+    in two different scopes therefore carries only the first frame; recorded
+    as a limit rather than discovered later.
+    """
+    for aid, pid in harness.state.addr:
+        if aid == target_id and pid in harness.state.problems:
+            return pid
+    return None
+
+
 def _premise_invited_problem(harness, target_id: str) -> str | None:
     """The problem this target answers, iff it is standing an invitation.
 
@@ -1413,6 +1451,9 @@ def crit_argumentative(
     authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
     single_invitation = _premise_invited_problem(harness, target_id)
     single_legend = _citable_legend(harness) if single_invitation is not None else None
+    single_frame_slice, single_frame_crisis = _frame_context(
+        harness, _target_problem(harness, target_id)
+    )
     pack = render_crit_pack(
         target_id,
         harness.state,
@@ -1423,6 +1464,8 @@ def crit_argumentative(
         citable_evidence_context=(
             None if single_legend is None else single_legend.text
         ),
+        frame_slice_context=single_frame_slice,
+        frame_crisis_context=single_frame_crisis,
     )
     pack = _condition_pack(pack, school_prefix)
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
@@ -1857,6 +1900,18 @@ def crit_argumentative_batch(
                         # No separately frozen edge means no atomic provider work.
                         raise exhausted
                     raise
+                # Each decomposed pack carries its own target's frame. "In
+                # every pack in scope" (§9.5) includes this one: a batch that
+                # exhausted its schema and fell back to atomic calls is still
+                # criticising targets inside a consulted frame, and a critic
+                # here who could not see what was declared could not tell a
+                # departure from a hidden premise.
+                atomic_frames = {
+                    target_id: _frame_context(
+                        harness, _target_problem(harness, target_id)
+                    )
+                    for target_id in target_ids
+                }
                 atomic_packs = {
                     target_id: _condition_pack(
                         render_crit_pack(
@@ -1867,6 +1922,8 @@ def crit_argumentative_batch(
                             token_budget=_conditioned_budget(
                                 config.PACK_TOKEN_BUDGET, school_prefix
                             ),
+                            frame_slice_context=atomic_frames[target_id][0],
+                            frame_crisis_context=atomic_frames[target_id][1],
                         ),
                         school_prefix,
                     )

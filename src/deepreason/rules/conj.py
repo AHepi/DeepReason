@@ -1379,6 +1379,17 @@ def conj(
         if legend is not None:
             citable_evidence_context = legend.text
             citable_blocks_shown = legend.shown
+    # The frame slice: for every consulted assertion whose sigma admits this
+    # problem, its articulation digest and its standing attackers (§9.5). Two
+    # values because the wounds are rendered EXACT while the digest is
+    # compressible -- see DR-CON-packs-and-token-economy's own negative rule.
+    from deepreason.calculus.render import (
+        render_frame_crisis_context,
+        render_frame_slice_context,
+    )
+
+    frame_slice_context = render_frame_slice_context(harness, problem_id)
+    frame_crisis_context = render_frame_crisis_context(harness, problem_id)
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1400,6 +1411,8 @@ def conj(
         frozen_evidence_context=frozen_evidence_context,
         citable_evidence_context=citable_evidence_context,
         capability_result_context=v6_capability_result_context,
+        frame_slice_context=frame_slice_context,
+        frame_crisis_context=frame_crisis_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
     )
     scratch_aliases = {}

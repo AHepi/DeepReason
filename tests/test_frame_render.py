@@ -560,3 +560,53 @@ def test_the_disclosure_loop_reaches_a_fixed_point(harness):
         # present or named -- never quietly absent.
         for section in ("citable-evidence-blocks", "frozen-evidence-context"):
             assert section in present or section in named, (budget, section)
+
+
+# --- the slice reaches a REAL pack through the rules --------------------------
+
+def test_both_rules_put_the_frame_in_the_pack_they_dispatch(harness, monkeypatch):
+    """S7. The renderers take the slice; these are the two callers that
+    actually supply it. A slice nothing passes is a section nothing renders,
+    which is the shape `docs/ERRATA.md` E28 records -- a mechanism nobody
+    triggers.
+
+    Asserted against the CALL SITES rather than a dispatched prompt, because
+    dispatch needs an adapter, a lease and a manifest, and none of those is
+    what this claim is about.
+    """
+    import ast
+    import pathlib
+
+    for module, callee in (
+        ("src/deepreason/rules/conj.py", "render_conj_pack"),
+        ("src/deepreason/rules/crit.py", "render_crit_pack"),
+    ):
+        tree = ast.parse(pathlib.Path(module).read_text())
+        calls = [
+            call for call in ast.walk(tree)
+            if isinstance(call, ast.Call)
+            and getattr(call.func, "id", "") == callee
+        ]
+        assert calls, module
+        for call in calls:
+            passed = {kw.arg for kw in call.keywords}
+            assert "frame_slice_context" in passed, (module, sorted(passed))
+            assert "frame_crisis_context" in passed, (module, sorted(passed))
+
+
+def test_the_frame_reaches_a_conjecture_pack_end_to_end(harness):
+    """The same claim, exercised: a problem in scope, rendered through the
+    real `render_conj_pack` with the real slice, carries the wounds."""
+    from deepreason.llm.packs import render_conj_pack
+
+    subject, _ = _pack_state(harness)
+    pack = render_conj_pack(
+        harness.state.problems["p-tides"], harness.state, harness.commitments,
+        harness.blobs, vs_k=2, token_budget=2500,
+        frame_slice_context=render_frame_slice_context(harness, "p-tides"),
+        frame_crisis_context=render_frame_crisis_context(harness, "p-tides"),
+    )
+    assert "## frame-crisis" in pack and "## frame-slice" in pack
+    assert "STANDING ATTACKERS" in pack
+    assert "DEPARTURES ARE PERMITTED" in pack
+    assert pack.index("## frame-crisis") < pack.index("## frame-slice")

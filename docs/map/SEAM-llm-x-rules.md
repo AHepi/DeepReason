@@ -63,6 +63,8 @@ alias builders and `AllocatedPack`, six wire-contract classes with
 | Batch roster | `llm/wire.py`, `rules/crit.py` | `BatchCriticWireV2._one_case_per_target`; `if case.target not in target_ids` | one case per assigned target; an unassigned target registers nothing |
 | Contracts fail closed | `llm/wire.py` | `CriticTargetRequiredError`, `AliasTableRequiredError` | a compact critic or conjecturer call refuses to build without its target / call-local table |
 | Model-facing bodies | `llm/packs.py` | `render_conj_pack`, `render_crit_pack`, `render_batch_crit_pack`, `render_cx_retry_pack`, `render_experiment_pack`, `render_property_pack` | every budgeted pack is rendered inside `llm/`, from raw state |
+| The frame slice crosses as TEXT | `rules/conj.py`, `rules/crit.py`, `llm/packs.py` | `frame_slice_context`, `frame_crisis_context` | a rule computes what a consulted frame says (`calculus/render.py`); `llm/` decides what it costs. The same shape `frozen_evidence_context` and `citable_evidence_context` already cross by |
+| No pack in scope renders without its frame | `rules/conj.py`, `rules/crit.py` | all three `render_*_pack` call sites pass both | §9.5's "in every pack in scope" is a census over call sites, not a property of one |
 | Allocation marker | `llm/packs.py`, `rules/conj.py`, `llm/adapter.py` | `AllocatedPack`; `pack_is_allocated` | a rule that appends bytes after PackIR allocation must re-wrap, or the adapter re-clips the whole prompt |
 | Budget subtraction | `rules/crit.py` | `_conditioned_budget` | bytes a rule prepends come out of the pack budget before rendering, not after |
 | Route inputs vs prompt bytes | `rules/crit.py` | `_critic_execution` → `(call_kwargs, prefix)` | school stance is prompt text; only seat, lease and `school_id` are route inputs |
@@ -84,6 +86,31 @@ into the next repair pack. The forbidden set names authority, never content, and
 the one exemption is the counterexample payload: application data whose keys
 belong to the domain, not to the harness.
 `check: python -c "import re,pathlib; a=pathlib.Path('src/deepreason/llm/adapter.py').read_text(); w=pathlib.Path('src/deepreason/llm/wire.py').read_text(); assert re.search(r'candidate = repair\.candidate_from_raw\(turn, raw\)\n\s+reject_model_control_fields\(candidate\)\n\s+wire_value = wire_contract\.validate_value\(candidate\)', a); assert re.search(r'_reject_control_fields\(value\)\n\s+schema = self\.model_json_schema\(\)\n\s+_reject_unknown_fields\(value, schema, schema\)', w); from deepreason.llm.firewall import FORBIDDEN_MODEL_CONTROL_FIELDS as F, _OPAQUE_DATA_FIELDS as O; assert {'model','endpoint','route','tool','delegate','permission','spawn','guard_policy','acceptance','status','context_window_tokens'} <= F; assert O == {'counterexample'}; assert re.search(r'self\._preflight_value\(value\)\n\s+return self\.wire_model\.model_validate\(value\)', w)" && ! grep -rq "reject_model_control_fields" --include=*.py src/deepreason/rules && grep -q "^def reject_model_control_fields(" src/deepreason/llm/firewall.py && python -m pytest tests/test_model_firewall.py tests/test_wire_contracts.py::test_counterexample_payload_remains_opaque_domain_data -q`
+
+**The frame slice crosses as rendered TEXT, not as a structure**, and both
+renderers take it in two halves. `rules/` computes it (`calculus/render.py`
+decides what a consulted frame says about itself); `llm/` decides what it costs
+and how it is cut. Passing a `FrameSliceV1` instead would put a `calculus`
+import inside `llm/` for a type nothing there reasons about — the same argument
+that keeps `frozen_evidence_context` and `citable_evidence_context` strings.
+
+"Wounds render in-frame, IN EVERY PACK IN SCOPE" (§9.5) is therefore a census
+over call sites rather than a property of one function, and the census is
+checked: all THREE `render_conj_pack`/`render_crit_pack` call sites in `rules/`
+pass both halves, including the atomic-decomposition path in `crit.py` that
+only exists after a batch critic exhausts its schema. That third site was
+missed by the first implementation and caught by the check below, which is why
+the check counts call sites instead of asserting the two obvious ones.
+`check: python -c "import ast,pathlib;n=0
+for m,c in (('src/deepreason/rules/conj.py','render_conj_pack'),('src/deepreason/rules/crit.py','render_crit_pack')):
+    T=ast.parse(pathlib.Path(m).read_text())
+    for k in ast.walk(T):
+        if isinstance(k,ast.Call) and getattr(k.func,'id','')==c:
+            n+=1
+            p={x.arg for x in k.keywords}
+            assert {'frame_slice_context','frame_crisis_context'}<=p,(m,k.lineno,sorted(p))
+assert n==3,n"`
+`check: python -m pytest tests/test_frame_render.py::test_both_rules_put_the_frame_in_the_pack_they_dispatch tests/test_frame_render.py::test_the_frame_reaches_a_conjecture_pack_end_to_end -q`
 
 The lease travels one way: a rule never resolves its own — it either carries
 one the scheduler resolved, or, when a v6 self-dispatching rule has no

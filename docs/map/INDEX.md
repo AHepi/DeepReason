@@ -25,6 +25,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
 | know why an artifact is (or is not) framing its problems | `CON-standing-and-background.md`, then `SUB-calculus.md` |
+| know what a pack shows about the frame it is posed in | `SEAM-calculus-x-rules.md`, then `CON-packs-and-token-economy.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -117,11 +118,12 @@ traffic at all.
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
 | — | llm × scheduler | `SEAM-llm-x-scheduler.md` |
+| — | calculus × rules | `SEAM-calculus-x-rules.md` |
 
-The last eight carry no import-count because at least one side is a concept
+The last nine carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
-the periphery × verification case — every import between the sides is
-function-local, which the coupling metric cannot see. The adjudication ×
+the periphery × verification and calculus × rules cases — every import between
+the sides is function-local, which the coupling metric cannot see. The adjudication ×
 authority case is the strongest form of that: the agreement IS the absence of
 traffic, and the measured consequence of breaking it is that committed roots
 change meaning.
