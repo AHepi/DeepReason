@@ -86,16 +86,33 @@ this lane.
 
 **What NEVER routes to it.** Anything touching a frozen surface: NO
 TASK CONE MAY INCLUDE ONE. Check every cone against
-`docs/map/INV-frozen-surfaces.md` before the task is added, not after —
-the seven paths are `capabilities/state.py`, `harness.py`,
-`invariants.py`, `verification/`, `run_manifest.py`,
-`qualification.py`, and `llm/firewall.py`'s `route_fingerprint`. The
+`docs/map/INV-frozen-surfaces.md` before the task is added, not after.
+That document owns the list and states it as FIVE surfaces; they span
+seven paths, because surface 3 covers both `invariants.py` and
+`verification/` — `capabilities/state.py`, `harness.py`,
+`invariants.py`, `verification/`, `run_manifest.py` and
+`qualification.py`, plus the frozen-ADJACENT `route_fingerprint` in
+`llm/firewall.py`. Count paths when testing a cone; cite the owning
+document's five when citing the law. The
 driver's own cone check is a write boundary, not an authorization: it
 enforces the cone you declared, so a cone that should never have been
 declared passes it. Also never: work whose acceptance is a judgment
-(spec drift, design adequacy, whether a claim is warranted) — the
-pilot's Rung 4 exists to establish how that fails; and anything that
-seals, amends or edits a run record, which is an operator act always.
+(spec drift, design adequacy, whether a claim is warranted); and
+anything that seals, amends or edits a run record, which is an
+operator act always.
+
+**Two limits the pilot measured, both binding.** (1) A REVIEW IS NOT
+AN EXIT CODE. treadle 0.5 retires its own driver on exactly this
+ground, and rung T5 measured why: given a true document set and one
+falsified byte-for-byte otherwise, the reviewer named the planted
+contradiction in prose while its TYPED verdict fields — the only part
+a gate stores — were identical across both. Route a review here to
+GENERATE the evidence, then read the reply and dispose of it in
+writing per `skills/review-response/SKILL.md`; never let the stored
+PASS/FAIL stand in for having read it. (2) The write cone is only as
+good as its author: the driver enforces the cone you declared, so keep
+anything that judges the work — a mutation proof, an acceptance
+script — OUTSIDE the cone it judges.
 
 **Who may author a task.** ONLY THE OPERATOR OR THE MONITOR. This is a
 security boundary, not a courtesy: a task's `accept` and `verify`
