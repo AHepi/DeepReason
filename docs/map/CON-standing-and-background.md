@@ -1,7 +1,7 @@
 <!-- DR-CON-standing-and-background -->
 Verified-at: e3a6cadf5
 Verify: python -m pytest tests/test_calculus_vocabulary.py -q
-Owns: src/deepreason/status_display.py, src/deepreason/calculus/standing.py
+Owns: src/deepreason/status_display.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/render.py
 Seams: 
 Seams-undocumented: application x standing-and-background, scheduler x standing-and-background
 
@@ -152,7 +152,53 @@ the other.
 | add a scope-predicate operation | `calculus/scope.py::OPS` (`DR-SUB-calculus`) | `tests/test_calculus_scope_predicate.py` |
 | change what makes an assertion consulted | `calculus/standing.py::consultability_of` | `tests/test_calculus_frame_assertions.py` |
 | change what the standing view shows | `calculus/standing.py::standing_view` | `tests/test_calculus_standing.py` |
+| change what a PACK shows about a consulted frame | `calculus/render.py::render_frame_slice_context` / `render_frame_crisis_context` (`DR-SEAM-calculus-x-rules`) | `tests/test_frame_render.py` |
+| change how a frame's exit is graded or worded | `calculus/render.py::EXIT_GRADES`, `EXIT_GRADE_MEANINGS`; `cli/main.py::render_exit_grades` | `tests/test_frame_render.py::test_the_three_grades_are_distinct_and_contestation_rounds_to_neither` |
 | change what separates a frame from its subject | `calculus/separation.py::frame_separated` (`DR-SUB-calculus`) | `tests/test_calculus_frame_separation.py` |
+
+## The three ways a frame leaves standing (Rung 6, RIDER 2 / R44)
+
+The Computable Calculus says a consulted frame assertion exits standing in
+exactly TWO ways. The Formalization (§8.2) shows that is true only under an
+extra axiom the source never states:
+
+> `FrameDecisive(L): ℓ_L(f) ≠ S` for every promotion-addressed frame assertion.
+
+**It is not adopted.** Adopting it would buy a tidy theorem by declaring the
+calculus's own `S` label unreachable for frame assertions — and a frame nobody
+has beaten is not the same thing as one that was beaten, nor one whose
+accreditation lapsed. So there are three grades, keyed to the label:
+
+| grade | label | what it means | how it is reached |
+|---|---|---|---|
+| `fall` | `REFUTED` | the frame assertion itself is defeated | a warranted attack on the assertion |
+| `revocation` | `SUSPENDED_UNSUPPORTED` | accreditation lost — unearned, not wrong | a reach case it DEPENDS on is refuted, so pass two takes its support |
+| `contestation` | `SUSPENDED` | unresolved attack; nobody has won | an attacker locked in an unresolved cycle, so neither accepted nor defeated |
+
+`fall` and `revocation` are provably disjoint (Theorem 8.1) and every grade is
+reached by its OWN registration — if one graph could produce all three they
+would be a relabelling of one condition rather than three reachable states.
+`contestation` needs a CYCLE and not a chain: an attacker attacked by an
+unattacked critic is simply refuted, and a chain of three REINSTATES the first
+attacker under grounded semantics.
+
+The render never rounds `contestation` onto either neighbour, and both surfaces
+say what each grade MEANS rather than only naming it — "revocation" reads like
+a weaker "fall" unless it says that accreditation lapsed.
+
+`check: python -m pytest "tests/test_frame_render.py::test_all_three_exit_grades_are_reachable_by_their_own_registration" tests/test_frame_render.py::test_the_three_grades_are_distinct_and_contestation_rounds_to_neither tests/test_frame_render.py::test_no_module_rounds_a_suspended_frame_onto_a_neighbour tests/test_frame_render.py::test_the_cli_prints_all_three_grades_with_their_meanings -q`
+`check: python -c "from deepreason.calculus.render import EXIT_GRADES, exit_grade; from deepreason.ontology import Status; assert len(EXIT_GRADES) == 3 and len(set(EXIT_GRADES.values())) == 3; assert EXIT_GRADES[Status.SUSPENDED] == 'contestation'; assert EXIT_GRADES[Status.SUSPENDED] not in (EXIT_GRADES[Status.REFUTED], EXIT_GRADES[Status.SUSPENDED_UNSUPPORTED]); assert exit_grade(Status.ACCEPTED) is None"`
+
+The grades are a READOUT. `exit_grade` is a pure function of the label and
+`frame_exits` reads replayed state, so nothing here can make an assertion exit
+— A9 again, and the reason the grades live in `render.py` rather than beside
+`consultability_of`.
+
+**One limit, stated so it is not over-read.** `standing_view["exits"]` reports
+the grade an assertion is IN, not the sequence number at which it left `U`. The
+Formalization defines an exit as a transition between consecutive prefixes;
+answering "which grade is this frame in now" needs only the label, and replaying
+every prefix on every render would buy a reader nothing they could act on.
 
 ## How an artifact comes to have standing at all (Rung 5)
 

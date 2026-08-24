@@ -698,6 +698,32 @@ def _require_v6_workload_match(run_input, dossier, spec) -> None:
         )
 
 
+def render_exit_grades(view: dict) -> list[str]:
+    """The three exit grades for the `standing` text output, or no lines.
+
+    A module-level function rather than a closure so it can be tested without
+    standing up a v6 manifest root -- `standing` is a root-admission command,
+    and building a whole run to assert on three printed lines would test the
+    admission gate rather than the rendering.
+
+    Rounding is the specific failure this guards. `contestation` sits between
+    `fall` and `revocation` and reads like either from a distance, so a reader
+    shown only "no longer framing" would take an unresolved fight for a
+    settled one. Each grade therefore prints its name AND what it means: the
+    names are not self-evident, and "revocation" in particular reads like a
+    weaker "fall" unless it says that accreditation lapsed rather than that
+    the claim was beaten.
+    """
+    if not view.get("exits"):
+        return []
+    lines = ["", "LEFT STANDING (three grades, and none is the others):"]
+    for exit_ in view["exits"]:
+        lines.append(f"  {exit_['subject']}  {exit_['grade']} — {exit_['means']}")
+        lines.append(f"      assertion   {exit_['assertion']}  [{exit_['label']}]")
+        lines.append(f"      promotion   {exit_['promotion_problem']}")
+    return lines
+
+
 def main(argv: list[str] | None = None) -> int:
     """Entry point: _main wrapped so piping into `head`/`less` (which closes
     stdout early) exits quietly instead of tracebacking on BrokenPipeError."""
@@ -993,8 +1019,13 @@ def _main(argv: list[str] | None = None) -> int:
             # text output, not a change to a pinned surface.
             print(json.dumps(view, indent=2, sort_keys=True))
             return 0
+        def _print_exits() -> None:
+            for line in render_exit_grades(view):
+                print(line)
+
         if not view["grants"]:
             print("(no artifact is currently framing any problem)")
+            _print_exits()
             for line in render_knowledge(harness):
                 print(line)
             return 0
@@ -1012,6 +1043,7 @@ def _main(argv: list[str] | None = None) -> int:
             print(f"    departure       {grant['departure_protocol']}")
             for pid in grant["framed_problems"]:
                 print(f"    in scope        {pid}")
+        _print_exits()
         for line in render_knowledge(harness):
             print(line)
         return 0

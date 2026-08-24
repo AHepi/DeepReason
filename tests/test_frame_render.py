@@ -24,6 +24,7 @@ import pytest
 
 from deepreason.calculus import operations
 from deepreason.calculus.render import (
+    EXIT_GRADE_MEANINGS,
     EXIT_GRADES,
     FRAME_SLICE_ATTACKERS_N,
     render_frame_crisis_context,
@@ -712,3 +713,213 @@ def test_the_cap_can_displace_an_individual_attacker_and_says_so(harness):
     # Displaced, but not silently: the total is in the pack.
     assert f"{FRAME_SLICE_ATTACKERS_N} of {len(made)} shown" in crisis
     assert set(made) - set(shown)
+
+
+# --- R7 / G1: the third exit grade, and the anti-FrameDecisive check ---------
+
+def _unresolved_attack_on(harness, target_id: str):
+    """Attack `target_id` with a critic that is itself locked in an
+    unresolved cycle, so the attacker is neither accepted nor defeated.
+
+    A CYCLE is required, not a chain. An attacker attacked by an unattacked
+    critic is simply refuted, and a chain of three REINSTATES the first
+    attacker under grounded semantics -- the first version of this fixture
+    built exactly that and produced `refuted` where it wanted `suspended`.
+
+    Warrants attach only at artifact registration (there is no
+    `register_warrant`), so the cycle is closed by letting the first critic
+    name a target that does not exist yet, which `Harness` admits.
+    """
+    from deepreason.ontology import Artifact, Warrant, WarrantType
+
+    nu_a = _art(harness, "nu: the overreach case is sound")
+    nu_b = _art(harness, "nu: the rebuttal is sound")
+    against_rebuttal = Warrant(
+        id="w-overreach-vs-rebuttal", target="CRITIC-REBUTTAL",
+        type=WarrantType.ARGUMENTATIVE, validity_node=nu_a.id,
+    )
+    against_target = Warrant(
+        id="w-overreach-vs-frame", target=target_id,
+        type=WarrantType.ARGUMENTATIVE, validity_node=nu_a.id,
+    )
+    harness.register_artifact(
+        Artifact(
+            id="CRITIC-OVERREACH",
+            content_ref="inline:critic: this frame overreaches its scope",
+            warrants=[against_rebuttal.id, against_target.id],
+            provenance=Provenance(role="critic"),
+        ),
+        warrants=[against_rebuttal, against_target],
+    )
+    against_overreach = Warrant(
+        id="w-rebuttal-vs-overreach", target="CRITIC-OVERREACH",
+        type=WarrantType.ARGUMENTATIVE, validity_node=nu_b.id,
+    )
+    harness.register_artifact(
+        Artifact(
+            id="CRITIC-REBUTTAL",
+            content_ref="inline:critic: the overreach case misreads the scope",
+            warrants=[against_overreach.id],
+            provenance=Provenance(role="critic"),
+        ),
+        warrants=[against_overreach],
+    )
+
+
+def _assertion_labelled(harness, target_status):
+    """A consulted-shaped frame assertion driven to one of the three exit
+    labels, by its OWN registration rather than by patching a status.
+
+    Each grade needs a different graph, which is the point: if one setup
+    could produce all three, the grades would be a relabelling of one
+    condition rather than three reachable states.
+    """
+    subject, case, promotion, assertion = _framed(harness)
+    if target_status is Status.REFUTED:
+        # fall: the assertion itself is defeated by a warranted attack.
+        attack(harness, assertion.id, "this-frame-was-never-earned")
+    elif target_status is Status.SUSPENDED_UNSUPPORTED:
+        # revocation: the reach case it DEPENDS on is refuted, so pass two
+        # takes its support away. Orphaned, not false.
+        attack(harness, case.id, "the-reach-records-were-contaminated")
+    else:
+        # contestation: the attacker is locked in an unresolved cycle, so it
+        # is neither accepted nor defeated and the assertion is attacked by
+        # something nobody has beaten. A CYCLE is required, not a chain: a
+        # chain of three reinstates the first critic (grounded semantics), and
+        # the first version of this fixture built one and produced `refuted`.
+        _unresolved_attack_on(harness, assertion.id)
+    assert harness.state.status[assertion.id] == target_status, (
+        target_status, harness.state.status[assertion.id]
+    )
+    return assertion
+
+
+@pytest.mark.parametrize(
+    "label,grade",
+    [
+        (Status.REFUTED, "fall"),
+        (Status.SUSPENDED_UNSUPPORTED, "revocation"),
+        (Status.SUSPENDED, "contestation"),
+    ],
+)
+def test_all_three_exit_grades_are_reachable_by_their_own_registration(
+    tmp_path, label, grade
+):
+    """G1. Each grade reached by a DIFFERENT graph, and the render names it.
+
+    This is the anti-`FrameDecisive` check. The Computable Calculus claims a
+    consulted frame exits standing in exactly two ways; the Formalization
+    (§8.2) shows that is true only under an extra axiom it never states --
+    `FrameDecisive(L): ℓ_L(f) ≠ S`. If that axiom held, the third
+    parametrisation here would be unreachable.
+    """
+    from deepreason.calculus.standing import standing_view
+
+    harness = Harness(tmp_path / f"run-{grade}")
+    assertion = _assertion_labelled(harness, label)
+
+    assert exit_grade(label) == grade
+    view = standing_view(harness)
+    reported = [e for e in view["exits"] if e["assertion"] == assertion.id]
+    assert len(reported) == 1, view["exits"]
+    assert reported[0]["grade"] == grade
+    assert reported[0]["label"] == label.value
+    # It has left standing, whichever way: no grant, and no frame renders.
+    assert view["grants"] == []
+
+
+def test_the_three_grades_are_distinct_and_contestation_rounds_to_neither(tmp_path):
+    """G1's second half, and the one the rider actually exists for.
+
+    Three labels, three grades, no collapsing. A design that adopted
+    `FrameDecisive` would map `S` onto `R` or `SU` and this would fail; so
+    would a render that reported "not consulted" for all three, which is the
+    lazier way to lose the distinction.
+    """
+    from deepreason.calculus.standing import standing_view
+
+    seen = {}
+    for label, grade in (
+        (Status.REFUTED, "fall"),
+        (Status.SUSPENDED_UNSUPPORTED, "revocation"),
+        (Status.SUSPENDED, "contestation"),
+    ):
+        harness = Harness(tmp_path / f"root-{grade}")
+        assertion = _assertion_labelled(harness, label)
+        entry = next(
+            e for e in standing_view(harness)["exits"]
+            if e["assertion"] == assertion.id
+        )
+        seen[grade] = (entry["label"], entry["means"])
+
+    assert len(seen) == 3
+    assert len({v[0] for v in seen.values()}) == 3          # three labels
+    assert len({v[1] for v in seen.values()}) == 3          # three meanings
+    assert seen["contestation"][0] == Status.SUSPENDED.value
+    assert seen["contestation"][1] != seen["fall"][1]
+    assert seen["contestation"][1] != seen["revocation"][1]
+    assert len(EXIT_GRADES) == 3 and len(set(EXIT_GRADES.values())) == 3
+    assert exit_grade(Status.ACCEPTED) is None               # still standing
+
+
+def test_no_module_rounds_a_suspended_frame_onto_a_neighbour(tmp_path):
+    """G1, structurally. `FrameDecisive` is not adopted, asserted as an
+    ABSENCE rather than trusted to stay unadopted: `EXIT_GRADES` is the one
+    mapping from label to grade, it is injective, and `SUSPENDED` maps to
+    neither of its neighbours' grades."""
+    assert EXIT_GRADES[Status.SUSPENDED] not in (
+        EXIT_GRADES[Status.REFUTED],
+        EXIT_GRADES[Status.SUSPENDED_UNSUPPORTED],
+    )
+    assert set(EXIT_GRADES) == {
+        Status.REFUTED, Status.SUSPENDED_UNSUPPORTED, Status.SUSPENDED
+    }
+    assert Status.ACCEPTED not in EXIT_GRADES
+
+
+def test_the_cli_prints_all_three_grades_with_their_meanings(tmp_path):
+    """R7 at the reader's surface. The grade names are not self-evident --
+    "revocation" reads like a weaker "fall" unless it says otherwise -- so
+    the text output prints each grade WITH what it means, and never collapses
+    the three into "no longer framing"."""
+    from deepreason.calculus.standing import standing_view
+    from deepreason.cli.main import render_exit_grades
+
+    for label, grade in (
+        (Status.REFUTED, "fall"),
+        (Status.SUSPENDED_UNSUPPORTED, "revocation"),
+        (Status.SUSPENDED, "contestation"),
+    ):
+        harness = Harness(tmp_path / f"root-{grade}")
+        _assertion_labelled(harness, label)
+        out = "\n".join(render_exit_grades(standing_view(harness)))
+        assert "LEFT STANDING" in out, grade
+        assert grade in out, grade
+        assert EXIT_GRADE_MEANINGS[grade] in out, grade
+        assert label.value in out, grade
+        for other in ("fall", "revocation", "contestation"):
+            if other != grade:
+                assert EXIT_GRADE_MEANINGS[other] not in out, (grade, other)
+
+    # No exits, no heading -- not an empty one (N1, at the reader's surface).
+    quiet = Harness(tmp_path / "quiet")
+    _framed(quiet)
+    assert render_exit_grades(standing_view(quiet)) == []
+
+
+def test_the_standing_json_view_carries_the_exits(tmp_path):
+    """The same three grades through `deepreason standing --json`, which is
+    also what the MCP `run_standing` tool renders -- so the expansion path
+    for a frame slice reaches both surfaces without either gaining a tool."""
+    from deepreason.calculus.standing import standing_view
+
+    harness = Harness(tmp_path / "run")
+    assertion = _assertion_labelled(harness, Status.SUSPENDED)
+    view = standing_view(harness)
+    assert view["view"] == "standing.v1"
+    entry = next(e for e in view["exits"] if e["assertion"] == assertion.id)
+    assert set(entry) == {
+        "assertion", "subject", "promotion_problem", "label", "grade", "means"
+    }
+    assert entry["grade"] == "contestation"

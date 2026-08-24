@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 11 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
+State: **step 12 next** (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -79,7 +79,7 @@ production lines over `src/`.
   Done-criterion: the test passes and is shown RED under a mutation that
   renders the slice only on the first cycle, pasted.
 
-- [ ] **11. The three exit grades** (S8, R7, G1) `[COMMIT]`
+- [x] **11. The three exit grades** (S8, R7, G1) `[COMMIT]`
   `render.EXIT_GRADES` / `frame_exits`; `standing_view["exits"]`; the CLI
   render; the anti-`FrameDecisive` absence check.
   Done-criterion: A8's test passes, showing three distinct grades from
@@ -217,6 +217,22 @@ and the cap CAN displace an individual early attacker, which is disclosed
 by the count rather than silent — so G6 is unconditional only while the
 total is within the cap.
 
+**Step 11** — R7/G1, the anti-`FrameDecisive` check. Three grades, each
+reached by its OWN graph:
+
+| grade | label | registration |
+|---|---|---|
+| `fall` | `refuted` | a warranted attack on the assertion |
+| `revocation` | `suspended_unsupported` | the reach case it depends on is refuted |
+| `contestation` | `suspended` | an attacker locked in an unresolved cycle |
+
+Mutations: (a) `Status.SUSPENDED → "revocation"` (FrameDecisive adopted) →
+**3 failed**; (b) `SUSPENDED` dropped from `EXIT_GRADES` (the two-exit
+claim) → **3 failed**. Restored → `27 passed`.
+`standing_view["exits"]` and the CLI both name each grade AND what it
+means. Ring incl. `test_calculus_standing.py`,
+`test_promotion_solo.py`, `test_calculus_vocabulary.py` → green.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -226,6 +242,23 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 11 — the first contestation fixture produced `refuted`, not
+`suspended`.** It built a CHAIN — assertion ← critic ← counter ← rebuttal —
+and grounded semantics reinstates the first critic across an odd chain, so
+the assertion came out defeated. Contestation needs a CYCLE: the attacker
+must be locked in a mutual attack so it is neither accepted nor defeated.
+Warrants attach only at artifact registration (there is no
+`register_warrant`), so the cycle is closed by letting the first critic name
+a target that does not exist yet, which `Harness` admits.
+
+**Step 11 — the CLI test could not call the CLI.** `standing` is a
+root-admission command and refuses a root with no run manifest
+(`MANIFEST_FILE_UNAVAILABLE`), so asserting on three printed lines would
+have meant standing up a whole v6 manifest run — testing the admission gate
+rather than the rendering. The exit rendering was lifted out of `main`'s
+closure into a module-level `render_exit_grades(view)`, which is the better
+shape anyway.
 
 **Step 10 — the first terminal-persistence test could not fail either.**
 Written at `token_budget=300`, it passed with `frame-crisis` made

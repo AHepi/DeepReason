@@ -223,6 +223,8 @@ def standing_view(harness) -> dict:
     carrying `framed_problems` because a grant a reader cannot locate in the
     frontier is a grant they cannot act on.
     """
+    from deepreason.calculus.render import frame_exits
+
     grants = sorted(consulted(harness), key=lambda g: g.assertion_id)
     return {
         "view": "standing.v1",
@@ -245,4 +247,12 @@ def standing_view(harness) -> dict:
             for g in grants
         ],
         "subjects": sorted({g.subject_id for g in grants}),
+        # THE THREE EXIT GRADES (Formalization §8.2, RIDER 2/R44). A frame
+        # assertion that is no longer consulted left standing in one of three
+        # ways, and the view names which. `FrameDecisive` -- the extra axiom
+        # under which only two exits exist -- is NOT adopted: it would buy a
+        # tidy theorem by declaring the calculus's own `S` label unreachable
+        # for frame assertions, and a frame nobody has beaten is not the same
+        # thing as a frame that was beaten or one whose accreditation lapsed.
+        "exits": [dict(exit_) for exit_ in frame_exits(harness)],
     }
