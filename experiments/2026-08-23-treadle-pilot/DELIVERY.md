@@ -87,6 +87,21 @@ the regression the install caused.
    the key appears in 0 of them — and lived only in a scratchpad file outside the
    repo. Worth rotating anyway.
 
+## Closing instruments
+
+    python -m pytest tests/ -q -n 4   -> 3873 passed, 2 failed, 6 skipped
+      both failures are tests/test_mcp_run.py, both in AUDIT_BASELINES.md's
+      named known-flaky-under-xdist set; serial re-run -> 2 passed in 12.22s.
+      Checked, not assumed. Nothing in this tranche touches MCP.
+    python tools/docs_verify.py       -> 3 failed (the three CON-run-identity
+      shallow-clone checks; exactly the recorded baseline, no new failure)
+    python3 tools/treadle0.5/selftest.py -> 38 checks, 12 planted refused, 0 failed
+    python3 scripts/consistency_packet.py --verify -> exit 0
+    verify_ledger('zoo/reviews/calls.jsonl')       -> 5 rows, clean
+    treadle --repo . doctor                        -> exit 0, every line OK
+    scripts/swarm_gate.py log-verify               -> chain intact
+    credential scan                                -> key in 0 tracked files
+
 ## Parked, not fixed
 
 `PARKED.md` P1: `docs/map/INV-frozen-surfaces.md` still prescribes the root

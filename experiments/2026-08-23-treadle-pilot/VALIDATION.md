@@ -47,7 +47,7 @@ about either.
 | Instrument | Result |
 |---|---|
 | `python -m pytest tests/ -q -n 4` (install boundary) | 3 failed → cause fixed → **3875 passed, 0 failed** |
-| `python -m pytest tests/ -q -n 4` (final) | see DELIVERY.md — run after the last commit |
+| `python -m pytest tests/ -q -n 4` (final) | **3873 passed, 2 failed, 6 skipped** — both failures `tests/test_mcp_run.py`, both in the baseline's named known-flaky set ("3 tests in `tests/test_mcp_run.py` ... thread-join timing"). Verified rather than assumed: serial re-run `2 passed in 12.22s`. Nothing in this tranche touches MCP |
 | `python tools/docs_verify.py` | **3 failed**, the three `CON-run-identity.md` shallow-clone checks — exactly the recorded baseline, no new failure |
 | `python3 tools/treadle0.5/selftest.py` | 38 checks, 12 planted violations refused, **0 failed** |
 | `python3 scripts/consistency_packet.py --verify` | exit 0 |
