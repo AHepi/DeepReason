@@ -59,6 +59,28 @@ Recorded 2026-08-12 at main 074ef1549.
   observation died at an earlier stage that shares the `reason` label
   in the failure envelope.
 
+- **Cycle soak** (`python -u scripts/cycle_soak.py --case epoch3`):
+  **expected exit 0.** The pre-launch instrument added 2026-08-23
+  (`experiments/2026-08-23-change-cycle-soak-instrument/`). Like the wheel
+  smokes, NO gate runs it — it is minutes-long and is run by hand before a
+  live launch. It drives `TextRunApplicationService` for 8 cycles on the
+  launch config's own shape against the wheel smoke's stub, and asserts a
+  typed terminal, no `operational_failure`, a clean `verify_root`, and a
+  cycle depth past 2 (the deepest of the four recorded 2026-08-22 deaths).
+  Its exit status is three-valued and the distinction is load-bearing:
+  **0** clean, **1** a real regression, **3** ONLY seams listed in the
+  script's `EXPECTED_RED` map failed. Exit 3 is a baseline value only while
+  that map is non-empty; an empty map plus exit 3 is a finding.
+  Seam dispositions are recorded per run in `<out>/soak-report.json`. A
+  seam reported `not-coverable` or `partial` is NOT coverage — see that
+  tranche's RESULTS.md for the standing honesty rows.
+  `--induce-repairs N` is a PROBE, not part of this baseline: it makes the
+  stub answer the run's first N wire schemas unusably once, to reach the
+  repair ladder the always-valid stub cannot. Under it the soak currently
+  exits 1 on a `workflow-call-pairing` violation, parked as P1 in that
+  tranche. Do not read that exit as a baseline delta; the baseline is the
+  bare invocation above.
+
 ## Census anchors (move with the tree; verify before trusting)
 
 - Committed-root census and per-root verdicts: the newest committed

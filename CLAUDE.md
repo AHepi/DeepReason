@@ -141,6 +141,16 @@ Regression tests name their motivating run in the docstring
 Ladders are shell scripts (`experiments/*/**_run.sh`) that do
 setup → qualify → reason → audit against a `DEEPREASON_HOME`.
 
+**No live launch without a green soak on the launch config**: run
+`python -u scripts/cycle_soak.py --case <case>` before any ladder launch.
+It drives the managed path to cycle 8 on the launch configuration's own
+shape against the deterministic stub, and carries a named assertion for
+each of the four 2026-08-22 cycle-0-to-2 operational deaths. It has
+REPRODUCED one of them offline (the reservation-bound seam); the other
+three are asserted, not demonstrated — read that tranche's RESULTS.md
+before treating a green soak as full coverage
+(`experiments/2026-08-23-change-cycle-soak-instrument/`).
+
 - **Run identity is deterministic.** Same question + config → same
   run id. A leftover root refuses relaunch with RUN_ALREADY_STARTED.
   Retire it — `git mv run-<id> <failed|completed>-epochN-run-<id>` —
