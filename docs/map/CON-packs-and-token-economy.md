@@ -78,6 +78,31 @@ content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
 `check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==17 and len(r)==13;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4"`
 
+**NO SILENT CAPS — a dropped section whose ABSENCE changes what the model may
+DO is named in the pack.** `allocate_pack` cuts an unaffordable optional
+section leaving no header and no placeholder, and "absence is the only signal"
+is right for a neighbourhood and wrong for a citable-evidence legend: a pack
+whose legend the budget cut is byte-indistinguishable from a run with no
+admitted evidence in it. P4 measured that shape from the other side — 0 of 36
+sub-problem prompts carrying citable blocks — and fixed the GATING; this is the
+allocation half (Rung 6, R6). `DISCLOSED_ON_DROP` names the four sections whose
+absence is reported (`citable-evidence-blocks`, `frozen-evidence-context`,
+`premise-invitation`, `standing-attacks`), and `_allocate_sections` re-allocates
+with a mandatory `context-withheld` notice until the notice names exactly what
+that allocation cut. When nothing is cut the notice is ABSENT, not empty — an
+always-present "withheld: none" line is the empty slot
+`docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md` measured as worse than a populated
+one.
+
+Convergence is MEASURED, not proved, and the distinction is recorded because
+the obvious argument is wrong: the dropped set is not monotone in `remaining`,
+since `allocate_pack` admits droppable sections greedily and `continue`s past
+one that will not fit, so a smaller budget can afford a later small section it
+could not afford before. At most three passes across 115 budgets from 1 to 799,
+against a bound of `len(sections) + 1`.
+`check: python -m pytest tests/test_frame_render.py::test_the_disclosure_loop_reaches_a_fixed_point tests/test_frame_render.py::test_a_dropped_citable_legend_is_disclosed_in_the_pack tests/test_frame_render.py::test_nothing_dropped_means_no_withheld_notice_at_all -q`
+`check: python -c "from deepreason.llm.packs import DISCLOSED_ON_DROP; assert DISCLOSED_ON_DROP == {'citable-evidence-blocks','frozen-evidence-context','premise-invitation','standing-attacks'}, sorted(DISCLOSED_ON_DROP)"`
+
 **Slow-changing sections precede volatile ones** so a provider prefix cache
 bills the repeated head at the cached rate — problem context and commitment
 schemas before the target, school stance before the neighbourhood. Pure

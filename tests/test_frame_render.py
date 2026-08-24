@@ -454,3 +454,109 @@ def test_the_exact_crisis_section_is_bounded_by_construction(harness):
     assert approximate_tokens(render_frame_slice_context(harness, "p-tides")) < (
         ARTICULATION_DIGEST_CHARS // 2
     )
+
+
+# --- R6 / G7: P4's render half, and no silent caps ---------------------------
+
+def _notice_body(pack: str) -> str:
+    """Just the `context-withheld` section's own text.
+
+    The notice sits at priority 1, so it renders near the TOP of the pack and
+    everything after it -- including the real section headers -- follows it. A
+    bare `pack.split("CONTEXT WITHHELD")[1]` therefore reads the whole rest of
+    the pack as if it were the notice, which is how the first version of these
+    two tests failed against correct code.
+    """
+    if "## context-withheld" not in pack:
+        return ""
+    after = pack.split("## context-withheld", 1)[1]
+    return after.split("\n\n## ", 1)[0]
+
+
+def test_a_dropped_citable_legend_is_disclosed_in_the_pack(harness):
+    """R6 (P4's render half) and G7.
+
+    P4 measured 0 of 36 sub-problem prompts carrying citable evidence blocks
+    and fixed the GATING -- the legend's universe is now unconditional. This
+    is the allocation half of the same question, and the point is that the
+    same outcome is still reachable silently: a dropped section leaves no
+    header and no placeholder, so a pack whose legend the budget cut is
+    byte-indistinguishable from a run with no admitted evidence in it. After
+    this, the deterministic section allocation SAYS what it settled.
+    """
+    from deepreason.llm.packs import DISCLOSED_ON_DROP, render_conj_pack
+
+    problem = _problem(harness, "p-cite", "a problem with admitted evidence")
+    legend = "CITABLE EVIDENCE BLOCKS\n" + "\n".join(
+        f"[{i:016x}] an admitted passage about the tides" for i in range(12)
+    )
+
+    generous = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, citable_evidence_context=legend,
+    )
+    assert "## citable-evidence-blocks" in generous
+    assert "CONTEXT WITHHELD" not in generous
+
+    starved = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=1, citable_evidence_context=legend,
+    )
+    # The notice renders at priority 1, near the TOP of the pack, so a bare
+    # substring search finds the name inside the notice itself. Sections are
+    # identified by their header; the notice by its own section body.
+    assert "## citable-evidence-blocks" not in starved
+    assert "CONTEXT WITHHELD" in starved
+    assert "citable-evidence-blocks" in _notice_body(starved)
+    assert "citable-evidence-blocks" in DISCLOSED_ON_DROP
+
+
+def test_nothing_dropped_means_no_withheld_notice_at_all(harness):
+    """G5 again, at the allocation layer. A standing "withheld: none" line
+    would be the empty slot the blinding note measured as worse than a
+    populated one, and it would appear in every pack in the run."""
+    from deepreason.llm.packs import render_conj_pack
+
+    problem = _problem(harness, "p-plain", "an ordinary problem")
+    pack = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500,
+    )
+    assert "CONTEXT WITHHELD" not in pack
+    assert "## context-withheld" not in pack
+
+
+def test_the_disclosure_loop_reaches_a_fixed_point(harness):
+    """The termination argument, exercised rather than asserted.
+
+    Adding the mandatory notice shrinks `remaining`, which can cut MORE
+    sections, which grows the notice. The dropped set is NOT monotone in
+    `remaining` -- `allocate_pack` is greedy and `continue`s past a section
+    that will not fit, so a smaller budget can afford a later small section it
+    could not afford before. Convergence is therefore a measured property, not
+    a proved one, and this sweep is the measurement: 115 budgets from 1 to
+    799 plus the default, each returning a pack that agrees with itself.
+
+    The invariant, stated as the two assertions below: no section is both
+    rendered and reported withheld, and no disclosed-on-drop section supplied
+    to the pack is absent without being named.
+    """
+    from deepreason.llm.packs import DISCLOSED_ON_DROP, render_conj_pack
+
+    problem = _problem(harness, "p-many", "a problem carrying every optional part")
+    for budget in list(range(1, 800, 7)) + [2500]:
+        pack = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=budget,
+            citable_evidence_context="CITABLE EVIDENCE BLOCKS\n" + "x" * 4000,
+            frozen_evidence_context="FROZEN EVIDENCE\n" + "y" * 4000,
+        )
+        present = {s for s in DISCLOSED_ON_DROP if f"## {s}" in pack}
+        body = _notice_body(pack)
+        named = {s for s in DISCLOSED_ON_DROP if s in body}
+        # No section is both rendered and reported withheld.
+        assert not (present & named), (budget, present, named)
+        # And every disclosed-on-drop section supplied to this pack is either
+        # present or named -- never quietly absent.
+        for section in ("citable-evidence-blocks", "frozen-evidence-context"):
+            assert section in present or section in named, (budget, section)

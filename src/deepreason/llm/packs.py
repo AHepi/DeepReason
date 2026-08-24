@@ -262,18 +262,112 @@ def _pack_section(
     )
 
 
+# Sections whose ABSENCE changes what the model may DO, rather than only what
+# it sees. A dropped `neighbourhood` costs exemplars; a dropped
+# `citable-evidence-blocks` costs the ability to cite at all, and the pack
+# then looks exactly like a run with no admitted evidence in it. P4 measured
+# that shape from the other side -- 0 of 36 sub-problem prompts carried
+# citable blocks -- and fixed the GATING; this is the allocation half, where
+# the same outcome can still be reached silently, because a dropped section
+# leaves no header and no placeholder.
+DISCLOSED_ON_DROP = frozenset(
+    {
+        "citable-evidence-blocks",
+        "frozen-evidence-context",
+        "premise-invitation",
+        "standing-attacks",
+    }
+)
+
+_WITHHELD_ID = "context-withheld"
+
+
+def _withheld_notice(dropped: tuple[str, ...]) -> str:
+    return (
+        "CONTEXT WITHHELD FOR BUDGET — these sections exist in this run and "
+        "were cut from THIS pack to fit its token budget, not because they "
+        "are empty: " + ", ".join(dropped) + ". Treat what you were shown as "
+        "partial; do not conclude the withheld content does not exist."
+    )
+
+
 def _allocate_sections(
     role: str, token_budget: int, sections: list[PackSection]
 ) -> str:
-    """Render one finite PackIR without ever clipping the aggregate prefix."""
-    result = allocate_pack(
-        PackIR(
-            profile=f"legacy.{role}.pack-ir.v1",
-            template_role=role,
-            target_tokens=token_budget,
-            sections=tuple(sections),
+    """Render one finite PackIR without ever clipping the aggregate prefix.
+
+    NO SILENT CAPS. `allocate_pack` drops an unaffordable optional section
+    leaving no header and no placeholder -- absence is the only signal, which
+    is right for a neighbourhood and wrong for the sections in
+    `DISCLOSED_ON_DROP`, where absence is indistinguishable from a run that
+    never had the content. So the allocation runs to a FIXED POINT: allocate,
+    and if any disclosed-on-drop section was cut, allocate again with a
+    mandatory one-line notice naming what was cut.
+
+    Termination is by the BOUND, and the first version of this comment claimed
+    something stronger that is not true. Adding the notice only ever decreases
+    `remaining`, but the dropped set is NOT monotone in `remaining`:
+    `allocate_pack` admits droppable sections greedily in `(priority, id)`
+    order and `continue`s past one that will not fit, so a smaller budget can
+    drop an early large section and thereby afford a later small one that had
+    not fit before. Convergence is therefore measured rather than proved --
+    at most three passes across 115 budgets from 1 to 799
+    (`experiments/2026-08-24-change-rung6-frame-render-departures/`), against a
+    bound of `len(sections) + 1`.
+
+    What IS guaranteed is the property that matters: the loop returns only
+    when the notice names exactly the disclosed-on-drop sections that final
+    allocation cut. On the bound-exhaustion path it names the union of every
+    cut it saw, which can OVER-name -- and over-naming is the safe direction,
+    because a section reported withheld while present costs a reader one
+    confusing line, whereas a section cut and not reported is the silent cap
+    this function exists to abolish.
+
+    When nothing disclosed is dropped the notice is ABSENT, not empty: an
+    always-present "withheld: none" line would be the empty slot that
+    `docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md` measured as worse than a
+    populated one.
+    """
+    base = list(sections)
+
+    def _allocate(disclosed: tuple[str, ...]):
+        current = list(base)
+        if disclosed:
+            current.append(
+                _pack_section(
+                    _WITHHELD_ID,
+                    _withheld_notice(disclosed),
+                    1,
+                    droppable=False,
+                    compressible=False,
+                )
+            )
+        result = allocate_pack(
+            PackIR(
+                profile=f"legacy.{role}.pack-ir.v1",
+                template_role=role,
+                target_tokens=token_budget,
+                sections=tuple(current),
+            )
         )
-    )
+        cut = tuple(
+            sorted(
+                section.id
+                for section in result.sections
+                if section.dropped and section.id in DISCLOSED_ON_DROP
+            )
+        )
+        return result, cut
+
+    disclosed: tuple[str, ...] = ()
+    seen: set[str] = set()
+    for _ in range(len(base) + 1):
+        result, cut = _allocate(disclosed)
+        if cut == disclosed:
+            return AllocatedPack(result.text)
+        seen.update(cut)
+        disclosed = cut
+    result, _ = _allocate(tuple(sorted(seen)))
     return AllocatedPack(result.text)
 
 

@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 8 next**
+State: **step 9 next**
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -57,7 +57,7 @@ production lines over `src/`.
   `DR-CON-packs-and-token-economy` census check updated in the SAME
   commit.
 
-- [ ] **8. The drop disclosure** (S6.2, S6.3, R6, G7)
+- [x] **8. The drop disclosure** (S6.2, S6.3, R6, G7)
   `DISCLOSED_ON_DROP` + the bounded fixed-point loop in
   `_allocate_sections`.
   Done-criterion: A7's test passes; a pasted demonstration that a
@@ -180,6 +180,18 @@ tests/test_compact_profiles.py` → **172 passed**.
 `DR-CON-packs-and-token-economy`'s two new checks were RUN before they were
 written down (`census OK`, `flags OK`, `2 passed`).
 
+**Step 8** — a starved conjecture pack now names what it cut:
+```
+CONTEXT WITHHELD FOR BUDGET — these sections exist in this run and were cut
+from THIS pack to fit its token budget, not because they are empty:
+citable-evidence-blocks. Treat what you were shown as partial; do not
+conclude the withheld content does not exist.
+```
+Convergence MEASURED rather than argued: at most **3** `allocate_pack`
+passes across 115 budgets from 1 to 799, bound `len(sections)+1`. Ring
+(incl. `test_v6_request_envelope.py`, `test_v6_context_continuation.py`) →
+**191 passed**. Both new map checks run before being written down.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -189,6 +201,20 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 8 — my own termination argument was wrong, and the first two tests
+failed against correct code.** SPEC.md S6.3 claimed the dropped set is
+monotone as `remaining` decreases, so the loop provably converges. It is
+not: `allocate_pack` is greedy and `continue`s past a section that will not
+fit, so a smaller budget can afford a later small section it could not
+afford before. Convergence is now a MEASURED property with a sweep behind
+it, and the bound-exhaustion path names the union (over-naming, the safe
+direction) rather than returning a pack that under-reports. Separately,
+both new tests initially failed because they searched for section names as
+bare substrings while the `context-withheld` notice sits at priority 1 and
+renders near the TOP — so `pack.split("CONTEXT WITHHELD")[1]` read the
+whole rest of the pack as the notice. Test bug, not a code bug; fixed with
+a `_notice_body` helper that reads only the notice's own section.
 
 **Step 7 — SPEC.md S6.1 specified one section; it had to become two.**
 The single compressible section passed non-droppability and still lost the
