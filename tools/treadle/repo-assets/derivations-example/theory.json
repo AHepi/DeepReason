@@ -1,0 +1,156 @@
+{
+ "name": "toy",
+ "sorts": [
+  "A"
+ ],
+ "functions": {},
+ "relations": {
+  "R": [
+   "A",
+   "A"
+  ],
+  "Q": [
+   "A",
+   "A"
+  ]
+ },
+ "rows": {
+  "AX1": {
+   "kind": "axiom",
+   "condition": [
+    "forall",
+    "x",
+    "A",
+    [
+     "implies",
+     [
+      "rel",
+      "R",
+      [
+       "var",
+       "x"
+      ],
+      [
+       "var",
+       "x"
+      ]
+     ],
+     [
+      "rel",
+      "Q",
+      [
+       "var",
+       "x"
+      ],
+      [
+       "var",
+       "x"
+      ]
+     ]
+    ]
+   ]
+  },
+  "AX2": {
+   "kind": "axiom",
+   "condition": [
+    "implies",
+    [
+     "rel",
+     "R",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ],
+    [
+     "rel",
+     "Q",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ]
+   ]
+  },
+  "AX3": {
+   "kind": "axiom",
+   "condition": [
+    "rel",
+    "R",
+    [
+     "elem",
+     "A",
+     "a0"
+    ],
+    [
+     "elem",
+     "A",
+     "a0"
+    ]
+   ]
+  },
+  "T1": {
+   "kind": "claim",
+   "condition": [
+    "rel",
+    "Q",
+    [
+     "elem",
+     "A",
+     "a0"
+    ],
+    [
+     "elem",
+     "A",
+     "a0"
+    ]
+   ]
+  },
+  "T2": {
+   "kind": "claim",
+   "condition": [
+    "and",
+    [
+     "rel",
+     "R",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ],
+    [
+     "rel",
+     "Q",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ]
+   ]
+  }
+ }
+}

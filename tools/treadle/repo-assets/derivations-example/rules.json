@@ -1,0 +1,62 @@
+{
+ "schema": "DERIVATION_RULES_V1",
+ "grades": {
+  "order": [
+   "D",
+   "T",
+   "P",
+   "B"
+  ],
+  "default_propagation": "min"
+ },
+ "rules": {
+  "MP": {
+   "premises": [
+    [
+     "implies",
+     "?A",
+     "?B"
+    ],
+    "?A"
+   ],
+   "conclusion": "?B",
+   "side_conditions": []
+  },
+  "AND_I": {
+   "premises": [
+    "?A",
+    "?B"
+   ],
+   "conclusion": [
+    "and",
+    "?A",
+    "?B"
+   ],
+   "side_conditions": []
+  },
+  "ALL_E": {
+   "premises": [
+    [
+     "forall",
+     "?xn",
+     "?S",
+     "?A"
+    ]
+   ],
+   "conclusion": "?B",
+   "side_conditions": [
+    {
+     "kind": "substitution",
+     "of": "?A",
+     "var": "?xv",
+     "term": "?t",
+     "gives": "?B"
+    },
+    {
+     "kind": "MANUAL",
+     "text": "?xv is ['var', ?xn] and term ?t inhabits sort ?S"
+    }
+   ]
+  }
+ }
+}

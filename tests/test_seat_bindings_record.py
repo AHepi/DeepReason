@@ -72,7 +72,14 @@ def _committed_roots() -> list[Path]:
     tracked = subprocess.run(
         ["git", "ls-files"], capture_output=True, text=True, check=True
     ).stdout.splitlines()
-    return [Path(p).parent for p in tracked if p.endswith("/log.jsonl")]
+    # A tracked ``log.jsonl`` is not by itself a run root: other tools commit
+    # append-only logs under that name (``.swarm/log.jsonl``, the swarm gate's
+    # coordination record), and opening one as an Event log raises
+    # CorruptLogError before any assertion here runs. Every real root carries
+    # ``objects/`` beside its log; nothing else does.
+    objects = {p.split("/objects/", 1)[0] for p in tracked if "/objects/" in p}
+    return [Path(p).parent for p in tracked
+            if p.endswith("/log.jsonl") and p[: -len("/log.jsonl")] in objects]
 
 
 def test_recorded_seat_bindings_is_absent_on_a_fresh_harness(tmp_path):

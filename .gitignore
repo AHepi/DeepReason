@@ -53,3 +53,10 @@ experiments/*/qualification-cache/
 
 # Build and wheel outputs
 *.whl
+
+# treadle (vendored at tools/treadle/ per experiments/2026-08-23-treadle-pilot/ D1):
+# source is committed, runtime state is not.
+tools/treadle/.venv/
+tools/treadle/src/treadle.egg-info/
+.treadle/
+zoo/reviews/*.transcript.tmp

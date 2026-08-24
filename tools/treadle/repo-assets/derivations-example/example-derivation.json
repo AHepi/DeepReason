@@ -1,0 +1,83 @@
+{
+ "schema": "DERIVATION_V1",
+ "theory": "toy",
+ "target": "T2",
+ "steps": [
+  {
+   "id": "s1",
+   "rule": "PREMISE",
+   "row": "AX2",
+   "grade": "D"
+  },
+  {
+   "id": "s2",
+   "rule": "PREMISE",
+   "row": "AX3",
+   "grade": "D"
+  },
+  {
+   "id": "s3",
+   "rule": "MP",
+   "premises": [
+    "s1",
+    "s2"
+   ],
+   "formula": [
+    "rel",
+    "Q",
+    [
+     "elem",
+     "A",
+     "a0"
+    ],
+    [
+     "elem",
+     "A",
+     "a0"
+    ]
+   ],
+   "grade": "T"
+  },
+  {
+   "id": "s4",
+   "rule": "AND_I",
+   "premises": [
+    "s2",
+    "s3"
+   ],
+   "formula": [
+    "and",
+    [
+     "rel",
+     "R",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ],
+    [
+     "rel",
+     "Q",
+     [
+      "elem",
+      "A",
+      "a0"
+     ],
+     [
+      "elem",
+      "A",
+      "a0"
+     ]
+    ]
+   ],
+   "grade": "T"
+  }
+ ],
+ "conclusion_step": "s4"
+}

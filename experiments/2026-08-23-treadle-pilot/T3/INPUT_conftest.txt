@@ -1,0 +1,26 @@
+=== tests/conftest.py, the two things you need from it ===
+"""Shared builders for P0 acceptance tests (spec §16)."""
+
+import pytest
+
+from deepreason.harness import Harness
+from deepreason.ontology import Interface, Provenance, Warrant, WarrantType
+
+
+@pytest.fixture
+def harness(tmp_path) -> Harness:
+    return Harness(tmp_path / "run")
+
+
+def art(harness: Harness, text: str, *, interface: Interface | None = None, **kwargs):
+    return harness.create_artifact(
+        text,
+        interface=interface,
+        provenance=kwargs.pop("provenance", Provenance(role="seed")),
+        **kwargs,
+    )
+
+
+NOTE: pytest's conftest fixtures do NOT reach a test file outside tests/.
+Define your own 'harness' fixture exactly as above. 'art' is importable:
+    from tests.conftest import art

@@ -1,0 +1,86 @@
+        "judge",
+        pack(a_text, b_text, "A", "B"),
+        PairwiseRuling,
+        aliases=aliases,
+    )
+    calls.append(llm_call)
+    if ruling1.winner == "neither":
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=None,
+                winner=None,
+                loser=None,
+                order_swap="not-run",
+                outcome="neither",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
+        return None
+    ruling2, call = adapter.call(
+        "judge",
+        pack(b_text, a_text, "A", "B"),
+        PairwiseRuling,
+        aliases=aliases,
+    )
+    calls.append(call)
+    # Under the swap, candidate a is labelled B: the same real winner is
+    # required (order-swap consistency, §3).
+    consistent = (
+        (ruling1.winner == "A" and ruling2.winner == "B")
+        or (ruling1.winner == "B" and ruling2.winner == "A")
+    )
+    if not consistent:
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=ruling2,
+                winner=None,
+                loser=None,
+                order_swap="failed",
+                outcome="blocked:order-swap",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
+        return _block(harness, "order-swap", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
+    # Referential integrity (§3): a named winner MUST quote a span of a
+    # candidate. An empty decisive_point is unscreened LLM adjudication —
+    # block it rather than skipping the check (the empty string is a substring
+    # of everything, so it would otherwise pass vacuously). PairwiseRuling
+    # allows "" only for 'neither', handled above.
+    if not ruling1.decisive_point or ruling1.decisive_point not in f"{a_text}\n{b_text}":
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=ruling2,
+                winner=None,
+                loser=None,
+                order_swap="pass",
+                outcome="blocked:referential-integrity",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
+        return _block(harness, "referential-integrity", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
+
+    loser = b_id if ruling1.winner == "A" else a_id
+    winner = a_id if ruling1.winner == "A" else b_id
+    if execution_backed(harness, loser):
+        # Execution supremacy (§3): the loser passes its exec-oracle, so a
+        # verdict from reality stands. A pairwise PREFERENCE cannot refute it —
+        # the rivalry stands unresolved, exactly as for a 'neither' ruling. The
+        # judge calls remain logged (the finally records them).

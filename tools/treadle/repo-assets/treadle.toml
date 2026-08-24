@@ -1,0 +1,74 @@
+# treadle configuration -- lives at the target repo root.
+# Stages name the model, the skill whose PROMPT-CORE becomes the system
+# prompt, and the budget. Routing maps task-id prefixes to stages.
+
+[driver]
+base_url = "http://localhost:11434/v1"   # env TREADLE_BASE_URL overrides (doctor shows the source)
+worker = "treadle"
+seed = 17
+push = "auto"            # auto | true | false -- false/failed pushes grade reviews REVIEWED_LOCAL_OBJECTS
+recover_stale = true     # requeue this driver's orphaned CLAIMED tasks at startup
+max_tokens_cap = 32000   # ceiling for empty-reply auto-raise
+
+[stage.pinning]                 # Reed W1: term pins fitted to batteries
+model = "qwen8.3:cloud"                  # owner arm-eval 2026-08-22: small 8.3 > full 8.7/8.6. TAG UNVERIFIED -- doctor checks it; fall back to glm-5.2:cloud if absent
+escalate_model = "deepseek-v4-pro:0813-cloud"  # dated tag PINNED: plain :cloud silently moved to the 0813 checkpoint
+skill = "skills/term-pinning/SKILL.md"
+context_files = ["zoo/batteries/FORMAT.md"]
+candidates = 2
+max_refinements = 2
+max_tokens = 16000                        # reasoning models spend the budget on the trace first (defect #1)
+
+[stage.battery]                 # Reed 1: example batteries
+model = "qwen8.3:cloud"                  # see pinning-stage note
+escalate_model = "deepseek-v4-pro:0813-cloud"
+skill = "skills/example-battery/SKILL.md"
+context_files = ["zoo/batteries/FORMAT.md"]   # grammar is READ context; cone stays the write boundary
+candidates = 3
+max_refinements = 1
+max_tokens = 16000
+
+[stage.refutation]              # Warp W3: countermodel attack
+model = "deepseek-v4-pro:0813-cloud"
+skill = "skills/refutation-first/SKILL.md"
+max_refinements = 1
+max_tokens = 20000
+
+[stage.review]                  # adversarial review of committed work
+kind = "review"
+model = "deepseek-v4-pro:0813-cloud"
+skill = "skills/minimal-pair-review/SKILL.md"
+max_tokens = 8000
+
+[stage.smoke]                   # cheap floor / control arm
+model = "gpt-oss:120b-cloud"
+skill = "skills/discharge-typing/SKILL.md"
+max_refinements = 0
+
+[[routing]]
+prefix = "PIN-"
+stage = "pinning"
+[[routing]]
+prefix = "BAT-"
+stage = "battery"
+[[routing]]
+prefix = "REF-"
+stage = "refutation"
+[[routing]]
+prefix = "REV-"
+stage = "review"
+[[routing]]
+prefix = "SMK-"
+stage = "smoke"
+
+[stage.deduction]               # proof search under deterministic replay
+model = "glm-5.2"
+escalate_model = "deepseek-v4-pro:0813"
+skill = "skills/deduction/SKILL.md"
+context_files = ["zoo/derivations/FORMAT.md", "rules/rules.json"]
+max_refinements = 3             # step-addressed errors make refinement productive
+max_tokens = 20000
+
+[[routing]]
+prefix = "DED-"
+stage = "deduction"

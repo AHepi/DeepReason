@@ -1,0 +1,23 @@
+{
+  "packet": "zoo/reviews/CONSISTENCY_PACKET.md",
+  "window": 200,
+  "max_chars": 24000,
+  "claims": [
+    {"label": "FROZEN-CLAUDE",   "path": "CLAUDE.md",
+     "patterns": ["capabilities/state\\.py", "route_fingerprint", "qualification subject digests"]},
+    {"label": "FROZEN-INV",      "path": "docs/map/INV-frozen-surfaces.md",
+     "patterns": ["capabilities/state\\.py", "def route_fingerprint", "qualification subject digests"]},
+    {"label": "SWEEP-CLAUDE",    "path": "CLAUDE.md",
+     "patterns": ["RETIRED as an instrument"]},
+    {"label": "SWEEP-BASELINE",  "path": "docs/AUDIT_BASELINES.md",
+     "patterns": ["RETIRED as an instrument"]},
+    {"label": "OLDRUNS-CLAUDE",  "path": "CLAUDE.md",
+     "patterns": ["Old runs owe the future nothing"]},
+    {"label": "OLDRUNS-ERRATA",  "path": "docs/ERRATA.md",
+     "patterns": ["Old runs owe the future nothing"]},
+    {"label": "TREADLE-CLAUDE",  "path": "CLAUDE.md",
+     "patterns": ["ONLY THE OPERATOR OR THE MONITOR"]},
+    {"label": "TREADLE-RESULTS", "path": "experiments/2026-08-23-treadle-pilot/RESULTS.md",
+     "patterns": ["only the operator or the monitor"]}
+  ]
+}
