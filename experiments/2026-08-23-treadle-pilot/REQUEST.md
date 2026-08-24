@@ -206,3 +206,38 @@ Q4: "its three failure modes" (R17) names a treadle taxonomy that is stated in
 ## Amendments
 (append-only; later operator messages land here as R20... or
 "R2a supersedes R2", each with its verbatim quote)
+
+### Amendment 1 — 2026-08-24, mid-tranche, after the four rungs had run
+
+Operator, verbatim, attaching `treadle0.5.zip`:
+
+> "Server side issue. Something you did caused a crash
+> try again
+> [treadle0.5.zip] Here's the updated. Install this and keep going"
+
+R20 (artifact): "Here's the updated. Install this" — install treadle 0.5 from
+   the supplied zip (sha256
+   1818f7b658c1ffbb23fc7d97dacc54fbfddb790851d6489cbc83d56cb5d18741).
+
+R21 (process): "keep going" — continue the tranche after installing.
+
+**Recorded at capture, not interpreted: 0.5 is not a newer version of the
+same artifact.** 0.4.1 shipped a Python package (`src/treadle/`, `pyproject.toml`,
+`tests/`, console entry point `treadle`), a swarm board driver
+(`repo-assets/swarm_gate.py`), and a config (`treadle.toml`). 0.5 ships none of
+those: it is `checkers/` (four Python modules), `skills/` (twelve), `selftest.py`
+and documentation, with a manual `SETUP.md` procedure. There is no `treadle`
+command, no `doctor`, no `run --once`, and no board.
+
+Consequences carried into SPEC.md rather than decided here:
+
+- Q5: R20 does not say whether 0.5 REPLACES the committed 0.4.1 install or is
+  installed beside it. 0.5 cannot replace the driver function, because it has
+  no driver.
+- Q6: R11-R18 (the four-rung pilot) are written against `treadle run --once`,
+  which does not exist in 0.5. Those requirements were satisfied against 0.4.1
+  before this amendment arrived; whether the operator wants them re-run under
+  some 0.5 equivalent cannot be read off "keep going".
+- Q7: the operator reports "Something you did caused a crash". No crash is
+  visible from this session's side — the full gate completed 3875 passed, 0
+  failed, and every treadle run exited 0. Nothing is inferred about the cause.
