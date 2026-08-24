@@ -1,0 +1,15 @@
+```json
+{
+  "repair": {
+    "baseline_sha256": "fab6411db9693f3affc2406f8d81553886930a64c3ed89b4ed7abe1e6c30d250",
+    "contract": "batch-critic.v2",
+    "ops": [
+      {
+        "op": "replace",
+        "path": "/cases/0/premise_evidence/1/block",
+        "value": "f4e3a1c7d8b92e6f5a2c1d4e9b8f7a6c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a"
+      }
+    ]
+  }
+}
+```

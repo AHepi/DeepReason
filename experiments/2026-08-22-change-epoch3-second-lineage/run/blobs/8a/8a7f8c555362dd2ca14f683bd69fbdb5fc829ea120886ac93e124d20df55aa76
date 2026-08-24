@@ -1,0 +1,102 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The nocturnal UHI is primarily driven by the delayed release of sensible heat stored in high thermal mass urban materials (asphalt, concrete), and the cross-city gap scales with the areal fraction of impervious surfaces and building density, which increase daytime heat storage.",
+      "mechanism": "During the day, urban materials with high heat capacity and thermal mass absorb incoming solar radiation. After sunset, as the atmospheric boundary layer stabilizes, these materials release stored sensible heat via longwave radiation and conduction, slowing the urban cooling rate relative to the countryside. The magnitude of this effect is larger in cities with greater impervious surface area and built density because they store more daytime heat.",
+      "counterconditions": [
+        "If rural thermal mass (e.g., dry bare rock or desert) equals or exceeds urban thermal mass, the storage-release mechanism fails to generate a significant nocturnal UHI.",
+        "If high regional wind speeds thoroughly mix the urban canopy layer with rural air, the local thermal storage release is advected away, neutralizing the gap."
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_005",
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.95
+    },
+    {
+      "claim": "The nocturnal UHI is primarily caused by the reduction of evapotranspiration and latent heat loss in cities, and the night-time gap is larger in cities surrounded by highly vegetated, well-irrigated countryside.",
+      "mechanism": "Rural areas cool efficiently at night via evapotranspiration, which consumes energy as latent heat rather than raising surface temperatures. Urban areas, lacking vegetation and moisture due to impervious surfaces, cannot dissipate heat this way, causing relative warmth. The gap is larger when the rural surroundings have abundant moisture and vegetation, maximizing the rural latent heat sink, whereas in arid regions the rural area also lacks evapotranspiration, shrinking the gap.",
+      "counterconditions": [
+        "If urban irrigation and green spaces are so extensive that urban evapotranspiration equals or exceeds rural evapotranspiration, the latent heat differential vanishes.",
+        "If regional aridity suppresses rural evapotranspiration, the urban-rural latent heat gap collapses."
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    },
+    {
+      "claim": "The nocturnal UHI is best explained by the reduced sky view factor in dense urban street canyons, which traps outgoing longwave radiation, and the gap is larger in cities with taller buildings and narrower streets.",
+      "mechanism": "Outgoing longwave radiation from urban surfaces is partially absorbed and re-emitted by building walls, reducing the effective sky view factor and trapping heat within the street canyon. This steric obstruction of radiative cooling prevents the urban surface from shedding heat as efficiently as the open countryside. Consequently, the night-time gap scales with building height and built density, which lower the sky view factor and enhance longwave trapping.",
+      "counterconditions": [
+        "If urban geometry features wide streets and low building height, the sky view factor approaches that of the countryside, neutralizing the radiation trap.",
+        "If atmospheric moisture or cloud cover raises baseline longwave downwelling uniformly, the relative disadvantage of a low sky view factor is diminished."
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_002"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "The nocturnal UHI is primarily governed by aridity and regional wind speed, where dry, calm conditions maximize both thermal storage and the nocturnal gap by minimizing advective cooling and latent heat loss.",
+      "mechanism": "Aridity reduces soil moisture, decreasing rural evapotranspiration and latent heat cooling, but high imperviousness in cities still exacerbates sensible heat storage. Calm wind speeds prevent turbulent mixing that would otherwise dissipate the stable nocturnal boundary layer. Thus, the cross-city gap scales with aridity and inversely with regional wind speed, as calm, dry conditions maximize the retention of anthropogenic and stored heat in the urban canopy.",
+      "counterconditions": [
+        "If regional wind speeds exceed the threshold for forced convection, the nocturnal heat island is rapidly flushed regardless of aridity.",
+        "If arid rural areas exhibit thermal storage and cooling rates identical to urban areas, the aridity mechanism does not explain a differential gap."
+      ],
+      "optional_refs": [
+        "SRC_008",
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.75
+    },
+    {
+      "claim": "The nocturnal UHI is primarily sustained by anthropogenic heat emissions (e.g., traffic, HVAC, industry), and the gap is larger in cities with higher population density and energy consumption.",
+      "mechanism": "Human activity injects waste heat directly into the urban atmosphere and canopy layer, particularly during evening hours when traffic and building climate control remain active. This continuous source of sensible heat offsets radiative cooling after sunset. The night-time gap scales with population density and economic activity, as these serve as proxies for the magnitude of anthropogenic heat flux.",
+      "counterconditions": [
+        "If a city is highly populous but powered entirely by external, non-heat-emitting sources (e.g., remote renewables with no local exhaust), anthropogenic heat flux becomes negligible.",
+        "If strict curfews or economic shutdowns eliminate evening traffic and industrial activity, the anthropogenic contribution to the nocturnal UHI vanishes."
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "The nocturnal UHI is primarily governed by a humidity-emissivity feedback, where urban dryness alters longwave emissivity and suppresses cooling, and the gap is larger in more humid regional climates.",
+      "mechanism": "Differential near-surface humidity and its feedback on longwave emissivity govern the UHI. Urban impervious surfaces rapidly shed moisture, creating a dry layer that alters the effective emissivity of the urban canopy and traps outgoing longwave radiation more effectively than the humid rural boundary layer. The night-time gap is larger in more humid regional climates because the urban-rural moisture differential is more pronounced, amplifying the emissivity contrast.",
+      "counterconditions": [
+        "If intense urban irrigation maintains humidity levels equal to the rural surroundings, the emissivity feedback is neutralized.",
+        "If both urban and rural environments are extremely arid, the baseline humidity is too low for any significant differential emissivity effect to manifest."
+      ],
+      "optional_refs": [
+        "SRC_004",
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.4
+    }
+  ]
+}
+```

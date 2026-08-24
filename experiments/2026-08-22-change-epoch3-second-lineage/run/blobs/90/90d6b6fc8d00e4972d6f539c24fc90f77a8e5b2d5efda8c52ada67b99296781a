@@ -1,0 +1,12 @@
+```json
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/1/block",
+      "value": "000000000000src001"
+    }
+  ],
+  "baseline_sha256": "fcdc565e162dab95f65c394aae154e9da91a0e8401429d93cba0a9642b5dd03e"
+}
+```

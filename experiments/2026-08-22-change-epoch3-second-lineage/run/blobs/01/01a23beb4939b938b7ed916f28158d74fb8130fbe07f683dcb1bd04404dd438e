@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 proposes a substantive integration relation between thermal mass and sky view factor, identifying a shared mechanism (mass controls stored heat, SVF controls dissipation rate) and specifying refutation conditions (identical cooling rates normalized for impervious area). This satisfies the problem's requirement to name a relation kind and state what refutes it."}]}
+```

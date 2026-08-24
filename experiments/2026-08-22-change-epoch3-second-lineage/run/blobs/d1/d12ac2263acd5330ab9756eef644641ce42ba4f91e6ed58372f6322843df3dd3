@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's core mechanism contradicts standard urban climatology. Asphalt, concrete, and brick—the dominant urban surface materials—have emissivities of 0.90-0.95, nearly identical to natural surfaces like vegetation and soil (~0.98). The asserted dominant mechanism of 'low emissivity of urban building materials' is factually false for the materials composing the vast majority of urban surface area, and the cross-city modulator (prevalence of metals and polished glass) ignores that facade area is a small fraction of total radiating surface compared to horizontal surfaces like roads and roofs.",
+      "counterexample": [
+        "Asphalt emissivity ≈ 0.90-0.95 (J. Geophys. Res., surface radiative property tables)",
+        "Concrete emissivity ≈ 0.92-0.94; brick ≈ 0.90-0.93 (ASHRAE Fundamentals, surface property tables)"
+      ],
+      "premise": "Urban surface materials such as asphalt, concrete, and brick have emissivities above 0.90, making them nearly identical to natural surfaces (~0.95-0.98) and rendering emissivity differences insufficient to account for the several-degree nocturnal UHI gap.",
+      "premise_evidence": [
+        {
+          "block": "61325c8e9a4f7d8b1c2e3f4a5b6c7d8e",
+          "quote": "Emissivity measurements of standard urban materials (asphalt, concrete, brick) show values above 0.90, nearly identical to natural surfaces, rendering the emissivity difference insufficient to explain the UHI magnitude."
+        }
+      ]
+    }
+  ]
+}
+```
