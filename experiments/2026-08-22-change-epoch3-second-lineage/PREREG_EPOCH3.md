@@ -216,3 +216,103 @@ wants to spend. That judgement is the operator's and is not pre-empted here.
 
 **AMEND-BLOCKED** remains defined in §5 and simply does not apply to this
 attempt: the amendment is not attempted, so it cannot be blocked.
+
+
+---
+
+# PREREG AMENDMENT 2 — 2026-08-24, before attempt 4's first provider call
+
+Sections 1-6 and AMENDMENT 1 above are FROZEN and are not rewritten. This
+amendment records what changed for attempt 4, on whose authority, what was
+proven offline before it, and what it predicts — appended, so every
+revision remains readable beside the original registration.
+
+**Authority.** The attempt-4 authorising prompt (REQUEST.md Amendment 3 /
+R18) for the single-phase shape and `cycles=8`, and the operator's answer
+"Raise to 1,200,000 (Recommended)" for the token bound. Both are quoted
+verbatim in REQUEST.md Amendment 3.
+
+**The gate that had to pass first, and did.** CLAUDE.md law forbids a live
+launch without a green soak on the launch configuration. `python -u
+scripts/cycle_soak.py --case epoch3` was run on this checkout
+(`b1bc0d7b8`, which carries both cycle-2 fixes) before anything else:
+
+    A1-typed-terminal          PASS   state=completed stop_reason=budget_exhausted
+    A2-no-operational-failure  PASS
+    A3-verify-root-clean       PASS   0 violations
+    A4-cycles-reached          PASS   reached cycle 8 of 8; deepest recorded death was cycle 2
+    D1-seat-contract           PART   32 attempts, zero repairs (stub never fails a schema)
+    D2-route-lease             PASS
+    D3-budget-auth             PASS
+    D4-reservation-bound       PASS   32 reservations, no bound refusal
+    exit 0 (clean)
+
+The load-bearing row is **D4**: the seam that killed attempt 3 is now green
+at depth 8 offline, on this configuration's own shape, against the
+deterministic stub. That is the first time the soak has ever been observed
+green at depth — the instrument's own RESULTS.md recorded exit 0 as "the
+baseline this tranche records but not a value it has measured". It is
+measured now.
+
+**What the soak does NOT prove, stated so a green gate is not over-read.**
+D1's repair ladder is still uncovered by default (the stub always answers
+schema-valid, so `attempt_index` never advances), and D2's tuning half and
+D3's denial half are both weaker than a PASS suggests — no controller
+retuned `max_tokens` during the soak and no finite token budget was set, so
+neither the tuned-lease path nor the budget-denial path was exercised. The
+soak instrument's own seam table says all three in the same words. A green
+soak means the four recorded death shapes did not recur offline; it does
+not mean a fifth cannot occur live.
+
+**What changes against §4 and AMENDMENT 1.**
+
+    cycles         4       ->  8         (authorising prompt, SPEC.md M9)
+    token budget   400 000 ->  1 200 000 (operator answer, R18)
+
+Nothing else moves. Single phase, `SECOND_LINEAGE=0`, the amendment and
+phase 2 still disabled. The question, the three subject predicates, the
+solo glm-5.2 configuration, the manifest `bb0455384ea09b5b…` (attached
+evidence still enabled so a later amendment stays possible), the
+supplement and its control, and every judgement label in §5 are unchanged.
+Because neither budget is part of the compiled manifest, the qualification
+subject digest does not move; qualification re-runs only because this
+container's `DEEPREASON_HOME` was wiped, not because anything was redesigned.
+
+**Why cycles rise to 8.** SPEC.md M9 measured a committed single-seed text
+root that reached cycle 8 and carries 186 ACCEPTED artifacts addressed to
+spawned `succ:`/`conn:` problems — for every one of those the seed problem
+is FOREIGN, which is exactly the carrier `reach_sweep` needs. No run of
+this configuration has ever survived past cycle 2. Four cycles was the
+frugal choice; it risks starving the registered hypothesis even on a
+perfectly healthy run, and a healthy run that never reaches the carrier is
+a fifth null result that says nothing about the hypothesis.
+
+**Registered prediction, made before launch (scored afterwards, like
+AMENDMENT 1's, which was refuted).** At the measured ~55 000 tokens per
+completed cycle, 8 cycles cost on the order of 440 000 tokens against
+1 200 000 available — roughly 2.7x headroom. The CYCLE budget is therefore
+expected to bind first, giving `completed` / `budget_exhausted`: a typed,
+resumable terminal, which also leaves this root amendable for the deferred
+second lineage. Two ways this prediction can fail, both registered now:
+the burn rate may rise with depth (n=1 cannot exclude it), in which case
+`WorkBudgetDenied` recurs — attempt 2's shape, not a new one; or a fifth
+distinct operational cause may appear, which the soak did not predict and
+which would itself be the tranche's finding.
+
+**Judgement is unchanged.** §5's four labels stand exactly as frozen:
+SUCCESS (typed terminal + `verify_root` clean + `reach_set` > 0),
+UNSUPPORTED (cycle budget reached WITH the carrier present and still zero
+reach), PRECONDITION-BLOCKED, TRUNCATED-BEFORE-CARRIER. AMEND-BLOCKED does
+not apply — no amendment is attempted. The P5 reporting rulings (E0
+empty-battery exits, and any reach event at coverage exactly 0.500) are
+reported as observed, never reinterpreted.
+
+**On the pre-authorised repeat.** §5's one repeat was SPENT by attempts 2
+and 3, and the tranche stopped there as required. Attempt 4 is not that
+repeat: it is a fresh authorisation from the operator, issued after both
+cycle-2 killers were fixed and after a pre-launch instrument that did not
+exist for attempts 1-3 came back green. No further repeat is authorised by
+this amendment; a fifth attempt would need the operator again.
+
+**Scope.** No `src/` or `tests/` change. `git diff --stat origin/main --
+src/ tests/` proves it at every phase boundary, as §6 requires.

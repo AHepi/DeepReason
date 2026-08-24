@@ -291,3 +291,91 @@ of the three requires resumability. Resumability matters only for the
 deferred second lineage, which this answer defers anyway. The operator's
 instruction is executed as given, with the expected terminal registered in
 advance.
+
+
+### Amendment 3 — 2026-08-24, attempt 4 authorised: depth over frugality
+
+Asked after the soak gate came back clean on this checkout (exit 0, cycle 8
+of 8 requested, `verify_root` 0 violations, D4-reservation-bound now PASS)
+and before any provider call.
+
+The authorising prompt, verbatim in the parts that bind execution:
+
+> Evidence-minting tranche: reach attempt 4 — soak first, then launch. Both
+> cycle-2 killers are fixed and the pre-launch instrument now exists; this
+> prompt is the operator's authorization for a fourth attempt.
+>
+> STEP 2 — PREREG AMENDMENT, ledgered before launch: attempt 4 runs SINGLE
+> PHASE, token budget 400000 (R17 unchanged), cycles raised 4 -> 8.
+> Authority: SPEC.md M9 — the committed comparison root's carrier appears
+> between cycle 2 and cycle 8; a 4-cycle run risks starving the hypothesis
+> even while healthy. Operator approval is this prompt.
+
+The operator then supplied the credential mid-session, with the message
+(credential redacted; the key itself is never written to a tracked file):
+
+> "here's the API key. unlimited tokens. <OLLAMA_API_KEY>"
+
+That message arrived AFTER the 400 000 bound was written, and it bears on
+it, so the fork was put rather than assumed. The question asked, verbatim:
+
+> The soak gate passed clean (exit 0, cycle 8 of 8, replay check green, and
+> the reservation-bound seam that killed attempt 3 is now green). Before I
+> launch: your prompt froze the token budget at 400,000 with cycles raised
+> 4 -> 8, but attempt 3's measured burn was ~55,000 tokens per completed
+> cycle, so 400,000 buys roughly 6 cycles, not 8 — and because each call
+> books its full completion cap up front, the run would die typed as an
+> operational failure around cycle 6 rather than reaching the depth where
+> the carrier is expected to appear. Your 'unlimited tokens' message
+> arrived after that budget was written. Which budget should attempt 4
+> carry?
+>
+> - Raise to 1,200,000 (Recommended): Enough headroom that the CYCLE budget
+>   binds first, so 8 cycles actually complete and the run stops as
+>   'budget_exhausted' — a clean, resumable terminal — instead of starving
+>   mid-run. Costs more provider tokens; you said tokens are cheap and
+>   unlimited. This is the only option that actually gives the registered
+>   hypothesis 8 cycles to fire in.
+> - Keep 400,000 as frozen: Honours the prompt's written bound exactly.
+>   Expected outcome by the measured burn rate: the token budget binds
+>   around cycle 6 and the run ends as an operational failure short of
+>   cycle 8 — likely a fourth TRUNCATED-BEFORE-CARRIER, i.e. the hypothesis
+>   untested again.
+> - Raise to 800,000: Middle road: buys roughly 7 cycles by the measured
+>   rate, so cycle 8 is still at risk if the burn rate rises in later cycles
+>   (which n=1 cannot rule out). Cheaper than 1,200,000, but may repeat the
+>   same starvation one cycle later.
+
+The operator's answer, verbatim:
+
+> "Raise to 1,200,000 (Recommended)"
+
+**R18 (behavior).** Attempt 4 runs as a SINGLE phase, `--budget cycles=8
+--token-budget 1200000`. The cycle budget is raised from 4 to 8 on the
+authorising prompt's own authority (SPEC.md M9: the committed comparison
+root's carrier appears between cycle 2 and cycle 8). The token bound is
+raised from 400 000 to 1 200 000 on this answer. R17's single-phase shape
+and its deferral of the second lineage (`SECOND_LINEAGE=0`) are UNCHANGED;
+only the two budget numbers move.
+
+**R18a (what the raise is for, stated so it cannot be re-read later as
+generosity).** The registered bound existed to cap spend, not to define the
+experiment. Raising it removes the token budget as the thing that ends the
+run, so the CYCLE budget binds and the run reaches cycle 8 — the depth at
+which SPEC.md M9 measured the carrier in a committed root. A run that dies
+of fuel starvation at cycle 6 tests nothing the previous three attempts did
+not already fail to test.
+
+**R18b (the prediction registered for this attempt).** At the measured
+~55 000 tokens per completed cycle (attempt 3: 109 975 tokens across 49
+calls for 2 completed cycles), 8 cycles cost on the order of 440 000
+tokens. Against 1 200 000 that is roughly 2.7x headroom, so the CYCLE
+budget is expected to bind first and the terminal is expected to be
+`completed` / `budget_exhausted` — resumable, therefore amendable later for
+the deferred second lineage. If the burn rate rises steeply with depth (n=1
+cannot exclude it), the token budget could still bind; that would be
+`WorkBudgetDenied`, the shape attempt 2 already recorded, and NOT a fifth
+distinct death.
+
+**Scope unchanged.** No `src/` or `tests/` change is authorised by this
+amendment, and none is made.
