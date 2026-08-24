@@ -170,7 +170,32 @@ points, module parity, MCP registration, and exact MCP schemas
 
 ## 7. The boundary gate
 
-(pending — filled in below once run on an idle box)
+**`python tools/docs_verify.py` (FULL) — 3 failed, and all three are the
+pre-existing shallow-clone failures the operator named.** None is this
+tranche's:
+
+```
+docs_verify [full]: 64 documents, 1033 checks, 4 workers
+  FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status ...
+  FAIL CON-run-identity.md:202: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree.
+  FAIL CON-run-identity.md:204: test -z "$(git show -M --diff-filter=R ...
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree.
+docs_verify: 3 failed
+```
+
+Each names a commit this shallow clone does not contain; on a full clone
+they pass. The FIRST pass of this run reported **6**, the extra three being
+this tranche's own (`CON-packs-and-token-economy` — my new check crashed on
+a non-literal section id; `SEAM-evaluation-x-ontology` — `programs.evaluate`'s
+pinned dispatch list; `SEAM-rules-x-scratch` — `render_crit_pack`'s pinned
+signature). All three are fixed and the count is back to the baseline.
+
+**`python -m pytest tests/ -q -n 4`** — (pending; running on an idle box)
+
+**`python scripts/wheel_smoke.py`** — PASS, pins unchanged (§6).
+
+**`python -u scripts/wheel_operational_smoke.py`** — (pending)
 
 ## 8. Residue — what this tranche did NOT prove
 
