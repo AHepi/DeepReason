@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 16 next** (14 and 15 landed; the full docs_verify re-run is the last outstanding measurement) (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
+State: **COMPLETE** — all sixteen steps checked, VALIDATION.md verdict PASS (the step-9 diff-budget stop was resolved by the operator: continue and disclose — REQUEST.md Amendment 1)
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -112,7 +112,7 @@ production lines over `src/`.
   scripts/wheel_operational_smoke.py` both green with **pins unchanged**,
   both outputs pasted, and the statement that no view shipped.
 
-- [ ] **16. Boundary gate** `[COMMIT]`
+- [x] **16. Boundary gate** `[COMMIT]`
   Done-criterion: `python -m pytest tests/ -q -n 4` → 0 failed;
   `python tools/docs_verify.py` FULL → only the 3 pre-existing
   `CON-run-identity.md` shallow-clone failures;
@@ -313,6 +313,30 @@ exactly the cacheable prefix `DR-CON-packs-and-token-economy`'s own ordering
 rule exists to protect. Moved to `_WITHHELD_PRIORITY = 99`. A mandatory
 section is retained in full at any priority, so the move costs nothing it
 was doing. Pinned and mutation-proven: priority back to 1 → **1 failed**.
+
+**Step 16** — the boundary, every instrument on an otherwise idle box:
+
+```
+python -m pytest tests/ -q -n 4
+3976 passed, 6 skipped in 1001.62s (0:16:41)
+
+python tools/docs_verify.py
+docs_verify [full]: 64 documents, 1033 checks, 4 workers
+docs_verify: 3 failed          (all three pre-existing, CON-run-identity)
+
+python scripts/wheel_smoke.py
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+points, module parity, MCP registration, and exact MCP schemas
+
+python -u scripts/wheel_operational_smoke.py
+wheel operational smoke passed: installed setup, explicit qualification
+(80 qualification calls; 418 total calls), readiness, question-only
+reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+restart, budget ceiling, and pre-V6 fail-closed admission
+```
+
+`tools/diff_budget.py` over `src`: **810** against the ledgered 560 —
+EXCEEDED, disclosed per R8, ceiling unre-baselined.
 
 ## Failures and re-plans
 

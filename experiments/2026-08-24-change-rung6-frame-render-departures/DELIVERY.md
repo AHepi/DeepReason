@@ -1,12 +1,6 @@
 # DELIVERED — Rung 6: frame render semantics and the departure protocol
 
-**DRAFT until VALIDATION.md reads PASS.** Written while the boundary
-measurements run, so the reconciliation is authored against the evidence
-rather than from memory at the end. `dr-deliver-change` runs only on a PASS;
-if the gate moves anything, this document is corrected before it is
-delivered rather than shipped as written.
-
-Branch: `claude/frame-render-departure-protocol-u4dnn7` (pushed).
+VALIDATION.md verdict: **PASS**. `claude/frame-render-departure-protocol-u4dnn7` (pushed, tree clean).
 Base: `origin/main` at `7ad1b273f`. Tranche:
 `experiments/2026-08-24-change-rung6-frame-render-departures/`.
 
@@ -74,6 +68,16 @@ the CLI gain the exit grades. New map document:
 | N1 | "provenance-shaped fields are ABSENT … A check pins that the renderer emits no empty provenance slots" | **DONE** | `test_the_frame_slice_emits_no_provenance_shaped_slot`, and an absent frame renders NOTHING rather than a "no frame" notice |
 | N2 | "persistence is asserted AT THE TERMINAL step, never at injection" | **DONE** | eight cycles, wound at 2, question at 8, against the real pack at a budget measured to bite |
 | N3 | "where a frame obligation can be a deterministic gate the pack must pass, build the gate; render position is a hedge, recorded as such" | **DONE** | two gates (non-droppable sections; record-side subtraction), and the position recorded as a hedge in `DR-CON-packs-and-token-economy` |
+
+## The instruments
+
+| Instrument | Result |
+|---|---|
+| `python -m pytest tests/ -q -n 4` | **3976 passed, 6 skipped, 0 failed** (base 3939 + 6; +37 is this tranche's own test file) |
+| `python tools/docs_verify.py` (FULL) | **3 failed** — all three the pre-existing `CON-run-identity` shallow-clone failures, unchanged from the base |
+| `tools/blast_radius.py` | `"frozen_surface_verdict": "CLEAR"` |
+| `python scripts/wheel_smoke.py` | PASS, pins unchanged |
+| `python -u scripts/wheel_operational_smoke.py` | PASS — 80 qualification calls, the number that would have moved had a new LLM role been added |
 
 ## Frozen surfaces
 

@@ -1,7 +1,6 @@
 # VALIDATION — Rung 6: frame render semantics and the departure protocol
 
-Verdict: **PENDING** (the operational smoke is the last outstanding
-measurement; every other check below is proven and pasted).
+Verdict: **PASS**.
 
 Authority: `SPEC.md` A1-A15 and `REQUEST.md` R1-R8, N1-N3, G1-G8.
 Base: `origin/main` at `7ad1b273f`. Branch:
@@ -210,7 +209,27 @@ run on an otherwise idle box against the tree that ships.
 
 **`python scripts/wheel_smoke.py`** — PASS, pins unchanged (§6).
 
-**`python -u scripts/wheel_operational_smoke.py`** — (pending)
+**`python -u scripts/wheel_operational_smoke.py`** — PASS:
+
+```
+wheel operational smoke passed: installed setup, explicit qualification
+(80 qualification calls; 418 total calls), readiness, question-only
+reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+restart, budget ceiling, and pre-V6 fail-closed admission
+```
+
+The qualification-call count is the number that would have moved had a new
+LLM role been added; it did not, which is surface 5's zero measured through
+a second instrument rather than only argued from the import check.
+
+**Process note, recorded because the rule exists for a reason.** The wheel
+smoke and a `docs_verify` run overlapped for several minutes, against
+CLAUDE.md §5b's "never run two worker-spawning instruments concurrently".
+The smoke's verdict is a PASS and contention manufactures failures rather
+than passes, so it stands; the `docs_verify` result was re-derived alone
+before being recorded. Separately, `pgrep -f docs_verify` reported six
+processes when there was one — it matched this session's own shell command
+lines, which is the exact trap §5b names, met in the wild.
 
 ## 8. Residue — what this tranche did NOT prove
 
