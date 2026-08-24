@@ -250,16 +250,106 @@ Three, none worked around:
 
 ---
 
+---
+
+## 2026-08-24 (later) — treadle 0.5.0 arrives mid-tranche, and rung T5
+
+The operator supplied `treadle0.5.zip` after the four rungs had run, saying
+"Here's the updated. Install this and keep going" (REQUEST.md Amendment 1).
+
+**0.5 is not a newer 0.4.1, and the difference decides what this tranche can
+still claim.** It ships no Python package, no console entry point, no
+`treadle.toml`, no board and no `doctor`. `MODULES.md` says why in its own
+words: the M2 driver is **"Retired on field evidence, not lost"** — the source
+cycle never ran it, and what replaced it (an agent working the `review-response`
+loop against external reviewers) "caught more defects than unattended generation
+plausibly would have". Its rule for reinstating one is exact, and it indicts the
+governance paragraph this tranche had already written: *"Install a driver only
+when the work is genuinely unattended AND every stage's acceptance is a
+deterministic command; **a review is never that shape** (its verdict is a
+finding for a person, not an exit code)."*
+
+So the 0.4.1 install stays — the recorded pilot depends on it, and `MODULES.md`
+notes M1's source is "lost with the 0.4.1 archive", which it is not here — and
+0.5 is installed as what it is, per `docs/TREADLE_ASSEMBLY.md`. Its own gate
+first: `python3 tools/treadle0.5/selftest.py` → **38 checks, 12 planted
+violations correctly refused, 0 failed.** Minimal install: two checkers
+(`consistency_packet`, `review_harness`), three skills, both guards proven on
+planted violations per FR-18. `influence_probe` deliberately NOT installed —
+`tools/blast_radius.py` already answers "can X affect Y" here, and two
+authorities for one question is how FR-14 drift starts.
+
+### T5 — the discriminating experiment T2's residue named as missing
+
+Residue item 1 above said the most valuable follow-up was testing whether the
+reviewer catches a FALSE claim, and that until it existed "a treadle PASS is a
+signal that nothing obvious contradicted the claims, not a verdict that they
+hold." That experiment now exists.
+
+Two cells, same reviewer (`deepseek-v4-pro:0813`), same prompt, same params;
+packets byte-identical except that cell B's `CLAUDE.md` excerpt names
+`scheduler/scheduler.py` where the `INV-frozen-surfaces` excerpt names
+`qualification.py` — a flat contradiction between two documents in the packet.
+
+| cell | packet | `overall` | `disagreements` | `worst:` |
+|---|---|---|---|---|
+| A | true | `INCONSISTENT` | 2 | seven-paths / five-surfaces |
+| B | one claim falsified | `INCONSISTENT` | 2 | **identical to A** |
+
+**The answer is split, and the split is the finding.** The reviewer DID catch
+the plant — cell B's prose says "One document says seven paths including
+`verification/` and `scheduler/scheduler.py`; another says five frozen surfaces
+and includes `qualification.py`". But every TYPED field was identical across the
+two cells. **A lane that stores only the typed verdict — which is exactly what
+rung T2's gate stored — cannot distinguish a true document set from a falsified
+one.** The discrimination is real and it lives in the part of the reply the
+typed channel discards. `CLAUDE.md`'s third-lane paragraph now carries this as a
+binding limit.
+
+**And the true cell found two real defects in this repository**, which is the
+independent-review value the operator asked about, delivered:
+
+- The frozen-surface list said "seven paths" in `CLAUDE.md` against "The five
+  frozen surfaces" in the document that owns it — introduced by this tranche's
+  own governance paragraph. Fixed here.
+- `docs/map/INV-frozen-surfaces.md` still prescribes the root sweep as "the
+  instrument" and mentions its 2026-08-22 retirement **zero times**, while
+  `CLAUDE.md` and `AUDIT_BASELINES.md` both record the ruling. Pre-existing,
+  not this tranche's, so PARKED with a ready-to-send prompt rather than fixed.
+
+One finding was REFUTED: the reviewer read `ERRATA.md` as marking the
+"old runs owe the future nothing" law superseded; `ERRATA.md:864` marks the OLD
+principle superseded BY that law. The direction is inverted. Its cause is a
+parameter, not a model failure: the packet's ±200-character window cut the
+governing clause mid-sentence. Full per-finding fates, the narrow-green
+statement, and a four-entry author defect ledger are in `T5/DISPOSITION.md`.
+
+### A gap in 0.5, measured rather than argued
+
+Both cells returned EMPTY on the first run. FR-15's remedy is "shrink the
+packet, never raise the budget" — and applying it here would have been wrong.
+Measured: `prompt_tokens=1581` (the packet is tiny), `finish_reason=length`,
+`completion_tokens=6000` spent on **22 886 characters of hidden reasoning**
+before any content. That is completion-side exhaustion, not packet overrun.
+
+**0.5's `review_harness` has a packet governor and no counterpart for this**,
+while 0.4.1's driver did — its "defect #1" auto-raised `max_tokens` on an empty
+reply and logged the diagnosis. A reasoning model behind `review_harness`
+returns empty and the harness offers the operator FR-15's remedy, which cannot
+help. Raising to 24 000 produced both verdicts. This is a field report 0.5 has
+not written yet, and the measurement above is what it would need.
+
 ## Recommendation — what routes to treadle tomorrow, and what never
 
 | DeepReason task class | Route? | On what evidence |
 |---|---|---|
-| Independent review of a delivered tranche's own claims | **Yes, with two conditions** | T2: refused three fragments, certified only the whole diff. Conditions: record the shas oldest-first, and use a `context_budget_chars` that provably exceeds the diff (`git diff base..tip \| wc -c`). Treat PASS as "nothing obvious contradicted it" — the false-diff experiment has not been run |
+| Independent review of a delivered tranche's own claims | **Yes — as evidence to be READ, never as a stored verdict** | T2 + T5. It refused three fragments and certified only the whole diff; it caught a planted contradiction; and it found two real defects in this repo, one of them pre-existing. But T5 measured that its typed fields did NOT move when a claim was falsified, so the reply must be read and dispositioned per `review-response`, not consumed as PASS/FAIL. Conditions: shas oldest-first; a budget that provably exceeds the diff; and a completion budget set from a measured `finish_reason`, not from FR-15's packet remedy |
 | Instrument delta tables against `docs/AUDIT_BASELINES.md` (the `dr-audit-broken` shape) | **Yes** | T1: one call, every value quoted from the pasted output, none invented. The monitor still runs the instrument — the model tabulates, it does not measure |
 | Regression fixtures for an already-decided behaviour, with a mutation proof | **Yes, when the monitor supplies the target and the proof** | T3: mutation-proven on the third call. The judgment of WHAT to pin stayed with the monitor; only the assembly was delegated |
 | Mechanical edits whose acceptance is one deterministic command | **Yes** | Same shape as T1/T3; the acceptor is the whole safeguard |
 | Reading-comprehension questions over a supplied excerpt | **Yes, cautiously** | T4: correct on first generation. Untested beyond one excerpt of one file — this is a single observation, not a capability claim |
-| Spec-drift or docs-drift over the tree at large | **No — untested** | T4 was supposed to test this and did not: nothing in the lane searches, and the model can only see its cone plus fixed `context_files` |
+| Spec-drift or docs-drift over the tree at large | **No for the tree at large; YES for a named claim set** | T4 did not test it: nothing in the lane searches. But T5 did the reachable half — `consistency_packet` extracts the claims a `claims.json` row names and a reviewer audits those. It watches only what its rows name, so a topic nobody added is a topic nobody checks |
+| Cross-document claim agreement (the same fact stated in two hand-edited docs) | **Yes** | T5: two real defects found on the first run, one of them a map document still prescribing an instrument retired two days earlier. `docs_verify` checks claim-against-code; nothing else checks claim-against-claim |
 | Anything whose cone would include a frozen surface | **NEVER** | `DR-INV-frozen-surfaces`. The driver's cone check is a write boundary, not an authorization: it enforces the cone you declared, so a cone that should never have been declared passes it cleanly |
 | Design adequacy, whether a claim is warranted, what a tranche should do next | **NEVER** | No deterministic acceptance command exists for these. Without one the lane has no judge, and the driver commits whatever exits 0 |
 | Sealing, amending or editing a run record | **NEVER** | Operator act, always. `README.md` states the same limit from treadle's side: "the driver never seals records — owner act, always" |
@@ -267,11 +357,14 @@ Three, none worked around:
 
 ## Residue — what this pilot did NOT establish
 
-1. **Whether the reviewer catches a FALSE claim.** Only a true-claim diff was
-   tested. The discriminating experiment — a planted defect, or a tranche whose
-   DELIVERY.md overstates its evidence — was not run. This is the single most
-   valuable follow-up, and until it exists a treadle PASS carries less weight
-   than its typed shape suggests.
+1. ~~**Whether the reviewer catches a FALSE claim.**~~ **ANSWERED, 2026-08-24,
+   rung T5 — and the answer is split.** It catches the falsehood in prose and
+   does NOT move its typed verdict. The consequence stands where the original
+   worry was: a treadle PASS carries less weight than its typed shape suggests,
+   and now that is measured rather than suspected. What remains open is the
+   harder version: whether it catches a falsehood that is *plausible* rather
+   than flatly contradictory — T5's plant was two documents naming different
+   files for the same slot, which is the easy case.
 2. **Where the judgment ceiling actually is.** T4 was too easy by construction.
 3. **How escalation and BLOCKED behave.** Neither fired once.
 4. **What a rung costs in tokens.** `calls.jsonl` records prompt/reply hashes
