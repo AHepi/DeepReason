@@ -1,7 +1,7 @@
 # Repo map (generated -- do not edit; regenerate with: swarm_gate.py map)
 branch: claude/treadle-install-pilot-fqwjt5
-head: dc8f7fcc7b3e7444a3690d8d05571d0a43731630
-tree_sha: 208dfc99b5e3e3e5f6b623a11d277d2c468d5fc3
+head: e97e52472daddea313639200eaef6e3caeea83a6
+tree_sha: e39266c36342f89d80fab7e6ac1a9398fe31ce44
 tracked_files: 130218
 
 ## Directories
