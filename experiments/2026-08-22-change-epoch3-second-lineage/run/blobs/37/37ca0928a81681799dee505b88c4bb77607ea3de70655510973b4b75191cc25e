@@ -1,0 +1,14 @@
+```json
+{
+  "repair.patch.v1": {
+    "baseline_sha256": "588b914ad514ef889210261728686914292b7d5de13f1c31afc748203a6ef07a",
+    "patches": [
+      {
+        "op": "replace",
+        "path": "/cases/0/premise_evidence/0/block",
+        "value": "4dd62735b90864a75220e09b302500bc"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,37 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@84ed478aeb402877f250b87e: program:reasoning_observation_pending
+- reason-counter@3c1ed3cff4b1331dd1070430: program:reasoning_observation_pending
+- reason-counter@ba5e16668c4a30e543a3e2f2: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The single best explanatory mechanism is reduced turbulent sensible heat transport: on calm nights, rural surfaces cool rapidly under a shallow, stable boundary layer, while urban roughness and thermal mixing maintain a deeper, warmer boundary layer; the gap scales with city size and wind speed.","counterconditions":[{"case":"If wind speed is very low, urban turbulence may also collapse, reducing the difference in boundary layer depth.","checker_spec":null,"eval":"observation"},{"case":"If rural roughness is high (e.g., forested countryside), the rural boundary layer may not decouple as strongly.","checker_spec":null,"eval":"observation"},{"case":"If thermal mass or sky view factor dominates the surface energy balance, boundary layer dynamics are not the single best mechanism.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rural areas form a strong nocturnal inversion that decouples the surface from warmer air aloft, accelerating cooling; urban roughness and ongoing heat release maintain turbulent mixing, keeping the surface coupled to a deeper, warmer boundary layer; the gap is more pronounced in larger cities and under conditions that would otherwise maximize rural stability.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1, reason-counter@84ed478aeb402877f250b87e, reason-counter@3c1ed3cff4b1331dd1070430, reason-counter@ba5e16668c4a30e543a3e2f2
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

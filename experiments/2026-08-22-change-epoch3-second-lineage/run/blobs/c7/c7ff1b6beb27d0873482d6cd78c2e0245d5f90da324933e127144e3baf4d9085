@@ -1,0 +1,37 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@42ea559f57ab2b7e4e547848: program:reasoning_observation_pending
+- reason-counter@8ed4576108c25613c752be20: program:reasoning_observation_pending
+- reason-counter@8cb39e512e4c49dcf03f5b7f: program:reasoning_observation_pending
+- reason-counter@732021c8c6c3ad48efd35b50: program:reasoning_observation_pending
+- reason-counter@2b75bb9ce0b6583a88c1f087: program:reasoning_observation_pending
+- reason-counter@5cbe0112bd9863024266c907: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":["commitment:uhi-energy-balance@v1","commitment:uhi-nocturnal-release@v1","commitment:uhi-cross-city-modulator@v1"],"disanalogies":["The city has anthropogenic heat sources and a large daytime heat-storage reservoir; a passively shielded rural cavity does not.","The city has a much larger thermal mass and lower albedo than typical cavity walls, contributing extra sensible heat release.","The city has impervious surfaces that reduce evapotranspiration and latent cooling, unlike the hypothetical cavity.","Wind and ventilation in a city canyon are governed by complex topological interactions, not by a simple radiative shield.","A radiatively shielded cavity does not produce internal heat via combustion or metabolism, as a city does."],"overturn_conditions":["If night-time UHI magnitude is found to be uncorrelated with sky view factor across cities after normalizing for thermal mass and anthropogenic heat, the radiative-trapping hypothesis fails.","If cities with high SVF but large thermal mass still exhibit large night-time UHI, then thermal mass release, not SVF, is the dominant mechanism.","If the night-time UHI is found to be driven by evapotranspiration differences rather than radiative flux divergence, the analogy's transferred claim fails.","If the UHI gap is found to scale with population density rather than geometric density, the analogy is overturned in favour of an anthropogenic-heat mechanism."],"shared_structure":["Both the city street canyon and a radiatively shielded cavity have surfaces exchanging longwave radiation with each other rather than the cold sky.","Both the radiatively shielded cavity and the urban canopy layer have an effective radiative sink temperature elevated above the true sky temperature.","Both the radiatively shielded cavity and the city canyon trap internal air, decoupled from the free atmosphere above, so surface cooling rates are reduced.","Cooling rate within both cavities scales with the inverse of openness to the sky (SVF)."],"source_memory_refs":["NEIGH_30be1190","NEIGH_6ca2d62f","NEIGH_8f06770a"],"transfer_claims":["If a cavity's effective longwave sink temperature rises as its sky view factor falls, then a city's nocturnal cooling rate will decrease as street-canyon SVF decreases.","If ra

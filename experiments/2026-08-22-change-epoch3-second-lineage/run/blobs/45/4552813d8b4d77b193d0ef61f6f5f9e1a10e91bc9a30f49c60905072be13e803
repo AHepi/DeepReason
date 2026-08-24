@@ -1,0 +1,111 @@
+{
+  "candidates": [
+    {
+      "claim": "The night-time UHI gap is primarily driven by stored sensible heat in high thermal mass materials (asphalt, masonry) that is released after sunset, and the gap scales with the city's impervious surface fraction and building density.",
+      "mechanism": "Urban materials have high heat capacity and thermal mass, absorbing intense daytime solar radiation. After sunset, as rural surfaces cool rapidly via radiative and latent heat losses, urban masonry slowly re-emits this stored heat as sensible heat, maintaining a higher air temperature. The cross-city variance is dictated by the total volume of stored heat, which scales directly with impervious surface area and built density.",
+      "counterconditions": [
+        "If rural and urban surfaces share identical thermal admittance and heat capacity, the stored heat differential vanishes.",
+        "If sustained high winds mix the urban boundary layer thoroughly with rural air, the localized sensible heat release is dissipated before forming a temperature gap."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_002",
+          "SRC_006"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The night-time UHI is governed by the suppression of evapotranspiration and latent heat loss, and the gap scales proportionally with the surrounding countryside's natural vegetation and irrigation, contrasting the city's impervious surfaces.",
+      "mechanism": "Rural areas cool efficiently at night via evapotranspiration, where water vaporization absorbs latent heat from the air. Cities, dominated by impervious surfaces, shed water rapidly and lack vegetation, severely restricting this latent heat sink. Consequently, urban sensible heat flux remains high. The cross-city intensity depends on the aridity and imperviousness of the urban area relative to its rural background: cities built in naturally humid, vegetated regions experience a larger UHI because the rural latent cooling is much stronger.",
+      "counterconditions": [
+        "If an urban area possesses extensive green infrastructure, parks, and irrigation that match rural evapotranspiration rates, the UHI gap shrinks.",
+        "If both rural and urban environments are natural deserts with zero moisture, the latent heat differential is eliminated."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_003",
+          "SRC_007"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The night-time UHI gap is primarily controlled by urban geometry—specifically the sky view factor—where deep street canyons trap longwave radiation, and the gap scales inversely with the sky view factor and proportional to building height.",
+      "mechanism": "On clear nights, surfaces cool by emitting longwave radiation to the cold sky. In dense cities, tall buildings reduce the sky view factor, creating a horizon that intercepts and re-radiates emitted longwave radiation back to the surface. This radiation trapping slows the urban cooling rate significantly compared to the open countryside. Cross-city variance is explained by urban morphology: cities with taller buildings, deeper street canyons, and denser built structures have a lower sky view factor, leading to a more pronounced night-time UHI.",
+      "counterconditions": [
+        "If a city consists entirely of single-story buildings with an unobstructed sky view, the radiation trapping effect is nullified.",
+        "If overcast clouds dominate both urban and rural skies, longwave cooling is uniformly suppressed everywhere, erasing the sky view factor differential."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_008"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The night-time UHI is fundamentally an atmospheric boundary layer depth effect, where calm clear nights form a much shallower stable boundary layer over rural areas, concentrating urban heat in a thinner layer; the UHI gap scales inversely with wind speed and boundary layer depth.",
+      "mechanism": "Rural nocturnal cooling generates a shallow, stably stratified boundary layer near the ground, trapping cooled air. Urban surfaces emit stored sensible heat and anthropogenic heat, maintaining a warmer, well-mixed urban boundary layer. Because the rural boundary layer is so shallow, even a moderate urban heat flux produces a large near-surface temperature differential. The cross-city variance depends on local meteorology: cities with lower nocturnal wind speeds and greater atmospheric stability experience a shallower rural boundary layer, resulting in a stronger, more pronounced UHI.",
+      "counterconditions": [
+        "If strong nocturnal winds mechanically mix the lower atmosphere uniformly to a great height in both city and country, the shallow rural boundary layer is destroyed and the UHI vanishes.",
+        "If turbulent mixing in the city fails to erode a local stable layer, the heat is not trapped in the surface layer, reducing the near-surface anomaly."
+      ],
+      "typicality": 0.65,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_005"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The dominant night-time UHI mechanism is direct anthropogenic heat emissions, and the UHI intensity scales proportionally with city size, population density, and energy consumption.",
+      "mechanism": "Cities continuously emit heat from human activities—combustion engines, HVAC systems, industrial processes, and human metabolism. On clear, calm nights when natural atmospheric mixing is minimal, this anthropogenic heat is trapped near the surface, directly elevating urban air temperatures above the rural background. The cross-city variation is best explained by the magnitude of these emissions: larger cities with higher population density and greater energy consumption release more heat, resulting in a more pronounced night-time UHI.",
+      "counterconditions": [
+        "If a city is completely powered by non-emissive renewable energy and lacks industrial heat sources, the anthropogenic contribution approaches zero.",
+        "If rural areas have intense nighttime agricultural or industrial activities emitting comparable heat, the urban-rural differential is minimized."
+      ],
+      "typicality": 0.45,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The night-time UHI is primarily a longwave emissivity feedback driven by urban aridity and humidity deficits, and the gap scales with the urban-rural humidity differential.",
+      "mechanism": "Impervious urban surfaces rapidly shed water, creating a localized aridity and humidity deficit. Drier air has lower longwave emissivity and reduced atmospheric counter-radiation, which one might think should increase cooling, but the impervious surfaces also have high thermal mass and low latent heat loss. The interplay results in urban surfaces retaining daytime heat. The cross-city variance scales with this humidity differential: cities that are heavily irrigated or naturally humid experience a weaker UHI, while arid cities surrounded by moist countryside exhibit a larger gap due to maximum latent and emissivity contrasts.",
+      "counterconditions": [
+        "If the city and countryside share identical near-surface humidity levels, the emissivity feedback mechanism ceases to modulate the UHI.",
+        "If urban emissivity is artificially increased via high-albedo or specialized cool roof coatings that alter radiative properties independent of humidity, the mechanism fails."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_004"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

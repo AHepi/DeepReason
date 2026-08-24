@@ -1,0 +1,9 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/cases/0/premise_evidence/0/block",
+    "operation": "replace",
+    "value": "5f4d3c2b1a0987654321abcedf"
+  }
+}
+```

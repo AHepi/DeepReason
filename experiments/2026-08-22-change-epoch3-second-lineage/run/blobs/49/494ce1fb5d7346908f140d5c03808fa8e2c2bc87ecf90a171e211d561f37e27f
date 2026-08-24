@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The target proposes a reduction relation claiming SVF is a proxy for built density, but its refutation condition is structurally unsound: a 'high thermal admittance but high SVF' city exhibiting large nocturnal UHI would equally support the alternative mechanism (thermal admittance as the true driver), because concrete's high thermal admittance would independently explain the UHI. The test fails to isolate SVF, so the proposed reduction cannot be meaningfully refuted as stated."}]}
+```
