@@ -32,7 +32,7 @@ from deepreason.measures.hv import (
     is_hv_floor,
     run_hv_floor,
 )
-from deepreason.calculus.nomination import nominate
+from deepreason.calculus.nomination import nominate, promotion_wound_counts
 from deepreason.calculus.succession import (
     is_succession_trial,
     run_succession_trial,
@@ -1100,6 +1100,13 @@ class Scheduler:
         # resolutions answers it, not another candidate.
         retired = retired_problems(self.harness)
         orphaned = set(premise_orphaned(self.harness))
+        # D-1, answered A: crisis is a RENDER state only, and the one
+        # scheduling consequence the answer names is ATTENTION -- "the
+        # incumbent's promotion problem stays on the frontier, ranked by wound
+        # count". More wounds means a louder open demand for an account of
+        # them, so the problem rises. It moves no label and confers nothing
+        # (C5); it decides only which problem a cycle looks at next.
+        promotion_wounds = promotion_wound_counts(self.harness)
         candidates = [
             p
             for p in state.problems.values()
@@ -1142,6 +1149,10 @@ class Scheduler:
                 return (
                     -(age * weight),
                     p.provenance.trigger != SpawnTrigger.SEED,
+                    # AFTER the seed term, never before it: the operator's own
+                    # question wins every tie, and a wounded background must
+                    # not be able to outrank it.
+                    -promotion_wounds.get(p.id, 0),
                     p.id in orphaned,
                     p.id in reflexive,
                     p.id,
@@ -1159,6 +1170,7 @@ class Scheduler:
             unsolved or candidates,
             key=lambda p: (
                 p.provenance.trigger != SpawnTrigger.SEED,
+                -promotion_wounds.get(p.id, 0),
                 p.id in orphaned,
                 p.id in reflexive,
             ),

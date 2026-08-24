@@ -1289,3 +1289,26 @@ the same document's own `SCHEMA.md` already implies: **a count stated in
 prose is a load-bearing claim and needs the check that would fail with
 it** — an unchecked number beside a checked one decays silently and reads
 as verified.
+
+**E51 — `DR-SUB-verification` said the epistemic checks "are not `verify_root`
+findings at all", and two of them are.** The row read: "the epistemic checks
+(`adjudication-blindness`, `bridge-epistemic`, `bridge-grounding`,
+`grounding-review`) are derived in `report.py` — they are not `verify_root`
+findings at all, so reading `verify_root` alone tells you nothing about them."
+It was true when written and stopped being true at Rung 4 (2026-08-22), which
+emitted `standing-integrity` from `verify_root` INTO the epistemic channel;
+Rung 7's `cascade-integrity` (2026-08-24) is the second. A reader who trusted
+the row would have skipped `verify_root` while looking for exactly the finding
+it carries.
+
+The row's own check did not catch it, and the reason generalises: it pinned
+`adjudication-blindness` by name — one member of a four-member set — and **a
+check that names one member cannot notice the set growing.** The four names in
+the prose were never checked against the four in the code at all. Found
+2026-08-24 by `experiments/2026-08-24-change-rung7-wounds-falls-succession/`
+while adding the second counterexample, and fixed in the same commit: the row
+now states the split both ways and its new check asserts BOTH partitions of
+`_EPISTEMIC_CHECKS` — those `verify_root` emits and those `report.py` derives —
+so a third member cannot join either side unnoticed. Sibling of E50: a
+membership claim in prose is load-bearing and needs the check that would fail
+with it, and for a SET that check must be over the whole set.

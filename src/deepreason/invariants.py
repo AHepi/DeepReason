@@ -4209,6 +4209,58 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"promotion problem ({grant.problem_id})",
             )
 
+    # Cascade integrity (v2 calculus program, Rung 7; granted contact, requested
+    # in that tranche's SPEC.md §1 before any of it was written). ADDITIVE: all
+    # three limbs recognise their inputs by bodies, commitments and marks that
+    # no root written before this layer existed can produce, so a root that
+    # predates it yields nothing here. Insertions only -- no existing finding's
+    # shape, name, order or detail string moved.
+    #
+    # Prop 9.7 is the claim: "every problem whose provenance carries fa
+    # receives an orphan mark when fa leaves unrefuted standing; no
+    # presupposing problem silently survives, and no mark resolves except by
+    # adjudicated work." Marking is a total computable function of the log, so
+    # a reader of a finished run needs telling only when the record does not
+    # agree with it.
+    marks = _orphan_marks(h)
+    for problem_id, body in _orphan_resolutions(h).items():
+        if problem_id in marks:
+            continue
+        # A closure with no cause. `retire` takes a problem off the frontier
+        # and `translate` replaces it -- doing either to a problem nothing
+        # orphaned removes a question with no premise-criticism behind it,
+        # which is the silent path N3 forbids.
+        fail(
+            "cascade-integrity",
+            f"problem {problem_id} carries a consulted "
+            f"{body.get('resolution', 'orphan')} resolution but no orphan mark",
+        )
+    for fallen in _fallen_frames(h):
+        # Re-derived HERE from the exits and sigma rather than read back from
+        # the marking function. A limb that called `premise_orphaned` on both
+        # sides would agree with itself on every possible record and could
+        # never fire; this one breaks if either derivation moves.
+        for problem_id in _framed_problem_ids(h, fallen.scope):
+            if problem_id == fallen.problem_id or problem_id in marks:
+                continue
+            fail(
+                "cascade-integrity",
+                f"problem {problem_id} is carried by fallen frame assertion "
+                f"{fallen.assertion_id} ({fallen.grade}) and is not marked",
+            )
+    for fallen in _unseparated_fallen_frames(h):
+        # DISCLOSURE, not an accusation. An assertion that was never
+        # consultable never framed anything, so its fall orphans nothing --
+        # but components only ever GROW, so a separation held at consultation
+        # can be lost afterwards, and then the frame entry is silent for it.
+        # Silence a reader cannot see is the thing worth reporting.
+        fail(
+            "cascade-integrity",
+            f"fallen frame assertion {fallen.assertion_id} ({fallen.grade}) "
+            f"marks nothing: it is not separated from its subject "
+            f"{fallen.subject_id}, so it was never consultable",
+        )
+
     return {"violations": violations, "stats": stats}
 
 
@@ -4235,6 +4287,41 @@ def _consulted_grants(harness):
     from deepreason.calculus.standing import consulted
 
     return consulted(harness)
+
+
+def _fallen_frames(harness):
+    """Assertions that HAVE left unrefuted standing and mark (Rung 7).
+
+    Imported in-function, like every other calculus reader here, so this module
+    holds no calculus import at module scope.
+    """
+    from deepreason.calculus.standing import fallen_frames
+
+    return fallen_frames(harness)
+
+
+def _unseparated_fallen_frames(harness):
+    from deepreason.calculus.standing import unseparated_fallen_frames
+
+    return unseparated_fallen_frames(harness)
+
+
+def _framed_problem_ids(harness, scope):
+    from deepreason.calculus.standing import framed_problem_ids
+
+    return framed_problem_ids(harness, scope)
+
+
+def _orphan_marks(harness):
+    from deepreason.premises import premise_orphaned
+
+    return premise_orphaned(harness)
+
+
+def _orphan_resolutions(harness):
+    from deepreason.premises import standing_resolutions
+
+    return standing_resolutions(harness)
 
 
 def verify_root_report(root: Path, meter_total: int | None = None):

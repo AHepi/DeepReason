@@ -279,5 +279,47 @@ before `SUB-calculus.md` and `SUB-rules.md`.
 
 ## 5. Amendments
 
-None yet. New operator messages are appended here verbatim, as new
-numbered requirements or as `Rn a supersedes Rn`, BEFORE being acted on.
+### Amendment 1 (2026-08-24) — the diff-budget overrun, disposed
+
+At the step-9 `[COMMIT]` checkpoint `tools/diff_budget.py` reported **893**
+insertions over `src/` against SPEC.md's ledgered ceiling of **700**, with
+~1000 projected at completion against the ladder's 500-700 estimate. That is
+`dr-change-orchestrator`'s stop condition ("the estimated diff exceeds
+SPEC.md's budget"), so the tranche stopped and put three priced roads to the
+operator.
+
+**The operator chose: continue and disclose.** Their selection, verbatim from
+the option they picked:
+
+> Continue and disclose (Recommended) — Finish steps 10-16 and land ~1000
+> lines, with the overrun and its per-file breakdown recorded in DELIVERY.md
+> rather than the ceiling re-baselined. This is Rung 6's own precedent
+> (759/560, disclosed). Nothing is cut, the live gate still runs.
+
+**R10 (new).** The 700 ceiling is NOT re-baselined. DELIVERY.md carries the
+overrun, its per-file breakdown, and the cause below, as a disclosed result
+rather than a corrected estimate.
+
+**What grew, measured at the stop:**
+
+| File | Insertions | SPEC estimate | Why |
+|---|---|---|---|
+| `calculus/succession.py` | 458 | 240 | the estimate counted EXECUTABLE lines and the instrument counts ADDED LINES. Measured at the stop: 241 executable, 217 docstring, comment and blank. The executable half is within 1 line of the estimate |
+| `premises.py` | 138 | 80 | `orphan_causes` was not in the estimate at all — it exists because the batch offer must know which cause explains a mark, and its precedence rule had to be written on the label rather than the grade |
+| `calculus/standing.py` | 126 | 60 | `unseparated_fallen_frames` and the shared `_fallen` helper, plus the recorded reason for requiring separation at the frame entry |
+| `informal/trial.py` | 73 | 30 | the observer had to fire at FIVE exits, not one: a hook that only fired on clean verdicts would report a flip rate of zero on exactly the trials that flipped |
+| `scheduler.py` | 49 | 45 | on estimate |
+| `signals.py` | 32 | 12 | two signals, not one — `succession.trial-flip-rate.v1` was not foreseen at spec time and the gate refused it until it was declared |
+| `calculus/render.py` | 22 | 20 | on estimate |
+| `calculus/__init__.py` | 8 | 15 | under estimate |
+
+**The single cause, stated so the next tranche does not repeat it.** SPEC.md
+§4's estimate was built by counting the executable lines each item needs.
+`tools/diff_budget.py` counts INSERTIONS, which includes every docstring,
+comment and blank line — and this repository's own convention requires a
+comment wherever the code cannot show the constraint. On the one new module the
+two numbers differ by 90 per cent. A future SPEC's size table should either
+estimate added lines directly or state which of the two it is estimating.
+
+New operator messages are appended here verbatim, as new numbered requirements
+or as `Rn a supersedes Rn`, BEFORE being acted on.

@@ -133,6 +133,7 @@ _EPISTEMIC_CHECKS = frozenset(
         "adjudication-blindness",
         "bridge-epistemic",
         "bridge-grounding",
+        "cascade-integrity",
         "grounding-review",
         "standing-integrity",
     }

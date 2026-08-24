@@ -178,6 +178,40 @@ subject.
 
 `check: python -c "import inspect; from deepreason.calculus import standing; src=inspect.getsource(standing.consultability_of); assert 'consultability(harness, assertion_id, body.subject_ref)' in src" && python -m pytest tests/test_calculus_frame_assertions.py::test_an_unseparated_assertion_is_unconsultable_with_rung3bs_own_code -q`
 
+## A6 and A9 at Rung 7 — what the cascade's second entry had to preserve
+
+**A6 preserved, and the frame entry is where it could most easily have been
+lost.** A fallen frame assertion marks every problem it carried — so the
+question "was this assertion ever consultable?" acquired a consequence it did
+not have before. The entry answers it by CALLING `separation.consultability`,
+Rung 3b's own predicate, rather than re-deriving the graph condition: two
+definitions of one invariant would leave no way to tell which the record meant.
+An unseparated assertion therefore marks NOTHING — R64's "no attack edge, no
+warrant, no label change" gains a fourth clause, "and no mark" — and is
+enumerated separately instead, so the silence is visible rather than absent.
+
+`check: python -m pytest tests/test_calculus_axioms_rung7.py -k a6 -q`
+
+**A9 preserved across three new readouts** — the batch offers, the succession
+pack and the trial record. The first two write nothing at all. The third DOES
+write, deliberately: a diagnostic nobody can attack is a diagnostic nobody can
+correct, so the trial record is an ordinary registered artifact plus a measure.
+What makes that still A9 is what it is NOT: no status, no edge, no warrant. The
+check pins the split by function name, so a second writer in that module fails
+here rather than being found later.
+
+`check: python -m pytest tests/test_calculus_axioms_rung7.py -k a9 -q`
+
+**A7 is why "carrying" is COMPUTED.** The cascade needs the set of problems a
+fallen frame carried, and A7's mechanism is that there is no mechanism —
+nothing stores which assertions a problem was posed under. So the set is σ
+evaluated on each immutable `Problem` record, which is exactly what `frames`
+has meant since Rung 4. A second meaning would give the cascade a different set
+from the renderer's, and the pack and the mark would then disagree about the
+same fall.
+
+`check: python -m pytest tests/test_calculus_cascade_frame_entry.py::test_a_fallen_frame_does_not_orphan_its_own_promotion_problem -q`
+
 ## A7 — problems immutably record their pose-time frame assertions
 
 **PROVED at Rung 4**, and the mechanism is that there is no mechanism: `Problem`

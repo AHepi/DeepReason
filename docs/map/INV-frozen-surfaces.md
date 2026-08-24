@@ -102,6 +102,44 @@ reported nothing on a root purpose-built to violate the law.
 
 `check: grep -q "standing-integrity" src/deepreason/invariants.py && grep -q "standing-integrity" src/deepreason/verification/report.py && grep -q "_declared_frame_assertions" src/deepreason/invariants.py && python -m pytest tests/test_calculus_standing.py::test_standing_integrity_fires_on_a_violated_mention_law tests/test_calculus_standing.py::test_standing_integrity_reports_nothing_on_a_root_that_predates_it -q`
 
+**Granted contact, 2026-08-24 — the `cascade-integrity` check (Rung 7).** The
+operator FORECAST this contact in the tranche instruction itself, named its
+exact content, and directed that the grant be requested in SPEC.md rather than
+in chat: "surface 3 — FORECAST ADDITIVE CONTACT (a cascade-integrity check in
+verification); request the grant in SPEC.md BEFORE code, the monitor reviews it
+there." The request was written into
+`experiments/2026-08-24-change-rung7-wounds-falls-succession/SPEC.md` §1 with
+`tools/blast_radius.py`'s own contact rows pasted and disposed one by one,
+before a line of the check existed.
+
+What moved: one additive `fail("cascade-integrity", …)` family at the END of
+`verify_root`, three limbs, plus six in-function reader helpers and the check's
+name in `_EPISTEMIC_CHECKS`. **Insertions only — 87 and 1, zero deletions** —
+so no existing finding's shape, name, order or detail string changed. Additive
+is provable rather than asserted: all three limbs recognise their inputs by
+bodies, commitments and marks no root written before this layer can produce,
+pinned by a probe against a committed root rather than a fixture.
+
+One design point worth keeping, because the obvious implementation is worthless
+rather than merely wrong. Limb 2 states Prop 9.7's totality — every problem a
+fallen frame carried is marked — and the obvious way to check it is to ask the
+marking function on both sides. That version agrees with itself on every
+possible record and can never fire. The shipped limb RE-DERIVES the obligation
+from the exits and σ and compares it against the marks, so a mutation to either
+derivation breaks it. `docs_verify --audit` refuses map checks that cannot
+fail; the same standard is owed to a `verify_root` finding, which has no
+equivalent auditor of its own.
+
+`check: grep -q "cascade-integrity" src/deepreason/invariants.py && grep -q "cascade-integrity" src/deepreason/verification/report.py && python -m pytest tests/test_cascade_integrity.py -q`
+`check: python -c "
+import inspect
+from deepreason.invariants import verify_root
+block = inspect.getsource(verify_root)
+block = block[block.index('Cascade integrity'):]
+assert '_framed_problem_ids(h, fallen.scope)' in block
+assert block.count('_orphan_marks(h)') == 1
+"`
+
 **False alarm rowed, same date.** `tools/blast_radius.py` also reported
 `manifest schemas and validators (run_manifest.py)` as `SYMBOL_INDIRECT` contact
 for the symbol `clamp`. It is a substring false positive: every `clamp` in that

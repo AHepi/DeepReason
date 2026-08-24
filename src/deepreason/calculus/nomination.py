@@ -47,7 +47,7 @@ from deepreason.calculus.compiler import compile_interface
 from deepreason.calculus.operations import ensure_promotion_problem
 from deepreason.calculus.programs import REACH_CERTIFICATE_COMMITMENT
 from deepreason.calculus.scope import SCOPE_SCHEMA, ScopeError, compile_scope, scope_admits
-from deepreason.ontology import Provenance
+from deepreason.ontology import Provenance, SpawnTrigger
 from deepreason.ontology.event import Rule
 from deepreason.ontology.state import Status
 
@@ -404,6 +404,38 @@ def promotion_criteria(harness, certificate_ref: str):
     from deepreason.calculus.promotion import criteria_for
 
     return criteria_for(certificate_ref)
+
+
+def promotion_wound_counts(harness) -> dict[str, int]:
+    """promotion problem id -> how many wounds its subject carries.
+
+    D-1 was answered A: crisis is a RENDER STATE ONLY. No standing-layer spawn
+    trigger exists and none is built -- what the answer asks for on the
+    scheduling side is one thing, and it is ATTENTION: "the incumbent's
+    promotion problem stays on the frontier, ranked by wound count."
+
+    Deliberately reads NOTHING from the standing view. A promotion problem
+    names its subject in its own `provenance.from_`, and a wound is a
+    registered warrant against that subject -- so this is a count over the
+    warrant table and the problem record, not a consultation. That is what
+    keeps `DR-SUB-calculus`'s NO SCHEDULER SELECTION row and
+    `DR-CON-standing-and-background`'s disambiguation check true as written:
+    the scheduler still reaches no derived problem-status view and no standing
+    view.
+    """
+    counts: dict[str, int] = {}
+    for pid, problem in harness.state.problems.items():
+        if problem.provenance.trigger is not SpawnTrigger.PROMOTION:
+            continue
+        sources = list(problem.provenance.from_)
+        if not sources:
+            continue
+        subject_id = sources[0]
+        counts[pid] = sum(
+            1 for warrant in harness.warrants.values()
+            if warrant.target == subject_id
+        )
+    return counts
 
 
 def nominate(harness, config) -> list:

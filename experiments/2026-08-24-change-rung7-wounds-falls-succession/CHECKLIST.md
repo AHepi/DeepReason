@@ -298,6 +298,21 @@ including the assertion that the operator's seed still wins every tie.
 DONE-CRITERION: `python -m pytest tests/test_scheduler_promotion_rank.py
 tests/test_scheduler*.py -q` — 0 failed.
 
+
+**DONE 2026-08-24.**
+
+```
+tests/test_scheduler_promotion_rank.py ..........   10 passed in 1.48s
+ring (promotion rank + scheduler + v6 deferral + route firewall + nomination
++ nomination live):                                 47 passed in 12.89s
+```
+
+Two fixture points the tests forced: `Scheduler` takes an adapter, and the
+fixture passes an EMPTY one — selection reaches no provider, so if it ever
+needed a seat this would fail rather than quietly succeed. And the constructor
+records its own start-up events, so the "moves no label" snapshot is taken
+AFTER construction, or it would assert something the test is not about.
+
 ## Step 11 — `cascade-integrity` in `verify_root` (S9; the §1 grant)
 
 The three limbs at the END of `verify_root`, the name in
@@ -309,6 +324,35 @@ DONE-CRITERION: `python -m pytest tests/test_cascade_integrity.py -q` —
 0 failed — plus the committed-root probe output and the insertions/
 deletions count for `invariants.py`.
 
+
+**DONE 2026-08-24.**
+
+```
+tests/test_cascade_integrity.py ........   8 passed in 20.99s
+
+git diff --numstat 053c129ac -- src/deepreason/invariants.py src/deepreason/verification/report.py
+87      0       src/deepreason/invariants.py
+1       0       src/deepreason/verification/report.py
+```
+
+**INSERTIONS ONLY — 87 and 1, zero deletions**, which is what the grant said it
+would be. The committed-root probe
+(`experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf`)
+returns no `cascade-integrity` finding, so additive is proven against a root
+that predates the layer rather than asserted.
+
+**One correction the step turned up, and it was already wrong before this
+tranche.** `DR-SUB-verification` claimed the epistemic checks "are not
+`verify_root` findings at all". That stopped being true at Rung 4, when
+`standing-integrity` began being emitted from `verify_root` into the epistemic
+channel; `cascade-integrity` is the second. The row's own check pinned ONE
+member by name, and a check that names one member cannot notice the set
+growing. Corrected in this commit with a check over BOTH partitions, and
+ledgered as `docs/ERRATA.md` E51.
+
+Map moved in this commit: `DR-INV-frozen-surfaces` (the granted contact with
+its three checkable facts), `DR-SUB-verification` (the corrected row).
+
 ## Step 12 — the axiom ledger (S10; G7)
 
 `tests/test_calculus_axioms_rung7.py`: A6 preserved at the frame entry,
@@ -318,6 +362,31 @@ and NO standing-layer spawn trigger exists (C-D1's absence). Map:
 
 DONE-CRITERION: `python -m pytest tests/test_calculus_axioms_rung7.py -q`
 — 0 failed.
+
+
+**DONE 2026-08-24.**
+
+```
+tests/test_calculus_axioms_rung7.py .......   7 passed in 0.15s
+  -k a6   2 passed
+  -k a9   3 passed
+```
+
+Rung 7 PROVES none of the eleven axioms and preserves two. A6 is preserved by
+calling Rung 3b's own predicate rather than re-deriving the graph condition, so
+R64's "no edge, no warrant, no label" gains its fourth clause — "and no mark" —
+from one definition rather than two. A9 is preserved across three new readouts,
+and the trial record is the interesting one: it DOES write, because a
+diagnostic nobody can attack is a diagnostic nobody can correct, and what makes
+that still A9 is that it writes an artifact and a measure and never a status,
+an edge or a warrant. The check pins the single writer by name.
+
+The absence D-1 chose is asserted too: no crisis-problem spawn trigger exists,
+and `SpawnTrigger` gained no member for one.
+
+Map moved in this commit: `DR-INV-axiom-basis` (A6/A9 at Rung 7, and why A7
+makes "carrying" computed), `DR-CON-scheduler-ranking` (the wound-count term
+and its position after the seed term, with a check on the ORDER).
 
 ## Step 13 — boundary gate `[COMMIT]` GATE
 

@@ -196,11 +196,39 @@ when `stats` was otherwise empty.
 `check: python -c "import re,pathlib; inv=pathlib.Path('src/deepreason/invariants.py').read_text(); rep=pathlib.Path('src/deepreason/verification/report.py').read_text(); em=set(re.findall(r'fail\(\s*\"([a-z0-9-]+)\"', inv)); sec=set(re.findall(r'\"([a-z0-9-]+)\"', rep.split('_SECURITY_CHECKS = frozenset(')[1].split(')')[0])); raise SystemExit(0 if sec and sec <= em else 1)"`
 - **`valid` does not mean good.** It means no integrity and no security finding.
   Completeness, epistemic adequacy and operational success are three separate
-  booleans, and a run can be `valid` with all three false. The epistemic checks
+  booleans, and a run can be `valid` with all three false.
+
+  **The epistemic checks come from BOTH ends, and this row said otherwise until
+  2026-08-24** (`docs/ERRATA.md` E51). It read: "the epistemic checks
   (`adjudication-blindness`, `bridge-epistemic`, `bridge-grounding`,
   `grounding-review`) are derived in `report.py` — they are not `verify_root`
-  findings at all, so reading `verify_root` alone tells you nothing about them.
+  findings at all". That was true when it was written and stopped being true at
+  Rung 4, which emitted `standing-integrity` from `verify_root` INTO the
+  epistemic channel; Rung 7's `cascade-integrity` is the second. The row's own
+  check never caught it, because it pinned `adjudication-blindness` alone — a
+  check that names one member cannot notice the set growing.
+
+  So there are two kinds, and a reader has to know which they are holding:
+
+  | | derived in `report.py` | emitted by `verify_root` |
+  |---|---|---|
+  | | `adjudication-blindness`, `bridge-epistemic`, `bridge-grounding`, `grounding-review` | `standing-integrity`, `cascade-integrity` |
+  | reading `verify_root` alone | tells you nothing about them | shows them |
+
+  `_EPISTEMIC_CHECKS` is the membership list for the CHANNEL, not for the
+  origin, and the check below now asserts the split both ways so a third
+  member cannot join either side unnoticed.
 `check: sh -c 'grep -q "return self.integrity_valid and self.security_valid" src/deepreason/verification/report.py && ! grep -q "\"adjudication-blindness\"" src/deepreason/invariants.py && grep -q "\"adjudication-blindness\"" src/deepreason/verification/report.py'`
+`check: python -c "
+import re, pathlib
+from deepreason.verification.report import _EPISTEMIC_CHECKS
+inv = pathlib.Path('src/deepreason/invariants.py').read_text()
+emitted = set(re.findall(r'fail\(\s*.([a-z0-9-]+).', inv))
+from_verify = _EPISTEMIC_CHECKS & emitted
+derived = _EPISTEMIC_CHECKS - emitted
+assert from_verify == {'standing-integrity', 'cascade-integrity'}, sorted(from_verify)
+assert derived == {'adjudication-blindness', 'bridge-epistemic', 'bridge-grounding', 'grounding-review'}, sorted(derived)
+"`
 - **`completion_satisfied` is UNREACHABLE on the public `deepreason reason`
   path, so any instrument demanding it is asserting against the design.**
   `completion_satisfied` is `not self.completion`, and

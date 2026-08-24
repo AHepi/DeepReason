@@ -38,6 +38,33 @@ solved candidate.
 Both guarantees are pinned by regression, not only by reading the sort key.
 `check: python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
 
+**The wound-count term (Rung 7, D-1 answered A), and where it sits.** A
+PROMOTION problem rises with the number of wounds its subject carries: more
+wounds is a louder open demand for an account of them, and D-1's answer is that
+this is the ONLY scheduling consequence a fallen or wounded background gets —
+"the incumbent's promotion problem stays on the frontier, ranked by wound
+count, attention only". No crisis-problem spawn trigger exists, and its absence
+is what the answer chose.
+
+The term sits AFTER the `SEED` term in both sort keys, and the ordering is the
+promise above rather than a preference: a background carrying forty wounds must
+not outrank the operator's own question. It reads a count over the warrant
+table and the problem's own `provenance.from_` — never a standing view, never a
+derived problem status — so `DR-SUB-calculus`'s NO SCHEDULER SELECTION row and
+`DR-CON-standing-and-background`'s disambiguation check both stay true as
+written.
+
+`check: python -m pytest tests/test_scheduler_promotion_rank.py -q`
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler._select_problem)
+seed = src.index('provenance.trigger != SpawnTrigger.SEED')
+wounds = src.index('promotion_wounds.get(p.id, 0)')
+assert seed < wounds, 'the wound term must sit AFTER the seed term'
+assert src.count('promotion_wounds.get(p.id, 0)') == 2, 'both sort keys'
+"`
+
 **What it is handed:** the harness's `state` (problems, artifacts, status —
 read only, never mutated here); `reflexive_problems(state)`, the lineage-
 following meta-work set; the `Config` knobs `FOCUS_PROBLEM`, `FOCUS_FAMILY`,
