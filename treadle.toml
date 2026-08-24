@@ -28,9 +28,19 @@ model = "deepseek-v4-pro:0813"  # deepseek-v4-pro:0813-cloud is this same dated 
 skill = "skills/minimal-pair-review/SKILL.md"
 max_tokens = 8000
 
+[stage.review_full]             # same shipped reviewer, context budget raised past
+kind = "review"                 # the default 24000 chars: pilot rung T2 measured a
+model = "deepseek-v4-pro:0813"  # 167628-char delivered diff truncated to its first
+skill = "skills/minimal-pair-review/SKILL.md"   # 6 of 24 files, all documentation
+context_budget_chars = 200000
+max_tokens = 8000
+
 [[routing]]
 prefix = "PIL-"
 stage = "pilot"
 [[routing]]
 prefix = "REV-"
 stage = "review"
+[[routing]]
+prefix = "REVF-"
+stage = "review_full"
