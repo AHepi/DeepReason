@@ -1,5 +1,5 @@
 # Checklist for: Rung 5 — promotion problems and their criteria as programs
-State: next=8 blockers=none
+State: next=15 blockers=none
 Map ids this plan was built on: `DR-SUB-calculus`, `DR-SUB-evaluation`,
 `DR-SUB-rules`, `DR-SEAM-evaluation-x-rules` (read first, per the map's own
 seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
@@ -57,26 +57,26 @@ One step per dr-execute-step invocation.
       done-when: both pasted outputs are in the step record, tree restored,
       `git diff --stat src/` shows no residue of the mutation.
 
-- [ ] 8. (S4–S8, S12) Write `tests/test_promotion_criteria.py` — one passing and
+- [x] 8. (S4–S8, S12) Write `tests/test_promotion_criteria.py` — one passing and
       one refusing case per criterion, plus a budget-0 `overrun` case per
       program.
       done-when: `python -m pytest tests/test_promotion_criteria.py -q` fails
       with an import error naming `promotion` (the tests exist, the module does
       not).
 
-- [ ] 9. (S10 of REQUEST R10, i.e. SPEC S8) Write
+- [x] 9. (S10 of REQUEST R10, i.e. SPEC S8) Write
       `tests/test_promotion_succession.py` — the FOUR refusals the strong
       relation owes: recovery-only, easier-to-vary, excisable-idle-part, and
       every-clause-non-strict.
       done-when: `python -m pytest tests/test_promotion_succession.py -q` fails
       with an import error naming `promotion`.
 
-- [ ] 10. (S4–S8, A10) Write `src/deepreason/calculus/promotion.py`: the five
+- [x] 10. (S4–S8, A10) Write `src/deepreason/calculus/promotion.py`: the five
       criterion programs, pure over (candidate bytes, frozen certificate).
       done-when: `python -m pytest tests/test_promotion_criteria.py tests/test_promotion_succession.py -q`
       ends "N passed" with 0 failed.
 
-- [ ] 11. (A10, S15) Register the six programs in `programs.py` — `PROGRAMS`
+- [x] 11. (A10, S15) Register the six programs in `programs.py` — `PROGRAMS`
       with `class_="structural"` and `BLOB_PROGRAMS` for blob dispatch — and
       update `docs/map/SEAM-evaluation-x-ontology.md:54`'s `G(f)` list in the
       SAME edit.
@@ -84,20 +84,20 @@ One step per dr-execute-step invocation.
       exits 0, and `python -m pytest tests/test_reflexive_discipline.py tests/test_prose_refutation_boundaries.py tests/test_verifier_registry.py tests/test_decommissioned_pipeline_stays_out.py -q`
       ends 0 failed.
 
-- [ ] 12. (S8) [COMMIT] Mutation-prove the strong relation's first refusal (R10):
+- [x] 12. (S8) [COMMIT] Mutation-prove the strong relation's first refusal (R10):
       temporarily drop the strictness-witness clause, watch
       `test_a_rival_that_only_recovers_is_not_a_successor` go RED, restore,
       watch it go GREEN. Paste both runs.
       done-when: both pasted outputs are in the step record and the tree is
       restored.
 
-- [ ] 13. (S9, S12) Write `tests/test_promotion_closure.py` — Remark 9.5 both
+- [x] 13. (S9, S12) Write `tests/test_promotion_closure.py` — Remark 9.5 both
       ways: an assertion outside a promotion problem is ignored; one addressed
       to a promotion problem whose criteria FAIL does not frame its scope.
       done-when: `python -m pytest tests/test_promotion_closure.py -q` fails
       with an import error naming `promotion_criteria_sweep`.
 
-- [ ] 14. (S9) Add `promotion_criteria_sweep` to `calculus/promotion.py`, minting
+- [x] 14. (S9) Add `promotion_criteria_sweep` to `calculus/promotion.py`, minting
       demonstrative warrants through `rules/warrants.py::register_fail_warrant`
       and minting nothing for `overrun`.
       done-when: `python -m pytest tests/test_promotion_closure.py -q` ends 0
@@ -228,3 +228,75 @@ RESTORED:
     20 passed in 8.44s
 
 `git diff --stat src/` after restore: empty — no residue of the mutation.
+
+**8.** `python -m pytest tests/test_promotion_criteria.py -q` → `16 failed`,
+every failure an `AttributeError`/`ImportError` on the unwritten criterion
+functions. Tests exist, guard nothing yet.
+
+**9.** `python -m pytest tests/test_promotion_succession.py -q` → `11 failed`,
+same shape.
+
+**10.** `python -m pytest tests/test_promotion_criteria.py
+tests/test_promotion_succession.py -q` → `27 passed`.
+
+Three corrections inside the step, each recorded because each changed a
+DESIGN decision rather than a typo:
+
+(a) `FrozenSubjectV1.demarcation`'s three values were renamed to
+`load-bearing` / `declared-only` / `no-attack-surface`. The first draft called
+the `crit`-false case `undecided`, which read as an abstention when it is a
+SETTLED failure — an interface declaring nothing forbids nothing, and no sample
+could rescue it (Rung 2's own rule). `declared-only` is now the abstention, and
+the criterion answers `overrun` on it.
+
+(b) `FrozenSubjectV1` gained `criticised_commitments`, and the certificate now
+freezes the subjects' OWN commitment specs as well as the problems' criteria.
+Non-immunization needs to know which components registered criticism cites, and
+the empirical clause needs to resolve whether a subject's own commitment is
+observation-valued; neither was reachable from the first shape.
+
+(c) Non-immunization returns `overrun` (`accounting-not-in-environment`) when a
+problem the rival accounts for was not frozen. Discovered by the fixtures:
+with an unknown accounting, `needed` computes as EMPTY and every uncriticised
+component looks idle, which would fell a rival for the environment's gaps
+rather than for its own riders.
+
+**11.** Registry check → `registry OK`; the six new names are declared
+`structural` and `programs_by_class()['structural'] == _STRUCTURAL_PROGRAMS`.
+`python -m pytest tests/test_reflexive_discipline.py
+tests/test_prose_refutation_boundaries.py tests/test_verifier_registry.py
+tests/test_decommissioned_pipeline_stays_out.py -q` → `72 passed`. All four
+assert over the DECLARATION, so they cover the new programs the day they land,
+exactly as their own docstrings promise.
+
+**12. MUTATION PROOF of the strong relation's first refusal — both runs.**
+
+MUTATED (the strictness-witness clause replaced by an unconditional pass — the
+WEAK reading, which R6 forbids building):
+
+    === MUTATED: the strictness witness is dropped (the WEAK reading) ===
+    E         - fail
+    E         + pass
+    FAILED tests/test_promotion_succession.py::test_a_rival_that_only_recovers_is_not_a_successor
+    1 failed, 10 passed in 0.07s
+
+Exactly one test goes red, and it is the one R10 names: "a rival that merely
+recovers the incumbent's explicanda is refused as a successor — the test that
+passes under the weak reading and must fail under this one". The other ten stay
+green, which is the second half of the proof: the strictness witness is doing
+this one job and is not propping up the other three clauses.
+
+RESTORED:
+
+    === RESTORED ===
+    33 passed in 2.35s
+
+`git diff --stat src/deepreason/calculus/promotion.py` after restore: `517
+insertions` and no deletions — the file as written, no residue.
+
+**13.** `python -m pytest tests/test_promotion_closure.py -q` →
+`AttributeError: module 'deepreason.calculus.promotion' has no attribute
+'promotion_criteria_sweep'`.
+
+**14.** `python -m pytest tests/test_promotion_closure.py -q` → `6 passed`.
+One in-step correction: `Consultability`'s typed field is `code`, not `reason`.

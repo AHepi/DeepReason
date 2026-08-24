@@ -319,6 +319,43 @@ def _lean_external_check(text: str, budget, artifact=None) -> tuple[str, dict]:
     }
 
 
+
+def _reach_certificate_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.calculus.programs import reach_certificate_wf
+
+    return reach_certificate_wf(text, budget, artifact)
+
+
+def _promotion_needs_blobs(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """The `PROGRAMS` half of a promotion criterion's DUAL registration.
+
+    A promotion criterion is registered in `PROGRAMS` to DECLARE its class and
+    in ``BLOB_PROGRAMS`` to receive the frozen certificate; ``evaluate``
+    dispatches the blob form first, so this body is unreachable through the
+    ordinary path. It exists because ``programs_by_class()`` -- and therefore
+    ``measures/reach._STRUCTURAL_PROGRAMS`` -- reads ``PROGRAMS`` alone, so a
+    criterion living only in ``BLOB_PROGRAMS`` would count SUBSTANTIVE by
+    default and would both ground reach and confer prose immunity. Both are
+    wrong for the promotion axis: grounding reach would let promotion paperwork
+    manufacture the signal that nominates it, and immunity would be sold for
+    ``promotion_accounts_for``'s vacuous no-incumbent pass.
+
+    A direct caller gets ``overrun`` -- unobtainable without the blob store --
+    rather than a wrong verdict.
+    """
+    return OVERRUN, {"reason": "promotion-criterion-requires-blobs"}
+
+
+def _promotion_blob_program(name):
+    def run(text: str, budget, artifact, blobs) -> tuple[str, dict]:
+        from deepreason.calculus import promotion
+
+        return getattr(promotion, name)(text, budget, artifact, blobs)
+
+    run.__name__ = f"_promotion_{name}"
+    return run
+
+
 PROGRAMS: dict[str, ProgramSpec] = {
     "json-wf": ProgramSpec("json-wf", _json_wf, "structural"),
     "tsp14_tour_wf": ProgramSpec("tsp14_tour_wf", _tsp14_tour_wf, "execution"),
@@ -344,6 +381,31 @@ PROGRAMS: dict[str, ProgramSpec] = {
     ),
     "frame_assertion_wf": ProgramSpec(
         "frame_assertion_wf", _frame_assertion_wf, "structural"
+    ),
+    # The promotion axis (calculus/, Rung 5). All six are STRUCTURAL, and the
+    # class here only ever WITHHOLDS: it keeps them from grounding reach and
+    # from conferring prose immunity. Withholding both is what the axis needs --
+    # a criterion that ground reach would feed the very measure that nominated
+    # it, and A8 says reach spawns promotion problems and cannot alter labels.
+    # The five criteria are also in BLOB_PROGRAMS, which is where they actually
+    # run; this registration declares their class.
+    "reach_certificate_wf": ProgramSpec(
+        "reach_certificate_wf", _reach_certificate_wf, "structural"
+    ),
+    "promotion_subject_demarcation": ProgramSpec(
+        "promotion_subject_demarcation", _promotion_needs_blobs, "structural"
+    ),
+    "promotion_reach_integrity": ProgramSpec(
+        "promotion_reach_integrity", _promotion_needs_blobs, "structural"
+    ),
+    "promotion_scope_determinism": ProgramSpec(
+        "promotion_scope_determinism", _promotion_needs_blobs, "structural"
+    ),
+    "promotion_compatibility": ProgramSpec(
+        "promotion_compatibility", _promotion_needs_blobs, "structural"
+    ),
+    "promotion_accounts_for": ProgramSpec(
+        "promotion_accounts_for", _promotion_needs_blobs, "structural"
     ),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
@@ -421,6 +483,15 @@ def _dataset_oracle(text: str, budget, artifact, blobs) -> tuple[str, dict]:
 # existing program signature changes.
 BLOB_PROGRAMS: dict = {
     "dataset_oracle": _dataset_oracle,
+    # The five promotion criteria (§9.4). Blob-aware because each reads ONE
+    # frozen, fence-stamped reach certificate its commitment spec names by
+    # digest -- never live graph state (Rider 5 clause 4). Their CLASS is
+    # declared in PROGRAMS above; `evaluate` dispatches this form first.
+    "promotion_subject_demarcation": _promotion_blob_program("subject_demarcation"),
+    "promotion_reach_integrity": _promotion_blob_program("reach_integrity"),
+    "promotion_scope_determinism": _promotion_blob_program("scope_determinism"),
+    "promotion_compatibility": _promotion_blob_program("compatibility"),
+    "promotion_accounts_for": _promotion_blob_program("accounts_for"),
 }
 
 

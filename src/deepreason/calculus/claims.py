@@ -251,19 +251,31 @@ class FrozenSubjectV1(_Part):
     it answers `overrun` -- unobtainable -- rather than guessing. The
     alternative, reading the live graph, is what Rider 5 clause (4) forbids.
 
-    `demarcation` is one of `load-bearing`, `declared-only` or `undecided`, and
-    the third is Rung 2's typed abstention carried forward: with no variator
-    seat the second reading cannot be taken, and "we could not check" must
+    `demarcation` carries §12.2's reading, and its three values are not a
+    scale. `no-attack-surface` is a SETTLED failure -- `crit` is false, the
+    interface declares nothing that could count against the subject, and no
+    sample is needed to know it (Rung 2's rule, transferred). `declared-only`
+    is the TYPED ABSTENTION: `crit` holds and the `load` half was never taken,
+    because it needs the variator seat and one provider call per subject and
+    nomination has no seat. `load-bearing` is both halves. A criterion reading
+    the middle value answers `overrun`, never `fail`: "we could not check" must
     never look like "we checked and it was fine".
     """
 
     artifact_id: str
     registered_seq: int = 0
     commitments: list[str] = Field(default_factory=list)
-    demarcation: Literal["load-bearing", "declared-only", "undecided"] = "undecided"
+    demarcation: Literal[
+        "load-bearing", "declared-only", "no-attack-surface"
+    ] = "declared-only"
     hv: float | None = None
     accounted: list[str] = Field(default_factory=list)
     wound_refs: list[str] = Field(default_factory=list)
+    # The commitments registered criticism actually cites. Separate from
+    # `wound_refs` because non-immunization asks a different question of them:
+    # a wound identifies WHERE the subject was hurt, and a component nothing
+    # cites is a component whose removal costs the record nothing.
+    criticised_commitments: list[str] = Field(default_factory=list)
 
 
 class ReachRecordV1(_Part):

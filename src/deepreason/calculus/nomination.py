@@ -227,20 +227,37 @@ def _wound_refs(harness, artifact_id: str) -> list[str]:
     )
 
 
+def _criticised_commitments(harness, artifact_id: str) -> list[str]:
+    """Which commitments registered criticism actually cites against a subject.
+
+    Non-immunization reads this: a component nothing has ever cited, that no
+    accounted problem asks for, and that risks nothing empirically, can be cut
+    without changing a single registered outcome -- which is what makes it a
+    rider rather than a part.
+    """
+    return sorted(
+        {
+            warrant.commitment
+            for warrant in harness.warrants.values()
+            if warrant.target == artifact_id and warrant.commitment
+        }
+    )
+
+
 def _demarcation(harness, artifact) -> str:
     """The §12.2 reading, cached into the certificate once per subject.
 
     `crit` alone is taken here. The `load` half needs the variator seat and one
     provider call per subject, which Rung 2 priced and answered: sample once for
     the life of the run and record a TYPED ABSTENTION when the seat is absent.
-    Nomination has no seat, so what it can honestly freeze is `declared-only`
-    (K is nonempty) or `undecided` (nothing declared at all is not an
-    abstention -- it is a settled `crit` failure, and the criterion reads it as
-    one).
+    Nomination has no seat, so it freezes `declared-only` (K nonempty, the
+    second reading untaken) or `no-attack-surface` (K empty, which `crit`
+    settles on its own and which no sample could rescue). It never writes
+    `load-bearing`; the field exists so a later sweep holding a variator can.
     """
     from deepreason.measures.demarcation import crit
 
-    return "declared-only" if crit(artifact, harness.commitments) else "undecided"
+    return "declared-only" if crit(artifact, harness.commitments) else "no-attack-surface"
 
 
 def _environment(harness, config, problem_ids):
@@ -300,8 +317,26 @@ def _environment(harness, config, problem_ids):
             hv=harness.state.hv.get(aid),
             accounted=_accounted(harness, aid),
             wound_refs=_wound_refs(harness, aid),
+            criticised_commitments=_criticised_commitments(harness, aid),
         )
         for aid in pool
+    ]
+    # A subject's OWN commitments join the frozen specs: the empirical clause
+    # (§12.2's closing sentence) asks whether any of them is observation-valued,
+    # and a criterion that could not resolve them would answer `overrun` on
+    # every empirical scope.
+    for subject in subjects:
+        commitment_ids.update(subject.commitments)
+    commitments = [
+        FrozenCommitmentV1(
+            id=cid,
+            eval=harness.commitments[cid].eval,
+            budget_steps=harness.commitments[cid].budget.steps,
+            budget_time_ms=harness.commitments[cid].budget.time_ms,
+            observation_valued=harness.commitments[cid].observation_valued,
+        )
+        for cid in sorted(commitment_ids)
+        if cid in harness.commitments
     ]
     return problems, commitments, subjects, sorted(set(truncated))
 
