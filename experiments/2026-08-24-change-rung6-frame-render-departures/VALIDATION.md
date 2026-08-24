@@ -1,8 +1,7 @@
 # VALIDATION — Rung 6: frame render semantics and the departure protocol
 
-Verdict: **PENDING** (boundary gate, full `docs_verify` and the operational
-smoke are the last outstanding measurements; every other check below is
-proven and pasted).
+Verdict: **PENDING** (the operational smoke is the last outstanding
+measurement; every other check below is proven and pasted).
 
 Authority: `SPEC.md` A1-A15 and `REQUEST.md` R1-R8, N1-N3, G1-G8.
 Base: `origin/main` at `7ad1b273f`. Branch:
@@ -196,7 +195,18 @@ a non-literal section id; `SEAM-evaluation-x-ontology` — `programs.evaluate`'s
 pinned dispatch list; `SEAM-rules-x-scratch` — `render_crit_pack`'s pinned
 signature). All three are fixed and the count is back to the baseline.
 
-**`python -m pytest tests/ -q -n 4`** — (pending; running on an idle box)
+**`python -m pytest tests/ -q -n 4` — `3976 passed, 6 skipped` in 1001.62s,
+ZERO FAILED.** The base was `3939 passed, 6 skipped`, so the suite grew by
+exactly **37** — this tranche's own `tests/test_frame_render.py` (35
+functions, one of them parametrised three ways). No pre-existing test was
+weakened and none was deleted; the two `CLAIM_SCHEMAS` count fixtures were
+minimally updated and SPEC.md predicted one of the two in advance (the
+other is corrected on the record in SPEC.md S2).
+
+The gate was run THREE times and only the last one counts: the first two
+were launched against trees that two review findings then changed under
+them, so they were killed rather than reported. The number above is from a
+run on an otherwise idle box against the tree that ships.
 
 **`python scripts/wheel_smoke.py`** — PASS, pins unchanged (§6).
 
