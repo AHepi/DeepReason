@@ -1,5 +1,5 @@
 <!-- DR-CON-standing-and-background -->
-Verified-at: c5a4206b
+Verified-at: e3a6cadf5
 Verify: python -m pytest tests/test_calculus_vocabulary.py -q
 Owns: src/deepreason/status_display.py, src/deepreason/calculus/standing.py
 Seams: 
@@ -153,6 +153,31 @@ the other.
 | change what makes an assertion consulted | `calculus/standing.py::consultability_of` | `tests/test_calculus_frame_assertions.py` |
 | change what the standing view shows | `calculus/standing.py::standing_view` | `tests/test_calculus_standing.py` |
 | change what separates a frame from its subject | `calculus/separation.py::frame_separated` (`DR-SUB-calculus`) | `tests/test_calculus_frame_separation.py` |
+
+## How an artifact comes to have standing at all (Rung 5)
+
+Rung 4 gave the consult predicate; it did not say how a promotion problem comes
+to exist, so in practice nothing had standing unless a test filed it by hand.
+Rung 5 closes that: **reach nominates.** Reach events for one subject spanning
+at least `Config.K_FRAME` distinct problem LINEAGES, over a coherent candidate
+scope, spawn a promotion problem, and a frame assertion addressed to it is a
+candidate answer that must survive five pinned criteria before it is consulted.
+
+Two things this deliberately is NOT. It is not reach granting standing — reach
+spawns a PROBLEM, and A8 is the axiom that says it can do nothing else. And it
+is not a promotion phase: what happens on the spawned problem is the ordinary
+Conj→Crit→Adj pass the scheduler already runs on every problem.
+
+`check: python -m pytest tests/test_calculus_nomination.py::test_nomination_fires_at_the_K_frame_threshold -q`
+
+**An unattacked assertion no longer frames by default.** This was the live hole
+after Rung 4 and it was silent: accepted plus addressed-to-a-promotion-problem
+was sufficient for consultation, so a claim nobody had examined became the
+coordinate system for its whole scope. Remark 9.5's closure is an ORDER, not a
+new rule — the criteria fire before anything consumes standing, a `fail` mints a
+demonstrative warrant, and the assertion stops being unrefuted.
+
+`check: python -m pytest tests/test_promotion_closure.py::test_an_unattacked_assertion_does_not_frame_because_its_criteria_fire_first -q`
 
 ## Traps
 

@@ -1,5 +1,5 @@
 <!-- DR-CON-problem-layer-lifecycle -->
-Verified-at: 03b1edf4
+Verified-at: e3a6cadf5
 Verify: python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py -q
 Owns: src/deepreason/premises.py, src/deepreason/measures/demarcation.py, src/deepreason/measures/attention.py
 Seams: 
@@ -137,6 +137,22 @@ label.
   critic who declines.
 
 `check: python -m pytest tests/test_premise_channel.py::test_the_siren_case_end_to_end tests/test_premise_channel.py::test_translate_is_the_only_replacement -q`
+
+## Promotion problems, and where they come from (Rung 5)
+
+A promotion problem is an ordinary `Problem` with `SpawnTrigger.PROMOTION`. Its
+one producer outside a test is `calculus/nomination.py::nominate`, which is a
+measure over the log rather than a branch of `scan_spawns` — deliberately
+separate, because `spawn.py` has a zero-line diff in this rung and H1's deletion
+must stay deleted.
+
+Its criteria are pinned AT REGISTRATION, and that is forced rather than chosen:
+`Problem` is immutable, so a promotion problem that existed for one event
+without its criteria would be a problem a candidate could be addressed to before
+anything could refuse it — the exact hole Remark 9.5's closure exists to shut.
+
+`check: python -c "from deepreason.ontology import SpawnTrigger; import inspect; from deepreason.calculus.operations import ensure_promotion_problem; assert 'criteria' in inspect.signature(ensure_promotion_problem).parameters; assert SpawnTrigger.PROMOTION.value == 'promotion'"`
+`check: python -m pytest tests/test_calculus_nomination.py::test_the_spawned_problem_is_an_ordinary_problem -q`
 
 ## Traps
 

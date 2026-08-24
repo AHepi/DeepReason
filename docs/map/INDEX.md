@@ -24,6 +24,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
+| know why an artifact is (or is not) framing its problems | `CON-standing-and-background.md`, then `SUB-calculus.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -49,7 +50,7 @@ than you need.
 | `SUB-verification.md` | `verify_root`, replay validation, epistemic checks. **Frozen** |
 | `SUB-manifest.md` | RunManifest schema and validators, qualification. **Frozen** |
 | `SUB-evaluation.md` | programs, oracles, measures, informal trials — where formal meets informal |
-| `SUB-calculus.md` | the typed claim substrate: a CLOSED body union and the one controller-owned compiler that assigns every ref role |
+| `SUB-calculus.md` | the typed claim substrate: a CLOSED body union and the one controller-owned compiler that assigns every ref role; also nomination (what makes a promotion problem exist) and the five promotion criteria |
 
 ## Concepts (not packages — that is why they need documents)
 

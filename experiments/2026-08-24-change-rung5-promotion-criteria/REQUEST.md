@@ -270,3 +270,41 @@ a criterion-instantiation site at promotion-problem registration.
 
 ## Amendments
 (append-only)
+
+### Amendment 1 — 2026-08-24, the size ceiling is EXCEEDED (C2, self-reported)
+
+No new operator words. This amendment records a breach of a constraint the
+operator set, at the moment it was measured, rather than at delivery.
+
+C2, verbatim: "SIZE: ladder estimates 400-600 lines. If SPEC.md's plan exceeds
+~800, STOP and say what grew."
+
+SPEC.md's PLAN was 686 production lines — under the threshold, so no stop was
+owed at spec time, and none was taken. The DELIVERED production diff is **1 442
+insertions across `src/`**, against that 686. Measured by
+`python tools/diff_budget.py ade214037`: 4 503 insertions in total against the
+ledgered all-paths ceiling of 1 900, verdict **EXCEEDED**.
+
+**What grew, itemized rather than summarized:**
+
+| Area | Planned | Actual | Why |
+|---|---|---|---|
+| `calculus/nomination.py` | 170 | 463 | the certificate BUILDER — freezing problems, criterion specs, the candidate pool with its demarcation/HV/accounting/wound readings, and the reveal seqs — is most of the file. SPEC.md itemized the certificate's SHAPE under S3 (95 lines, in `claims.py`) and never separately costed the code that fills it |
+| `calculus/promotion.py` | 275 (S4–S9) | 587 | five criteria plus the shared frozen-input contract, the succession relation as a standalone function, and the closure sweep |
+| `claims.py` + `compiler.py` + `calculus/programs.py` | 95 | 160 | four `_Part` models the criteria turned out to need (`FrozenProblemV1`, `FrozenCommitmentV1`, `FrozenSubjectV1`, `ReachRecordV1`, `FrozenGrantV1`) |
+| `programs.py` registration | 35 | 71 | the dual-registration wrappers and their reason |
+| everything else (`config`, `run_manifest`, `scheduler`, `cli`, `views/knowledge`) | 111 | 161 | close to plan |
+
+**The honest part of the account.** 268 of `nomination.py`'s 463 lines and 357
+of `promotion.py`'s 587 are CODE; the remainder is docstrings, comments and
+blank lines, which this repository's own convention asks for ("comments state
+constraints the code cannot show"). By that measure the two new modules are 625
+lines of code against a 445-line plan for them — still over, by ~40 percent, and
+still an overrun. The line count is not what was underestimated; the frozen
+certificate's builder was.
+
+**No scope was added to buy this.** Every line traces to an S-number and an
+R-number; nothing outside REQUEST.md was implemented. The overrun is an
+estimating failure at SPEC time, not scope creep at execution time, and it is
+reported here rather than at delivery so the operator sees it while the tranche
+is still open.

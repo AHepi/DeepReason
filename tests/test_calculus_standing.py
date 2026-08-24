@@ -22,6 +22,7 @@ from deepreason.calculus.standing import (
 )
 from deepreason.harness import Harness
 from deepreason.ontology import (
+    Commitment,
     Interface,
     Problem,
     ProblemProvenance,
@@ -413,8 +414,39 @@ def test_the_standing_surface_is_read_only_and_calls_no_model(
     # Both handlers open read-only, asserted on the source rather than trusted.
     # Read from the AST: a keyword argument is the meaning, and a text search
     # would also match `read_only=True` belonging to some neighbouring call.
+    #
+    # WIDENED at Rung 5, and widened rather than relaxed. The CLI handler now
+    # binds its harness to a local so the knowledge section can share the one
+    # open, so the argument to `standing_view` may be a Name rather than an
+    # inline call. The assertion follows the binding and then requires the SAME
+    # thing of it: the nearest binding of that name above the call, which is
+    # the one the handler actually passes.
     for path in ("src/deepreason/cli/main.py", "src/deepreason/mcp_server.py"):
         tree = ast.parse(pathlib.Path(path).read_text())
+
+        def _is_read_only_harness(node):
+            return (
+                isinstance(node, ast.Call)
+                and ast.unparse(node.func) == "Harness"
+                and any(
+                    k.arg == "read_only" and getattr(k.value, "value", None) is True
+                    for k in node.keywords
+                )
+            )
+
+        # Every `<name> = Harness(...)` in the file, with its line. Keyed by
+        # (name, lineno) and NOT by name alone: this file binds the name
+        # `harness` twenty-six times, and a name-keyed map would silently
+        # check one of them and pass whatever the other twenty-five did.
+        bindings = [
+            (target.id, assign.lineno, assign.value)
+            for assign in ast.walk(tree)
+            if isinstance(assign, ast.Assign)
+            for target in assign.targets
+            if isinstance(target, ast.Name)
+            and isinstance(assign.value, ast.Call)
+            and ast.unparse(assign.value.func) == "Harness"
+        ]
         opens = [
             node for node in ast.walk(tree)
             if isinstance(node, ast.Call)
@@ -423,11 +455,16 @@ def test_the_standing_surface_is_read_only_and_calls_no_model(
         assert opens, path
         for call in opens:
             inner = call.args[0]
-            assert isinstance(inner, ast.Call) and ast.unparse(inner.func) == "Harness"
-            assert any(
-                k.arg == "read_only" and getattr(k.value, "value", None) is True
-                for k in inner.keywords
-            ), (path, ast.unparse(call))
+            if isinstance(inner, ast.Name):
+                # The nearest binding of that name ABOVE the call is the one
+                # it receives, which is what the reader of this handler sees.
+                candidates = [
+                    (lineno, value) for name, lineno, value in bindings
+                    if name == inner.id and lineno < call.lineno
+                ]
+                assert candidates, (path, ast.unparse(call))
+                inner = max(candidates)[1]
+            assert _is_read_only_harness(inner), (path, ast.unparse(call))
 
     # No LLM seat: the module graph the view depends on reaches no adapter,
     # route or seat. Read from the AST so an aliased import cannot slip past.
@@ -540,3 +577,106 @@ def test_standing_integrity_reports_nothing_on_a_root_that_predates_it():
         v for v in verify_root(root)["violations"]
         if v["check"] == "standing-integrity"
     ] == []
+
+
+# --- Prop 12.6 / D-4 answered A: the knowledge view, definition always inline --
+
+
+def test_the_knowledge_view_never_prints_the_bare_word(tmp_path, monkeypatch, capsys):
+    """D-4's H3 discipline, made structural rather than remembered.
+
+    The recorded precedent this forestalls is not hypothetical: readers of
+    `positions.accepted` treated acceptance as ADJUDICATED, and v1.7 §E had to
+    add the `adjudication-blindness` check afterwards. "Knowledge" carries more
+    weight than "accepted", so the definition travels with every row, and the
+    row and its label come out of one function -- a caller cannot print one
+    without the other without writing the bare word itself.
+    """
+    from deepreason.cli.main import main
+    from deepreason.views.knowledge import KNOWLEDGE_LABEL, knowledge_view
+
+    assert KNOWLEDGE_LABEL == "knowledge (unrefuted ∧ active ∧ reach > 0)"
+
+    root, filed = _framed_manifest_root(tmp_path, monkeypatch, name="knowledge-root")
+    capsys.readouterr()
+    assert main(["--root", str(root), "standing"]) == 0
+    text = capsys.readouterr().out
+    for line in text.splitlines():
+        if "knowledge" in line:
+            assert KNOWLEDGE_LABEL in line, line
+
+
+def test_the_knowledge_view_is_derived_and_writes_nothing(harness):
+    """A view steers attention and never adjudicates (Def 8.1). It is
+    recomputed from replayed state on every call, and no label anywhere is
+    computed from it."""
+    from deepreason.views.knowledge import KNOWLEDGE_LABEL, knowledge_view
+
+    kappa = Commitment(id="k-mechanism", eval="predicate:len(content) > 0")
+    harness.register_commitment(kappa)
+    problem = harness.register_problem(
+        Problem(
+            id="question-seed", description="why do tides follow the moon",
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": SpawnTrigger.SEED, "from": []}
+            ),
+        )
+    )
+    declaring = harness.create_artifact(
+        "b: the lunar theory",
+        interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=problem.id,
+    )
+    bare = harness.create_artifact(
+        "c: a claim that forbids nothing",
+        provenance=Provenance(role="conjecturer"), problem_id=problem.id,
+    )
+    harness.record_measure(reach={declaring.id: 1.0, bare.id: 1.0})
+
+    before = (harness.root / "log.jsonl").read_bytes()
+    view = knowledge_view(harness)
+    assert (harness.root / "log.jsonl").read_bytes() == before
+
+    assert view["label"] == KNOWLEDGE_LABEL
+    ids = [row["artifact"] for row in view["rows"]]
+    # `crit` false settles §12.2 on its own: an interface declaring nothing
+    # forbids nothing, so no sample could rescue it and the view excludes it.
+    assert ids == [declaring.id]
+    assert all(row["label"] == KNOWLEDGE_LABEL for row in view["rows"])
+    # Every row says WHICH half of §12.2 it rests on. A row implying the full
+    # reading it never took would be the misreading this view exists to avoid.
+    assert view["rows"][0]["active_reading"] == "declared-only"
+
+
+def test_a_refuted_or_unreaching_artifact_is_not_knowledge(harness):
+    """The two other conjuncts, each on its own. Without them the view could
+    pass by reporting everything with a nonempty interface."""
+    from deepreason.views.knowledge import knowledge_view
+
+    kappa = Commitment(id="k-mechanism", eval="predicate:len(content) > 0")
+    harness.register_commitment(kappa)
+    problem = harness.register_problem(
+        Problem(
+            id="question-seed", description="why do tides follow the moon",
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": SpawnTrigger.SEED, "from": []}
+            ),
+        )
+    )
+    unreaching = harness.create_artifact(
+        "b: never travelled", interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=problem.id,
+    )
+    reaching = harness.create_artifact(
+        "c: travelled and then fell", interface=Interface(commitments=[kappa.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=problem.id,
+    )
+    harness.record_measure(reach={reaching.id: 1.0})
+    assert [r["artifact"] for r in knowledge_view(harness)["rows"]] == [reaching.id]
+
+    attack(harness, reaching.id, "the account fails on its own criteria")
+    assert harness.state.status[reaching.id] is Status.REFUTED
+    assert knowledge_view(harness)["rows"] == []
+    assert unreaching.id not in {
+        r["artifact"] for r in knowledge_view(harness)["rows"]
+    }

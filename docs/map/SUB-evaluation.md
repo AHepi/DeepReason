@@ -1,5 +1,5 @@
 <!-- DR-SUB-evaluation -->
-Verified-at: 6721010d
+Verified-at: e3a6cadf5
 Verify: python -m pytest tests/test_oracle.py tests/test_hv.py tests/test_informal.py tests/test_trial.py tests/test_standards.py tests/test_audits.py tests/test_dataset_oracle.py -q
 Owns: src/deepreason/programs.py, src/deepreason/oracle.py, src/deepreason/oracle_sandbox.py, src/deepreason/measures/, src/deepreason/informal/
 Seams: DR-SEAM-evaluation-x-rules, DR-SEAM-evaluation-x-ontology
@@ -62,7 +62,13 @@ or a trace, and `rubric:` never reaches a program at all.
   anti-relapse gate, never by adjudication.
 - `content_text(artifact, blobs)` — the artifact's real bytes, inline or blob.
 - `PROGRAMS` (name → `ProgramSpec`) and `BLOB_PROGRAMS` (the additive registry
-  for programs that also receive the blob store).
+  for programs that also receive the blob store). Rung 5's five promotion
+  criteria are in BOTH, and that is not redundancy: `programs_by_class()` reads
+  `PROGRAMS` alone, so a blob-only program has no declared class and counts
+  SUBSTANTIVE by default. `dataset_oracle` is correctly substantive that way; a
+  promotion criterion must be structural, or it would ground reach — and reach
+  is what nominates the promotion problem whose criteria it is.
+`check: python -c "from deepreason.programs import PROGRAMS, BLOB_PROGRAMS, programs_by_class; from deepreason.calculus.promotion import PROMOTION_PROGRAMS; assert set(PROMOTION_PROGRAMS) <= set(PROGRAMS) & set(BLOB_PROGRAMS); assert set(PROMOTION_PROGRAMS) <= set(programs_by_class()['structural']); assert 'dataset_oracle' in BLOB_PROGRAMS and 'dataset_oracle' not in PROGRAMS"`
 
 **`oracle.py` — verdicts from execution.**
 - `run_from_spec` / `run_property_from_spec` / `check_generator_from_spec` /
@@ -161,6 +167,7 @@ land in the caller's content-addressed blob store as `trace_ref` digests.
 |---|---|---|
 | Add a mechanically-adjudicated program | a function plus a `ProgramSpec` row in `PROGRAMS`, `src/deepreason/programs.py` | `python -m pytest tests/test_oracle.py -q` |
 | Add a program that needs durable bytes (not the artifact's own) | `BLOB_PROGRAMS` and the `arg in BLOB_PROGRAMS` branch of `evaluate` | `python -m pytest tests/test_dataset_oracle.py -q` |
+| Add a blob program that must NOT ground reach or confer immunity | both registries — `BLOB_PROGRAMS` for dispatch, `PROGRAMS` with `class_="structural"` for the class | `python -m pytest tests/test_promotion_criteria.py -q` |
 | What a `predicate:` expression may contain | `_validate_predicate` and `_SAFE_NAMES`, `programs.py` | `python -m pytest tests/test_security.py -q` |
 | What untrusted oracle source may contain | `_guard`, `_ALLOWED`, `_INT_LITERAL_CAP`, `oracle.py` | `python -m pytest tests/test_oracle.py -k "blocked or bomb" -q` |
 | Sandbox CPU/memory/IPC limits or the worker protocol | `MEMORY_CAP_BYTES`, `IPC_CAP_BYTES`, `CPU_SECONDS_MAX`, `_cpu_seconds`, `oracle_sandbox.py` | `python -m pytest tests/test_oracle.py -k "sandbox or memory_bomb" -q` |

@@ -980,16 +980,23 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "standing":
         from deepreason.calculus.standing import standing_view
+        from deepreason.views.knowledge import render_knowledge
 
         # READ-ONLY, and read_only=True says so to the harness rather than only
         # in the help text: opening a root writable REPAIRS it, which would
         # destroy the evidence a reader opened it to look at.
-        view = standing_view(Harness(Path(args.root), read_only=True))
+        harness = Harness(Path(args.root), read_only=True)
+        view = standing_view(harness)
         if args.json:
+            # The MCP tool `run_standing` renders THIS dict, and it is left
+            # exactly as it was: the knowledge view is a reader's section of the
+            # text output, not a change to a pinned surface.
             print(json.dumps(view, indent=2, sort_keys=True))
             return 0
         if not view["grants"]:
             print("(no artifact is currently framing any problem)")
+            for line in render_knowledge(harness):
+                print(line)
             return 0
         for grant in view["grants"]:
             validity = grant["validity"]
@@ -1005,6 +1012,8 @@ def _main(argv: list[str] | None = None) -> int:
             print(f"    departure       {grant['departure_protocol']}")
             for pid in grant["framed_problems"]:
                 print(f"    in scope        {pid}")
+        for line in render_knowledge(harness):
+            print(line)
         return 0
 
     if args.command == "why":

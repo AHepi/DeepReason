@@ -1,7 +1,7 @@
 <!-- DR-SUB-calculus -->
-Verified-at: 03b1edf4
-Verify: python -m pytest tests/test_calculus_claim_substrate.py -q
-Owns: src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/scope.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/views.py
+Verified-at: e3a6cadf5
+Verify: python -m pytest tests/test_calculus_claim_substrate.py tests/test_calculus_nomination.py tests/test_promotion_criteria.py tests/test_promotion_succession.py -q
+Owns: src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/nomination.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/promotion.py, src/deepreason/calculus/scope.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/views.py
 Seams: 
 Seams-undocumented: calculus x ontology, calculus x problem-layer-lifecycle, calculus x evaluation, calculus x adjudication
 
@@ -15,6 +15,21 @@ outside the set can become quasi-ontology, and no model ever chooses whether an
 endpoint is a `mention`, a `dependence`, or `evidence`.
 
 `check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS) == 9 and all(s.startswith('poietic.') for s in CLAIM_SCHEMAS)"`
+
+Five of the nine names have a producer. The other four are declared and REFUSED
+by `decode` with `claim-schema-not-implemented`, which is the deliberate shape:
+shipping a body model nobody can create is `docs/ERRATA.md` E28's pattern, so a
+name joins the implemented set only in the rung that supplies its producer.
+Rung 5 supplied `poietic.reach-certificate.v1`'s.
+
+`check: python -c "from deepreason.calculus.claims import _IMPLEMENTED, CLAIM_SCHEMAS, decode, ClaimDecodeError; assert len(_IMPLEMENTED) == 5 and 'poietic.reach-certificate.v1' in _IMPLEMENTED; import json; missing = [s for s in CLAIM_SCHEMAS if s not in _IMPLEMENTED]; assert len(missing) == 4;
+for name in missing:
+    try:
+        decode(json.dumps({'schema': name}))
+    except ClaimDecodeError as e:
+        assert e.code == 'claim-schema-not-implemented', (name, e.code)
+    else:
+        raise AssertionError(name)"`
 
 ## Why closed, and why an open predicate is refused
 
@@ -117,6 +132,56 @@ it consumes that package's OUTPUT through replayed state, never its logic.
 
 `check: ! grep -qE "create_artifact|register_|record_|blobs\.put|Warrant" src/deepreason/calculus/separation.py && grep -q "def consultability" src/deepreason/calculus/separation.py && python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/calculus/separation.py').read_text()); mods=[(n.module or '') for n in ast.walk(t) if isinstance(n,ast.ImportFrom)]+[a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names]; assert not any('adjudication' in m for m in mods), mods"`
 
+## Nomination and promotion criteria (Rung 5)
+
+Rung 4 said what a promotion problem IS. Rung 5 says WHEN one exists, and what
+a candidate must survive to be promoted through it.
+
+**Nomination is a MEASURE-RULE over the log** (`nomination.py`), never a
+decision: reach events for one subject spanning at least `Config.K_FRAME`
+distinct problem LINEAGES, over a coherent candidate scope, spawn a promotion
+problem. What follows is an ordinary Conj→Crit→Adj pass — there is no promotion
+phase in the scheduler, only a step that nominates and one that fires criteria.
+
+LINEAGE is the load-bearing definition and the whole threshold turns on it. A
+problem's parents are the problems it descends from, reached through
+`provenance.from_` entries that are problems AND through the ORIGIN problem —
+the FIRST `state.addr` entry — of entries that are artifacts. Connection and
+integration problems are spawned from ARTIFACTS, so a walk that stopped there
+would make each its own lineage and a single-question run would look like
+dozens. Measured on the committed attempt-4 root: all 210 problems share one
+root under this definition, and two under the truncated one.
+
+`check: python -m pytest tests/test_promotion_nomination_live.py -q`
+
+**The five criteria are PROGRAMS over a frozen input** (`promotion.py`). Each is
+a pure function of the candidate's bytes and interface plus ONE fence-stamped
+reach certificate fetched from the blob store by digest and re-digested on
+arrival. None reads live graph state, which is what makes a promotion verdict
+reproducible: a candidate evaluated twice on one record gets one answer,
+whatever the run did in between.
+
+`accounts-for` is the STRONG succession relation and the weak form was never
+built: recovery, rigidity, non-immunization AND a strictness witness, all four
+required. A rival that recovers the incumbent's explicanda and nothing more is
+REFUSED — that is the case the weak reading admits, and it is what the mutation
+proof pins.
+
+`check: python -m pytest tests/test_promotion_succession.py::test_a_rival_that_only_recovers_is_not_a_successor -q`
+`check: python -c "import inspect; from deepreason.calculus.promotion import _succeeds_one; src = inspect.getsource(_succeeds_one); assert all(r in src for r in ('recovery-fails', 'rival-is-easier-to-vary', 'excisable-idle-component', 'no-strictness-witness'))"`
+
+**Remark 9.5's closure is an ORDER, not a rule.** A frame assertion nobody
+attacked is ACCEPTED, and an accepted assertion addressed to a promotion problem
+is CONSULTED — so an unexamined claim would frame its whole scope simply by
+having been registered. `promotion_criteria_sweep` runs immediately after the
+reach sweep and before anything consumes standing: criteria fire, a `fail` mints
+a demonstrative warrant through `rules/warrants.register_fail_warrant`, and
+`consultability_of` declines the assertion. An `overrun` mints NOTHING — "we
+could not check" must never become the strongest criticism in the calculus.
+
+`check: python -m pytest tests/test_promotion_closure.py -q`
+`check: python -c "import inspect; from deepreason.scheduler.scheduler import Scheduler; src = inspect.getsource(Scheduler._promotion_step); assert 'nominate(' in src and 'promotion_criteria_sweep(' in src"`
+
 ## State it owns
 
 **None that persists, and none added anywhere else.** No field was added to
@@ -134,7 +199,29 @@ found through `addr`.
 `adjudication_component`, `frame_separated`, `consultability`,
 `ensure_promotion_problem`, `file_frame_assertion`, `compile_scope`,
 `scope_admits`, `consultability_of`, `consulted`, `standing_of`, `frames`,
-`standing_view`.
+`standing_view`, `origin_problem`, `problem_parents`, `lineage_root`,
+`lineage_span`, `candidate_scope`, `build_certificate`, `nominate`,
+`criteria_for`, `succeeds`, `ordering_holds`, `promotion_criteria_sweep`.
+
+- **A promotion criterion that counted SUBSTANTIVE would close a loop nobody
+  wants.** The class in `programs.PROGRAMS` decides whether a program can ground
+  reach and confer prose immunity, and reach is what NOMINATES — so a
+  substantive promotion criterion would let promotion paperwork manufacture the
+  signal that produced it. All six of Rung 5's programs are therefore declared
+  `structural`, which in this tree only ever WITHHOLDS. The mechanical
+  consequence is dual registration: `programs_by_class()` reads `PROGRAMS`
+  alone, so a criterion living only in `BLOB_PROGRAMS` would count substantive
+  by default, as `dataset_oracle` correctly does. Shipped 2026-08-24 (Rung 5).
+`check: python -c "from deepreason.programs import PROGRAMS, BLOB_PROGRAMS, programs_by_class; from deepreason.calculus.promotion import PROMOTION_PROGRAMS; d = set(programs_by_class()['structural']); assert set(PROMOTION_PROGRAMS) <= d; assert set(PROMOTION_PROGRAMS) <= set(BLOB_PROGRAMS); assert 'dataset_oracle' not in d"`
+
+- **An unknown accounting makes every component look idle.** Non-immunization
+  asks what a rival's accounted problems ASK FOR; if the certificate never froze
+  one of them, `needed` computes as EMPTY and every uncriticised component
+  passes the idle test — felling a rival for the environment's gaps rather than
+  for its own riders. The relation answers `overrun` with
+  `accounting-not-in-environment` instead. Found by the fixtures during Rung 5's
+  own step 10, before it could reach a run.
+`check: python -c "import inspect; from deepreason.calculus.promotion import _succeeds_one; assert 'accounting-not-in-environment' in inspect.getsource(_succeeds_one)"`
 
 ## Traps
 

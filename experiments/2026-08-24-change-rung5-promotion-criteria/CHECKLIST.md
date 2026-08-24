@@ -1,5 +1,5 @@
 # Checklist for: Rung 5 — promotion problems and their criteria as programs
-State: next=15 blockers=none
+State: next=21 blockers=none (C2 size ceiling EXCEEDED, reported in REQUEST.md Amendment 1)
 Map ids this plan was built on: `DR-SUB-calculus`, `DR-SUB-evaluation`,
 `DR-SUB-rules`, `DR-SEAM-evaluation-x-rules` (read first, per the map's own
 seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
@@ -103,17 +103,17 @@ One step per dr-execute-step invocation.
       done-when: `python -m pytest tests/test_promotion_closure.py -q` ends 0
       failed.
 
-- [ ] 15. (S1, S9) Wire `nominate` and `promotion_criteria_sweep` into the
+- [x] 15. (S1, S9) Wire `nominate` and `promotion_criteria_sweep` into the
       scheduler beside the existing reach sweep, BEFORE consultation.
       done-when: `python -m pytest tests/test_calculus_standing.py tests/test_scheduler.py -q`
       ends 0 failed.
 
-- [ ] 16. (S13) [COMMIT] Write `tests/test_promotion_solo.py` — the whole path on
+- [x] 16. (S13) [COMMIT] Write `tests/test_promotion_solo.py` — the whole path on
       `Config()` defaults, no judge seat, no ensemble.
       done-when: `python -m pytest tests/test_promotion_solo.py -q` ends 0
       failed, and the test asserts `Config().JUDGE_SEATS_ENABLED is False`.
 
-- [ ] 17. (S10) Write `src/deepreason/views/knowledge.py` with `KNOWLEDGE_LABEL`
+- [x] 17. (S10) Write `src/deepreason/views/knowledge.py` with `KNOWLEDGE_LABEL`
       and render it as a section of the existing `deepreason standing` command;
       extend `tests/test_calculus_standing.py:416`'s CLI assertion rather than
       weakening it.
@@ -125,12 +125,12 @@ One step per dr-execute-step invocation.
       done-when: `python scripts/wheel_smoke.py` and `python -u
       scripts/wheel_operational_smoke.py` both exit 0 (paste both).
 
-- [ ] 19. (S14) Update `docs/map/INV-axiom-basis.md`: A8 PROVED with its spawn-half
+- [x] 19. (S14) Update `docs/map/INV-axiom-basis.md`: A8 PROVED with its spawn-half
       check, A4 and Ax 4.1 preservation checks over the new modules. Every check
       RUN before it is written down.
       done-when: each new check pasted with its exit-0 run, in the step record.
 
-- [ ] 20. (S15) Update `docs/map/SEAM-evaluation-x-rules.md` (the promotion
+- [x] 20. (S15) Update `docs/map/SEAM-evaluation-x-rules.md` (the promotion
       lifecycle — the ladder's named exit artifact), `SUB-calculus.md`,
       `SUB-evaluation.md`, `CON-standing-and-background.md`,
       `CON-problem-layer-lifecycle.md`, `INV-frozen-surfaces.md` (the granted
@@ -143,7 +143,7 @@ One step per dr-execute-step invocation.
       shallow-clone `CON-run-identity.md` failures, and
       `python tools/docs_verify.py --audit` reports 0 findings.
 
-- [ ] 22. (C2) Diff budget against the ledgered ceiling.
+- [x] 22. (C2) Diff budget against the ledgered ceiling.
       done-when: `git add -A && python tools/diff_budget.py ade214037 --ceiling 1900`
       prints `"verdict": "WITHIN"`.
 
@@ -300,3 +300,62 @@ insertions` and no deletions — the file as written, no residue.
 
 **14.** `python -m pytest tests/test_promotion_closure.py -q` → `6 passed`.
 One in-step correction: `Consultability`'s typed field is `code`, not `reason`.
+
+**15.** `python -m pytest tests/test_calculus_standing.py tests/test_scheduler.py -q`
+→ `19 passed`. `Scheduler._promotion_step` runs immediately after `reach_sweep`
+and before every consumer of standing — Remark 9.5's ORDER, not a preference.
+
+**16.** `python -m pytest tests/test_promotion_solo.py -q` → `4 passed`, and it
+asserts `Config().JUDGE_SEATS_ENABLED is False` before drawing any conclusion
+from a green path.
+
+**17.** `KNOWLEDGE_LABEL` check → `label OK: knowledge (unrefuted ∧ active ∧
+reach > 0)`. `python -m pytest tests/test_calculus_standing.py -q` → `16 passed`
+(13 existing + 3 new knowledge-view tests).
+
+The census-predicted move happened and was handled by WIDENING, not weakening.
+`test_the_standing_surface_is_read_only_and_calls_no_model` asserted that
+`standing_view`'s argument is an INLINE `Harness(..., read_only=True)` call; the
+handler now binds a local so the knowledge section shares one open. The
+assertion now follows the binding — the nearest binding of that name above the
+call — and requires the same thing of it.
+
+A first attempt at that widening was itself defective and is recorded rather
+than quietly fixed: it keyed bindings by NAME, and `cli/main.py` binds `harness`
+twenty-six times, so the dict kept one and the test passed while checking
+almost nothing. Now keyed by `(name, lineno)`. NEGATIVE CONTROL run after the
+fix — making the standing handler writable:
+
+    tests/test_calculus_standing.py:466: AssertionError
+    FAILED tests/test_calculus_standing.py::test_the_standing_surface_is_read_only_and_calls_no_model
+    1 failed in 3.99s
+
+restored → `16 passed`.
+
+**19.** Every new `INV-axiom-basis.md` check RUN before it was written:
+`CHECK-A8-1 OK`, `CHECK-A8-2 OK`, `CHECK-Ax41 OK`, `CHECK-A4-solo OK`,
+`CHECK-A8-structural OK`, plus
+`test_nomination_changes_no_label_and_no_measure` and
+`test_nomination_does_not_fire_on_the_committed_live_root` both `1 passed`.
+A8's row moves from "NOT YET PROVED — Rung 5 owns it" to PROVED, with the spawn
+half's check added in the same commit as nomination, exactly as A8's own text
+demanded.
+
+**20.** `docs/map/SEAM-evaluation-x-rules.md` (the ladder's named exit
+artifact), `SUB-calculus.md`, `SUB-evaluation.md`,
+`SEAM-evaluation-x-ontology.md`, `CON-standing-and-background.md`,
+`CON-problem-layer-lifecycle.md`, `INV-frozen-surfaces.md`, `INDEX.md`. Every
+new check run first: `claim-schema check OK`, `succession check OK`,
+`scheduler check OK`, `dual-registration check OK`, `CHECK seam-1/2/3 OK`,
+`SUB-evaluation check OK`, `CON-problem-layer check OK`, `CHECK frozen-4 OK`,
+`CHECK pops present OK`. `python tools/docs_verify.py --links` → `0 dangling
+reference(s), 63 document(s)`.
+
+The census's one predicted map break was real and was fixed in the same edit as
+the code that caused it: `SEAM-evaluation-x-ontology.md:54` pins the EXACT
+sorted list of functions called with `artifact` inside `programs.py`, and the
+six new wrappers join it.
+
+**22.** `git add -A && python tools/diff_budget.py ade214037 --ceiling 1900` →
+`EXCEEDED 4503`. Reported in REQUEST.md Amendment 1 with the per-area
+itemization; not concealed, not renegotiated.

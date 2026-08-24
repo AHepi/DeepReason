@@ -1,7 +1,7 @@
 <!-- DR-SEAM-evaluation-x-rules -->
-Verified-at: 6721010d
+Verified-at: e3a6cadf5
 Verify: python tools/docs_verify.py
-Owns: src/deepreason/rules/warrants.py, src/deepreason/measures/reach.py, src/deepreason/programs.py, src/deepreason/informal/trial.py
+Owns: src/deepreason/rules/warrants.py, src/deepreason/measures/reach.py, src/deepreason/programs.py, src/deepreason/informal/trial.py, src/deepreason/calculus/promotion.py
 Sides: DR-SUB-evaluation, DR-SUB-rules
 
 # evaluation x rules
@@ -208,6 +208,69 @@ also inherit `_verdict_cache`'s deliberate sandbox-abort hole, turning machine
 availability into an immunity decision.
 `check: python -c "import inspect; from deepreason.rules import warrants; s=inspect.getsource(warrants); assert '_verdict_cache' not in s; assert s.count('programs.evaluate(kappa, target, harness.blobs)')==2" && grep -q "_verdict_cache" src/deepreason/measures/reach.py && grep -q 'if \"sandbox_abort\" not in trace:' src/deepreason/measures/reach.py`
 
+## The promotion lifecycle (Rung 5)
+
+The five pinned criteria of a promotion problem are ORDINARY COMMITMENTS on the
+existing evaluation path, and that is the whole design: nothing about promotion
+reaches the rules through a new door. A criterion is a `program:` commitment,
+`programs.evaluate` computes its verdict exactly as it does for any other, and
+the verdict becomes an epistemic move only through
+`rules/warrants.register_fail_warrant` — the one constructor — and only from a
+`fail`. `calculus/promotion.py` imports that name from `rules/` and nothing
+else, which keeps the reverse arrow as narrow here as the six-name pin keeps it
+for `measures/` and `informal/`.
+
+`check: python -c "
+import ast, pathlib
+R = pathlib.Path('src/deepreason')
+Q = lambda p: p.relative_to(R.parent).with_suffix('').parts
+M = lambda p, n: '.'.join(list(Q(p)[:len(Q(p)) - n.level] if n.level else []) + ([n.module] if n.module else []))
+F = [R / 'calculus' / 'promotion.py', R / 'calculus' / 'nomination.py']
+names = {a.name for p in F for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, ast.ImportFrom) and M(p, n).startswith('deepreason.rules') for a in n.names}
+assert names == {'register_fail_warrant'}, names
+"`
+
+**`overrun` mints nothing, and the promotion criteria are why that mattered
+enough to be pinned here.** The seam's agreement above already says an
+`overrun` is pending rather than a refutation; the promotion sweep is the first
+consumer for which the distinction is load-bearing rather than theoretical.
+Three of the five criteria return `overrun` on ordinary conditions — a subject
+whose §12.2 `load` reading was never taken because the run has no variator seat,
+an incumbent HV that was never sampled, an accounting the frozen environment
+does not cover. If any of those minted a warrant, "we could not check" would
+become the strongest criticism in the calculus, and a solo run would refuse
+every candidate it could not measure.
+
+`check: python -c "
+import inspect
+from deepreason.calculus.promotion import promotion_criteria_sweep
+src = inspect.getsource(promotion_criteria_sweep)
+assert 'if verdict != FAIL:' in src
+assert src.count('register_fail_warrant(') == 1
+"`
+`check: python -m pytest tests/test_promotion_closure.py::test_an_overrun_criterion_mints_nothing -q`
+
+**The six new programs are DUAL-REGISTERED, and the reason is this seam's own
+`_STRUCTURAL_PROGRAMS` set.** Membership of that set is what decides whether a
+program can ground reach and confer prose immunity, and it is derived from the
+class declared in `PROGRAMS` — which `BLOB_PROGRAMS` entries do not have.
+`dataset_oracle` is correctly substantive that way; a promotion criterion must
+not be. So each criterion is registered in `PROGRAMS` to declare
+`class_="structural"` and in `BLOB_PROGRAMS` to receive the frozen certificate,
+and `evaluate` dispatches the blob form first. The `PROGRAMS` body is
+unreachable through the ordinary path and returns `overrun` if a direct caller
+ever finds it.
+
+`check: python -c "
+import inspect
+from deepreason.programs import PROGRAMS, BLOB_PROGRAMS
+from deepreason.calculus.promotion import PROMOTION_PROGRAMS
+for name in PROMOTION_PROGRAMS:
+    assert PROGRAMS[name].class_ == 'structural'
+    assert PROGRAMS[name]('{}', None, None) == ('overrun', {'reason': 'promotion-criterion-requires-blobs'})
+    assert list(inspect.signature(BLOB_PROGRAMS[name]).parameters) == ['text', 'budget', 'artifact', 'blobs']
+"`
+
 ## How to change it
 
 1. **Read `DR-INV-frozen-surfaces` first.** The `"execution-backed"` decline
@@ -247,6 +310,17 @@ hole; then `tests/test_reflexive_discipline.py` on the reach side and
 all of those and still moves an existing root's `att` is caught only by the
 42-root sweep in `DR-INV-frozen-surfaces`, which is the expensive place to find
 out.
+
+- **A promotion criterion declared SUBSTANTIVE closes a loop this seam cannot
+  see.** Moving one of Rung 5's six programs out of the structural class would
+  let it ground reach — and reach is what NOMINATES a promotion problem, so the
+  criteria of a promotion problem would manufacture the signal that produced it.
+  The class also gates prose immunity, and `promotion_accounts_for` passes
+  VACUOUSLY when a candidate declares no incumbent, so the same move would sell
+  immunity for a verdict that decided nothing. Both consequences are invisible
+  from `programs.py`, which is why the trap is written down here. Shipped
+  2026-08-24 (Rung 5); no run has hit it.
+`check: python -c "from deepreason.measures.reach import _STRUCTURAL_PROGRAMS as S; from deepreason.calculus.promotion import PROMOTION_PROGRAMS; assert set(PROMOTION_PROGRAMS) <= set(S)"`
 
 ## Traps
 

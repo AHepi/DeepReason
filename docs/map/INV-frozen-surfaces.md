@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: 23bb8bf66
+Verified-at: e3a6cadf5
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -199,6 +199,28 @@ mode to `Config`, and add its key here in the same commit. See `docs/ERRATA.md`
 E44.
 
 `check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && grep -q 'data.pop("SPLIT_BUDGET_SEAT_PROTOCOL", None)' src/deepreason/run_manifest.py`
+
+**Rung 5's contact, recorded because a granted contact still gets written down.**
+The v2 calculus program's promotion rung added two `Config` knobs — `K_FRAME`
+(how many distinct problem lineages one subject's reach must span before a
+promotion problem is spawned) and `PROMOTION_ENVIRONMENT_MAX` (how much of the
+record one reach certificate may freeze) — and therefore two `data.pop` lines
+here. The grant was given in advance and in the operator's own words, over
+exactly this file and for exactly this reason: "new knobs on Config only, each
+with its versioned-source line". The LADDER's own Rung 5 row pre-grants it
+identically. What makes the contact SAFE is measured rather than argued: with
+the pops, no key reaches `engine_config_json` and no qualification subject
+digest moves.
+
+`check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; c = json.loads(_manifest(_profile()).engine_config_json); leaked = sorted(k for k in c if k in ('K_FRAME', 'PROMOTION_ENVIRONMENT_MAX')); assert not leaked, leaked; from deepreason.config import Config; assert Config().K_FRAME == 2 and Config().PROMOTION_ENVIRONMENT_MAX == 64" && grep -q 'data.pop("K_FRAME", None)' src/deepreason/run_manifest.py && grep -q 'data.pop("PROMOTION_ENVIRONMENT_MAX", None)' src/deepreason/run_manifest.py`
+
+**Surface 5 stayed at ZERO across Rung 5, and it is checked rather than
+asserted.** The whole promotion road — nomination, the five criteria, the
+closure sweep — reaches no LLM seat, so the pair inventory is unchanged, no
+subject digest moves, and no home owes a ~14-minute battery rerun. See
+`DR-INV-axiom-basis`'s A4 preservation row for the import check that pins it.
+
+`check: python -m pytest tests/test_promotion_solo.py::test_no_promotion_module_can_reach_a_seat -q`
 
 ## The instruments that prove you did not break anything
 

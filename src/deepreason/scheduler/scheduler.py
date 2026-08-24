@@ -32,6 +32,8 @@ from deepreason.measures.hv import (
     is_hv_floor,
     run_hv_floor,
 )
+from deepreason.calculus.nomination import nominate
+from deepreason.calculus.promotion import promotion_criteria_sweep
 from deepreason.measures.reach import reach_sweep
 from deepreason.premises import (
     independence_resolution_rate,
@@ -2274,6 +2276,7 @@ class Scheduler:
         reach_sweep(
             harness, coverage_min=config.REACH_COVERAGE_MIN
         )  # hits recorded; debt spawns next scan
+        self._promotion_step()
         self._lazy_hv()
         self._experiment_step()
         self._property_step()
@@ -2309,6 +2312,30 @@ class Scheduler:
                 f"{independence_resolution_rate(harness):.4f}",
             ]
         )
+
+    def _promotion_step(self) -> None:
+        """§9.4: nominate, then fire the promotion criteria (Rung 5).
+
+        Placed immediately after `reach_sweep` and BEFORE the render and
+        schedule surfaces that consume standing, which is Remark 9.5's ORDER
+        rather than a preference: a frame assertion nobody attacked is accepted,
+        and an accepted assertion addressed to a promotion problem is consulted,
+        so the criteria must have fired by the time anything asks what is
+        framing. Running the sweep after consultation would leave one whole
+        cycle in which an unexamined claim is the coordinate system.
+
+        Nomination DETECTS and never decides: it writes a problem, its criteria
+        and the frozen certificate they read, and nothing else. The promotion
+        itself is the ordinary Conj->Crit->Adj pass this scheduler already runs
+        on any problem, which is why there is no promotion phase here.
+
+        Solo-safe by construction (L-3): neither call needs a seat. The
+        criteria are programs, and the one reading that would need the variator
+        -- §12.2's `load` half -- is frozen as a typed abstention that answers
+        `overrun`, so a run with no seats completes the whole path.
+        """
+        nominate(self.harness, self.config)
+        promotion_criteria_sweep(self.harness, self.config)
 
     def _premise_rent_step(self) -> None:
         """Adjudicate filed premises by demarcation (`active` = crit and mod).

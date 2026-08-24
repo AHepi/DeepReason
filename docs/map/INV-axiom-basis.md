@@ -1,6 +1,6 @@
 <!-- DR-INV-axiom-basis -->
-Verified-at: 03b1edf4
-Verify: python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py tests/test_proof_debt.py -q
+Verified-at: e3a6cadf5
+Verify: python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py tests/test_proof_debt.py tests/test_calculus_nomination.py tests/test_promotion_solo.py -q
 Owns: 
 Seams: 
 Seams-undocumented: 
@@ -42,7 +42,7 @@ check is worse than an admitted gap, because it reports success.
 | **A5** | a frame assertion mentions but does not depend on its subject | **Rung 2** (attributions), **Rung 4** (frame assertions) | Rung 3b, **Rung D** (derivation manifests mention their subject). Rung D's THIRD site — localizations — is PARKED and does not yet answer for it |
 | **A6** | consulted frame assertions satisfy frame-separation | **Rung 3b** | Rungs 4, 7 |
 | **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
-| **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** — NOT YET LANDED | Rung 8 |
+| **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** | Rung 8 |
 | **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render), **Rung 8** (diagnostics) — NOT YET LANDED | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
 | **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung; **Rung D** logs the rent sample as a canonical artifact rather than a blob |
 | **Ax 4.1** | **Genesis Inertness** — appraisal predicates are invariant under permutation of provenance; origin confers neither warrant nor stigma | stated here; **no rung may violate it** | every rung; **Rung D** — neither `receipt()` nor a manifest reads provenance |
@@ -167,20 +167,77 @@ assert sorted(Problem.model_fields) == ['criteria', 'description', 'id', 'proven
 
 ## A8 — reach spawns promotion problems, and cannot alter labels
 
-**NOT YET PROVED — Rung 5 owns it**, and this row is the obligation rather than
-the discharge. What Rung 4 established that Rung 5 will build on: a promotion
-problem is an ordinary `Problem` with `SpawnTrigger.PROMOTION`, and being
-addressed to one changes nothing about any label — it changes only whether an
-assertion is CONSULTED.
+**PROVED at Rung 5.** Both halves now have checks, and the spawn half is the one
+Rung 4 had to leave open: `calculus/nomination.py::nominate` is the only
+producer of a `SpawnTrigger.PROMOTION` problem outside a test, and it reads
+`state.reach` to decide whether to spawn one.
 
-Half of A8 is checkable today, and only half. Reach measures ground no reach
-from structural programs, so a well-formed frame assertion cannot buy its own
-promotion case.
+The axiom's force is in the second clause — CANNOT DIRECTLY ALTER LABELS — and
+it is asserted structurally AND behaviourally, because either alone is
+satisfiable by the wrong thing. Structurally, the measure imports no
+adjudication, warrant, LLM or trial path and assigns into no label map;
+behaviourally, a firing nomination leaves every pre-existing entry of
+`state.status`, `state.hv` and `state.reach` byte-identical. The one addition
+a firing nomination makes to `state.status` is the reach certificate's own
+registration, which is what every unattacked artifact gets and is not a
+judgment moving.
 
-`check: python -c "from deepreason.measures.reach import _STRUCTURAL_PROGRAMS as S; assert {'frame_assertion_wf','problem_subject_wf','premise_attribution_wf'} <= S"`
+`check: python -c "
+import ast, pathlib
+t = ast.parse(pathlib.Path('src/deepreason/calculus/nomination.py').read_text())
+mods = [(n.module or '') for n in ast.walk(t) if isinstance(n, ast.ImportFrom)]
+assert not any(k in m for m in mods for k in ('adjudication', 'warrants', 'llm', 'trial')), mods
+W = [ast.unparse(g) for n in ast.walk(t) if isinstance(n, ast.Assign) for g in n.targets if any(k in ast.unparse(g) for k in ('state.status', 'state.hv', 'state.reach'))]
+assert not W, W
+"`
+`check: python -m pytest tests/test_calculus_nomination.py::test_nomination_changes_no_label_and_no_measure -q`
 
-No check is offered for the spawn half. Rung 5 must add one here in the same
-commit that lands nomination.
+The SPAWN half, on the tree and on real live data. The second check is the
+negative control and is the more informative of the two: the committed
+attempt-4 root recorded a genuine reach event, and nomination still declines it
+because that event spans ONE problem lineage.
+
+`check: python -c "
+import inspect
+from deepreason.calculus.nomination import nominate
+from deepreason.ontology import SpawnTrigger
+assert 'ensure_promotion_problem(' in inspect.getsource(nominate)
+assert SpawnTrigger.PROMOTION.value == 'promotion'
+"`
+`check: python -m pytest tests/test_promotion_nomination_live.py::test_nomination_does_not_fire_on_the_committed_live_root -q`
+
+Rung 4's half is retained and WIDENED. Reach measures ground no reach from
+structural programs, so a well-formed frame assertion cannot buy its own
+promotion case — and neither can a well-formed reach certificate or a passing
+promotion criterion. That widening closes the loop from the other side: a
+criterion counted SUBSTANTIVE would ground reach, and reach is what nominates,
+so the promotion machinery would manufacture the signal that produced it.
+
+`check: python -c "from deepreason.measures.reach import _STRUCTURAL_PROGRAMS as S; assert {'frame_assertion_wf','problem_subject_wf','premise_attribution_wf'} <= S; assert {'reach_certificate_wf','promotion_subject_demarcation','promotion_reach_integrity','promotion_scope_determinism','promotion_compatibility','promotion_accounts_for'} <= S"`
+
+**Trap for Rung 8.** The nomination CONSTANTS are Rung 8's to tune, and tuning
+`K_FRAME` cannot be allowed to become a way of altering labels indirectly. The
+guard is the same one that holds today: the measure writes a problem and its
+paperwork, and nothing else, whatever the threshold says.
+
+## A4, preserved at Rung 5 — no promotion module can reach a label or a seat
+
+A4's own section is above; this is Rung 5's preservation entry, kept beside A8
+because the two are broken by the same edit. Neither `nomination.py` nor
+`promotion.py` imports an LLM, adapter, seat, provider, qualification, judge,
+trial or ensemble path, so the promotion road cannot acquire a seat dependency
+by a later edit without this check going red. That is also frozen surface 5 held
+at ZERO: the v2 program adds no new LLM role, so no qualification subject digest
+moves and no home owes a ~14-minute battery rerun.
+
+`check: python -c "
+import ast, pathlib
+for name in ('nomination.py', 'promotion.py'):
+    t = ast.parse(pathlib.Path('src/deepreason/calculus/' + name).read_text())
+    mods = [(n.module or '') for n in ast.walk(t) if isinstance(n, ast.ImportFrom)] + [a.name for n in ast.walk(t) if isinstance(n, ast.Import) for a in n.names]
+    assert not any(p in m for m in mods for p in ('llm', 'adapter', 'seat', 'provider', 'qualification', 'judge', 'trial', 'ensemble')), (name, mods)
+"`
+`check: python -m pytest tests/test_promotion_solo.py -q`
 
 ## A9 — render, measures and diagnostics act only through attention
 
@@ -226,6 +283,22 @@ make the standing view rank grants by the provenance role that authored the
 assertion, or to make `consultability_of` prefer an assertion authored by a
 conjecturer over one imported. Neither happens; consultation reads the body, the
 addressing, the label and the graph, and nothing about who wrote it.
+
+**Rung 5's own near-miss shape, recorded like Rung 4's.** It would have been
+natural to let nomination rank candidate subjects by the provenance role that
+authored them, or to let `accounts-for` prefer a rival a conjecturer wrote over
+one that was imported. Neither happens: nomination reads reach, addressing and
+lineage, and the succession relation reads accounted sets, HV readings,
+declared commitments and registered criticism. Nothing reads who wrote what.
+The one `provenance` field either module names is `trigger`, which is what a
+PROBLEM IS rather than where it came from.
+
+`check: python -c "
+import pathlib, re
+for name in ('nomination.py', 'promotion.py'):
+    src = pathlib.Path('src/deepreason/calculus/' + name).read_text()
+    assert not re.search(r'provenance\.(?!trigger|from_)', src), name
+"`
 
 `check: python -c "
 import pathlib, re
