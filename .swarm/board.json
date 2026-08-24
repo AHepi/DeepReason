@@ -31,6 +31,25 @@
       "verify": "",
       "worker": "treadle"
     },
+    "PIL-RegressionFixture": {
+      "accept": "python -m pytest experiments/2026-08-23-treadle-pilot/T3/test_pairwise_referential_integrity.py -q && bash experiments/2026-08-23-treadle-pilot/mutation_proof_T3.sh",
+      "base": "36499a8046c0d208759500d11e8c5edcc366a38f",
+      "claim_token": 0,
+      "cone": [
+        "experiments/2026-08-23-treadle-pilot/T3/*"
+      ],
+      "depends_on": [],
+      "goal": "Write ONE pytest file, experiments/2026-08-23-treadle-pilot/T3/test_pairwise_referential_integrity.py, that pins an existing committed behaviour of src/deepreason/informal/trial.py::pairwise_discriminate. THE BEHAVIOUR: when the judge returns a NAMED winner (A or B) whose decisive_point is the EMPTY STRING, the trial must block on referential-integrity and register no warrant. The code's own comment says why this case is special: the empty string is a substring of everything, so without an explicit empty-string guard it would pass the containment check vacuously. See INPUT_trial_excerpt.txt for the exact code. THE TEST: build the pairwise setup exactly as INPUT_test_pattern.txt shows (_pairwise_setup, LLMAdapter with a MockEndpoint of judge replies, Config(), authority='status'); the two judge replies must be order-swap CONSISTENT (winner A then winner B) so the order-swap check passes and execution reaches the referential-integrity check; both replies carry decisive_point ''. Assert that pairwise_discriminate returns None, that both candidates are still Status.ACCEPTED, and that the harness log contains an event whose inputs include the string 'trial-blocked:referential-integrity'. Define your own harness fixture (pytest conftest fixtures do NOT reach a file outside tests/) as INPUT_conftest.txt shows, and import art from tests.conftest. Emit only the one test file.",
+      "notes": [],
+      "out_of_scope": "Do not modify src/, tests/, or any INPUT_ file. Do not weaken the assertion to make it pass. The acceptance runs a mutation proof that deletes the empty-string guard from trial.py and requires your test to go RED; a test that passes either way will be rejected.",
+      "reads": [],
+      "reviewer": "",
+      "shas": [],
+      "state": "READY",
+      "state_ts": 1787545179.3847654,
+      "verify": "",
+      "worker": ""
+    },
     "REV-RungD": {
       "accept": "# Claim/check pairs from the delivering tranche, verbatim from its own VALIDATION.md.\n# Each line is CLAIM -> the command the tranche ran -> the result it recorded.\n# Judge whether the DIFF supports each claim. These lines are context, not a script.\n# S1  the closed claim-name set did not grow -> python -c \"len(CLAIM_SCHEMAS)==9 and poietic.derivation-manifest.v1 in _IMPLEMENTED\" -> S1 ok\n# S2  open certificates are dependences and the subject is a mention -> pytest test_open_certificates_are_dependences_and_the_subject_is_a_mention -> 1 passed\n# S3  the derivation-manifest wf program is structural -> python -c \"PROGRAMS[derivation_manifest_wf].class_==structural\" -> S3 ok\n# S4  the new module is covered -> pytest tests/test_proof_debt.py -q -> 18 passed\n# S5  a receipt is recomputed from the log and never stored, and reruns its kernel checks rather than reading them back -> pytest test_a_receipt_is_recomputed_from_the_log_and_never_stored test_a_receipt_reruns_its_kernel_checks_rather_than_reading_them_back -> 2 passed\n# S6  the log replays identically after a certificate is attacked -> pytest test_the_log_replays_identically_after_a_certificate_is_attacked -> 1 passed\n# S7  dependents are invalidated on recomputation, not retroactively -> pytest test_dependents_are_invalidated_on_recomputation_not_retroactively -> 1 passed\n# S8  a manifest is wired to the validity node as EVIDENCE -> pytest test_a_manifest_is_wired_to_the_validity_node_as_evidence -> 1 passed\n# S9  attacking a manifest item disables the attack before pass one -> pytest test_attacking_a_manifest_item_disables_the_attack_before_pass_one -> 1 passed\n# S10 the rent sweep files a manifest whose sample is attackable -> pytest tests/test_premise_channel.py test_the_rent_sweep_files_a_manifest_whose_sample_is_attackable -> 26 passed\n# S20 filing a manifest moves no label, and the read path holds no call that could write -> pytest test_filing_a_manifest_moves_no_label test_the_read_path_holds_no_call_that_could_write -> 2 passed\n# DELIVERY.md also claims: not one line of adjudication/ changed; 457 insertions in src/ whose 4 deletions are one reworded comment, two extended import lines and one extended docstring line - no behaviour removed.",
       "base": "b10fc5fd2",
