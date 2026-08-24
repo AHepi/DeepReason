@@ -32,3 +32,4 @@ passing the seed's subject predicates: none
 control holds (not all three pass): True
 [2026-08-24T03:55:50Z] SUPPLEMENT PREFLIGHT OK rc=0
 [2026-08-24T03:55:50Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-24T03:57:50Z] QUALIFY FAILED rc=1 -- see /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/qualify.json and /home/user/DeepReason/experiments/2026-08-22-change-epoch3-second-lineage/qualify.stderr.log
