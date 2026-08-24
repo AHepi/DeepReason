@@ -129,8 +129,18 @@ subject_ref` (an artifact cannot depart from itself).
 
 **Predicted fixture update, declared IN ADVANCE per the gate rule:**
 `tests/test_proof_debt.py:108` asserts `len(CLAIM_SCHEMAS) == 9`. It
-becomes `== 10`. This is the only count assertion over that tuple; the
-other consumers assert MEMBERSHIP, which is unaffected.
+becomes `== 10`.
+
+**CORRECTED at step 4, and the correction is recorded rather than
+quietly applied.** This paragraph first said "this is the only count
+assertion over that tuple; the other consumers assert MEMBERSHIP". That
+was wrong: `tests/test_calculus_frame_assertions.py:192` carries the same
+count and failed at the step-4 ring. The blast-radius census DID list
+that line — it was mis-read as a membership assertion, which is E45's
+own lesson (classify per CHECK, not per file) recurring inside a spec
+that cites E45. Both fixtures move to `== 10`, both keep their
+declared-but-unbuilt assertion intact, and both docstrings state why the
+count moved. No design item changes.
 
 ### S3 (R4, R5) — the compiler rule
 

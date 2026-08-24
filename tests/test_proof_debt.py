@@ -101,11 +101,17 @@ def test_the_closed_claim_name_set_does_not_grow(harness):
     An ontology addition riding in on a rung meant only to build one is exactly
     what the closure exists to stop, so the count is the property, not the
     presence.
+
+    The count moved from 9 to 10 at Rung 6, and the move is the sanctioned
+    path rather than the failure this test watches for: `claims.py`'s own
+    docstring admits a name in the rung that SUPPLIES ITS PRODUCER, and Rung 6
+    supplies `file_departure_declaration`. A name added without a producer
+    would still fail here, which is the property being kept.
     """
     from deepreason.calculus import CLAIM_SCHEMAS
     from deepreason.calculus.claims import _IMPLEMENTED
 
-    assert len(CLAIM_SCHEMAS) == 9
+    assert len(CLAIM_SCHEMAS) == 10
     assert DERIVATION_MANIFEST_V1 in CLAIM_SCHEMAS
     assert DERIVATION_MANIFEST_V1 in _IMPLEMENTED
 

@@ -186,10 +186,17 @@ def test_a_controller_compiled_assertion_passes_well_formedness(harness):
 def test_the_closed_name_set_did_not_grow():
     """R1. This rung supplies a PRODUCER for a name the closed set already
     declared. A set that grew would mean an ontology addition rode in on a
-    rung that was only meant to build one."""
+    rung that was only meant to build one.
+
+    The count moved from 9 to 10 at Rung 6, which is the admitted path and not
+    the failure guarded here: `claims.py` admits a NAME in the rung that
+    supplies its producer, and Rung 6 shipped `file_departure_declaration` in
+    the same tranche. What still fails is the case this test is named for --
+    a declared-but-unbuilt schema, exercised below.
+    """
     from deepreason.calculus import CLAIM_SCHEMAS
 
-    assert len(CLAIM_SCHEMAS) == 9
+    assert len(CLAIM_SCHEMAS) == 10
     assert FRAME_ASSERTION_V1 in CLAIM_SCHEMAS
     with pytest.raises(ClaimDecodeError) as caught:
         decode('{"schema": "poietic.succession.v1"}')

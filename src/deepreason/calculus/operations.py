@@ -9,9 +9,15 @@ simply running it again.
 
 from __future__ import annotations
 
-from deepreason.calculus.claims import FrameAssertionV1, ProblemSubjectV1, encode
+from deepreason.calculus.claims import (
+    DepartureDeclarationV1,
+    FrameAssertionV1,
+    ProblemSubjectV1,
+    encode,
+)
 from deepreason.calculus.compiler import compile_interface
 from deepreason.calculus.programs import (
+    DEPARTURE_DECLARATION_COMMITMENT,
     FRAME_ASSERTION_COMMITMENT,
     PROBLEM_SUBJECT_COMMITMENT,
 )
@@ -127,6 +133,48 @@ def file_frame_assertion(
         departure_protocol=departure_protocol,
         reach_case_refs=list(reach_case_refs),
         succeeded_wound_refs=list(succeeded_wound_refs),
+    )
+    return harness.create_artifact(
+        encode(body),
+        codec="json",
+        interface=compile_interface(body),
+        problem_id=problem.id,
+        provenance=Provenance(role="import"),
+    )
+
+
+def file_departure_declaration(
+    harness,
+    *,
+    problem,
+    subject_ref: str,
+    departing_ref: str,
+    broken_ids,
+    rationale: str,
+):
+    """Declare that one artifact breaks with named commitments of a frame.
+
+    An ORDINARY artifact, like every other claim here, and that is the whole
+    of "the declaration is itself attackable": nothing special protects it, so
+    a critic attacks it exactly as they would attack anything else.
+
+    Idempotent by content address for the same reason `file_frame_assertion`
+    is -- the body is a pure function of its arguments, so declaring the same
+    departure twice registers one artifact.
+
+    NO CHECK RUNS HERE against the subject's actual commitment ids. Refusing a
+    declaration that names an id the subject does not carry would make the
+    authoring path a judge of whether a departure is real, and a departure a
+    critic disputes is a criticism they mount, not an authoring error. The
+    render subtracts what is declared; whether the subtraction was earned is
+    an ordinary question for criticism.
+    """
+    harness.register_commitment(DEPARTURE_DECLARATION_COMMITMENT)
+    body = DepartureDeclarationV1(
+        subject_ref=subject_ref,
+        departing_ref=departing_ref,
+        broken_ids=list(broken_ids),
+        rationale=rationale,
     )
     return harness.create_artifact(
         encode(body),

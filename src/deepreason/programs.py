@@ -326,6 +326,12 @@ def _reach_certificate_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     return reach_certificate_wf(text, budget, artifact)
 
 
+def _departure_declaration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.calculus.programs import departure_declaration_wf
+
+    return departure_declaration_wf(text, budget, artifact)
+
+
 def _promotion_needs_blobs(text: str, budget, artifact=None) -> tuple[str, dict]:
     """The `PROGRAMS` half of a promotion criterion's DUAL registration.
 
@@ -381,6 +387,12 @@ PROGRAMS: dict[str, ProgramSpec] = {
     ),
     "frame_assertion_wf": ProgramSpec(
         "frame_assertion_wf", _frame_assertion_wf, "structural"
+    ),
+    # STRUCTURAL is L-4 here, not caution: a departure declaration that
+    # grounded reach or bought prose immunity would pay for departing, and a
+    # reward is a score. Rung 6.
+    "departure_declaration_wf": ProgramSpec(
+        "departure_declaration_wf", _departure_declaration_wf, "structural"
     ),
     # The promotion axis (calculus/, Rung 5). All six are STRUCTURAL, and the
     # class here only ever WITHHOLDS: it keeps them from grounding reach and

@@ -1272,3 +1272,20 @@ somewhere to have been prevented: **a census must enumerate every symbol a spec
 item names as its mechanism, not only the files it plans to edit, and must
 classify per CHECK rather than per file.** Recorded 2026-08-24 by the same
 tranche, against itself.
+
+**E50 — `DR-SUB-calculus` said "five of the nine names are DECLARED AND
+UNBUILT" three paragraphs below its own check asserting there are four.**
+`docs/map/SUB-calculus.md`'s "Why closed" section gave the unbuilt count as
+five while the check in its "What it owns" section asserted
+`len(missing) == 4`, and both were on the same page. With five implemented
+of nine declared, four is right and five is wrong. The error was inert —
+nothing branches on the prose — but it is the shape a reader is least
+likely to catch, because the contradicting check is above the fold and
+passes. Found 2026-08-24 by
+`experiments/2026-08-24-change-rung6-frame-render-departures/` while
+moving the same counts for the departure-declaration body, and fixed in
+the same commit; the counts now read four of ten. The general rule, which
+the same document's own `SCHEMA.md` already implies: **a count stated in
+prose is a load-bearing claim and needs the check that would fail with
+it** — an unchecked number beside a checked one decays silently and reads
+as verified.

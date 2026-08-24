@@ -27,6 +27,7 @@ CLAIM_SCHEMAS: tuple[str, ...] = (
     "poietic.derivation-manifest.v1",
     "poietic.reach-certificate.v1",
     "poietic.frame-assertion.v1",
+    "poietic.departure-declaration.v1",
     "poietic.problem-retirement.v1",
     "poietic.problem-translation.v1",
     "poietic.localization.v1",
@@ -38,13 +39,14 @@ DERIVATION_MANIFEST_V1 = "poietic.derivation-manifest.v1"
 PREMISE_ATTRIBUTION_V1 = "poietic.premise-attribution.v1"
 FRAME_ASSERTION_V1 = "poietic.frame-assertion.v1"
 REACH_CERTIFICATE_V1 = "poietic.reach-certificate.v1"
+DEPARTURE_DECLARATION_V1 = "poietic.departure-declaration.v1"
 
 # The names with a producer. The rest are declared above and refused below,
 # with their names on the record so a reader sees the intended shape of the
 # substrate rather than only the built part of it.
 _IMPLEMENTED: tuple[str, ...] = (
     PROBLEM_SUBJECT_V1, PREMISE_ATTRIBUTION_V1, FRAME_ASSERTION_V1,
-    DERIVATION_MANIFEST_V1, REACH_CERTIFICATE_V1,
+    DERIVATION_MANIFEST_V1, REACH_CERTIFICATE_V1, DEPARTURE_DECLARATION_V1,
 )
 
 
@@ -170,6 +172,41 @@ class FrameAssertionV1(_Body):
             # A case that IS the subject is a dependence on the subject under
             # another name, which is exactly what Law 9.4 forbids.
             raise ValueError("a reach case may not be the subject itself")
+        return self
+
+
+class DepartureDeclarationV1(_Body):
+    """The departure protocol of §9.5: "this candidate breaks with the frame, here."
+
+    The declaration exists so that a conflict with a consulted frame can be
+    STATED rather than hidden. Declaring removes the target of the
+    hidden-premise criticism -- an undeclared conflict is criticisable as a
+    silent assumption -- while the declaration itself remains an ordinary
+    artifact anyone may attack.
+
+    NOTHING SCORES A DEPARTURE, and the guarantee is structural rather than
+    promised: the compiler gives this body two MENTIONs and no dependence, so
+    neither pass of adjudication has an edge through which a declaration could
+    move any label. See `compiler.compile_interface`.
+    """
+
+    schema_: Literal["poietic.departure-declaration.v1"] = Field(
+        default=DEPARTURE_DECLARATION_V1, alias="schema"
+    )
+    subject_ref: str
+    departing_ref: str
+    # The subject's own commitment ids the candidate breaks with. Ids, not
+    # prose: the render subtracts these from the obligations a candidate still
+    # implicitly holds, and a prose description could not be subtracted.
+    broken_ids: list[str] = Field(min_length=1)
+    rationale: str
+
+    @model_validator(mode="after")
+    def _departure_is_from_something_else(self):
+        if self.departing_ref == self.subject_ref:
+            raise ValueError("an artifact cannot declare a departure from itself")
+        if len(set(self.broken_ids)) != len(self.broken_ids):
+            raise ValueError("broken_ids must be unique")
         return self
 
 
@@ -339,6 +376,7 @@ _MODELS: dict[str, type[_Body]] = {
     FRAME_ASSERTION_V1: FrameAssertionV1,
     DERIVATION_MANIFEST_V1: DerivationManifestV1,
     REACH_CERTIFICATE_V1: ReachCertificateV1,
+    DEPARTURE_DECLARATION_V1: DepartureDeclarationV1,
 }
 
 

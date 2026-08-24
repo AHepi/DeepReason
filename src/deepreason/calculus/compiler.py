@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from deepreason.calculus import claims
 from deepreason.calculus.claims import (
+    DepartureDeclarationV1,
     DerivationManifestV1,
     FrameAssertionV1,
     PremiseAttributionV1,
@@ -30,6 +31,7 @@ from deepreason.ontology.artifact import RefRole
 def compile_interface(body) -> Interface:
     """Body -> Interface. Raises on a body this compiler has no rule for."""
     from deepreason.calculus.programs import (
+        DEPARTURE_DECLARATION_COMMITMENT,
         DERIVATION_MANIFEST_COMMITMENT,
         FRAME_ASSERTION_COMMITMENT,
         PREMISE_ATTRIBUTION_COMMITMENT,
@@ -88,6 +90,25 @@ def compile_interface(body) -> Interface:
             for wound in body.succeeded_wound_refs
         ]
         return Interface(commitments=[FRAME_ASSERTION_COMMITMENT.id], refs=refs)
+    if isinstance(body, DepartureDeclarationV1):
+        # TWO MENTIONS AND NOTHING ELSE, and this assignment IS L-4. A
+        # dependence either way would give the declaration a support edge, and
+        # pass two would then move a label because a departure was declared --
+        # a penalty channel arriving through the graph rather than through a
+        # rule anyone wrote. With two mentions there is no edge to carry one:
+        # nothing scores departures because nothing CAN.
+        #
+        # The direction that looks safe is the one to refuse hardest. Depending
+        # on the departing artifact would suspend the declaration the moment
+        # the candidate was refuted, deleting the record of what it broke with
+        # at exactly the moment a reader wants it.
+        return Interface(
+            commitments=[DEPARTURE_DECLARATION_COMMITMENT.id],
+            refs=[
+                Ref(target=body.subject_ref, role=RefRole.MENTION),
+                Ref(target=body.departing_ref, role=RefRole.MENTION),
+            ],
+        )
     if isinstance(body, DerivationManifestV1):
         refs = [
             # MENTION on the subject, for the mention law's own reason: a

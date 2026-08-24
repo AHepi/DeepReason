@@ -9,6 +9,7 @@ itself by being a well-formed claim.
 from __future__ import annotations
 
 from deepreason.calculus.claims import (
+    DEPARTURE_DECLARATION_V1,
     DERIVATION_MANIFEST_V1,
     FRAME_ASSERTION_V1,
     PREMISE_ATTRIBUTION_V1,
@@ -25,6 +26,7 @@ PREMISE_ATTRIBUTION_WF = "premise_attribution_wf"
 FRAME_ASSERTION_WF = "frame_assertion_wf"
 DERIVATION_MANIFEST_WF = "derivation_manifest_wf"
 REACH_CERTIFICATE_WF = "reach_certificate_wf"
+DEPARTURE_DECLARATION_WF = "departure_declaration_wf"
 
 PROBLEM_SUBJECT_COMMITMENT = Commitment(
     id="claim:problem-subject-wf@v1", eval=f"program:{PROBLEM_SUBJECT_WF}"
@@ -40,6 +42,10 @@ DERIVATION_MANIFEST_COMMITMENT = Commitment(
 )
 REACH_CERTIFICATE_COMMITMENT = Commitment(
     id="claim:reach-certificate-wf@v1", eval=f"program:{REACH_CERTIFICATE_WF}"
+)
+DEPARTURE_DECLARATION_COMMITMENT = Commitment(
+    id="claim:departure-declaration-wf@v1",
+    eval=f"program:{DEPARTURE_DECLARATION_WF}",
 )
 
 
@@ -126,3 +132,16 @@ def reach_certificate_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     grounded reach would close that loop from the other side.
     """
     return _wf(text, REACH_CERTIFICATE_V1, artifact)
+
+
+def departure_declaration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Structural well-formedness for a declared departure.
+
+    STRUCTURAL, and here that word carries L-4 rather than only the usual
+    caution. A program that grounded reach or conferred prose immunity would
+    make DECLARING a departure buy something, and the freedom to depart has to
+    be worth exactly nothing or it is a channel that scores departures by
+    rewarding them. Passing proves the declaration is well formed and names
+    real ids; it says nothing about whether the departure is wise.
+    """
+    return _wf(text, DEPARTURE_DECLARATION_V1, artifact)

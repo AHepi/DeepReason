@@ -14,15 +14,16 @@ ONE controller-owned function. Two guarantees that only work together: nothing
 outside the set can become quasi-ontology, and no model ever chooses whether an
 endpoint is a `mention`, a `dependence`, or `evidence`.
 
-`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS) == 9 and all(s.startswith('poietic.') for s in CLAIM_SCHEMAS)"`
+`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; assert len(CLAIM_SCHEMAS) == 10 and all(s.startswith('poietic.') for s in CLAIM_SCHEMAS)"`
 
-Five of the nine names have a producer. The other four are declared and REFUSED
+Six of the ten names have a producer. The other four are declared and REFUSED
 by `decode` with `claim-schema-not-implemented`, which is the deliberate shape:
 shipping a body model nobody can create is `docs/ERRATA.md` E28's pattern, so a
 name joins the implemented set only in the rung that supplies its producer.
-Rung 5 supplied `poietic.reach-certificate.v1`'s.
+Rung 5 supplied `poietic.reach-certificate.v1`'s; Rung 6 supplied
+`poietic.departure-declaration.v1`'s.
 
-`check: python -c "from deepreason.calculus.claims import _IMPLEMENTED, CLAIM_SCHEMAS, decode, ClaimDecodeError; assert len(_IMPLEMENTED) == 5 and 'poietic.reach-certificate.v1' in _IMPLEMENTED; import json; missing = [s for s in CLAIM_SCHEMAS if s not in _IMPLEMENTED]; assert len(missing) == 4;
+`check: python -c "from deepreason.calculus.claims import _IMPLEMENTED, CLAIM_SCHEMAS, decode, ClaimDecodeError; assert len(_IMPLEMENTED) == 6 and 'poietic.reach-certificate.v1' in _IMPLEMENTED; import json; missing = [s for s in CLAIM_SCHEMAS if s not in _IMPLEMENTED]; assert len(missing) == 4;
 for name in missing:
     try:
         decode(json.dumps({'schema': name}))
@@ -38,27 +39,40 @@ become ontology, and each one would need its interaction with `att`, `dep`,
 replay and status re-proven. `decode` refuses an unknown schema name with
 `claim-schema-unknown`.
 
-Five of the nine names are DECLARED AND UNBUILT, refused with
+Four of the ten names are DECLARED AND UNBUILT, refused with
 `claim-schema-not-implemented`. That split is deliberate: shipping body models
 with no producers is `docs/ERRATA.md` E28's pattern — a mechanism nobody
-triggers — while closing the NAME set is what actually stops the drift.
+triggers — while closing the NAME set is what actually stops the drift. (This
+paragraph read "five of the nine" until 2026-08-24 and contradicted the
+`len(missing) == 4` check three paragraphs above it — `docs/ERRATA.md` E50.)
 
 `check: python -m pytest tests/test_calculus_claim_substrate.py::test_an_open_predicate_cannot_enter tests/test_calculus_claim_substrate.py::test_a_declared_but_unbuilt_schema_is_refused_with_its_reason -q`
 
 Rung 4 supplied the producer for `poietic.frame-assertion.v1` — a name the
-closed set ALREADY declared. The set did not grow, and that is the property
-worth checking: an ontology addition riding in on a rung meant only to build
-one is exactly what the closure exists to stop.
+closed set ALREADY declared. Rung D repeated the pattern for
+`poietic.derivation-manifest.v1` (`DR-CON-proof-debt-and-localization`), and
+Rung 5 for `poietic.reach-certificate.v1`. Through all three the set did not
+grow.
 
-`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 9 and len(_IMPLEMENTED) == 5 and {'poietic.frame-assertion.v1', 'poietic.derivation-manifest.v1', 'poietic.reach-certificate.v1'} <= set(_IMPLEMENTED)"`
+**Rung 6 is the first rung that GREW it**, to 10, and the difference is worth
+stating exactly because the earlier phrasing here ("the set did not grow") was
+easy to read as the invariant. It is not. `claims.py`'s own docstring states
+the rule: "Adding a name here is an ontology change and belongs in the rung
+that supplies its producer, never in a convenience commit." What the closure
+forbids is a NAME WITHOUT A PRODUCER, not a name. Rung 6 added
+`poietic.departure-declaration.v1` and shipped
+`operations.file_departure_declaration` in the same tranche, so the rule held
+while the count moved. A name added with no producer still fails the refusal
+check above.
 
-Rung D repeats the pattern for `poietic.derivation-manifest.v1` (`DR-CON-proof-debt-and-localization`):
-a producer for a name the set already held, so the closure is exercised twice
-over and the count is still 9. `KernelCheckV1` is deliberately a `_Part` and not
-a `_Body` — it carries no `schema` name and `decode` cannot reach it, so a
-body's internal parts can never widen the closed set by the back door.
+`check: python -c "from deepreason.calculus import CLAIM_SCHEMAS; from deepreason.calculus.claims import _IMPLEMENTED; assert len(CLAIM_SCHEMAS) == 10 and len(_IMPLEMENTED) == 6 and {'poietic.frame-assertion.v1', 'poietic.derivation-manifest.v1', 'poietic.reach-certificate.v1', 'poietic.departure-declaration.v1'} <= set(_IMPLEMENTED)"`
+`check: python -c "from deepreason.calculus import file_departure_declaration; from deepreason.calculus.claims import DEPARTURE_DECLARATION_V1, _IMPLEMENTED; assert DEPARTURE_DECLARATION_V1 in _IMPLEMENTED and callable(file_departure_declaration)"`
 
-`check: python -c "from deepreason.calculus.claims import KernelCheckV1, _MODELS, CLAIM_SCHEMAS; assert KernelCheckV1 not in _MODELS.values() and len(CLAIM_SCHEMAS) == 9"`
+`KernelCheckV1` is deliberately a `_Part` and not a `_Body` — it carries no
+`schema` name and `decode` cannot reach it, so a body's internal parts can
+never widen the closed set by the back door.
+
+`check: python -c "from deepreason.calculus.claims import KernelCheckV1, _MODELS, CLAIM_SCHEMAS; assert KernelCheckV1 not in _MODELS.values() and len(CLAIM_SCHEMAS) == 10"`
 
 ## The compiler is the only authority on ref roles
 
