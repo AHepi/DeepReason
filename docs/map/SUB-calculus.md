@@ -335,7 +335,16 @@ found through `addr`.
   in the source documents, not in a run.
 `check: python -m pytest tests/test_calculus_frame_separation.py::test_a_reach_case_that_depends_on_the_subject_is_unconsultable -q`
 - **`consultability` had NO caller in `src/` until Rung 4 — WIRED 2026-08-22,
-  and only for frame assertions.** Rung 3b shipped the predicate and said Rung 4
+  and only for frame assertions. The check reads CALLERS, not text, and it
+  did not always.** Until 2026-08-24 it grepped every file outside
+  `calculus/` for the STRING `consultability`, which is a proxy for the claim
+  rather than the claim. Rung 7's cascade entry explains in a docstring why it
+  calls Rung 3b's predicate instead of re-deriving the graph condition — a
+  sentence that makes the code more legible and trips a text grep. Rewording
+  the prose to satisfy the proxy would have made the code worse to keep a
+  weaker check green, so the check now parses for CALL and IMPORT sites, which
+  is what "no caller" always meant. The rest of the row is unchanged, and so is
+  the parked question it protects.** Rung 3b shipped the predicate and said Rung 4
   owned the consultation site; `standing.py::consultability_of` is that site. It
   CALLS `separation.consultability` and returns its `Consultability` value with
   `FRAME_NOT_SEPARATED` unchanged rather than re-deriving the graph condition —
@@ -346,7 +355,20 @@ found through `addr`.
   (`experiments/2026-08-21-change-rung3b-frame-separation/PARKED.md` P1, carried
   forward as `experiments/2026-08-22-change-rung4-frame-assertions/PARKED.md`
   P2), and `premises.py` is untouched.
-`check: python -c "import pathlib; hits=[str(p) for p in sorted(pathlib.Path('src/deepreason').rglob('*.py')) if 'consultability' in p.read_text() and not str(p).startswith('src/deepreason/calculus/')]; assert hits == [], hits" && grep -q "def consultability_of" src/deepreason/calculus/standing.py && grep -q "consultability(harness, assertion_id, body.subject_ref)" src/deepreason/calculus/standing.py && python -c "import ast, pathlib; tree = ast.parse(pathlib.Path('src/deepreason/premises.py').read_text()); mods = {(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)}; bad = {m for m in mods if m.startswith(('deepreason.calculus.claims', 'deepreason.calculus.compiler', 'deepreason.calculus.operations'))}; assert not bad, sorted(bad)" && grep -q "def standing_attributions" src/deepreason/premises.py`
+`check: python -c "
+import ast, pathlib
+hits = []
+for path in sorted(pathlib.Path('src/deepreason').rglob('*.py')):
+    if str(path).startswith('src/deepreason/calculus/'):
+        continue
+    tree = ast.parse(path.read_text())
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and 'consultability' in ast.unparse(node.func):
+            hits.append(f'{path}:call')
+        if isinstance(node, ast.ImportFrom) and any('consultability' in a.name for a in node.names):
+            hits.append(f'{path}:import')
+assert hits == [], hits
+" && grep -q "def consultability_of" src/deepreason/calculus/standing.py && grep -q "consultability(harness, assertion_id, body.subject_ref)" src/deepreason/calculus/standing.py && python -c "import ast, pathlib; tree = ast.parse(pathlib.Path('src/deepreason/premises.py').read_text()); mods = {(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)}; bad = {m for m in mods if m.startswith(('deepreason.calculus.claims', 'deepreason.calculus.compiler', 'deepreason.calculus.operations'))}; assert not bad, sorted(bad)" && grep -q "def standing_attributions" src/deepreason/premises.py`
 - **Two-step registration leaves a gap, and the gap is the right trade.**
   `register_problem` then `ensure_problem_subject` can be interrupted between
   the writes. The result is a typed `problem_subject_missing` diagnostic and an

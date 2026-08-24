@@ -46,7 +46,7 @@ exactly one passes a non-literal name — `fail(str(item["check"]), ...)`, which
 forwards the `_controller_v3_history` findings — and every name that pass can
 forward is a string literal some `fail(` already minted (`school-route`,
 `workflow-call-pairing`, `workflow-decision`). Only `detail` is free text.
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());C=lambda nm:[n for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'id',None)==nm];lit=lambda n:bool(n.args) and isinstance(n.args[0],ast.Constant) and isinstance(n.args[0].value,str);f=C('fail');g=C('finding');assert len(f)==220,len(f);assert len([n for n in f if not lit(n)])==1,[ast.unparse(n) for n in f if not lit(n)];assert len(g)>15 and all(map(lit,g)),[ast.unparse(n) for n in g if not lit(n)];assert {n.args[0].value for n in g}<={n.args[0].value for n in f if lit(n)}"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/invariants.py').read_text());C=lambda nm:[n for n in ast.walk(T) if isinstance(n,ast.Call) and getattr(n.func,'id',None)==nm];lit=lambda n:bool(n.args) and isinstance(n.args[0],ast.Constant) and isinstance(n.args[0].value,str);f=C('fail');g=C('finding');assert len(f)==223,len(f);assert len([n for n in f if not lit(n)])==1,[ast.unparse(n) for n in f if not lit(n)];assert len(g)>15 and all(map(lit,g)),[ast.unparse(n) for n in g if not lit(n)];assert {n.args[0].value for n in g}<={n.args[0].value for n in f if lit(n)}"`
 
 `StateDiff` carries two different kinds of thing, and only one is replay input.
 `hv_set`, `reach_set`, `addr+` and `carry+` are read back and applied;

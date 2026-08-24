@@ -54,7 +54,7 @@ let either side grow silently past the number written here.
 |---|---|---|---|
 | Spawn scan | `scheduler/scheduler.py` | `scan_spawns(harness, config)` at the head of `step` | structural triggers are swept before selection, so a problem minted this cycle is eligible this cycle |
 | Spawn rule | `rules/spawn.py` | `scan_spawns`, deterministic problem ids | rescans are idempotent and free; the scheduler may call it every cycle without bookkeeping |
-| Problem selection | `scheduler/scheduler.py` | `_select_problem`, the `rank` tuple | age × solved-weight, then SEED, then premise-marked, then reflexive, then id — in both selection modes |
+| Problem selection | `scheduler/scheduler.py` | `_select_problem`, the `rank` tuple | age × solved-weight, then SEED, then promotion wound count, then premise-marked, then reflexive, then id — in both selection modes |
 | Premise layer (attention only) | `scheduler/scheduler.py`, `premises.py` | `retired_problems` filters the pool, `premise_orphaned` adds one rank term, `premise_work_invited` records the standing invitation | the scheduler consults the premise layer and moves no label; the INVITATION itself is computed inside `rules/crit.py`, because `_arg_crit`'s call is keyword-free by the invariant below |
 | Reflexive ration | `scheduler/scheduler.py` | `reflexive_problems` + `INTEGRATION_BUDGET_SHARE` | meta-work draws one capped pool and follows lineage, not just the trigger |
 | School allocation | `capture/schools.py` | `allocate` (single caller: the scheduler) | which schools compete on this problem; ownership by provenance with a cross-examination floor (`DR-CON-schools`) |
@@ -80,8 +80,15 @@ exactly once.
 
 The rank tuple is the seam's most expensive single line — see Traps. It is
 parsed here, not grepped, so a reordering cannot pass by coincidence, and the
-non-liveness branch carries the same two terms.
-`check: python -c 'import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._select_problem))); rank = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == "rank"][0]; ret = [n for n in ast.walk(rank) if isinstance(n, ast.Return)][0]; assert [ast.unparse(e) for e in ret.value.elts] == ["-(age * weight)", "p.provenance.trigger != SpawnTrigger.SEED", "p.id in orphaned", "p.id in reflexive", "p.id"], [ast.unparse(e) for e in ret.value.elts]; lam = [n for n in ast.walk(t) if isinstance(n, ast.Lambda) and isinstance(n.body, ast.Tuple)][0]; assert [ast.unparse(e) for e in lam.body.elts] == ["p.provenance.trigger != SpawnTrigger.SEED", "p.id in orphaned", "p.id in reflexive"]; src = inspect.getsource(S._select_problem); assert "ProvenanceRole.IMPORT" in src and "survivors_by_problem" in src' && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
+non-liveness branch carries the same terms.
+
+**Rung 7 added the wound-count term** (D-1 answered A: the incumbent's
+promotion problem stays on the frontier, ranked by wound count, attention
+only). It sits AFTER the SEED term in both keys, and that position is the
+guarantee rather than a detail: a background carrying forty wounds must not
+outrank the operator's own question. The pin below asserts the ORDER, so
+moving the term earlier fails here rather than in a live run's budget.
+`check: python -c 'import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._select_problem))); rank = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == "rank"][0]; ret = [n for n in ast.walk(rank) if isinstance(n, ast.Return)][0]; assert [ast.unparse(e) for e in ret.value.elts] == ["-(age * weight)", "p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive", "p.id"], [ast.unparse(e) for e in ret.value.elts]; lam = [n for n in ast.walk(t) if isinstance(n, ast.Lambda) and isinstance(n.body, ast.Tuple)][0]; assert [ast.unparse(e) for e in lam.body.elts] == ["p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive"]; src = inspect.getsource(S._select_problem); assert "ProvenanceRole.IMPORT" in src and "survivors_by_problem" in src' && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
 
 Whether a rule entry takes `adapter` is exactly whether the scheduler must
 ration provider spend for it. `run_browser_evidence` is the informative
