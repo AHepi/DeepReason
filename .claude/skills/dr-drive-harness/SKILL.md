@@ -24,6 +24,16 @@ authority; the sequence is:
     python -c "import deepreason" || pip install -e . --break-system-packages -q
     ls experiments/*/env 2>/dev/null          # gitignored credentials survive?
 
+**No live launch without a green soak on the launch config**: run
+`python -u scripts/cycle_soak.py --case <case>` before any ladder launch.
+It drives the managed path to cycle 8 on the launch configuration's own
+shape against the deterministic stub, and carries a named assertion for
+each of the four 2026-08-22 cycle-0-to-2 operational deaths. It has
+REPRODUCED one of them offline (the reservation-bound seam); the other
+three are asserted, not demonstrated — read that tranche's RESULTS.md
+before treating a green soak as full coverage
+(`experiments/2026-08-23-change-cycle-soak-instrument/`).
+
 Always `python -m pytest`, never bare `pytest` (PATH shim). Credentials
 are recreated from the operator's handover, never committed — `env`
 files are gitignored; check with `git check-ignore <path>` before
