@@ -36,6 +36,7 @@ from deepreason.calculus.nomination import nominate
 from deepreason.calculus.promotion import promotion_criteria_sweep
 from deepreason.measures.reach import reach_sweep
 from deepreason.premises import (
+    batch_translation_offers,
     independence_resolution_rate,
     premise_orphaned,
     premise_rent_sweep,
@@ -2310,6 +2311,20 @@ class Scheduler:
             inputs=[
                 "problem.independence-resolution-rate.v1",
                 f"{independence_resolution_rate(harness):.4f}",
+            ]
+        )
+        # §9.8's batch translation offers (v2 Rung 7). ATTENTION ONLY: the
+        # receipt says how many groups of open orphans share one cause and how
+        # large the largest is, so a reader can see the offer was made whether
+        # or not anyone took it up -- the anti-E28 shape the premise channel's
+        # other two receipts already use. It registers nothing and resolves
+        # nothing; materializing a group still means adjudicating each closure.
+        offers = batch_translation_offers(harness)
+        harness.record_measure(
+            inputs=[
+                "premise.batch-translation-offered.v1",
+                str(len(offers)),
+                str(max((o["size"] for o in offers), default=0)),
             ]
         )
 

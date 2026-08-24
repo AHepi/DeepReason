@@ -300,8 +300,15 @@ def test_the_fall_grade_dominates_the_revocation_grade(harness):
 
 def test_there_is_no_second_marking_mechanism(harness):
     """G2's ABSENCE, asserted structurally because no behavioural test can see
-    it. Exactly one function in `src/` assigns a cascade grade, and every
-    consumer of the marks reads that function rather than deriving its own."""
+    it. Exactly one function in `src/` NAMES a cascade grade constant, so a
+    second grading rule cannot exist without appearing here -- every consumer
+    of the marks reads that function's output rather than deriving its own.
+
+    `orphan_causes` is the near miss worth naming: it needs to know which cause
+    explains a mark, and an earlier draft compared grade strings to decide it.
+    It now expresses precedence on the LABEL and reads the grade from the mark,
+    so it cannot disagree with the function that assigned it.
+    """
     src = pathlib.Path("src/deepreason")
     assigning = []
     for path in sorted(src.rglob("*.py")):

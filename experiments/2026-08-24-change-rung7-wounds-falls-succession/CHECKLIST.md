@@ -102,6 +102,31 @@ restore; run GREEN. Both outputs pasted.
 DONE-CRITERION: the RED output, the restore, and the GREEN output all
 pasted in the step's record.
 
+**DONE 2026-08-24.** Six proofs, then the mutation.
+
+GREEN (shipped tree):
+
+
+
+MUTATION APPLIED —  gains a clause making a
+REFUTED subject remove its own standing, which is exactly what Prop 9.6 forbids:
+
+
+
+RED:
+
+
+
+RESTORED from the scratch copy (
+prints nothing), then GREEN again:
+
+
+
+The mutation kills three of the six: the end-to-end proposition, the in-frame
+wound render, and the many-wounds quantitative form. The three it does NOT kill
+are the ones a label-only test would have been satisfied by — which is why the
+file checks the grant, the render and the cascade as well as the label.
+
 ## Step 5 — batch translation offers (S3; R3) `[COMMIT]` GATE
 
 `premises.py::batch_translation_offers`, the
@@ -114,6 +139,22 @@ DONE-CRITERION: `python -m pytest tests/test_premise_batch_offers.py
 tests/test_signals.py -q` — 0 failed — plus the blast-radius and
 diff-budget JSON for the commit.
 
+**DONE 2026-08-24.**
+
+
+
+**One near miss, recorded rather than absorbed.** The first 
+compared GRADE STRINGS to decide which cause explains a mark — a second place
+where a grade was being decided, which
+ caught in the same session. It now
+expresses precedence on the LABEL, exactly as the marking function does, and
+READS the grade from the mark.
+
+Map moved in this commit:  (batch offers, the
+sixth signal, the new entry points).  needed no change
+— it pins no signal count — and 's own gate
+() is green.
+
 ## Step 6 — N3 at scale (S10; G4)
 
 `tests/test_cascade_n3_at_scale.py`: ONE fall over a thousand problems;
@@ -124,6 +165,17 @@ measured, not asserted: marking a thousand problems costs one derivation.
 
 DONE-CRITERION: `python -m pytest tests/test_cascade_n3_at_scale.py -q`
 — 0 failed, with the recorded wall time.
+
+**DONE 2026-08-24.**
+
+
+
+**Restructured mid-step for a real defect, not a style preference.** The first
+version had tests that depended on earlier tests' mutations of a module-scoped
+fixture. That passes serially and FAILS under , which scatters tests
+across workers by default — the gate's own configuration. The fixture now
+builds the final state and every test is a pure read, so the file is
+order-independent by construction. Verified under  above, not assumed.
 
 ## Step 7 — succession detection and the render exception (S4; R4)
 

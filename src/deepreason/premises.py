@@ -302,6 +302,85 @@ def open_orphans(harness) -> dict[str, str]:
     }
 
 
+def orphan_causes(harness) -> dict[str, tuple[str, str]]:
+    """problem id -> (cause id, grade), for every marked problem.
+
+    The CAUSE is what fell: the premise for the premise entry, the assertion for
+    the frame entry. Kept beside `premise_orphaned` rather than folded into it
+    because the mark is what the scheduler and the resolutions read, and a mark
+    that carried its cause would tempt a consumer to act on the cause instead of
+    on the problem -- which is how a mark becomes a verdict.
+
+    Grades agree with `premise_orphaned` by construction: both read the same
+    labels through the same two-line mapping, and the test that pins them
+    compares the two dictionaries key for key.
+    """
+    causes: dict[str, tuple[str, str]] = {}
+    marks = premise_orphaned(harness)
+    pairs: list[tuple[str, str]] = [
+        (problem_id, premise_id)
+        for _, problem_id, premise_id in standing_attributions(harness)
+    ]
+    from deepreason.calculus.standing import fallen_frames, framed_problem_ids
+
+    for fallen in fallen_frames(harness):
+        pairs += [
+            (problem_id, fallen.assertion_id)
+            for problem_id in framed_problem_ids(harness, fallen.scope)
+            if problem_id != fallen.problem_id
+        ]
+    for problem_id, cause_id in pairs:
+        if problem_id not in marks:
+            continue
+        # Precedence is expressed on the LABEL, exactly as the marking function
+        # expresses it, and the grade is READ from the mark rather than decided
+        # here. Two functions deciding a grade would be the second mechanism
+        # Prop 9.7's completion exists to forbid -- so this one names neither
+        # grade constant, and a reader can see that it cannot disagree.
+        fell = harness.state.status.get(cause_id) == Status.REFUTED
+        if problem_id in causes and not fell:
+            continue
+        causes[problem_id] = (cause_id, marks[problem_id])
+    return causes
+
+
+def batch_translation_offers(harness) -> tuple[dict, ...]:
+    """§9.8's batch offers: OPEN orphans grouped by what fell.
+
+    "The fall is one event; its thousandfold consequence is paid as the
+    frontier is touched, not all at once" -- and one translation into a better
+    vocabulary answers for a whole group at once, because the group shares a
+    cause. Grouping by cause is therefore not a convenience: a group with two
+    causes is two translations wearing one name.
+
+    ATTENTION ONLY (C5, A9). This registers nothing, spawns nothing, moves no
+    label and confers no protection. It offers; a critic who declines pays
+    nothing, and the three resolutions remain ordinary registered artifacts
+    authored one at a time. An offer is not a resolution and materializing a
+    group still means adjudicating each closure.
+
+    Sorted by cause id, then by problem id, so two readers of one root see the
+    same offers in the same order.
+    """
+    open_ = open_orphans(harness)
+    causes = orphan_causes(harness)
+    grouped: dict[tuple[str, str], list[str]] = {}
+    for problem_id in open_:
+        cause = causes.get(problem_id)
+        if cause is None:
+            continue
+        grouped.setdefault(cause, []).append(problem_id)
+    return tuple(
+        {
+            "cause": cause_id,
+            "grade": grade,
+            "problems": sorted(problem_ids),
+            "size": len(problem_ids),
+        }
+        for (cause_id, grade), problem_ids in sorted(grouped.items())
+    )
+
+
 def retired_problems(harness) -> set[str]:
     """Problems whose consulted resolution is `retire`.
 

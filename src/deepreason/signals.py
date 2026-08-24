@@ -483,6 +483,21 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
     # mechanism nobody triggers is a mechanism that never runs (ERRATA E28),
     # and a receipt is the only way that is visible from the record alone.
     SignalDeclaration(
+        name="premise.batch-translation-offered.v1",
+        unit="count",
+        semantics="how many groups of OPEN orphan problems currently share one "
+                  "cause, so that one translation into a better vocabulary "
+                  "could answer for a whole group (inputs: [signal, group "
+                  "count, largest group size]). §9.8's batch offer, and "
+                  "attention only: it offers, it does not resolve. No "
+                  "resolution is registered by it, no problem is retired by "
+                  "it, and a critic who ignores every offer pays nothing. It "
+                  "says nothing about whether any of the grouped problems "
+                  "should be retired, translated, or found independent — those "
+                  "remain three adjudicated closures authored one at a time",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
         name="premise.work-invited.v1",
         unit="event",
         semantics="an invitation to name what the problem itself presupposes "

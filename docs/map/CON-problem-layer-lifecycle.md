@@ -161,21 +161,58 @@ actually ran.
 
 `check: python -m pytest tests/test_premise_channel_loop.py -q`
 
+## Batch translation offers (§9.8, Rung 7)
+
+"The fall is one event; its thousandfold consequence is paid as the frontier is
+touched, not all at once." One translation into a better vocabulary answers for
+a whole GROUP, because the group shares a cause — so `batch_translation_offers`
+groups OPEN orphans by what fell: the premise for the premise entry, the
+assertion for the frame entry. A group with two causes would be two
+translations wearing one name, which is why the grouping key is the cause and
+not the grade.
+
+ATTENTION ONLY (C5, A9). An offer registers nothing, spawns nothing, retires
+nothing and moves no label; a critic who ignores every offer pays nothing, and
+materializing a group still means adjudicating each closure one at a time. The
+per-cycle receipt exists for the anti-E28 reason the channel's other two
+receipts do: a mechanism nobody triggers is a mechanism that never runs, and a
+receipt is the only way that is visible from the record alone.
+
+`orphan_causes` is the companion, and the near miss inside it is worth naming:
+it must know which cause explains a mark, and an earlier draft compared GRADE
+STRINGS to decide it — a second place where a grade was being decided. It now
+expresses precedence on the LABEL, exactly as the marking function does, and
+READS the grade from the mark, so the two cannot disagree.
+
+`check: python -m pytest tests/test_premise_batch_offers.py -q`
+`check: python -c "
+import ast, inspect
+from deepreason.premises import batch_translation_offers, orphan_causes
+for fn in (batch_translation_offers, orphan_causes):
+    src = inspect.getsource(fn)
+    assert 'PREMISE_REFUTED' not in src and 'PREMISE_UNACCREDITED' not in src, fn.__name__
+    calls = [ast.unparse(n.func) for n in ast.walk(ast.parse(src)) if isinstance(n, ast.Call)]
+    assert not [c for c in calls if c.split('.')[-1].startswith(('create_', 'register_', 'record_', 'commit_', 'append_'))], (fn.__name__, calls)
+"`
+
 ## The signals
 
 Three detection signals are declared under the signal contract
 (`DR-INV-signal-contract`, `DR-REC-add-signal`) and emitted once per cycle: `problem.thrash.v1`,
 `criticism.attack-target-entropy.v1`, `problem.independence-resolution-rate.v1`.
 Two process receipts ride beside them: `premise.work-invited.v1` and
-`premise.attribution-filed.v1`. All five price attention and none may reach a
-label.
+`premise.attribution-filed.v1`. Rung 7 adds a third,
+`premise.batch-translation-offered.v1`. All six price attention and none may
+reach a label.
 
-`check: python -c "from deepreason.signals import declaration; names=['problem.thrash.v1','criticism.attack-target-entropy.v1','problem.independence-resolution-rate.v1','premise.work-invited.v1','premise.attribution-filed.v1']; ds=[declaration(n) for n in names]; assert all(d is not None and d.unit != 'unspecified' and d.staleness != 'unspecified' for d in ds)"`
+`check: python -c "from deepreason.signals import declaration; names=['problem.thrash.v1','criticism.attack-target-entropy.v1','problem.independence-resolution-rate.v1','premise.work-invited.v1','premise.attribution-filed.v1','premise.batch-translation-offered.v1']; ds=[declaration(n) for n in names]; assert all(d is not None and d.unit != 'unspecified' and d.staleness != 'unspecified' for d in ds)"`
 
 ## Entry points
 
-`standing_attributions`, `premise_orphaned` (problem → grade), `open_orphans`
-(marked and unresolved — the work), `standing_resolutions`, `retired_problems`,
+`standing_attributions`, `premise_orphaned` (problem → grade, BOTH entries),
+`open_orphans` (marked and unresolved — the work), `orphan_causes` (problem →
+what fell), `batch_translation_offers` (§9.8's groups), `standing_resolutions`,
+`retired_problems`,
 `premise_work_invited` (the producer rule), `file_premise` (registers X and ρ),
 `premise_rent_sweep` (the demarcation adjudication),
 `independence_resolution_rate` (the over-binding diagnostic).
