@@ -79,6 +79,11 @@ two-exit claim): **3 failed**. Restored: `27 passed` at that step.
 **N2 — the crisis section made droppable.** **2 failed** (budget survival
 AND terminal persistence). Restored: `22 passed` at that step.
 
+**Two declarations by one candidate must UNION, not overwrite.** Reverting
+`declared_departures` to the assignment it originally used: **1 failed**.
+Restored: `36 passed`. This one is a defect this tranche shipped and then
+found by review — see §8 item 7.
+
 **Six more**, listed in CHECKLIST.md's per-step proof: the slice stops
 rendering attackers; the departure directive dropped; attackers rendered in
 `state.att` order against a shuffled state; a `school:` slot emitted;

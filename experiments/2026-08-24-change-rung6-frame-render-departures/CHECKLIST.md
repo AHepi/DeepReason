@@ -292,6 +292,19 @@ wheel smoke passed: isolated V6-only contents, clean imports, exact entry
 points, module parity, MCP registration, and exact MCP schemas
 ```
 
+**Post-step-15 review** — a defect in this tranche's own code, found by
+re-reading the diff rather than by a failing gate.
+`declared_departures` keyed a dict by departing artifact and ASSIGNED, so
+two declarations by one candidate against one subject overwrote each other
+in `state.artifacts` iteration order. Because the body is content-addressed,
+breaking with a second commitment is necessarily a SECOND artifact — so the
+common case (a candidate that departs on two counts) silently un-declared
+one of them and handed the hidden-premise criticism back a target the
+candidate had already given up. Fixed to UNION, pinned by
+`test_a_second_declaration_adds_to_the_first_rather_than_replacing_it`, and
+mutation-proven: reverting to assignment → **1 failed**; restored →
+`36 passed`.
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said

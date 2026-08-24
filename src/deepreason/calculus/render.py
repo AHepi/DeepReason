@@ -178,8 +178,8 @@ def declared_departures(
     exists to abolish. `departure_declaration_wf` is what reports the
     mis-registration, on the record, where a reader can attack it.
     """
-    found: dict[str, tuple[str, ...]] = {}
-    for aid, artifact in harness.state.artifacts.items():
+    found: dict[str, set[str]] = {}
+    for artifact in harness.state.artifacts.values():
         if DEPARTURE_DECLARATION_COMMITMENT.id not in artifact.interface.commitments:
             continue
         try:
@@ -190,8 +190,17 @@ def declared_departures(
             continue
         if body.subject_ref != subject_id:
             continue
-        found[body.departing_ref] = tuple(body.broken_ids)
-    return tuple(sorted(found.items()))
+        # UNION, not assignment. One artifact may file several declarations
+        # against one subject -- the body is content-addressed, so breaking
+        # with a second commitment is necessarily a second artifact. Assigning
+        # here made the last one in iteration order win and silently
+        # UN-DECLARED the first, which would hand the hidden-premise criticism
+        # back a target the candidate had already given up. Found by review
+        # inside this tranche.
+        found.setdefault(body.departing_ref, set()).update(body.broken_ids)
+    return tuple(
+        (departing, tuple(sorted(broken))) for departing, broken in sorted(found.items())
+    )
 
 
 def held_frame_obligations(

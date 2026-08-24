@@ -1135,3 +1135,47 @@ def test_the_scope_dsl_cannot_name_a_departure():
     assert "def compile_scope" in source           # positive anchor
     for name in ("departure", "Departure", "render"):
         assert name not in source, name
+
+
+def test_a_second_declaration_adds_to_the_first_rather_than_replacing_it(harness):
+    """Two departures from one candidate must UNION, not overwrite.
+
+    The body is content-addressed, so breaking with a second commitment is
+    necessarily a second artifact. The first implementation keyed a dict by
+    departing artifact and ASSIGNED, so whichever declaration came last in
+    iteration order won and silently un-declared the other — handing the
+    hidden-premise criticism back a target the candidate had already given
+    up. Found by review inside this tranche, not by a failing gate.
+    """
+    harness.register_commitment(SUBJECT_COMMITMENT)
+    second = Commitment(id="k:the-harbour-basin-is-rigid", eval="prose")
+    harness.register_commitment(second)
+    subject = _art(
+        harness, SUBJECT_TEXT,
+        interface=Interface(commitments=[SUBJECT_COMMITMENT.id, second.id], refs=[]),
+    )
+    case = _art(harness, "reach record: three lineages cite this subject")
+    promotion = operations.ensure_promotion_problem(
+        harness, subject.id, "should the lunar theory frame this scope"
+    )
+    operations.file_frame_assertion(
+        harness, problem=promotion, subject_ref=subject.id, scope=SCOPE,
+        reach_case_refs=(case.id,), departure_protocol="declare the ids",
+    )
+    problem = _problem(harness, "p-tides", "predict the spring tides here")
+    candidate = _art(harness, "c: a solar-lunar composite over a compliant basin")
+
+    for broken, why in (
+        (SUBJECT_COMMITMENT.id, "the solar term is not negligible"),
+        (second.id, "the basin flexes measurably at spring tide"),
+    ):
+        operations.file_departure_declaration(
+            harness, problem=problem, subject_ref=subject.id,
+            departing_ref=candidate.id, broken_ids=[broken], rationale=why,
+        )
+
+    declared = dict(declared_departures(harness, subject.id))
+    assert set(declared[candidate.id]) == {SUBJECT_COMMITMENT.id, second.id}
+    assert held_frame_obligations(harness, subject.id, candidate.id) == ()
+    crisis = render_frame_crisis_context(harness, "p-tides")
+    assert SUBJECT_COMMITMENT.id in crisis and second.id in crisis
