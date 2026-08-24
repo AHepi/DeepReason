@@ -1,0 +1,10 @@
+```json
+{
+  "repair.patch.v1": {
+    "patch": {
+      "op": "remove",
+      "path": "/scratch_proposal/unresolved_questions/0/related_refs"
+    }
+  }
+}
+```
