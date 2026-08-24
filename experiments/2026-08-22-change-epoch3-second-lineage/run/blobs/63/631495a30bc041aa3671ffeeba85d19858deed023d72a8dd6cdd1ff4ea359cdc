@@ -1,0 +1,47 @@
+```json
+{
+  "candidate": {
+    "claim": "The night-time UHI is dictated by the urban sky-view factor: deep street canyons trap longwave radiation, slowing nocturnal cooling, and cross-city intensity scales with built density and building height.",
+    "mechanism": "On clear, calm nights, cooling occurs mainly via longwave radiation to the sky. In dense cities, the sky view factor is low—tall buildings and narrow streets block the view of the cold sky—so outgoing longwave radiation is intercepted and re-emitted by surrounding walls and roads. This radiation trapping slows the urban cooling rate. Rural areas, with an unobstructed hemispheric view, cool rapidly. Cities with greater built density and taller buildings exhibit a more pronounced nocturnal heat island because their reduced sky view factor further suppresses radiative heat loss.",
+    "counterconditions": [
+      "Cloudy or foggy nights increase the effective sky view factor across all surfaces, equalizing rural and urban longwave losses and eliminating the gap.",
+      "High wind speeds mix the urban canyon air with cooler rural air, overriding the radiation-trapping effect.",
+      "A sprawling, low-rise city with a high sky view factor would not exhibit this mechanism and would cool much like the countryside."
+    ],
+    "typicality": 0.7,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001"
+      ],
+      "shared_structure": [
+        "A radiating surface exchanges energy with a cold sink; in both cases the sink is the night sky.",
+        "Obstructing the view to the cold sink traps energy and slows cooling.",
+        "The depth or density of the obstructing structure scales with the degree of trapping."
+      ],
+      "disanalogies": [
+        "A thermos is a closed, near-vacuum system preventing conduction and convection, whereas a street canyon is open to the atmosphere and dominated by radiative exchange.",
+        "The thermos interior is heated actively; the urban fabric stores passive solar energy during the day."
+      ],
+      "transfer_claims": [
+        "Just as a thermos with a narrower neck loses heat more slowly, a street canyon with a smaller sky view factor cools more slowly.",
+        "The magnitude of the night-time UHI should scale with the geometric obstruction of the sky, analogous to how thermos performance scales with neck size."
+      ],
+      "overturn_conditions": [
+        "Empirical studies show sky view factor does not correlate with nocturnal UHI intensity after controlling for thermal mass.",
+        "It is demonstrated that convective heat loss, not radiative loss, dominates nocturnal cooling in dense urban areas.",
+        "The rural environment is found to have a comparable sky view obstruction due to tree canopy."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

@@ -1,0 +1,37 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@de03e75a279051fede21045e: program:reasoning_observation_pending
+- reason-counter@98a81ab4d483f9f5a8967d86: program:reasoning_observation_pending
+- reason-counter@921df3cc3e41030a980b97a9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The nocturnal UHI is governed by the suppression of evapotranspiration and latent heat loss. Impervious urban surfaces shed water rapidly, denying the surface the latent heat sink that vegetated countryside relies on. After sunset, the rural landscape continues to cool via evapotranspiration, while the dry city cannot. The single best cross-city predictor is the fraction of green space / vegetation cover: cities with less vegetation and more impervious area exhibit a more pronounced night-time UHI because they lack the latent heat sink that would otherwise accelerate cooling.","counterconditions":[{"case":"If the rural area is in a hyper-arid climate with no soil moisture, evapotranspiration is negligible for both city and countryside, and the mechanism cannot explain the gap.","checker_spec":null,"eval":"observation"},{"case":"If an urban area has extensive irrigation and green space, its latent heat loss may approach that of the countryside, neutralizing the effect.","checker_spec":null,"eval":"observation"},{"case":"If dewfall or advection dominates the nocturnal energy balance, latent heat suppression becomes a secondary term.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In the countryside, soil moisture and vegetation sustain evapotranspiration, which consumes energy as latent heat and cools the near-surface air. In the city, impervious surfaces prevent infiltration and rapidly shed water, so the latent heat sink is largely absent. On clear, calm nights, rural evapotranspiration continues to draw down temperature, while the dry urban surface must cool by sensible heat release and longwave radiation alone\u2014a slower process. The cross-city variation scales with vegetation / green-space cover: cities with less irrigation and more impervious surface lose the evaporative cooling pathway more completely, producing a larger nocturnal gap.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, uhi-energy-balance@v1, uhi-nocturnal-release@v1, uhi-cross-city-modulator@v1, reason-counter@de03e75a279051fede21045e, reason-counter@98a81ab4d483f9f5a8967d86, reason-counter@921df3cc3e41030a980b97a9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

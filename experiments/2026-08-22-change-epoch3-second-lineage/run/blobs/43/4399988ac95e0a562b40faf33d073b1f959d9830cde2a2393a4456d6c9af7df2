@@ -1,0 +1,64 @@
+```json
+{
+  "candidate": {
+    "claim": "The night-time UHI is primarily a nocturnal longwave radiation budget effect governed by sky view factor (SVF): street canyons trap outgoing longwave radiation via inter-emission between building facets, so the cross-city night-time gap is largest where dense, tall building geometry produces the smallest SVF, whereas rural surfaces cool rapidly by unobstructed radiative loss to the sky.",
+    "mechanism": "After sunset the lower atmosphere decouples, leaving a shallow stable boundary layer where the surface energy balance collapses to net longwave loss and stored-heat release. In open countryside, a high sky view factor gives rapid direct radiative cooling to the cold sky. In cities, low sky view factor within street canyons means building facets emit longwave radiation that is partly intercepted by opposing facets rather than the sky, and that intercepted energy is re-emitted and re-absorbed in a cascade, so the effective radiative sink temperature seen by street-level air is much warmer than the sky. That mechanism yields a persistent nocturnal warm excess, and its magnitude scales with the inverse of sky view factor (i.e., denser/taller built geometry means stronger trapping and a larger night-time UHI gap), largely independent of daytime heat-storage differences.",
+    "counterconditions": [
+      "If dense forest canopies or other non-urban obstacles produce similarly low SVF, the effect is not uniquely urban and should not be attributed to city canyon geometry.",
+      "If a city has very low SVF yet does not exhibit a night-time warm excess, the effect is insufficient and must be reduced to a storage-release contribution.",
+      "If a city with very open geometry and high SVF still shows a large night-time UHI gap, the effect is likely dominated by anthropogenic heat, evapotranspiration deficits, or thermal mass, not radiation trapping.",
+      "If the effect is found to depend on wind speed rather than geometric obstruction, it is a ventilation deficit, not a longwave radiative trapping effect.",
+      "If the effect scales with city population rather than building-height/density, the effect is better attributed to anthropogenic heat output.",
+      "If the effect reverses (city cooler) under cloudless nights with strong wind, that supports the claim, not refutes it."
+    ],
+    "typicality": 0.7,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    },
+    "checker_specs": [],
+    "evidence_refs": [],
+    "analogy": {
+      "source_memory_refs": [
+        "NEIGH_30be1190",
+        "NEIGH_6ca2d62f",
+        "NEIGH_8f06770a"
+      ],
+      "shared_structure": [
+        "Both the city street canyon and a radiatively shielded cavity have surfaces exchanging longwave radiation with each other rather than the cold sky.",
+        "Both the radiatively shielded cavity and the urban canopy layer have an effective radiative sink temperature elevated above the true sky temperature.",
+        "Both the radiatively shielded cavity and the city canyon trap internal air, decoupled from the free atmosphere above, so surface cooling rates are reduced.",
+        "Cooling rate within both cavities scales with the inverse of openness to the sky (SVF)."
+      ],
+      "disanalogies": [
+        "The city has anthropogenic heat sources and a large daytime heat-storage reservoir; a passively shielded rural cavity does not.",
+        "The city has a much larger thermal mass and lower albedo than typical cavity walls, contributing extra sensible heat release.",
+        "The city has impervious surfaces that reduce evapotranspiration and latent cooling, unlike the hypothetical cavity.",
+        "Wind and ventilation in a city canyon are governed by complex topological interactions, not by a simple radiative shield.",
+        "A radiatively shielded cavity does not produce internal heat via combustion or metabolism, as a city does."
+      ],
+      "transfer_claims": [
+        "If a cavity's effective longwave sink temperature rises as its sky view factor falls, then a city's nocturnal cooling rate will decrease as street-canyon SVF decreases.",
+        "If radiative trapping dominates cooling in a shielded cavity, then the cross-city night-time UHI gap will scale inversely with city-averaged SVF.",
+        "If an obstructed cavity remains warmer than an exposed surface under the same sky, then urban air will remain warmer than rural air on clear, calm nights.",
+        "If radiative trapping is the dominant effect, then adding tall, dense buildings to a city will increase the night-time UHI gap more than adding low, sparse buildings of the same footprint."
+      ],
+      "overturn_conditions": [
+        "If night-time UHI magnitude is found to be uncorrelated with sky view factor across cities after normalizing for thermal mass and anthropogenic heat, the radiative-trapping hypothesis fails.",
+        "If cities with high SVF but large thermal mass still exhibit large night-time UHI, then thermal mass release, not SVF, is the dominant mechanism.",
+        "If the night-time UHI is found to be driven by evapotranspiration differences rather than radiative flux divergence, the analogy's transferred claim fails.",
+        "If the UHI gap is found to scale with population density rather than geometric density, the analogy is overturned in favour of an anthropogenic-heat mechanism."
+      ],
+      "adopted_commitment_refs": [
+        "commitment:uhi-energy-balance@v1",
+        "commitment:uhi-nocturnal-release@v1",
+        "commitment:uhi-cross-city-modulator@v1"
+      ]
+    }
+  }
+}
+```

@@ -1,0 +1,22 @@
+```json
+{
+  "candidate": {
+    "claim": "The night-time UHI is dominated by stored sensible heat: urban masonry and asphalt absorb daytime solar radiation and, having high thermal mass and heat capacity, release that stored energy as longwave radiation after sunset, slowing the urban cooling rate relative to the countryside. The cross-city magnitude of this gap scales with built density and impervious surface fraction, as denser, more massive urban fabrics retain more heat per unit area.",
+    "mechanism": "During the day, urban materials with high thermal mass and heat capacity (e.g., concrete, asphalt, masonry) absorb and store sensible heat from incoming solar radiation. After sunset, when the net radiation balance turns negative, these materials release the stored heat as longwave radiation and sensible heat into the urban boundary layer. Because rural vegetation and soils often contain moisture that facilitates latent heat loss (evapotranspiration) and cool more rapidly, the urban cooling rate is comparatively slower, maintaining a higher nocturnal temperature. The magnitude of this effect is more pronounced in cities with greater built density and a higher fraction of impervious surfaces, as they represent a larger volumetric heat reservoir.",
+    "counterconditions": [
+      "If rural dry soils possess comparable thermal mass and lack moisture for evapotranspiration, the differential cooling rate and resulting UHI gap would be minimized.",
+      "If wind speeds are sufficiently high, turbulent mixing would homogenize the urban and rural boundary layers, dissipating the stored heat differential.",
+      "If anthropogenic heat emissions dominate the nocturnal energy balance, the stored sensible heat mechanism would be a secondary contributor.",
+      "If a city is built primarily of low thermal mass materials (e.g., wood, light metal), the daytime storage and nocturnal release of heat would be significantly reduced."
+    ],
+    "typicality": 0.85,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  }
+}
+```

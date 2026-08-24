@@ -1,0 +1,7 @@
+```json
+{
+  "pointer": "/cases/0/premise_evidence/1/block",
+  "operation": "replace",
+  "value": "000000000000target001"
+}
+```

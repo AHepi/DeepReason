@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The 'refuted if' test is self-defeating: it states that UHI vanishing under high cloud cover would 'paradoxically support the shared radiative mechanism but refute the independence of the storage mechanism.' This concedes the relation still holds—both endpoints reduce to radiative cooling—so it does not specify what would refute the relation as stated. A predicate that, when triggered, confirms the relation cannot serve as a genuine refutation condition.",
+      "premise": "A substantive relation must name a condition under which the claimed relation between SRC_003 and SRC_005 fails; a 'refuted if' clause whose triggered outcome still supports the relation does not refute it.",
+      "premise_evidence": [
+        {
+          "block": "2a45b7988522",
+          "quote": "This shared mechanism is REFUTED IF observational evidence shows that on nights with very low wind and high cloud cover, the UHI vanishes—this would imply that suppressing radiative cooling (via clouds) eliminates the differential, which would paradoxically support the shared radiative mechanism but refute the independence of the storage mechanism"
+        }
+      ]
+    }
+  ]
+}
+```

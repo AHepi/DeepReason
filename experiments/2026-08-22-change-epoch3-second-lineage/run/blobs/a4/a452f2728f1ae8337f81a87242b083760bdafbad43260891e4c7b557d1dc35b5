@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal UHI and its cross-city variance are governed by the geometry of the urban canyon: deep, dense building arrays shrink the sky view factor, trapping longwave radiation and slowing radiative cooling, so cities with greater built density and taller street walls retain more daytime stored heat after sunset and cool more slowly.",
+    "mechanism": "At night the surface loses heat by longwave emission to the sky. In dense, tall building arrays the effective sky view factor is small, so much of the emitted longwave is intercepted by opposing walls and re-radiated back, reducing net radiative loss. The same masonry and asphalt that has high thermal mass and heat capacity also retains daytime sensible heat, and the canyon suppresses wind speed, further weakening turbulent sensible and latent heat removal. Thus a larger, denser city with deeper canyons and weaker ventilation releases stored heat more slowly, producing a larger and more persistent nocturnal warm anomaly relative to open countryside.",
+    "counterconditions": [
+      "If sky view factor is not materially reduced by building geometry, canyon trapping cannot dominate nocturnal cooling differences.",
+      "If wind speed is strong enough to flush canyons and homogenize air, the radiative-trapping effect is overwhelmed by advective cooling.",
+      "If rural surfaces have comparable thermal mass and low sky view (e.g. forested or snow-covered), the urban-canyon contrast diminishes.",
+      "If anthropogenic heat release or latent-heat deficit dominates the energy balance, geometry alone cannot explain the largest nocturnal gaps."
+    ],
+    "typicality": 0.55,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003",
+        "SRC_004"
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003",
+      "SRC_004"
+    ]
+  }
+}
+```

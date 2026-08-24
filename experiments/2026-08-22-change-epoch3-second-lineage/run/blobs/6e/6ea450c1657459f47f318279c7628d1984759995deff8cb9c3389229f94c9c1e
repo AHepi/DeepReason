@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "The target correctly identifies the delayed release of sensible heat from high thermal mass materials (asphalt, concrete) as the primary mechanism for nocturnal UHI, and accurately attributes the cross-city variation in nighttime intensity to street canyon geometry and reduced sky view factor, which aligns with the problem's requirements.", "counterexample": null, "premise": null, "premise_evidence": null}]}
+```

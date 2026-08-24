@@ -1,0 +1,34 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@c14f42e6c661db253fa340e9: program:reasoning_observation_pending
+- reason-counter@275014c9cd026edcb7077ed7: program:reasoning_observation_pending
+- reason-counter@b72ad8cbfc5455d78f09988a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A thermos is a closed, near-vacuum system preventing conduction and convection, whereas a street canyon is open to the atmosphere and dominated by radiative exchange.","The thermos interior is heated actively; the urban fabric stores passive solar energy during the day."],"overturn_conditions":["Empirical studies show sky view factor does not correlate with nocturnal UHI intensity after controlling for thermal mass.","It is demonstrated that convective heat loss, not radiative loss, dominates nocturnal cooling in dense urban areas.","The rural environment is found to have a comparable sky view obstruction due to tree canopy."],"shared_structure":["A radiating surface exchanges energy with a cold sink; in both cases the sink is the night sky.","Obstructing the view to the cold sink traps energy and slows cooling.","The depth or density of the obstructing structure scales with the degree of trapping."],"source_memory_refs":["SRC_001"],"transfer_claims":["Just as a thermos with a narrower neck loses heat more slowly, a street canyon with a smaller sky view factor cools more slowly.","The magnitude of the night-time UHI should scale with the geometric obstruction of the sky, analogous to how thermos performance scales with neck size."]},"claim":"The night-time UHI is dictated by the urban sky-view factor: deep street canyons trap longwave radiation, slowing nocturnal cooling, and cross-city intensity scales with built density and building height.","counterconditions":[{"case":"Cloudy or foggy nights increase the effective sky view factor across all surfaces, equalizing rural and urban longwave losses and eliminating the gap.","checker_spec":null,"eval":"observation"},{"case":"High wind speeds mix the urban canyon air with cooler rural air, overriding the radiation-trapping effect.","checker_spec":null,"eval":"observation"},{"case":"A sprawling, low-rise city with a high sky view factor would not exhibit this mechanism and would cool much like the countryside.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"On clear, calm nights, cooling occurs mainly via longwave radiation to the sky. In dense cities, the sky view factor is low\u2014tall buildings and narrow streets block the view of the cold sky\u2014so outgoing longwave radiation is intercepted and re-emitted by surrounding walls and roads. This radiation trapping slows the urban cooling rate. Rural areas, with an unobstructed hemisph

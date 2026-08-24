@@ -1,0 +1,26 @@
+```json
+{
+  "candidate": {
+    "claim": "The night-time UHI and its inter-city variance are primarily governed by the sky view factor (SVF): dense urban geometry traps longwave radiation in street canyons, slowing nocturnal cooling, and the effect is more pronounced in cities with deeper, denser building canyons.",
+    "mechanism": "Under clear, calm night conditions, rural terrain has a high SVF and efficiently radiates absorbed daytime heat to the cold sky as outgoing longwave radiation. In cities, tall buildings create low-SVF street canyons that obstruct the view of the sky, trapping outgoing longwave radiation and reflecting it between building facades. This radiative trap drastically slows the nocturnal cooling rate of urban thermal mass (asphalt, masonry), maintaining higher near-surface air temperatures. The magnitude of this night-time gap scales with built density and building height: cities with lower average SVF (deeper, denser canyons) exhibit a larger UHI effect because their radiative cooling efficiency is more severely impaired compared to flat rural surfaces.",
+    "counterconditions": [
+      "If the night is cloudy, longwave radiation is absorbed and re-emitted by the cloud base regardless of surface geometry, neutralizing the urban-rural SVF difference.",
+      "If wind speeds are high, turbulent sensible heat mixing dominates over radiative transfer, mechanically flushing the street canyon and overriding the SVF radiative trap.",
+      "If a city comprises predominantly low-rise, sprawling buildings with a high SVF, the nocturnal radiative trap mechanism is negligible."
+    ],
+    "typicality": 0.85,
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

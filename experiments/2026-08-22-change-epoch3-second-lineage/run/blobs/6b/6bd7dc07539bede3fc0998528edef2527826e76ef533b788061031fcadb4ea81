@@ -1,0 +1,6 @@
+{
+  "patch": {
+    "pointer": "/cases/0/preise",
+    "op": "remove"
+  }
+}

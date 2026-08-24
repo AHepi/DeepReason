@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "The target proposes a substantive abstraction relation: SRC_004 abstracts away from the specific material-level thermal physics of SRC_003 and SRC_002, reducing the nocturnal UHI to the urban canyon sky view factor (SVF). It names the relation kind (abstraction/reduction), specifies what is abstracted away (material heat capacity, vegetation cover) and what it is reduced to (a single geometric parameter, SVF), and states a concrete refutation condition: two cities with identical SVF distributions but materially different nocturnal UHI magnitudes due to construction materials or irrigation. This satisfies the problem's requirement for a substantive relation with a named kind and a stated refutation criterion.",
+      "premise": "The problem requires a substantive relation naming its kind and stating what it is refuted if.",
+      "premise_evidence": [
+        {
+          "block": "2a45b7988522",
+          "quote": "SRC_004 abstracts away from the specific material-level thermal-physics of SRC_003 and SRC_002, reducing the nocturnal UHI to a single geometric parameter: the urban canyon sky view factor (SVF)."
+        },
+        {
+          "block": "2a45b7988522",
+          "quote": "This abstraction is REFUTED IF two cities with identical SVF distributions exhibit materially different nocturnal UHI magnitudes due to large differences in construction materials...or in irrigation extent, proving that SVF alone is an insufficient descriptor..."
+        }
+      ]
+    }
+  ]
+}
+```
