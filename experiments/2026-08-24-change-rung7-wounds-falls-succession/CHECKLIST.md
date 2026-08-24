@@ -23,6 +23,13 @@ Add to `src/deepreason/calculus/standing.py`: `FallenFrame`,
 DONE-CRITERION:
 `python -c "from deepreason.calculus import fallen_frames, framed_problem_ids, unseparated_fallen_frames; import inspect; from deepreason.calculus.standing import consulted, StandingGrant; assert str(inspect.signature(consulted)) == '(harness)'; print('ok')"`
 
+**DONE 2026-08-24.**
+
+```
+DONE-CRITERION step 1: consulted() and StandingGrant unchanged; four new names import
+33 passed in 39.08s        # tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py
+```
+
 ## Step 2 — tests for the frame entry, RED first (S1, S2; G2, G3)
 
 Write `tests/test_calculus_cascade_frame_entry.py`. It must be RED
@@ -37,6 +44,17 @@ DONE-CRITERION: the RED run pasted (`python -m pytest
 tests/test_calculus_cascade_frame_entry.py -q` — failures naming the
 missing frame entry, not import errors).
 
+**DONE 2026-08-24 — RED, as designed.** Four failures, every one naming the
+missing frame entry; no import error, no collection error.
+
+```
+FAILED tests/test_calculus_cascade_frame_entry.py::test_a_fall_marks_every_problem_the_frame_carried
+FAILED tests/test_calculus_cascade_frame_entry.py::test_a_revocation_marks_with_the_weaker_grade
+FAILED tests/test_calculus_cascade_frame_entry.py::test_the_frame_entry_is_read_not_reimplemented
+FAILED tests/test_calculus_cascade_frame_entry.py::test_the_mark_is_reversible_by_the_same_computed_predicate
+4 failed, 9 passed in 3.49s
+```
+
 ## Step 3 — ONE marking function, both entries (S2; R2, G2, G3)
 
 Rewrite `premises.py::premise_orphaned` as: collect `(problem_id,
@@ -48,6 +66,29 @@ commit, with the narrowing's reason written down.
 DONE-CRITERION: `python -m pytest
 tests/test_calculus_cascade_frame_entry.py tests/test_premise_channel.py
 tests/test_premise_channel_loop.py -q` — 0 failed.
+
+**DONE 2026-08-24.** GREEN, and the ring with it.
+
+```
+tests/test_calculus_cascade_frame_entry.py ..... 14 passed in 4.01s
+tests/test_premise_channel.py tests/test_premise_channel_loop.py
+tests/test_calculus_cascade_frame_entry.py ..... 49 passed in 7.45s
+ring (premises + standing + frame assertions + render + separation + closure):
+129 passed in 44.50s
+diff budget: {"areas": {"src": 191}, "ceiling": 700, "verdict": "WITHIN"}
+```
+
+**One design point the tests forced, recorded rather than absorbed.** σ can
+admit the assertion's OWN promotion problem, because the two are about the same
+subject — and marking it would deprioritize in scheduling the one problem D-1
+requires to stay on the frontier when a frame falls. The entry excludes exactly
+that problem, and `test_a_fallen_frame_does_not_orphan_its_own_promotion_problem`
+proves σ admits it, so the exclusion is what does the work rather than the
+scope.
+
+Map moved in this commit: `DR-CON-problem-layer-lifecycle` (the second entry,
+one marking function, the three conditions), `DR-SUB-calculus` (the NARROWED
+`premises.py` trap check, with the narrowing's reason).
 
 ## Step 4 — Prop 9.6 end to end, with its mutation proof (S10; G1)
 

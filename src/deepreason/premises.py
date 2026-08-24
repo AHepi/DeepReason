@@ -218,8 +218,59 @@ def standing_resolutions(harness) -> dict[str, dict]:
     return out
 
 
+def _fallen_frame_entries(harness):
+    """The SECOND entry condition (v2 Rung 7): (problem id, label) for every
+    problem a fallen frame carried.
+
+    Reads `calculus.standing.fallen_frames`; it does not re-derive which frames
+    fell. Two readings of "a frame that left unrefuted standing" would leave no
+    way to tell which one a mark on the record meant -- the same reason
+    `consultability_of` calls Rung 3b's separation predicate rather than
+    re-deriving the graph condition.
+
+    "Carrying" is sigma-admission, computed from each immutable `Problem`
+    record (A7: nothing stores which assertions a problem was posed under), so
+    the cascade's set and the renderer's set are the same set. Imported inside
+    the function: this module is Rung 2's machinery and holds no calculus
+    import at module scope.
+    """
+    from deepreason.calculus.standing import fallen_frames, framed_problem_ids
+
+    for fallen in fallen_frames(harness):
+        for problem_id in framed_problem_ids(harness, fallen.scope):
+            if problem_id == fallen.problem_id:
+                # The assertion's OWN promotion problem is the problem it
+                # ANSWERS, never one posed under it, and sigma can admit it by
+                # accident because the two are about the same subject. Marking
+                # it would deprioritize in scheduling the one problem D-1
+                # requires to stay on the frontier when a frame falls -- "the
+                # incumbent's promotion problem stays on the frontier, ranked
+                # by wound count". The exclusion is the answer to D-1 read
+                # back into the cascade, not a convenience.
+                continue
+            yield problem_id, fallen.label
+
+
 def premise_orphaned(harness) -> dict[str, str]:
     """problem id -> grade, for every problem whose premise has fallen.
+
+    ONE MARKING FUNCTION, BOTH ENTRY CONDITIONS (Prop 9.7, complete at Rung 7).
+    A problem is marked when a consulted ATTRIBUTION names a premise that has
+    fallen (§9.8's premise entry, Rung 2), or when a consulted FRAME ASSERTION
+    it was posed under has left unrefuted standing (§9.7's frame entry, Rung
+    7). The two entries differ in what they READ and in nothing else: they
+    produce the same pairs and pass through the same grading step below, so
+    there is no second mechanism to keep in step with this one.
+
+    §9.7's two grades are distinguished by the TWO-PASS LABELS and by nothing
+    else -- `refuted` from pass one is a fall, `suspended_unsupported` from
+    pass two is a revocation -- which is why neither entry needs machinery of
+    its own to tell them apart. `suspended` marks NOTHING: an unresolved attack
+    is nobody's win, and a problem posed under a contested frame is not
+    orphaned.
+
+    A problem reached by BOTH grades carries the fall, because a refuted
+    premise is a stronger fact about the problem than an unaccredited one.
 
     DERIVED, never stored (C4): a pure function of replayed state, recomputed on
     demand. That is also what makes the cascade LAZY -- a fall over a thousand
@@ -227,9 +278,13 @@ def premise_orphaned(harness) -> dict[str, str]:
     what 9.8 requires ("its thousandfold consequence is paid as the frontier is
     touched, not all at once").
     """
+    entries = [
+        (problem_id, harness.state.status.get(premise_id))
+        for _, problem_id, premise_id in standing_attributions(harness)
+    ]
+    entries += list(_fallen_frame_entries(harness))
     marks: dict[str, str] = {}
-    for _, problem_id, premise_id in standing_attributions(harness):
-        status = harness.state.status.get(premise_id)
+    for problem_id, status in entries:
         if status == Status.REFUTED:
             marks[problem_id] = PREMISE_REFUTED
         elif status == Status.SUSPENDED_UNSUPPORTED:

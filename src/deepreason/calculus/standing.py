@@ -216,6 +216,132 @@ def frames(harness, subject_id: str, problem_id: str) -> bool:
     return False
 
 
+@dataclass(frozen=True)
+class FallenFrame:
+    """One assertion that HAS left unrefuted standing, as the cascade sees it.
+
+    DERIVED on every call, never stored, for `StandingGrant`'s own reason: a
+    stored fall could fall out of step with the log that implies it, and the
+    cascade would then mark problems on a frame the record no longer says fell.
+
+    `grade` is `render.EXIT_GRADES`' own value, taken from the two-pass label
+    and from nothing else -- §9.7's table distinguishes fall from revocation
+    with NO new machinery, and a grade computed anywhere but from the label
+    would be that machinery.
+    """
+
+    assertion_id: str
+    subject_id: str
+    problem_id: str
+    scope: dict
+    label: Status
+    grade: str
+
+
+# The two labels that MARK. `SUSPENDED` (contestation) is deliberately absent:
+# §9.7's table names two grades, and an unresolved attack is nobody's win. A
+# problem posed under a contested frame is not orphaned -- the frame has not
+# left standing, it is being fought over.
+_MARKING_GRADES: dict[Status, str] = {
+    Status.REFUTED: "fall",
+    Status.SUSPENDED_UNSUPPORTED: "revocation",
+}
+
+
+def _fallen(harness, *, separated: bool) -> tuple[FallenFrame, ...]:
+    """Assertions consulted BUT FOR their label, split on the separation test.
+
+    Def 9.2's four conditions minus the third. The three that remain are
+    checked with the consult path's OWN predicates -- strict recognition
+    through `frame_assertion_body`, promotion addressing through
+    `_promotion_problem_of`, and separation through Rung 3b's
+    `separation.consultability` -- so an assertion the cascade acts on is one
+    the renderer would have consulted, on the same definitions, and there is no
+    second reading of "consulted" anywhere in the tree.
+
+    STRICT recognition is load-bearing here and the loose reading would be
+    wrong: an assertion whose interface the controller's compiler would not
+    have emitted is not this claim at all, so it never framed anything and its
+    fall orphans nothing. The loose reading exists for the INTEGRITY check,
+    which must see exactly the assertions this function refuses.
+    """
+    found = []
+    for assertion_id, body in frame_assertions(harness):
+        label = harness.state.status.get(assertion_id)
+        grade = _MARKING_GRADES.get(label)
+        if grade is None:
+            continue
+        problem_id = _promotion_problem_of(harness, assertion_id)
+        if problem_id is None:
+            continue
+        if consultability(
+            harness, assertion_id, body.subject_ref
+        ).consultable is not separated:
+            continue
+        found.append(
+            FallenFrame(
+                assertion_id=assertion_id,
+                subject_id=body.subject_ref,
+                problem_id=problem_id,
+                scope=body.scope,
+                label=label,
+                grade=grade,
+            )
+        )
+    return tuple(sorted(found, key=lambda f: f.assertion_id))
+
+
+def fallen_frames(harness) -> tuple[FallenFrame, ...]:
+    """Every assertion that has left unrefuted standing and MARKS (§9.7).
+
+    The second entry condition of the cascade, and the whole of what Rung 7
+    adds to it: what fell is read here, what it costs is decided by the ONE
+    marking function in `premises.py`. Nothing here writes, and nothing here
+    grades a problem -- this answers only "which frames fell, and how".
+    """
+    return _fallen(harness, separated=True)
+
+
+def unseparated_fallen_frames(harness) -> tuple[FallenFrame, ...]:
+    """The same, for assertions that fail ONLY the separation condition.
+
+    These mark NOTHING, and that is R64 rather than an oversight: an
+    unseparated assertion is unconsultable, so it never framed anything and had
+    no standing to lose. They are enumerated because components only ever GROW
+    -- an assertion separated when it was consulted can be unseparated now --
+    so a reader of a finished run needs telling that the record holds one.
+    `invariants.py`'s `cascade-integrity` check is what tells them.
+    """
+    return _fallen(harness, separated=False)
+
+
+def framed_problem_ids(harness, scope: dict) -> tuple[str, ...]:
+    """Every problem sigma admits, sorted. A7, and the reason it is computed.
+
+    `Problem` records no frame and nothing stores which assertions a problem
+    was posed under -- the log's own append-only ordering is the record -- so
+    "the problems carrying this frame" is sigma evaluated on each immutable
+    problem record, which is exactly what `frames` has meant since Rung 4. A
+    second meaning here would give the cascade a different set from the
+    renderer's, and the pack and the mark would disagree about the same fall.
+
+    A scope that no longer compiles admits NOTHING rather than raising, for
+    `frames`'s own reason: the assertion is on the record and cannot be edited,
+    so a reader asking what it carries must get an answer.
+    """
+    try:
+        compiled = compile_scope(scope)
+    except ScopeError:
+        return ()
+    return tuple(
+        sorted(
+            pid
+            for pid, problem in harness.state.problems.items()
+            if scope_admits(compiled, problem)
+        )
+    )
+
+
 def standing_view(harness) -> dict:
     """The whole read-only projection, for render and schedule ONLY (Prop 12.5).
 

@@ -261,7 +261,7 @@ found through `addr`.
   (`experiments/2026-08-21-change-rung3b-frame-separation/PARKED.md` P1, carried
   forward as `experiments/2026-08-22-change-rung4-frame-assertions/PARKED.md`
   P2), and `premises.py` is untouched.
-`check: python -c "import pathlib; hits=[str(p) for p in sorted(pathlib.Path('src/deepreason').rglob('*.py')) if 'consultability' in p.read_text() and not str(p).startswith('src/deepreason/calculus/')]; assert hits == [], hits" && grep -q "def consultability_of" src/deepreason/calculus/standing.py && grep -q "consultability(harness, assertion_id, body.subject_ref)" src/deepreason/calculus/standing.py && ! grep -q "deepreason.calculus" src/deepreason/premises.py && grep -q "def standing_attributions" src/deepreason/premises.py`
+`check: python -c "import pathlib; hits=[str(p) for p in sorted(pathlib.Path('src/deepreason').rglob('*.py')) if 'consultability' in p.read_text() and not str(p).startswith('src/deepreason/calculus/')]; assert hits == [], hits" && grep -q "def consultability_of" src/deepreason/calculus/standing.py && grep -q "consultability(harness, assertion_id, body.subject_ref)" src/deepreason/calculus/standing.py && python -c "import ast, pathlib; tree = ast.parse(pathlib.Path('src/deepreason/premises.py').read_text()); mods = {(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)}; bad = {m for m in mods if m.startswith(('deepreason.calculus.claims', 'deepreason.calculus.compiler', 'deepreason.calculus.operations'))}; assert not bad, sorted(bad)" && grep -q "def standing_attributions" src/deepreason/premises.py`
 - **Two-step registration leaves a gap, and the gap is the right trade.**
   `register_problem` then `ensure_problem_subject` can be interrupted between
   the writes. The result is a typed `problem_subject_missing` diagnostic and an
@@ -304,7 +304,23 @@ for path in sorted(pathlib.Path('src/deepreason/scheduler').rglob('*.py')):
   citation dependence R62 requires landed in both, as `citation_ref` on the
   body and as the `citation_ref` keyword on `file_premise`. A change that lands
   in one and not the other is the drift this row exists to catch.
-`check: ! grep -q "deepreason.calculus" src/deepreason/premises.py && python -c "
+
+  **NARROWED at Rung 7, and narrowed to what the claim was always about.** The
+  check used to forbid the string `deepreason.calculus` appearing anywhere in
+  `premises.py` at all, which was a PROXY for "the channel is not on the
+  substrate" rather than the claim itself. Rung 7 wires the cascade's SECOND
+  entry condition — a fallen frame marks what it framed — and that entry reads
+  `calculus.standing.fallen_frames` through a function-local import. It does
+  not move the attribution or the premise onto a claim body: `file_premise`
+  still builds its own interface, `presupposition_wf` still owns the mention
+  law, and the two shapes are still kept in step by hand. So the check now
+  asserts the claim itself — `premises.py` imports nothing from
+  `calculus.claims`, `calculus.compiler` or `calculus.operations`, the three
+  modules the substrate actually lives in. The narrower form is also SHARPER:
+  it names the modules, so it cannot be satisfied by reaching the same bodies
+  under another path, and it no longer fails for a reader that merely CONSULTS
+  the calculus.
+`check: python -c "import ast, pathlib; tree = ast.parse(pathlib.Path('src/deepreason/premises.py').read_text()); mods = {(n.module or '') for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)}; bad = {m for m in mods if m.startswith(('deepreason.calculus.claims', 'deepreason.calculus.compiler', 'deepreason.calculus.operations'))}; assert not bad, sorted(bad); assert 'deepreason.calculus.standing' in mods" && python -c "
 from deepreason.calculus.claims import PremiseAttributionV1 as A
 from deepreason.calculus.compiler import compile_interface
 import inspect

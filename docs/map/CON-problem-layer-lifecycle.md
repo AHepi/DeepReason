@@ -32,6 +32,62 @@ without anyone rescuing the premise.
 
 `check: python -m pytest tests/test_premise_channel.py::test_an_attribution_alone_marks_nothing tests/test_premise_channel.py::test_a_refuted_premise_alone_marks_nothing tests/test_premise_channel.py::test_attacking_the_attribution_releases_the_problem -q`
 
+## Two entry conditions, ONE marking function (Rung 7)
+
+Prop 9.7 is complete only with both entries in it, and the second landed
+2026-08-24. A problem is marked when a consulted ATTRIBUTION names a premise
+that has fallen (§9.8's premise entry, Rung 2), **or** when a consulted FRAME
+ASSERTION it was posed under has left unrefuted standing (§9.7's frame entry,
+Rung 7).
+
+The two differ in what they READ and in nothing else. Both produce
+`(problem id, label)` pairs; both pass through the same grading step in
+`premise_orphaned`; neither carries a grading rule of its own. That is what
+"no second mechanism" means here and it is asserted structurally, because no
+behavioural test can see a second one: exactly ONE function in `src/` assigns
+a cascade grade.
+
+| Entry | Reads | Marks |
+|---|---|---|
+| premise (Rung 2) | `standing_attributions` → the premise's label | every problem the attribution names |
+| frame (Rung 7) | `calculus.standing.fallen_frames` → the assertion's label | every problem σ admits, except the assertion's OWN promotion problem |
+
+§9.7's two grades come from the **two-pass labels** and from nothing else, which
+is why neither entry needed new machinery: `refuted` (pass one) is a **fall**
+and marks `premise refuted`; `suspended_unsupported` (pass two) is a
+**revocation** and marks `premise unaccredited`. `suspended` — contestation —
+marks NOTHING, because an unresolved attack is nobody's win. A problem reached
+by both grades carries the fall: a refuted premise is a stronger fact about the
+problem than an unaccredited one.
+
+Three conditions the frame entry keeps, and each is load-bearing:
+
+- **STRICT recognition.** An assertion whose interface the controller's
+  compiler would not have emitted is not this claim at all, so it never framed
+  anything. The LOOSE reading exists for `verify_root`'s integrity checks and
+  for nothing else.
+- **Separation (A6, R64).** An unseparated assertion is unconsultable and
+  "moves no edge, no warrant and no label" — it never had standing to lose.
+  It is still ENUMERATED, by `unseparated_fallen_frames`, because components
+  only ever grow and a separation can be lost AFTER consultation; what reports
+  it is `verify_root`'s `cascade-integrity`.
+- **Its own promotion problem is excluded.** σ can admit it by accident,
+  because the two are about the same subject — but that problem is the one the
+  assertion ANSWERS, and D-1 was answered "the incumbent's promotion problem
+  stays on the frontier" when a frame falls. A mark deprioritizes; marking it
+  would push down the one problem that must stay up.
+
+`check: python -m pytest tests/test_calculus_cascade_frame_entry.py -q`
+`check: python -c "
+import ast, pathlib
+assigning = []
+for path in sorted(pathlib.Path('src/deepreason').rglob('*.py')):
+    for node in ast.walk(ast.parse(path.read_text())):
+        if isinstance(node, ast.FunctionDef) and ('PREMISE_REFUTED' in ast.unparse(node) or 'PREMISE_UNACCREDITED' in ast.unparse(node)):
+            assigning.append(f'{path.name}::{node.name}')
+assert assigning == ['premises.py::premise_orphaned'], assigning
+"`
+
 ## State it owns
 
 **None that persists.** `premise_orphaned` is a pure function of replayed state
