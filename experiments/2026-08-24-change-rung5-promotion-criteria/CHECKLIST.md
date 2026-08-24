@@ -1,5 +1,5 @@
 # Checklist for: Rung 5 — promotion problems and their criteria as programs
-State: next=6 blockers=none
+State: next=8 blockers=none
 Map ids this plan was built on: `DR-SUB-calculus`, `DR-SUB-evaluation`,
 `DR-SUB-rules`, `DR-SEAM-evaluation-x-rules` (read first, per the map's own
 seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
@@ -45,13 +45,13 @@ One step per dr-execute-step invocation.
       `state.status` and `state.hv` are byte-identical across a `nominate` call
       that DOES spawn.
 
-- [ ] 6. (S11, S15) Write `tests/test_promotion_nomination_live.py` — M-4's
+- [x] 6. (S11, S15) Write `tests/test_promotion_nomination_live.py` — M-4's
       NEGATIVE half on the committed attempt-4 root, opened `read_only=True`,
       asserting the empty nomination AND the one-lineage reason.
       done-when: `python -m pytest tests/test_promotion_nomination_live.py -q`
       ends "N passed" with 0 failed.
 
-- [ ] 7. (S11) [COMMIT] Mutation-prove the live negative: temporarily make
+- [x] 7. (S11) [COMMIT] Mutation-prove the live negative: temporarily make
       `lineage_root` return the problem id itself, watch the live test go RED,
       restore, watch it go GREEN. Paste both runs.
       done-when: both pasted outputs are in the step record, tree restored,
@@ -196,3 +196,35 @@ test now asserts every PRE-EXISTING label is identical and that the only
 additions are reach certificates — registration, never adjudication.
 Ring: `python -m pytest tests/test_calculus*.py tests/test_reflexive_discipline.py
 tests/test_prose_refutation_boundaries.py -q` → `139 passed`.
+
+**6.** `python -m pytest tests/test_promotion_nomination_live.py -q` → `5 passed`.
+One in-step correction: the read-only refusal type is `ReadOnlyHarnessError`,
+not `ReadOnlyError`. The root is opened `read_only=True` and the last test
+proves the open wrote nothing.
+
+**7. MUTATION PROOF of the live negative half — both runs, pasted.**
+
+MUTATED (`problem_parents` stops at artifact sources — the truncated walk):
+
+    === MUTATED: the walk stops at artifact sources ===
+    FAILED tests/test_promotion_nomination_live.py::test_the_one_reach_event_spans_exactly_one_lineage
+    FAILED tests/test_promotion_nomination_live.py::test_every_problem_in_the_run_descends_from_the_one_seed
+    FAILED tests/test_promotion_nomination_live.py::test_nomination_does_not_fire_on_the_committed_live_root
+    3 failed, 2 passed in 8.51s
+
+    E   AssertionError: assert 'conn:0793267d0d4d' == 'question-4dd...0e09b302500bc'
+    E   AssertionError: ['conn:0793267d0d4d', 'conn:07c58a1d6b34', 'conn:13f027942733', ...]
+    E   deepreason.harness.ReadOnlyHarnessError: time-travel harness is read-only
+
+Read the third failure carefully — it is the whole proof. Under the truncated
+walk the committed live root SPANS TWO LINEAGES and nomination TRIES TO FIRE,
+and the only thing that stopped it writing a promotion problem into the
+evidence was the read-only open. The definition is what produces the no-fire,
+not an accident of the fixture.
+
+RESTORED:
+
+    === RESTORED ===
+    20 passed in 8.44s
+
+`git diff --stat src/` after restore: empty — no residue of the mutation.
