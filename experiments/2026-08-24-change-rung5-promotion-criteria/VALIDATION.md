@@ -1,7 +1,6 @@
 # Validation for: Rung 5 — promotion problems and their criteria as programs
 
-Verdict: **PENDING** until the full gate and the full `docs_verify` lines below
-are pasted. Every other section is complete and its output is real.
+Verdict: **PASS.**
 
 ## Acceptance checks (SPEC.md item order, every one re-run in this phase)
 
@@ -208,9 +207,142 @@ EXISTING `standing` command's text output, `standing_view`'s dict is unchanged
 so the `run_standing` MCP tool renders exactly what it rendered before, and no
 entry point, tool name or schema hash moved.
 
+## Full gate
+
+    $ python -m pytest tests/ -q -n 4
+    3939 passed, 6 skipped in 824.20s (0:13:44)
+    rc=0
+
+PASS. Baseline at `ade214037` was `3879 passed, 6 skipped` (re-derived in this
+session, not taken from the handover). The delta is 60, which is exactly this
+tranche's new tests: 15 nomination + 16 criteria + 11 succession + 6 closure +
+4 solo + 5 live + 3 knowledge-view. Nothing else moved.
+
 ## Map
 
-(filled below with the full-mode run)
+    $ python tools/docs_verify.py
+    docs_verify [full]: 63 documents, 1012 checks, 4 workers
+      FAIL CON-run-identity.md:200  -> (empty)
+      FAIL CON-run-identity.md:202  -> fatal: ambiguous argument '1637e808': unknown revision
+      FAIL CON-run-identity.md:204  -> fatal: ambiguous argument 'f304fec1': unknown revision
+    docs_verify: 3 failed
+
+PASS. Exactly the three pre-existing `CON-run-identity.md` shallow-clone
+failures the operator's handover named, all "unknown revision" against a
+truncated history; zero on an unshallowed clone.
+
+    $ python tools/docs_verify.py --audit
+    docs_verify --audit: 0 finding(s)                                    PASS
+
+    $ python tools/docs_verify.py --links
+    docs_verify --links: 0 dangling reference(s), 63 document(s)          PASS
+
+    $ python tools/docs_verify.py --coverage
+    docs_verify --coverage: 7 seam(s) swept, 16 without a Sweep: header,
+                            2 finding(s)                                 PASS
+
+The two coverage findings (`SEAM-periphery-x-verification` and
+`SEAM-schools-x-scratch`, each an unnamed enforcement site) are PRE-EXISTING:
+re-run at `ade214037`, the same "7 swept, 16 without a Sweep: header, 2
+finding(s)" comes back. Neither seam is this tranche's.
+
+### THE FIRST FULL RUN FAILED IN 12 PLACES, AND ONE WAS A REAL DESIGN ERROR
+
+This is recorded in full because the boundary gate justified itself here, and a
+validation that reported only the second run would hide that.
+
+**The design error.** `DR-SEAM-evaluation-x-ontology` records that
+`Budget.steps` and `Budget.time_ms` are read by NOTHING in the tree, and states
+the reason: neither is part of any spec digest, while a criterion's real bound
+lives in `extra["spec"]`, which is inside the commitment's content address. Its
+closing sentence is "reading either one back into the evaluator is the change
+this absence exists to stop" — and the five promotion criteria were taking their
+step bound from exactly there. A bound outside the content address can move
+without the commitment moving, which makes a verdict depend on something other
+than content. FIXED IN THE CODE, not in the check: the bound is now
+`extra["spec"]["step_limit"]`, the road `dataset_oracle` already takes.
+`FrozenCommitmentV1`'s `budget_steps`/`budget_time_ms` are deleted — no consumer
+read them, and freezing a number nothing reads would put a second,
+authoritative-looking bound on the record beside the one that governs. The
+budget test now starves the bound that actually governs.
+
+**A near-miss the same failure exposed.** `promotion.py` imported the registry
+as `programs as registry`, so its `evaluate` call was invisible to
+`SUB-evaluation`'s caller census, which matches on the NAME `programs`. The
+alias was removed rather than the census widened: a census a caller can dodge by
+renaming an import is not a census.
+
+**Two boundary checks NARROWED, never weakened, each mutation-proved after.**
+
+- `CON-standing-and-background`: "the scheduler imports nothing from
+  `calculus/`" was a proxy for a NAME COLLISION —
+  `scheduler._standing_recrit_pool` means *still standing*,
+  `calculus/standing.py` means *frame role*. Rung 5 imports `nomination` and
+  `promotion`, neither of which touches the word. The check now names the module
+  and the accessors, so it cannot be satisfied by importing the same functions
+  under another path.
+- `SUB-calculus`: the NO SCHEDULER INTEGRATION row's own text says *nothing
+  selects on `problem_status` yet* — and nothing does now either; nomination
+  spawns a problem, it does not choose what to work on next. The check now
+  asserts that claim instead of the proxy.
+
+  NEGATIVE CONTROL on both, run before either was trusted — adding a
+  `standing_of` import to the scheduler:
+
+      === MUTATED: the scheduler imports the calculus sense of 'standing' ===
+      AssertionError: ('src/deepreason/scheduler/scheduler.py', ['standing_of'])
+      CON-standing check FAILS as it should
+      === RESTORED === (git diff --stat: empty)
+
+**Six count pins updated**, each a legitimate consequence of the design:
+`register_fail_warrant` call sites 13→14 and files 9→10 (the promotion sweep
+mints through the one constructor, which is what the seam wants); `_substantive`
+consumers 2→3 (nomination REUSES the boundary rather than re-deriving it);
+implemented claim names 4→5; `programs.evaluate` callers +2.
+
+**A CENSUS GAP, reported.** SPEC.md's blast-radius census did NOT predict the
+`register_fail_warrant` pins in `SUB-rules.md` and `SEAM-adjudication-x-rules.md`,
+because I never declared `register_fail_warrant` as a target SYMBOL — even
+though SPEC.md S9 names it as the mechanism. `tools/blast_radius.py` reports
+consumers only for declared targets, so a mechanism named in prose and not in
+`--symbols` is invisible to it. This is the third consecutive spec to miss a hit
+of this shape (rung-5 PARKED P6 records the first two), and the pattern is now
+specific enough to state as a rule: **every symbol a spec item names as its
+mechanism belongs in `--symbols`, not only the files it plans to edit.**
+
+    $ python tools/docs_verify.py --stale
+    docs_verify --stale: 8 document(s) worth re-reading
+
+Fifteen before, eight now. The seven this tranche made stale had their
+`Verified-at:` advanced because their checks WERE re-run — in the full pass
+above, which passed them: `SEAM-evaluation-x-rules`, `SUB-calculus`,
+`SEAM-manifest-x-schools`, `SUB-manifest`, `SUB-scheduler`, `SUB-application`,
+`CON-schools`. The remaining eight (`CON-criticism-source`, `CON-run-identity`,
+`CON-seats`, `INV-signal-contract`, `SEAM-llm-x-scheduler`,
+`SEAM-llm-x-workflow`, `SUB-llm`, `SUB-verification`) are DISMISSED with their
+reason: each was made stale by a commit that pre-dates this branch
+(`89d4b6e74`, `f77b7af17`, `8469d0669`, `ae869296`), and clearing another
+tranche's staleness is not this one's to do — advancing a stamp over checks I
+did not re-read for their own document's sake is exactly the false stamp the
+map's own rule forbids.
+
+**New checks added by this change:** ~20, across `INV-axiom-basis` (A8 proved
+with the spawn-half check it demanded, plus A4 and Genesis Inertness
+preservation), `SUB-calculus` (nomination, the criteria, two new Traps),
+`SEAM-evaluation-x-rules` (the promotion lifecycle — the ladder's named exit
+artifact), `SUB-evaluation`, `CON-standing-and-background`,
+`CON-problem-layer-lifecycle`, `INV-frozen-surfaces`. Every one was RUN before
+it was written down, and each would fail if its behaviour regressed.
+
+**Record observables added vs sweep probes:** this change adds no new field to
+`Event`, `EpistemicState` or `Problem`. What it adds to the record is ORDINARY
+artifacts (reach certificates, frame assertions), ordinary `Measure` events with
+typed input tags (`promotion.nominated.v1`,
+`promotion.scope-incoherent.v1`), and ordinary demonstrative warrants. No new
+record TYPE, so no sweep probe is owed — and the sweep is retired as an
+instrument in any case (operator ruling 2026-08-22). The stronger substitute the
+standing law names is committed here: a single-root replay against the live
+attempt-4 root, in `tests/test_promotion_nomination_live.py`.
 
 ## Requirement sweep
 

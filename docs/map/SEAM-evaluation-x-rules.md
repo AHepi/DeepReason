@@ -1,5 +1,5 @@
 <!-- DR-SEAM-evaluation-x-rules -->
-Verified-at: e3a6cadf5
+Verified-at: 812aa1aba
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/warrants.py, src/deepreason/measures/reach.py, src/deepreason/programs.py, src/deepreason/informal/trial.py, src/deepreason/calculus/promotion.py
 Sides: DR-SUB-evaluation, DR-SUB-rules

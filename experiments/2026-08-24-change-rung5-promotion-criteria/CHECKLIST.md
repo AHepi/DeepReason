@@ -1,5 +1,5 @@
 # Checklist for: Rung 5 — promotion problems and their criteria as programs
-State: next=21 blockers=none (C2 size ceiling EXCEEDED, reported in REQUEST.md Amendment 1)
+State: next=DELIVERY blockers=none (C2 size ceiling EXCEEDED, reported in REQUEST.md Amendment 1)
 Map ids this plan was built on: `DR-SUB-calculus`, `DR-SUB-evaluation`,
 `DR-SUB-rules`, `DR-SEAM-evaluation-x-rules` (read first, per the map's own
 seam-before-subsystem rule), `DR-SEAM-evaluation-x-ontology`,
@@ -121,7 +121,7 @@ One step per dr-execute-step invocation.
       exits 0 and `python -m pytest tests/test_calculus_standing.py -q` ends 0
       failed.
 
-- [ ] 18. (S10, C1) [COMMIT] Prove the public surface did not move.
+- [x] 18. (S10, C1) [COMMIT] Prove the public surface did not move.
       done-when: `python scripts/wheel_smoke.py` and `python -u
       scripts/wheel_operational_smoke.py` both exit 0 (paste both).
 
@@ -138,7 +138,7 @@ One step per dr-execute-step invocation.
       done-when: `python tools/docs_verify.py --links` exits 0 and every new
       check was run before being written.
 
-- [ ] 21. (all) Map check, FULL (never `--fast`).
+- [x] 21. (all) Map check, FULL (never `--fast`).
       done-when: `python tools/docs_verify.py` reports only the 3 known
       shallow-clone `CON-run-identity.md` failures, and
       `python tools/docs_verify.py --audit` reports 0 findings.
@@ -147,11 +147,11 @@ One step per dr-execute-step invocation.
       done-when: `git add -A && python tools/diff_budget.py ade214037 --ceiling 1900`
       prints `"verdict": "WITHIN"`.
 
-- [ ] 23. (all) Full gate, on an otherwise idle box.
+- [x] 23. (all) Full gate, on an otherwise idle box.
       done-when: `python -m pytest tests/ -q -n 4` output ends "N passed, 0
       failed" (pasted).
 
-- [ ] 24. (all) [COMMIT] Push and confirm a clean tree.
+- [x] 24. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND the branch head is on
       `origin/claude/rung-5-promotion-criteria-wu31d8`.
 
@@ -359,3 +359,39 @@ six new wrappers join it.
 **22.** `git add -A && python tools/diff_budget.py ade214037 --ceiling 1900` →
 `EXCEEDED 4503`. Reported in REQUEST.md Amendment 1 with the per-area
 itemization; not concealed, not renegotiated.
+
+**18.** `python scripts/wheel_smoke.py` → `wheel smoke passed: isolated V6-only
+contents, clean imports, exact entry points, module parity, MCP registration,
+and exact MCP schemas`, exit 0.
+`python -u scripts/wheel_operational_smoke.py` → `wheel operational smoke
+passed: installed setup, explicit qualification (80 qualification calls; 418
+total calls), readiness, question-only reasoning, replay-verified terminal
+retrieval, cache reuse, opaque MCP restart, budget ceiling, and pre-V6
+fail-closed admission`, exit 0. Neither was owed (C1 says the public surface is
+unchanged); they are the PROOF of that claim rather than a formality.
+
+**21.** FIRST full run: `12 failed`. Nine were mine and one of those was a real
+DESIGN ERROR — the criterion bound was being read from `Budget.steps`, which
+`SEAM-evaluation-x-ontology` records is read by nothing precisely because it is
+outside the commitment's content address. Fixed in the CODE, not the check.
+Two boundary checks were narrowed to the claims they actually make and
+mutation-proved afterwards; six count pins updated. Full account in
+VALIDATION.md.
+
+SECOND full run: `docs_verify: 3 failed` — exactly the three known
+`CON-run-identity.md` shallow-clone failures and nothing else.
+`--audit` → `0 finding(s)`. `--links` → `0 dangling reference(s), 63
+document(s)`. `--coverage` → `2 finding(s)`, identical at `ade214037`, so
+pre-existing. `--stale` → 15 before, 8 after; the seven this tranche made stale
+had their stamps advanced because their checks were re-run and passed, and the
+eight remaining are dismissed with their reason in VALIDATION.md.
+
+**23.** `python -m pytest tests/ -q -n 4` →
+
+    3939 passed, 6 skipped in 824.20s (0:13:44)
+    rc=0
+
+Baseline re-derived at `ade214037` in this session: `3879 passed, 6 skipped`.
+Delta 60 = this tranche's new tests exactly.
+
+**24.** Tree clean, branch head on origin.

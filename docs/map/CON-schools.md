@@ -1,5 +1,5 @@
 <!-- DR-CON-schools -->
-Verified-at: 23bb8bf66
+Verified-at: 812aa1aba
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capture/schools.py, src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/workflow/criticism.py, src/deepreason/informal/trial.py, src/deepreason/llm/packs.py, src/deepreason/ontology/event.py, src/deepreason/module_events.py
 Seams: DR-SEAM-schools-x-scratch, DR-SEAM-manifest-x-schools, DR-SEAM-schools-x-scheduler

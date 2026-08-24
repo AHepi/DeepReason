@@ -1,5 +1,5 @@
 <!-- DR-SEAM-manifest-x-schools -->
-Verified-at: 23bb8bf66
+Verified-at: 812aa1aba
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/run_manifest.py, src/deepreason/llm/firewall.py, src/deepreason/workflow/criticism.py, src/deepreason/v6_policy.py
 Sides: DR-CON-schools, DR-SUB-manifest
