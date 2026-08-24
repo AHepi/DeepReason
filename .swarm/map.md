@@ -1,8 +1,8 @@
 # Repo map (generated -- do not edit; regenerate with: swarm_gate.py map)
 branch: claude/treadle-install-pilot-fqwjt5
-head: 36499a8046c0d208759500d11e8c5edcc366a38f
-tree_sha: 5eaba32776567723de35c3adb0ad2624899fa035
-tracked_files: 130218
+head: 70d5bb80e5bb7563c742c2c00e73101e653d7a93
+tree_sha: 075f35ecd083dc5034ea2a27008d722aee3b25d6
+tracked_files: 130220
 
 ## Directories
 - `.claude/` -- 24 files
@@ -14,7 +14,7 @@ tracked_files: 130218
 - `docs/` -- 129 files
 - `docs/map/` -- 63 files
 - `docs/proposals/` -- 13 files
-- `experiments/` -- 128610 files
+- `experiments/` -- 128612 files
 - `experiments/2026-07-30-change-amendment-epochs/` -- 5 files
 - `experiments/2026-07-30-fix-citation-quote-check/` -- 7 files
 - `experiments/2026-07-30-fix-sandbox-contract/` -- 8 files
@@ -127,7 +127,7 @@ tracked_files: 130218
 - `experiments/2026-08-22-measure-grounded-flip-rate/` -- 18 files
 - `experiments/2026-08-22-reach-structural-programs-fix/` -- 13 files
 - `experiments/2026-08-23-audit-invention-inventory/` -- 1 files
-- `experiments/2026-08-23-treadle-pilot/` -- 13 files
+- `experiments/2026-08-23-treadle-pilot/` -- 15 files
 - `experiments/autonomous_inquiry_preflight_2026-07-16/` -- 5 files
 - `experiments/bronze_feedback_v1_superseded_2026-07-14/` -- 1315 files
 - `experiments/bronze_flat_2026-07-13/` -- 2205 files

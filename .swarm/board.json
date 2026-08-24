@@ -34,7 +34,7 @@
     "PIL-RegressionFixture": {
       "accept": "python -m pytest experiments/2026-08-23-treadle-pilot/T3/test_pairwise_referential_integrity.py -q && bash experiments/2026-08-23-treadle-pilot/mutation_proof_T3.sh",
       "base": "36499a8046c0d208759500d11e8c5edcc366a38f",
-      "claim_token": 0,
+      "claim_token": 1,
       "cone": [
         "experiments/2026-08-23-treadle-pilot/T3/*"
       ],
@@ -42,11 +42,37 @@
       "goal": "Write ONE pytest file, experiments/2026-08-23-treadle-pilot/T3/test_pairwise_referential_integrity.py, that pins an existing committed behaviour of src/deepreason/informal/trial.py::pairwise_discriminate. THE BEHAVIOUR: when the judge returns a NAMED winner (A or B) whose decisive_point is the EMPTY STRING, the trial must block on referential-integrity and register no warrant. The code's own comment says why this case is special: the empty string is a substring of everything, so without an explicit empty-string guard it would pass the containment check vacuously. See INPUT_trial_excerpt.txt for the exact code. THE TEST: build the pairwise setup exactly as INPUT_test_pattern.txt shows (_pairwise_setup, LLMAdapter with a MockEndpoint of judge replies, Config(), authority='status'); the two judge replies must be order-swap CONSISTENT (winner A then winner B) so the order-swap check passes and execution reaches the referential-integrity check; both replies carry decisive_point ''. Assert that pairwise_discriminate returns None, that both candidates are still Status.ACCEPTED, and that the harness log contains an event whose inputs include the string 'trial-blocked:referential-integrity'. Define your own harness fixture (pytest conftest fixtures do NOT reach a file outside tests/) as INPUT_conftest.txt shows, and import art from tests.conftest. Emit only the one test file.",
       "notes": [],
       "out_of_scope": "Do not modify src/, tests/, or any INPUT_ file. Do not weaken the assertion to make it pass. The acceptance runs a mutation proof that deletes the empty-string guard from trial.py and requires your test to go RED; a test that passes either way will be rejected.",
+      "reads": [
+        [
+          "skills/pilot-task/SKILL.md",
+          "c759e965b0dc072af26febcbb08306f87cea536e27d10d234f8aa0c9355b367e"
+        ]
+      ],
+      "reviewer": "",
+      "shas": [
+        "70d5bb80e5bb7563c742c2c00e73101e653d7a93"
+      ],
+      "state": "COMMITTED",
+      "state_ts": 1787545220.5485685,
+      "verify": "",
+      "worker": "treadle"
+    },
+    "PIL-SpecDriftJudgment": {
+      "accept": "F=experiments/2026-08-23-treadle-pilot/T4/ANSWER.md; test -f $F && grep -qx 'verdict: HOLDS' $F && grep -qx 'request_budget: ORDINAL' $F && grep -qx 'execution_budget: COUNT' $F && grep -qx 'filter: isinstance' $F && grep -q 'SimulationProposalV1' $F && grep -q 'SimulationWorkOrderV1' $F",
+      "base": "70d5bb80e5bb7563c742c2c00e73101e653d7a93",
+      "claim_token": 0,
+      "cone": [
+        "experiments/2026-08-23-treadle-pilot/T4/*"
+      ],
+      "depends_on": [],
+      "goal": "Write experiments/2026-08-23-treadle-pilot/T4/ANSWER.md. INPUT_claim_and_code.txt holds one documentation claim from CLAUDE.md and the code it is about, verbatim. Decide whether the code still satisfies the claim, and say exactly how it does it. No instrument in this repository reports this; the answer comes only from reading the code. Your file must contain, each on its own line and with no other text on that line, exactly these four lines: 'verdict: HOLDS' or 'verdict: DRIFTED'; 'request_budget: ORDINAL' or 'request_budget: COUNT'; 'execution_budget: ORDINAL' or 'execution_budget: COUNT'; and 'filter: <the Python builtin the code uses to keep one capability's records out of the other's budget>'. ORDINAL means the budget is decided by an item's position in a sorted sequence; COUNT means it is decided by how many items there are. Below those four lines, justify each one by quoting the exact expression from the code that decides it, and name the two class names the filter tests against. State plainly anything you could not establish.",
+      "notes": [],
+      "out_of_scope": "Do not rewrite INPUT_claim_and_code.txt. Do not touch anything outside the cone. You cannot run any command; the excerpt you were given is all the evidence there is.",
       "reads": [],
       "reviewer": "",
       "shas": [],
       "state": "READY",
-      "state_ts": 1787545179.3847654,
+      "state_ts": 1787545283.028772,
       "verify": "",
       "worker": ""
     },
