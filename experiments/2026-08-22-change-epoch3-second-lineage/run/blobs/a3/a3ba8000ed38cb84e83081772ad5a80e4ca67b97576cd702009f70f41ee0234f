@@ -1,0 +1,113 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The nocturnal UHI is primarily driven by the slow release of stored sensible heat from urban thermal mass, and the cross-city magnitude of this effect scales directly with city size because larger cities contain a greater absolute volume of heat-storing masonry and asphalt that intercepts daytime solar radiation.",
+      "mechanism": "During the day, high-thermal-capacity materials like concrete and asphalt absorb solar energy. After sunset, while rural areas cool rapidly via radiative loss, the urban fabric releases this stored sensible heat into the canopy air, maintaining warmer temperatures. The magnitude of this effect increases in larger cities simply due to the proportional aggregation of heat storage volume relative to surrounding rural areas.",
+      "counterconditions": [
+        "If urban materials have high albedo and low thermal mass, the heat storage release would be insufficient to account for the nocturnal temperature gap.",
+        "If rural thermal mass (e.g., dense vegetation or soil moisture) approaches urban thermal mass, the differential cooling rate would diminish.",
+        "If city size increases without a corresponding increase in dense urban materials (e.g., sprawling low-density suburbs), the scaling relationship fails."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is governed by the suppression of evapotranspiration and latent heat loss in cities, and the cross-city magnitude of this effect is more pronounced in arid climates because rural evaporative cooling is acutely limited by the humidity deficit, widening the night-time temperature gap.",
+      "mechanism": "Impervious urban surfaces shed water rapidly, severely limiting the latent heat sink that cools rural vegetation through evapotranspiration. At night, this lack of moisture prevents evaporative cooling from offsetting other heat sources. In arid regions, the rural moisture deficit is so extreme that urban areas retain heat much more effectively relative to their surroundings, making the UHI effect larger.",
+      "counterconditions": [
+        "If arid rural areas have substantial irrigation (oases), the rural latent heat loss increases, closing the temperature gap.",
+        "If daytime urban moisture is actively replenished by precipitation or municipal irrigation, the latent heat suppression mechanism weakens.",
+        "If humidity is uniformly high across both urban and rural areas, the aridity-driven scaling of the UHI effect disappears."
+      ],
+      "typicality": 0.75,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_007",
+        "SRC_005",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "On clear, calm nights, the nocturnal UHI is dominated by a longwave radiation trap caused by dense urban geometry, and the cross-city magnitude of this effect scales with built density and building height because these factors decrease the sky view factor, impeding radiative cooling.",
+      "mechanism": "Tall buildings and narrow street canyons restrict the view of the cold sky, trapping longwave radiation emitted by the urban surface and preventing efficient nocturnal cooling. Cities with denser, taller building configurations exhibit stronger UHI effects because the reduced sky view factor further delays the release of stored heat, keeping the urban canopy warmer.",
+      "counterconditions": [
+        "If urban geometry is characterized by wide, open avenues with high sky view factors, the radiation trap mechanism fails.",
+        "If cloud cover is uniform, it replaces the sky view factor as the dominant limiter of longwave cooling, erasing geometric differences.",
+        "If wind speeds are high, turbulent mixing replaces radiative cooling as the dominant nocturnal heat removal process."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is primarily sustained by continuous anthropogenic heat emissions from buildings and transportation, and the cross-city magnitude of this effect scales directly with population density because higher populations generate more waste heat that offsets nighttime cooling.",
+      "mechanism": "Human activities in cities continuously inject heat into the urban environment, particularly during evening hours when domestic heating and cooling, industrial processes, and vehicle traffic peak. This constant input of sensible heat slows the nocturnal cooling rate. Cities with higher population densities inherently produce more anthropogenic heat per unit area, leading to a more pronounced UHI gap.",
+      "counterconditions": [
+        "If populations migrate to hotter climates where domestic heating is unnecessary, the anthropogenic heat output drops, weakening the effect.",
+        "If cities adopt strict energy efficiency standards and electrified public transit, the waste heat output per capita decreases.",
+        "If rural areas have comparable agricultural or industrial heat sources, the population density scaling weakens."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is critically modulated by the interaction of impervious surfaces and sky view factor, meaning the single best mechanism for cross-city variation is the coupling of daytime heat storage with nighttime radiative trapping, which scales non-linearly with built density.",
+      "mechanism": "The high thermal mass and low albedo of impervious urban surfaces maximize daytime heat storage. At night, this stored heat is released, but a low sky view factor (due to street canyon geometry) traps the longwave radiation. These mechanisms are synergistic: impervious surfaces provide the heat, and dense geometry prevents its radiative escape. The combined effect scales non-linearly with built density.",
+      "counterconditions": [
+        "If an area has high thermal mass but open geometry (e.g., a paved parking lot), radiative cooling is efficient and the UHI is weak.",
+        "If an area has dense geometry but pervious, low-thermal-mass surfaces (e.g., a dense forest), there is little heat to trap.",
+        "If cloud cover or high wind speed overrides both storage and geometry, the synergistic effect is nullified."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [
+        "SRC_003",
+        "SRC_006",
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is a counterexample to single-mechanism explanations; it requires a coupled mechanism where daytime anthropogenic heat injection warms the urban thermal mass, and nighttime cooling is limited by a humidity-dependent feedback loop that scales with regional aridity and wind speed.",
+      "mechanism": "Anthropogenic heat continuously warms the urban fabric during the day. At night, as this stored heat is released, the urban-rural temperature gradient drives a differential in saturation vapor pressure. In arid regions, this leads to a stronger humidity deficit that suppresses latent heat loss, while low wind speed prevents mixing. The interplay of stored heat, aridity, and wind creates a non-linear, coupled UHI response.",
+      "counterconditions": [
+        "If regional aridity is uniform and high wind speeds dominate, the humidity-dependent feedback loop breaks down.",
+        "If anthropogenic heat emissions are negligible, the initial thermal mass warming is insufficient to drive the feedback.",
+        "If latent heat loss is not the primary nocturnal cooling mechanism, the humidity-dependent feedback is irrelevant."
+      ],
+      "typicality": 0.25,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008",
+        "SRC_002"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```
