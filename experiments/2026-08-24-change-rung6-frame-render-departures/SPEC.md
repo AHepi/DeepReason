@@ -178,9 +178,25 @@ Idempotent by content address.
 `llm/packs.py`:
 
 1. `render_conj_pack` and `render_crit_pack` each gain
-   `frame_slice_context: str | None = None`, rendered as ONE
-   `_pack_section("frame-slice", ..., 4, droppable=False,
-   compressible=True, min_tokens=96)`.
+   `frame_slice_context` and `frame_crisis_context`, rendered as TWO
+   sections at priority 4: `frame-crisis` (droppable=False,
+   compressible=False — exact) and `frame-slice` (droppable=False,
+   compressible=True, min_tokens=96).
+
+   **AMENDED at step 7, by measurement.** This item first specified ONE
+   compressible section carrying both halves. Its own test refuted that
+   at a budget of one token: the section survived (non-droppable did its
+   job) while `_bounded_view` cut the `STANDING ATTACKERS` block out of
+   the middle, leaving a pack that showed a frame with no visible crisis
+   — the exact presentation §9.5 exists to abolish, arrived at silently.
+   The split is §9.5's own wording rather than a patch: only the
+   articulation digest is described there as "compressed; expandable by
+   view". Exact is affordable because the crisis is bounded by
+   construction (`FRAME_SLICE_ATTACKERS_N` × `_ATTACKER_HEAD_CHARS` plus
+   `FRAME_SLICE_DEPARTURES_N`, under 600 tokens against the smallest
+   shipped pack budget of 1200), and both caps state themselves in-band.
+   Section-slot census therefore moves conj **15 → 17** and crit
+   **11 → 13**, not 16/12.
    - **Non-droppable** is the mechanism (N3): the allocator cannot
      silently remove it, and a shortfall surfaces as `mandatory_overflow`
      — the IR's own disclosed channel — never as a quiet cut.
@@ -192,9 +208,8 @@ Idempotent by content address.
      Position is a HEDGE (N3), and the choice is recorded as such: the
      cache-prefix cost of putting a per-cycle-varying section ahead of
      the static foundation is the reason it is 4 and not 3.
-   - Section-slot census moves: conj **15 → 16**, crit **11 → 12**. Both
-     numbers are pinned by `DR-CON-packs-and-token-economy`'s own AST
-     check, which moves in the same commit.
+   - Both numbers are pinned by `DR-CON-packs-and-token-economy`'s own
+     AST check, which moves in the same commit.
 
 2. `DISCLOSED_ON_DROP: frozenset` = `{"citable-evidence-blocks",
    "frozen-evidence-context", "premise-invitation", "standing-attacks"}`

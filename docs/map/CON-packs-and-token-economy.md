@@ -41,6 +41,8 @@ section mandatory.
 | Auxiliary packs — NOT on the IR | `src/deepreason/llm/packs.py` | `render_experiment_pack`, `render_property_pack`, `render_cx_retry_pack` |
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
 | Section-size constants | `src/deepreason/llm/packs.py` | `NEIGHBOURHOOD_N`, `ATTACKERS_N`, `FOUNDATION_CHARS` |
+| The frame slice's two halves, and their caps | `src/deepreason/calculus/render.py` | `render_frame_slice_context` (digest), `render_frame_crisis_context` (wounds + departures), `FRAME_SLICE_ATTACKERS_N`, `FRAME_SLICE_DEPARTURES_N`, `ARTICULATION_DIGEST_CHARS` |
+| Sections whose absence is disclosed rather than silent | `src/deepreason/llm/packs.py` | `DISCLOSED_ON_DROP`, `_allocate_sections` |
 | Presentation profiles and their budgets | `src/deepreason/llm/profiles.py` | `PROFILES`, `ProfileSpec.pack_budget` |
 | Aggregate prefix clip (legacy path) | `src/deepreason/llm/profiles.py` | `clip_pack`, via `packs.apply_model_profile` |
 | Profile → Config projection | `src/deepreason/llm/profiles.py` | `apply_profile_to_config` |
@@ -74,7 +76,7 @@ tie-break is load-bearing in `render_crit_pack`: `target` and
 `target-support-chain` both sit at priority 4, and the chain follows the
 content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==15 and len(r)==11;assert r['target']==r['target-support-chain']==4"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==17 and len(r)==13;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4"`
 
 **Slow-changing sections precede volatile ones** so a provider prefix cache
 bills the repeated head at the cached rate — problem context and commitment
@@ -93,6 +95,47 @@ that greps for the forbidden pairing goes silently vacuous the moment the calls
 are reformatted. The second check exhibits the overshoot.
 `check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K=[{k.arg:getattr(k.value,'value',None) for k in c.keywords} for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'];D=[k for k in K if k.get('droppable') is True];assert D and all(k.get('compressible') is True for k in D)"`
 `check: python -c "from deepreason.packs import PackIR, PackSection, allocate_pack; s=PackSection(id='d', text_ref='inline:'+('x'*4000), priority=1, min_tokens=10, max_tokens=1000, droppable=True, compressible=False, cache_group='d'); r=allocate_pack(PackIR(profile='p', template_role='critic', target_tokens=50, sections=(s,))); assert r.allocated_tokens==1000 and r.mandatory_overflow==0"`
+
+**NEGATIVE — the frame slice is never droppable, and its CRISIS half is never
+compressible either.** For every consulted frame assertion whose σ admits the
+problem, the pack carries the subject's articulation digest AND the subject's
+standing attackers (§9.5, Rung 6) — "the frame ships its own crisis". These are
+TWO sections, and the split is §9.5's own wording rather than a convenience:
+only the articulation digest is described there as "compressed; expandable by
+view".
+
+- `frame-slice` — the digest. Non-droppable, compressible. The expansion is
+  `deepreason standing --json`.
+- `frame-crisis` — the standing attackers, the departure directive and what has
+  already been declared. Non-droppable AND non-compressible, i.e. exact. It
+  sorts before `frame-slice` on id, so the crisis leads.
+
+Droppable would let budget pressure restore the settled-frame presentation the
+sections exist to abolish, and silently — a dropped section leaves no header and
+no placeholder, so nothing downstream could tell a frame with no open
+indictments from a frame whose indictments the allocator cut. **Compressible
+would do the same thing more quietly still**, and this is measured rather than
+feared: the first implementation carried both halves in ONE compressible
+section, and at a budget of one token the section survived while
+`_bounded_view` cut the `STANDING ATTACKERS` block out of the middle of a pack
+that still showed a frame. Its own test caught it
+(`experiments/2026-08-24-change-rung6-frame-render-departures/`).
+
+Exact is affordable only because the crisis is BOUNDED BY CONSTRUCTION —
+`FRAME_SLICE_ATTACKERS_N` attackers at `_ATTACKER_HEAD_CHARS` each plus
+`FRAME_SLICE_DEPARTURES_N` declarations, under 600 tokens against the smallest
+shipped pack budget of 1200. Both caps state themselves in-band wherever they
+bite ("5 of 12 shown"), so a capped list never reads as a complete one.
+
+POSITION (priority 4, after the cacheable static head, before the
+neighbourhood) is a HEDGE and not the mechanism.
+`docs/RESEARCH_FINDINGS_Q1Q10_2026-08-22.md` Q1 measured that standing rules
+decay in context regardless of placement, so the load-bearing parts are the
+allocator flags here and the deterministic `held_frame_obligations` subtraction
+in `calculus/render.py` — neither of which depends on the model honouring
+anything it was shown.
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(ast.literal_eval(c.args[0]),[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and ast.literal_eval(c.args[0]) in ('frame-slice','frame-crisis')];assert len(K['frame-slice'])==2 and all(k['droppable'] is False and k['compressible'] is True for k in K['frame-slice']), K;assert len(K['frame-crisis'])==2 and all(k['droppable'] is False and k['compressible'] is False for k in K['frame-crisis']), K"`
+`check: python -m pytest tests/test_frame_render.py::test_the_frame_slice_survives_a_budget_that_drops_everything_optional tests/test_frame_render.py::test_the_exact_crisis_section_is_bounded_by_construction -q`
 
 **NEGATIVE — the critic's target may never be excerpted.** The `target` section
 is mandatory and exact. Budgeting it converted a transport limit into an

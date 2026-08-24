@@ -48,7 +48,11 @@ FRAME_SLICE_ATTACKERS_N = 5
 # calculus's own description -- the expansion is `deepreason standing --json`
 # and the MCP `run_standing` tool, both of which carry the full slice.
 ARTICULATION_DIGEST_CHARS = 400
-_ATTACKER_HEAD_CHARS = 160
+_ATTACKER_HEAD_CHARS = 120
+# Declared departures render capped for the same reason attackers do: a
+# section that is EXACT must be bounded by construction or it is not a
+# section, it is an unbounded mandatory cost.
+FRAME_SLICE_DEPARTURES_N = 4
 
 # Keyed to the LABEL, per the Formalization §8.2. Three grades, not two: the
 # two-exit claim holds only under an extra axiom (`FrameDecisive`) that the
@@ -86,6 +90,7 @@ class FrameSliceV1:
     attackers_total: int
     departure_protocol: str
     declared_departures: tuple[tuple[str, tuple[str, ...]], ...]
+    declared_departures_total: int
 
 
 def subject_attackers(harness, subject_id: str) -> tuple[tuple[str, str, str], ...]:
@@ -210,6 +215,7 @@ def frame_slices(harness, problem_id: str) -> tuple[FrameSliceV1, ...]:
             continue
         head, truncated, commitments = articulation_digest(harness, grant.subject_id)
         attackers = subject_attackers(harness, grant.subject_id)
+        declared = declared_departures(harness, grant.subject_id)
         slices.append(
             FrameSliceV1(
                 assertion_id=grant.assertion_id,
@@ -221,13 +227,14 @@ def frame_slices(harness, problem_id: str) -> tuple[FrameSliceV1, ...]:
                 attackers=attackers[:FRAME_SLICE_ATTACKERS_N],
                 attackers_total=len(attackers),
                 departure_protocol=grant.departure_protocol,
-                declared_departures=declared_departures(harness, grant.subject_id),
+                declared_departures=declared[:FRAME_SLICE_DEPARTURES_N],
+                declared_departures_total=len(declared),
             )
         )
     return tuple(sorted(slices, key=lambda s: s.assertion_id))
 
 
-def _slice_lines(slice_: FrameSliceV1) -> list[str]:
+def _digest_lines(slice_: FrameSliceV1) -> list[str]:
     lines = [
         f"  subject {slice_.subject_id}",
         f"    {slice_.digest_head}"
@@ -235,13 +242,16 @@ def _slice_lines(slice_: FrameSliceV1) -> list[str]:
            if slice_.digest_truncated else ""),
     ]
     if slice_.commitment_ids:
-        lines.append(
-            "    its commitments: " + ", ".join(slice_.commitment_ids)
-        )
+        lines.append("    its commitments: " + ", ".join(slice_.commitment_ids))
+    return lines
+
+
+def _crisis_lines(slice_: FrameSliceV1) -> list[str]:
+    lines = [f"  subject {slice_.subject_id}"]
     if slice_.attackers:
         # The cap states itself. A count shown without its total is a silent
-        # cap, and a pack that silently caps is a pack whose reader cannot
-        # tell a quiet frame from a truncated one.
+        # cap, and a reader cannot then tell a quiet frame from a truncated
+        # one.
         shown = (
             f"{len(slice_.attackers)} of {slice_.attackers_total} shown, by id"
             if slice_.attackers_total > len(slice_.attackers)
@@ -265,18 +275,20 @@ def _slice_lines(slice_: FrameSliceV1) -> list[str]:
     if slice_.departure_protocol:
         lines.append(f"    departure protocol: {slice_.departure_protocol}")
     if slice_.declared_departures:
-        lines.append("    ALREADY DECLARED against this frame:")
+        extra = slice_.declared_departures_total - len(slice_.declared_departures)
+        header = "    ALREADY DECLARED against this frame"
+        header += f" ({len(slice_.declared_departures)} of {slice_.declared_departures_total} shown, by id):" if extra else ":"
+        lines.append(header)
         for departing, broken in slice_.declared_departures:
             lines.append(f"      - {departing} breaks {', '.join(broken)}")
     return lines
 
 
 def render_frame_slice_context(harness, problem_id: str) -> str | None:
-    """The model-facing frame slice for one problem, or None when nothing
-    frames it.
+    """The frame's ARTICULATION for one problem, or None when nothing frames it.
 
-    None rather than an empty string, and rather than a "no frame" notice:
-    a pack section that announced the absence of a frame would be exactly the
+    None rather than an empty string, and rather than a "no frame" notice: a
+    pack section that announced the absence of a frame would be exactly the
     empty provenance-shaped slot `RESEARCH_JUDGE_BLINDING` measured as worse
     than a populated one.
     """
@@ -288,7 +300,35 @@ def render_frame_slice_context(harness, problem_id: str) -> str | None:
         "it is posed in, not a claim you are required to accept):"
     ]
     for slice_ in slices:
-        lines += _slice_lines(slice_)
+        lines += _digest_lines(slice_)
+    return "\n".join(lines)
+
+
+def render_frame_crisis_context(harness, problem_id: str) -> str | None:
+    """The frame's OPEN INDICTMENTS and its departure directive, or None.
+
+    SEPARATE FROM THE DIGEST, and the split is §9.5's own wording rather than
+    a convenience: only the articulation digest is described as "compressed;
+    expandable by view". The wounds are not, and a first version that carried
+    both in one compressible section was caught by its own test -- at a tight
+    budget the section survived, `_bounded_view` cut its middle, and the
+    STANDING ATTACKERS block disappeared while the pack still showed a frame.
+    A frame presented without its crisis is exactly the settled-frame
+    presentation §9.5 exists to abolish, so this half is rendered EXACT.
+
+    Exact means it must be bounded by construction, not by hope:
+    `FRAME_SLICE_ATTACKERS_N` attackers of `_ATTACKER_HEAD_CHARS` each and
+    `FRAME_SLICE_DEPARTURES_N` declarations, both caps stated in-band wherever
+    they bite. That is the mandatory cost a frame in scope imposes on the pack
+    budget, and where it will not fit the allocator reports
+    `mandatory_overflow` and the envelope check refuses -- never a quiet cut.
+    """
+    slices = frame_slices(harness, problem_id)
+    if not slices:
+        return None
+    lines = []
+    for slice_ in slices:
+        lines += _crisis_lines(slice_)
     return "\n".join(lines)
 
 

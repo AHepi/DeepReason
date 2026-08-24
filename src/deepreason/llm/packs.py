@@ -358,6 +358,8 @@ def render_conj_pack(
     frozen_evidence_context: str | None = None,
     citable_evidence_context: str | None = None,
     capability_result_context: str | None = None,
+    frame_slice_context: str | None = None,
+    frame_crisis_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
@@ -506,6 +508,39 @@ def render_conj_pack(
                 3,
                 droppable=False,
                 compressible=False,
+            )
+        )
+    if frame_crisis_context:
+        # EXACT, and it sorts before "frame-slice" on id so the crisis leads.
+        # A frame renders its own open indictments in every pack in its scope
+        # (§9.5). Droppable would let budget pressure remove them silently --
+        # a dropped section leaves no header. Compressible would do the same
+        # thing more quietly still: the first version of this carried the
+        # wounds and the digest in ONE compressible section, and at a tight
+        # budget `_bounded_view` cut the STANDING ATTACKERS block out of a
+        # pack that still showed a frame. Bounded by construction in
+        # `calculus/render.py`, which is what makes exact affordable.
+        sections.append(
+            _pack_section(
+                "frame-crisis",
+                frame_crisis_context,
+                4,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    if frame_slice_context:
+        # The articulation digest, and this half IS "compressed; expandable by
+        # view" in §9.5's own words -- the expansion is `deepreason standing
+        # --json`. Non-droppable so a frame never renders as absent.
+        sections.append(
+            _pack_section(
+                "frame-slice",
+                frame_slice_context,
+                4,
+                droppable=False,
+                compressible=True,
+                min_tokens=96,
             )
         )
     if accepted:
@@ -860,6 +895,8 @@ def render_crit_pack(
     token_budget: int,
     premise_invitation: str | None = None,
     citable_evidence_context: str | None = None,
+    frame_slice_context: str | None = None,
+    frame_crisis_context: str | None = None,
 ) -> str:
     target = state.artifacts[target_id]
     # Commitments render BEFORE the target (angle 4): problem criteria lead
@@ -971,6 +1008,32 @@ def render_crit_pack(
                     provenance_refs=tuple(ref.target for ref in known),
                 )
             )
+    if frame_crisis_context:
+        # The critic needs this half for a reason the conjecturer does not: an
+        # UNDECLARED conflict with the frame is criticisable as a silent
+        # assumption, and a critic who cannot see what was declared cannot
+        # tell the two apart. Exact, for the same reason as in the conjecture
+        # pack.
+        sections.append(
+            _pack_section(
+                "frame-crisis",
+                frame_crisis_context,
+                4,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    if frame_slice_context:
+        sections.append(
+            _pack_section(
+                "frame-slice",
+                frame_slice_context,
+                4,
+                droppable=False,
+                compressible=True,
+                min_tokens=96,
+            )
+        )
     counterexample_note = (
         _COUNTEREXAMPLE_NOTE
         if _carries_execution_oracle(target, commitments)

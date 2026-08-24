@@ -1,6 +1,6 @@
 # CHECKLIST — Rung 6
 
-State: **step 7 next**
+State: **step 8 next**
 Authority: `SPEC.md` items S1-S9; `REQUEST.md` R1-R7, N1-N3, G1-G8.
 Rule: one step per `dr-execute-step` invocation; a step is done only when
 its done-criterion output is PASTED below it.
@@ -48,7 +48,7 @@ production lines over `src/`.
   Done-criterion: the four tests pass; each is shown RED first by a
   one-line mutation, pasted.
 
-- [ ] **7. Pack sections** (S6.1) `[COMMIT]`
+- [x] **7. Pack sections** (S6.1) `[COMMIT]`
   `frame_slice_context` on both renderers; one non-droppable,
   compressible `frame-slice` section each.
   Done-criterion: `python -m pytest tests/test_pack_ir.py
@@ -165,6 +165,21 @@ nothing; the retry asserts the replacement landed):
 
 Restored: `10 passed`.
 
+**Step 7** — section-slot census after the split:
+```
+conj 17  crit 13
+p4 ids conj: ['active-properties', 'citable-evidence-blocks', 'frame-crisis', 'frame-slice', 'frozen-evidence-context']
+p4 ids crit: ['frame-crisis', 'frame-slice', 'target', 'target-support-chain']
+```
+`frame-crisis` sorts before `frame-slice` on id, so the crisis leads; the
+pre-existing `target` / `target-support-chain` tie at 4 is unchanged. Ring:
+`tests/test_pack_ir.py tests/test_pack_prefix.py tests/test_frame_render.py
+tests/test_crit_batch.py tests/test_oracle.py
+tests/test_prose_refutation_boundaries.py tests/test_harness_fixes.py
+tests/test_compact_profiles.py` → **172 passed**.
+`DR-CON-packs-and-token-economy`'s two new checks were RUN before they were
+written down (`census OK`, `flags OK`, `2 passed`).
+
 ## Failures and re-plans
 
 **Step 4 — SPEC.md was wrong about the fixture count.** SPEC.md said
@@ -174,6 +189,15 @@ same one and went red. The blast-radius census DID list that line and it
 was mis-read as a membership assertion — E45's own lesson recurring inside
 a spec that cites it. Both fixtures updated, SPEC.md corrected on the
 record rather than silently.
+
+**Step 7 — SPEC.md S6.1 specified one section; it had to become two.**
+The single compressible section passed non-droppability and still lost the
+wounds: at a budget of one token the section survived and `_bounded_view`
+cut the `STANDING ATTACKERS` block out of its middle, so the pack showed a
+frame with no visible crisis. Caught by the step-7 test rather than by
+review. Split into an EXACT `frame-crisis` and a compressible
+`frame-slice`, which is §9.5's own wording — only the digest is described
+there as compressed. SPEC.md amended on the record.
 
 **Step 6 — the first ordering test could not fail.** It registered three
 attacks and asserted the render was id-sorted. `Harness._adjudicate` does

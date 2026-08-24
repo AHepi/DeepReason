@@ -26,6 +26,7 @@ from deepreason.calculus import operations
 from deepreason.calculus.render import (
     EXIT_GRADES,
     FRAME_SLICE_ATTACKERS_N,
+    render_frame_crisis_context,
     articulation_digest,
     declared_departures,
     exit_grade,
@@ -114,13 +115,14 @@ def test_a_consulted_frame_renders_its_digest_and_its_standing_attackers(harness
     )
     problem = _problem(harness, "p-tides", "predict the spring tides here")
 
-    text = render_frame_slice_context(harness, "p-tides")
-    assert text is not None
-    assert subject.id in text
-    assert "the moon's differential" in text          # the digest
-    assert SUBJECT_COMMITMENT.id in text              # the departure surface
-    assert critic.id in text                          # the crisis, in frame
-    assert "STANDING ATTACKERS" in text
+    digest = render_frame_slice_context(harness, "p-tides")
+    crisis = render_frame_crisis_context(harness, "p-tides")
+    assert digest is not None and crisis is not None
+    assert subject.id in digest and subject.id in crisis
+    assert "the moon's differential" in digest        # the articulation
+    assert SUBJECT_COMMITMENT.id in digest            # the departure surface
+    assert critic.id in crisis                        # the crisis, in frame
+    assert "STANDING ATTACKERS" in crisis
     assert problem.id == "p-tides"
 
 
@@ -141,7 +143,7 @@ def test_the_standing_attacker_cap_states_itself(harness):
         attack(harness, subject.id, f"independent-fault-{index}")
     _problem(harness, "p-tides", "predict the spring tides here")
 
-    text = render_frame_slice_context(harness, "p-tides")
+    text = render_frame_crisis_context(harness, "p-tides")
     assert f"{FRAME_SLICE_ATTACKERS_N} of {FRAME_SLICE_ATTACKERS_N + 2} shown" in text
     slice_ = frame_slices(harness, "p-tides")[0]
     assert len(slice_.attackers) == FRAME_SLICE_ATTACKERS_N
@@ -155,7 +157,7 @@ def test_the_slice_carries_the_departure_directive_and_the_protocol(harness):
     assertion's own protocol string travels with it."""
     _framed(harness)
     _problem(harness, "p-tides", "predict the spring tides here")
-    text = render_frame_slice_context(harness, "p-tides")
+    text = render_frame_crisis_context(harness, "p-tides")
     assert "DEPARTURES ARE PERMITTED" in text
     assert "no penalty anywhere" in text
     assert "UNDECLARED conflict" in text
@@ -187,7 +189,7 @@ def test_declaring_a_departure_removes_the_held_obligation(harness):
     assert held_frame_obligations(harness, subject.id, silent.id) == (
         SUBJECT_COMMITMENT.id,
     )
-    assert departing.id in render_frame_slice_context(harness, "p-tides")
+    assert departing.id in render_frame_crisis_context(harness, "p-tides")
 
 
 def test_a_departure_declaration_is_itself_attackable(harness):
@@ -225,10 +227,11 @@ def test_the_slice_is_byte_identical_across_renders(tmp_path):
         attack(harness, subject.id, f"independent-fault-{index}")
     _problem(harness, "p-tides", "predict the spring tides here")
 
-    first = render_frame_slice_context(harness, "p-tides")
-    assert first == render_frame_slice_context(harness, "p-tides")
     replayed = Harness(root, read_only=True)
-    assert render_frame_slice_context(replayed, "p-tides") == first
+    for render in (render_frame_slice_context, render_frame_crisis_context):
+        first = render(harness, "p-tides")
+        assert first == render(harness, "p-tides")
+        assert render(replayed, "p-tides") == first
 
 
 # --- G5 / N1: omit, do not redact --------------------------------------------
@@ -251,7 +254,8 @@ def test_the_frame_slice_emits_no_provenance_shaped_slot(harness):
     _problem(harness, "p-tides", "predict the spring tides here")
 
     bare = render_frame_slice_context(harness, "p-tides")
-    assert bare is not None
+    bare_crisis = render_frame_crisis_context(harness, "p-tides")
+    assert bare is not None and bare_crisis is not None
     attack(harness, subject.id, "mispredicts-the-neap-tide")
     departing = _art(harness, "c: a solar-lunar composite")
     operations.file_departure_declaration(
@@ -260,15 +264,17 @@ def test_the_frame_slice_emits_no_provenance_shaped_slot(harness):
         broken_ids=[SUBJECT_COMMITMENT.id], rationale="the solar term matters",
     )
     full = render_frame_slice_context(harness, "p-tides")
+    full_crisis = render_frame_crisis_context(harness, "p-tides")
 
-    for text in (bare, full):
+    for text in (bare, bare_crisis, full, full_crisis):
         lowered = text.lower()
         for label in PROVENANCE_SHAPED:
             assert label not in lowered, (label, text)
     # And the empty parts are ABSENT rather than blanked.
-    assert "STANDING ATTACKERS" not in bare
-    assert "ALREADY DECLARED" not in bare
-    assert "(none)" not in full and "—\n" not in full
+    assert "STANDING ATTACKERS" not in bare_crisis   # no attackers yet
+    assert "ALREADY DECLARED" not in bare_crisis     # nothing declared yet
+    for text in (full, full_crisis):
+        assert "(none)" not in text
 
 
 def test_an_absent_frame_renders_nothing_rather_than_a_no_frame_notice(harness):
@@ -277,6 +283,7 @@ def test_an_absent_frame_renders_nothing_rather_than_a_no_frame_notice(harness):
     model to wonder what was withheld."""
     _problem(harness, "p-plain", "an ordinary problem with no frame at all")
     assert render_frame_slice_context(harness, "p-plain") is None
+    assert render_frame_crisis_context(harness, "p-plain") is None
 
 
 def test_attackers_render_in_id_order_whatever_order_the_state_holds(harness):
@@ -303,3 +310,147 @@ def test_attackers_render_in_id_order_whatever_order_the_state_holds(harness):
 
     slice_ = frame_slices(harness, "p-tides")[0]
     assert [attacker for attacker, _, _ in slice_.attackers] == sorted(made)
+
+
+# --- the slice as a PACK section ---------------------------------------------
+
+def _pack_state(harness):
+    """A framed problem plus a target, ready for either renderer."""
+    subject, _, _, _ = _framed(harness)
+    attack(harness, subject.id, "mispredicts-the-neap-tide-by-forty-minutes")
+    problem = _problem(harness, "p-tides", "predict the spring tides here")
+    return subject, problem
+
+
+def test_the_frame_slice_survives_a_budget_that_drops_everything_optional(harness):
+    """The mechanism, not the position (N3).
+
+    A budget small enough to drop every optional section must still carry the
+    frame slice, because a dropped section leaves NO header and no
+    placeholder: a droppable slice would restore the settled-frame
+    presentation §9.5 exists to abolish, and nothing downstream could tell
+    that it had. Both renderers, because a frame that shipped its crisis to
+    the conjecturer and not the critic would leave the critic unable to tell
+    a declared departure from a silent one.
+    """
+    from deepreason.llm.packs import render_conj_pack, render_crit_pack
+
+    subject, _ = _pack_state(harness)
+    slice_text = render_frame_slice_context(harness, "p-tides")
+    assert slice_text is not None
+
+    crisis_text = render_frame_crisis_context(harness, "p-tides")
+    assert crisis_text is not None
+
+    conj = render_conj_pack(
+        harness.state.problems["p-tides"], harness.state, harness.commitments,
+        harness.blobs, vs_k=2, token_budget=1,
+        frame_slice_context=slice_text, frame_crisis_context=crisis_text,
+    )
+    crit = render_crit_pack(
+        subject.id, harness.state, harness.commitments, harness.blobs,
+        token_budget=1,
+        frame_slice_context=slice_text, frame_crisis_context=crisis_text,
+    )
+    for pack in (conj, crit):
+        assert "frame-crisis" in pack and "frame-slice" in pack
+        # The WHOLE crisis, not a compressed view of it: every attacker line
+        # survives a budget of one token. This is the assertion the one-section
+        # version failed.
+        assert crisis_text in pack
+        assert "STANDING ATTACKERS" in pack
+
+
+def test_an_unframed_problem_adds_no_frame_section_to_either_pack(harness):
+    """G5, at the pack layer. `None` in means no section out — not an empty
+    one, and not a header announcing that no frame applies."""
+    from deepreason.llm.packs import render_conj_pack, render_crit_pack
+
+    target = _art(harness, "an ordinary candidate")
+    problem = _problem(harness, "p-plain", "an ordinary problem, no frame")
+    conj = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500,
+        frame_slice_context=render_frame_slice_context(harness, "p-plain"),
+        frame_crisis_context=render_frame_crisis_context(harness, "p-plain"),
+    )
+    crit = render_crit_pack(
+        target.id, harness.state, harness.commitments, harness.blobs,
+        token_budget=2500,
+        frame_slice_context=render_frame_slice_context(harness, "p-plain"),
+        frame_crisis_context=render_frame_crisis_context(harness, "p-plain"),
+    )
+    for pack in (conj, crit):
+        assert "frame-slice" not in pack
+        assert "frame-crisis" not in pack
+        assert "FRAME (" not in pack
+
+
+def test_the_frame_slice_allocation_is_accounted(harness):
+    """G7. The slice is in the allocation record with its own size, so "does
+    it fit the budget" is a question the accounting answers rather than one
+    a reader estimates from the rendered bytes."""
+    from deepreason.packs import PackIR, PackSection, allocate_pack
+    from deepreason.packs.allocate import approximate_tokens
+
+    _pack_state(harness)
+    slice_text = render_frame_slice_context(harness, "p-tides")
+    section = PackSection(
+        id="frame-slice", text_ref=f"inline:{slice_text}", priority=4,
+        min_tokens=96, max_tokens=approximate_tokens(slice_text),
+        droppable=False, compressible=True, cache_group="frame-slice",
+    )
+    result = allocate_pack(
+        PackIR(profile="p", template_role="conjecturer", target_tokens=2500,
+               sections=(section,))
+    )
+    booked = result.accounting()["sections"]["frame-slice"]
+    assert booked["dropped"] is False
+    assert booked["tokens"] == booked["source_tokens"]
+    assert result.allocated_tokens <= result.target_tokens
+
+
+def test_the_exact_crisis_section_is_bounded_by_construction(harness):
+    """The price of EXACT, paid where it can be seen.
+
+    A non-droppable, non-compressible section is retained in full even when it
+    exceeds the target (`DR-CON-packs-and-token-economy`'s mandatory-section
+    rule), so a crisis block that could grow without limit would be an
+    unbounded mandatory cost on every pack in the frame's scope. It cannot:
+    the attacker cap, the attacker head bound and the declaration cap bound it
+    together, and both caps state themselves in-band where they bite.
+    """
+    from deepreason.calculus.render import (
+        ARTICULATION_DIGEST_CHARS,
+        FRAME_SLICE_DEPARTURES_N,
+    )
+    from deepreason.packs.allocate import approximate_tokens
+
+    subject, _, _, _ = _framed(harness)
+    problem = _problem(harness, "p-tides", "predict the spring tides here")
+    for index in range(FRAME_SLICE_ATTACKERS_N * 4):
+        attack(harness, subject.id, f"independent-fault-{index}")
+    for index in range(FRAME_SLICE_DEPARTURES_N * 3):
+        departing = _art(harness, f"c{index}: a rival that breaks with the frame")
+        operations.file_departure_declaration(
+            harness, problem=problem, subject_ref=subject.id,
+            departing_ref=departing.id, broken_ids=[SUBJECT_COMMITMENT.id],
+            rationale=f"reason {index}",
+        )
+
+    crisis = render_frame_crisis_context(harness, "p-tides")
+    slice_ = frame_slices(harness, "p-tides")[0]
+    assert len(slice_.attackers) == FRAME_SLICE_ATTACKERS_N
+    assert len(slice_.declared_departures) == FRAME_SLICE_DEPARTURES_N
+    # Both caps disclose themselves rather than implying the shown set is all.
+    assert f"{FRAME_SLICE_ATTACKERS_N} of {slice_.attackers_total} shown" in crisis
+    assert (
+        f"{FRAME_SLICE_DEPARTURES_N} of {slice_.declared_departures_total} shown"
+        in crisis
+    )
+    # The bound itself: comfortably inside the smallest shipped pack budget
+    # (`PROFILES[COMPACT].pack_tokens_max` is 1200).
+    assert approximate_tokens(crisis) < 600
+    assert approximate_tokens(render_frame_slice_context(harness, "p-tides")) < (
+        ARTICULATION_DIGEST_CHARS // 2
+    )
