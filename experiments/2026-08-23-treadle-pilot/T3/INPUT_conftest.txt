@@ -1,0 +1,33 @@
+=== tests/conftest.py: the harness fixture and art() helper ===
+3:import pytest
+4-
+5:from deepreason.harness import Harness
+6:from deepreason.ontology import Interface, Provenance, Warrant, WarrantType
+7-
+8-
+9-@pytest.fixture
+10:def harness(tmp_path) -> Harness:
+11-    return Harness(tmp_path / "run")
+12-
+13-
+14:def art(harness: Harness, text: str, *, interface: Interface | None = None, **kwargs):
+15-    return harness.create_artifact(
+16-        text,
+17-        interface=interface,
+18-        provenance=kwargs.pop("provenance", Provenance(role="seed")),
+19-        **kwargs,
+20-    )
+21-
+22-
+23-def attack(harness: Harness, target_id: str, note: str, *, warrant_kwargs: dict | None = None):
+24-    """Register nu + a critic artifact carrying a warrant against target."""
+25-    nu = art(harness, f"nu: the attack '{note}' is sound and relevant")
+26-    warrant = Warrant(
+27-        id=f"w-{note}",
+28-        target=target_id,
+29-        type=WarrantType.ARGUMENTATIVE,
+30-        validity_node=nu.id,
+31-        **(warrant_kwargs or {}),
+32-    )
+33-    critic = harness.create_artifact(
+34-        f"critic: {note}",

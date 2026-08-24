@@ -1,0 +1,125 @@
+=== tests/test_trial.py: imports and the pairwise fixture pattern (lines 1-40) ===
+"""P5 acceptance (c) (spec §16): a rubric warrant registers only with a
+conforming trial transcript; an order-swap inconsistency blocks a pairwise
+warrant. Plus: referential integrity, paraphrase flips, ensemble splits."""
+
+import json
+
+import pytest
+
+from deepreason.config import Config
+from deepreason.harness import Harness, WellFormednessError
+from deepreason.informal.standards import register_standard
+from deepreason.informal.trial import pairwise_discriminate, run_trial
+from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.budget import TokenMeter
+from deepreason.llm.endpoints import MockEndpoint
+from deepreason.ontology import (
+    Commitment,
+    Interface,
+    Problem,
+    ProblemProvenance,
+    Provenance,
+    Status,
+    Warrant,
+    WarrantType,
+)
+from tests.conftest import art
+
+CASE = "the passage uses parallel fifths in bar 3, violating clause 2"
+DEFENCE = "the fifths are an intentional echo of the cantus firmus"
+CRITIC = json.dumps({"attack": True, "case": CASE})
+DEFENDER = json.dumps({"answer": DEFENCE})
+FAIL_RULING = json.dumps({"verdict": "fail", "decisive_point": "parallel fifths in bar 3"})
+PASS_RULING = json.dumps({"verdict": "pass", "decisive_point": "intentional echo"})
+PARAPHRASES = json.dumps(
+    {"edits": [{"content": "fifths move in parallel at bar 3; clause 2 forbids it"},
+               {"content": "bar 3 contains consecutive fifths, contra clause 2"}]}
+)
+
+
+def _setup(harness) -> tuple[str, Commitment]:
+
+=== tests/test_trial.py: _pairwise_setup and two pairwise tests (lines 160-245) ===
+    assert harness.state.status[target_id] == Status.ACCEPTED
+    assert any(
+        "trial-blocked:ensemble-split" in event.inputs
+        for event in harness.log.read()
+    )
+    logged_calls = [event.llm for event in harness.log.read() if event.llm]
+    assert meter.calls == len(logged_calls) == 7
+    assert sum(call.tokens for call in logged_calls) == meter.total
+
+
+def test_ensemble_split_blocks_and_logs(harness):
+    target_id, kappa = _setup(harness)
+    adapter = _adapter(harness, [FAIL_RULING], judge2=[PASS_RULING])
+    assert adapter.ensemble_size("judge") == 2
+    assert run_trial(
+        harness, target_id, kappa, adapter, Config(), authority="status"
+    ) is None
+    blocks = [e for e in harness.log.read()
+              if any(t == "trial-blocked:ensemble-split" for t in e.inputs)]
+    assert blocks  # disagreement is a signal, never averaged away (§10.4)
+
+
+def _pairwise_setup(harness):
+    a = art(harness, "rival A: the moon's differential pull explains both tides")
+    b = art(harness, "rival B: solar heating explains the tides")
+    problem = harness.register_problem(
+        Problem(
+            id="disc:pi-tides", description="discriminate rivals", criteria=[],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "discrimination", "from": ["pi-tides", a.id, b.id]}
+            ),
+        )
+    )
+    return problem, a, b
+
+
+def test_order_swap_inconsistency_blocks_pairwise(harness):
+    """Acceptance (c): same presented label wins both orders => positional
+    preference, not discrimination => no warrant, rivalry stands."""
+    problem, a, b = _pairwise_setup(harness)
+    ruling_a = json.dumps({"winner": "A", "decisive_point": "differential pull"})
+    adapter = LLMAdapter(
+        {"judge": MockEndpoint([ruling_a, ruling_a])}, harness.blobs, retry_max=2
+    )
+    assert pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="status"
+    ) is None
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED  # unresolved, correctly
+    blocks = [e for e in harness.log.read()
+              if any(t == "trial-blocked:order-swap" for t in e.inputs)]
+    assert blocks
+
+
+def test_consistent_pairwise_registers_indexed_warrant(harness):
+    problem, a, b = _pairwise_setup(harness)
+    responses = [
+        json.dumps({"winner": "A", "decisive_point": "differential pull"}),
+        json.dumps({"winner": "B", "decisive_point": "differential pull"}),  # swapped order
+    ]
+    adapter = LLMAdapter({"judge": MockEndpoint(responses)}, harness.blobs, retry_max=2)
+    ruling = pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="status"
+    )
+    assert ruling is not None
+    assert harness.state.status[b.id] == Status.REFUTED   # loser, for pi only
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    body = json.loads(harness.blobs.get(ruling.content_ref) if not
+                      ruling.content_ref.startswith("inline:") else
+                      ruling.content_ref[len("inline:"):].encode())
+    assert body["pairwise"]["problem"] == problem.id  # indexed to pi (D10)
+
+
+def test_judge_cannot_discriminate_registers_nothing(harness):
+    problem, a, b = _pairwise_setup(harness)
+    neither = json.dumps({"winner": "neither", "decisive_point": ""})
+    adapter = LLMAdapter({"judge": MockEndpoint([neither])}, harness.blobs, retry_max=2)
+    assert pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="status"
+    ) is None
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED

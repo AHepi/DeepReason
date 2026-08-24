@@ -1,0 +1,89 @@
+=== THE DOCUMENT CLAIM UNDER TEST ===
+Source: CLAUDE.md, section 'Hard-won invariants (violations of these were real, recorded defects)'
+
+  "Per-capability budgets meter only their own capability's records —
+   the shared capability-state maps pool ALL capabilities' proposals
+   and work orders; always filter by type."
+
+=== THE CODE, VERBATIM ===
+Source: src/deepreason/capabilities/simulation.py, lines 535-580
+
+        )
+
+        reason = None
+        source_bytes = b""
+        if not self.policy.enabled:
+            reason = "capability_disabled"
+        else:
+            # Simulation budgets meter SIMULATION work only. The capability
+            # state pools every capability's proposals and work orders in
+            # shared maps, and counting the pooled totals here let two
+            # research fetches exhaust the simulation budgets before the
+            # first simulation proposal arrived (openchallenge
+            # run-9e9812fe: both typed simulation proposals denied with
+            # zero simulations run).
+            ordered_requests = sorted(
+                (
+                    item
+                    for item in self.harness.capability_state.proposals.values()
+                    if isinstance(item, SimulationProposalV1)
+                ),
+                key=lambda item: (
+                    item.source_call_seq,
+                    item.proposal_index,
+                    item.id,
+                ),
+            )
+            request_ordinal = ordered_requests.index(proposal) + 1
+            if request_ordinal > self.policy.maximum_simulation_requests:
+                reason = "request_budget_exhausted"
+        simulation_executions = sum(
+            1
+            for order in self.harness.capability_state.work_orders.values()
+            if isinstance(order, SimulationWorkOrderV1)
+        )
+        if (
+            reason is None
+            and simulation_executions >= self.policy.maximum_simulation_executions
+        ):
+            reason = "execution_budget_exhausted"
+        if (
+            reason is None
+            and len(proposal.model_source.encode("utf-8"))
+            > self.policy.maximum_generated_code_bytes
+        ):
+            reason = "generated_code_bytes_exceeded"
+
+
+=== SUPPORTING CONTEXT: the shared maps, src/deepreason/capabilities/state.py lines 80-110 ===
+    ResearchConsumptionV1,
+)
+
+
+@dataclass
+class CapabilityReplayState:
+    proposals: dict[str, SimulationProposalV1] = field(default_factory=dict)
+    transitions: dict[str, CapabilityTransitionV1] = field(default_factory=dict)
+    current_transition_by_request: dict[str, str] = field(default_factory=dict)
+    grants: dict[str, SimulationGrantV1] = field(default_factory=dict)
+    compiled: dict[str, CompiledSimulationV1] = field(default_factory=dict)
+    work_orders: dict[str, SimulationWorkOrderV1] = field(default_factory=dict)
+    receipts: dict[str, SimulationExecutionReceiptV1] = field(default_factory=dict)
+    result_packages: dict[str, SimulationResultPackageV1] = field(default_factory=dict)
+    consumptions: dict[str, SimulationConsumptionV1] = field(default_factory=dict)
+    event_seqs: list[int] = field(default_factory=list)
+    process_digest: str = "sha256:" + hashlib.sha256(
+        b"capability.process-state.v1\x00empty"
+    ).hexdigest()
+
+    @property
+    def request_count(self) -> int:
+        return len(self.proposals)
+
+    @property
+    def execution_count(self) -> int:
+        return len(self.work_orders)
+
+    @property
+    def consumption_count(self) -> int:
+        return len(self.consumptions)
