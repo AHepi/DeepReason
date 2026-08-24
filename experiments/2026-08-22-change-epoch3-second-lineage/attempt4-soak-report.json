@@ -1,0 +1,528 @@
+{
+  "attempts": {
+    "attempts": 32,
+    "attempts_without_complete_lease": 0,
+    "distinct_contracts": [
+      "conjecturer.turn.v6"
+    ],
+    "distinct_roles": [
+      "conjecturer"
+    ],
+    "repairs": 0
+  },
+  "case": {
+    "attached_evidence_enabled": true,
+    "case": "epoch3",
+    "compile_notices": [],
+    "criteria": [
+      "uhi-energy-balance@v1",
+      "uhi-nocturnal-release@v1",
+      "uhi-cross-city-modulator@v1"
+    ],
+    "manifest_sha256": "e9eaa3b76189efd9815e3a3319b021d412d3db73b00f025110f384d8708f6a12",
+    "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+    "run_input_digest": "c9c3af6ba58e30b691591ab310b1d9f770da2bbf30386b83d300d8565328fc7d"
+  },
+  "checks": [
+    {
+      "detail": "state='completed' stop_reason='budget_exhausted' typed_error=None",
+      "id": "A1-typed-terminal",
+      "ok": true
+    },
+    {
+      "detail": "stop_reason='budget_exhausted'",
+      "id": "A2-no-operational-failure",
+      "ok": true
+    },
+    {
+      "detail": "0 violation(s)",
+      "id": "A3-verify-root-clean",
+      "ok": true
+    },
+    {
+      "detail": "reached cycle 8 of 8 requested; the deepest recorded death was cycle 2",
+      "id": "A4-cycles-reached",
+      "ok": true
+    }
+  ],
+  "cycles": 8,
+  "drive": {
+    "elapsed_s": 151.0,
+    "max_cycle_seen": 8,
+    "progress_events": 11,
+    "terminal": {
+      "accounting": {
+        "delta": 0,
+        "logged_tokens_this_run": 163226,
+        "metered_tokens": 163226,
+        "note": "nonzero delta = spend invisible to the log; investigate before trusting metrics"
+      },
+      "canonical_bridge_eligible": true,
+      "capability_accounting": {
+        "compilation_usage_known": true,
+        "execution_usage_known": true,
+        "result_follow_up_work_orders": 0,
+        "schema": "capability-accounting.v1",
+        "simulation_backend_attempts": 0,
+        "simulation_executions": 0,
+        "simulation_requests": 0
+      },
+      "capability_audits": {
+        "CAPABILITY_REQUEST_AUDIT.md": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/CAPABILITY_REQUEST_AUDIT.md",
+        "FINDINGS.md": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/FINDINGS.md",
+        "REPLAY_VALIDATION.json": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/REPLAY_VALIDATION.json",
+        "RESEARCH_SOURCE_AUDIT.md": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/RESEARCH_SOURCE_AUDIT.md",
+        "SIMULATION_RESULTS.md": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/SIMULATION_RESULTS.md",
+        "THEORY_TEST_LINEAGE.md": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/THEORY_TEST_LINEAGE.md",
+        "TOKEN_ACCOUNTING.json": "/tmp/claude-0/-home-user-DeepReason/4b1ff047-2891-56cd-9210-713081846314/scratchpad/soak/run2/run/TOKEN_ACCOUNTING.json"
+      },
+      "completion_status": "incomplete",
+      "display": {
+        "status_counts": {
+          "refuted": 1,
+          "unrefuted": 15
+        }
+      },
+      "frontier": [],
+      "model_execution": {
+        "base_profile": "standard",
+        "event_horizon_seq": 251,
+        "mode": "base_only",
+        "recovery_routes": [],
+        "route_seat_bases": [
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "argumentative_critic",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "conjecturer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "defender",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "grounding_reviewer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "judge",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "property_designer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "summarizer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "synthesizer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "thesis",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "variator",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "vision_critic",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          }
+        ],
+        "route_seat_model_classifications": [
+          {
+            "authorized_contract_ids": [
+              "batch-critic.v2",
+              "critic.atomic-target.v1"
+            ],
+            "behavioral_grant_sha256": "bffdc5ce8affd30011b4770788f4debfb20dd52733b4eeb872b6787445390227",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [
+              "sha256:77cb13f00c59987dd1c35c471cee9a73397377230e23c8e0273f6444d8e7b69b",
+              "sha256:db5e31e2c450fbf45627b21823ef1af165dc8d8480c081c68709333de75b9522"
+            ],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "argumentative_critic",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "qualified_exact_behavior"
+          },
+          {
+            "authorized_contract_ids": [
+              "conjecturer.atomic-candidate.v1",
+              "conjecturer.turn.v6"
+            ],
+            "behavioral_grant_sha256": "a8d02ef904804388ad5a318ff92e6098fe437b88c262fd19ba57527b6f8f49e7",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [
+              "sha256:0b1693ca7e536278ca6ad4ff7d3a0f816d6e51cf138aa19d38db4607ba94218a",
+              "sha256:54fb87618809bc976520fd9ca637f6e10a3a5ed1745d5ea91e79703db35cf465"
+            ],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "conjecturer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "qualified_exact_behavior"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "910b8fd79d478ceb1a0a194a1b79b581c5c95097bda5473d9342f112c1be616b",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "defender",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "05eeaee846898313cbc92677cb66ec4b43d2dfb4b19d6e95f79745cba710f7aa",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "grounding_reviewer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "17426e95a1929e733131800e5ab8d04dbe7b776c71049a9ce935092d96f4e4c3",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "judge",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "5bf4380fd462d32b4742ce6a3ae8af35017f35cd5d004ecbe50dba4fa64e11c1",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "property_designer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "edcd3ad71069fede02c8eb705a9ffbb45d7b4d80b0d92cd02c6a6e89700ec09d",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "summarizer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "f4c99d9cb1420edcc617565b6548cee62118e2f72f0826e1792692674afd54c2",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "synthesizer",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "8900d46af2cf1161f1464f3223f4dc53237e0f8703a96c017efa1a2e91e142bb",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "thesis",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "64b36c7ebf0cf2bb9b4295501eb578fa14282bef16cceda3f4c3f6318563bca3",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "variator",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "3afb6ef88eec9bbd9e3450cbf9b23a9130763d1053a361e6998f51c03ef7be64",
+            "classification_binding_ref": "sha256:9a0c441e7959d9cb8ed2ae3291427b25871cd7cd8f1ba2056920cd8f70eb7b9e",
+            "classification_plan_ref": "sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687",
+            "role": "vision_critic",
+            "route_sha256": "67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          }
+        ],
+        "schema": "model-execution-summary.v1"
+      },
+      "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+      "schema": "deepreason-run-result-v2",
+      "state": "completed",
+      "stop": {
+        "digest": "d223a9479b874bf49f6ebfb21369acfa7faafc9ef97df5285bce07a35fd15037",
+        "event_seq": 251,
+        "metrics": {
+          "criticism_debt": 0.0,
+          "cycle": 8,
+          "frontier_delta": 0,
+          "gate_orbit": false,
+          "new_admissions": 0,
+          "new_problems": 0,
+          "open_research": 0,
+          "pending_deterministic_checks": 0,
+          "repair_exhausted": false,
+          "status_churn": 0,
+          "stuck_signal": false,
+          "workload_complete": false
+        },
+        "policy_digest": "76a98a16373c7575acfc41e8877c17b2f3476622cb06f8cbcefc8d388101b147",
+        "reason": "budget_exhausted",
+        "schema": "deepreason-run-stop-v1"
+      },
+      "survivors": [],
+      "terminal_commitment_ref": "sha256:e091b5c665aa3333b09f7a9139aebc0ecb3a01bf73e222ebcc758a150063ed66",
+      "verification": {
+        "completion_satisfied": false,
+        "epistemic_checks_passed": true,
+        "finding_counts": {
+          "completion": 1,
+          "epistemic": 0,
+          "integrity": 0,
+          "operational": 0,
+          "security": 0
+        },
+        "integrity_valid": true,
+        "operational_checks_passed": true,
+        "schema": "verification.summary.v2",
+        "security_valid": true,
+        "valid": true
+      },
+      "workload": "text"
+    },
+    "typed_error": null
+  },
+  "exit_status": 0,
+  "induce_repairs": 0,
+  "induced_schemas": [],
+  "object_counts": {
+    "artifact": 16,
+    "commitment": 5,
+    "problem": 1,
+    "warrant": 3,
+    "workflow-context-exposure-v2": 32,
+    "workflow-context-pack-plan-v1": 32,
+    "workflow-dispatch-authorization-v1": 32,
+    "workflow-lifecycle-decision": 1,
+    "workflow-lifecycle-snapshot": 1,
+    "workflow-model-classification-binding-v1": 1,
+    "workflow-provider-attempt-v1": 32,
+    "workflow-route-seat-model-classification-plan-v1": 1,
+    "workflow-run-terminal-commitment-v1": 1,
+    "workflow-run-terminal-result-draft-v1": 1,
+    "workflow-semantic-admission-v1": 32,
+    "workflow-stop-metrics-observation": 1,
+    "workflow-token-reservation-v2": 32,
+    "workflow-work-lifecycle-transition-v1": 160,
+    "workflow-work-preparation-v1": 32,
+    "workflow-work-terminal-v1": 32
+  },
+  "provider_calls": 112,
+  "qualification": {
+    "elapsed_s": 3.0,
+    "report_written": true,
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": "f9b23a9130763d1053a361e6998f51c03ef7be64\",\n        \"endpoint_id\": \"ollama-glm-5.2\",\n        \"evidence_pair_ids\": [],\n        \"role\": \"vision_critic\",\n        \"route_sha256\": \"67d8e1b84b5cf7882e37576076b062e2d23d0c862beeefb8b6f0828700e7747c\",\n        \"seat\": 0,\n        \"selected_class\": \"inactive_no_authorized_contract\"\n      }\n    ],\n    \"id\": \"sha256:31edb7364f0c68401dc3dc96bb580a0f9a21cffc7f9a032e31e995c6a06d62df\",\n    \"manifest_digest\": \"e9eaa3b76189efd9815e3a3319b021d412d3db73b00f025110f384d8708f6a12\",\n    \"qualification_evidence_sha256\": \"94af7e1bf3e006e7635d8e5c1ef0b85304be6a53552471ae6c682ec1d5d79687\",\n    \"schema\": \"workflow.route-seat-model-classification-plan.v1\"\n  },\n  \"run_manifest_schema_version\": 6,\n  \"run_manifest_sha256\": \"e9eaa3b76189efd9815e3a3319b021d412d3db73b00f025110f384d8708f6a12\",\n  \"schema\": \"deepreason-production-contract-doctor-v1\",\n  \"summary\": {\n    \"alias_failures\": 0,\n    \"case_count\": 80,\n    \"eventual_valid_count\": 80,\n    \"first_pass_valid_count\": 80,\n    \"pair_count\": 4,\n    \"qualified\": true,\n    \"qualified_pair_count\": 4,\n    \"re_exercised_pair_count\": 0,\n    \"repair_count\": 0,\n    \"scope_violations\": 0,\n    \"semantic_admission_count\": 80\n  }\n}\n"
+  },
+  "seams": [
+    {
+      "detail": {
+        "distinct_contracts": [
+          "conjecturer.turn.v6"
+        ],
+        "reached_by": {
+          "workflow-contract-decomposition-transition-v1": 0,
+          "workflow-provider-attempt-v1": 32
+        },
+        "repairs": 0
+      },
+      "disposition": "partial",
+      "expected_red_until": null,
+      "id": "D1-seat-contract",
+      "reason": "seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline",
+      "what": "seat contracts with repairs"
+    },
+    {
+      "detail": {
+        "attempts": 32,
+        "attempts_without_complete_lease": 0,
+        "reached_by": {
+          "workflow-provider-attempt-v1": 32
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": null,
+      "id": "D2-route-lease",
+      "reason": "",
+      "what": "lease-checked routes with tuning"
+    },
+    {
+      "detail": {
+        "reached_by": {
+          "workflow-dispatch-authorization-v1": 32
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": null,
+      "id": "D3-budget-auth",
+      "reason": "",
+      "what": "budget authorization"
+    },
+    {
+      "detail": {
+        "reached_by": {
+          "workflow-token-reservation-v2": 32
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": "the reservation-bound fix window (llm/adapter.py)",
+      "id": "D4-reservation-bound",
+      "reason": "",
+      "what": "reservation/dispatch bounds"
+    }
+  ],
+  "status": {
+    "accepted": 0,
+    "activity": "budget_exhausted",
+    "artifact_id": null,
+    "completed_units": null,
+    "cycle": 8,
+    "determinate": false,
+    "display_status_counts": {
+      "refuted": 1,
+      "unrefuted": 15
+    },
+    "frontier_size": 0,
+    "message": "",
+    "phase": "stop",
+    "problem_id": "question-4dd62735b90864a75220e09b302500bc",
+    "queued_checks": 0,
+    "queued_criticism": 0,
+    "refuted": 0,
+    "run_id": "e9eaa3b76189efd9815e3a3319b021d412d3db73b00f025110f384d8708f6a12",
+    "seq": 18,
+    "state": "completed",
+    "stop_reason": "budget_exhausted",
+    "suspended": 0,
+    "token_limit": null,
+    "token_spend": 163226,
+    "total_units": null,
+    "workload": "text"
+  },
+  "token_budget": null
+}
