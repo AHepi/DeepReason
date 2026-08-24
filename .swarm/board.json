@@ -124,10 +124,16 @@
       ],
       "depends_on": [],
       "goal": "Independent review of the delivered Rung D tranche (proof debt / Duhem localization), commits b10fc5fd2..c1a2f09a1 on main. Second measurement: identical to REV-RungD except the reviewer sees the whole diff.",
-      "notes": [],
+      "notes": [
+        {
+          "by": "treadle",
+          "note": "Diff shown contains only docs/checklist; S1\u2013S20 are unsupported because no src/tests changes are present.",
+          "result": "FAIL"
+        }
+      ],
       "out_of_scope": "You are reviewing a diff that is already committed and pushed. Do not propose rewrites. Your one output is the verdict block. A claim you cannot check against the diff you were shown is CANNOT_DECIDE, not a guess.",
       "reads": [],
-      "reviewer": "",
+      "reviewer": "treadle",
       "shas": [
         "c1a2f09a158ef43f5a30af2b9de08d36daf188be",
         "d2732ea701bd09b97b47af03b3253ea6de76fff4",
@@ -142,8 +148,8 @@
         "78636e68f987c4260f7834480ad77be08c650033",
         "098a0b0bc8c485d530abf7f3aeaf16938e24e2eb"
       ],
-      "state": "COMMITTED",
-      "state_ts": 1787544946.8561347,
+      "state": "BLOCKED",
+      "state_ts": 1787544980.9555185,
       "verify": "",
       "worker": "monitor"
     }
