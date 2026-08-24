@@ -209,6 +209,21 @@ order-independent by construction. Verified under `-n 4` above, not assumed.
 DONE-CRITERION: `python -m pytest tests/test_calculus_succession.py
 tests/test_frame_render.py -q` — 0 failed.
 
+
+**DONE 2026-08-24.**
+
+```
+tests/test_calculus_succession.py ..............   14 passed in 0.83s
+ring (succession + frame render + standing + H1 + promotion closure/succession):
+88 passed in 41.59s
+```
+
+**One fixture point the tests forced.** The narrow tides scope does NOT admit
+the discrimination problem, so a suppression test written against it would have
+looked green while the frame was merely out of scope. The rivalry fixture uses
+a scope that DOES admit it, and the test asserts admission first — the
+suppression is what does the work, not the scope.
+
 ## Step 8 — the trial's two roads and its record (S5, S6; R6-R9, G5)
 
 The two GENERIC keywords on `informal/trial.py::pairwise_discriminate`
@@ -220,6 +235,28 @@ order-disagreement case.
 DONE-CRITERION: `python -m pytest tests/test_calculus_succession_trial.py
 tests/test_trial.py tests/test_scheduler*.py -q` — 0 failed.
 
+
+**DONE 2026-08-24.**
+
+```
+tests/test_calculus_succession_trial.py ...................   19 passed in 0.84s
+ring (succession trial + succession + trial + authority policy + scheduler +
+frame render):                                               111 passed in 6.57s
+tests/test_signals.py tests/test_signal_contract.py           19 passed in 3.73s
+```
+
+**The gate caught an undeclared signal, and that is the mechanism working.**
+`succession.trial-flip-rate.v1` was emitted before it was declared;
+`test_every_emitted_signal_is_registered` AST-scans the source tree and failed
+on it. Declared through the typed channel per `DR-REC-add-signal` — name, unit,
+producer-agnostic semantics, staleness bound — never by teaching a consumer
+about succession.
+
+`informal/trial.py` gained exactly two GENERIC keywords, `presentation` and
+`observer`. Neither names succession and the module imports nothing from
+`calculus`, so no new package edge exists and there is still ONE pairwise
+instrument.
+
 ## Step 9 — anomaly conservation, proved (S7; R5) `[COMMIT]` GATE
 
 `tests/test_calculus_anomaly_conservation.py`, all four limbs. Map:
@@ -229,6 +266,27 @@ tests/test_trial.py tests/test_scheduler*.py -q` — 0 failed.
 DONE-CRITERION: `python -m pytest
 tests/test_calculus_anomaly_conservation.py -q` — 0 failed — plus the
 blast-radius and diff-budget JSON.
+
+
+**DONE 2026-08-24.**
+
+```
+tests/test_calculus_anomaly_conservation.py ........   8 passed in 0.27s
+ring (succession, trial, promotion, scheduler, signals, frame render):
+145 passed in 11.11s
+diff budget: {"areas": {"src": 893}, "ceiling": 700, "verdict": "EXCEEDED"}
+```
+
+**The diff budget EXCEEDED at this checkpoint — the workflow's own stop
+condition.** 893 src insertions against the ledgered 700, with roughly 1000
+projected at completion. Put to the operator with priced roads; the answer and
+its disposition are ledgered as REQUEST.md Amendment 1.
+
+Map moved in this commit: `DR-SUB-calculus` (succession, the render exception,
+anomaly conservation, `Owns:` gains `succession.py`),
+`DR-SEAM-calculus-x-rules` (the exception rides the seam without widening it,
+plus its own trap row), `DR-CON-standing-and-background` (Prop 9.6 proved, the
+second cascade entry).
 
 ## Step 10 — the promotion problem's wound-count rank (S8; C-D1)
 

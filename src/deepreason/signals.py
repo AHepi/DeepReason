@@ -483,6 +483,23 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
     # mechanism nobody triggers is a mechanism that never runs (ERRATA E28),
     # and a receipt is the only way that is visible from the record alone.
     SignalDeclaration(
+        name="succession.trial-flip-rate.v1",
+        unit="ratio",
+        semantics="the fraction of a succession trial's pair evaluations whose "
+                  "TOP CHOICE reversed when the two candidates changed places "
+                  "(inputs: [signal, discrimination problem id, trial record "
+                  "id, rate, outcome]). 0.0 means every evaluation named the "
+                  "same candidate under both presentations; 1.0 means every "
+                  "one reversed, which is a positional preference rather than "
+                  "a discrimination. It is a diagnostic of the TRIAL and of "
+                  "nothing else: it says nothing about which candidate is "
+                  "better, and a reversal is recorded as a typed no-verdict "
+                  "rather than broken by a tiebreak. Reported on every "
+                  "succession trial, because a trial that never reports its "
+                  "flip rate is claiming a precision it does not have",
+        staleness="run",
+    ),
+    SignalDeclaration(
         name="premise.batch-translation-offered.v1",
         unit="count",
         semantics="how many groups of OPEN orphan problems currently share one "

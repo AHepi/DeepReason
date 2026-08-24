@@ -33,6 +33,10 @@ from deepreason.measures.hv import (
     run_hv_floor,
 )
 from deepreason.calculus.nomination import nominate
+from deepreason.calculus.succession import (
+    is_succession_trial,
+    run_succession_trial,
+)
 from deepreason.calculus.promotion import promotion_criteria_sweep
 from deepreason.measures.reach import reach_sweep
 from deepreason.premises import (
@@ -1965,8 +1969,16 @@ class Scheduler:
 
         # Discrimination in informal mode resolves comparatively (§10.2):
         # a pairwise ruling, not more conjectures.
-        if problem.provenance.trigger == SpawnTrigger.DISCRIMINATION and self.adapter.has_role(
-            "judge"
+        #
+        # SUCCESSION is the same branch, not a second one (§9.7: "succession is
+        # discrimination"). What differs is that its trial runs WITHOUT a judge
+        # seat too -- the program road needs none, and locking succession out
+        # of a solo run would collide with the standing law -- and that its
+        # rubric road is handed the two articulation digests rather than the
+        # frame assertions' own bytes (Q2a).
+        succession = is_succession_trial(harness, problem.id)
+        if problem.provenance.trigger == SpawnTrigger.DISCRIMINATION and (
+            succession or self.adapter.has_role("judge")
         ):
             from deepreason.informal.trial import pairwise_discriminate
 
@@ -1984,7 +1996,7 @@ class Scheduler:
                 for i in problem.provenance.from_
                 if harness.state.status.get(i) == Status.ACCEPTED
             ][:2]
-            if len(rivals) == 2:
+            if len(rivals) == 2 or (succession and len(rivals) >= 2):
                 try:
                     authority = trial_authority_for(
                         config, self.workload_profile, AuthoritySurface.PAIRWISE
@@ -2003,7 +2015,21 @@ class Scheduler:
                         f"{rivals[0]}|{rivals[1]}",
                     ):
                         run_pairwise = False
-                    if run_pairwise:
+                    if succession:
+                        # The program road runs whatever `run_pairwise` says:
+                        # a bounded rubric road is a bound on the JUDGE, never
+                        # on whether the trial happened or reported its flip
+                        # rate. `adapter=None` is how the solo road is taken.
+                        run_succession_trial(
+                            harness,
+                            problem,
+                            self.adapter if run_pairwise else None,
+                            config,
+                            authority=authority,
+                            diagnostics=self.diagnostics,
+                            rubric_rivals=rivals,
+                        )
+                    elif run_pairwise:
                         pairwise_discriminate(
                             harness,
                             problem,

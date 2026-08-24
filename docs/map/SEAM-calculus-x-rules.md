@@ -53,6 +53,7 @@ them — a render that minted anything, or a promotion criterion that rendered.
 | Site | File | Symbol | What it enforces |
 |---|---|---|---|
 | The only crossing | `calculus/render.py` | `render_frame_slice_context`, `render_frame_crisis_context` | a rule receives TEXT; it never receives a grant, a label or a decision |
+| Rung 7's succession context uses the SAME crossing | `calculus/render.py` | `render_frame_slice_context` returns the succession pack for a succession trial | the seam did not widen: no new symbol crosses, no new pack section exists, and `llm/packs.py` learns nothing about succession |
 | The consult path is not widened for it | `calculus/render.py` | `frame_slices` calls `consulted` and `frames` unchanged | `invariants.py`'s `standing-integrity` check reads `consulted`; a render that needed it widened would reach into frozen surface 3 |
 | Which problem a critic's frame belongs to | `rules/crit.py` | `_target_problem` | the frame shown agrees with the standard `_problem_context` leads the pack with |
 | Every pack in scope | `rules/conj.py`, `rules/crit.py` | three `render_*_pack` call sites | §9.5's "in every pack in scope" — see `DR-SEAM-llm-x-rules` for the census check |
@@ -78,6 +79,25 @@ The alternative that was NOT taken, recorded so it is not re-proposed: passing a
 `frozen_evidence_context` and `citable_evidence_context` already cross as
 strings for the same reason.
 
+## The succession exception rides this seam without widening it (Rung 7)
+
+§9.7's one proper render exception — the succession pack suppresses the
+incumbent's frame slice and renders both articulation digests — lands ENTIRELY
+on the calculus side. `render.frame_slices` returns `()` for a succession
+trial and `render_frame_slice_context` returns the succession context instead,
+so the two names `rules/` imports are unchanged and the import check above
+still pins the crossing to exactly those two.
+
+That was a design constraint, not a convenience. A new pack section would have
+needed `llm/packs.py` to know what a succession is, and a new symbol crossing
+here would have made the seam two crossings wide for a case that is a
+different TEXT rather than a different relationship. It also inherits the
+existing slot's non-droppability for free, which a new section would have had
+to re-argue.
+
+`check: python -m pytest tests/test_calculus_succession.py::test_the_incumbents_frame_slice_is_suppressed tests/test_calculus_succession.py::test_both_articulation_digests_are_rendered -q`
+`check: ! grep -q "succession" src/deepreason/llm/packs.py`
+
 ## Traps
 
 - **Believing this seam is one-directional.** It is not, and the first draft of
@@ -95,6 +115,13 @@ strings for the same reason.
   atomic-decomposition path in `crit.py` exists only after a batch critic
   exhausts its schema, and the first implementation of Rung 6 missed it. The
   census check lives in `DR-SEAM-llm-x-rules` and counts sites.
+- **Reading the succession suppression as a second exception.** It is ONE
+  site, in `frame_slices`, and both renderers inherit it. A future change that
+  suppressed inside `render_frame_slice_context` instead would leave
+  `render_frame_crisis_context` still rendering the incumbent's wounds as
+  though they were the frame's own crisis — a succession pack posed in the
+  incumbent's vocabulary, which is exactly the bias the exception removes. The
+  check under the succession section above pins the site by function name.
 - **Expecting `calculus/render.py` to fail loudly on a broken frame.** It does
   not, deliberately: `frames` answers False for a scope that no longer
   compiles, and `declared_departures` skips an undecodable body. A render that

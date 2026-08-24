@@ -226,7 +226,20 @@ def frame_slices(harness, problem_id: str) -> tuple[FrameSliceV1, ...]:
     path `invariants.py` reads for the `standing-integrity` check, and a
     render that needed them widened would be a render reaching into a frozen
     surface for its own convenience.
+
+    THE ONE RENDER EXCEPTION lives here, and it is one site rather than two
+    (§9.7, Rung 7): a SUCCESSION TRIAL yields no slices at all, so both
+    `render_frame_slice_context` and `render_frame_crisis_context` fall to
+    their existing `None` path and the trial of a frame is framed by neither
+    party. Suppressing in `frame_slices` rather than in each renderer is what
+    keeps it ONE exception -- two suppressions could drift, and a pack that
+    suppressed the digest but kept the crisis would still be posed in the
+    incumbent's vocabulary.
     """
+    from deepreason.calculus.succession import is_succession_trial
+
+    if is_succession_trial(harness, problem_id):
+        return ()
     slices = []
     for grant in consulted(harness):
         if not frames(harness, grant.subject_id, problem_id):
@@ -310,6 +323,15 @@ def render_frame_slice_context(harness, problem_id: str) -> str | None:
     empty provenance-shaped slot `RESEARCH_JUDGE_BLINDING` measured as worse
     than a populated one.
     """
+    from deepreason.calculus.succession import render_succession_context
+
+    succession = render_succession_context(harness, problem_id)
+    if succession is not None:
+        # The exception's other half: what a succession pack shows INSTEAD.
+        # It rides this slot rather than a new pack section so allocation
+        # treats it exactly as it treats a frame slice -- non-droppable -- and
+        # so `llm/packs.py` learns nothing about succession.
+        return succession
     slices = frame_slices(harness, problem_id)
     if not slices:
         return None

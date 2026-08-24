@@ -1,7 +1,7 @@
 <!-- DR-SUB-calculus -->
 Verified-at: b41c5cf10
-Verify: python -m pytest tests/test_calculus_claim_substrate.py tests/test_calculus_nomination.py tests/test_promotion_criteria.py tests/test_promotion_succession.py -q
-Owns: src/deepreason/calculus/render.py, src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/nomination.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/promotion.py, src/deepreason/calculus/scope.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/views.py
+Verify: python -m pytest tests/test_calculus_claim_substrate.py tests/test_calculus_nomination.py tests/test_promotion_criteria.py tests/test_promotion_succession.py tests/test_calculus_succession.py -q
+Owns: src/deepreason/calculus/render.py, src/deepreason/calculus/succession.py, src/deepreason/calculus/claims.py, src/deepreason/calculus/compiler.py, src/deepreason/calculus/nomination.py, src/deepreason/calculus/operations.py, src/deepreason/calculus/programs.py, src/deepreason/calculus/promotion.py, src/deepreason/calculus/scope.py, src/deepreason/calculus/separation.py, src/deepreason/calculus/standing.py, src/deepreason/calculus/views.py
 Seams: DR-SEAM-calculus-x-rules
 Seams-undocumented: calculus x ontology, calculus x problem-layer-lifecycle, calculus x evaluation, calculus x adjudication
 
@@ -196,6 +196,88 @@ could not check" must never become the strongest criticism in the calculus.
 `check: python -m pytest tests/test_promotion_closure.py -q`
 `check: python -c "import inspect; from deepreason.scheduler.scheduler import Scheduler; src = inspect.getsource(Scheduler._promotion_step); assert 'nominate(' in src and 'promotion_criteria_sweep(' in src"`
 
+## Succession, and the one render exception (Rung 7)
+
+Rung 5 gave the RELATION (`accounts-for`, the strong form). Rung 7 gives the
+TRIAL — and it is not a new instrument, which is the design. §9.7's own words:
+"succession is discrimination." The rivalry reaches the frontier through
+`rules/spawn.py`'s existing ≥2-survivors branch, which knows nothing about
+frames; `calculus/succession.py` decides only what the PACK shows once that
+problem is selected and what the TRIAL RECORDS about how it judged.
+
+**The one proper render exception, and it is ONE SITE.** `render.frame_slices`
+returns `()` for a succession trial, so both renderers fall to their existing
+`None` path and `render_frame_slice_context` returns the succession context
+instead. Suppressing in `frame_slices` rather than in each renderer is what
+keeps it one exception: two suppressions could drift, and a pack that
+suppressed the digest while keeping the crisis would still be posed in the
+incumbent's vocabulary. What the pack shows is both articulation digests, both
+candidates' wounds under the same cap, and the criteria in a fixed order —
+ordered by SUBJECT ID, never by incumbency, because ordering by who arrived
+first is provenance entering appraisal (Ax 4.1). The failure being mitigated
+has a name — INCUMBENT-JUDGE BIAS — and the mitigation is symmetric exposure;
+"a view from nowhere is not on offer."
+
+`check: python -m pytest tests/test_calculus_succession.py -q`
+`check: python -c "
+import ast, pathlib
+src = pathlib.Path('src/deepreason/calculus/render.py').read_text()
+calling = [n.name for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef) and 'is_succession_trial(' in ast.unparse(n)]
+assert calling == ['frame_slices'], calling
+"`
+
+**The trial records four things Q2 requires**
+(`docs/RESEARCH_FINDINGS_Q1Q10_2026-08-22.md`), and the number that governs
+them is that ordering alone flips the top-1 candidate on 16–39% of prompts:
+
+| | requirement | where |
+|---|---|---|
+| Q2a | both orders of the two ARTICULATION DIGESTS | `program_road`, `rubric_presentation` |
+| Q2b | order-disagreement is a typed NO-VERDICT, never a tiebreak | `NO_VERDICT` / `ORDER_DISAGREEMENT`, reusing the guard's own `blocked:order-swap` |
+| Q2c | criterion order fixed or randomized, and WHICH recorded | `SUCCESSION_CRITERION_ORDER = "fixed"`, in the record |
+| Q2d | the per-trial FLIP RATE, first-class | `flip_rate`, beside `flips` and `evaluated` |
+
+FIXED rather than randomized, and the reason is recorded rather than assumed:
+§12.1's determinism admits exactly two roads — seed the kernel or log the draw
+— and Q2's measurement is that criterion order SHIFTS a criterion's mean, not
+that randomizing removes the shift. Fixing it makes the shift constant and
+named.
+
+Two roads, and the rubric one is OPTIONAL (D-6 answer A, and the operator's
+solo law): the program road needs no seat, so succession is never locked out of
+a solo run. A rubric ruling is admitted only through the existing
+`pairwise_discriminate` guard — its referential-integrity, order-swap and
+execution-supremacy screens all still apply — reached through two GENERIC
+keywords (`presentation`, `observer`) so `informal/` learns nothing about
+frames and no new package edge is created.
+
+`check: python -m pytest tests/test_calculus_succession_trial.py -q`
+`check: python -c "
+import ast, pathlib
+t = ast.parse(pathlib.Path('src/deepreason/informal/trial.py').read_text())
+mods = [(n.module or '') for n in ast.walk(t) if isinstance(n, ast.ImportFrom)]
+assert not [m for m in mods if 'calculus' in m], mods
+"`
+
+## Anomaly conservation (Rung 7)
+
+Nothing new was built for it: `succeeded_wound_refs`, the machine-derived wound
+list, and `bounded` validity with its domain and tolerance all shipped at Rungs
+4–5. What Rung 7 adds is the proof that the road CLOSES.
+
+A successor claims the incumbent's wounds as MENTIONS, and the role is the
+whole of the safety: a DEPENDENCE would suspend the successor the moment a
+wound was reinstated away, so a successful defence of the incumbent would
+silently unseat its replacement. The successor's scope statement fixes the
+incumbent's residual validity domain, leaving a bounded-validity assertion for
+the fallen subject — INSTRUMENT STANDING, which is not a third standing value
+but a consulted grant whose `validity` reads `bounded` (C3). It is authored by
+the successor and attackable like anything: refute it and the fallen subject
+stops framing even its bounded domain, and that fall cascades exactly as the
+first one did.
+
+`check: python -m pytest tests/test_calculus_anomaly_conservation.py -q`
+
 ## State it owns
 
 **None that persists, and none added anywhere else.** No field was added to
@@ -215,7 +297,10 @@ found through `addr`.
 `scope_admits`, `consultability_of`, `consulted`, `standing_of`, `frames`,
 `standing_view`, `origin_problem`, `problem_parents`, `lineage_root`,
 `lineage_span`, `candidate_scope`, `build_certificate`, `nominate`,
-`criteria_for`, `succeeds`, `ordering_holds`, `promotion_criteria_sweep`.
+`criteria_for`, `succeeds`, `ordering_holds`, `promotion_criteria_sweep`,
+`fallen_frames`, `unseparated_fallen_frames`, `framed_problem_ids`,
+`succession_trial_of`, `is_succession_trial`, `render_succession_context`,
+`run_succession_trial`, `record_succession_trial`.
 
 - **A promotion criterion that counted SUBSTANTIVE would close a loop nobody
   wants.** The class in `programs.PROGRAMS` decides whether a program can ground

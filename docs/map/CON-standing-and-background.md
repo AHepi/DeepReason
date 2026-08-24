@@ -132,6 +132,36 @@ names no standing symbol, and nothing in `adjudication/` imports the view.
 
 `check: python -m pytest tests/test_calculus_standing.py::test_frame_assertions_do_not_move_a_single_label tests/test_calculus_standing.py::test_label_computation_names_no_standing_symbol tests/test_calculus_standing.py::test_no_adjudication_module_imports_the_standing_view -q`
 
+**Prop 9.6 (wound persistence) — PROVED at Rung 7, end to end.** A wound
+changes `status(b)` and does not change `standing(b)`. Nothing was BUILT for
+wounds and nothing needed to be: a fail verdict on the subject's own
+observation-valued commitment already yields a demonstrative warrant, an attack
+edge and a refuted label through the tree's one warrant constructor. What the
+rung owed was the proof.
+
+The proof is taken at every layer a wound could have reached, not only at the
+label — a label-only test is satisfied by three of the six cases and would have
+missed the other three. So: `status(b)` MOVES (or the test proves nothing), the
+assertion's own label is untouched, the grant is identical field for field, the
+frame still frames and still RENDERS with the wound on display, and the cascade
+does NOT fire. Newton between 1859 and 1915 is the intended state:
+status-refuted, standing-background, the perihelion in every pack, succession
+wanted.
+
+MUTATION PROVEN: a clause making a refuted subject lose its own standing turns
+three of the six red, and the tranche's CHECKLIST carries both runs.
+
+`check: python -m pytest tests/test_calculus_wound_persistence.py -q`
+
+**The cascade's second entry (Prop 9.7, completed at Rung 7).** A consulted
+assertion that has LEFT unrefuted standing marks every problem it carried —
+`DR-CON-problem-layer-lifecycle` owns the marking function and the three
+conditions the entry keeps. Read the two together: a wound to the SUBJECT
+orphans nothing, and a fall of the ASSERTION orphans everything in σ. That
+asymmetry IS the separation, seen from the problem layer.
+
+`check: python -m pytest tests/test_calculus_cascade_frame_entry.py -q`
+
 **Prop 12.4 (axis independence) — PROVED at Rung 4, both directions.** Status
 moves without standing moving (refute the SUBJECT: it only MENTIONS b, so pass
 two never reaches the assertion). Standing moves without status moving (attack

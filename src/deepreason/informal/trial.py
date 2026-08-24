@@ -14,6 +14,7 @@ of blocks is a critic-gaming signal.
 
 import hashlib
 import json
+from dataclasses import dataclass
 
 from deepreason.authority import TrialAuthority
 from deepreason.informal.standards import precedent_slice, resolve_standard, standard_body
@@ -1124,17 +1125,54 @@ def _advisory_pairwise_result(
     return observation
 
 
+@dataclass(frozen=True)
+class PairwisePresentation:
+    """What the judge is shown INSTEAD of the two candidates' own bytes.
+
+    Generic on purpose: this module learns nothing about what a caller is
+    comparing. §9.7's succession trial supplies the two ARTICULATION DIGESTS
+    and a fixed criterion order through this, because a succession judged on
+    the frame assertions' own JSON would be judging paperwork rather than the
+    two accounts of the world.
+
+    `criteria` overrides `problem.criteria` for the same reason: a
+    discrimination problem carries none of its own, and a trial that showed an
+    empty criteria block while recording a criterion ORDER would be recording
+    a discipline it did not have.
+    """
+
+    a_text: str
+    b_text: str
+    criteria: tuple[str, ...] = ()
+
+
 def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, config,
                           diagnostics: list | None = None, *,
-                          authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY):
+                          authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY,
+                          presentation: PairwisePresentation | None = None,
+                          observer=None):
     """§10.2: (A, B, pi, criteria) -> winner + decisive_point, mandatory
     order-swap. Status mode registers an argumentative warrant against the
     loser, indexed to pi — never a global ranking. Advisory mode records the
-    comparison without a warrant; 'neither' remains unresolved in both."""
+    comparison without a warrant; 'neither' remains unresolved in both.
+
+    `presentation` replaces what the judge SEES; every screen below is
+    unchanged and still applies, which is the point of routing a succession
+    through this function rather than writing a second trial. `observer`, when
+    given, is called with `(ruling1, ruling2, outcome)` once both orders have
+    been judged — including the blocked outcomes, because a caller recording a
+    FLIP RATE needs the disagreements most of all. Both are generic: nothing
+    here imports or names the caller that uses them.
+    """
     authority = _coerce_trial_authority(authority)
-    a_text = content_text(harness.state.artifacts[a_id], harness.blobs)
-    b_text = content_text(harness.state.artifacts[b_id], harness.blobs)
-    criteria = "\n".join(f"- {c}" for c in problem.criteria)
+    if presentation is not None:
+        a_text, b_text = presentation.a_text, presentation.b_text
+        criteria_ids = presentation.criteria
+    else:
+        a_text = content_text(harness.state.artifacts[a_id], harness.blobs)
+        b_text = content_text(harness.state.artifacts[b_id], harness.blobs)
+        criteria_ids = problem.criteria
+    criteria = "\n".join(f"- {c}" for c in criteria_ids)
 
     def pack(first, second, first_label, second_label):
         return "\n".join([
@@ -1148,13 +1186,26 @@ def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, confi
     calls: list = []
     try:
         return _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text,
-                               pack, adapter, diagnostics, calls, authority)
+                               pack, adapter, diagnostics, calls, authority,
+                               observer)
     finally:
         harness.record_llm_calls(calls, "trial-llm")
 
 
 def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
-                    adapter, diagnostics, calls: list, authority: TrialAuthority):
+                    adapter, diagnostics, calls: list, authority: TrialAuthority,
+                    observer=None):
+    def _seen(ruling1, ruling2, outcome):
+        """Hand the caller both orders, whatever the outcome.
+
+        Called at EVERY exit that has judged an order, the blocked ones
+        included: a caller measuring how often the top choice reverses needs
+        the reversals, and a hook that only fired on clean verdicts would
+        report a flip rate of zero on exactly the trials that flipped.
+        """
+        if observer is not None:
+            observer(ruling1, ruling2, outcome)
+
     aliases = aliases_for_values([a_text, b_text], prefix="K")
     ruling1, llm_call = adapter.call(
         "judge",
@@ -1164,6 +1215,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
     )
     calls.append(llm_call)
     if ruling1.winner == "neither":
+        _seen(ruling1, None, "neither")
         if authority == TrialAuthority.OBSERVE_ONLY:
             return _advisory_pairwise_result(
                 harness,
@@ -1195,6 +1247,10 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
         or (ruling1.winner == "B" and ruling2.winner == "A")
     )
     if not consistent:
+        # Q2b's road, for any caller measuring it: the two orders disagreed,
+        # so there is NO verdict. Nothing below picks a winner from either
+        # order, and the rivalry stays unresolved.
+        _seen(ruling1, ruling2, "blocked:order-swap")
         if authority == TrialAuthority.OBSERVE_ONLY:
             return _advisory_pairwise_result(
                 harness,
@@ -1218,6 +1274,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
     # of everything, so it would otherwise pass vacuously). PairwiseRuling
     # allows "" only for 'neither', handled above.
     if not ruling1.decisive_point or ruling1.decisive_point not in f"{a_text}\n{b_text}":
+        _seen(ruling1, ruling2, "blocked:referential-integrity")
         if authority == TrialAuthority.OBSERVE_ONLY:
             return _advisory_pairwise_result(
                 harness,
@@ -1239,6 +1296,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
     loser = b_id if ruling1.winner == "A" else a_id
     winner = a_id if ruling1.winner == "A" else b_id
     if execution_backed(harness, loser):
+        _seen(ruling1, ruling2, "execution-backed-loser")
         # Execution supremacy (§3): the loser passes its exec-oracle, so a
         # verdict from reality stands. A pairwise PREFERENCE cannot refute it —
         # the rivalry stands unresolved, exactly as for a 'neither' ruling. The
@@ -1260,6 +1318,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
                 calls=calls,
             )
         return None
+    _seen(ruling1, ruling2, "consistent-preference")
     if authority == TrialAuthority.OBSERVE_ONLY:
         return _advisory_pairwise_result(
             harness,
