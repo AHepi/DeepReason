@@ -1,0 +1,86 @@
+{
+  "catalogue": "https://ollama.com/v1/models",
+  "catalogue_size": 19,
+  "distinct_models": [
+    "deepseek-v4-pro:0813",
+    "glm-5.2",
+    "kimi-k3",
+    "qwen3.5:397b"
+  ],
+  "holds": true,
+  "missing": [],
+  "rows": [
+    {
+      "listed": true,
+      "model": "kimi-k3",
+      "role": "argumentative_critic",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "deepseek-v4-pro:0813",
+      "role": "conjecturer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "defender",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "grounding_reviewer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "qwen3.5:397b",
+      "role": "judge",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "judge",
+      "seat": 1
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "property_designer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "summarizer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "synthesizer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "thesis",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "variator",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "vision_critic",
+      "seat": 0
+    }
+  ]
+}

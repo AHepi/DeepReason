@@ -65,6 +65,7 @@ from wheel_operational_smoke import (  # noqa: E402
 
 REACH_RICH = REPO / "experiments" / "2026-08-22-live-reach-rich-run"
 EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
+POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -165,6 +166,18 @@ class SoakCase:
     attached_evidence: bool
     default_cycles: int = 8
     default_token_budget: int | None = None
+    # The directory ``builder`` is imported from.  Defaults to the reach-rich
+    # tranche because the first two cases live there; a case whose builder
+    # lives elsewhere cannot be expressed without this.
+    builder_dir: Path = REACH_RICH
+    # Whether the builder OWNS root construction.  The default path below
+    # compiles a single-model, rubric-forbidding manifest with an empty
+    # dossier, which is the true shape of the first two cases and the wrong
+    # shape for any case carrying cross-family seats or a bound dossier.
+    # Such a case must delegate, or the soak would drive a configuration the
+    # launch will never use -- and an instrument that soaks the wrong shape
+    # is worse than no instrument, because it reports green.
+    delegates_to_builder: bool = False
 
 
 CASES: dict[str, SoakCase] = {
@@ -178,6 +191,22 @@ CASES: dict[str, SoakCase] = {
         config_path=REACH_RICH / "run-config.yaml",
         builder="build_manifest",
         attached_evidence=True,
+    ),
+    "pr1": SoakCase(
+        id="pr1",
+        description=(
+            "the Poietics P-R1 explanation shape: CROSS-FAMILY seats "
+            "(deepseek-v4-pro:0813 conjecturer, kimi-k3 critic, a two-seat "
+            "qwen3.5/glm-5.2 judge ensemble), everything on, and the twelve "
+            "curated record files bound as a dossier AT SEED"
+        ),
+        config_path=POIETICS / "run-config.yaml",
+        builder="build_manifest_pr1",
+        builder_dir=POIETICS,
+        attached_evidence=True,
+        delegates_to_builder=True,
+        default_cycles=12,
+        default_token_budget=3_000_000,
     ),
     "reach-rich": SoakCase(
         id="reach-rich",
@@ -211,12 +240,20 @@ def _loopback_config(source: Path, dest: Path, port: int) -> Path:
     document = yaml.safe_load(source.read_text())
     roles = document.get("roles") or {}
     endpoint = f"http://127.0.0.1:{port}/v1"
-    for name, route in roles.items():
+
+    def _redirect(route):
+        # A role may carry a LIST of routes (a judge ensemble).  Skipping
+        # those would leave the ensemble pointing at the real provider with
+        # the operator's key -- an offline instrument reaching the network.
+        if isinstance(route, (list, tuple)):
+            return [_redirect(entry) for entry in route]
         if not isinstance(route, dict):
-            continue
+            return route
         route["endpoint"] = endpoint
         route["api_key_env"] = TEST_CREDENTIAL_ENV
-    document["roles"] = roles
+        return route
+
+    document["roles"] = {name: _redirect(route) for name, route in roles.items()}
     dest.write_text(yaml.safe_dump(document, sort_keys=True))
     return dest
 
@@ -231,9 +268,18 @@ def _case_symbols(case: SoakCase):
     actually launches.
     """
 
-    sys.path.insert(0, str(REACH_RICH))
-    module = __import__(case.builder)
-    return module.QUESTION, module.CRITERIA, module.COMPILED_AT
+    return (
+        _case_module(case).QUESTION,
+        _case_module(case).CRITERIA,
+        _case_module(case).COMPILED_AT,
+    )
+
+
+def _case_module(case: SoakCase):
+    """Import the committed builder that owns this case's shape."""
+
+    sys.path.insert(0, str(case.builder_dir))
+    return __import__(case.builder)
 
 
 def build_root(case: SoakCase, root: Path, *, port: int) -> dict:
@@ -258,6 +304,15 @@ def build_root(case: SoakCase, root: Path, *, port: int) -> dict:
     config_path = _loopback_config(
         case.config_path, root.parent / "soak-config.yaml", port
     )
+
+    if case.delegates_to_builder:
+        # The builder writes dossier, run-input, manifest and problem.json
+        # itself, from the loopback-redirected config.  Nothing about the
+        # launch shape is restated here, so the soak cannot drift from it.
+        summary = _case_module(case).build(root, config_path=config_path)
+        summary["case"] = case.id
+        return summary
+
     config = load_config(config_path)
 
     problem_id = f"question-{_question_digest(question)[:32]}"

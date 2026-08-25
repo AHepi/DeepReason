@@ -151,8 +151,12 @@ CRITERIA = (
 )
 
 
-def build(root: Path) -> dict:
-    config = load_config(CONFIG_PATH)
+def build(root: Path, *, config_path: Path | str | None = None) -> dict:
+    # ``config_path`` exists for cycle_soak.py, which hands in a copy of
+    # this tranche's config with every endpoint redirected to its local
+    # stub.  The soak must drive THIS shape; restating the shape there
+    # instead would let the instrument and the launch drift apart.
+    config = load_config(config_path or CONFIG_PATH)
     problem_id = f"question-{_question_digest(QUESTION)[:32]}"
 
     # Admission mints the dossier from the twelve curated files. The
