@@ -1,0 +1,1 @@
+{"commitment":"poietics-confound@v1","eval":"predicate:sum(1 for t in ('confound', 'one repository', 'one author', 'one week', 'single author', 'arbitrar', 'registry size', 'not established', 'untested', 'magnitude', 'typical') if t in content.lower()) >= 2","verdict":"fail"}

@@ -1,0 +1,115 @@
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject, rather than describes it, only when the test's failure mode is installed before the subject's construction, so that the subject is selected against a pre-existing rejection criterion; otherwise the test merely restates whatever the subject already does. The 3-of-26 distribution is exactly the signature of this asymmetry: compile.py carried the one mutation whose guard was shown to fail first, so that mutation was the only one against which the guard had real selective power, while every ordinarily-guarded module lost 4/4 to 6/7 because their guards were written after the fact and therefore describe the code as found rather than constrain the code as built.",
+      "mechanism": "Installation order converts a test from a description into a constraint. When a guard is installed before the subject, the subject's subsequent changes are evaluated against a fixed rejection boundary, and any mutation that crosses the boundary is lost. When the guard is installed after the subject, the guard's boundary is fitted to the already-present behavior, so mutations that preserve the fitted behavior pass through unchanged. The single shown-to-fail-first case in compile.py is the only instance where the boundary preceded the behavior; the other modules' guards are all retrospective fittings, which is why their mutation losses cluster at the high end of the range.",
+      "counterconditions": [
+        "If any ordinarily-guarded module also had a guard installed before its subject, the distribution should show a lower loss there, not 4/4 to 6/7.",
+        "If a retrospective guard is written from an independent specification rather than from the observed code, it can constrain without installation order, and the result should improve.",
+        "If the shown-to-fail-first mutation was fixed by changing the code to match the guard rather than the guard to reject the mutation, the direction of constraint is reversed."
+      ],
+      "typicality": 0.92,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "03be16ddea3ab3e2"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ]
+    },
+    {
+      "claim": "The 3-of-26 result is a registry-size confound, not evidence about testing in general: the one module with a shown-to-fail-first installation is also the one module where the test-to-mutation ratio is high enough for a guard to have any measurable effect. The ordinarily-guarded modules lose most of their mutations because their guards were not established against an independent rejection set, and the apparent distribution is an artifact of the small number of mutations per module.",
+      "mechanism": "A test only appears to constrain when there are enough mutations to distinguish a selective guard from a descriptive one. With one mutation against compile.py, a single shown-to-fail-first installation produces a clean 1-of-9 loss. With four to seven mutations per ordinarily-guarded module, a guard that merely describes the existing code passes nearly all mutations, producing the observed 4/4 to 6/7 losses. The asymmetry is not a property of the tests but of the mutation counts: the one case with pre-installed failure is also the one case where the denominator is small enough for a single selective event to dominate the fraction.",
+      "counterconditions": [
+        "If the ordinarily-guarded modules each had dozens of mutations and still lost 4/4 to 6/7, the registry-size explanation would fail.",
+        "If compile.py had nine mutations and still lost only one, installation order would be a stronger explanation than mutation count.",
+        "If the same author produced a second repository with pre-installed failure in a module with many mutations and saw a low loss rate, the confound would be weakened."
+      ],
+      "typicality": 0.85,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when the test is a ritual installation whose failure has been planted before the subject is admitted, and it describes its subject when the test is a registry entry added after the subject already exists. The 3-of-26 record is consistent with the hypothesis that only the shown-to-fail-first mutation in compile.py was a planted failure, while every ordinarily-guarded module's guards were added after the code, making them descriptions of the code rather than constraints on it.",
+      "mechanism": "A planted failure changes the semantics of the test from verification to selection. When a test fails first and the code is then changed until the test passes, the test acts as a fixed target that the code must satisfy. When the code exists first and the test is written to pass against it, the test acts as a restatement of the code's current behavior. The ritual of shown-to-fail-first installation is the observable marker of the planted-failure mechanism; its absence in the ordinarily-guarded modules explains why their guards do not reject mutations: the guards were never given a failure to reject.",
+      "counterconditions": [
+        "If a shown-to-fail-first installation is later found in an ordinarily-guarded module that still loses 4/4 to 6/7 mutations, the ritual marker is insufficient.",
+        "If a guard written after the code is independently derived from a specification and still passes all mutations, the description-constraint distinction is not purely temporal.",
+        "If the 1-of-9 mutation in compile.py was not actually shown to fail first but was selected by another criterion, the planted-failure mechanism fails."
+      ],
+      "typicality": 0.88,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ]
+    },
+    {
+      "claim": "The condition under which a test constrains rather than describes is that the test's rejection criterion is independent of the subject's construction history. A test that is derived from the same author, same week, and same care as the subject will, by construction, describe it, because the author's mental model is the common cause of both. The 3-of-26 result is explained by the fact that the one shown-to-fail-first installation broke this common-cause loop: the test's failure was an external event, not a product of the same model that wrote the code.",
+      "mechanism": "When a single author writes both the code and the test in the same work session, the test is fitted to the code's current behavior and cannot constrain future mutations. The only way to break this fitting is to introduce an event that the author did not generate: a test that fails on first installation. That failure is the sole point where the test's criterion comes from outside the author's current model, and it is the sole point where the test can reject a mutation. Every other guard shares the author's mental model with the code, so every other guard is a description, and every other module's mutation losses cluster at the high end.",
+      "counterconditions": [
+        "If the same author wrote a test that failed first in an ordinarily-guarded module and still lost 4/4 mutations, the common-cause explanation would be incomplete.",
+        "If an independent reviewer wrote the guards and the mutation losses remained high, the author-common-cause mechanism would fail.",
+        "If the shown-to-fail-first event was generated by the same author's own debugging process, the independence condition is not met."
+      ],
+      "typicality": 0.80,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "09208b033e714960"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only when the subject's behavior is underdetermined by the test's own construction, and describes it when the test is a tautological restatement of the subject's existing behavior. The 3-of-26 distribution is a magnitude artifact: the one shown-to-fail-first mutation is the only case where the test and the subject are not tautologically related, because the test was written against a different behavior than the subject's current one, and the magnitude of the observed loss is proportional to the distance between the test's construction-time behavior and the subject's present behavior.",
+      "mechanism": "The constraint-description distinction is a measure of tautological distance. If a test is written by inspecting the subject and asserting its observed properties, the test is a tautology: any mutation that preserves the observed properties passes, and the test constrains nothing. If a test is written against a different behavior and then the subject is changed to match, the test and subject are separated by a construction gap, and mutations that fail to close the gap are lost. The shown-to-fail-first installation is the only case where a construction gap existed; all other guards were written with zero gap, so they are tautological descriptions.",
+      "counterconditions": [
+        "If a guard written with zero construction gap still rejects a mutation because the mutation changes a property not observed at writing time, the tautology criterion fails.",
+        "If the shown-to-fail-first mutation was later found to preserve all observed properties of the pre-installation behavior, the construction-gap mechanism fails.",
+        "If the same author wrote a guard with an explicit construction gap in an ordinarily-guarded module and saw high mutation loss, the mechanism would be supported."
+      ],
+      "typicality": 0.75,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "028950f9751ab59a"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when the test's failure is a recorded, irreversible event in the installation record, and describes it when the test's failure is not recorded or is reversible. The 3-of-26 result is explained by the fact that only the shown-to-fail-first mutation in compile.py has a recorded failure event in the installation history; every other module's guards have no recorded failure, so their failures, if any, were folded back into the code without leaving a trace, making the guards indistinguishable from descriptions.",
+      "mechanism": "Constraint requires a durable record of rejection. When a test fails and the failure is recorded, the subsequent code change is constrained by the need to satisfy the recorded failure. When a test fails but the failure is not recorded, the author can adjust either the code or the test without accountability, and the test becomes a description of whatever the code does after the adjustment. The installation record is the mechanism that converts a transient failure into a lasting constraint, and the absence of such records in the ordinarily-guarded modules is why their mutation losses are high.",
+      "counterconditions": [
+        "If an ordinarily-guarded module has a recorded failure event and still loses 4/4 to 6/7 mutations, the record-based mechanism fails.",
+        "If the shown-to-fail-first mutation's failure was not recorded but the mutation was still lost, the mechanism's necessity is disproven.",
+        "If a guard with no recorded failure rejects a mutation because the mutation changes the code's interface, the mechanism is insufficient."
+      ],
+      "typicality": 0.65,
+      "evidence_refs": [
+        {
+          "block": "0615e03ec804152b"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ]
+    }
+  ]
+}

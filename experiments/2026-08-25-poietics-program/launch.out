@@ -55,3 +55,5 @@ catalogue lists 19 models; this config names 4 distinct
 every seat's model is listed
 [2026-08-25T09:51:45Z] MODEL PREFLIGHT OK rc=0
 [2026-08-25T09:51:45Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-25T09:55:22Z] QUALIFY OK rc=0
+[2026-08-25T09:55:22Z] === REASON: run --budget cycles=12 --token-budget 3000000 ===
