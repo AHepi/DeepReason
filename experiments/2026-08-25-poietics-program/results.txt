@@ -1,0 +1,41 @@
+# Results for /home/user/DeepReason/experiments/2026-08-25-poietics-program/run
+  (resolved from a root)
+
+## Question
+  Under what conditions does a test constrain its subject rather than describe it? Account for the 3-of-26 result in the attached record and its distribution — compile.py 1/9 mutations lost under shown-to-fail-first installation, every ordinarily-guarded module 4/4 to 6/7 — same author, same week, same care.
+
+## Run
+  run id (the deterministic identity of this run): 1b31f0065687bd24f64bb08acae1245446b4b31c31b90b141ff95cd5759c9a97
+  state: completed
+  stop_reason (the typed reason it ended, never a crash): budget_exhausted
+  cycles completed: 12
+  tokens spent vs budget: 521838 / 3000000
+  manifest (the compiled configuration the run carries) present: yes, schema version 6
+
+## Artifacts
+  accepted / refuted / suspended: 419 / 104 / 0
+  survivors (positions still standing at the end): 82
+  frontier (the open edge of the inquiry): 40 artifacts, problem question-aa835741bebc4b4cb189f4b08bef649a
+    018f5a065f1a, 0b2a241b0c6b, 1062191dcee6, 108367f148ca, 123a45da1f9b (+35 more)
+
+## Adjudication (defended trials — a criticism argued and judged)
+  ran: no
+  judge calls: 0
+  trial verdicts observed: none
+  trials declined (the case did not sustain): none
+  trials blocked by a guard: none
+
+## Measurement instrument
+  embedder (the model that turned this run's text into vectors, so its novelty, near-duplicate and school-distance readings are on that model's scale): neural (nomic-ai/nomic-embed-text-v1.5)
+
+## Verification
+  verify_root verdict (the replay check that re-derives the whole run from its log and confirms nothing in the record is corrupt or altered): yes
+  read from: stored (pass --verify to re-derive it instead of reading the stored verdict)
+  violations: 0
+  finding families: completion=120, epistemic=0, integrity=0, operational=22, security=0
+
+## Amendment and terminal readiness
+  amendment epochs (later question/evidence appended without editing anything): 0
+  stands at a valid typed terminal: yes (terminal epoch 0)
+  stop reason is resumable: yes
+  ready for `deepreason amend` / `deepreason continue`: yes

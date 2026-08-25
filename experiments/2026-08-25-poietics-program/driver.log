@@ -60,3 +60,19 @@ every seat's model is listed
 [2026-08-25T10:42:22Z] REASON rc=0
 [2026-08-25T10:42:22Z] REASON stop_reason=budget_exhausted
 [2026-08-25T10:42:22Z] === AUDIT: verify_root + findings + results + the milestone census ===
+state=completed stop_reason=budget_exhausted
+M1 MET  accepted=435 survivors=82 passing poietics-installation-mechanism@v1: 34
+M2 MET  verified citations 212, into the record 212 = critic side 2 + conjecture side 210
+      M2 counts the CRITIC side only (PREREG.md §5); conjecture-side citations are reported, never counted
+      critic cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/data/extracted_episodes.json
+      critic cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/14_CORRECTIONS_AND_WITHDRAWN_CLAIMS.md
+      (conjecture cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/data/commits.json)
+      (conjecture cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/00_EXECUTIVE_SUMMARY.md)
+      (conjecture cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/12_MUTATION_TESTING.md)
+      (conjecture cited: /home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/15_INSIGHTS.md)
+M3 MET  conjectures leaning on a withdrawn figure: 7, section-14 citations: 20
+
+required milestones hold: True
+report /home/user/DeepReason/experiments/2026-08-25-poietics-program/milestones.json
+[2026-08-25T10:44:27Z] MILESTONES: M1 and M2 met, M3 met or untriggered -- SUCCESS by PREREG.md §6
+[2026-08-25T10:44:27Z] === DONE: see /home/user/DeepReason/experiments/2026-08-25-poietics-program/{reason.log,verify_root.json,findings.json,results.txt,milestones.json} ===

@@ -1,0 +1,140 @@
+{
+  "M1": {
+    "accepted_count": 435,
+    "criterion": "poietics-installation-mechanism@v1",
+    "met": true,
+    "milestone": "M1 accepted conjectures proposing a mechanism",
+    "required": true,
+    "survivor_count": 82,
+    "survivors_passing": [
+      "007dca563e8ddb537138b6410d65570617eb77284afbd4f0318b06d9f0fe45cf",
+      "0b35ed752e77f1579edf2b3bd734eb0aaefa3a3dbd2a5c84bc84d9b305fbbe63",
+      "0c9d02e6f822a69e82f7ce62d697fd1c59d84eef86e4644a475214b883cc95b6",
+      "0db58d46cf41e3e836860230eaf149b3b2635bd89c29cb0497e766d14d451963",
+      "0ea9c87e757c73291cac82cea974acf7af836ffc9bbf24908be205a51927a7b5",
+      "112e51191181f2f0c643434341dad6bddbd2429f1fbd5bc84d565c8f30bcae99",
+      "13146bb4cb72b5713276ad0a906e0daddce6e90d8e226dc8c1bd04b9aba12dc3",
+      "220c50bc4d64b67206481ad3bf5fcd41adc0128838bffc68084e2c2d520a8cb3",
+      "242b26217498f0110687e001ab998f29134e6cdb091c139b75f2871fdf3d385a",
+      "312843533deaff5878f8f58548b36e1d0c7d906f89ec2bee7f10b5951d7d7442",
+      "3354806ac084b4d5c664ce4a4dba682e259890059f1c8a51e3e8dfe9ab624814",
+      "350930cc931be00014127a8c9e632e2abae353e9c93b3f056c2b3500b43f8a93",
+      "37c89cb1f7914bd68bf0f76ecfee95db2bf50adf82499138befcb87d74d68e33",
+      "3efb80b0bfa4fa682dc19c3fb3ed44bab7525c89dbe9c96ad7e07cb56330bf4a",
+      "436ade63e61d32709632fa1a6d52a570370abf9d16610eab2aa6f7460a53c4d3",
+      "44e54b49c68e801407e61f1a424ddaed8f0ef09745440e03f1b82d9cc592a598",
+      "514399797d2e4cc67ecd3feb5615680e7010bc35b5123c904abc228a3cd9de27",
+      "5289a5f5e170896ce8bb2cd244dc16b1cc1a39a7b5e1308810a87452fedec54d",
+      "5890bc4dc476335e4adfb248719b1ff68aef3cf63a44aebca45924a74dbbc2e9",
+      "599ea5e969396cc2f0c8567229b7afaa57344107b5ac1cd52f7bcdad0b609487",
+      "6bc686d953389e66eaadaad2fd789e717da3ff4122857d10ea417badbe837ba2",
+      "756f0844e91ccbedaa242be83da5fbe51648c2dd1540709beb149f0576bbd901",
+      "75a0c5f5b45fc4abc508101ee584982dc3049f44e28c0d163121f55b48741b0d",
+      "802cc3a5dc68c7ea9f6c98c99fc2bf83823fcbf16c4ae2fee4ce32ab6b4db1f4",
+      "b06d919108a6a77bca5fd8ac586325633e1086c5eb9db909fbdea2459fcfd9db",
+      "b911cd7f9c69020fd58124af4dd2bca5bee1b6c57d8338c4ae7f1c4bcd39ecb6",
+      "bccf5ac4d334e048e6aa4face1992604c3d42be375c0c5ffd166d7ec209e0285",
+      "c00c0237298149a2527c41416fd9b3a2cbe136f98b2724189687d7179132ee2d",
+      "d157aa667e3f8aa830469039494457ce00115484dc6dc21d1f84c336ba4ebb5b",
+      "d372094c539680111a24a8f11c5209f86d83daad4bcf5b7a6e06230b0796dbe0",
+      "e4745a6a4cd1de192b59a1fcfbad72367794bc29451c1f064aaf4485e392536d",
+      "e7fcac5cae01d2f2d4ee6319605dede6c885216f6cd31e8ffb7f0c52d6145952",
+      "f69e86b908c3497db93187a68c2d56a384147a484d583525c680023081965092",
+      "fa18c80e19d07923c18d905c4ea3b215e743388eb9709f921579b6ec5c114570"
+    ]
+  },
+  "M2": {
+    "conjecture_side_hits": 210,
+    "critic_side_hits": 2,
+    "critic_sources_cited": [
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/data/extracted_episodes.json",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/14_CORRECTIONS_AND_WITHDRAWN_CLAIMS.md"
+    ],
+    "met": true,
+    "milestone": "M2 criticism citing a byte-checked dossier block",
+    "required": true,
+    "sources_cited": [
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/data/commits.json",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/data/extracted_episodes.json",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/00_EXECUTIVE_SUMMARY.md",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/12_MUTATION_TESTING.md",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/14_CORRECTIONS_AND_WITHDRAWN_CLAIMS.md",
+      "/home/user/DeepReason/experiments/2026-08-25-poietics-program/record/report/15_INSIGHTS.md"
+    ],
+    "verified_citations_into_record": 212,
+    "verified_citations_total": 212
+  },
+  "M3": {
+    "conjectures_leaning_on_a_withdrawn_figure": [
+      {
+        "artifact": "802cc3a5dc68c7ea9f6c98c99fc2bf83823fcbf16c4ae2fee4ce32ab6b4db1f4",
+        "figures": [
+          "6/6 held",
+          "6/6",
+          "59 caught",
+          "3 survived"
+        ]
+      },
+      {
+        "artifact": "220c50bc4d64b67206481ad3bf5fcd41adc0128838bffc68084e2c2d520a8cb3",
+        "figures": [
+          "6/6",
+          "59 caught",
+          "3 survived"
+        ]
+      },
+      {
+        "artifact": "ce828dd84c8b8994357c49414422a58840fae2aefac836f0212c455b2d7957a3",
+        "figures": [
+          "6/6",
+          "59 caught",
+          "3 survived"
+        ]
+      },
+      {
+        "artifact": "3354806ac084b4d5c664ce4a4dba682e259890059f1c8a51e3e8dfe9ab624814",
+        "figures": [
+          "6/6",
+          "59 caught",
+          "59/3",
+          "3 survived"
+        ]
+      },
+      {
+        "artifact": "e4745a6a4cd1de192b59a1fcfbad72367794bc29451c1f064aaf4485e392536d",
+        "figures": [
+          "6/6 held",
+          "6/6",
+          "59 caught",
+          "3 survived"
+        ]
+      },
+      {
+        "artifact": "5890bc4dc476335e4adfb248719b1ff68aef3cf63a44aebca45924a74dbbc2e9",
+        "figures": [
+          "6/6"
+        ]
+      },
+      {
+        "artifact": "d157aa667e3f8aa830469039494457ce00115484dc6dc21d1f84c336ba4ebb5b",
+        "figures": [
+          "6/6 held",
+          "6/6",
+          "59 caught",
+          "3 survived"
+        ]
+      }
+    ],
+    "met": true,
+    "milestone": "M3 the section-14 corrections cited against a withdrawn number",
+    "required_if_triggered": true,
+    "section_14_citations": 20,
+    "status": "MET",
+    "triggered": true
+  },
+  "record_present": true,
+  "required_milestones_hold": true,
+  "root": "/home/user/DeepReason/experiments/2026-08-25-poietics-program/run",
+  "state": "completed",
+  "stop_reason": "budget_exhausted"
+}
