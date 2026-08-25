@@ -219,7 +219,13 @@ def held_frame_obligations(
     return tuple(k for k in frame_obligations(harness, subject_id) if k not in declared)
 
 
-def frame_slices(harness, problem_id: str) -> tuple[FrameSliceV1, ...]:
+def frame_slices(
+    harness,
+    problem_id: str,
+    *,
+    attackers_n: int = FRAME_SLICE_ATTACKERS_N,
+    departures_n: int = FRAME_SLICE_DEPARTURES_N,
+) -> tuple[FrameSliceV1, ...]:
     """Every consulted frame whose sigma admits this problem, by assertion id.
 
     Built on `consulted` and `frames` UNCHANGED. Those two are the consult
@@ -255,14 +261,29 @@ def frame_slices(harness, problem_id: str) -> tuple[FrameSliceV1, ...]:
                 digest_head=head,
                 digest_truncated=truncated,
                 commitment_ids=commitments,
-                attackers=attackers[:FRAME_SLICE_ATTACKERS_N],
+                attackers=attackers[:attackers_n],
                 attackers_total=len(attackers),
                 departure_protocol=grant.departure_protocol,
-                declared_departures=declared[:FRAME_SLICE_DEPARTURES_N],
+                declared_departures=declared[:departures_n],
                 declared_departures_total=len(declared),
             )
         )
     return tuple(sorted(slices, key=lambda s: s.assertion_id))
+
+
+def _budgets(harness) -> tuple[int, int]:
+    """The slice caps in force: the ones the recorded hysteresis policy
+    AUTHORISED, or the module defaults when no policy is on the record.
+
+    Read from the record rather than re-derived, so a replay renders what the
+    run rendered. The import is local: `calculus/` must stay importable without
+    `capture/`, and the fallback path must not need it at all -- which is also
+    what makes every root written before Rung 8 render exactly as it did.
+    """
+    from deepreason.capture.hysteresis import slice_budgets
+    from deepreason.config import Config
+
+    return slice_budgets(harness, Config())
 
 
 def _digest_lines(slice_: FrameSliceV1) -> list[str]:
@@ -332,7 +353,10 @@ def render_frame_slice_context(harness, problem_id: str) -> str | None:
         # treats it exactly as it treats a frame slice -- non-droppable -- and
         # so `llm/packs.py` learns nothing about succession.
         return succession
-    slices = frame_slices(harness, problem_id)
+    attackers_n, departures_n = _budgets(harness)
+    slices = frame_slices(
+        harness, problem_id, attackers_n=attackers_n, departures_n=departures_n
+    )
     if not slices:
         return None
     lines = [
@@ -363,7 +387,10 @@ def render_frame_crisis_context(harness, problem_id: str) -> str | None:
     budget, and where it will not fit the allocator reports
     `mandatory_overflow` and the envelope check refuses -- never a quiet cut.
     """
-    slices = frame_slices(harness, problem_id)
+    attackers_n, departures_n = _budgets(harness)
+    slices = frame_slices(
+        harness, problem_id, attackers_n=attackers_n, departures_n=departures_n
+    )
     if not slices:
         return None
     lines = []

@@ -42,6 +42,7 @@ section mandatory.
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
 | Section-size constants | `src/deepreason/llm/packs.py` | `NEIGHBOURHOOD_N`, `ATTACKERS_N`, `FOUNDATION_CHARS` |
 | The frame slice's two halves, and their caps | `src/deepreason/calculus/render.py` | `render_frame_slice_context` (digest), `render_frame_crisis_context` (wounds + departures), `FRAME_SLICE_ATTACKERS_N`, `FRAME_SLICE_DEPARTURES_N`, `ARTICULATION_DIGEST_CHARS` |
+| Where those two caps come FROM, since Rung 8 | `src/deepreason/calculus/render.py` | `_budgets` — the recorded `capture14-hysteresis.v1` policy's authorised widths, falling back to `Config.FRAME_SLICE_ATTACKERS` / `FRAME_SLICE_DEPARTURES`, whose defaults ARE the two module constants |
 | Sections whose absence is disclosed rather than silent | `src/deepreason/llm/packs.py` | `DISCLOSED_ON_DROP`, `_allocate_sections` |
 | Presentation profiles and their budgets | `src/deepreason/llm/profiles.py` | `PROFILES`, `ProfileSpec.pack_budget` |
 | Aggregate prefix clip (legacy path) | `src/deepreason/llm/profiles.py` | `clip_pack`, via `packs.apply_model_profile` |
@@ -238,6 +239,26 @@ check below is structural only.
 | The request-envelope bound or its typed error | `llm/adapter.py` `_enforce_request_envelope`, `RequestEnvelopeExceeded` | `tests/test_v6_request_envelope.py` |
 | The provider ceiling's reservation arithmetic | `llm/budget.py` `conservative_prompt_bound`, `TokenMeter.reserve` | `tests/test_token_reserve.py`, `tests/test_budget.py` |
 | Moving a legacy renderer onto the IR | `llm/packs.py`, replacing `_clip(...)` with `_allocate_sections(...)` | `tests/test_pack_ir.py`, `tests/test_crit_batch.py` |
+
+
+## The frame slice is the only pack section a controller may widen (Rung 8)
+
+§14.7's diversify mode may alter render slices, and on this tree that is its
+ONE lever — the other four it names do not exist here, and the policy artifact
+discloses each with a resolution rather than pretending otherwise
+(`DR-INV-signal-contract`). Widening shows MORE of the frame's own standing
+attackers and more of the departures already declared against it: the frame's
+crisis, not more of the frame. A pack posed inside a coordinate system is
+diversified by seeing more of what is wrong with that system.
+
+Three properties keep this inside the token economy rather than beside it. The
+caps are read from the AUTHORISING policy, not re-derived, so a replay renders
+what the run rendered. The fallback is the `Config` defaults, whose values are
+the module constants, so a record with no policy — every root written before
+Rung 8 — renders byte-identically. And the cap still states itself in-band at
+either width, so a reader can still tell a quiet frame from a truncated one.
+
+`check: grep -q "^def _budgets(" src/deepreason/calculus/render.py && python -m pytest tests/test_capture14_hysteresis.py::test_diversify_shows_more_of_the_frames_own_crisis tests/test_capture14_hysteresis.py::test_slice_budgets_fall_back_to_config_on_a_record_with_no_policy -q`
 
 ## Traps
 

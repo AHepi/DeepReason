@@ -319,3 +319,91 @@ def test_the_widened_budgets_are_the_ones_the_policy_authorised(tmp_path):
         authorised["attackers"],
         authorised["departures"],
     )
+
+
+# --- the lever, through the render it actually moves ---------------------------
+
+
+def _framed_with_many_attackers(harness, n_attackers: int):
+    """A consulted frame whose subject carries more attackers than the default
+    slice cap, so the cap is what decides how many the pack shows."""
+    from deepreason.calculus import operations
+
+    scope = {
+        "schema": "declarative-scope.v1",
+        "predicate": {
+            "op": "contains",
+            "args": [{"field": "description"}, {"text": "tides"}],
+        },
+    }
+    subject = harness.create_artifact(
+        "b: the lunar theory of tides", provenance=Provenance(role="seed")
+    )
+    case = harness.create_artifact(
+        "reach record: three lineages cite it", provenance=Provenance(role="seed")
+    )
+    promotion = operations.ensure_promotion_problem(
+        harness, subject.id, "promote or refuse the lunar theory of tides"
+    )
+    operations.file_frame_assertion(
+        harness,
+        problem=promotion,
+        subject_ref=subject.id,
+        scope=scope,
+        reach_case_refs=(case.id,),
+        departure_protocol="declare which of its commitments you break with",
+    )
+    for i in range(n_attackers):
+        nu = harness.create_artifact(
+            f"nu: attack {i} is sound", provenance=Provenance(role="critic")
+        )
+        harness.create_artifact(
+            f"critic: the lunar theory fails case {i}",
+            provenance=Provenance(role="critic"),
+            warrants=[
+                Warrant(
+                    id=f"w-att-{i}",
+                    target=subject.id,
+                    type=WarrantType.ARGUMENTATIVE,
+                    validity_node=nu.id,
+                )
+            ],
+        )
+    from deepreason.ontology import Problem, ProblemProvenance
+
+    return harness.register_problem(
+        Problem(
+            id="what-governs-the-tides",
+            description="what governs the tides at the equinox",
+            criteria=[],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
+def test_diversify_shows_more_of_the_frames_own_crisis(tmp_path):
+    """§14.7's ONE lever on this tree, exercised through the render it moves.
+
+    Widening shows more of the frame's OWN standing attackers -- open
+    indictments of the coordinate system the problem is posed in. That is what
+    makes it diversification rather than more conditioning.
+    """
+    from deepreason.calculus.render import render_frame_crisis_context
+
+    harness = Harness(tmp_path / "run")
+    problem = _framed_with_many_attackers(harness, 12)
+
+    before = render_frame_crisis_context(harness, problem.id)
+    assert before is not None
+    narrow = before.count("      - ")
+
+    hysteresis.step(harness, _always_alarmed())
+    assert hysteresis.mode(harness) == "diversify"
+    after = render_frame_crisis_context(harness, problem.id)
+    wide = after.count("      - ")
+
+    assert wide > narrow, "the mode did not reach the one lever it has"
+    assert wide == narrow * hysteresis.SLICE_WIDENING
+    # And the cap still states itself, so a reader can tell a quiet frame from
+    # a truncated one at either width.
+    assert f"of {12} shown" in after

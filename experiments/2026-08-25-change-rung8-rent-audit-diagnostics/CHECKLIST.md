@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=11 blockers=none
+State: next=12 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -327,7 +327,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       PERMITTED here, for the policy artifact and only for it, because a policy
       that could not be attacked would be authority without exposure (P6).
 
-- [ ] 11. (S6c) `src/deepreason/calculus/render.py`: keyword-only
+- [x] 11. (S6c) `src/deepreason/calculus/render.py`: keyword-only
       `attackers_n` / `departures_n` on `frame_slices`, defaulting to today's
       module constants; the two context renderers resolve the budgets from the
       latest recorded hysteresis policy via a lazily-imported
@@ -337,6 +337,27 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       tests/test_calculus_succession.py -q` -> 0 failed (UNCHANGED — this is
       the MUST-NOT-MOVE half of the census), and a new named test shows
       `diversify` widens both budgets while `normal` does not.
+
+      PROOF — the MUST-NOT-MOVE half of the census holds, and wider than
+      planned (the four frame/slice consumers plus the pack IR):
+      ```
+      $ python -m pytest tests/test_frame_render.py tests/test_calculus_succession.py -q
+      51 passed in 2.65s
+      ```
+      The 16 `FRAME_SLICE_ATTACKERS_N` / `FRAME_SLICE_DEPARTURES_N` test lines
+      and the 2 map checks named in SPEC.md §7 did not move: the module
+      constants remain the defaults and only a keyword argument was added.
+
+      PROOF — the lever, through the render it actually moves:
+      ```
+      $ python -m pytest tests/test_capture14_hysteresis.py -q
+      12 passed in 0.94s
+      ::test_diversify_shows_more_of_the_frames_own_crisis
+      ::test_slice_budgets_fall_back_to_config_on_a_record_with_no_policy
+      ```
+      The second is the absence-tolerant reader SPEC.md §10 requires: a record
+      with no policy — every root written before this rung — renders exactly as
+      it did.
 
 - [ ] 12. (S6a, S7) `tests/test_capture14_emission.py` and
       `tests/test_capture14_promotion_conditioning.py` written FIRST. Covers:
