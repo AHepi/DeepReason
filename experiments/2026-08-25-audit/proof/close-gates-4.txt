@@ -1,0 +1,46 @@
+=== PRECEDENCE 4 — every verdict row cites an existing proof file ===
+LEDGER finding rows (excluding the 2 header rows):
+  44
+
+Proof files referenced by a LEDGER row, and whether each exists:
+  OK      proof/activation-broken.txt
+  OK      proof/activation-dead.txt
+  OK      proof/activation-docs-drift.txt
+  OK      proof/activation-goal-trace.txt
+  OK      proof/activation-spec-drift.txt
+  OK      proof/broken-gate.txt
+  OK      proof/broken-sweep.txt
+  OK      proof/census-citation-cost.txt
+  OK      proof/census-keep-is-load-bearing.txt
+  OK      proof/cycle-soak.txt
+  OK      proof/docs-audit.txt
+  OK      proof/docs-claim-verification.txt
+  OK      proof/docs-full.txt
+  OK      proof/docs-links.txt
+  OK      proof/docs-stale.txt
+  OK      proof/goal-L1.txt
+  OK      proof/goal-L2.txt
+  OK      proof/goal-L3.txt
+  OK      proof/goal-L4.txt
+  OK      proof/goal-L5.txt
+  OK      proof/goal-L6.txt
+  OK      proof/goal-L7.txt
+  OK      proof/goal-L8.txt
+  OK      proof/spec-method.txt
+  OK      proof/spec-orphan-wordbound.txt
+  OK      proof/treadle-doctor.txt
+  OK      proof/tree-cli-flags-silent.txt
+  OK      proof/tree-config-fields-silent.txt
+  OK      proof/tree-error-strings-silent.txt
+  OK      proof/wheel-operational-smoke.txt
+  OK      proof/wheel-smoke.txt
+
+missing: 0
+
+Rows citing an artifact file rather than proof/ (censuses):
+      2 | docs-census.md |
+      1 | experiments-census.md |
+experiments/2026-08-25-audit/docs-census.md
+experiments/2026-08-25-audit/experiments-census.md
+
+Total proof files present: 44

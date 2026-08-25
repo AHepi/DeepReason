@@ -1,0 +1,22 @@
+=== PRECEDENCE 1 — committed run roots read, never written ===
+$ git status --porcelain -- experiments/ | grep -v 2026-08-25-audit
+  (empty above = no committed root touched)
+
+=== PRECEDENCE 3 — nothing modified outside the tranche dir ===
+$ git status --porcelain
+ M experiments/2026-08-25-audit/PARKED.md
+ M experiments/2026-08-25-audit/proof/wheel-operational-smoke.txt
+?? experiments/2026-08-25-audit/AUDIT_REPORT.md
+?? experiments/2026-08-25-audit/broken.md
+?? experiments/2026-08-25-audit/dead.md
+?? experiments/2026-08-25-audit/proof/close-gates.txt
+?? experiments/2026-08-25-audit/proof/dead-candidates.txt
+?? experiments/2026-08-25-audit/proof/dead-census.json
+?? experiments/2026-08-25-audit/proof/dead-census.txt
+?? experiments/2026-08-25-audit/proof/dead-tally.txt
+
+$ git diff --stat HEAD
+ experiments/2026-08-25-audit/PARKED.md             | 52 ++++++++++++++++++++++
+ .../proof/wheel-operational-smoke.txt              |  2 +
+ 2 files changed, 54 insertions(+)
+  (empty above = no tracked file modified)

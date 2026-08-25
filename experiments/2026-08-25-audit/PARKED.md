@@ -245,3 +245,55 @@ Route: `dr-change-orchestrator`. Proof: `docs-census.md` (all 131 rows).
 
     Nothing is lost by deleting: git history keeps every byte.
 
+
+---
+
+## P6 — `treadle doctor` has not run since the container rolled back
+
+Route: `dr-change-orchestrator`. Proof: `broken.md` B6,
+`proof/treadle-doctor.txt`.
+
+    Route: dr-change-orchestrator (environment restoration, not a code fix).
+    Goal (one): get `treadle doctor` running again and record its verdict
+    against docs/AUDIT_BASELINES.md.
+    Why it matters beyond tidiness: the baseline says a
+    "WARN model tag ... NOT on endpoint" line "is always a finding: hosted
+    checkpoints are retired without notice, and that line is how this repo
+    learns." That early-warning channel is currently dark -- if a hosted
+    checkpoint the treadle lane depends on were retired today, nothing in
+    this repo would notice.
+    Two blockers, both environmental:
+      1. tools/treadle/.venv is absent (container rollback). Rebuild per
+         tools/treadle/VENDORED.md.
+      2. OLLAMA_API_KEY is unset and no experiments/*/env file exists to
+         recreate it from. Needs the operator's handover value; it is
+         gitignored and never committed.
+    End state: `tools/treadle/.venv/bin/treadle --repo . doctor` runs with
+    the key exported, and its output is compared line-by-line against the
+    baseline's recorded expectation (5 environment lines, 3 stage lines,
+    credentials, 4 model-tag lines). Compare the OK/WARN/MISS verdicts,
+    NOT the arithmetic -- the line count moves whenever treadle.toml gains
+    or loses a stage or a context_files entry.
+    If a model tag comes back NOT on endpoint, that is a finding: row it
+    and park a replacement-checkpoint prompt, do not silently re-pin.
+
+---
+
+## P7 — CLAUDE.md's stated gate expectation is out of date
+
+Route: `dr-change-orchestrator`. Proof: `broken.md` B1,
+`proof/broken-gate.txt`.
+
+    Route: dr-change-orchestrator.
+    Goal (one): correct CLAUDE.md's "Build and test" section, which tells
+    every incoming session to "expect ~3100 passed, 0 failed". The gate on
+    main is 4162 passed, 6 skipped, 0 failed.
+    Why it is worth a line of work: the number is what a fresh session
+    compares its first gate run against, so a stale one invites either a
+    false alarm or, worse, a shrug at a real 1000-test discrepancy.
+    Evidence pointer: experiments/2026-08-25-audit/proof/broken-gate.txt
+    ("4162 passed, 6 skipped in 998.65s").
+    End state: the number matches the tree, and the line says it is
+    approximate and moves. Consider whether it should cite the audit that
+    last measured it, so the next drift is dateable.
+    Gate: none needed -- this is a one-line documentation correction.
