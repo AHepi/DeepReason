@@ -1,0 +1,40 @@
+{
+  "criteria": [
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:any(t in content.lower() for t in ('condition', 'when ', 'only if', 'unless', 'requires', 'depends on', 'sufficient', 'necessary', 'holds when', 'fails when')) and sum(1 for t in ('constrain', 'constraint', 'describ', 'restate', 'derive', 'independent', 'by construction', 'circular', 'tautolog', 'redundan') if t in content.lower()) >= 2",
+      "id": "poietics-constraint-condition@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:sum(1 for t in ('shown-to-fail', 'shown to fail', 'planted', 'fail first', 'fails first', 'install', 'ritual', 'registry', 'mutation', 'guard') if t in content.lower()) >= 2 and any(t in content.lower() for t in ('compile.py', '1 of 9', '1/9', '3 of 26', '3/26', 'distribution', 'every other module', 'ordinarily-guarded', 'ordinarily guarded'))",
+      "id": "poietics-installation-mechanism@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:sum(1 for t in ('confound', 'one repository', 'one author', 'one week', 'single author', 'arbitrar', 'registry size', 'not established', 'untested', 'magnitude', 'typical') if t in content.lower()) >= 2",
+      "id": "poietics-confound@v1",
+      "observation_valued": false
+    }
+  ],
+  "problem": {
+    "description": "Under what conditions does a test constrain its subject rather than describe it? Account for the 3-of-26 result in the attached record and its distribution \u2014 compile.py 1/9 mutations lost under shown-to-fail-first installation, every ordinarily-guarded module 4/4 to 6/7 \u2014 same author, same week, same care.",
+    "id": "question-aa835741bebc4b4cb189f4b08bef649a"
+  },
+  "schema": "deepreason-text-workload-v1",
+  "sources": []
+}

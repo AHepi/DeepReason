@@ -1,0 +1,118 @@
+[
+  {
+    "file": "src/poietics/__init__.py",
+    "lines": 3
+  },
+  {
+    "file": "src/poietics/__main__.py",
+    "lines": 13
+  },
+  {
+    "file": "src/poietics/binding/__init__.py",
+    "lines": 2
+  },
+  {
+    "file": "src/poietics/binding/finalize.py",
+    "lines": 329
+  },
+  {
+    "file": "src/poietics/binding/model.py",
+    "lines": 831
+  },
+  {
+    "file": "src/poietics/binding/plan.py",
+    "lines": 749
+  },
+  {
+    "file": "src/poietics/canonical.py",
+    "lines": 609
+  },
+  {
+    "file": "src/poietics/cli.py",
+    "lines": 554
+  },
+  {
+    "file": "src/poietics/explain/__init__.py",
+    "lines": 42
+  },
+  {
+    "file": "src/poietics/explain/model.py",
+    "lines": 363
+  },
+  {
+    "file": "src/poietics/explain/report.py",
+    "lines": 933
+  },
+  {
+    "file": "src/poietics/generation/__init__.py",
+    "lines": 2
+  },
+  {
+    "file": "src/poietics/generation/extract.py",
+    "lines": 1240
+  },
+  {
+    "file": "src/poietics/generation/model.py",
+    "lines": 649
+  },
+  {
+    "file": "src/poietics/generation/ollama.py",
+    "lines": 572
+  },
+  {
+    "file": "src/poietics/generation/ollama_http.py",
+    "lines": 168
+  },
+  {
+    "file": "src/poietics/ground/__init__.py",
+    "lines": 26
+  },
+  {
+    "file": "src/poietics/ground/errors.py",
+    "lines": 45
+  },
+  {
+    "file": "src/poietics/ground/evaluate.py",
+    "lines": 116
+  },
+  {
+    "file": "src/poietics/ground/model.py",
+    "lines": 170
+  },
+  {
+    "file": "src/poietics/packs/__init__.py",
+    "lines": 10
+  },
+  {
+    "file": "src/poietics/packs/empirical.py",
+    "lines": 622
+  },
+  {
+    "file": "src/poietics/pff/__init__.py",
+    "lines": 7
+  },
+  {
+    "file": "src/poietics/pff/compile.py",
+    "lines": 1125
+  },
+  {
+    "file": "src/poietics/pff/local_checkers.py",
+    "lines": 89
+  },
+  {
+    "file": "src/poietics/pff/model.py",
+    "lines": 618
+  },
+  {
+    "file": "src/poietics/pff/registry.py",
+    "lines": 1473
+  },
+  {
+    "file": "src/poietics/pff/validate.py",
+    "lines": 1443
+  },
+  {
+    "file": "src/poietics/replay.py",
+    "lines": 403
+  }
+]
