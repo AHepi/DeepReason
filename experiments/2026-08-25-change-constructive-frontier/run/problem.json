@@ -1,0 +1,40 @@
+{
+  "criteria": [
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) for raw in [re.findall(r'(?m)^[ \\t]*POINT[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]*$', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])])",
+      "id": "frontier-wellformed@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) and len(cl) > 0 and min(abs((u[0] - t[0]) * (v[1] - t[1]) - (v[0] - t[0]) * (u[1] - t[1])) for t in pts for u in pts for v in pts if t < u < v) / 2.0 >= float(cl[-1]) - 1e-12 for raw in [re.findall(r'(?m)^[ \\t]*POINT[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]*$', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])] for cl in [re.findall(r'(?m)^[ \\t]*CLAIM[ \\t]+([-+0-9.eE]+)[ \\t]*$', content)])",
+      "id": "frontier-claim-honest@v1",
+      "observation_valued": false
+    },
+    {
+      "budget": {
+        "extra": {},
+        "steps": 100000,
+        "time_ms": 2000
+      },
+      "eval": "predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) and min(abs((u[0] - t[0]) * (v[1] - t[1]) - (v[0] - t[0]) * (u[1] - t[1])) for t in pts for u in pts for v in pts if t < u < v) / 2.0 >= 0.005 for raw in [re.findall(r'(?m)^[ \\t]*POINT[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]+([0-9]*\\.?[0-9]+)[ \\t]*$', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])])",
+      "id": "frontier-above-floor@v1",
+      "observation_valued": false
+    }
+  ],
+  "problem": {
+    "description": "Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line \"POINT x y\" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line \"CLAIM v\" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.",
+    "id": "question-64b724c4118320989925d111501a8e41"
+  },
+  "schema": "deepreason-text-workload-v1",
+  "sources": []
+}

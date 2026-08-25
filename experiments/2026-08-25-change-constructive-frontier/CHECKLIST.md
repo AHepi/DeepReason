@@ -301,6 +301,15 @@ PART is the stub's standing limitation for every case, not a pc1 finding.
 
 ### Step 8 — PREREG frozen and pushed (R17–R25) ✅
 
-`PREREG.md` committed and pushed before any provider call. See the commit
-immediately following this checklist entry; `driver.log` does not exist yet
-at that commit, which is the ordering proof R17 asks for.
+`PREREG.md` committed and pushed before any provider call, at commit
+`9f49e4c5e`.
+
+**The ordering proof, stated precisely.** `driver.log` DOES exist at that
+commit — the dry run of step 6 wrote it. It contains no `QUALIFY` and no
+`REASON` line, and ends with `DRY RUN: stopping before qualify -- no
+provider call made`. So the correct statement of R17's proof is: at the
+commit that froze PREREG.md, no provider inference call had been made, and
+the driver log proves it by what it does NOT contain. (The model preflight
+does reach the network, but only `https://ollama.com/v1/models`, which
+answers unauthenticated and lists model ids; it dispatches no completion
+and consumes no tokens.)
