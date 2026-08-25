@@ -1,5 +1,5 @@
 <!-- DR-SEAM-capabilities-x-rules -->
-Verified-at: 9fa394d9
+Verified-at: 1662a3f96
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/capabilities/simulation.py, src/deepreason/capabilities/research.py
 Sides: DR-SUB-capabilities, DR-SUB-rules
@@ -136,11 +136,14 @@ artifact, no commitment and no warrant; the only thing it hands back to the rule
 is text (`result_context`), and that text can only reach a model as a follow-up
 conjecture pack section. Research is the single exception and it is not an
 exception to the principle: `consume` goes through `register_evidence`, the same
-canonical entry the rest of the system uses, at `role="import"`, and the
-scheduler excludes import-role artifacts from its survivor count. Nothing at
+canonical entry the rest of the system uses, at `role="import"`, and every
+survivor surface excludes import-role artifacts through the one authority that
+owns that rule (`ontology.state.counts_as_survivor`, `DR-SUB-ontology`) — the
+scheduler used to be the only place it held, which is how `run-1b31f006`
+published 24 admission records as survivors. Nothing at
 this seam constructs a `Warrant`; `rules/warrants.py` and the whole of
 `adjudication/` do not mention capabilities in any spelling.
-`check: ! grep -qE "create_artifact|register_batch|register_commitment|register_evidence" src/deepreason/capabilities/simulation.py && grep -q "    def result_context(" src/deepreason/capabilities/simulation.py && grep -q "from deepreason.research.backends import register_evidence" src/deepreason/capabilities/research.py && python -c "import inspect; from deepreason.capabilities.research import ResearchCapabilityController as R; assert 'register_evidence(' in inspect.getsource(R.consume)" && grep -q 'role: str = "import"' src/deepreason/research/backends.py && grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py && test "$(ls src/deepreason/adjudication/*.py | wc -l)" -ge 3 && ! grep -rqE "capabilit|imulation" --include=*.py src/deepreason/adjudication/ src/deepreason/rules/warrants.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
+`check: ! grep -qE "create_artifact|register_batch|register_commitment|register_evidence" src/deepreason/capabilities/simulation.py && grep -q "    def result_context(" src/deepreason/capabilities/simulation.py && grep -q "from deepreason.research.backends import register_evidence" src/deepreason/capabilities/research.py && python -c "import inspect; from deepreason.capabilities.research import ResearchCapabilityController as R; assert 'register_evidence(' in inspect.getsource(R.consume)" && grep -q 'role: str = "import"' src/deepreason/research/backends.py && python -c "import inspect; from deepreason.scheduler.scheduler import Scheduler, run_report; assert all('counts_as_survivor' in inspect.getsource(s) for s in (Scheduler._select_problem, run_report))" && test "$(ls src/deepreason/adjudication/*.py | wc -l)" -ge 3 && ! grep -rqE "capabilit|imulation" --include=*.py src/deepreason/adjudication/ src/deepreason/rules/warrants.py && grep -q "^def register_fail_warrant(" src/deepreason/rules/warrants.py`
 
 **No capability record spawns a problem, and no rule but `conj` can reach a
 controller.** `spawn.py`, `warrants.py`, `act.py`, `vision.py`, `experiment.py`,

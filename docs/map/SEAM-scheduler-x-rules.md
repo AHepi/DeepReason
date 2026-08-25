@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scheduler-x-rules -->
-Verified-at: f9fcd1136
+Verified-at: 1662a3f96
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/rules/spawn.py
 Sides: DR-SUB-rules, DR-SUB-scheduler
@@ -88,7 +88,7 @@ only). It sits AFTER the SEED term in both keys, and that position is the
 guarantee rather than a detail: a background carrying forty wounds must not
 outrank the operator's own question. The pin below asserts the ORDER, so
 moving the term earlier fails here rather than in a live run's budget.
-`check: python -c 'import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._select_problem))); rank = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == "rank"][0]; ret = [n for n in ast.walk(rank) if isinstance(n, ast.Return)][0]; assert [ast.unparse(e) for e in ret.value.elts] == ["-(age * weight)", "p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive", "p.id"], [ast.unparse(e) for e in ret.value.elts]; lam = [n for n in ast.walk(t) if isinstance(n, ast.Lambda) and isinstance(n.body, ast.Tuple)][0]; assert [ast.unparse(e) for e in lam.body.elts] == ["p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive"]; src = inspect.getsource(S._select_problem); assert "ProvenanceRole.IMPORT" in src and "survivors_by_problem" in src' && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
+`check: python -c 'import ast, inspect, textwrap; from deepreason.scheduler.scheduler import Scheduler as S; t = ast.parse(textwrap.dedent(inspect.getsource(S._select_problem))); rank = [n for n in ast.walk(t) if isinstance(n, ast.FunctionDef) and n.name == "rank"][0]; ret = [n for n in ast.walk(rank) if isinstance(n, ast.Return)][0]; assert [ast.unparse(e) for e in ret.value.elts] == ["-(age * weight)", "p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive", "p.id"], [ast.unparse(e) for e in ret.value.elts]; lam = [n for n in ast.walk(t) if isinstance(n, ast.Lambda) and isinstance(n.body, ast.Tuple)][0]; assert [ast.unparse(e) for e in lam.body.elts] == ["p.provenance.trigger != SpawnTrigger.SEED", "-promotion_wounds.get(p.id, 0)", "p.id in orphaned", "p.id in reflexive"]; src = inspect.getsource(S._select_problem); assert "counts_as_survivor" in src and "survivors_by_problem" in src' && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage -q`
 
 Whether a rule entry takes `adapter` is exactly whether the scheduler must
 ration provider spend for it. `run_browser_evidence` is the informative

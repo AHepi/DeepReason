@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 748c9ab61
+Verified-at: 1662a3f96
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler
@@ -145,6 +145,7 @@ fails if a SECOND variable-headed signal appears (both mutations were run).
 | Add a per-cycle phase, or reorder the sweep tail | the call list at the end of `step`, plus a `_<name>_step` method | `tests/test_scheduler.py::test_multi_cycle_spawns_and_persistence` |
 | How much LLM criticism a cycle may spend, or its batching | `_arg_crit`; `Config.ARG_CRIT_PER_CYCLE`, `CRIT_BATCH_K`, `RECRIT_STANDING` | `tests/test_budget.py::test_arg_crit_per_cycle_cap` |
 | Which standing survivors get re-criticized, and in what order | `_standing_recrit_pool` | `tests/test_properties.py::test_standing_recrit_pool_includes_active_properties` |
+| What counts as a survivor in the published set and in the aging weight | NOT this package: `counts_as_survivor` in `ontology/state.py` (`DR-SUB-ontology`). `run_report` and `_select_problem` are consumers and may not re-spell the rule | `tests/test_import_role_survivors.py::test_the_writer_publishes_a_survivor_set_the_invariant_already_holds_over` |
 | Discrimination backoff / when a rivalry is left unresolved | `_disc_paused`; `Config.DISC_ATTEMPTS_MAX`, `DISC_COOLDOWN` | `tests/test_rotation.py::test_attempt_cap_frees_the_rotation`, `::test_transport_drop_defers_instead_of_burning_the_futility_cap` |
 | When fuzz re-probes, or what clears the clean bit | `_fuzz_sweep` and the `_fuzz_clean.clear()` calls in `_experiment_step` / `_property_step` | `tests/test_experiment.py::test_fuzz_sweep_is_not_rationed_behind_llm_slots` |
 | Experiment / property design cadence | `_experiment_step`, `_property_step`; `Config.GEN_PROPOSE_PERIOD`, `GEN_MAX`, `PROP_PROPOSE_PERIOD`, `PROP_MAX` | `tests/test_v6_scheduler_model_phase_deferral.py::test_v6_experiment_and_property_design_defer_before_provider` |
@@ -249,8 +250,27 @@ cell names a symbol the check greps for.
   rank ties outright. `FOCUS_FAMILY` is the same class of hazard one level up —
   stage isolation, not a filter convenience: without it an earlier stage's
   unsolved successor leftovers out-age this stage's seed and the staged pipeline
-  bleeds backward.
-`check: grep -q "ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
+  bleeds backward. **The first of those two rules then held only where it was
+  patched.** It was spelled out in `_select_problem` and nowhere else, so
+  `run_report` — the writer of every root's published survivor set, two hundred
+  lines up in the SAME FILE — kept counting import-role records, and
+  `run-1b31f006` (poietics P-R1, the first run here to bind a non-empty dossier
+  at seed) published **82 survivors of which 24 were IMPORT-role sections of
+  the operator's own record**, each registered at log seq 5-40 against a log
+  whose first LLM-bearing event is seq 85. `deepreason results` reported all 82
+  as "positions still standing at the end". The check below used to grep this
+  file for the literal, which cannot distinguish one site that has the clause
+  from another that does not. FIXED 2026-08-25: the rule moved to
+  `ontology/state.py::counts_as_survivor`, every survivor surface calls it, and
+  no consumer may re-spell it
+  (`experiments/2026-08-25-fix-import-role-survivors/`).
+`check: python -c "
+import inspect, pathlib
+from deepreason.scheduler.scheduler import Scheduler, run_report
+for site in (Scheduler._select_problem, run_report):
+    assert 'counts_as_survivor' in inspect.getsource(site), site
+assert 'ProvenanceRole.IMPORT' not in pathlib.Path(inspect.getfile(Scheduler)).read_text()
+" && python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_import_role_survivors.py -q`
 - **The meta-economy ate the inquiry.** In the Bronze Age postmortem, debt and
   remove-arbitrariness problems were budgeted as ordinary work and their
   successors escaped the reflexive set entirely — ~40 of 48 artifacts went to

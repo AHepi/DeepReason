@@ -1,5 +1,5 @@
 <!-- DR-SUB-ontology -->
-Verified-at: 23bb8bf66
+Verified-at: 1662a3f96
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
 Seams: DR-SEAM-ontology-x-rules, DR-SEAM-evaluation-x-ontology
@@ -75,6 +75,7 @@ persisted through the object store under the four registered schema names.
 | add a spawn trigger | `SpawnTrigger` in `ontology/problem.py`, then a `_spawn` branch in `rules/spawn.py` | `tests/test_harness_fixes.py::test_remove_arbitrariness_carries_root_description_and_criteria` |
 | pin new criteria into every problem at registration | `POPPER_BATTERY` in `ontology/problem.py` (consumed by `Harness.register_problem`) | `tests/test_reflexive_discipline.py::test_debt_problem_asks_the_genuine_question` |
 | add a status label | `Status` in `ontology/state.py`, then `final_labels` in `adjudication/support.py` | `tests/test_adjudication.py::test_support_cascade_orphaned_not_false` |
+| change what counts as a "survivor" on ANY surface | `counts_as_survivor` / `is_import_admission` in `ontology/state.py` — the ONE place the rule lives; `scheduler.run_report`, `Scheduler._select_problem` and `application.results._survivor_count` all call it and none re-spells it | `tests/test_import_role_survivors.py::test_one_authority_names_the_rule_and_every_survivor_surface_calls_it` |
 | add a materialized relation to the view | `EpistemicState` in `ontology/state.py` + an aliased field on `StateDiff` in `ontology/event.py` + `Harness._apply_event` | `tests/test_adjudication.py::test_validity_attack_disables_every_carrier_of_a_warrant` |
 | add a budget dimension a test program reads | `Budget.extra` in `ontology/commitment.py` | `tests/test_ontology.py::test_commitment_defaults` |
 | add an event rule | `Rule` in `ontology/event.py` + the dispatch in `Harness._apply_event` | `tests/test_ontology.py::test_event_round_trip` |
@@ -83,7 +84,34 @@ persisted through the object store under the four registered schema names.
 | record a per-attempt provider signal that nothing may act on | a defaulted field on `LLMAttempt`, plus a no-consumer census pinning where its name may occur | `tests/test_seats_evidence_law.py::test_natural_stop_is_recorded_and_never_consumed` |
 | persist a new record type under `objects/` | `SCHEMAS` in `storage/objects.py` | `tests/test_workflow_control_event_storage_c1.py::test_every_workflow_record_round_trips_through_shared_store` |
 
+`check: python -c "
+import inspect, pathlib
+from deepreason.ontology.state import counts_as_survivor, is_import_admission
+from deepreason.scheduler.scheduler import Scheduler, run_report
+from deepreason.application import results
+for site in (Scheduler._select_problem, run_report):
+    assert 'counts_as_survivor' in inspect.getsource(site), site
+assert 'is_import_admission' in inspect.getsource(results._survivor_count)
+for module in (Scheduler, results):
+    text = pathlib.Path(inspect.getfile(module)).read_text()
+    assert 'ProvenanceRole.IMPORT' not in text, module
+"`
+
 `check: python -c "from deepreason.ontology.event import LLMAttempt as A; assert {'natural_stop', 'split_leg', 'split_notice', 'split_max_tokens'} <= set(A.model_fields); a = A(prompt_ref='blob:p'); assert (a.natural_stop, a.split_leg, a.split_notice, a.split_max_tokens) == (None, '', '', None), a" && test -z "$(grep -rl natural_stop src/deepreason --include=*.py | grep -vE '^src/deepreason/(ontology/event|llm/(adapter|split))\.py$')"`
+
+**The survivor rule was spelled out at each surface, and one copy drifted.**
+`selfstudy run-9175f0ec` installed "import-role admission records never count as
+a survivor" in `Scheduler._select_problem` alone. `run-1b31f006` (poietics P-R1,
+the first run here to bind a non-empty dossier at seed) then published **82
+survivors, 24 of them IMPORT-role sections of the operator's own record**, all
+registered at log seq 5-40 while the log's first LLM-bearing event is seq 85 —
+so `deepreason results` reported as "positions still standing" 24 artifacts that
+were accepted before any model was consulted. The map's own check could not see
+it: it grepped for the literal in the file, and the file held one site that had
+the clause and another that did not. FIXED 2026-08-25 by moving the rule to
+`ontology/state.py` and leaving no consumer able to spell it
+(`experiments/2026-08-25-fix-import-role-survivors/`).
+`check: python -m pytest tests/test_import_role_survivors.py -q`
 
 ## Traps
 
