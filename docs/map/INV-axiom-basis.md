@@ -87,6 +87,22 @@ the budgeted function returns now, not what somebody wrote down.
 `check: python -m pytest tests/test_proof_debt.py::test_a_receipt_reruns_its_kernel_checks_rather_than_reading_them_back -q`
 `check: python -c "from deepreason.proof_debt import NOT_RERUNNABLE; assert NOT_RERUNNABLE == 'not-rerunnable'"`
 
+**PRESERVED at Rung 8, where it was one line from being lost.** T-7 asked for
+the scope-predicate budget as a `Config` knob, and a criterion reading that knob
+LIVE would let a promotion verdict move while its commitment stood still — a
+verdict that is no longer a finite-budget function of its own frozen input.
+The knob ships, and the bound travels inside the reach certificate
+(`scope_max_depth` / `scope_max_nodes`), the same road `k_frame` already takes.
+`compile_scope`'s bounds are keyword-only and default to the module constants,
+so every caller that is asking "is this well-formed" rather than reaching a
+verdict is unchanged.
+
+Mutation-proven: reading the bound from a live `Config()` instead of from the
+certificate turns the guard red.
+
+`check: python -m pytest tests/test_promotion_rent.py::test_the_scope_bound_comes_from_the_certificate_not_the_config -q`
+`check: python -c "import ast, inspect; from deepreason.calculus.promotion import scope_determinism; t=ast.parse(inspect.getsource(scope_determinism).lstrip()); names={n.id for n in ast.walk(t) if isinstance(n, ast.Name)} | {n.attr for n in ast.walk(t) if isinstance(n, ast.Attribute)}; assert 'scope_max_depth' in names and 'scope_max_nodes' in names and 'Config' not in names"`
+
 ## A3 — two passes, in that order
 
 `_adjudicate` is the sole writer of `state.status` and calls the label function

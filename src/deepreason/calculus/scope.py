@@ -63,11 +63,13 @@ class CompiledScope:
 
 
 def _budget(state: dict, depth: int) -> None:
-    if depth > _MAX_DEPTH:
-        raise ScopeError("scope-too-deep", f"nesting exceeds {_MAX_DEPTH}")
+    max_depth = state.get("max_depth", _MAX_DEPTH)
+    max_nodes = state.get("max_nodes", _MAX_NODES)
+    if depth > max_depth:
+        raise ScopeError("scope-too-deep", f"nesting exceeds {max_depth}")
     state["nodes"] += 1
-    if state["nodes"] > _MAX_NODES:
-        raise ScopeError("scope-too-large", f"node bound {_MAX_NODES} exceeded")
+    if state["nodes"] > max_nodes:
+        raise ScopeError("scope-too-large", f"node bound {max_nodes} exceeded")
 
 
 def _text(node: Any, state: dict, depth: int) -> tuple[str, Any]:
@@ -130,12 +132,24 @@ def _predicate(node: Any, state: dict, depth: int) -> tuple:
     return (op, _list(args[0], state, depth + 1), _text(args[1], state, depth + 1))
 
 
-def compile_scope(document: Any) -> CompiledScope:
+def compile_scope(
+    document: Any,
+    *,
+    max_depth: int | None = None,
+    max_nodes: int | None = None,
+) -> CompiledScope:
     """Validate a scope document WHOLE, before anything evaluates it.
 
     Up-front validation is what makes sigma total: a predicate that could fail
     part-way through evaluation would make membership depend on which problem
     happened to be tested first.
+
+    The bounds are OPTIONAL and default to the module constants. A promotion
+    criterion passes the values its own reach certificate froze, never the
+    live `Config`: a bound outside the content address would let a verdict move
+    while its commitment stood still (Prop 12.1). Every other caller is asking
+    "is this document well-formed", not reaching a verdict, and takes the
+    defaults.
     """
     if not isinstance(document, dict):
         raise ScopeError("scope-not-an-object", type(document).__name__)
@@ -143,7 +157,12 @@ def compile_scope(document: Any) -> CompiledScope:
         raise ScopeError("scope-document-shape", repr(sorted(document))[:120])
     if document["schema"] != SCOPE_SCHEMA:
         raise ScopeError("scope-schema-unknown", repr(document["schema"]))
-    return CompiledScope(_predicate(document["predicate"], {"nodes": 0}, 0))
+    state = {
+        "nodes": 0,
+        "max_depth": _MAX_DEPTH if max_depth is None else int(max_depth),
+        "max_nodes": _MAX_NODES if max_nodes is None else int(max_nodes),
+    }
+    return CompiledScope(_predicate(document["predicate"], state, 0))
 
 
 def _string(node: tuple, problem) -> str:

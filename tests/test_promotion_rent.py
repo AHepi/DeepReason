@@ -255,18 +255,26 @@ def test_the_scope_bound_comes_from_the_certificate_not_the_config(harness):
     `k_frame` does.
     """
     subject, problem, certificate, criteria = _nominate(
-        harness, config=Config(K_FRAME=2, SCOPE_MAX_NODES=512)
+        harness, config=Config(K_FRAME=2)
     )
     body = decode(content_text(certificate, harness.blobs))
-    assert body.scope_max_nodes == 512
-    assert body.scope_max_depth == 16
-
+    assert (body.scope_max_depth, body.scope_max_nodes) == (16, 512)
     candidate = _candidate(harness, problem, subject_ref=subject.id,
                            cases=[certificate.id])
     kappa = _criterion(harness, criteria, promotion.SCOPE_DETERMINISM)
-    before = evaluate(kappa, candidate, harness.blobs)
-    # A hostile config cannot reach a frozen verdict.
-    tightened = Config(K_FRAME=2, SCOPE_MAX_NODES=1, SCOPE_MAX_DEPTH=1)
-    assert tightened.SCOPE_MAX_NODES == 1
-    after = evaluate(kappa, candidate, harness.blobs)
-    assert before == after
+    assert evaluate(kappa, candidate, harness.blobs)[0] == "pass"
+
+    # A certificate frozen under a bound of ZERO cannot admit the same scope --
+    # so the bound is genuinely read from the certificate. Under a live-Config
+    # implementation this verdict would be identical to the one above, because
+    # `Config()` in this process still says 512.
+    starved = body.model_copy(update={"scope_max_nodes": 0, "scope_max_depth": 0})
+    kappa_starved = next(
+        k for k in promotion.criteria_for(harness.blobs.put(
+            starved.model_dump_json(by_alias=True, exclude_none=True).encode()))
+        if k.eval == f"program:{promotion.SCOPE_DETERMINISM}"
+    )
+    verdict, detail = evaluate(kappa_starved, candidate, harness.blobs)
+    assert verdict == "overrun", (verdict, detail)
+    assert detail["reason"] == "scope-exceeds-its-bound"
+    assert Config().SCOPE_MAX_NODES == 512, "the live Config never moved"

@@ -316,7 +316,13 @@ def scope_determinism(text, budget, artifact=None, blobs=None):
     from deepreason.calculus.scope import ScopeError, compile_scope
 
     try:
-        compile_scope(claim.scope)
+        # The CERTIFICATE's bounds, never `Config`'s: a criterion's verdict may
+        # not move when a run's configuration moves and its commitment does not.
+        compile_scope(
+            claim.scope,
+            max_depth=certificate.scope_max_depth,
+            max_nodes=certificate.scope_max_nodes,
+        )
     except ScopeError as error:
         if error.code in {"scope-too-deep", "scope-too-large"}:
             # A declared bound that could not be met. Refusing here would refuse

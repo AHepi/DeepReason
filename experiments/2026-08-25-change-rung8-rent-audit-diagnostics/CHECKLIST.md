@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=19 blockers=none
+State: next=21 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -538,7 +538,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       107 passed in 7.02s
       ```
 
-- [ ] 19. (S2) `src/deepreason/calculus/scope.py`, `claims.py`, `nomination.py`,
+- [x] 19. (S2) `src/deepreason/calculus/scope.py`, `claims.py`, `nomination.py`,
       `promotion.py`: keyword-only bounds on `compile_scope` defaulting to the
       module constants; `scope_max_depth` / `scope_max_nodes` on
       `ReachCertificateV1` beside `k_frame`, populated by `build_certificate`
@@ -548,10 +548,95 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       -> 0 failed, including
       `test_the_scope_bound_comes_from_the_certificate_not_the_config`.
 
-- [ ] 20. (S2) [COMMIT] Map: `docs/map/SUB-calculus.md`'s scope and certificate
+      PROOF:
+      ```
+      $ python -m pytest tests/test_calculus_scope_predicate.py tests/test_calculus_nomination.py \
+            tests/test_promotion_rent.py tests/test_promotion_criteria.py tests/test_frame_render.py -q
+      82 passed in 5.35s
+      ```
+      The guard was WEAK when first written — it only asserted the certificate
+      CARRIED the bounds, which a live-`Config` implementation would also have
+      passed. Rewritten to discriminate: a certificate frozen under a bound of
+      ZERO must make `scope_determinism` answer `overrun`, while
+      `Config().SCOPE_MAX_NODES` is still 512 in the same process. Then
+      MUTATION-PROVEN — reading the bound from a live `Config()` turns it red:
+      ```
+      MUTATION: read the bound from live Config instead of the certificate
+      FAILED ::test_the_scope_bound_comes_from_the_certificate_not_the_config
+      1 failed, 9 passed in 0.76s
+      ```
+
+- [x] 20. (S2) [COMMIT] Map: `docs/map/SUB-calculus.md`'s scope and certificate
       rows; `docs/map/INV-axiom-basis.md`'s Prop 12.1 evidence gains the
       certificate-carried bound.
       done-when: `python tools/docs_verify.py` at baseline, new checks pasted.
+
+      PROOF — `DR-INV-axiom-basis`'s **A2** row gains the Rung 8 preservation
+      (a finite-budget verdict is not one whose bound a live knob can move),
+      with two checks, both run before being written down and the second
+      AST-anchored rather than text-anchored so a comment mentioning `Config`
+      cannot satisfy or break it:
+      ```
+      $ python -m pytest tests/test_promotion_rent.py::test_the_scope_bound_comes_from_the_certificate_not_the_config -q
+      1 passed in 0.16s
+      SCOPE-CHECK exit 0
+      ```
+      and the same check against the mutated tree:
+      ```
+      AssertionError          (Config reached the verdict -> check red)
+      ```
+
+      ### STOP RECORDED — `diff_budget.py` verdict EXCEEDED
+
+      ```
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "462d6091d",
+       "areas": {"src": 1124}, "total_insertions": 1124,
+       "ceiling": 1100, "verdict": "EXCEEDED"}
+      ```
+
+      **Decision:** the ceiling is exceeded by 24 insertions with the authority
+      audit (S3, ~260) still to land; deliver everything and do NOT re-baseline
+      the ceiling.
+
+      **Where it went, per file, against SPEC.md §11's itemization:**
+
+      | file | actual | SPEC estimate |
+      |---|---|---|
+      | `capture/diagnostics.py` | 557 | 350 |
+      | `capture/hysteresis.py` | 189 | 115 |
+      | `signals.py` | 133 | 80 |
+      | `calculus/promotion.py` | 72 | 90 (with S2's share) |
+      | `config.py` | 56 | 45 |
+      | `calculus/render.py` | 32 | 40 |
+      | `calculus/scope.py` | 25 | 55 (with claims/nomination) |
+      | `run_manifest.py` | 21 | 20 |
+      | `calculus/nomination.py` | 16 | — |
+      | `calculus/claims.py` | 10 | — |
+      | `scheduler/scheduler.py` | 8 | 100 |
+      | `programs.py` | 5 | — |
+
+      Three items came in UNDER (render, scope+claims+nomination at 51 against
+      55, scheduler at 8 against 100 — the emission logic went into
+      `capture/diagnostics.py` where it belongs rather than into the
+      scheduler). The whole overrun is in the two new capture modules and the
+      registry, and its cause is the same one Rung 6 and Rung 7 recorded:
+      insertions are docstrings and constraint comments, not executable lines,
+      and a module whose comments state constraints rather than narrate runs
+      richer than the 1.90 ratio Rung 7 measured.
+
+      **Options, priced:**
+
+      | road | cost | what it buys |
+      |---|---|---|
+      | **A — deliver all of S1–S12, disclose the overrun, ceiling NOT re-baselined** (CHOSEN) | final ≈ 1 380–1 400 | every R delivered; the overrun is one visible number in DELIVERY.md, which is what Rung 7 did with 1027/700 |
+      | B — strip docstrings and constraint comments to land at 1 100 | ≈ 280 lines of prose deleted | a number; costs the comments CLAUDE.md says exist to state constraints the code cannot show, on the two modules a future reader will need them most |
+      | C — park the authority audit (S3) to a follow-up tranche | lands ≈ 1 130 | still over, and R2/R3 are requirements — parking one is the operator's call, not mine |
+
+      **Recommendation and why:** A. B trades the tranche's most re-readable
+      asset for a number, and C does not even land under the ceiling while
+      dropping a requirement. R20 ("keep going without permission") removes the
+      pause, not the disclosure; the operator was told at 680/1100 that this was
+      coming, with the same recommendation.
 
 - [ ] 21. (S3) `tests/test_calculus_authority_audit.py` written FIRST, with the
       five clause tests AND the five SEEDED-VIOLATION tests of SPEC.md §S3 —
