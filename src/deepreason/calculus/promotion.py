@@ -34,6 +34,7 @@ REACH_INTEGRITY = "promotion_reach_integrity"
 SCOPE_DETERMINISM = "promotion_scope_determinism"
 COMPATIBILITY = "promotion_compatibility"
 ACCOUNTS_FOR = "promotion_accounts_for"
+RENT = "promotion_rent"
 
 PROMOTION_PROGRAMS: tuple[str, ...] = (
     SUBJECT_DEMARCATION,
@@ -41,6 +42,7 @@ PROMOTION_PROGRAMS: tuple[str, ...] = (
     SCOPE_DETERMINISM,
     COMPATIBILITY,
     ACCOUNTS_FOR,
+    RENT,
 )
 
 # Prop 12.1: a criterion terminates inside a DECLARED bound, and `overrun` means
@@ -58,7 +60,7 @@ PROMOTION_STEPS = 4_000
 
 
 def criteria_for(certificate_ref: str) -> tuple[Commitment, ...]:
-    """The five criteria, bound to ONE certificate by content address.
+    """The six criteria, bound to ONE certificate by content address.
 
     The certificate digest is in the commitment id as well as in its frozen
     spec, so a criterion cannot be re-pointed at a different certificate without
@@ -509,6 +511,68 @@ def accounts_for(text, budget, artifact=None, blobs=None):
     if refusal is not None:
         return refusal
     return succeeds(certificate, claim)
+
+
+# --- criterion 6: rent (§9.3), the articulation clause -------------------------
+
+
+def rent(text, budget, artifact=None, blobs=None):
+    """§9.3: a candidate background is promotable only once ARTICULATED.
+
+    Three legs, and they are separate reasons rather than one because a critic
+    cannot argue with a verdict that does not say which thing was wrong:
+    commitments are what wounds violate, assumption ids are what departures
+    declare against, and vocabulary is what the frame slice shows.
+
+    `active(b)` and the observation-valued clause are NOT re-checked here --
+    they are criterion 1, and two criteria refusing one candidate for one
+    defect would double-count the same wound.
+
+    On this tree the assumption ids ARE the subject's own commitment ids:
+    `DepartureDeclarationV1.broken_ids` and `render.frame_obligations` both say
+    so. A separate assumption id space would be a new claim body, not a
+    stricter reading of this one.
+    """
+    certificate, claim, refusal = _open(text, budget, blobs, cost=1)
+    if refusal is not None:
+        return refusal
+    subject = _subject_of(certificate, claim.subject_ref)
+    if subject is None:
+        return OVERRUN, {"reason": "subject-not-in-environment",
+                         "detail": claim.subject_ref}
+
+    if not subject.commitments:
+        return FAIL, {"reason": "subject-enumerates-no-commitments",
+                      "subject": subject.artifact_id}
+
+    for cid in subject.commitments:
+        if _commitment_of(certificate, cid) is not None:
+            continue
+        # The environment cap dropped it, so the id may well be enumerated on
+        # the live record and this program cannot see it. Pending, never a
+        # refutation (Prop 12.1's `overrun`).
+        if any(entry.endswith(cid) for entry in certificate.truncated):
+            return OVERRUN, {"reason": "assumption-id-truncated", "assumption": cid}
+        return FAIL, {"reason": "assumption-id-not-enumerated",
+                      "assumption": cid, "subject": subject.artifact_id}
+
+    if not _vocabulary(certificate, subject):
+        return FAIL, {"reason": "subject-states-no-vocabulary",
+                      "subject": subject.artifact_id}
+
+    return PASS, {"subject": subject.artifact_id,
+                  "assumptions": list(subject.commitments),
+                  "commitments": list(subject.commitments)}
+
+
+def _vocabulary(certificate, subject) -> str:
+    """The subject's stated terms, as the certificate froze them.
+
+    Whitespace-normalised: a subject whose whole articulation is blank states
+    no terms, and a frame slice built on it would show an empty coordinate
+    system to every conjecture in its scope.
+    """
+    return " ".join((subject.articulation or "").split())
 
 
 # --- Remark 9.5's default-consult closure -------------------------------------

@@ -260,6 +260,19 @@ def _demarcation(harness, artifact) -> str:
     return "declared-only" if crit(artifact, harness.commitments) else "no-attack-surface"
 
 
+def _articulation(harness, artifact_id: str) -> str:
+    """The subject's stated terms, exactly as the frame slice will show them.
+
+    Delegates to `render.articulation_digest` rather than re-deriving: two
+    derivations of "what this frame says" would eventually disagree, and the
+    one a conjecture is SHOWN is the one rent must be checking.
+    """
+    from deepreason.calculus.render import articulation_digest
+
+    head, _, _ = articulation_digest(harness, artifact_id)
+    return head
+
+
 def _environment(harness, config, problem_ids):
     """The frozen problem records, criterion specs and candidate subjects.
 
@@ -316,6 +329,7 @@ def _environment(harness, config, problem_ids):
             accounted=_accounted(harness, aid),
             wound_refs=_wound_refs(harness, aid),
             criticised_commitments=_criticised_commitments(harness, aid),
+            articulation=_articulation(harness, aid),
         )
         for aid in pool
     ]
@@ -364,6 +378,8 @@ def build_certificate(harness, config, subject_id: str, problem_ids) -> ReachCer
         subject_ref=subject_id,
         scope=candidate_scope(problem_ids),
         k_frame=int(config.K_FRAME),
+        scope_max_depth=int(config.SCOPE_MAX_DEPTH),
+        scope_max_nodes=int(config.SCOPE_MAX_NODES),
         reach_records=reach_records,
         problems=problems,
         commitments=commitments,

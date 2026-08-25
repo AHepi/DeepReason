@@ -234,7 +234,7 @@ assert names == {'register_fail_warrant'}, names
 enough to be pinned here.** The seam's agreement above already says an
 `overrun` is pending rather than a refutation; the promotion sweep is the first
 consumer for which the distinction is load-bearing rather than theoretical.
-Three of the five criteria return `overrun` on ordinary conditions — a subject
+Four of the six criteria return `overrun` on ordinary conditions — a subject
 whose §12.2 `load` reading was never taken because the run has no variator seat,
 an incumbent HV that was never sampled, an accounting the frozen environment
 does not cover. If any of those minted a warrant, "we could not check" would

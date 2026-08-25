@@ -51,7 +51,7 @@ than you need.
 | `SUB-verification.md` | `verify_root`, replay validation, epistemic checks. **Frozen** |
 | `SUB-manifest.md` | RunManifest schema and validators, qualification. **Frozen** |
 | `SUB-evaluation.md` | programs, oracles, measures, informal trials — where formal meets informal |
-| `SUB-calculus.md` | the typed claim substrate: a CLOSED body union and the one controller-owned compiler that assigns every ref role; also nomination (what makes a promotion problem exist) and the five promotion criteria |
+| `SUB-calculus.md` | the typed claim substrate: a CLOSED body union and the one controller-owned compiler that assigns every ref role; also nomination (what makes a promotion problem exist) and the six promotion criteria |
 
 ## Concepts (not packages — that is why they need documents)
 

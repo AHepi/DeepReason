@@ -419,6 +419,9 @@ PROGRAMS: dict[str, ProgramSpec] = {
     "promotion_accounts_for": ProgramSpec(
         "promotion_accounts_for", _promotion_needs_blobs, "structural"
     ),
+    "promotion_rent": ProgramSpec(
+        "promotion_rent", _promotion_needs_blobs, "structural"
+    ),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
     "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
@@ -495,7 +498,7 @@ def _dataset_oracle(text: str, budget, artifact, blobs) -> tuple[str, dict]:
 # existing program signature changes.
 BLOB_PROGRAMS: dict = {
     "dataset_oracle": _dataset_oracle,
-    # The five promotion criteria (§9.4). Blob-aware because each reads ONE
+    # The six promotion criteria (§9.4, §9.3). Blob-aware because each reads ONE
     # frozen, fence-stamped reach certificate its commitment spec names by
     # digest -- never live graph state (Rider 5 clause 4). Their CLASS is
     # declared in PROGRAMS above; `evaluate` dispatches this form first.
@@ -504,6 +507,7 @@ BLOB_PROGRAMS: dict = {
     "promotion_scope_determinism": _promotion_blob_program("scope_determinism"),
     "promotion_compatibility": _promotion_blob_program("compatibility"),
     "promotion_accounts_for": _promotion_blob_program("accounts_for"),
+    "promotion_rent": _promotion_blob_program("rent"),
 }
 
 

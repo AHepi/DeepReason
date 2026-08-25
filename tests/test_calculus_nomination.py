@@ -196,7 +196,7 @@ def test_nomination_fires_at_the_K_frame_threshold(harness):
     spawned = nomination.nominate(harness, Config(K_FRAME=2))
     assert [p.provenance.trigger for p in spawned] == [SpawnTrigger.PROMOTION]
     assert spawned[0].provenance.from_ == [subject.id]
-    assert spawned[0].criteria, "the five criteria are pinned at registration"
+    assert spawned[0].criteria, "the six criteria are pinned at registration"
 
 
 def test_nomination_does_not_fire_one_lineage_short(harness):

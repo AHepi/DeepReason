@@ -313,6 +313,10 @@ class FrozenSubjectV1(_Part):
     # a wound identifies WHERE the subject was hurt, and a component nothing
     # cites is a component whose removal costs the record nothing.
     criticised_commitments: list[str] = Field(default_factory=list)
+    # §9.3's vocabulary leg: the subject's stated terms, frozen. The SAME text
+    # `render.articulation_digest` shows in the frame slice, at the same bound,
+    # so what rent checks and what a conjecture is shown cannot diverge.
+    articulation: str = ""
 
 
 class ReachRecordV1(_Part):
@@ -360,6 +364,12 @@ class ReachCertificateV1(_Body):
     subject_ref: str
     scope: dict[str, Any]
     k_frame: int
+    # §9.4's scope-predicate budgets, frozen at nomination. They are `Config`
+    # knobs (T-7), but a criterion may not read them live: a bound outside the
+    # content address would let a verdict move while its commitment stood
+    # still, which Prop 12.1 forbids. Same road as `k_frame`.
+    scope_max_depth: int = 16
+    scope_max_nodes: int = 512
     reach_records: list[ReachRecordV1] = Field(default_factory=list)
     problems: list[FrozenProblemV1] = Field(default_factory=list)
     commitments: list[FrozenCommitmentV1] = Field(default_factory=list)

@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=15 blockers=none
+State: next=19 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -435,14 +435,20 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       frame slice as the only pack section a controller may widen.
       The full `docs_verify` runs at step 26.
 
-- [ ] 15. (S1) `tests/test_promotion_rent.py` written FIRST. Covers the three
+- [x] 15. (S1) `tests/test_promotion_rent.py` written FIRST. Covers the three
       legs of SPEC.md §S1 separately (each with a fixture that fails only that
       leg), the `overrun`-not-`fail` rule when the certificate's cap dropped an
       id, and `test_the_scope_bound_comes_from_the_certificate_not_the_config`
       (which belongs to S2 and is written here so S2's step has a guard).
       done-when: the file FAILS — pasted.
 
-- [ ] 16. (S1) `src/deepreason/calculus/promotion.py` + `programs.py`:
+      PROOF — RED (all ten):
+      ```
+      $ python -m pytest tests/test_promotion_rent.py -q
+      10 failed in 0.69s
+      ```
+
+- [x] 16. (S1) `src/deepreason/calculus/promotion.py` + `programs.py`:
       `promotion_rent` as criterion 6, registered in `PROMOTION_PROGRAMS`,
       `programs.PROGRAMS` (`class_="structural"`) and `programs.BLOB_PROGRAMS`.
       done-when: `python -m pytest tests/test_promotion_rent.py -q` -> the
@@ -451,7 +457,20 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       PROMOTION_PROGRAMS; assert len(PROMOTION_PROGRAMS)==6 and 'promotion_rent'
       in PROMOTION_PROGRAMS; print(PROMOTION_PROGRAMS)"`.
 
-- [ ] 17. (S1) [COMMIT] The EXPECTED-TO-MOVE half of the census, updated
+      PROOF — GREEN, all ten including the scope-bound guard:
+      ```
+      $ python -m pytest tests/test_promotion_rent.py -q
+      10 passed in 0.70s
+      ```
+      Two record fields were needed and both are ADDITIVE with defaults, so a
+      certificate serialized without them still decodes:
+      `FrozenSubjectV1.articulation` (the vocabulary leg) and the
+      certificate's `scope_max_depth` / `scope_max_nodes` (S2).
+      `articulation` is filled by DELEGATING to `render.articulation_digest`
+      rather than re-deriving — what rent checks and what a conjecture is
+      shown in the frame slice are then the same text by construction.
+
+- [x] 17. (S1) [COMMIT] The EXPECTED-TO-MOVE half of the census, updated
       minimally and never by weakening an assertion:
       `tests/test_promotion_criteria.py` :150 :378 :408,
       `tests/test_promotion_solo.py` :108 :129,
@@ -463,9 +482,61 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       tests/test_promotion_rent.py -q` -> 0 failed, and `docs_verify` at
       baseline.
 
-- [ ] 18. (S1) (S1) MUTATION PROOF for rent: in a scratch copy delete each of
+      PROOF — and the census OVER-predicted, which is worth recording because
+      it is the safe direction:
+      ```
+      $ python -m pytest tests/test_promotion_criteria.py tests/test_promotion_solo.py \
+            tests/test_promotion_closure.py tests/test_calculus_nomination.py \
+            tests/test_promotion_succession.py tests/test_calculus_anomaly_conservation.py -q
+      60 passed in 4.03s
+      ```
+      SPEC.md §7 predicted the four `PROMOTION_PROGRAMS` test lines would move
+      when the tuple grew from five to six. **None did** — every one asserts
+      MEMBERSHIP, not length. What DID need updating was PROSE, in four places
+      a grep for a symbol would never have found: `DR-INDEX`,
+      `DR-INV-frozen-surfaces` and `DR-SUB-calculus` each said "the five
+      criteria", `DR-SEAM-evaluation-x-rules` said "three of the five return
+      `overrun`" (now four of six), and one test docstring in
+      `test_calculus_nomination.py` said "the five criteria are pinned".
+      A census over symbols does not catch a count written in words.
+
+      Two new checks in `DR-SUB-calculus`, run before being written down:
+      ```
+      ART-CHECK exit 0     (_articulation delegates to articulation_digest)
+      CLASS-CHECK exit 0   (all six structural AND in BLOB_PROGRAMS)
+      ```
+
+- [x] 18. (S1) (S1) MUTATION PROOF for rent: in a scratch copy delete each of
       the three legs in turn; each deletion turns at least one named test RED.
       done-when: three RED runs and the restored GREEN run pasted.
+
+      PROOF — each leg deleted in turn, in a scratch copy:
+      ```
+      --- MUTATION: leg 1 (commitments) deleted ---
+      FAILED ::test_rent_refuses_a_subject_that_enumerates_no_commitments
+      1 failed, 9 passed
+
+      --- MUTATION: leg 2 (enumerated assumptions) deleted ---
+      FAILED ::test_rent_refuses_an_assumption_id_nothing_enumerates
+      FAILED ::test_a_truncated_environment_is_overrun_and_never_fail
+      2 failed, 8 passed
+
+      --- MUTATION: leg 3 (vocabulary) deleted ---
+      FAILED ::test_rent_refuses_a_subject_that_states_no_vocabulary
+      1 failed, 9 passed
+      ```
+      Each leg is killed by a DIFFERENT named test, which is the property the
+      three-reason design exists for: the tests distinguish the three defects
+      the same way a critic would have to.
+
+      RESTORED — GREEN, across the whole promotion and frame ring:
+      ```
+      $ python -m pytest tests/test_promotion_rent.py tests/test_promotion_criteria.py \
+            tests/test_promotion_solo.py tests/test_promotion_closure.py \
+            tests/test_calculus_nomination.py tests/test_promotion_succession.py \
+            tests/test_calculus_anomaly_conservation.py tests/test_frame_render.py -q
+      107 passed in 7.02s
+      ```
 
 - [ ] 19. (S2) `src/deepreason/calculus/scope.py`, `claims.py`, `nomination.py`,
       `promotion.py`: keyword-only bounds on `compile_scope` defaulting to the

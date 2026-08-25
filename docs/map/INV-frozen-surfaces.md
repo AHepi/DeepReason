@@ -253,7 +253,7 @@ digest moves.
 `check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; c = json.loads(_manifest(_profile()).engine_config_json); leaked = sorted(k for k in c if k in ('K_FRAME', 'PROMOTION_ENVIRONMENT_MAX')); assert not leaked, leaked; from deepreason.config import Config; assert Config().K_FRAME == 2 and Config().PROMOTION_ENVIRONMENT_MAX == 64" && grep -q 'data.pop("K_FRAME", None)' src/deepreason/run_manifest.py && grep -q 'data.pop("PROMOTION_ENVIRONMENT_MAX", None)' src/deepreason/run_manifest.py`
 
 **Surface 5 stayed at ZERO across Rung 5, and it is checked rather than
-asserted.** The whole promotion road — nomination, the five criteria, the
+asserted.** The whole promotion road — nomination, the six criteria, the
 closure sweep — reaches no LLM seat, so the pair inventory is unchanged, no
 subject digest moves, and no home owes a ~14-minute battery rerun. See
 `DR-INV-axiom-basis`'s A4 preservation row for the import check that pins it.

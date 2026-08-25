@@ -168,12 +168,41 @@ root under this definition, and two under the truncated one.
 
 `check: python -m pytest tests/test_promotion_nomination_live.py -q`
 
-**The five criteria are PROGRAMS over a frozen input** (`promotion.py`). Each is
+**The six criteria are PROGRAMS over a frozen input** (`promotion.py`). Each is
 a pure function of the candidate's bytes and interface plus ONE fence-stamped
 reach certificate fetched from the blob store by digest and re-digested on
 arrival. None reads live graph state, which is what makes a promotion verdict
 reproducible: a candidate evaluated twice on one record gets one answer,
 whatever the run did in between.
+
+**The sixth is RENT (§9.3), added at Rung 8**, and it is a separate criterion
+rather than a clause of the first on purpose. Criterion 1 asks whether the
+subject FORBIDS anything — `active(b)` is `demarcation == "load-bearing"`, and
+the observation-valued clause rides there too. Rent asks whether what it
+forbids is ENUMERABLE: commitments (what wounds violate), assumption ids (what
+departures declare against — on this tree the subject's own commitment ids,
+which is what `DepartureDeclarationV1.broken_ids` already means), and
+vocabulary. A candidate can pass either and fail the other, and one `fail`
+reason covering two defects is what makes a promotion refusal unanswerable — a
+critic cannot argue with a verdict that does not say which thing was wrong.
+
+The vocabulary leg reads `FrozenSubjectV1.articulation`, which `nomination`
+fills by DELEGATING to `render.articulation_digest`. One derivation, not two:
+what rent checks and what a conjecture is shown in the frame slice are the same
+text, and two derivations of "what this frame says" would eventually disagree.
+
+`check: python -m pytest tests/test_promotion_rent.py -q`
+`check: python -c "import inspect; from deepreason.calculus.nomination import _articulation; assert 'articulation_digest' in inspect.getsource(_articulation)"`
+
+**The scope-predicate budget travels INSIDE the certificate** (Rung 8, T-7).
+`Config.SCOPE_MAX_DEPTH` / `SCOPE_MAX_NODES` are ordinary knobs, but
+`scope_determinism` reads `ReachCertificateV1.scope_max_depth` /
+`scope_max_nodes`, frozen at nomination — the same road `k_frame` takes. A
+bound read live would let a criterion's verdict move while its commitment stood
+still, which is what Prop 12.1 forbids and what `promotion.py`'s own module
+note already says about `PROMOTION_STEPS`.
+
+`check: python -m pytest tests/test_promotion_rent.py::test_the_scope_bound_comes_from_the_certificate_not_the_config -q`
 
 `accounts-for` is the STRONG succession relation and the weak form was never
 built: recovery, rigidity, non-immunization AND a strictness witness, all four
@@ -306,7 +335,7 @@ found through `addr`.
   wants.** The class in `programs.PROGRAMS` decides whether a program can ground
   reach and confer prose immunity, and reach is what NOMINATES — so a
   substantive promotion criterion would let promotion paperwork manufacture the
-  signal that produced it. All six of Rung 5's programs are therefore declared
+  signal that produced it. All of Rung 5's programs, and Rung 8's rent, are therefore declared
   `structural`, which in this tree only ever WITHHOLDS. The mechanical
   consequence is dual registration: `programs_by_class()` reads `PROGRAMS`
   alone, so a criterion living only in `BLOB_PROGRAMS` would count substantive
