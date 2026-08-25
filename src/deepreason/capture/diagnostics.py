@@ -468,3 +468,90 @@ def diagnostics(harness, config) -> Capture14VectorV1:
         var=render(validity_attack_rate(harness, w), precision),
         egr=render(exogenous_grounding_ratio(harness, w), precision),
     )
+
+
+# --- G-4/G-5: the capture cost of elevation ------------------------------------------------
+
+CONDITIONING_SIGNAL = "capture14.promotion-conditioning.v1"
+
+
+def _conditioning_records(harness) -> tuple[tuple[str, str, str], ...]:
+    """`(phase, assertion id, payload digest)` for every conditioning record."""
+    return tuple(
+        (event.inputs[1], event.inputs[2], event.inputs[3])
+        for event in harness.log.read()
+        if event.rule is Rule.MEASURE
+        and len(event.inputs) >= 4
+        and event.inputs[0] == CONDITIONING_SIGNAL
+    )
+
+
+def conditioning_payload(harness, digest: str) -> dict:
+    return json.loads(harness.blobs.get(digest))
+
+
+def owed_after(harness) -> tuple[str, ...]:
+    """Elevations with a `before` and no `after`, in elevation order.
+
+    Derived from the LOG rather than from scheduler state: a resumed run owes
+    exactly what the record says it owes, and no in-process variable can
+    disagree with it.
+    """
+    records = _conditioning_records(harness)
+    paid = {aid for phase, aid, _ in records if phase == "after"}
+    return tuple(
+        aid for phase, aid, _ in records if phase == "before" and aid not in paid
+    )
+
+
+def _emit_conditioning(harness, config, assertion_id: str, phase: str, scope) -> None:
+    from deepreason.calculus.standing import framed_problem_ids
+
+    payload = {
+        "phase": phase,
+        "assertion": assertion_id,
+        "conditioned_problems": len(framed_problem_ids(harness, scope)) if scope else 0,
+        "vector": json.loads(diagnostics(harness, config).model_dump_json(by_alias=True)),
+    }
+    digest = harness.blobs.put(canonical_json(payload))
+    harness.record_measure(inputs=[CONDITIONING_SIGNAL, phase, assertion_id, digest])
+
+
+def promotion_conditioning(harness, config) -> None:
+    """G-5's pair: pay any owed `after`, then record a `before` per new
+    elevation.
+
+    The order matters and is not arbitrary. Paying first means an elevation
+    that happens in this same cycle does not have its own `before` mistaken for
+    an owed `after`; recording second means the `before` is taken with the new
+    grant already on the record, which is what makes `conditioned_problems`
+    the size of the surface the elevation actually created.
+    """
+    from deepreason.calculus.standing import consulted
+
+    grants = {grant.assertion_id: grant for grant in consulted(harness)}
+    for assertion_id in owed_after(harness):
+        grant = grants.get(assertion_id)
+        _emit_conditioning(
+            harness, config, assertion_id, "after", grant.scope if grant else None
+        )
+    seen = {aid for _, aid, _ in _conditioning_records(harness)}
+    for assertion_id, grant in sorted(grants.items()):
+        if assertion_id not in seen:
+            _emit_conditioning(harness, config, assertion_id, "before", grant.scope)
+
+
+def emit(harness, config) -> None:
+    """One cycle's §14 emission: the six, then G-5's pair, then the controller.
+
+    The vector is computed ONCE and emitted six times. Six independent
+    computations could straddle a registration and describe different windows,
+    and six numbers describing different states of the record are not a vector.
+    """
+    from deepreason.capture import hysteresis
+
+    vector = diagnostics(harness, config)
+    for signal, value in zip(CAPTURE14_SIGNALS, vector.values()):
+        harness.record_measure(inputs=[signal, value, str(vector.n), str(vector.m)])
+    promotion_conditioning(harness, config)
+    hysteresis.step(harness, config)

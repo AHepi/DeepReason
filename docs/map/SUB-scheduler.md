@@ -84,6 +84,24 @@ The internal phases are the real surface for a change: `_select_problem`,
 `_maybe_config_referee`, `_recover_workflow_prefixes`, `_record_stop`.
 `check: grep -q "^class Scheduler:" src/deepreason/scheduler/scheduler.py && grep -q "def run_scheduler(" src/deepreason/ops.py && grep -q "RunManifest v6 scheduler requires the global transaction dispatch guard" src/deepreason/scheduler/scheduler.py && for s in reflexive_problems problem_family problem_family_key lineage_endpoints stable_component_spec; do grep -q "^def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done && for s in step run report activate_interventions _select_problem _criticize _arg_crit _foreign_arg_crit _simulation_capability_step _experiment_step _property_step _fuzz_sweep _browser_step _vision_step _research_step _audit_step _capture_step _lazy_hv _maybe_config_referee _recover_workflow_prefixes _record_stop; do grep -q "^    def $s(" src/deepreason/scheduler/scheduler.py || exit 1; done && for c in rules/conj.py jolts.py views/jolt_signals.py easy.py; do grep -q "from deepreason.scheduler.scheduler import" "src/deepreason/$c" || exit 1; done`
 
+## The per-cycle signal emission carries TWO instrument families (Rung 8)
+
+`_record_detection_signals` fires once per cycle and now emits two families
+over one state of the record. The three v2 detection signals read the standing
+graph as it stands; `capture14.emit` reads a fixed SEQUENCE-NUMBER window
+`W_m(n)` and emits §14's six, G-5's promotion-conditioning pair, and §14.7's
+hysteresis step. They are a distinct family and not a replacement — the full
+three-population table is in `DR-INV-signal-contract` (V-6).
+
+Three orderings inside `capture14.emit` are load-bearing. The vector is
+computed ONCE and emitted six times, so the six describe one window rather than
+six adjacent ones. An owed `after` is paid BEFORE new elevations are recorded,
+so an elevation happening in this same cycle cannot have its own `before`
+mistaken for an owed `after`. And the hysteresis step runs LAST, so its policy
+reads the vector this cycle actually emitted.
+
+`check: grep -q "capture14.emit(harness, self.config)" src/deepreason/scheduler/scheduler.py && python -m pytest tests/test_capture14_emission.py tests/test_capture14_promotion_conditioning.py -q`
+
 Two orderings are load-bearing. The tail of `step()` runs the design steps
 before the fuzz sweep, so new generators and properties apply in the same cycle,
 and vision after the browser, so it judges freshly recorded renders. Within

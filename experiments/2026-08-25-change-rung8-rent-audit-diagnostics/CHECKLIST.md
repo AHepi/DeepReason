@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=12 blockers=none
+State: next=15 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -359,7 +359,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       with no policy — every root written before this rung — renders exactly as
       it did.
 
-- [ ] 12. (S6a, S7) `tests/test_capture14_emission.py` and
+- [x] 12. (S6a, S7) `tests/test_capture14_emission.py` and
       `tests/test_capture14_promotion_conditioning.py` written FIRST. Covers:
       the six fire once per cycle from one shared vector; the three Rung 2
       signals still fire; EVERY elevation gets both a `before` and an `after`;
@@ -368,7 +368,18 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       derived from the record, not from process state).
       done-when: both files FAIL — pasted.
 
-- [ ] 13. (S6a, S7) `src/deepreason/scheduler/scheduler.py`: inside
+      PROOF — RED, both files:
+      ```
+      $ python -m pytest tests/test_capture14_promotion_conditioning.py -q
+      7 failed, 1 passed in 0.38s
+      $ python -m pytest tests/test_capture14_emission.py -q
+      2 failed, 3 passed in 0.16s
+      ```
+      The emission file's three early passes are the ones that read only the
+      Rung 2 signals and the registry — correctly green before the wiring,
+      which is what makes the two failures the real subject.
+
+- [x] 13. (S6a, S7) `src/deepreason/scheduler/scheduler.py`: inside
       `_record_detection_signals`, in the fixed order of SPEC.md §S7 — compute
       the vector once, emit the six, emit owed `after` records, detect new
       elevations and emit their `before` records, run the hysteresis step.
@@ -376,13 +387,53 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       tests/test_capture14_promotion_conditioning.py
       tests/test_premise_channel_loop.py -q` -> 0 failed.
 
-- [ ] 14. (S6a, S6b) [COMMIT] Map: `docs/map/SUB-scheduler.md` and
+      PROOF:
+      ```
+      $ python -m pytest tests/test_capture14_emission.py \
+            tests/test_capture14_promotion_conditioning.py \
+            tests/test_premise_channel_loop.py -q
+      23 passed in 1.63s
+      $ python -m pytest tests/test_scheduler.py tests/test_capture14_diagnostics.py \
+            tests/test_capture14_hysteresis.py tests/test_signals.py tests/test_orbit.py -q
+      60 passed in 7.58s
+      ```
+      The emission tests drive a REAL `Scheduler` over a real root rather than
+      calling the capture functions directly — the wiring is the thing ERRATA
+      E28 records being missed twice (a controller that never steered, a reach
+      trigger that never fired).
+
+      One scope collision found and fixed in the FIXTURE, not the code: a
+      promotion problem described as "promote or refuse the lunar theory of
+      TIDES" falls inside its own candidate's scope predicate, so the
+      elevation's own paperwork was counted in `conditioned_problems` (4, not
+      3). Correct behaviour of `framed_problem_ids`; the test now keeps the
+      promotion problem out of the scope so the number means what it says.
+
+- [x] 14. (S6a, S6b) [COMMIT] Map: `docs/map/SUB-scheduler.md` and
       `docs/map/CON-scheduler-ranking.md` gain the emission site's new
       obligations; `docs/map/SUB-periphery.md` records the G-4 extension (one
       band vocabulary, two instrument families) with a check that the
       hysteresis bands ARE the `raw_flags` bands.
       done-when: `python tools/docs_verify.py` -> baseline failure count, new
       checks exit 0 (pasted).
+
+      PROOF — new checks, run before being written down:
+      ```
+      $ grep -q "capture14.emit(harness, self.config)" src/deepreason/scheduler/scheduler.py \
+          && python -m pytest tests/test_capture14_emission.py \
+                 tests/test_capture14_promotion_conditioning.py -q
+      13 passed in 0.44s
+      $ grep -q "^def _budgets(" src/deepreason/calculus/render.py && python -m pytest \
+          tests/test_capture14_hysteresis.py::test_diversify_shows_more_of_the_frames_own_crisis \
+          tests/test_capture14_hysteresis.py::test_slice_budgets_fall_back_to_config_on_a_record_with_no_policy -q
+      2 passed in 0.35s
+      ```
+      `DR-SUB-scheduler` records the THREE load-bearing orderings inside
+      `capture14.emit` (one vector for six signals; owed `after` paid before
+      new elevations are recorded; the controller last, so its policy reads the
+      vector this cycle emitted). `DR-CON-packs-and-token-economy` records the
+      frame slice as the only pack section a controller may widen.
+      The full `docs_verify` runs at step 26.
 
 - [ ] 15. (S1) `tests/test_promotion_rent.py` written FIRST. Covers the three
       legs of SPEC.md §S1 separately (each with a fixture that fails only that

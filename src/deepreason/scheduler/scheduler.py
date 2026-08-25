@@ -14,6 +14,7 @@ import json
 
 from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.capture import detection, ladder, schools
+from deepreason.capture import diagnostics as capture14
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenBudgetExceeded
@@ -2365,6 +2366,13 @@ class Scheduler:
                 str(max((o["size"] for o in offers), default=0)),
             ]
         )
+        # §14's six, G-5's promotion-conditioning pair, and §14.7's controller
+        # (v2 Rung 8). A DISTINCT FAMILY from the three above and not a
+        # replacement for them: those read the standing graph as it stands,
+        # these read a fixed sequence-number window (V-6). Emitted from this
+        # same site so both series are complete rather than sampled, and AFTER
+        # them so one cycle's record carries both readings of one state.
+        capture14.emit(harness, self.config)
 
     def _promotion_step(self) -> None:
         """§9.4: nominate, then fire the promotion criteria (Rung 5).
