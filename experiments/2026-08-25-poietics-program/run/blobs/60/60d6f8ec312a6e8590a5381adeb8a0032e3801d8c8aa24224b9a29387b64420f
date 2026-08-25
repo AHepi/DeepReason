@@ -1,0 +1,120 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject rather than describing it when the test's installation ritual embeds the subject's failure as a precondition for registration — the 3-of-26 result arises because only mutations that participate in the shown-to-fail-first installation path are visible to the guard, while the 1/9 compile.py loss and the 4/4 to 6/7 module spread reflect the same mechanism applied at different registry scopes.",
+      "mechanism": "The shown-to-fail-first installation pattern means the test suite is not measuring the code as written but as installed through a ritual that already encodes which failures count. When a mutation is introduced, the guard sees only the delta against the canonical failure registry, not the full behavioral surface. The distribution (3 of 26) is the fingerprint of a registry whose entries are selected by the same author's care in the same week: mutations that land outside the ritual's blast radius are invisible by construction.",
+      "counterconditions": [
+        "If the 3 surviving mutations would still be caught under a naive no-install test run, the installation ritual is not the differentiator.",
+        "If the 1/9 compile.py loss is attributable to a one-line content-edit hole with no registry involvement, then the distribution is noise, not a fingerprint.",
+        "If independent re-runs with shuffled mutation order change which 3 of 26 survive, the result is order-dependent rather than structurally constrained.",
+        "If every ordinarily-guarded module's 4/4 to 6/7 spread is explained by module size alone, then the constraint is coverage, not ritual."
+      ],
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "claim": "A test constrains rather than describes when the guard's declared data model and the subject's added behavior diverge — the 3-of-26 survivors are one bug in two costumes: guards that check declared data cannot see added behavior, and the installation ritual only makes this divergence load-bearing.",
+      "mechanism": "The record's own finding ('THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR') suggests the test is an enforcement of a data schema, not a description of runtime behavior. Under shown-to-fail-first installation, the subject is normalized to match the declared data before testing, so mutations that only alter behavior are invisible. The 4/4 to 6/7 spread across ordinarily-guarded modules is the variance in how much added behavior each module carries relative to its declared surface.",
+      "counterconditions": [
+        "If at least one survivor alters declared data and still escapes, the declared-data/added-behavior distinction is not exhaustive.",
+        "If the compile.py 1/9 loss involves a guard that checks behavior rather than data, then the mechanism is not uniform across the repository.",
+        "If a behavior-guard mutation would be caught even under installation, then the constraint is not on data declaration.",
+        "If the author's care is uniformly distributed, the spread should be narrower than observed."
+      ],
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "028950f9751ab59a"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "claim": "The 3-of-26 result is an artifact of masking, not of genuine test strength: mutations no guard catches are reported as caught because the installation ritual's failure registry is itself the oracle, so the test constrains its subject only when the subject participates in the ritual's masking.",
+      "mechanism": "The record notes that in the 59/3 case the error was masking: mutations no guard catches were reported as caught. This implies a self-referential oracle: the test's verdict is derived from the registry of shown failures, not from an independent description of correct behavior. Under this regime, a test constrains when it forces the subject into a shape that the registry already anticipates; it merely describes when the subject falls outside the registry's vocabulary. The 1/9 compile.py mutation loss is a masking failure at the build stage, while the 3/26 distribution is the subset of mutations that happen to align with the registry's blind spots.",
+      "counterconditions": [
+        "If an independent oracle (not the installation registry) confirms the 3 survivors are genuinely uncaught, then masking is not the explanation.",
+        "If the compile.py loss can be reproduced without the installation ritual, then the masking is not installation-specific.",
+        "If the 4/4 to 6/7 spread is monotonic in module size, then the masking is uniform, not selective.",
+        "If the same mutations under a different test harness produce the same 3-of-26, then the constraint is in the code, not the ritual."
+      ],
+      "evidence_refs": [
+        {
+          "block": "028950f9751ab59a"
+        },
+        {
+          "block": "057f5d8af80d2d12"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "claim": "A test constrains rather than describes when it is a guard that never fires on its author: the 3-of-26 result is the residue of a test suite designed to fail loudly for others but remain silent for the author's own installed path, so the distribution is a signature of authorial blind spots, not subject structure.",
+      "mechanism": "The record's insight — 'a process guard that never fires on its author is probably not a guard' — suggests the test suite is an enforcement mechanism tuned to catch violations in unfamiliar code, not to describe the code it was written alongside. The shown-to-fail-first installation ritual encodes the author's own failure expectations, so mutations that preserve the author's intended semantics are invisible. The 1/9 compile.py loss is a guard that fired on the author's own edit but was silently weakened; the 3/26 spread is the set of mutations that fell within the author's unexamined assumptions.",
+      "counterconditions": [
+        "If a mutation authored by someone else and planted in the same location is also missed, then the blindness is not author-specific.",
+        "If the author's own edits to guarded modules are caught at a higher rate than the 3/26 baseline, then the guard does fire on its author.",
+        "If the distribution is stable across different authors' mutation sets, then it is structural, not biographical.",
+        "If the compile.py loss was caught in a later audit without ritual change, then the weakness was transient, not authorial."
+      ],
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "typicality": 0.55
+    },
+    {
+      "claim": "The 3-of-26 result is an under-powered measurement artifact: the test constrains only when its constraint is load-bearing in the installation path, and the distribution is the small-sample fingerprint of one repository, one author, one week — no structural condition can be inferred beyond the ritual's local ordering.",
+      "mechanism": "The caveat in the record is explicit: one repository, one author, one week, mutations proposed by models that had read the acceptance record. The 3-of-26 distribution is consistent with a process where the test suite's power is a function of how many mutations happen to intersect the installation ritual's registry. The 4/4 to 6/7 spread across ordinarily-guarded modules is the expected variance when each module's guard coverage is independent and the sample size is 9 mutations in compile.py. The test constrains when the mutation's blast radius overlaps the ritual's registry; it describes otherwise, and with this sample size the boundary is arbitrary.",
+      "counterconditions": [
+        "If a larger mutation sample (e.g., 100+ per module) preserves the 3/26 ratio, then the effect is not small-sample noise.",
+        "If the same author's other repositories show the same 3-of-26 pattern, then it is authorial style, not local chance.",
+        "If the compile.py 1/9 loss is reproducible across multiple independent mutation sets, then it is a stable hole, not a sampling artifact.",
+        "If the record contains a control group without installation, and the 3-of-26 disappears, then the installation ritual is confirmed as the active ingredient."
+      ],
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ],
+      "typicality": 0.45
+    },
+    {
+      "claim": "A test constrains rather than describes when its guard checks the subject's own declaration of what it is, making the test a restatement of authorial intent rather than an independent observation — the 3-of-26 result is the set of mutations that do not alter the subject's self-description, and the installation ritual merely makes this circularity load-bearing.",
+      "mechanism": "The test suite's guards operate on declared data and installed registry entries, both of which are the subject's own self-description. When a mutation preserves the declaration but changes behavior, the test cannot see it; when a mutation changes the declaration, the test sees it as a registration failure, not as a behavioral deviation. The shown-to-fail-first installation ritual turns this circularity into a constraint: the subject must match its own declared failure profile. The 1/9 compile.py loss is a mutation that changed the declaration at a point where the ritual's registry had a content-edit hole; the 3/26 spread is the fraction of mutations that changed behavior without changing declaration.",
+      "counterconditions": [
+        "If a mutation that changes both declaration and behavior is caught, but one that changes neither is also caught, then the circularity is not the only constraint.",
+        "If the test suite has any oracle independent of the subject's declarations, then the description is not purely circular.",
+        "If the 4/4 to 6/7 spread is uncorrelated with the size of each module's declaration surface, then the circularity is not uniform.",
+        "If the author's care level varied within the week, the distribution should be bimodal, not continuous."
+      ],
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ],
+      "typicality": 0.35
+    }
+  ]
+}
+```
