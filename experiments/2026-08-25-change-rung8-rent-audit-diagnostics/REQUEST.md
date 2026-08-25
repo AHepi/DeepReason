@@ -380,3 +380,35 @@ schema version (the `ENGAGED_CRITICISM_AUTHORITY` trap). Surface 3
 grant is requested in SPEC.md BEFORE any code is written, per the ladder's
 own rule. Surfaces 1, 2 and 5 forecast zero contact, and R17's "NO new LLM
 role" is what keeps surface 5 at zero.
+
+### Amendment 1 — 2026-08-25, mid-workflow (during SPEC.md), operator message verbatim
+
+> Ok. So keep running tests for as long as you can. Now I just need as much
+> helpful data as possible. Please make it happen. Tokens aren't an obstacle.
+> Keep going without permission
+
+**R20 (process):** "keep running tests for as long as you can… as much helpful
+data as possible… Tokens aren't an obstacle. Keep going without permission"
+
+Reconciled against the existing ledger, in writing:
+
+- **It does not change the design.** No R1-R19 requirement is superseded,
+  narrowed or widened. R20 is a PROCESS requirement about how much evidence the
+  tranche generates and about not pausing for permission.
+- **It raises the evidence floor.** Where a spec item's `accept` names one
+  command, the tranche runs the wider instrument too and pastes it: the full
+  gate at every phase boundary rather than only at the last, `docs_verify` FULL
+  (not `--fast`), both wheel smokes even though S11 predicts an unchanged public
+  surface, `python tools/docs_verify.py --audit` and `--links`, and
+  `tools/diff_budget.py` / `tools/blast_radius.py` at every `[COMMIT]`.
+- **It does NOT relax R18's ceiling or the workflow's stop conditions.** C1
+  stands ("the workflow's own stop conditions apply, nothing else stops"), and
+  "keep going without permission" removes the courtesy pauses, not the typed
+  stops. A step that fails twice the same way, a frozen-surface contact beyond
+  the one R17 pre-authorizes, or a plan over ~1 100 insertions still stops.
+- **It agrees with a standing operator design law** already in CLAUDE.md
+  ("Tokens are cheap; the agent is not", 2026-08-08): prefer generated evidence
+  over hand-crafted reasoning. R20 is that law restated for this tranche, and
+  the evidence discipline is unchanged — no live launch (the operator's own
+  KNOWN CURRENT STATE says this rung launches nothing), and model prose is
+  still never evidence.
