@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=1 blockers=none
+State: next=3 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -28,7 +28,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       operator's KNOWN CURRENT STATE (3 pre-existing shallow-clone failures)
       or is 0.
 
-- [ ] 1. (S9) `src/deepreason/config.py`: add the ten knobs of SPEC.md §S9 with
+- [x] 1. (S9) `src/deepreason/config.py`: add the ten knobs of SPEC.md §S9 with
       their recorded defaults, each carrying a comment stating the CONSTRAINT
       (why the default is today's constant, or that it is unmeasured) and never
       narrating the change. `CAPTURE14_EXIT_K < CAPTURE14_ENTER_K` is validated
@@ -40,7 +40,23 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       'CAPTURE14_ENTER_K','CAPTURE14_EXIT_K')])"` prints the ten defaults, and
       a `Config(CAPTURE14_EXIT_K=3, CAPTURE14_ENTER_K=2)` raises.
 
-- [ ] 2. (S10) [COMMIT] `src/deepreason/run_manifest.py`: one
+      PROOF:
+      ```
+      SCOPE_MAX_DEPTH            = 16
+      SCOPE_MAX_NODES            = 512
+      FRAME_SLICE_ATTACKERS      = 5
+      FRAME_SLICE_DEPARTURES     = 4
+      CAPTURE14_WINDOW           = 200
+      CAPTURE14_AGE_FLOOR        = 50
+      CAPTURE14_PRECISION        = 6
+      CAPTURE14_SC_CEILING       = 0.5
+      CAPTURE14_ENTER_K          = 2
+      CAPTURE14_EXIT_K           = 0
+      Value error, CAPTURE14_EXIT_K must be strictly below CAPTURE14_ENTER_K:
+      got exit=3 enter=2 [type=value_error]
+      ```
+
+- [x] 2. (S10) [COMMIT] `src/deepreason/run_manifest.py`: one
       `data.pop(<knob>, None)` per new knob in `_versioned_source_config_data`,
       unconditional, under ONE comment block stating the reason (consulted at
       sites inside the run, never written to the manifest; their effect IS
@@ -50,6 +66,26 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       tests/test_allocation_signal_consumption.py -q` -> 0 failed, and
       `python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q`
       -> 1 passed. This is the step that PROVES surface 4 stayed still.
+
+      PROOF:
+      ```
+      $ python -m pytest tests/test_reusable_qualification.py tests/test_allocation_signal_consumption.py -q
+      54 passed in 21.52s
+      $ python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q
+      1 passed in 0.37s
+      ```
+      Stronger than the done-criterion asked for: `source_config_hash` compared
+      byte-for-byte at the tranche base (`462d6091d`, in a scratch worktree)
+      and at HEAD, for EVERY schema version. Ten new knobs, zero digest motion.
+      ```
+      schema   462d6091d                                                          HEAD
+      1        6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   (identical)
+      2        6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   (identical)
+      3        2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   (identical)
+      4        2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   (identical)
+      5        2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   (identical)
+      6        2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   (identical)
+      ```
 
 - [ ] 3. (S8, R13) `src/deepreason/signals.py`: the eight `capture14.*`
       declarations, none carrying `unspecified`; and ONE appended sentence to

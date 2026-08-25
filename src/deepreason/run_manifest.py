@@ -2432,6 +2432,27 @@ def _versioned_source_config_data(
     # the ENGAGED_CRITICISM_AUTHORITY incident exactly (docs/ERRATA.md E44).
     data.pop("K_FRAME", None)
     data.pop("PROMOTION_ENVIRONMENT_MAX", None)
+    # The v2 calculus Rung 8 knobs, dropped for the same reason and with the
+    # same guarantee: every one is consulted at a site INSIDE the run and none
+    # is ever written to the manifest, and each one's effect is recorded more
+    # precisely than a Config echo could record it. The two scope bounds travel
+    # inside each reach certificate (`scope_max_depth`/`scope_max_nodes`), so
+    # the record says which bound a given verdict was reached under. The eight
+    # capture knobs travel inside the diagnostics payload and the
+    # `capture14-hysteresis.v1` policy artifact, which carry their own window,
+    # precision and bands. Omitting any of these drops would move every
+    # qualification subject digest for a measure threshold, which is the
+    # ENGAGED_CRITICISM_AUTHORITY incident exactly (docs/ERRATA.md E44).
+    data.pop("SCOPE_MAX_DEPTH", None)
+    data.pop("SCOPE_MAX_NODES", None)
+    data.pop("FRAME_SLICE_ATTACKERS", None)
+    data.pop("FRAME_SLICE_DEPARTURES", None)
+    data.pop("CAPTURE14_WINDOW", None)
+    data.pop("CAPTURE14_AGE_FLOOR", None)
+    data.pop("CAPTURE14_PRECISION", None)
+    data.pop("CAPTURE14_SC_CEILING", None)
+    data.pop("CAPTURE14_ENTER_K", None)
+    data.pop("CAPTURE14_EXIT_K", None)
     return data
 
 

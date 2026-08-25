@@ -365,6 +365,48 @@ class Config(BaseModel):
     # "terminates inside its declared budget" unprovable. What the cap drops is
     # RECORDED in the certificate's `truncated` list -- never silently.
     PROMOTION_ENVIRONMENT_MAX: int = 64
+    # Scope-predicate budgets (sigma's DSL, D-5). These are CONFIGURABLE but a
+    # promotion verdict may never read them from here: `build_certificate`
+    # stamps them into the reach certificate and `scope_determinism` reads the
+    # certificate, so the bound travels inside the content address exactly as
+    # K_FRAME's does. A bound read live would let a criterion's verdict move
+    # while its commitment stood still, which Prop 12.1 forbids. Defaults are
+    # today's `calculus/scope.py` module constants; neither is measured -- no
+    # committed root has ever approached either.
+    SCOPE_MAX_DEPTH: int = 16
+    SCOPE_MAX_NODES: int = 512
+    # Frame-slice budgets (T-7; §14.7's one lever that exists on this tree).
+    # How many of a consulted frame's standing attackers and already-declared
+    # departures the slice shows. Defaults are today's `calculus/render.py`
+    # module constants, which remain the fallback whenever no hysteresis policy
+    # is on the record. Attention only: the slice conditions GENERATION and
+    # reaches no label. Unmeasured.
+    FRAME_SLICE_ATTACKERS: int = 5
+    FRAME_SLICE_DEPARTURES: int = 4
+    # The §14 capture diagnostics. The window is a count of SEQUENCE NUMBERS,
+    # never of wall-clock time and never of events: W_m(n) = {max(1, n-m+1) ..
+    # n}. CAPTURE_W above is a different instrument's event window and the two
+    # are not interchangeable.
+    #
+    # Every value here is UNMEASURED and the closing RESULTS.md says so. The
+    # calculus defends none of them; §8 of this tranche's SPEC.md states what
+    # would measure each.
+    CAPTURE14_WINDOW: int = 200
+    # The age floor h of §14.3: an artifact younger than this has not had time
+    # to attract criticism, so counting it as debt would measure the run's
+    # youth rather than its criticism.
+    CAPTURE14_AGE_FLOOR: int = 50
+    # A10: the precision is DECLARED, not derived. It is part of the policy and
+    # is recorded in every diagnostics payload, so a reader re-derives the
+    # number without knowing this default.
+    CAPTURE14_PRECISION: int = 6
+    CAPTURE14_SC_CEILING: float = 0.5
+    # The hysteresis asymmetry of §14.7, and it is structural rather than
+    # tuned: T_exit must be STRICTER than T_enter or the controller chatters at
+    # the boundary. The validator below refuses any pair that would make them
+    # equal or inverted.
+    CAPTURE14_ENTER_K: int = 2
+    CAPTURE14_EXIT_K: int = 0
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # Research service mode (§12; research/backends.py:build_service):
@@ -631,6 +673,20 @@ class Config(BaseModel):
         str,
         dict[str, Any] | list[dict[str, Any]] | None,
     ] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _capture14_hysteresis_is_asymmetric(self):
+        # §14.7's controller "may enter ... when T_enter holds and leave only
+        # when a STRICTER recovery predicate T_exit holds". Symmetric or
+        # inverted thresholds are not a tuning choice with a bad value; they
+        # are a controller that chatters across the boundary, which is the one
+        # behaviour the hysteresis exists to exclude.
+        if self.CAPTURE14_EXIT_K >= self.CAPTURE14_ENTER_K:
+            raise ValueError(
+                "CAPTURE14_EXIT_K must be strictly below CAPTURE14_ENTER_K: "
+                f"got exit={self.CAPTURE14_EXIT_K} enter={self.CAPTURE14_ENTER_K}"
+            )
+        return self
 
     @field_validator("roles")
     @classmethod
