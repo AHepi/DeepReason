@@ -1,0 +1,136 @@
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject, rather than describing it, when the test is installed before the subject's behaviour is fixed and the installation ritual is shown to fail first. The 3-of-26 result reflects exactly this: only the mutations that were installed under a shown-to-fail-first discipline survived, and the 1-of-9 compile.py loss is the signature of an installation gate that was never actually exercised.",
+      "mechanism": "When a test is written against an already-working subject, it records the subject's current behaviour and is satisfied by construction; it describes. When the test is installed as a guard that is demonstrated to fail against a planted mutation before the subject is accepted, it binds a counterfactual: subject passes only if the guarded behaviour is present. The 1-of-9 compile.py loss shows the gap between describing an installation ritual and performing it: a guard that never fails on its author is not a guard.",
+      "counterconditions": [
+        "The 3-of-26 distribution could be explained by mutation difficulty rather than installation order if the surviving mutations were all in hard-to-reach code paths.",
+        "If the compile.py mutation loss was due to an unrelated content-edit hole, then the shown-to-fail-first mechanism did not actually operate there.",
+        "Single-author, single-repository, single-week confound means the observed pattern may reflect the author's habits rather than a general condition on tests."
+      ],
+      "typicality": 0.82,
+      "evidence_refs": [
+        {
+          "block": "002779d3ed9dd0a6"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "03be16ddea3ab3e2"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The condition is not installation order alone but whether the test's failure mode is the same failure mode as the mutation it guards. The 3-of-26 survivors are the cases where the guard checks declared data, while the lost mutations added behaviour that no data-facing guard could see; the 1-of-9 compile.py loss is one bug in two costumes.",
+      "mechanism": "A test constrains only the dimension it actually samples. If a guard checks declared data but the mutation adds behaviour, the guard describes the declaration and misses the behaviour. The distribution of survivors follows from the alignment between guard modality and mutation modality, not from the author's care or the ritual.",
+      "counterconditions": [
+        "If the surviving mutations were all in the same modality by chance, the 3-of-26 result is a sampling artefact.",
+        "The one-repository confound means we cannot separate modality alignment from codebase-specific guard patterns.",
+        "If the ordinarily-guarded modules showed 4/4 to 6/7 regardless of modality, then installation discipline matters more than modality."
+      ],
+      "typicality": 0.71,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A test constrains when the subject's acceptance record is derived from the test's rejection, not from the test's acceptance. The 3-of-26 result shows that most mutations were caught by tests that accepted the mutated subject as equivalent to the original, so the tests described rather than constrained; the 1-of-9 compile.py loss is the clearest case where acceptance was recorded without a prior rejection.",
+      "mechanism": "Constraint requires a negative instance in the installation record: the test must have rejected something that the project then decided to keep or fix. Without that negative, the test's pass is only a restatement of the subject. The distribution of 3-of-26 follows the distribution of recorded rejections, and compile.py's 1-of-9 loss marks the absence of exactly such a record.",
+      "counterconditions": [
+        "If the acceptance record is incomplete and rejections occurred but were not recorded, the 3-of-26 result undercounts constraint.",
+        "The magnitude of the effect may be inflated by the small registry size.",
+        "Single-author confound: the same author's same-week care may have produced both the tests and the acceptance record, making the distinction circular."
+      ],
+      "typicality": 0.64,
+      "evidence_refs": [
+        {
+          "block": "0aade89eefe9dee8"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The condition is negative: a test describes its subject unless the test would fail on at least one counterfactual version of the subject that the project has actually instantiated. The 3-of-26 result is not a failure of care but a failure of counterfactual instantiation: only 3 of 26 mutations were ever instantiated as subjects that the guards had to reject before acceptance.",
+      "mechanism": "Constraint is the shadow cast by a demonstrated counterexample. If no counterexample is ever instantiated, the test has no grip on the subject's modal space and collapses into description. The 1-of-9 compile.py loss marks the module where the counterfactual was never instantiated, so the test had no opportunity to constrain.",
+      "counterconditions": [
+        "If counterfactual instantiation is expensive or impractical, then the condition may be unreachable in practice.",
+        "The one-week timeframe may not allow enough counterfactual instantiation for a reliable distribution.",
+        "Arbitrary mutation selection could produce 3-of-26 even under a strong constraint regime if the mutations happened to avoid the guarded paths."
+      ],
+      "typicality": 0.45,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A test constrains when its guard is designed for the case where it fires on its author, and the 3-of-26 result is the distribution of guards that were never fired on their author. The 1-of-9 compile.py loss is the single mutation that would have fired on the author's own installation ritual, and it was lost because the ritual was never actually performed against a planted failure.",
+      "mechanism": "The author of a test is the last person it will catch. If the installation ritual does not force the author to see the guard fail against their own work, the guard remains a description of the author's intention. The 3-of-26 survivors are the cases where the guard fired on someone other than the author, and the 1-of-9 compile.py loss is the case where it never fired at all.",
+      "counterconditions": [
+        "If the author was not the only installer, the 'fires on its author' condition may not be the operative variable.",
+        "The confound of one author across the whole repository means we cannot separate author-specific blind spots from general test properties.",
+        "The 4/4 to 6/7 results in ordinarily-guarded modules suggest the author's blind spots were unevenly distributed rather than uniform."
+      ],
+      "typicality": 0.38,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2"
+        },
+        {
+          "block": "002779d3ed9dd0a6"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The 3-of-26 result does not establish any general condition on when tests constrain: it is a one-repository, one-author, one-week artefact, and the 1-of-9 compile.py loss may be a content-edit hole rather than an installation-discipline failure. Any condition inferred from this record is a description of the author's week, not a constraint on testing.",
+      "mechanism": "The evidence is too small and too confounded to support a transferable condition. The mutations were proposed by models that had read the acceptance record, so the distribution is contaminated by the very record it purports to explain. The 1-of-9 compile.py loss is the clearest sign that the observed pattern is not a stable property of tests but a local artefact of how this particular record was assembled.",
+      "counterconditions": [
+        "If the same pattern replicates in a different repository, author, and week, the confound objection loses force.",
+        "The 4/4 to 6/7 consistency in ordinarily-guarded modules is a weak regularity that may survive the confound.",
+        "The 3-of-26 result is large enough in magnitude to warrant a mechanism even if the confound is real."
+      ],
+      "typicality": 0.29,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "002779d3ed9dd0a6"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
