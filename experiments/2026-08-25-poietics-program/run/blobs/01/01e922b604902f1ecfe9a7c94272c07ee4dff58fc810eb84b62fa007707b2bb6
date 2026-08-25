@@ -1,0 +1,118 @@
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject when installation order changes which failures are visible: the shown-to-fail-first installation converts a latent mutation into an observed failure only if the guard is already installed before the mutation is introduced. In the 1-of-9 compile.py case, the lost mutation was masked because the fail-first ritual installed the very guard that would later catch it, so the mutation was never exposed to an unguarded compiler path. The distribution (1/9 vs 4/4 to 6/7) reflects whether the test's authority was established before or after the subject was permitted to run.",
+      "mechanism": "Shown-to-fail-first installation creates a temporal asymmetry: the test becomes a precondition for execution rather than an observer of it. Mutations that alter code already guarded by an installed test are constrained (caught), while mutations that alter the installation ritual itself or the guard's own registration are described (missed) because no independent test exists outside the ritual. The 3-of-26 result follows from how many mutations land in already-guarded code paths versus in the guard-installation path itself.",
+      "counterconditions": [
+        "If compile.py's 1-of-9 result is shown to be an artifact of mutation ordering rather than installation authority, the temporal claim fails.",
+        "If the 4/4 to 6/7 modules were tested under a different ritual than compile.py, the distribution comparison is confounded.",
+        "If a guard that catches a mutation was written after the mutation was proposed, then the test describes rather than constrains.",
+        "If the lost mutation is recoverable by re-running the suite in a different order without changing any guard, then installation order is not the binding condition."
+      ],
+      "typicality": 0.82,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "028950f9751ab59a"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only if the test's own installation is not part of the subject's failure surface. The 1-of-9 compile.py loss occurs because compile.py is both the subject and the installer: mutations to compile.py can disable the very mechanism that would report them. Ordinarily-guarded modules show 4/4 to 6/7 because their tests are installed by a separate authority, so a mutation in the module cannot reach back and silence the test. The asymmetry is a property of self-installing subjects, not of test quality.",
+      "mechanism": "When the test and the subject share a code path, a mutation can corrupt both the behaviour under test and the test's ability to report failure. This is a reflexivity confound: the subject modifies its own observer. The 3-of-26 result counts mutations that land in the shared observer-subject boundary, where no independent signal exists. The distribution is explained by the degree of coupling between each module and the test harness that guards it.",
+      "counterconditions": [
+        "If compile.py's lost mutation was in a pure function with no interaction with the guard registry, the reflexivity mechanism fails.",
+        "If the 4/4 to 6/7 modules also self-install but still catch all mutations, then self-installation alone is not the constraining condition.",
+        "If an independent second harness could be written to catch the lost compile.py mutation without changing compile.py, then the constraint was a design choice, not a structural limit.",
+        "If the 3-of-26 distribution is explained by mutation difficulty rather than observer-subject coupling, the claim is confounded."
+      ],
+      "typicality": 0.74,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when the test asserts a property that the mutation must violate to survive, and merely describes it when the test asserts a property the mutation can bypass by changing what the test reads. The 1-of-9 compile.py mutation was lost because the guard checked declared data, not added behaviour: the mutation added a behaviour that no declared field recorded. The 4/4 to 6/7 modules constrained their mutations because their guards checked executed behaviour, which the mutations could not avoid. The 3-of-26 result is a census of how many guards check declarations versus executions.",
+      "mechanism": "Declared-data guards are vulnerable to added-behaviour mutations because they inspect a static surface that the mutation can leave unchanged. Executed-behaviour guards are robust because they inspect the trace, which the mutation must alter to have any effect. The distribution follows the ratio of declaration-checking guards to behaviour-checking guards in each module. compile.py's lost mutation was an addition that no declared field could distinguish from the original.",
+      "counterconditions": [
+        "If the lost compile.py mutation also changed a declared field but was still missed, then declaration-checking is not the differentiator.",
+        "If a behaviour-checking guard in one of the 4/4 modules also missed an added-behaviour mutation, the mechanism is not sufficient.",
+        "If the 3-of-26 mutations were all behaviour-adding but only some were caught, then the guard type alone does not explain the distribution.",
+        "If the author's own reports show that declaration-checking guards caught mutations elsewhere, the dichotomy is too strong."
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "0aade89eefe9dee8"
+        }
+      ]
+    },
+    {
+      "claim": "The 1-of-9 compile.py result is not evidence that the test constrains its subject; it is evidence that the mutation was planted in a path the author had already decided not to guard. The 3-of-26 distribution is an artefact of mutation selection: the mutations were proposed by models that had read the acceptance record, so they were biased toward already-guarded code or already-unguarded code. A test constrains its subject only when the mutation is adversarial to the test's stated intent, and that condition is not established for the 1-of-9 loss.",
+      "mechanism": "Mutation selection bias creates a confound between test strength and mutation placement. If the mutations were generated with knowledge of which paths were guarded, then the observed catch rates reflect the generator's priors, not the tests' constraining power. The 1-of-9 loss may indicate a mutation placed in a known-unguarded region, which tells us nothing about whether the test would constrain a randomly placed mutation. The 4/4 to 6/7 results may similarly reflect that those modules' mutations were placed in already-tested territory.",
+      "counterconditions": [
+        "If the mutation generator's access to the acceptance record is shown not to bias placement, the confound disappears.",
+        "If the 1-of-9 lost mutation is in code that the author explicitly claimed was guarded, then the result is not explained by selection bias.",
+        "If a blind mutation run on the same code produces the same distribution, then generator bias is not the operative condition.",
+        "If the 3-of-26 result is stable across independent mutation authors, the artefact claim fails."
+      ],
+      "typicality": 0.55,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "0b4076ae84559daa"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when failure is the installation condition rather than the outcome: the shown-to-fail-first ritual makes the test's authority depend on the subject failing before the test is trusted. The 1-of-9 compile.py mutation was lost because the mutation did not cause a failure during installation, so the test never activated for that path. The 4/4 to 6/7 modules constrained their mutations because their mutations did cause installation-time failures, which triggered the guard. The 3-of-26 result measures how many mutations fail loudly enough during installation to be caught by a fail-first test.",
+      "mechanism": "Shown-to-fail-first installation creates a threshold effect: only failures that manifest during the installation ritual are recorded as constraints. Failures that would manifest later, or only under different inputs, are described rather than constrained because the test never runs in the mode that would expose them. The distribution reflects the proportion of mutations that are installation-visible versus runtime-visible in each module.",
+      "counterconditions": [
+        "If the lost compile.py mutation would fail loudly during installation but was still missed, then installation visibility is not the mechanism.",
+        "If the 4/4 modules caught runtime-only mutations, then the fail-first threshold does not explain their success.",
+        "If the ritual was run identically for all modules, then differential installation visibility cannot explain the distribution.",
+        "If the 1-of-9 loss is shown to be a reporting error rather than a silent pass, the claim is confounded."
+      ],
+      "typicality": 0.61,
+      "evidence_refs": [
+        {
+          "block": "028950f9751ab59a"
+        },
+        {
+          "block": "0a5a41977d58bdb4"
+        }
+      ]
+    },
+    {
+      "claim": "The question is underdetermined by the record: the 3-of-26 result cannot distinguish between 'the test constrained its subject' and 'the subject was never mutated in a way that would test the constraint.' The 1-of-9 compile.py loss and the 4/4 to 6/7 module results are consistent with a model where every test merely describes its subject, but the mutations were unevenly distributed across described and undescribed paths. No condition can be inferred from a single repository, one author, and one week of mutation testing.",
+      "mechanism": "A describing test and a constraining test are observationally equivalent when the mutation set is not independently sampled from the space of possible changes. The observed distribution is a joint product of test strength and mutation placement, and the record provides no experiment that varies one while holding the other fixed. The 3-of-26 count is therefore a description of the mutation set, not a measurement of test constraining power. Any claimed condition is an unmeasured prior, not a finding.",
+      "counterconditions": [
+        "If the record contains a controlled comparison varying only the test while holding mutations fixed, the underdetermination is resolved.",
+        "If the 1-of-9 loss can be reproduced with an independently generated mutation set, then the result is not an artefact of selection.",
+        "If the author's acceptance record specifies the guard intent for each lost mutation, then constraint versus description can be adjudicated.",
+        "If a second repository with different authorship shows the same distribution, then the single-author confound is weakened."
+      ],
+      "typicality": 0.35,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "21bf24f5ede4d33c"
+        }
+      ]
+    }
+  ]
+}

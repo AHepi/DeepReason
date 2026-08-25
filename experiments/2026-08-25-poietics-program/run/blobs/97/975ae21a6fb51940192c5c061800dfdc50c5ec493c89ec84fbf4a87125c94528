@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The registry-confounding account in SRC_005 abstracts SRC_003's one-repository arbitrariness claim by specifying the causal mechanism through which arbitrary installation history generates the 3-of-26 distribution: the registry's enumeration semantics are defined by the test's own installation history, so the test constrains only entries installed under a detectable guard. Refuted if the 3 surviving mutations are re-run under ordinary installation order and are not caught, or if the registry has deterministic enumeration order and the survivors do not cluster in a way consistent with installation-history-defined semantics.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_005", "SRC_003"]
+    },
+    {
+      "content": "SRC_001's registry-size account reduces to SRC_004's order-effect explanation as a special case: the mutation count per module determines whether a given guard installation order can produce a measurable selective effect, so the observed asymmetry is a function of both order and size, not a general testing condition. Refuted if ordinarily-guarded modules each had dozens of mutations and still lost 4/4 to 6/7, or if mutation proposal and guard installation order were randomized across the project and the asymmetry persisted.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_001", "SRC_004"]
+    },
+    {
+      "content": "SRC_005 shares mechanism with SRC_002 in that both explain the 1-of-9 compile.py loss as an installation-discipline failure rather than a stable property of tests; SRC_005 specifies the mechanism as a coverage gap in a directly tested code path, while SRC_002 frames it as a content-edit hole, but both deny generalizability from the record. Refuted if the 1-of-9 compile.py mutation is shown to be in a directly tested code path and the coverage-gap explanation is thereby confirmed against SRC_002's content-edit framing, or if the pattern replicates across authors and weeks.",
+      "typicality": 0.58,
+      "neighbours": ["SRC_005", "SRC_002"]
+    },
+    {
+      "content": "SRC_004 integrates SRC_003's arbitrariness claim by adding temporal ordering as the operative variable: the 3-of-26 result is an artifact of mutation proposal order and guard installation order in one repository, which is the specific temporal mechanism behind SRC_003's one-author, one-week confound. Refuted if a formal policy mandated guard-before-mutation ordering and compile.py still showed 1/9, or if the same distribution replicated with a different author following a different order.",
+      "typicality": 0.69,
+      "neighbours": ["SRC_004", "SRC_003"]
+    },
+    {
+      "content": "SRC_002 contradicts SRC_001's implicit commitment to a positive mechanism (registry-size confound) by asserting that the evidence is too small and contaminated to support any transferable condition at all: SRC_001 proposes that mutation count explains the distribution, while SRC_002 claims the 3-of-26 result warrants no mechanism beyond local artefact. Refuted if the 4/4 to 6/7 consistency in ordinarily-guarded modules survives replication across a different repository, author, and week, thereby establishing a regularity that SRC_002 denies is inferable.",
+      "typicality": 0.41,
+      "neighbours": ["SRC_002", "SRC_001"]
+    },
+    {
+      "content": "SRC_005 is compatible with SRC_004: both explain the 3-of-26 result as an installation-order artifact, but SRC_005's registry-semantics mechanism (the test constrains only entries installed under a guard the test can detect) is consistent with SRC_004's sequential guard-installation account, and neither requires a generalizable testing condition. Refuted if the same shown-to-fail ritual on a larger, multi-author repository reproduces the 3-of-26 ratio, or if the mutation proposal and guard installation order were randomized and the distribution did not show the observed asymmetry.",
+      "typicality": 0.74,
+      "neighbours": ["SRC_005", "SRC_004"]
+    }
+  ]
+}
+```

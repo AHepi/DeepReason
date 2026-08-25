@@ -1,0 +1,114 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject rather than describes it when the subject has authority over the test's installation conditions, because installation order determines which failures the test can see before it can report them.",
+      "mechanism": "The shown-to-fail-first installation creates a registry entry before the mutation can be evaluated, so the test that should detect the mutation is itself pre-empted by the installation ritual. The 1/9 loss in compile.py occurs because compile.py is the authority that installs the guard registry, so its own guard is installed after the failure is already committed to the record. The distribution (1/9 vs 4/4-6/7) follows from authority distance: modules that merely consume the installed registry are constrained by it, while the module that authors the installation is only described by it.",
+      "counterconditions": [
+        "If the 1/9 mutation were a semantic no-op rather than a guard-bypass, installation order would be irrelevant",
+        "If compile.py mutations were run under a separate bootstrap guard not shown in the record",
+        "If the 3-of-26 result showed the same 1/9 pattern across all mutation classes rather than only compile.py"
+      ],
+      "typicality": 0.72,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The test constrains when it is a precondition for the subject's own operation, and only describes when it is a post-hoc observation of the subject's outputs; the 1/9 loss marks the single case where the test was part of the subject's self-installation rather than an external observer.",
+      "mechanism": "compile.py is both the subject and the test harness in one file. When a mutation removes its guard, the mutation also removes the only observer that could report the loss. The other modules have their guards tested by compile.py as an external authority, so the test constrains them. The 3-of-26 result is the distribution of this self-referential blind spot across three distinct guard types that all share the same authoring pattern.",
+      "counterconditions": [
+        "If compile.py had a separate test file that was not mutated",
+        "If the 1/9 mutation were in a guard that a different module also imported and tested",
+        "If the 3-of-26 pattern matched a pre-existing distribution of mutation severity rather than self-reference"
+      ],
+      "typicality": 0.64,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A test describes rather than constrains when the acceptance criterion is 'shown-to-fail-first' because the failure is planted into the record before the test can reject it; the test then only re-describes what installation already committed.",
+      "mechanism": "The installation ritual requires a shown failure before the guard is installed. This means the test's verdict is pre-loaded with the failure it was supposed to catch. The 1/9 loss in compile.py is the case where the planting step and the test step are the same code path, so the test cannot distinguish its own failure from the mutation's failure. The 4/4 to 6/7 results are cases where the planting step is separate from the tested module, so the test still has a distinct object to constrain.",
+      "counterconditions": [
+        "If the shown-to-fail-first step were reversible after the test runs",
+        "If the 1/9 mutation were in a non-guard code path that happens to affect compile.py",
+        "If the distribution held across multiple authors rather than one author"
+      ],
+      "typicality": 0.58,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The condition is whether the test and the subject share a single authority for their respective validity; when they do, the test only describes the authority's self-consistency, and when they don't, the test constrains the subject by imposing an independent standard.",
+      "mechanism": "In the poietics record, one author wrote both the guards and the tests for them in the same week. For compile.py, the guard and the test share the same file and the same authorial act, so the test cannot constrain anything beyond the author's own consistency. For the other modules, the test file is a separate artifact that the author treats as an external check, so it constrains. The 1/9 vs 4/4-6/7 distribution is the empirical trace of this shared-authority condition.",
+      "counterconditions": [
+        "If a second author had written the compile.py tests",
+        "If the 1/9 mutation were caught by a test in a different file",
+        "If the 3-of-26 distribution were uniform across files rather than concentrated in compile.py"
+      ],
+      "typicality": 0.45,
+      "evidence_refs": [
+        {
+          "block": "09208b033e714960"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A test constrains its subject only if the test's failure can be distinguished from the subject's failure; when the installation protocol conflates the two, as in shown-to-fail-first, the test describes the conflation rather than constraining either side.",
+      "mechanism": "The 1/9 loss in compile.py is the case where the mutation removes the distinction between test-failure and subject-failure, because the mutation is in the code that performs the distinction. The other modules preserve the distinction because their guards are not the code that performs the distinction. The 3-of-26 result is the count of mutations that attack the distinction itself rather than the subject's behavior.",
+      "counterconditions": [
+        "If the 1/9 mutation were detectable by a different test that does not rely on the distinction",
+        "If the 3-of-26 result included mutations that attack the subject's behavior directly",
+        "If the distinction were re-established by an independent check not shown in the record"
+      ],
+      "typicality": 0.39,
+      "evidence_refs": [
+        {
+          "block": "028950f9751ab59a"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The 1/9 loss is not a property of compile.py's code but of its position as the first module in the installation order; any module placed first under shown-to-fail-first installation would lose the same proportion of mutations, so the test constrains only when the installation order makes the subject's failure visible before the test runs.",
+      "mechanism": "The installation order is a linear sequence, and the first module is the only one whose failures are committed before any guard is installed. The 1/9 result is the expected proportion for a first-position module with nine mutations under this protocol. The 4/4 to 6/7 results are the expected proportions for later-position modules whose failures occur after at least one guard is active. The 3-of-26 distribution is the sum of these position-dependent proportions across three guard classes.",
+      "counterconditions": [
+        "If a different module placed first would lose a different proportion of mutations",
+        "If the 1/9 loss were reproduced with compile.py placed later in the installation order",
+        "If the 3-of-26 result showed no correlation with installation position"
+      ],
+      "typicality": 0.31,
+      "evidence_refs": [
+        {
+          "block": "0a5a41977d58bdb4"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

@@ -1,0 +1,156 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's installation process changes the subject's environment so that failures the test was designed to catch are masked before the test can observe them.",
+      "mechanism": "In the shown-to-fail-first installation, the compiler's own mutations (1/9 lost under compile.py) were hidden because the test harness was installed in a state that already contained the failure signature. The test then verifies the installed state rather than the subject's independent behavior, making the test a constraint that constructs the subject it purports to describe. The 3-of-26 result follows from the distribution: every ordinarily-guarded module showed 4/4 to 6/7 mutations caught, but the one mutation lost under fail-first installation slipped through because the guard that would catch it was never exercised in the installed configuration.",
+      "counterconditions": [
+        "If the 1/9 mutation lost under compile.py was due to a different cause than shown-to-fail-first installation (e.g., a pre-existing bug in the mutation itself), then the constraint-vs-description distinction collapses.",
+        "If the 3-of-26 distribution can be explained by a known, documented weakness in the mutation-testing tool rather than by the test's installation procedure, then the claim is false.",
+        "If an independent re-run of the same mutation under a clean installation catches all 9/9, then the shown-to-fail-first installation was not the constraining mechanism."
+      ],
+      "typicality": 0.72,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        },
+        {
+          "block": "028950f9751ab59a"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    },
+    {
+      "claim": "A test constrains its subject only if the test's guard conditions are installed as part of the subject's runtime environment rather than as independent observers, and the 3-of-26 result is the fraction of mutations that were invisible to guards installed under shown-to-fail-first conditions.",
+      "mechanism": "The ordinarily-guarded modules (4/4 to 6/7) had guards that were active during normal execution. The one mutation lost under compile.py was in a location where the guard was not installed until after the failure had already been shown. The test thus constrained the subject by making the guard's presence conditional on the failure's prior visibility, creating a circular dependency: the test only catches mutations that do not change what the installation procedure already revealed. The 3-of-26 distribution reflects the number of mutations whose detection depended on guards that were installed after the failure was exposed.",
+      "counterconditions": [
+        "If all guards were installed identically across all modules regardless of shown-to-fail-first state, then the installation-order mechanism is not the cause.",
+        "If the 1/9 mutation lost under compile.py was in an ordinarily-guarded module and not in a special installation path, then the distribution is unexplained.",
+        "If a re-run with guards installed before any failure is shown still loses the same mutation, then the constraint is elsewhere."
+      ],
+      "typicality": 0.61,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "03be16ddea3ab3e2"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's own acceptance criteria are satisfied by the installation procedure rather than by the subject's independent properties, and the 3-of-26 result is the set of mutations that the acceptance criteria never evaluated.",
+      "mechanism": "The compile.py test under shown-to-fail-first installation accepted a state that already contained the failure as its 'pass' condition. The acceptance criteria were therefore tautological: the test passed because the installation procedure guaranteed that the failure would be present before the test ran. This constrained the subject by making the test's outcome a function of the installation order rather than of the subject's code. The 1/9 mutation lost under compile.py was one that the acceptance criteria did not evaluate; the 3-of-26 distribution reflects the number of mutations whose effects were not observable under the installation-first regime.",
+      "counterconditions": [
+        "If the acceptance criteria explicitly require evaluation of all mutations regardless of installation order, then the tautology is not present.",
+        "If the 1/9 mutation was caught by a different test in the suite but not by compile.py specifically, then the loss is localized and not a general constraint.",
+        "If the acceptance criteria were written before the shown-to-fail-first procedure was adopted, then the procedure is not the source of the constraint."
+      ],
+      "typicality": 0.54,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "0615e03ec804152b"
+        },
+        {
+          "block": "04a8146c6fdfb0be"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    },
+    {
+      "claim": "A test constrains its subject when the test is part of the subject's build system, and the 3-of-26 result is the number of mutations whose effects were absorbed by the build system's own error handling before the test could observe them.",
+      "mechanism": "The compile.py mutation lost under shown-to-fail-first installation was not a mutation in the subject's logic but in the build system's error path. The build system's error handling (the 'shown-to-fail-first' installation) already contained logic that masked the mutation's effect. The test then described the build system's masked state, not the subject's original behavior. The 3-of-26 distribution reflects the number of mutations that were in code paths where the build system's error handling ran before the test's guards.",
+      "counterconditions": [
+        "If the lost mutation was in the subject's core logic and not in the build system, then the build-system mechanism is wrong.",
+        "If the build system's error handling is identical across all 26 mutations, then the distribution cannot be explained by build-system differences.",
+        "If re-running the test without the build system's error handling still loses the same mutation, then the constraint is not from the build system."
+      ],
+      "typicality": 0.48,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "025181d5ffe71cf7"
+        },
+        {
+          "block": "0a201dc94a4c3f63"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    },
+    {
+      "claim": "A test constrains its subject when the test's installation procedure creates the very failure it claims to detect, and the 3-of-26 result is the number of mutations that were created by the installation procedure rather than by the mutation generator.",
+      "mechanism": "The shown-to-fail-first installation did not merely reveal existing failures; it created new failure conditions in the subject's environment. The 1/9 mutation lost under compile.py was not a mutation in the subject's code but an artifact of the installation procedure that the mutation generator then attributed to the subject. The test thus constrained the subject by injecting the failure signature that it then 'detected.' The 3-of-26 distribution reflects the number of mutations that were artifacts of installation-order effects rather than genuine subject mutations.",
+      "counterconditions": [
+        "If the 1/9 mutation was generated by the mutation tool and not by the installation procedure, then the artifact mechanism is false.",
+        "If a clean-room installation (without shown-to-fail-first) still produces the same 3-of-26 distribution, then installation artifacts are not the cause.",
+        "If the mutation generator's seed is deterministic and independent of the installation procedure, then the installation cannot have created the mutation."
+      ],
+      "typicality": 0.35,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "002779d3ed9dd0a6"
+        },
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's failure mode is indistinguishable from the subject's failure mode under the same installation, and the 3-of-26 result is the number of cases where the test's own failure was counted as the subject's mutation loss.",
+      "mechanism": "Under shown-to-fail-first installation, the test harness's own failure modes (e.g., timeouts, resource exhaustion, or guard installation errors) were recorded as if they were the subject's mutation losses. The 1/9 mutation lost under compile.py was a case where the test harness failed to run the mutation at all, but this was recorded as the mutation being 'lost.' The test constrained the subject by conflating its own operational failures with the subject's behavioral properties. The 3-of-26 distribution reflects the number of cases where the test's operational failure was misattributed to the subject.",
+      "counterconditions": [
+        "If the test harness's operational failures are logged separately from mutation losses, then the conflation cannot occur.",
+        "If the 1/9 mutation loss was due to a genuine code-level mutation that was not caught, rather than a harness failure, then the mechanism is wrong.",
+        "If re-running the test with a different harness (but the same shown-to-fail-first installation) recovers the 1/9 mutation, then the harness was the cause."
+      ],
+      "typicality": 0.28,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9"
+        },
+        {
+          "block": "0b4076ae84559daa"
+        },
+        {
+          "block": "08e6e945b58ed82f"
+        }
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": ["SRC_001"]
+      }
+    }
+  ]
+}
+```
