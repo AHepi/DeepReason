@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed reduction relation is unidirectional, unidirectional only: it claims the 3-of-26 mutation survival result reduces to a registry-size confound. However, it fails to establish that registry size is the *only* or *primary* explanatory variable. The refutation condition ('same survival count appears... independent of installation order') is necessary but not sufficient for the reduction claim, because it does not rule out other confounding variables (e.g., test coverage intensity, mutation operator type, or code complexity) that could equally explain the survival count. For a reduction to be substantive, it must demonstrate that the reduced-to factor (registry-size) is explanatorily complete; this target merely asserts a correlation between installation order and survival without addressing competing explanations.",
+      "premise": "A reduction is only valid if the reducing factor is shown to be the exclusive or dominant cause",
+      "premise_evidence": [
+        {
+          "block": "578e42df713e",
+          "quote": "relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))"
+        }
+      ]
+    }
+  ]
+}
+```
