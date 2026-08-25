@@ -1,0 +1,88 @@
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.1 0.1\nPOINT 0.9 0.1\nPOINT 0.1 0.9\nPOINT 0.9 0.9\nPOINT 0.3 0.5\nPOINT 0.7 0.5\nPOINT 0.5 0.3\nPOINT 0.5 0.7\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "A symmetric, grid-like construction with 13 points arranged to maintain a minimum spacing. The minimum area of 0.005 is derived from specific closely spaced collinear or near-collinear points (e.g., (0.5,0.3), (0.5,0.5), (0.5,0.7) combined with points at x=0.4 or 0.6, yielding a base of 0.1 and height of 0.1). This candidate prioritizes structural stability and ease of verification over maximizing the theoretical score.",
+      "counterconditions": [
+        "If any three points are strictly collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the coordinates provided do not parse to exactly 13 distinct points, the frontier-wellformed@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.9
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.333333 0.0\nPOINT 0.666667 0.0\nPOINT 0.0 0.333333\nPOINT 0.0 0.666667\nPOINT 1.0 0.333333\nPOINT 1.0 0.666667\nPOINT 0.333333 1.0\nPOINT 0.666667 1.0\nPOINT 0.5 0.5\nCLAIM 0.027778",
+      "mechanism": "Distributes 12 points uniformly along the perimeter of the unit square (3 per edge) and places one point in the center. The closest triangles are formed by three adjacent points on the same edge, resulting in a base of 1/3 and height of 1/3, yielding an area of (1/2)*(1/3)*(1/3) = 1/18 ≈ 0.055556. The claim of 0.027778 is conservative due to rounding.",
+      "counterconditions": [
+        "If any three points on the perimeter are collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the true minimum area of the configuration is less than 0.027778 due to rounding errors, the frontier-claim-honest@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.95 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.95\nPOINT 0.35 0.05\nPOINT 0.65 0.05\nPOINT 0.05 0.35\nPOINT 0.05 0.65\nPOINT 0.95 0.35\nPOINT 0.95 0.65\nPOINT 0.35 0.95\nPOINT 0.65 0.95\nPOINT 0.5 0.5\nCLAIM 0.024",
+      "mechanism": "A scaled-down perimeter distribution with 12 points on the edges of a smaller square and one in the center. The minimum triangle area is expected to be formed by adjacent points on the same edge, yielding a base of 0.3 and height of 0.3, resulting in an area of (1/2)*0.3*0.3 = 0.045. The claim of 0.024 is conservative to account for rounding and potential smaller triangles involving the center point.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the true minimum area is less than 0.024 due to rounding errors or smaller triangles involving the center point, the frontier-claim-honest@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.1 0.1\nPOINT 0.9 0.1\nPOINT 0.1 0.9\nPOINT 0.9 0.9\nPOINT 0.2 0.5\nPOINT 0.8 0.5\nPOINT 0.5 0.2\nPOINT 0.5 0.8\nPOINT 0.5 0.5\nCLAIM 0.002",
+      "mechanism": "A symmetrical construction with denser spacing near the center and midpoints of the edges. The minimum area is expected to be formed by nearby points such as (0.5,0.0), (0.5,0.2), and (0.5,0.5), but since these are collinear, the minimum area is determined by non-collinear triplets. The claim of 0.002 is conservative.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the true minimum area is less than 0.002 due to rounding errors or smaller triangles, the frontier-claim-honest@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.3 0.0\nPOINT 0.6 0.0\nPOINT 0.0 0.3\nPOINT 0.3 0.3\nPOINT 0.6 0.3\nPOINT 0.0 0.6\nPOINT 0.3 0.6\nPOINT 0.6 0.6\nPOINT 0.9 0.0\nPOINT 0.9 0.3\nPOINT 0.9 0.6\nPOINT 0.45 0.45\nCLAIM 0.01",
+      "mechanism": "A regular grid construction with points at multiples of 0.3, plus an additional point near the center. The minimum area is expected to be formed by adjacent grid points, yielding a base of 0.3 and height of 0.3, resulting in an area of (1/2)*0.3*0.3 = 0.045. The claim of 0.01 is conservative to account for rounding and potential smaller triangles involving the additional point.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the true minimum area is less than 0.01 due to rounding errors or smaller triangles involving the additional point, the frontier-claim-honest@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.05 0.0\nPOINT 0.95 0.0\nPOINT 0.05 1.0\nPOINT 0.95 1.0\nPOINT 0.35 0.0\nPOINT 0.65 0.0\nPOINT 0.0 0.35\nPOINT 0.0 0.65\nPOINT 1.0 0.35\nPOINT 1.0 0.65\nPOINT 0.35 1.0\nPOINT 0.65 1.0\nPOINT 0.5 0.5\nCLAIM 0.018",
+      "mechanism": "A slightly asymmetrical perimeter distribution with 12 points on the edges and one in the center. The minimum area is expected to be formed by adjacent points on the same edge, yielding a base of 0.3 and height of 0.3, resulting in an area of (1/2)*0.3*0.3 = 0.045. The claim of 0.018 is conservative to account for rounding and potential smaller triangles involving the center point.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is 0, failing the frontier-above-floor@v1 criterion.",
+        "If the true minimum area is less than 0.018 due to rounding errors or smaller triangles involving the center point, the frontier-claim-honest@v1 criterion fails."
+      ],
+      "optional_refs": ["SRC_006", "SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.4
+    }
+  ]
+}
