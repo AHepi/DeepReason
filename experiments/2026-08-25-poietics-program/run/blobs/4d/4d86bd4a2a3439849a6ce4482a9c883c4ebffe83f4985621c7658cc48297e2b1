@@ -1,0 +1,1425 @@
+[
+  {
+    "chain": "sha256:265c8e2aaf324fe23bbc1f2f0391b925bf9b890d75dc541b5a75b54a2f73ced3",
+    "finish_reason": "stop|prompt_tokens=1959",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-glm",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/roundtrip/BACKTRANSLATION_glm-5.2.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "prompt_sha256": "sha256:b0278a51b81516ceb5fa605334abc3e7b9471d0cbb6bf99e8b048da963745620",
+    "reply_chars": 4228,
+    "reply_sha256": "sha256:1a209e7158ffc7dc4ff6410d71caf114dd9d2b8260aed16f406721349512d605",
+    "role": "BACK-TRANSLATOR",
+    "seq": 1,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:0bacb7015037784d9525cf291a2c2be50ab4fd49a186732d9b8e674e8964c966",
+    "finish_reason": "stop|prompt_tokens=1943",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-kimi",
+    "model": "kimi-k2.7-code",
+    "out": "zoo/reviews/roundtrip/BACKTRANSLATION_kimi-k2.7-code.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:265c8e2aaf324fe23bbc1f2f0391b925bf9b890d75dc541b5a75b54a2f73ced3",
+    "prompt_sha256": "sha256:b0278a51b81516ceb5fa605334abc3e7b9471d0cbb6bf99e8b048da963745620",
+    "reply_chars": 4010,
+    "reply_sha256": "sha256:798c16360c94b9cdb64a55400a62128e8453bb1ba1d9e678bd10a7c9f5171612",
+    "role": "BACK-TRANSLATOR",
+    "seq": 2,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:7a5d68a4ce27944e12930a5847d519d3e4bf547d4b2ebb76eaf0cd80e9ce307d",
+    "finish_reason": "stop|prompt_tokens=12216",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/roundtrip/BACKTRANSLATION_glm-5.2.md",
+      "zoo/reviews/roundtrip/BACKTRANSLATION_kimi-k2.7-code.md",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md [start .. ## 5. What the pin sets aside)",
+      "zoo/batteries/rule_target_blocking/BATTERY.md [start .. ## Registry)"
+    ],
+    "job": "compare",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/roundtrip/COMPARATOR_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:0bacb7015037784d9525cf291a2c2be50ab4fd49a186732d9b8e674e8964c966",
+    "prompt_sha256": "sha256:dbcc5b7530b8ad0c5251bcb343191e5f295fc17c1fcffa1cf515e12a6e365b74",
+    "reply_chars": 2151,
+    "reply_sha256": "sha256:b37af2681f503d32ace538132d0bfe00c5ef3da770f72259bdf7ecfd69941c99",
+    "role": "COMPARATOR",
+    "seq": 3,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:2556ce800eb20c3746ac3116f256d619ca7c0379c907ba32f016c596b96c9ae6"
+  },
+  {
+    "chain": "sha256:0103d96dafc0a7210beef4c9da100585ca4d2b8098a7b838c291e3e5524253a1",
+    "finish_reason": "stop|prompt_tokens=8144",
+    "forbidden": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/batteries/rule_target_blocking/BATTERY.md [start .. ## Registry)",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md [## 4. The pin .. ## 5. What the pin sets aside)"
+    ],
+    "job": "minimal-pair",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/MINIMAL_PAIR_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:7a5d68a4ce27944e12930a5847d519d3e4bf547d4b2ebb76eaf0cd80e9ce307d",
+    "prompt_sha256": "sha256:8d127b1c1c3c0e8ca72172fdc6949621437dd056f351246a0072aa6fe817a514",
+    "reply_chars": 1240,
+    "reply_sha256": "sha256:71e0ff22c4b8eec8acbafd91b46ec83fd98514f1ca5d8a9120847170766afd75",
+    "role": "REVIEWER",
+    "seq": 4,
+    "skill": "skills/minimal-pair-review/SKILL.md",
+    "system_sha256": "sha256:545b1cadb2650a4a1357be65410be731904c4472c2b66b61332d5fc50b677e17"
+  },
+  {
+    "chain": "sha256:3d116781252cf2d5b202d1ccc669f736d123cd963242a56c8859e52fb232efa8",
+    "finish_reason": "stop|prompt_tokens=6178",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md [## 6. Exact lowering .. ## 8. Compiler diagnostics)",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md [## 11. Explicitly non-dispatchable .. ## 12. Bounded)"
+    ],
+    "job": "ledger-audit",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/LEDGER_AUDIT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:0103d96dafc0a7210beef4c9da100585ca4d2b8098a7b838c291e3e5524253a1",
+    "prompt_sha256": "sha256:eab87f836773a482659a761e0b19790ec4bd3df7ee8928aeb6cfc41130b565a4",
+    "reply_chars": 2489,
+    "reply_sha256": "sha256:9d41d4bf3446f438a442f658b901810bbb5907a85b0e0d17323e283249c16db3",
+    "role": "REVIEWER",
+    "seq": 5,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:f3562edf7bf93ad5f668f57edfd1c27b28a609f4ff3fac0ba90d8cad5baceb70",
+    "finish_reason": "stop|prompt_tokens=2144",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-glm-r2",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/roundtrip/round2/BACKTRANSLATION_glm-5.2.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:3d116781252cf2d5b202d1ccc669f736d123cd963242a56c8859e52fb232efa8",
+    "prompt_sha256": "sha256:49b745bffc2b3407dbeea3c37673507f1ba11804e09aa4c069ef134a38fc5c78",
+    "reply_chars": 4606,
+    "reply_sha256": "sha256:e5354c6411103c90856b93a846d2538de425022f5e881f78b4c65f41142f0d54",
+    "role": "BACK-TRANSLATOR",
+    "seq": 6,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:d52833358a6fc504c8a80b064618d815c8e04b98bd0b981d946620ade1487011",
+    "finish_reason": "stop|prompt_tokens=2126",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-kimi-r2",
+    "model": "kimi-k2.7-code",
+    "out": "zoo/reviews/roundtrip/round2/BACKTRANSLATION_kimi-k2.7-code.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:f3562edf7bf93ad5f668f57edfd1c27b28a609f4ff3fac0ba90d8cad5baceb70",
+    "prompt_sha256": "sha256:49b745bffc2b3407dbeea3c37673507f1ba11804e09aa4c069ef134a38fc5c78",
+    "reply_chars": 4352,
+    "reply_sha256": "sha256:92bd43a35576db281e03b1805f5a439e621bb925687550414b71e1bd3b6f0a19",
+    "role": "BACK-TRANSLATOR",
+    "seq": 7,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:9c54c73c4ccf32066fd4fe3318e589295a195992b7604b303532e4088e150d0c",
+    "finish_reason": "stop|prompt_tokens=12609",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/roundtrip/round2/BACKTRANSLATION_glm-5.2.md",
+      "zoo/reviews/roundtrip/round2/BACKTRANSLATION_kimi-k2.7-code.md",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md [start .. ## 5. What the pin sets aside)",
+      "zoo/batteries/rule_target_blocking/BATTERY.md [start .. ## Registry)"
+    ],
+    "job": "compare-r2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/roundtrip/round2/COMPARATOR_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:d52833358a6fc504c8a80b064618d815c8e04b98bd0b981d946620ade1487011",
+    "prompt_sha256": "sha256:c214a19bed4fba0ca2b72bec5da09f03ce55cfe046c65e9e683118be14d80d7c",
+    "reply_chars": 927,
+    "reply_sha256": "sha256:6669b45f6152a2b0180c419992b5ccd9c2ad3ccfb77bb6d2364f06c5e55faed7",
+    "role": "COMPARATOR",
+    "seq": 8,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:2556ce800eb20c3746ac3116f256d619ca7c0379c907ba32f016c596b96c9ae6"
+  },
+  {
+    "chain": "sha256:d105f6c899a2b83d6853477d8747e0a240df0a52223f856f2e308ea9f592713b",
+    "finish_reason": "stop|prompt_tokens=2489",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "docs/CORE_SPEC_AUDIT_V0.1.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-glm-r3",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/roundtrip/round3/BACKTRANSLATION_glm-5.2.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:9c54c73c4ccf32066fd4fe3318e589295a195992b7604b303532e4088e150d0c",
+    "prompt_sha256": "sha256:a53e58a69a38b22c4d3a2ed23259fb5f2b4a63569ea8ad68fff1c5544724e647",
+    "reply_chars": 3933,
+    "reply_sha256": "sha256:0d4cddca2c56bb0eef6fcaebfd8151ad8d91c443282ea4a6ceb4e2bc86706325",
+    "role": "BACK-TRANSLATOR",
+    "seq": 9,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:d82fd3583de113b2d6d01f6a5b5aa22fe7dd215c90d557d7027a8e483fe9721a",
+    "finish_reason": "stop|prompt_tokens=2468",
+    "forbidden": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.1.md",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md",
+      "zoo/batteries/rule_target_blocking/BATTERY.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md",
+      "README.md",
+      "docs/CORE_SPEC_AUDIT_V0.1.md",
+      "zoo/mappings/RULE_TARGET_BLOCKING.md",
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_ROUNDTRIP_INPUT.md [## Instructions to the back-translator .. ## Instructions to the comparator)"
+    ],
+    "job": "backtranslate-kimi-r3",
+    "model": "kimi-k2.7-code",
+    "out": "zoo/reviews/roundtrip/round3/BACKTRANSLATION_kimi-k2.7-code.md",
+    "params": {
+      "max_tokens": 16000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:d105f6c899a2b83d6853477d8747e0a240df0a52223f856f2e308ea9f592713b",
+    "prompt_sha256": "sha256:a53e58a69a38b22c4d3a2ed23259fb5f2b4a63569ea8ad68fff1c5544724e647",
+    "reply_chars": 5048,
+    "reply_sha256": "sha256:677cc3a6cab839f9a4902ff6a62caded3137a7c6b8eb4d1682cac43f98c381f1",
+    "role": "BACK-TRANSLATOR",
+    "seq": 10,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:93bf909d62c355610596b11fd6c6a31bad59673f024586a205bf00bc732ed489"
+  },
+  {
+    "chain": "sha256:9ed5a5cdd3a60fb539c6aef2e1915db6e20f3573e273698998bb56509f16b4b7",
+    "finish_reason": "stop|prompt_tokens=3296",
+    "forbidden": [],
+    "inputs": [
+      "docs/CORE_SPEC_AUDIT_V0.1.md [### 3.1 Rule-target blocking .. ### 3.2 The defect)",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md [## 3. OPEN-1, resolved .. ## 4. The pin)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Rule record .. ### Face record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Face record .. ### Certificate record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### User-rule compilation .. ## Ground-program semantics)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Invariants enforced in code review .. ## Extension packs)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Closure compilation .. ### Face compilation)"
+    ],
+    "job": "spec-conformance",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/SPEC_CONFORMANCE_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:d82fd3583de113b2d6d01f6a5b5aa22fe7dd215c90d557d7027a8e483fe9721a",
+    "prompt_sha256": "sha256:d39e1b6defbb4428778416b24b3b6384ea4c63bb4532caccc76a5597e6912ad7",
+    "reply_chars": 2026,
+    "reply_sha256": "sha256:a5df915b44d90a3a2d76e5c66e630d031bb3514f596442b62a2d9f983b56962f",
+    "role": "REVIEWER",
+    "seq": 11,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:4608601f70f86e84c7dd288130170a4a024fa83075f85fb18e72ca2109f464e2",
+    "finish_reason": "stop|prompt_tokens=14509",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/roundtrip/round3/BACKTRANSLATION_glm-5.2.md",
+      "zoo/reviews/roundtrip/round3/BACKTRANSLATION_kimi-k2.7-code.md",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md [start .. ## 5. What the pin sets aside)",
+      "zoo/batteries/rule_target_blocking/BATTERY.md [start .. ## Registry)"
+    ],
+    "job": "compare-r3",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/roundtrip/round3/COMPARATOR_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 32000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:9ed5a5cdd3a60fb539c6aef2e1915db6e20f3573e273698998bb56509f16b4b7",
+    "prompt_sha256": "sha256:812ca5faf77bdc689dd2bf0b94a94ef6750c828acf2d7a023b0bfd53e30b50e5",
+    "reply_chars": 1587,
+    "reply_sha256": "sha256:6d731236f39165836f7b292811cde5e7767d6cb04a54e186755cec47fa41371c",
+    "role": "COMPARATOR",
+    "seq": 12,
+    "skill": "skills/semantic-round-trip/SKILL.md",
+    "system_sha256": "sha256:2556ce800eb20c3746ac3116f256d619ca7c0379c907ba32f016c596b96c9ae6"
+  },
+  {
+    "chain": "sha256:2f504d081aa39498115d8cf859e01033a52b5083f31b5abf168a977d143611bb",
+    "finish_reason": "stop|prompt_tokens=10184",
+    "forbidden": [
+      "zoo/reviews/RULE_TARGET_BLOCKING_MINIMAL_PAIR_REVIEW.md"
+    ],
+    "inputs": [
+      "zoo/batteries/rule_target_blocking/BATTERY.md [start .. ## Registry)",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md [## 3. OPEN-1, resolved .. ## 5. What the pin sets aside)"
+    ],
+    "job": "minimal-pair-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/MINIMAL_PAIR_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:4608601f70f86e84c7dd288130170a4a024fa83075f85fb18e72ca2109f464e2",
+    "prompt_sha256": "sha256:049e81ac1f117bfc681b56289ea09cd02495be33fccd46e5724039ce6b43160b",
+    "reply_chars": 729,
+    "reply_sha256": "sha256:6f494a6805e888dc400b82929290e70dea15f71b90bb80bc63c25df794219413",
+    "role": "REVIEWER",
+    "seq": 13,
+    "skill": "skills/minimal-pair-review/SKILL.md",
+    "system_sha256": "sha256:545b1cadb2650a4a1357be65410be731904c4472c2b66b61332d5fc50b677e17"
+  },
+  {
+    "chain": "sha256:59cb1c6be907fc2bd0791212e707d0d14552039ed12ad6a9282c48f9e07380b7",
+    "finish_reason": "stop|prompt_tokens=6604",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.2.md",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md [## 6. Exact lowering .. ## 8. Compiler diagnostics)",
+      "docs/PFF_CORE_V0.1_CHALLENGE_PROFILE.md [## 11. Explicitly non-dispatchable .. ## 12. Bounded)"
+    ],
+    "job": "ledger-audit-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/LEDGER_AUDIT_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:2f504d081aa39498115d8cf859e01033a52b5083f31b5abf168a977d143611bb",
+    "prompt_sha256": "sha256:5f210797dfda0da437a33c26949b0b9731c92409d4e790775d84546c80726bfa",
+    "reply_chars": 3541,
+    "reply_sha256": "sha256:dc2f270268e0d9172c3f8962a2b11f10fa8273656e2c8ef5a68e7253f8e4afdf",
+    "role": "REVIEWER",
+    "seq": 14,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:29f4ee8f0e276b4003f5328dc919f8fdcad70ce3e5a7b698741055f919c4de36",
+    "finish_reason": "stop|prompt_tokens=11357",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Discernment report .. ## First object-level)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Status and conflict axes .. ## Discernment report)",
+      "src/poietics/explain/model.py",
+      "src/poietics/explain/report.py"
+    ],
+    "job": "explain-conformance",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/EXPLAIN_CONFORMANCE_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:59cb1c6be907fc2bd0791212e707d0d14552039ed12ad6a9282c48f9e07380b7",
+    "prompt_sha256": "sha256:7ef005bd1b4215372cde0ca5ed690e91e3771211c5e29e3c0fb193753bfa4352",
+    "reply_chars": 2086,
+    "reply_sha256": "sha256:1029ad7071c5774b8e3786c5e1c98ea0a5116cd76364f1b93aaa1f930636b26d",
+    "role": "REVIEWER",
+    "seq": 15,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:43e114cb9258b6f02c4f2b3f8fdbf8ac34f6626d731ca3a7832b28aef27d106a",
+    "finish_reason": "stop|prompt_tokens=5612",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Challenge effects .. ### Discharge compatibility)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Problem-face retention .. ## Core conformance suite)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Challenge record .. ### Discharge record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Invariants enforced in code review .. ## Extension packs)"
+    ],
+    "job": "spec-conformance-defect",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/SPEC_CONFORMANCE_DEFECT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:29f4ee8f0e276b4003f5328dc919f8fdcad70ce3e5a7b698741055f919c4de36",
+    "prompt_sha256": "sha256:3be270c8db007632c98975bf23368fa134b4be5d72eba5bfc09fc33e62db7324",
+    "reply_chars": 2092,
+    "reply_sha256": "sha256:3778925e3508c97208fa668eff6ac9b17e656bf506f9d471b8787fe350e8673e",
+    "role": "REVIEWER",
+    "seq": 16,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:85f146df15e7c5ed909b496c4475c4d786c5b13bba6d408fc8af9c398cb0dec7",
+    "finish_reason": "stop|prompt_tokens=5444",
+    "forbidden": [],
+    "inputs": [
+      "zoo/batteries/defect_lifecycle/BATTERY.md [start .. ## Registry)",
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md [## 4. The pin .. ## 6. Bucket)"
+    ],
+    "job": "minimal-pair-defect",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/MINIMAL_PAIR_DEFECT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:43e114cb9258b6f02c4f2b3f8fdbf8ac34f6626d731ca3a7832b28aef27d106a",
+    "prompt_sha256": "sha256:2dc96be327bccd2a83ceefcf048903c84d636947544537bf77aa2b533af70faa",
+    "reply_chars": 1744,
+    "reply_sha256": "sha256:f0a1964b3adf85ff88b493fe158f66083fcafba27b01eb9a5433bc0797e818c7",
+    "role": "REVIEWER",
+    "seq": 17,
+    "skill": "skills/minimal-pair-review/SKILL.md",
+    "system_sha256": "sha256:545b1cadb2650a4a1357be65410be731904c4472c2b66b61332d5fc50b677e17"
+  },
+  {
+    "chain": "sha256:2ab6b78131c47f2e86652fe6e2c4add6f00cf79562b2b2ea2b8f012d0b78ebcc",
+    "finish_reason": "stop|prompt_tokens=6108",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## First object-level predicate pack .. ## Problem-face retention)",
+      "src/poietics/packs/empirical.py"
+    ],
+    "job": "pack-conformance",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/PACK_CONFORMANCE_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:85f146df15e7c5ed909b496c4475c4d786c5b13bba6d408fc8af9c398cb0dec7",
+    "prompt_sha256": "sha256:81bf2141ca18625ca3909cac15f7365c72046e387f655abf79baf7b900bbb8bd",
+    "reply_chars": 2568,
+    "reply_sha256": "sha256:ccdfb7cd09a0b742605ed85a5ea9c6f3d9d0e3af79ad8765995c59b82aa52e60",
+    "role": "REVIEWER",
+    "seq": 18,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:fa2993bb9e906fc7d16efb94ccb44614520bfbc64bda9af8fd86378d40432421",
+    "finish_reason": "stop|prompt_tokens=8532",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Canonicalisation and deterministic package identity .. ## Minimal command-line interface)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Minimal append-only replay wrapper .. ## Implementation sequence)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Invariants enforced in code review .. ## Extension packs)",
+      "src/poietics/canonical.py",
+      "src/poietics/replay.py"
+    ],
+    "job": "canonical-conformance",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CANONICAL_CONFORMANCE_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:2ab6b78131c47f2e86652fe6e2c4add6f00cf79562b2b2ea2b8f012d0b78ebcc",
+    "prompt_sha256": "sha256:04253675fbd6f244d6fece97f76d830fb97a515e2bf3892976dbfb5b85f7649d",
+    "reply_chars": 1847,
+    "reply_sha256": "sha256:6ab75787765e7daf0177a773e0c856f6e9a08e48eaddcec6acbe02a4a6dae6a0",
+    "role": "REVIEWER",
+    "seq": 19,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:5262cbc676f21f62e88f66cd991d5f7ef98d4c0d89530ff9d6561599ee71fe61",
+    "finish_reason": "stop|prompt_tokens=5229",
+    "forbidden": [],
+    "inputs": [
+      "docs/MILESTONE_8_FINDINGS_V0.1.md",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Closed-negative literal .. ### Certificate record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Challenge effects .. ### User-rule compilation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Problem-face retention .. ## Canonicalisation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Canonicalisation and deterministic package identity .. ## Minimal command-line interface)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Extension packs .. ## Checker interface)"
+    ],
+    "job": "milestone-8-findings",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/MILESTONE_8_FINDINGS_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:fa2993bb9e906fc7d16efb94ccb44614520bfbc64bda9af8fd86378d40432421",
+    "prompt_sha256": "sha256:a44368930dcb9000390c1a58e3cc948985c589922c24f49ce17d2731314f0137",
+    "reply_chars": 3720,
+    "reply_sha256": "sha256:6e1349cbb8ddc1252010d98051bdf738a2f57981f90dee1b2396bba3741c9926",
+    "role": "REVIEWER",
+    "seq": 20,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:096614d332aa9fb0e4b1ad76c3b32f45fc511a07924afca4b7dd8e4261e972cb",
+    "finish_reason": "stop|prompt_tokens=6816",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Minimal command-line interface .. ## Minimal append-only replay wrapper)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Minimal append-only replay wrapper .. ## Implementation sequence)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Discernment report .. ## First object-level)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Completion criterion for the seed engine .. ## Closing formulation)",
+      "src/poietics/cli.py"
+    ],
+    "job": "cli-conformance",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CLI_CONFORMANCE_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:5262cbc676f21f62e88f66cd991d5f7ef98d4c0d89530ff9d6561599ee71fe61",
+    "prompt_sha256": "sha256:c6bc1f4209aacb052dcb2a3c41b6bf0000f359a3c38aca7cb413f7e38c3ad802",
+    "reply_chars": 2734,
+    "reply_sha256": "sha256:fdb08a90692f7dffbb23864e877b5127fad89d1881551dea803fb6b6587143d8",
+    "role": "REVIEWER",
+    "seq": 21,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:2498564cbc54eb703ba8d3dba38b46ca8a50f7e8e2f24341c3f554076e0b649e",
+    "finish_reason": "stop|prompt_tokens=5465",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_REGISTRY_PINNING_V0.1.md",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Canonicalisation and deterministic package identity .. ## Minimal command-line interface)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Discharge compatibility .. ### User-rule compilation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Predicate registry .. ## Validation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Deliberate clarifications made by this profile .. ## Closing formulation)"
+    ],
+    "job": "registry-pinning-pin",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/REGISTRY_PINNING_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:096614d332aa9fb0e4b1ad76c3b32f45fc511a07924afca4b7dd8e4261e972cb",
+    "prompt_sha256": "sha256:70bb8a612d813df5f7e347065ab8fcb1c22f233d3cdcc6745355c500311a94e3",
+    "reply_chars": 3429,
+    "reply_sha256": "sha256:42f8578b377a3ccf6af0134f4228f25e9556a2a65aaf2fac3bacf37cda70ca80",
+    "role": "REVIEWER",
+    "seq": 22,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:915da4e3710cadcbd34013a35accd5a17dd6547c378e94b435cf0323b105dfcf",
+    "finish_reason": "stop|prompt_tokens=5623",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.3.md [## 3. OPEN-1, narrowed .. ## 5. What the pin sets aside)",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.3.md [## 7. OPEN items .. ## 8. Vacuity probe)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Rule record .. ### Certificate record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Face compilation .. ### Discharge compatibility)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### User-rule compilation .. ## Ground-program semantics)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Invariants enforced in code review .. ## Extension packs)"
+    ],
+    "job": "rule-target-v3",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/RULE_TARGET_V3_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:2498564cbc54eb703ba8d3dba38b46ca8a50f7e8e2f24341c3f554076e0b649e",
+    "prompt_sha256": "sha256:11baf791da812380c006fac32be6fef88d6103dd2a46d63e9b98df552e309229",
+    "reply_chars": 3330,
+    "reply_sha256": "sha256:9d0040b96068876ebfcab8c2f90e13aa09362695a098fc2e42457a5e53bfbba4",
+    "role": "REVIEWER",
+    "seq": 23,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:76507b00cf58d76bebc8cce814ec3b33a5a7cfc5a3629f44b82b8a9da18ed250",
+    "finish_reason": "stop|prompt_tokens=3466",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md [## 7. OPEN items .. ## 8. Vacuity probe)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Challenge record .. ### Base partition)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Problem-face retention .. ## Canonicalisation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Closure record .. ### Challenge record)"
+    ],
+    "job": "defect-bindings",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/DEFECT_BINDINGS_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:915da4e3710cadcbd34013a35accd5a17dd6547c378e94b435cf0323b105dfcf",
+    "prompt_sha256": "sha256:2e01de090ebea304164f1d418728856cdf4f3544ef84317ff3a08d2822378cc8",
+    "reply_chars": 3061,
+    "reply_sha256": "sha256:ebaa3290e432ff3f30d45c0adb2ea742eb0bec2b92884e9db31cd8b08b8abfda",
+    "role": "REVIEWER",
+    "seq": 24,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:fdccc1f882e6d8fc05d1aeb5d58492d443db023f76ad37322a05ddc6e6781274",
+    "finish_reason": "stop|prompt_tokens=3466",
+    "forbidden": [],
+    "inputs": [
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md [## 7. OPEN items .. ## 8. Vacuity probe)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Challenge record .. ### Base partition)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Problem-face retention .. ## Canonicalisation)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Closure record .. ### Challenge record)"
+    ],
+    "job": "defect-bindings",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/DEFECT_BINDINGS_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:76507b00cf58d76bebc8cce814ec3b33a5a7cfc5a3629f44b82b8a9da18ed250",
+    "prompt_sha256": "sha256:2e01de090ebea304164f1d418728856cdf4f3544ef84317ff3a08d2822378cc8",
+    "reply_chars": 3392,
+    "reply_sha256": "sha256:cf6ae74b14626202f40b3a9ece47a53b5b046aa8630e44a99c722b6dc543bf4d",
+    "role": "REVIEWER",
+    "seq": 25,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:6170e61079112450036d44186c8524b70e6fb496e9352bf7bccd402f3549d64f",
+    "finish_reason": "length|prompt_tokens=9851",
+    "forbidden": [],
+    "inputs": [
+      "docs/CORE_SPEC_AUDIT_V0.1.md [## 5. Deviations found .. ## 6. What the specification still does not settle)",
+      "docs/MILESTONE_8_FINDINGS_V0.1.md",
+      "docs/PIN_REGISTRY_PINNING_V0.1.md [## 1. The gap .. ## 5. The readings)",
+      "docs/PIN_RULE_TARGET_BLOCKING_V0.3.md [## 3. OPEN-1, narrowed .. ## 4. The pin)"
+    ],
+    "job": "cross-artifact-consistency",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 32000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:fdccc1f882e6d8fc05d1aeb5d58492d443db023f76ad37322a05ddc6e6781274",
+    "prompt_sha256": "sha256:7082c277d3fcc8868e962beeb23b581392fba6e1eabce056929f62a0fc9fb9bf",
+    "reply_chars": 0,
+    "reply_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "role": "REVIEWER",
+    "seq": 26,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:3999a75c446bcbd26b9044b5a9aab24660c9afd6e594a509573581e652b8477b",
+    "finish_reason": "stop|prompt_tokens=2682",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-consistency",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:6170e61079112450036d44186c8524b70e6fb496e9352bf7bccd402f3549d64f",
+    "prompt_sha256": "sha256:915ef75056e693c94d31c29d4aed88437a94f728b0a38e54ed27ba4f24c3866a",
+    "reply_chars": 3843,
+    "reply_sha256": "sha256:194ee6cf21cc8f38e1f8bd287422e6f61ba8c8e993a46f4977fe094631b2cebc",
+    "role": "REVIEWER",
+    "seq": 27,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:0e8593050a629e68f9d9920c72edc384378246129c92efa782591cd5a8498d19",
+    "finish_reason": "stop|prompt_tokens=4977",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-consistency",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 32000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:3999a75c446bcbd26b9044b5a9aab24660c9afd6e594a509573581e652b8477b",
+    "prompt_sha256": "sha256:cc1c46518ade3ed54e46a5496ae984334d71281c3f43667838025bbfd35959b1",
+    "reply_chars": 5355,
+    "reply_sha256": "sha256:69c2374ea7f7506d21ff1e3b4680d7ef045621685655481f7ffdd9b9c21cca20",
+    "role": "REVIEWER",
+    "seq": 28,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:94d62af823ab3e1734dd706967fd7089e72422e48c328bccfe3457bcf5c9627a",
+    "finish_reason": "stop|prompt_tokens=4679",
+    "forbidden": [],
+    "inputs": [
+      "treadle0.5/SETUP.md",
+      "treadle0.5/MODULES.md",
+      "treadle0.5/README.md"
+    ],
+    "job": "treadle-setup",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/TREADLE_SETUP_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:0e8593050a629e68f9d9920c72edc384378246129c92efa782591cd5a8498d19",
+    "prompt_sha256": "sha256:f9a1b59558413fbcba15ee7d825783364007ae25b06892c14ab082cb870aa842",
+    "reply_chars": 4329,
+    "reply_sha256": "sha256:9a19d2427130694a021e913edce6df0528add26ca603fb14141834a7d9dc2f0d",
+    "role": "REVIEWER",
+    "seq": 29,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:9f511117470bb80d2af9fb4073170a9feaae5f1d738f6a2c66342190dac41193",
+    "finish_reason": "stop|prompt_tokens=3614",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "README.md [| `poietics.binding` .. \n\nThe dependency)",
+      "src/poietics/binding/finalize.py"
+    ],
+    "job": "binding-boundary",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/BINDING_BOUNDARY_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:94d62af823ab3e1734dd706967fd7089e72422e48c328bccfe3457bcf5c9627a",
+    "prompt_sha256": "sha256:981c061f77ce3f1fb1c1a2d0c4154a6cb0a5d520b85290ae708d70d618b41984",
+    "reply_chars": 2713,
+    "reply_sha256": "sha256:2abe1ef626fb0509c495c9f0a461c800f148e73f9d2dadfbfa962745bc9d2e04",
+    "role": "REVIEWER",
+    "seq": 30,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:cf54c761fa2619b63833bb3ffd163300cee7986092953510133e516994fc2eaa",
+    "finish_reason": "stop|prompt_tokens=3430",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "README.md [| `poietics.binding` .. \n\nThe dependency)",
+      "src/poietics/binding/finalize.py"
+    ],
+    "job": "binding-boundary-glm",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/independent/BINDING_BOUNDARY_glm-5.2.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:9f511117470bb80d2af9fb4073170a9feaae5f1d738f6a2c66342190dac41193",
+    "prompt_sha256": "sha256:981c061f77ce3f1fb1c1a2d0c4154a6cb0a5d520b85290ae708d70d618b41984",
+    "reply_chars": 6024,
+    "reply_sha256": "sha256:cbe85ac45f90ccb8f01fe5a22fd1a607bcd4dce155097a5aaffcc7f5ae877794",
+    "role": "REVIEWER",
+    "seq": 31,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:e19cb8eba92f05cd52d714c5a0ca9e945cac2b434f0d55080cea02596e132ff8",
+    "finish_reason": "stop|prompt_tokens=2968",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Checker interface .. ## What the first implementation does not need to know)",
+      "README.md [| `poietics.generation.extract` .. \n\nThe dependency)",
+      "src/poietics/generation/extract.py [start .. def _)"
+    ],
+    "job": "generation-boundary",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/GENERATION_BOUNDARY_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:cf54c761fa2619b63833bb3ffd163300cee7986092953510133e516994fc2eaa",
+    "prompt_sha256": "sha256:ec4d07f8f58561c78064fec08307508b0fd0e0a354f2ae5d53faf60c227a743f",
+    "reply_chars": 2608,
+    "reply_sha256": "sha256:ef70afffef488a1898f061461fd5e7a7abc55dccd6663e83ef4cffa7ad13c952",
+    "role": "REVIEWER",
+    "seq": 32,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:5164db7e45ef9c64863ddfa173d0c052655b40e8efd3874647d831b69bf592c3",
+    "finish_reason": "stop|prompt_tokens=2758",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Checker interface .. ## What the first implementation does not need to know)",
+      "README.md [| `poietics.generation.extract` .. \n\nThe dependency)",
+      "src/poietics/generation/extract.py [start .. def _)"
+    ],
+    "job": "generation-boundary-kimi",
+    "model": "kimi-k2.7-code",
+    "out": "zoo/reviews/independent/GENERATION_BOUNDARY_kimi-k2.7-code.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:e19cb8eba92f05cd52d714c5a0ca9e945cac2b434f0d55080cea02596e132ff8",
+    "prompt_sha256": "sha256:ec4d07f8f58561c78064fec08307508b0fd0e0a354f2ae5d53faf60c227a743f",
+    "reply_chars": 2988,
+    "reply_sha256": "sha256:427d9c14407517ecacb6af36993b02cfc64443dd476a90557b25149fcf5750ac",
+    "role": "REVIEWER",
+    "seq": 33,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:5e64f91e0e6d5a09904d88014c163888ddb620b6a48790e14621b8f617ac7d2c",
+    "finish_reason": "stop|prompt_tokens=1929",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [### Closure record .. ### Contrary record)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Validation .. ## Deterministic compilation)",
+      "src/poietics/pff/local_checkers.py"
+    ],
+    "job": "local-checkers",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/LOCAL_CHECKERS_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:5164db7e45ef9c64863ddfa173d0c052655b40e8efd3874647d831b69bf592c3",
+    "prompt_sha256": "sha256:79408a0ac13fd8457c29483a5c2cfa9d5642bfd6b649660444b0b5cdb2947d2d",
+    "reply_chars": 1613,
+    "reply_sha256": "sha256:7c481162363def308ef2c40f14fabfeb8625022dd648e0e0c4612f564baa6469",
+    "role": "REVIEWER",
+    "seq": 34,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:3daaee0fa7a8912d20bd24b3debbd6b6d7afaf5572deae2cde286feed7f1d0d1",
+    "finish_reason": "stop|prompt_tokens=5898",
+    "forbidden": [],
+    "inputs": [
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "README.md [| `poietics.binding` .. \n\nThe dependency)",
+      "src/poietics/binding/plan.py [def _coverage_gate .. end)"
+    ],
+    "job": "binding-plan",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/BINDING_PLAN_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:5e64f91e0e6d5a09904d88014c163888ddb620b6a48790e14621b8f617ac7d2c",
+    "prompt_sha256": "sha256:52a803b0225f6e3cd3613f2033271797e962f075d526b6215ee9ba0000b9375e",
+    "reply_chars": 2861,
+    "reply_sha256": "sha256:3f820c80f7f880f49e07809b4571d39050a22a9398074b2e112b03f318780c59",
+    "role": "REVIEWER",
+    "seq": 35,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:98996f8a64d39f7f11a1e052d0ede1998f108a908a03d58dcc3538e316742abd",
+    "finish_reason": "stop|prompt_tokens=3209",
+    "forbidden": [],
+    "inputs": [
+      "README.md [| `poietics.generation.ollama` .. | `poietics.binding`)",
+      "src/poietics/generation/ollama.py [start .. def _validate_text)",
+      "src/poietics/generation/ollama_http.py"
+    ],
+    "job": "generation-transport",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/GENERATION_TRANSPORT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:3daaee0fa7a8912d20bd24b3debbd6b6d7afaf5572deae2cde286feed7f1d0d1",
+    "prompt_sha256": "sha256:f47892039d194cffcc8e6c968372f83bebeb70dbf83db9cb4e628c98e31b5932",
+    "reply_chars": 2561,
+    "reply_sha256": "sha256:e9eb336ee2ec90948e3c9a916b59042065ba2bd31a4015320c876907dabba326",
+    "role": "REVIEWER",
+    "seq": 36,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:da3f40232278042a6aa5dbe0f9d727d1ea21fb04e58ec31851e875abb7e01269",
+    "finish_reason": "error|prompt_tokens=0",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:98996f8a64d39f7f11a1e052d0ede1998f108a908a03d58dcc3538e316742abd",
+    "prompt_sha256": "sha256:60313a07a2184cc9a8852dffb711f253d750cac023caf9461bb0d9852d35d60b",
+    "reply_chars": 0,
+    "reply_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "role": "REVIEWER",
+    "seq": 37,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:b9266562470f704da669c12214a1a67d8630a3d4b0471e863c26a176a1edbb34",
+    "finish_reason": "length|prompt_tokens=6055",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 32000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:da3f40232278042a6aa5dbe0f9d727d1ea21fb04e58ec31851e875abb7e01269",
+    "prompt_sha256": "sha256:60313a07a2184cc9a8852dffb711f253d750cac023caf9461bb0d9852d35d60b",
+    "reply_chars": 0,
+    "reply_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "role": "REVIEWER",
+    "seq": 38,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:6f79fc01722ecdaabc9ba6106d9e89267434959031b031a7bb7e55f179f06b34",
+    "finish_reason": "stop|prompt_tokens=5349",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:b9266562470f704da669c12214a1a67d8630a3d4b0471e863c26a176a1edbb34",
+    "prompt_sha256": "sha256:a51c5f8924e165fa823c915c615e877fa65c357bd14f90ceb2348ad2abc24666",
+    "reply_chars": 2407,
+    "reply_sha256": "sha256:c598221434ef12cb345680d3baafc92bc39e08cc84a64e013f56f100174add8f",
+    "role": "REVIEWER",
+    "seq": 39,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:2c48c9a25a33b834a54b914c4309cc5e233650d145e16df425c44b58aa5f07ed",
+    "finish_reason": "stop|prompt_tokens=2755",
+    "forbidden": [],
+    "inputs": [
+      "README.md [| `poietics.generation.ollama` .. | `poietics.binding`)",
+      "src/poietics/generation/ollama.py [def generate_ollama .. end)",
+      "src/poietics/generation/ollama_http.py"
+    ],
+    "job": "generation-transport",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/GENERATION_TRANSPORT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:6f79fc01722ecdaabc9ba6106d9e89267434959031b031a7bb7e55f179f06b34",
+    "prompt_sha256": "sha256:06daae72fe87ccf47c2fa5edc3e2297c549fd3e26b3b84f08c16c098513a0008",
+    "reply_chars": 1637,
+    "reply_sha256": "sha256:5f43526ba682fbb47494ef3b103a5dee9e8c25bf3f5acedd3d1a397c7a727c3f",
+    "role": "REVIEWER",
+    "seq": 40,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:ade0485be151a7d4bf85e05771c3fd03eb8c3f81649e8009a2f5a5d3d2dc92dc",
+    "finish_reason": "stop|prompt_tokens=5577",
+    "forbidden": [],
+    "inputs": [
+      "zoo/reviews/CONSISTENCY_PACKET.md"
+    ],
+    "job": "cross-artifact-v2",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/CROSS_ARTIFACT_V2_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:2c48c9a25a33b834a54b914c4309cc5e233650d145e16df425c44b58aa5f07ed",
+    "prompt_sha256": "sha256:fdf2fb8584ba7d25d4368e57324c826d6404322a25ce279e6b0889de9579fb77",
+    "reply_chars": 1808,
+    "reply_sha256": "sha256:6967db4abe688fd9c03c62fd0d79ccc55ed7f839dc62f857b686924a09990bfc",
+    "role": "REVIEWER",
+    "seq": 41,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:6e09815ff76df69051787187a38840881f21adb6f7804b5dbe005cc9b6fad277",
+    "finish_reason": "stop|prompt_tokens=4725",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### RT-2 .. ### DF-1)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "src/poietics/pff/compile.py [def _compile_rules .. def _compile_discharges)",
+      "src/poietics/pff/validate.py [class ValidationCode .. @dataclass)"
+    ],
+    "job": "accepted-rt",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_RT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:ade0485be151a7d4bf85e05771c3fd03eb8c3f81649e8009a2f5a5d3d2dc92dc",
+    "prompt_sha256": "sha256:bed751c06299894b23704150fcdd09d39de4ed4acb5a26e23e927377cfe593d4",
+    "reply_chars": 2310,
+    "reply_sha256": "sha256:eedfee9adaf0c7587571fd72d2d7ed53ab72afcba59925f228a6c5806929bada",
+    "role": "REVIEWER",
+    "seq": 42,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:9ec29ad4bae7e85bc34191dfc5b84217f548063b7765cd75ae22e4656223c743",
+    "finish_reason": "stop|prompt_tokens=1829",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": ..         elif record.kind == \"rebut\":)"
+    ],
+    "job": "accepted-df",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_glm-5.2.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:6e09815ff76df69051787187a38840881f21adb6f7804b5dbe005cc9b6fad277",
+    "prompt_sha256": "sha256:cbf43afd2bd4df01a187b81ac76425ef43df920753cc76a1d4b3751705c83953",
+    "reply_chars": 3912,
+    "reply_sha256": "sha256:33aedeebc25c5daed9806723a91231c9b9f8394d5b1652460067bfd35312e328",
+    "role": "REVIEWER",
+    "seq": 43,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:73496732994b9503be8eedcf58c515e88f1c4e85f3337eba6fb1ff7a5890b90b",
+    "finish_reason": "stop|prompt_tokens=1886",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### REG-1 .. ### AU-1)",
+      "src/poietics/pff/registry.py [def _require_version_suffix .. def _collection)"
+    ],
+    "job": "accepted-reg",
+    "model": "kimi-k2.7-code",
+    "out": "zoo/reviews/independent/ACCEPTED_REG_kimi-k2.7-code.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:9ec29ad4bae7e85bc34191dfc5b84217f548063b7765cd75ae22e4656223c743",
+    "prompt_sha256": "sha256:c9297c1b3c15fedd311df48333cccdbdc780956231c2fa388f6d357fa06811b4",
+    "reply_chars": 2767,
+    "reply_sha256": "sha256:3d5e8d7ce201786621618fe226ad1ecd7870d0fbefe65b84badf4926de1e22ac",
+    "role": "REVIEWER",
+    "seq": 44,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:973c6e7552fc2cd3fad8aaa40ae72762157b31762eceeef65fb9e039e9e7b33f",
+    "finish_reason": "stop|prompt_tokens=6188",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### RT-2 .. ### DF-1)",
+      "docs/poietic-pff-implementable-core-spec-v0.1.md [## Reference implementation boundary .. ## Normative vocabulary)",
+      "src/poietics/pff/compile.py [def _compile_rules .. def _compile_discharges)",
+      "src/poietics/pff/validate.py [class ValidationCode .. @dataclass)",
+      "src/poietics/pff/model.py [class RuleRecord .. class ContraryRecord)",
+      "src/poietics/pff/compile.py [_FACE_BLOCKING_CHALLENGE_KINDS = frozenset( .. _ATOM_ROLES = frozenset()"
+    ],
+    "job": "accepted-rt",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_RT_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:73496732994b9503be8eedcf58c515e88f1c4e85f3337eba6fb1ff7a5890b90b",
+    "prompt_sha256": "sha256:3b67309d57a632aa24b57f2cb38861c7fcfba89e1d0fb22875582000524482f4",
+    "reply_chars": 2973,
+    "reply_sha256": "sha256:efca00540278d1977a9694196adcfa3e37780fcf776cb60c65c307a4ce10bad6",
+    "role": "REVIEWER",
+    "seq": 45,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:1062ddec744d315d5ea26529fdcee4eb68c908571b18aab6db9cd628f40c830d",
+    "finish_reason": "stop|prompt_tokens=1941",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": ..         elif record.kind == \"rebut\":)"
+    ],
+    "job": "accepted-df-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:973c6e7552fc2cd3fad8aaa40ae72762157b31762eceeef65fb9e039e9e7b33f",
+    "prompt_sha256": "sha256:cbf43afd2bd4df01a187b81ac76425ef43df920753cc76a1d4b3751705c83953",
+    "reply_chars": 1670,
+    "reply_sha256": "sha256:da021339c211c2f06b4bba41afac1324fea350bd284526b2ffb4e2148b3a9821",
+    "role": "REVIEWER",
+    "seq": 46,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:2d79e38ec19024408110527c4b4bec6cb8a6a655628f58ba543bd8c67d0472f7",
+    "finish_reason": "stop|prompt_tokens=1940",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### REG-1 .. ### AU-1)",
+      "src/poietics/pff/registry.py [def _require_version_suffix .. def _collection)"
+    ],
+    "job": "accepted-reg-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_REG_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:1062ddec744d315d5ea26529fdcee4eb68c908571b18aab6db9cd628f40c830d",
+    "prompt_sha256": "sha256:c9297c1b3c15fedd311df48333cccdbdc780956231c2fa388f6d357fa06811b4",
+    "reply_chars": 1456,
+    "reply_sha256": "sha256:8434e74d5e63eb7c40a69daca3255998bab5c71d8d951916a3a4df1e3cbc44a4",
+    "role": "REVIEWER",
+    "seq": 47,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:094940418960ceb79114cef5c85f7764cb275a7e138ba3e0c6b3127e3e07395e",
+    "finish_reason": "stop|prompt_tokens=2356",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": .. def _compile_discharges)"
+    ],
+    "job": "accepted-df-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:2d79e38ec19024408110527c4b4bec6cb8a6a655628f58ba543bd8c67d0472f7",
+    "prompt_sha256": "sha256:b53843b2ec3a934ef4b6fac785187d2244e72c1a0701ce0dca982303b61bd22b",
+    "reply_chars": 2259,
+    "reply_sha256": "sha256:eb7328eeffd7b415d01a11cccaa866abc7339f6b670a4cc400d233cc61697b87",
+    "role": "REVIEWER",
+    "seq": 48,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:6ffe62e0740be6dc87cd34b4b29d89dc8d2265559b09ff214b3ca0f6a27e5842",
+    "finish_reason": "stop|prompt_tokens=2189",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": .. def _compile_discharges)"
+    ],
+    "job": "accepted-df",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_glm-5.2.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:094940418960ceb79114cef5c85f7764cb275a7e138ba3e0c6b3127e3e07395e",
+    "prompt_sha256": "sha256:b53843b2ec3a934ef4b6fac785187d2244e72c1a0701ce0dca982303b61bd22b",
+    "reply_chars": 3758,
+    "reply_sha256": "sha256:43c31ecd6ba8a0e7af8e5327119c7502340875a0272201890bb5e82561b3fa56",
+    "role": "REVIEWER",
+    "seq": 49,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:c429085914f8bfc9d402bd50fddc298defd76a8f8b48937586738d7f51efdc0d",
+    "finish_reason": "stop|prompt_tokens=2345",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### REG-1 .. ### AU-1)",
+      "src/poietics/pff/registry.py [def _require_version_suffix .. def _collection)"
+    ],
+    "job": "accepted-reg-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_REG_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:6ffe62e0740be6dc87cd34b4b29d89dc8d2265559b09ff214b3ca0f6a27e5842",
+    "prompt_sha256": "sha256:b4f25d2a06c62436aceb439a9e26fcccd5020433cd76ded74a8046c3c81261c0",
+    "reply_chars": 1671,
+    "reply_sha256": "sha256:e551a28cf3326031f988ea3642a9a626d8f784a30cd61a968b86cd1c89f37c68",
+    "role": "REVIEWER",
+    "seq": 50,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:715a7c9eb0516e3f7c73d2f18d8803daa9df4053b9bce26856fe13ead0d458ea",
+    "finish_reason": "stop|prompt_tokens=3164",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md [## 3. What the specification says .. ## 4. The pin)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": .. def _compile_discharges)"
+    ],
+    "job": "accepted-df-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:c429085914f8bfc9d402bd50fddc298defd76a8f8b48937586738d7f51efdc0d",
+    "prompt_sha256": "sha256:c6388e2bb1c32ef680d38ae1899e2bf7084eff81f47f4baabb34305a2da8bb0e",
+    "reply_chars": 2200,
+    "reply_sha256": "sha256:ac8d6a1510f13aec3e28479c10ea30a513b56c262446d7992ba54c34f01aa365",
+    "role": "REVIEWER",
+    "seq": 51,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:b86291655ae39d1e4fb7bd5b235195dd4caad94537331bce499b630b3063271c",
+    "finish_reason": "stop|prompt_tokens=2968",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### DF-1 .. ### REG-1)",
+      "docs/PIN_DEFECT_LIFECYCLE_V0.1.md [## 3. What the specification says .. ## 4. The pin)",
+      "src/poietics/pff/compile.py [        if record.kind == \"defect\": .. def _compile_discharges)"
+    ],
+    "job": "accepted-df",
+    "model": "glm-5.2",
+    "out": "zoo/reviews/independent/ACCEPTED_DF_glm-5.2.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:715a7c9eb0516e3f7c73d2f18d8803daa9df4053b9bce26856fe13ead0d458ea",
+    "prompt_sha256": "sha256:c6388e2bb1c32ef680d38ae1899e2bf7084eff81f47f4baabb34305a2da8bb0e",
+    "reply_chars": 4164,
+    "reply_sha256": "sha256:5f872aa2aced1aae71c7496be4112e11a3c0d3630c898621fe8abf077d189bcc",
+    "role": "REVIEWER",
+    "seq": 52,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  },
+  {
+    "chain": "sha256:369edfbb4599e321cf0856058bdff4cd37757a27ea9576249ce6d1d3c1f9465c",
+    "finish_reason": "stop|prompt_tokens=2533",
+    "forbidden": [],
+    "inputs": [
+      "docs/ACCEPTANCE_V0.1.md [### REG-1 .. ### AU-1)",
+      "src/poietics/pff/registry.py [def _require_version_suffix .. def _collection)"
+    ],
+    "job": "accepted-reg-deepseek",
+    "model": "deepseek-v4-pro:0813",
+    "out": "zoo/reviews/independent/ACCEPTED_REG_deepseek-v4-pro-0813.md",
+    "params": {
+      "max_tokens": 24000,
+      "seed": 17,
+      "temperature": 0.0
+    },
+    "prev": "sha256:b86291655ae39d1e4fb7bd5b235195dd4caad94537331bce499b630b3063271c",
+    "prompt_sha256": "sha256:ca55c663653836c5d81a05a83dbfb17c1c2330300953fed1fd51ae1769abc3a1",
+    "reply_chars": 1476,
+    "reply_sha256": "sha256:fe35e48f6a16e06a0b6656e846ab71790a3e58644fe9c5a8209b28f77670984a",
+    "role": "REVIEWER",
+    "seq": 53,
+    "skill": "skills/discharge-typing/SKILL.md",
+    "system_sha256": "sha256:eebfacb674a68847b5cd7312008e319c1b95e55a8474da85282dc6dd20b2e26a"
+  }
+]

@@ -1,1 +1,0 @@
-RESULTS_ROOT_NOT_FOUND: /home/user/DeepReason/experiments/2026-08-25-poietics-program/run is neither a run root (no log.jsonl) nor a home holding one
