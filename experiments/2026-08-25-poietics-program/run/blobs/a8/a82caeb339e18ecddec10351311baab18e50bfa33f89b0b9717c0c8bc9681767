@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "content": "The 3-of-26 mutation survival result reduces to an artifact of registry-size confounds: it is refuted if the same survival count appears in a mutation set where all entries are known to be exercised by tests, independent of installation order.",
+    "typicality": 0.72,
+    "neighbours": ["SRC_001", "SRC_002", "SRC_003"],
+    "evidence_refs": [
+      {
+        "block": "007dca563e8ddb537138b6410d65570617eb77284afbd4f0318b06d9f0fe45cf",
+        "quote": "The 3-of-26 result is a distribution artifact of registry-size confounds: with only 26 mutations across one author's one-week repository, the survival count is dominated by arbitrary registry entries that were never exercised by any test in the first place, not by a property of shown-to-fail-first installation."
+      },
+      {
+        "block": "0b35ed752e77f1579edf2b3bd734eb0aaefa3a3dbd2a5c84bc84d9b305fbbe63",
+        "quote": "The 3-of-26 result is a confound of one-repository, one-author, one-week arbitrariness: the distribution (compile.py 1/9 vs. 4/4 to 6/7 elsewhere) reflects where the author happened to install shown-to-fail-first tests as guards, not any general condition under which tests constrain rather than describe their subjects."
+      }
+    ]
+  }
+}
+```

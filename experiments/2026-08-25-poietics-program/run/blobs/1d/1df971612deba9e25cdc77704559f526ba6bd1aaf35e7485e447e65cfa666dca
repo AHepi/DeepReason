@@ -1,0 +1,9 @@
+```json
+{
+  "candidate": {
+    "content": "The 3-of-26 result contradicts the claim that shown-to-fail-first installation uniformly constrains registry targets; it is refuted if the same installation ritual reproduces the 3-of-26 ratio on a larger, multi-author repository.",
+    "typicality": 0.78,
+    "neighbours": ["SRC_001", "SRC_002"]
+  }
+}
+```
