@@ -1,5 +1,5 @@
 <!-- DR-SEAM-capabilities-x-rules -->
-Verified-at: c7e25419c
+Verified-at: 1662a3f96
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/capabilities/simulation.py, src/deepreason/capabilities/research.py
 Sides: DR-SUB-capabilities, DR-SUB-rules

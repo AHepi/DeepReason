@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scheduler-x-rules -->
-Verified-at: c7e25419c
+Verified-at: 1662a3f96
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/rules/spawn.py
 Sides: DR-SUB-rules, DR-SUB-scheduler

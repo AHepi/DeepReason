@@ -1,5 +1,5 @@
 <!-- DR-SUB-ontology -->
-Verified-at: c7e25419c
+Verified-at: 1662a3f96
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
 Seams: DR-SEAM-ontology-x-rules, DR-SEAM-evaluation-x-ontology
