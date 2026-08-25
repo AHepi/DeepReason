@@ -1,0 +1,19 @@
+treadle doctor — NOT RUNNABLE in this container. Both prerequisites absent.
+
+1. The vendored venv is gone:
+   $ ls tools/treadle/.venv/bin/treadle
+ls: cannot access 'tools/treadle/.venv/bin/treadle': No such file or directory
+   -> absent. AUDIT_BASELINES says: 'If tools/treadle/.venv is absent the
+      container has rolled back; rebuild it per tools/treadle/VENDORED.md
+      before treating anything here as a delta.'
+
+2. No credential:
+   OLLAMA_API_KEY unset, and no experiments/*/env file exists
+ls: cannot access 'experiments/*/env': No such file or directory
+
+VERDICT: not-runnable, NOT a delta. Rowed and parked (P6) rather than
+reported as a finding -- an instrument that could not run has produced no
+evidence either way, and saying otherwise would be inventing a verdict.
+The baseline's own note distinguishes these: 'A WARN credentials line is
+baseline ONLY when the key is unset', and 'NOTE model-tag check skipped
+means the endpoint was unreachable, which is a network fact, not a verdict'.

@@ -1,0 +1,23 @@
+PROOF: docs/map check: lines EXECUTE against committed experiment roots.
+This is why the census's KEEP rows are not a matter of taste: deleting a
+cited root turns docs_verify red the moment it next runs.
+
+-- map documents carrying a check: line that names an experiments/ path --
+docs/map/SUB-periphery.md:4
+docs/map/SEAM-harness-x-verification.md:4
+docs/map/SUB-adjudication.md:3
+docs/map/CON-run-identity.md:3
+docs/map/SEAM-adjudication-x-rules.md:2
+docs/map/SEAM-adjudication-x-authority.md:2
+docs/map/SUB-evaluation.md:1
+docs/map/SUB-capabilities.md:1
+docs/map/SEAM-schools-x-scratch.md:1
+docs/map/SEAM-ontology-x-rules.md:1
+docs/map/SEAM-harness-x-workflow.md:1
+docs/map/INV-frozen-surfaces.md:1
+   (25 checks across 12 documents)
+
+-- live re-derivation of two of them, run just now --
+  SEAM-harness-x-verification.md:150 asserts len(c)==1083 -> 1083
+  SUB-adjudication.md:151 asserts len(state.artifacts)==42 -> 42
+  both hold.

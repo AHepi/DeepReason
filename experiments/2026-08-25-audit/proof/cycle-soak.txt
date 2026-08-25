@@ -1,0 +1,13 @@
+cycle soak (python -u scripts/cycle_soak.py --case epoch3) — NOT RUN.
+
+AUDIT_BASELINES records it as a PRE-LAUNCH instrument: 'Like the wheel
+smokes, NO gate runs it -- it is minutes-long and is run by hand before a
+live launch.'
+
+This audit launches nothing. It is READ-ONLY by the operator's own
+close-out instruction, so the precondition that makes the soak meaningful
+-- an imminent ladder launch on a specific config -- does not exist here.
+Not-run is the correct state, not an omission.
+
+The script is present and would run:
+-rw-r--r-- 1 root root 33837 Aug 25 06:49 scripts/cycle_soak.py
