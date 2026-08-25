@@ -151,6 +151,24 @@ CRITERIA = (
 )
 
 
+def _assert_workload_matches(root: Path) -> None:
+    """Refuse to hand the ladder a root `deepreason run` will reject.
+
+    `_require_v6_workload_match` compares the CLI workload (problem.json)
+    against the frozen run input AND the dossier's source ids. It is imported
+    rather than reimplemented so this guard cannot drift from the check it
+    stands in for.
+    """
+    from deepreason.cli.main import _read_problem_file, _require_v6_workload_match
+    from deepreason.evidence import load_evidence_dossier, load_run_input
+    from deepreason.workloads.text import ReasoningWorkloadSpec
+
+    # The same three lines cli/main.py runs at launch, in the same order.
+    payload = _read_problem_file(root / "problem.json")
+    spec = ReasoningWorkloadSpec.model_validate(payload)
+    _require_v6_workload_match(load_run_input(root), load_evidence_dossier(root), spec)
+
+
 def build(root: Path, *, config_path: Path | str | None = None) -> dict:
     # ``config_path`` exists for cycle_soak.py, which hands in a copy of
     # this tranche's config with every endpoint redirected to its local
@@ -224,13 +242,26 @@ def build(root: Path, *, config_path: Path | str | None = None) -> dict:
                 "schema": "deepreason-text-workload-v1",
                 "problem": {"id": problem_id, "description": QUESTION},
                 "criteria": [json.loads(c.model_dump_json()) for c in CRITERIA],
-                "sources": [],
+                # EVERY dossier source id, in the dossier's own order. The
+                # predecessor builders wrote [] here and were right to: their
+                # dossiers were empty. Ours is not, and
+                # cli/main.py::_require_v6_workload_match refuses the launch
+                # with RUN_INPUT_MISMATCH when this list and the dossier's
+                # disagree -- which is exactly how P-R1's first launch died,
+                # after the qualification battery had already been paid for.
+                "sources": [source.id for source in dossier.sources],
             },
             indent=2,
             sort_keys=True,
         )
         + "\n"
     )
+
+    # Assert the launch contract HERE, in the builder that can still fix it,
+    # rather than discovering it three minutes and one battery later. This
+    # calls the CLI's own predicate rather than a copy of it: a copy would
+    # agree with the original only until one of them changed.
+    _assert_workload_matches(root)
 
     for notice in manifest.compile_notices or ():
         print(f"NOTICE {notice.code}: {notice.message}", file=sys.stderr)

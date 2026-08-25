@@ -112,3 +112,27 @@ catalogue lists 19 models; this config names 4 distinct
 every seat's model is listed
 [2026-08-25T09:40:30Z] MODEL PREFLIGHT OK rc=0
 [2026-08-25T09:40:30Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-25T09:43:33Z] QUALIFY OK rc=0
+[2026-08-25T09:43:33Z] === REASON: run --budget cycles=12 --token-budget 3000000 ===
+[2026-08-25T09:43:34Z] REASON rc=1 -- see /home/user/DeepReason/experiments/2026-08-25-poietics-program/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-25T09:43:34Z] REASON stop_reason=NO_STOP_RECORD
+[2026-08-25T09:43:34Z] === AUDIT: verify_root + findings + results + the milestone census ===
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/2026-08-25-poietics-program/milestone_census.py", line 287, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-poietics-program/milestone_census.py", line 262, in main
+    report = census(root)
+             ^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-poietics-program/milestone_census.py", line 168, in census
+    for line in (root / "log.jsonl").read_text().splitlines():
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/user/DeepReason/experiments/2026-08-25-poietics-program/run/log.jsonl'
+[2026-08-25T09:43:38Z] MILESTONES: a REQUIRED milestone is unmet (rc=1) -- typed failure, judge per PREREG.md §6
+[2026-08-25T09:43:38Z] === DONE: see /home/user/DeepReason/experiments/2026-08-25-poietics-program/{reason.log,verify_root.json,findings.json,results.txt,milestones.json} ===

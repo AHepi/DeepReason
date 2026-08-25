@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/user/DeepReason/src/deepreason/__main__.py", line 6, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/src/deepreason/cli/main.py", line 731, in main
+    return _main(argv)
+           ^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/cli/main.py", line 1266, in _main
+    summary = findings_summary(Path(args.root))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/src/deepreason/findings.py", line 270, in findings_summary
+    raise ValueError(f"not a run root (no log.jsonl): {root}")
+ValueError: not a run root (no log.jsonl): /home/user/DeepReason/experiments/2026-08-25-poietics-program/run

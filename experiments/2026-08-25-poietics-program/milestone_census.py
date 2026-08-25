@@ -165,7 +165,13 @@ def census(root: pathlib.Path) -> dict:
     }
 
     verified_citations = []
-    for line in (root / "log.jsonl").read_text().splitlines():
+    # A root whose run never started has no log. That is a real outcome --
+    # P-R1's first launch produced exactly one -- and this census must report
+    # it as UNMET rather than crash, or the instrument fails precisely when
+    # something has gone wrong.
+    log_path = root / "log.jsonl"
+    log_lines = log_path.read_text().splitlines() if log_path.is_file() else []
+    for line in log_lines:
         try:
             event = json.loads(line)
         except json.JSONDecodeError:
@@ -244,6 +250,7 @@ def census(root: pathlib.Path) -> dict:
     holds = m1["met"] and m2["met"] and (m3["met"] is not False)
     return {
         "root": str(root),
+        "record_present": bool(log_lines),
         "state": result.get("state"),
         "stop_reason": result.get("stop_reason") or result.get("reason"),
         "M1": m1,
@@ -264,6 +271,9 @@ def main() -> int:
 
     m1, m2, m3 = report["M1"], report["M2"], report["M3"]
     print(f"state={report['state']} stop_reason={report['stop_reason']}")
+    if not report["record_present"]:
+        print("NO RECORD: this root has no log.jsonl -- the run never started. "
+              "Every milestone below is UNMET by absence, not by measurement.")
     print(f"M1 {'MET' if m1['met'] else 'UNMET'}  "
           f"accepted={m1['accepted_count']} survivors={m1['survivor_count']} "
           f"passing {m1['criterion']}: {len(m1['survivors_passing'])}")
