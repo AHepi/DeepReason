@@ -1,0 +1,24 @@
+PRE-STATE, recorded before any change.
+HEAD: 6e64330fea8822fb6ce9f32a13073b8798fd1114
+experiments/ directory count: 154
+  (152 censused + the audit tranche + this tranche)
+
+=== the 18 EXTRACT-THEN-PRUNE directories, with the sha where their PARKED.md text lives ===
+experiments/2026-07-30-change-amendment-epochs                 c1f96ae36a8b10fe746d19f5479a652199f01acf  items=4
+experiments/2026-07-30-fix-citation-quote-check                c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-07-30-fix-sandbox-contract                    c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-01-fix-decomposition-merge-pairing         c1f96ae36a8b10fe746d19f5479a652199f01acf  items=9
+experiments/2026-08-02-map-falsification                       c1f96ae36a8b10fe746d19f5479a652199f01acf  items=6
+experiments/2026-08-03-change-driving-skill                    c1f96ae36a8b10fe746d19f5479a652199f01acf  items=3
+experiments/2026-08-03-change-rung1-sockets-on-paper           c1f96ae36a8b10fe746d19f5479a652199f01acf  items=6
+experiments/2026-08-03-change-rung2-bridge-unification         c1f96ae36a8b10fe746d19f5479a652199f01acf  items=4
+experiments/2026-08-03-change-rung2-config-inventory           c1f96ae36a8b10fe746d19f5479a652199f01acf  items=6
+experiments/2026-08-05-fix-smoke-entry-point-reader            c1f96ae36a8b10fe746d19f5479a652199f01acf  items=5
+experiments/2026-08-08-change-rung-g1-actual-diff-budget       c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-09-change-errata-sweep-and-automation      c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-11-change-docs-reorg-steps-3-4             c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-14-change-rung1-vocabulary-groundwork      c1f96ae36a8b10fe746d19f5479a652199f01acf  items=3
+experiments/2026-08-15-change-rung2-premise-channel            c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-15-change-rung3a-h1-successor-deletion     c1f96ae36a8b10fe746d19f5479a652199f01acf  items=1
+experiments/2026-08-22-audit-scalarization                     c1f96ae36a8b10fe746d19f5479a652199f01acf  items=3
+experiments/2026-08-24-change-rung5-promotion-criteria         c1f96ae36a8b10fe746d19f5479a652199f01acf  items=4

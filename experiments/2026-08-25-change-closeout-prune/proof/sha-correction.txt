@@ -1,0 +1,18 @@
+WHY THE PER-FILE SHA WAS ABANDONED (A1 -> A1a)
+
+$ git rev-parse --is-shallow-repository
+true
+$ git rev-list --count HEAD
+59
+$ git log --oneline | tail -3   # c1f96ae36 is the graft boundary
+8dc73af9c Rung 6: the departure-declaration claim body (steps 1-4)
+4c1bda4c9 Rung 6: CHECKLIST.md
+c1f96ae36 Rung 6: SPEC.md
+
+All 18 PARKED.md files returned that same boundary sha from
+'git log -1 --format=%H -- <path>' -- an artifact, not provenance.
+
+A1a: use the pre-deletion HEAD 6e64330fea8822fb6ce9f32a13073b8798fd1114.
+$ git show 6e64330fe:experiments/2026-08-24-change-rung5-promotion-criteria/PARKED.md | wc -c
+7153
+-> content retrievable. A1a is sound.
