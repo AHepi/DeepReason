@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Epistemic circularity: the relation's refutation condition presupposes the very artifact status it attempts to establish. By specifying that refutation requires reproducing the '3-of-26 ratio' via the 'same shown-to-fail ritual' on larger repositories, the target treats the specific quantitative outcome as the invariant to be explained rather than the installation-order mechanism itself. If the mechanism (registry-semantics guard constraints) is correct, the exact ratio 3/26 should be contingent on repository size and guard density, not a necessary replication target. A substantive relation must specify what would falsify the causal connection between the two explanations (e.g., finding that SRC_005's guard-detection constraints operate independently of installation order, or that SRC_004's sequential account violates registry-semantics invariants discovered by SRC_005), not merely demand statistical reproduction of the original sample statistic.",
+      "premise": "Refuted if the same shown-to-fail ritual on a larger, multi-author repository reproduces the 3-of-26 ratio, or if the mutation proposal and guard installation order were randomized and the distribution did not show the observed asymmetry.",
+      "premise_evidence": null,
+      "counterexample": [
+        "A multi-author repository reproduces the installation-order mechanism (later guards mask earlier ones via registry-semantics constraints) but yields a 5-of-30 ratio due to different guard density. Under the target's refutation condition, this would not refute (wrong ratio), yet it would confirm the shared mechanism. Conversely, a single-author repository with randomized guard order shows the observed asymmetry due to an independent selection bias in the test harness, not installation order: this refutes by randomization but fails to test the actual claimed mechanism connecting SRC_004 and SRC_005."
+      ],
+      "counterexample_note": "The refutation condition fails to isolate the compatibility claim, testing instead for statistical artifact persistence rather than mechanistic dependence."
+    }
+  ]
+}

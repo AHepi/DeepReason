@@ -1,0 +1,1 @@
+{"cases":[{"target_alias":"SRC_001","attack":false,"case":"Target passes all machine-evaluated commitments. It provides the requested necessary/sufficient condition ('only if') and addresses the 3-of-26 confound (same author/week/repo) without asserting contradictions.","premise":null,"premise_evidence":null}]}

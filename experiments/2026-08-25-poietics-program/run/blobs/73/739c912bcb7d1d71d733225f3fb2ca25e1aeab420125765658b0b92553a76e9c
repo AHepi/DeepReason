@@ -1,0 +1,106 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject rather than describes it only when the test installation mechanism changes the subject's failure semantics before the test executes — shown-to-fail-first installation does exactly this because it makes the guard's own failure a precondition for the guard to be registered as a test subject.",
+      "mechanism": "In shown-to-fail-first installation, a mutation that fails the guard's own test is recorded as 'lost' before the ordinarily-guarded module's mutation tests run. The guard's failure becomes a filter on what counts as a testable subject, so the test constrains the population of mutations it can see rather than describing an independent distribution.",
+      "counterconditions": [
+        "If the installation order is randomized and the result is invariant, the test describes rather than constrains.",
+        "If every ordinarily-guarded module showed the same 1/9 loss rate, the effect is systematic description not constraint.",
+        "If compile.py mutations are drawn from the same distribution as module mutations, the 3-of-26 result is a description of mutation space."
+      ],
+      "typicality": 0.85,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9",
+          "quote": "| GAP REG-1 | 0/6 |"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains rather than describes when the author is the instrument and the acceptance record is the specification; the 3-of-26 result is an artifact of the same author writing both the guard and the mutation in the same week, so the test only confirms the author's model of failure rather than an external distribution.",
+      "mechanism": "Same-author-same-week means the mutation generator and the guard author share a failure vocabulary. The test constrains its subject because the subject (mutations) is drawn from the same cognitive source as the test (guards), so the test can only describe what the author already believes is fail-able.",
+      "counterconditions": [
+        "If a different author's mutations produce a similar loss rate, the constraint claim weakens.",
+        "If the mutations were generated independently of the acceptance record, the test describes an external distribution.",
+        "If the 3-of-26 result is stable across multiple weeks and authors, it describes a property of the code."
+      ],
+      "typicality": 0.72,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc",
+          "quote": "It is one repository, one author, one week, and the mutations were proposed by models that had read the acceptance record."
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only if the test's own failure is a necessary condition for the subject's installation; the 1/9 mutations lost under shown-to-fail-first installation are lost because the guard that would catch them never fires on its own author's mutation.",
+      "mechanism": "The guard that checks declared data does not see added behavior, so when the mutation is in the author's own module, the guard's failure to fire becomes a precondition for the mutation to be installed as a test subject. The test constrains the subject by excluding exactly the mutations that would expose the guard's blindness.",
+      "counterconditions": [
+        "If the guard fires on its own author's mutation and the mutation is still lost, the constraint is not from the guard's blindness.",
+        "If the 1/9 loss rate is independent of whether the mutation is in the author's module, the constraint is not author-specific.",
+        "If the mutation is lost even when the guard is not installed, the test describes rather than constrains."
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12",
+          "quote": "THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR."
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains rather than describes when the subject's failure is masked by the test's own registry; the 3-of-26 distribution arises because mutations no guard catches are reported as caught, so the test's registry constrains what counts as a failure before any description can occur.",
+      "mechanism": "The registry is the test's memory of what it has seen fail. When a mutation is lost, the registry marks it as caught, so the test constrains its subject by reclassifying failure as success. The 3-of-26 result is the number of mutations that escaped this reclassification, not the number that actually failed.",
+      "counterconditions": [
+        "If the registry is independently audited and the loss rate persists, the test describes rather than constrains.",
+        "If the masking is uniform across all modules, the distribution is a description of registry behavior.",
+        "If the 3-of-26 result is reproducible without the registry, the constraint claim fails."
+      ],
+      "typicality": 0.55,
+      "evidence_refs": [
+        {
+          "block": "028950f9751ab59a",
+          "quote": "The error was not noise, it was masking: mutations no guard catches were reported as caught."
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the installation ritual is the only thing that distinguishes a 'mutation' from a 'guard'; the 1/9 loss in compile.py is a property of the ritual, not of the mutations, because every ordinarily-guarded module's 4/4 to 6/7 result is a description of the ritual's granularity, not of the code.",
+      "mechanism": "The shown-to-fail-first installation makes the guard's failure a precondition for the mutation to exist as a test subject. The distribution of losses across modules is a description of how many guards each module has, not of how many mutations actually fail. The test constrains by construction because the subject is defined by the test's installation order.",
+      "counterconditions": [
+        "If the number of guards per module is uncorrelated with the loss rate, the constraint is not from the ritual.",
+        "If a different installation order produces the same 3-of-26, the test describes a stable property.",
+        "If the mutations are pre-registered before installation, the ritual cannot constrain them."
+      ],
+      "typicality": 0.40,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9",
+          "quote": "| 6/6 | `src/poietics/pff/registry.py` |"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only when the test's failure is indistinguishable from the subject's failure; in shown-to-fail-first installation, the 1/9 mutations lost are exactly those where the guard's failure and the mutation's failure are the same event, so the test constrains by collapsing the distinction between tester and tested.",
+      "mechanism": "When a mutation causes the guard's own test to fail, the installation stops and the mutation is lost. The test constrains the subject because the subject's failure is the test's failure — there is no independent description possible when the observer is part of the observed system.",
+      "counterconditions": [
+        "If the guard's failure and the mutation's failure can be distinguished by an external observer, the test describes rather than constrains.",
+        "If the 1/9 loss rate is independent of whether the mutation causes the guard's test to fail, the collapse is not the mechanism.",
+        "If the installation continues after the guard's test fails, the test cannot constrain by collapse."
+      ],
+      "typicality": 0.30,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2",
+          "quote": "a process guard that never fires on its author is probably not a guard."
+        }
+      ]
+    }
+  ],
+  "context_request": null,
+  "abstention": null,
+  "simulation_proposals": [],
+  "scratch_proposal": null
+}
+```
