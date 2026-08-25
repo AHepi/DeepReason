@@ -129,7 +129,12 @@ ammunition, which is what binding the record as evidence was for.
 ## Residue — what this run does NOT establish
 
 **R1 — 24 of the 82 survivors are the record's own documents, not
-conjectures.** CLAUDE.md states as a hard-won invariant that "import-role
+conjectures.** FIXED 2026-08-25 by
+`experiments/2026-08-25-fix-import-role-survivors/`: `deepreason results` now
+reports **58** for this root. The stored `run-result.json` is untouched and
+still lists 82 ids — the fix changed what the reader counts, not what the
+record holds — so every number quoted below remains exactly what this run
+published. The residue as originally written follows, unedited. CLAUDE.md states as a hard-won invariant that "import-role
 admission records never count as survivors", and the results surface counts
 them anyway. M1 survives this easily (26 conjecture survivors pass the
 criterion, against a floor of one), but the headline "82 survivors" is

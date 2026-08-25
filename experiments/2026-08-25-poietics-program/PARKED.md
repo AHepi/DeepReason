@@ -126,6 +126,11 @@ criteria, and belongs in that design, not in a fix.
 
 ## P4 — the results surface counts import-role records as survivors
 
+**FIXED 2026-08-25** — `experiments/2026-08-25-fix-import-role-survivors/`.
+The reading this entry asked to separate was settled by the record, not by
+wording: all 24 members register at log seqs 5-40 against a log whose first
+LLM-bearing event is seq 85. The entry stands unedited below.
+
 **What.** P-R1's terminal result reports 82 survivors. 24 of them are
 IMPORT-role admission records — sections of the operator's attached record,
 admitted as artifacts at seed and never removed from the survivor set. Of
