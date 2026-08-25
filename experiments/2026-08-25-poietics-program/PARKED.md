@@ -198,10 +198,28 @@ under the legacy criticism path, not adjudicated verdicts — and nothing in
 this run is evidence about cross-family judging, which was the whole point
 of the operator's correction from a solo configuration.
 
-**Open question this tranche cannot answer:** whether no criticism DESERVED
-a trial in twelve cycles, or whether something in the engaged-criticism
-configuration prevents criticisms from reaching one. Those have opposite
-remedies and the record here does not separate them.
+**STRENGTHENED 2026-08-25, after the tranche closed.** This is not a
+property of P-R1's configuration. A census of every committed root in
+`experiments/` that reports the field returns **judge calls 0, adjudication
+ran: no, in every one** - reach-rich, all four epoch-3 attempts, Rung 7's
+live gate, and P-R1. No defended trial has ever run in this repository.
+
+    0  ran=no  2026-08-25-poietics-program
+    0  ran=no  2026-08-24-change-rung7-wounds-falls-succession
+    0  ran=no  2026-08-22-change-epoch3-second-lineage  (and attempts 2, 3, phase1)
+
+That moves the finding from "this run's ensemble bought nothing" to "the
+adjudication path has no live evidence of ever executing". Every claim in
+this repository about judge behaviour under live conditions rests on
+offline tests, and the operator's standing caution about judges - that they
+"prosecute without any discernable discrimination" - has never been
+testable here, because they have never prosecuted anything.
+
+**Open question this tranche cannot answer:** whether no criticism has ever
+DESERVED a trial, or whether something in the path prevents entry
+regardless of merit. Those have opposite remedies, and the census cannot
+separate them - but it does establish that the question has never been
+answered live, which the single-run finding did not.
 
 **Ready-to-send prompt:**
 
