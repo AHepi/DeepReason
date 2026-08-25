@@ -1,1 +1,1 @@
-{"last_control_seq":2705,"outstanding_work_order_ids":[],"process_digest":"sha256:fb608c3a5d57de3fa0dacf3bc210c9aa50f3484444c75b44aca1c5d3d70afcf4","schema":"workflow.checkpoint.v1"}
+{"last_control_seq":2706,"outstanding_work_order_ids":[],"process_digest":"sha256:fb608c3a5d57de3fa0dacf3bc210c9aa50f3484444c75b44aca1c5d3d70afcf4","schema":"workflow.checkpoint.v1","terminal_commitment_ledger_digest":"sha256:fa37bbc7f608b72f8f2f807667dd30d85d24740f33a5373f2f01ff00aa9c00da"}
