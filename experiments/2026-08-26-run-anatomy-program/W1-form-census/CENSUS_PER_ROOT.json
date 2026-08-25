@@ -63,6 +63,36 @@
      "field": "/values",
      "class": "value_error",
      "count": 20
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 4
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 4
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patches",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_pointers",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/value/*/rule",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -71,7 +101,11 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/patches": 1,
+    "/pointer": 4,
+    "/patch": 4
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -108,12 +142,27 @@
     "schema_exhausted/conjecture_schema_exhausted": 3,
     "rejected/atomic_conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 6,
+    "off_target": 5,
+    "not_patch_mode": 2,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 12,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "conjecture": 22,
+    "repair": 14,
+    "criticism": 9
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 24,
     "fenced_json": 4
    },
-   "repair_fight_count": 17
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -175,7 +224,19 @@
      "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/new_blocks/*/body/local_key",
      "class": "extra_forbidden",
-     "count": 4
+     "count": 5
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
     },
     {
      "contract_id": "conjecturer.turn.v6",
@@ -190,7 +251,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/pointer": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -212,12 +275,23 @@
     "abandoned/context_no_additional_context": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "criticism": 22,
+    "conjecture": 16,
+    "repair": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 24,
     "bare_json": 14
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -286,9 +360,27 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_pointer",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/links/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
     },
     {
      "contract_id": "conjecturer.turn.v6",
@@ -303,7 +395,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/patch": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -334,12 +428,26 @@
     "rejected/conjecture_repair_requested": 2,
     "completed/semantic_admission_partial": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 5,
+    "no_pointer_returned": 2,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 7,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 27,
+    "conjecture": 17,
+    "repair": 8
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 30,
     "bare_json": 13
    },
-   "repair_fight_count": 9
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -402,6 +510,24 @@
      "field": "/candidates/*/optional_refs/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 5
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -410,7 +536,10 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/pointer": 1,
+    "/patch": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -432,12 +561,23 @@
     "rejected/conjecture_repair_requested": 1,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "criticism": 15,
+    "conjecture": 12,
+    "repair": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 15,
     "bare_json": 12
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -509,6 +649,30 @@
      "field": "/candidates/*/analogy/overturn_conditions",
      "class": "missing",
      "count": 6
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -518,8 +682,13 @@
      "unknown": 10
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "still_invalid": 4
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 1,
+    "/pointer": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -541,12 +710,25 @@
     "schema_exhausted/conjecture_schema_exhausted": 1,
     "rejected/simulation_semantic_rejected": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 4,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "conjecture": 10,
+    "criticism": 9,
+    "repair": 5
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 14,
     "bare_json": 4
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -639,12 +821,36 @@
      "contract_id": "batch-critic.v2",
      "field": "/$defs",
      "class": "extra_forbidden",
-     "count": 3
+     "count": 4
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 1
     },
     {
      "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/links/*/from_ref",
      "class": "missing",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/contract",
+     "class": "extra_forbidden",
      "count": 1
     }
    ],
@@ -655,8 +861,16 @@
      "unknown": 25
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "still_invalid": 1,
+    "repaired_without_remove": 2
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 1,
+    "/baseline_sha256": 1,
+    "/contract": 1,
+    "/patch": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -690,12 +904,26 @@
     "rejected/critic_repair_step_rejected": 1,
     "schema_exhausted/critic_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "not_patch_mode": 2,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 9,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "criticism": 31,
+    "conjecture": 17,
+    "repair": 11
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 29,
     "fenced_json": 20
    },
-   "repair_fight_count": 10
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -771,6 +999,54 @@
      "field": "/candidates/*/neighbours/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patches",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/operations",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repairPatch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -781,7 +1057,13 @@
     }
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/patches": 1,
+    "/pointer": 1,
+    "/baseline_sha256": 1,
+    "/patch": 2,
+    "/operations": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -810,12 +1092,23 @@
     "rejected/conjecture_repair_requested": 4,
     "schema_exhausted/conjecture_schema_exhausted": 2
    },
+   "repair_patch_verdicts": {
+    "on_target": 15
+   },
+   "repair_modes": {
+    "patch": 15
+   },
+   "task_kinds": {
+    "criticism": 26,
+    "conjecture": 22,
+    "repair": 15
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 30,
     "fenced_json": 20
    },
-   "repair_fight_count": 13
+   "repair_fight_count": 4
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -881,15 +1174,33 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/*/content",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/*/evidence_refs",
      "class": "extra_forbidden",
      "count": 3
     },
     {
      "contract_id": "conjecturer.turn.v6",
-     "field": "/*/content",
+     "field": "/baseline_sha256",
      "class": "extra_forbidden",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/operations",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -898,7 +1209,11 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/baseline_sha256": 2,
+    "/pointer": 1,
+    "/operations": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -927,12 +1242,23 @@
     "rejected/conjecture_repair_requested": 3,
     "schema_exhausted/conjecture_schema_exhausted": 2
    },
+   "repair_patch_verdicts": {
+    "on_target": 8
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "criticism": 25,
+    "conjecture": 22,
+    "repair": 8
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 29,
     "fenced_json": 19
    },
-   "repair_fight_count": 7
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1001,7 +1327,13 @@
      "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/new_blocks/*/body/local_key",
      "class": "extra_forbidden",
-     "count": 1
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 2
     },
     {
      "contract_id": "conjecturer.turn.v6",
@@ -1016,7 +1348,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/baseline_sha256": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1037,12 +1371,23 @@
     "schema_exhausted/conjecture_schema_exhausted": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "criticism": 28,
+    "conjecture": 16,
+    "repair": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 26,
     "fenced_json": 19
    },
-   "repair_fight_count": 3
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1112,6 +1457,30 @@
      "field": "/candidates/*/optional_refs/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 5
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_type",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -1120,7 +1489,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/patch": 3
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1150,12 +1521,24 @@
     "rejected/conjecture_repair_requested": 2,
     "abandoned/context_no_additional_context": 2
    },
+   "repair_patch_verdicts": {
+    "on_target": 6,
+    "no_pointer_returned": 2
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "criticism": 28,
+    "conjecture": 22,
+    "repair": 8
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 30,
     "fenced_json": 18
    },
-   "repair_fight_count": 10
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1224,7 +1607,9 @@
      "unknown": 4
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
@@ -1234,6 +1619,17 @@
     "completed/semantic_admission_complete": 13,
     "rejected/conjecture_repair_requested": 2,
     "completed/semantic_admission_partial": 1
+   },
+   "repair_patch_verdicts": {
+    "on_target": 2
+   },
+   "repair_modes": {
+    "patch": 2
+   },
+   "task_kinds": {
+    "criticism": 37,
+    "conjecture": 14,
+    "repair": 2
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -1315,15 +1711,45 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 5
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/candidates/*/neighbours/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 5
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_pointers",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -1333,8 +1759,13 @@
      "unknown": 8
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 1
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 5,
+    "/baseline_sha256": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1364,12 +1795,23 @@
     "schema_exhausted/conjecture_schema_exhausted": 2,
     "completed/semantic_admission_partial": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 19
+   },
+   "repair_modes": {
+    "patch": 19
+   },
+   "task_kinds": {
+    "criticism": 34,
+    "conjecture": 25,
+    "repair": 19
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 34,
     "fenced_json": 25
    },
-   "repair_fight_count": 19
+   "repair_fight_count": 7
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1446,6 +1888,18 @@
      "field": "/cases/*/target_alias",
      "class": "missing",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -1455,8 +1909,13 @@
      "unknown": 5
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 3
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 2,
+    "/pointer": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1479,12 +1938,23 @@
     "abandoned/context_no_additional_context": 1,
     "rejected/critic_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 9
+   },
+   "repair_modes": {
+    "patch": 9
+   },
+   "task_kinds": {
+    "criticism": 30,
+    "conjecture": 17,
+    "repair": 9
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 36,
     "fenced_json": 12
    },
-   "repair_fight_count": 8
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1568,10 +2038,52 @@
      "count": 4
     },
     {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
      "contract_id": "batch-critic.v2",
      "field": "/cases/*/counterexample",
      "class": "list_type",
      "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointers",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/baselin",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_path",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -1581,8 +2093,14 @@
      "unknown": 9
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "still_invalid": 5,
+    "repaired_without_remove": 1
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 2,
+    "/baseline_sha256": 3
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1624,12 +2142,26 @@
     "rejected/critic_repair_requested": 1,
     "abandoned/context_no_additional_context": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 9,
+    "not_patch_mode": 2,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 10,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "criticism": 30,
+    "conjecture": 22,
+    "repair": 12
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 29,
     "fenced_json": 20
    },
-   "repair_fight_count": 15
+   "repair_fight_count": 4
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1699,6 +2231,12 @@
      "field": "/scratch_proposal/links/*/to_ref",
      "class": "string_pattern_mismatch",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -1709,7 +2247,9 @@
     }
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/patch": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -1730,12 +2270,23 @@
     "rejected/conjecture_repair_requested": 3,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 6
+   },
+   "repair_modes": {
+    "patch": 6
+   },
+   "task_kinds": {
+    "criticism": 32,
+    "conjecture": 18,
+    "repair": 6
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 35,
     "fenced_json": 17
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1808,6 +2359,12 @@
      "count": 6
     },
     {
+     "contract_id": "batch-critic.v2",
+     "field": "/authorized_pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
      "contract_id": "conjecturer.turn.v6",
      "field": "/candidates/*/optional_refs/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
@@ -1821,7 +2378,9 @@
      "unknown": 6
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 3
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -1845,12 +2404,24 @@
     "schema_exhausted/critic_schema_exhausted": 1,
     "rejected/critic_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 5,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 6
+   },
+   "task_kinds": {
+    "criticism": 23,
+    "conjecture": 12,
+    "repair": 6
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 27,
     "bare_json": 8
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1934,12 +2505,23 @@
     "rejected/critic_repair_requested": 1,
     "schema_exhausted/critic_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 38,
+    "conjecture": 18,
+    "repair": 1
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 29,
     "bare_json": 26
    },
-   "repair_fight_count": 2
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -1991,7 +2573,13 @@
      "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/links_meta",
      "class": "extra_forbidden",
-     "count": 2
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -2000,7 +2588,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/pointer": 1
+   },
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
    "work_terminals": {
@@ -2012,13 +2602,24 @@
     "rejected/conjecture_repair_requested": 1,
     "abandoned/context_no_additional_context": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 2
+   },
+   "repair_modes": {
+    "patch": 2
+   },
+   "task_kinds": {
+    "criticism": 27,
+    "conjecture": 9,
+    "repair": 2
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 29,
     "fenced_json": 6,
     "prose_wrapped_fenced_json": 1
    },
-   "repair_fight_count": 2
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2125,6 +2726,12 @@
      "field": "/cases/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 3
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 2
     }
    ],
    "coercion": {
@@ -2133,7 +2740,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/pointer": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "batch-critic.v2",
@@ -2174,13 +2783,27 @@
     "rejected/critic_repair_step_rejected": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 3,
+    "on_target": 2
+   },
+   "repair_modes": {
+    "whole_object_syntax": 3,
+    "patch": 2
+   },
+   "task_kinds": {
+    "defended_trial_step": 494,
+    "criticism": 119,
+    "conjecture": 48,
+    "repair": 5
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 348,
     "fenced_json": 309,
     "prose_wrapped_bare_json": 1
    },
-   "repair_fight_count": 8
+   "repair_fight_count": 4
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2269,9 +2892,19 @@
     "rejected/atomic_conjecture_repair_requested": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "conjecture": 2,
+    "repair": 2
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {},
-   "repair_fight_count": 4
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2385,11 +3018,23 @@
     "schema_exhausted/atomic_conjecture_repair_unrepairable": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 3,
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "patch": 3,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "repair": 5,
+    "conjecture": 2
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 3
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2451,27 +3096,27 @@
     },
     {
      "contract_id": "conjecturer.atomic-candidate.v1",
-     "field": "/candidate/analogy/transfer_claims",
-     "class": "missing",
-     "count": 2
-    },
-    {
-     "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/sidecar/optional_refs",
      "class": "extra_forbidden",
-     "count": 1
+     "count": 2
     },
     {
      "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/counterarguments",
      "class": "extra_forbidden",
-     "count": 1
+     "count": 2
     },
     {
      "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/analogy/adopted_commitments",
      "class": "extra_forbidden",
-     "count": 1
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.atomic-candidate.v1",
+     "field": "/candidate/analogy/transfer_claims",
+     "class": "missing",
+     "count": 2
     },
     {
      "contract_id": "conjecturer.atomic-candidate.v1",
@@ -2535,11 +3180,23 @@
     "rejected/conjecture_repair_requested": 1,
     "schema_exhausted/conjecture_repair_unrepairable": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "patch": 8,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "repair": 10,
+    "conjecture": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 8
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 4
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2625,13 +3282,31 @@
      "contract_id": "batch-critic.v2",
      "field": "/cases/*/preise",
      "class": "extra_forbidden",
-     "count": 4
+     "count": 6
     },
     {
      "contract_id": "batch-critic.v2",
      "field": "/cases/*/premise_evidence/*/block",
      "class": "string_pattern_mismatch",
      "count": 4
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/code",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/type",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/code",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -2641,7 +3316,10 @@
      "unknown": 27
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 6,
+    "still_invalid": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -2683,12 +3361,26 @@
     "budget_denied/token_budget_denied": 1,
     "completed/atomic_critic_output_admitted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 11,
+    "not_patch_mode": 1,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 12,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 27,
+    "conjecture": 16,
+    "repair": 13
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 32,
     "fenced_json": 15
    },
-   "repair_fight_count": 9
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2755,8 +3447,20 @@
     },
     {
      "contract_id": "batch-critic.v2",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "batch-critic.v2",
      "field": "/cases/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/repair_patch_v1",
+     "class": "extra_forbidden",
      "count": 1
     }
    ],
@@ -2766,7 +3470,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/repair_patch_v1": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "batch-critic.v2",
@@ -2795,12 +3501,24 @@
     "schema_exhausted/critic_schema_exhausted": 2,
     "abandoned/provider_predispatch_authority_failed": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 14,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 15
+   },
+   "task_kinds": {
+    "criticism": 30,
+    "repair": 15,
+    "conjecture": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 21,
     "bare_json": 16
    },
-   "repair_fight_count": 12
+   "repair_fight_count": 8
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -2900,12 +3618,24 @@
      "contract_id": "batch-critic.v2",
      "field": "/cases/*/preise",
      "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
      "count": 1
     },
     {
      "contract_id": "batch-critic.v2",
      "field": "/cases/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/repair",
+     "class": "extra_forbidden",
      "count": 1
     }
    ],
@@ -2916,7 +3646,11 @@
      "unknown": 39
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "escape_taken_remove": 1,
+    "repaired_without_remove": 6,
+    "still_invalid": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -2974,12 +3708,26 @@
     "rejected/conjecture_repair_requested": 3,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 22,
+    "no_pointer_returned": 2,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 24,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 94,
+    "repair": 25,
+    "conjecture": 21
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 104,
     "bare_json": 19
    },
-   "repair_fight_count": 17
+   "repair_fight_count": 13
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3070,13 +3818,43 @@
      "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/checker_specs/*/id",
      "class": "extra_forbidden",
-     "count": 3
+     "count": 4
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 2
     },
     {
      "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/checker_specs/*/terms",
      "class": "extra_forbidden",
      "count": 2
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/contract",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/contract",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.atomic-candidate.v1",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.atomic-candidate.v1",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -3086,8 +3864,16 @@
      "unknown": 14
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 3,
+    "still_invalid": 1
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 2,
+    "/contract": 2,
+    "/baseline_sha256": 1,
+    "/pointer": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -3150,12 +3936,23 @@
     "schema_exhausted/conjecture_schema_exhausted": 1,
     "rejected/atomic_conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 13
+   },
+   "repair_modes": {
+    "patch": 13
+   },
+   "task_kinds": {
+    "criticism": 20,
+    "repair": 13,
+    "conjecture": 8
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 16,
     "bare_json": 14
    },
-   "repair_fight_count": 11
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3231,6 +4028,30 @@
      "field": "/scratch_proposal/links/*/to_ref",
      "class": "string_pattern_mismatch",
      "count": 2
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/contract",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/baseline_sha256",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -3240,8 +4061,15 @@
      "unknown": 9
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 4
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 1,
+    "/contract": 1,
+    "/pointer": 1,
+    "/baseline_sha256": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "batch-critic.v2",
@@ -3271,12 +4099,23 @@
     "rejected/conjecture_repair_requested": 2,
     "schema_exhausted/critic_schema_exhausted": 2
    },
+   "repair_patch_verdicts": {
+    "on_target": 12
+   },
+   "repair_modes": {
+    "patch": 12
+   },
+   "task_kinds": {
+    "criticism": 31,
+    "repair": 12,
+    "conjecture": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 20,
     "fenced_json": 17
    },
-   "repair_fight_count": 10
+   "repair_fight_count": 6
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3362,6 +4201,18 @@
      "field": "/scratch_proposal/links/*/to_ref",
      "class": "string_pattern_mismatch",
      "count": 7
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/authorized_pointers",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -3371,7 +4222,9 @@
      "unknown": 16
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 4
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -3414,12 +4267,23 @@
     "abandoned/context_capability_not_granted": 1,
     "rejected/conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "criticism": 20,
+    "conjecture": 10,
+    "repair": 8
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 22,
     "bare_json": 11
    },
-   "repair_fight_count": 5
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3496,6 +4360,12 @@
    "failure_fields": [
     {
      "contract_id": "batch-critic.v2",
+     "field": "/cases/*/preise",
+     "class": "extra_forbidden",
+     "count": 6
+    },
+    {
+     "contract_id": "batch-critic.v2",
      "field": "/cases/*/premise_evidence/*/block",
      "class": "string_pattern_mismatch",
      "count": 6
@@ -3507,12 +4377,6 @@
      "count": 5
     },
     {
-     "contract_id": "batch-critic.v2",
-     "field": "/cases/*/preise",
-     "class": "extra_forbidden",
-     "count": 3
-    },
-    {
      "contract_id": "conjecturer.turn.v6",
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
@@ -3521,6 +4385,18 @@
     {
      "contract_id": "batch-critic.v2",
      "field": "/allowed",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.atomic-candidate.v1",
+     "field": "/candidate/claim_honest",
      "class": "extra_forbidden",
      "count": 2
     },
@@ -3538,13 +4414,19 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/candidates/*/neighbours/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 1
     },
     {
-     "contract_id": "conjecturer.atomic-candidate.v1",
-     "field": "/candidate/claim_honest",
+     "contract_id": "batch-critic.v2",
+     "field": "/repair_patch",
      "class": "extra_forbidden",
      "count": 1
     }
@@ -3556,7 +4438,10 @@
      "unknown": 8
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "still_invalid": 3,
+    "repaired_without_remove": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -3670,13 +4555,27 @@
     "rejected/atomic_conjecture_repair_requested": 2,
     "schema_exhausted/atomic_conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 13,
+    "on_target": 13,
+    "no_pointer_returned": 2
+   },
+   "repair_modes": {
+    "patch": 15,
+    "whole_object_syntax": 13
+   },
+   "task_kinds": {
+    "criticism": 175,
+    "conjecture": 89,
+    "repair": 28
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 154,
     "bare_json": 101,
     "prose_wrapped_fenced_json": 1
    },
-   "repair_fight_count": 36
+   "repair_fight_count": 22
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3761,6 +4660,24 @@
      "contract_id": "conjecturer.atomic-candidate.v1",
      "field": "/candidate/checker_specs/*/type",
      "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_attempted",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_path",
+     "class": "extra_forbidden",
      "count": 1
     },
     {
@@ -3783,7 +4700,11 @@
      "unknown": 21
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 4,
+    "still_invalid": 2,
+    "escape_taken_remove": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -3830,13 +4751,27 @@
     "rejected/atomic_conjecture_repair_step_rejected": 2,
     "rejected/atomic_conjecture_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 9,
+    "not_patch_mode": 4,
+    "off_target": 2,
+    "no_pointer_returned": 2
+   },
+   "repair_modes": {
+    "patch": 13,
+    "whole_object_syntax": 4
+   },
+   "task_kinds": {
+    "conjecture": 67,
+    "repair": 17
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 35,
     "bare_json": 34,
     "prose_wrapped_fenced_json": 1
    },
-   "repair_fight_count": 14
+   "repair_fight_count": 7
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -3920,6 +4855,12 @@
     },
     {
      "contract_id": "batch-critic.v2",
+     "field": "/contract",
+     "class": "extra_forbidden",
+     "count": 3
+    },
+    {
+     "contract_id": "batch-critic.v2",
      "field": "/cases/*/counterexample",
      "class": "list_type",
      "count": 2
@@ -3927,6 +4868,18 @@
     {
      "contract_id": "batch-critic.v2",
      "field": "/cases/*/counterexample_note",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/valueType",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "batch-critic.v2",
+     "field": "/patch",
      "class": "extra_forbidden",
      "count": 1
     }
@@ -3937,7 +4890,10 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/contract": 3,
+    "/patch": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -3986,12 +4942,25 @@
     "rejected/conjecture_repair_requested": 1,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 16,
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "patch": 16,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "criticism": 112,
+    "conjecture": 33,
+    "repair": 18
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 120,
     "fenced_json": 26
    },
-   "repair_fight_count": 17
+   "repair_fight_count": 12
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4078,6 +5047,12 @@
      "count": 3
     },
     {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/scratch_proposal/new_blocks/*/body/related_refs",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
      "contract_id": "bridge.composition.v2",
      "field": "/sections/*/ledger_entry_handles",
      "class": "BRIDGE_COMPOSITION_INVALID",
@@ -4088,12 +5063,6 @@
      "field": "/sections/*/ledger_entry_handles",
      "class": "BRIDGE_COMPOSITION_INVALID",
      "count": 2
-    },
-    {
-     "contract_id": "conjecturer.turn.v6",
-     "field": "/scratch_proposal/new_blocks/*/body/related_refs",
-     "class": "extra_forbidden",
-     "count": 1
     },
     {
      "contract_id": "bridge.composition.v2",
@@ -4151,6 +5120,19 @@
     "completed/bridge_output_admitted": 1,
     "rejected/conjecture_repair_step_rejected": 1,
     "completed/semantic_admission_complete": 1
+   },
+   "repair_patch_verdicts": {
+    "on_target": 6
+   },
+   "repair_modes": {
+    "patch": 6
+   },
+   "task_kinds": {
+    "criticism": 14,
+    "conjecture": 6,
+    "repair": 6,
+    "bridge_composition": 2,
+    "bridge_ledger": 1
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -4267,6 +5249,12 @@
      "field": "/sections",
      "class": "BRIDGE_COMPOSITION_INVALID",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -4276,7 +5264,11 @@
      "unknown": 14
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 4,
+    "escape_taken_remove": 1,
+    "still_invalid": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -4311,12 +5303,27 @@
     "schema_exhausted/conjecture_schema_exhausted": 1,
     "schema_exhausted/bridge_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "not_patch_mode": 5
+   },
+   "repair_modes": {
+    "patch": 8,
+    "whole_object_syntax": 5
+   },
+   "task_kinds": {
+    "criticism": 19,
+    "conjecture": 16,
+    "repair": 13,
+    "bridge_composition": 6,
+    "bridge_ledger": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 28,
     "fenced_json": 19
    },
-   "repair_fight_count": 10
+   "repair_fight_count": 8
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4428,6 +5435,18 @@
     "schema_exhausted/conjecture_schema_exhausted": 2,
     "completed/semantic_admission_complete": 2
    },
+   "repair_patch_verdicts": {
+    "off_target": 4,
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "conjecture": 16,
+    "repair": 8,
+    "criticism": 7
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 18,
@@ -4503,6 +5522,12 @@
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
      "count": 6
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/version",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -4512,7 +5537,10 @@
      "unknown": 6
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "still_invalid": 1,
+    "repaired_without_remove": 2
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -4534,12 +5562,24 @@
     "rejected/simulation_semantic_rejected": 1,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 7,
+    "off_target": 1
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "conjecture": 9,
+    "repair": 8,
+    "criticism": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 11,
     "bare_json": 5
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4647,12 +5687,23 @@
     "rejected/atomic_conjecture_repair_requested": 1,
     "schema_exhausted/atomic_conjecture_repair_unrepairable": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 3
+   },
+   "repair_modes": {
+    "whole_object_syntax": 3
+   },
+   "task_kinds": {
+    "conjecture": 12,
+    "repair": 3,
+    "criticism": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 6,
     "bare_json": 6
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4765,13 +5816,24 @@
     "rejected/config_referee_repair_requested": 1,
     "completed/semantic_admission_complete": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "conjecture": 15,
+    "criticism": 9,
+    "repair": 2
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 12,
     "bare_json": 8,
     "prose_wrapped_bare_json": 1
    },
-   "repair_fight_count": 5
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4843,6 +5905,18 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/operations",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/value/*/N",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/values",
      "class": "extra_forbidden",
      "count": 1
@@ -4854,7 +5928,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/operations": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -4882,12 +5958,23 @@
     "schema_exhausted/conjecture_schema_exhausted": 2,
     "rejected/conjecture_repair_requested": 2
    },
+   "repair_patch_verdicts": {
+    "on_target": 8
+   },
+   "repair_modes": {
+    "patch": 8
+   },
+   "task_kinds": {
+    "conjecture": 12,
+    "repair": 8,
+    "criticism": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 12,
     "bare_json": 7
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -4953,6 +6040,17 @@
     "completed/semantic_admission_complete": 2,
     "completed/semantic_admission_partial": 2,
     "rejected/critic_repair_requested": 1
+   },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 10,
+    "conjecture": 4,
+    "repair": 1
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -5044,7 +6142,9 @@
      "unknown": 4
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 2
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [
     {
@@ -5068,12 +6168,25 @@
     "completed/config_referee_output_admitted": 1,
     "completed/semantic_admission_complete": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 2,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 2,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "conjecture": 10,
+    "criticism": 5,
+    "repair": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 9,
     "fenced_json": 5
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5187,6 +6300,12 @@
      "field": "/candidates/*/analogy/overturn_conditions",
      "class": "missing",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -5196,8 +6315,13 @@
      "unknown": 10
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "still_invalid": 1,
+    "repaired_without_remove": 4
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -5220,12 +6344,25 @@
     "completed/semantic_admission_complete": 2,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 14,
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "patch": 14,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "repair": 16,
+    "conjecture": 11,
+    "criticism": 11
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 17,
     "bare_json": 13
    },
-   "repair_fight_count": 8
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5291,6 +6428,12 @@
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
      "count": 21
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 3
     }
    ],
    "coercion": {
@@ -5300,8 +6443,14 @@
      "unknown": 21
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "escape_taken_remove": 2,
+    "repaired_without_remove": 6,
+    "still_invalid": 3
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 3
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -5323,12 +6472,25 @@
     "abandoned/context_no_additional_context": 3,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 11,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 11,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 16,
+    "conjecture": 14,
+    "repair": 12
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 23,
     "fenced_json": 10
    },
-   "repair_fight_count": 9
+   "repair_fight_count": 5
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5418,7 +6580,19 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/values",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
      "class": "extra_forbidden",
      "count": 1
     }
@@ -5430,8 +6604,13 @@
      "unknown": 7
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 3,
+    "still_invalid": 1
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -5461,12 +6640,24 @@
     "schema_exhausted/conjecture_schema_exhausted": 2,
     "completed/config_referee_output_admitted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "no_pointer_returned": 1
+   },
+   "repair_modes": {
+    "patch": 9
+   },
+   "task_kinds": {
+    "conjecture": 16,
+    "criticism": 15,
+    "repair": 9
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "fenced_json": 17,
     "bare_json": 17
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5552,6 +6743,18 @@
      "field": "/candidates/*/evidence_refs/*/block",
      "class": "string_pattern_mismatch",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/value/direction",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -5561,8 +6764,14 @@
      "unknown": 10
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 1,
+    "still_invalid": 2,
+    "escape_taken_remove": 1
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 2
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -5583,12 +6792,23 @@
     "schema_exhausted/conjecture_schema_exhausted": 1,
     "completed/config_referee_output_admitted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "criticism": 13,
+    "conjecture": 10,
+    "repair": 4
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 14,
     "fenced_json": 9
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 1
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5650,7 +6870,9 @@
      "unknown": 4
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 2
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
@@ -5661,6 +6883,17 @@
     "rejected/conjecture_repair_requested": 1,
     "completed/semantic_admission_complete": 1,
     "rejected/conjecture_repair_step_rejected": 1
+   },
+   "repair_patch_verdicts": {
+    "on_target": 2
+   },
+   "repair_modes": {
+    "patch": 2
+   },
+   "task_kinds": {
+    "criticism": 3,
+    "conjecture": 2,
+    "repair": 2
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -5746,6 +6979,18 @@
      "field": "/values",
      "class": "extra_forbidden",
      "count": 2
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/operations",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -5755,8 +7000,13 @@
      "unknown": 6
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 2,
+    "still_invalid": 2
+   },
+   "lossless_spelling_pointers": {
+    "/operations": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -5793,12 +7043,25 @@
     "schema_exhausted/conjecture_schema_exhausted": 2,
     "schema_exhausted/conjecture_repair_unrepairable": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 8,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "conjecture": 20,
+    "repair": 9,
+    "criticism": 6
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 17,
     "fenced_json": 12
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5854,6 +7117,12 @@
      "field": "/candidates/*/counterconditions",
      "class": "too_short",
      "count": 3
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_patch_v1",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -5862,7 +7131,9 @@
     "handle_kinds": {}
    },
    "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "lossless_spelling_pointers": {
+    "/repair_patch_v1": 1
+   },
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
    "work_terminals": {
@@ -5873,12 +7144,25 @@
     "rejected/conjecture_repair_requested": 1,
     "budget_denied/token_budget_denied": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 2,
+    "on_target": 2
+   },
+   "repair_modes": {
+    "whole_object_syntax": 2,
+    "patch": 2
+   },
+   "task_kinds": {
+    "criticism": 9,
+    "repair": 4,
+    "conjecture": 3
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 11,
     "fenced_json": 1
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -5960,6 +7244,18 @@
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
      "count": 4
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair_type",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -5969,8 +7265,12 @@
      "unknown": 4
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 2
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 1
+   },
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
    "work_terminals": {
@@ -5984,12 +7284,25 @@
     "completed/semantic_admission_complete": 1,
     "completed/semantic_admission_partial": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "criticism": 6,
+    "conjecture": 5,
+    "repair": 4,
+    "bridge_ledger": 1,
+    "bridge_composition": 1
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 9,
     "fenced_json": 3
    },
-   "repair_fight_count": 5
+   "repair_fight_count": 3
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -6088,8 +7401,32 @@
     },
     {
      "contract_id": "conjecturer.turn.v6",
+     "field": "/operation",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
      "field": "/candidates/*/optional_refs/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/authorized_pointer",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/repair",
+     "class": "extra_forbidden",
+     "count": 1
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/patch",
+     "class": "extra_forbidden",
      "count": 1
     },
     {
@@ -6113,8 +7450,13 @@
      "conflict_key": 2
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "repaired_without_remove": 5,
+    "still_invalid": 4
+   },
+   "lossless_spelling_pointers": {
+    "/patch": 1
+   },
    "decomposition_events": [
     {
      "source_contract_id": "conjecturer.turn.v6",
@@ -6163,12 +7505,27 @@
     "rejected/critic_repair_requested": 1,
     "abandoned/context_no_additional_context": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 8,
+    "not_patch_mode": 4,
+    "no_pointer_returned": 2
+   },
+   "repair_modes": {
+    "patch": 10,
+    "whole_object_syntax": 4
+   },
+   "task_kinds": {
+    "criticism": 17,
+    "repair": 14,
+    "conjecture": 13,
+    "bridge_ledger": 5
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 26,
     "fenced_json": 9
    },
-   "repair_fight_count": 14
+   "repair_fight_count": 8
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -6244,6 +7601,12 @@
      "field": "/scratch_proposal/unresolved_questions/*/related_refs",
      "class": "value_error",
      "count": 8
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/pointer",
+     "class": "extra_forbidden",
+     "count": 2
     }
    ],
    "coercion": {
@@ -6253,8 +7616,13 @@
      "unknown": 8
     }
    },
-   "escape_followups": {},
-   "lossless_spelling_pointers": {},
+   "escape_followups": {
+    "still_invalid": 2,
+    "repaired_without_remove": 3
+   },
+   "lossless_spelling_pointers": {
+    "/pointer": 2
+   },
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
    "work_terminals": {
@@ -6268,12 +7636,27 @@
     "abandoned/context_no_additional_context": 1,
     "completed/semantic_admission_complete": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 5,
+    "not_patch_mode": 1
+   },
+   "repair_modes": {
+    "patch": 5,
+    "whole_object_syntax": 1
+   },
+   "task_kinds": {
+    "criticism": 9,
+    "repair": 6,
+    "conjecture": 4,
+    "bridge_ledger": 1,
+    "bridge_composition": 1
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 10,
     "fenced_json": 5
    },
-   "repair_fight_count": 6
+   "repair_fight_count": 4
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -6356,6 +7739,12 @@
      "field": "/candidates/*/optional_refs/*",
      "class": "V6_WIRE_REFERENCE_INVALID",
      "count": 6
+    },
+    {
+     "contract_id": "conjecturer.turn.v6",
+     "field": "/operation",
+     "class": "extra_forbidden",
+     "count": 1
     }
    ],
    "coercion": {
@@ -6386,11 +7775,24 @@
     "completed/semantic_admission_complete": 1,
     "schema_exhausted/conjecture_schema_exhausted": 1
    },
+   "repair_patch_verdicts": {
+    "on_target": 4
+   },
+   "repair_modes": {
+    "patch": 4
+   },
+   "task_kinds": {
+    "conjecture": 9,
+    "criticism": 6,
+    "repair": 4,
+    "bridge_ledger": 1,
+    "bridge_composition": 1
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 18
    },
-   "repair_fight_count": 3
+   "repair_fight_count": 2
   },
   {
    "schema": "run-anatomy.form-census.root.v1",
@@ -6479,7 +7881,9 @@
      "unknown": 6
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "escape_taken_remove": 1
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
@@ -6491,6 +7895,19 @@
     "completed/bridge_output_admitted": 2,
     "rejected/conjecture_repair_requested": 2,
     "rejected/conjecture_repair_step_rejected": 1
+   },
+   "repair_patch_verdicts": {
+    "on_target": 3
+   },
+   "repair_modes": {
+    "patch": 3
+   },
+   "task_kinds": {
+    "criticism": 22,
+    "conjecture": 9,
+    "repair": 3,
+    "bridge_ledger": 1,
+    "bridge_composition": 1
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -6587,7 +8004,9 @@
      "unknown": 8
     }
    },
-   "escape_followups": {},
+   "escape_followups": {
+    "repaired_without_remove": 3
+   },
    "lossless_spelling_pointers": {},
    "decomposition_events": [],
    "route_seat_insufficient_capability": [],
@@ -6601,6 +8020,21 @@
     "rejected/bridge_repair_requested": 1,
     "rejected/conjecture_repair_step_rejected": 1,
     "rejected/critic_repair_requested": 1
+   },
+   "repair_patch_verdicts": {
+    "on_target": 4,
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "patch": 4,
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "criticism": 9,
+    "repair": 6,
+    "conjecture": 3,
+    "bridge_ledger": 2,
+    "bridge_composition": 2
    },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
@@ -6712,12 +8146,24 @@
     "completed/semantic_admission_complete": 1,
     "rejected/bridge_repair_requested": 1
    },
+   "repair_patch_verdicts": {
+    "not_patch_mode": 2
+   },
+   "repair_modes": {
+    "whole_object_syntax": 2
+   },
+   "task_kinds": {
+    "criticism": 12,
+    "bridge_ledger": 8,
+    "conjecture": 4,
+    "repair": 2
+   },
    "content_valid_responses_unparsed": 0,
    "wire_shapes": {
     "bare_json": 19,
     "fenced_json": 3
    },
-   "repair_fight_count": 4
+   "repair_fight_count": 3
   }
  ]
 }

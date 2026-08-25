@@ -328,6 +328,24 @@ def failure_class(diag: dict, message_codes: dict | None = None) -> str:
     return "UNCODED_OTHER"
 
 
+EXTRA_FIELD_AT = re.compile(r"^extra field at (\S+)")
+
+
+def failing_pointer(diag: dict) -> str:
+    """The pointer a diagnostic is about.
+
+    A repair-envelope diagnostic carries it in `path`. A bare field
+    diagnostic often carries `path: ""` and puts the pointer in the message
+    ("extra field at /patch"), so a census that reads only `path` sees an
+    object-wide failure where the record named a field. Both are read.
+    """
+    path = diag.get("path")
+    if path:
+        return str(path)
+    m = EXTRA_FIELD_AT.match((diag.get("message") or "").strip())
+    return m.group(1) if m else ""
+
+
 def normalize_pointer(path) -> str:
     """A JSON pointer with list indices collapsed, so /cases/0/x and
     /cases/7/x aggregate as one field."""
@@ -367,6 +385,77 @@ def decimal_places(x) -> int:
     if "e" in s or "E" in s:
         return -1
     return len(s.split(".")[1].rstrip("0")) if "." in s else 0
+
+
+# Container names the record actually shows wrapping a repair patch. Read from
+# committed responses, not imagined: `repair.patch.v1`, `patch`, `patches` and
+# `operations` are the four the 2026-08-22 lossless fix absorbs; `repair`,
+# `repair_patch`, `repair_patch_v1` and `repairPatch` appear in the record and
+# are NOT in that closed set, which is a measurement this census reports rather
+# than a change it makes.
+PATCH_CONTAINERS = (
+    "repair.patch.v1",
+    "repair_patch_v1",
+    "repairPatch",
+    "repair_patch",
+    "repair",
+    "operations",
+    "patches",
+    "patch",
+)
+OP_KEYS = ("op", "operation")
+POINTER_KEYS = ("path", "pointer")
+
+
+def _as_operations(value) -> list[dict]:
+    """Every operation object in a repair response, whatever it is wrapped in.
+
+    The record shows a patch arriving as a bare operation object, as a list of
+    them, and inside eight different container names, with the operation verb
+    spelled `op` or `operation` and the pointer spelled `path` or `pointer`.
+    An extractor that reads only the canonical spelling scores every other
+    shape as "returned nothing", which is how a census manufactures an
+    off-target finding out of a convergent repair (docs/ERRATA.md E42).
+    """
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            out.extend(_as_operations(item))
+        return out
+    if not isinstance(value, dict):
+        return []
+    if any(k in value for k in OP_KEYS) and any(k in value for k in POINTER_KEYS):
+        return [value]
+    for name in PATCH_CONTAINERS:
+        if name in value:
+            found = _as_operations(value[name])
+            if found:
+                return found
+    return []
+
+
+def patch_pointers(parsed) -> list[str]:
+    """Every JSON pointer a repair patch response addresses."""
+    out = []
+    for op in _as_operations(parsed):
+        for key in POINTER_KEYS:
+            ptr = op.get(key)
+            if isinstance(ptr, str) and ptr:
+                out.append(ptr)
+                break
+    return out
+
+
+def patch_operations(parsed) -> list[str]:
+    """Every operation verb a repair patch response uses."""
+    out = []
+    for op in _as_operations(parsed):
+        for key in OP_KEYS:
+            verb = op.get(key)
+            if isinstance(verb, str) and verb:
+                out.append(verb.lower())
+                break
+    return out
 
 
 def hedge_hits(text: str) -> list[str]:
@@ -481,8 +570,8 @@ def census_root(root_rel: str, message_codes: dict | None = None) -> dict:
                 "failures": [
                     {
                         "class": failure_class(d, message_codes),
-                        "field": normalize_pointer(d.get("path")),
-                        "field_raw": d.get("path"),
+                        "field": normalize_pointer(failing_pointer(d)),
+                        "field_raw": failing_pointer(d),
                         "message": (d.get("message") or "")[:400],
                         "allowed": (d.get("allowed") or "")[:200],
                         "rejected_handle": d.get("rejected_handle"),
@@ -554,42 +643,89 @@ def census_root(root_rel: str, message_codes: dict | None = None) -> dict:
                 "maximum_schema_repairs": g.get("maximum_schema_repairs"),
             }
 
-    per_work = defaultdict(list)
+    # A repair does NOT reuse its parent's work id: the repair policy executes
+    # `fresh_transaction_per_repair`, so every attempt in a ladder has its own.
+    # The ladder is linked by the FROZEN repair task payload
+    # (`repair.semantic-task.v1`), whose `parent_work_id` names the chain root
+    # and whose `authorized_pointers` are the dispatch authority E42 says to
+    # read instead of any diagnostic field. Grouping by work id instead makes
+    # every ladder look like a single call and hides all repair spend.
+    terminal_by_work = {t.get("work_id"): t for t in terminals.values()}
+    chain_root = {}
     for r in rows:
-        per_work[r["work_id"]].append(r)
+        prep = preparations.get(r["work_id"]) or {}
+        payload = prep.get("task_payload_value") or {}
+        r["task_kind"] = prep.get("task_kind")
+        r["repair_mode"] = payload.get("mode")
+        r["repair_index"] = payload.get("repair_index")
+        r["authorized_pointers"] = payload.get("authorized_pointers") or []
+        r["parent_work_id"] = payload.get("parent_work_id")
+        r["previous_work_id"] = payload.get("previous_work_id")
+        r["dispatched_diagnostic_ref"] = payload.get("diagnostic_ref")
+        chain_root[r["work_id"]] = payload.get("parent_work_id") or r["work_id"]
+
+    # Resolve chains transitively: a third repair points at the second.
+    def root_of(wid, seen=None):
+        seen = seen or set()
+        while wid in chain_root and chain_root[wid] != wid and wid not in seen:
+            seen.add(wid)
+            wid = chain_root[wid]
+        return wid
+
+    for r in rows:
+        r["chain_root"] = root_of(r["work_id"])
+        if r["task_kind"] == "repair":
+            _, text = read_blob(root, r["raw_ref"])
+            parsed, _ = parse_model_json(text)
+            r["returned_pointers"] = patch_pointers(parsed)
+            r["returned_operations"] = patch_operations(parsed)
+            # Only a PATCH-mode repair addresses pointers at all. A
+            # `whole_object_syntax` repair reissues the whole object and has
+            # no pointers by design; scoring it "off target" would be an
+            # artifact of the census, not a fact about the model.
+            if r["repair_mode"] != "patch":
+                r["patch_verdict"] = "not_patch_mode"
+            elif not r["returned_pointers"]:
+                r["patch_verdict"] = "no_pointer_returned"
+            else:
+                authorized = set(r["authorized_pointers"])
+                returned = set(r["returned_pointers"])
+                r["patch_verdict"] = "on_target" if returned <= authorized else "off_target"
+        else:
+            r["returned_pointers"] = []
+            r["returned_operations"] = []
+            r["patch_verdict"] = None
+
+    per_chain = defaultdict(list)
+    for r in rows:
+        per_chain[r["chain_root"]].append(r)
 
     fights = []
-    for wid, group in per_work.items():
+    for cid_root, group in per_chain.items():
         group.sort(key=lambda r: (r["attempt_index"] or 0, r["seq"]))
         if len(group) == 1 and group[0]["valid_on_arrival"]:
             continue
-        term = None
-        for t in terminals.values():
-            if t.get("work_id") == wid:
-                term = t
-                break
-        prep = None
-        for p in preparations.values():
-            if p.get("id") == wid or wid == p.get("id"):
-                prep = p
-                break
+        last = group[-1]
+        term = terminal_by_work.get(last["work_id"]) or {}
         fights.append(
             {
-                "work_id": wid,
-                "contract_id": group[0]["contract_id"],
+                "chain_root": cid_root,
+                "contract_ids": [r["contract_id"] for r in group],
                 "role": group[0]["role"],
                 "seat": group[0]["seat"],
                 "cycle": group[0]["cycle"],
                 "calls_consumed": len(group),
                 "grant": grants.get(group[0]["contract_id"]),
                 "arrival_validity": [r["valid_on_arrival"] for r in group],
-                "asked_for": [
-                    [f["field"] for f in r["failures"] if f["field"]] for r in group
-                ],
-                "came_back_at": [r["repair_scope"] for r in group],
-                "terminal_status": (term or {}).get("status"),
-                "terminal_reason": (term or {}).get("reason_code"),
-                "task_kind": (prep or {}).get("task_kind"),
+                # What the harness ASKED for, from the frozen dispatch payload.
+                "asked_for": [r["authorized_pointers"] for r in group],
+                # What the model actually patched.
+                "came_back_at": [r["returned_pointers"] for r in group],
+                "patch_verdicts": [r["patch_verdict"] for r in group],
+                "repair_modes": [r.get("repair_mode") for r in group],
+                "task_kinds": [r["task_kind"] for r in group],
+                "terminal_status": term.get("status"),
+                "terminal_reason": term.get("reason_code"),
             }
         )
 
@@ -606,8 +742,12 @@ def census_root(root_rel: str, message_codes: dict | None = None) -> dict:
     coercion["handle_kinds"] = dict(coercion["handle_kinds"])
 
     # ---- did the NEXT attempt take the escape it was offered? ----
+    # Escape utilization: the record TOLD the seat that omission was legal at
+    # this pointer ("never invent a handle to fill an optional reference").
+    # Did the next attempt in the ladder take that escape, or supply another
+    # value? Walked along the chain, because the next attempt has a new work id.
     escape_followups = Counter()
-    for wid, group in per_work.items():
+    for _, group in per_chain.items():
         group.sort(key=lambda r: (r["attempt_index"] or 0, r["seq"]))
         for i, r in enumerate(group[:-1]):
             offered = [
@@ -617,10 +757,11 @@ def census_root(root_rel: str, message_codes: dict | None = None) -> dict:
                 continue
             nxt = group[i + 1]
             _, text = read_blob(root, nxt["raw_ref"])
-            body = (text or "").lower()
+            parsed, _ = parse_model_json(text)
+            ops = patch_operations(parsed)
             if not text:
                 escape_followups["no_response_recorded"] += 1
-            elif '"remove"' in body:
+            elif "remove" in ops:
                 escape_followups["escape_taken_remove"] += 1
             elif nxt["valid_on_arrival"]:
                 escape_followups["repaired_without_remove"] += 1
@@ -710,6 +851,17 @@ def census_root(root_rel: str, message_codes: dict | None = None) -> dict:
             ).most_common()
         ),
         "repair_fights": fights,
+        "repair_patch_verdicts": dict(
+            Counter(
+                str(r["patch_verdict"]) for r in rows if r.get("task_kind") == "repair"
+            ).most_common()
+        ),
+        "repair_modes": dict(
+            Counter(
+                str(r.get("repair_mode")) for r in rows if r.get("task_kind") == "repair"
+            ).most_common()
+        ),
+        "task_kinds": dict(Counter(str(r.get("task_kind")) for r in rows).most_common()),
         "content": {
             "valid_responses_unparsed": unparsed_valid,
             "wire_shapes": dict(wire_shapes.most_common()),

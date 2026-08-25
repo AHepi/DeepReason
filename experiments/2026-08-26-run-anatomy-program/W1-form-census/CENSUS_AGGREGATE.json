@@ -1,0 +1,5045 @@
+{
+ "schema": "run-anatomy.form-census.aggregate.v1",
+ "roots": 54,
+ "attempts": 3155,
+ "valid_on_arrival": 2743,
+ "validity_rate": 0.8694,
+ "repair_scoped_attempts": 128,
+ "second_or_later_attempts": 456,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 11,
+ "by_contract": {
+  "batch-critic.v2": {
+   "attempts": 1384,
+   "valid": 1282,
+   "repair_scoped": 39,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.9263
+  },
+  "bridge.composition-batch.v1": {
+   "attempts": 5,
+   "valid": 4,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.8
+  },
+  "bridge.composition.v2": {
+   "attempts": 12,
+   "valid": 9,
+   "repair_scoped": 2,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.75
+  },
+  "bridge.ledger-batch.v1": {
+   "attempts": 13,
+   "valid": 10,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.7692
+  },
+  "bridge.ledger.v3": {
+   "attempts": 18,
+   "valid": 10,
+   "repair_scoped": 2,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.5556
+  },
+  "config-referee.v1": {
+   "attempts": 6,
+   "valid": 5,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.8333
+  },
+  "conjecturer.atomic-candidate.v1": {
+   "attempts": 373,
+   "valid": 354,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 1,
+   "validity_rate": 0.9491
+  },
+  "conjecturer.turn.v6": {
+   "attempts": 816,
+   "valid": 541,
+   "repair_scoped": 82,
+   "truncated": 0,
+   "unnatural_stop": 10,
+   "validity_rate": 0.663
+  },
+  "critic.atomic-target.v1": {
+   "attempts": 34,
+   "valid": 34,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "defender.direct.v1": {
+   "attempts": 122,
+   "valid": 122,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "judgeruling.direct.v1": {
+   "attempts": 342,
+   "valid": 342,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "variator.direct.v1": {
+   "attempts": 30,
+   "valid": 30,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  }
+ },
+ "by_model": {
+  "deepseek-v4-flash:0731": {
+   "attempts": 104,
+   "valid": 88,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.8462
+  },
+  "deepseek-v4-pro": {
+   "attempts": 57,
+   "valid": 52,
+   "repair_scoped": 2,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.9123
+  },
+  "deepseek-v4-pro:0813": {
+   "attempts": 37,
+   "valid": 36,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.973
+  },
+  "gemma4:31b": {
+   "attempts": 34,
+   "valid": 30,
+   "repair_scoped": 3,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.8824
+  },
+  "glm-5.2": {
+   "attempts": 2378,
+   "valid": 2022,
+   "repair_scoped": 107,
+   "truncated": 0,
+   "unnatural_stop": 11,
+   "validity_rate": 0.8503
+  },
+  "kimi-k2.6": {
+   "attempts": 48,
+   "valid": 39,
+   "repair_scoped": 4,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.8125
+  },
+  "kimi-k3": {
+   "attempts": 126,
+   "valid": 110,
+   "repair_scoped": 8,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.873
+  },
+  "mistral-large-3:675b": {
+   "attempts": 200,
+   "valid": 195,
+   "repair_scoped": 2,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.975
+  },
+  "qwen3.5:397b": {
+   "attempts": 171,
+   "valid": 171,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  }
+ },
+ "by_role_seat": {
+  "argumentative_critic#seat0": {
+   "attempts": 1424,
+   "valid": 1321,
+   "repair_scoped": 40,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.9277
+  },
+  "conjecturer#seat0": {
+   "attempts": 1189,
+   "valid": 895,
+   "repair_scoped": 82,
+   "truncated": 0,
+   "unnatural_stop": 11,
+   "validity_rate": 0.7527
+  },
+  "defender#seat0": {
+   "attempts": 122,
+   "valid": 122,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "judge#seat0": {
+   "attempts": 171,
+   "valid": 171,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "judge#seat1": {
+   "attempts": 171,
+   "valid": 171,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  },
+  "summarizer#seat0": {
+   "attempts": 31,
+   "valid": 20,
+   "repair_scoped": 3,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.6452
+  },
+  "thesis#seat0": {
+   "attempts": 17,
+   "valid": 13,
+   "repair_scoped": 3,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.7647
+  },
+  "variator#seat0": {
+   "attempts": 30,
+   "valid": 30,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 1.0
+  }
+ },
+ "by_attempt_index": {
+  "0": {
+   "attempts": 2699,
+   "valid": 2475,
+   "repair_scoped": 113,
+   "truncated": 0,
+   "unnatural_stop": 11,
+   "validity_rate": 0.917
+  },
+  "1": {
+   "attempts": 219,
+   "valid": 128,
+   "repair_scoped": 14,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.5845
+  },
+  "2": {
+   "attempts": 115,
+   "valid": 70,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.6087
+  },
+  "3": {
+   "attempts": 68,
+   "valid": 40,
+   "repair_scoped": 0,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.5882
+  },
+  "4": {
+   "attempts": 54,
+   "valid": 30,
+   "repair_scoped": 1,
+   "truncated": 0,
+   "unnatural_stop": 0,
+   "validity_rate": 0.5556
+  }
+ },
+ "failure_classes": {
+  "string_pattern_mismatch": 457,
+  "value_error": 336,
+  "extra_forbidden": 206,
+  "V6_WIRE_REFERENCE_INVALID": 115,
+  "WIRE_TRAILING_CONTENT": 78,
+  "missing": 56,
+  "TRUNCATED_MID_JSON": 52,
+  "WIRE_NO_COMPLETE_JSON": 34,
+  "SCRATCH_ALIAS_UNKNOWN": 31,
+  "UNCODED_OTHER": 24,
+  "list_type": 13,
+  "repair.unrepairable.v1": 11,
+  "BRIDGE_COMPOSITION_INVALID": 8,
+  "too_short": 7,
+  "string_too_short": 3,
+  "too_long": 2,
+  "BRIDGE_WIRE_REFERENCE_INVALID": 1
+ },
+ "failure_class_by_contract": [
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "value_error",
+   "count": 325
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "string_pattern_mismatch",
+   "count": 325
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "extra_forbidden",
+   "count": 134
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "string_pattern_mismatch",
+   "count": 129
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 107
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "extra_forbidden",
+   "count": 51
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "missing",
+   "count": 49
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "WIRE_TRAILING_CONTENT",
+   "count": 42
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 32
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "SCRATCH_ALIAS_UNKNOWN",
+   "count": 31
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "WIRE_TRAILING_CONTENT",
+   "count": 22
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "UNCODED_OTHER",
+   "count": 21
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "extra_forbidden",
+   "count": 21
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "WIRE_NO_COMPLETE_JSON",
+   "count": 15
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "list_type",
+   "count": 13
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "WIRE_NO_COMPLETE_JSON",
+   "count": 11
+  },
+  {
+   "contract_id": "bridge.ledger.v3",
+   "class": "value_error",
+   "count": 10
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "repair.unrepairable.v1",
+   "count": 9
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "WIRE_TRAILING_CONTENT",
+   "count": 8
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 8
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 8
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "too_short",
+   "count": 7
+  },
+  {
+   "contract_id": "bridge.ledger.v3",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 6
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "WIRE_NO_COMPLETE_JSON",
+   "count": 5
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 5
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "class": "missing",
+   "count": 4
+  },
+  {
+   "contract_id": "bridge.ledger.v3",
+   "class": "WIRE_TRAILING_CONTENT",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "string_pattern_mismatch",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "missing",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 3
+  },
+  {
+   "contract_id": "bridge.composition-batch.v1",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "class": "string_too_short",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "UNCODED_OTHER",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "repair.unrepairable.v1",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.ledger.v3",
+   "class": "WIRE_NO_COMPLETE_JSON",
+   "count": 2
+  },
+  {
+   "contract_id": "config-referee.v1",
+   "class": "too_long",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "class": "WIRE_TRAILING_CONTENT",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "class": "value_error",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "class": "TRUNCATED_MID_JSON",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "class": "WIRE_NO_COMPLETE_JSON",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "class": "UNCODED_OTHER",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "class": "BRIDGE_WIRE_REFERENCE_INVALID",
+   "count": 1
+  }
+ ],
+ "failure_by_contract_field": [
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/evidence_refs/*/block",
+   "class": "string_pattern_mismatch",
+   "count": 244
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+   "class": "value_error",
+   "count": 230
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/premise_evidence/*/block",
+   "class": "string_pattern_mismatch",
+   "count": 129
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*/to_ref",
+   "class": "string_pattern_mismatch",
+   "count": 70
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/optional_refs/*",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 64
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/values",
+   "class": "value_error",
+   "count": 54
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/cluster_suggestions/*/member_refs",
+   "class": "value_error",
+   "count": 25
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/patch",
+   "class": "extra_forbidden",
+   "count": 23
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/pointer",
+   "class": "extra_forbidden",
+   "count": 22
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair",
+   "class": "extra_forbidden",
+   "count": 19
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/analogy/transfer_claims",
+   "class": "missing",
+   "count": 16
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/mechanism",
+   "class": "missing",
+   "count": 15
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/preise",
+   "class": "extra_forbidden",
+   "count": 14
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/counterexample",
+   "class": "list_type",
+   "count": 13
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/requested_observables",
+   "class": "value_error",
+   "count": 12
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*/from_ref",
+   "class": "string_pattern_mismatch",
+   "count": 11
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/baseline_sha256",
+   "class": "extra_forbidden",
+   "count": 11
+  },
+  {
+   "contract_id": "bridge.ledger.v3",
+   "field": "/entries/*",
+   "class": "value_error",
+   "count": 10
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/neighbours/*",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 9
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/analogy/overturn_conditions",
+   "class": "missing",
+   "count": 8
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/new_blocks/*/body/local_key",
+   "class": "extra_forbidden",
+   "count": 7
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/new_blocks/*",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 7
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair_patch",
+   "class": "extra_forbidden",
+   "count": 7
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/patch",
+   "class": "extra_forbidden",
+   "count": 7
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 5
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/contract",
+   "class": "extra_forbidden",
+   "count": 5
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/values",
+   "class": "extra_forbidden",
+   "count": 5
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/new_blocks/*/local_key",
+   "class": "missing",
+   "count": 4
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/$defs",
+   "class": "extra_forbidden",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/operations",
+   "class": "extra_forbidden",
+   "count": 4
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/target_alias",
+   "class": "missing",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/analogy/source_memory_refs",
+   "class": "too_short",
+   "count": 4
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/repair",
+   "class": "extra_forbidden",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/checker_specs/*/id",
+   "class": "extra_forbidden",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*",
+   "class": "value_error",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/authorized_pointer",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/*/content",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/*/evidence_refs",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links_meta",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/pointer",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/evidence_refs/*/block",
+   "class": "string_pattern_mismatch",
+   "count": 3
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/allowed",
+   "class": "extra_forbidden",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/typicality",
+   "class": "missing",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/simulation_proposals/*/parameter_definitions/*/values_json",
+   "class": "string_too_short",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/counterconditions",
+   "class": "too_short",
+   "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/patches",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/authorized_pointers",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*",
+   "class": "V6_WIRE_REFERENCE_INVALID",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/contract",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair_type",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/authorized_path",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/sidecar/optional_refs",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/counterarguments",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/analogy/adopted_commitments",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/analogy/transfer_claims",
+   "class": "missing",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/checker_specs/*/terms",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/repair_patch",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/claim_honest",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/checker_specs/*/type",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/counterexample_note",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/new_blocks/*/body/related_refs",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "field": "/sections/*/ledger_entry_handles",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.composition-batch.v1",
+   "field": "/sections/*/ledger_entry_handles",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 2
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "field": "/sections",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 2
+  },
+  {
+   "contract_id": "config-referee.v1",
+   "field": "/cited_seqs",
+   "class": "too_long",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/candidates/*/counterconditions",
+   "class": "missing",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/operation",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/value/*/rule",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/diagnostics/*/status",
+   "class": "UNCODED_OTHER",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*/from_ref",
+   "class": "missing",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repairPatch",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/pointers",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/baselin",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/authorized_pointer",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/search_signal",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/requested_context_aliases",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/analogy/source_memory_refs",
+   "class": "missing",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/code",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/type",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/code",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/repair_patch_v1",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/baseline_sha256",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/pointer",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/baseline_sha256",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/authorized_pointers",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair_attempted",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate/checker_specs/*/tolerance",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "field": "/candidate",
+   "class": "value_error",
+   "count": 1
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/valueType",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.composition.v2",
+   "field": "/sections/*/text",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.composition-batch.v1",
+   "field": "/sections/*/text",
+   "class": "BRIDGE_COMPOSITION_INVALID",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/version",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/value/*/N",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/value/direction",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair_patch_v1",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "field": "/entries/*/source_conflict_keys/*",
+   "class": "UNCODED_OTHER",
+   "count": 1
+  },
+  {
+   "contract_id": "bridge.ledger-batch.v1",
+   "field": "/entries/*/source_conflict_keys/*",
+   "class": "BRIDGE_WIRE_REFERENCE_INVALID",
+   "count": 1
+  }
+ ],
+ "coercion": {
+  "definition": "escape_legal: reference-field diagnostics where the record itself states omission or an unknown handle was legal. fabricated_handle: of those, the ones where the model supplied a handle the record classifies as `unknown` -- it invented a value it was explicitly told it did not need. This is PhantomFill's CFR made code-scorable on our own record: absence was the legal answer, so a supplied value is a coerced fabrication with no judge involved.",
+  "escape_legal": 257,
+  "fabricated_handle": 255,
+  "coerced_fabrication_rate": 0.9922,
+  "observed_handle_kinds": {
+   "unknown": 336,
+   "conflict_key": 2
+  },
+  "escape_utilization_next_attempt": {
+   "repaired_without_remove": 78,
+   "still_invalid": 35,
+   "escape_taken_remove": 7
+  }
+ },
+ "lossless_spelling": {
+  "fix_commit_ts": "2026-08-22T16:09:24+00:00",
+  "fix_commit": "97a964583",
+  "fix_tranche": "experiments/2026-08-22-fix-repair-patch-transport",
+  "before_fix": {
+   "/patch": 29,
+   "/pointer": 26,
+   "/baseline_sha256": 13,
+   "/contract": 4,
+   "/operations": 4,
+   "/patches": 2,
+   "/repair_patch_v1": 1
+  },
+  "before_fix_total": 79,
+  "after_fix": {
+   "/contract": 3,
+   "/repair_patch_v1": 1,
+   "/patch": 1
+  },
+  "after_fix_total": 5,
+  "roots_before": [
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+    "first_ts": "2026-08-02T23:02:29.484884+00:00",
+    "hits": 9
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+    "first_ts": "2026-08-09T01:30:16.645592+00:00",
+    "hits": 7
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+    "first_ts": "2026-08-08T23:41:38.207945+00:00",
+    "hits": 6
+   },
+   {
+    "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+    "first_ts": "2026-08-22T14:02:17.827837+00:00",
+    "hits": 6
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "first_ts": "2026-08-09T00:42:20.052184+00:00",
+    "hits": 5
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "first_ts": "2026-08-09T02:25:26.150470+00:00",
+    "hits": 5
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+    "first_ts": "2026-08-09T00:27:46.197489+00:00",
+    "hits": 4
+   },
+   {
+    "root": "experiments/2026-08-22-live-reach-rich-run/run",
+    "first_ts": "2026-08-22T14:18:41.568109+00:00",
+    "hits": 4
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "first_ts": "2026-08-09T01:07:34.126651+00:00",
+    "hits": 3
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "first_ts": "2026-08-08T22:11:15.088875+00:00",
+    "hits": 3
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+    "first_ts": "2026-07-29T23:12:57.114347+00:00",
+    "hits": 3
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "first_ts": "2026-08-02T23:03:02.246011+00:00",
+    "hits": 2
+   }
+  ],
+  "roots_after": [
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "first_ts": "2026-08-25T09:56:03.330896+00:00",
+    "hits": 4
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "first_ts": "2026-08-23T18:39:19.543678+00:00",
+    "hits": 1
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "first_ts": "2026-08-23T10:23:47.135679+00:00",
+    "hits": 0
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+    "first_ts": "2026-08-24T04:03:14.603708+00:00",
+    "hits": 0
+   },
+   {
+    "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+    "first_ts": "2026-08-25T01:54:35.116845+00:00",
+    "hits": 0
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "first_ts": "2026-08-25T19:47:21.017264+00:00",
+    "hits": 0
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+    "first_ts": "2026-08-25T19:07:54.400793+00:00",
+    "hits": 0
+   }
+  ]
+ },
+ "content": {
+  "wire_shapes": {
+   "bare_json": 1484,
+   "fenced_json": 1254,
+   "prose_wrapped_fenced_json": 3,
+   "prose_wrapped_bare_json": 2
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 725,
+    "fenced_json": 555,
+    "prose_wrapped_fenced_json": 1,
+    "prose_wrapped_bare_json": 1
+   },
+   "bridge.composition-batch.v1": {
+    "bare_json": 3,
+    "fenced_json": 1
+   },
+   "bridge.composition.v2": {
+    "bare_json": 6,
+    "fenced_json": 3
+   },
+   "bridge.ledger-batch.v1": {
+    "fenced_json": 6,
+    "bare_json": 4
+   },
+   "bridge.ledger.v3": {
+    "fenced_json": 5,
+    "bare_json": 5
+   },
+   "config-referee.v1": {
+    "bare_json": 5
+   },
+   "conjecturer.atomic-candidate.v1": {
+    "fenced_json": 191,
+    "bare_json": 163
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 276,
+    "fenced_json": 263,
+    "prose_wrapped_fenced_json": 2
+   },
+   "critic.atomic-target.v1": {
+    "bare_json": 19,
+    "fenced_json": 14,
+    "prose_wrapped_bare_json": 1
+   },
+   "defender.direct.v1": {
+    "bare_json": 77,
+    "fenced_json": 45
+   },
+   "judgeruling.direct.v1": {
+    "bare_json": 171,
+    "fenced_json": 171
+   },
+   "variator.direct.v1": {
+    "bare_json": 30
+   }
+  },
+  "enum_like_fields": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 1421,
+    "False": 640
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 1219,
+    "SRC_002": 555,
+    "SRC_003": 212,
+    "SRC_004": 75
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/search_signal": {
+    "productive": 234,
+    "need_context": 12
+   },
+   "conjecturer.turn.v6/operation": {
+    "replace": 20,
+    "add": 2
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 769,
+    "need_context": 2,
+    "stuck": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "NEW_001": 28,
+    "NEW_002": 9,
+    "NEW_003": 5,
+    "SCR_001": 2,
+    "SCR_007": 1,
+    "NEW_004": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "NEW_001": 80,
+    "NEW_002": 34,
+    "NEW_003": 13,
+    "NEW_004": 1
+   },
+   "conjecturer.turn.v6/op": {
+    "replace": 110,
+    "remove": 11,
+    "add": 10
+   },
+   "critic.atomic-target.v1/attack": {
+    "True": 32,
+    "False": 2
+   },
+   "critic.atomic-target.v1/cited_input_aliases/*": {
+    "SRC_001": 32
+   },
+   "critic.atomic-target.v1/target_alias": {
+    "SRC_001": 34
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/adopted_commitment_refs/*": {
+    "reasoning-envelope-wf": 7,
+    "SRC_001": 5,
+    "SRC_002": 5,
+    "program:reasoning-envelope-wf": 4,
+    "SRC_004": 4,
+    "SRC_003": 2
+   },
+   "judgeruling.direct.v1/verdict": {
+    "fail": 194,
+    "pass": 148
+   },
+   "bridge.ledger.v3/entries/*/claim_class": {
+    "surviving_conjecture": 62,
+    "unknown": 6,
+    "conflict": 6,
+    "supported_inference": 5,
+    "source_fact": 3,
+    "recorded_observation": 3
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "surviving_conjecture": 36,
+    "unknown": 10,
+    "conflict": 8,
+    "supported_inference": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/formal_artifact_handles/*": {
+    "ART_1": 9,
+    "ART_2": 9,
+    "ART_3": 9,
+    "ART_4": 9
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflicting_handles/*": {
+    "ART_3": 12,
+    "ART_1": 11,
+    "ART_2": 10,
+    "ART_4": 9
+   }
+  },
+  "field_kinds": {
+   "batch-critic.v2/baseline_sha256": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 2061
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 1760
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 910,
+    "numeric_array": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "string": 351,
+    "number": 21
+   },
+   "batch-critic.v2/cases/*/counterexample/*/$846": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/$909_legally_correct": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/D_n": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/EDD_satisfied": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/N": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/P": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/R_increment": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/SRC_001_prediction": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/SRC_002_prediction": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/S_increment": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/abstraction_justification": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/accept": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/accepted_by_preorder/*": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_added_pieces": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_independence_requirement": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_max_UHI_low": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_mechanism": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_silent_pass": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_status": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/all_through_center": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/allocation_policy": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/answer": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/applies_to": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/area_km2": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/argument": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/arid_city": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/artifact": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/artifact_pair": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/artifacts/*": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attack_edges/*/from": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attack_edges/*/to": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attack_surface": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attackers/*/id": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attackers/*/strength": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/author_artifact": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/author_claim": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/author_final_claim": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/author_hidden_chain_omitted": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/author_marked_irrelevant": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/axiom_schema": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/axis_kind": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_for_all_hours": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_hours": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_pay": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_total": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/basis": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/behavior": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/blind_spot_corrections_counted": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/block": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_count": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_pencils": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_price_usd": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cache_key": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/calculation": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/case": {
+    "string": 7
+   },
+   "batch-critic.v2/cases/*/counterexample/*/checker_artifact": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/checker_same_engine": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/checker_spec": {
+    "null": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/checkpoint": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/child": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/child_substitutable_for_parent": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cic_score": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/circular_refutation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/city": {
+    "string": 10
+   },
+   "batch-critic.v2/cases/*/counterexample/*/city_A": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/city_B": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_says_residue_mod_7": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_type": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_verdict": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed": {
+    "string": 1,
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed_encoding_residue": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed_linearization": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed_verdict": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/closed_extension/c\u2192E_{a\u2192b}": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/closed_extension/c\u2192validity_node(w)": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/closed_extension/label(b)": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/comment": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/committed": {
+    "bool": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/component_B_node": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/components/A/*": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/components/B/*": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/composite": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/computed": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/concurrent": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/concurrent_at": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/condition": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/conjecture": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/consequence": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/consistency": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/consistency_check": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/constraint_used": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/content": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/context": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/contradiction": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct": {
+    "string": 4,
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_calculation": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_mechanism": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_piecewise": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_result": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_step": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_total": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_total_pay": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/corrective_pivot_points": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_E": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_S": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_foreign_primitives_available": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_native_proposals": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_proposed_hybrids": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/countercondition_verdict": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/criterion_failed": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/criterion_passed": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/critic": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/critic_role": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/critique": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cross_cutting_proposals": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/current_state": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cuts": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cuts/*": {
+    "string": 12
+   },
+   "batch-critic.v2/cases/*/counterexample/*/deepest_test": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeat/*/from": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeat/*/to": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeats": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defect_status": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/delta_in_error_detection": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/derivation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/description": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/determined": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/diagnosis": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/difference": {
+    "number": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used_100_300": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used_10_99": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/direct_answer": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/discontinuity_at_hours": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distance": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct_digit_count": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct_from": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct_lines": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinguishing_evidence_provided_by_SRC_001": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinguishing_evidence_within_run": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/edit": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/edit_sequence": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/effect": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/enclave_signature": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/endpoint_drift": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/endpoint_identity": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/endpoints_provide_common_scale": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/enrichment_graph/*": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/entailed_cost_dollars": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/entry_id": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/episode_id": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/equals": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/equation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/equation_used": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/eval": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evaluation_friction_foreign": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/event": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evolution_step1": {
+    "numeric_array": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evolution_step1/*": {
+    "number": 16
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected": {
+    "string": 7
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected_max_UHI_high": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected_suite_result": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/explanation": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/f_f_x": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/f_f_x_at_writer_level": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/f_x": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fact": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fails_first_congruence": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fails_second_congruence": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/failure": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/field": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fields/module": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fields/narrative": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fields/review_id": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fields/summary": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/fields/verdict": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/finite_defense_depth": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/first_call_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/flawed_blended_rate_actual": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/forbidden_case_fires": {
+    "bool": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/forbidden_case_refusal_1": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/forbidden_case_refusal_2": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/foreign_primitives_translated": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/form": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formal_spec": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formalization": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formula": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formula_prediction_of_added_pieces": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formula_well_defined": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/four_distinct_diameters_through_center": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/frozen_seat_identity": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/gap": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/genuine_verification": {
+    "bool": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/given": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grand_total": {
+    "number": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph/attacks/*": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph/attacks/*/*": {
+    "string": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph/edge_node": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph/nodes/*": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/graph/warrant": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grounded_extension": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grounded_extension/*": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grounded_extension_differs": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grounded_label": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/growth_class": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/hallucinated_constraint": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/halt": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/humid_city": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ideal_lines": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/idempotent": {
+    "bool": 11
+   },
+   "batch-critic.v2/cases/*/counterexample/*/idempotent_at_system_level": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/idempotent_at_writer_level": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/implication": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inconsistency": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/independence_evidence": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/independent_checker": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/independent_checker_artifact": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inference": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_labels/a": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_labels/b": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_labels/c": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_labels/x": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_state": {
+    "numeric_array": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_state/*": {
+    "number": 26
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inner_labelling/a\u2192b": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inner_labelling/c\u2192d": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/innovation_to_semantics": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/input": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/input_framework/arguments/*": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/input_framework/attacks/*/*": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/instance": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/interpretation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/intersections_at_center": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/invariant_set/safety_includes_no_duplicates": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/invariant_set/writer_requires": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/is_affine_over_GF2": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/is_linear_over_GF2": {
+    "bool": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/is_number_conserving": {
+    "bool": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/is_reversible": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/is_suppression": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/issue": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/itb_holds": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/jump": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/justification": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/k": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/label": {
+    "string": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/labels/A": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/labels/B": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/labels_preserved": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/largest": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/latent_bias_shared": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/left_hand_side": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/lineage": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/linear_map_example": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/local_rule_decimal": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log/*": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log10_population": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log_requires_of_writer": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/longwave_emissivity": {
+    "number": 1,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mechanism": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/meet/A": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/meet/B": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/method": {
+    "string": 10
+   },
+   "batch-critic.v2/cases/*/counterexample/*/missing": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mod5": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mod7": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/monotone_circuit_output/a": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/monotone_circuit_output/b": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mutation": {
+    "string": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mutation_passes_silently": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/n": {
+    "number": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/name_explicitly_describes_ignoring_drift_fields": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/named_implies_homogeneous_comparison": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/native_only_proposals": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/net_suppression_formula": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/new_diameter": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/next": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/next_digits": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/nocturnal_UHI_K": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/nocturnal_UHI_gap": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/nocturnal_behavior": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/node": {
+    "string": 10
+   },
+   "batch-critic.v2/cases/*/counterexample/*/node_a": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/node_b": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/node_x": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/not": {
+    "number": 1,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/note": {
+    "string": 21
+   },
+   "batch-critic.v2/cases/*/counterexample/*/notebook": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/notebook_price": {
+    "number": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observation": {
+    "string": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_A": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_S": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_arid_degC": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_humid_degC": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ones_after": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ones_before": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/operation": {
+    "string": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/operator": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ord_W_2": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/outcome": {
+    "string": 7
+   },
+   "batch-critic.v2/cases/*/counterexample/*/output": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_correct": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_hours": {
+    "number": 7
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_pay": {
+    "number": 4,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_rate": {
+    "number": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_total": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/own_chosen": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/parent": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/parent_satisfied_without_child_contract": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/passes_through_exact_center": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pathway": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pay": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pct": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pen": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pen_price": {
+    "number": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pencils_total": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/period_upper_bound": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_magnitude": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_test": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pieces": {
+    "number": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/piecewise": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/place": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/place_after_overtaking": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/position_after": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/position_before": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/position_overtaken": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/positional_product": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pre_order": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/predicted": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/predicted_gap": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/predicted_gap_from_cooling_logic": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/premium_rate": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/premium_total": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/previous_diameters": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/price_total_usd": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/priority": {
+    "number": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem_allows_proportional_convention": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem_clause": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem_statement": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/properties": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/property": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/proponent_winning": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/proposed_suspended": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/published_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quantity": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/question": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quote": {
+    "string": 10
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quotient_diff": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rate": {
+    "number": 4,
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/raw": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/reason": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/reasoning": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/recomputation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/reference": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refutation_condition": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refutation_of_arithmetic": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refutation_of_shared_mechanism": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refutation_requires": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refuted_by": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refuted_if": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regions": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_hours": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_hours_pay": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_pay": {
+    "number": 2,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_total": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/reinstated": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rejected_rival": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/relation": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/relation_claim": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/relation_kind": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_diff": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_mod_5": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_mod_7": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/repeated_digit_count": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/repeated_effect": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/repeated_request": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/replay_deterministic": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/replay_state": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/replayed_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/request": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/required_bound": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/residue_mod_5": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/residue_mod_7": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result": {
+    "string": 8,
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.3/a1": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.3/a2": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.3/c": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.8/a1": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.8/a2": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result_at_0.8/c": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/reward_function": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rfc9110_note": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rfc_9110_verdict": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/right_hand_side": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/role": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rule": {
+    "number": 12
+   },
+   "batch-critic.v2/cases/*/counterexample/*/run": {
+    "string": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/run_observation": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/run_record": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rural_cooling": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/safe": {
+    "bool": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*/safe_at_writer_level": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/same_engine_checker": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/satisfies_all_short_cycles": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/satisfies_both_constraints": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/satisfies_constraints": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/satisfies_required_congruences": {
+    "bool": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/satisfies_short_cycle": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "string": 27
+   },
+   "batch-critic.v2/cases/*/counterexample/*/second_call_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/section": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/self_attack": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sensitivity": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/separating_verdict": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/set_theoretic_difference": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/setup": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/shared_lineage": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/shared_mechanism": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/shared_population_density": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/shared_property": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/single_engine_adversarial_mode": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/single_engine_generative_mode": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/single_run_record": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sky_view_factor": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sky_view_factor_low": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/solution": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/source": {
+    "string": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/src": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/src_002_conditional": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/src_005_origin": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/src_006_origin": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/state": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/stated_rate": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/stated_refutation_fires": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/statement": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/status": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/straight": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/structural_basis": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/structure": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sum": {
+    "number": 11,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/surface": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/surfaced_boundary": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/system": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_assertion": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claim": {
+    "string": 2,
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claimed_blended_rate": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claimed_total": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_concedes": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_label": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_method_output": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_quantity": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_result": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_verdict": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/text": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/thought": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/threshold": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/thresholds": {
+    "numeric_array": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/thresholds/*": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/through_center": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total": {
+    "number": 4,
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_dollars": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_pay": {
+    "number": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_three_digit_numbers": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_warrants": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/triple": {
+    "numeric_array": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/triple/*": {
+    "number": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/true_reduction_requirement": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/truncated": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/two_distinct_architectures": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/type": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/un_closed_extension/c\u2192E_{a\u2192b}": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/un_closed_extension/c\u2192validity_node(w)": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/un_closed_extension/label(b)": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/unit_price_dollars_per_pencil": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/valid_inheritance": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/value": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/verdict_change": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/violates_balance": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/warrants_per_position": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/what": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/width": {
+    "number": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/would_silently_pass": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/would_silently_pass_true_violation": {
+    "bool": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/writer": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/writer_operation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x": {
+    "number": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x_mod_5": {
+    "number": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x_mod_7": {
+    "number": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/yield_t1": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/yield_t2": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/premise": {
+    "string": 291,
+    "null": 54
+   },
+   "batch-critic.v2/cases/*/premise_evidence": {
+    "null": 153
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/block": {
+    "string": 237
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/quote": {
+    "string": 237
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 2061
+   },
+   "batch-critic.v2/op": {
+    "string": 12
+   },
+   "batch-critic.v2/operation": {
+    "string": 10
+   },
+   "batch-critic.v2/patch/*/op": {
+    "string": 13
+   },
+   "batch-critic.v2/patch/*/path": {
+    "string": 13
+   },
+   "batch-critic.v2/patch/*/value": {
+    "string": 11
+   },
+   "batch-critic.v2/patch/op": {
+    "string": 10
+   },
+   "batch-critic.v2/patch/path": {
+    "string": 9
+   },
+   "batch-critic.v2/patch/pointer": {
+    "string": 1
+   },
+   "batch-critic.v2/patch/value": {
+    "string": 5
+   },
+   "batch-critic.v2/patch/value/*": {
+    "string": 1
+   },
+   "batch-critic.v2/path": {
+    "string": 15
+   },
+   "batch-critic.v2/pointer": {
+    "string": 7
+   },
+   "batch-critic.v2/repair.patch.v1/*/op": {
+    "string": 2
+   },
+   "batch-critic.v2/repair.patch.v1/*/path": {
+    "string": 2
+   },
+   "batch-critic.v2/repair.patch.v1/*/value": {
+    "string": 2
+   },
+   "batch-critic.v2/repair.patch.v1/baseline_sha256": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/op": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/operation": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patch/*/op": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patch/*/path": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patch/*/value": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patches/*/op": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patches/*/path": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/patches/*/value": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/path": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/pointer": {
+    "string": 1
+   },
+   "batch-critic.v2/repair.patch.v1/value": {
+    "string": 2
+   },
+   "batch-critic.v2/value": {
+    "string": 18
+   },
+   "batch-critic.v2/value/*": {
+    "string": 2
+   },
+   "bridge.composition-batch.v1/op": {
+    "string": 1
+   },
+   "bridge.composition-batch.v1/path": {
+    "string": 1
+   },
+   "bridge.composition-batch.v1/resolution": {
+    "string": 3
+   },
+   "bridge.composition-batch.v1/resolution_reason": {
+    "string": 1
+   },
+   "bridge.composition-batch.v1/sections/*/ledger_entry_handles/*": {
+    "string": 11
+   },
+   "bridge.composition-batch.v1/sections/*/span_id": {
+    "string": 11
+   },
+   "bridge.composition-batch.v1/sections/*/text": {
+    "string": 11
+   },
+   "bridge.composition-batch.v1/unresolved_items/*/description": {
+    "string": 4
+   },
+   "bridge.composition-batch.v1/unresolved_items/*/ledger_entry_handles/*": {
+    "string": 4
+   },
+   "bridge.composition-batch.v1/unresolved_items/*/reason": {
+    "string": 4
+   },
+   "bridge.composition-batch.v1/value/*": {
+    "string": 1
+   },
+   "bridge.composition.v2/ledger_amendment_request": {
+    "null": 4
+   },
+   "bridge.composition.v2/ledger_amendment_request/proposed_claim": {
+    "string": 1
+   },
+   "bridge.composition.v2/ledger_amendment_request/reason": {
+    "string": 1
+   },
+   "bridge.composition.v2/ledger_amendment_request/requested_class": {
+    "string": 1
+   },
+   "bridge.composition.v2/op": {
+    "string": 1
+   },
+   "bridge.composition.v2/path": {
+    "string": 1
+   },
+   "bridge.composition.v2/resolution": {
+    "string": 8
+   },
+   "bridge.composition.v2/resolution_reason": {
+    "string": 7
+   },
+   "bridge.composition.v2/sections/*/ledger_entry_handles/*": {
+    "string": 25
+   },
+   "bridge.composition.v2/sections/*/span_id": {
+    "string": 18
+   },
+   "bridge.composition.v2/sections/*/text": {
+    "string": 18
+   },
+   "bridge.composition.v2/unresolved_items": {
+    "null": 2
+   },
+   "bridge.composition.v2/unresolved_items/*/description": {
+    "string": 9
+   },
+   "bridge.composition.v2/unresolved_items/*/ledger_entry_handles": {
+    "null": 2
+   },
+   "bridge.composition.v2/unresolved_items/*/ledger_entry_handles/*": {
+    "string": 49
+   },
+   "bridge.composition.v2/unresolved_items/*/reason": {
+    "string": 8,
+    "null": 1
+   },
+   "bridge.composition.v2/value/*": {
+    "string": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/claim": {
+    "string": 55
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "string": 55
+   },
+   "bridge.ledger-batch.v1/entries/*/conflict_handles/*": {
+    "string": 19
+   },
+   "bridge.ledger-batch.v1/entries/*/entry_key": {
+    "string": 55
+   },
+   "bridge.ledger-batch.v1/entries/*/formal_artifact_handles/*": {
+    "string": 36
+   },
+   "bridge.ledger-batch.v1/entries/*/premise_keys/*": {
+    "string": 12
+   },
+   "bridge.ledger-batch.v1/entries/*/qualification": {
+    "string": 4
+   },
+   "bridge.ledger-batch.v1/entries/*/scratch_handles/*": {
+    "string": 3
+   },
+   "bridge.ledger-batch.v1/entries/*/source_conflict_keys/*": {
+    "string": 11
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflict_key": {
+    "string": 13
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflicting_handles/*": {
+    "string": 42
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/description": {
+    "string": 9
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/reason": {
+    "string": 5
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/related_entry_keys/*": {
+    "string": 24
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/requirement": {
+    "string": 11
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/scratch_handles/*": {
+    "string": 6
+   },
+   "bridge.ledger.v3/entries/*/claim": {
+    "string": 85
+   },
+   "bridge.ledger.v3/entries/*/claim_class": {
+    "string": 85
+   },
+   "bridge.ledger.v3/entries/*/conflict_handles/*": {
+    "string": 42
+   },
+   "bridge.ledger.v3/entries/*/entry_key": {
+    "string": 85
+   },
+   "bridge.ledger.v3/entries/*/evidence_handles/*": {
+    "string": 3
+   },
+   "bridge.ledger.v3/entries/*/formal_artifact_handles/*": {
+    "string": 111
+   },
+   "bridge.ledger.v3/entries/*/premise_keys/*": {
+    "string": 28
+   },
+   "bridge.ledger.v3/entries/*/qualification": {
+    "string": 7
+   },
+   "bridge.ledger.v3/entries/*/scratch_handles/*": {
+    "string": 12
+   },
+   "bridge.ledger.v3/entries/*/source_conflict_keys/*": {
+    "string": 3
+   },
+   "bridge.ledger.v3/entries/*/source_handles/*": {
+    "string": 3
+   },
+   "bridge.ledger.v3/entries/*/trace_handles/*": {
+    "string": 1
+   },
+   "bridge.ledger.v3/source_conflicts/*/conflict_key": {
+    "string": 4
+   },
+   "bridge.ledger.v3/source_conflicts/*/conflicting_handles/*": {
+    "string": 28
+   },
+   "bridge.ledger.v3/source_conflicts/*/description": {
+    "string": 4
+   },
+   "bridge.ledger.v3/source_conflicts/*/scratch_handles/*": {
+    "string": 2
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/reason": {
+    "string": 5
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/related_entry_keys/*": {
+    "string": 25
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/requirement": {
+    "string": 13
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/scratch_handles/*": {
+    "string": 13
+   },
+   "config-referee.v1/assessment": {
+    "string": 5
+   },
+   "config-referee.v1/cited_seqs": {
+    "numeric_array": 5
+   },
+   "config-referee.v1/cited_seqs/*": {
+    "number": 71
+   },
+   "config-referee.v1/recommendation": {
+    "string": 5
+   },
+   "config-referee.v1/verdict": {
+    "string": 5
+   },
+   "conjecturer.atomic-candidate.v1/abstention": {
+    "null": 36
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy": {
+    "null": 9
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/adopted_commitment_refs/*": {
+    "string": 18
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/disanalogies/*": {
+    "string": 168
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/overturn_conditions/*": {
+    "string": 157
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/shared_structure/*": {
+    "string": 193
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/source_memory_refs/*": {
+    "string": 111
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/transfer_claims/*": {
+    "string": 135
+   },
+   "conjecturer.atomic-candidate.v1/candidate/claim": {
+    "string": 269
+   },
+   "conjecturer.atomic-candidate.v1/candidate/content": {
+    "string": 72
+   },
+   "conjecturer.atomic-candidate.v1/candidate/counterconditions/*": {
+    "string": 859
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/block": {
+    "string": 317
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/quote": {
+    "string": 237,
+    "null": 19
+   },
+   "conjecturer.atomic-candidate.v1/candidate/mechanism": {
+    "string": 269
+   },
+   "conjecturer.atomic-candidate.v1/candidate/neighbours/*": {
+    "string": 194
+   },
+   "conjecturer.atomic-candidate.v1/candidate/optional_refs/*": {
+    "string": 315
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/requested_context_aliases/*": {
+    "string": 385
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/search_signal": {
+    "string": 246
+   },
+   "conjecturer.atomic-candidate.v1/candidate/typicality": {
+    "number": 341
+   },
+   "conjecturer.atomic-candidate.v1/op": {
+    "string": 10
+   },
+   "conjecturer.atomic-candidate.v1/operation": {
+    "string": 1
+   },
+   "conjecturer.atomic-candidate.v1/path": {
+    "string": 11
+   },
+   "conjecturer.atomic-candidate.v1/repair.patch.v1/op": {
+    "string": 2
+   },
+   "conjecturer.atomic-candidate.v1/repair.patch.v1/path": {
+    "string": 1
+   },
+   "conjecturer.atomic-candidate.v1/repair.patch.v1/pointer": {
+    "string": 1
+   },
+   "conjecturer.atomic-candidate.v1/value": {
+    "string": 2
+   },
+   "conjecturer.atomic-candidate.v1/value/*": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/*/op": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/*/path": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/*/value": {
+    "string": 2,
+    "numeric_array": 1
+   },
+   "conjecturer.turn.v6/*/value/*": {
+    "number": 1
+   },
+   "conjecturer.turn.v6/abstention": {
+    "null": 18
+   },
+   "conjecturer.turn.v6/candidates/*/analogy": {
+    "null": 22
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/adopted_commitment_refs/*": {
+    "string": 27
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/disanalogies/*": {
+    "string": 167
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/overturn_conditions/*": {
+    "string": 145
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/shared_structure/*": {
+    "string": 187
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/source_memory_refs/*": {
+    "string": 111
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/transfer_claims/*": {
+    "string": 139
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 1221
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "string": 757
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 3217
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/block": {
+    "string": 543
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/quote": {
+    "string": 271,
+    "null": 16
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 1221
+   },
+   "conjecturer.turn.v6/candidates/*/neighbours/*": {
+    "string": 1911
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 1233
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/requested_context_aliases/*": {
+    "string": 251
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 772
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 1978
+   },
+   "conjecturer.turn.v6/context_request": {
+    "null": 17
+   },
+   "conjecturer.turn.v6/context_request/desired_retrieval_channels/*": {
+    "string": 17
+   },
+   "conjecturer.turn.v6/context_request/purpose": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/context_request/query": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/context_request/requested_visible_aliases/*": {
+    "string": 37
+   },
+   "conjecturer.turn.v6/op": {
+    "string": 131
+   },
+   "conjecturer.turn.v6/operation": {
+    "string": 22
+   },
+   "conjecturer.turn.v6/patch/*/op": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/*/path": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/*/value": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/op": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/patch/operation": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/path": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/patch/pointer": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/value": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/patch/value/*": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/path": {
+    "string": 150
+   },
+   "conjecturer.turn.v6/pointer": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/repair.patch.v1/*/op": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/repair.patch.v1/*/path": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/repair.patch.v1/*/value/*": {
+    "string": 12
+   },
+   "conjecturer.turn.v6/repair.patch.v1/op": {
+    "string": 10
+   },
+   "conjecturer.turn.v6/repair.patch.v1/operation": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/repair.patch.v1/patch/op": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/repair.patch.v1/patch/path": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/repair.patch.v1/path": {
+    "string": 11
+   },
+   "conjecturer.turn.v6/repair.patch.v1/value": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/repair.patch.v1/value/*": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/research_proposals/*/purpose": {
+    "string": 17
+   },
+   "conjecturer.turn.v6/research_proposals/*/request_identifier": {
+    "string": 17
+   },
+   "conjecturer.turn.v6/research_proposals/*/urls/*": {
+    "string": 21
+   },
+   "conjecturer.turn.v6/schema": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal": {
+    "null": 6
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/member_refs/*": {
+    "string": 8
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/seed_focus": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/because": {
+    "string": 13,
+    "null": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "string": 14,
+    "null": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "string": 46
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "string": 12,
+    "null": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "string": 46
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "string": 46
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "string": 12,
+    "null": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/bears_on_refs/*": {
+    "string": 81
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "string": 128
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "string": 68,
+    "null": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "string": 33,
+    "null": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "string": 111
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "string": 128
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "string": 114
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "string": 118
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/declared_assumptions/*": {
+    "string": 10
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/discriminating_purpose": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/hypothesis": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/interpretation_conditions/*": {
+    "string": 17
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/model_source": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/parameter_definitions/*/name": {
+    "string": 9
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/parameter_definitions/*/values_json": {
+    "string": 9
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/request_identifier": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/requested_observables/*": {
+    "string": 21
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/requested_seed_set": {
+    "numeric_array": 1
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/requested_seed_set/*": {
+    "number": 10
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/rival_predictions/*": {
+    "string": 13
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/simulation_mode": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/value": {
+    "string": 64,
+    "numeric_array": 11,
+    "null": 1,
+    "number": 1
+   },
+   "conjecturer.turn.v6/value/*": {
+    "string": 70,
+    "number": 21,
+    "numeric_array": 1
+   },
+   "conjecturer.turn.v6/value/*/*": {
+    "number": 3
+   },
+   "critic.atomic-target.v1/attack": {
+    "bool": 34
+   },
+   "critic.atomic-target.v1/cited_input_aliases/*": {
+    "string": 32
+   },
+   "critic.atomic-target.v1/claim": {
+    "string": 32
+   },
+   "critic.atomic-target.v1/counterexample": {
+    "null": 10,
+    "numeric_array": 1
+   },
+   "critic.atomic-target.v1/counterexample/*": {
+    "string": 23,
+    "number": 4
+   },
+   "critic.atomic-target.v1/counterexample/*/actual_state": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/case": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/city_A": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/city_B": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/city_pair": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/claim_type": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/countercondition": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/cuts": {
+    "number": 4
+   },
+   "critic.atomic-target.v1/counterexample/*/evidence_within_run": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/flaw": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/graph": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/missing": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/note": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/pieces": {
+    "number": 4
+   },
+   "critic.atomic-target.v1/counterexample/*/properties/mechanism": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/properties/note": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/ratio_ambiguity": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/result": {
+    "string": 2
+   },
+   "critic.atomic-target.v1/counterexample/*/run_phase": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/target_answer_says_to_count": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/target_claim": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/type": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/uhi_gap_A": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/uhi_gap_B": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample/*/what_problem_asks_for": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/grounds": {
+    "string": 32
+   },
+   "critic.atomic-target.v1/premise": {
+    "string": 17,
+    "null": 1
+   },
+   "critic.atomic-target.v1/premise_evidence": {
+    "null": 1
+   },
+   "critic.atomic-target.v1/premise_evidence/*/block": {
+    "string": 27
+   },
+   "critic.atomic-target.v1/premise_evidence/*/quote": {
+    "string": 27
+   },
+   "critic.atomic-target.v1/target_alias": {
+    "string": 34
+   },
+   "defender.direct.v1/answer": {
+    "string": 122
+   },
+   "judgeruling.direct.v1/decisive_point": {
+    "string": 342
+   },
+   "judgeruling.direct.v1/verdict": {
+    "string": 342
+   },
+   "variator.direct.v1/edits/*/content": {
+    "string": 59
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "no evidence": 44,
+    "insufficient": 37,
+    "n/a": 6,
+    "unable to": 5,
+    "unknown": 5,
+    "placeholder": 2,
+    "not provided": 2,
+    "not specified": 1,
+    "unclear": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "no evidence": 3,
+    "unable to": 2,
+    "cannot determine": 2,
+    "n/a": 1,
+    "insufficient": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeats": {
+    "insufficient": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result": {
+    "cannot determine": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "insufficient": 1
+   },
+   "batch-critic.v2/cases/*/premise": {
+    "no evidence": 4,
+    "insufficient": 2,
+    "n/a": 1,
+    "not provided": 1
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/quote": {
+    "insufficient": 5,
+    "unable to": 1
+   },
+   "bridge.composition.v2/sections/*/text": {
+    "cannot determine": 1
+   },
+   "bridge.composition.v2/unresolved_items/*/description": {
+    "cannot be determined": 2
+   },
+   "bridge.composition.v2/unresolved_items/*/reason": {
+    "unknown": 2
+   },
+   "bridge.ledger-batch.v1/entries/*/claim": {
+    "cannot be determined": 5,
+    "unknown": 2,
+    "no evidence": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "unknown": 10
+   },
+   "bridge.ledger-batch.v1/entries/*/qualification": {
+    "no evidence": 2
+   },
+   "bridge.ledger.v3/entries/*/claim": {
+    "insufficient": 2,
+    "cannot be determined": 2
+   },
+   "bridge.ledger.v3/entries/*/claim_class": {
+    "unknown": 6
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/reason": {
+    "insufficient": 1
+   },
+   "config-referee.v1/assessment": {
+    "no evidence": 3
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/disanalogies/*": {
+    "unknown": 1,
+    "insufficient": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/overturn_conditions/*": {
+    "insufficient": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/shared_structure/*": {
+    "unknown": 3
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/transfer_claims/*": {
+    "insufficient": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/claim": {
+    "insufficient": 2,
+    "unable to": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/content": {
+    "insufficient": 4
+   },
+   "conjecturer.atomic-candidate.v1/candidate/counterconditions/*": {
+    "insufficient": 17,
+    "not applicable": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/quote": {
+    "unknown": 11
+   },
+   "conjecturer.atomic-candidate.v1/candidate/mechanism": {
+    "unknown": 3
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/overturn_conditions/*": {
+    "insufficient": 3
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/shared_structure/*": {
+    "unknown": 2,
+    "insufficient": 1
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "insufficient": 6,
+    "unknown": 3,
+    "no evidence": 2
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "insufficient": 15,
+    "unknown": 2,
+    "unable to": 2,
+    "not specified": 1
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "insufficient": 63,
+    "unknown": 4,
+    "unclear": 1,
+    "not specified": 1,
+    "unable to": 1,
+    "n/a": 1,
+    "not provided": 1,
+    "cannot determine": 1
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/quote": {
+    "insufficient": 1,
+    "unknown": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "no evidence": 5,
+    "insufficient": 5,
+    "unknown": 4,
+    "cannot be determined": 1,
+    "placeholder": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "insufficient": 2,
+    "unknown": 1
+   },
+   "critic.atomic-target.v1/grounds": {
+    "insufficient": 2,
+    "n/a": 1,
+    "no evidence": 1
+   },
+   "critic.atomic-target.v1/premise": {
+    "insufficient": 1,
+    "no evidence": 1
+   },
+   "defender.direct.v1/answer": {
+    "insufficient": 6,
+    "placeholder": 2,
+    "no evidence": 2,
+    "not specified": 1,
+    "unable to": 1
+   },
+   "judgeruling.direct.v1/decisive_point": {
+    "insufficient": 2
+   },
+   "variator.direct.v1/edits/*/content": {
+    "insufficient": 5,
+    "no evidence": 2,
+    "placeholder": 1,
+    "not provided": 1
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+    "seq": 185,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If Rule 184 has any state for W in 5..11 with a transient > W or a cycle > 2, the separating property is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+    "seq": 205,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/counterconditions/*",
+    "marker": "insufficient",
+    "value": "The right-permutativity property might be insufficient to explain the behavior, if rule 30 (which is also right-permutative) is observed to fail for small W despite the property."
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+    "seq": 327,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If simulation of rule 110 or rule 184 for any W in [5,11] shows ALL initial states reach a cycle of length <=2 within 4*W steps, then nonlinearity alone is insufficient as a separating property."
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 169,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unclear",
+    "value": "If the recovery guard's expected behavior is not specified (i.e., it is unclear what 'firing' means), the test cannot be written without a design decision."
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 343,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "unable to",
+    "value": "If PARKED.md's six defects are: (1) append-only corruption, (2) security bypass (SRC_003), (3) routing rot, (4) recovery guard, (5) torn-tail repair (SRC_002/SRC_004), (6) census delta, then Priority 4 is correct ONLY IF the recovery guard is explicitly ranked below routing rot (Priority 3). But the"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 481,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "no evidence",
+    "value": "The minimal regression-test plan is: (1) lease-mismatch refusal test, (2) _reset() guard test, (3) context receipt recovery guard test, (4) census delta test, (5) torn-tail repair gate test, and DELETE the unimported functions rather than testing them. The ordering is justified because the unimporte"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 481,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "no evidence",
+    "value": "The ordering principle is: what silently disables a security boundary (lease-mismatch) outranks what corrupts internal record integrity (_reset()), which outranks what hides a recovery failure (context receipt), which outranks unexplained observability discrepancies (census delta), which outranks pa"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 538,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "SRC_002 inverts the prioritization demanded by the problem context ('explicit ordering justified by blast radius (what corrupts the append-only record vs what merely hides a refusal)') by placing a refusal-hiding guard (lease-mismatch) above record-corruption (_reset()) on *speculative* grounds \u2014 th"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 585,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unable to",
+    "value": "SRC_001 addresses only one gap (unimported functions) and never delivers the required overall prioritized ordering of all six defects. The problem explicitly states 'A plan that simply says \"test everything\" is worthless; the deliverable is the ordering and its justification,' yet SRC_001 provides a"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 933,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "The proposed 'shared mechanism' conflates two structurally distinct failure modes under a superficially similar label. The target itself concedes the refutation condition \u2014 'if one gap is confirmed to be by-design behavior while the other is a confirmed bug' \u2014 yet the body provides no evidence to di"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 993,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "unknown",
+    "value": "DEPENDS ON: SRC_004 depends on SRC_005 because the test design (assert ERROR vs verdict classification for three pre-v6 roots) presupposes the prior investigation SRC_005 mandates (determine whether the delta is by design or by bug). The test is vacuous \u2014 it asserts an unknown expectation \u2014 without "
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 83,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/claim",
+    "marker": "unable to",
+    "value": "Ownership-based allocation suppresses cross-cutting explanations by starving rival lineages of the computational resources needed to develop their alternative vocabularies, causing them to atrophy and become unable to generate competing explanations."
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 151,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "placeholder",
+    "value": "SRC_001 frames the suppression/efficiency distinction via Kuhnian analogy, but its central diagnostic\u2014the 'saturation threshold'\u2014is left as an unspecified formalization placeholder rather than the concrete counting procedure the problem demands. The target says a crisis 'must be formalized as a satu"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 287,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If L_owner's primitives are strictly insufficient to solve certain problems, the system would be forced to use L_rival primitives to achieve the binary reward, contradicting the claim that L_owner is always the cheapest option."
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 319,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "The target's mechanistic account is non-causal as specified: it asserts that rival primitives are 'artificially excluded from the action space,' but it never identifies the causal structure by which ownership allocation performs this exclusion. The problem demands a causal mechanism connecting the o"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 428,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unable to",
+    "value": "SRC_001, SRC_002, and SRC_003 all fail to address whether ownership-based allocation _systematically_ suppresses cross-cutting explanations in a way that a single-run observation can distinguish from efficiency. SRC_003's own countercondition concedes that 'if the count of cross-lineage references i"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 665,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "unknown",
+    "value": "SRC_005's 'epistemic tariff' mechanism contradicts SRC_001's 'self-reinforcing silo' mechanism on the direction of causal force: SRC_005 claims the tariff protects incumbent vocabulary from invalidation (outward defensive pressure), while SRC_001 claims silos never encounter anomalies forcing a brid"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 17,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the rate of cross-cutting insights generated by the dialectic is significantly lower than the rate generated by a recombination-allocating control, the dialectic mechanism is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 17,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/scratch_proposal/new_blocks/*/body/content",
+    "marker": "insufficient",
+    "value": "Contradiction to explore: The problem asks for evidence 'within a single run,' but suppression is a counterfactual concept\u2014it requires comparing what was discovered to what could have been discovered. Within a single run, we only observe what was discovered, not what was suppressed. The boundary-tra"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 285,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target asserts a dependence on SRC_004's suppression mechanism via a 'translational tax on foreign ontologies,' but it never identifies the causal mechanism by which this tax *produces* the block's isolation. It states that allocation rules 'disincentivise borrowing,' but disincentive is an ince"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "seq": 1268,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "SRC_004 and SRC_005 share a mechanism: positive cut thickness (or pathological curves) changes the topological count by destroying or fragmenting the center region. SRC_004 projects this to infinity via fractal cuts; SRC_005 projects it to a center-singularity that may disconnect the 8 sectors. They"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+    "seq": 580,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "SRC_001 proposes a 'refinement' relation between SRC_004 and SRC_005, but a case split (zero-absent vs. zero-present) that merely partitions an identical end-count (504+144=648) is a re-derivation of the same quantity, not a substantive dependence/reduction/ablation. The covering principle exposes t"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+    "seq": 879,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/mechanism",
+    "marker": "unknown",
+    "value": "Symmetric partitioning around the arithmetic mean. Because the three integers are consecutive even integers, their common difference is 2. Choosing the middle integer as the unknown n makes the sum 3n. The mean n = 138/3 = 46 is even, satisfying the parity constraint. The largest is n+2 = 48."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 115,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "unknown",
+    "value": "An empiric stance probes whether the two constraints fully pin down the pen price under real-world pricing conventions. If the $12.50 total is tax-inclusive but the $10 difference is pre-tax, or vice versa, the system has a third free parameter (tax rate) and the pen price is not uniquely determined"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 155,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unknown",
+    "value": "The target's central claim that the pen price is 'underdetermined' unless tax scope is specified is false for this problem as stated. The problem provides two independent linear equations in two unknowns: N + P = 12.50 and N = P + 10. Solving yields P = 1.25 uniquely. The target invents an unasked t"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 191,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unknown",
+    "value": "If the problem is recognized as a standard algebraic word problem with scalar unknowns, it is fully determined."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 191,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/analogy/shared_structure/*",
+    "marker": "unknown",
+    "value": "Two unknown prices with a fixed total and a fixed additive difference."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 242,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unknown",
+    "value": "SRC_001 claims the problem is underdetermined, but this is directly refuted by the target's own counterconditions. If 'If the problem is recognized as a standard algebraic word problem with scalar unknowns, it is fully determined' is true, then the problem is not underdetermined. This is a standard "
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 618,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "insufficient",
+    "value": "A skeptic stance treats the two equations as insufficient without a causal model of how the prices were set (e.g., supply, demand, tax policy). Without knowing why the notebook costs $10 more, the algebraic solution is seen as a formal exercise disconnected from real-world price determination."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 618,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unknown",
+    "value": "The problem provides two independent equations in two unknowns, which is sufficient for a unique algebraic solution."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 618,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unknown",
+    "value": "The problem provides two independent equations in two unknowns, which is sufficient for a unique algebraic solution without additional tax assumptions."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 739,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/mechanism",
+    "marker": "unknown",
+    "value": "Let P be the price of the pen and N be the price of the notebook. The problem states two constraints: (1) N + P = 12.50 and (2) N = P + 10. Substituting the second equation into the first yields (P + 10) + P = 12.50, which simplifies to 2P + 10 = 12.50, 2P = 2.50, and P = 1.25. This follows the cove"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 759,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/mechanism",
+    "marker": "unknown",
+    "value": "Let the pen cost P and the notebook cost N. The problem supplies two simultaneous linear constraints over the reals: (1) N + P = 12.50 (sum), and (2) N = P + 10 (additive difference). Substituting (2) into (1) gives (P + 10) + P = 12.50, so 2P = 2.50, hence P = 1.25. The covering principle is: whene"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 759,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/analogy/shared_structure/*",
+    "marker": "unknown",
+    "value": "Two unknowns constrained by one sum and one additive difference."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 759,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/analogy/shared_structure/*",
+    "marker": "unknown",
+    "value": "Elimination of the larger unknown by substitution yields a unique smaller unknown."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 759,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/analogy/disanalogies/*",
+    "marker": "unknown",
+    "value": "Multiplicative cousins (n = 10p) share the abstract 'two constraints, two unknowns' skeleton but differ in the operator composing the difference, yielding a different solution branch."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+    "seq": 869,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "cannot be determined",
+    "value": "The problem provides surface-level algebraic constraints but does not specify the underlying economic mechanism setting the prices. Without a causal model of how the prices came to be (e.g., market equilibrium, cost-plus pricing), the prices are merely variables satisfying a relation, and a unique '"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+    "seq": 1600,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "conn:204d29004328 INTEGRATES the enumeration strategy of SRC_005 with the algebraic guarantee of SRC_004: enumeration from the sparser residue class (mod 7) is a constructive search whose termination is guaranteed by CRT's uniqueness theorem (gcd(5,7)=1 \u27f9 unique mod 35). The integration is that CRT "
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "seq": 80,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "not specified",
+    "value": "The transaction includes hidden fees or taxes not specified in the base rate."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "seq": 80,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "The single data point is insufficient to justify the inductive leap under a skeptic stance."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "seq": 80,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unknown",
+    "value": "The problem is not pedagogical but a real-world pricing query with unknown structure."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "seq": 281,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002's claim that the answer is underdetermined lacks any causal mechanism linking the premise '7 for $2' to a non-$6 result. It merely asserts logical compatibility of alternative pricing models (tiered, bundle-only) without constructing a single concrete counterexample where the same premise ho"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+    "seq": 879,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/counterconditions/*",
+    "marker": "not applicable",
+    "value": "If the '7 for $2' price is a limited-time or conditional promotion not applicable to a 21-pencil purchase, the $6 result is not entailed."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 201,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/analogy/shared_structure/*",
+    "marker": "unknown",
+    "value": "Both require solving for an unknown total count given a fixed cumulative sum, analogous to budget allocation across tiers."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 664,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "The target asserts a shared three-stage digit-exhaustion mechanism between SRC_006 and SRC_003 and stakes the relation on SRC_003 containing the 189-digit consumption step and the 2\u21923-digit boundary. But the problem context (07e5ec535396) supplies no evidence that SRC_003 actually uses a digit-exhau"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 920,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/analogy/shared_structure/*",
+    "marker": "unknown",
+    "value": "The unknown 'final page' is located at the boundary where the total consumed resource hits a target value"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "seq": 13,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "unknown",
+    "value": "15% of 80 equals 12, assuming the percentage is a markup on a cost base that is unknown."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "seq": 52,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unknown",
+    "value": "SRC_002 injects an unsupported financial-context premise ('assuming the percentage is a markup on a cost base that is unknown') that the problem never states. The actual problem is a bare arithmetic question: 'What is 15% of 80?' It contains no cost base, no markup, and no reverse-percentage framing"
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "seq": 1373,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "unknown",
+    "value": "15% of 80 equals 12, assuming the percentage is a markup on a cost base that is unknown."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "seq": 1373,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "unknown",
+    "value": "The problem text specifies 15% of 80 as a direct proportion. However, in a business context where 80 represents a final selling price inclusive of a 15% markup, the unknown cost base C would satisfy 80 = C \u00d7 1.15, making C \u2248 69.57. Under the direct proportional reading, the markup value is 12."
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+    "seq": 1403,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unknown",
+    "value": "SRC_002 injects an unstated 'markup' business context and an 'unknown cost base' that the problem never requests. The stated problem asks for 15% of 80; by adding the assumption that 80 is a final selling price inclusive of a 15% markup, SRC_002 makes the answer depend on a reverse-engineered base ("
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+    "seq": 264,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002 attacks the necessity claim by proposing contextual isolation, but the proposal is insufficient under the problem's own terms. The problem asks what evidence within a single run's record would distinguish genuine independent verification from mere restatement. SRC_002 denies the checker acce"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 93,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "The target answers 'what evidence within a single run's own record would distinguish genuine independent verification from mere restatement' with an artifact-ID disjointness count, but this counting rule is vulnerable to the exact restatement failure mode the problem asks to detect: if the checker c"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 106,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "SRC_002 overstates the sufficiency of a context wipe when the conjecture role group and checker are the SAME model engine. The problem's key premise is that one engine is trusted to check itself; SRC_002 asserts that mere statelessness 'counts as independent' if a different intermediate step appears"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 228,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_003's mechanism of 'Persona-Induced Divergence' via an adversarial system prompt is insufficient for independent verification because the model's internal coherence drive and safety tuning can override the persona. The target even lists 'The model's internal coherence drive overrides the adversa"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 899,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "The perturbation is insufficient to overcome the model's inherent bias toward self-consistency (confirmation bias)."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 899,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "unknown",
+    "value": "Separation is necessary because a single engine's 'verification' is actually a 'consistency check' of its own internal probability distribution, which is fundamentally incapable of discovering 'unknown unknowns' present in its own training priors."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 999,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "SRC_002 argues that separating engines may decrease reliability, but its positive criterion for verification \u2014 'Depth of Trace', whether the checker identifies the specific step of failure \u2014 is available to and diagnostic of a checker regardless of whether it is the same or a separate engine. The ar"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 1020,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "SRC_003 conflates activation-trajectory divergence with independence, but its own counterconditions expose the flaw: if both paths remain in the same attractor basin or the perturbation cannot overcome self-consistency bias, the perturbation yields only apparent independence. The target offers no ev"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 45,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002 substitutes a population-level statistical requirement the problem never asked for, and by its own argument concedes the within-run evidence it dismisses is 'necessary.' The problem asks what within a single run's record distinguishes genuine verification from restatement and what to count/e"
+   }
+  ],
+  "prose_wrapped_exemplars": [
+   {
+    "seq": 936,
+    "contract_id": "conjecturer.turn.v6",
+    "role": "conjecturer",
+    "shape": "prose_wrapped_fenced_json",
+    "preamble": "JSON Response\n\n```json\n",
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484"
+   },
+   {
+    "seq": 472,
+    "contract_id": "critic.atomic-target.v1",
+    "role": "argumentative_critic",
+    "shape": "prose_wrapped_bare_json",
+    "preamble": "The target's RESIDUE label is computed as a pure annotation over the *final* grounded labels (the skeptical fixed point) without specifying any fallback rule. This is technically unsound for the exact situation the problem asks it to handle: in a cycle (e.g., A and B mutually attacking each other), every node is suspended at the fixed point, yet *no attacker was ever committed to root*. The target",
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run"
+   },
+   {
+    "seq": 423,
+    "contract_id": "batch-critic.v2",
+    "role": "argumentative_critic",
+    "shape": "prose_wrapped_fenced_json",
+    "preamble": "The target SRC_001 explains the sustained audit flags by invoking a meta-layer confirmation process involving SRC_006 and SRC_008 as peer-review verification of the critics' verdicts. However, the problem context (\u00a711.3) frames the adjudication-ritual flags as sustained based on the critics' findings themselves \u2014 the standard does not mention or require a meta-judgment layer. By attributing the su",
+    "root": "experiments/2026-08-25-change-constructive-frontier/run"
+   },
+   {
+    "seq": 1128,
+    "contract_id": "conjecturer.turn.v6",
+    "role": "conjecturer",
+    "shape": "prose_wrapped_fenced_json",
+    "preamble": "I'll construct several candidate configurations for maximizing the minimum triangle area among 13 points in the unit square.\n\n**Strategy Analysis:**\n- With 13 points forming 286 triangles, we need every triple to have area \u2265 some threshold\n- The floor is 0.005; pushing much higher requires careful geometric arrangement\n- A grid or lattice-like structure with points spread to maximize minimum separ",
+    "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+   },
+   {
+    "seq": 205,
+    "contract_id": "batch-critic.v2",
+    "role": "argumentative_critic",
+    "shape": "prose_wrapped_bare_json",
+    "preamble": "The target refutes a trivially false \"structural lemma\" about diagonal W matrices at 2x2, but this is a strawman irrelevant to the 3x3 tensor rank problem. The mechanism is correct (diagonal output coefficient matrices cannot produce off-diagonal product entries) yet that observation is obvious and advances nothing about R(3,3,3). No concrete construction or structural obstruction for the actual o",
+    "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593"
+   }
+  ],
+  "numeric_precision": {
+   "batch-critic.v2/cases/*/counterexample": {
+    "0": 21,
+    "len=1": 3,
+    "len=10": 1,
+    "len=3": 1,
+    "len=5": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "0": 21
+   },
+   "batch-critic.v2/cases/*/counterexample/*/D_n": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/N": {
+    "2": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/P": {
+    "2": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/R_increment": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/S_increment": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_added_pieces": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_max_UHI_low": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/area_km2": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/attackers/*/strength": {
+    "1": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_for_all_hours": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_hours": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_pay": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/base_total": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/blind_spot_corrections_counted": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_count": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_pencils": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/bundle_price_usd": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cic_score": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_says_residue_mod_7": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claimed_encoding_residue": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_result": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_total": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/correct_total_pay": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/corrective_pivot_points": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_S": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_foreign_primitives_available": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_native_proposals": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/count_proposed_hybrids": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cross_cutting_proposals": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/cuts": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/difference": {
+    "0": 7,
+    "2": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used_100_300": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/digits_used_10_99": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/direct_answer": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/discontinuity_at_hours": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct_digit_count": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distinct_lines": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/endpoint_drift": {
+    "0": 1,
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/endpoint_identity": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/entailed_cost_dollars": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/equals": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evaluation_friction_foreign": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evolution_step1": {
+    "0": 16,
+    "len=5": 2,
+    "len=6": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/evolution_step1/*": {
+    "0": 16
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected_max_UHI_high": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/flawed_blended_rate_actual": {
+    "15": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/foreign_primitives_translated": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/formula_prediction_of_added_pieces": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/four_distinct_diameters_through_center": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/frozen_seat_identity": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/grand_total": {
+    "0": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_state": {
+    "0": 26,
+    "len=5": 4,
+    "len=6": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/initial_state/*": {
+    "0": 26
+   },
+   "batch-critic.v2/cases/*/counterexample/*/intersections_at_center": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/jump": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/k": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/largest": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/local_rule_decimal": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log10_population": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/longwave_emissivity": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mod5": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/mod7": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/n": {
+    "0": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/native_only_proposals": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/next": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/next_digits": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/nocturnal_UHI_K": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/not": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/notebook": {
+    "2": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/notebook_price": {
+    "2": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_A": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_S": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_arid_degC": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_humid_degC": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ones_after": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ones_before": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/ord_W_2": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_correct": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_hours": {
+    "0": 7
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_pay": {
+    "0": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_rate": {
+    "0": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/overtime_total": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pen": {
+    "2": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pen_price": {
+    "2": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pencils_total": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/period_upper_bound": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/pieces": {
+    "0": 5
+   },
+   "batch-critic.v2/cases/*/counterexample/*/premium_rate": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/premium_total": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/previous_diameters": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/price_total_usd": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/priority": {
+    "0": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quantity": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quotient_diff": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rate": {
+    "0": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/raw": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regions": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_hours": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_hours_pay": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_pay": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/regular_total": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_diff": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_mod_5": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/remainder_mod_7": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/repeated_digit_count": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/required_bound": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/residue_mod_5": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/residue_mod_7": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/result": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/right_hand_side": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/rule": {
+    "0": 12
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sky_view_factor_low": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sum": {
+    "0": 5,
+    "1": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claim": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claimed_blended_rate": {
+    "2": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_claimed_total": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_method_output": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_quantity": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/target_result": {
+    "6": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/thresholds": {
+    "1": 2,
+    "len=2": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/thresholds/*": {
+    "1": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total": {
+    "0": 2,
+    "1": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_dollars": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_pay": {
+    "0": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_three_digit_numbers": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/total_warrants": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/triple": {
+    "0": 9,
+    "len=3": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/triple/*": {
+    "0": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/truncated": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/unit_price_dollars_per_pencil": {
+    "10": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/warrants_per_position": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/width": {
+    "0": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x": {
+    "0": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x_mod_5": {
+    "0": 3
+   },
+   "batch-critic.v2/cases/*/counterexample/*/x_mod_7": {
+    "0": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/yield_t1": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/yield_t2": {
+    "0": 1
+   },
+   "config-referee.v1/cited_seqs": {
+    "0": 71,
+    "len=15": 1,
+    "len=16": 1,
+    "len=18": 1,
+    "len=19": 1,
+    "len=3": 1
+   },
+   "config-referee.v1/cited_seqs/*": {
+    "0": 71
+   },
+   "conjecturer.atomic-candidate.v1/candidate/typicality": {
+    "0": 6,
+    "1": 116,
+    "2": 219
+   },
+   "conjecturer.turn.v6/*/value": {
+    "0": 1,
+    "len=1": 1
+   },
+   "conjecturer.turn.v6/*/value/*": {
+    "0": 1
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "0": 23,
+    "1": 1020,
+    "2": 935
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/requested_seed_set": {
+    "0": 10,
+    "len=10": 1
+   },
+   "conjecturer.turn.v6/simulation_proposals/*/requested_seed_set/*": {
+    "0": 10
+   },
+   "conjecturer.turn.v6/value": {
+    "0": 21,
+    "1": 1,
+    "len=1": 6,
+    "len=3": 5
+   },
+   "conjecturer.turn.v6/value/*": {
+    "0": 24,
+    "len=3": 1
+   },
+   "conjecturer.turn.v6/value/*/*": {
+    "0": 3
+   },
+   "critic.atomic-target.v1/counterexample": {
+    "0": 4,
+    "len=4": 1
+   },
+   "critic.atomic-target.v1/counterexample/*": {
+    "0": 4
+   },
+   "critic.atomic-target.v1/counterexample/*/cuts": {
+    "0": 4
+   },
+   "critic.atomic-target.v1/counterexample/*/pieces": {
+    "0": 4
+   }
+  }
+ },
+ "repair_fights": {
+  "count": 224,
+  "ladder_length_distribution": {
+   "1": 5,
+   "2": 104,
+   "3": 47,
+   "4": 14,
+   "5": 54
+  },
+  "calls_spent_in_ladders": 680,
+  "repair_patch_verdicts": {
+   "on_target": 359,
+   "not_patch_mode": 66,
+   "no_pointer_returned": 19,
+   "off_target": 12
+  },
+  "by_contract": {
+   "batch-critic.v2": {
+    "ladders": 67,
+    "calls_consumed": 165,
+    "terminal:completed": 41,
+    "terminal:schema_exhausted": 25,
+    "hit_grant_ceiling": 32,
+    "terminal:rejected": 1
+   },
+   "bridge.composition-batch.v1": {
+    "ladders": 1,
+    "calls_consumed": 2,
+    "terminal:schema_exhausted": 1,
+    "hit_grant_ceiling": 1
+   },
+   "bridge.composition.v2": {
+    "ladders": 2,
+    "calls_consumed": 4,
+    "terminal:schema_exhausted": 2,
+    "hit_grant_ceiling": 2
+   },
+   "bridge.ledger-batch.v1": {
+    "ladders": 2,
+    "calls_consumed": 4,
+    "terminal:completed": 1,
+    "hit_grant_ceiling": 2,
+    "terminal:schema_exhausted": 1
+   },
+   "bridge.ledger.v3": {
+    "ladders": 6,
+    "calls_consumed": 12,
+    "terminal:completed": 4,
+    "hit_grant_ceiling": 6,
+    "terminal:schema_exhausted": 2
+   },
+   "config-referee.v1": {
+    "ladders": 1,
+    "calls_consumed": 1,
+    "terminal:rejected": 1
+   },
+   "conjecturer.atomic-candidate.v1": {
+    "ladders": 11,
+    "calls_consumed": 33,
+    "terminal:completed": 4,
+    "terminal:schema_exhausted": 6,
+    "hit_grant_ceiling": 2,
+    "terminal:None": 1
+   },
+   "conjecturer.turn.v6": {
+    "ladders": 134,
+    "calls_consumed": 459,
+    "terminal:schema_exhausted": 64,
+    "hit_grant_ceiling": 52,
+    "terminal:rejected": 15,
+    "terminal:completed": 55
+   }
+  }
+ },
+ "truncation_by_model": {
+  "deepseek-v4-flash:0731": {
+   "attempts": 104,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "deepseek-v4-pro": {
+   "attempts": 57,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "deepseek-v4-pro:0813": {
+   "attempts": 37,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "gemma4:31b": {
+   "attempts": 34,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "glm-5.2": {
+   "attempts": 2378,
+   "truncated": 0,
+   "unnatural_stop": 11
+  },
+  "kimi-k2.6": {
+   "attempts": 48,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "kimi-k3": {
+   "attempts": 126,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "mistral-large-3:675b": {
+   "attempts": 200,
+   "truncated": 0,
+   "unnatural_stop": 0
+  },
+  "qwen3.5:397b": {
+   "attempts": 171,
+   "truncated": 0,
+   "unnatural_stop": 0
+  }
+ }
+}

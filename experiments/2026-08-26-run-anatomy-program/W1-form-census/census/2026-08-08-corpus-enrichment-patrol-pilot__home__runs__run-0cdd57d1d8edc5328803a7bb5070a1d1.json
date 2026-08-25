@@ -72,6 +72,54 @@
    "field": "/candidates/*/neighbours/*",
    "class": "V6_WIRE_REFERENCE_INVALID",
    "count": 3
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/patch",
+   "class": "extra_forbidden",
+   "count": 2
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/patches",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/pointer",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair_patch",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/baseline_sha256",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/operations",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repair",
+   "class": "extra_forbidden",
+   "count": 1
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/repairPatch",
+   "class": "extra_forbidden",
+   "count": 1
   }
  ],
  "coercion": {
@@ -82,7 +130,13 @@
   }
  },
  "escape_followups": {},
- "lossless_spelling_pointers": {},
+ "lossless_spelling_pointers": {
+  "/patches": 1,
+  "/pointer": 1,
+  "/baseline_sha256": 1,
+  "/patch": 2,
+  "/operations": 1
+ },
  "decomposition_events": [
   {
    "source_contract_id": "conjecturer.turn.v6",
@@ -113,346 +167,319 @@
  },
  "repair_fights": [
   {
-   "work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
-   "contract_id": "conjecturer.turn.v6",
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "contract_ids": [
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6"
+   ],
    "role": "conjecturer",
    "seat": 0,
    "cycle": 1,
-   "calls_consumed": 1,
+   "calls_consumed": 5,
    "grant": {
     "maximum_provider_calls": 5,
     "maximum_schema_repairs": 4
    },
    "arrival_validity": [
-    false
+    false,
+    true,
+    false,
+    false,
+    true
    ],
    "asked_for": [
+    [],
     [
-     "/scratch_proposal/links/*/to_ref",
-     "/scratch_proposal/links/*/to_ref",
-     "/scratch_proposal/links/*/to_ref"
+     "/scratch_proposal/links/0/to_ref",
+     "/scratch_proposal/links/1/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
     ]
    ],
    "came_back_at": [
-    "/scratch_proposal/links/0/to_ref"
+    [],
+    [
+     "/scratch_proposal/links/0/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
+    ],
+    [
+     "/scratch_proposal/links/1/to_ref"
+    ]
    ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_requested",
-   "task_kind": "conjecture"
+   "patch_verdicts": [
+    null,
+    "on_target",
+    "on_target",
+    "on_target",
+    "on_target"
+   ],
+   "repair_modes": [
+    null,
+    "patch",
+    "patch",
+    "patch",
+    "patch"
+   ],
+   "task_kinds": [
+    "conjecture",
+    "repair",
+    "repair",
+    "repair",
+    "repair"
+   ],
+   "terminal_status": "completed",
+   "terminal_reason": "semantic_admission_complete"
   },
   {
-   "work_id": "sha256:d62d575c84a3c756954d92011c82e74271f358f5e1b32bd9456f7c8f321683a9",
-   "contract_id": "conjecturer.turn.v6",
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "contract_ids": [
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6"
+   ],
    "role": "conjecturer",
    "seat": 0,
    "cycle": 1,
-   "calls_consumed": 1,
+   "calls_consumed": 5,
    "grant": {
     "maximum_provider_calls": 5,
     "maximum_schema_repairs": 4
    },
    "arrival_validity": [
-    false
+    false,
+    true,
+    false,
+    false,
+    true
    ],
    "asked_for": [
+    [],
     [
-     "/scratch_proposal/links/*/to_ref"
+     "/candidates/0/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
     ]
    ],
    "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:ce3086253915acd9b39905ae3ee296b25f40e32cd53b38c44f282271f5d65bd8",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 1,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
+    [],
     [
-     "/scratch_proposal/links/*/to_ref"
+     "/candidates/0/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
+    ],
+    [
+     "/candidates/1/optional_refs/1"
     ]
    ],
-   "came_back_at": [
-    ""
+   "patch_verdicts": [
+    null,
+    "on_target",
+    "on_target",
+    "on_target",
+    "on_target"
    ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 1,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
+   "repair_modes": [
+    null,
+    "patch",
+    "patch",
+    "patch",
+    "patch"
    ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_requested",
-   "task_kind": "conjecture"
-  },
-  {
-   "work_id": "sha256:56904823234a44307f4ee91db5126bf373143f6c89e8c07895224696a4471f86",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 1,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:92b366af9281d6eec4d08a00fa36c3a7969f289304df9d31091c31c9a8f417ba",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 1,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 3,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/neighbours/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_requested",
-   "task_kind": "conjecture"
-  },
-  {
-   "work_id": "sha256:474101bb9ab108c7a24f87a4bf50caeb68efd7b40861b4447ca110ae9224da2f",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 3,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/neighbours/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 4,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_requested",
-   "task_kind": "conjecture"
-  },
-  {
-   "work_id": "sha256:aa44ea18c16a0458c98ef3a5e33d0d67fac0a45d7d57a4ff876247bdc54cf74e",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 4,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:03bcd966a1b1c79b9b60a3c20e091eb22552636cacd58d677c17209c6788efcb",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 4,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:9abc5538ed3a0c98de047e1c682838d904c9ac37ee99d9a0f7517df3e66af1ca",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 4,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
-   ],
-   "terminal_status": "rejected",
-   "terminal_reason": "conjecture_repair_step_rejected",
-   "task_kind": "repair"
-  },
-  {
-   "work_id": "sha256:1e1e027d760796d10e5fb886ed31b4c315626ebbd0e6040ed085357a954f96f6",
-   "contract_id": "conjecturer.turn.v6",
-   "role": "conjecturer",
-   "seat": 0,
-   "cycle": 4,
-   "calls_consumed": 1,
-   "grant": {
-    "maximum_provider_calls": 5,
-    "maximum_schema_repairs": 4
-   },
-   "arrival_validity": [
-    false
-   ],
-   "asked_for": [
-    [
-     "/candidates/*/optional_refs/*"
-    ]
-   ],
-   "came_back_at": [
-    ""
+   "task_kinds": [
+    "conjecture",
+    "repair",
+    "repair",
+    "repair",
+    "repair"
    ],
    "terminal_status": "schema_exhausted",
-   "terminal_reason": "conjecture_schema_exhausted",
-   "task_kind": "repair"
+   "terminal_reason": "conjecture_schema_exhausted"
+  },
+  {
+   "chain_root": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "contract_ids": [
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6"
+   ],
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 3,
+   "calls_consumed": 4,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false,
+    false,
+    true,
+    true
+   ],
+   "asked_for": [
+    [],
+    [
+     "/candidates/1/neighbours/4"
+    ],
+    [
+     "/candidates/1/neighbours/4"
+    ],
+    [
+     "/candidates/3/neighbours/3"
+    ]
+   ],
+   "came_back_at": [
+    [],
+    [
+     "/candidates/1/neighbours/4"
+    ],
+    [
+     "/candidates/1/neighbours/4"
+    ],
+    [
+     "/candidates/3/neighbours/3"
+    ]
+   ],
+   "patch_verdicts": [
+    null,
+    "on_target",
+    "on_target",
+    "on_target"
+   ],
+   "repair_modes": [
+    null,
+    "patch",
+    "patch",
+    "patch"
+   ],
+   "task_kinds": [
+    "conjecture",
+    "repair",
+    "repair",
+    "repair"
+   ],
+   "terminal_status": "completed",
+   "terminal_reason": "semantic_admission_complete"
+  },
+  {
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "contract_ids": [
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6",
+    "conjecturer.turn.v6"
+   ],
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 4,
+   "calls_consumed": 5,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "asked_for": [
+    [],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ]
+   ],
+   "came_back_at": [
+    [],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ],
+    [
+     "/candidates/3/optional_refs/2"
+    ]
+   ],
+   "patch_verdicts": [
+    null,
+    "on_target",
+    "on_target",
+    "on_target",
+    "on_target"
+   ],
+   "repair_modes": [
+    null,
+    "patch",
+    "patch",
+    "patch",
+    "patch"
+   ],
+   "task_kinds": [
+    "conjecture",
+    "repair",
+    "repair",
+    "repair",
+    "repair"
+   ],
+   "terminal_status": "schema_exhausted",
+   "terminal_reason": "conjecture_schema_exhausted"
   }
  ],
+ "repair_patch_verdicts": {
+  "on_target": 15
+ },
+ "repair_modes": {
+  "patch": 15
+ },
+ "task_kinds": {
+  "criticism": 26,
+  "conjecture": 22,
+  "repair": 15
+ },
  "content": {
   "valid_responses_unparsed": 0,
   "wire_shapes": {
@@ -1021,7 +1048,18 @@
    "work_id": "sha256:71a6d89b5e4e85cd61b750aed9ce4dff911961470e5e52013dbd678600525a87",
    "raw_ref": "8cb8d7a237d403d4e86c9e502d41d48216d6d5b931070a16d0c8e9f2a84a6f37",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:71a6d89b5e4e85cd61b750aed9ce4dff911961470e5e52013dbd678600525a87",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 28,
@@ -1048,7 +1086,18 @@
    "work_id": "sha256:88f60b3d4b97a088b744b857b033d0c7728372228daf2384262957b031c941dc",
    "raw_ref": "7f43edf30a1fcb7eb17c91aa7b955749e7fea1102cdecec930d5879f81a70b19",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:88f60b3d4b97a088b744b857b033d0c7728372228daf2384262957b031c941dc",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 39,
@@ -1075,7 +1124,18 @@
    "work_id": "sha256:9495bfd369a3202eba7d3f381343514d47ae25f099436ef3794f883c8ee56980",
    "raw_ref": "732041a5ec7193f8b942d9c2602644d7406899d0221cea9cab59f5126cb5dc16",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:9495bfd369a3202eba7d3f381343514d47ae25f099436ef3794f883c8ee56980",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 48,
@@ -1102,7 +1162,18 @@
    "work_id": "sha256:194b58d7bb5b0908eadc8523159d7430e5051da50ca07f822005c75c7d17ba4c",
    "raw_ref": "836b73fcf6f15c843a381966dddba3608b14198d66f2fe8fc07eb7277b333e8f",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:194b58d7bb5b0908eadc8523159d7430e5051da50ca07f822005c75c7d17ba4c",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 61,
@@ -1172,7 +1243,18 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 66,
@@ -1214,7 +1296,25 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 1,
+   "authorized_pointers": [
+    "/scratch_proposal/links/0/to_ref",
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "parent_work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "previous_work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "dispatched_diagnostic_ref": "4d4bf7304e3a4b8b2ecbb4280f670be9cbf0055324b7e06ad2264e85ec7e3ef3",
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "returned_pointers": [
+    "/scratch_proposal/links/0/to_ref"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 71,
@@ -1244,8 +1344,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/patches",
+     "field_raw": "/patches",
      "message": "extra field at /patches",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -1268,7 +1368,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 2,
+   "authorized_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "parent_work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "previous_work_id": "sha256:b777cb7547cfdbfb0ca7ff41cf2ed7fe1eef4a38258612c3a8e99f925264c9a2",
+   "dispatched_diagnostic_ref": "fb986c63a4fe90bb44416264ce01abf78492a0803f0b2b2cef38b4b7f5fb0ca0",
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "returned_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 76,
@@ -1298,8 +1415,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/pointer",
+     "field_raw": "/pointer",
      "message": "extra field at /pointer",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -1322,7 +1439,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 3,
+   "authorized_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "parent_work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "previous_work_id": "sha256:d62d575c84a3c756954d92011c82e74271f358f5e1b32bd9456f7c8f321683a9",
+   "dispatched_diagnostic_ref": "fb986c63a4fe90bb44416264ce01abf78492a0803f0b2b2cef38b4b7f5fb0ca0",
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "returned_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 81,
@@ -1349,7 +1483,24 @@
    "work_id": "sha256:083514b6f3a74665c1576c8bd84ab0b6fc3e97b452a8bf87ef5230e401e00062",
    "raw_ref": "a6daccc4efa340c60d8f1265d7c0c16a90003f04b99d4c255380fb3585fae93a",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 4,
+   "authorized_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "parent_work_id": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "previous_work_id": "sha256:ce3086253915acd9b39905ae3ee296b25f40e32cd53b38c44f282271f5d65bd8",
+   "dispatched_diagnostic_ref": "fb986c63a4fe90bb44416264ce01abf78492a0803f0b2b2cef38b4b7f5fb0ca0",
+   "chain_root": "sha256:cf213b74f89ea54993251981bef7043d7decd4b5b33b3512a555abf12f88d961",
+   "returned_pointers": [
+    "/scratch_proposal/links/1/to_ref"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 101,
@@ -1376,7 +1527,18 @@
    "work_id": "sha256:a9f2e482c170bf8d5e2288b2b28eaf59e610eb040259521342c455c7a3980151",
    "raw_ref": "aebea3e8c1a568517514dc742878c9611ea253ad278c1e82264021fd9ed1dae3",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:a9f2e482c170bf8d5e2288b2b28eaf59e610eb040259521342c455c7a3980151",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 112,
@@ -1403,7 +1565,18 @@
    "work_id": "sha256:04a97e8229c1de6b26c616cc4a69363018aec169691ff3595277000caa511fb0",
    "raw_ref": "48da67358ea928845a6986d0490dfb826950c8b4bbf4bb0d2a650b0d61f143c7",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:04a97e8229c1de6b26c616cc4a69363018aec169691ff3595277000caa511fb0",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 135,
@@ -1430,7 +1603,18 @@
    "work_id": "sha256:e160d1719da40ffc35ff897d1353bc3fd7801f755fb308dc7783dbc3a971377e",
    "raw_ref": "fa203f15cece3144663a32b33f08c01a6c97c5f50ec5cf786bccf60f2dd4e1ff",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:e160d1719da40ffc35ff897d1353bc3fd7801f755fb308dc7783dbc3a971377e",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 159,
@@ -1457,7 +1641,18 @@
    "work_id": "sha256:19d57aec37bb2f994eb9060be0e84a30e6b9c725d5f3d96cf56d32b2ea090636",
    "raw_ref": "94d80a37a23a597ee223233f919196ff74cd33c6fdacee01471635dea0dbf936",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:19d57aec37bb2f994eb9060be0e84a30e6b9c725d5f3d96cf56d32b2ea090636",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 170,
@@ -1484,7 +1679,18 @@
    "work_id": "sha256:d7b75966d156b15ec251ba6a16111205a181f2dcc48715681c38a93412f4ddbd",
    "raw_ref": "98530b0018d2b0581e12375de8d437b97d2869cb5b04e41de3ce4fa9035e73f8",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:d7b75966d156b15ec251ba6a16111205a181f2dcc48715681c38a93412f4ddbd",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 179,
@@ -1511,7 +1717,18 @@
    "work_id": "sha256:7f5a27c48a0a8cfc46b876dc3faacf6238a208ae094fa37787e53e860c04a29d",
    "raw_ref": "e18e6b5e9c71aed21b0a96e4628e06ec6c1b3a79aa923a255ce26951c9e4f55a",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:7f5a27c48a0a8cfc46b876dc3faacf6238a208ae094fa37787e53e860c04a29d",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 212,
@@ -1581,7 +1798,18 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 217,
@@ -1630,7 +1858,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 1,
+   "authorized_pointers": [
+    "/candidates/0/optional_refs/1"
+   ],
+   "parent_work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "previous_work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "dispatched_diagnostic_ref": "dac348953ab3b839fbf2620a69e2f19fa6e2aa97c564662d35859d63bc27f059",
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "returned_pointers": [
+    "/candidates/0/optional_refs/1"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 222,
@@ -1660,8 +1905,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/repair_patch",
+     "field_raw": "/repair_patch",
      "message": "extra field at /repair_patch",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -1691,7 +1936,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 2,
+   "authorized_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "parent_work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "previous_work_id": "sha256:ea6ff65ecdfc9ed470d0607721bbda163059245e56281e6bb3ba555d5eba6b63",
+   "dispatched_diagnostic_ref": "438c11bb208df7030c2e3a4c8f3cd97ae301d18647c82dddfb680d42c1edc096",
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "returned_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 227,
@@ -1721,8 +1983,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/baseline_sha256",
+     "field_raw": "/baseline_sha256",
      "message": "extra field at /baseline_sha256",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -1752,7 +2014,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 3,
+   "authorized_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "parent_work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "previous_work_id": "sha256:56904823234a44307f4ee91db5126bf373143f6c89e8c07895224696a4471f86",
+   "dispatched_diagnostic_ref": "438c11bb208df7030c2e3a4c8f3cd97ae301d18647c82dddfb680d42c1edc096",
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "returned_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 232,
@@ -1801,7 +2080,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 4,
+   "authorized_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "parent_work_id": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "previous_work_id": "sha256:92b366af9281d6eec4d08a00fa36c3a7969f289304df9d31091c31c9a8f417ba",
+   "dispatched_diagnostic_ref": "438c11bb208df7030c2e3a4c8f3cd97ae301d18647c82dddfb680d42c1edc096",
+   "chain_root": "sha256:8a83120ef3c53b2c1f75cf0c8819acca539162ab601ccfb21e5fa0ca5b3f5f26",
+   "returned_pointers": [
+    "/candidates/1/optional_refs/1"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 238,
@@ -1828,7 +2124,18 @@
    "work_id": "sha256:721c1f432f361265d4dd32776f8ffa5d088e9a27dccfd77b6fb009222e5f5fd6",
    "raw_ref": "920a54d13cfa458b151ddd06d3455bcc15874de0a8cb872ed7163d380977bab5",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:721c1f432f361265d4dd32776f8ffa5d088e9a27dccfd77b6fb009222e5f5fd6",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 243,
@@ -1855,7 +2162,18 @@
    "work_id": "sha256:b3e0c1eaceb0b520bddb7d678bc122da3f244d839800d24425bb781955d8c86e",
    "raw_ref": "16b560f77c974380a190cb3acb5e79909d84c50fe72f89802f1a109bdc82e668",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:b3e0c1eaceb0b520bddb7d678bc122da3f244d839800d24425bb781955d8c86e",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 248,
@@ -1882,7 +2200,18 @@
    "work_id": "sha256:d29dfbd3acd5c004fa8b4e39f440c905241b998cac65565fac15545e3cea72eb",
    "raw_ref": "833bac4e1526c3b6df3a27052ab70df674ac482619b7243676b71df5d5f27be6",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:d29dfbd3acd5c004fa8b4e39f440c905241b998cac65565fac15545e3cea72eb",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 253,
@@ -1909,7 +2238,18 @@
    "work_id": "sha256:fc0925eaaef88b51b869275f52236c94bb3988ecd5053da76513930a035e11ad",
    "raw_ref": "d56d3f057707901e5473d8314559dfda6b590b54a48c88b0800a85bafb9d4aa0",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:fc0925eaaef88b51b869275f52236c94bb3988ecd5053da76513930a035e11ad",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 258,
@@ -1936,7 +2276,18 @@
    "work_id": "sha256:289815cab51cb0734602cf532bfbd6d003426089e17be88340127e263bb3e492",
    "raw_ref": "9209dbc004a530d9503fc65c3c164317762e4623659a6e984263107704f94e35",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:289815cab51cb0734602cf532bfbd6d003426089e17be88340127e263bb3e492",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 263,
@@ -1963,7 +2314,18 @@
    "work_id": "sha256:2e8ae61e52cde98f530bb157bdc01cde5c5cfec3c92aff37038acaad4db8113d",
    "raw_ref": "ee1ea1a3ece0e6018a78e5b2120122cb99d14c925910a622712f23cf3c6748fe",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:2e8ae61e52cde98f530bb157bdc01cde5c5cfec3c92aff37038acaad4db8113d",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 296,
@@ -1990,7 +2352,18 @@
    "work_id": "sha256:058f654e53baf1e30a0b7151dd5369d6c2c5e271159896f359002d3dae0a0b24",
    "raw_ref": "5618ab440430ef99a53bb41242c8104715d4cb414f01182065ce92e28d2614fd",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:058f654e53baf1e30a0b7151dd5369d6c2c5e271159896f359002d3dae0a0b24",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 309,
@@ -2017,7 +2390,18 @@
    "work_id": "sha256:feda2388b4a4549034b43f8227bdacaa01f0c6ca8a8e4d3a4ab2bc0147d13087",
    "raw_ref": "53868ad153a2f44b968529ce426e0ea6ffbe5ac20b121c67765d178f79517f32",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:feda2388b4a4549034b43f8227bdacaa01f0c6ca8a8e4d3a4ab2bc0147d13087",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 316,
@@ -2044,7 +2428,18 @@
    "work_id": "sha256:820609512d3d0f72e1ca84970a232f4fbcf3d2f927d352694c2ea98282f264b6",
    "raw_ref": "83dce1d6374ae8ddcec78494156e0f24a661c7598dcf61f994ebb7fd8d0e32f0",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:820609512d3d0f72e1ca84970a232f4fbcf3d2f927d352694c2ea98282f264b6",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 453,
@@ -2071,7 +2466,18 @@
    "work_id": "sha256:ea361abd8462a5b85c41680b8c8b4fa326a98ae1a75d44f3f2bcccd02948dc02",
    "raw_ref": "c5915f00fe4ff26042efc237c9401a18970d2fe11319e5360fff54bdc459aac9",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:ea361abd8462a5b85c41680b8c8b4fa326a98ae1a75d44f3f2bcccd02948dc02",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 471,
@@ -2098,7 +2504,18 @@
    "work_id": "sha256:00cd89788ee9c56b1220dbb3d0b485a8aa1e41a7c12c1ca748dfffdd3742b4ac",
    "raw_ref": "2cd80dbf51fa5a04a97b72c9e11398de37d5a4fd28b4a5916ce9b48063a7e43b",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:00cd89788ee9c56b1220dbb3d0b485a8aa1e41a7c12c1ca748dfffdd3742b4ac",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 480,
@@ -2125,7 +2542,18 @@
    "work_id": "sha256:68a57e9299bc44c436d3fd1b5926c07e1fa10739172e93cb9b9844863523385b",
    "raw_ref": "6679bec5c8d51cd2c4ac498e9c60a2ce7a553a9e0e443c6f3212884d88055f38",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:68a57e9299bc44c436d3fd1b5926c07e1fa10739172e93cb9b9844863523385b",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 493,
@@ -2152,7 +2580,18 @@
    "work_id": "sha256:c51e8766044c35d5cc95702ddae1f9216300a1a71cbf07ed49fce0f486a5e0ca",
    "raw_ref": "9f27459270de22734752a7eeffbfc3c4e660a75ec291e269c5e127010a7c54fd",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:c51e8766044c35d5cc95702ddae1f9216300a1a71cbf07ed49fce0f486a5e0ca",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 534,
@@ -2179,7 +2618,18 @@
    "work_id": "sha256:cb229bb9fd8294484e7723a22e49d63cb73650a9aab430e0d56352226df2bf64",
    "raw_ref": "9aeec7265ab8ad7fa55464fceb15bf7d8898208612c4057ba874c3353d600534",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:cb229bb9fd8294484e7723a22e49d63cb73650a9aab430e0d56352226df2bf64",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 557,
@@ -2206,7 +2656,18 @@
    "work_id": "sha256:e874223916927c7e82fee7dd08d01b476229898bf733b3ac0150eacd33dd50d8",
    "raw_ref": "f8a827e03b3a04071bccd7f54bad067a5694b6a15dfc829e1a12d6b3f6a0e99c",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:e874223916927c7e82fee7dd08d01b476229898bf733b3ac0150eacd33dd50d8",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 570,
@@ -2233,7 +2694,18 @@
    "work_id": "sha256:ab57aa2cacfbf3130626e03d87de1556a6513721a03a5b1e35cb11f2d223bb90",
    "raw_ref": "9c806a334e90e7ea7cbe6c98c4614250db7e8e0e37173141f51de1f41110ebd1",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:ab57aa2cacfbf3130626e03d87de1556a6513721a03a5b1e35cb11f2d223bb90",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 610,
@@ -2260,7 +2732,18 @@
    "work_id": "sha256:466a764d570936aeeb530800742ab4972980e3ca58fe33fcda0722482f799a54",
    "raw_ref": "18e25f80060ba464b49006b99338eb304918398a5f0301f014292e720e266a52",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:466a764d570936aeeb530800742ab4972980e3ca58fe33fcda0722482f799a54",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 628,
@@ -2287,7 +2770,18 @@
    "work_id": "sha256:5c9a08a60b70863a19afd99ff2e0ef2fd9c6a368c287a6cf0bdd3ad7b4cd88d1",
    "raw_ref": "af5372b54bb30ad4794910194be72db7c5ac7e72274eb07a608839d30785b482",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:5c9a08a60b70863a19afd99ff2e0ef2fd9c6a368c287a6cf0bdd3ad7b4cd88d1",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 641,
@@ -2314,7 +2808,18 @@
    "work_id": "sha256:9ec86fface77efd976f6ef7337507f2b66de32983201bfb068731ab1b3b347cc",
    "raw_ref": "41329d96a9aaf1a3f9a8a107486c860626b06bb6d0c7619ec97f21b4bacde3c1",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:9ec86fface77efd976f6ef7337507f2b66de32983201bfb068731ab1b3b347cc",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 652,
@@ -2341,7 +2846,18 @@
    "work_id": "sha256:5c27e7872a3fc725a54ef396afeadca73a72e127dee929074ea39c53c4e9a0da",
    "raw_ref": "db4a096289dc06a81efa60f7d3ed756e63c19380ff2b4ee1bbe1e888de4d70d7",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:5c27e7872a3fc725a54ef396afeadca73a72e127dee929074ea39c53c4e9a0da",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 700,
@@ -2421,7 +2937,18 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 705,
@@ -2451,8 +2978,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/patch",
+     "field_raw": "/patch",
      "message": "extra field at /patch",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -2487,7 +3014,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 1,
+   "authorized_pointers": [
+    "/candidates/1/neighbours/4"
+   ],
+   "parent_work_id": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "previous_work_id": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "dispatched_diagnostic_ref": "4faab147f9eb786c41f76b051a981718d2ef627717f994a76913a9db2b8d9817",
+   "chain_root": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "returned_pointers": [
+    "/candidates/1/neighbours/4"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 710,
@@ -2541,7 +3085,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 2,
+   "authorized_pointers": [
+    "/candidates/1/neighbours/4"
+   ],
+   "parent_work_id": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "previous_work_id": "sha256:474101bb9ab108c7a24f87a4bf50caeb68efd7b40861b4447ca110ae9224da2f",
+   "dispatched_diagnostic_ref": "4faab147f9eb786c41f76b051a981718d2ef627717f994a76913a9db2b8d9817",
+   "chain_root": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "returned_pointers": [
+    "/candidates/1/neighbours/4"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 715,
@@ -2568,7 +3129,24 @@
    "work_id": "sha256:195681c1782de6508a479e5959363600dcbfdef62c5a43d63f9c64302fa85cb4",
    "raw_ref": "32bbd4aa899258caf86d35f6859b53c3bba2e37c69f8752938d980b8848a6e68",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 3,
+   "authorized_pointers": [
+    "/candidates/3/neighbours/3"
+   ],
+   "parent_work_id": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "previous_work_id": "sha256:0e80af19d931af531d2efe886cad4c31621a984b386dfdcafd61817240050684",
+   "dispatched_diagnostic_ref": "ab9611d4cfd74cd7612f1848e46a34ebeaddba309cb5be22d7916ab71cd9aab4",
+   "chain_root": "sha256:bc88658e72664fa63d8dcdc256e1fdc24c3d5b61942e81199aad4c64a91b7779",
+   "returned_pointers": [
+    "/candidates/3/neighbours/3"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 733,
@@ -2595,7 +3173,18 @@
    "work_id": "sha256:163ab688dcee30324b0e436ce635bc7dba794aa634b80c80991b98aff76d5c2b",
    "raw_ref": "e1d1d76868d5a275de13a671927c81e52bf38f993462469f72ad0203c5c71d72",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:163ab688dcee30324b0e436ce635bc7dba794aa634b80c80991b98aff76d5c2b",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 750,
@@ -2622,7 +3211,18 @@
    "work_id": "sha256:ab5191d915f3d411594ca715443efa0c599bb6ca344d9c7be0cf06f478f22954",
    "raw_ref": "6a3b22db9e43d85d9d3df504762adbcdefcdfeb7621a5fc58f7d02d753a4b3e3",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:ab5191d915f3d411594ca715443efa0c599bb6ca344d9c7be0cf06f478f22954",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 830,
@@ -2692,7 +3292,18 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 835,
@@ -2722,8 +3333,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/operations",
+     "field_raw": "/operations",
      "message": "extra field at /operations",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -2753,7 +3364,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 1,
+   "authorized_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "parent_work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "previous_work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "dispatched_diagnostic_ref": "b321c878a0f61649414075fa4db464c5e6c85d27eb2efeb511947f64139dd89d",
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "returned_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 840,
@@ -2783,8 +3411,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/repair",
+     "field_raw": "/repair",
      "message": "extra field at /repair",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -2814,7 +3442,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 2,
+   "authorized_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "parent_work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "previous_work_id": "sha256:aa44ea18c16a0458c98ef3a5e33d0d67fac0a45d7d57a4ff876247bdc54cf74e",
+   "dispatched_diagnostic_ref": "b321c878a0f61649414075fa4db464c5e6c85d27eb2efeb511947f64139dd89d",
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "returned_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 845,
@@ -2844,8 +3489,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/patch",
+     "field_raw": "/patch",
      "message": "extra field at /patch",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -2875,7 +3520,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 3,
+   "authorized_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "parent_work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "previous_work_id": "sha256:03bcd966a1b1c79b9b60a3c20e091eb22552636cacd58d677c17209c6788efcb",
+   "dispatched_diagnostic_ref": "b321c878a0f61649414075fa4db464c5e6c85d27eb2efeb511947f64139dd89d",
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "returned_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 850,
@@ -2905,8 +3567,8 @@
    "failures": [
     {
      "class": "extra_forbidden",
-     "field": "",
-     "field_raw": "",
+     "field": "/repairPatch",
+     "field_raw": "/repairPatch",
      "message": "extra field at /repairPatch",
      "allowed": "complete JSON value",
      "rejected_handle": null,
@@ -2936,7 +3598,24 @@
      ],
      "kind": "repair_envelope"
     }
-   ]
+   ],
+   "task_kind": "repair",
+   "repair_mode": "patch",
+   "repair_index": 4,
+   "authorized_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "parent_work_id": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "previous_work_id": "sha256:9abc5538ed3a0c98de047e1c682838d904c9ac37ee99d9a0f7517df3e66af1ca",
+   "dispatched_diagnostic_ref": "b321c878a0f61649414075fa4db464c5e6c85d27eb2efeb511947f64139dd89d",
+   "chain_root": "sha256:e8bee5ba1a4a5bc1ed22a503065298b94960b6c74fe996e62cd2878f8358f416",
+   "returned_pointers": [
+    "/candidates/3/optional_refs/2"
+   ],
+   "returned_operations": [
+    "replace"
+   ],
+   "patch_verdict": "on_target"
   },
   {
    "seq": 856,
@@ -2963,7 +3642,18 @@
    "work_id": "sha256:2a1b0f82449501042d1696debfa567489b6ded842ceeaf5f844cd695860cf65f",
    "raw_ref": "97ca671354c5e3f980460067d271fb01359c8d73cac5a5a2a9f048c5173c2efc",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:2a1b0f82449501042d1696debfa567489b6ded842ceeaf5f844cd695860cf65f",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 861,
@@ -2990,7 +3680,18 @@
    "work_id": "sha256:cc47925f1864c19903f6667233deee9f061a462ff6b0fe63725fa36e694a5424",
    "raw_ref": "3a95e0de93195201c0cbe2ecf65eb4dcf8819a2523b01d3bed0eec35722eea56",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:cc47925f1864c19903f6667233deee9f061a462ff6b0fe63725fa36e694a5424",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 866,
@@ -3017,7 +3718,18 @@
    "work_id": "sha256:88835a938815cf735a1a3833bb1896545f13ef1976311352291f612153c5f09a",
    "raw_ref": "4a0014ce053d427737531fa2708b9dbe338d13830a45e23fd9703210244dc5bb",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:88835a938815cf735a1a3833bb1896545f13ef1976311352291f612153c5f09a",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 871,
@@ -3044,7 +3756,18 @@
    "work_id": "sha256:2ee8b1cab5190c4e5d48e049b01f6eab0562f9a98f5021c202a70c71e56eab52",
    "raw_ref": "6aa5bb64bc54d0419a1f9194b20e5918c39e979088dc2ff8b6516957ae8c28a8",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:2ee8b1cab5190c4e5d48e049b01f6eab0562f9a98f5021c202a70c71e56eab52",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 876,
@@ -3071,7 +3794,18 @@
    "work_id": "sha256:2cbc4441e8035f161a7682ad0c743d7483d7600040b838c63ec3b234a312b1f8",
    "raw_ref": "b58f08a7f1d1b318bb2639198a94d17c5a584443d16769a9aebb6a7c7bac2d9a",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:2cbc4441e8035f161a7682ad0c743d7483d7600040b838c63ec3b234a312b1f8",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 881,
@@ -3098,7 +3832,18 @@
    "work_id": "sha256:1a959f6ad660d79862c9720537cd81967e071aee9a356af062b176963cd17c3e",
    "raw_ref": "563f5803e5657b192e73665abab1b97aa9286dca48490eb25f49f5ef61ee3117",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:1a959f6ad660d79862c9720537cd81967e071aee9a356af062b176963cd17c3e",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 911,
@@ -3125,7 +3870,18 @@
    "work_id": "sha256:6d62d01bc022cfc1cd4fb8ef58fbee4f62757b8fb9b7e5690d511c0d74044809",
    "raw_ref": "057b3a615265f0447df5e25e45f35aca165fa7779693efaa7868d9f4ee7aa0ee",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:6d62d01bc022cfc1cd4fb8ef58fbee4f62757b8fb9b7e5690d511c0d74044809",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 933,
@@ -3152,7 +3908,18 @@
    "work_id": "sha256:280b048d5e8d4f7c7aefd9efc9abc128c91e3eae43c58e07bb9c50801bd055c1",
    "raw_ref": "05c30f1b68e319ddec7225904532e117ea9e5cd8a2d6c85599a2b0fb469c983e",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:280b048d5e8d4f7c7aefd9efc9abc128c91e3eae43c58e07bb9c50801bd055c1",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 1077,
@@ -3179,7 +3946,18 @@
    "work_id": "sha256:cfc73c5ffb24c5a36e37405430c812c4f4f81d0e27106e51495f91cfafa14456",
    "raw_ref": "e1ac41fc88474d60c230356d6564360fdf5e8396dca38e01290a2ccc1f9e0b6c",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "conjecture",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:cfc73c5ffb24c5a36e37405430c812c4f4f81d0e27106e51495f91cfafa14456",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 1096,
@@ -3206,7 +3984,18 @@
    "work_id": "sha256:8ab87c8c8ef970a1ae11876748973977db338bbcf0c7a3e0ee3ae96838d90be6",
    "raw_ref": "3b5afea875adfc32256a2c665a139d75c8604baa073717e90368f237823d8913",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:8ab87c8c8ef970a1ae11876748973977db338bbcf0c7a3e0ee3ae96838d90be6",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 1115,
@@ -3233,7 +4022,18 @@
    "work_id": "sha256:d37791b68ceadd42111adab782c8a86db454e716d306d243ae028be56b8d0bc3",
    "raw_ref": "5b3fc1cbf59cf293dd00ce2b69d9628a660e3122770604b8defcb38693d22e70",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:d37791b68ceadd42111adab782c8a86db454e716d306d243ae028be56b8d0bc3",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   },
   {
    "seq": 1124,
@@ -3260,7 +4060,18 @@
    "work_id": "sha256:4d2905765357f493668f68cfedfd5124f960b9c67e710b81809d578bc455fc9f",
    "raw_ref": "66775fe2699da4f4921c8f6340f918b5abfe4c557330856d1116698284f360e2",
    "admission_outcome": "admitted",
-   "failures": []
+   "failures": [],
+   "task_kind": "criticism",
+   "repair_mode": null,
+   "repair_index": null,
+   "authorized_pointers": [],
+   "parent_work_id": null,
+   "previous_work_id": null,
+   "dispatched_diagnostic_ref": null,
+   "chain_root": "sha256:4d2905765357f493668f68cfedfd5124f960b9c67e710b81809d578bc455fc9f",
+   "returned_pointers": [],
+   "returned_operations": [],
+   "patch_verdict": null
   }
  ]
 }

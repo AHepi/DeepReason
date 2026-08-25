@@ -1,0 +1,390 @@
+{
+ "schema": "run-anatomy.pc1-headline.v1",
+ "instance": "Heilbronn N=13, unit square, minimise-nothing/maximise the minimum triangle area over 286 triples",
+ "source_artifacts": [
+  "experiments/2026-08-25-change-constructive-frontier/arm_h_scores.json",
+  "experiments/2026-08-25-change-constructive-frontier/arm_s_merged.jsonl"
+ ],
+ "registered_floor": 0.005,
+ "arm_h": {
+  "arm": "H (harness)",
+  "candidates_scored": 132,
+  "transport_errors": 0,
+  "valid_checker_confirmed": 15,
+  "validity_rate": 0.1136,
+  "invalid": 117,
+  "invalidity_rate": 0.8864,
+  "causes": {
+   "CLAIM_INFLATED": 114,
+   "VALID_below_registered_floor": 15,
+   "WRONG_COUNT": 3
+  },
+  "field_level_causes": {
+   "claim string: CLAIM value exceeds the construction's own minimum": 114,
+   "claim string: wrong number of POINT lines": 3
+  },
+  "claim_inflated_detail": {
+   "total": 114,
+   "true_minimum_exactly_zero_collinear": 114,
+   "true_minimum_positive_but_overstated": 0,
+   "inflation_ratio_claimed_over_actual": {
+    "min": null,
+    "median": null,
+    "max": null
+   }
+  },
+  "wrong_count_detail": {
+   "required_points": 13,
+   "observed_point_counts": {
+    "12": 3
+   }
+  },
+  "coordinate_hygiene": {
+   "decimal_places_written": {
+    "0": 147,
+    "1": 76,
+    "2": 98,
+    "3": 47,
+    "6": 22
+   },
+   "duplicate_points_total": 0,
+   "coords_outside_unit_square": 0,
+   "nonnumeric_coordinates": 0
+  },
+  "exemplars": {
+   "VALID_below_floor": {
+    "score": 0.0004075,
+    "score_exact": "163/400000",
+    "claimed": 5e-05,
+    "n_points": 13,
+    "code": null,
+    "construction": "POINT 0.500000 0.500000\nPOINT 0.239000 0.351000\nPOINT 0.384000 0.741000\nPOINT 0.724000 0.631000\nPOINT 0.822000 0.302000\nPOINT 0.585000 0.083000\nPOINT 0.185000 0.634000\nPOINT 0.090000 0.239000\nPOINT 0.395000 0.031000\nPOINT 0.624000 0.904000\nPOINT 0.926000 0.802000\nPOINT 0.904000 0.117000\nPOINT 0.295000 0.936000\nCLAIM 0.000050"
+   },
+   "CLAIM_INFLATED_collinear": {
+    "score": 0.0,
+    "score_exact": "0",
+    "claimed": 0.015625,
+    "n_points": 13,
+    "code": "CLAIM_INFLATED",
+    "construction": ""
+   },
+   "WRONG_COUNT": {
+    "score": null,
+    "score_exact": null,
+    "claimed": null,
+    "n_points": 12,
+    "code": "WRONG_COUNT",
+    "construction": ""
+   }
+  }
+ },
+ "arm_s": {
+  "arm": "S (blind repeated sampling)",
+  "candidates_scored": 53,
+  "transport_errors": 1,
+  "valid_checker_confirmed": 23,
+  "validity_rate": 0.434,
+  "invalid": 30,
+  "invalidity_rate": 0.566,
+  "causes": {
+   "CLAIM_INFLATED": 30,
+   "VALID_above_floor": 13,
+   "VALID_below_registered_floor": 10,
+   "TRANSPORT_ERROR/no response scored": 1
+  },
+  "field_level_causes": {
+   "claim string: CLAIM value exceeds the construction's own minimum": 30
+  },
+  "claim_inflated_detail": {
+   "total": 30,
+   "true_minimum_exactly_zero_collinear": 14,
+   "true_minimum_positive_but_overstated": 16,
+   "inflation_ratio_claimed_over_actual": {
+    "min": 1.0,
+    "median": 1.17,
+    "max": 400.0
+   }
+  },
+  "wrong_count_detail": {
+   "required_points": 13,
+   "observed_point_counts": {}
+  },
+  "coordinate_hygiene": {
+   "decimal_places_written": {},
+   "duplicate_points_total": 0,
+   "coords_outside_unit_square": 0,
+   "nonnumeric_coordinates": 0
+  },
+  "exemplars": {
+   "CLAIM_INFLATED_overstated": {
+    "score": 0.003471986111,
+    "score_exact": "3471986111/1000000000000",
+    "claimed": 0.003472,
+    "n_points": 13,
+    "code": "CLAIM_INFLATED",
+    "construction": ""
+   },
+   "VALID_below_floor": {
+    "score": 0.0032,
+    "score_exact": "2/625",
+    "claimed": 0.0032,
+    "n_points": 13,
+    "code": null,
+    "construction": ""
+   },
+   "CLAIM_INFLATED_collinear": {
+    "score": 0.0,
+    "score_exact": "0",
+    "claimed": 0.008,
+    "n_points": 13,
+    "code": "CLAIM_INFLATED",
+    "construction": ""
+   }
+  }
+ },
+ "mechanism": {
+  "why_this_is_read_from_blobs": "arm_h_scores.json stores `text` only for candidates the checker CONFIRMED (score_run.py:157), so the 117 refuted constructions -- the subject of the headline -- are absent from it. They are read here from the run root's raw provider blobs, which is what the model actually wrote.",
+  "reconciliation_note": "Blob-level construction counts need not equal the tranche's artifact-level candidate counts: the same construction can be restated across a batch and is deduplicated here, and a response can carry a construction that never became a scored artifact. The artifact-level counts above remain authoritative for the headline; these counts are the mechanism census beneath it.",
+  "arm_h": {
+   "label": "ARM H (from the run root's raw provider blobs)",
+   "constructions_found": 133,
+   "checker_verdicts": {
+    "CLAIM_INFLATED": 115,
+    "VALID": 15,
+    "WRONG_COUNT": 3
+   },
+   "zero_cause_signature": {
+    "axis_aligned_triple": 126,
+    "not_scored_wrong_count": 3,
+    "oblique_collinear_triple_only": 3
+   },
+   "min_area_exactly_zero": 129,
+   "min_area_zero_rate": 0.9699,
+   "zero_with_coordinates_at_2dp_or_coarser": 70,
+   "coordinate_decimal_places_written": {
+    "0": 1331,
+    "1": 800,
+    "2": 701,
+    "3": 152,
+    "5": 45,
+    "6": 411
+   },
+   "by_coarsest_decimal_place": {
+    "1": {
+     "constructions": 7,
+     "min_area_zero": 6
+    },
+    "2": {
+     "constructions": 65,
+     "min_area_zero": 64
+    },
+    "3": {
+     "constructions": 17,
+     "min_area_zero": 16
+    },
+    "5": {
+     "constructions": 2,
+     "min_area_zero": 2
+    },
+    "6": {
+     "constructions": 42,
+     "min_area_zero": 41
+    }
+   },
+   "exemplars": {
+    "score_zero": {
+     "verdict": {
+      "valid": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "score": 0.0,
+      "score_exact": "0",
+      "claim": 0.015625,
+      "claim_confirmed": false
+     },
+     "max_decimal_places": 2,
+     "signature": {
+      "points": 13,
+      "x_shared_by_3_or_more": 3,
+      "y_shared_by_3_or_more": 3,
+      "axis_aligned_triple_present": true,
+      "distinct_x_values": 5,
+      "distinct_y_values": 5
+     },
+     "construction": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nCLAIM 0.015625"
+    },
+    "WRONG_COUNT": {
+     "verdict": {
+      "valid": false,
+      "code": "WRONG_COUNT",
+      "n_points": 12,
+      "n_triples": null,
+      "score": null,
+      "score_exact": null,
+      "claim": null,
+      "claim_confirmed": false
+     },
+     "max_decimal_places": 6,
+     "signature": {
+      "points": 12,
+      "x_shared_by_3_or_more": 2,
+      "y_shared_by_3_or_more": 3,
+      "axis_aligned_triple_present": true,
+      "distinct_x_values": 7,
+      "distinct_y_values": 4
+     },
+     "construction": "POINT 0.000000 0.000000\nPOINT 0.300000 0.000000\nPOINT 0.700000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.500000 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.150000 0.666667\nPOINT 0.850000 0.666667\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nCLAIM 0.033333"
+    },
+    "VALID": {
+     "verdict": {
+      "valid": true,
+      "code": null,
+      "n_points": 13,
+      "n_triples": 286,
+      "score": 0.0004075,
+      "score_exact": "163/400000",
+      "claim": 5e-05,
+      "claim_confirmed": true,
+      "above_floor": false
+     },
+     "max_decimal_places": 3,
+     "signature": {
+      "points": 13,
+      "x_shared_by_3_or_more": 0,
+      "y_shared_by_3_or_more": 0,
+      "axis_aligned_triple_present": false,
+      "distinct_x_values": 13,
+      "distinct_y_values": 13
+     },
+     "construction": "POINT 0.500000 0.500000\nPOINT 0.239000 0.351000\nPOINT 0.384000 0.741000\nPOINT 0.724000 0.631000\nPOINT 0.822000 0.302000\nPOINT 0.585000 0.083000\nPOINT 0.185000 0.634000\nPOINT 0.090000 0.239000\nPOINT 0.395000 0.031000\nPOINT 0.624000 0.904000\nPOINT 0.926000 0.802000\nPOINT 0.904000 0.117000\nPOINT 0.295000 0.936000\nCLAIM 0.000050"
+    }
+   }
+  },
+  "arm_s": {
+   "label": "ARM S (from the committed sample files)",
+   "constructions_found": 52,
+   "checker_verdicts": {
+    "CLAIM_INFLATED": 30,
+    "VALID": 22
+   },
+   "zero_cause_signature": {
+    "axis_aligned_triple": 10,
+    "oblique_collinear_triple_only": 4
+   },
+   "min_area_exactly_zero": 14,
+   "min_area_zero_rate": 0.2692,
+   "zero_with_coordinates_at_2dp_or_coarser": 9,
+   "coordinate_decimal_places_written": {
+    "0": 189,
+    "1": 181,
+    "2": 211,
+    "3": 28,
+    "4": 21,
+    "5": 14,
+    "6": 708
+   },
+   "by_coarsest_decimal_place": {
+    "1": {
+     "constructions": 2,
+     "min_area_zero": 2
+    },
+    "2": {
+     "constructions": 12,
+     "min_area_zero": 7
+    },
+    "3": {
+     "constructions": 1,
+     "min_area_zero": 1
+    },
+    "4": {
+     "constructions": 1,
+     "min_area_zero": 0
+    },
+    "6": {
+     "constructions": 36,
+     "min_area_zero": 4
+    }
+   },
+   "exemplars": {
+    "VALID": {
+     "verdict": {
+      "valid": true,
+      "code": null,
+      "n_points": 13,
+      "n_triples": 286,
+      "score": 0.013307680842,
+      "score_exact": "6653840421/500000000000",
+      "claim": 0.0133,
+      "claim_confirmed": true,
+      "above_floor": true
+     },
+     "max_decimal_places": 6,
+     "signature": {
+      "points": 13,
+      "x_shared_by_3_or_more": 0,
+      "y_shared_by_3_or_more": 0,
+      "axis_aligned_triple_present": false,
+      "distinct_x_values": 7,
+      "distinct_y_values": 13
+     },
+     "construction": "POINT 1.000000 0.500000\nPOINT 0.942728 0.732362\nPOINT 0.784032 0.911492\nPOINT 0.560268 0.996354\nPOINT 0.322698 0.967508\nPOINT 0.125745 0.831561\nPOINT 0.014529 0.619658\nPOINT 0.014529 0.380342\nPOINT 0.125745 0.168439\nPOINT 0.322698 0.032492\nPOINT 0.560268 0.003646\nPOINT 0.784032 0.088508\nPOINT 0.942728 0.267638\nCLAIM 0.013300"
+    },
+    "CLAIM_INFLATED": {
+     "verdict": {
+      "valid": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "score": 0.003471986111,
+      "score_exact": "3471986111/1000000000000",
+      "claim": 0.003472,
+      "claim_confirmed": false
+     },
+     "max_decimal_places": 6,
+     "signature": {
+      "points": 13,
+      "x_shared_by_3_or_more": 0,
+      "y_shared_by_3_or_more": 0,
+      "axis_aligned_triple_present": false,
+      "distinct_x_values": 13,
+      "distinct_y_values": 7
+     },
+     "construction": "POINT 0.0 0.0\nPOINT 0.083333 0.083333\nPOINT 0.166667 0.333333\nPOINT 0.25 0.75\nPOINT 0.333333 0.25\nPOINT 0.416667 1.0\nPOINT 0.5 0.833333\nPOINT 0.583333 0.833333\nPOINT 0.666667 1.0\nPOINT 0.75 0.25\nPOINT 0.833333 0.75\nPOINT 0.916667 0.333333\nPOINT 1.0 0.083333\nCLAIM 0.003472"
+    },
+    "score_zero": {
+     "verdict": {
+      "valid": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "score": 0.0,
+      "score_exact": "0",
+      "claim": 0.008,
+      "claim_confirmed": false
+     },
+     "max_decimal_places": 2,
+     "signature": {
+      "points": 13,
+      "x_shared_by_3_or_more": 0,
+      "y_shared_by_3_or_more": 0,
+      "axis_aligned_triple_present": false,
+      "distinct_x_values": 11,
+      "distinct_y_values": 7
+     },
+     "construction": "POINT 0.05 0.1\nPOINT 0.35 0.15\nPOINT 0.65 0.1\nPOINT 0.95 0.15\nPOINT 0.1 0.45\nPOINT 0.4 0.4\nPOINT 0.7 0.45\nPOINT 0.95 0.4\nPOINT 0.05 0.7\nPOINT 0.3 0.75\nPOINT 0.6 0.7\nPOINT 0.9 0.75\nPOINT 0.5 0.95\nCLAIM 0.008"
+    }
+   }
+  }
+ },
+ "headline": {
+  "arm_h_validity": 0.1136,
+  "arm_s_validity": 0.434,
+  "gap": 0.3204,
+  "arm_h_invalidity_attributed": {
+   "claim string: CLAIM value exceeds the construction's own minimum": 114,
+   "claim string: wrong number of POINT lines": 3
+  },
+  "one_field": "Every one of ARM H's invalid candidates failed in the SAME field: the single free string carrying the construction. Not one failed a schema constraint, a type, an enum or a pointer. The form was filled correctly and the content it carried was wrong, which is the one failure a wire contract is structurally unable to catch."
+ }
+}
