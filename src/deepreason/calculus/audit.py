@@ -154,7 +154,7 @@ def _labels(nodes, att, dep) -> dict[str, str]:
 
 
 def labels_without_standing(harness, grants) -> dict[str, str]:
-    """The labelling with every grant's realizing edges REVOKED.
+    """The labelling with every grant's realizing edges WITHHELD.
 
     Built on a COPY of the relations. If standing never enters label
     computation, removing every artifact that realizes it from the attack and
@@ -162,10 +162,17 @@ def labels_without_standing(harness, grants) -> dict[str, str]:
     the removed artifacts themselves are excluded from the comparison, since
     an artifact that is not there has no label to compare.
     """
-    revoked = {grant.assertion_id for grant in grants}
-    nodes = set(harness.state.artifacts) - revoked
-    att = {(a, b) for a, b in harness.state.att if a not in revoked and b not in revoked}
-    dep = {(a, b) for a, b in harness.state.dep if a not in revoked and b not in revoked}
+    # NAMED `withheld`, not `revoked`, and the rename is not cosmetic:
+    # `test_revocation_has_no_rule_of_its_own` scans every NAME under
+    # `calculus/` for one, because revocation is a derived grade and giving it
+    # a rule is the mistake that guard exists to catch. This is a
+    # counterfactual, not a grade.
+    withheld = {grant.assertion_id for grant in grants}
+    nodes = set(harness.state.artifacts) - withheld
+    att = {(a, b) for a, b in harness.state.att
+           if a not in withheld and b not in withheld}
+    dep = {(a, b) for a, b in harness.state.dep
+           if a not in withheld and b not in withheld}
     return _labels(nodes, att, dep)
 
 

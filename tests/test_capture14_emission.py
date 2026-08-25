@@ -68,14 +68,39 @@ def test_the_three_rung_two_signals_still_fire(scheduler_harness):
 
 
 def test_all_six_describe_one_window(scheduler_harness):
-    """One computation, six emissions. If the six were computed separately,
-    a registration landing between two of them would give them different `n`
-    -- and the vector would describe no single state of the record."""
+    """One computation, six emissions. Two properties, and the second is the
+    one that would catch six independent computations: every emitted value
+    equals the corresponding field of ONE `diagnostics()` call taken at the
+    same point, and every row carries the same window size.
+    """
+    from deepreason.capture.diagnostics import diagnostics
+    from deepreason.config import Config
+
     harness, scheduler = scheduler_harness
+    expected = diagnostics(harness, Config())
     scheduler._record_detection_signals()
     rows = {row[0]: row for row in _emitted(harness) if row[0].startswith("capture14.")}
-    windows = {tuple(row[2:]) for row in rows.values() if len(row) > 2}
-    assert len(windows) == 1, windows
+    assert {tuple(row[2:]) for row in rows.values()} == {(str(expected.m),)}
+    assert [rows[s][1] for s in CAPTURE14_SIGNALS] == list(expected.values())
+
+
+def test_the_emitted_inputs_carry_no_absolute_sequence_number(scheduler_harness):
+    """Regression (v6 shadow comparison, Rung 8 gate).
+
+    `n` is the log's length INCLUDING bookkeeping events, so a signal carrying
+    it makes one epistemic state emit different bytes in two runs whose
+    authoritative surfaces are equal -- which is exactly what
+    `test_workflow_shadow_c0` compares. The window SIZE is configuration and
+    is stable; the window's END is already in the record, as the seq of the
+    measure event itself.
+    """
+    harness, scheduler = scheduler_harness
+    scheduler._record_detection_signals()
+    n = harness._next_seq - 1
+    for row in _emitted(harness):
+        if row[0].startswith("capture14."):
+            assert str(n) not in row[2:], row
+            assert len(row) == 3, row
 
 
 def test_emission_is_deterministic_over_one_record(scheduler_harness):

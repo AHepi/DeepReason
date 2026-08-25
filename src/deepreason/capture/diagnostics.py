@@ -552,6 +552,12 @@ def emit(harness, config) -> None:
 
     vector = diagnostics(harness, config)
     for signal, value in zip(CAPTURE14_SIGNALS, vector.values()):
-        harness.record_measure(inputs=[signal, value, str(vector.n), str(vector.m)])
+        # The window SIZE travels in the inputs; the window's END does not.
+        # `n` is the log's length INCLUDING bookkeeping, so two runs with equal
+        # authoritative surfaces and different event counts would emit
+        # different bytes for one epistemic state -- which is what the v6
+        # shadow comparison caught. The record already says `n`: it is the seq
+        # of the measure event carrying the value.
+        harness.record_measure(inputs=[signal, value, str(vector.m)])
     promotion_conditioning(harness, config)
     hysteresis.step(harness, config)

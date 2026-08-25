@@ -70,6 +70,27 @@ false entries for one ordinary tranche is the condition under which a twelfth,
 real one gets skimmed past. The 2026-08-09 incident this gate was built for was
 exactly a stop that was written and not obeyed.
 
+**Confirmed by controlled comparison, in the same session.** The tranche's FULL
+final file list, with DISTINCTIVE symbol names, returns exactly one contact —
+the pre-authorized `run_manifest.py` one — and zero name-collision entries:
+
+```
+$ python tools/blast_radius.py --files <all 15 changed src files> \
+    --symbols authority_audit promotion_rent slice_budgets \
+              promotion_conditioning stream_contraction exogenous_grounding_ratio \
+    --against 462d6091d
+verdict: CONTACT
+DIRECT contacts: [run_manifest.py]        <- the one SPEC.md section 1 named
+SYMBOL_INDIRECT count: 0
+frozen_adjacent: 0
+```
+
+Same tree, same base, MORE files declared — and the eleven contacts vanish. The
+variable is the symbol names alone: `mode`, `window`, `step`, `diagnostics`
+against `authority_audit`, `promotion_rent`, `slice_budgets`. So the tier's
+output is a function of how ordinary an author's vocabulary is, which is not a
+property of the change.
+
 **Prompt:**
 
 > Route through `deepreason-orchestrator`. GOAL: one bounded tranche — make

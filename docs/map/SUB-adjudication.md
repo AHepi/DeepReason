@@ -50,10 +50,23 @@ than a substring match, and so that `evidence_lineage`'s nesting inside
 structurally.
 `check: python -c "import ast,pathlib; top=lambda f: {n.name:n for n in ast.parse(pathlib.Path('src/deepreason/adjudication/'+f).read_text()).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}; e=top('edges.py'); assert {'build_att','build_dep','toposort','DependenceCycleError'} <= set(e), sorted(e); assert isinstance(e['DependenceCycleError'],ast.ClassDef); assert 'evidence_lineage' not in e; assert 'evidence_lineage' in {n.name for n in ast.walk(e['build_att']) if isinstance(n,ast.FunctionDef)}; assert {'grounded_extension','label0'} <= set(top('grounded.py')), sorted(top('grounded.py')); assert 'final_labels' in top('support.py'), sorted(top('support.py'))"`
 
-Exactly two modules in `src/` call any of them: `harness.py` (`Harness._adjudicate`,
-the sole writer of `state.status`) and `invariants.py` (`verify_root` re-derives
-`dep` and re-runs `toposort` rather than trusting the recorded graph).
-`check: python -c "import pathlib; imp=sorted(str(p) for p in pathlib.Path('src').rglob('*.py') if 'from deepreason.adjudication' in p.read_text() and 'deepreason/adjudication/' not in str(p)); assert imp==['src/deepreason/harness.py','src/deepreason/invariants.py'], imp" && [ "$(grep -rc "self.state.status = " src/deepreason/harness.py)" = 1 ] && grep -qE "^    def _adjudicate\(" src/deepreason/harness.py && grep -q "self._apply_event(event, adjudicate=False)" src/deepreason/harness.py && grep -A2 "except DependenceCycleError as e:" src/deepreason/harness.py | grep -q "raise WellFormednessError(str(e)) from e" && grep -q "toposort(set(h.state.artifacts), build_dep(h.state.artifacts))" src/deepreason/invariants.py`
+Exactly THREE modules in `src/` call any of them, and the list is pinned exactly
+rather than as a minimum, so a fourth is a failure: `harness.py`
+(`Harness._adjudicate`, the sole writer of `state.status`), `invariants.py`
+(`verify_root` re-derives `dep` and re-runs `toposort` rather than trusting the
+recorded graph), and — since Rung 8 — `calculus/audit.py`.
+
+**Why the third is legitimate, and why it is not a weakening.** The first two
+WRITE or VALIDATE labels. `audit.py` computes labels it never applies: §9.9's C5
+and P6 clauses are DIFFERENTIALS, and the only way to show standing does not
+reach a label is to compute the labels without it and find them unchanged. It
+imports the real `label0`/`final_labels` rather than reimplementing the two
+passes, and that is the point — a reimplementation would be measuring itself,
+which is the mistake `experiments/2026-08-22-measure-grounded-flip-rate/`
+records avoiding in as many words ("not a reimplementation — a reimplementation
+would measure itself"). It reads a COPY of the relations and writes nothing:
+`state.status` still has exactly one writer.
+`check: python -c "import pathlib; imp=sorted(str(p) for p in pathlib.Path('src').rglob('*.py') if 'from deepreason.adjudication' in p.read_text() and 'deepreason/adjudication/' not in str(p)); assert imp==['src/deepreason/calculus/audit.py','src/deepreason/harness.py','src/deepreason/invariants.py'], imp" && [ "$(grep -rc "self.state.status = " src/deepreason/harness.py)" = 1 ] && grep -qE "^    def _adjudicate\(" src/deepreason/harness.py && grep -q "self._apply_event(event, adjudicate=False)" src/deepreason/harness.py && grep -A2 "except DependenceCycleError as e:" src/deepreason/harness.py | grep -q "raise WellFormednessError(str(e)) from e" && grep -q "toposort(set(h.state.artifacts), build_dep(h.state.artifacts))" src/deepreason/invariants.py`
 
 ## State it owns
 
