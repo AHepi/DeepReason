@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=5 blockers=none
+State: next=8 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -153,7 +153,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       BECAUSE it is never emitted — which is a fact about `detection.py` and is
       checked as one rather than promised.
 
-- [ ] 5. (S4) `tests/test_capture14_diagnostics.py` written FIRST, against the
+- [x] 5. (S4) `tests/test_capture14_diagnostics.py` written FIRST, against the
       module that does not exist yet. Covers: the window is sequence-numbered
       (`W_m(n)`) and not an event count; each of the six against a hand-built
       record with a known answer; the empty case returns `None` and never
@@ -164,18 +164,89 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       FAILS with a collection/import error — pasted. A test that has never been
       red has never been shown to be able to fail.
 
-- [ ] 6. (S4) `src/deepreason/capture/diagnostics.py`: `window`, `canonical`,
+      PROOF — RED:
+      ```
+      tests/test_capture14_diagnostics.py:25: in <module>
+          from deepreason.capture import diagnostics as d14
+      E   ImportError: cannot import name 'diagnostics' from 'deepreason.capture'
+      1 error in 0.20s
+      ```
+
+- [x] 6. (S4) `src/deepreason/capture/diagnostics.py`: `window`, `canonical`,
       the six functions of SPEC.md §S4's table, and `diagnostics()` returning
       the vector with `n`, `m`, `h`, `precision`.
       done-when: `python -m pytest tests/test_capture14_diagnostics.py -q`
       -> N passed, 0 failed.
 
-- [ ] 7. (S4) [COMMIT] Map: `docs/map/SUB-periphery.md` gains the
+      PROOF — GREEN, 29 tests:
+      ```
+      $ python -m pytest tests/test_capture14_diagnostics.py -q
+      29 passed in 0.71s
+      ```
+      TWO NEAR-VACUITIES were caught while implementing, and each now has a
+      test that fails against the vacuous version rather than a comment saying
+      it was considered:
+
+      1. `Provenance.event_seq` defaults to 0 and almost nothing sets it, so an
+         age floor derived from it reads EVERY artifact as maximally old and
+         discriminates nothing. Measured before writing the test:
+         ```
+         722c59ba01 provenance.event_seq = 0
+         9b642b5004 provenance.event_seq = 0   (five conjectures, five zeroes)
+         ```
+         `younger_than` now derives age from the events inside the floor, which
+         also avoids a whole-log read per cycle.
+         `::test_the_age_floor_actually_discriminates`
+      2. A behavioural signature carrying ref TARGETS is unique for every
+         content-addressed artifact, so SC would read 0 on every record ever
+         made. Relations enter as ROLE COUNTS.
+         `::test_stream_contraction_ignores_artifact_identity`
+
+      The V-6 decision is also a TEST, not only a paragraph — the two families
+      are shown to disagree on one record:
+      `::test_attack_target_entropy_reads_newly_carried_attacks` moves the
+      window past both carriages and asserts §14.2 goes absent while the
+      shipped `criticism.attack-target-entropy.v1` still reads 1.0.
+
+- [x] 7. (S4) [COMMIT] Map: `docs/map/SUB-periphery.md` gains the
       `capture/diagnostics.py` row with a check that would fail if a diagnostic
       started reading wall-clock; `docs/map/INV-axiom-basis.md`'s A10 row gains
       the canonical-rounding evidence.
       done-when: `python tools/docs_verify.py` -> failure count unchanged from
       step 0's baseline, and the two new checks exit 0 (paste them).
+
+      PROOF — `docs_verify` baseline established (step 0's other half):
+      ```
+      $ python tools/docs_verify.py
+      docs_verify [full]: 64 documents, 1047 checks, 4 workers
+        FAIL CON-run-identity.md:200  (git history: shallow clone)
+        FAIL CON-run-identity.md:202  fatal: ambiguous argument '1637e808'
+        FAIL CON-run-identity.md:204  fatal: ambiguous argument 'f304fec1'
+      docs_verify: 3 failed
+      ```
+      Exactly the operator's KNOWN CURRENT STATE: 3 pre-existing shallow-clone
+      failures, all three the same git-history check family, none in a document
+      this tranche touches.
+
+      Four NEW checks added across `DR-SUB-periphery` and `DR-INV-axiom-basis`,
+      each RUN BEFORE being written down:
+      ```
+      PERIPHERY-CHECK-1 exit 0     (module shape; six signals)
+      ::test_no_diagnostic_reads_wall_clock                        1 passed
+      ::test_the_age_floor_actually_discriminates
+      ::test_stream_contraction_ignores_artifact_identity          2 passed
+      ::test_canonical_rounding_is_half_even_at_the_declared_precision
+      ::test_absence_renders_as_none_and_never_as_zero
+      ::test_two_computations_over_one_record_are_byte_identical   3 passed
+      ```
+      Document ring green:
+      ```
+      $ python tools/docs_verify.py --ring periphery
+      == SUB-periphery ==   119 passed, 3 skipped in 22.60s
+      ```
+      `Verified-at:` stamps are NOT advanced here — they advance at step 26,
+      after the full `docs_verify` re-runs. A stale stamp is honest; a false
+      one is not.
 
 - [ ] 8. (S5) `tests/test_capture14_hysteresis.py` written FIRST. Covers:
       `T_enter`/`T_exit` asymmetry (a state that enters does NOT immediately

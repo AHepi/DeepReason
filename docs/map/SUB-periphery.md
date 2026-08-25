@@ -161,6 +161,41 @@ workspace root when a patch is applied.
 | the browser page or its containment rules | `_Handler` in `webapp.py` | `tests/test_webapp.py::test_nonlocal_host_header_is_rejected` |
 `check: grep -q "^def _compile_expression(" src/deepreason/simulation/compiler.py && grep -q "^def _with_cross_examiner(" src/deepreason/capture/schools.py && grep -q "^def _safe_target(" src/deepreason/workloads/code.py && grep -q "^def _run_tools(" src/deepreason/mcp_server.py && grep -q "^def _tools(" src/deepreason/mcp_server.py && grep -q "^class _Handler(BaseHTTPRequestHandler)" src/deepreason/webapp.py && grep -q "^def classify_dimensions(" src/deepreason/experiments/campaign.py && grep -q "^class AuditDimensions" src/deepreason/experiments/campaign.py && grep -q "^def main(" src/deepreason/admission/adapter_host.py && grep -q "deepreason.admission.adapter_host" src/deepreason/admission/adapters.py && test -f src/deepreason/admission/adapters_pdf.py && test -f src/deepreason/admission/adapters_epub.py && grep -q "^class ReasoningWorkloadSpec" src/deepreason/workloads/text.py && grep -q "WORKLOADS.register(_adapter)" src/deepreason/workloads/__init__.py && grep -q "^    droppable: bool" src/deepreason/packs/ir.py && grep -q "^    compressible: bool" src/deepreason/packs/ir.py && python -m pytest tests/test_pack_ir.py::test_mandatory_criteria_and_output_contract_are_never_clipped tests/test_runtime_workload_integration.py::test_ops_forwards_bound_v6_workload_and_stop_policy tests/test_workload_text.py tests/test_workload_code.py::test_source_change_and_symlink_are_rejected_after_snapshot tests/test_persistence_invariants.py::test_object_store_is_namespaced_and_rejects_cross_schema_collision tests/test_admission.py::test_parser_version_binds_into_the_dossier_digest tests/test_admission.py::test_registered_adapter_runs_sandboxed_and_binds_into_the_digest tests/test_evidence_citations.py::test_unrecoverable_block_text_never_passes_silently tests/test_research.py::test_backend_modes_are_distinct_and_invalid_values_fail_loudly tests/test_schools.py tests/test_orbit.py::test_ladder_rotates_the_orbiting_school tests/test_simulation_compiler.py tests/test_mcp.py::test_initialize_and_tools_list_are_truthful_and_exact tests/test_campaign_coordinator.py tests/test_webapp.py::test_nonlocal_host_header_is_rejected -q`
 
+## `capture/` grew a SECOND instrument family at Rung 8, and they are not siblings
+
+`capture/detection.py` measures over an EVENT window (`CAPTURE_W`, via
+`harness.recent_semantic_events`) and feeds `raw_flags` -> `ladder.respond`.
+`capture/diagnostics.py` implements §14's six over a SEQUENCE-NUMBER window
+`W_m(n)`, and feeds declared signals and `capture/hysteresis.py`. Four
+quantities carry near-identical names across the two and none of them is the
+same number — the full three-population table is in `DR-INV-signal-contract`.
+
+What keeps them from silently merging is that they share a BAND VOCABULARY and
+nothing else: the hysteresis controller reuses `ATTACK_ENTROPY_FLOOR`,
+`CRIT_DEBT_CEILING`, `LAMBDA_FLOOR` and `MIN_ATTACKS_FOR_RITUAL` rather than
+inventing a parallel set, so a calibration lands once. That reuse is the G-4
+obligation ("the existing capture instruments extend to the new surface")
+discharged as code rather than as a claim.
+
+`check: grep -q "^def window(" src/deepreason/capture/diagnostics.py && grep -q "^def diagnostics(" src/deepreason/capture/diagnostics.py && grep -q "^CAPTURE14_SIGNALS" src/deepreason/capture/diagnostics.py && python -c "from deepreason.capture.diagnostics import CAPTURE14_SIGNALS; assert len(CAPTURE14_SIGNALS) == 6"`
+
+**No diagnostic may read wall-clock.** §15.1 puts wall-clock outside every
+verdict and serialization, and a windowed instrument is the easiest place to
+lose that by accident. Enforced by an AST scan over the whole module rather
+than a grep, because `from datetime import datetime as dt` defeats a grep and
+`.ts` matches every attribute ending in those letters.
+
+`check: python -m pytest tests/test_capture14_diagnostics.py::test_no_diagnostic_reads_wall_clock -q`
+
+**The age floor and the signature are both one line from being vacuous**, and
+both have a test that fails against the vacuous version. `Provenance.event_seq`
+defaults to 0 and almost nothing sets it, so an age derived from it would read
+every artifact as maximally old; and a behavioural signature carrying ref
+TARGETS would be unique for every content-addressed artifact, so SC would read
+0 on every record ever made.
+
+`check: python -m pytest tests/test_capture14_diagnostics.py::test_the_age_floor_actually_discriminates tests/test_capture14_diagnostics.py::test_stream_contraction_ignores_artifact_identity -q`
+
 ## Traps
 
 - **Adding one MCP tool moves FOUR pins, and no gate runs two of them.**

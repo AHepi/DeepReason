@@ -355,6 +355,18 @@ attackers a pack shows — a property this module must own rather than borrow fr
 a frozen surface.
 
 `check: python -m pytest tests/test_frame_render.py::test_the_slice_is_byte_identical_across_renders tests/test_frame_render.py::test_attackers_render_in_id_order_whatever_order_the_state_holds -q`
+
+**PROVED at Rung 8, for the first time as an explicit POLICY rather than as a
+by-product.** §14's diagnostics carry a rounding rule and a fixed precision that
+are part of the policy (R48/A10), not of the implementation: `canonical` is
+`ROUND_HALF_EVEN` — never HALF_UP, which drifts a series upward on ties — at a
+precision the emitted payload STATES, so a reader re-derives every number from
+the record without knowing any default. The six are emitted as fixed-precision
+decimal STRINGS rather than floats, because a float's repr is the machine's and
+a decimal string is the policy's; and absence renders `none` rather than
+`0.000000`, so "no data" and "measured zero" stay distinguishable.
+
+`check: python -m pytest tests/test_capture14_diagnostics.py::test_canonical_rounding_is_half_even_at_the_declared_precision tests/test_capture14_diagnostics.py::test_absence_renders_as_none_and_never_as_zero tests/test_capture14_diagnostics.py::test_two_computations_over_one_record_are_byte_identical -q`
 `check: python -c "
 from deepreason.calculus.claims import FrameAssertionV1, encode
 s = {'schema': 'declarative-scope.v1', 'predicate': {'const': True}}
