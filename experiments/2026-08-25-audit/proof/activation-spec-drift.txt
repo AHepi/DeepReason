@@ -1,0 +1,4 @@
+PLANT: appended 'ZzFabricatedSpecTermQqq' to a COPY of proof/spec-terms.txt
+SCAN: grep -rqIw -F 'ZzFabricatedSpecTermQqq' src/ docs/map/
+RESULT: zero hits -> verdict spec-orphan. Instrument discriminates.
+RESTORE: plant lived only in the scratchpad copy; proof/spec-terms.txt untouched.
