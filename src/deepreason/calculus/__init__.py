@@ -7,6 +7,10 @@ no model ever chooses whether an endpoint is a mention, a dependence, or
 evidence. Bodies are proposable; semantics are not.
 """
 
+from deepreason.calculus.audit import (
+    AuthorityAuditV1,
+    authority_audit,
+)
 from deepreason.calculus.claims import (
     CLAIM_SCHEMAS,
     DepartureDeclarationV1,
@@ -58,6 +62,8 @@ from deepreason.calculus.views import (
 )
 
 __all__ = [
+    "AuthorityAuditV1",
+    "authority_audit",
     "CLAIM_SCHEMAS",
     "DepartureDeclarationV1",
     "DerivationManifestV1",

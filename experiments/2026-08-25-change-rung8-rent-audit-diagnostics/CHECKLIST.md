@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=21 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
+State: next=24 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -638,26 +638,95 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       pause, not the disclosure; the operator was told at 680/1100 that this was
       coming, with the same recommendation.
 
-- [ ] 21. (S3) `tests/test_calculus_authority_audit.py` written FIRST, with the
+- [x] 21. (S3) `tests/test_calculus_authority_audit.py` written FIRST, with the
       five clause tests AND the five SEEDED-VIOLATION tests of SPEC.md §S3 —
       one per clause, each constructing a record that violates exactly that
       clause.
       done-when: the file FAILS (module absent) — pasted.
 
-- [ ] 22. (S3) `src/deepreason/calculus/audit.py`: `authority_audit(harness)`
+      PROOF — RED:
+      ```
+      E   ImportError: cannot import name 'audit' from 'deepreason.calculus'
+      1 error in 0.23s
+      ```
+
+- [x] 22. (S3) `src/deepreason/calculus/audit.py`: `authority_audit(harness)`
       returning `AuthorityAuditV1` with the five clauses (`C4-derived`,
       `C3-content-not-type`, `C5-absent-from-labels`, `N1-attackable`,
       `P6-reinstateable`) and a `violations` list.
       done-when: `python -m pytest tests/test_calculus_authority_audit.py -q`
       -> N passed, 0 failed.
 
-- [ ] 23. (S3, R3) [COMMIT] **The audit shown to FAIL, then shown to pass** —
+      PROOF — GREEN, 17 tests:
+      ```
+      $ python -m pytest tests/test_calculus_authority_audit.py -q
+      17 passed in 2.72s
+      ```
+      One design correction the fixtures forced, and it is the difference
+      between an audit and a decoration. The first version built its realizer
+      set from the CONSULTED grants. Running it on the committed Rung 7 live
+      root exposed the hole: that root's one frame assertion is REFUTED, so
+      `consulted()` is empty and the audit passed VACUOUSLY over 68 artifacts.
+      A refuted assertion still realizes standing — it is the thing whose
+      defeat took the standing away, and P6 is precisely the claim that the
+      defeat can be undone. The realizer set is now built from every DECLARED
+      assertion, so authority cannot escape scrutiny by losing.
+
+      Evidence, on a root the harness really made:
+      ```
+      root: experiments/2026-08-24-change-rung7-wounds-falls-succession/run
+        artifacts 68  att 11  dep 1
+        declared frame assertions: 1   consulted grants: 0
+        audit ok: True   violations: []
+          C4-derived               ok=True  checked=0
+          C3-content-not-type      ok=True  checked=1
+          C5-absent-from-labels    ok=True  checked=68
+          N1-attackable            ok=True  checked=9
+          P6-reinstateable         ok=True  checked=1
+      ```
+      That case is now a regression test pinned to the committed root.
+
+- [x] 23. (S3, R3) [COMMIT] **The audit shown to FAIL, then shown to pass** —
       the gate obligation R15 names first. Both runs pasted: the five seeded
       violations each reported by the audit (the seeded records RED against a
       clean expectation), and the real tree GREEN. Map:
       `docs/map/CON-standing-and-background.md` gains the audit with a check
       that it can still fail.
       done-when: both runs pasted; `docs_verify` at baseline.
+
+      PROOF — **the audit SHOWN TO FAIL**, one seed per clause, printed as the
+      audit's own words rather than as a green test:
+      ```
+      CLEAN TREE: ok
+      SEED C4 : C4: standing is stored on the applied state: ['standing']
+      SEED C3 : C3: standing is realized by a second record type: ['poietic.instrument-standing.v1']
+      SEED C5 : C5: revoking standing moved 1 label(s): ['583207939998fe20bd275e7d…']
+      SEED N1 : N1: 1 realizing object(s) are not on the record and so could never be attacked: ['not-on-the-rec…']
+      SEED P6 : P6: 1 realizing object(s) stay refuted with every attack on them removed: ['d9a99d655df0b354205d…']
+      RESTORED: ok
+      ```
+      and as tests:
+      ```
+      $ python -m pytest tests/test_calculus_authority_audit.py -q -k fails
+      5 passed, 12 deselected in 0.23s
+      ```
+      `::test_every_clause_has_a_seeded_violation_test` turns
+      `docs_verify --audit`'s standard on this file itself: a clause with no
+      seeded-violation test fails the suite.
+
+      **THEN SHOWN TO PASS**, on the real tree and on a committed live root:
+      ```
+      $ python -m pytest tests/test_calculus_authority_audit.py -q
+      17 passed in 2.72s
+      ```
+      Two new checks in `DR-CON-standing-and-background`, both run first:
+      ```
+      2 passed in 2.37s          (committed-root + every-clause-seeded)
+      NO-INVARIANTS-CONTACT exit 0
+      ```
+      The second is the frozen-surface guarantee as a CHECK rather than a
+      claim: `invariants.py` does not mention the audit, so surface 3 stays at
+      zero contact and Rung 8's forecast holds.
 
 - [ ] 24. (S11) `src/deepreason/calculus/__init__.py` and
       `src/deepreason/capture/__init__.py` exports; then PROVE the public

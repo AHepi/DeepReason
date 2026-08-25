@@ -255,6 +255,42 @@ demonstrative warrant, and the assertion stops being unrefuted.
 
 `check: python -m pytest tests/test_promotion_closure.py::test_an_unattacked_assertion_does_not_frame_because_its_criteria_fire_first -q`
 
+## The authority audit — §9.9 as a program that can FAIL (Rung 8)
+
+`calculus/audit.py::authority_audit(harness)` is §9.9 executed over a replayed
+root, one clause per sentence, returning a typed `AuthorityAuditV1`. Two of the
+five are DIFFERENTIALS on a COPY of the relations, because the only way to show
+standing does not reach a label is to compute the labels WITHOUT it and find
+them unchanged.
+
+| clause | what it executes |
+|---|---|
+| `C4-derived` | no field of the applied state stores standing; the grants are re-derived |
+| `C3-content-not-type` | one body schema realizes standing; instrument standing is a `bounded` VALUE of `validity`, not a second record type |
+| `C5-absent-from-labels` | revoke every grant on a copy, relabel, and compare every surviving label |
+| `N1-attackable` | every realizing object is a registered artifact or commitment, and therefore a legal `Warrant.target` |
+| `P6-reinstateable` | remove every attack on a realizer, on a copy, and check none stays refuted (Thm 12.3) |
+
+**The realizer set is built from every DECLARED assertion, not from the live
+grants**, and that is the difference between an audit and a decoration: a
+refuted assertion still realizes standing — it is the thing whose defeat took
+the standing away — so auditing only live grants would let authority escape
+scrutiny by losing. Measured on the committed Rung 7 live root, where the one
+frame assertion is refuted: `grants == 0`, and the audit still checks 9
+realizers across 68 artifacts.
+
+`check: python -m pytest tests/test_calculus_authority_audit.py -q`
+`check: python -m pytest tests/test_calculus_authority_audit.py::test_the_audit_runs_on_a_committed_live_root tests/test_calculus_authority_audit.py::test_every_clause_has_a_seeded_violation_test -q`
+
+**It is NOT in `invariants.py`, deliberately.** `verify_root` asks whether a
+record is well-formed and replayable; this asks whether the calculus's
+authority story holds on it, and it needs counterfactual relation sets to ask —
+a validator with a simulator inside it is a different thing from a validator.
+Keeping it in `calculus/` also holds frozen surface 3 at zero contact, which is
+Rung 8's own forecast.
+
+`check: ! grep -q "authority_audit" src/deepreason/invariants.py`
+
 ## Traps
 
 - **The word "standing" was already taken, three times, in three different
