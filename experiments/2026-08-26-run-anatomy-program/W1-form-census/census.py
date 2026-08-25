@@ -75,10 +75,12 @@ ECHO_OR_CONTAINER_POINTERS = {
     "/pointer",
 }
 
-# Conservative hedge/refusal markers. Listed here rather than hidden in a
-# regex so a reader can audit and re-run with a different list; a hit is a
-# CANDIDATE hedge, not a proven one, and the census reports exemplars so the
-# classification can be checked by eye.
+# Hedge-SHAPED substrings. A hit is a CANDIDATE only, and on this corpus most
+# hits are FALSE POSITIVES: a critic writing "the target provides no evidence
+# for X" is making an attack, not declining to. That was measured, not
+# assumed — see COERCION_PROBE.json's false-positive exemplars. Nothing may
+# quote a count over this list as a hedge rate; use SELF_REFERENTIAL_REFUSAL
+# below, which cannot be the substance of a criticism.
 HEDGE_MARKERS = (
     "insufficient",
     "unknown",
@@ -458,9 +460,32 @@ def patch_operations(parsed) -> list[str]:
     return out
 
 
+# Phrases in which the SPEAKER declines, so they cannot be the content of a
+# criticism about someone else's work. Word-boundary matched: the loose list
+# above matched "n/a" inside ordinary words.
+SELF_REFERENTIAL_REFUSAL = (
+    r"\bi cannot\b",
+    r"\bi can't\b",
+    r"\bi am unable\b",
+    r"\bas an ai\b",
+    r"\bcannot determine whether\b",
+    r"\bunable to determine\b",
+    r"\bnot enough information (?:to|is)\b",
+    r"\binsufficient information to\b",
+    r"\bi do not have\b",
+)
+REFUSAL_RE = re.compile("|".join(SELF_REFERENTIAL_REFUSAL), re.IGNORECASE)
+
+
 def hedge_hits(text: str) -> list[str]:
+    """Hedge-SHAPED substring hits. Candidates only — see HEDGE_MARKERS."""
     low = text.lower()
     return [m for m in HEDGE_MARKERS if m in low]
+
+
+def refusal_hits(text: str) -> list[str]:
+    """Phrases in which the speaker declines. These are hedges, not content."""
+    return [m.group(0) for m in REFUSAL_RE.finditer(text or "")]
 
 
 # --------------------------------------------------------------------------

@@ -1,0 +1,532 @@
+{
+ "schema": "run-anatomy.coercion-probe.v1",
+ "authority": "docs/RESEARCH_STRUCTURED_OUTPUT_COERCION_2026-08-22.md recommendation 2",
+ "escape_value_list": [
+  "abstain",
+  "indeterminate",
+  "insufficient",
+  "insufficient_data",
+  "insufficient_evidence",
+  "n/a",
+  "need_context",
+  "no_verdict",
+  "none",
+  "not_applicable",
+  "unclear",
+  "undetermined",
+  "unknown"
+ ],
+ "hedge_marker_list_LOOSE_candidates_only": [
+  "insufficient",
+  "unknown",
+  "not enough information",
+  "cannot determine",
+  "cannot be determined",
+  "unable to",
+  "no evidence",
+  "n/a",
+  "not applicable",
+  "unclear",
+  "i cannot",
+  "i can't",
+  "as an ai",
+  "not provided",
+  "not specified",
+  "placeholder",
+  "tbd"
+ ],
+ "self_referential_refusal_patterns": [
+  "\\bi cannot\\b",
+  "\\bi can't\\b",
+  "\\bi am unable\\b",
+  "\\bas an ai\\b",
+  "\\bcannot determine whether\\b",
+  "\\bunable to determine\\b",
+  "\\bnot enough information (?:to|is)\\b",
+  "\\binsufficient information to\\b",
+  "\\bi do not have\\b"
+ ],
+ "enum_escape_audit": {
+  "batch-critic.v2/cases/*/attack": {
+   "observations": 2061,
+   "vocabulary": {
+    "True": 1421,
+    "False": 640
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "batch-critic.v2/cases/*/target_alias": {
+   "observations": 2061,
+   "vocabulary": {
+    "SRC_001": 1219,
+    "SRC_002": 555,
+    "SRC_003": 212,
+    "SRC_004": 75
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "conjecturer.atomic-candidate.v1/candidate/sidecar/search_signal": {
+   "observations": 246,
+   "vocabulary": {
+    "productive": 234,
+    "need_context": 12
+   },
+   "escape_values_present": [
+    "need_context"
+   ],
+   "escape_uses": 12,
+   "escape_utilization_rate": 0.0488
+  },
+  "conjecturer.turn.v6/operation": {
+   "observations": 22,
+   "vocabulary": {
+    "replace": 20,
+    "add": 2
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+   "observations": 772,
+   "vocabulary": {
+    "productive": 769,
+    "need_context": 2,
+    "stuck": 1
+   },
+   "escape_values_present": [
+    "need_context"
+   ],
+   "escape_uses": 2,
+   "escape_utilization_rate": 0.0026
+  },
+  "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+   "observations": 46,
+   "vocabulary": {
+    "NEW_001": 28,
+    "NEW_002": 9,
+    "NEW_003": 5,
+    "SCR_001": 2,
+    "SCR_007": 1,
+    "NEW_004": 1
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+   "observations": 128,
+   "vocabulary": {
+    "NEW_001": 80,
+    "NEW_002": 34,
+    "NEW_003": 13,
+    "NEW_004": 1
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "conjecturer.turn.v6/op": {
+   "observations": 131,
+   "vocabulary": {
+    "replace": 110,
+    "remove": 11,
+    "add": 10
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "critic.atomic-target.v1/attack": {
+   "observations": 34,
+   "vocabulary": {
+    "True": 32,
+    "False": 2
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "critic.atomic-target.v1/cited_input_aliases/*": {
+   "observations": 32,
+   "vocabulary": {
+    "SRC_001": 32
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "critic.atomic-target.v1/target_alias": {
+   "observations": 34,
+   "vocabulary": {
+    "SRC_001": 34
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "conjecturer.turn.v6/candidates/*/analogy/adopted_commitment_refs/*": {
+   "observations": 27,
+   "vocabulary": {
+    "reasoning-envelope-wf": 7,
+    "SRC_001": 5,
+    "SRC_002": 5,
+    "program:reasoning-envelope-wf": 4,
+    "SRC_004": 4,
+    "SRC_003": 2
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "judgeruling.direct.v1/verdict": {
+   "observations": 342,
+   "vocabulary": {
+    "fail": 194,
+    "pass": 148
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "bridge.ledger.v3/entries/*/claim_class": {
+   "observations": 85,
+   "vocabulary": {
+    "surviving_conjecture": 62,
+    "unknown": 6,
+    "conflict": 6,
+    "supported_inference": 5,
+    "source_fact": 3,
+    "recorded_observation": 3
+   },
+   "escape_values_present": [
+    "unknown"
+   ],
+   "escape_uses": 6,
+   "escape_utilization_rate": 0.0706
+  },
+  "bridge.ledger-batch.v1/entries/*/claim_class": {
+   "observations": 55,
+   "vocabulary": {
+    "surviving_conjecture": 36,
+    "unknown": 10,
+    "conflict": 8,
+    "supported_inference": 1
+   },
+   "escape_values_present": [
+    "unknown"
+   ],
+   "escape_uses": 10,
+   "escape_utilization_rate": 0.1818
+  },
+  "bridge.ledger-batch.v1/entries/*/formal_artifact_handles/*": {
+   "observations": 36,
+   "vocabulary": {
+    "ART_1": 9,
+    "ART_2": 9,
+    "ART_3": 9,
+    "ART_4": 9
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  },
+  "bridge.ledger-batch.v1/source_conflicts/*/conflicting_handles/*": {
+   "observations": 42,
+   "vocabulary": {
+    "ART_3": 12,
+    "ART_1": 11,
+    "ART_2": 10,
+    "ART_4": 9
+   },
+   "escape_values_present": [],
+   "escape_uses": 0,
+   "escape_utilization_rate": 0.0
+  }
+ },
+ "coerced_fabrication": {
+  "definition": "escape_legal: reference-field diagnostics where the record itself states omission or an unknown handle was legal. fabricated_handle: of those, the ones where the model supplied a handle the record classifies as `unknown` -- it invented a value it was explicitly told it did not need. This is PhantomFill's CFR made code-scorable on our own record: absence was the legal answer, so a supplied value is a coerced fabrication with no judge involved.",
+  "escape_legal": 257,
+  "fabricated_handle": 255,
+  "coerced_fabrication_rate": 0.9922,
+  "observed_handle_kinds": {
+   "unknown": 336,
+   "conflict_key": 2
+  },
+  "escape_utilization_next_attempt": {
+   "repaired_without_remove": 78,
+   "still_invalid": 35,
+   "escape_taken_remove": 7
+  }
+ },
+ "forced_boolean_vs_sibling_prose": {
+  "cases_scored": 2095,
+  "measure": "A case counts as DECLINED only if its prose contains a phrase in which the SPEAKER declines (word-boundary matched) or the field is an escape token or empty. The loose hedge-marker list is reported separately and must not be read as a hedge rate.",
+  "joint_attack_x_declined_prose": {
+   "attack=True, declined=False": 1437,
+   "attack=False, declined=True": 483,
+   "attack=False, declined=False": 159,
+   "attack=True, declined=True": 16
+  },
+  "attacks_asserted": 1453,
+  "attacks_whose_own_prose_declines": 16,
+  "declined_attack_rate": 0.011,
+  "attack_true_breakdown": {
+   "attack_true_case_argued": 1437,
+   "attack_true_case_empty": 15,
+   "attack_true_self_referential_refusal": 1
+  },
+  "note_on_attack_false": "An attack=False case with empty prose is the CORRECT shape -- declining to attack needs no argument -- so the attack=False row of the joint table is not a finding. The finding is confined to attack=True.",
+  "loose_hedge_marker_hits_NOT_A_HEDGE_RATE": {
+   "True": 108,
+   "False": 2
+  },
+  "loose_marker_false_positive_exemplars": [
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 538,
+    "loose_markers": [
+     "no evidence"
+    ],
+    "case": "SRC_002 inverts the prioritization demanded by the problem context ('explicit ordering justified by blast radius (what corrupts the append-only record vs what merely hides a refusal)') by placing a refusal-hiding guard (lease-mismatch) above record-corruption (_reset()) on *speculative* grounds \u2014 th",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 585,
+    "loose_markers": [
+     "unable to"
+    ],
+    "case": "SRC_001 addresses only one gap (unimported functions) and never delivers the required overall prioritized ordering of all six defects. The problem explicitly states 'A plan that simply says \"test everything\" is worthless; the deliverable is the ordering and its justification,' yet SRC_001 provides a",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   },
+   {
+    "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+    "seq": 933,
+    "loose_markers": [
+     "no evidence"
+    ],
+    "case": "The proposed 'shared mechanism' conflates two structurally distinct failure modes under a superficially similar label. The target itself concedes the refutation condition \u2014 'if one gap is confirmed to be by-design behavior while the other is a confirmed bug' \u2014 yet the body provides no evidence to di",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 151,
+    "loose_markers": [
+     "placeholder"
+    ],
+    "case": "SRC_001 frames the suppression/efficiency distinction via Kuhnian analogy, but its central diagnostic\u2014the 'saturation threshold'\u2014is left as an unspecified formalization placeholder rather than the concrete counting procedure the problem demands. The target says a crisis 'must be formalized as a satu",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 319,
+    "loose_markers": [
+     "n/a"
+    ],
+    "case": "The target's mechanistic account is non-causal as specified: it asserts that rival primitives are 'artificially excluded from the action space,' but it never identifies the causal structure by which ownership allocation performs this exclusion. The problem demands a causal mechanism connecting the o",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   },
+   {
+    "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+    "seq": 428,
+    "loose_markers": [
+     "unable to"
+    ],
+    "case": "SRC_001, SRC_002, and SRC_003 all fail to address whether ownership-based allocation _systematically_ suppresses cross-cutting explanations in a way that a single-run observation can distinguish from efficiency. SRC_003's own countercondition concedes that 'if the count of cross-lineage references i",
+    "why_not_a_hedge": "the marker is the SUBSTANCE of the criticism (the target provides no evidence / is unable to), not the critic declining to make it"
+   }
+  ],
+  "exemplars": [
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "seq": 835,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "seq": 840,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+    "seq": 845,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 1171,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 1176,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+    "seq": 1181,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+    "seq": 50,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+    "seq": 55,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 1800,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 1805,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+    "seq": 1810,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+    "seq": 307,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+    "seq": 472,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+    "seq": 477,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+    "seq": 1288,
+    "model": "glm-5.2",
+    "attack": true,
+    "refusal_phrases": [],
+    "case_is_escape_token": false,
+    "case_is_empty": true,
+    "case": ""
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 814,
+    "model": "kimi-k3",
+    "attack": true,
+    "refusal_phrases": [
+     "I cannot"
+    ],
+    "case_is_escape_token": false,
+    "case_is_empty": false,
+    "case": "The alleged contradiction asserts non-quantitative facts about extracted_episodes.json (SRC_005) without evidence: it claims SRC_005 'captures case-level failures that the metrics summary aggregates away or reports as resolved' and exhibits 'decision reversals' irreconcilable with SRC_003, but no episode content, failure count, or status is quoted from either artifact, so the relation is stipulate"
+   }
+  ]
+ },
+ "judge_form_filling": {
+  "rulings": 342,
+  "verdicts": {
+   "fail": 194,
+   "pass": 148
+  },
+  "no_third_verdict": "JudgeRuling declares enum [fail, pass]; there is no abstain value",
+  "rulings_whose_decisive_point_declines": {},
+  "declined_rate": 0.0,
+  "decisive_point_length_buckets": {
+   "50": 11,
+   "100": 49,
+   "150": 93,
+   "200": 65,
+   "250": 67,
+   "300": 29,
+   "350": 13,
+   "400": 8,
+   "450": 5,
+   "500": 2
+  },
+  "exemplars": []
+ }
+}
