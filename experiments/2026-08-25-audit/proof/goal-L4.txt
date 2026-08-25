@@ -1,0 +1,3 @@
+### L4 — process law
+no code mechanism expected; carried by CLAUDE.md Build-and-test + dr-drive-harness
+CLAUDE.md:350:- **Tokens are cheap; the agent is not** (2026-08-08, operator's words

@@ -1,0 +1,17 @@
+### L6 — Operations are available to every configuration
+-- mechanism: start_manifest_run (the ONE RUN PATH)
+src/deepreason/cli/main.py:3006:        accepted = TEXT_RUN_SERVICE.start_manifest_run(
+src/deepreason/application/text_runs.py:752:    def start_manifest_run(
+-- terminalize_text_run (shared terminalizer)
+src/deepreason/application/text_runs.py
+src/deepreason/application/__pycache__/text_runs.cpython-311.pyc
+-- tests
+tests/test_amendment_chain_integrity.py
+tests/test_calculus_standing.py
+tests/__pycache__/test_amendment_chain_integrity.cpython-311-pytest-9.1.1.pyc
+tests/__pycache__/test_calculus_standing.cpython-311-pytest-9.1.1.pyc
+tests/__pycache__/test_lifecycle_operation_parity.cpython-311-pytest-9.1.1.pyc
+tests/__pycache__/test_single_run_path.cpython-311-pytest-9.1.1.pyc
+tests/__pycache__/test_amendment_epochs.cpython-311-pytest-9.1.1.pyc
+tests/test_amendment_epochs.py
+tests/test_lifecycle_operation_parity.py

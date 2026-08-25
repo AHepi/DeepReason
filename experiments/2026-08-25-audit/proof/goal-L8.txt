@@ -1,0 +1,33 @@
+### L8 — The signal registry is a CONTRACT, allocation layered
+-- registry / signal declaration
+src/deepreason/signals.py
+-- open-loop typed notice
+src/deepreason/controller.py:278:        # open-loop on those signals and is a DISCLOSURE, never a refusal.
+src/deepreason/controller.py:284:                "open_loop": list(
+src/deepreason/controller.py:285:                    allocation.open_loop_signals(self.adapter.endpoints)
+src/deepreason/signals.py:611:                  "produce this signal at all, which is a disclosed open loop "
+src/deepreason/capture/hysteresis.py:18:resolution, reusing `allocation.open_loop_signals`'s disclose-never-die shape.
+src/deepreason/allocation.py:9:typed open-loop notice.
+src/deepreason/allocation.py:99:# and the open-loop census exist to catch.
+src/deepreason/allocation.py:144:def open_loop_signals(bound_roles) -> tuple[str, ...]:
+-- seat-instance keying
+src/deepreason/controller.py:132:        role, seat = allocation.split_seat_instance(knob[len("cap:"):])
+src/deepreason/controller.py:192:    def _seat_instances(self) -> dict[str, tuple[str, int, object]]:
+src/deepreason/controller.py:204:                name = allocation.seat_instance(role, seat, len(endpoints))
+src/deepreason/controller.py:209:        return allocation.seat_instance(role, seat, len(self._endpoints_for(role)))
+src/deepreason/controller.py:227:        bound = self._seat_instances().get(instance)
+src/deepreason/controller.py:244:        for instance in self._seat_instances():
+-- INV document
+docs/map/INV-signal-contract.md
+-- tests
+tests/test_capture14_hysteresis.py
+tests/test_frame_render.py
+tests/test_allocation_signal_consumption.py
+tests/test_schools.py
+tests/test_v6_context_continuation.py
+tests/test_criticism_voting.py
+tests/test_signal_contract.py
+tests/test_review_fixes.py
+tests/test_rung5_alternative_backend.py
+tests/test_route_lease_maxtokens_tuning.py
+tests/test_conjecturer_turn_v4.py
