@@ -1,0 +1,102 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's failure path is causally upstream of the subject's accepted form — for example, when a mutation is installed under a shown-to-fail-first ritual and the failing installation becomes part of the subject's own guard structure.",
+      "mechanism": "Shown-to-fail-first installation converts the test from an external measurement into an internal precondition: the subject is modified to expect and reject the failure mode before it is accepted. Under this installation ritual, the test no longer merely reports on a pre-existing object; it selects which object variant can exist. The 1/9 mutation lost in compile.py reflects a subject whose guard was keyed to declared data rather than added behaviour, so the test constrained only the declared surface.",
+      "counterconditions": [
+        "If the same mutation survives under a describe-only installation where the test is run after the subject is fixed, the constrain interpretation fails.",
+        "If the 1/9 loss is explained by a simple coverage gap unrelated to installation order, the ritual mechanism is irrelevant.",
+        "If ordinarily-guarded modules lose 4/4 to 6/7 under the same shown-to-fail-first ritual, the specialness of compile.py disappears.",
+        "If a registry-size or author-specific confound explains the distribution, the constraint claim is weakened."
+      ],
+      "typicality": 0.82,
+      "evidence_refs": [
+        {"block": "01cc9b7f77380bf9"},
+        {"block": "01ccc04a460b08fc"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it only if the test's own failure mode is planted in the subject before the test is first run — the shown-to-fail-first installation makes the test part of the subject's construction, not its observation.",
+      "mechanism": "The planted failure acts as a ritual gate: the subject must first exhibit the failure and then be modified to suppress it, which means the test's expectation is built into the subject's acceptance criteria. Compile.py's 1/9 mutation loss indicates the planted failure was in the code but not in the recorded acceptance surface, so the constraint was partial and left the added-behaviour path unguarded.",
+      "counterconditions": [
+        "If the mutation was lost because the guard checked declared data only, the constraint is about guard design rather than installation ritual.",
+        "If the same author and week produce different loss rates under a describe-only workflow, the shown-to-fail-first mechanism is not necessary.",
+        "If the 3-of-26 distribution is uniform across modules, the compile.py special case is noise.",
+        "If a confound such as one repository or arbitrary registry size explains the difference, the claim collapses."
+      ],
+      "typicality": 0.75,
+      "evidence_refs": [
+        {"block": "002779d3ed9dd0a6"},
+        {"block": "057f5d8af80d2d12"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's guard fires on the author's own mutation — if a process guard never fires on its author, it is probably a description, not a constraint.",
+      "mechanism": "The constraint relation is reflexive: a guard that only catches others' mutations describes an imagined subject, while a guard that catches the author's own mutation constrains the actual construction. The compile.py 1/9 mutation loss shows a guard that checked declared data and therefore missed added behaviour by the same author, so the test described a narrower subject than the one installed.",
+      "counterconditions": [
+        "If the author's own mutations are always caught by other modules' guards at 4/4 to 6/7, the reflexive condition is not sufficient.",
+        "If the 1/9 loss is due to a single oversight rather than a systematic guard design, the constraint interpretation overstates the mechanism.",
+        "If the distribution is explained by module size or registry size rather than guard reflexivity, the claim is confounded.",
+        "If a shown-to-fail-first installation with a non-reflexive guard still loses mutations, the condition is not necessary."
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [
+        {"block": "03be16ddea3ab3e2"},
+        {"block": "028950f9751ab59a"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's failure mode becomes a required precondition for the subject's acceptance — the shown-to-fail-first installation makes the failure part of the subject's identity, so the test cannot describe what the subject would have been without it.",
+      "mechanism": "Under shown-to-fail-first, the subject is not accepted until it has failed the test and been repaired. The repair is part of the subject's construction, so the test is a constraint on the repair process. The 3-of-26 result and the 1/9 compile.py loss reflect that only mutations aligned with the planted failure mode were constrained; mutations outside that mode were described but not constrained.",
+      "counterconditions": [
+        "If the same mutation loss occurs under a describe-only installation, the shown-to-fail-first precondition is not doing the work.",
+        "If ordinarily-guarded modules show the same loss distribution, the installation ritual is not the differentiator.",
+        "If the confound of one author and one week explains the distribution, the claim is weakened.",
+        "If the 1/9 loss is an artefact of the mutation proposal process rather than the installation, the constraint mechanism is misattributed."
+      ],
+      "typicality": 0.55,
+      "evidence_refs": [
+        {"block": "01cc9b7f77380bf9"},
+        {"block": "002779d3ed9dd0a6"}
+      ],
+      "sidecar": {"search_signal": "need_context"}
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the subject's acceptance is conditional on the test's failure being impossible — the shown-to-fail-first installation turns the test into a sufficiency condition, so the subject is only what survives the test.",
+      "mechanism": "The constraint relation is modal: the test sets a boundary that the subject cannot cross after installation. The 1/9 mutation lost in compile.py under shown-to-fail-first installation indicates that the boundary was set too narrowly — the guard covered declared data but not added behaviour, so the test constrained only a subset of the subject. The 3-of-26 distribution suggests the boundary is uneven across modules.",
+      "counterconditions": [
+        "If the test is not a necessary condition for acceptance, the sufficiency claim is too strong.",
+        "If the mutation loss is due to an independent coverage gap, the constraint interpretation is not warranted.",
+        "If the distribution is explained by registry size or module complexity, the sufficiency condition is confounded.",
+        "If the same author's other modules lose 4/4 to 6/7 under the same ritual, the sufficiency condition is not stable."
+      ],
+      "typicality": 0.41,
+      "evidence_refs": [
+        {"block": "057f5d8af80d2d12"},
+        {"block": "01ccc04a460b08fc"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "A test constrains its subject rather than describes it when the test's guard is installed as part of the subject's own registry — if the guard lives in the same registry as the subject, the test and subject are mutually constraining, and the distinction between describing and constraining collapses.",
+      "mechanism": "The registry is the point of collapse: when the guard and the subject share a registry, the test's failure mode is part of the subject's accepted vocabulary. The 1/9 mutation lost in compile.py suggests that the guard was keyed to the registry's declared data, so mutations that added behaviour outside the registry were not constrained. The 3-of-26 result reflects the registry size and the arbitrariness of what the registry includes.",
+      "counterconditions": [
+        "If the guard is outside the subject's registry but the mutation is still lost, the collapse is not necessary.",
+        "If the distribution is explained by one author and one week rather than registry structure, the mechanism is confounded.",
+        "If the same registry produces different loss rates across modules, the registry is not the determining factor.",
+        "If the shown-to-fail-first installation is removed and the loss rate changes, the registry is not sufficient."
+      ],
+      "typicality": 0.23,
+      "evidence_refs": [
+        {"block": "01cc9b7f77380bf9"},
+        {"block": "03093dbd40142ed5"}
+      ],
+      "sidecar": {"search_signal": "stuck"}
+    }
+  ]
+}
+```

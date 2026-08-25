@@ -1,0 +1,38 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-aa835741bebc4b4cb189f4b08bef649a) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Under what conditions does a test constrain its subject rather than describe it? Account for the 3-of-26 result in the attached record and its distribution — compile.py 1/9 mutations lost under shown-to-fail-first installation, every ordinarily-guarded module 4/4 to 6/7 — same author, same week, same care.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- poietics-constraint-condition@v1: predicate:any(t in content.lower() for t in ('condition', 'when ', 'only if', 'unless', 'requires', 'depends on', 'sufficient', 'necessary', 'holds when', 'fails when')) and sum(1 for t in ('constrain', 'constraint', 'describ', 'restate', 'derive', 'independent', 'by construction', 'circular', 'tautolog', 'redundan') if t in content.lower()) >= 2
+- poietics-installation-mechanism@v1: predicate:sum(1 for t in ('shown-to-fail', 'shown to fail', 'planted', 'fail first', 'fails first', 'install', 'ritual', 'registry', 'mutation', 'guard') if t in content.lower()) >= 2 and any(t in content.lower() for t in ('compile.py', '1 of 9', '1/9', '3 of 26', '3/26', 'distribution', 'every other module', 'ordinarily-guarded', 'ordinarily guarded'))
+- poietics-confound@v1: predicate:sum(1 for t in ('confound', 'one repository', 'one author', 'one week', 'single author', 'arbitrar', 'registry size', 'not established', 'untested', 'magnitude', 'typical') if t in content.lower()) >= 2
+- reason-counter@68d351ca6449323c1c215a5d: program:reasoning_observation_pending
+- reason-counter@cec8c6533098ace9f18d5ff5: program:reasoning_observation_pending
+- reason-counter@68138ccbcce913c85bbb80c4: program:reasoning_observation_pending
+- reason-counter@cf64ea05f7faa4a9adeb80be: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A test constrains its subject rather than describes it when the test's guard fires on the author's own mutation \u2014 if a process guard never fires on its author, it is probably a description, not a constraint.","counterconditions":[{"case":"If the author's own mutations are always caught by other modules' guards at 4/4 to 6/7, the reflexive condition is not sufficient.","checker_spec":null,"eval":"observation"},{"case":"If the 1/9 loss is due to a single oversight rather than a systematic guard design, the constraint interpretation overstates the mechanism.","checker_spec":null,"eval":"observation"},{"case":"If the distribution is explained by module size or registry size rather than guard reflexivity, the claim is confounded.","checker_spec":null,"eval":"observation"},{"case":"If a shown-to-fail-first installation with a non-reflexive guard still loses mutations, the condition is not necessary.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The constraint relation is reflexive: a guard that only catches others' mutations describes an imagined subject, while a guard that catches the author's own mutation constrains the actual construction. The compile.py 1/9 mutation loss shows a guard that checked declared data and therefore missed added behaviour by the same author, so the test described a narrower subject than the one installed.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, poietics-constraint-condition@v1, poietics-installation-mechanism@v1, poietics-confound@v1, reason-counter@68d351ca6449323c1c215a5d, reason-counter@cec8c6533098ace9f18d5ff5, reason-counter@68138ccbcce913c85bbb80c4, reason-counter@cf64ea05f7faa4a9adeb80be
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

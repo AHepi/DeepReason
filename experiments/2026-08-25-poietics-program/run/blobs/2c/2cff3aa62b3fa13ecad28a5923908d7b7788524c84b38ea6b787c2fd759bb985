@@ -1,0 +1,19 @@
+{
+  "attack": true,
+  "target_alias": "SRC_001",
+  "cited_input_aliases": ["SRC_001"],
+  "claim": "The target fails to specify the necessary conditions and instead uses the single-repository limitation as a blanket refusal to infer, which contradicts the problem's demand to explain the specific observed distribution (1/9 vs 4/4–6/7).",
+  "grounds": "The problem explicitly asks to 'account for' the 1/9 compile.py loss versus the 4/4 to 6/7 distribution in ordinarily-guarded modules. The target's core claim that 'no condition can be inferred' and that the result is merely 'a description of the mutation set' is a non-response: it does not engage with the specific asymmetry that compile.py—installed under shown-to-fail-first conditions—behaved differently from modules with ordinary guards. By treating the single-repository/author/week limitation as defeating all inference rather than as a scope restriction on generalizability, the target avoids the required analytical work of distinguishing constraint from description in this specific record.",
+  "premise": "The target asserts that the record underdetermines the question and no conditions can be inferred from a single repository.",
+  "premise_evidence": [
+    {
+      "block": "599ea5e969396cc2f0c8567229b7afaa57344107b5ac1cd52f7bcdad0b609487",
+      "quote": "No condition can be inferred from a single repository, one author, and one week of mutation testing."
+    },
+    {
+      "block": "599ea5e969396cc2f0c8567229b7afaa57344107b5ac1cd52f7bcdad0b609487",
+      "quote": "The 3-of-26 count is therefore a description of the mutation set, not a measurement of test constraining power."
+    }
+  ],
+  "counterexample": null
+}
