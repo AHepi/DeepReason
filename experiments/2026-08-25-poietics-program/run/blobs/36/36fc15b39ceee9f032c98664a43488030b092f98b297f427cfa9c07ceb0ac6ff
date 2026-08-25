@@ -1,0 +1,12 @@
+{
+  "candidate": {
+    "content": "The confound explanation inherits from a more general sampling-artifact mechanism: a registry-size confound is refuted if the 3-of-26 survival ratio persists when the mutation set is expanded to include enough mutations that every registry entry is exercised at least once.",
+    "typicality": 0.6,
+    "evidence_refs": [],
+    "neighbours": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003"
+    ]
+  }
+}
