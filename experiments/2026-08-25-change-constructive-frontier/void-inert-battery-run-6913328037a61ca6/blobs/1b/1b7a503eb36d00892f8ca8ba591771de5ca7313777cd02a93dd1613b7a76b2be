@@ -1,0 +1,73 @@
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.5 0.5\nPOINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.0 1.0\nPOINT 0.25 0.75\nPOINT 0.75 0.25\nPOINT 0.1 0.5\nPOINT 0.9 0.5\nPOINT 0.5 0.1\nPOINT 0.5 0.9\nPOINT 0.15 0.15\nPOINT 0.85 0.85\nCLAIM 0.005625",
+      "mechanism": "A pseudo-symmetric manual distribution inside the unit square. Points are placed on the boundary, midpoints of edges, and interior diagonals to maximize Euclidean spread. The minimum triangle area is bounded by the smallest collinear or near-collinear triplets. This candidate is highly atypical for its lack of rigorous optimization.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is exactly 0, failing the floor.",
+        "If the exact coordinates yield a minimum area strictly less than the claimed value, the claim is refuted.",
+        "If the checker finds a triangle with area < 0.005, the floor criterion is failed."
+      ],
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.1
+    },
+    {
+      "claim": "POINT 0.5 0.5\nPOINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.0 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nPOINT 0.75 0.25\nPOINT 0.1 0.5\nPOINT 0.9 0.5\nPOINT 0.5 0.1\nPOINT 0.5 0.9\nCLAIM 0.00625",
+      "mechanism": "A semi-regular grid combined with axis-aligned midpoints. By placing points at (0.25, 0.25) and (0.75, 0.75), we avoid the collinearity of the main diagonal (0,0)-(0.5,0.5)-(1,1) by omitting the center, but here the center is included. Actually, (0,0)-(0.25,0.25)-(0.5,0.5) are collinear, yielding area 0.",
+      "counterconditions": [
+        "Collinearity of (0,0), (0.25, 0.25), and (0.5, 0.5) results in a triangle of area 0, which fails the frontier-above-floor@v1 and frontier-claim-honest@v1 criteria."
+      ],
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.05
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.05\nPOINT 0.5 0.95\nPOINT 0.05 0.5\nPOINT 0.95 0.5\nPOINT 0.33 0.67\nPOINT 0.67 0.33\nPOINT 0.2 0.8\nPOINT 0.8 0.2\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "An arrangement seeking to balance boundary and interior points while avoiding obvious 3-point lines. Coordinates are manually perturbed to break exact rational collinearities, though exact floating point calculation may reveal unexpected near-collinearities.",
+      "counterconditions": [
+        "If the floating point calculation of any triangle area yields a value less than 0.005, the floor is failed.",
+        "If the claimed score of 0.005 is strictly greater than the true minimum triangle area, the claim is refuted."
+      ],
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.15
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nPOINT 0.75 0.25\nPOINT 0.5 0.5\nCLAIM 0.0",
+      "mechanism": "A symmetric grid containing multiple collinear triplets, such as (0,0)-(0.5,0)-(1,0) and (0,0)-(0.25,0.25)-(0.5,0.5). This intentionally fails the minimum area constraint but serves as a structural baseline.",
+      "counterconditions": [
+        "This candidate inherently fails the frontier-above-floor@v1 criterion because the minimum triangle area is exactly 0 due to collinear points."
+      ],
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.01
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.1\nPOINT 0.5 0.9\nPOINT 0.1 0.5\nPOINT 0.9 0.5\nPOINT 0.33 0.67\nPOINT 0.67 0.33\nPOINT 0.2 0.8\nPOINT 0.8 0.2\nPOINT 0.5 0.5\nCLAIM 0.004",
+      "mechanism": "A pseudo-random scatter within the unit square. The coordinates are chosen to avoid obvious rational linear dependencies. The claim of 0.004 is a conservative guess below the 0.005 floor, likely to be refuted by the floor criterion, demonstrating an honest but failed attempt.",
+      "counterconditions": [
+        "Fails frontier-above-floor@v1 because the claimed minimum area 0.004 is less than the required 0.005.",
+        "If the true minimum area is less than 0.004, the claim is refuted."
+      ],
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "typicality": 0.05
+    }
+  ]
+}

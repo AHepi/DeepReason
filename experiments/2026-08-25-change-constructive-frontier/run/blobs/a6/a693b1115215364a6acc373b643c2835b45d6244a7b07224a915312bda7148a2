@@ -1,0 +1,15 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 invokes SRC_006 and SRC_008 as independent confirmations of the falsificationist stance's self-consistency, but those targets are absent from the targets list and have no machine-evaluated commitments in this batch. The target therefore supports its adjudication with references that cannot be verified or falsified under the audit-ritual as stated.",
+      "premise": "An adjudication answer must ground its sustained-flags judgment in evidence that is verifiable within the audit scope.",
+      "counterexample": [
+        "The flags are sustained because the neighborhood reveals a self-consistency property of the falsificationist stance where SRC_001's own commitment content, evaluated under §11.3, independently satisfies the ritual's structural requirements."
+      ]
+    }
+  ]
+}
+```

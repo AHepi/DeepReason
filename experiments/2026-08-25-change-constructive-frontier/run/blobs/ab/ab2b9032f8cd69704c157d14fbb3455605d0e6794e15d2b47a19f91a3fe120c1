@@ -1,0 +1,72 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.027778",
+      "mechanism": "A 4x4 grid (yielding 16 points) inherently avoids small triangles because the minimal collinear spacing is large (1/3). By selectively removing 3 points from the 4x4 grid, we retain 13 points. The removal of 3 points aims to break the most dangerous triangles. In the full 4x4 grid, the smallest triangles have area 1/18 = 0.0555. Removing points to reduce down to 13 points lowers the minimum area to 1/36 = 0.027778, which satisfies the 0.005 floor.",
+      "counterconditions": [
+        "If the removed grid points do not actually eliminate the minimal 1/18 area triangles, the score may drop to 0.",
+        "The 4x4 grid might have an unresolvable bottleneck where any 3 removed points leave a 1/36 triangle, but perhaps 13 points must be placed non-grid-like to exceed 1/36."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_001",
+          "SRC_003"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+      "mechanism": "A 5x5 grid has 25 points and a minimum triangle area of 0.01. By carefully extracting a 13-point subset that maintains large local distances, we can achieve a high score. This configuration takes the 4 corners, midpoints of edges, 4 inner points at 0.25/0.75, and the center. The distances are tuned to be multiples of 0.25 or 0.5, avoiding the small 1/24 fractions. The minimum area is 1/32 = 0.03125.",
+      "counterconditions": [
+        "The specific 5x5 subset might inadvertently contain a triangle with area smaller than 1/32.",
+        "The checker might find a collinearity or near-collinearity among the selected midpoints and center reducing the area to 0."
+      ],
+      "typicality": 0.6,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_002"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.500000 0.500000\nPOINT 0.904508 0.690983\nPOINT 0.809017 0.927051\nPOINT 0.500000 1.000000\nPOINT 0.190983 0.927051\nPOINT 0.095492 0.690983\nPOINT 0.000000 0.500000\nPOINT 0.095492 0.309017\nPOINT 0.190983 0.072949\nPOINT 0.500000 0.000000\nPOINT 0.809017 0.072949\nPOINT 0.904508 0.309017\nPOINT 1.000000 0.500000\nCLAIM 0.007265",
+      "mechanism": "Distributing points on a circle is optimal for maximizing minimum distances in 2D. Placing 12 points on a circle and 1 at the center ensures no 3 points are collinear. The area of triangles formed by adjacent points on the circle and the center is large. The minimum area will come from three adjacent points on the circle, which for a unit circle is approximately 0.0145. Scaled to the unit square, it yields roughly 0.00726.",
+      "counterconditions": [
+        "The circular configuration is constrained by the square boundary, so the circle must be scaled to radius 0.5, wasting corner space and potentially lowering the maximum achievable area compared to grid-like fills.",
+        "If the points are too evenly spaced, three adjacent points might form a smaller area than a corner-point triangle in a grid layout."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_004"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.666667\nPOINT 0.000000 1.000000\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.055556",
+      "mechanism": "By using the perimeter of a 4x4 grid (12 points) and adding the center point (0.5, 0.5), we avoid small triangles formed by internal grid lines. The minimal triangles should be formed by the center point and two adjacent perimeter points, yielding an area of 1/18 = 0.0555. This dramatically reduces the number of small-area triples compared to a full grid.",
+      "counterconditions": [
+        "There might be an unexpectedly small triangle formed by three points on the same edge or adjacent edges of the perimeter.",
+        "The center point (0.5, 0.5) might align perfectly with perimeter points to create a 0-area triangle (e.g., (0,0), (0.5,0.5), (1,1))."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "requested_context_aliases": [
+          "SRC_005"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.146447\nPOINT 0.500000 0.853553\nPOINT 0.146447 0.500000\nPOINT 0.853553 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.020833",
+      "mechanism": "This configuration uses a mix of the square corners, the center, midpoints offset to avoid collinearity with the diagonal, and interior points at 0.25/0.75. It seeks to combine the boundary stability of corners with the interior spread of a grid, avoiding the strict 1/3 grid bottleneck by allowing irrational offsets. The minimum triangle is expected to be around 1/48
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

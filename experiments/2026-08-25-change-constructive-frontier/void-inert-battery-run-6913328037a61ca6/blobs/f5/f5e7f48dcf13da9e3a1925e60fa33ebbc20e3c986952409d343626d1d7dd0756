@@ -1,0 +1,12 @@
+```json
+{
+  "repair_attempted": {
+    "path": "/scratch_proposal/unresolved_questions/0/related_refs",
+    "op": "replace",
+    "value": [
+      "NEW_001",
+      "NEW_002"
+    ]
+  }
+}
+```

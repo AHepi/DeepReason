@@ -1,0 +1,67 @@
+[arm-s] 0001 tokens= 12747 cum=   12747/702789 valid=True score=0.013307680842 best=0.013307680842
+[arm-s] 0002 tokens= 10819 cum=   23566/702789 valid=True score=0.013307680842 best=0.013307680842
+[arm-s] 0003 tokens= 11900 cum=   35466/702789 valid=True score=0.0135949364055 best=0.0135949364055
+[arm-s] 0004 tokens= 12013 cum=   47479/702789 valid=False score=0.003471986111 best=0.0135949364055
+[arm-s] 0005 tokens=  9987 cum=   57466/702789 valid=True score=0.0032 best=0.0135949364055
+[arm-s] 0006 tokens= 11676 cum=   69142/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0007 tokens=  6381 cum=   75523/702789 valid=True score=0.013307680842 best=0.0135949364055
+[arm-s] 0008 tokens=  8916 cum=   84439/702789 valid=True score=0.013307680842 best=0.0135949364055
+[arm-s] 0009 tokens= 16124 cum=  100563/702789 valid=False score=0.0025 best=0.0135949364055
+[arm-s] 0010 tokens= 21580 cum=  122143/702789 valid=True score=0.000578619213 best=0.0135949364055
+[arm-s] 0011 tokens=  8721 cum=  130864/702789 valid=False score=0.013307680842 best=0.0135949364055
+[arm-s] 0012 tokens= 12274 cum=  143138/702789 valid=True score=0.013307723273 best=0.0135949364055
+[arm-s] 0013 tokens= 15802 cum=  158940/702789 valid=False score=0.013307680842 best=0.0135949364055
+[arm-s] 0014 tokens= 16736 cum=  175676/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0015 tokens= 12985 cum=  188661/702789 valid=True score=0.000561495 best=0.0135949364055
+[arm-s] 0016 tokens=  8787 cum=  197448/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0017 tokens= 15570 cum=  213018/702789 valid=True score=0.000571787 best=0.0135949364055
+[arm-s] 0018 tokens= 21688 cum=  234706/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0019 tokens=  8087 cum=  242793/702789 valid=False score=0.003471986111 best=0.0135949364055
+[arm-s] 0020 tokens= 10842 cum=  253635/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0021 tokens=  5447 cum=  259082/702789 valid=False score=5e-05 best=0.0135949364055
+[arm-s] 0022 tokens= 25704 cum=  284786/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0023 tokens=  8161 cum=  292947/702789 valid=False score=0.013307723273 best=0.0135949364055
+[arm-s] 0024 tokens= 11473 cum=  304420/702789 valid=False score=0.0 best=0.0135949364055
+[arm-s] 0025 tokens= 22055 cum=  326475/702789 valid=False score=0.0103064649975 best=0.0135949364055
+[arm-s] 0026 tokens= 16806 cum=  343281/702789 valid=True score=0.013307751281 best=0.0135949364055
+[arm-s] 0027 tokens=  9491 cum=  352772/702789 valid=True score=0.013307623771 best=0.0135949364055
+[arm-s] 0028 tokens=  9987 cum=  362759/702789 valid=True score=0.002958535503 best=0.0135949364055
+[arm-s] 0029 tokens= 14903 cum=  377662/702789 valid=True score=0.000125 best=0.0135949364055
+[arm-s] 0030 tokens= 11591 cum=  389253/702789 valid=True score=0.013307680842 best=0.0135949364055
+[arm-s] 0031 tokens=  3363 cum=  392616/702789 valid=True score=0.000578619213 best=0.0135949364055
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 210, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 131, in main
+    payload = sample(api_key)
+              ^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 87, in sample
+    with urllib.request.urlopen(request, timeout=TIMEOUT_S) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 1391, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 1352, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/http/client.py", line 1415, in getresponse
+    response.begin()
+  File "/usr/lib/python3.11/http/client.py", line 330, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/http/client.py", line 299, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response

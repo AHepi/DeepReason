@@ -1,0 +1,20 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.015625",
+    "mechanism": "A geometric grid alignment is constructed by placing points at the four corners, four edge midpoints, and five internal grid points at (0.5, 0.5) and (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), (0.75, 0.75). By leveraging highly symmetric collinearities, the smallest non-degenerate triangles are formed with a determinant of 1/32, yielding an area of 0.015625 (1/64).",
+    "counterconditions": [
+      "If any three points not intended to be collinear align to form a smaller non-zero triangle area, the claim is refuted.",
+      "If the geometric coordinates calculate to a minimum area strictly less than 0.015625, the claim is false."
+    ],
+    "typicality": 0.7,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

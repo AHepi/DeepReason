@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+    "mechanism": "I propose a highly symmetric, structured configuration: the 4 corners of the unit square, the 4 edge midpoints, the 4 inner midpoints (forming an inner square), and the exact center. This 13-point set is highly structured but deeply flawed. Any three collinear points form a triangle of area 0. In this construction, (0,0), (0.5,0), and (1,0) are collinear, yielding a minimum triangle area of 0. This candidate deliberately sacrifices optimality to provide a baseline for comparison and highlight the vulnerability of purely symmetry-based approaches to geometric degeneracies.",
+    "counterconditions": [
+      "If the three points (0,0), (0.5,0), and (1,0) are collinear, the minimum triangle area is 0.",
+      "If the four points (0,0), (0.5,0.5), and (1,1) are collinear, the minimum triangle area is 0.",
+      "If the diagonal symmetry forces points into a line, the minimum area is 0."
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.1
+  }
+}

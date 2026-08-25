@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.309017 0.154508\nPOINT 0.309017 0.845492\nPOINT 0.500000 0.500000\nPOINT 0.691000 0.154508\nPOINT 0.691000 0.845492\nPOINT 0.079785 0.369000\nPOINT 0.079785 0.631000\nPOINT 0.920215 0.369000\nPOINT 0.920215 0.631000\nCLAIM 0.003500",
+    "mechanism": "Exploits diagonal symmetry and leverages near-homothetic subclustering to create a dense, highly degenerate structure where many points lie on a common set of lines or clusters, forcing the minimum triangle area well below the empirical floor of 0.005 (i.e., a deliberate underperformer violating frontier-above-floor).",
+    "counterconditions": [
+      "frontier-above-floor@v1 is true",
+      "frontier-claim-honest@v1 is false (CLAIM 0.003500 is falsely low; true minimum area is larger)",
+      "frontier-wellformed@v1 is true",
+      "true minimum triangle area is strictly greater than 0.005",
+      "all 13 points are not distinct",
+      "points are not within [0,1]x[0,1]"
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.04
+  }
+}
+```

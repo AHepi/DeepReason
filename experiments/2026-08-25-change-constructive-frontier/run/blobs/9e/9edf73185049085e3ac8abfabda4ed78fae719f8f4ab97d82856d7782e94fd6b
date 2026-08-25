@@ -1,0 +1,71 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nCLAIM 0.031250",
+      "mechanism": "Perturbed 3x3 grid: 8 points on grid boundary/corners plus 4 interior diagonal points creates highly uniform area distribution avoiding collinear triples.",
+      "counterconditions": [
+        "If any three points are collinear, minimum area is 0",
+        "If points are perturbed too close to grid lines, small triangles form near (0.25,0.25),(0,0.25),(0.5,0)",
+        "If score is below 0.03, the configuration is suboptimal"
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "POINT 0.500000 0.500000\nPOINT 0.500000 0.100000\nPOINT 0.500000 0.900000\nPOINT 0.103553 0.250000\nPOINT 0.896447 0.250000\nPOINT 0.103553 0.750000\nPOINT 0.896447 0.750000\nPOINT 0.250000 0.103553\nPOINT 0.750000 0.103553\nPOINT 0.250000 0.896447\nPOINT 0.750000 0.896447\nPOINT 0.103553 0.500000\nPOINT 0.896447 0.500000\nCLAIM 0.030330",
+      "mechanism": "Radial design: center point plus points at 3 distance levels (0.4, 0.329, 0.354) on 4 axes. Geometric spacing of radial levels ensures minimum area ~0.0303.",
+      "counterconditions": [
+        "If radial levels are not properly spaced, some triple may have smaller area",
+        "If axis-aligned collinearities not broken by asymmetric spacing, area may be 0",
+        "If radial scaling exceeds bounds, points leave unit square"
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nCLAIM 0.000000",
+      "mechanism": "Naive 3x3 grid plus 4 diagonal midpoints. Contains numerous collinear triples yielding zero-area triangles. A deliberately weak baseline.",
+      "counterconditions": [
+        "Any collinear triple produces zero area, refuting non-zero claims",
+        "Cannot achieve score above 0 by construction"
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "POINT 0.060000 0.060000\nPOINT 0.940000 0.060000\nPOINT 0.940000 0.940000\nPOINT 0.060000 0.940000\nPOINT 0.500000 0.060000\nPOINT 0.940000 0.500000\nPOINT 0.500000 0.940000\nPOINT 0.060000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.280000 0.280000\nPOINT 0.720000 0.280000\nPOINT 0.720000 0.720000\nPOINT 0.280000 0.720000\nCLAIM 0.031250",
+      "mechanism": "Edge-contracted 3x3 grid with inset margins and 4 diagonal interior points. Preserves relative spacing of uniform grid while compressing inward to break boundary collinearities.",
+      "counterconditions": [
+        "If contraction factor too small, collinearities remain from grid structure",
+        "If contraction too large, boundary triangles shrink below grid level",
+        "Score 0.03125 assumes 0.44 unit spacing scaled uniformly"
+      ],
+      "typicality": 0.55,
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "POINT 0.000000 0.500000\nPOINT 0.183013 0.933013\nPOINT 0.683013 0.933013\nPOINT 1.000000 0.500000\nPOINT 0.683013 0.066987\nPOINT 0.183013 0.066987\nPOINT 0.500000 0.500000\nPOINT 0.500000 0.866987\nPOINT 0.500000 0.133013\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nCLAIM 0.013000",
+      "mechanism": "Hexagonal shell (6 vertices of regular hexagon) plus center and axis-aligned extension points. Radial symmetry distributes points evenly angularly but creates small triangles with axis extensions.",
+      "counterconditions": [
+        "Axis-aligned extension points may create very small triangles with hexagon vertices",
+        "Central plus extension points may be collinear",
+        "Hexagonal spacing may be suboptimal for n=13 compared to rectangular"
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_003"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.000000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 1.000000\nCLAIM 0.023438",
+      "mechanism": "Perturbed grid with 4 boundary mid-edge interior points. Lower score than diagonal-interior variant because boundary placements create small sliver triangles with adjacent grid edges.",
+      "counterconditions": [
+        "Points on grid edges create near-zero triangles with adjacent boundary points",
+        "Score 0.0234 is significantly below diagonal variant's 0.03125",
+        "If edge midpoints shifted off boundary, score may improve"
+      ],
+      "typicality": 0.4,
+      "optional_refs": ["SRC_004"]
+    }
+  ]
+}
+```

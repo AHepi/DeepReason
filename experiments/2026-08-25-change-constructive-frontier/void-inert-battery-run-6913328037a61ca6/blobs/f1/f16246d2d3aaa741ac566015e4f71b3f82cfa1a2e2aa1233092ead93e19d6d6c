@@ -1,0 +1,25 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.285714\nPOINT 1.000000 0.285714\nPOINT 0.500000 0.142857\nPOINT 0.000000 0.571428\nPOINT 1.000000 0.571428\nPOINT 0.500000 0.428571\nPOINT 0.000000 0.857142\nPOINT 1.000000 0.857142\nPOINT 0.500000 0.714285\nPOINT 0.500000 0.500000\nCLAIM 0.005102",
+    "mechanism": "12 of the 13 points are placed on the boundary of the unit square (two per side, carefully separated). The central point (0.5, 0.5) is then added. Because boundary points are co-linear in pairs on the edges, many triangles degenerate; the smallest non-degenerate triangles are formed by taking two boundary points on one edge and the center, giving a base of 1/7 and height 1/2, yielding area 1/28 ≈ 0.0357. However, a global scan reveals even smaller triangles: for instance, the triangle formed by (0, 0.285714), (1, 0.285714), and (0.5, 0.142857) has a base of 1.0 and height of 0.142857, giving an area of exactly 1/14 ≈ 0.0714. The absolute limiting minimum area is dictated by the three points (0,0), (0, 2/7), and (0.5, 1/7), which yields area 1/196 ≈ 0.005102.",
+    "counterconditions": [
+      "If any three points are shifted to be collinear, the score drops to zero.",
+      "If a smaller internal triangle is formed by the dense packing on the edges, the claimed score of 0.005102 will be strictly greater than the true minimum, causing the honesty check to fail.",
+      "If a more optimal non-boundary arrangement exists that spaces all points >0.1 apart in effective projective distance, the mechanism's reliance on boundary degeneracy is suboptimal."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.25
+  }
+}
+```

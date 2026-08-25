@@ -1,0 +1,52 @@
+{
+  "candidates": [
+    {
+      "content": "The ritual flags are sustained because the falsificationist stance is functionally embedded in both critics and the adjudication ritual, rendering any observed cross-critic agreement trivially expected rather than probative.",
+      "typicality": 0.75,
+      "neighbours": [
+        "SRC_002",
+        "SRC_007"
+      ]
+    },
+    {
+      "content": "The audit flags are a FALSE POSITIVE: the critics independently found the same counterexample on artifact 0c61961a8085, making their agreement weak evidence rather than a robust, independent triangulation.",
+      "typicality": 0.65,
+      "neighbours": [
+        "SRC_003",
+        "SRC_006"
+      ]
+    },
+    {
+      "content": "The flags are sustained because the adjudication harness detected cross-critic consistency on frontier-claim-honest@v1 (SRC_007) and frontier-claim-honest@v2, proving the verdicts are algorithmically commensurable across different seeded instances.",
+      "typicality": 0.8,
+      "neighbours": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The ritual flags are a FALSE NEGATIVE because the skeptics operate with an identical prior distribution: they are two draws from a single school_policy, not genuinely independent sources, so the ritual's independence assumption fails.",
+      "typicality": 0.3,
+      "neighbours": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "The flags are sustained NOT because of independent discovery, but because SRC_006 and SRC_008 confirm a self-consistency property of the falsificationist stance, demonstrating that the stance's internal logic is reliably preserved across instances.",
+      "typicality": 0.6,
+      "neighbours": [
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "The flags are sustained because the neighborhood reveals a self-consistency property of the falsificationist stance where SRC_006 and SRC_008 independently confirm each other's logic, satisfying the ritual's structural requirements.",
+      "typicality": 0.5,
+      "neighbours": [
+        "SRC_005",
+        "SRC_008"
+      ]
+    }
+  ]
+}

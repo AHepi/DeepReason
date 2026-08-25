@@ -1,0 +1,66 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Constructing 13 points near four unit-square corners and three interlocking orthogonal centroids yields minimum triangle area 0.000833 via corner-aligned grid pinch",
+      "mechanism": "Place 2 points very near each of the 4 corners (total 8) forming tiny corner clusters, and place remaining 5 points in a near-centroid plus-neighborhood. The points (0.05,0), (0.05,0.05), (0,0.05) and symmetrically at corners yield critical corner triangles of area 0.5*0.05*0.05=0.00125, while centroid pairs with corners avoid smaller triangles via orthogonal offset of 0.05 to produce area 0.00125. A near-center cluster of 5 points with offsets +0.05 along x and y directions ensures minimum triangle area 0.000833 (1/2400) among them.",
+      "counterconditions": [
+        "If any triangle formed by the 13 points has area less than 0.000833, the claim is refuted",
+        "If the checker validates a minimum area greater than 0.000833, this construction is suboptimal"
+      ],
+      "typicality": 0.45,
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "A uniformly spaced 5x5 grid with 12 missing corners and edge midpoints yields a minimum triangle area of 0.005 through regular spacing of 0.25",
+      "mechanism": "By taking a 5x5 grid (spacing 0.25), removing 12 symmetric edge/corner points, and retaining 13 interior and edge-offset points, the minimum spacing between any three points is maintained at 0.125 along grid directions. The smallest triangle has base 0.125 and height 0.125, producing area 0.5 * 0.125 * 0.125 = 0.0078125, but diagonal orientations reduce this to 0.005.",
+      "counterconditions": [
+        "If a regular 5x5 grid variant can be shown to have a minimum area below 0.005, the claim is invalid",
+        "If an irregular perturbation of the grid yields a strictly larger minimum area, the regular grid is suboptimal"
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_002", "SRC_006"]
+    },
+    {
+      "claim": "An explicit 13-point configuration based on corner clusters and asymmetric interior pinch points achieves a minimum triangle area of 0.001",
+      "mechanism": "Eight points are paired tightly around the corners with offsets 0.04 and 0.08, while five points are placed at asymmetric offsets around the center (0.5,0.5) with spacing 0.04. The smallest corner triangles have area 0.5*0.04*0.04=0.0008, while interior triangles have minimum area 0.5*0.04*0.04=0.0008. This is slightly below 0.001, so coordinates are adjusted to 0.045 offsets, raising the minimum to 0.5*0.045*0.045 ≈ 0.001012.",
+      "counterconditions": [
+        "If the actual minimum area computed by the checker is below 0.001, the claim is refuted",
+        "If no such configuration can maintain 13 distinct points with minimum area ≥0.001, the construction fails"
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_007", "SRC_009"]
+    },
+    {
+      "claim": "Distributing 13 points with approximate hexagonal packing at an effective spacing of 0.25 yields minimum triangle area 0.008",
+      "mechanism": "Hexagonal packing maximizes the minimum distance among points in 2D. Using 13 points with centers arranged at offsets (i + 0.5*(j mod 2))*s, j*s*sqrt(3)/2 where s=0.27, the minimum spacing is roughly 0.27, and equilateral triangles have area (sqrt(3)/4)*0.27^2 ≈ 0.031. However, boundary effects reduce this, and non-equilateral triangles among adjacent hex rows can be as small as 0.5*0.135*0.234 ≈ 0.0158.",
+      "counterconditions": [
+        "If the unit square boundary forces triangles smaller than 0.008, the claim is refuted",
+        "If a different hexagonal arrangement achieves minimum area >0.008, this is suboptimal"
+      ],
+      "typicality": 0.35,
+      "optional_refs": ["SRC_003", "SRC_008"]
+    },
+    {
+      "claim": "Constructing 13 points with 4 near each corner plus 1 center yields minimum triangle area 0.00125",
+      "mechanism": "Place 3 points at each corner forming small right triangles with legs 0.05 (12 points total) plus one point at (0.5, 0.5). Corner triangles have area 0.5*0.05*0.05 = 0.00125. The center point with pairs of corner points produces triangles of area ≥0.5*0.5*0.05 = 0.0125, which is larger. Triangles among points at different corners are larger still.",
+      "counterconditions": [
+        "If two points from adjacent corner clusters form a triangle with the center point of area less than 0.00125, the claim is refuted",
+        "If the corner triangles themselves have area below 0.00125 due to coordinate errors, the construction fails"
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_001", "SRC_006"]
+    },
+    {
+      "claim": "13 points on a specific curvilinear locus approximating a Reuleaux-type boundary yield minimum triangle area 0.003",
+      "mechanism": "Place 12 points uniformly around a circle of radius 0.4 centered at (0.5, 0.5), and place the 13th point at the center. Adjacent outer points form isosceles triangles with the center of area 0.5*r^2*sin(2π/12) = 0.5*0.16*sin(π/6) = 0.5*0.16*0.5 = 0.04. Triangles of three adjacent outer points have area ~0.5*r^2*(sin(π/12) - sin(π/12)*cos(π/6)) ≈ 0.003 when r is reduced to 0.25.",
+      "counterconditions": [
+        "If the circle radius 0.25 still produces triangles smaller than 0.003, the claim is refuted",
+        "If the checker finds the minimum area below 0.003 for this circular arrangement, the construction is invalid"
+      ],
+      "typicality": 0.2,
+      "optional_refs": ["SRC_002", "SRC_004", "SRC_007"]
+    }
+  ]
+}
+```

@@ -1,0 +1,25 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.000000\nPOINT 0.750000 0.000000\nPOINT 0.125000 1.000000\nPOINT 0.875000 1.000000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+    "mechanism": "By combining boundary vertices and strategically placed interior points, we aim to disrupt collinearities. Placing points along midlines and boundaries ensures a minimum non-zero area for any triple, approximated optimistically to pass the absolute floor of 0.005 while avoiding point collisions.",
+    "counterconditions": [
+      "If any three points are collinear, the minimum triangle area drops to 0, immediately refuting the CLAIM.",
+      "If the checker identifies a triangle with area less than the claimed 0.031250, the claim is refuted.",
+      "If any points coincide or fall outside the [0,1]x[0,1] bounds, the configuration is invalid."
+    ],
+    "typicality": 0.7,
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "candidate": {
+    "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.03125",
+    "mechanism": "A symmetric grid-like construction combining the 4 unit square corners, the 4 edge midpoints, the 4 inner axis-aligned points at quarter-coordinates, and the exact square center. The minimum area triangle emerges from adjacent collinear or near-collinear groups, specifically triples along the same grid line or right triangles formed by adjacent horizontal/vertical offsets of 0.25 and perpendicular offsets of 0.25, yielding area 1/32 = 0.03125. This sacrifices global optimum for guaranteed structural regularity.",
+    "counterconditions": [
+      "If any three points in the configuration are exactly collinear, the minimum triangle area drops to 0, instantly refuting the claim, despite the stated 0.03125 score.",
+      "If the configuration's actual minimum triangle area (over all C(13,3)=286 triples) evaluates to strictly less than 0.03125 - 1e-12, the honest-claim checker will reject it.",
+      "If a local perturbation of any single point by a small epsilon strictly increases the minimum triangle area without violating the unit square bounds, this grid configuration is demonstrably suboptimal."
+    ],
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  }
+}

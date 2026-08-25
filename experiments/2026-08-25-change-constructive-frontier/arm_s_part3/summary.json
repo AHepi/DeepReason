@@ -1,0 +1,15 @@
+{
+  "arm": "S",
+  "best_sample_index": 6,
+  "best_score": 0.0133077088625,
+  "best_score_exact": "1064616709/80000000000",
+  "max_tokens": 32768,
+  "model": "glm-5.2",
+  "n_refuted": 8,
+  "n_samples": 15,
+  "n_transport_errors": 0,
+  "n_valid": 7,
+  "temperature": 1.0,
+  "token_budget_matched_to_arm_h": 193694,
+  "tokens_spent": 200359
+}

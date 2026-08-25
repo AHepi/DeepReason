@@ -1,0 +1,64 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The §11.3 adjudication-ritual flags are false positives: they conflate critic execution failures (timeout, crash) with genuine critic unreliability, likely due to inconsistent critic-version pinning.",
+      "typicality": 0.85,
+      "neighbours": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_004",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is a true positive: the critic is genuinely unreliable on artifact 0c61961a8085, and the ritual's sustained flag correctly identifies this unsoundness.",
+      "typicality": 0.72,
+      "neighbours": [
+        "SRC_003",
+        "SRC_006",
+        "SRC_007"
+      ]
+    },
+    {
+      "content": "The ritual flags are misattributed: §11.3 should flag artifact 0c61961a8085 as adversarially hard rather than flagging the critic as unreliable.",
+      "typicality": 0.68,
+      "neighbours": [
+        "SRC_003",
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The §11.3 flagging criterion is vacuously satisfied by any critic that crashes, rendering the ritual's signal uninformative: it cannot distinguish a bad critic from a hard artifact.",
+      "typicality": 0.60,
+      "neighbours": [
+        "SRC_004",
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The ritual itself is the bug: the adjudication-ritual's §11.3 flagging criterion conflates 'critic failed on artifact X' with 'critic is unreliable', and the ritual harness requires structural revision.",
+      "typicality": 0.78,
+      "neighbours": [
+        "SRC_002",
+        "SRC_004",
+        "SRC_005",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The §11.3 flags are a false positive arising from inconsistent critic-version pinning: the ritual harness evaluated frontier-claim-honest@v1 and found it sound, but a stale cached verdict from an earlier critic version was retained.",
+      "typicality": 0.82,
+      "neighbours": [
+        "SRC_002",
+        "SRC_005",
+        "SRC_006"
+      ]
+    }
+  ]
+}
+```

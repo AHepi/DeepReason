@@ -1,0 +1,76 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.5 1\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.03125",
+      "mechanism": "A highly symmetric 4x4 grid with the center point removed, offset by half a grid cell. It features rows of 3 points at y=0.25, y=0.5, and y=0.75. The minimum area is achieved by the right triangles in the four corners of the 0.5x0.5 sub-squares, formed by grid lines and a half-diagonal (e.g., (0,0), (0.5,0), (0.25,0.25)), yielding an area of 1/32 = 0.03125.",
+      "counterconditions": [
+        "If the actual minimum triangle area in the configuration is strictly less than 0.03125, the claim is refuted.",
+        "If the configuration contains overlapping points, it violates the distinctness criterion.",
+        "If the formation rule misses a smaller triangle formed by a non-obvious triple, the claim fails."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.25 0\nPOINT 0 0.25\nPOINT 1 0.25\nPOINT 0.25 1\nPOINT 0.5 0.25\nPOINT 0.25 0.5\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.5 0.5\nCLAIM 0.015625",
+      "mechanism": "This arrangement places points on a 4x4 integer grid (coordinates i/4) but deliberately excludes the four 'anti-corners' to disrupt long horizontal/vertical alignments and introduce staggered 45-degree diagonals. By fragmenting the grid lines, it forces small triangles (area 1/64 = 0.015625) using half-steps while avoiding the larger minimums found in uniform grids.",
+      "counterconditions": [
+        "If the minimum area is lower than 0.015625 due to an unconsidered staggered diagonal, the claim is false.",
+        "If a better configuration exists with minimum area > 0.03125 by a non-grid method, this candidate is suboptimal.",
+        "If the configuration's anti-corners form unintended near-collinear triples with smaller areas, it fails."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_005",
+        "SRC_008"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.5 1\nPOINT 0.333333 0\nPOINT 0 0.333333\nPOINT 1 0.333333\nPOINT 0.333333 1\nPOINT 0.5 0.5\nCLAIM 0.009259",
+      "mechanism": "A perturbation of Candidate 1 that pushes four edge midpoints outward to the 1/3 and 2/3 positions. The claim asserts an area slightly above 1/108 (~0.009259), derived from thin triangles formed by the stretched segments and the original corner anchors. This explores the fragility of symmetric grid structures and the impact of localized stretching.",
+      "counterconditions": [
+        "If the minimum area is not approximately 0.009259, the claimed score is incorrect.",
+        "If the perturbation creates an unexpected collinearity or smaller triangle, it fails the honesty check.",
+        "If this perturbation somehow destroys all medium-area triangles without creating small ones, the claim is invalid."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_007"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.125\nPOINT 0.125 0.5\nPOINT 0.5 0.875\nPOINT 0.875 0.5\nPOINT 0.5 0.5\nCLAIM 0.0078125",
+      "mechanism": "An atypical cross-shaped pattern inside the unit square. It combines a 4x4 grid core with midpoints pushed to 1/8 and 7/8 positions. The minimum area is determined by the intersection of central radial spokes and the inner grid, intended to produce areas of 1/128 (0.0078125). It deliberately sacrifices the 0.03125 minimum to test if radical redistribution can avoid medium-sized triangles entirely.",
+      "counterconditions": [
+        "If the cross-spokes intersect to form triangles smaller than 1/128, the claim is refuted.",
+        "If the radial geometry is less optimal than a uniform 4x4 grid, the design is suboptimal.",
+        "If the checker identifies a near-collinear triple along the spokes with a smaller area, it fails."
+      ],
+      "typicality": 0.15,
+      "optional_refs": [
+        "SRC_009"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

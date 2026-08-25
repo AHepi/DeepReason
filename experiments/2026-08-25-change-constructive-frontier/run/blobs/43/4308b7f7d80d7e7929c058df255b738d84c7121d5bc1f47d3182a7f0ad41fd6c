@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual flags are sustained because two independent critics (SRC_007, SRC_009) falsified the same artifact, satisfying the cross-critic consistency requirement via structural convergence on a counterexample.",
+      "typicality": 0.9,
+      "neighbours": ["SRC_002", "SRC_004", "SRC_008"]
+    },
+    {
+      "content": "The audit flags are sustained NOT by independent discovery of the same counterexample, but because two independently seeded NU verdicts (SRC_006, SRC_008) corroborate the falsificationist stance, making ritual-flag persistence an epistemic property of the neighborhood rather than a factual discovery.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_003", "SRC_005", "SRC_006"]
+    },
+    {
+      "content": "The sustained flags are a FALSE POSITIVE of the adjudication-ritual: two critics failing on the same artifact is weak evidence and does not warrant sustaining adjudication flags without a second divergent test artifact.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_006"]
+    },
+    {
+      "content": "The flags are sustained because the falsificationist stance is structurally embedded in both the critics and the adjudication ritual, so the harness will inevitably confirm consistency whenever falsificationist critics operate under a falsificationist ritual, making the flag an artifact of design rather than an empirical finding.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_007", "SRC_001"]
+    },
+    {
+      "content": "The ritual flags are sustained because cross-critic consistency across independently seeded falsificationist stances (SRC_007, SRC_009) demonstrates an invariant self-consistency property of the neighborhood's epistemic stance, not because any single counterexample was independently rediscovered.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_005", "SRC_008", "SRC_003"]
+    },
+    {
+      "content": "The sustained flags arise from circular reinforcement: school-1 (SRC_001) seeds skeptic critics whose falsificationist commitments (SRC_007, SRC_009) are then judged by an adjudication ritual that encodes the same commitments, so the flags measure ritual-critic alignment rather than artifact truth.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_001", "SRC_007", "SRC_006"]
+    }
+  ]
+}

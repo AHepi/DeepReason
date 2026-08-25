@@ -1,0 +1,110 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+```json
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual flag (§11.3) is sustained because the verdict-shape mandates an impossible joint requirement: every surviving candidate must simultaneously satisfy mutually exclusive probes (e.g., frontier-claim-honest and frontier-above-floor), guaranteeing structural failure.",
+      "typicality": 0.85,
+      "neighbours": [
+        "SRC_002",
+        "SRC_008",
+        "SRC_006"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is sustained by design as a stabilizing negative-feedback loop: the ritual deliberately prevents premature closure by enforcing contradictory criteria that keep the search space open.",
+      "typicality": 0.75,
+      "neighbours": [
+        "SRC_004",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "The adjudication-ritual flag persists due to a type confusion in the critic harness: 'sound and relevant' (a meta-level judgment) is conflated with the base-level verdict shape, causing the system to reject valid candidates based on a category error.",
+      "typicality": 0.55,
+      "neighbours": [
+        "SRC_005",
+        "SRC_007"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is an artifact of temporal misalignment: the 'sound and relevant' affirmations and the 'failed' verdicts are evaluated at different phases of the adjudication cycle, making the sustained flag a phantom of asynchronous evaluation rather than a genuine structural defect.",
+      "typicality": 0.35,
+      "neighbours": [
+        "SRC_007",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "The adjudication-ritual flag is sustained because the two critics (frontier-claim-honest, frontier-above-floor) are redundant probes of the same latent quality; their apparent mutual exclusion is an epistemic illusion arising from measuring the same frontier from orthogonal axes.",
+      "typicality": 0.25,
+      "neighbours": [
+        "SRC_003",
+        "SRC_006"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is an emergent property of the unifier stance (school-2): the school_policy's commitment to unification forces the adjudication ritual to reject candidates that do not bridge all critical dimensions, rendering the flag a side effect of an over-constrained meta-objective.",
+      "typicality": 0.15,
+      "neighbours": [
+        "SRC_001",
+        "SRC_004",
+        "SRC_008"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative mechanism: the adjudication-ritual flag could be a *feature masquerading as a bug*. If the critic harness is designed to optimize for exploratory breadth over exploitative depth, the sustained flag might be an intentional pressure valve that prevents the system from collapsing onto a single candidate too early. The 'impossible joint requirement' (SRC_002, SRC_008) would then be a deliberate impossibility, not a defect.",
+          "bears_on_refs": [
+            "SRC_002",
+            "SRC_004",
+            "SRC_008"
+          ],
+          "why_keep_this": "This reframes the flag from a failure to a strategy, opening a line of critique that challenges the audit's assumption that the flag is undesirable."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: If the two critics (frontier-claim-honest, frontier-above-floor) were not redundant probes (SRC_003) but genuinely independent dimensions, the §11.3 flag would likely not be sustained. This suggests the flag's persistence is contingent on a latent correlation in the critic space, not on the verdict-shape alone.",
+          "bears_on_refs": [
+            "SRC_003",
+            "SRC_006"
+          ],
+          "why_keep_this": "Isolates the redundancy hypothesis from the structural-impossibility hypothesis, making them independently testable."
+        }
+      },
+      {
+        "local_key": "NEW_003",
+        "body": {
+          "content": "Rough fragment: The temporal-misalignment account (SRC_007) implies that the flag is a *recording artifact*. If the affirmations and failures are timestamped, a re-synchronization of the evaluation phases could dissolve the flag without changing any critic logic. This would mean the audit is diagnosing a clock error, not a ritual error.",
+          "bears_on_refs": [
+            "SRC_007"
+          ],
+          "why_keep_this": "Offers a low-cost intervention (re-timing) that would falsify the structural accounts if it works."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "If the adjudication-ritual flag were removed (e.g., by relaxing the joint requirement), would the critic harness still prevent premature closure, or does the flag serve as the sole negative-feedback mechanism?",
+        "related_refs": [
+          "NEW_001",
+          "SRC_004"
+        ]
+      },
+      {
+        "question": "Are the two critics (frontier-claim-honest, frontier-above-floor) measuring the same latent variable, and if so, is their redundancy a design choice or an unintended correlation?",
+        "related_refs": [
+          "NEW_002",
+          "SRC_003",
+          "SRC
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

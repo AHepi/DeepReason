@@ -66,6 +66,7 @@ from wheel_operational_smoke import (  # noqa: E402
 REACH_RICH = REPO / "experiments" / "2026-08-22-live-reach-rich-run"
 EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
 POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
+FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -206,6 +207,28 @@ CASES: dict[str, SoakCase] = {
         attached_evidence=True,
         delegates_to_builder=True,
         default_cycles=12,
+        default_token_budget=3_000_000,
+    ),
+    "pc1": SoakCase(
+        id="pc1",
+        description=(
+            "the P-C1 ARM H constructive shape: SOLO glm-5.2 across all 11 "
+            "canonical roles, everything on EXCEPT judges (rubric_policy "
+            "forbid, JUDGE_SEATS_ENABLED false), an EMPTY dossier, and three "
+            "predicate: criteria that score a Heilbronn construction"
+        ),
+        config_path=FRONTIER / "run-config.yaml",
+        builder="build_manifest_pc1",
+        builder_dir=FRONTIER,
+        attached_evidence=False,
+        # The builder owns root construction: the default path would bind a
+        # manifest with rubric_policy left alone and a differently-shaped
+        # dossier, and an instrument that soaks the wrong shape is worse
+        # than no instrument, because it reports green.
+        delegates_to_builder=True,
+        # R20's "cycles sized deep"; the launch's own depth, not a sample
+        # of it -- the soak must drive the configuration the launch uses.
+        default_cycles=24,
         default_token_budget=3_000_000,
     ),
     "reach-rich": SoakCase(

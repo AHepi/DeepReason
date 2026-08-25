@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.0 0.0\nPOINT 0.0 0.5\nPOINT 0.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 0.5\nPOINT 0.5 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.5\nPOINT 1.0 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nCLAIM 0.0",
+    "mechanism": "An expanded 3x3 grid (spacing 0.5) is supplemented by four interior points at the centers of the four corner sub-squares (coordinates at 0.25 and 0.75). The interior points break up large empty regions. However, this fails to keep all 286 triangles with positive area: the triple (0,0)-(0.5,0)-(1,0) lies on the line y=0, giving a triangle of area 0. The construction is an intentionally criticizable baseline—it is well-formed and passes distinctness, but fails the floor and yields a zero area score.",
+    "counterconditions": [
+      "If any three points are collinear, the minimum area becomes 0, failing the 0.005 floor.",
+      "Moving any boundary point off the edge to avoid collinearity would alter the configuration.",
+      "A more refined lattice with triangular (hexagonal) symmetry is needed to avoid all collinear triples."
+    ],
+    "typicality": 0.2,
+    "optional_refs": ["SRC_001", "SRC_002"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_003"],
+      "search_signal": "productive"
+    }
+  }
+}
+```

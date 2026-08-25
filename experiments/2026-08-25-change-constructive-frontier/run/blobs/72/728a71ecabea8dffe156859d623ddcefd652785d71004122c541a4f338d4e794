@@ -1,0 +1,21 @@
+```json
+{
+  "candidate": {
+    "content": "The adjudication-ritual flag is sustained not by the verdict-shape alone but by the harness's failure to enforce a temporal sequencing constraint between the 'sound and relevant' affirmations and the 'failed' verdicts, rendering the ritual's negative-feedback loop a non-monotonic, unstable attractor.",
+    "typicality": 0.28,
+    "evidence_refs": [
+      {
+        "block": "033eab748c73445d9f6c9268a3fc8a1d604b7cb444a4274791ad0653653383a7"
+      },
+      {
+        "block": "843cefb9d510742355b505ed529b2645d090eb0e54152a8eb7715ef4dcafb44b"
+      }
+    ],
+    "neighbours": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ]
+  }
+}
+```

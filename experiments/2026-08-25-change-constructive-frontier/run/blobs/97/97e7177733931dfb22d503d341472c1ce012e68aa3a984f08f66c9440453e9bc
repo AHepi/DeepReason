@@ -1,0 +1,8 @@
+```json
+{
+  "patch": {
+    "op": "remove",
+    "path": "/cases/0/preise"
+  }
+}
+```

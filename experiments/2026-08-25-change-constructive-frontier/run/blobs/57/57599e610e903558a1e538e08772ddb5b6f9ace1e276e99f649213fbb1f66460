@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "The target addresses the stated audit-ritual scope directly: it identifies §11.3 and explains the logical tension between verdict-quality criteria and object-level progress criteria, which is the substance the ritual asks the critic to adjudicate.", "premise": null, "premise_evidence": null, "counterexample": null}]}
+```

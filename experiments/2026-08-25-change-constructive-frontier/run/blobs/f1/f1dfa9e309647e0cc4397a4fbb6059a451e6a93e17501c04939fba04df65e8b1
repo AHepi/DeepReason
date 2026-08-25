@@ -1,0 +1,3 @@
+```json
+{"cases":[{"target_alias":"SRC_001","attack":true,"case":"The target asserts the flags are sustained because the harness detected 'cross-critic consistency,' yet it simultaneously claims this consistency proves verdicts are 'algorithmically commensurable across different seeded instances.' These are two distinct claims, and the evidence given for one (consistency of output) does not substantiate the other (commensurability of algorithm). The target conflates empirical correlation with structural proof, rendering the adjudication justification logically invalid.","premise":"The target claims that detected cross-critic consistency proves verdicts are algorithmically commensurable.","premise_evidence":null,"counterexample":null}]}
+```

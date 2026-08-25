@@ -1,0 +1,11 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "SRC_001 argues the adjudication-ritual is unfair because ground-truth (SRC_005) is non-mechanistic while critics are held to a mechanistic standard. However, SRC_001's claim requires the problem context to demand a causal mechanism from critics. The actual problem context only requires 'adjudication-ritual flags sustained (§11.3)', with no mention of any mechanistic requirement. SRC_001 invokes 'school-0's mechanist stance' as if it were part of the ritual, but the stated problem never references such a stance or any mechanistic criterion. The asymmetry SRC_001 identifies is therefore not established against the problem as stated; it depends on scope the problem never asked for. Without a mechanistic requirement in the problem itself, the comparison to a non-mechanistic ground-truth does not demonstrate that the adjudication-ritual's sustained flags are unjustified."
+    }
+  ]
+}
+```

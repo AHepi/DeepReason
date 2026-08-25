@@ -1,9 +1,95 @@
-# The Poietics research program — three runs, one record
+# The CONSTRUCTIVE FRONTIER series — v2
 
-Registered 2026-08-25 (REQUEST.md R8, R9). **P-R1 runs in this tranche.
-P-R2 and P-R3 are REGISTERED ONLY** — question, dossier, milestones and
-launch preconditions written down here before P-R1's outcome is known, so
-neither can be quietly reshaped to fit whatever P-R1 happens to produce.
+**v2, 2026-08-25.** This program was registered the same day as *the
+Poietics research program — three runs, one record*, and REDIRECTED before
+its second run. P-R1 ran and is unaffected. **P-R2 and P-R3 are CANCELLED**
+by operator ruling; the program continues as the CONSTRUCTIVE FRONTIER
+series, whose first run is P-C1.
+
+## The ruling that redirected it (operator, 2026-08-25, verbatim)
+
+> change the research program a bit. I needs to solve a tough problem.
+> Something that prompts the LLMs to have to be imaginative.
+
+and, from the same exchange, the standing spend criterion this series is
+now measured against:
+
+> results must beat what one-shot prompting buys, measured, or the spend
+> is not justified.
+
+Those two sentences are the whole authority for v2. They are reproduced
+here rather than paraphrased because they are the cancelling instrument for
+two registered runs, and a cancellation whose authority is a paraphrase is
+a cancellation nobody can audit later.
+
+## What v2 keeps from v1
+
+The v1 text below is NOT deleted. A registered question that gets cancelled
+stays legible, or the record loses the fact that it was ever registered —
+the same never-delete rule REQUEST.md applies to requirements. P-R1's
+section stands as run; P-R2 and P-R3 keep their registered text beneath
+their CANCELLED markers.
+
+---
+
+## The problem class this series works in (registered v2)
+
+**Geometric construction on small open instances.** Two families:
+
+- **Circle packing** — maximise the minimum radius of N equal circles
+  packed in the unit square.
+- **Heilbronn** — maximise the minimum triangle area over all triples of N
+  points in the unit square.
+
+Both share the property the ruling asks for. A candidate is a
+CONSTRUCTION, not an opinion; its commitment is a number; and that number
+is settled by a deterministic checker rather than by anyone's reading. So
+criticism here is DEMONSTRATIVE — a refutation is a computation, not a
+verdict — and no judge seat is involved at any point.
+
+P-C1 registers ONE instance from this class, chosen at spec time from
+N in 13..16, with the choice reasoned rather than asserted.
+
+## Why this class answers the ruling
+
+The models cannot retrieve their way through it and cannot argue their way
+through it. The obvious symmetric answers are not merely mediocre, they
+score exactly ZERO — a regular arrangement contains collinear triples, and
+a collinear triple has area 0, which is the minimum. Producing anything at
+all therefore requires abandoning the first idea, which is what "prompts
+the LLMs to have to be imaginative" names.
+
+---
+
+## P-C1 — the first constructive run — **STATUS: RUNS IN THE SUCCESSOR**
+
+**Instance.** Heilbronn, N = 13 (the choice is reasoned in that tranche's
+SPEC.md §S1 and measured by its committed `instance_probe.py`).
+
+**Where it lives.** `experiments/2026-08-25-change-constructive-frontier/`
+— REQUEST.md, SPEC.md, PREREG.md, and the checker. This document registers
+it; that tranche runs it.
+
+**Two arms, matched on measured token spend**, both registered before
+launch: ARM H, the harness driving conjecture–criticism over candidates;
+ARM S, the same model at the same budget doing blind repeated one-shot
+construction, every reply scored by the same checker. The comparison is
+the spend criterion above, made literal.
+
+**The prediction is registered honestly and against the harness.**
+`docs/RESEARCH_FINDINGS_Q1Q10_2026-08-22.md` Q4 records zero of 36
+comparisons beating repeated sampling at equal cost. ARM S may win. If it
+does, that is a boundary measured on our own machine and it is recorded as
+a real result, not a failure.
+
+---
+
+# v1 — the Poietics research program (superseded 2026-08-25)
+
+Registered 2026-08-25 (REQUEST.md R8, R9). **P-R1 ran in its tranche.
+P-R2 and P-R3 were REGISTERED ONLY** — question, dossier, milestones and
+launch preconditions written down before P-R1's outcome was known, so
+neither could be quietly reshaped to fit whatever P-R1 happened to produce.
 One tranche, one run (C2).
 
 The shared evidence base is `record/` — twelve curated files from the
@@ -59,7 +145,14 @@ whole reason P-R2 and P-R3 exist.
 
 ---
 
-## P-R2 — the premises run — **STATUS: REGISTERED, NOT RUN**
+## P-R2 — the premises run — **STATUS: CANCELLED 2026-08-25**
+
+**CANCELLED** by the operator ruling quoted at the top of this document
+("change the research program a bit. I needs to solve a tough problem.
+Something that prompts the LLMs to have to be imaginative."). Its
+preconditions had been met — P-R1 committed with a typed terminal and a
+clean `verify_root`, RESULTS.md written — so this is a redirection, not a
+lapse. The registered text is retained below, unrun.
 
 **Question, registered:**
 
@@ -114,7 +207,15 @@ the project.
 
 ---
 
-## P-R3 — the succession trial — **STATUS: REGISTERED, NOT RUN**
+## P-R3 — the succession trial — **STATUS: CANCELLED 2026-08-25**
+
+**CANCELLED** by the same operator ruling. Its precondition — two or more
+surviving separable rival mechanisms — had been SATISFIED by P-R1's Groups
+A and B, so this too is a redirection rather than a run that could not
+happen. One consequence is worth stating plainly and is carried into the
+successor's residue: **no live succession has still ever run**, and P-R3
+was the registered occasion for the first. The registered text is retained
+below, unrun.
 
 **Question, registered:**
 
@@ -167,3 +268,42 @@ well-criticised ACCOUNT of someone else's evidence, with its own residue
 stated. "Accepted does not mean true" applies doubly here, and every
 RESULTS.md in this program is required to say so in its own words rather
 than by citing this line.
+
+---
+
+## Program status (v2, 2026-08-25)
+
+    P-R1  explanation   RUN. Success by its PREREG.md §6. Root committed.
+    P-R2  premises      CANCELLED 2026-08-25 by operator ruling. Its
+                        preconditions were MET; it was redirected, not
+                        dropped for cause. Registered text retained above.
+    P-R3  succession    CANCELLED 2026-08-25 by the same ruling. Its
+                        precondition (two or more surviving separable
+                        rivals) was SATISFIED by P-R1's Groups A and B.
+                        Registered text retained above. NOTE: no live
+                        succession has still ever run.
+    P-C1  construction  RUNS in experiments/2026-08-25-change-constructive-
+                        frontier/. Heilbronn N=13, two arms matched on
+                        measured token spend.
+
+Note on the section above this one: "What the program as a whole cannot
+deliver" is v1 text and is scoped to v1's three runs. It is true of them
+and is retained unchanged. It does not describe P-C1, whose ceiling is a
+different thing entirely — a construction either clears the checker or it
+does not, and no part of that verdict is an account of someone else's
+evidence.
+
+## What v2 inherits as unfinished business
+
+Two things the cancellation does not make go away, recorded here so the
+successor does not have to rediscover them:
+
+- **No live succession trial has ever run.** P-R3 was the registered
+  occasion and it is cancelled. The Rung 7 protocol remains exercised only
+  offline.
+- **P-R1's own residue stands** — its RESULTS.md R1–R6, including the
+  survivor-count inflation from import-role records (parked P4) and the
+  fact that its judge ensemble was built, qualified, paid for, and never
+  ran. P-C1 takes the first of these as a KNOWN ISSUE to report rather
+  than diagnose, and answers the second structurally: it has no judge at
+  all.

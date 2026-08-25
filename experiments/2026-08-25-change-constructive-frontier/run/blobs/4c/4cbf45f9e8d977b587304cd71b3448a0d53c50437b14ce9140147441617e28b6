@@ -1,0 +1,11 @@
+```json
+{
+  "patch": {
+    "op": "replace",
+    "path": "/cases/0/counterexample",
+    "value": [
+      "Two critics instantiated with different seeded instances of a frontier-claim-honest model could agree on a shared verdict because both are influenced by a common systematic bias in their base model or training data, yet still apply internally incommensurable standards when evaluated on adversarial inputs where that bias is absent."
+    ]
+  }
+}
+```

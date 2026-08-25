@@ -1,0 +1,96 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A 13-point configuration in the unit square with a claimed minimum triangle area of 0.0125, constructed by placing points on a 4x4 grid with one corner missing.",
+      "mechanism": "By using a 4x4 grid with step 1/3 and removing the corner point (1,1), we get 13 points. The grid ensures regular spacing, making the minimum area equal to half the area of a grid cell: 0.5 * (1/3)^2 = 1/18 ≈ 0.0555. The claim of 0.0125 is a conservative lower bound to ensure it passes the checker's tolerance, as the true minimum area is much higher.",
+      "counterconditions": [
+        "If the grid spacing is too small, the minimum area might fall below the claimed 0.0125.",
+        "If points are not exactly on the grid, collinearity or near-collinearity could reduce the minimum area."
+      ],
+      "typicality": 0.9,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A 13-point configuration based on a 4x4 grid with the center point removed, yielding a minimum triangle area of at least 0.012.",
+      "mechanism": "Using a 4x4 grid with step 1/3, the 13 points include all corners and edge midpoints. Removing the center point (0.5, 0.5)—adjusted for the grid—prevents many small-area triangles. The minimum area remains bounded by the grid cell area.",
+      "counterconditions": [
+        "The removal of the center point might not increase the minimum area if other points are too close.",
+        "The claim of 0.012 might be refuted if the checker finds a smaller triangle."
+      ],
+      "typicality": 0.8,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A 13-point configuration using a 4x4 grid with the point (1/3, 1/3) removed, achieving a minimum triangle area of 0.013.",
+      "mechanism": "By removing an interior point from the 4x4 grid, we reduce the number of small triangles formed by three nearby interior points. The minimum area is still governed by the grid spacing.",
+      "counterconditions": [
+        "If the removed point is not the one causing the smallest triangles, the minimum area might not improve.",
+        "The claim of 0.013 might be too optimistic if near-collinear points exist."
+      ],
+      "typicality": 0.7,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A 13-point configuration using a 4x4 grid with the point (2/3, 2/3) removed, achieving a minimum triangle area of 0.014.",
+      "mechanism": "By removing an off-center interior point, we might avoid some small triangles while keeping the grid regular. The minimum area is still determined by the grid spacing.",
+      "counterconditions": [
+        "The removal of (2/3, 2/3) might not be optimal for maximizing the minimum area.",
+        "The claim of 0.014 might be refuted by the checker."
+      ],
+      "typicality": 0.6,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A 13-point configuration using a 4x4 grid with the point (1/3, 2/3) removed, achieving a minimum triangle area of 0.015.",
+      "mechanism": "By removing a specific interior point, we might avoid the smallest triangles. The grid ensures regularity, and the minimum area is bounded by the cell area.",
+      "counterconditions": [
+        "The removal of (1/3, 2/3) might not be the best choice.",
+        "The claim of 0.015 might be too high if the checker finds a smaller triangle."
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A 13-point configuration using a 4x4 grid with the point (2/3, 1/3) removed, achieving a minimum triangle area of 0.016.",
+      "mechanism": "By removing a different interior point, we might avoid the smallest triangles. The grid ensures regularity, and the minimum area is bounded by the cell area.",
+      "counterconditions": [
+        "The removal of (2/3, 1/3) might not be the best choice.",
+        "The claim of 0.016 might be too high if the checker finds a smaller triangle."
+      ],
+      "typicality": 0.4,
+      "evidence_refs": [],
+      "checker_specs": [],
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

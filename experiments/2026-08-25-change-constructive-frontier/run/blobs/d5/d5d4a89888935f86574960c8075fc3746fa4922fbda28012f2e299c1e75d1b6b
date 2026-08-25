@@ -1,0 +1,24 @@
+{
+  "candidate": {
+    "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.5 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nCLAIM 0.0",
+    "mechanism": "Uses a standard 4x4 grid subset containing multiple colinear triples (e.g., y=0 with (0,0), (0.5,0), (1,0)). Guarantees a literal minimum area of exactly 0.0, mathematically proving the frontier floor by explicit violation of the general position assumption. The checker evaluates all 286 triples, confirming the 0.0 score via colinear triangles.",
+    "counterconditions": [
+      "If the checker implicitly enforces general position, it will reject the 0.0 score.",
+      "If coordinates fall outside [0,1]x[0,1], the wellformedness predicate fails."
+    ],
+    "typicality": 0.01,
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  }
+}

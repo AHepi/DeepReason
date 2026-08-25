@@ -1,0 +1,60 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nPOINT 0.333333 0.333333\nCLAIM 0.018518",
+      "mechanism": "By evenly distributing 13 points across a 3x3 boundary grid with one point at the center of a sub-cell, we ensure a relatively uniform spread. The minimum triangle area is bounded by the smallest collinear or nearly collinear triple. In this configuration, the closest points are spaced by 1/3 in either x or y direction, yielding a minimum triangle area of 1/54 ≈ 0.018518.",
+      "counterconditions": [
+        "If any three points become collinear within a smaller grid spacing, the minimum triangle area drops below 1/54.",
+        "If the boundary points are shifted inward, the area of the bounding triangles decreases."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.125000 0.875000\nPOINT 0.875000 0.875000\nPOINT 0.125000 0.125000\nCLAIM 0.015625",
+      "mechanism": "A symmetric layout combining boundary midpoints and interior points on a dyadic grid. The dyadic spacing (1/8, 1/4) ensures that the smallest triangles formed by neighboring points have an area of 1/64 = 0.015625. This leverages recursive halving of the square to avoid small fractional collisions.",
+      "counterconditions": [
+        "If points are arranged in a stricter grid, collinearity might reduce the minimum area.",
+        "If the dyadic fractions are perturbed, the minimum area might decrease."
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.200000 0.000000\nPOINT 0.400000 0.000000\nPOINT 0.600000 0.000000\nPOINT 0.800000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nCLAIM 0.012500",
+      "mechanism": "By placing 5 points uniformly on the bottom edge and symmetrically distributing points in the interior, we achieve a minimum spacing of 0.2. The smallest triangle formed by adjacent boundary points and an interior point has an area of 1/80 = 0.0125.",
+      "counterconditions": [
+        "If the interior points are too close to the boundary, triangle areas shrink.",
+        "If any boundary points are collinear with interior points, area vanishes."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.050000 0.050000\nPOINT 0.950000 0.050000\nPOINT 0.050000 0.950000\nPOINT 0.950000 0.950000\nPOINT 0.050000 0.366667\nPOINT 0.050000 0.633333\nPOINT 0.950000 0.366667\nPOINT 0.950000 0.633333\nPOINT 0.366667 0.050000\nPOINT 0.633333 0.050000\nPOINT 0.366667 0.950000\nPOINT 0.633667 0.950000\nPOINT 0.500000 0.500000\nCLAIM 0.017778",
+      "mechanism": "An inset grid avoids boundary edge cases while maintaining 1/3 spacing. The minimum triangle area is determined by the spacing of 1/3 and the inset of 0.05, yielding a smallest triangle area of 1/56 ≈ 0.017778.",
+      "counterconditions": [
+        "If the inset is too large, the effective area shrinks, reducing the minimum triangle area.",
+        "If points become collinear along the inset grid, the minimum area drops to zero."
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.015625",
+      "mechanism": "A highly symmetric configuration combining corner, mid-edge, center, and quarter points. The smallest triangles are formed by the center, a quarter point, and a mid-edge point, giving an area of 1/64 = 0.015625.",
+      "counterconditions": [
+        "If any symmetry is broken, the minimum area might decrease.",
+        "If the quarter points are shifted, the minimum area could drop."
+      ],
+      "typicality": 0.9
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.125000\nPOINT 0.500000 0.875000\nPOINT 0.125000 0.500000\nPOINT 0.875000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.015625",
+      "mechanism": "A configuration combining corners, inner square vertices, and midpoints. The minimum triangle area is determined by the closest triple, which in this case is around 1/64 = 0.015625 due to the 0.125 spacing.",
+      "counterconditions": [
+        "If the inner square is perturbed, the minimum area might decrease.",
+        "If the midpoints are not symmetrically placed, smaller triangles may form."
+      ],
+      "typicality": 0.4
+    }
+  ]
+}
+```

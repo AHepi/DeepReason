@@ -1,0 +1,11 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": false,
+      "case": "SRC_001 substantiates its §11.3 adjudication by grounding the sustained-flag verdict in a determinable normative condition: both critics omitted an inspectable causal decision boundary, which the target explicitly identifies as the mechanist-policy requirement that critics supply a causal mechanism for their verdict. The target's premise is coherent and scoped to the stated audit task; no machine-evaluated commitment is implicated, and no counterexample shows the verdict misapplied to the evidence."
+    }
+  ]
+}
+```

@@ -1,0 +1,78 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Perturbed integer lattice: Place 9 points on a 3x3 grid (0.0, 0.333, 0.667, 1.0) and 4 points at midpoints of the boundary edges (0.5, 0.0), (0.0, 0.5), (1.0, 0.5), (0.5, 1.0). Slight perturbations break collinearities that would otherwise yield zero area. Minimum triangle area is expected to be very small.",
+      "mechanism": "Grid-like structures naturally maximize point dispersion but suffer from many collinear triples, resulting in degenerate triangles (area 0). By perturbing the points slightly off the grid, we resolve collinearities, but the minimum area is dictated by the smallest perturbation, which is arbitrarily small and thus likely fails the 0.005 floor.",
+      "counterconditions": [
+        "The perturbations required to break all 3x3 grid collinearities while maintaining boundary midpoints will inevitably create some triangles with an area well below 0.005.",
+        "The 3x3 grid inherently forces at least one set of three points to be nearly collinear, preventing a score above 0.005."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "Regular 12-gon boundary with center point: Place 12 points equally spaced on the unit circle inscribed in the square (radius 0.5, center 0.5, 0.5), and 1 point at the center (0.5, 0.5). CLAIM 0.001",
+      "mechanism": "A regular 12-gon maximizes the minimum distance between boundary points. However, any three adjacent vertices form an isosceles triangle with a very small height relative to the base, yielding a small area. The center point forms thin triangles with adjacent boundary points.",
+      "counterconditions": [
+        "Three adjacent vertices of a regular 12-gon inscribed in a circle of radius 0.5 form a triangle with area approximately 0.0169. However, the triangle formed by the center and two adjacent vertices has an area of ~0.0325. The minimum is actually constrained by the 12-gon itself, but the 0.001 claim is overly pessimistic and fails to optimize for the 0.005 floor.",
+        "The regular 12-gon is suboptimal for area maximization compared to irregular convex polygons which can expand to touch the square's corners and edges."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "Maximal spacing heuristic via repulsion: Start with random points and simulate electrostatic repulsion within the unit square. The resulting configuration often resembles a hexagonal packing distorted to fit the square boundaries. CLAIM 0.006",
+      "mechanism": "Electrostatic repulsion maximizes pairwise distances, which correlates with but does not strictly maximize the minimum triangle area. The resulting irregular structure avoids the collinear traps of grids but may leave small gaps. A score around 0.006 is a plausible empirical result for 13 points.",
+      "counterconditions": [
+        "Maximizing pairwise distances does not guarantee maximizing the minimum triangle area; repulsion can still leave three points nearly collinear.",
+        "The specific boundary effects of the square might constrain the repulsed configuration to a minimum area below 0.005 depending on the exact local minima reached."
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "Corner-anchor asymmetric layout: Place 4 points near the corners (0.05, 0.05), (0.95, 0.05), (0.05, 0.95), (0.95, 0.95). Place 4 points near edge midpoints (0.5, 0.08), (0.5, 0.92), (0.08, 0.5), (0.92, 0.5). Place 5 points in an inner cross/pentagon: (0.5, 0.3), (0.5, 0.7), (0.3, 0.5), (0.7, 0.5), (0.5, 0.5). CLAIM 0.007",
+      "mechanism": "This pushes points towards the extremities of the square to maximize the overall spread, while using an inner structure to break large empty areas. The asymmetry and specific offsets (e.g., 0.05 instead of 0.0) are chosen heuristically to prevent collinearity among the inner cross, edge midpoints, and corners.",
+      "counterconditions": [
+        "The inner cross (0.3,0.5), (0.5,0.5), (0.7,0.5) is perfectly collinear, resulting in a minimum area of 0, instantly refuting the claim.",
+        "Even if the inner cross is perturbed, the triangle formed by (0.5, 0.08), (0.5, 0.3), (0.5, 0.7) is collinear."
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "Fractal / recursive subdivision: Subdivide the square into 4x4=16 cells. Place 13 points in 13 of the 16 cells, at the centers of those cells. CLAIM 0.006",
+      "mechanism": "Using a 4x4 grid of cells (cell size 0.25) and placing points at cell centers (e.g., 0.125, 0.375, 0.625, 0.875). Avoiding 3 cells prevents complete rows/columns. The minimum distance is 0.25. Three points in adjacent diagonal cells form an area of 0.5 * 0.25 * 0.25 = 0.03125. Three points in a 'knight's move' pattern might yield smaller areas.",
+      "counterconditions": [
+        "It is impossible to select 13 out of 16 cells without selecting at least three cells that lie in a straight line (by the pigeonhole principle on 4 rows and 4 columns), leading to collinear points and a zero area.",
+        "The area of a triangle formed by points in three adjacent diagonal cells is 0.03125, which is well above 0.005, but the collinearity issue is fatal."
+      ],
+      "typicality": 0.3
+    },
+    {
+      "claim": "Optimal 13-point arrangement derived from convex hull optimization: 5 points on the boundary forming an irregular pentagon touching the square's corners and edges, and 8 points in the interior positioned to maximize the smallest三角 area. CLAIM 0.009",
+      "mechanism": "The optimal solution likely involves an irregular convex hull that perfectly fills the square, combined with an interior structure that avoids any three points being collinear or nearly collinear. The exact coordinates would be derived from non-convex numerical optimization specifically targeting the minimum triangle area.",
+      "counterconditions": [
+        "Without exact coordinates and a verified checker result, this claim is speculative and cannot be confirmed.",
+        "An interior configuration of 8 points within a boundary of 5 points may inevitably contain a triangle with area less than 0.009 due to density constraints."
+      ],
+      "typicality": 0.1
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Exploring the pigeonhole principle on grids: For a 3x3 grid (9 points), there are 8 lines of 3 points. For a 4x4 grid (16 cells), selecting 13 points means omitting 3. To break all rows, columns, and diagonals of length 3, we need to omit at least 4 points (one for each row, one for each column, etc.). Thus, a 4x4 cell-center approach is structurally incapable of avoiding collinear triples.",
+          "why_keep_this": "This proves that simple grid-based cell-center placements cannot work for 13 points and motivates the need for irregular perturbations or non-grid geometries."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Hypothesis: The optimal configuration for 13 points might be related to the 'no-three-in-line' problem on a discrete grid, but scaled and perturbed. If we place points on a 5x5 grid (25 points) and select 13 such that no three are collinear, then perturb them off the grid to maximize area, we might find a strong candidate.",
+          "possible_next_move": "Search for known solutions to the no-three-in-line problem for n=13 on a 5x5 grid and test their minimum triangle areas when inscribed in the unit square."
+        }
+      }
+    ]
+  }
+}
+```

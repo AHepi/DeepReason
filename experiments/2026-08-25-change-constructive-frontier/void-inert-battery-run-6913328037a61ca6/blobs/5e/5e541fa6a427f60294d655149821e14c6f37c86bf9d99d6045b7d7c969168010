@@ -1,0 +1,78 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.333333 0.0\nPOINT 0.666667 0.0\nPOINT 0.0 0.333333\nPOINT 0.0 0.666667\nPOINT 1.0 0.333333\nPOINT 1.0 0.666667\nPOINT 0.333333 1.0\nPOINT 0.666667 1.0\nPOINT 0.5 0.5\nCLAIM 0.018518",
+      "mechanism": "Regular 4x4 grid intersections scaled to unit square, excluding the exact center (0.5, 0.5), which is then added back in isolation. The primary collinearity families along the perimeter (x = 0.25i) yield a guaranteed minimum triangle area of 1/54 ≈ 0.018518 formed by three adjacent boundary points on the same edge. By leaving the center point un-shifted, internal diagonal collinearities present in a full 4x4 grid are resolved, although the center point forms smaller triangles with adjacent grid neighbors.",
+      "counterconditions": [
+        "An internal triangle involving the center point (0.5, 0.5) and two distinct adjacent boundary points along the same axis (e.g., (0.0, 0.0) and (0.333333, 0.0)) yields a smaller area of exactly 1/12 = 0.083333, failing to bound the minimum.",
+        "An internal triangle involving the center point and two closer non-collinear internal neighbors yields an area smaller than 0.018518."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_001"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.125000 0.250000\nPOINT 0.375000 0.250000\nPOINT 0.625000 0.250000\nPOINT 0.875000 0.250000\nPOINT 0.500000 0.750000\nCLAIM 0.007812",
+      "mechanism": "An inductively-shrinking lattice arrangement. The base points form a 3x3 grid (scaled by 1/2), with three surviving points shifted upwards (y=0.25), and an additional 5th row of points (x = 0.125 * i, y = 0.75) fully added in the lower band to pack more distinct points without creating high-density zones. The minimum area is anchored by the horizontal collinearity in the 5-point row at y=0.25, yielding an area of 0.5 * 0.125 * 0.125 = 0.0078125.",
+      "counterconditions": [
+        "The densest row at y=0.25 contains 5 evenly spaced points, forcing the minimum collinear-triple area down to 0.0078125.",
+        "The presence of y-coordinates spaced only 0.25 apart between rows y=0.0 and y=0.25 creates triangles of area smaller than 0.018518."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.250000 1.000000\nPOINT 0.750000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.125000 0.250000\nPOINT 0.375000 0.250000\nPOINT 0.625000 0.250000\nPOINT 0.875000 0.250000\nCLAIM 0.007812",
+      "mechanism": "A combination of 3x3 and 5x5 grid intersections superimposed. The layout strictly interleaves the columns x=0, 0.5, 1 and x=0.25, 0.75 with the rows y=0, 0.5, 1 and y=0.25. The base 3x3 grid enforces large minimum areas for its 9 points, but the 4 supplementary fractional grid points preserve a minimal triangle area of 1/128 ≈ 0.0078125 formed between the 5-point row (y=0.25) and the base horizontal points.",
+      "counterconditions": [
+        "The supplementary grid points placed exactly midway between base grid nodes introduce high local density, yielding smaller triangles of area 1/128.",
+        "A more optimal packing likely exists that avoids perfectly halving the largest empty interior intervals."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.250000 0.000000\nPOINT 0.750000 0.000000\nPOINT 0.125000 0.250000\nPOINT 0.375000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.007812",
+      "mechanism": "A linear extrapolation approach attempting to map points along an extended lattice boundary. By projecting points onto internal bounded fractional coordinate clusters, it maintains a projected density roughly equivalent to a localized 5x5 grid over half the area, causing the minimum triangle area to drop to 1/128 ≈ 0.0078125 via collinear horizontal triples.",
+      "counterconditions": [
+        "Cramming 6 points into a narrow horizontal strip of height 0.25 forces collinear triples to have areas of 1/128 or less.",
+        "The overall geometric distribution is heavily suboptimal due to ignoring the available volume of the square in the y-dimension."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "POINT 0.500000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.250000\nPOINT 0.000000 0.750000\nPOINT 1.000000 0.250000\nPOINT 1.000000 0.750000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.250000 0.000000\nPOINT 0.750000 0.000000\nPOINT 0.250000 1.000000\nPOINT 0.750000 1.000000\nCLAIM 0.015625",
+      "mechanism": "A symmetric networked layout featuring a central vertical spine (x=0.5, y=0, 0.5, 1), two vertical boundary pairs (x=0 and x=1, y=0.25 and 0.75), and interior/boundary points aligning horizontally with x=0.25 and 0.75. The geometric spacing guarantees that any collinear triplet across horizontal/vertical axes must span an interval of at least 0.25, yielding a minimal triangle area of 1/64 = 0.015625.",
+      "counterconditions": [
+        "The extreme horizontal collinearity present across the three y=0.0 points and three y=1.0 points bounds the minimum area at 0.015625.",
+        "Shifting one of the boundary points to a fractional coordinate could break the collinearity and strictly increase the minimum area."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.007812",
+      "mechanism": "An isotropic perturbation of the regular 4x4 grid, retaining 13 points aligned to the exact lattice coordinates spaced by 0.25. This arrangement systematically models standard packing heuristics: uniform grid intersection, yielding consistent horizontal and vertical collinearity that bounds the minimal triangle area at 1/128 ≈ 0.0078125.",
+      "counterconditions": [
+        "The regular 4x4 grid structure inherently bounds the minimum triangle area to 1/128 due to its dense horizontal and vertical collinearities.",
+        "Introducing deliberate perturbations to the exact grid coordinates is required to elevate the minimum area strictly above 0.0078125."
+      ],
+      "typicality": 0.85,
+      "optional_refs": [
+        "SRC_007"
+      ]
+    }
+  ]
+}
+```

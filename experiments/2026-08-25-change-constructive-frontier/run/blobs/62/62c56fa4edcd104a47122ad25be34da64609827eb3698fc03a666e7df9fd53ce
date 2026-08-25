@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "content": "The §11.3 adjudication-ritual flag is sustained because the critic harness implements a premature convergence-prevention heuristic: by structurally enforcing verdict-shape constraints that demand semantic novelty (mutual exclusion at the frontier), it deliberately sacrifices short-term logical consistency to maintain generative diversity in the candidate pool, treating temporary contradiction as a feature rather than a bug.",
+    "typicality": 0.25,
+    "neighbours": [
+      "SRC_006",
+      "SRC_008"
+    ],
+    "evidence_refs": [
+      {
+        "block": "033eab748c73445d9f6c9268a3fc8a1d604b7cb444a4274791ad0653653383a7",
+        "quote": "The §11.3 flag is sustained by design: the adjudication ritual is a *stabilizing negative-feedback loop* that prevents premature closure. The ritual deliberatel"
+      },
+      {
+        "block": "dfcc562d97853b4679aed7d501b01cff7e568cddb386fb1658df9f547a200d21",
+        "quote": "The adjudication-ritual flag is sustained because the critics are *adversarial validators* operating under a covering principle of *mutual exclusion at the fron"
+      }
+    ]
+  }
+}

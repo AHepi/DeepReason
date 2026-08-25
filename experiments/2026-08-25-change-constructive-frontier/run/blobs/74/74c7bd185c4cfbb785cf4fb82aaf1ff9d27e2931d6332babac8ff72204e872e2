@@ -1,0 +1,30 @@
+```json
+{
+  "candidate": {
+    "content": "The §11.3 adjudication-ritual flags are sustained against both critics because the mechanist policy (school-0) requires each critic to expose an inspectable, causal decision boundary. The frontier-claim-honest@v1 and frontier-above-floor@v1 critics both failed to surface such a boundary for artifact 0c61961a8085 / SRC_005, making the flags valid under the governing school-0 stance rather than artifacts of bookkeeping.",
+    "typicality": 0.78,
+    "evidence_refs": [
+      {
+        "block": "0a005733269b610a94ebb3f15d642967dbf4545da015c2fb9f0c7f96ea0a4e97",
+        "quote": "§11.3 flags are sustained because both critics (frontier-claim-honest@v1, frontier-above-floor@v1) were adjudicated against a ground-truth verdict artifact (SRC"
+      },
+      {
+        "block": "b8b2f5a4a953c69b6b1eab8b87d168660c475d39e9655c75cbd6d3f9aa810e20",
+        "quote": "§11.3 flags are sustained because both critics failed to surface their own decision boundary in a way the adjudication harness can inspect."
+      },
+      {
+        "block": "2b596ab6b62847caffaa38bbc9e4d56efd9b6f298440f540389e33f691d449e1",
+        "quote": "§11.3 flags are sustained because the two critics were tested on the same artifact (0c61961a8085 / SRC_005) and both were found to have failed"
+      },
+      {
+        "block": "aee8c8f7efbe8d02cd4ad342748faf98d13dfe9e8f65a5a97bd0bc75a2115b13",
+        "quote": "§11.3 flags are sustained because the adjudication-ritual applies a mechanistic requirement (school-0 stance: demand a causal mechanism) to the critics"
+      },
+      {
+        "block": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+      }
+    ],
+    "neighbours": ["SRC_005"]
+  }
+}
+```

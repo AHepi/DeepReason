@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 offers a coherent, self-justifying design rationale for sustaining the flag: the flag functions as a stabilizing negative-feedback loop that prevents premature closure on under-supported conjectures. This directly answers the stated audit scope (§11.3: adjudication-ritual flags sustained) and is not refuted by any machine-evaluated commitment. No concrete failure of the ritual's standard as stated is shown, so no fault is warranted.", "premise": null, "premise_evidence": null, "counterexample": null}]}
+```

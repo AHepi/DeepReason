@@ -1,0 +1,72 @@
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual flags are sustained because both critics operate under falsificationist commitments: SRC_007 (frontier-claim-honest) and SRC_009 (frontier-above-floor) failed on the SAME artifact (0c61961a8085). A single shared failing datum is sufficient to generate the sustained flag under the counterexample-first stance: the adversarial harness independently confirmed a falsification signal from two distinct critic channels, and the ritual correctly propagates that as a durable finding rather than an isolated fluke.",
+      "neighbours": ["SRC_007", "SRC_009", "SRC_006", "SRC_008"],
+      "typicality": 0.82
+    },
+    {
+      "content": "The audit flags are sustained NOT because the two critics independently found the same counterexample, but because the two independent NU verdicts (SRC_006 and SRC_008) on a prior artifact (SRC_005) established a meta-judgment layer confirming the critics' verdicts as sound and relevant. The ritual adjudicator is verifying the auditors, not just the critics: the sustained flag is a meta-layer confirmation that the critics' verdicts survive peer-review, not a direct signal about 0c61961a8085.",
+      "neighbours": ["SRC_006", "SRC_008", "SRC_007", "SRC_009"],
+      "typicality": 0.55
+    },
+    {
+      "content": "The ritual flags are sustained because the adjudication harness detected cross-critic consistency on 0c61961a8085: frontier-claim-honest@v1 (SRC_007) and frontier-above-floor@v1 (SRC_009) are probing DISTINCT dimensions of the target (honesty of claims vs. magnitude above floor), yet both failed. Orthogonal failures on the same artifact are a stronger signal than either alone, and the ritual correctly elevates the sustained flag when cross-dimensional falsification converges.",
+      "neighbours": ["SRC_007", "SRC_009", "SRC_006", "SRC_008"],
+      "typicality": 0.68
+    },
+    {
+      "content": "The flags are sustained because the neighborhood reveals a self-consistency property of the falsificationist stance: SRC_006 and SRC_008 independently confirm each other's verdicts on SRC_005 (both declared sound and relevant), which in turn licenses the propagation of failure verdicts SRC_007 and SRC_009. The adjudication ritual treats mutual peer-validation as a necessary condition before a flag becomes sustained; without the NU-layer agreement, a single critic failure would remain provisional.",
+      "neighbours": ["SRC_006", "SRC_008", "SRC_007", "SRC_009"],
+      "typicality": 0.45
+    },
+    {
+      "content": "The sustained flags are a FALSE POSITIVE of the adjudication-ritual: two critics (SRC_007, SRC_009) failing on the same artifact 0c61961a8085 is a weak evidential signal, not a strong one. Under the counterexample-first stance, the correct response to a single counterexample is to hold the conjecture provisionally refuted, not to elevate the flag to 'sustained'. The ritual's promotion from 'flagged' to 'sustained' requires independent counterexamples from distinct artifacts, but here only one artifact is cited. The ritual overpromotes correlation to causal confirmation.",
+      "neighbours": ["SRC_007", "SRC_009"],
+      "typicality": 0.22
+    },
+    {
+      "content": "The flags are sustained because the falsificationist stance (counterexample first) is structurally embedded in both the critics and the adjudication ritual: the ritual defines 'sustained' as 'survived counterexample and remained flagged'. SRC_006/SRC_008 confirm the critics' verdicts as sound and relevant, while SRC_007/SRC_009 record the critics' actual failures on 0c61961a8085. The sustained flag is the conjunction: (verdicts are sound) AND (verdicts found failure) AND (failure survived without rebuttal from the original artifact's proponents). All three are satisfied.",
+      "neighbours": ["SRC_006", "SRC_007", "SRC_008", "SRC_009"],
+      "typicality": 0.62
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: the adjudication-ritual's sustained flag is a two-gate AND condition: (1) at least one critic verdict finding failure exists, and (2) at least one NU (peer) verdict confirms that critic's verdict as sound and relevant. SRC_007 + SRC_006 satisfies gate (1)+(2) for frontier-claim-honest. SRC_009 + SRC_008 satisfies gate (1)+(2) for frontier-above-floor. Two parallel AND-conditions is sufficient for a ritual-level sustained flag under §11.3.",
+          "bears_on_refs": ["SRC_006", "SRC_007", "SRC_008", "SRC_009"],
+          "why_keep_this": "Provides a precise structural mechanism testable against §11.3 wording if it is surfaced in context."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterexample-first tension: the critic stance is 'counterexample first', but the audit is adjudicating the RITUAL, not the underlying conjecture. If the ritual promotes a single shared counterexample to 'sustained', the ritual itself may be violating the counterexample-first principle by overpromoting. This is the atypical candidate (typicality 0.22) formalized.",
+          "bears_on_refs": ["SRC_007", "SRC_009"],
+          "why_keep_this": "Captures the adversarial self-criticism of the ritual under its own school stance."
+        }
+      },
+      {
+        "local_key": "NEW_003",
+        "body": {
+          "content": "Open question: does §11.3 require a single critic failure (minimal falsification) or multiple independent failures (robustness through triangulation) to sustain a flag? The neighborhood data supports BOTH readings, so disambiguating the §11.3 text is the critical information need.",
+          "bears_on_refs": ["SRC_006", "SRC_007", "SRC_008", "SRC_009"],
+          "why_keep_this": "Identifies the fork between candidate-1 (single datum sufficient) and candidate-6 (AND-gate) readings."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does §11.3 define 'sustained' as requiring (a) at least one failure verdict, (b) at least one failure verdict plus a peer NU confirmation, or (c) multiple independent failure verdicts? The neighborhood data is compatible with all three.",
+        "related_refs": ["NEW_001", "NEW_003"]
+      },
+      {
+        "question": "Are frontier-claim-honest@v1 and frontier-above-floor@v1 probing the SAME dimension of the target or DISTINCT dimensions? If same, convergence is weak evidence; if distinct, convergence is strong evidence.",
+        "related_refs": ["NEW_002"]
+      }
+    ]
+  }
+}

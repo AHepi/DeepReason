@@ -1,0 +1,18 @@
+=== RED: one guard disabled at a time, the mutation must SLIP THROUGH ===
+  M2 planted overlap (duplicate point)       guard off -> code=CLAIM_INFLATED           SLIPPED (as required)
+  M3 inflated claim (-> 0.9)                 guard off -> code=None                     SLIPPED (as required)
+  M4 point outside the square                guard off -> code=CLAIM_INFLATED           SLIPPED (as required)
+  M5 twelve points, not thirteen             guard off -> code=DUPLICATE_POINT          SLIPPED (as required)
+  M6 no CLAIM line                           guard off -> code=RAISED TypeError         SLIPPED (as required)
+
+=== GREEN: the unmodified checker must CATCH every one ===
+  M1 known-good construction                 valid=True  code=None             score=0.013307680842   OK
+  M2 planted overlap (duplicate point)       valid=False code=DUPLICATE_POINT  score=None   OK
+  M3 inflated claim (-> 0.9)                 valid=False code=CLAIM_INFLATED   score=0.013307680842   OK
+  M4 point outside the square                valid=False code=OUT_OF_SQUARE    score=None   OK
+  M5 twelve points, not thirteen             valid=False code=WRONG_COUNT      score=None   OK
+  M6 no CLAIM line                           valid=False code=NO_CLAIM         score=None   OK
+  M7 collinear triple (valid, worthless)     valid=True  code=None             score=0.0   OK
+  M8 honest under-claim                      valid=True  code=None             score=0.013307680842   OK
+
+RED 5/5 slipped through their disabled guards; GREEN 8/8 correct.

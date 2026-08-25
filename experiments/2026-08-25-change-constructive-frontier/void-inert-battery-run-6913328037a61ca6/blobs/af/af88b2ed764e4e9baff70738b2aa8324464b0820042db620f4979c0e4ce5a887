@@ -1,0 +1,81 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0 0\nPOINT 0 1\nPOINT 1 0\nPOINT 1 1\nPOINT 0.5 0.5\nPOINT 0.5 0\nPOINT 0.5 1\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.25 0.5\nPOINT 0.75 0.5\nPOINT 0.5 0.25\nPOINT 0.5 0.75\nCLAIM 0",
+      "mechanism": "Baseline 3x3-grid proposal. By placing points on a lattice, we predict a minimum triangle area of 0 due to numerous collinear triples (e.g., (0,0), (0.5,0), (1,0)). This serves as a naive starting point demonstrating the necessity of breaking lattice symmetries to avoid zero-area triangles.",
+      "counterconditions": [
+        "If all 13 points are not strictly collinear-free, the minimum area evaluates to 0.",
+        "If the configuration is perturbed off the grid, the minimum area strictly increases."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.05\nPOINT 0.95 0.95\nPOINT 0.5 0.5\nPOINT 0.05 0.5\nPOINT 0.95 0.5\nPOINT 0.5 0.05\nPOINT 0.5 0.95\nPOINT 0.225 0.25\nPOINT 0.775 0.25\nPOINT 0.225 0.75\nPOINT 0.775 0.75\nCLAIM 0.0045",
+      "mechanism": "A 5x5 symmetric grid with the center removed to avoid massive collinearity. Points are pushed slightly inside the unit square to allow area scaling. The minimum triangle area is formed by near-collinear triples along the structural diagonals and midlines, calculating to approximately 0.0045. This demonstrates the inefficiency of retaining lattice symmetries.",
+      "counterconditions": [
+        "If any three points form a straight line, the area is 0.",
+        "If the grid is perfectly centered without the removed center, many collinear triples yield an area of 0."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.048 0.065\nPOINT 0.045 0.935\nPOINT 0.955 0.045\nPOINT 0.965 0.935\nPOINT 0.522 0.5\nPOINT 0.065 0.5\nPOINT 0.965 0.5\nPOINT 0.5 0.065\nPOINT 0.5 0.935\nPOINT 0.291 0.302\nPOINT 0.722 0.301\nPOINT 0.281 0.716\nPOINT 0.731 0.693\nCLAIM 0.004",
+      "mechanism": "A perturbed lattice breaking exact collinearity. We introduce deterministic pseudorandom jitter to a 5x5 grid (minus center) to eliminate zero-area triangles. The minimum triangle area is pushed to ~0.004, exploiting the linear separation of lattice neighbors while ensuring strict positivity. This falls below the 0.005 frontier floor but illustrates the transition from symmetric to asymmetric placement.",
+      "counterconditions": [
+        "If the jitter is too small, the minimum area remains effectively 0 or below the 0.005 threshold.",
+        "If the perturbations align accidentally, new collinear triples may form."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.032 0.047\nPOINT 0.041 0.966\nPOINT 0.977 0.042\nPOINT 0.969 0.976\nPOINT 0.523 0.5\nPOINT 0.045 0.522\nPOINT 0.977 0.488\nPOINT 0.518 0.038\nPOINT 0.481 0.961\nPOINT 0.258 0.319\nPOINT 0.742 0.29\nPOINT 0.282 0.748\nPOINT 0.738 0.712\nCLAIM 0.005",
+      "mechanism": "A aggressively perturbed grid scaled and jittered to ensure the minimum triangle area clears the 0.005 frontier floor. By pushing points to the edges (corners at ~0.03 and ~0.97) and applying pseudorandom noise to midpoints, the minimal determinant area is forced above 0.005. The exact value 0.005 is conservatively claimed to account for minor decimal truncation effects.",
+      "counterconditions": [
+        "If the true calculated minimum area is strictly less than 0.005 due to a failure in the pseudorandom seed, the claim is refuted.",
+        "If any point falls outside [0,1]x[0,1], the configuration is invalid."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.02 0.04\nPOINT 0.04 0.98\nPOINT 0.98 0.02\nPOINT 0.96 0.98\nPOINT 0.5 0.5\nPOINT 0.02 0.5\nPOINT 0.98 0.5\nPOINT 0.5 0.02\nPOINT 0.5 0.98\nPOINT 0.26 0.31\nPOINT 0.74 0.29\nPOINT 0.27 0.69\nPOINT 0.73 0.71\nCLAIM 0.007",
+      "mechanism": "An optimized edge-spread configuration. Points are pushed as close to the boundary as possible (corners at ~0.02-0.04) to maximize the convex hull area, while interior points are placed on concentric rings with broken symmetry. The scaling of the bounding box directly maximizes the minimal determinant, yielding an expected minimum area of ~0.007.",
+      "counterconditions": [
+        "If the interior points are too close to each other, local triangles will have areas smaller than 0.007.",
+        "If the edge points are not spread sufficiently, the global area scale shrinks."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

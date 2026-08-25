@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "§11.3 of the adjudication-ritual audits the critic (the subject of the ritual), not the artifacts the critic reviews; there is no commitment or evidence that §11.3 should ever flag an artifact as adversarially hard, so the assertion that the flag is 'misattributed' is unsupported by the problem scope.", "premise": "The target claims §11.3 should flag artifact 0c61961a8085 as adversarially hard rather than flagging the critic as unreliable, implying the adjudication-ritual scope extends to artifact-hardness classification.", "premise_evidence": null, "counterexample": null}]}
+```

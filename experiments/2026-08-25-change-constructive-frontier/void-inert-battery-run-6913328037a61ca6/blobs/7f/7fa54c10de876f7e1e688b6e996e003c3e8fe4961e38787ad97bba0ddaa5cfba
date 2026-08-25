@@ -1,0 +1,67 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.333333\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.010417",
+      "mechanism": "Grid-based arrangement combining the 4 corners of the unit square, the midpoints of the 4 edges, the exact center, and 4 symmetric points at the 1/3 and 2/3 marks of the main and anti-diagonals. This distribution is engineered to prevent any three points from being collinear and to push the minimum triangle area above 0.005. The 1/3 spacing provides a structured tension that balances the corners against the edge midpoints.",
+      "counterconditions": [
+        "If the 1/3 marks form an unexpectedly small triangle with one of the midpoints, the score will drop.",
+        "If any of the 4 points at the 1/3 and 2/3 intersections are collinear with a corner, the area would be zero and the claim refuted."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.015625",
+      "mechanism": "Highly symmetric 13-point configuration utilizing the 4 corners, the exact center, and 8 points at the 1/4 and 3/4 marks of a central rotated square and its axes. This spacing maximizes the minimum distance between any three points in the grid by creating a consistent 1/4 x 1/4 bounding box for the smallest possible triangles.",
+      "counterconditions": [
+        "If the 1/4 and 3/4 markings are not sufficiently separated from the central point, the minimum triangle area falls below the claim.",
+        "If the 4 inner axis points (0.25,0.5), (0.75,0.5), (0.5,0.25), (0.5,0.75) form a triangle smaller than 1/64 with the central point, the claim is invalid."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.200000 0.500000\nPOINT 0.800000 0.500000\nPOINT 0.500000 0.200000\nPOINT 0.500000 0.800000\nPOINT 0.200000 0.200000\nPOINT 0.800000 0.800000\nPOINT 0.200000 0.800000\nPOINT 0.800000 0.200000\nPOINT 0.500000 0.500000\nCLAIM 0.020000",
+      "mechanism": "Pushing the inner square axes further out to the 1/5 and 4/5 marks creates larger triangles between the inner cross-points and the diagonals. This aims to resolve the tightness of the 1/4 grid by expanding the inner geometry while still maintaining strict non-collinearity and maximizing the empty space in the center.",
+      "counterconditions": [
+        "If pushing the inner cross points to 1/5 causes them to interact poorly with the corners (e.g., collinearity or very thin triangles), the score fails.",
+        "If the area of triangles formed by (0.2,0.5), (0.5,0.2), and (0.2,0.2) is less than 0.02, the claim is refuted."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_004"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.166667 0.500000\nPOINT 0.833333 0.500000\nPOINT 0.500000 0.166667\nPOINT 0.500000 0.833333\nPOINT 0.166667 0.166667\nPOINT 0.833333 0.833333\nPOINT 0.166667 0.833333\nPOINT 0.833333 0.166667\nPOINT 0.500000 0.500000\nCLAIM 0.027778",
+      "mechanism": "Further expanding the inner geometric tension to the 1/6 and 5/6 marks. This maximizes the spacing between the central point and the inner cross/diagonal points, forming a robust grid that theoretically pushes the minimum triangle area to 1/36. The 1/6 spacing is chosen to avoid collinearity with the corners while maximizing internal spread.",
+      "counterconditions": [
+        "If the 1/6 marks form a triangle smaller than 1/36 with the central point or the corners, the claim fails.",
+        "If (0.166667, 0.500000), (0.500000, 0.166667), and (0.166667, 0.166667) are too close or collinear, the area is zero."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [
+        "SRC_002"
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.333333\nPOINT 0.333333 1.000000\nPOINT 1.000000 0.666667\nPOINT 0.666667 0.000000\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.333333\nPOINT 0.500000 0.500000\nCLAIM 0.018519",
+      "mechanism": "Asymmetric perturbation of the boundary points to the 1/3 and 2/3 marks on each edge, combined with a central cross. This breaks the perfect symmetry of the grid to avoid collinearity traps while maintaining a high minimum triangle area. The 1/3 boundary marks are chosen to ensure that triangles formed with the inner 1/3 cross points are of substantial size.",
+      "counterconditions": [
+        "If the asymmetric boundary points create an unexpected collinearity with the inner cross points, the area is zero.",
+        "If the 1/3 boundary spacing is too tight with the inner cross, the minimum area may drop below the claimed 0.018519."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    }
+  ]
+}
+```

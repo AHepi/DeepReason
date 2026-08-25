@@ -1,0 +1,13 @@
+```json
+{
+  "candidate": {
+    "content": "The §11.3 flag is sustained as an unavoidable epistemic cost: the ritual is an information-theoretic bottleneck where candidates must be compressed into the verdict-shape, forcing a marginal loss of soundness or relevance for any high-dimensional claim.",
+    "typicality": 0.55,
+    "neighbours": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ]
+  }
+}
+```

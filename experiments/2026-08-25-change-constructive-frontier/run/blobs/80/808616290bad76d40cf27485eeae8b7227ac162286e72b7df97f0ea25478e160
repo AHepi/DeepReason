@@ -1,0 +1,21 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target asserts 'commitments: (none)' yet the entire argument rests on substantive claims about two named critics (frontier-claim-honest and frontier-above-floor) being 'redundant probes of the same latent quality' with 'near-collinear signals' creating 'systematic covariance.' These are concrete, checkable commitments about the relationship between specific probes—but they are not registered as commitments, so the harness cannot mechanically verify them. The target invokes named critics and a specific mechanism (covariance misread as independent disagreement) without exposing any schema for those claims, making the central assertion unauditable under §11.3's adjudication-ritual standard.",
+      "premise": "The target lists 'commitments: (none)' while simultaneously making substantive, falsifiable claims about two named critics and their statistical relationship (collinearity, covariance, redundancy).",
+      "premise_evidence": [
+        {
+          "block": "target_src_001_block",
+          "quote": "commitments: (none)"
+        }
+      ],
+      "counterexample": [
+        "If the target had registered a commitment like 'predicate: correlation(frontier-claim-honest.signal, frontier-above-floor.signal) > 0.95' and it passed machine evaluation, the redundancy claim would be auditable; with no commitments registered, the harness has nothing to evaluate, yet the target presents the conclusion as if established."
+      ]
+    }
+  ]
+}
+```

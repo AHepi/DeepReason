@@ -1,0 +1,9 @@
+{
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/scratch_proposal/links/0/from_ref",
+      "value": "NEW_001"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+[arm-s] 0000 tokens= 23728 cum=   23728/310173 valid=False score=0.0017 best=None
+[arm-s] 0001 tokens= 11934 cum=   35662/310173 valid=False score=0.000557831102 best=None
+[arm-s] 0002 tokens= 11643 cum=   47305/310173 valid=False score=0.013498501401 best=None
+[arm-s] 0003 tokens= 11513 cum=   58818/310173 valid=False score=0.0 best=None
+[arm-s] 0004 tokens= 11896 cum=   70714/310173 valid=False score=0.002314726852 best=None
+[arm-s] 0005 tokens= 21276 cum=   91990/310173 valid=False score=0.0006 best=None
+[arm-s] 0006 tokens= 24489 cum=  116479/310173 valid=False score=0.0135824822365 best=None
+Traceback (most recent call last):
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 210, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 131, in main
+    payload = sample(api_key)
+              ^^^^^^^^^^^^^^^
+  File "/home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/arm_s.py", line 87, in sample
+    with urllib.request.urlopen(request, timeout=TIMEOUT_S) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 1391, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/urllib/request.py", line 1352, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/http/client.py", line 1415, in getresponse
+    response.begin()
+  File "/usr/lib/python3.11/http/client.py", line 330, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/http/client.py", line 299, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
