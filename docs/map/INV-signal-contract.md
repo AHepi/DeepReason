@@ -152,6 +152,23 @@ its most plausible disguise — turns the differential red.
 `check: python -m pytest tests/test_allocation_signal_consumption.py -q -k "evidence or verdict"`
 `check: ! grep -qE "create_artifact|Warrant|att_add|dep_add" src/deepreason/allocation.py`
 
+**The same row, for the SECOND controller (Rung 8).** `capture/hysteresis.py`
+implements §14.7 and Theorem 14.1 is the identical claim in the calculus's own
+words: two states with identical artifacts, attacks and dependencies but
+different diagnostic values or attention modes have identical labels. It gets
+the identical guard — a differential on one scripted record, plus a structural
+check — with one deliberate difference from allocation's: `create_artifact` IS
+permitted, for the policy artifact and only for it, because a policy that could
+not be attacked would be authority without exposure (P6).
+
+Mutation-proven twice, in a scratch copy: teaching `_adjudicate` to read the
+recorded mode turns the differential red, and minting a warrant when the mode
+is entered — the forbidden move dressed as "so the diversification has teeth" —
+turns both the differential AND the structural check red.
+
+`check: python -m pytest tests/test_capture14_hysteresis.py -q -k "theorem_14_1 or constructs_no_edge"`
+`check: ! grep -qE "att_add|dep_add|Warrant\(|register_fail_warrant|_adjudicate" src/deepreason/capture/hysteresis.py`
+
 ## Two families read attack-target entropy, and they are not the same quantity
 
 The v2 program's V-6 row, decided at Rung 8

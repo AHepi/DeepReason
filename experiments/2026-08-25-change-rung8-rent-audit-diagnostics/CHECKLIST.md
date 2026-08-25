@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=8 blockers=none
+State: next=11 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -248,7 +248,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       after the full `docs_verify` re-runs. A stale stamp is honest; a false
       one is not.
 
-- [ ] 8. (S5) `tests/test_capture14_hysteresis.py` written FIRST. Covers:
+- [x] 8. (S5) `tests/test_capture14_hysteresis.py` written FIRST. Covers:
       `T_enter`/`T_exit` asymmetry (a state that enters does NOT immediately
       exit); the policy artifact is registered, attackable, and carries its
       bands and precision; the `no_lever` disclosure names all four absent
@@ -258,7 +258,14 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       done-when: `python -m pytest tests/test_capture14_hysteresis.py -q` FAILS
       (module absent) — pasted.
 
-- [ ] 9. (S5) `src/deepreason/capture/hysteresis.py`: `step()`, the bands
+      PROOF — RED:
+      ```
+      from deepreason.capture import hysteresis
+      E   ImportError: cannot import name 'hysteresis' from 'deepreason.capture'
+      1 error in 0.21s
+      ```
+
+- [x] 9. (S5) `src/deepreason/capture/hysteresis.py`: `step()`, the bands
       reusing `ATTACK_ENTROPY_FLOOR` / `CRIT_DEBT_CEILING` / `LAMBDA_FLOOR` /
       `MIN_ATTACKS_FOR_RITUAL`, the `capture14-hysteresis.v1` policy artifact
       through `harness.create_artifact` + `Rule.REFL`, and
@@ -266,13 +273,59 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       done-when: `python -m pytest tests/test_capture14_hysteresis.py -q`
       -> N passed, 0 failed.
 
-- [ ] 10. (S5, R11) [COMMIT] The Theorem 14.1 MUTATION PROOF, in a scratch
+      PROOF — GREEN, 11 tests:
+      ```
+      $ python -m pytest tests/test_capture14_hysteresis.py -q
+      11 passed in 0.66s
+      ```
+      One design correction en route, worth recording because it is the kind
+      that silently half-works: the first `policies()` recognised a policy by
+      sniffing the artifact's content prefix, and `json.dumps(sort_keys=True)`
+      puts `"schema"` past the 120-character window — so `mode()` always read
+      `normal` and the controller could never hold a mode. It now reads the
+      mode RECEIPTS, which is the record's own statement that an artifact is a
+      policy, and which a critic quoting a policy cannot impersonate.
+
+- [x] 10. (S5, R11) [COMMIT] The Theorem 14.1 MUTATION PROOF, in a scratch
       copy: wire the hysteresis mode into label computation, run the
       differential, watch it go RED, restore, watch it go GREEN. Plus the
       structural check
       `! grep -qE "att_add|dep_add|Warrant\(|register_fail_warrant|_adjudicate" src/deepreason/capture/hysteresis.py`
       added to `docs/map/INV-signal-contract.md` beside `allocation.py`'s.
       done-when: both runs pasted (RED then GREEN) and the grep check exits 0.
+
+      PROOF — MUTATION 1, `_adjudicate` reads the recorded mode
+      (a controller decision reaching label computation):
+      ```
+      E  AssertionError: diversify moved something Theorem 14.1 forbids
+      E  {'labels': {'0d11e5c3...': 'refuted', ...}}
+      E       !=    {'labels': {'0d11e5c3...': 'accepted', ...}}
+      FAILED ::test_theorem_14_1_two_modes_one_record_identical_labels
+      1 failed, 10 passed in 0.75s
+      ```
+
+      PROOF — MUTATION 2, the plausible disguise: entering the mode ALSO
+      attacks the least-criticised artifact, "so the diversification has
+      teeth". Kills BOTH guards, which is the point of having two:
+      ```
+      FAILED ::test_theorem_14_1_two_modes_one_record_identical_labels
+      FAILED ::test_the_module_constructs_no_edge_no_label_and_no_warrant
+      2 failed, 9 passed in 0.82s
+      ```
+
+      RESTORED — GREEN:
+      ```
+      $ python -m pytest tests/test_capture14_hysteresis.py -q
+      11 passed in 0.60s
+      $ python -m pytest tests/test_capture14_hysteresis.py -q -k "theorem_14_1 or constructs_no_edge"
+      2 passed, 9 deselected in 0.22s
+      $ ! grep -qE "att_add|dep_add|Warrant\(|register_fail_warrant|_adjudicate" src/deepreason/capture/hysteresis.py
+      STRUCTURAL-CHECK exit 0
+      ```
+      Both checks are now in `DR-INV-signal-contract`, beside `allocation.py`'s,
+      with the one deliberate difference recorded: `create_artifact` is
+      PERMITTED here, for the policy artifact and only for it, because a policy
+      that could not be attacked would be authority without exposure (P6).
 
 - [ ] 11. (S6c) `src/deepreason/calculus/render.py`: keyword-only
       `attackers_n` / `departures_n` on `frame_slices`, defaulting to today's
