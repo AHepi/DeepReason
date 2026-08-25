@@ -195,7 +195,7 @@
         "model_id": "glm-5.2",
         "model_revision": "glm-5.2",
         "output_mechanism": "json_text",
-        "pair_id": "sha256:8f6bc719365e98bea4d7b9a6345d80f819d58dcb230bbf990bf8b38dae5036b3",
+        "pair_id": "sha256:5f42f8402b0034205a24b8c0bd25db47d6db3ecd12721c166d06927007f21ddd",
         "provider": "ollama",
         "role": "argumentative_critic",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
@@ -399,7 +399,7 @@
         "model_id": "glm-5.2",
         "model_revision": "glm-5.2",
         "output_mechanism": "json_text",
-        "pair_id": "sha256:ae1946f51438ebf8320f1d8b4db033a05e06947edea7b744f536fe2ac3d3eb43",
+        "pair_id": "sha256:2e2f6702b0767b2881993de3c4d0ba69a79d0aeba303706fa1a851daf7001032",
         "provider": "ollama",
         "role": "conjecturer",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
@@ -603,7 +603,7 @@
         "model_id": "glm-5.2",
         "model_revision": "glm-5.2",
         "output_mechanism": "json_text",
-        "pair_id": "sha256:3a474a73da0571104a6ab77ce7d306fa73121d98758990dff6e392c6528adc21",
+        "pair_id": "sha256:383621efad2a10c3ccf5d929557df63e1cb947559b749ed57375bcd9be4efdc6",
         "provider": "ollama",
         "role": "conjecturer",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
@@ -638,195 +638,12 @@
         {
           "alias_failures": 0,
           "case_id": "case-003",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-004",
           "eventual_valid": false,
           "failure_code": "REPAIR_SCOPE_VIOLATION",
           "first_pass_valid": false,
           "repair_count": 2,
-          "scope_violations": 2,
+          "scope_violations": 1,
           "semantic_admission": false
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-005",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-006",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-007",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-008",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-009",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-010",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-011",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-012",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-013",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-014",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-015",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-016",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-017",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-018",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-019",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-020",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        }
-      ],
-      "eventual_valid_count": 19,
-      "first_draw_cases": [
-        {
-          "alias_failures": 0,
-          "case_id": "case-001",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-002",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-003",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
         },
         {
           "alias_failures": 0,
@@ -970,7 +787,7 @@
           "failure_code": "VALIDATION_ERROR",
           "first_pass_valid": false,
           "repair_count": 2,
-          "scope_violations": 1,
+          "scope_violations": 0,
           "semantic_admission": false
         },
         {
@@ -983,7 +800,192 @@
           "semantic_admission": true
         }
       ],
-      "first_pass_valid_count": 19,
+      "eventual_valid_count": 18,
+      "first_draw_cases": [
+        {
+          "alias_failures": 0,
+          "case_id": "case-001",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-002",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-005",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-006",
+          "eventual_valid": false,
+          "failure_code": "VALUE_ERROR",
+          "first_pass_valid": false,
+          "repair_count": 2,
+          "scope_violations": 1,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-007",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-008",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-009",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-010",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-011",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-012",
+          "eventual_valid": false,
+          "failure_code": "REPAIR_SCOPE_VIOLATION",
+          "first_pass_valid": false,
+          "repair_count": 2,
+          "scope_violations": 2,
+          "semantic_admission": false
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-013",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-014",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-015",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-016",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-017",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-018",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-019",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-020",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        }
+      ],
+      "first_pass_valid_count": 18,
       "pair": {
         "contract_id": "critic.atomic-target.v1",
         "endpoint_id": "ollama-glm-5.2",
@@ -991,16 +993,16 @@
         "model_id": "glm-5.2",
         "model_revision": "glm-5.2",
         "output_mechanism": "json_text",
-        "pair_id": "sha256:5611909e60479fde00ee4586e0b8d7daa905a32531fc4f06078a2240a068d4a4",
+        "pair_id": "sha256:f46b2d0fde77110eca24be2aa7912c9d49f04d6e83b89724c7a4e30adc75b722",
         "provider": "ollama",
         "role": "argumentative_critic",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
         "seat": 0
       },
       "qualified": false,
-      "repair_count": 2,
-      "scope_violations": 2,
-      "semantic_admission_count": 19
+      "repair_count": 4,
+      "scope_violations": 1,
+      "semantic_admission_count": 18
     }
   ],
   "production_contracts": true,
@@ -1017,8 +1019,8 @@
         "behavioral_grant_sha256": "e50dcacc04258f8f6a88f32c65710982ce90a8af86531b972d2da739bcd76e58",
         "endpoint_id": "ollama-glm-5.2",
         "evidence_pair_ids": [
-          "sha256:5611909e60479fde00ee4586e0b8d7daa905a32531fc4f06078a2240a068d4a4",
-          "sha256:8f6bc719365e98bea4d7b9a6345d80f819d58dcb230bbf990bf8b38dae5036b3"
+          "sha256:5f42f8402b0034205a24b8c0bd25db47d6db3ecd12721c166d06927007f21ddd",
+          "sha256:f46b2d0fde77110eca24be2aa7912c9d49f04d6e83b89724c7a4e30adc75b722"
         ],
         "role": "argumentative_critic",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
@@ -1033,8 +1035,8 @@
         "behavioral_grant_sha256": "443d5ab3da8e951fa8098c61b6e85938b54e8f2017d8da1d349400fd81876843",
         "endpoint_id": "ollama-glm-5.2",
         "evidence_pair_ids": [
-          "sha256:3a474a73da0571104a6ab77ce7d306fa73121d98758990dff6e392c6528adc21",
-          "sha256:ae1946f51438ebf8320f1d8b4db033a05e06947edea7b744f536fe2ac3d3eb43"
+          "sha256:2e2f6702b0767b2881993de3c4d0ba69a79d0aeba303706fa1a851daf7001032",
+          "sha256:383621efad2a10c3ccf5d929557df63e1cb947559b749ed57375bcd9be4efdc6"
         ],
         "role": "conjecturer",
         "route_sha256": "298966b4dc82cc5527db486ad30efa73ff5bb079d154e879d092391ac4848e84",
@@ -1132,25 +1134,25 @@
         "selected_class": "inactive_no_authorized_contract"
       }
     ],
-    "id": "sha256:3a23a7fbc1ee2a57155ffabeb34b9328bcb2836e08e35ce45d6eadb43b081b3b",
-    "manifest_digest": "6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4",
-    "qualification_evidence_sha256": "adb2586ed54c22ab1561b6e3d764f3160bed64d0f02d36f0af134f1f4031b1f2",
+    "id": "sha256:c4afdd06030ed2342a4e69258e88d55b6136b64102161fee1ea369cc066c9376",
+    "manifest_digest": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
+    "qualification_evidence_sha256": "8c5853a4eca060d0dcae73f2cdc2fbc599e5d573327a66d5bc4c52ead0a986b0",
     "schema": "workflow.route-seat-model-classification-plan.v1"
   },
   "run_manifest_schema_version": 6,
-  "run_manifest_sha256": "6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4",
+  "run_manifest_sha256": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
   "schema": "deepreason-production-contract-doctor-v1",
   "summary": {
     "alias_failures": 0,
     "case_count": 80,
-    "eventual_valid_count": 79,
-    "first_pass_valid_count": 79,
+    "eventual_valid_count": 78,
+    "first_pass_valid_count": 78,
     "pair_count": 4,
     "qualified": false,
     "qualified_pair_count": 3,
     "re_exercised_pair_count": 1,
-    "repair_count": 2,
-    "scope_violations": 2,
-    "semantic_admission_count": 79
+    "repair_count": 4,
+    "scope_violations": 1,
+    "semantic_admission_count": 78
   }
 }

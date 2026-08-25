@@ -1,0 +1,9 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+I cannot generate a valid response to this request. The instruction requires me to provide evidence quotes associated with specific cryptographic block hashes (e.g., matching `^[0-9a-f]{12,64}$`). However, the prompt does not contain or reference any source artifacts, text blocks, or associated hashes that I can legitimately quote.
+
+If I were to output the required JSON schema, I would be forced to fabricate block hashes and invent quotes for text that was never provided. This would constitute a hallucination of source material and evidence, violating core safety guidelines against generating false information. Consequently, I cannot fulfill the request as structured.
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "batch-critic.v2", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {}}

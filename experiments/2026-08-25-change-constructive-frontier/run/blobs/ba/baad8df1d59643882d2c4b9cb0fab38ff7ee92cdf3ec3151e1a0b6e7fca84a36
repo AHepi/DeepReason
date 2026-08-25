@@ -1,0 +1,66 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.500000 0.000000\nPOINT 0.000000 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.500000 0.666667\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.555556\nPOINT 0.666667 0.555556\nPOINT 0.333333 0.111111\nPOINT 0.666667 0.111111\nPOINT 0.166667 0.777778\nPOINT 0.833333 0.777778\nPOINT 0.500000 0.333333\nCLAIM 0.009259",
+      "mechanism": "The configuration is formed by nesting three concentric hexagons with vertices on medians of the square, scaled to exploit area symmetry. The base hexagon lies on the perimeter, while inner layers are rotated by 60 degrees and scaled toward the center, ensuring the minimum triangle area is governed by the interaction of diagonally adjacent vertices between the middle and inner layers.",
+      "counterconditions": [
+        "If the checker finds any pair of points with distance less than 0.1, the configuration is too clustered and fails the minimum area constraint.",
+        "If the actual minimum triangle area computed by the checker is less than 0.009259, the claim is refuted.",
+        "If any three points are collinear, the minimum area becomes zero and the configuration is invalid."
+      ],
+      "typicality": 1.0
+    },
+    {
+      "claim": "POINT 0.500000 0.500000\nPOINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nCLAIM 0.031250",
+      "mechanism": "The configuration places 4 points at the corners of the unit square, 4 at the midpoints of the edges, 4 at the centers of the four quadrants, and 1 at the exact center. This high-symmetry arrangement creates a grid-like structure that distributes points uniformly, ensuring the minimum triangle area is maximized by the grid spacing of 0.25 units.",
+      "counterconditions": [
+        "If the checker finds that any three collinear points exist, the area is zero and the claim fails.",
+        "If the actual minimum triangle area is less than 0.03125, the claim is refuted.",
+        "If the points are not exactly positioned as specified, the symmetry is broken and the minimum area may decrease."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.079680 0.079680\nPOINT 0.500000 0.079680\nPOINT 0.920320 0.079680\nPOINT 0.079680 0.500000\nPOINT 0.920320 0.500000\nPOINT 0.079680 0.920320\nPOINT 0.500000 0.920320\nPOINT 0.920320 0.920320\nPOINT 0.289840 0.289840\nPOINT 0.710160 0.289840\nPOINT 0.289840 0.710160\nPOINT 0.710160 0.710160\nPOINT 0.500000 0.500000\nCLAIM 0.012880",
+      "mechanism": "A symmetric arrangement using an 8-point outer ring, 4-point inner ring, and center point. The outer ring uses two horizontal lines at y=0.07968 and y=0.92032 and two vertical lines at x=0.07968 and x=0.92032, maximizing separation. The inner ring at 0.28984 and 0.71016 maintains equal spacing from the outer ring and center, distributing points to avoid small triangles near collinear configurations.",
+      "counterconditions": [
+        "If the actual minimum triangle area is less than 0.01288, the claim is refuted.",
+        "If any three points are collinear or nearly collinear, the minimum area approaches zero.",
+        "If the inner ring spacing does not properly balance with the outer ring, small triangles form between adjacent inner and outer points."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.333333 0.166667\nPOINT 0.666667 0.166667\nPOINT 0.166667 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.833333 0.500000\nPOINT 0.333333 0.833333\nPOINT 0.666667 0.833333\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nCLAIM 0.013889",
+      "mechanism": "A hybrid configuration combining corner anchors with an interior grid offset to avoid collinearity. The corners provide large bounding triangles, while the interior points are placed at fractional coordinates that avoid alignment with corners and edges. The midpoints of the top and bottom edges add vertical symmetry without creating collinear triples with the interior grid points.",
+      "counterconditions": [
+        "If the checker finds the minimum area is less than 0.013889, the claim is refuted.",
+        "If the midpoints of top and bottom edges create collinear triples with interior points, the configuration fails.",
+        "If the grid offset of 1/6 does not sufficiently separate interior points from edge midpoints, small triangles form."
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.080000 0.080000\nPOINT 0.500000 0.000000\nPOINT 0.920000 0.020000\nPOINT 0.020000 0.500000\nPOINT 0.980000 0.480000\nPOINT 0.080000 0.920000\nPOINT 0.500000 1.000000\nPOINT 0.920000 0.980000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.005000",
+      "mechanism": "An irregular configuration that deliberately uses asymmetric edge placements to avoid collinearity. The outer 8 points are placed near but not exactly on the square edges, with slight perturbations to break symmetry. The inner 4-point diamond and center point maintain a minimum separation. The claimed area is conservative at 0.005, matching the floor criterion.",
+      "counterconditions": [
+        "If the actual minimum triangle area is less than 0.005, the claim is refuted.",
+        "If the perturbations are too small, near-collinear triples may still produce areas below 0.005.",
+        "If the checker uses exact arithmetic and finds the minimum area is exactly 0.005 or above, the claim survives."
+      ],
+      "typicality": 0.3
+    },
+    {
+      "claim": "POINT 0.079680 0.500000\nPOINT 0.289840 0.079680\nPOINT 0.289840 0.920320\nPOINT 0.500000 0.079680\nPOINT 0.500000 0.289840\nPOINT 0.500000 0.710160\nPOINT 0.500000 0.920320\nPOINT 0.710160 0.079680\nPOINT 0.710160 0.920320\nPOINT 0.920320 0.289840\nPOINT 0.920320 0.710160\nPOINT 0.079680 0.079680\nPOINT 0.920320 0.920320\nCLAIM 0.010374",
+      "mechanism": "A rotated diamond lattice configuration using 13 points placed at intersections of two rotated grid systems. The primary grid uses spacing 0.42032 with offset 0.07968, while the secondary grid uses spacing 0.21016. Points are selected to maximize minimum pairwise distance while avoiding collinear triples, placing most points on the boundary and a few in the interior to break potential collinearities.",
+      "counterconditions": [
+        "If the rotated grid creates unexpected collinear triples, the minimum area drops to zero.",
+        "If the actual minimum triangle area is less than 0.010374, the claim is refuted.",
+        "If the checker finds that the boundary points are too close to each other, the configuration fails the minimum area test."
+      ],
+      "typicality": 0.4
+    }
+  ]
+}
+```
