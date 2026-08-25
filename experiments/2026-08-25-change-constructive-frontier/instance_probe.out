@@ -1,0 +1,18 @@
+== (d) dynamic range: random uniform draws, seeded ==
+  heilbronn n=13  median=0.000227  best-of-2000=0.002824
+  heilbronn n=14  median=0.000174  best-of-2000=0.003156
+  heilbronn n=15  median=0.000137  best-of-2000=0.001639
+  heilbronn n=16  median=0.000112  best-of-2000=0.001756
+  packing   n=13  median=0.010973  best-of-2000=0.054473
+  packing   n=14  median=0.009948  best-of-2000=0.054202
+  packing   n=15  median=0.009546  best-of-2000=0.054210
+  packing   n=16  median=0.009002  best-of-2000=0.044449
+
+== (b) the top of the band is DEGENERATE for packing ==
+  packing n=16, the 4x4 grid: r=0.125000  (= 1/8 exactly, the proven optimum)
+
+== (c) at n=13 the OBVIOUS answers score zero ==
+  circle of 13, r=0.5                      0.013308
+  8-ring + 4-ring + centre                 0.000000
+  4 corners + 4 edge midpoints + 5 inner   0.000000
+  jittered 4x4 grid                        0.000163
