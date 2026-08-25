@@ -1,0 +1,9 @@
+AGENT.md
+R_t
+codec:json
+deepreason.config.load
+harness-spec-v1.4-amendment.md
+harness-spec-v1.5-amendment.md
+harness-spec-v1.6-amendment.md
+novel-case
+workflow-resume-decision.v1
