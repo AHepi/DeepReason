@@ -1,0 +1,20 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 0.333333 0.500000\nPOINT 0.666667 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.027778",
+    "mechanism": "A radial grid placing points at the 4 corners, 4 midpoints of the sides, 4 internal grid anchors, and 1 center point. The 1/3 spacing enforces a guaranteed baseline area for triangles formed by points on opposite sides, while the center point intersects perfectly without generating excessively small areas with the boundary midpoints.",
+    "counterconditions": [
+      "Any colinearity introduced by the specific grid layout may yield a triangle of area 0, which trivially refutes the CLAIM if the geometric spacing is not exactly maintained.",
+      "If the points on the edges are too close together, triangles formed by two adjacent boundary points and the center point may fall below the claimed area of 1/36."
+    ],
+    "typicality": 0.7,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  }
+}
+```

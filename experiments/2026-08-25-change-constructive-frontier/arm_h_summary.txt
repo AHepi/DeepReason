@@ -1,0 +1,14 @@
+state                              failed
+stop_reason                        operational_failure
+cycles                             15
+n_artifacts                        1076
+n_candidates                       132
+n_valid                            15
+n_refuted                          117
+n_below_floor                      15
+refutations_by_code                {'CLAIM_INFLATED': 114, 'WRONG_COUNT': 3}
+best_score                         0.0004075
+best_score_exact                   163/400000
+survivors_raw_INFLATED_see_P4      0
+survivors_generative_only          0
+accepted_count                     909

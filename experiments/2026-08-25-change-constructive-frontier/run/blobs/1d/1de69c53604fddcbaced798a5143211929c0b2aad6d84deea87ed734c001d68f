@@ -1,0 +1,10 @@
+```json
+{
+  "repair_patch": [
+    {
+      "op": "remove",
+      "path": "/allowed"
+    }
+  ]
+}
+```

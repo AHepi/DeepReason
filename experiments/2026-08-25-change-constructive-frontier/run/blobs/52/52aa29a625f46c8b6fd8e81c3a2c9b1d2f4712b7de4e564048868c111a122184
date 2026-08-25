@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 asserts a true positive sustained flag but provides no verifiable premise_evidence (block + quote) tying the claim to artifact 0c61961a8085, making the assertion unfalsifiable in this batch.", "premise": "A sustained §11.3 flag identifying genuine unsoundness should be grounded in artifact-attached evidence from the critic being audited.", "premise_evidence": null, "counterexample": null}]}
+```

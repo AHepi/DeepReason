@@ -1,0 +1,25 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts the §11.3 flag fires specifically because 'both critics failed to surface their own decision boundary in a way the adjudication harness can inspect.' It then grounds this claim in a mechanism that is internal to a single critic: an opaque internal process with no audit trail, a conservative default 'fail' rating, and the critic lacking mechanistic transparency. The explanation never accounts for the multiplicity — it does not explain how a single-critic cognitive-opaqueness mechanism yields a flag against BOTH critics. The critic could have (correctly or incorrectly) surfaced its decision boundary, leaving an audit trail, yet SRC_001's own mechanism would predict the flag fires anyway based solely on the OTHER critic's opaqueness. The 'both' in the target's diagnosis is thus unsupported by the mechanism it offers, constituting an internal inconsistency between the stated flag rationale and the proposed mechanism.",
+      "premise": "SRC_001 diagnoses the §11.3 flag as caused by a mechanism — opaque internal process, no audit trail, conservative default — that operates within a single critic, yet claims the flag fires against 'both critics.'",
+      "premise_evidence": [
+        {
+          "block": "7a4f8e2b9c1d3e6a5f2b8d4c",
+          "quote": "§11.3 flags are sustained because both critics failed to surface their own decision boundary in a way the adjudication harness can inspect."
+        },
+        {
+          "block": "9c3e7a1d5f2b8e4c6a1d3f5e",
+          "quote": "If the critic arrived at a correct conclusion via an opaque internal process that left no audit trail ... A critic with a sound verdict but no articulable causal mechanism is indistinguishable from one with an unsound verdict."
+        }
+      ],
+      "counterexample": [
+        "Critic A surfaces its decision boundary with a full, inspectable audit trail; Critic B does not. Under SRC_001's stated mechanism, the flag fires on B due to opaqueness, yet 'both critics' in the diagnosis would be false — the mechanism cannot explain a flag sustained against A."
+      ]
+    }
+  ]
+}
+```

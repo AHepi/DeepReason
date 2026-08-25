@@ -346,3 +346,11 @@ every seat's model is listed
 [2026-08-25T19:43:58Z] === QUALIFY retry attempt 1/6 ===
 [2026-08-25T19:46:39Z] QUALIFY OK on attempt 1 rc=0
 [2026-08-25T19:46:57Z] === REASON (re-entry): run --budget cycles=24 --token-budget 3000000 ===
+[2026-08-25T20:39:44Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
+[2026-08-25T20:39:44Z] REASON stop_reason=operational_failure
+[2026-08-25T20:39:44Z] === AUDIT: verify_root + findings + results ===
+[2026-08-25T20:43:06Z] === SCORE: the exact checker over every artifact in the record ===
+ARM H best valid score: 0.0004075
+ARM H candidates: 132  refuted: 117
+ARM H tokens spent: None
+[2026-08-25T20:43:20Z] === DONE (re-entry) ===

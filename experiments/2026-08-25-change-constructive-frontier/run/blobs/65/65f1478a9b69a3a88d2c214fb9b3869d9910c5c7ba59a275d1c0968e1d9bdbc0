@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "No fault: SRC_001 critiques the substance of §11.3's criterion, not a machine-evaluated commitment, and the audit ritual did not ask for difficulty-controlled evidence it omitted.", "counterexample": null, "premise": null, "premise_evidence": null}]}
+```

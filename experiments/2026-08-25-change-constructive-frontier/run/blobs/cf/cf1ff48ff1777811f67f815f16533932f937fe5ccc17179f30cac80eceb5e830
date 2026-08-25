@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts the §11.3 flags are a false positive by attributing them to 'inconsistent critic-version pinning' and an unreconciled version mismatch between frontier-claim-honest@v1 and the verdict-producing version in SRC_006. But SRC_001 lists zero commitments—no schema, no predicate, no program—so the claim is entirely unsubstantiated by machine-evaluable evidence. More critically, the very framing is self-defeating: if the harness pinned the wrong critic version, that is a harness-configuration defect, not a property of the artifact under audit. The target conflates an external evaluation-environment error with a substantive defense of its own content, offering no argument that the §11.3 flags are unwarranted on the merits of the audited material itself.",
+      "premise": "A defense against §11.3 adjudication-ritual flags must address whether the flags are substantively unwarranted for the artifact under audit, not merely assert that an unrelated version-pinning inconsistency elsewhere (SRC_006) caused a false positive.",
+      "premise_evidence": null,
+      "counterexample": null
+    }
+  ]
+}

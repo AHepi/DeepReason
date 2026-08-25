@@ -1,0 +1,33 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.0 0.333333\nPOINT 0.0 0.666667\nPOINT 0.333333 0.0\nPOINT 0.666667 0.0\nPOINT 1.0 0.333333\nPOINT 1.0 0.666667\nPOINT 0.333333 1.0\nPOINT 0.666667 1.0\nCLAIM 0.018519",
+      "mechanism": "Construct a symmetric boundary-centric configuration: 12 points distributed evenly along the perimeter (3 per side) and 1 point at the center. The spacing of 1/3 guarantees that the minimum area is formed by three adjacent points on the same boundary, yielding a triangle with base 1/3 and height 1/3. Area = 1/18 ≈ 0.055556. However, cross-interactions between boundary points and the center, as well as adjacent segments across corners (e.g., (2/3,1), (1,2/3), (1,1/3)), form triangles with area exactly 1/54 ≈ 0.018519. This establishes the true minimum for this construction.",
+      "counterconditions": [
+        "If any three points fall into a collinear or near-collinear arrangement with less than 1/54 area, the claim is refuted.",
+        "If geometric perturbations to increase cross-boundary spacing inadvertently decrease the minimum cross-corner triangle area below 1/54, the construction is invalid."
+      ],
+      "typicality": 0.9
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.5 0.0\nPOINT 1.0 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.0 1.0\nPOINT 0.5 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.25\nPOINT 0.5 0.75\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.75 0.75\nCLAIM 0.03125",
+      "mechanism": "This construction uses a 3x3 grid of the unit square's key dyadic points, augmented with 4 additional interior points to break up large empty central regions and maximize the smallest triangle. By ensuring points are spread evenly and symmetrically, the minimum triangle area is kept to 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any three points form a triangle with an area smaller than 0.03125, the configuration fails.",
+        "If perturbations applied to improve symmetry inadvertently decrease the minimum area below 0.03125, the claim is refuted."
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.1 0.1\nPOINT 0.9 0.1\nPOINT 0.1 0.9\nPOINT 0.9 0.9\nPOINT 0.5 0.1\nPOINT 0.1 0.5\nPOINT 0.9 0.5\nPOINT 0.5 0.9\nPOINT 0.5 0.5\nPOINT 0.3 0.3\nPOINT 0.7 0.3\nPOINT 0.3 0.7\nPOINT 0.7 0.7\nCLAIM 0.008",
+      "mechanism": "An inset symmetric grid is constructed to explore tighter packing. Points are placed at 0.1 and 0.9 boundaries and filled in symmetrically at 0.3, 0.5, and 0.7. This forces multiple small triangles, with the smallest estimated at 0.008, comfortably above the 0.005 floor.",
+      "counterconditions": [
+        "If the tight spacing of 0.2 between adjacent interior points forms a triangle with an area less than 0.008, the claim fails.",
+        "If checker identifies a closer set of 3 points yielding an area < 0.008, the claim is refuted."
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.03125",
+      "mechanism": "A maximal spacing arrangement on the dyadic grid {0, 0.25, 0.5, 0.75, 1.0}^2 is deployed. Selecting points forming a perimeter and an alternating interior diamond,

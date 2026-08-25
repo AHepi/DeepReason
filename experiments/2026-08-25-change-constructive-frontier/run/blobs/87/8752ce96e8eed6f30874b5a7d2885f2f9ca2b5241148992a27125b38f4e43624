@@ -1,0 +1,36 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"enum": ["SRC_001"], "type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"const": "SRC_001", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"SRC_001"}
+
+INPUT:
+
+## problem-context
+PROBLEM CONTEXT (audit:ritual) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+audit the critic: adjudication-ritual flags sustained (§11.3)
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET fd0e1987d6bbb56c5c0c749a674dd6ae8e509dd2c98efb4959ed545753c3c2c3
+The sustained flags are a FALSE POSITIVE of the adjudication-ritual: two critics failing on the same artifact is weak evidence and does not warrant sustaining adjudication flags without a second divergent test artifact.
+
+## target-support-chain
+TARGET SUPPORT CHAIN (what the target declares it rests on):
+- 167ab415ec741cb639b0a8339ddc97a55b1ae4850139df722b7c080f89dc4466 [dependence]
+
+## target-support-content
+SUPPORT CONTENT:
+- 167ab415ec741cb639b0a8339ddc97a55b1ae4850139df722b7c080f89dc4466: The sustained flags are a FALSE POSITIVE of the adjudication-ritual: two critics (SRC_007, SRC_009) failing on the same artifact 0c61961a8085 is a weak evidenti
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

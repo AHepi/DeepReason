@@ -1,0 +1,8 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/candidate/claim_honest",
+    "op": "remove"
+  }
+}
+```

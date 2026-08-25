@@ -1,0 +1,13 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.250000 0.500000\nPOINT 0.500000 0.750000\nPOINT 0.750000 0.500000\nCLAIM 0.015625",
+    "mechanism": "A 4x4 grid lattice is formed in the unit square with a spacing of 0.25. By taking the 4 corners, 4 edge midpoints, the center, and the 4 axis-aligned neighbors of the center, we obtain a highly symmetric configuration. The smallest possible triangle area in an axis-aligned grid of spacing d is d^2/2. With d=0.25, this yields a minimum triangle area of 0.25^2 / 2 = 0.03125 / 2 = 0.015625.",
+    "counterconditions": [
+      "If any point lies outside [0,1]x[0,1], the configuration is invalid.",
+      "If any two points are not distinct, the configuration is invalid.",
+      "If the minimum area among all 286 triangles is less than 0.015625, the claimed score is refuted.",
+      "If a triangle is formed by three collinear points, the area is 0, refuting the score; however, this grid subset avoids any three points being collinear by excluding points like (0,0.25) and (0.25,0) that would form a line with the center."
+    ],
+    "typicality": 0.7
+  }
+}

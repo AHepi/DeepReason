@@ -1,0 +1,97 @@
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.500000 0.500000\nCLAIM 0.041667",
+      "mechanism": "Perturbed 3x3 grid with 4 corners: A regular 3x3 grid minimizes collinear triples. The point (0.5,0.5) is off the main diagonal grids to avoid 0-area triangles with corners. Minimum area triangles occur near the grid cells with area 1/24 ≈ 0.041667.",
+      "counterconditions": [
+        "If any 3 points are collinear, the score is 0 and the claim is refuted",
+        "If the minimum triangle area is actually less than 0.041667, the claim is refuted",
+        "If the minimum triangle area is actually greater than 0.041667, the claim is unnecessarily modest but still valid"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nCLAIM 0.031250",
+      "mechanism": "Fractal midpoint structure: Start with 4 corners and center. Add midpoints of edges and interior quadrants. This creates a self-similar pattern where minimum triangles have area 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any 3 points are collinear (e.g., along edges or diagonals), the score is 0",
+        "If the minimum triangle area is actually less than 0.03125, the claim is refuted"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 0.500000 0.500000\nCLAIM 0.027778",
+      "mechanism": "Hybrid grid with corners and midpoints: 4 corners, 4 edge midpoints, 4 interior 1/3-2/3 points, and center. The minimum triangle area is bounded by the smallest grid cell triangles at approximately 1/36 ≈ 0.02778.",
+      "counterconditions": [
+        "If any 3 points are collinear (edge midpoints with corners, or interior points with center), the score is 0",
+        "If the minimum triangle area is actually less than 0.027778, the claim is refuted"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 0.866025\nPOINT 0.500000 0.288675\nPOINT 0.000000 0.577350\nPOINT 1.000000 0.577350\nPOINT 0.250000 0.144338\nPOINT 0.750000 0.144338\nPOINT 0.250000 0.433013\nPOINT 0.750000 0.433013\nPOINT 0.125000 0.072169\nPOINT 0.875000 0.072169\nPOINT 0.500000 0.500000\nCLAIM 0.006500",
+      "mechanism": "Triangular lattice projection: A hexagonal/triangular lattice structure tends to maximize minimum distances and areas. Points are placed at triangular lattice positions projected into the unit square. The minimum triangle area is approximately 0.0065.",
+      "counterconditions": [
+        "If any 3 points are collinear, the score is 0",
+        "If the minimum triangle area is actually less than 0.0065, the claim is refuted",
+        "If any point falls outside [0,1]x[0,1], the configuration is invalid"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.3
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.015625",
+      "mechanism": "4 corners, 4 edge midpoints, 4 interior quadrant centers, and center point. This symmetric arrangement creates a nested grid with minimum triangle area 1/64 = 0.015625. The collinearity issue with edge midpoints and corners is addressed by the presence of interior points breaking up collinear triples.",
+      "counterconditions": [
+        "If any 3 points are collinear, the score is 0 and the claim is refuted",
+        "If the minimum triangle area is actually less than 0.015625, the claim is refuted"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.030000 0.030000\nPOINT 0.500000 0.030000\nPOINT 0.970000 0.030000\nPOINT 0.030000 0.500000\nPOINT 0.970000 0.500000\nPOINT 0.030000 0.970000\nPOINT 0.500000 0.970000\nPOINT 0.970000 0.970000\nPOINT 0.350000 0.650000\nPOINT 0.650000 0.350000\nPOINT 0.200000 0.500000\nPOINT 0.800000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.010000",
+      "mechanism": "Perturbed grid with corners pulled inward: Pull corners slightly inward to break edge collinearity with midpoints. Add asymmetric interior points to avoid collinearity. The minimum triangle area is conservatively estimated at 0.01.",
+      "counterconditions": [
+        "If any 3 points are collinear, the score is 0",
+        "If the minimum triangle area is actually less than 0.01, the claim is refuted",
+        "If the perturbation is insufficient to break all collinearities, the configuration fails"
+      ],
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.2
+    }
+  ]
+}

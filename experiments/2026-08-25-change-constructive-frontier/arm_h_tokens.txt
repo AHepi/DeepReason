@@ -1,0 +1,5 @@
+ARM H llm attempts      : 292
+ARM H TOKENS (measured) : 702789
+by role                 : [('argumentative_critic', 188), ('conjecturer', 104)]
+truncated responses     : 16
+calls needing >1 attempt: 0

@@ -1,0 +1,60 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual flag (§11.3) is sustained because the critic harness imposes a logically impossible joint requirement: it demands every surviving candidate be simultaneously 'sound and relevant' at the meta-level while demonstrably advancing a frontier claim, creating a type confusion between verdict quality and object-level progress that no single candidate can satisfy.",
+      "typicality": 0.85,
+      "neighbours": [
+        "SRC_005",
+        "SRC_008",
+        "SRC_002"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is a deliberate stabilizing negative-feedback loop: the ritual is designed to prevent premature closure by maintaining two redundant probes of latent quality, ensuring only robustly surviving candidates pass the adjudication threshold.",
+      "typicality": 0.75,
+      "neighbours": [
+        "SRC_004",
+        "SRC_003",
+        "SRC_006"
+      ]
+    },
+    {
+      "content": "The adjudication-ritual flag persists due to a type confusion: the harness conflates 'sound and relevant' (a meta-level judgment about verdict quality) with 'failed' (an object-level outcome), causing the ritual to reject candidates that are meta-level sound but object-level inconclusive.",
+      "typicality": 0.7,
+      "neighbours": [
+        "SRC_005",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is an artifact of temporal misalignment: the 'sound and relevant' affirmations and the 'failed' verdicts are issued at different stages of the adjudication cycle, so the ritual appears contradictory when viewed synchronically but resolves when the temporal ordering of critic evaluations is reconstructed.",
+      "typicality": 0.45,
+      "neighbours": [
+        "SRC_007",
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "The adjudication-ritual flag is sustained because the critics are adversarial validators operating under mutual exclusion at the frontier: they are designed to disagree by construction, and the flag persists as the expected equilibrium of a game-theoretic adjudication protocol rather than a malfunction.",
+      "typicality": 0.55,
+      "neighbours": [
+        "SRC_006",
+        "SRC_004",
+        "SRC_003"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is sustained because the verdict-shape mandates that every surviving candidate satisfy both a frontier-claim-honest criterion and a frontier-above-floor criterion, but these are redundant probes of the same latent quality, so the joint requirement is not impossible but merely inefficient: it filters correctly at the cost of unnecessary constraint duplication.",
+      "typicality": 0.4,
+      "neighbours": [
+        "SRC_003",
+        "SRC_002",
+        "SRC_008"
+      ]
+    }
+  ]
+}
+```

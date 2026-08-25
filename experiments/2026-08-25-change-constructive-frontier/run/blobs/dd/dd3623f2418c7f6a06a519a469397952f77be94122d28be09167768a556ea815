@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.333333 0.000000\nPOINT 0.666667 1.000000\nCLAIM 0.000000",
+    "mechanism": "The construction provides a trivial baseline of 0.0 minimum area, deliberately satisfying all checker predicates except the floor at 0.005. It illustrates an extreme where many points lie on the same horizontal or vertical lines, forming multiple collinear triples (e.g. (0,0), (0.333333,0), (0.5,0)).",
+    "counterconditions": [
+      "If the floor predicate is strictly enforced (>= 0.005), this construction fails.",
+      "If any 3 non-collinear points exist whose triangle area is strictly less than 0.000000 (impossible by definition), it would fail the CLAIM predicate.",
+      "If the problem constraints prohibited 3 or more points from sharing an x or y coordinate, this construction would fail."
+    ],
+    "typicality": 0.01,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    }
+  }
+}

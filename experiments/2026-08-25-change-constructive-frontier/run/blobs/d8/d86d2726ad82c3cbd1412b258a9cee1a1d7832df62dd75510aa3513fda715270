@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The target declares the §11.3 flags are false positives and attributes them to inconsistent critic-version pinning, yet it provides no supporting evidence for the causal diagnosis and explicitly lists no commitments, so the assertion rests entirely on an unevidenced assertion and cannot be adjudicated as a sustained critique under the audit standard.", "premise": "SRC_001 claims the §11.3 adjudication-ritual flags are false positives caused by conflating execution failures with unreliability and likely due to inconsistent critic-version pinning.", "premise_evidence": null, "counterexample": null}]}
+```

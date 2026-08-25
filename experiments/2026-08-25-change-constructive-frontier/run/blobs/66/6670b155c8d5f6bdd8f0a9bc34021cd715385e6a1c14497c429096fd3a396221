@@ -1,0 +1,20 @@
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "The grid-based configuration relies on distributing 13 points evenly across a 3x3 and 4x4 grid lattice. This configuration is likely suboptimal for maximizing the minimum triangle area because grid alignments inherently produce collinear triples. The point (0.5, 0.5) lies exactly on the diagonal between (0,0) and (1,1) and also on the anti-diagonal between (0,1) and (1,0), guaranteeing multiple triangles with exactly 0 area. This candidate serves as an honest, easily checkable baseline floor that strictly satisfies the well-formedness constraints while demonstrating a known degenerate failure mode for area maximization.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum triangle area becomes exactly zero.",
+        "If the point perturbation is attempted to remove collinearities but is not accompanied by a rigorous area-distance proof, the CLAIM may be falsely asserted above the true minimum.",
+        "If the claim is submitted as anything greater than 0.000000, it will be immediately refuted by the checker due to the central collinearities."
+      ],
+      "typicality": 0.01,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.036000\nPOINT 1.000000 0.000000\nPOINT 0.036000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.964000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.964000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nCLAIM 0.0065",
+      "mechanism": "This configuration starts from a symmetric 3x3 grid plus corner midpoints and applies a radial perturbation to break exact collinearities. The central point is pushed slightly to create a uniform 'ring' of minimal-area triangles in the immediate vicinity of the origin, center, and diagonal points. The mechanism assumes that small local perturbations of structured grids can yield a positive lower bound without requiring complex global optimization. The claim of 0.0065 is an empirical guess based on the perturbation distance (0.036) and the resulting approximate base-height products of nearby triangles.",
+      "counterconditions": [
+        "The perturbation may accidentally introduce a new collinearity or near-collinearity among non-adjacent points (e.g., diagonal alignments involving (0.25, 0.25) and (0.75

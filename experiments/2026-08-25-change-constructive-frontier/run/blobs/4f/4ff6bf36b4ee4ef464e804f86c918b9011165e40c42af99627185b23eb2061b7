@@ -1,0 +1,7 @@
+{
+  "candidate": {
+    "content": "The §11.3 flag is sustained because the critic harness is a *stabilizing negative-feedback loop* (per 033eab74) that prevents premature closure: it deliberately refrains from emitting a definitive, self-terminating 'sound and relevant' certification, leaving the verdict shape permanently incomplete.",
+    "typicality": 0.25,
+    "neighbours": ["SRC_007", "SRC_006", "SRC_008"]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "candidate": {
+    "claim": "POINT 0.0 0.0\nPOINT 0.0 0.375\nPOINT 0.0 0.75\nPOINT 0.333333 0.0\nPOINT 0.333333 0.375\nPOINT 0.333333 0.75\nPOINT 0.666667 0.0\nPOINT 0.666667 0.375\nPOINT 0.666667 0.75\nPOINT 1.0 0.0\nPOINT 1.0 0.375\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nCLAIM 0.0",
+    "mechanism": "A candidate that openly refutes itself by violating the floor predicate (frontier-above-floor@v1) and honest-claim predicate (frontier-claim-honest@v1). It is submitted not as a valid solution to the geometric problem, but as an adversarial probe of the adjudication-ritual flag (§11.3) sustained in the neighbourhood. It leverages the 4x3 grid's structural susceptibility to generating collinear triples—y=0, x=1, and the horizontal grid lines—yielding a zero minimum area. This intentional failure creates a deliberate type confusion between 'sound and relevant' at the meta-level versus failing at the object-level, acting as a stabilizing negative-feedback loop.",
+    "counterconditions": [
+      "The geometric checker requires the minimum area to be >= 0.005; this construction yields 0.0, so it must be refuted if object-level criteria are strictly enforced.",
+      "If the 'sound and relevant' affirmation logic is strictly separated from object-level validation, this candidate is refuted as a mathematical construction."
+    ],
+    "typicality": 0.02,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    "optional_refs": [
+      "SRC_006",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "f71bce81c0f3a0155c972e9512869e9d026abdddd3dc46bc9397d83a100f8745",
+        "843cefb9d510742355b505ed529b2645d090eb0e54152a8eb7715ef4dcafb44b"
+      ],
+      "shared_structure": [
+        "Submission of an object-level artifact that intentionally fails a formal metric to test the meta-level adjudication harness's verdict-shape",
+        "Exploiting the tension between 'failed' verdicts and 'sound and relevant' affirmations via temporal misalignment"
+      ],
+      "disanalogies": [
+        "Previous flags were sustained by textual or logical artifacts in the harness; this directly submits a malformed geometric configuration as the artifact",
+        "The 4x3 grid is a trivial collinear structure, whereas previous neighbourhood contexts involved complex ritualistic logic"
+      ],
+      "transfer_claims": [
+        "If the adjudication-ritual flag persists despite object-level refutation, the harness has a type confusion between meta-level soundness and object-level validity.",
+        "The ritual acts as a stabilizing negative-feedback loop by deliberately admitting refuted candidates to prevent premature closure."
+      ],
+      "overturn_conditions": [
+        "If the harness strictly enforces frontier-above-floor@v1 as a hard filter before any meta-level affirmation, the candidate is refuted and the ritual is bypassed.",
+        "If 'sound and relevant' is interpreted exclusively as object-level metric compliance, the type confusion is resolved and this candidate is discarded."
+      ],
+      "adopted_commitment_refs": [
+        "0ccfdd986b268dbe99ec57035d8fa195b166dc3c7c58124063825406730da249"
+      ]
+    }
+  }
+}

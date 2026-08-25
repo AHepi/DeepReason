@@ -1,0 +1,20 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+    "mechanism": "A 4x4 grid graph contains 16 vertices with a minimum bounding triangle area of 1/32 = 0.03125. By removing 3 colinear vertices from the middle of the 4x4 grid, the minimum area among all remaining triples is preserved, as no smaller triangles are generated. The selected points are the corners, edge midpoints, inner 3x3 grid points, and center.",
+    "counterconditions": [
+      "If any three points form a triangle with area strictly less than 0.03125, the claim is refuted.",
+      "If the numerical coordinates are parsed to have fewer than 6 decimal places and result in distinctness violations, the claim is refuted.",
+      "If the minimum area is actually bounded by a configuration not derived from grid sparsification, this specific score is suboptimal."
+    ],
+    "typicality": 0.8,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

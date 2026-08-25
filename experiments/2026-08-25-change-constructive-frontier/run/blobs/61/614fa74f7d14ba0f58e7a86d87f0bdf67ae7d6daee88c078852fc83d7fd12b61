@@ -1,0 +1,49 @@
+{
+  "candidates": [
+    {
+      "content": "The §11.3 adjudication-ritual flags are false positives: they conflate transient critic execution failures (timeout, crash, resource exhaustion) on artifact 0c61961a8085 with intrinsic critic unreliability, a classification error stemming from conflating an environmental accident with a structural deficiency.",
+      "typicality": 0.85,
+      "neighbours": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_005"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is a true positive: the critic is genuinely unreliable on artifact 0c61961a8085, rendering any associated verdicts unsound because the critic cannot be trusted to evaluate that specific artifact correctly.",
+      "typicality": 0.75,
+      "neighbours": [
+        "SRC_006"
+      ]
+    },
+    {
+      "content": "The ritual flags are correctly triggered but misattributed: §11.3 should flag artifact 0c61961a8085 as adversarially hard rather than the critic as unreliable, preserving the signal's utility while shifting the target.",
+      "typicality": 0.6,
+      "neighbours": [
+        "SRC_007"
+      ]
+    },
+    {
+      "content": "The §11.3 flagging criterion is vacuously satisfied by any critic that crashes, rendering the ritual's signal uninformative because it cannot distinguish a bad critic from a resource-constrained one facing a pathological input.",
+      "typicality": 0.4,
+      "neighbours": [
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The ritual itself is the bug: the adjudication-ritual's §11.3 flagging criterion is structurally unsound because it treats execution failure as a sufficient statistic for unreliability without controlling for artifact difficulty.",
+      "typicality": 0.35,
+      "neighbours": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The flags are a false positive arising from inconsistent critic-version pinning: the ritual harness evaluated frontier-claim-honest@v1 and failed to account for version drift, attributing a harness configuration error to the critic.",
+      "typicality": 0.2,
+      "neighbours": [
+        "SRC_002"
+      ]
+    }
+  ]
+}

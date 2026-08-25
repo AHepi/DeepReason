@@ -1,0 +1,59 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual §11.3 flags are false positives: they conflate critic execution failures (timeout, crash) on artifact 0c61961a8085 with critic unreliability, as shown by the sound and relevant verdict in SRC_006.",
+      "typicality": 0.82,
+      "neighbours": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008",
+        "SRC_009"
+      ]
+    },
+    {
+      "content": "The §11.3 flag is a true positive: the critic is genuinely unreliable on artifact 0c61961a8085, and the verdict in SRC_006 is irrelevant or unsound because it did not exercise the failing execution path.",
+      "typicality": 0.28,
+      "neighbours": [
+        "SRC_006",
+        "SRC_008",
+        "SRC_009"
+      ]
+    },
+    {
+      "content": "The ritual flags are correct in flagging, but misattributed: §11.3 should flag the artifact 0c61961a8085 as adversarially hard rather than the critic as unreliable.",
+      "typicality": 0.18,
+      "neighbours": [
+        "SRC_008",
+        "SRC_009"
+      ]
+    },
+    {
+      "content": "The §11.3 flagging criterion is vacuously satisfied by any critic that crashes, making the ritual's signal uninformative: it cannot distinguish a bad critic from a hard artifact.",
+      "typicality": 0.12,
+      "neighbours": [
+        "SRC_008",
+        "SRC_009"
+      ]
+    },
+    {
+      "content": "The §11.3 flags are a false positive arising from inconsistent critic-version pinning: the ritual harness evaluated frontier-claim-honest@v1 and failed to reconcile it with the version actually producing the sound verdict in SRC_006.",
+      "typicality": 0.65,
+      "neighbours": [
+        "SRC_006",
+        "SRC_007",
+        "SRC_008"
+      ]
+    },
+    {
+      "content": "The adjudication-ritual is irreparably broken because §11.3 cannot be patched without violating the empiric school's stance in SRC_004: any fix that distinguishes execution failure from unreliability requires mechanistic assumptions the empiric stance forbids.",
+      "typicality": 0.08,
+      "neighbours": [
+        "SRC_004",
+        "SRC_008",
+        "SRC_009"
+      ]
+    }
+  ]
+}
+```

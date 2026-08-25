@@ -1,0 +1,18 @@
+To maximize the minimum triangle area for 13 points in the unit square, we can use an affine-transformed regular 13-gon that optimally fills the square. A regular 13-gon inscribed in a circle has its minimum triangle area formed by three consecutive vertices. By computing the bounding box of the polygon and scaling it to exactly $[0,1] \times [0,1]$, the areas of all triangles are scaled up, pushing the minimum area to approximately 0.013593. 
+
+Here is the configuration:
+
+POINT 0.500000 1.000000
+POINT 0.265934 0.941861
+POINT 0.085487 0.780877
+POINT 0.000000 0.553786
+POINT 0.029060 0.312714
+POINT 0.166005 0.112859
+POINT 0.379470 0.000000
+POINT 0.620530 0.000000
+POINT 0.833995 0.112859
+POINT 0.970940 0.312714
+POINT 1.000000 0.553786
+POINT 0.914513 0.780877
+POINT 0.734066 0.941861
+CLAIM 0.013500

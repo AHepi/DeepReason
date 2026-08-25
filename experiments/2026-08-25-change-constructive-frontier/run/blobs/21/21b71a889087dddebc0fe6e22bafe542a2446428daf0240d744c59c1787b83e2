@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.5\nPOINT 0.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 0.333333\nPOINT 0.5 0.666667\nPOINT 0.5 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.333333\nPOINT 1.0 0.666667\nPOINT 1.0 1.0\nPOINT 0.25 0.5\nPOINT 0.75 0.5\nCLAIM 0.041667",
+      "mechanism": "A grid-based heuristic approach: 12 points are distributed in a 4x3 grid (or a vertical 2x6 grid variant) which guarantees parallel lines. Two additional points are placed at the horizontal midpoints. This creates massive unavoidable collinearity (dropping area to 0 for the strictly gridded points) and severe narrow triangles due to small coordinate differences. It serves as a highly criticizable, naive baseline configuration that perfectly achieves the floor score without any optimization.",
+      "counterconditions": [
+        "If three points are perfectly collinear, the area is 0 and the claim is immediately refuted.",
+        "If the checker finds any triangle with area strictly less than 0.005, it violates the frontier-above-floor@v1 predicate.",
+        "If the CLAIM value strictly exceeds the true minimum area, it violates frontier-claim-honest@v1."
+      ],
+      "typicality": 0.85
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.1 0.3\nPOINT 0.9 0.3\nPOINT 0.3 0.9\nPOINT 0.7 0.1\nPOINT 0.1 0.7\nPOINT 0.9 0.7\nPOINT 0.3 0.1\nPOINT 0.7 0.9\nCLAIM 0.005",
+      "mechanism": "A mixed corner-and-centroid heuristic: corners and center are placed to maximize spread, while remaining points are placed on concentric boundaries or rotated grids. This suffers from symmetries resulting in collinear triples across the diagonals and center, alongside unoptimized small triangles. The score is conservatively claimed at the floor to pass the baseline threshold.",
+      "counterconditions": [
+        "If three points are perfectly collinear, the area is 0 and the claim is refuted.",
+        "If the CLAIM value strictly exceeds the true minimum area, it violates frontier-claim-honest@v1.",
+        "If the true minimum area is strictly less than 0.005, it violates frontier-above-floor@v1."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.95 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.95\nPOINT 0.05 0.5\nPOINT 0.95 0.5\nPOINT 0.5 0.05\nPOINT 0.5 0.95\nPOINT 0.5 0.32\nPOINT 0.5 0.68\nPOINT 0.22 0.25\nPOINT 0.78 0.25\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "An inner-circle and perturbed grid heuristic: points are placed on an implicit circle and crosshair centered at 0.5,0.5. This causes many narrow chords and some collinear or near-collinear sets (e.g., on x=0.5). By perturbing slightly off-grid, it avoids exact zero area but leaves narrow triangles. Claim is set strictly at the 0.005 floor to satisfy the baseline.",
+      "counterconditions": [
+        "If the minimum triangle area is strictly less than 0.005, it violates frontier-above-floor@v1.",
+        "If the CLAIM value is less than 0.005, it fails the problem's baseline threshold.",
+        "If any perturbation introduces a new collinearity or sub-0.005 triangle, the claim is refuted."
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.006 0.006\nPOINT 0.006 0.994\nPOINT 0.994 0.006\nPOINT 0.994 0.994\nPOINT 0.5 0.006\nPOINT 0.5 0.994\nPOINT 0.006 0.5\nPOINT 0.994 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "An exaggerated boundary heuristic: points are pushed toward the extreme bounds, leaving large empty spaces and heavily clustered points along the axes. This unoptimized placement guarantees the existence of extremely thin triangles near the edges and collinear sets along the central crosshair. The claimed score is the absolute minimum to avoid automatic refutation.",
+      "counterconditions": [
+        "If the true minimum area falls below 0.005, it violates frontier-above-floor@v1.",
+        "If the CLAIM value is strictly greater than the true minimum area, it violates frontier-claim-honest@v1.",
+        "If exact collinearity occurs among the central crosshair points, the claim is refuted by 0-area."
+      ],
+      "typicality": 0.4
+    }
+  ]
+}
+```

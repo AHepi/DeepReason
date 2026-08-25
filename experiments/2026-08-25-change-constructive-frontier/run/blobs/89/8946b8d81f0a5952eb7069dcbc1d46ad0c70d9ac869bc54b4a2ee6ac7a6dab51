@@ -1,0 +1,3 @@
+```json
+{"cases":[{"target_alias":"SRC_001","attack":true,"case":"The target fails the stated problem context. The problem context defines the standard the target answers to as auditing the critic within the adjudication-ritual, specifically auditing the sustained §11.3 flag. The target's claim ('the §11.3 adjudication-ritual flag is sustained because...') reiterates and justifies the existence of the flag instead of auditing it against the ritual standard.","premise":null,"premise_evidence":null,"counterexample":null}]}
+```

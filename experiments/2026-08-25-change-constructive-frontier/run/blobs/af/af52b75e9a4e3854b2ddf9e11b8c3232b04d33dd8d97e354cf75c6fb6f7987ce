@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "The adjudication-ritual flags are sustained because cross-critic consistency across independently seeded falsificationist stances (SRC_007, SRC_009) demonstrates a structural alignment in counterexample detection, rather than mere evidentiary coincidence.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_003", "SRC_004", "SRC_005", "SRC_007"]
+    },
+    {
+      "content": "The sustained flags are a false positive of the adjudication-ritual: two critics sharing a falsificationist stance failing on the same artifact constitutes weak evidence, as the shared stance undermines the independence required for strong corroboration.",
+      "typicality": 0.65,
+      "neighbours": ["SRC_007", "SRC_009"]
+    },
+    {
+      "content": "The flags are sustained because the falsificationist stance is structurally embedded in both the critics and the adjudication ritual itself, creating a self-reinforcing validation loop where the harness inevitably confirms what its critics are designed to find.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_006", "SRC_008"]
+    },
+    {
+      "content": "The audit flags are sustained because mechanist and skeptic school policies (SRC_001, SRC_002) implicitly converge on falsificationist principles when adjudicating frontier claims, making cross-school validation a structural artifact rather than independent confirmation.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_001", "SRC_002"]
+    },
+    {
+      "content": "The sustained flags arise not from the critics' stances but from the adjudication-ritual's selection function: the harness filters for artifacts where falsificationist commitments are likely to trigger, biasing the sample toward confirmations.",
+      "typicality": 0.2,
+      "neighbours": ["SRC_003", "SRC_005"]
+    },
+    {
+      "content": "The audit flags are sustained because the two NU verdicts (SRC_006, SRC_008) form a closed evidentiary loop: each verdict references the other's independence as justification, creating circular support that the ritual cannot distinguish from genuine corroboration.",
+      "typicality": 0.15,
+      "neighbours": ["SRC_004", "SRC_006", "SRC_008"]
+    }
+  ]
+}

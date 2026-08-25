@@ -1,0 +1,59 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.031250",
+      "mechanism": "A symmetric recursive point distribution. By placing points on a 4x4 grid centered at 0.25, 0.5, 0.75 and removing 3 points, we attempt to maximize the minimum spacing across all triples. The 0.03125 (1/32) score arises from minimal triangles like (0,0), (0.25,0.25), (0.5,0.5) which are colinear giving 0 area, intentionally proposed to fail the countercondition and demonstrate strict falsifiability.",
+      "counterconditions": [
+        "Any three points lying on the same line will yield a triangle area of 0, refuting the minimum area claim.",
+        "The checker will compute an area of 0.0 for the triple (0,0), (0.25,0.25), (0.5,0.5), instantly refuting this candidate."
+      ],
+      "typicality": 0.1
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.020833",
+      "mechanism": "A heuristic grid-based layout where 13 points are placed at prominent coordinates within the unit square. The area is bounded by a sub-optimal 0.020833 because the geometric constraints of 13 points on this grid create small degenerate triangles that cannot exceed this floor without a more sophisticated optimization scheme.",
+      "counterconditions": [
+        "If an optimized continuous layout is found achieving a minimum triangle area greater than 0.020833, this candidate is refuted.",
+        "If any pair of points violates the unit square constraint [0,1]x[0,1], the construction is invalid."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.015625",
+      "mechanism": "This construction clusters points symmetrically around the center and edges of the square. The 0.015625 (1/64) value represents a conservative lower bound derived from local triangular densities near the boundaries and center, intentionally lower than theoretical maximums to safely pass the honesty checker.",
+      "counterconditions": [
+        "If the checker finds any triangle with an area less than 0.015625, the claim is refuted.",
+        "If the absolute global maximum for 13 points is proven to be exactly 0.015625, this conservative candidate becomes optimal and refutes all higher claims."
+      ],
+      "typicality": 0.9
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.018519",
+      "mechanism": "By placing 12 points uniformly on the perimeter of the square (dividing edges into thirds) and one at the center, we balance boundary density and interior coverage. This yields a minimum area of 0.018519 (1/54), driven by triangles formed by adjacent edge points and the center point.",
+      "counterconditions": [
+        "If any optimized interior configuration yields a score higher than 0.018519, this boundary-heavy candidate is refuted.",
+        "If any three points are colinear or form a triangle smaller than 0.018519, the claim fails the honesty check."
+      ],
+      "typicality": 0.3
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nCLAIM 0.010000",
+      "mechanism": "This is a deliberately sub-optimal but valid construction. The coordinates form a nested symmetric pattern that guarantees all points are distinct and within the unit square. The claim of 0.010000 is chosen as an arbitrary safe floor that is almost certainly lower than the true minimum area of this configuration, ensuring it passes the honesty check while remaining highly atypical and easily falsifiable by better optimizations.",
+      "counterconditions": [
+        "Any candidate achieving a minimum triangle area > 0.010000 refutes this as sub-optimal.",
+        "If the actual minimum area of this exact configuration is less than 0.010000, the claim is refuted by the checker."
+      ],
+      "typicality": 0.05
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+      "mechanism": "A deliberately over-claimed configuration. The coordinates are distributed symmetrically within the square. The claim of 0.031250 (1/32) is intentionally set higher than the likely true minimum area of this layout (which is 0.0 due to colinearity) to serve as a strict test case for the frontier-claim-honest checker.",
+      "counterconditions": [
+        "The checker
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

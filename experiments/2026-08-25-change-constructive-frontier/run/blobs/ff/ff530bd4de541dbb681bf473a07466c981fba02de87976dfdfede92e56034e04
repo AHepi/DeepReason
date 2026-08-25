@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "SRC_001 does not provide quoted evidence for the reattribution of the §11.3 flag, nor does it specify the artifact identifier required by the audit scope. Because the only claim (misattribution) is asserted without premises or evidence in the input, there is no basis to sustain a fault against the target on the stated problem."}]}
+```

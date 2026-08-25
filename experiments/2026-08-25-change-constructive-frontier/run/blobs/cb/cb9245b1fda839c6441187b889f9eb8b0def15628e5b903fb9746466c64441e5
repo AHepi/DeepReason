@@ -1,0 +1,3 @@
+```json
+{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The claim asserts the §11.3 flags conflate execution failures with unreliability due to inconsistent critic-version pinning, yet the target provides no commitments, evidence, or supporting artifact substantiating either the conflation or the pinning hypothesis, so the assertion is unevidenced relative to the audit-ritual standard.", "premise": "A critic audit claim that adjudication-ritual flags are false positives must be substantiated by evidence linking the flagged outcomes to execution failures rather than genuine unreliability.", "premise_evidence": null, "counterexample": null}]}
+```
