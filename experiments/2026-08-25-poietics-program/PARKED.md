@@ -121,3 +121,106 @@ unaffected. Recorded so a later program does not invent the shortcut.
 
 **Ready-to-send prompt:** none. This is a note for whoever designs P-R2's
 criteria, and belongs in that design, not in a fix.
+
+---
+
+## P4 — the results surface counts import-role records as survivors
+
+**What.** P-R1's terminal result reports 82 survivors. 24 of them are
+IMPORT-role admission records — sections of the operator's attached record,
+admitted as artifacts at seed and never removed from the survivor set. Of
+the 34 survivors passing this tranche's mechanism criterion, 8 are imported
+record sections rather than conjectures.
+
+**Why it is a finding and not a preference.** CLAUDE.md states as a
+hard-won invariant, in the list whose violations were "real, recorded
+defects": *"import-role admission records never count as 'survivors'."*
+The results surface counts them.
+
+**Measured, from the committed root:**
+
+    all survivors                     82   = 58 conjecturer + 24 import
+    survivors passing the criterion   34   = 26 conjecturer +  8 import
+
+**Consequence, and its limit.** No milestone in this tranche turns on it —
+M1 needed one conjecture survivor passing the criterion and got 26. But any
+run binding a non-empty dossier will report a survivor count inflated by the
+size of that dossier, and "82 survivors" reads as 82 positions when it is
+58. The inflation scales with the evidence attached, which means it grows
+precisely as attached-evidence runs become more common.
+
+**Not fixed here:** the survivor set is computed in `src/`, and R15 bounds
+this tranche to no `src/` or `tests/` change.
+
+**Ready-to-send prompt:**
+
+> Route through `deepreason-orchestrator` (a defect, not a change). Goal:
+> establish whether the terminal result's survivor set should exclude
+> IMPORT-role admission records, per CLAUDE.md's invariant "import-role
+> admission records never count as 'survivors'", and fix it if so.
+>
+> Diagnose from the typed record BEFORE reading code. The fixture is
+> committed and needs no live run:
+> `experiments/2026-08-25-poietics-program/run` — 82 survivors, 24 of them
+> IMPORT-role, reproducible with:
+>
+>     from deepreason.harness import Harness
+>     h = Harness('<root>', read_only=True)
+>     survivors = json.load(open('<root>/run-result.json'))['survivors']
+>     # count by h.state.artifacts[a].provenance.role
+>
+> Two readings to separate before proposing anything, because they lead to
+> different fixes. Either the invariant governs every survivor surface and
+> the result payload is wrong; or the invariant governs only the reach and
+> carrier measures where it was originally recorded, and the defect is that
+> CLAUDE.md states it unqualified. Check the tranche that recorded it before
+> deciding — the wrong reading here changes committed roots' meaning, which
+> is the adjudication-x-authority seam's stated failure mode.
+>
+> If the fix changes the survivor count, note that committed roots' reported
+> numbers move. Under the 2026-08-14 operator law old roots owe the future
+> nothing, so that is permitted; say it in the tranche rather than
+> discovering it in review.
+
+---
+
+## P5 — the judge ensemble was paid for and never ran
+
+**What.** P-R1 was configured with a two-seat cross-family judge ensemble
+(`qwen3.5:397b`, `glm-5.2`) at the operator's explicit instruction. It was
+compiled, it passed the qualification battery, and it recorded **zero calls**
+across twelve cycles: no defended trial ran, none was declined, none was
+blocked by a guard.
+
+**Why it is worth a finding.** A judge rules inside a defended trial, and no
+criticism sustained to one. So the run's 419 acceptances are acceptances
+under the legacy criticism path, not adjudicated verdicts — and nothing in
+this run is evidence about cross-family judging, which was the whole point
+of the operator's correction from a solo configuration.
+
+**Open question this tranche cannot answer:** whether no criticism DESERVED
+a trial in twelve cycles, or whether something in the engaged-criticism
+configuration prevents criticisms from reaching one. Those have opposite
+remedies and the record here does not separate them.
+
+**Ready-to-send prompt:**
+
+> Route through `deepreason-orchestrator`. Goal: establish why zero defended
+> trials ran in `experiments/2026-08-25-poietics-program/run` despite
+> `ENGAGED_CRITICISM_AUTHORITY: defended_trial`, `JUDGE_SEATS_ENABLED: true`,
+> `ADJUDICATION_STATUS_AUTHORITY_ENABLED: true`, a qualified two-seat
+> cross-family judge ensemble, 207 Crit events and 126 critic calls.
+>
+> Diagnose from the typed record first. The committed root is the fixture;
+> `results.txt` reports adjudication ran: no, judge calls 0, trials declined
+> none, trials blocked none — note that "declined none" and "blocked none"
+> means the trial path was never ENTERED, not that cases were tried and
+> lost. Find where a criticism becomes a trial candidate and what predicate
+> it failed.
+>
+> Separate the two readings before proposing a fix: (a) no criticism
+> sustained, which is correct behaviour and the finding is only that the
+> ensemble's cost bought nothing; or (b) a configuration or gate prevents
+> entry regardless of merit, which is a defect. Consult the judge-evidence
+> review tranche before designing anything that leans on judges
+> (`experiments/2026-08-09-change-judge-evidence-review/`), per CLAUDE.md.
