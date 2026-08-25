@@ -1312,3 +1312,40 @@ now states the split both ways and its new check asserts BOTH partitions of
 so a third member cannot join either side unnoticed. Sibling of E50: a
 membership claim in prose is load-bearing and needs the check that would fail
 with it, and for a SET that check must be over the whole set.
+
+---
+
+## 2026-08-25 (Rung 8 — rent, the authority audit, the §14 diagnostics)
+
+**E52 — `RECONCILIATION.md` routes five drift rows to "Rung 7"; four of them
+are Rung 8's, and one of them really did land at Rung 7.** The v2 program's
+drift table gives its dispositions as
+`experiments/2026-08-14-change-calculus-reconciliation-v2/RECONCILIATION.md`
+rows **S-7** ("adopt — Rung 7"), **S-17** ("adopt — Rung 7"), **S-21**
+("adopt — Rung 7, as a replay program over the log"), **G-4** ("adapt — Rung 7
+must extend the existing capture instruments"), **G-5** ("adopt — Rung 7") and
+**P-10** ("Rung 7 adds the calculus's specific new instrument"). The same
+program's `LADDER.md` opens its **Rung 8** section with "Discharges: S-7, S-17
+(residual-domain authorship), S-21, G-4, G-5, T-7, P-10."
+
+The record settles it. `experiments/2026-08-24-change-rung7-wounds-falls-
+succession/DELIVERY.md` reconciles ten requirements — wounds, the second
+cascade entry, batch translation offers, succession, anomaly conservation, and
+Q2a–Q2d — and none of them is rent, the authority audit, or capture
+integration. Those four (S-7, S-21, G-4, G-5, with P-10's new instrument) were
+delivered 2026-08-25 by Rung 8. **S-17 is the exception and cuts the other
+way:** anomaly conservation DID land at Rung 7 (that DELIVERY's R5), so the
+`LADDER.md` Rung 8 header over-claims it.
+
+Cause, and it is structural rather than careless: `RECONCILIATION.md`'s
+disposition column was written when the program had SEVEN rungs.
+`LADDER.md`'s own Correction 2 then split the spawn-trigger deletion into its
+own rung and Amendment 2 inserted Rung 1b, shifting every later number by one.
+The drift table was never re-numbered. Every row after the split reads one
+rung early.
+
+**Uncorrected in place, deliberately.** `RECONCILIATION.md` is a delivered
+tranche's committed artifact and rewriting its disposition column would edit
+the record of what was decided when. This entry is the correction, and the
+authority for "which rung owes which row" is `LADDER.md` plus the delivering
+tranche's own DELIVERY.md — never the drift table's rung numbers.

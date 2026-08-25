@@ -1,5 +1,5 @@
 <!-- DR-INV-axiom-basis -->
-Verified-at: f9fcd1136
+Verified-at: 748c9ab61
 Verify: python -m pytest tests/test_calculus_standing.py tests/test_calculus_frame_assertions.py tests/test_proof_debt.py tests/test_calculus_nomination.py tests/test_promotion_solo.py -q
 Owns: 
 Seams: 

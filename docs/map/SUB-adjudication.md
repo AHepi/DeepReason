@@ -1,5 +1,5 @@
 <!-- DR-SUB-adjudication -->
-Verified-at: 08dcdf3c
+Verified-at: 748c9ab61
 Verify: python -m pytest tests/test_adjudication.py -q
 Owns: src/deepreason/adjudication/
 Seams: DR-SEAM-adjudication-x-rules, DR-SEAM-adjudication-x-authority

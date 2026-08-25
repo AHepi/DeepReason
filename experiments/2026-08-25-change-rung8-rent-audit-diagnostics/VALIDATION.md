@@ -193,7 +193,31 @@ deliberately-open items, with §13's residue quoted verbatim. **PASS**
 
 ## 2. Full gate
 
-<<GATE>>
+```
+$ python -m pytest tests/ -q -n 4
+4162 passed, 6 skipped in 1255.00s (0:20:55)
+EXIT=0
+```
+**PASS. 0 failed.** Baseline at `462d6091d` was `4080 passed, 6 skipped, 0
+failed` — **+82 tests**, all of them this tranche's.
+
+The FIRST boundary run returned `5 failed, 4156 passed`. Two were the
+known-flaky MCP thread tests, confirmed by a serial re-run
+(`tests/test_mcp_run.py -q -p no:xdist` -> `7 passed in 11.21s`); on the run
+above they passed under `-n 4` as well. **Three were real defects and were
+fixed** — CHECKLIST steps 31–33, each recorded there with the failure output
+that found it:
+
+1. a counterfactual's local named `revoked` tripped the AST scan asserting
+   revocation has no rule of its own;
+2. the emitted inputs carried the absolute sequence number `n`, which made one
+   epistemic state emit different bytes in two runs the v6 shadow comparison
+   considers equivalent (24 events against 19);
+3. a map check pinning exactly two importers of `deepreason.adjudication`
+   correctly caught `calculus/audit.py` as a third.
+
+None of the three could have been caught by a ring: each is a claim about the
+whole tree, which is what a boundary gate is for.
 
 ## 3. Record-behaviour preservation
 
@@ -235,11 +259,84 @@ frozen_adjacent: 0
 Touched: nothing. No `pyproject.toml`, no CLI entry point, no MCP tool, no
 wheel layout change. `wheel_smoke.py` was run ANYWAY and passed (§S11), because
 "unchanged" is a claim about a measured surface.
-`wheel_operational_smoke.py`: <<OPSMOKE>>
+`wheel_operational_smoke.py`: **PASSED**, run alone (it builds a disposable venv and installs the
+wheel, so it needs an uncontended slot):
+```
+wheel operational smoke passed: installed setup, explicit qualification
+(80 qualification calls; 410 total calls), readiness, question-only reasoning,
+replay-verified terminal retrieval, cache reuse, opaque MCP restart, budget
+ceiling, and pre-V6 fail-closed admission
+```
 
 ## 6. Map
 
-<<MAP>>
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 64 documents, 1069 checks, 4 workers
+  FAIL CON-run-identity.md:200   (git history: shallow clone)
+  FAIL CON-run-identity.md:202   fatal: ambiguous argument '1637e808'
+  FAIL CON-run-identity.md:204   fatal: ambiguous argument 'f304fec1'
+docs_verify: 3 failed
+```
+**PASS.** Exactly step 0's baseline — the same three pre-existing
+shallow-clone git-history checks, none in a document this tranche touches.
+Check count moved **1 047 -> 1 069: 22 new checks.**
+
+```
+$ python tools/docs_verify.py --audit
+docs_verify --audit: 0 finding(s)                                    PASS
+$ python tools/docs_verify.py --links
+docs_verify --links: 0 dangling reference(s), 64 document(s)          PASS
+$ python tools/docs_verify.py --coverage
+docs_verify --coverage: 7 seam(s) swept, 17 without a Sweep: header, 2 finding(s)
+```
+`--coverage`: **PASS, pre-existing.** Byte-identical at the tranche base, run
+in a scratch worktree at `462d6091d`: same 2 findings
+(`amendment/apply.py`, `informal/trial.py`), same 17 seams without a `Sweep:`
+header. Neither finding is in a file or document this tranche touches.
+
+`--stale`: 20 documents listed. Disposition of every one:
+
+| document | disposition |
+|---|---|
+| the ELEVEN this tranche edited — `DR-INDEX`, `DR-SUB-calculus`, `DR-SUB-scheduler`, `DR-SUB-periphery`, `DR-SUB-adjudication`, `DR-CON-standing-and-background`, `DR-CON-packs-and-token-economy`, `DR-SEAM-evaluation-x-rules`, `DR-INV-frozen-surfaces`, `DR-INV-signal-contract`, `DR-INV-axiom-basis` | **UPDATED**, and their `Verified-at:` stamps advanced to `748c9ab61` — the full run above re-ran every check in every one of them |
+| `DR-SUB-manifest`, `DR-SEAM-manifest-x-schools` | **dismissed.** Stale because `run_manifest.py` moved — ten `data.pop` lines in `_versioned_source_config_data`. Every claim either document makes is unchanged and its checks pass; the new fact (the ten-knob grant, with the digest compared at base and HEAD) is written where it belongs, in `DR-INV-frozen-surfaces` |
+| `DR-SEAM-scheduler-x-rules` | **dismissed.** Stale because `scheduler.py` moved — one call added inside `_record_detection_signals`. The seam is about problem selection and criticism dispatch; the emission site is documented in `DR-SUB-scheduler`, which was updated |
+| `DR-SUB-evaluation` | **dismissed.** Stale because `promotion.py` moved. Its programs-registry claims are unchanged and pass; the sixth criterion is documented in `DR-SUB-calculus`, which owns it and was updated |
+| `DR-SEAM-llm-x-rules`, `DR-SEAM-llm-x-scheduler`, `DR-SUB-application` | **dismissed, and not this tranche's.** Each was already stale at `462d6091d` for a Rung 6 / epoch-3 commit; this tranche touched none of their owned files |
+
+new checks added by this change: **22** — across `DR-INV-signal-contract`
+(V-6's three-population table and the Theorem 14.1 structural guard),
+`DR-SUB-periphery` (module shape, wall-clock AST scan, the two anti-vacuity
+guards), `DR-INV-axiom-basis` (A9's differential, A10's rounding policy, A2's
+certificate-carried bound), `DR-SUB-calculus` (rent, the articulation
+delegation, the scope bound), `DR-CON-standing-and-background` (the audit and
+its no-`invariants.py` guarantee), `DR-CON-packs-and-token-economy` (the one
+widenable pack section), `DR-SUB-scheduler` (the emission site),
+`DR-SUB-adjudication` (the third importer), `DR-INV-frozen-surfaces` (the
+ten-knob grant and its digest comparison).
+
+record observables added vs sweep probes: eight measure signals, one policy
+artifact body, two `ReachCertificateV1` fields, one `FrozenSubjectV1` field.
+**No sweep probe is owed** — the root sweep is RETIRED as an instrument
+(operator ruling 2026-08-22, CLAUDE.md), and its replacement obligation is
+targeted, mutation-proven regression tests committed in the same tranche,
+which S1, S3, S4 and S5 each carry. Every new reader is absence-tolerant and
+each has a named test saying so.
+
+wheel smoke:
+```
+$ python scripts/wheel_smoke.py
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+points, module parity, MCP registration, and exact MCP schemas
+$ python -u scripts/wheel_operational_smoke.py
+wheel operational smoke passed: installed setup, explicit qualification
+(80 qualification calls; 410 total calls), readiness, question-only reasoning,
+replay-verified terminal retrieval, cache reuse, opaque MCP restart, budget
+ceiling, and pre-V6 fail-closed admission
+```
+Neither was OWED — the packaging surface is untouched — and both were run
+anyway, because "unchanged" is a claim about a measured surface.
 
 ## 7. Requirement sweep
 
@@ -288,4 +385,53 @@ wheel layout change. `wheel_smoke.py` was run ANYWAY and passed (§S11), because
 - **A5** `critic_budgets` is disclosed as owned-elsewhere rather than steered.
 - **A6** assumption ids ARE commitment ids on this tree.
 
-## Verdict: <<VERDICT>>
+## 10. Size — the ceiling, EXCEEDED and not re-baselined
+
+```
+$ python tools/diff_budget.py 462d6091d --ceiling 1100 --paths src
+{"areas": {"src": 1429}, "total_insertions": 1429, "ceiling": 1100,
+ "verdict": "EXCEEDED"}
+```
+
+**1 429 `src/` insertions against a ledgered ceiling of 1 100.** The ceiling is
+NOT re-baselined. Recorded as a STOP with three priced options at CHECKLIST
+step 20 and disclosed to the operator at 680/1 100, before the audit was
+written.
+
+| file | actual | SPEC.md §11 estimate |
+|---|---|---|
+| `capture/diagnostics.py` | 563 | 350 |
+| `calculus/audit.py` | 285 | 170 |
+| `capture/hysteresis.py` | 189 | 115 |
+| `signals.py` | 133 | 80 |
+| `calculus/promotion.py` | 72 | 90 (with S2's share) |
+| `config.py` | 56 | 45 |
+| `calculus/render.py` | 32 | 40 |
+| `calculus/scope.py` | 25 | 55 (with claims + nomination) |
+| `run_manifest.py` | 21 | 20 |
+| `calculus/nomination.py` | 16 | — |
+| `calculus/claims.py` | 10 | — |
+| `scheduler/scheduler.py` | 8 | 100 |
+| `capture/__init__.py` | 8 | 12 (with calculus) |
+| `calculus/__init__.py` | 6 | — |
+| `programs.py` | 5 | — |
+
+Tests and documentation (2 126 insertions) are budgeted separately, per the
+convention Rung 7's DELIVERY records.
+
+Four items came in UNDER, one of them by an order of magnitude: the emission
+logic went into `capture/diagnostics.py`, where it belongs, rather than into
+the scheduler (8 against 100). The whole overrun sits in the three new modules
+and the registry. The cause is the one Rung 6 and Rung 7 both recorded and
+Rung 8 tried to correct for: insertions are docstrings and constraint comments,
+not executable lines, and Rung 7's measured 1.90 ratio is not a constant — a
+module whose comments state constraints runs richer than one that narrates.
+**Third recorded occurrence; parked as P4, now past the `authoring-skills` E1
+tripwire of two.**
+
+## Verdict: **PASS**
+
+Every acceptance check green, the full gate 0 failed, `docs_verify` at
+baseline, both smokes green, the frozen-surface diff explained and authorized,
+and every R swept. The one ceiling breach is recorded, priced, and not
+re-baselined — a disclosed overrun, not a failed check.

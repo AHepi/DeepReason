@@ -1,5 +1,5 @@
 <!-- DR-INV-signal-contract -->
-Verified-at: 5e0d5bab
+Verified-at: 748c9ab61
 Verify: python -m pytest tests/test_signal_contract.py tests/test_allocation_signal_consumption.py -q
 Owns: src/deepreason/signals.py, src/deepreason/allocation.py
 Seams: 

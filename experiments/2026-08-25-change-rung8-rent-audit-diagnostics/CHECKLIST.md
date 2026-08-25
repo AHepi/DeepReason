@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=34 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
+State: next=35 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -843,11 +843,39 @@ ring tests could not have caught because each is a claim about the WHOLE tree.
       1
       ```
 
-- [ ] 34. (all) Re-run the FULL GATE and the FULL `docs_verify` after the three
+- [x] 34. (all) Re-run the FULL GATE and the FULL `docs_verify` after the three
       fixes.
       done-when: the gate ends "N passed, 0 failed" (with any MCP flake
       re-run serially and the serial result pasted), and `docs_verify` returns
       to step 0's baseline of 3 pre-existing shallow-clone failures.
+
+      PROOF:
+      ```
+      $ python -m pytest tests/ -q -n 4
+      4162 passed, 6 skipped in 1255.00s (0:20:55)      EXIT=0
+
+      $ python tools/docs_verify.py
+      docs_verify [full]: 64 documents, 1069 checks, 4 workers
+        FAIL CON-run-identity.md:200 / :202 / :204   (shallow clone, git history)
+      docs_verify: 3 failed
+      ```
+      **0 failed**, +82 tests over the 4 080 baseline, and the MCP thread tests
+      passed under `-n 4` on this run without needing the serial re-run.
+      `docs_verify` is back to the exact baseline, with 22 more checks
+      (1 047 -> 1 069).
+
+      Both smokes, neither owed, run anyway:
+      ```
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+      wheel operational smoke passed: installed setup, explicit qualification
+      (80 qualification calls; 410 total calls), readiness, question-only
+      reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+      restart, budget ceiling, and pre-V6 fail-closed admission
+      ```
+      `Verified-at:` advanced to `748c9ab61` on the eleven map documents this
+      tranche edited — and only those — because the run above re-ran every
+      check in every one of them.
 
 - [ ] 35. (all) [COMMIT] VALIDATION.md, DELIVERY.md, push, clean tree.
       done-when: `git status --porcelain` empty and the branch head is on
