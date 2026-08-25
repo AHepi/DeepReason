@@ -1,0 +1,135 @@
+# P-R1 (the explanation run): CROSS-FAMILY source configuration.
+#
+# Seat assignments are the operator's, verbatim (REQUEST.md A3/R17):
+# "Deepseek V4 Pro 0813 for conjecturer, Kimi K3 for critic, Qwen 3.5 for
+# judge one and GLM 5.2 for judge 3." R17 supersedes R10c's solo posture.
+#
+# Every model id below was resolved against the LIVE Ollama Cloud catalogue
+# (https://ollama.com/v1/models, which answers unauthenticated) rather than
+# guessed from the operator's prose. All four are present in the 19-model
+# list. This matters because compile no longer refuses an unreachable model
+# (operator law 2026-08-12, "All configurations should be allowed") -- a
+# wrong id would not surface until mid-run.
+#
+# Every V3 canonical role is populated explicitly: Config.roles defaults to
+# {} and any role omitted here gets zero routes. The operator named four
+# seats; the remaining eight stay on glm-5.2, the profile R10c originally
+# named and the one this repository has the most live evidence for.
+#
+# Explicit endpoint_id per role: all four models share one base URL, and the
+# auto-derived endpoint_id hashes the base URL alone -- leaving it implicit
+# would give every role the SAME endpoint_id despite carrying different
+# models, and the judge ensemble's seat/endpoint pairing is verified by
+# identity (adapter.require_cross_family_judges).
+#
+# max_tokens 32768, not 16384: glm-5.2 and deepseek-v4-pro are reasoning
+# models and a hard question can burn the whole completion cap on hidden
+# reasoning and emit nothing (typed seat failure). The ledgered response to
+# that is a bigger cap, not a diagnosis (reach-rich run-config.yaml).
+
+roles:
+  # Default profile (glm-5.2): every role the operator did not name.
+  defender: &default_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    reasoning: "none"
+    timeout_s: 180
+    output_mode: json_object
+  variator: *default_glm
+  summarizer: *default_glm
+  synthesizer: *default_glm
+  vision_critic: *default_glm
+  property_designer: *default_glm
+  thesis: *default_glm
+  grounding_reviewer: *default_glm
+
+  # Conjecture seat: "Deepseek V4 Pro 0813" (A3).
+  conjecturer:
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-deepseek-v4-pro-0813
+    provider: ollama
+    model: deepseek-v4-pro:0813
+    model_revision: deepseek-v4-pro:0813
+    family: deepseek
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    reasoning: "none"
+    timeout_s: 180
+    output_mode: json_object
+
+  # Criticism seat: "Kimi K3" (A3).
+  argumentative_critic:
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-kimi-k3
+    provider: ollama
+    model: kimi-k3
+    model_revision: kimi-k3
+    family: kimi
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    reasoning: "none"
+    timeout_s: 180
+    output_mode: json_object
+
+  # Judge seats: "Qwen 3.5 for judge one and GLM 5.2 for judge 3" (A3).
+  # TWO seats, two genuinely distinct families. That is what
+  # require_cross_family_judge_ensemble demands (firewall.py:389-392: at
+  # least two seats AND at least two families) and it is the regime the
+  # committed judge-audit evidence measured at 0-2.5% false conviction of
+  # sound work, against 47-60% for same-family pairing.
+  judge:
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-qwen3.5-397b
+      provider: ollama
+      model: qwen3.5:397b
+      model_revision: qwen3.5:397b
+      family: qwen
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 32768
+      reasoning: "none"
+      timeout_s: 180
+      output_mode: json_object
+    - endpoint: https://ollama.com/v1
+      endpoint_id: ollama-glm-5.2
+      provider: ollama
+      model: glm-5.2
+      model_revision: glm-5.2
+      family: glm
+      api_key_env: OLLAMA_API_KEY
+      context_window_tokens: 131072
+      max_tokens: 32768
+      reasoning: "none"
+      timeout_s: 180
+      output_mode: json_object
+
+# "Everything on" (R10c, which A3 did not supersede), stated explicitly
+# rather than inherited, because several of these fields ship the other way.
+JUDGE_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+SCHOOL_SEATS_ENABLED: true
+
+# ARGUMENTATIVE_AUTHORITY stays at its shipped default. Declaring it
+# "trial_required" trips CALIBRATION_RECEIPT_REQUIRED for ANY text workload
+# (authority.py::_preflight_text_authority) whose verifier is a permanent
+# stub that can never pass. Real status-changing authority for this run
+# comes through the engaged criticism engine below, which that wall never
+# inspects -- the same route the grounded-extension-expansion tranche took.
+ARGUMENTATIVE_AUTHORITY: observe_only
+ENGAGED_CRITICISM_AUTHORITY: defended_trial
+LEGACY_CRITICISM_ENABLED: false
+
+# Research backend ON. The Config field's shipped default is "agent", but
+# "everything on" must be written down rather than inherited: the reach-rich
+# and epoch-3 configs both set it to null, so silence here would read as a
+# copy of them rather than as a decision.
+RESEARCH_BACKEND: agent

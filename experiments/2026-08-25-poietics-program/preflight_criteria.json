@@ -1,0 +1,316 @@
+{
+  "cases": [
+    {
+      "label": "off-subject control",
+      "pass_count": 0,
+      "passing": [],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "on-subject control",
+      "pass_count": 3,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1",
+        "poietics-confound@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "pass"
+        }
+      ]
+    }
+  ],
+  "control_1_holds": true,
+  "control_1_negative_holds": true,
+  "control_1_positive_holds": true,
+  "criteria": [
+    "poietics-constraint-condition@v1",
+    "poietics-installation-mechanism@v1",
+    "poietics-confound@v1"
+  ],
+  "dossier_files_passing_all_three": [
+    "record/data/extracted_episodes.json",
+    "record/report/00_EXECUTIVE_SUMMARY.md",
+    "record/report/15_INSIGHTS.md"
+  ],
+  "dossier_leakage": [
+    {
+      "label": "record/README.md",
+      "pass_count": 1,
+      "passing": [
+        "poietics-installation-mechanism@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/commits.json",
+      "pass_count": 2,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/engine.json",
+      "pass_count": 0,
+      "passing": [],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/extracted_episodes.json",
+      "pass_count": 3,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1",
+        "poietics-confound@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "pass"
+        }
+      ]
+    },
+    {
+      "label": "record/data/metrics.json",
+      "pass_count": 0,
+      "passing": [],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/mutations.json",
+      "pass_count": 2,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/review_ledger.json",
+      "pass_count": 0,
+      "passing": [],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/data/tests.json",
+      "pass_count": 2,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/report/00_EXECUTIVE_SUMMARY.md",
+      "pass_count": 3,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1",
+        "poietics-confound@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "pass"
+        }
+      ]
+    },
+    {
+      "label": "record/report/12_MUTATION_TESTING.md",
+      "pass_count": 2,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/report/14_CORRECTIONS_AND_WITHDRAWN_CLAIMS.md",
+      "pass_count": 0,
+      "passing": [],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "fail"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "fail"
+        }
+      ]
+    },
+    {
+      "label": "record/report/15_INSIGHTS.md",
+      "pass_count": 3,
+      "passing": [
+        "poietics-constraint-condition@v1",
+        "poietics-installation-mechanism@v1",
+        "poietics-confound@v1"
+      ],
+      "rows": [
+        {
+          "id": "poietics-constraint-condition@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-installation-mechanism@v1",
+          "verdict": "pass"
+        },
+        {
+          "id": "poietics-confound@v1",
+          "verdict": "pass"
+        }
+      ]
+    }
+  ],
+  "dossier_max_pass_count": 3
+}
