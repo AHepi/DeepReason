@@ -1,0 +1,82 @@
+survivors (82):
+  018f5a065f1a  inline:The mutation-testing evidence in SRC_005 integrates the mutation corpus i
+  0b2a241b0c6b  inline:The isolated artifact 0094852dcac7 integrates SRC_003's metrics.json as i
+  1062191dcee6  inline:The extracted_episodes.json (SRC_005) depends on review_ledger.json (SRC_
+  108367f148ca  inline:The mutation-testing episode in SRC_005 depends on the test suite in SRC_
+  123a45da1f9b  inline:The connected artifact 0094852dcac7 depends on SRC_003's metrics schema: 
+  1c5fff54ea3a  inline:The mutation-testing analysis in SRC_005 abstracts the review ledger in S
+  242b26217498  inline:SRC_005 is compatible with SRC_004: both explain the 3-of-26 result as an
+  26b977215e9e  inline:The extracted_episodes.json (SRC_005) contradicts metrics.json (SRC_003):
+  2c6ae1762c8a  inline:The isolated artifact 0094852dcac7 abstracts SRC_005 and SRC_002 jointly:
+  312843533dea  inline:SRC_004 abstracts SRC_002: the sufficiency-condition framing in SRC_004 i
+  344a9d81050e  inline:The connected artifact 0094852dcac7 integrates SRC_004's mutation ledger:
+  37c89cb1f791  inline:SRC_001's registry-size account reduces to SRC_004's order-effect explana
+  436ade63e61d  inline:SRC_005 shares mechanism with SRC_002 in that both explain the 1-of-9 com
+  4d6b9262d2f2  inline:The extracted_episodes.json (SRC_005) abstracts the review_ledger.json (S
+  55f4310fe773  inline:The 007dca563e8d result integrates the foundation artifacts' confound exp
+  5bec6f078181  inline:The isolated artifact 0094852dcac7 contradicts SRC_001's tests.json: the 
+  6af74793d0d8  inline:SRC_005 contradicts SRC_004: SRC_005 claims the registry is the point of 
+  6bc686d95338  inline:SRC_002 contradicts SRC_001's implicit commitment to a positive mechanism
+  6e4c11b22474  inline:The connected artifact 0094852dcac7 abstracts the failure-mode catalogue 
+  717a1f27949e  inline:The connected artifact 0094852dcac7 is compatible with the acceptance-rec
+  72385962a2b9  inline:The mutation-testing run in SRC_005 shares mechanism with the test defini
+  78aec5e2ad0d  inline:The isolated artifact 0094852dcac7 depends on SRC_005's extracted_episode
+  7dd321b380a7  inline:SRC_005 integrates SRC_002: the registry-collapse mechanism in SRC_005 su
+  aa69ba5ad78a  inline:The 3-of-26 result contradicts the claim that shown-to-fail-first install
+  af789d9897d5  inline:SRC_003 shares mechanism with SRC_001: both treat the shown-to-fail-first
+  b06d919108a6  inline:The registry-confounding account in SRC_005 abstracts SRC_003's one-repos
+  b452da1f293b  inline:The mutation-testing record in SRC_005 contradicts the metrics record in 
+  b4bb7fc1ec29  inline:SRC_001 reduces to SRC_003: the planted-failure-before-first-run mechanis
+  bd999a8a72f8  inline:The isolated artifact 0094852dcac7 shares mechanism with SRC_004's mutati
+  c2c25a567c7a  inline:The 3-of-26 mutation survival result reduces to an artifact of registry-s
+  c3731a9a15b1  inline:The confound explanation inherits from a more general sampling-artifact m
+  d372094c5396  inline:The registry-confounding mechanism depends on the ad-hoc installation of 
+  dd3f3d72b680  inline:The extracted_episodes.json (SRC_005) integrates mutations.json (SRC_004)
+  deb81b87bd29  inline:SRC_004 depends on SRC_001: the modal sufficiency claim in SRC_004 requir
+  df6fe3f5809b  inline:The extracted_episodes.json (SRC_005) inherits its event-ordering schema 
+  e3338637ec73  inline:The connected artifact 0094852dcac7 contradicts SRC_002's review-ledger a
+  e6205c48cf6d  inline:The mutation-testing record in SRC_005 is compatible with the review ledg
+  e7fcac5cae01  inline:SRC_004 integrates SRC_003's arbitrariness claim by adding temporal order
+  e9563a74b4ce  inline:The isolated artifact 0094852dcac7 reduces to SRC_002's review_ledger.jso
+  f9471d2fef9e  inline:The 3-of-26 result reduces to an under-powered measurement artifact, refu
+
+# Theory: 018f5a065f1a
+
+## 018f5a065f1a [unrefuted]
+
+The mutation-testing evidence in SRC_005 integrates the mutation corpus in SRC_004: the mutations documented in SRC_004 are the specific inputs whose catch-status SRC_005 reports. Refuted if SRC_005's mutation outcomes could be fully explained without reference to any mutation entries from SRC_004.
+
+- attack surface: hv-floor@2a45b7988522, lineage-ref@863a92c071d1, relation-form@578e42df713e
+- refs: 0094852dcac7 (dependence), 1389e666072e (dependence), 14b0d18c5bec (dependence), 2d4b374ff786 (dependence), 7d7b6932369e (dependence)
+- status changed at seq: 644
+
+## 0094852dcac7 [unrefuted]
+
+{"dossier_digest":"5e04e375de86528f5ee343c88f566f54ee4f94e90e0e6e6a18519109f3acb327","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"dfbcecdbedd2427081aac50304e2c2c3175116e63debdc7b482c8ba82680e235","schema":"attached-source-record.v1","source":{"byte_count":563080,"content_ref":
+
+- status changed at seq: 35
+
+## 1389e666072e [unrefuted]
+
+{"dossier_digest":"5e04e375de86528f5ee343c88f566f54ee4f94e90e0e6e6a18519109f3acb327","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"dfbcecdbedd2427081aac50304e2c2c3175116e63debdc7b482c8ba82680e235","schema":"attached-source-record.v1","source":{"byte_count":51602,"content_ref":"
+
+- status changed at seq: 5
+
+## 14b0d18c5bec [unrefuted]
+
+{"dossier_digest":"5e04e375de86528f5ee343c88f566f54ee4f94e90e0e6e6a18519109f3acb327","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"dfbcecdbedd2427081aac50304e2c2c3175116e63debdc7b482c8ba82680e235","schema":"attached-source-record.v1","source":{"byte_count":78059,"content_ref":"
+
+- status changed at seq: 26
+
+## 2d4b374ff786 [unrefuted]
+
+{"dossier_digest":"5e04e375de86528f5ee343c88f566f54ee4f94e90e0e6e6a18519109f3acb327","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"dfbcecdbedd2427081aac50304e2c2c3175116e63debdc7b482c8ba82680e235","schema":"attached-source-record.v1","source":{"byte_count":63815,"content_ref":"
+
+- status changed at seq: 8
+
+## 7d7b6932369e [unrefuted]
+
+{"dossier_digest":"5e04e375de86528f5ee343c88f566f54ee4f94e90e0e6e6a18519109f3acb327","epistemic_notice":"This record preserves claimed provenance and content identity only; it does not establish source reliability or factual truth.","run_input_digest":"dfbcecdbedd2427081aac50304e2c2c3175116e63debdc7b482c8ba82680e235","schema":"attached-source-record.v1","source":{"byte_count":183,"content_ref":"82
+
+- status changed at seq: 23
+

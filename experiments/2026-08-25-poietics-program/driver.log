@@ -57,3 +57,6 @@ every seat's model is listed
 [2026-08-25T09:51:45Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-25T09:55:22Z] QUALIFY OK rc=0
 [2026-08-25T09:55:22Z] === REASON: run --budget cycles=12 --token-budget 3000000 ===
+[2026-08-25T10:42:22Z] REASON rc=0
+[2026-08-25T10:42:22Z] REASON stop_reason=budget_exhausted
+[2026-08-25T10:42:22Z] === AUDIT: verify_root + findings + results + the milestone census ===
