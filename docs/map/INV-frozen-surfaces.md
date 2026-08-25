@@ -202,6 +202,29 @@ the surface MORE stable rather than less. Ledgered at
 
 `check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && test "$(grep -c 'data.pop(\"SPLIT_BUDGET_' src/deepreason/run_manifest.py)" -eq 2`
 
+**Rung 8 took the same grant, for ten knobs, and PROVED the preservation
+directly.** `SCOPE_MAX_DEPTH`, `SCOPE_MAX_NODES`, `FRAME_SLICE_ATTACKERS`,
+`FRAME_SLICE_DEPARTURES` and the six `CAPTURE14_*` values are `Config` fields
+consulted at sites inside a run and never written to the manifest; each has an
+unconditional `data.pop` line. The check is not "the test suite is green" but
+the digest itself, compared at the tranche base and at HEAD **for every schema
+version**:
+
+```
+schema  462d6091d                                                          HEAD
+1       6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   identical
+2       6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81   identical
+3-6     2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   identical
+```
+
+Ten knobs, zero digest motion. Their effect IS recorded, and more precisely
+than a `Config` echo would record it: the two scope bounds travel inside each
+reach certificate, and the eight capture values inside the diagnostics payload
+and the `capture14-hysteresis.v1` policy artifact.
+
+`check: test "$(grep -c 'data.pop("CAPTURE14_' src/deepreason/run_manifest.py)" -eq 6 && test "$(grep -c 'data.pop("SCOPE_MAX_\|data.pop("FRAME_SLICE_' src/deepreason/run_manifest.py)" -eq 4`
+`check: python -c "from deepreason.config import Config; from deepreason.run_manifest import source_config_hash; h=[source_config_hash(Config(), schema_version=v) for v in (1,2,3,4,5,6)]; assert h[0]==h[1] and h[2]==h[3]==h[4]==h[5]" && python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the

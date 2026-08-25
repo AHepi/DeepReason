@@ -43,8 +43,8 @@ check is worse than an admitted gap, because it reports success.
 | **A6** | consulted frame assertions satisfy frame-separation | **Rung 3b** | Rungs 4, 7 |
 | **A7** | problems immutably record their pose-time frame assertions | **Rung 4** | Rungs 6, 7 |
 | **A8** | reach can spawn promotion problems but cannot directly alter labels | **Rung 5** | Rung 8 |
-| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render) — **LANDED 2026-08-24**; **Rung 8** (diagnostics) — not yet | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
-| **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism | every rung; **Rung D** logs the rent sample as a canonical artifact rather than a blob |
+| **A9** | render, measures, diagnostics and knowledge views act only through attention | **Rung 6** (render) — **LANDED 2026-08-24**; **Rung 8** (diagnostics) — **LANDED 2026-08-25**, Theorem 14.1 exhibited and mutation-proven twice | Rungs 2, 5, **D** (a receipt is a readout and moves no label) |
+| **A10** | all set ordering, numerical evaluation, sampling and serialization are canonical | already true — re-proved by every rung's replay determinism; **Rung 8** states it as an explicit POLICY (rounding rule + declared precision), not a by-product | every rung; **Rung D** logs the rent sample as a canonical artifact rather than a blob |
 | **Ax 4.1** | **Genesis Inertness** — appraisal predicates are invariant under permutation of provenance; origin confers neither warrant nor stigma | stated here; **no rung may violate it** | every rung; **Rung D** — neither `receipt()` nor a manifest reads provenance |
 
 ## A1 — append-only log, state a pure fold
@@ -351,6 +351,22 @@ attack edges and support edges over the shared artifacts — and the claim was
 MUTATION-PROVEN, not asserted (the tranche's VALIDATION.md pastes the RED).
 
 `check: python -m pytest tests/test_frame_render.py::test_rendering_the_frame_slice_moves_no_label -q`
+
+**PROVED at Rung 8, for the diagnostics half.** Theorem 14.1: two states with
+identical artifacts, attacks and dependencies but different diagnostic values or
+attention modes have identical labels. Exhibited by a DIFFERENTIAL over one
+scripted record — the same record run with the §14.7 controller in `normal` and
+in `diversify`, comparing every label, every `att` edge, every `dep` edge and
+every warrant, with the controller's own policy artifact excluded because a
+policy having a status is the design (P6), not a leak.
+
+Mutation-proven twice in a scratch copy: teaching `_adjudicate` to read the
+recorded mode turns the differential red, and minting a warrant when the mode is
+entered — the forbidden move dressed as "so the diversification has teeth" —
+turns both the differential and the structural check red.
+
+`check: python -m pytest tests/test_capture14_hysteresis.py -q -k "theorem_14_1 or constructs_no_edge"`
+
 
 ## A10 — canonical ordering, evaluation, sampling, serialization
 
