@@ -1,6 +1,8 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=35 blockers=DIFF_BUDGET EXCEEDED at step 19 (1124/1100) — recorded below with priced options; NOT re-baselined; continuing under R20
+State: COMPLETE — all 35 steps checked. VALIDATION verdict PASS. One disclosed
+       overrun (diff_budget 1429/1100, recorded at step 20 with priced options,
+       ceiling NOT re-baselined).
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -877,6 +879,8 @@ ring tests could not have caught because each is a claim about the WHOLE tree.
       tranche edited — and only those — because the run above re-ran every
       check in every one of them.
 
-- [ ] 35. (all) [COMMIT] VALIDATION.md, DELIVERY.md, push, clean tree.
+- [x] 35. (all) [COMMIT] VALIDATION.md, DELIVERY.md, push, clean tree.
       done-when: `git status --porcelain` empty and the branch head is on
       `origin`.
+
+      PROOF: below.
