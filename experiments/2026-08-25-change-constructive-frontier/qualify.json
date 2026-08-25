@@ -462,8 +462,8 @@
           "alias_failures": 0,
           "case_id": "case-006",
           "eventual_valid": true,
-          "first_pass_valid": false,
-          "repair_count": 1,
+          "first_pass_valid": true,
+          "repair_count": 0,
           "scope_violations": 0,
           "semantic_admission": true
         },
@@ -595,7 +595,7 @@
         }
       ],
       "eventual_valid_count": 20,
-      "first_pass_valid_count": 19,
+      "first_pass_valid_count": 20,
       "pair": {
         "contract_id": "conjecturer.turn.v6",
         "endpoint_id": "ollama-glm-5.2",
@@ -610,7 +610,7 @@
         "seat": 0
       },
       "qualified": true,
-      "repair_count": 1,
+      "repair_count": 0,
       "scope_violations": 0,
       "semantic_admission_count": 20
     },
@@ -638,21 +638,21 @@
         {
           "alias_failures": 0,
           "case_id": "case-003",
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
+        },
+        {
+          "alias_failures": 0,
+          "case_id": "case-004",
           "eventual_valid": false,
           "failure_code": "REPAIR_SCOPE_VIOLATION",
           "first_pass_valid": false,
           "repair_count": 2,
           "scope_violations": 2,
           "semantic_admission": false
-        },
-        {
-          "alias_failures": 0,
-          "case_id": "case-004",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
         },
         {
           "alias_failures": 0,
@@ -885,12 +885,11 @@
         {
           "alias_failures": 0,
           "case_id": "case-010",
-          "eventual_valid": false,
-          "failure_code": "REPAIR_SCOPE_VIOLATION",
-          "first_pass_valid": false,
-          "repair_count": 2,
-          "scope_violations": 2,
-          "semantic_admission": false
+          "eventual_valid": true,
+          "first_pass_valid": true,
+          "repair_count": 0,
+          "scope_violations": 0,
+          "semantic_admission": true
         },
         {
           "alias_failures": 0,
@@ -941,8 +940,8 @@
           "alias_failures": 0,
           "case_id": "case-016",
           "eventual_valid": true,
-          "first_pass_valid": false,
-          "repair_count": 1,
+          "first_pass_valid": true,
+          "repair_count": 0,
           "scope_violations": 0,
           "semantic_admission": true
         },
@@ -967,11 +966,12 @@
         {
           "alias_failures": 0,
           "case_id": "case-019",
-          "eventual_valid": true,
-          "first_pass_valid": true,
-          "repair_count": 0,
-          "scope_violations": 0,
-          "semantic_admission": true
+          "eventual_valid": false,
+          "failure_code": "VALIDATION_ERROR",
+          "first_pass_valid": false,
+          "repair_count": 2,
+          "scope_violations": 1,
+          "semantic_admission": false
         },
         {
           "alias_failures": 0,
@@ -1132,9 +1132,9 @@
         "selected_class": "inactive_no_authorized_contract"
       }
     ],
-    "id": "sha256:38789f8e3c46a848bceaa659ab40b5377189cb50b2714473173b76003d08e066",
+    "id": "sha256:3a23a7fbc1ee2a57155ffabeb34b9328bcb2836e08e35ce45d6eadb43b081b3b",
     "manifest_digest": "6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4",
-    "qualification_evidence_sha256": "9ab488015001dedb0a69c7753ae2d9acca6b58441e05bd3fd4dc590f4e3bb606",
+    "qualification_evidence_sha256": "adb2586ed54c22ab1561b6e3d764f3160bed64d0f02d36f0af134f1f4031b1f2",
     "schema": "workflow.route-seat-model-classification-plan.v1"
   },
   "run_manifest_schema_version": 6,
@@ -1144,12 +1144,12 @@
     "alias_failures": 0,
     "case_count": 80,
     "eventual_valid_count": 79,
-    "first_pass_valid_count": 78,
+    "first_pass_valid_count": 79,
     "pair_count": 4,
     "qualified": false,
     "qualified_pair_count": 3,
     "re_exercised_pair_count": 1,
-    "repair_count": 3,
+    "repair_count": 2,
     "scope_violations": 2,
     "semantic_admission_count": 79
   }

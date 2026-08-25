@@ -313,3 +313,57 @@ the driver log proves it by what it does NOT contain. (The model preflight
 does reach the network, but only `https://ollama.com/v1/models`, which
 answers unauthenticated and lists model ids; it dispatches no completion
 and consumes no tokens.)
+
+### Step 9 — ARM H launch (R20, R28) — IN PROGRESS
+
+**Launched 19:07:25Z**, run id
+`6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4`,
+detached, snapshot loop armed on the driver pid.
+
+Getting there took four qualification batteries and one mistake of my own.
+Both are recorded here because a green obtained on the fourth try is not the
+same fact as a green obtained on the first, and RESULTS.md must say which
+one this is.
+
+**The recurring failure — a real finding, PARKED not fixed.**
+
+| Battery | Result | Detail |
+|---|---|---|
+| 1 (18:48–18:52, via `pc1_run.sh`) | **FAIL** | `critic.atomic-target.v1`, 19/20 eventual valid, 2 scope violations, `REPAIR_SCOPE_VIOLATION` |
+| 2 (18:55) | **VOID — my error, not the model's** | see below |
+| 3 (18:56–18:59) | **PASS** | 80/80, 0 scope violations |
+| 4 (19:00–19:03, via `pc1_run.sh`) | **FAIL** | `critic.atomic-target.v1` again, 19/20, 2 scope violations |
+| 5 (19:04–19:07, via `qualify_retry.sh`) | **PASS** | 80/80, 0 scope violations — the run proceeds on this one |
+
+So the battery on this manifest passes roughly half the time, and every
+failure is the SAME contract: `critic.atomic-target.v1` on
+`argumentative_critic`/glm-5.2 returns one schema-invalid first pass in 20,
+and the repair path then edits outside its permitted scope. One such case
+disqualifies the entire battery. **This is exactly the seam the soak
+declared it could not cover offline** — D1-seat-contract came back `[PART]`
+with the reason "the deterministic stub always returns a schema-valid
+response, so attempt_index never advances past 0 offline". The soak said
+where it was blind and the live run failed precisely there.
+
+PARKED as **P1** — it is a defect in a surface this tranche is not scoped to
+change (R32), and one tranche, one goal.
+
+**My own error, recorded rather than quietly dropped.** Battery 2 reported
+`ENDPOINT_ERROR` on all 80 cases and I briefly read it as the provider
+revoking the key. It was not. I had written `source env` in a manual
+command; without a leading `./`, bash searches PATH first and sources
+`/usr/bin/env` — the coreutils BINARY — which sets nothing, so the doctor
+ran against an empty key and every call returned HTTP 401. The ladder itself
+was never affected (it sources an absolute path). The void report is
+retained as `qualify-attempt2-VOID-agent-error.json` and carries no evidence
+about the model.
+
+**The stale root was RETIRED, not edited.** Battery 1's root held a FAILED
+qualification report at the canonical path, and `deepreason run` refused
+with `DOCTOR_REPORT_PAIR_UNQUALIFIED at /pairs/3/qualified`. The root was
+uncommitted (`git ls-files` returned 0 files under it) and had run ZERO
+cycles (no `log.jsonl`, no `progress.jsonl`), so nothing was destroyed: the
+report was preserved as `qualify-attempt1-report.json` and the root
+rebuilt. `qualify_retry.sh` then re-qualified the rebuilt root in place —
+legitimate for the same reason, since the rule that protects roots protects
+COMMITTED ones.
