@@ -1,0 +1,37 @@
+== ADMISSION_SPEC.md 'v1 IMPLEMENTED (2026-07-28)' ==
+Status: v1 IMPLEMENTED (2026-07-28) — all three decided build items are
+live and tested:
+1. Core parser + dossier + CLI: deterministic text/markdown/CSV-TSV
+   parsing with exact byte spans, `EvidenceDossierV2` with admission
+   blocks and typed refusals, the managed admission store, `deepreason
+   admit` / `admit --inspect`, and `reason --dossier` run-identity
+   binding (`src/deepreason/admission/`, `tests/test_admission.py`).
+2. The §3a adapter contract with the first-party PDF adapter behind
+__init__.py
+__pycache__
+adapter_host.py
+adapters.py
+adapters_epub.py
+adapters_pdf.py
+attach.py
+parse.py
+store.py
+src/deepreason/controller.py
+src/deepreason/runtime/stop.py
+src/deepreason/mcp_server.py
+src/deepreason/webapp.py
+
+== MINI_PLAN.md 'BUILT AND LIVE-VERIFIED -- see mini/' ==
+mini/
+  src/deepreason/mini* ABSENT
+src/deepreason/log/event_log.py
+src/deepreason/intake_form.py
+src/deepreason/llm/repair.py
+src/deepreason/llm/budget.py
+  cited evidence file:
+    experiments/results/mini_smoke_report.json ABSENT
+
+== RESEARCH_BACKEND.md 'tranche 1 IMPLEMENTED' (the E20 precedent) ==
+src/deepreason/research/fetch.py
+tests/test_research_web.py
+src/deepreason/run_manifest.py:3383:        raise ValueError("V6_RESEARCH_UNAVAILABLE")

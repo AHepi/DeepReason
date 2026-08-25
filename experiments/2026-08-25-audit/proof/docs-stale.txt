@@ -1,0 +1,19 @@
+CON-criticism-source.md: 2 commit(s) to owned files since 69d3061e
+    ee94e8d61 Rung 6: the two rules supply the frame, and the seam that creates (step 9)
+    c1f96ae36 Rung 6: SPEC.md
+CON-run-identity.md: 1 commit(s) to owned files since ae869296
+    c1f96ae36 Rung 6: SPEC.md
+CON-scheduler-ranking.md: 1 commit(s) to owned files since f9fcd1136
+    3d530ab11 step 12-14: per-cycle emission and G-5's before/after conditioning (S6a, S6b, S7, R4, R5, R8)
+SEAM-calculus-x-rules.md: 1 commit(s) to owned files since f9fcd1136
+    3913830fc step 11: the frame slice's caps come from the recorded policy (S6c, R6, R11)
+SEAM-evaluation-x-ontology.md: 1 commit(s) to owned files since b41c5cf10
+    fe2384f04 step 15-18: rent as promotion criterion 6, mutation-proven three ways (S1, R1)
+SEAM-llm-x-rules.md: 1 commit(s) to owned files since b41c5cf10
+    3b8e5ae55 Rung 6: the withheld notice must not lead the pack
+SEAM-llm-x-scheduler.md: 1 commit(s) to owned files since 5e0d5bab
+    c1f96ae36 Rung 6: SPEC.md
+SEAM-scheduler-x-rules.md: 1 commit(s) to owned files since f9fcd1136
+    3d530ab11 step 12-14: per-cycle emission and G-5's before/after conditioning (S6a, S6b, S7, R4, R5, R8)
+docs_verify --stale: 8 document(s) worth re-reading
+EXIT=0
