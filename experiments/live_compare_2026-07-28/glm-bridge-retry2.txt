@@ -1,0 +1,8 @@
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+FAIL  bridge_status(terminal)  | state=failed detail={"error_code": "BRIDGE_STAGE_A_FAILED", "formal_seq": 330, "process_status": "failure", "run_id": "run-889fa5110b88329aa71409e4ea97dc5e", "schema": "deepreason-bridge-status-v1", "source_terminal_comm
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+FAIL  bridge_claims  | ValueError: BRIDGE_RESULT_HAS_NO_LEDGER
+=== 2/5 passed ===

@@ -1,0 +1,11 @@
+07:45:48 native one-shots
+[glm] glm-5.2 …
+[glm] done: 29.1s, 6797 content chars, finish=stop, error=none
+[kimi] kimi-k2.6 …
+[kimi] done: 35.7s, 6196 content chars, finish=stop, error=none
+[deepseek] deepseek-v4-pro …
+[deepseek] done: 40.1s, 5552 content chars, finish=stop, error=none
+07:47:33 glm ladder
+08:12:19 kimi ladder
+09:13:53 deepseek ladder
+09:26:08 compare-run done

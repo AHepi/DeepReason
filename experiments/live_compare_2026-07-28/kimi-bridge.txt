@@ -1,0 +1,8 @@
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+PASS  bridge_status(terminal)  | state=completed detail={"formal_seq": 306, "process_status": "success", "resolution": "underdetermined", "run_id": "run-4f7501795bd3f9e22004ff7c9a8aa19f", "schema": "deepreason-bridge-status-v1", "source_terminal_commitment
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+PASS  bridge_claims  | ok
+=== 4/5 passed ===

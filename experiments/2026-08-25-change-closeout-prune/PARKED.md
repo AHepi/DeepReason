@@ -94,3 +94,55 @@ READY-TO-SEND PROMPT:
     audit does not repeat this.
     End state: the audit says 71, says the first count used a label regex,
     and the counting rule is fixed where the next audit will read it.
+
+## P3 — Q-E1 is structurally blind to dynamically-discovered run roots
+
+WHAT: the prune removed 53 of 113 committed run roots. One of them was
+load-bearing and the census could not have known: no source file names its
+path, because the test that needs it *discovers* roots at runtime
+(`git ls-files experiments`) and selects by SIZE and PROPERTY.
+
+`experiments/live_compare_2026-07-28` was restored and rowed KEEP per R5.
+Only that one broke — measured, not assumed: the full gate found exactly
+1 failure in 4162, and `docs_verify` exactly 1 non-baseline failure. But
+the other 52 removed roots survived by luck, not by design. Any future
+test whose selector shifts could hit the same wall.
+
+The selector family in `tests/test_results_command.py` alone:
+`_tracked_roots`, `_smallest_root_with`, `_smallest_root_without`,
+`_smallest_root_publishing`, `_smallest_root_logging_no_embedder`. Each
+picks a root by property. None names a path.
+
+This is a defect in the CENSUS METHOD, not in the code. Q-E1 cannot be
+tightened to catch it — a path grep has no path to find. It needs a fifth
+question.
+
+READY-TO-SEND PROMPT:
+
+    Route: dr-change-orchestrator.
+    Goal (one): add a fifth census question to the experiments-audit
+    method so dynamically-discovered fixture roots can never again be
+    pruned invisibly.
+    Proposed Q-E5 (HOLDS A COMMITTED RUN ROOT?): a directory containing
+    any `log.jsonl` tracked by git is KEEP by default, because the test
+    suite reaches run roots by enumeration
+    (`git ls-files experiments | grep '/log.jsonl$'`) and selects among
+    them by size and property, never by path. Pruning such a directory
+    can silently change which root a selector returns. Overriding Q-E5
+    for a specific directory requires showing that no selector's result
+    moves when it is removed -- which in practice means running the full
+    gate, so the honest default is KEEP.
+    Evidence pointers:
+      experiments/2026-08-25-change-closeout-prune/proof/r5-remedy.txt
+        -- the worked failure, with both roots and their sizes.
+      tests/test_results_command.py lines 37-106 -- the selector family.
+    Scope note: 6 directories holding 52 run roots were pruned in this
+    tranche WITHOUT breaking anything. Q-E5 would have kept them. Decide
+    deliberately whether to restore them under the new rule or leave them
+    pruned with the measurement as the warrant -- that is an operator
+    call about how much fixture surface to keep, not a defect.
+    Where the rule lives: the close-out audit brief's Q-E1..Q-E4 list,
+    and .claude/skills/dr-audit-orchestrator (or the audit brief template)
+    so the next census inherits it.
+    End state: the census method names Q-E5, and the 2026-08-25 census
+    carries a note saying which of its PRUNE rows Q-E5 would have changed.

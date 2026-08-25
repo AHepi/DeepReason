@@ -39,10 +39,10 @@ that fires decides the verdict:
 
 | verdict | directories |
 |---|---|
-| KEEP | 82 |
+| KEEP | 83 (82 as rowed, +1 corrected 2026-08-25 — see row 143) |
 | EXTRACT-THEN-PRUNE | 18 |
-| PRUNE | 52 |
-| **leaving the tree (EXTRACT + PRUNE)** | **70** |
+| PRUNE | 51 (52 as rowed, −1 corrected 2026-08-25 — see row 143) |
+| **leaving the tree (EXTRACT + PRUNE)** | **69** (70 as rowed, −1 corrected) |
 
 **60 open park items** sit inside the 18
 EXTRACT-THEN-PRUNE directories. Those are the items that MUST be re-homed
@@ -195,7 +195,7 @@ remainder live in KEEP directories and stay where they are.)
 | 140 | `live_20b_schema_2026-07-31` | n — — | no PARKED.md | — | — | **PRUNE** | Q-E1/E2/E3 all negative |
 | 141 | `live_coin_canonicity_2026-07-31` | n — — | no PARKED.md | — | later:2026-08-06-change-qualification-per-seat-s4 | **PRUNE** | Q-E1/E2/E3 all negative |
 | 142 | `live_coin_thinkingoff_2026-07-31` | n — — | no PARKED.md | — | later:2026-07-31-change-critic-seats-and-thinking | **PRUNE** | Q-E1/E2/E3 all negative |
-| 143 | `live_compare_2026-07-28` | n — — | no PARKED.md | — | later:2026-08-01-fix-adjudication-blindness | **PRUNE** | Q-E1/E2/E3 all negative |
+| 143 | `live_compare_2026-07-28` | n — — | no PARKED.md | — | later:2026-08-01-fix-adjudication-blindness | **KEEP** | **CORRECTED 2026-08-25 by `experiments/2026-08-25-change-closeout-prune/` per R5.** Q-E1 MISSED IT, and could not have caught it: `tests/test_results_command.py::_smallest_root_logging_no_embedder` discovers run roots via `git ls-files experiments` and returns the smallest carrying no embedder stamp — selected by SIZE and PROPERTY, never by name. This directory holds that root; its path appears in no source file, so a path grep is structurally blind to it. Proof: `experiments/2026-08-25-change-closeout-prune/proof/r5-remedy.txt` |
 | 144 | `live_engaged_2026-07-27` | Y — tests/test_adjudication_blindness.py:55: "experiments/live_engaged_2026-07-27/ | no PARKED.md | — | later:2026-08-01-fix-adjudication-blindness | **KEEP** | Q-E1 referenced |
 | 145 | `live_gemma4_schema_2026-07-31` | n — — | no PARKED.md | — | — | **PRUNE** | Q-E1/E2/E3 all negative |
 | 146 | `live_jolt_2026-07-31` | Y — docs/map/SEAM-adjudication-x-rules.md:237:`check: grep -q "harness._oracle_pen | no PARKED.md | — | later:2026-08-01-change-prose-can-refute | **KEEP** | Q-E1 referenced |

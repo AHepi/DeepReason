@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Two conclusions with different variable bindings but isomorphic derivations are treated as distinct"},"steps":100000,"time_ms":2000},"eval":"program:derivation_isomorphism_check","id":"fc:2ed151b33c4b","observation_valued":false},"id":"fc:2ed151b33c4b","schema":"commitment"}

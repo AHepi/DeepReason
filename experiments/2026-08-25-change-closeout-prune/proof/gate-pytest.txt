@@ -22,4 +22,114 @@ bringing up nodes...
 ........................................................................ [ 32%]
 ........................................................................ [ 34%]
 ........................................................................ [ 36%]
-.....
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 46%]
+........................................................................ [ 48%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 62%]
+.........................F.............................................. [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 79%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 98%]
+...............................................................          [100%]
+=================================== FAILURES ===================================
+_____________ test_results_embedder_absence_is_typed_not_a_failure _____________
+[gw1] linux -- Python 3.11.15 /usr/local/bin/python
+
+    def test_results_embedder_absence_is_typed_not_a_failure():
+        """Reader-before-writer guardrail: two committed roots predate the
+        embedder stamp entirely. They must read as a typed ABSENCE from the
+        closed vocabulary, never as an error and never as a silently omitted key
+        a caller cannot distinguish from a false value.
+        """
+    
+        from deepreason.application.results import (
+            ABSENCE_REASONS,
+            results_summary,
+        )
+    
+        root = _smallest_root_logging_no_embedder()
+>       summary = results_summary(root)
+                  ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_results_command.py:694: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepreason/application/results.py:584: in results_summary
+    harness = Harness(root, read_only=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/deepreason/harness.py:103: in __init__
+    self._workflow_manifest = self._load_workflow_manifest()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/deepreason/harness.py:144: in _load_workflow_manifest
+    return load_run_manifest(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src/deepreason/run_manifest.py:4238: in load_run_manifest
+    _discriminate_raw_run_manifest_version(raw)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+raw = b'{"bridge_policy":{"allow_abstention":true,"allow_partial":true,"composer_role":"thesis","grounding_repair_role":"jud...ace0b00cde6c6826e74f801254793c19de0a4006ae38a97a05efc1da5","stop_policy":{},"toolchains":[],"workload_profile":"text"}'
+
+    def _discriminate_raw_run_manifest_version(raw: bytes) -> None:
+        """Reject historical versions before any RunManifest model validation."""
+        try:
+            payload = json.loads(raw)
+        except RecursionError as error:
+            raise RunManifestError(
+                "INVALID_RUN_MANIFEST",
+                "manifest JSON nesting exceeds the supported depth",
+            ) from error
+        except (ValueError, UnicodeDecodeError):
+            # Preserve the existing model-validation error path for malformed JSON.
+            return
+        if not isinstance(payload, dict):
+            # Preserve the existing model-validation error path for other JSON roots.
+            return
+        if "schema_version" not in payload:
+            raise RunManifestError(
+                "INVALID_RUN_MANIFEST",
+                "manifest JSON must declare an integer schema_version",
+                "/schema_version",
+            )
+        schema_version = payload["schema_version"]
+        if type(schema_version) is not int:
+            raise RunManifestError(
+                "INVALID_RUN_MANIFEST",
+                "manifest schema_version must be an integer",
+                "/schema_version",
+            )
+        if 1 <= schema_version <= 5:
+>           raise UnsupportedRunManifestVersionError(schema_version)
+E           deepreason.run_manifest.UnsupportedRunManifestVersionError: UNSUPPORTED_RUN_MANIFEST_VERSION at /schema_version: RunManifest schema version 3 is unsupported; only schema version 6 is accepted
+
+src/deepreason/run_manifest.py:4221: UnsupportedRunManifestVersionError
+=========================== short test summary info ============================
+FAILED tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure
+1 failed, 4161 passed, 6 skipped in 842.95s (0:14:02)
+EXIT=1
