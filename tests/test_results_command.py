@@ -172,15 +172,29 @@ def test_results_summary_reports_run_identity_state_and_budget():
 
 
 def test_results_summary_reports_artifact_survivor_and_frontier_counts():
-    """R7: accepted/refuted/suspended, final survivor count, frontier."""
+    """R7: accepted/refuted/suspended, final survivor count, frontier.
+
+    The survivor count is the published set LESS its import-role admission
+    records, which the invariant says never count. This assertion used to read
+    `== len(result["survivors"])` and passed while the surface reported 10
+    survivors for a root holding 4 admission records
+    (`completed-epoch3-run-9e9812fe`), and 82 for `run-1b31f006`. See
+    `experiments/2026-08-25-fix-import-role-survivors/`.
+    """
 
     from deepreason.application.results import results_summary
+    from deepreason.harness import Harness
+    from deepreason.ontology.state import is_import_admission
 
     root = _smallest_root_publishing("survivors")
     summary = results_summary(root)
     result = json.loads((root / "run-result.json").read_text())
+    state = Harness(root, read_only=True).state
 
-    assert summary["artifacts"]["survivor_count"] == len(result["survivors"])
+    assert summary["artifacts"]["survivor_count"] == sum(
+        1 for aid in result["survivors"] if not is_import_admission(state, aid)
+    )
+    assert summary["artifacts"]["survivor_count"] <= len(result["survivors"])
     assert summary["artifacts"]["frontier"]["count"] == len(result["frontier"])
     assert summary["artifacts"]["frontier"]["artifact_ids"] == list(result["frontier"])
     if (root / "run-status.json").exists():

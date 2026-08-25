@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 812aa1aba
+Verified-at: c7e25419c
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -192,6 +192,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 | To change... | Edit | Test |
 |---|---|---|
 | What `deepreason results` reports, or how a fact's absence is typed | `results_summary` and `ABSENCE_REASONS` in `application/results.py`; `render_results` for the glossed human mode | `tests/test_results_command.py::test_absent_facts_are_typed_absences_not_omitted_keys` |
+| What the reported survivor COUNT means | NOT this package: `is_import_admission` in `ontology/state.py` (`DR-SUB-ontology`). `_survivor_count` may only SUBTRACT the admission records the invariant bars from the set the record published — never re-derive membership, never re-adjudicate a member's status | `tests/test_import_role_survivors.py::test_the_results_surface_reports_the_conjectures_and_not_the_dossier` |
 | Add, rename or retire a CLI verb | `build_parser` and the matching `_main` branch in `cli/main.py`; add it to `_ROOT_ADMISSION_COMMANDS` if it reads a run root | `tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands` |
 | What a command may do to a pre-V6, unbound or tampered root | `_admit_v6_root` in `cli/main.py` | `tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest` |
 | The process exit-code contract | `run_result_exit_code` in `application/models.py` | `tests/test_r0_terminal_verification.py::test_run_result_exit_contract` |
@@ -214,6 +215,21 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 
 ## Traps
 
+- **The survivor count was the writer's word, and the writer was wrong.**
+  `_artifacts` reported `len(result["survivors"])` verbatim, so when
+  `scheduler.run_report` published import-role admission records into that set
+  this surface stated them to the operator under the gloss "positions still
+  standing at the end". Measured on two committed roots, not one:
+  `run-1b31f006` reported 82 where the record supports 58, and
+  `completed-epoch3-run-9e9812fe` reported 10 where it supports 6. FIXED
+  2026-08-25 (`experiments/2026-08-25-fix-import-role-survivors/`); the reader
+  now subtracts through `ontology.state.is_import_admission`. Note what the fix
+  deliberately does NOT do, because the obvious version is wrong: it does not
+  re-derive the survivor set from replayed state. A reader that did could
+  report a survivor the record never published, and would silently
+  re-adjudicate a root whose epoch moved after its payload was written.
+  Subtracting is the only power a reader over an append-only record has here.
+`check: python -m pytest tests/test_import_role_survivors.py::test_the_results_surface_reports_the_conjectures_and_not_the_dossier tests/test_results_command.py::test_results_summary_reports_artifact_survivor_and_frontier_counts -q`
 - **The result-retrieval surface used to have no verb, and every session
   reinvented it.** Operator, 2026-08-13: "When retrieving run results, Opus 5
   keeps grepping for flags that dont exist." The facts were scattered across

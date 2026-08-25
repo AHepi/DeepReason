@@ -174,11 +174,37 @@ def _run(status: dict | None, stop: dict | None) -> dict[str, Any]:
     }
 
 
+def _survivor_count(result: dict, state: Any | None) -> Any:
+    """Published survivors, less the admission records the invariant bars.
+
+    Whether a survivor set EXISTS stays the stored record's word: a failed run
+    publishes no `survivors` key and must report an absence rather than a
+    zero. A root whose replay defeats the state reader reports an absence too
+    — a number that could not have the rule applied to it is not this run's
+    survivor count.
+    """
+
+    from deepreason.ontology.state import is_import_admission
+
+    if "survivors" not in result:
+        return _absent("NO_SURVIVOR_RECORD")
+    if state is None:
+        return _absent("REPLAY_STATE_UNREADABLE")
+    return sum(1 for aid in result["survivors"] if not is_import_admission(state, aid))
+
+
 def _artifacts(
     positions: dict[str, list] | None,
     status: dict | None,
     result: dict | None,
+    state: Any | None,
 ) -> dict[str, Any]:
+    """The run's artifact counts. `survivor_count` is the published survivor
+    set MINUS its import-role admission records, which the invariant says
+    never count — see `_survivor_count`, which owns that subtraction, and
+    `deepreason.ontology.state.is_import_admission`, which owns the rule.
+    """
+
     counts: dict[str, Any] = {}
     for label in ("accepted", "refuted", "suspended"):
         counts[label] = (
@@ -197,19 +223,11 @@ def _artifacts(
     elif "frontier" not in result:
         no_frontier = _absent("NO_FRONTIER_RECORD")
         frontier = {"count": no_frontier, "artifact_ids": no_frontier}
-        survivors = (
-            len(result["survivors"])
-            if "survivors" in result
-            else _absent("NO_SURVIVOR_RECORD")
-        )
+        survivors = _survivor_count(result, state)
     else:
         listed = list(result["frontier"] or ())
         frontier = {"count": len(listed), "artifact_ids": listed}
-        survivors = (
-            len(result["survivors"])
-            if "survivors" in result
-            else _absent("NO_SURVIVOR_RECORD")
-        )
+        survivors = _survivor_count(result, state)
     frontier["problem_id"] = (
         status.get("problem_id", _absent("NO_RUN_STATUS_JSON"))
         if status
@@ -582,6 +600,10 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
     stop = _read_json(root / "run-stop.json")
 
     harness = Harness(root, read_only=True)
+    try:
+        replayed_state = harness.state
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
+        replayed_state = None
     summary: dict[str, Any] = {
         "schema": RESULTS_SCHEMA,
         "root": str(root),
@@ -589,7 +611,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "question": findings.get("question") or _absent("NO_RUN_INPUT"),
         "identity": _identity(root, status, replay),
         "run": _run(status, stop),
-        "artifacts": _artifacts(positions, status, result),
+        "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
         "verification": _verification(root, replay, result, verify=verify),

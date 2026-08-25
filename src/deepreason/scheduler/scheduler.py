@@ -49,6 +49,7 @@ from deepreason.premises import (
     retired_problems,
 )
 from deepreason.ontology import Rule, SpawnTrigger, Status
+from deepreason.ontology.state import counts_as_survivor
 from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
@@ -210,7 +211,7 @@ def run_report(harness, config, *, diagnostics=()) -> dict:
 
     state = harness.state
     survivors = sorted(
-        {aid for aid, _ in state.addr if state.status.get(aid) == Status.ACCEPTED}
+        {aid for aid, _ in state.addr if counts_as_survivor(state, aid)}
     )
     scored = []
     for aid in survivors:
@@ -1068,24 +1069,18 @@ class Scheduler:
         return True
 
     def _select_problem(self):
-        from deepreason.ontology.artifact import ProvenanceRole
-
         state = self.harness.state
         if self.config.FOCUS_PROBLEM is not None:
             return state.problems.get(self.config.FOCUS_PROBLEM)
         # "Solved" means a CANDIDATE survived — never admission bookkeeping.
-        # Evidence admission auto-accepts import-role records (attached-source
-        # records, source-reliability assertions) that ADDRESS the operator's
-        # question, and counting them as survivors marked the question solved
-        # before a single provider call, dropping it to the 0.3 aging weight
+        # `counts_as_survivor` owns that rule; the consequence HERE is the
+        # aging weight: counting admission records marked the operator's
+        # question solved before a single provider call, dropping it to 0.3
         # while never-worked spawns outranked it (selfstudy run-9175f0ec:
         # the question terminated budget_denied with zero calls).
         survivors_by_problem: dict[str, int] = {}
         for aid, pid in state.addr:
-            if (
-                state.status.get(aid) == Status.ACCEPTED
-                and state.artifacts[aid].provenance.role != ProvenanceRole.IMPORT
-            ):
+            if counts_as_survivor(state, aid):
                 survivors_by_problem[pid] = survivors_by_problem.get(pid, 0) + 1
         integration_allowed = self.config.INTEGRATION_BUDGET_SHARE > 0 and (
             self._cycles == 0

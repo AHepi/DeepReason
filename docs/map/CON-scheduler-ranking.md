@@ -1,5 +1,5 @@
 <!-- DR-CON-scheduler-ranking -->
-Verified-at: f9fcd1136
+Verified-at: c7e25419c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py
 Seams: DR-SEAM-scheduler-x-rules
@@ -32,8 +32,20 @@ round-robin pool's sort key.
 Import-role admission records (attached-source records, source-
 reliability assertions) never count as a "survivor" — the aging weight
 cannot be depressed by evidence-admission bookkeeping mistaken for a
-solved candidate.
-`check: grep -q "provenance.role != ProvenanceRole.IMPORT" src/deepreason/scheduler/scheduler.py`
+solved candidate. The socket does not OWN that rule and no longer spells
+it: `deepreason.ontology.state.counts_as_survivor` is the one authority,
+and every survivor surface calls it (`DR-SUB-ontology`). The check below
+used to grep this file for the literal, which is exactly the check that
+passed while `run_report`, two hundred lines up in the same file, had no
+role clause at all and published 24 admission records as survivors of
+`run-1b31f006`.
+`check: python -c "
+import inspect, pathlib
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler._select_problem)
+assert 'counts_as_survivor(state, aid)' in src
+assert 'ProvenanceRole.IMPORT' not in pathlib.Path(inspect.getfile(Scheduler)).read_text()
+"`
 
 Both guarantees are pinned by regression, not only by reading the sort key.
 `check: python -m pytest tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero tests/test_scheduler.py::test_focus_family_restricts_selection -q`
