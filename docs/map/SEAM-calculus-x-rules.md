@@ -1,5 +1,5 @@
 <!-- DR-SEAM-calculus-x-rules -->
-Verified-at: b41c5cf10
+Verified-at: f9fcd1136
 Verify: python -m pytest tests/test_frame_render.py -q
 Owns: src/deepreason/calculus/render.py
 Sides: DR-SUB-calculus, DR-SUB-rules

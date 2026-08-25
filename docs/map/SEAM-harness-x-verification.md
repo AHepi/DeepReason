@@ -1,5 +1,5 @@
 <!-- DR-SEAM-harness-x-verification -->
-Verified-at: 5d848e09
+Verified-at: f9fcd1136
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/log/event_log.py, src/deepreason/storage/blobs.py
 Sides: DR-SUB-harness, DR-SUB-verification
