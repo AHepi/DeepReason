@@ -1,0 +1,82 @@
+[2026-08-25T18:36:01Z] === SETUP: build_manifest_pc1.py -> /home/user/DeepReason/experiments/2026-08-25-change-constructive-frontier/.dry-run-root ===
+{
+  "attached_evidence_enabled": false,
+  "compile_notices": [],
+  "criteria": [
+    "frontier-wellformed@v1",
+    "frontier-claim-honest@v1",
+    "frontier-above-floor@v1"
+  ],
+  "dossier_sources": 0,
+  "judge_seats_enabled": false,
+  "manifest_sha256": "6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4",
+  "problem_id": "question-64b724c4118320989925d111501a8e41",
+  "question_sha256": "64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e",
+  "run_input_digest": "740edc4de464aad2b8b830060af77431825c034d63d6fe67f856961541870327"
+}
+[2026-08-25T18:36:02Z] SETUP OK rc=0
+[2026-08-25T18:36:02Z] === PREFLIGHT: criteria discrimination + malformed-predicate guard ===
+== 1. every predicate is sandbox-legal ==
+  SAFE  frontier-wellformed@v1
+  SAFE  frontier-claim-honest@v1
+  SAFE  frontier-above-floor@v1
+  SAFE  criteria.py and checker.py share the same wire regexes
+
+== 2. the S4 mutation table, through programs.evaluate ==
+  M1 known-good construction                 wellformed=pass claim=pass floor=pass   OK
+  M2 planted overlap (duplicate point)       wellformed=fail claim=fail floor=fail   OK
+  M3 inflated claim (-> 0.9)                 wellformed=pass claim=fail floor=pass   OK
+  M4 point outside the square                wellformed=fail claim=fail floor=fail   OK
+  M5 twelve points, not thirteen             wellformed=fail claim=fail floor=fail   OK
+  M6 no CLAIM line                           wellformed=pass claim=fail floor=pass   OK
+  M7 collinear triple (valid, worthless)     wellformed=pass claim=pass floor=fail   OK
+  M8 honest under-claim                      wellformed=pass claim=pass floor=pass   OK
+
+== 3. float-vs-exact agreement (SPEC S3's declared A10 bound) ==
+  20000 configurations at the 6-dp grid
+  max |exact - float| = 9.459663954936e-17   bound 1e-12   OK
+
+== 4. discrimination controls ==
+  prose with no construction              {'wellformed': 'fail', 'claim-honest': 'fail', 'above-floor': 'fail'}   OK
+  random configuration (seeded)           {'wellformed': 'pass', 'claim-honest': 'pass', 'above-floor': 'fail'}   OK
+  the plain circle of 13                  {'wellformed': 'pass', 'claim-honest': 'pass', 'above-floor': 'pass'}   OK
+
+PREFLIGHT OK -- the battery discriminates and no predicate is malformed
+[2026-08-25T18:36:53Z] PREFLIGHT OK rc=0
+[2026-08-25T18:36:53Z] === PREFLIGHT: the checker's own mutation table ===
+=== RED: one guard disabled at a time, the mutation must SLIP THROUGH ===
+  M2 planted overlap (duplicate point)       guard off -> code=CLAIM_INFLATED           SLIPPED (as required)
+  M3 inflated claim (-> 0.9)                 guard off -> code=None                     SLIPPED (as required)
+  M4 point outside the square                guard off -> code=CLAIM_INFLATED           SLIPPED (as required)
+  M5 twelve points, not thirteen             guard off -> code=DUPLICATE_POINT          SLIPPED (as required)
+  M6 no CLAIM line                           guard off -> code=RAISED TypeError         SLIPPED (as required)
+
+=== GREEN: the unmodified checker must CATCH every one ===
+  M1 known-good construction                 valid=True  code=None             score=0.013307680842   OK
+  M2 planted overlap (duplicate point)       valid=False code=DUPLICATE_POINT  score=None   OK
+  M3 inflated claim (-> 0.9)                 valid=False code=CLAIM_INFLATED   score=0.013307680842   OK
+  M4 point outside the square                valid=False code=OUT_OF_SQUARE    score=None   OK
+  M5 twelve points, not thirteen             valid=False code=WRONG_COUNT      score=None   OK
+  M6 no CLAIM line                           valid=False code=NO_CLAIM         score=None   OK
+  M7 collinear triple (valid, worthless)     valid=True  code=None             score=0.0   OK
+  M8 honest under-claim                      valid=True  code=None             score=0.013307680842   OK
+
+RED 5/5 slipped through their disabled guards; GREEN 8/8 correct.
+[2026-08-25T18:36:53Z] CHECKER OK rc=0
+[2026-08-25T18:36:53Z] === PREFLIGHT: the seat model exists in the live catalogue ===
+ok  argumentative_critic   seat 0  glm-5.2
+ok  conjecturer            seat 0  glm-5.2
+ok  defender               seat 0  glm-5.2
+ok  grounding_reviewer     seat 0  glm-5.2
+ok  judge                  seat 0  glm-5.2
+ok  property_designer      seat 0  glm-5.2
+ok  summarizer             seat 0  glm-5.2
+ok  synthesizer            seat 0  glm-5.2
+ok  thesis                 seat 0  glm-5.2
+ok  variator               seat 0  glm-5.2
+ok  vision_critic          seat 0  glm-5.2
+
+catalogue lists 19 models; this config names 1 distinct
+every seat's model is listed
+[2026-08-25T18:36:54Z] MODEL PREFLIGHT OK rc=0
+[2026-08-25T18:36:54Z] DRY RUN: stopping before qualify -- no provider call made, rehearsal root removed, rc=0

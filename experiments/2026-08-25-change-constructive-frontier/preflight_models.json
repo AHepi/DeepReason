@@ -1,0 +1,77 @@
+{
+  "catalogue": "https://ollama.com/v1/models",
+  "catalogue_size": 19,
+  "distinct_models": [
+    "glm-5.2"
+  ],
+  "holds": true,
+  "missing": [],
+  "rows": [
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "argumentative_critic",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "conjecturer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "defender",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "grounding_reviewer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "judge",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "property_designer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "summarizer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "synthesizer",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "thesis",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "variator",
+      "seat": 0
+    },
+    {
+      "listed": true,
+      "model": "glm-5.2",
+      "role": "vision_critic",
+      "seat": 0
+    }
+  ]
+}
