@@ -1,0 +1,14 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.0 0.0\nPOINT 0.0 0.35\nPOINT 0.0 0.7\nPOINT 0.35 0.175\nPOINT 0.35 0.525\nPOINT 0.35 0.875\nPOINT 0.7 0.0\nPOINT 0.7 0.35\nPOINT 0.7 0.7\nPOINT 1.0 0.175\nPOINT 1.0 0.525\nPOINT 1.0 0.875\nCLAIM 0.030625",
+    "mechanism": "13 points arranged in three vertical columns (x=0, 0.35, 0.7, 1.0) with interlaced y-coordinates (y=0, 0.175, 0.35, 0.525, 0.7, 0.875), so every column's y-values sit midway between its neighbor's. The bounding box of any triangle includes at least one column gap dx=0.35 and one y-lattice gap dy=0.175. Geometrically, any three points enclose at least one full grid parallelogram of area 0.35×0.175=0.06125, so every triangle spans base×height ≥ 0.06125, giving minimum area ≥ 0.030625.",
+    "counterconditions": [
+      "Existence of any collinear or near-collinear triple in the lattice reducing the minimum area below the claimed 0.030625",
+      "Three points sharing the same column and an adjacent column point aligned to produce a degenerate or sub-0.030625 triangle",
+      "Checker refutation of the claimed minimum by enumerating 286 triangles and finding one with area < 0.030625"
+    ],
+    "typicality": 0.85
+  }
+}
+```

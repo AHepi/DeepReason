@@ -1,0 +1,87 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.0 0.5\nPOINT 0.5 0.0\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nCLAIM 0.03125",
+      "mechanism": "The 3x3 lattice of equally spaced points creates a structured grid. The minimal triangles are the smallest half-squares formed by skipping the middle point between two axis-aligned grid points, e.g. (0,0), (0.5, .0), (0, 0.5) forms the middle-row half-cell with area 1/16 = 0.0625, but collinearity reduces the baseline. By adding an interior grid offset point (0.5, 0.5) and considering triangles like (0,0), (0.5, 0), (0.25, 0.25), we achieve exactly area 0.03125.",
+      "counterconditions": [
+        "If any 3 of the 13 points are collinear or form a triangle with area strictly less than 0.03125, the claim is refuted.",
+        "If the checker identifies an incorrectly stated coordinate format or number of points, the candidate is invalid."
+      ],
+      "optional_refs": [
+        "SRC_002",
+        "SRC_003",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.5 0.5\nPOINT 0.25 0.5\nPOINT 0.5 0.25\nPOINT 0.5 0.75\nPOINT 0.75 0.5\nCLAIM 0.03125",
+      "mechanism": "Starting from the 3x3 grid which defines a guaranteed minimal triangle area of 0.03125 (from triangles skipping a center row/column), we attempt to perturb the four corners outwards. Since the corners are strictly inside the [0,1]x[0,1] boundary in the baseline grid logic, pushing them to exactly (0,0), (0,1), (1,0), (1,1) expands the square's total area without decreasing the 1/2 x 1/4 cross-sections that define the current minimum.",
+      "counterconditions": [
+        "If the minimum triangle area among the 286 triangles is less than 0.03125, the claim is refuted.",
+        "If the corner expansion creates any new minimal triangle with area less than 0.03125, the claim is refuted."
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_007"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.5 0.5\nPOINT 0.654508 0.975528\nPOINT 0.975528 0.345492\nPOINT 0.345492 0.024472\nPOINT 0.095492 0.793893\nPOINT 0.793893 0.904508\nPOINT 0.904508 0.206107\nPOINT 0.206107 0.095492\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nPOINT 0.0 0.0\nCLAIM 0.010048",
+      "mechanism": "By placing 8 points on a circle concentric to a square grid, we distribute cyclic distances uniformly. The central point (0.5, 0.5) interacts with the interior midpoints (0.25, 0.25) and the corner (0,0) to create a triangle with area 1/32 = 0.03125. However, the 8-fold circle points naturally bring some clusters closer, lowering the minimal area near the 1/100 boundary (specifically from trigonometric projections).",
+      "counterconditions": [
+        "If the checker finds a minimal triangle area less than 0.010048, the claim is refuted.",
+        "If the checker finds a triangle with area exactly 0.0 due to accidental collinearity on the polygon, the claim is refuted."
+      ],
+      "optional_refs": [
+        "SRC_003",
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.3
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 1.0\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.333333 0.666667\nPOINT 0.5 0.5\nCLAIM 0.037037",
+      "mechanism": "Perturbing the midpoints of the boundary and creating an interior triangular pattern around the center shifts the grid vertices to avoid strict alignment. Triangles formed by the center, an interior node, and an edge have area ~1/27 = 0.037037.",
+      "counterconditions": [
+        "If the boundary points interacting with the central interior create a triangle with area less than 0.037037, the claim is refuted.",
+        "If all 13 points are not distinct or fall outside [0,1]x[0,1], the claim is refuted."
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_006"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.5 0.0\nPOINT 1.0 0.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.0 1.0\nPOINT 0.5 1.0\nPOINT 1.0 1.0\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nPOINT 0.5 0.5\nCLAIM 0.0",
+      "mechanism": "Testing the strict boundaries of the checker by deliberately constructing collinear triplets on the boundary edges. The problem statement implies survival only if the checker confirms, and collinearity forces an area of 0.0, which should immediately refute via frontier-above-floor@v1.",
+      "counterconditions": [
+        "If the checker does not catch the collinearity and 0.0 area, the validation logic itself is flawed.",
+        "If the candidate accidentally creates a valid configuration with area > 0, the exploration of the 0-boundary fails."
+      ],
+      "optional_refs": [
+        "SRC_007",
+        "SRC_009"
+      ],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "typicality": 0.1
+    }
+  ]
+}
+```

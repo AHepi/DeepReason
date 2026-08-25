@@ -184,3 +184,57 @@ single-run margin is reported as a single-run margin and never as a result.
 - **The survivor-count inflation from import-role records is a KNOWN
   ISSUE** (poietics P4, parked). Conjecture-only figures are quoted; the
   raw figure is labelled inflated wherever it appears (R31).
+
+---
+
+## APPENDIX — post-launch correction, 2026-08-25 19:40Z
+
+This appendix is APPENDED, never an edit of the frozen sections above.
+§1–§8 stand exactly as registered.
+
+**What was wrong.** SPEC.md §S2 and the first `checker.py` / `criteria.py`
+extracted the wire format with LINE-ANCHORED regexes (`(?m)^...$`), on the
+assumption that a candidate reaches the record as plain text with real line
+breaks. It does not. Every seat runs `output_mode: json_object`, so a
+construction arrives inside a JSON envelope —
+`{"claim":"POINT 0.5 0.5\nPOINT ..."}` — where the breaks are the two
+characters backslash-n. Anchored patterns match nothing there.
+
+**How it was found, and how bad it was.** The first live launch reached
+cycle 11 before an interim scoring pass showed **0 candidates out of 1509
+artifacts**. The in-run battery had been inert for the entire run: it
+refuted every candidate, silently, for a reason invisible in the record.
+That is the same failure family as
+`DR-SEAM-evaluation-x-ontology`'s "a malformed `predicate:` is a REFUTATION,
+not an error" — and my step-5 preflight did not catch it, because every
+fixture I wrote was in the plain-text shape I had assumed.
+
+**The fix, and the proof.** The anchors are dropped; the KEYWORD is the
+delimiter. Measured on that run's own record: the anchored form matched
+**0 of 1509** artifacts, the unanchored form **183**. A new permanent
+fixture **M9** carries the JSON-envelope shape and must score identically
+to M1; `checker.py --self-test` is 9/9 and `preflight_criteria.py` exits 0.
+
+**Why this is a repair and not a result-fitted change.** The fix is
+determined entirely by the record's byte SHAPE, not by any score. What I
+had seen when I made it was that zero constructions were being read at all.
+For completeness, the void run's post-hoc scores are recorded below and
+they argue AGAINST the harness, not for it — so if the fix were motivated
+by results it was motivated in the wrong direction.
+
+**The void run is retained as evidence**, at
+`void-inert-battery-run-6913328037a61ca6/`, scored in
+`void-inert-battery-scores.json`. It is NOT an ARM H result and is never
+quoted as one: its criticism never received the checker signal the design
+requires. It is, unintentionally, a third condition — *the harness without
+checker feedback* — and it is reported as such:
+
+    183 candidates attempted, 24 valid, 159 refuted
+    147 CLAIM_INFLATED, 7 WRONG_COUNT, 3 NO_CLAIM, 2 DUPLICATE_POINT
+    best valid score 0.0 -- every valid construction was collinear
+
+**What changes for the registered design: nothing.** Both arms are scored
+by the same fixed checker, the question bytes are unchanged, the milestones
+and the margin rule are unchanged, and ARM H relaunches from cycle 0. The
+criteria are part of the run input digest, so the relaunch mints a NEW run
+id; the void root keeps its own.

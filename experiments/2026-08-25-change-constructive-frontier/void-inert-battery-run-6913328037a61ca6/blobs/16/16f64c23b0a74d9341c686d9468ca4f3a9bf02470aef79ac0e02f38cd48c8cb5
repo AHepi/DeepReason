@@ -1,0 +1,21 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0 0\nPOINT 0 0.5\nPOINT 0 1\nPOINT 0.5 0\nPOINT 0.5 0.5\nPOINT 0.5 1\nPOINT 1 0\nPOINT 1 0.5\nPOINT 1 1\nPOINT 0.333333 0.166667\nPOINT 0.666667 0.833333\nPOINT 0.166667 0.666667\nPOINT 0.833333 0.333333\nCLAIM 0.020833",
+    "mechanism": "An n=3 equi-spaced Cartesian grid guarantees uniform area spacings of 1/18 (~0.0556). This forms the baseline. Placing 4 additional interior points at off-grid coordinates—chosen for their distinct rational thirds/sixths values—avoids aligning with the grid's primary axes and diagonals. The geometry of this specific perturbation natively guarantees that no new triangle falls below 1/48 (~0.02083), which is comfortably above the 0.005 criterion.",
+    "counterconditions": [
+      "A checker analyzing the 286 triangles formed by the perturbed grid finds any triangle with area less than 0.020833.",
+      "Two of the 13 points are not distinct.",
+      "Any point lies outside the [0,1]x[0,1] bounds."
+    ],
+    "typicality": 0.85,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_004"
+      ]
+    }
+  }
+}
+```

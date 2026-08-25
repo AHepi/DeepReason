@@ -56,8 +56,14 @@ FLOOR = 0.005
 # The wire format, SPEC.md S2.  Byte-identical to `checker.POINT_RE` and
 # `checker.CLAIM_RE`; `preflight_criteria.py` asserts that equality rather
 # than trusting this comment, because two copies of a regex are two regexes.
-POINT_PAT = r"(?m)^[ \t]*POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)[ \t]*$"
-CLAIM_PAT = r"(?m)^[ \t]*CLAIM[ \t]+([-+0-9.eE]+)[ \t]*$"
+#
+# NOT line-anchored, and the reason is recorded in checker.py: every seat
+# runs `output_mode: json_object`, so a construction reaches the record
+# inside a JSON envelope where line breaks are the two characters
+# backslash-n.  The anchored form matched 0 of 1509 artifacts on a real
+# run; this one matched 183.
+POINT_PAT = r"POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)"
+CLAIM_PAT = r"CLAIM[ \t]+([-+0-9.eE]+)"
 
 # Bind the raw matches and the sorted points once, then reuse.  `for x in
 # [expr]` is the only way to bind a name inside a single expression without

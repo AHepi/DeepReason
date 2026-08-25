@@ -1,0 +1,17 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.200000\nPOINT 0.000000 0.400000\nPOINT 0.000000 0.600000\nPOINT 0.000000 0.800000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.200000\nPOINT 1.000000 0.400000\nPOINT 1.000000 0.600000\nPOINT 1.000000 0.800000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.020000",
+    "mechanism": "Two parallel vertical lines x=0 and x=1 with 6 equally spaced points on each (spacing 0.2). The 12 boundary points are placed so that any triple of collinear boundary points has zero area. A single interior point at (0.5, 0.5) is added. Because the two boundary lines are parallel, any triangle using one interior point and two boundary points from the SAME line has zero altitude relative to that line, hence zero area. The candidate is constructed to fail the floor criterion, serving as a criticizable baseline for typicality.",
+    "counterconditions": [
+      "If any two boundary points from the same vertical line are used with the interior point, the triangle area is exactly 0, which is less than 0.005, failing frontier-above-floor@v1.",
+      "If the interior point is perturbed off the midline, some of these near-zero triangles become nonzero but may still fall below the 0.005 floor unless perturbation is large."
+    ],
+    "typicality": 0.01,
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}
+```

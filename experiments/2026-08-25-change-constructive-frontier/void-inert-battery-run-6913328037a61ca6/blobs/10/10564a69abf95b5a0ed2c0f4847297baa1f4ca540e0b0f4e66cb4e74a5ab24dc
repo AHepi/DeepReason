@@ -1,0 +1,19 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.125000 0.625000\nPOINT 0.875000 0.375000\nPOINT 0.625000 0.125000\nPOINT 0.375000 0.875000\nCLAIM 0.023438",
+    "mechanism": "A symmetric construction derived by placing 4 points on the unit square boundary, 4 points on the midpoints of the central diamond, 1 central point, and 4 points in a rotated inner pattern. This geometric configuration ensures a uniform distribution of triangular areas. By maximizing the minimum distance between any three points relative to the unit square's area, the minimum triangle area is pushed to a stable local maximum, avoiding collinearity through radial symmetry.",
+    "counterconditions": [
+      "If the minimum area among all 286 triangles is less than 0.023438, the claim is refuted.",
+      "If any two points coincide or fall outside the [0,1]x[0,1] bounds, the configuration is invalid.",
+      "If any three points are found to be collinear, yielding a triangle of area 0, the configuration collapses."
+    ],
+    "typicality": 0.7,
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

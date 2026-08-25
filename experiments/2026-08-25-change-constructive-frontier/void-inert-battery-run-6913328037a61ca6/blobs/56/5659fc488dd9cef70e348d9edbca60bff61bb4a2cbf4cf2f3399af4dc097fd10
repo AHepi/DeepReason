@@ -1,0 +1,22 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 0.333333 0.333333\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+    "mechanism": "The configuration combines the four corners, edge midpoints, internal lattice points, and the exact center. The inclusion of the center (0.5, 0.5), edge midpoints (e.g., 0.5, 0.0), and collinear diagonal points (e.g., 0.333, 0.333 and 0.666, 0.666) forces multiple zero-area triangles.",
+    "counterconditions": [
+      "The configuration score is 0.000000 because it is impossible to strictly maximize the minimum triangle area without first guaranteeing no three points are collinear.",
+      "Since a score of 0.000000 is the absolute floor for any distinct configuration, any candidate achieving a positive minimum area trivially refutes this claim as suboptimal.",
+      "Any configuration containing an edge midpoint and the two corresponding corners forms a collinear triple, ensuring a zero score without needing a checker calculation."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.01
+  }
+}

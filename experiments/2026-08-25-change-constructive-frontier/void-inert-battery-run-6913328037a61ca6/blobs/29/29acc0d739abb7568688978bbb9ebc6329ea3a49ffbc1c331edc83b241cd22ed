@@ -1,0 +1,7 @@
+```json
+{
+  "authorized_path": "/scratch_proposal/unresolved_questions/1/related_refs",
+  "op": "replace",
+  "value": ["NEW_002"]
+}
+```

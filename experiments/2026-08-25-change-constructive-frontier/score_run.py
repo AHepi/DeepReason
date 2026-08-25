@@ -122,6 +122,11 @@ def score(root: pathlib.Path) -> dict:
                 "role": role,
                 "accepted": aid in accepted,
                 "survivor": aid in raw_survivors,
+                # M3's pattern census reads this. Kept only for VALID
+                # candidates and truncated: the census counts vocabulary,
+                # and carrying every refuted candidate's full prose would
+                # bloat the report without adding a countable fact.
+                "text": text[:4000] if verdict["valid"] else None,
                 **verdict,
             }
         )

@@ -54,12 +54,24 @@ N_POINTS = 13
 # 0.013308, i.e. 2.7x this floor).
 FLOOR = Fraction(5, 1000)
 
-# The wire format, SPEC.md S2.  Line-anchored keywords rather than bare
-# parenthesised pairs: a candidate is mostly prose, and prose contains
-# parenthesised numbers.  Anchoring means nothing but a declared point line
-# can ever be read as a point.
-POINT_RE = re.compile(r"(?m)^[ \t]*POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)[ \t]*$")
-CLAIM_RE = re.compile(r"(?m)^[ \t]*CLAIM[ \t]+([-+0-9.eE]+)[ \t]*$")
+# The wire format, SPEC.md S2.  The KEYWORD is the delimiter; the patterns
+# are deliberately NOT line-anchored, and that is a correction paid for by a
+# killed run rather than a preference.
+#
+# The first version anchored on `(?m)^...$`, assuming a candidate arrives as
+# plain text with real line breaks.  It does not.  Every seat runs
+# `output_mode: json_object`, so a construction reaches the record INSIDE a
+# JSON envelope -- `{"claim":"POINT 0.5 0.5\nPOINT ..."}` -- where the line
+# breaks are the two characters backslash-n, not newlines.  Anchored
+# patterns match nothing there.  Measured on the killed run's own record:
+# 0 of 1509 artifacts matched the anchored form, 183 matched this one.
+#
+# Dropping the anchors costs the guarantee that prose can never be misread
+# as a point.  That risk is small (a bare capitalised "POINT 0.3 0.7" in
+# running prose) and is the right trade against a battery that matches
+# nothing at all.  Fixture M9 pins the envelope shape.
+POINT_RE = re.compile(r"POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)")
+CLAIM_RE = re.compile(r"CLAIM[ \t]+([-+0-9.eE]+)")
 
 ZERO, ONE = Fraction(0), Fraction(1)
 
@@ -218,8 +230,19 @@ def fixtures() -> dict[str, str]:
         + points[3:]
     )
 
+    # The shape the record ACTUALLY carries: a JSON envelope whose "claim"
+    # field holds the construction with backslash-n between lines.  This is
+    # the fixture whose absence let a run reach cycle 11 with an inert
+    # battery, so it is pinned here permanently.
+    envelope = (
+        '{"analogy":null,"claim":"'
+        + "\\n".join(points + [claim_line])
+        + '","definitions":[]}'
+    )
+
     return {
         "M1 known-good construction": good,
+        "M9 JSON envelope, escaped newlines": envelope,
         "M2 planted overlap (duplicate point)": "\n".join(duplicated + [claim_line]) + "\n",
         "M3 inflated claim (-> 0.9)": "\n".join(points + ["CLAIM 0.900000"]) + "\n",
         "M4 point outside the square": "\n".join(outside + [claim_line]) + "\n",
@@ -239,6 +262,9 @@ EXPECTED = {
     "M6 no CLAIM line": (False, "NO_CLAIM"),
     "M7 collinear triple (valid, worthless)": (True, None),
     "M8 honest under-claim": (True, None),
+    # The envelope carries the SAME construction as M1 and must score
+    # identically; if it does not, the extraction is shape-sensitive.
+    "M9 JSON envelope, escaped newlines": (True, None),
 }
 
 

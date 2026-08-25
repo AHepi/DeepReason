@@ -97,8 +97,16 @@ that prose elsewhere in a candidate cannot be misparsed as a construction.
 **Extraction is defined once**, as the regex pair below, and is byte-shared
 between the offline checker and the in-run predicate:
 
-    (?m)^[ \t]*POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)[ \t]*$
-    (?m)^[ \t]*CLAIM[ \t]+([-+0-9.eE]+)[ \t]*$
+    POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)
+    CLAIM[ \t]+([-+0-9.eE]+)
+
+**CORRECTED 2026-08-25 19:40Z (see PREREG.md's appendix).** These were
+originally line-anchored (`(?m)^...$`). That was wrong: seats run
+`output_mode: json_object`, so a construction arrives inside a JSON envelope
+where line breaks are the two characters backslash-n, and anchored patterns
+match nothing. Measured on a real run's record, anchored matched 0 of 1509
+artifacts and unanchored matched 183. Fixture M9 now pins the envelope
+shape.
 
 If more than one `CLAIM` line is present the LAST is authoritative.
 

@@ -1,0 +1,22 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.500000\nPOINT 0.071429 0.928571\nPOINT 0.142857 0.357143\nPOINT 0.214286 0.785714\nPOINT 0.285714 0.214286\nPOINT 0.357143 0.642857\nPOINT 0.428571 0.071429\nPOINT 0.500000 0.500000\nPOINT 0.571429 0.928571\nPOINT 0.642857 0.357143\nPOINT 0.714286 0.785714\nPOINT 0.785714 0.214286\nPOINT 0.857143 0.642857\nCLAIM 0.012755",
+    "mechanism": "This candidate uses a scaled modular projection with an arithmetic step of 1/7 (≈0.142857) to disperse points and avoid regular lattice collinearities. The x-coordinates increase linearly while the y-coordinates are offset modulo 1 to prevent three points from lying on a single line. The generated configuration is highly structured, effectively balancing point density and spacing to keep small triangles from collapsing.",
+    "counterconditions": [
+      "If three points are collinear or if the checker finds any triangle with area less than 0.012755, the candidate is refuted.",
+      "If the output parser fails to extract 13 distinct POINT lines and one CLAIM line matching the decimal format, the candidate is rejected by the well-formedness predicate.",
+      "If the calculation of the cross-product area misses any pair of points or if floating-point rounding drops the minimum area below the claimed value minus 1e-12, the candidate is refuted."
+    ],
+    "optional_refs": [
+      "SRC_003",
+      "SRC_006"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    },
+    "typicality": 0.6
+  }
+}
+```

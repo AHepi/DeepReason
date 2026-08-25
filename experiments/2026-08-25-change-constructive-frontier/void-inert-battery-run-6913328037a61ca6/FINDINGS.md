@@ -1,0 +1,1521 @@
+# Findings
+
+## Question
+
+Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line "POINT x y" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line "CLAIM v" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.
+
+## Positions the record accepts
+
+1291 positions stand formally accepted. Where they answer the same question differently they are unresolved rivals: the record deliberately preserves the disagreement rather than merging it.
+
+- nu: verdict of frontier-wellformed@v1 on 51c814c49cfc8600254bf29544f29a7ae5f77ca3545325d965a06eaf43ed93e4 is sound and relevant `[a550ca733ab9]`
+- critic: frontier-wellformed@v1 failed on 51c814c49cfc `[77ca0e4efedb]`
+- nu: verdict of frontier-claim-honest@v1 on 51c814c49cfc8600254bf29544f29a7ae5f77ca3545325d965a06eaf43ed93e4 is sound and relevant `[5554057454a6]`
+- critic: frontier-claim-honest@v1 failed on 51c814c49cfc `[794aacc8a03a]`
+- nu: verdict of frontier-above-floor@v1 on 51c814c49cfc8600254bf29544f29a7ae5f77ca3545325d965a06eaf43ed93e4 is sound and relevant `[1a14b5cae0ee]`
+- critic: frontier-above-floor@v1 failed on 51c814c49cfc `[af2f0acbac0c]`
+- nu: verdict of frontier-wellformed@v1 on 1cbdca31e6b90f114fb576ba79352dc5f6fb21dd2ad9f685efec7a67559b45a8 is sound and relevant `[dd9dcd8318df]`
+- critic: frontier-wellformed@v1 failed on 1cbdca31e6b9 `[e6506dc5fb47]`
+- nu: verdict of frontier-claim-honest@v1 on 1cbdca31e6b90f114fb576ba79352dc5f6fb21dd2ad9f685efec7a67559b45a8 is sound and relevant `[07a104b2b2e1]`
+- critic: frontier-claim-honest@v1 failed on 1cbdca31e6b9 `[1e5a60e464d7]`
+- nu: verdict of frontier-above-floor@v1 on 1cbdca31e6b90f114fb576ba79352dc5f6fb21dd2ad9f685efec7a67559b45a8 is sound and relevant `[c3bf5a376bd8]`
+- critic: frontier-above-floor@v1 failed on 1cbdca31e6b9 `[0c4862fc4ea9]`
+- nu: verdict of frontier-wellformed@v1 on cd1d472c40d83439139469e43b527de53c7d07e269cc2758dc96f60d772c7695 is sound and relevant `[004c0744fc1c]`
+- critic: frontier-wellformed@v1 failed on cd1d472c40d8 `[fd47a9ed1474]`
+- nu: verdict of frontier-claim-honest@v1 on cd1d472c40d83439139469e43b527de53c7d07e269cc2758dc96f60d772c7695 is sound and relevant `[19d5521c73c5]`
+- critic: frontier-claim-honest@v1 failed on cd1d472c40d8 `[264ade0d907e]`
+- nu: verdict of frontier-above-floor@v1 on cd1d472c40d83439139469e43b527de53c7d07e269cc2758dc96f60d772c7695 is sound and relevant `[2895705e11f6]`
+- critic: frontier-above-floor@v1 failed on cd1d472c40d8 `[509a73e33d97]`
+- nu: verdict of frontier-wellformed@v1 on e05fd697fe17562fd4a9ac7f9915ddf91e39b5c5a41326a6bb4b1446fe972705 is sound and relevant `[cdff395d16df]`
+- critic: frontier-wellformed@v1 failed on e05fd697fe17 `[0b4b349500ab]`
+- nu: verdict of frontier-claim-honest@v1 on e05fd697fe17562fd4a9ac7f9915ddf91e39b5c5a41326a6bb4b1446fe972705 is sound and relevant `[8a5418a8c0b2]`
+- critic: frontier-claim-honest@v1 failed on e05fd697fe17 `[18e1714ba0cc]`
+- nu: verdict of frontier-above-floor@v1 on e05fd697fe17562fd4a9ac7f9915ddf91e39b5c5a41326a6bb4b1446fe972705 is sound and relevant `[29bf6cf4411b]`
+- critic: frontier-above-floor@v1 failed on e05fd697fe17 `[989e463774d5]`
+- nu: verdict of frontier-wellformed@v1 on 98420109f39d5624fb32c22b1c7932a3db204dbf8b51a5126422cb7bdde1371f is sound and relevant `[62faa9259dab]`
+- critic: frontier-wellformed@v1 failed on 98420109f39d `[b5c240e53059]`
+- nu: verdict of frontier-claim-honest@v1 on 98420109f39d5624fb32c22b1c7932a3db204dbf8b51a5126422cb7bdde1371f is sound and relevant `[e7b8db3b1e76]`
+- critic: frontier-claim-honest@v1 failed on 98420109f39d `[e5c49b999b26]`
+- nu: verdict of frontier-above-floor@v1 on 98420109f39d5624fb32c22b1c7932a3db204dbf8b51a5126422cb7bdde1371f is sound and relevant `[4e752cb87e00]`
+- critic: frontier-above-floor@v1 failed on 98420109f39d `[8a3c96197c82]`
+- nu: verdict of frontier-wellformed@v1 on f8c9a563289dfae57b321be84488bdb79aac321d43e52a5639da1d63e8360132 is sound and relevant `[378ad7881dac]`
+- critic: frontier-wellformed@v1 failed on f8c9a563289d `[b91bf8ba56ee]`
+- nu: verdict of frontier-claim-honest@v1 on f8c9a563289dfae57b321be84488bdb79aac321d43e52a5639da1d63e8360132 is sound and relevant `[7be7cccd25bd]`
+- critic: frontier-claim-honest@v1 failed on f8c9a563289d `[46b69bf8c6a5]`
+- nu: verdict of frontier-above-floor@v1 on f8c9a563289dfae57b321be84488bdb79aac321d43e52a5639da1d63e8360132 is sound and relevant `[22179852bb08]`
+- critic: frontier-above-floor@v1 failed on f8c9a563289d `[56d4a23d15a0]`
+- nu: verdict of frontier-wellformed@v1 on 1a6887a8a44ff8306008cd18ab2f4be4e05069a81498d38a02a5bd4f47b62f22 is sound and relevant `[c183ac10dfa5]`
+- critic: frontier-wellformed@v1 failed on 1a6887a8a44f `[de5e4939218f]`
+- nu: verdict of frontier-claim-honest@v1 on 1a6887a8a44ff8306008cd18ab2f4be4e05069a81498d38a02a5bd4f47b62f22 is sound and relevant `[f486519dcb0e]`
+- critic: frontier-claim-honest@v1 failed on 1a6887a8a44f `[87d756bd7a00]`
+- nu: verdict of frontier-above-floor@v1 on 1a6887a8a44ff8306008cd18ab2f4be4e05069a81498d38a02a5bd4f47b62f22 is sound and relevant `[9e4dd2738032]`
+- critic: frontier-above-floor@v1 failed on 1a6887a8a44f `[7bf20bdc5924]`
+- nu: verdict of frontier-wellformed@v1 on 782bfcc5598883459326178a814387ffb1244091d45bd55c11270f5dc626230d is sound and relevant `[8607d8574759]`
+- critic: frontier-wellformed@v1 failed on 782bfcc55988 `[710054717189]`
+- nu: verdict of frontier-claim-honest@v1 on 782bfcc5598883459326178a814387ffb1244091d45bd55c11270f5dc626230d is sound and relevant `[ca73d52e2fbe]`
+- critic: frontier-claim-honest@v1 failed on 782bfcc55988 `[7f42b4b09451]`
+- nu: verdict of frontier-above-floor@v1 on 782bfcc5598883459326178a814387ffb1244091d45bd55c11270f5dc626230d is sound and relevant `[b8ffe75ee461]`
+- critic: frontier-above-floor@v1 failed on 782bfcc55988 `[4f39f69b5725]`
+- nu: verdict of frontier-wellformed@v1 on 24d8ed036e6304d8ec0490b3ed3a18df2f605eac2262a193632305e5f8edd858 is sound and relevant `[1576a3db14c8]`
+- critic: frontier-wellformed@v1 failed on 24d8ed036e63 `[a3d1107e51aa]`
+- nu: verdict of frontier-claim-honest@v1 on 24d8ed036e6304d8ec0490b3ed3a18df2f605eac2262a193632305e5f8edd858 is sound and relevant `[8d45a0d503e3]`
+- critic: frontier-claim-honest@v1 failed on 24d8ed036e63 `[407d755b4138]`
+- nu: verdict of frontier-above-floor@v1 on 24d8ed036e6304d8ec0490b3ed3a18df2f605eac2262a193632305e5f8edd858 is sound and relevant `[a91329a76b34]`
+- critic: frontier-above-floor@v1 failed on 24d8ed036e63 `[0eda9b7a9995]`
+- nu: verdict of frontier-wellformed@v1 on 15c57dce4387b5a5d11a7426cf976116c1a65c8e2703f201c1eaefc2f68e4bb5 is sound and relevant `[dd1aceeab727]`
+- critic: frontier-wellformed@v1 failed on 15c57dce4387 `[e846d4d315b0]`
+- nu: verdict of frontier-claim-honest@v1 on 15c57dce4387b5a5d11a7426cf976116c1a65c8e2703f201c1eaefc2f68e4bb5 is sound and relevant `[42e7fa80bc4e]`
+- critic: frontier-claim-honest@v1 failed on 15c57dce4387 `[676d2c7890a8]`
+- nu: verdict of frontier-above-floor@v1 on 15c57dce4387b5a5d11a7426cf976116c1a65c8e2703f201c1eaefc2f68e4bb5 is sound and relevant `[cce782c34f52]`
+- critic: frontier-above-floor@v1 failed on 15c57dce4387 `[e24e84139297]`
+- nu: verdict of frontier-wellformed@v1 on 8abced1e0ae51ba765109d3598115b26472877222aa6d880b4c3c883bc3f228f is sound and relevant `[54a3f9a6ad59]`
+- critic: frontier-wellformed@v1 failed on 8abced1e0ae5 `[df06dedb1feb]`
+- nu: verdict of frontier-claim-honest@v1 on 8abced1e0ae51ba765109d3598115b26472877222aa6d880b4c3c883bc3f228f is sound and relevant `[64657522f642]`
+- critic: frontier-claim-honest@v1 failed on 8abced1e0ae5 `[069b95991419]`
+- nu: verdict of frontier-above-floor@v1 on 8abced1e0ae51ba765109d3598115b26472877222aa6d880b4c3c883bc3f228f is sound and relevant `[a2da31aa43fe]`
+- critic: frontier-above-floor@v1 failed on 8abced1e0ae5 `[4b7c55e890f5]`
+- nu: verdict of frontier-wellformed@v1 on d3b07d1b36465e0d1b0d8e977c5100fdcf8f88d9ea5ca1fc315c162867337b66 is sound and relevant `[986015d7f0fe]`
+- critic: frontier-wellformed@v1 failed on d3b07d1b3646 `[4634ad64b75a]`
+- nu: verdict of frontier-claim-honest@v1 on d3b07d1b36465e0d1b0d8e977c5100fdcf8f88d9ea5ca1fc315c162867337b66 is sound and relevant `[80e02addc36b]`
+- critic: frontier-claim-honest@v1 failed on d3b07d1b3646 `[5978ab264aac]`
+- nu: verdict of frontier-above-floor@v1 on d3b07d1b36465e0d1b0d8e977c5100fdcf8f88d9ea5ca1fc315c162867337b66 is sound and relevant `[e37e73dcc6b9]`
+- critic: frontier-above-floor@v1 failed on d3b07d1b3646 `[a8e307d5491f]`
+- nu: verdict of frontier-wellformed@v1 on 469cecbaa424b9ed2b5f94234b3376351eba909bbad28a073e5bda5dd8affd02 is sound and relevant `[b2e917ccd186]`
+- critic: frontier-wellformed@v1 failed on 469cecbaa424 `[6f6c248cf793]`
+- nu: verdict of frontier-claim-honest@v1 on 469cecbaa424b9ed2b5f94234b3376351eba909bbad28a073e5bda5dd8affd02 is sound and relevant `[7b2a64a9ca2e]`
+- critic: frontier-claim-honest@v1 failed on 469cecbaa424 `[65f2ad6e8318]`
+- nu: verdict of frontier-above-floor@v1 on 469cecbaa424b9ed2b5f94234b3376351eba909bbad28a073e5bda5dd8affd02 is sound and relevant `[b154c098b489]`
+- critic: frontier-above-floor@v1 failed on 469cecbaa424 `[3aba1244efd8]`
+- nu: verdict of frontier-wellformed@v1 on 8e36e6cb95edf246f7fa73d2405998af177594b4245dc8ecb01647edc764c494 is sound and relevant `[fc0d6d62b28d]`
+- critic: frontier-wellformed@v1 failed on 8e36e6cb95ed `[a3704145a3d2]`
+- nu: verdict of frontier-claim-honest@v1 on 8e36e6cb95edf246f7fa73d2405998af177594b4245dc8ecb01647edc764c494 is sound and relevant `[7bcfdd01fd0d]`
+- critic: frontier-claim-honest@v1 failed on 8e36e6cb95ed `[e2386b3a426b]`
+- nu: verdict of frontier-above-floor@v1 on 8e36e6cb95edf246f7fa73d2405998af177594b4245dc8ecb01647edc764c494 is sound and relevant `[744e98b5d264]`
+- critic: frontier-above-floor@v1 failed on 8e36e6cb95ed `[71c719704358]`
+- nu: verdict of frontier-wellformed@v1 on c60c6a19986b9361b64cf387b62f25b5a0f019e09178c4749ec745740ea287e8 is sound and relevant `[52ac43320072]`
+- critic: frontier-wellformed@v1 failed on c60c6a19986b `[493ca35936dd]`
+- nu: verdict of frontier-claim-honest@v1 on c60c6a19986b9361b64cf387b62f25b5a0f019e09178c4749ec745740ea287e8 is sound and relevant `[a99d265d9e2a]`
+- critic: frontier-claim-honest@v1 failed on c60c6a19986b `[ac9f2cd617c1]`
+- nu: verdict of frontier-above-floor@v1 on c60c6a19986b9361b64cf387b62f25b5a0f019e09178c4749ec745740ea287e8 is sound and relevant `[b3a2d387d1a1]`
+- critic: frontier-above-floor@v1 failed on c60c6a19986b `[b7916733f262]`
+- nu: verdict of frontier-wellformed@v1 on cfc75182206c25b4fa4b10be4ebd526b9b8fbe7515e6742004165166a889bd86 is sound and relevant `[e581d2b69faf]`
+- critic: frontier-wellformed@v1 failed on cfc75182206c `[ce2a3d61623a]`
+- nu: verdict of frontier-claim-honest@v1 on cfc75182206c25b4fa4b10be4ebd526b9b8fbe7515e6742004165166a889bd86 is sound and relevant `[1fc19bb59842]`
+- critic: frontier-claim-honest@v1 failed on cfc75182206c `[c8c6aa664e35]`
+- nu: verdict of frontier-above-floor@v1 on cfc75182206c25b4fa4b10be4ebd526b9b8fbe7515e6742004165166a889bd86 is sound and relevant `[7aa4f63750bf]`
+- critic: frontier-above-floor@v1 failed on cfc75182206c `[f49286bd7685]`
+- nu: verdict of frontier-wellformed@v1 on ad9e1f39e94782e892fa7e7237c4ae176f0080e4c0c9c6868b83593eb78531f9 is sound and relevant `[dc2529034727]`
+- critic: frontier-wellformed@v1 failed on ad9e1f39e947 `[fbc6f3997027]`
+- nu: verdict of frontier-claim-honest@v1 on ad9e1f39e94782e892fa7e7237c4ae176f0080e4c0c9c6868b83593eb78531f9 is sound and relevant `[c8e5b83d1a89]`
+- critic: frontier-claim-honest@v1 failed on ad9e1f39e947 `[5a06a93aefb2]`
+- nu: verdict of frontier-above-floor@v1 on ad9e1f39e94782e892fa7e7237c4ae176f0080e4c0c9c6868b83593eb78531f9 is sound and relevant `[9787eb660400]`
+- critic: frontier-above-floor@v1 failed on ad9e1f39e947 `[2ddd81a9d90a]`
+- {"cycle": 2, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 20480}} `[56f9c6cb7b0d]`
+- {"adjustments": {"render_slices": {"attackers": 10, "departures": 8}}, "bands": {"ath": false, "debt": true, "egr": true, "rr": true, "sc": true, "var": true}, "enter_k": 2, "exit_k": 0, "mode": "diversify", "no_lever": {"critic_budgets": "the lever exists but belongs to the ALLOCATION controller under its own envelope law; two controllers writing one seat cap is a defect, not a feature", "lineage_quotas": "no lineage quota exists on this tree; a scheduler that capped work per lineage root would be one", "retrieval_balance": "retrieval balance lives on the evidence policy, not on a knob this c… `[7f71cb176a99]`
+- nu: verdict of frontier-wellformed@v1 on ea240936085eea00ff9b6149282908110c46adc7b12d2bfed8eafcc64381369c is sound and relevant `[4bed696e766c]`
+- critic: frontier-wellformed@v1 failed on ea240936085e `[47047400d92c]`
+- nu: verdict of frontier-claim-honest@v1 on ea240936085eea00ff9b6149282908110c46adc7b12d2bfed8eafcc64381369c is sound and relevant `[38e3b1af4a77]`
+- critic: frontier-claim-honest@v1 failed on ea240936085e `[9cc4831da088]`
+- nu: verdict of frontier-above-floor@v1 on ea240936085eea00ff9b6149282908110c46adc7b12d2bfed8eafcc64381369c is sound and relevant `[b188c45a1ad9]`
+- critic: frontier-above-floor@v1 failed on ea240936085e `[cdaa28a2878e]`
+- nu: verdict of frontier-wellformed@v1 on 87faf95ebc7616c8779b461a6be3615ba459cc3ce503b458052ee33584e9fe49 is sound and relevant `[f43c0d4372b0]`
+- critic: frontier-wellformed@v1 failed on 87faf95ebc76 `[3a52113b434b]`
+- nu: verdict of frontier-claim-honest@v1 on 87faf95ebc7616c8779b461a6be3615ba459cc3ce503b458052ee33584e9fe49 is sound and relevant `[3f094c92fbc8]`
+- critic: frontier-claim-honest@v1 failed on 87faf95ebc76 `[537cdc52dcb2]`
+- nu: verdict of frontier-above-floor@v1 on 87faf95ebc7616c8779b461a6be3615ba459cc3ce503b458052ee33584e9fe49 is sound and relevant `[bbc8e3ed2541]`
+- critic: frontier-above-floor@v1 failed on 87faf95ebc76 `[8eda75413245]`
+- nu: verdict of frontier-wellformed@v1 on 958fa7c704cef71cdc22b5f0ad1c6eb9c0f5738b42e4f7240ae9bc87eb6d3364 is sound and relevant `[7611b456fbba]`
+- critic: frontier-wellformed@v1 failed on 958fa7c704ce `[37d56b29bc0e]`
+- nu: verdict of frontier-claim-honest@v1 on 958fa7c704cef71cdc22b5f0ad1c6eb9c0f5738b42e4f7240ae9bc87eb6d3364 is sound and relevant `[889945321486]`
+- critic: frontier-claim-honest@v1 failed on 958fa7c704ce `[10ca9f098ada]`
+- nu: verdict of frontier-above-floor@v1 on 958fa7c704cef71cdc22b5f0ad1c6eb9c0f5738b42e4f7240ae9bc87eb6d3364 is sound and relevant `[16b8246a16f0]`
+- critic: frontier-above-floor@v1 failed on 958fa7c704ce `[44ee5742edcc]`
+- nu: verdict of frontier-wellformed@v1 on 1d9e89700bd496e21d7f1b1cfbbd5b697352337a2f580ab33224cbc9e8d2b485 is sound and relevant `[f2458330d86a]`
+- critic: frontier-wellformed@v1 failed on 1d9e89700bd4 `[3c825cd235a4]`
+- nu: verdict of frontier-claim-honest@v1 on 1d9e89700bd496e21d7f1b1cfbbd5b697352337a2f580ab33224cbc9e8d2b485 is sound and relevant `[adf603b7b923]`
+- critic: frontier-claim-honest@v1 failed on 1d9e89700bd4 `[e1d437a85da7]`
+- nu: verdict of frontier-above-floor@v1 on 1d9e89700bd496e21d7f1b1cfbbd5b697352337a2f580ab33224cbc9e8d2b485 is sound and relevant `[0feadbee1745]`
+- critic: frontier-above-floor@v1 failed on 1d9e89700bd4 `[5c4f12130965]`
+- nu: verdict of frontier-wellformed@v1 on 4eac6e3d16f4ff87c6056251b11609cd22dcc8a24703658436621214c815f391 is sound and relevant `[7274c3912ab6]`
+- critic: frontier-wellformed@v1 failed on 4eac6e3d16f4 `[6b9cecb9506a]`
+- nu: verdict of frontier-claim-honest@v1 on 4eac6e3d16f4ff87c6056251b11609cd22dcc8a24703658436621214c815f391 is sound and relevant `[24b00598f2b0]`
+- critic: frontier-claim-honest@v1 failed on 4eac6e3d16f4 `[2b04b2d5ba04]`
+- nu: verdict of frontier-above-floor@v1 on 4eac6e3d16f4ff87c6056251b11609cd22dcc8a24703658436621214c815f391 is sound and relevant `[49a1d27e4982]`
+- critic: frontier-above-floor@v1 failed on 4eac6e3d16f4 `[d156ded609bf]`
+- nu: verdict of frontier-wellformed@v1 on 0019eeb77c3e72e8df14aa1fcf388680f06ab00153ee72b0782dd1830f40db49 is sound and relevant `[3e5635675855]`
+- critic: frontier-wellformed@v1 failed on 0019eeb77c3e `[490536033d16]`
+- nu: verdict of frontier-claim-honest@v1 on 0019eeb77c3e72e8df14aa1fcf388680f06ab00153ee72b0782dd1830f40db49 is sound and relevant `[06cf49578c95]`
+- critic: frontier-claim-honest@v1 failed on 0019eeb77c3e `[39ac6525213e]`
+- nu: verdict of frontier-above-floor@v1 on 0019eeb77c3e72e8df14aa1fcf388680f06ab00153ee72b0782dd1830f40db49 is sound and relevant `[358a5fdabc63]`
+- critic: frontier-above-floor@v1 failed on 0019eeb77c3e `[4866725b18f7]`
+- nu: verdict of frontier-wellformed@v1 on 5f700ede15c2b9880aea28452e1c78a808860f1361ea0a53f8840bfb21dbbed0 is sound and relevant `[5c0059edc465]`
+- critic: frontier-wellformed@v1 failed on 5f700ede15c2 `[6f10a14dc36c]`
+- nu: verdict of frontier-claim-honest@v1 on 5f700ede15c2b9880aea28452e1c78a808860f1361ea0a53f8840bfb21dbbed0 is sound and relevant `[d43777e03365]`
+- critic: frontier-claim-honest@v1 failed on 5f700ede15c2 `[ca25a479b905]`
+- nu: verdict of frontier-above-floor@v1 on 5f700ede15c2b9880aea28452e1c78a808860f1361ea0a53f8840bfb21dbbed0 is sound and relevant `[94e53b62a231]`
+- critic: frontier-above-floor@v1 failed on 5f700ede15c2 `[590bd943fa8f]`
+- nu: verdict of frontier-wellformed@v1 on 3fa12e2ea4d1737e9f333d63375edaac2cbb6b856a2f575dbb2e7b49d2e102db is sound and relevant `[d3c1e456a9bc]`
+- critic: frontier-wellformed@v1 failed on 3fa12e2ea4d1 `[c3c3c0bb8947]`
+- nu: verdict of frontier-claim-honest@v1 on 3fa12e2ea4d1737e9f333d63375edaac2cbb6b856a2f575dbb2e7b49d2e102db is sound and relevant `[fcd7d2d4dec5]`
+- critic: frontier-claim-honest@v1 failed on 3fa12e2ea4d1 `[ea11f7eebd7a]`
+- nu: verdict of frontier-above-floor@v1 on 3fa12e2ea4d1737e9f333d63375edaac2cbb6b856a2f575dbb2e7b49d2e102db is sound and relevant `[900c0ac40a7c]`
+- critic: frontier-above-floor@v1 failed on 3fa12e2ea4d1 `[da52028b008f]`
+- nu: verdict of frontier-wellformed@v1 on a5a9ffc94b0817e9bfb08990ec2f041735269379a5adde3557aa9f06034ba1c0 is sound and relevant `[0100156a9031]`
+- critic: frontier-wellformed@v1 failed on a5a9ffc94b08 `[c74686a1fc11]`
+- nu: verdict of frontier-claim-honest@v1 on a5a9ffc94b0817e9bfb08990ec2f041735269379a5adde3557aa9f06034ba1c0 is sound and relevant `[fef5c0f0b5ba]`
+- critic: frontier-claim-honest@v1 failed on a5a9ffc94b08 `[719be3de037f]`
+- nu: verdict of frontier-above-floor@v1 on a5a9ffc94b0817e9bfb08990ec2f041735269379a5adde3557aa9f06034ba1c0 is sound and relevant `[6e0c3aaac5a4]`
+- critic: frontier-above-floor@v1 failed on a5a9ffc94b08 `[421e516f33f8]`
+- nu: verdict of frontier-wellformed@v1 on 877096a9ea5475eae6ac93b0395368f0c862e3c7691972df5777762b9b820f9d is sound and relevant `[236271c7b5c3]`
+- critic: frontier-wellformed@v1 failed on 877096a9ea54 `[b7a5501df509]`
+- nu: verdict of frontier-claim-honest@v1 on 877096a9ea5475eae6ac93b0395368f0c862e3c7691972df5777762b9b820f9d is sound and relevant `[4ec7a689cd23]`
+- critic: frontier-claim-honest@v1 failed on 877096a9ea54 `[df5b48224ec4]`
+- nu: verdict of frontier-above-floor@v1 on 877096a9ea5475eae6ac93b0395368f0c862e3c7691972df5777762b9b820f9d is sound and relevant `[f32cbcefae21]`
+- critic: frontier-above-floor@v1 failed on 877096a9ea54 `[e24948a8f328]`
+- nu: verdict of frontier-wellformed@v1 on dead52c2af986ebba024a1d167c0001b2592bf69f25e4b5fe56e98a1dfd0a7fb is sound and relevant `[b24dd2fb22e6]`
+- critic: frontier-wellformed@v1 failed on dead52c2af98 `[3deeed2f00a8]`
+- nu: verdict of frontier-claim-honest@v1 on dead52c2af986ebba024a1d167c0001b2592bf69f25e4b5fe56e98a1dfd0a7fb is sound and relevant `[aeb8410e360f]`
+- critic: frontier-claim-honest@v1 failed on dead52c2af98 `[7c336f92b85e]`
+- nu: verdict of frontier-above-floor@v1 on dead52c2af986ebba024a1d167c0001b2592bf69f25e4b5fe56e98a1dfd0a7fb is sound and relevant `[009086bc182f]`
+- critic: frontier-above-floor@v1 failed on dead52c2af98 `[36d4fe05d233]`
+- nu: verdict of frontier-wellformed@v1 on c0c5af61ed86ef352389f1b3f5831c0f82828e031c9312ad0dbb0b3c81057b4d is sound and relevant `[7556d0d990ac]`
+- critic: frontier-wellformed@v1 failed on c0c5af61ed86 `[912bc33b2af9]`
+- nu: verdict of frontier-claim-honest@v1 on c0c5af61ed86ef352389f1b3f5831c0f82828e031c9312ad0dbb0b3c81057b4d is sound and relevant `[fab0e462c5ea]`
+- critic: frontier-claim-honest@v1 failed on c0c5af61ed86 `[4d697b7eb7f0]`
+- nu: verdict of frontier-above-floor@v1 on c0c5af61ed86ef352389f1b3f5831c0f82828e031c9312ad0dbb0b3c81057b4d is sound and relevant `[991c4b6e985d]`
+- critic: frontier-above-floor@v1 failed on c0c5af61ed86 `[008f4bbf4be2]`
+- nu: verdict of frontier-wellformed@v1 on 446d2729f70ceeb28ed673f0efebc42d3632d3e7d5f0a613a44e65307d225c26 is sound and relevant `[cea5c9f64657]`
+- critic: frontier-wellformed@v1 failed on 446d2729f70c `[acbde5da58c1]`
+- nu: verdict of frontier-claim-honest@v1 on 446d2729f70ceeb28ed673f0efebc42d3632d3e7d5f0a613a44e65307d225c26 is sound and relevant `[0357d2cd5f6d]`
+- critic: frontier-claim-honest@v1 failed on 446d2729f70c `[e2e7ba381693]`
+- nu: verdict of frontier-above-floor@v1 on 446d2729f70ceeb28ed673f0efebc42d3632d3e7d5f0a613a44e65307d225c26 is sound and relevant `[477e7e23ae28]`
+- critic: frontier-above-floor@v1 failed on 446d2729f70c `[43c909160dee]`
+- nu: verdict of frontier-wellformed@v1 on a3a3313e0a2125ee5638101431808aae9cb4470e8030bad6591745261232000e is sound and relevant `[88d71ea84038]`
+- critic: frontier-wellformed@v1 failed on a3a3313e0a21 `[62c50a68a875]`
+- nu: verdict of frontier-claim-honest@v1 on a3a3313e0a2125ee5638101431808aae9cb4470e8030bad6591745261232000e is sound and relevant `[69da6829e1de]`
+- critic: frontier-claim-honest@v1 failed on a3a3313e0a21 `[cf56deb7888f]`
+- nu: verdict of frontier-above-floor@v1 on a3a3313e0a2125ee5638101431808aae9cb4470e8030bad6591745261232000e is sound and relevant `[f068de18ea4d]`
+- critic: frontier-above-floor@v1 failed on a3a3313e0a21 `[6562fd655101]`
+- nu: verdict of frontier-wellformed@v1 on f33a22d20631a93e0581e52786fd99b6d3ccc06df8058f10cabaada2a6e8e24e is sound and relevant `[0aebc3ac9a34]`
+- critic: frontier-wellformed@v1 failed on f33a22d20631 `[8c1f7e580c1c]`
+- nu: verdict of frontier-claim-honest@v1 on f33a22d20631a93e0581e52786fd99b6d3ccc06df8058f10cabaada2a6e8e24e is sound and relevant `[a781b590c725]`
+- critic: frontier-claim-honest@v1 failed on f33a22d20631 `[db334f8865be]`
+- nu: verdict of frontier-above-floor@v1 on f33a22d20631a93e0581e52786fd99b6d3ccc06df8058f10cabaada2a6e8e24e is sound and relevant `[344b6c7ef46f]`
+- critic: frontier-above-floor@v1 failed on f33a22d20631 `[99801ce80810]`
+- nu: verdict of frontier-wellformed@v1 on 55d223a6d38109e2b0a242d19154f7dfacb19277e80cf1a4b98586a0c89123e1 is sound and relevant `[c62f86e4c943]`
+- critic: frontier-wellformed@v1 failed on 55d223a6d381 `[c90c4c1d3a6c]`
+- nu: verdict of frontier-claim-honest@v1 on 55d223a6d38109e2b0a242d19154f7dfacb19277e80cf1a4b98586a0c89123e1 is sound and relevant `[e12a093dfd00]`
+- critic: frontier-claim-honest@v1 failed on 55d223a6d381 `[94d1247ab269]`
+- nu: verdict of frontier-above-floor@v1 on 55d223a6d38109e2b0a242d19154f7dfacb19277e80cf1a4b98586a0c89123e1 is sound and relevant `[dc4c05856204]`
+- critic: frontier-above-floor@v1 failed on 55d223a6d381 `[641d6ab670ab]`
+- nu: verdict of frontier-wellformed@v1 on b66227495fb1684c441dcf5b1c52caa7a4c7f6e7cc4575a68ea713a51e1f6cf8 is sound and relevant `[b86235cc6f7e]`
+- critic: frontier-wellformed@v1 failed on b66227495fb1 `[26e79f0fb38d]`
+- nu: verdict of frontier-claim-honest@v1 on b66227495fb1684c441dcf5b1c52caa7a4c7f6e7cc4575a68ea713a51e1f6cf8 is sound and relevant `[0ab5236b91f2]`
+- critic: frontier-claim-honest@v1 failed on b66227495fb1 `[b8e040f2c4e5]`
+- nu: verdict of frontier-above-floor@v1 on b66227495fb1684c441dcf5b1c52caa7a4c7f6e7cc4575a68ea713a51e1f6cf8 is sound and relevant `[6a86d4d24c1e]`
+- critic: frontier-above-floor@v1 failed on b66227495fb1 `[e014e2311a05]`
+- nu: verdict of frontier-wellformed@v1 on ca7e2beb49c6ff61075bcc8be8febd78e6141ef0db366fc07adac20972606fea is sound and relevant `[fb10ec0922f1]`
+- critic: frontier-wellformed@v1 failed on ca7e2beb49c6 `[cbd6be8660cb]`
+- nu: verdict of frontier-claim-honest@v1 on ca7e2beb49c6ff61075bcc8be8febd78e6141ef0db366fc07adac20972606fea is sound and relevant `[0069cb8cd3b3]`
+- critic: frontier-claim-honest@v1 failed on ca7e2beb49c6 `[d93b788b99b9]`
+- nu: verdict of frontier-above-floor@v1 on ca7e2beb49c6ff61075bcc8be8febd78e6141ef0db366fc07adac20972606fea is sound and relevant `[873abaefcd89]`
+- critic: frontier-above-floor@v1 failed on ca7e2beb49c6 `[21ef104be4ce]`
+- nu: verdict of frontier-wellformed@v1 on c61888f5316f3ab003d028a4af1335f5a0272d5e0cf5f06ab444fc085a363828 is sound and relevant `[cd858e36890b]`
+- critic: frontier-wellformed@v1 failed on c61888f5316f `[6ce1dbf27c0c]`
+- nu: verdict of frontier-claim-honest@v1 on c61888f5316f3ab003d028a4af1335f5a0272d5e0cf5f06ab444fc085a363828 is sound and relevant `[571d99715985]`
+- critic: frontier-claim-honest@v1 failed on c61888f5316f `[8f36d6f3c212]`
+- nu: verdict of frontier-above-floor@v1 on c61888f5316f3ab003d028a4af1335f5a0272d5e0cf5f06ab444fc085a363828 is sound and relevant `[e674403eed84]`
+- critic: frontier-above-floor@v1 failed on c61888f5316f `[eedbaf93312a]`
+- nu: verdict of frontier-wellformed@v1 on 5322fce1a2f1125ed7dd5aaf028fc6453227c317abaa80e4c66d377d9fa433a4 is sound and relevant `[130391f3a8be]`
+- critic: frontier-wellformed@v1 failed on 5322fce1a2f1 `[62973fd18159]`
+- nu: verdict of frontier-claim-honest@v1 on 5322fce1a2f1125ed7dd5aaf028fc6453227c317abaa80e4c66d377d9fa433a4 is sound and relevant `[b0c123ed0653]`
+- critic: frontier-claim-honest@v1 failed on 5322fce1a2f1 `[a32ebdb22034]`
+- nu: verdict of frontier-above-floor@v1 on 5322fce1a2f1125ed7dd5aaf028fc6453227c317abaa80e4c66d377d9fa433a4 is sound and relevant `[9e1ac58c0ef8]`
+- critic: frontier-above-floor@v1 failed on 5322fce1a2f1 `[b6fd3cf37283]`
+- nu: verdict of frontier-wellformed@v1 on dad237b50e8eb76b9a0e4134ed9d5493d9bf9f3ab8e6c6820c82d31c5b4708e5 is sound and relevant `[4c1a105df6e4]`
+- critic: frontier-wellformed@v1 failed on dad237b50e8e `[916f0e6940fa]`
+- nu: verdict of frontier-claim-honest@v1 on dad237b50e8eb76b9a0e4134ed9d5493d9bf9f3ab8e6c6820c82d31c5b4708e5 is sound and relevant `[b31744f01a02]`
+- critic: frontier-claim-honest@v1 failed on dad237b50e8e `[faa2a7afa38a]`
+- nu: verdict of frontier-above-floor@v1 on dad237b50e8eb76b9a0e4134ed9d5493d9bf9f3ab8e6c6820c82d31c5b4708e5 is sound and relevant `[a6798c420f38]`
+- critic: frontier-above-floor@v1 failed on dad237b50e8e `[592e8b783a40]`
+- nu: verdict of frontier-wellformed@v1 on 0dbd1e71d1f0fe640d4b886f2bc9210e0eead8af8e56864a02c71c4afaab908f is sound and relevant `[bfd01e479d81]`
+- critic: frontier-wellformed@v1 failed on 0dbd1e71d1f0 `[579eba34a1a3]`
+- nu: verdict of frontier-claim-honest@v1 on 0dbd1e71d1f0fe640d4b886f2bc9210e0eead8af8e56864a02c71c4afaab908f is sound and relevant `[cdbf604d9ac7]`
+- critic: frontier-claim-honest@v1 failed on 0dbd1e71d1f0 `[2be38aa3b9ed]`
+- nu: verdict of frontier-above-floor@v1 on 0dbd1e71d1f0fe640d4b886f2bc9210e0eead8af8e56864a02c71c4afaab908f is sound and relevant `[3690f6324cbe]`
+- critic: frontier-above-floor@v1 failed on 0dbd1e71d1f0 `[7c9d67273a04]`
+- nu: verdict of frontier-wellformed@v1 on 6a6cce66484d9aa0b7a586e61bd3ead038317bc762fc9bb84ad12ee49ee3c748 is sound and relevant `[f2e071a51431]`
+- critic: frontier-wellformed@v1 failed on 6a6cce66484d `[71c86abab56e]`
+- nu: verdict of frontier-claim-honest@v1 on 6a6cce66484d9aa0b7a586e61bd3ead038317bc762fc9bb84ad12ee49ee3c748 is sound and relevant `[2f2950b94134]`
+- critic: frontier-claim-honest@v1 failed on 6a6cce66484d `[1cea9f5126ba]`
+- nu: verdict of frontier-above-floor@v1 on 6a6cce66484d9aa0b7a586e61bd3ead038317bc762fc9bb84ad12ee49ee3c748 is sound and relevant `[5367516f0d5a]`
+- critic: frontier-above-floor@v1 failed on 6a6cce66484d `[7839d1f92c7a]`
+- nu: verdict of frontier-wellformed@v1 on 3d5df227bbbbd6e19a6fda0db0251bff1e9c63059ac4580bafe414642e88ff77 is sound and relevant `[0ad992f722ba]`
+- critic: frontier-wellformed@v1 failed on 3d5df227bbbb `[b9de6b9ce2c5]`
+- nu: verdict of frontier-claim-honest@v1 on 3d5df227bbbbd6e19a6fda0db0251bff1e9c63059ac4580bafe414642e88ff77 is sound and relevant `[eea79c0e098a]`
+- critic: frontier-claim-honest@v1 failed on 3d5df227bbbb `[49ede4d1908b]`
+- nu: verdict of frontier-above-floor@v1 on 3d5df227bbbbd6e19a6fda0db0251bff1e9c63059ac4580bafe414642e88ff77 is sound and relevant `[e9d3b4aebc20]`
+- critic: frontier-above-floor@v1 failed on 3d5df227bbbb `[178b49e6001d]`
+- nu: verdict of frontier-wellformed@v1 on f508c67d95ba0d5280fb108d204d0a4d385629814b1ba060a967b598e967845a is sound and relevant `[c9c6cf62a0f5]`
+- critic: frontier-wellformed@v1 failed on f508c67d95ba `[6c52f2773ffb]`
+- nu: verdict of frontier-claim-honest@v1 on f508c67d95ba0d5280fb108d204d0a4d385629814b1ba060a967b598e967845a is sound and relevant `[6aaed1eb317e]`
+- critic: frontier-claim-honest@v1 failed on f508c67d95ba `[5a7c6a730442]`
+- nu: verdict of frontier-above-floor@v1 on f508c67d95ba0d5280fb108d204d0a4d385629814b1ba060a967b598e967845a is sound and relevant `[239c29abc95e]`
+- critic: frontier-above-floor@v1 failed on f508c67d95ba `[4cbabcc89e71]`
+- nu: verdict of frontier-wellformed@v1 on c48ad002105c14c6b1d0c79fae99fda3619922f3a3c87123d5177f811c41f799 is sound and relevant `[d063951d6e7c]`
+- critic: frontier-wellformed@v1 failed on c48ad002105c `[79b684584ca7]`
+- nu: verdict of frontier-claim-honest@v1 on c48ad002105c14c6b1d0c79fae99fda3619922f3a3c87123d5177f811c41f799 is sound and relevant `[3a8d25bc49cc]`
+- critic: frontier-claim-honest@v1 failed on c48ad002105c `[7b8cd70a29a1]`
+- nu: verdict of frontier-above-floor@v1 on c48ad002105c14c6b1d0c79fae99fda3619922f3a3c87123d5177f811c41f799 is sound and relevant `[f37a044cd4f7]`
+- critic: frontier-above-floor@v1 failed on c48ad002105c `[0ab84e7f39f1]`
+- nu: verdict of frontier-wellformed@v1 on ff3a9c4072b62ad1d8b9fc2f6b2fe0d65b4a2c0bf23782ac6d6fe5b4b0486d3d is sound and relevant `[9dcdf3bae91d]`
+- critic: frontier-wellformed@v1 failed on ff3a9c4072b6 `[13c7b75b981e]`
+- nu: verdict of frontier-claim-honest@v1 on ff3a9c4072b62ad1d8b9fc2f6b2fe0d65b4a2c0bf23782ac6d6fe5b4b0486d3d is sound and relevant `[f57c758d62b7]`
+- critic: frontier-claim-honest@v1 failed on ff3a9c4072b6 `[575880c29541]`
+- nu: verdict of frontier-above-floor@v1 on ff3a9c4072b62ad1d8b9fc2f6b2fe0d65b4a2c0bf23782ac6d6fe5b4b0486d3d is sound and relevant `[b3b72884e294]`
+- critic: frontier-above-floor@v1 failed on ff3a9c4072b6 `[2b3a7a280262]`
+- nu: verdict of frontier-wellformed@v1 on 1bf3a7cb06d711af8b4b803e117784a1285dad1b7873cb3dfde9c4bf87285ed1 is sound and relevant `[34ecb9a6b6f7]`
+- critic: frontier-wellformed@v1 failed on 1bf3a7cb06d7 `[69f64e9dcbe6]`
+- nu: verdict of frontier-claim-honest@v1 on 1bf3a7cb06d711af8b4b803e117784a1285dad1b7873cb3dfde9c4bf87285ed1 is sound and relevant `[c2443b49441a]`
+- critic: frontier-claim-honest@v1 failed on 1bf3a7cb06d7 `[6c8eac9db240]`
+- nu: verdict of frontier-above-floor@v1 on 1bf3a7cb06d711af8b4b803e117784a1285dad1b7873cb3dfde9c4bf87285ed1 is sound and relevant `[f2275118fc85]`
+- critic: frontier-above-floor@v1 failed on 1bf3a7cb06d7 `[f8e80f9a065d]`
+- nu: verdict of frontier-wellformed@v1 on ccd7248dd6be148ce133568dec67692e7f6c67392e94a061427d61d524fec0d9 is sound and relevant `[daac4c0937c5]`
+- critic: frontier-wellformed@v1 failed on ccd7248dd6be `[e76cb8518e26]`
+- nu: verdict of frontier-claim-honest@v1 on ccd7248dd6be148ce133568dec67692e7f6c67392e94a061427d61d524fec0d9 is sound and relevant `[393d7c814d43]`
+- critic: frontier-claim-honest@v1 failed on ccd7248dd6be `[616f3d1b4d0d]`
+- nu: verdict of frontier-above-floor@v1 on ccd7248dd6be148ce133568dec67692e7f6c67392e94a061427d61d524fec0d9 is sound and relevant `[2a1cd87d93a6]`
+- critic: frontier-above-floor@v1 failed on ccd7248dd6be `[7e45a182e1cf]`
+- nu: verdict of frontier-wellformed@v1 on a73332e6b4bb1f8d303b6aa08b53b784c5c63352571920dc9ebbd2c69830ffa5 is sound and relevant `[066acd671bf8]`
+- critic: frontier-wellformed@v1 failed on a73332e6b4bb `[c7937ae30c24]`
+- nu: verdict of frontier-claim-honest@v1 on a73332e6b4bb1f8d303b6aa08b53b784c5c63352571920dc9ebbd2c69830ffa5 is sound and relevant `[77be282e8a57]`
+- critic: frontier-claim-honest@v1 failed on a73332e6b4bb `[37cb4267175f]`
+- nu: verdict of frontier-above-floor@v1 on a73332e6b4bb1f8d303b6aa08b53b784c5c63352571920dc9ebbd2c69830ffa5 is sound and relevant `[f611922d733b]`
+- critic: frontier-above-floor@v1 failed on a73332e6b4bb `[36c057709633]`
+- nu: verdict of frontier-wellformed@v1 on d90da18a716f51cef4860f4f8b530909eef5d49507de8f734c587ab49505a686 is sound and relevant `[6f96f86be6d2]`
+- critic: frontier-wellformed@v1 failed on d90da18a716f `[547a900212b1]`
+- nu: verdict of frontier-claim-honest@v1 on d90da18a716f51cef4860f4f8b530909eef5d49507de8f734c587ab49505a686 is sound and relevant `[11362de9127d]`
+- critic: frontier-claim-honest@v1 failed on d90da18a716f `[da9589718fa7]`
+- nu: verdict of frontier-above-floor@v1 on d90da18a716f51cef4860f4f8b530909eef5d49507de8f734c587ab49505a686 is sound and relevant `[902de7d20162]`
+- critic: frontier-above-floor@v1 failed on d90da18a716f `[0b35331a36f2]`
+- nu: verdict of frontier-wellformed@v1 on d651d1bcaf93769bbcfe349d503ae686c0642f02c2bf5d99347f9de8c58f8db2 is sound and relevant `[6ad206508ee1]`
+- critic: frontier-wellformed@v1 failed on d651d1bcaf93 `[1a88cb635b37]`
+- nu: verdict of frontier-claim-honest@v1 on d651d1bcaf93769bbcfe349d503ae686c0642f02c2bf5d99347f9de8c58f8db2 is sound and relevant `[c15c25f975ed]`
+- critic: frontier-claim-honest@v1 failed on d651d1bcaf93 `[d5f84507f4ce]`
+- nu: verdict of frontier-above-floor@v1 on d651d1bcaf93769bbcfe349d503ae686c0642f02c2bf5d99347f9de8c58f8db2 is sound and relevant `[7d987a11eaa4]`
+- critic: frontier-above-floor@v1 failed on d651d1bcaf93 `[63095d77d4cf]`
+- nu: verdict of frontier-wellformed@v1 on a2c8a1d49f8630b06e81b6932d9db6f1a914776e7d189b9483f050930357d4a6 is sound and relevant `[14b63d97bfc8]`
+- critic: frontier-wellformed@v1 failed on a2c8a1d49f86 `[5b01e431077e]`
+- nu: verdict of frontier-claim-honest@v1 on a2c8a1d49f8630b06e81b6932d9db6f1a914776e7d189b9483f050930357d4a6 is sound and relevant `[a3f9e620c520]`
+- critic: frontier-claim-honest@v1 failed on a2c8a1d49f86 `[b57fd7abd772]`
+- nu: verdict of frontier-above-floor@v1 on a2c8a1d49f8630b06e81b6932d9db6f1a914776e7d189b9483f050930357d4a6 is sound and relevant `[e58392742545]`
+- critic: frontier-above-floor@v1 failed on a2c8a1d49f86 `[23545b452641]`
+- nu: verdict of frontier-wellformed@v1 on 3faa77b1f9bb4716d22cf82951ffa3f2967a6d10881e5bed59743edc0295f15f is sound and relevant `[e6efdc8776bb]`
+- critic: frontier-wellformed@v1 failed on 3faa77b1f9bb `[57def53a4705]`
+- nu: verdict of frontier-claim-honest@v1 on 3faa77b1f9bb4716d22cf82951ffa3f2967a6d10881e5bed59743edc0295f15f is sound and relevant `[1a76147d8a79]`
+- critic: frontier-claim-honest@v1 failed on 3faa77b1f9bb `[56b565cb310d]`
+- nu: verdict of frontier-above-floor@v1 on 3faa77b1f9bb4716d22cf82951ffa3f2967a6d10881e5bed59743edc0295f15f is sound and relevant `[18e7c931c2a3]`
+- critic: frontier-above-floor@v1 failed on 3faa77b1f9bb `[cca24a65f029]`
+- nu: verdict of frontier-wellformed@v1 on 50cf713631394af053bb5f42e508635ac4a098c85db113a1026a2e1563da7bbd is sound and relevant `[c31c6eac1000]`
+- critic: frontier-wellformed@v1 failed on 50cf71363139 `[44cc6cdfba62]`
+- nu: verdict of frontier-claim-honest@v1 on 50cf713631394af053bb5f42e508635ac4a098c85db113a1026a2e1563da7bbd is sound and relevant `[f35824eec0b3]`
+- critic: frontier-claim-honest@v1 failed on 50cf71363139 `[21a13a36103e]`
+- nu: verdict of frontier-above-floor@v1 on 50cf713631394af053bb5f42e508635ac4a098c85db113a1026a2e1563da7bbd is sound and relevant `[e23eaf86840c]`
+- critic: frontier-above-floor@v1 failed on 50cf71363139 `[4ddb8903970d]`
+- {"cycle": 4, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 12800}} `[c6e27bb93265]`
+- nu: verdict of frontier-wellformed@v1 on 8d8a4e8cb081643a40a3b93e29e69984913fddc08c531a38375fee173492ceb1 is sound and relevant `[62a48a3a15be]`
+- critic: frontier-wellformed@v1 failed on 8d8a4e8cb081 `[e80360b387e7]`
+- nu: verdict of frontier-claim-honest@v1 on 8d8a4e8cb081643a40a3b93e29e69984913fddc08c531a38375fee173492ceb1 is sound and relevant `[85376725debb]`
+- critic: frontier-claim-honest@v1 failed on 8d8a4e8cb081 `[d13876dca4db]`
+- nu: verdict of frontier-above-floor@v1 on 8d8a4e8cb081643a40a3b93e29e69984913fddc08c531a38375fee173492ceb1 is sound and relevant `[12aaeb0bd522]`
+- critic: frontier-above-floor@v1 failed on 8d8a4e8cb081 `[407543b7f46d]`
+- nu: verdict of frontier-wellformed@v1 on 92ce32d18b128be27ce7034249fd931cc05b865a9cab7043aa79d313bcb2c561 is sound and relevant `[ddc5cda10da9]`
+- critic: frontier-wellformed@v1 failed on 92ce32d18b12 `[924668a3e14d]`
+- nu: verdict of frontier-claim-honest@v1 on 92ce32d18b128be27ce7034249fd931cc05b865a9cab7043aa79d313bcb2c561 is sound and relevant `[8c6d2947ef34]`
+- critic: frontier-claim-honest@v1 failed on 92ce32d18b12 `[4a5bd091bd8a]`
+- nu: verdict of frontier-above-floor@v1 on 92ce32d18b128be27ce7034249fd931cc05b865a9cab7043aa79d313bcb2c561 is sound and relevant `[27db4eee974b]`
+- critic: frontier-above-floor@v1 failed on 92ce32d18b12 `[5f6578c684b2]`
+- nu: verdict of frontier-wellformed@v1 on 8629e9e2224c26edbd24aea686be4098afd4e80443c016343184a2eb87244668 is sound and relevant `[b0777ac18d7e]`
+- critic: frontier-wellformed@v1 failed on 8629e9e2224c `[342b7142839a]`
+- nu: verdict of frontier-claim-honest@v1 on 8629e9e2224c26edbd24aea686be4098afd4e80443c016343184a2eb87244668 is sound and relevant `[ed9b500e50e5]`
+- critic: frontier-claim-honest@v1 failed on 8629e9e2224c `[cc52433a7205]`
+- nu: verdict of frontier-above-floor@v1 on 8629e9e2224c26edbd24aea686be4098afd4e80443c016343184a2eb87244668 is sound and relevant `[12d24f41b1d0]`
+- critic: frontier-above-floor@v1 failed on 8629e9e2224c `[93e50d6cf0e1]`
+- nu: verdict of frontier-wellformed@v1 on 0568d8ebee5670b716348e60f0e7e1cfaae5589d4755bf00b023d4fc4cde55a5 is sound and relevant `[6f5781fabc6f]`
+- critic: frontier-wellformed@v1 failed on 0568d8ebee56 `[a174a96c8502]`
+- nu: verdict of frontier-claim-honest@v1 on 0568d8ebee5670b716348e60f0e7e1cfaae5589d4755bf00b023d4fc4cde55a5 is sound and relevant `[0aaafa165558]`
+- critic: frontier-claim-honest@v1 failed on 0568d8ebee56 `[c3808b04cc64]`
+- nu: verdict of frontier-above-floor@v1 on 0568d8ebee5670b716348e60f0e7e1cfaae5589d4755bf00b023d4fc4cde55a5 is sound and relevant `[6d9df39adece]`
+- critic: frontier-above-floor@v1 failed on 0568d8ebee56 `[78d590445192]`
+- nu: verdict of frontier-wellformed@v1 on 0833b42675364bb3e0199aa2491754889618bae3d0ab4b0592f9590704392192 is sound and relevant `[722cb49ec29e]`
+- critic: frontier-wellformed@v1 failed on 0833b4267536 `[00ee2a23b2b0]`
+- nu: verdict of frontier-claim-honest@v1 on 0833b42675364bb3e0199aa2491754889618bae3d0ab4b0592f9590704392192 is sound and relevant `[c429f925eafa]`
+- critic: frontier-claim-honest@v1 failed on 0833b4267536 `[ea262d1cdd4b]`
+- nu: verdict of frontier-above-floor@v1 on 0833b42675364bb3e0199aa2491754889618bae3d0ab4b0592f9590704392192 is sound and relevant `[5c5a8187e219]`
+- critic: frontier-above-floor@v1 failed on 0833b4267536 `[8f4bdc2fd0cd]`
+- nu: verdict of frontier-wellformed@v1 on e694778a5e494a419a8f3ce9272bc882c0b0441aab20ed12aa1d57501ca2ad9e is sound and relevant `[3b2ebe2309ef]`
+- critic: frontier-wellformed@v1 failed on e694778a5e49 `[6e3c97ef38aa]`
+- nu: verdict of frontier-claim-honest@v1 on e694778a5e494a419a8f3ce9272bc882c0b0441aab20ed12aa1d57501ca2ad9e is sound and relevant `[91097f2def00]`
+- critic: frontier-claim-honest@v1 failed on e694778a5e49 `[9c2e8c0afff4]`
+- nu: verdict of frontier-above-floor@v1 on e694778a5e494a419a8f3ce9272bc882c0b0441aab20ed12aa1d57501ca2ad9e is sound and relevant `[36f275251ab6]`
+- critic: frontier-above-floor@v1 failed on e694778a5e49 `[0722c4ee04b1]`
+- nu: verdict of frontier-wellformed@v1 on ef160be4cd5e43caf14a062fd8d36add82800692ed338f81468b3ff0c3f7c1a8 is sound and relevant `[fc5ca7dcae5c]`
+- critic: frontier-wellformed@v1 failed on ef160be4cd5e `[dc3145bd4081]`
+- nu: verdict of frontier-claim-honest@v1 on ef160be4cd5e43caf14a062fd8d36add82800692ed338f81468b3ff0c3f7c1a8 is sound and relevant `[511a0ef72428]`
+- critic: frontier-claim-honest@v1 failed on ef160be4cd5e `[ed4396a0c072]`
+- nu: verdict of frontier-above-floor@v1 on ef160be4cd5e43caf14a062fd8d36add82800692ed338f81468b3ff0c3f7c1a8 is sound and relevant `[cbf4b4604175]`
+- critic: frontier-above-floor@v1 failed on ef160be4cd5e `[2bd8f33b59b3]`
+- nu: verdict of frontier-wellformed@v1 on 295b0c4c850ec8181990bc80445c764198bc806d9b6fc33cfef3a4b2dfc3ee47 is sound and relevant `[58562eb8d459]`
+- critic: frontier-wellformed@v1 failed on 295b0c4c850e `[ed984231cce8]`
+- nu: verdict of frontier-claim-honest@v1 on 295b0c4c850ec8181990bc80445c764198bc806d9b6fc33cfef3a4b2dfc3ee47 is sound and relevant `[c2d838af6a27]`
+- critic: frontier-claim-honest@v1 failed on 295b0c4c850e `[3d74c7506509]`
+- nu: verdict of frontier-above-floor@v1 on 295b0c4c850ec8181990bc80445c764198bc806d9b6fc33cfef3a4b2dfc3ee47 is sound and relevant `[62e15efafefa]`
+- critic: frontier-above-floor@v1 failed on 295b0c4c850e `[69f7d0ec7ccf]`
+- nu: verdict of frontier-wellformed@v1 on 2194b6e24ac73bdddad18e7a04968bc88849efde237bf270b83cc9486dcf8053 is sound and relevant `[8e61679c680c]`
+- critic: frontier-wellformed@v1 failed on 2194b6e24ac7 `[445f3819ad14]`
+- nu: verdict of frontier-claim-honest@v1 on 2194b6e24ac73bdddad18e7a04968bc88849efde237bf270b83cc9486dcf8053 is sound and relevant `[85b7de8954b1]`
+- critic: frontier-claim-honest@v1 failed on 2194b6e24ac7 `[86fc6a3037ed]`
+- nu: verdict of frontier-above-floor@v1 on 2194b6e24ac73bdddad18e7a04968bc88849efde237bf270b83cc9486dcf8053 is sound and relevant `[50d7f2c04a3f]`
+- critic: frontier-above-floor@v1 failed on 2194b6e24ac7 `[324016035e39]`
+- nu: verdict of frontier-wellformed@v1 on d1ae9f57aecd4307f25b4cf11844015f381d8fa49cefea895a0e12b0106dc233 is sound and relevant `[8ee4cdc23e1b]`
+- critic: frontier-wellformed@v1 failed on d1ae9f57aecd `[045276c77b21]`
+- nu: verdict of frontier-claim-honest@v1 on d1ae9f57aecd4307f25b4cf11844015f381d8fa49cefea895a0e12b0106dc233 is sound and relevant `[578b71dab7b6]`
+- critic: frontier-claim-honest@v1 failed on d1ae9f57aecd `[239e5737dbd6]`
+- nu: verdict of frontier-above-floor@v1 on d1ae9f57aecd4307f25b4cf11844015f381d8fa49cefea895a0e12b0106dc233 is sound and relevant `[7b26daa24a77]`
+- critic: frontier-above-floor@v1 failed on d1ae9f57aecd `[d9fa4737b195]`
+- nu: verdict of frontier-wellformed@v1 on b461c5fc7b4553a038795d3b5ee488f45b0f566a2c8f2b9554380907bfc501f5 is sound and relevant `[a082400e0907]`
+- critic: frontier-wellformed@v1 failed on b461c5fc7b45 `[b3c9becb1713]`
+- nu: verdict of frontier-claim-honest@v1 on b461c5fc7b4553a038795d3b5ee488f45b0f566a2c8f2b9554380907bfc501f5 is sound and relevant `[b2cc1511f854]`
+- critic: frontier-claim-honest@v1 failed on b461c5fc7b45 `[d2df5085c143]`
+- nu: verdict of frontier-above-floor@v1 on b461c5fc7b4553a038795d3b5ee488f45b0f566a2c8f2b9554380907bfc501f5 is sound and relevant `[72be27597890]`
+- critic: frontier-above-floor@v1 failed on b461c5fc7b45 `[298b1e03669b]`
+- nu: verdict of frontier-wellformed@v1 on a1ff51ad657eecf6f850337453b4e8c2563f371476ef69ce404841a00fdd6e43 is sound and relevant `[e5e4b5514f1e]`
+- critic: frontier-wellformed@v1 failed on a1ff51ad657e `[2c6afdbf0d4f]`
+- nu: verdict of frontier-claim-honest@v1 on a1ff51ad657eecf6f850337453b4e8c2563f371476ef69ce404841a00fdd6e43 is sound and relevant `[85ab85dfafbb]`
+- critic: frontier-claim-honest@v1 failed on a1ff51ad657e `[e3efe472b00a]`
+- nu: verdict of frontier-above-floor@v1 on a1ff51ad657eecf6f850337453b4e8c2563f371476ef69ce404841a00fdd6e43 is sound and relevant `[2a5cfb49b5a7]`
+- critic: frontier-above-floor@v1 failed on a1ff51ad657e `[7aefbeaed239]`
+- nu: verdict of frontier-wellformed@v1 on fa1be91558d52205a982164ef3b9b397f6519a9ce6b0171c0de6f948977da44a is sound and relevant `[02aed20f5923]`
+- critic: frontier-wellformed@v1 failed on fa1be91558d5 `[ff81ba638df2]`
+- nu: verdict of frontier-claim-honest@v1 on fa1be91558d52205a982164ef3b9b397f6519a9ce6b0171c0de6f948977da44a is sound and relevant `[915951b47f74]`
+- critic: frontier-claim-honest@v1 failed on fa1be91558d5 `[ad5d15477b40]`
+- nu: verdict of frontier-above-floor@v1 on fa1be91558d52205a982164ef3b9b397f6519a9ce6b0171c0de6f948977da44a is sound and relevant `[d11834dbd389]`
+- critic: frontier-above-floor@v1 failed on fa1be91558d5 `[a720b682aaa1]`
+- nu: verdict of frontier-wellformed@v1 on 65ff3f88c3da32cb4196a2eba162d5476c65ddd0d128d2ae5de98e31fd4b7ae0 is sound and relevant `[7f8058037a67]`
+- critic: frontier-wellformed@v1 failed on 65ff3f88c3da `[5e161f67e160]`
+- nu: verdict of frontier-claim-honest@v1 on 65ff3f88c3da32cb4196a2eba162d5476c65ddd0d128d2ae5de98e31fd4b7ae0 is sound and relevant `[c2d0bf27e8e4]`
+- critic: frontier-claim-honest@v1 failed on 65ff3f88c3da `[a7bcfbde1e4c]`
+- nu: verdict of frontier-above-floor@v1 on 65ff3f88c3da32cb4196a2eba162d5476c65ddd0d128d2ae5de98e31fd4b7ae0 is sound and relevant `[d5f2552d9a4f]`
+- critic: frontier-above-floor@v1 failed on 65ff3f88c3da `[9e42f72cfa0f]`
+- nu: verdict of frontier-wellformed@v1 on 6fe6ad8b2980287817e2e5afd6759af66a0f99a33f0ba309f2fc66e34a244c4e is sound and relevant `[c4a109e7fcf3]`
+- critic: frontier-wellformed@v1 failed on 6fe6ad8b2980 `[6f49ac8e1d7d]`
+- nu: verdict of frontier-claim-honest@v1 on 6fe6ad8b2980287817e2e5afd6759af66a0f99a33f0ba309f2fc66e34a244c4e is sound and relevant `[f1c1a665d593]`
+- critic: frontier-claim-honest@v1 failed on 6fe6ad8b2980 `[187185abdaea]`
+- nu: verdict of frontier-above-floor@v1 on 6fe6ad8b2980287817e2e5afd6759af66a0f99a33f0ba309f2fc66e34a244c4e is sound and relevant `[b1446d656cd5]`
+- critic: frontier-above-floor@v1 failed on 6fe6ad8b2980 `[0fb14b2e32cb]`
+- nu: verdict of frontier-wellformed@v1 on 20a027601fb9298543ec3fe8467834319dd6d5fa6f069aa363ac8e4005992b7f is sound and relevant `[8fae6e3341e0]`
+- critic: frontier-wellformed@v1 failed on 20a027601fb9 `[1f0b30e2110d]`
+- nu: verdict of frontier-claim-honest@v1 on 20a027601fb9298543ec3fe8467834319dd6d5fa6f069aa363ac8e4005992b7f is sound and relevant `[667097a4210e]`
+- critic: frontier-claim-honest@v1 failed on 20a027601fb9 `[7e10629a9151]`
+- nu: verdict of frontier-above-floor@v1 on 20a027601fb9298543ec3fe8467834319dd6d5fa6f069aa363ac8e4005992b7f is sound and relevant `[3bfa3a0a2a7f]`
+- critic: frontier-above-floor@v1 failed on 20a027601fb9 `[02ed3f00d41e]`
+- nu: verdict of frontier-wellformed@v1 on 3020054e354dc4e15190b24aec054644e9465451f6f37b5524d478c511da33ce is sound and relevant `[e8ea3dc7a26e]`
+- critic: frontier-wellformed@v1 failed on 3020054e354d `[4b9848a1a8fb]`
+- nu: verdict of frontier-claim-honest@v1 on 3020054e354dc4e15190b24aec054644e9465451f6f37b5524d478c511da33ce is sound and relevant `[ec53a376d1ed]`
+- critic: frontier-claim-honest@v1 failed on 3020054e354d `[2a1859b8ee57]`
+- nu: verdict of frontier-above-floor@v1 on 3020054e354dc4e15190b24aec054644e9465451f6f37b5524d478c511da33ce is sound and relevant `[6be9a24c7f7b]`
+- critic: frontier-above-floor@v1 failed on 3020054e354d `[d4dae85f6719]`
+- nu: verdict of frontier-wellformed@v1 on 5ad08848eaa092179577a16d1069b7398563be5e51a65d3b5472a6eba0afebc5 is sound and relevant `[94cb17e59fca]`
+- critic: frontier-wellformed@v1 failed on 5ad08848eaa0 `[5a2e3b63b880]`
+- nu: verdict of frontier-claim-honest@v1 on 5ad08848eaa092179577a16d1069b7398563be5e51a65d3b5472a6eba0afebc5 is sound and relevant `[e0a758779371]`
+- critic: frontier-claim-honest@v1 failed on 5ad08848eaa0 `[9d1abd253a62]`
+- nu: verdict of frontier-above-floor@v1 on 5ad08848eaa092179577a16d1069b7398563be5e51a65d3b5472a6eba0afebc5 is sound and relevant `[64d56df305cc]`
+- critic: frontier-above-floor@v1 failed on 5ad08848eaa0 `[cff8865aa673]`
+- nu: verdict of frontier-wellformed@v1 on c012a109bd0346eebae99a7499da4179a27f374354940952996421a3dc2820b3 is sound and relevant `[0b1090699254]`
+- critic: frontier-wellformed@v1 failed on c012a109bd03 `[3ab2888fc18d]`
+- nu: verdict of frontier-claim-honest@v1 on c012a109bd0346eebae99a7499da4179a27f374354940952996421a3dc2820b3 is sound and relevant `[023f7c8b7e9a]`
+- critic: frontier-claim-honest@v1 failed on c012a109bd03 `[9cf32b321ec4]`
+- nu: verdict of frontier-above-floor@v1 on c012a109bd0346eebae99a7499da4179a27f374354940952996421a3dc2820b3 is sound and relevant `[c95a13a1d3af]`
+- critic: frontier-above-floor@v1 failed on c012a109bd03 `[8ea184618f67]`
+- nu: verdict of frontier-wellformed@v1 on b8256609f4679fb52c53b6d2d0e4b588501615b91acca776b4dabbc6da382bc5 is sound and relevant `[ec85dc6ee373]`
+- critic: frontier-wellformed@v1 failed on b8256609f467 `[54cceb319469]`
+- nu: verdict of frontier-claim-honest@v1 on b8256609f4679fb52c53b6d2d0e4b588501615b91acca776b4dabbc6da382bc5 is sound and relevant `[4da3055fc6c4]`
+- critic: frontier-claim-honest@v1 failed on b8256609f467 `[75ae08059daf]`
+- nu: verdict of frontier-above-floor@v1 on b8256609f4679fb52c53b6d2d0e4b588501615b91acca776b4dabbc6da382bc5 is sound and relevant `[5a78456d00a5]`
+- critic: frontier-above-floor@v1 failed on b8256609f467 `[ea18ee1e8b62]`
+- nu: verdict of frontier-wellformed@v1 on fc73325630c67f47e8ae5650fa4410a9a0b1c519e005b7e84e9a58274e5a20a7 is sound and relevant `[9ab8ceabae58]`
+- critic: frontier-wellformed@v1 failed on fc73325630c6 `[55e5e87e9b49]`
+- nu: verdict of frontier-claim-honest@v1 on fc73325630c67f47e8ae5650fa4410a9a0b1c519e005b7e84e9a58274e5a20a7 is sound and relevant `[10f394637f5f]`
+- critic: frontier-claim-honest@v1 failed on fc73325630c6 `[fd5f3436bf76]`
+- nu: verdict of frontier-above-floor@v1 on fc73325630c67f47e8ae5650fa4410a9a0b1c519e005b7e84e9a58274e5a20a7 is sound and relevant `[401d99cb5316]`
+- critic: frontier-above-floor@v1 failed on fc73325630c6 `[61bc7134a045]`
+- nu: verdict of frontier-wellformed@v1 on 5c7f14d6b4709ea2578231c23ad64faa3b13b870271bbdff5b0beccfaaf40157 is sound and relevant `[672e7168388c]`
+- critic: frontier-wellformed@v1 failed on 5c7f14d6b470 `[4c04951e9ef8]`
+- nu: verdict of frontier-claim-honest@v1 on 5c7f14d6b4709ea2578231c23ad64faa3b13b870271bbdff5b0beccfaaf40157 is sound and relevant `[b0855cef5770]`
+- critic: frontier-claim-honest@v1 failed on 5c7f14d6b470 `[120a338c355c]`
+- nu: verdict of frontier-above-floor@v1 on 5c7f14d6b4709ea2578231c23ad64faa3b13b870271bbdff5b0beccfaaf40157 is sound and relevant `[73f128e48799]`
+- critic: frontier-above-floor@v1 failed on 5c7f14d6b470 `[b1c2dce577ce]`
+- nu: verdict of frontier-wellformed@v1 on b55f6e43a859cb56b32afe453e25bc244515879475b42c270e793aba205ce987 is sound and relevant `[ce7a2a2ed5e4]`
+- critic: frontier-wellformed@v1 failed on b55f6e43a859 `[1c8751ff7402]`
+- nu: verdict of frontier-claim-honest@v1 on b55f6e43a859cb56b32afe453e25bc244515879475b42c270e793aba205ce987 is sound and relevant `[4ac5dfd96415]`
+- critic: frontier-claim-honest@v1 failed on b55f6e43a859 `[182b4635a4f3]`
+- nu: verdict of frontier-above-floor@v1 on b55f6e43a859cb56b32afe453e25bc244515879475b42c270e793aba205ce987 is sound and relevant `[47893324aa26]`
+- critic: frontier-above-floor@v1 failed on b55f6e43a859 `[05a65b5fdeb3]`
+- nu: verdict of frontier-wellformed@v1 on 8b57e8d652727f16cfa82a33a6487e536e7b1676af27d9aad589ef8f4f1ca202 is sound and relevant `[b35ba80689cb]`
+- critic: frontier-wellformed@v1 failed on 8b57e8d65272 `[92d66dcdf5f6]`
+- nu: verdict of frontier-claim-honest@v1 on 8b57e8d652727f16cfa82a33a6487e536e7b1676af27d9aad589ef8f4f1ca202 is sound and relevant `[a1e770dedeaf]`
+- critic: frontier-claim-honest@v1 failed on 8b57e8d65272 `[20be1153dfb6]`
+- nu: verdict of frontier-above-floor@v1 on 8b57e8d652727f16cfa82a33a6487e536e7b1676af27d9aad589ef8f4f1ca202 is sound and relevant `[bcd38a3c9a99]`
+- critic: frontier-above-floor@v1 failed on 8b57e8d65272 `[ee5c30babfe5]`
+- nu: verdict of frontier-wellformed@v1 on 718744ce2786eba1da69e0defc4ef47c38b1404b6b0fb0dc02675bf537438220 is sound and relevant `[a433449cbcde]`
+- critic: frontier-wellformed@v1 failed on 718744ce2786 `[9e9e75636144]`
+- nu: verdict of frontier-claim-honest@v1 on 718744ce2786eba1da69e0defc4ef47c38b1404b6b0fb0dc02675bf537438220 is sound and relevant `[34caf897402a]`
+- critic: frontier-claim-honest@v1 failed on 718744ce2786 `[60e22a0fda0d]`
+- nu: verdict of frontier-above-floor@v1 on 718744ce2786eba1da69e0defc4ef47c38b1404b6b0fb0dc02675bf537438220 is sound and relevant `[de821070fdd8]`
+- critic: frontier-above-floor@v1 failed on 718744ce2786 `[22765962108a]`
+- nu: verdict of frontier-wellformed@v1 on 97a743b653a762ddc2d885f52725dec9d480087db858c81b8e77709627a3d5bb is sound and relevant `[56ceee076349]`
+- critic: frontier-wellformed@v1 failed on 97a743b653a7 `[4a3411c06503]`
+- nu: verdict of frontier-claim-honest@v1 on 97a743b653a762ddc2d885f52725dec9d480087db858c81b8e77709627a3d5bb is sound and relevant `[d15e80fd938b]`
+- critic: frontier-claim-honest@v1 failed on 97a743b653a7 `[07c738d2b23a]`
+- nu: verdict of frontier-above-floor@v1 on 97a743b653a762ddc2d885f52725dec9d480087db858c81b8e77709627a3d5bb is sound and relevant `[f88da9bb864d]`
+- critic: frontier-above-floor@v1 failed on 97a743b653a7 `[1e7b2518be04]`
+- nu: verdict of frontier-wellformed@v1 on 0c93de62632ac1b6187fec40fb4118918fb4e977cde679284b42fcfba716b448 is sound and relevant `[0fc98b5a0810]`
+- critic: frontier-wellformed@v1 failed on 0c93de62632a `[23ac3294d095]`
+- nu: verdict of frontier-claim-honest@v1 on 0c93de62632ac1b6187fec40fb4118918fb4e977cde679284b42fcfba716b448 is sound and relevant `[d3e397f02d1c]`
+- critic: frontier-claim-honest@v1 failed on 0c93de62632a `[183fdd31d539]`
+- nu: verdict of frontier-above-floor@v1 on 0c93de62632ac1b6187fec40fb4118918fb4e977cde679284b42fcfba716b448 is sound and relevant `[905fd19031ac]`
+- critic: frontier-above-floor@v1 failed on 0c93de62632a `[809d105bc842]`
+- nu: verdict of frontier-wellformed@v1 on 2168dc91d748c0b7861be964c9d51e792f808447e51511018f8214bdff51b0c0 is sound and relevant `[5eccfd2d45e1]`
+- critic: frontier-wellformed@v1 failed on 2168dc91d748 `[7a6acf5d71de]`
+- nu: verdict of frontier-claim-honest@v1 on 2168dc91d748c0b7861be964c9d51e792f808447e51511018f8214bdff51b0c0 is sound and relevant `[c1167457c722]`
+- critic: frontier-claim-honest@v1 failed on 2168dc91d748 `[c508e1d0018b]`
+- nu: verdict of frontier-above-floor@v1 on 2168dc91d748c0b7861be964c9d51e792f808447e51511018f8214bdff51b0c0 is sound and relevant `[c428eef4cf5a]`
+- critic: frontier-above-floor@v1 failed on 2168dc91d748 `[17f11aee6366]`
+- nu: verdict of frontier-wellformed@v1 on df96d494ce88eaf32a72959d1d0d5764e627efaebb5b086e7a09de69adf23916 is sound and relevant `[5c447222622b]`
+- critic: frontier-wellformed@v1 failed on df96d494ce88 `[bb6218c70bcf]`
+- nu: verdict of frontier-claim-honest@v1 on df96d494ce88eaf32a72959d1d0d5764e627efaebb5b086e7a09de69adf23916 is sound and relevant `[b5e2152fa843]`
+- critic: frontier-claim-honest@v1 failed on df96d494ce88 `[4f11acbc8de6]`
+- nu: verdict of frontier-above-floor@v1 on df96d494ce88eaf32a72959d1d0d5764e627efaebb5b086e7a09de69adf23916 is sound and relevant `[e409fd866d65]`
+- critic: frontier-above-floor@v1 failed on df96d494ce88 `[06613bb7f3af]`
+- nu: verdict of frontier-wellformed@v1 on 1a828e7f098c19f53612bb2453cfdd3c2811eed148858b8f3a90f22e525d0eca is sound and relevant `[fb7668506e20]`
+- critic: frontier-wellformed@v1 failed on 1a828e7f098c `[f2c8922947ff]`
+- nu: verdict of frontier-claim-honest@v1 on 1a828e7f098c19f53612bb2453cfdd3c2811eed148858b8f3a90f22e525d0eca is sound and relevant `[7db340701585]`
+- critic: frontier-claim-honest@v1 failed on 1a828e7f098c `[866b5289d204]`
+- nu: verdict of frontier-above-floor@v1 on 1a828e7f098c19f53612bb2453cfdd3c2811eed148858b8f3a90f22e525d0eca is sound and relevant `[05d989d45777]`
+- critic: frontier-above-floor@v1 failed on 1a828e7f098c `[67e24983a455]`
+- nu: verdict of frontier-wellformed@v1 on 199a0c3c81a6a71401b00e1db884137a712e29b85e239edb3091650e8de069cc is sound and relevant `[7496be376d74]`
+- critic: frontier-wellformed@v1 failed on 199a0c3c81a6 `[e909b7004bee]`
+- nu: verdict of frontier-claim-honest@v1 on 199a0c3c81a6a71401b00e1db884137a712e29b85e239edb3091650e8de069cc is sound and relevant `[384bb3cc0cf4]`
+- critic: frontier-claim-honest@v1 failed on 199a0c3c81a6 `[b7dabea32067]`
+- nu: verdict of frontier-above-floor@v1 on 199a0c3c81a6a71401b00e1db884137a712e29b85e239edb3091650e8de069cc is sound and relevant `[db7960d83ccd]`
+- critic: frontier-above-floor@v1 failed on 199a0c3c81a6 `[2ab0b2dea792]`
+- nu: verdict of frontier-wellformed@v1 on 9ba1ff7616168bd76b5bd71fe3ca2ab3b74b71fa8905086cfc34282529b94c1a is sound and relevant `[3a22eb64d967]`
+- critic: frontier-wellformed@v1 failed on 9ba1ff761616 `[cc86bbe4a18a]`
+- nu: verdict of frontier-claim-honest@v1 on 9ba1ff7616168bd76b5bd71fe3ca2ab3b74b71fa8905086cfc34282529b94c1a is sound and relevant `[594a68e44312]`
+- critic: frontier-claim-honest@v1 failed on 9ba1ff761616 `[d2a171c1d203]`
+- nu: verdict of frontier-above-floor@v1 on 9ba1ff7616168bd76b5bd71fe3ca2ab3b74b71fa8905086cfc34282529b94c1a is sound and relevant `[0a22e927dae8]`
+- critic: frontier-above-floor@v1 failed on 9ba1ff761616 `[c527094966d7]`
+- nu: verdict of frontier-wellformed@v1 on 509aeb94cc7a5f8af638c743e350d934ee72f2058e50af8367204e153af01fcb is sound and relevant `[e22fa91c78f7]`
+- critic: frontier-wellformed@v1 failed on 509aeb94cc7a `[2b09e538b3aa]`
+- nu: verdict of frontier-claim-honest@v1 on 509aeb94cc7a5f8af638c743e350d934ee72f2058e50af8367204e153af01fcb is sound and relevant `[f2edfb2c9a87]`
+- critic: frontier-claim-honest@v1 failed on 509aeb94cc7a `[3020b4da58d8]`
+- nu: verdict of frontier-above-floor@v1 on 509aeb94cc7a5f8af638c743e350d934ee72f2058e50af8367204e153af01fcb is sound and relevant `[389f8d3fba3d]`
+- critic: frontier-above-floor@v1 failed on 509aeb94cc7a `[a477e049391d]`
+- {"cycle": 6, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 8000}} `[f7fda6a61308]`
+- nu: verdict of frontier-wellformed@v1 on ab85658ce1bb349bc3a457b20d4fbb163aba78351723765634f0334bd5b7000f is sound and relevant `[0ef37446e85e]`
+- critic: frontier-wellformed@v1 failed on ab85658ce1bb `[3e78cca01e3c]`
+- nu: verdict of frontier-claim-honest@v1 on ab85658ce1bb349bc3a457b20d4fbb163aba78351723765634f0334bd5b7000f is sound and relevant `[fdbf21216d06]`
+- critic: frontier-claim-honest@v1 failed on ab85658ce1bb `[5d48678dfca6]`
+- nu: verdict of frontier-above-floor@v1 on ab85658ce1bb349bc3a457b20d4fbb163aba78351723765634f0334bd5b7000f is sound and relevant `[8634df77d65b]`
+- critic: frontier-above-floor@v1 failed on ab85658ce1bb `[2e0f41480194]`
+- nu: verdict of frontier-wellformed@v1 on 09fb097076c7d78b0ac90751fa347ae0c7db9c65b42de674256a79ee2f549c1b is sound and relevant `[fc2671621daf]`
+- critic: frontier-wellformed@v1 failed on 09fb097076c7 `[c7660c63b6ea]`
+- nu: verdict of frontier-claim-honest@v1 on 09fb097076c7d78b0ac90751fa347ae0c7db9c65b42de674256a79ee2f549c1b is sound and relevant `[574e2fb8d65a]`
+- critic: frontier-claim-honest@v1 failed on 09fb097076c7 `[3b84cb858332]`
+- nu: verdict of frontier-above-floor@v1 on 09fb097076c7d78b0ac90751fa347ae0c7db9c65b42de674256a79ee2f549c1b is sound and relevant `[ec777cceca76]`
+- critic: frontier-above-floor@v1 failed on 09fb097076c7 `[dbf256fd50f9]`
+- nu: verdict of frontier-wellformed@v1 on ee134491e5db8bc11fbcb8e53e61cb1f10de8e9edbe103a57f030c6ee913bf2c is sound and relevant `[e21b1de7233f]`
+- critic: frontier-wellformed@v1 failed on ee134491e5db `[7b82b1e41373]`
+- nu: verdict of frontier-claim-honest@v1 on ee134491e5db8bc11fbcb8e53e61cb1f10de8e9edbe103a57f030c6ee913bf2c is sound and relevant `[fe7a5ab3dcea]`
+- critic: frontier-claim-honest@v1 failed on ee134491e5db `[118229af3d0c]`
+- nu: verdict of frontier-above-floor@v1 on ee134491e5db8bc11fbcb8e53e61cb1f10de8e9edbe103a57f030c6ee913bf2c is sound and relevant `[5724262baefa]`
+- critic: frontier-above-floor@v1 failed on ee134491e5db `[f96bd76cf64f]`
+- nu: verdict of frontier-wellformed@v1 on 736cc47cf03427601052b8a8da3b0e117d0b05d547f13773019648d8fe13f656 is sound and relevant `[2fd3311fa581]`
+- critic: frontier-wellformed@v1 failed on 736cc47cf034 `[aff748b61d8e]`
+- nu: verdict of frontier-claim-honest@v1 on 736cc47cf03427601052b8a8da3b0e117d0b05d547f13773019648d8fe13f656 is sound and relevant `[352010129077]`
+- critic: frontier-claim-honest@v1 failed on 736cc47cf034 `[cc151a56048f]`
+- nu: verdict of frontier-above-floor@v1 on 736cc47cf03427601052b8a8da3b0e117d0b05d547f13773019648d8fe13f656 is sound and relevant `[d969340cafe7]`
+- critic: frontier-above-floor@v1 failed on 736cc47cf034 `[56d24d296b4f]`
+- nu: verdict of frontier-wellformed@v1 on 7a8630eb22b5d04645387ba072d4519f1fd4d4a01f5cdc262fe40c486a1fefe3 is sound and relevant `[254157e11409]`
+- critic: frontier-wellformed@v1 failed on 7a8630eb22b5 `[f83eaa0def5e]`
+- nu: verdict of frontier-claim-honest@v1 on 7a8630eb22b5d04645387ba072d4519f1fd4d4a01f5cdc262fe40c486a1fefe3 is sound and relevant `[7e6dcb539497]`
+- critic: frontier-claim-honest@v1 failed on 7a8630eb22b5 `[c1c21b1f2887]`
+- nu: verdict of frontier-above-floor@v1 on 7a8630eb22b5d04645387ba072d4519f1fd4d4a01f5cdc262fe40c486a1fefe3 is sound and relevant `[e8a0c3b695b8]`
+- critic: frontier-above-floor@v1 failed on 7a8630eb22b5 `[1766bf399e69]`
+- nu: verdict of frontier-wellformed@v1 on 15795c39fb9c7f84b470569453649018b90ec6b2e8f3d2763df77fd28ae1574e is sound and relevant `[f74cd5632c13]`
+- critic: frontier-wellformed@v1 failed on 15795c39fb9c `[cf386e20eb06]`
+- nu: verdict of frontier-claim-honest@v1 on 15795c39fb9c7f84b470569453649018b90ec6b2e8f3d2763df77fd28ae1574e is sound and relevant `[3e18b21f7e54]`
+- critic: frontier-claim-honest@v1 failed on 15795c39fb9c `[dff296fb44ca]`
+- nu: verdict of frontier-above-floor@v1 on 15795c39fb9c7f84b470569453649018b90ec6b2e8f3d2763df77fd28ae1574e is sound and relevant `[a279fdca70fa]`
+- critic: frontier-above-floor@v1 failed on 15795c39fb9c `[8d42f81fa231]`
+- nu: verdict of frontier-wellformed@v1 on 78e1dfc96719067b2fb0532b7a0bfb6132aba26b87e22b47f61fbe54c3c0cddf is sound and relevant `[c5ce6baa0e99]`
+- critic: frontier-wellformed@v1 failed on 78e1dfc96719 `[0dc923018497]`
+- nu: verdict of frontier-claim-honest@v1 on 78e1dfc96719067b2fb0532b7a0bfb6132aba26b87e22b47f61fbe54c3c0cddf is sound and relevant `[8cf0a6591c5f]`
+- critic: frontier-claim-honest@v1 failed on 78e1dfc96719 `[5e55fe840b42]`
+- nu: verdict of frontier-above-floor@v1 on 78e1dfc96719067b2fb0532b7a0bfb6132aba26b87e22b47f61fbe54c3c0cddf is sound and relevant `[40da60aa4971]`
+- critic: frontier-above-floor@v1 failed on 78e1dfc96719 `[9f2ab3ce2c0f]`
+- nu: verdict of frontier-wellformed@v1 on 093f2c0a26d73a41c55fef024cd6f01c1bb84c602b817641d6942c2c829e4649 is sound and relevant `[77b0a25f5d67]`
+- critic: frontier-wellformed@v1 failed on 093f2c0a26d7 `[7c1f22937984]`
+- nu: verdict of frontier-claim-honest@v1 on 093f2c0a26d73a41c55fef024cd6f01c1bb84c602b817641d6942c2c829e4649 is sound and relevant `[9a521fcb7761]`
+- critic: frontier-claim-honest@v1 failed on 093f2c0a26d7 `[9fae12472b33]`
+- nu: verdict of frontier-above-floor@v1 on 093f2c0a26d73a41c55fef024cd6f01c1bb84c602b817641d6942c2c829e4649 is sound and relevant `[bd10fcc07038]`
+- critic: frontier-above-floor@v1 failed on 093f2c0a26d7 `[d8829a2ff031]`
+- nu: verdict of frontier-wellformed@v1 on f4e20aecc61d6c2d5554b020c3d315422cebe19525ab0686106b15ac3d305d8b is sound and relevant `[a3c07a661dbe]`
+- critic: frontier-wellformed@v1 failed on f4e20aecc61d `[043fd7fcfc0a]`
+- nu: verdict of frontier-claim-honest@v1 on f4e20aecc61d6c2d5554b020c3d315422cebe19525ab0686106b15ac3d305d8b is sound and relevant `[f38bcc7769cc]`
+- critic: frontier-claim-honest@v1 failed on f4e20aecc61d `[3f00de741cac]`
+- nu: verdict of frontier-above-floor@v1 on f4e20aecc61d6c2d5554b020c3d315422cebe19525ab0686106b15ac3d305d8b is sound and relevant `[3623d5a5bcaa]`
+- critic: frontier-above-floor@v1 failed on f4e20aecc61d `[8f32db689f41]`
+- nu: verdict of frontier-wellformed@v1 on 0a4563a0a8e4c3ed94803b2d8258e137bfb902cbed0b715f190d15b194e70646 is sound and relevant `[0509707bb417]`
+- critic: frontier-wellformed@v1 failed on 0a4563a0a8e4 `[ea3c64299d22]`
+- nu: verdict of frontier-claim-honest@v1 on 0a4563a0a8e4c3ed94803b2d8258e137bfb902cbed0b715f190d15b194e70646 is sound and relevant `[8192a1cc53cf]`
+- critic: frontier-claim-honest@v1 failed on 0a4563a0a8e4 `[07b4f61d0c41]`
+- nu: verdict of frontier-above-floor@v1 on 0a4563a0a8e4c3ed94803b2d8258e137bfb902cbed0b715f190d15b194e70646 is sound and relevant `[49b9eb193edc]`
+- critic: frontier-above-floor@v1 failed on 0a4563a0a8e4 `[d7612e7eda21]`
+- nu: verdict of frontier-wellformed@v1 on e0c330dba4cdee5e03e4b1f4e0e2cb12746213ec51cfb4ff78cc2ffc62e7acde is sound and relevant `[560b6a5f24bb]`
+- critic: frontier-wellformed@v1 failed on e0c330dba4cd `[1e1b4d656a43]`
+- nu: verdict of frontier-claim-honest@v1 on e0c330dba4cdee5e03e4b1f4e0e2cb12746213ec51cfb4ff78cc2ffc62e7acde is sound and relevant `[a49e4bbc8724]`
+- critic: frontier-claim-honest@v1 failed on e0c330dba4cd `[2397d4fca4e4]`
+- nu: verdict of frontier-above-floor@v1 on e0c330dba4cdee5e03e4b1f4e0e2cb12746213ec51cfb4ff78cc2ffc62e7acde is sound and relevant `[45cf8f55b83a]`
+- critic: frontier-above-floor@v1 failed on e0c330dba4cd `[f822abd2dd03]`
+- nu: verdict of frontier-wellformed@v1 on 7a4e088e59806e272a20d3584c5582db8242bee180e5264275f84743ebae337a is sound and relevant `[41b7b24fb2b8]`
+- critic: frontier-wellformed@v1 failed on 7a4e088e5980 `[bb82bc26f554]`
+- nu: verdict of frontier-claim-honest@v1 on 7a4e088e59806e272a20d3584c5582db8242bee180e5264275f84743ebae337a is sound and relevant `[7392698cceb9]`
+- critic: frontier-claim-honest@v1 failed on 7a4e088e5980 `[15c7404dd3bc]`
+- nu: verdict of frontier-above-floor@v1 on 7a4e088e59806e272a20d3584c5582db8242bee180e5264275f84743ebae337a is sound and relevant `[2eb4b6cf6ca3]`
+- critic: frontier-above-floor@v1 failed on 7a4e088e5980 `[235b61cb49c5]`
+- nu: verdict of frontier-wellformed@v1 on fd8d53c72a3d0d299b55a1f2069dc217b84eaa0af94e4f2690372201edee79bb is sound and relevant `[c324a7de4b14]`
+- critic: frontier-wellformed@v1 failed on fd8d53c72a3d `[a6abdfc879f2]`
+- nu: verdict of frontier-claim-honest@v1 on fd8d53c72a3d0d299b55a1f2069dc217b84eaa0af94e4f2690372201edee79bb is sound and relevant `[ead7448d513f]`
+- critic: frontier-claim-honest@v1 failed on fd8d53c72a3d `[67df547d1c24]`
+- nu: verdict of frontier-above-floor@v1 on fd8d53c72a3d0d299b55a1f2069dc217b84eaa0af94e4f2690372201edee79bb is sound and relevant `[99b441226c43]`
+- critic: frontier-above-floor@v1 failed on fd8d53c72a3d `[5326f8cd4dd0]`
+- nu: verdict of frontier-wellformed@v1 on 3aadb11237155497eaa3611b7560c919e9c06e6d5b34368905427d3f1bacf32f is sound and relevant `[f2e82a195f44]`
+- critic: frontier-wellformed@v1 failed on 3aadb1123715 `[ca6d7d5eb378]`
+- nu: verdict of frontier-claim-honest@v1 on 3aadb11237155497eaa3611b7560c919e9c06e6d5b34368905427d3f1bacf32f is sound and relevant `[7c72c482b937]`
+- critic: frontier-claim-honest@v1 failed on 3aadb1123715 `[f30ec3079fb2]`
+- nu: verdict of frontier-above-floor@v1 on 3aadb11237155497eaa3611b7560c919e9c06e6d5b34368905427d3f1bacf32f is sound and relevant `[83ed26d39e90]`
+- critic: frontier-above-floor@v1 failed on 3aadb1123715 `[b2e2dc325d9a]`
+- nu: verdict of frontier-wellformed@v1 on 368237d11e2714938eaf3d805a82b3b17efa5ebb694243005f5e05f74b1c7ead is sound and relevant `[ea4ab2e53b0c]`
+- critic: frontier-wellformed@v1 failed on 368237d11e27 `[f92f7b6e61f9]`
+- nu: verdict of frontier-claim-honest@v1 on 368237d11e2714938eaf3d805a82b3b17efa5ebb694243005f5e05f74b1c7ead is sound and relevant `[a3f0b327b2d3]`
+- critic: frontier-claim-honest@v1 failed on 368237d11e27 `[d80ae1ce3119]`
+- nu: verdict of frontier-above-floor@v1 on 368237d11e2714938eaf3d805a82b3b17efa5ebb694243005f5e05f74b1c7ead is sound and relevant `[88606c40d825]`
+- critic: frontier-above-floor@v1 failed on 368237d11e27 `[705789bab40b]`
+- nu: verdict of frontier-wellformed@v1 on b9d6eebc1bcb05993a99644e2fb6c8e52d4cd66f9df96016e9eb45ff992dce93 is sound and relevant `[64b9d692fe97]`
+- critic: frontier-wellformed@v1 failed on b9d6eebc1bcb `[d721dd11e017]`
+- nu: verdict of frontier-claim-honest@v1 on b9d6eebc1bcb05993a99644e2fb6c8e52d4cd66f9df96016e9eb45ff992dce93 is sound and relevant `[7206a84f7cf8]`
+- critic: frontier-claim-honest@v1 failed on b9d6eebc1bcb `[c2cceb521aca]`
+- nu: verdict of frontier-above-floor@v1 on b9d6eebc1bcb05993a99644e2fb6c8e52d4cd66f9df96016e9eb45ff992dce93 is sound and relevant `[1a839c9d9914]`
+- critic: frontier-above-floor@v1 failed on b9d6eebc1bcb `[6c86d52f9478]`
+- nu: verdict of frontier-wellformed@v1 on cc7370503603b97fa5e5bcf8cafec7ee73aa0aa81cc52e290cbe0f4bd323be39 is sound and relevant `[154b11e8d060]`
+- critic: frontier-wellformed@v1 failed on cc7370503603 `[698a5888339e]`
+- nu: verdict of frontier-claim-honest@v1 on cc7370503603b97fa5e5bcf8cafec7ee73aa0aa81cc52e290cbe0f4bd323be39 is sound and relevant `[cd3e2aba99ba]`
+- critic: frontier-claim-honest@v1 failed on cc7370503603 `[8144d7d8fb11]`
+- nu: verdict of frontier-above-floor@v1 on cc7370503603b97fa5e5bcf8cafec7ee73aa0aa81cc52e290cbe0f4bd323be39 is sound and relevant `[84a97e38ae00]`
+- critic: frontier-above-floor@v1 failed on cc7370503603 `[6e2e2bc81665]`
+- nu: verdict of frontier-wellformed@v1 on f7fd0d17544d8ce9bfe37bc61765f98aceb0030703f7031b21dcc5eec3caa885 is sound and relevant `[07c0e9c32ce5]`
+- critic: frontier-wellformed@v1 failed on f7fd0d17544d `[69134b52b7d9]`
+- nu: verdict of frontier-claim-honest@v1 on f7fd0d17544d8ce9bfe37bc61765f98aceb0030703f7031b21dcc5eec3caa885 is sound and relevant `[804d09f02c88]`
+- critic: frontier-claim-honest@v1 failed on f7fd0d17544d `[a8bc025ae3fe]`
+- nu: verdict of frontier-above-floor@v1 on f7fd0d17544d8ce9bfe37bc61765f98aceb0030703f7031b21dcc5eec3caa885 is sound and relevant `[e527e9a17e7f]`
+- critic: frontier-above-floor@v1 failed on f7fd0d17544d `[e45bd2c25b6b]`
+- nu: verdict of frontier-wellformed@v1 on f24f6b711bafe58f78fe676a3395a9825637fc56eb974a98387cd8e47e3178b9 is sound and relevant `[a9a3a66141e1]`
+- critic: frontier-wellformed@v1 failed on f24f6b711baf `[9b2b2823ef93]`
+- nu: verdict of frontier-claim-honest@v1 on f24f6b711bafe58f78fe676a3395a9825637fc56eb974a98387cd8e47e3178b9 is sound and relevant `[b7d3591a1cec]`
+- critic: frontier-claim-honest@v1 failed on f24f6b711baf `[7173a73ec26f]`
+- nu: verdict of frontier-above-floor@v1 on f24f6b711bafe58f78fe676a3395a9825637fc56eb974a98387cd8e47e3178b9 is sound and relevant `[a0d4332d2e88]`
+- critic: frontier-above-floor@v1 failed on f24f6b711baf `[eb3b14bb8338]`
+- nu: verdict of frontier-wellformed@v1 on 2029846dc5bfd40f3a1487a5170199724b8457a604c60fc0769ef5cc0b70820c is sound and relevant `[57cbc43efda7]`
+- critic: frontier-wellformed@v1 failed on 2029846dc5bf `[73c88e2c8d51]`
+- nu: verdict of frontier-claim-honest@v1 on 2029846dc5bfd40f3a1487a5170199724b8457a604c60fc0769ef5cc0b70820c is sound and relevant `[e92649f4717d]`
+- critic: frontier-claim-honest@v1 failed on 2029846dc5bf `[b6ac17a5c231]`
+- nu: verdict of frontier-above-floor@v1 on 2029846dc5bfd40f3a1487a5170199724b8457a604c60fc0769ef5cc0b70820c is sound and relevant `[95ed7aa9353d]`
+- critic: frontier-above-floor@v1 failed on 2029846dc5bf `[3d140cea1f11]`
+- nu: verdict of frontier-wellformed@v1 on 6c11852870dac2933dc93aeaa3efd6db2bf54bc74eca89d72f12c6235896ccf9 is sound and relevant `[1e9d1806abba]`
+- critic: frontier-wellformed@v1 failed on 6c11852870da `[eddf95adc548]`
+- nu: verdict of frontier-claim-honest@v1 on 6c11852870dac2933dc93aeaa3efd6db2bf54bc74eca89d72f12c6235896ccf9 is sound and relevant `[398b4546666f]`
+- critic: frontier-claim-honest@v1 failed on 6c11852870da `[6414d010b2c6]`
+- nu: verdict of frontier-above-floor@v1 on 6c11852870dac2933dc93aeaa3efd6db2bf54bc74eca89d72f12c6235896ccf9 is sound and relevant `[166c545ae3e4]`
+- critic: frontier-above-floor@v1 failed on 6c11852870da `[84970317ae2f]`
+- nu: verdict of frontier-wellformed@v1 on 94bc7fd3b20379d8d9fa34ad2dacc064e0f0611ed0fba9bd191cfa2640864d35 is sound and relevant `[aace4be43b57]`
+- critic: frontier-wellformed@v1 failed on 94bc7fd3b203 `[a5e04157a6de]`
+- nu: verdict of frontier-claim-honest@v1 on 94bc7fd3b20379d8d9fa34ad2dacc064e0f0611ed0fba9bd191cfa2640864d35 is sound and relevant `[1bd87479a967]`
+- critic: frontier-claim-honest@v1 failed on 94bc7fd3b203 `[e6ef3e5e3ef7]`
+- nu: verdict of frontier-above-floor@v1 on 94bc7fd3b20379d8d9fa34ad2dacc064e0f0611ed0fba9bd191cfa2640864d35 is sound and relevant `[3908a08b4ab8]`
+- critic: frontier-above-floor@v1 failed on 94bc7fd3b203 `[facb272a43d1]`
+- nu: verdict of frontier-wellformed@v1 on 8ed62a94d3a2bbb8d1476ff0495201589e6067f970c500007adbfcf33010d3b0 is sound and relevant `[709264d41fcf]`
+- critic: frontier-wellformed@v1 failed on 8ed62a94d3a2 `[70431a7a17cf]`
+- nu: verdict of frontier-claim-honest@v1 on 8ed62a94d3a2bbb8d1476ff0495201589e6067f970c500007adbfcf33010d3b0 is sound and relevant `[df38918f7ac3]`
+- critic: frontier-claim-honest@v1 failed on 8ed62a94d3a2 `[9b622c1a4339]`
+- nu: verdict of frontier-above-floor@v1 on 8ed62a94d3a2bbb8d1476ff0495201589e6067f970c500007adbfcf33010d3b0 is sound and relevant `[9e86e1b85828]`
+- critic: frontier-above-floor@v1 failed on 8ed62a94d3a2 `[f172e0a4b810]`
+- nu: verdict of frontier-wellformed@v1 on 4e2a2102933dd62aff1c48b43922a06c822d561bc133a4c55c98fd669dd38be1 is sound and relevant `[4bd4a70dbf6c]`
+- critic: frontier-wellformed@v1 failed on 4e2a2102933d `[2976e66c4eb1]`
+- nu: verdict of frontier-claim-honest@v1 on 4e2a2102933dd62aff1c48b43922a06c822d561bc133a4c55c98fd669dd38be1 is sound and relevant `[5979606b4379]`
+- critic: frontier-claim-honest@v1 failed on 4e2a2102933d `[ea7f7cc0cd3b]`
+- nu: verdict of frontier-above-floor@v1 on 4e2a2102933dd62aff1c48b43922a06c822d561bc133a4c55c98fd669dd38be1 is sound and relevant `[c0d55b986ddb]`
+- critic: frontier-above-floor@v1 failed on 4e2a2102933d `[aeb3d0425247]`
+- nu: verdict of frontier-wellformed@v1 on b6e00b7758d32af291386ca5ec9c1ae637a7d4fef086d5158c8793a0a28166db is sound and relevant `[2ca0f00377a2]`
+- critic: frontier-wellformed@v1 failed on b6e00b7758d3 `[94290328c5cc]`
+- nu: verdict of frontier-claim-honest@v1 on b6e00b7758d32af291386ca5ec9c1ae637a7d4fef086d5158c8793a0a28166db is sound and relevant `[5a1b6f2d1bff]`
+- critic: frontier-claim-honest@v1 failed on b6e00b7758d3 `[3f90d91c56fa]`
+- nu: verdict of frontier-above-floor@v1 on b6e00b7758d32af291386ca5ec9c1ae637a7d4fef086d5158c8793a0a28166db is sound and relevant `[2b1017ed0900]`
+- critic: frontier-above-floor@v1 failed on b6e00b7758d3 `[153d5a11b998]`
+- nu: verdict of frontier-wellformed@v1 on 2186393ceaf360eb6496d2f8941c2f689579ce0a3134169b5db59a0799d4130e is sound and relevant `[9d96878ef7f3]`
+- critic: frontier-wellformed@v1 failed on 2186393ceaf3 `[17d2c1b8352f]`
+- nu: verdict of frontier-claim-honest@v1 on 2186393ceaf360eb6496d2f8941c2f689579ce0a3134169b5db59a0799d4130e is sound and relevant `[aa03fd2adf9b]`
+- critic: frontier-claim-honest@v1 failed on 2186393ceaf3 `[892cbe6a2e3b]`
+- nu: verdict of frontier-above-floor@v1 on 2186393ceaf360eb6496d2f8941c2f689579ce0a3134169b5db59a0799d4130e is sound and relevant `[0887f035da84]`
+- critic: frontier-above-floor@v1 failed on 2186393ceaf3 `[19dd30adea7d]`
+- nu: verdict of frontier-wellformed@v1 on 101630c133a22a23a6fcb6de9428db83a1b77595abe694eaf0ad34d6d6399a3e is sound and relevant `[a8ec7b29b58b]`
+- critic: frontier-wellformed@v1 failed on 101630c133a2 `[64daa2c280a2]`
+- nu: verdict of frontier-claim-honest@v1 on 101630c133a22a23a6fcb6de9428db83a1b77595abe694eaf0ad34d6d6399a3e is sound and relevant `[351230696da1]`
+- critic: frontier-claim-honest@v1 failed on 101630c133a2 `[8fad248501a5]`
+- nu: verdict of frontier-above-floor@v1 on 101630c133a22a23a6fcb6de9428db83a1b77595abe694eaf0ad34d6d6399a3e is sound and relevant `[1648002711e5]`
+- critic: frontier-above-floor@v1 failed on 101630c133a2 `[36c229a4a80e]`
+- nu: verdict of frontier-wellformed@v1 on 94591f3a15393e0bc9886eef8f5a315756373b84dd0f76ba7fb51b97f1fd224c is sound and relevant `[d795379cc745]`
+- critic: frontier-wellformed@v1 failed on 94591f3a1539 `[f8c2e5c3a4c9]`
+- nu: verdict of frontier-claim-honest@v1 on 94591f3a15393e0bc9886eef8f5a315756373b84dd0f76ba7fb51b97f1fd224c is sound and relevant `[0df51ca26aa3]`
+- critic: frontier-claim-honest@v1 failed on 94591f3a1539 `[3bed6a4a5145]`
+- nu: verdict of frontier-above-floor@v1 on 94591f3a15393e0bc9886eef8f5a315756373b84dd0f76ba7fb51b97f1fd224c is sound and relevant `[4ad32b813c77]`
+- critic: frontier-above-floor@v1 failed on 94591f3a1539 `[c7b11742418e]`
+- nu: verdict of frontier-wellformed@v1 on 765c8aa2d33699123dbd2be5a3b57e75e650776cc8f60d7eeb448dba97ab2a62 is sound and relevant `[2f3f31fcbf5b]`
+- critic: frontier-wellformed@v1 failed on 765c8aa2d336 `[0349865fcc71]`
+- nu: verdict of frontier-claim-honest@v1 on 765c8aa2d33699123dbd2be5a3b57e75e650776cc8f60d7eeb448dba97ab2a62 is sound and relevant `[ea61d25b7d83]`
+- critic: frontier-claim-honest@v1 failed on 765c8aa2d336 `[36a62b2c740a]`
+- nu: verdict of frontier-above-floor@v1 on 765c8aa2d33699123dbd2be5a3b57e75e650776cc8f60d7eeb448dba97ab2a62 is sound and relevant `[6d27cd258736]`
+- critic: frontier-above-floor@v1 failed on 765c8aa2d336 `[bf00377f4e68]`
+- nu: verdict of frontier-wellformed@v1 on 4882533963f43eb99429917ee362aca53f8f29bb43b6a7139953d553727862f0 is sound and relevant `[1c43a49de5e8]`
+- critic: frontier-wellformed@v1 failed on 4882533963f4 `[e65c68f239df]`
+- nu: verdict of frontier-claim-honest@v1 on 4882533963f43eb99429917ee362aca53f8f29bb43b6a7139953d553727862f0 is sound and relevant `[d20691654b0e]`
+- critic: frontier-claim-honest@v1 failed on 4882533963f4 `[8f3d6cd0be7e]`
+- nu: verdict of frontier-above-floor@v1 on 4882533963f43eb99429917ee362aca53f8f29bb43b6a7139953d553727862f0 is sound and relevant `[b02145cc702e]`
+- critic: frontier-above-floor@v1 failed on 4882533963f4 `[60c822d71599]`
+- nu: verdict of frontier-wellformed@v1 on f945e947236e73999d9cb8a3de498b7718ab512fe652f572aaee214b7ac77385 is sound and relevant `[e03cb030e4e0]`
+- critic: frontier-wellformed@v1 failed on f945e947236e `[83087b0f608f]`
+- nu: verdict of frontier-claim-honest@v1 on f945e947236e73999d9cb8a3de498b7718ab512fe652f572aaee214b7ac77385 is sound and relevant `[b2c95073783f]`
+- critic: frontier-claim-honest@v1 failed on f945e947236e `[a303342d0223]`
+- nu: verdict of frontier-above-floor@v1 on f945e947236e73999d9cb8a3de498b7718ab512fe652f572aaee214b7ac77385 is sound and relevant `[be1f3e25519e]`
+- critic: frontier-above-floor@v1 failed on f945e947236e `[29e2a44a5728]`
+- nu: verdict of frontier-wellformed@v1 on 30d362c3c3ecb5cb3b4f80ee4ae649f6fa60df78b3743dca971fc78a0fb7a438 is sound and relevant `[54d2913d9723]`
+- critic: frontier-wellformed@v1 failed on 30d362c3c3ec `[172616aac104]`
+- nu: verdict of frontier-claim-honest@v1 on 30d362c3c3ecb5cb3b4f80ee4ae649f6fa60df78b3743dca971fc78a0fb7a438 is sound and relevant `[394964432684]`
+- critic: frontier-claim-honest@v1 failed on 30d362c3c3ec `[efb030cdedd6]`
+- nu: verdict of frontier-above-floor@v1 on 30d362c3c3ecb5cb3b4f80ee4ae649f6fa60df78b3743dca971fc78a0fb7a438 is sound and relevant `[a579f5b078eb]`
+- critic: frontier-above-floor@v1 failed on 30d362c3c3ec `[e8342bf5cf3f]`
+- nu: verdict of frontier-wellformed@v1 on 6d356cda7e515947fa41e6c933ac3b88e9e13a42b02d6036a5ea6881956ecfff is sound and relevant `[7c9fbfe6f40f]`
+- critic: frontier-wellformed@v1 failed on 6d356cda7e51 `[aad466e2c1c6]`
+- nu: verdict of frontier-claim-honest@v1 on 6d356cda7e515947fa41e6c933ac3b88e9e13a42b02d6036a5ea6881956ecfff is sound and relevant `[2d3dacd95bb6]`
+- critic: frontier-claim-honest@v1 failed on 6d356cda7e51 `[506f3a499c43]`
+- nu: verdict of frontier-above-floor@v1 on 6d356cda7e515947fa41e6c933ac3b88e9e13a42b02d6036a5ea6881956ecfff is sound and relevant `[7263b8d55c75]`
+- critic: frontier-above-floor@v1 failed on 6d356cda7e51 `[9954576e41cd]`
+- nu: verdict of frontier-wellformed@v1 on c7f41a6f0bbf42851358faf4d8b8031d42a2db3ffd0ba194c41ba59636f242ea is sound and relevant `[4cf3f51be635]`
+- critic: frontier-wellformed@v1 failed on c7f41a6f0bbf `[074b962708d5]`
+- nu: verdict of frontier-claim-honest@v1 on c7f41a6f0bbf42851358faf4d8b8031d42a2db3ffd0ba194c41ba59636f242ea is sound and relevant `[faa581d2cb87]`
+- critic: frontier-claim-honest@v1 failed on c7f41a6f0bbf `[c257a15a8ee4]`
+- nu: verdict of frontier-above-floor@v1 on c7f41a6f0bbf42851358faf4d8b8031d42a2db3ffd0ba194c41ba59636f242ea is sound and relevant `[e0c8a9d5d5a0]`
+- critic: frontier-above-floor@v1 failed on c7f41a6f0bbf `[44d53abae561]`
+- nu: verdict of frontier-wellformed@v1 on da6ea4fc943be638809d58f8d326ce6f0a9c0cdf343fc958958652d3b8622a77 is sound and relevant `[e6738a060e92]`
+- critic: frontier-wellformed@v1 failed on da6ea4fc943b `[3028a7c85751]`
+- nu: verdict of frontier-claim-honest@v1 on da6ea4fc943be638809d58f8d326ce6f0a9c0cdf343fc958958652d3b8622a77 is sound and relevant `[a79e4e9c9493]`
+- critic: frontier-claim-honest@v1 failed on da6ea4fc943b `[98e62759e34f]`
+- nu: verdict of frontier-above-floor@v1 on da6ea4fc943be638809d58f8d326ce6f0a9c0cdf343fc958958652d3b8622a77 is sound and relevant `[2f6e5e434b1f]`
+- critic: frontier-above-floor@v1 failed on da6ea4fc943b `[6760d408280c]`
+- nu: verdict of frontier-wellformed@v1 on 6b8f2f1fa75797d7fb16d3487169f1c45408199536f7fbc33a7a1f0a823822f2 is sound and relevant `[3c1ed4d3b811]`
+- critic: frontier-wellformed@v1 failed on 6b8f2f1fa757 `[a47979ff3ed3]`
+- nu: verdict of frontier-claim-honest@v1 on 6b8f2f1fa75797d7fb16d3487169f1c45408199536f7fbc33a7a1f0a823822f2 is sound and relevant `[51a924d5527d]`
+- critic: frontier-claim-honest@v1 failed on 6b8f2f1fa757 `[76f8f70ca457]`
+- nu: verdict of frontier-above-floor@v1 on 6b8f2f1fa75797d7fb16d3487169f1c45408199536f7fbc33a7a1f0a823822f2 is sound and relevant `[ec5a800148dd]`
+- critic: frontier-above-floor@v1 failed on 6b8f2f1fa757 `[d1a129a09cb1]`
+- nu: verdict of frontier-wellformed@v1 on 4599f0fa637406eda1e60d20bdc70fa78b230dbe8bf17d7711886c329705c382 is sound and relevant `[bfab30eeadcb]`
+- critic: frontier-wellformed@v1 failed on 4599f0fa6374 `[ae91b0e642d8]`
+- nu: verdict of frontier-claim-honest@v1 on 4599f0fa637406eda1e60d20bdc70fa78b230dbe8bf17d7711886c329705c382 is sound and relevant `[b8d4d46e1027]`
+- critic: frontier-claim-honest@v1 failed on 4599f0fa6374 `[882b249bef8a]`
+- nu: verdict of frontier-above-floor@v1 on 4599f0fa637406eda1e60d20bdc70fa78b230dbe8bf17d7711886c329705c382 is sound and relevant `[8d1101995820]`
+- critic: frontier-above-floor@v1 failed on 4599f0fa6374 `[7abf110ef330]`
+- nu: verdict of frontier-wellformed@v1 on 55e4963e00636e2d720f193bec7a157a34713e66d86e9a8050b85b327f55553a is sound and relevant `[e49a6d779a3a]`
+- critic: frontier-wellformed@v1 failed on 55e4963e0063 `[d340d935665b]`
+- nu: verdict of frontier-claim-honest@v1 on 55e4963e00636e2d720f193bec7a157a34713e66d86e9a8050b85b327f55553a is sound and relevant `[aa5cba7a2181]`
+- critic: frontier-claim-honest@v1 failed on 55e4963e0063 `[7f88c59dde52]`
+- nu: verdict of frontier-above-floor@v1 on 55e4963e00636e2d720f193bec7a157a34713e66d86e9a8050b85b327f55553a is sound and relevant `[5d4b93966822]`
+- critic: frontier-above-floor@v1 failed on 55e4963e0063 `[ea023179f558]`
+- nu: verdict of frontier-wellformed@v1 on c61923ab01f984a4c2f93c6d9b79159dfca9248385a1a5b3442d37c6a29c08b2 is sound and relevant `[29c825ad90e4]`
+- critic: frontier-wellformed@v1 failed on c61923ab01f9 `[7a3fc8031a5f]`
+- nu: verdict of frontier-claim-honest@v1 on c61923ab01f984a4c2f93c6d9b79159dfca9248385a1a5b3442d37c6a29c08b2 is sound and relevant `[dec0b6f0a3cf]`
+- critic: frontier-claim-honest@v1 failed on c61923ab01f9 `[741dce937f2d]`
+- nu: verdict of frontier-above-floor@v1 on c61923ab01f984a4c2f93c6d9b79159dfca9248385a1a5b3442d37c6a29c08b2 is sound and relevant `[7067b5c32553]`
+- critic: frontier-above-floor@v1 failed on c61923ab01f9 `[89c1aa437335]`
+- nu: verdict of frontier-wellformed@v1 on b45202f525dd65cde4531cc8646abd8dca3ce637b0f666daab70e85720cc0151 is sound and relevant `[22069ea6fbdf]`
+- critic: frontier-wellformed@v1 failed on b45202f525dd `[24bdf6e8d157]`
+- nu: verdict of frontier-claim-honest@v1 on b45202f525dd65cde4531cc8646abd8dca3ce637b0f666daab70e85720cc0151 is sound and relevant `[53102da4de51]`
+- critic: frontier-claim-honest@v1 failed on b45202f525dd `[20f3d2e1eed9]`
+- nu: verdict of frontier-above-floor@v1 on b45202f525dd65cde4531cc8646abd8dca3ce637b0f666daab70e85720cc0151 is sound and relevant `[58c3a2e7fd94]`
+- critic: frontier-above-floor@v1 failed on b45202f525dd `[f93a4045cf84]`
+- nu: verdict of frontier-wellformed@v1 on 49c12109b201a732b16111ef99fe104467f3a540434a7f9f6aba325eef614749 is sound and relevant `[3791bb4b1a8e]`
+- critic: frontier-wellformed@v1 failed on 49c12109b201 `[947802637ba3]`
+- nu: verdict of frontier-claim-honest@v1 on 49c12109b201a732b16111ef99fe104467f3a540434a7f9f6aba325eef614749 is sound and relevant `[0657d74e19f3]`
+- critic: frontier-claim-honest@v1 failed on 49c12109b201 `[0740ac409470]`
+- nu: verdict of frontier-above-floor@v1 on 49c12109b201a732b16111ef99fe104467f3a540434a7f9f6aba325eef614749 is sound and relevant `[f731c2a60f1c]`
+- critic: frontier-above-floor@v1 failed on 49c12109b201 `[16a1ba2cfcb6]`
+- nu: verdict of frontier-wellformed@v1 on 3ae8602a42f9b091b4291400b15aaea298427fce76a2bf7c746a1d2afe6ef589 is sound and relevant `[4d005e419d63]`
+- critic: frontier-wellformed@v1 failed on 3ae8602a42f9 `[3ea7352a65e5]`
+- nu: verdict of frontier-claim-honest@v1 on 3ae8602a42f9b091b4291400b15aaea298427fce76a2bf7c746a1d2afe6ef589 is sound and relevant `[b1b378ab8849]`
+- critic: frontier-claim-honest@v1 failed on 3ae8602a42f9 `[9df2dbc14ac0]`
+- nu: verdict of frontier-above-floor@v1 on 3ae8602a42f9b091b4291400b15aaea298427fce76a2bf7c746a1d2afe6ef589 is sound and relevant `[f331622743c4]`
+- critic: frontier-above-floor@v1 failed on 3ae8602a42f9 `[060d26027c71]`
+- {"cycle": 8, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 5000}} `[08f91786ac9d]`
+- nu: verdict of frontier-wellformed@v1 on e737b56b50fdc5bd5941e95f9e714a6175af39775960f1f89c6d9e5bbd6b9a22 is sound and relevant `[cc2ffddff588]`
+- critic: frontier-wellformed@v1 failed on e737b56b50fd `[920962f7debf]`
+- nu: verdict of frontier-claim-honest@v1 on e737b56b50fdc5bd5941e95f9e714a6175af39775960f1f89c6d9e5bbd6b9a22 is sound and relevant `[df9de138b7a9]`
+- critic: frontier-claim-honest@v1 failed on e737b56b50fd `[9bd66b4d6a52]`
+- nu: verdict of frontier-above-floor@v1 on e737b56b50fdc5bd5941e95f9e714a6175af39775960f1f89c6d9e5bbd6b9a22 is sound and relevant `[4e11ae97cf9e]`
+- critic: frontier-above-floor@v1 failed on e737b56b50fd `[7a549b49cc4c]`
+- nu: verdict of frontier-wellformed@v1 on 62156c9ebe626a71f0f0a890b1c2c59baa63eaf5532cd3ab9ade63d11c6b1220 is sound and relevant `[55bd7892ad6f]`
+- critic: frontier-wellformed@v1 failed on 62156c9ebe62 `[a0154cd094de]`
+- nu: verdict of frontier-claim-honest@v1 on 62156c9ebe626a71f0f0a890b1c2c59baa63eaf5532cd3ab9ade63d11c6b1220 is sound and relevant `[376f4cb77e25]`
+- critic: frontier-claim-honest@v1 failed on 62156c9ebe62 `[7c8b36066298]`
+- nu: verdict of frontier-above-floor@v1 on 62156c9ebe626a71f0f0a890b1c2c59baa63eaf5532cd3ab9ade63d11c6b1220 is sound and relevant `[9743afc517b4]`
+- critic: frontier-above-floor@v1 failed on 62156c9ebe62 `[59b94c7c41f6]`
+- nu: verdict of frontier-wellformed@v1 on 96dda65d60a97851785877f163dd5e531f432cc15adc8b969e3f6a43a72ac652 is sound and relevant `[f996f0c655c4]`
+- critic: frontier-wellformed@v1 failed on 96dda65d60a9 `[bee8a54f6fe5]`
+- nu: verdict of frontier-claim-honest@v1 on 96dda65d60a97851785877f163dd5e531f432cc15adc8b969e3f6a43a72ac652 is sound and relevant `[336b945586a5]`
+- critic: frontier-claim-honest@v1 failed on 96dda65d60a9 `[2bc1fc0e6cb7]`
+- nu: verdict of frontier-above-floor@v1 on 96dda65d60a97851785877f163dd5e531f432cc15adc8b969e3f6a43a72ac652 is sound and relevant `[7c955e3f0424]`
+- critic: frontier-above-floor@v1 failed on 96dda65d60a9 `[a4fa422938ef]`
+- nu: verdict of frontier-wellformed@v1 on 46d109303c90adc0d3ed5a847e1c406f4b5e9b1f4b2f48331ae8d39f0c28e1a2 is sound and relevant `[de7ad86a21dc]`
+- critic: frontier-wellformed@v1 failed on 46d109303c90 `[679a2326cd3e]`
+- nu: verdict of frontier-claim-honest@v1 on 46d109303c90adc0d3ed5a847e1c406f4b5e9b1f4b2f48331ae8d39f0c28e1a2 is sound and relevant `[2995c85163b5]`
+- critic: frontier-claim-honest@v1 failed on 46d109303c90 `[6855eb56b053]`
+- nu: verdict of frontier-above-floor@v1 on 46d109303c90adc0d3ed5a847e1c406f4b5e9b1f4b2f48331ae8d39f0c28e1a2 is sound and relevant `[8078be315e38]`
+- critic: frontier-above-floor@v1 failed on 46d109303c90 `[2b8adcbfc0e8]`
+- nu: verdict of frontier-wellformed@v1 on 02272c43f7a19b511028fffeb06dbc437c35a28249e6214c35b665c4e7fc98a6 is sound and relevant `[f7b3c46a47c4]`
+- critic: frontier-wellformed@v1 failed on 02272c43f7a1 `[edb6b6ac97b8]`
+- nu: verdict of frontier-claim-honest@v1 on 02272c43f7a19b511028fffeb06dbc437c35a28249e6214c35b665c4e7fc98a6 is sound and relevant `[2f42aeb1b520]`
+- critic: frontier-claim-honest@v1 failed on 02272c43f7a1 `[e56407e41a3d]`
+- nu: verdict of frontier-above-floor@v1 on 02272c43f7a19b511028fffeb06dbc437c35a28249e6214c35b665c4e7fc98a6 is sound and relevant `[81af67057d71]`
+- critic: frontier-above-floor@v1 failed on 02272c43f7a1 `[068e8526ede8]`
+- nu: verdict of frontier-wellformed@v1 on 160662fc7e4902c51b1d5c52f6a0d0ae040a6b0a85504d28ace322142274e1ff is sound and relevant `[24a6def3540c]`
+- critic: frontier-wellformed@v1 failed on 160662fc7e49 `[3d1daeeef089]`
+- nu: verdict of frontier-claim-honest@v1 on 160662fc7e4902c51b1d5c52f6a0d0ae040a6b0a85504d28ace322142274e1ff is sound and relevant `[37c19ca6762f]`
+- critic: frontier-claim-honest@v1 failed on 160662fc7e49 `[430fcce9ae9e]`
+- nu: verdict of frontier-above-floor@v1 on 160662fc7e4902c51b1d5c52f6a0d0ae040a6b0a85504d28ace322142274e1ff is sound and relevant `[ca2ccc605bf9]`
+- critic: frontier-above-floor@v1 failed on 160662fc7e49 `[dfbdefca349f]`
+- nu: verdict of frontier-wellformed@v1 on 920858250254cf17b6bbadebd3bb3363a939088592109610612c13f0639fc8d2 is sound and relevant `[4543d309bb9b]`
+- critic: frontier-wellformed@v1 failed on 920858250254 `[16ad0669a99d]`
+- nu: verdict of frontier-claim-honest@v1 on 920858250254cf17b6bbadebd3bb3363a939088592109610612c13f0639fc8d2 is sound and relevant `[9eab6bbe9fea]`
+- critic: frontier-claim-honest@v1 failed on 920858250254 `[0c69adb3839d]`
+- nu: verdict of frontier-above-floor@v1 on 920858250254cf17b6bbadebd3bb3363a939088592109610612c13f0639fc8d2 is sound and relevant `[3ae671391711]`
+- critic: frontier-above-floor@v1 failed on 920858250254 `[8a9146d3015f]`
+- nu: verdict of frontier-wellformed@v1 on 16461510ed798a3997936ab786d2d59ba31be5560973293dd8a7a6d6dfe48018 is sound and relevant `[24c3d2e0f058]`
+- critic: frontier-wellformed@v1 failed on 16461510ed79 `[331c919f045d]`
+- nu: verdict of frontier-claim-honest@v1 on 16461510ed798a3997936ab786d2d59ba31be5560973293dd8a7a6d6dfe48018 is sound and relevant `[226df4bf751d]`
+- critic: frontier-claim-honest@v1 failed on 16461510ed79 `[89866ee8ae8f]`
+- nu: verdict of frontier-above-floor@v1 on 16461510ed798a3997936ab786d2d59ba31be5560973293dd8a7a6d6dfe48018 is sound and relevant `[56d325367908]`
+- critic: frontier-above-floor@v1 failed on 16461510ed79 `[3a96b4fbfa19]`
+- nu: verdict of frontier-wellformed@v1 on 9a4ea7b72c7f84e8973cd4f37de3b7e93f4b7547c1122235cefd03047f478f3c is sound and relevant `[11478d27a5cd]`
+- critic: frontier-wellformed@v1 failed on 9a4ea7b72c7f `[336776b47bed]`
+- nu: verdict of frontier-claim-honest@v1 on 9a4ea7b72c7f84e8973cd4f37de3b7e93f4b7547c1122235cefd03047f478f3c is sound and relevant `[8f77e4e10211]`
+- critic: frontier-claim-honest@v1 failed on 9a4ea7b72c7f `[f389d647cd40]`
+- nu: verdict of frontier-above-floor@v1 on 9a4ea7b72c7f84e8973cd4f37de3b7e93f4b7547c1122235cefd03047f478f3c is sound and relevant `[c4b46bad3186]`
+- critic: frontier-above-floor@v1 failed on 9a4ea7b72c7f `[7681581df908]`
+- nu: verdict of frontier-wellformed@v1 on c5a32d450e978eab77634758b9904df5774f4f473e9d2068266d877a00dfd9af is sound and relevant `[1b45b3c72be4]`
+- critic: frontier-wellformed@v1 failed on c5a32d450e97 `[f7ef67afe4d1]`
+- nu: verdict of frontier-claim-honest@v1 on c5a32d450e978eab77634758b9904df5774f4f473e9d2068266d877a00dfd9af is sound and relevant `[ef008bb185ac]`
+- critic: frontier-claim-honest@v1 failed on c5a32d450e97 `[846cac4a1c97]`
+- nu: verdict of frontier-above-floor@v1 on c5a32d450e978eab77634758b9904df5774f4f473e9d2068266d877a00dfd9af is sound and relevant `[4dfd457b18f1]`
+- critic: frontier-above-floor@v1 failed on c5a32d450e97 `[c5c147160033]`
+- nu: verdict of frontier-wellformed@v1 on 6a40881ae83eb84fe180841e50b3f434d10ce9ee1409ee40b0ffa7974dd86b3b is sound and relevant `[5801c82466ef]`
+- critic: frontier-wellformed@v1 failed on 6a40881ae83e `[d9b25b911dff]`
+- nu: verdict of frontier-claim-honest@v1 on 6a40881ae83eb84fe180841e50b3f434d10ce9ee1409ee40b0ffa7974dd86b3b is sound and relevant `[7594c5a5f9c3]`
+- critic: frontier-claim-honest@v1 failed on 6a40881ae83e `[e4b4a264b2f7]`
+- nu: verdict of frontier-above-floor@v1 on 6a40881ae83eb84fe180841e50b3f434d10ce9ee1409ee40b0ffa7974dd86b3b is sound and relevant `[723c42d42507]`
+- critic: frontier-above-floor@v1 failed on 6a40881ae83e `[90910c71ab0a]`
+- nu: verdict of frontier-wellformed@v1 on 09fc674376245c4dc6f9841c03fad770960990283fe170a766b35c108e1da7f9 is sound and relevant `[9fe9612a62ad]`
+- critic: frontier-wellformed@v1 failed on 09fc67437624 `[bc764f078b6f]`
+- nu: verdict of frontier-claim-honest@v1 on 09fc674376245c4dc6f9841c03fad770960990283fe170a766b35c108e1da7f9 is sound and relevant `[1af0987d413e]`
+- critic: frontier-claim-honest@v1 failed on 09fc67437624 `[a1d7ada6c5ce]`
+- nu: verdict of frontier-above-floor@v1 on 09fc674376245c4dc6f9841c03fad770960990283fe170a766b35c108e1da7f9 is sound and relevant `[ef68be2cc2dd]`
+- critic: frontier-above-floor@v1 failed on 09fc67437624 `[0309dcf328c3]`
+- nu: verdict of frontier-wellformed@v1 on c8224818bb0e25d707f19ed2cc81b6a580f2d53fa07d3bbc4e15cb10cb05e4ff is sound and relevant `[eb654cc7880d]`
+- critic: frontier-wellformed@v1 failed on c8224818bb0e `[ce0511a22024]`
+- nu: verdict of frontier-claim-honest@v1 on c8224818bb0e25d707f19ed2cc81b6a580f2d53fa07d3bbc4e15cb10cb05e4ff is sound and relevant `[adc231455807]`
+- critic: frontier-claim-honest@v1 failed on c8224818bb0e `[d01efdab9786]`
+- nu: verdict of frontier-above-floor@v1 on c8224818bb0e25d707f19ed2cc81b6a580f2d53fa07d3bbc4e15cb10cb05e4ff is sound and relevant `[d2c701f35dff]`
+- critic: frontier-above-floor@v1 failed on c8224818bb0e `[34c1073cb411]`
+- nu: verdict of frontier-wellformed@v1 on 5a65dcf33e649b6930727d08255b686b3af483aa86884e4e82ef88d38a3306ed is sound and relevant `[6a1434e31199]`
+- critic: frontier-wellformed@v1 failed on 5a65dcf33e64 `[148e91dff09c]`
+- nu: verdict of frontier-claim-honest@v1 on 5a65dcf33e649b6930727d08255b686b3af483aa86884e4e82ef88d38a3306ed is sound and relevant `[9378aaee7f89]`
+- critic: frontier-claim-honest@v1 failed on 5a65dcf33e64 `[d2d2363dce70]`
+- nu: verdict of frontier-above-floor@v1 on 5a65dcf33e649b6930727d08255b686b3af483aa86884e4e82ef88d38a3306ed is sound and relevant `[4804169c2cd5]`
+- critic: frontier-above-floor@v1 failed on 5a65dcf33e64 `[d4b936f24aee]`
+- nu: verdict of frontier-wellformed@v1 on d30be612eddb17c045265c029e92d694f1bdcfa13eabce608f7bc86cd6b13035 is sound and relevant `[b193a33df569]`
+- critic: frontier-wellformed@v1 failed on d30be612eddb `[a13d97832c0b]`
+- nu: verdict of frontier-claim-honest@v1 on d30be612eddb17c045265c029e92d694f1bdcfa13eabce608f7bc86cd6b13035 is sound and relevant `[713ca4c51c2a]`
+- critic: frontier-claim-honest@v1 failed on d30be612eddb `[4adaa8d5c2a8]`
+- nu: verdict of frontier-above-floor@v1 on d30be612eddb17c045265c029e92d694f1bdcfa13eabce608f7bc86cd6b13035 is sound and relevant `[1c0515faa5cf]`
+- critic: frontier-above-floor@v1 failed on d30be612eddb `[8cfb571cb875]`
+- nu: verdict of frontier-wellformed@v1 on 6706f67b075b0fa6c8b8559de1354fade1b3a2a17b37ac0b8bd308b516cce931 is sound and relevant `[14d8139db38d]`
+- critic: frontier-wellformed@v1 failed on 6706f67b075b `[01106eaf3ab0]`
+- nu: verdict of frontier-claim-honest@v1 on 6706f67b075b0fa6c8b8559de1354fade1b3a2a17b37ac0b8bd308b516cce931 is sound and relevant `[f598a884786a]`
+- critic: frontier-claim-honest@v1 failed on 6706f67b075b `[b79fb73beaeb]`
+- nu: verdict of frontier-above-floor@v1 on 6706f67b075b0fa6c8b8559de1354fade1b3a2a17b37ac0b8bd308b516cce931 is sound and relevant `[811b519b8bf5]`
+- critic: frontier-above-floor@v1 failed on 6706f67b075b `[faff5adda3d7]`
+- nu: verdict of frontier-wellformed@v1 on 4e350b1d31390f172e7fbc30b6f55e878c4f06641dc6c1165a0eab628cc88c4b is sound and relevant `[f64ec53576f2]`
+- critic: frontier-wellformed@v1 failed on 4e350b1d3139 `[e3ab33c0c5f1]`
+- nu: verdict of frontier-claim-honest@v1 on 4e350b1d31390f172e7fbc30b6f55e878c4f06641dc6c1165a0eab628cc88c4b is sound and relevant `[dbf1637c75dd]`
+- critic: frontier-claim-honest@v1 failed on 4e350b1d3139 `[7482e160df3e]`
+- nu: verdict of frontier-above-floor@v1 on 4e350b1d31390f172e7fbc30b6f55e878c4f06641dc6c1165a0eab628cc88c4b is sound and relevant `[fe7fdfafa174]`
+- critic: frontier-above-floor@v1 failed on 4e350b1d3139 `[40593fb98b9c]`
+- nu: verdict of frontier-wellformed@v1 on cd09122a32051f6e48b0ea9c34686f3366071a7635e31c04a3fd3d688ec8c90f is sound and relevant `[a3ec27ee7ec4]`
+- critic: frontier-wellformed@v1 failed on cd09122a3205 `[e5a76e179ad2]`
+- nu: verdict of frontier-claim-honest@v1 on cd09122a32051f6e48b0ea9c34686f3366071a7635e31c04a3fd3d688ec8c90f is sound and relevant `[be722bf22027]`
+- critic: frontier-claim-honest@v1 failed on cd09122a3205 `[588dcd1788d0]`
+- nu: verdict of frontier-above-floor@v1 on cd09122a32051f6e48b0ea9c34686f3366071a7635e31c04a3fd3d688ec8c90f is sound and relevant `[49149760d1c9]`
+- critic: frontier-above-floor@v1 failed on cd09122a3205 `[987748192b06]`
+- nu: verdict of frontier-wellformed@v1 on 2fbfdfa3e66c8a2fad8f564f2631d0bf6e63f2959e49b221164082cdd17760a6 is sound and relevant `[059771a49ac0]`
+- critic: frontier-wellformed@v1 failed on 2fbfdfa3e66c `[a4a5a246c46b]`
+- nu: verdict of frontier-claim-honest@v1 on 2fbfdfa3e66c8a2fad8f564f2631d0bf6e63f2959e49b221164082cdd17760a6 is sound and relevant `[aab0c00a19e0]`
+- critic: frontier-claim-honest@v1 failed on 2fbfdfa3e66c `[e0364f7ce7fc]`
+- nu: verdict of frontier-above-floor@v1 on 2fbfdfa3e66c8a2fad8f564f2631d0bf6e63f2959e49b221164082cdd17760a6 is sound and relevant `[ceff8f219b43]`
+- critic: frontier-above-floor@v1 failed on 2fbfdfa3e66c `[49635c4b6590]`
+- nu: verdict of frontier-wellformed@v1 on 0110facb72c2d3ced813035f33579a3454ce6a1a9edfe7463c23ee28cac50e9d is sound and relevant `[3aaa884f9588]`
+- critic: frontier-wellformed@v1 failed on 0110facb72c2 `[9ca0ed15807a]`
+- nu: verdict of frontier-claim-honest@v1 on 0110facb72c2d3ced813035f33579a3454ce6a1a9edfe7463c23ee28cac50e9d is sound and relevant `[56b6ead50693]`
+- critic: frontier-claim-honest@v1 failed on 0110facb72c2 `[e612e6ef811e]`
+- nu: verdict of frontier-above-floor@v1 on 0110facb72c2d3ced813035f33579a3454ce6a1a9edfe7463c23ee28cac50e9d is sound and relevant `[654bef42fe6d]`
+- critic: frontier-above-floor@v1 failed on 0110facb72c2 `[f283e3069705]`
+- nu: verdict of frontier-wellformed@v1 on 308d52fa96975985ceeeac2bfb9036e39748530decd1bce7b15973e17b579afa is sound and relevant `[163eb0af4b5c]`
+- critic: frontier-wellformed@v1 failed on 308d52fa9697 `[2f5de226c5e2]`
+- nu: verdict of frontier-claim-honest@v1 on 308d52fa96975985ceeeac2bfb9036e39748530decd1bce7b15973e17b579afa is sound and relevant `[8c4ac6c84251]`
+- critic: frontier-claim-honest@v1 failed on 308d52fa9697 `[7cde0f7a682b]`
+- nu: verdict of frontier-above-floor@v1 on 308d52fa96975985ceeeac2bfb9036e39748530decd1bce7b15973e17b579afa is sound and relevant `[4a298ba42965]`
+- critic: frontier-above-floor@v1 failed on 308d52fa9697 `[60b0ab12e487]`
+- nu: verdict of frontier-wellformed@v1 on ad531b600b5d6325fa40ced142c2db3fd5c474dfc6632f38ab4f4f1abeb19526 is sound and relevant `[ff303726b737]`
+- critic: frontier-wellformed@v1 failed on ad531b600b5d `[ea50be2a339a]`
+- nu: verdict of frontier-claim-honest@v1 on ad531b600b5d6325fa40ced142c2db3fd5c474dfc6632f38ab4f4f1abeb19526 is sound and relevant `[bb144c20eb10]`
+- critic: frontier-claim-honest@v1 failed on ad531b600b5d `[c39e39c22e00]`
+- nu: verdict of frontier-above-floor@v1 on ad531b600b5d6325fa40ced142c2db3fd5c474dfc6632f38ab4f4f1abeb19526 is sound and relevant `[42a26355437e]`
+- critic: frontier-above-floor@v1 failed on ad531b600b5d `[8db83ad68cfa]`
+- nu: verdict of frontier-wellformed@v1 on 9e9d7ba42368897ccc3088157d1685a6a6586fe3d7955d28e050345431198c34 is sound and relevant `[b09e1fb1bec8]`
+- critic: frontier-wellformed@v1 failed on 9e9d7ba42368 `[8a4153f1cb2c]`
+- nu: verdict of frontier-claim-honest@v1 on 9e9d7ba42368897ccc3088157d1685a6a6586fe3d7955d28e050345431198c34 is sound and relevant `[290ef08243d8]`
+- critic: frontier-claim-honest@v1 failed on 9e9d7ba42368 `[e43579297fbe]`
+- nu: verdict of frontier-above-floor@v1 on 9e9d7ba42368897ccc3088157d1685a6a6586fe3d7955d28e050345431198c34 is sound and relevant `[d4234db6ddf1]`
+- critic: frontier-above-floor@v1 failed on 9e9d7ba42368 `[c8b44dbe7d0d]`
+- nu: verdict of frontier-wellformed@v1 on 4487dd11e32139861c537dbfe165aa8ca6cc9c1999593878d7d899a804904670 is sound and relevant `[14e08721c4e2]`
+- critic: frontier-wellformed@v1 failed on 4487dd11e321 `[ffff71258d48]`
+- nu: verdict of frontier-claim-honest@v1 on 4487dd11e32139861c537dbfe165aa8ca6cc9c1999593878d7d899a804904670 is sound and relevant `[601d66a12cd6]`
+- critic: frontier-claim-honest@v1 failed on 4487dd11e321 `[d9f951e7e48e]`
+- nu: verdict of frontier-above-floor@v1 on 4487dd11e32139861c537dbfe165aa8ca6cc9c1999593878d7d899a804904670 is sound and relevant `[00318ba49fe3]`
+- critic: frontier-above-floor@v1 failed on 4487dd11e321 `[f9c4de115f73]`
+- nu: verdict of frontier-wellformed@v1 on decb84b8cf7ccee1c87d3d94ab4fdaec2617c24eca8ba04b822f9536735c96a5 is sound and relevant `[9daeb9409267]`
+- critic: frontier-wellformed@v1 failed on decb84b8cf7c `[6465e6045e4d]`
+- nu: verdict of frontier-claim-honest@v1 on decb84b8cf7ccee1c87d3d94ab4fdaec2617c24eca8ba04b822f9536735c96a5 is sound and relevant `[9909bcda4b60]`
+- critic: frontier-claim-honest@v1 failed on decb84b8cf7c `[9cc2e50dd0fa]`
+- nu: verdict of frontier-above-floor@v1 on decb84b8cf7ccee1c87d3d94ab4fdaec2617c24eca8ba04b822f9536735c96a5 is sound and relevant `[60ded441d94a]`
+- critic: frontier-above-floor@v1 failed on decb84b8cf7c `[0c953d568ce7]`
+- nu: verdict of frontier-wellformed@v1 on c406360e5b5003178e56415c499b20c86ed394d367748332585a8d06453c8b60 is sound and relevant `[e06ab911ccda]`
+- critic: frontier-wellformed@v1 failed on c406360e5b50 `[02143e6a8578]`
+- nu: verdict of frontier-claim-honest@v1 on c406360e5b5003178e56415c499b20c86ed394d367748332585a8d06453c8b60 is sound and relevant `[207721b0b0b8]`
+- critic: frontier-claim-honest@v1 failed on c406360e5b50 `[16fec7d924e2]`
+- nu: verdict of frontier-above-floor@v1 on c406360e5b5003178e56415c499b20c86ed394d367748332585a8d06453c8b60 is sound and relevant `[0944bc91184d]`
+- critic: frontier-above-floor@v1 failed on c406360e5b50 `[d8e2b87687a2]`
+- nu: verdict of frontier-wellformed@v1 on 8e212e37e7252f596ee7b860f97a7deadcf33dac7eea8a49a6d679b194d137cc is sound and relevant `[3ed8f76b903c]`
+- critic: frontier-wellformed@v1 failed on 8e212e37e725 `[4c443c9c8b76]`
+- nu: verdict of frontier-claim-honest@v1 on 8e212e37e7252f596ee7b860f97a7deadcf33dac7eea8a49a6d679b194d137cc is sound and relevant `[4a3661419d97]`
+- critic: frontier-claim-honest@v1 failed on 8e212e37e725 `[8743e43cb9d2]`
+- nu: verdict of frontier-above-floor@v1 on 8e212e37e7252f596ee7b860f97a7deadcf33dac7eea8a49a6d679b194d137cc is sound and relevant `[b6684dd019e8]`
+- critic: frontier-above-floor@v1 failed on 8e212e37e725 `[7aa0dfbf0ff8]`
+- nu: verdict of frontier-wellformed@v1 on 36c9846968f2752f6ad1bd934c4b6151e04f59fc4819d200c78b0039878ab82e is sound and relevant `[83e1e5da4e46]`
+- critic: frontier-wellformed@v1 failed on 36c9846968f2 `[141a2260b8e6]`
+- nu: verdict of frontier-claim-honest@v1 on 36c9846968f2752f6ad1bd934c4b6151e04f59fc4819d200c78b0039878ab82e is sound and relevant `[405b2bb60079]`
+- critic: frontier-claim-honest@v1 failed on 36c9846968f2 `[6db7a603638f]`
+- nu: verdict of frontier-above-floor@v1 on 36c9846968f2752f6ad1bd934c4b6151e04f59fc4819d200c78b0039878ab82e is sound and relevant `[e7b10aa79fa4]`
+- critic: frontier-above-floor@v1 failed on 36c9846968f2 `[5e09749ee047]`
+- nu: verdict of frontier-wellformed@v1 on a78a204244bf23be4def4bdd409394ea9553ee5b5530e1ddfb4a9674c9e64bb7 is sound and relevant `[595d9b8ddc31]`
+- critic: frontier-wellformed@v1 failed on a78a204244bf `[fab6248da0ac]`
+- nu: verdict of frontier-claim-honest@v1 on a78a204244bf23be4def4bdd409394ea9553ee5b5530e1ddfb4a9674c9e64bb7 is sound and relevant `[04f86b188e78]`
+- critic: frontier-claim-honest@v1 failed on a78a204244bf `[a8ca680d29b2]`
+- nu: verdict of frontier-above-floor@v1 on a78a204244bf23be4def4bdd409394ea9553ee5b5530e1ddfb4a9674c9e64bb7 is sound and relevant `[f6478338345f]`
+- critic: frontier-above-floor@v1 failed on a78a204244bf `[ee7ac7e72ed3]`
+- nu: verdict of frontier-wellformed@v1 on 621fa36f33c6f1b8f9436466f7a86f996f339ce892d79f99883be412856e4455 is sound and relevant `[758ba56618b5]`
+- critic: frontier-wellformed@v1 failed on 621fa36f33c6 `[e862e0cc0339]`
+- nu: verdict of frontier-claim-honest@v1 on 621fa36f33c6f1b8f9436466f7a86f996f339ce892d79f99883be412856e4455 is sound and relevant `[abbec755af9a]`
+- critic: frontier-claim-honest@v1 failed on 621fa36f33c6 `[08a4d8bb4a06]`
+- nu: verdict of frontier-above-floor@v1 on 621fa36f33c6f1b8f9436466f7a86f996f339ce892d79f99883be412856e4455 is sound and relevant `[caa4d3f36678]`
+- critic: frontier-above-floor@v1 failed on 621fa36f33c6 `[5a2bac16292a]`
+- nu: verdict of frontier-wellformed@v1 on cc10c1307fbf637223d5837a6c081bf21e99cb9e2999b2420b140a48eebdd39a is sound and relevant `[df4232fe5dbb]`
+- critic: frontier-wellformed@v1 failed on cc10c1307fbf `[69d986e0872e]`
+- nu: verdict of frontier-claim-honest@v1 on cc10c1307fbf637223d5837a6c081bf21e99cb9e2999b2420b140a48eebdd39a is sound and relevant `[8d1c161d31f0]`
+- critic: frontier-claim-honest@v1 failed on cc10c1307fbf `[acffdbd47010]`
+- nu: verdict of frontier-above-floor@v1 on cc10c1307fbf637223d5837a6c081bf21e99cb9e2999b2420b140a48eebdd39a is sound and relevant `[8ae718e9fe51]`
+- critic: frontier-above-floor@v1 failed on cc10c1307fbf `[4b16944dec2f]`
+- nu: verdict of frontier-wellformed@v1 on 9250f3b16b5613ddc7409fe10e1cc23cbc1262f39d05978c9fe9fb512cbe05fd is sound and relevant `[66163f2e9b8d]`
+- critic: frontier-wellformed@v1 failed on 9250f3b16b56 `[937d0c43d3b9]`
+- nu: verdict of frontier-claim-honest@v1 on 9250f3b16b5613ddc7409fe10e1cc23cbc1262f39d05978c9fe9fb512cbe05fd is sound and relevant `[14ac4effcff9]`
+- critic: frontier-claim-honest@v1 failed on 9250f3b16b56 `[0239c7abf6c7]`
+- nu: verdict of frontier-above-floor@v1 on 9250f3b16b5613ddc7409fe10e1cc23cbc1262f39d05978c9fe9fb512cbe05fd is sound and relevant `[ceb1758bf1c9]`
+- critic: frontier-above-floor@v1 failed on 9250f3b16b56 `[c0d84704caaa]`
+- nu: verdict of frontier-wellformed@v1 on c9b79910524e812b8b23d151116ae87dac27a825924c94af7c0b9d049208a95e is sound and relevant `[a8f7d6b8086e]`
+- critic: frontier-wellformed@v1 failed on c9b79910524e `[8515920a1a32]`
+- nu: verdict of frontier-claim-honest@v1 on c9b79910524e812b8b23d151116ae87dac27a825924c94af7c0b9d049208a95e is sound and relevant `[30ef6824bc52]`
+- critic: frontier-claim-honest@v1 failed on c9b79910524e `[ddf4b691f6d3]`
+- nu: verdict of frontier-above-floor@v1 on c9b79910524e812b8b23d151116ae87dac27a825924c94af7c0b9d049208a95e is sound and relevant `[a72cfad37056]`
+- critic: frontier-above-floor@v1 failed on c9b79910524e `[a2e5b3074dfb]`
+- nu: verdict of frontier-wellformed@v1 on 4bd9e0eafff3e76168ab37f820f2e1bb3d86c619476b5bb5cd18ac1973ed0d17 is sound and relevant `[ea5faa5fa8fb]`
+- critic: frontier-wellformed@v1 failed on 4bd9e0eafff3 `[2eaf2bfba1d1]`
+- nu: verdict of frontier-claim-honest@v1 on 4bd9e0eafff3e76168ab37f820f2e1bb3d86c619476b5bb5cd18ac1973ed0d17 is sound and relevant `[2bdaa70a6a56]`
+- critic: frontier-claim-honest@v1 failed on 4bd9e0eafff3 `[ab7bc74f20be]`
+- nu: verdict of frontier-above-floor@v1 on 4bd9e0eafff3e76168ab37f820f2e1bb3d86c619476b5bb5cd18ac1973ed0d17 is sound and relevant `[20636314fa6e]`
+- critic: frontier-above-floor@v1 failed on 4bd9e0eafff3 `[4c7fb82592cf]`
+- nu: verdict of frontier-wellformed@v1 on cd015fc48e0246218c036e71d8d863c22042c021dd53e8b3650e23e2be4506a2 is sound and relevant `[0de926640531]`
+- critic: frontier-wellformed@v1 failed on cd015fc48e02 `[b8563471b742]`
+- nu: verdict of frontier-claim-honest@v1 on cd015fc48e0246218c036e71d8d863c22042c021dd53e8b3650e23e2be4506a2 is sound and relevant `[c633b5c602ec]`
+- critic: frontier-claim-honest@v1 failed on cd015fc48e02 `[6cec2b81d197]`
+- nu: verdict of frontier-above-floor@v1 on cd015fc48e0246218c036e71d8d863c22042c021dd53e8b3650e23e2be4506a2 is sound and relevant `[1caa8aa61ea3]`
+- critic: frontier-above-floor@v1 failed on cd015fc48e02 `[a81a2d9cad4f]`
+- nu: verdict of frontier-wellformed@v1 on 24487d85de4b1b0ef88d42b71c6d64d24f8f2c0384db3557a74e75175c436f4e is sound and relevant `[284560eecfa4]`
+- critic: frontier-wellformed@v1 failed on 24487d85de4b `[7e980e314b8e]`
+- nu: verdict of frontier-claim-honest@v1 on 24487d85de4b1b0ef88d42b71c6d64d24f8f2c0384db3557a74e75175c436f4e is sound and relevant `[8e811dcbc7f6]`
+- critic: frontier-claim-honest@v1 failed on 24487d85de4b `[bc2a0aa9e9c3]`
+- nu: verdict of frontier-above-floor@v1 on 24487d85de4b1b0ef88d42b71c6d64d24f8f2c0384db3557a74e75175c436f4e is sound and relevant `[de40d22f521c]`
+- critic: frontier-above-floor@v1 failed on 24487d85de4b `[ff1300945636]`
+- nu: verdict of frontier-wellformed@v1 on 6636e5e30c6d385ee64c7cc28705585a35131fd821dc083f6ea719ce126edbaa is sound and relevant `[872238ec2b68]`
+- critic: frontier-wellformed@v1 failed on 6636e5e30c6d `[c78b4589efa3]`
+- nu: verdict of frontier-claim-honest@v1 on 6636e5e30c6d385ee64c7cc28705585a35131fd821dc083f6ea719ce126edbaa is sound and relevant `[ba9da0b4d50a]`
+- critic: frontier-claim-honest@v1 failed on 6636e5e30c6d `[805d4443244a]`
+- nu: verdict of frontier-above-floor@v1 on 6636e5e30c6d385ee64c7cc28705585a35131fd821dc083f6ea719ce126edbaa is sound and relevant `[860074b6d35b]`
+- critic: frontier-above-floor@v1 failed on 6636e5e30c6d `[73240d8d3d12]`
+- nu: verdict of frontier-wellformed@v1 on a7e560a62f435a9a180e2d68692723c65f202f44983ee5e5c514c25f787ba00c is sound and relevant `[e9915e77a054]`
+- critic: frontier-wellformed@v1 failed on a7e560a62f43 `[50f961f1b478]`
+- nu: verdict of frontier-claim-honest@v1 on a7e560a62f435a9a180e2d68692723c65f202f44983ee5e5c514c25f787ba00c is sound and relevant `[2e03791886c7]`
+- critic: frontier-claim-honest@v1 failed on a7e560a62f43 `[c5702bdc8b77]`
+- nu: verdict of frontier-above-floor@v1 on a7e560a62f435a9a180e2d68692723c65f202f44983ee5e5c514c25f787ba00c is sound and relevant `[e111c6265a17]`
+- critic: frontier-above-floor@v1 failed on a7e560a62f43 `[e196e3c68b74]`
+- nu: verdict of frontier-wellformed@v1 on 32f71523ebffdbaecb9adfe1d2456ce83cc4569634bb27a4ce8b8b6c05d873b4 is sound and relevant `[d8315625ebe8]`
+- critic: frontier-wellformed@v1 failed on 32f71523ebff `[86c27d053a78]`
+- nu: verdict of frontier-claim-honest@v1 on 32f71523ebffdbaecb9adfe1d2456ce83cc4569634bb27a4ce8b8b6c05d873b4 is sound and relevant `[da90d5283729]`
+- critic: frontier-claim-honest@v1 failed on 32f71523ebff `[f8eceb18dfd9]`
+- nu: verdict of frontier-above-floor@v1 on 32f71523ebffdbaecb9adfe1d2456ce83cc4569634bb27a4ce8b8b6c05d873b4 is sound and relevant `[bd2780b731b7]`
+- critic: frontier-above-floor@v1 failed on 32f71523ebff `[0ddf0cd0a638]`
+- {"cycle": 10, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 3125}} `[bedc42e2115d]`
+- nu: verdict of frontier-wellformed@v1 on 893fbc0838d761d890fdd81e8aee71c8017dcd0bf264496561faaa687d28b345 is sound and relevant `[2879138e12f5]`
+- critic: frontier-wellformed@v1 failed on 893fbc0838d7 `[f56c92b51668]`
+- nu: verdict of frontier-claim-honest@v1 on 893fbc0838d761d890fdd81e8aee71c8017dcd0bf264496561faaa687d28b345 is sound and relevant `[d66fb3c7e30f]`
+- critic: frontier-claim-honest@v1 failed on 893fbc0838d7 `[d16962e62fca]`
+- nu: verdict of frontier-above-floor@v1 on 893fbc0838d761d890fdd81e8aee71c8017dcd0bf264496561faaa687d28b345 is sound and relevant `[8c35a7964392]`
+- critic: frontier-above-floor@v1 failed on 893fbc0838d7 `[598d022a5d78]`
+- nu: verdict of frontier-wellformed@v1 on d62ec23aa8b923d11a3fe79d954ed936ce2c79233da1eb9f8d1a61878a9b7d39 is sound and relevant `[9b8fe766a4cd]`
+- critic: frontier-wellformed@v1 failed on d62ec23aa8b9 `[2e1852802c49]`
+- nu: verdict of frontier-claim-honest@v1 on d62ec23aa8b923d11a3fe79d954ed936ce2c79233da1eb9f8d1a61878a9b7d39 is sound and relevant `[d979862855a0]`
+- critic: frontier-claim-honest@v1 failed on d62ec23aa8b9 `[f8262c92e48c]`
+- nu: verdict of frontier-above-floor@v1 on d62ec23aa8b923d11a3fe79d954ed936ce2c79233da1eb9f8d1a61878a9b7d39 is sound and relevant `[d5f44dd6dddf]`
+- critic: frontier-above-floor@v1 failed on d62ec23aa8b9 `[f436f40d40e8]`
+- nu: verdict of frontier-wellformed@v1 on 407bccdce528e942039c8da7497a2c45af1b63e81613aad3b2dd1cc19aa54c5d is sound and relevant `[08dae21def23]`
+- critic: frontier-wellformed@v1 failed on 407bccdce528 `[8cc49b5c3e2c]`
+- nu: verdict of frontier-claim-honest@v1 on 407bccdce528e942039c8da7497a2c45af1b63e81613aad3b2dd1cc19aa54c5d is sound and relevant `[434c17d8ced8]`
+- critic: frontier-claim-honest@v1 failed on 407bccdce528 `[a0d88aad16ea]`
+- nu: verdict of frontier-above-floor@v1 on 407bccdce528e942039c8da7497a2c45af1b63e81613aad3b2dd1cc19aa54c5d is sound and relevant `[c78bbbde5a7a]`
+- critic: frontier-above-floor@v1 failed on 407bccdce528 `[0ce392f42ae1]`
+- nu: verdict of frontier-wellformed@v1 on c4b920e2beb92d8e78b2e2c8bf13d88ef2abd4448c088ae371cc017f15b8eca9 is sound and relevant `[66c1b0d66ceb]`
+- critic: frontier-wellformed@v1 failed on c4b920e2beb9 `[377762e73bb9]`
+- nu: verdict of frontier-claim-honest@v1 on c4b920e2beb92d8e78b2e2c8bf13d88ef2abd4448c088ae371cc017f15b8eca9 is sound and relevant `[0aec39c1da41]`
+- critic: frontier-claim-honest@v1 failed on c4b920e2beb9 `[67699bd1cfef]`
+- nu: verdict of frontier-above-floor@v1 on c4b920e2beb92d8e78b2e2c8bf13d88ef2abd4448c088ae371cc017f15b8eca9 is sound and relevant `[ba2b61bec806]`
+- critic: frontier-above-floor@v1 failed on c4b920e2beb9 `[4dd57495b93d]`
+- nu: verdict of frontier-wellformed@v1 on da233eb8f14e5fa530f3ee1075b9938b2e3dedada70d68d94c3985585a658b07 is sound and relevant `[1a6623edbe90]`
+- critic: frontier-wellformed@v1 failed on da233eb8f14e `[a6f2c3429371]`
+- nu: verdict of frontier-claim-honest@v1 on da233eb8f14e5fa530f3ee1075b9938b2e3dedada70d68d94c3985585a658b07 is sound and relevant `[44ac31b6fd23]`
+- critic: frontier-claim-honest@v1 failed on da233eb8f14e `[1ce25bd8cc16]`
+- nu: verdict of frontier-above-floor@v1 on da233eb8f14e5fa530f3ee1075b9938b2e3dedada70d68d94c3985585a658b07 is sound and relevant `[ce63b081081e]`
+- critic: frontier-above-floor@v1 failed on da233eb8f14e `[c5df47cb928b]`
+- nu: verdict of frontier-wellformed@v1 on 0accc1bd452476bde4d4c587663ce4f12b65d7db2a32827cd09702f0c53f733e is sound and relevant `[f7ad259f43b2]`
+- critic: frontier-wellformed@v1 failed on 0accc1bd4524 `[b49f9f542037]`
+- nu: verdict of frontier-claim-honest@v1 on 0accc1bd452476bde4d4c587663ce4f12b65d7db2a32827cd09702f0c53f733e is sound and relevant `[d6bfb22ef59b]`
+- critic: frontier-claim-honest@v1 failed on 0accc1bd4524 `[48dda409fd4f]`
+- nu: verdict of frontier-above-floor@v1 on 0accc1bd452476bde4d4c587663ce4f12b65d7db2a32827cd09702f0c53f733e is sound and relevant `[0effc7bdc60e]`
+- critic: frontier-above-floor@v1 failed on 0accc1bd4524 `[cc41b99f770f]`
+- nu: verdict of frontier-wellformed@v1 on 0c1e409c554dbe31914c36dd4d7e7de194b665f2c2f567dda27fab31242d425f is sound and relevant `[4cb69145f636]`
+- critic: frontier-wellformed@v1 failed on 0c1e409c554d `[802caab8618e]`
+- nu: verdict of frontier-claim-honest@v1 on 0c1e409c554dbe31914c36dd4d7e7de194b665f2c2f567dda27fab31242d425f is sound and relevant `[25d497385b53]`
+- critic: frontier-claim-honest@v1 failed on 0c1e409c554d `[0bbe8e73485b]`
+- nu: verdict of frontier-above-floor@v1 on 0c1e409c554dbe31914c36dd4d7e7de194b665f2c2f567dda27fab31242d425f is sound and relevant `[f305b07e091f]`
+- critic: frontier-above-floor@v1 failed on 0c1e409c554d `[9e685c58739b]`
+- nu: verdict of frontier-wellformed@v1 on cbe01d6615396fb6f71d0f6421faa07ab8c180207a3a04531f285ff6f3041468 is sound and relevant `[ab669a7acc25]`
+- critic: frontier-wellformed@v1 failed on cbe01d661539 `[fe098e7299a6]`
+- nu: verdict of frontier-claim-honest@v1 on cbe01d6615396fb6f71d0f6421faa07ab8c180207a3a04531f285ff6f3041468 is sound and relevant `[ca55a65b473c]`
+- critic: frontier-claim-honest@v1 failed on cbe01d661539 `[71a26ca54abf]`
+- nu: verdict of frontier-above-floor@v1 on cbe01d6615396fb6f71d0f6421faa07ab8c180207a3a04531f285ff6f3041468 is sound and relevant `[10e982e3b54d]`
+- critic: frontier-above-floor@v1 failed on cbe01d661539 `[677504b22c0b]`
+- nu: verdict of frontier-wellformed@v1 on dde3116f1700f7130ab87fa94c61534bcc542d4dda89d105b8f8ad5c031a71bd is sound and relevant `[31254b7602fb]`
+- critic: frontier-wellformed@v1 failed on dde3116f1700 `[f21a0ea5e7c3]`
+- nu: verdict of frontier-claim-honest@v1 on dde3116f1700f7130ab87fa94c61534bcc542d4dda89d105b8f8ad5c031a71bd is sound and relevant `[e4a174119bc5]`
+- critic: frontier-claim-honest@v1 failed on dde3116f1700 `[2aa0634d810d]`
+- nu: verdict of frontier-above-floor@v1 on dde3116f1700f7130ab87fa94c61534bcc542d4dda89d105b8f8ad5c031a71bd is sound and relevant `[b592f17af56b]`
+- critic: frontier-above-floor@v1 failed on dde3116f1700 `[c81c552aea2d]`
+- nu: verdict of frontier-wellformed@v1 on 9821d3a28cca2958838186b0468a38a7a19767f867b036a1277a70b000432e90 is sound and relevant `[44ab6d36f3c2]`
+- critic: frontier-wellformed@v1 failed on 9821d3a28cca `[d1a167d2b02f]`
+- nu: verdict of frontier-claim-honest@v1 on 9821d3a28cca2958838186b0468a38a7a19767f867b036a1277a70b000432e90 is sound and relevant `[b4a4efb477fe]`
+- critic: frontier-claim-honest@v1 failed on 9821d3a28cca `[89b7008aaef8]`
+- nu: verdict of frontier-above-floor@v1 on 9821d3a28cca2958838186b0468a38a7a19767f867b036a1277a70b000432e90 is sound and relevant `[7a08ced1a4ac]`
+- critic: frontier-above-floor@v1 failed on 9821d3a28cca `[08ef9841797e]`
+- nu: verdict of frontier-wellformed@v1 on 6ce243ba570b7be6590dd1eee6ad37cb5385386b154629bd10f98cc96d79e20d is sound and relevant `[7c7b7d7b130b]`
+- critic: frontier-wellformed@v1 failed on 6ce243ba570b `[f06bf6508bdf]`
+- nu: verdict of frontier-claim-honest@v1 on 6ce243ba570b7be6590dd1eee6ad37cb5385386b154629bd10f98cc96d79e20d is sound and relevant `[31ab88f1d1bc]`
+- critic: frontier-claim-honest@v1 failed on 6ce243ba570b `[cdc83b9886d4]`
+- nu: verdict of frontier-above-floor@v1 on 6ce243ba570b7be6590dd1eee6ad37cb5385386b154629bd10f98cc96d79e20d is sound and relevant `[6a4bf0d69b38]`
+- critic: frontier-above-floor@v1 failed on 6ce243ba570b `[e1eb7d1bcb55]`
+- nu: verdict of frontier-wellformed@v1 on c20d50178915b024904f14ebba1a6a38573e512adcc1df999040aa6626d78518 is sound and relevant `[223bceac6418]`
+- critic: frontier-wellformed@v1 failed on c20d50178915 `[b6350d6d071f]`
+- nu: verdict of frontier-claim-honest@v1 on c20d50178915b024904f14ebba1a6a38573e512adcc1df999040aa6626d78518 is sound and relevant `[98fea93ab887]`
+- critic: frontier-claim-honest@v1 failed on c20d50178915 `[f20d8d214c12]`
+- nu: verdict of frontier-above-floor@v1 on c20d50178915b024904f14ebba1a6a38573e512adcc1df999040aa6626d78518 is sound and relevant `[0543d229bfcf]`
+- critic: frontier-above-floor@v1 failed on c20d50178915 `[0a9a3096000a]`
+- nu: verdict of frontier-wellformed@v1 on 6666e47af90ad7e50aad0b2ec4b539b3b3443299d92796fa864ee454556c998e is sound and relevant `[21a230dd4e46]`
+- critic: frontier-wellformed@v1 failed on 6666e47af90a `[1773a6ca4afa]`
+- nu: verdict of frontier-claim-honest@v1 on 6666e47af90ad7e50aad0b2ec4b539b3b3443299d92796fa864ee454556c998e is sound and relevant `[6d8c12551e91]`
+- critic: frontier-claim-honest@v1 failed on 6666e47af90a `[60ebc166ce06]`
+- nu: verdict of frontier-above-floor@v1 on 6666e47af90ad7e50aad0b2ec4b539b3b3443299d92796fa864ee454556c998e is sound and relevant `[75a48a6a8faa]`
+- critic: frontier-above-floor@v1 failed on 6666e47af90a `[bc107c47df67]`
+- nu: verdict of frontier-wellformed@v1 on 4afc8ff10da3f46c4141eaf96bf006c2c6d9c51dc7f786f0ebb83ee6d1a37af4 is sound and relevant `[d1554131809d]`
+- critic: frontier-wellformed@v1 failed on 4afc8ff10da3 `[284598046b12]`
+- nu: verdict of frontier-claim-honest@v1 on 4afc8ff10da3f46c4141eaf96bf006c2c6d9c51dc7f786f0ebb83ee6d1a37af4 is sound and relevant `[074eed4585c5]`
+- critic: frontier-claim-honest@v1 failed on 4afc8ff10da3 `[499d730b3b9c]`
+- nu: verdict of frontier-above-floor@v1 on 4afc8ff10da3f46c4141eaf96bf006c2c6d9c51dc7f786f0ebb83ee6d1a37af4 is sound and relevant `[44b275ccc778]`
+- critic: frontier-above-floor@v1 failed on 4afc8ff10da3 `[1dfb6c1e4151]`
+- nu: verdict of frontier-wellformed@v1 on 5779948d72fb139fe5414edabaf5f42bba1bb9dc42a4ae33608ade216b1b6f5a is sound and relevant `[97919eb8a1bf]`
+- critic: frontier-wellformed@v1 failed on 5779948d72fb `[87d41cfbb142]`
+- nu: verdict of frontier-claim-honest@v1 on 5779948d72fb139fe5414edabaf5f42bba1bb9dc42a4ae33608ade216b1b6f5a is sound and relevant `[487b6ee2eabd]`
+- critic: frontier-claim-honest@v1 failed on 5779948d72fb `[778ef054e8bf]`
+- nu: verdict of frontier-above-floor@v1 on 5779948d72fb139fe5414edabaf5f42bba1bb9dc42a4ae33608ade216b1b6f5a is sound and relevant `[c296016c499a]`
+- critic: frontier-above-floor@v1 failed on 5779948d72fb `[8ef63ae28dcb]`
+- nu: verdict of frontier-wellformed@v1 on 8ddde40caaadde342039d3c0e76c3f9965b0d25654b95afe2fe133e6bacddad8 is sound and relevant `[f7833b89ec00]`
+- critic: frontier-wellformed@v1 failed on 8ddde40caaad `[565a860ac4e0]`
+- nu: verdict of frontier-claim-honest@v1 on 8ddde40caaadde342039d3c0e76c3f9965b0d25654b95afe2fe133e6bacddad8 is sound and relevant `[7516ef194ea5]`
+- critic: frontier-claim-honest@v1 failed on 8ddde40caaad `[772195a7d4b6]`
+- nu: verdict of frontier-above-floor@v1 on 8ddde40caaadde342039d3c0e76c3f9965b0d25654b95afe2fe133e6bacddad8 is sound and relevant `[2efc202e022b]`
+- critic: frontier-above-floor@v1 failed on 8ddde40caaad `[a8ed73ce7fad]`
+- nu: verdict of frontier-wellformed@v1 on 3526a1b19bf0961c3430ea1bfa9926c24f92de8d403d3639bc1fc70ff533c1a7 is sound and relevant `[bec167a6f96b]`
+- critic: frontier-wellformed@v1 failed on 3526a1b19bf0 `[a6b6358f439b]`
+- nu: verdict of frontier-claim-honest@v1 on 3526a1b19bf0961c3430ea1bfa9926c24f92de8d403d3639bc1fc70ff533c1a7 is sound and relevant `[5cba57b9a44a]`
+- critic: frontier-claim-honest@v1 failed on 3526a1b19bf0 `[4182a0adf572]`
+- nu: verdict of frontier-above-floor@v1 on 3526a1b19bf0961c3430ea1bfa9926c24f92de8d403d3639bc1fc70ff533c1a7 is sound and relevant `[24582f5fb8c8]`
+- critic: frontier-above-floor@v1 failed on 3526a1b19bf0 `[b8ada987f18f]`
+- nu: verdict of frontier-wellformed@v1 on 559db1885ab46f0805ebd9e0df7bc65ffee9890a0366d6adcc0831fbd83ee17a is sound and relevant `[225ac951644a]`
+- critic: frontier-wellformed@v1 failed on 559db1885ab4 `[90d40f0e57e7]`
+- nu: verdict of frontier-claim-honest@v1 on 559db1885ab46f0805ebd9e0df7bc65ffee9890a0366d6adcc0831fbd83ee17a is sound and relevant `[6237f8b8997c]`
+- critic: frontier-claim-honest@v1 failed on 559db1885ab4 `[b658473601af]`
+- nu: verdict of frontier-above-floor@v1 on 559db1885ab46f0805ebd9e0df7bc65ffee9890a0366d6adcc0831fbd83ee17a is sound and relevant `[70d0bcc1ec5e]`
+- critic: frontier-above-floor@v1 failed on 559db1885ab4 `[4e14c5dccdc2]`
+- nu: verdict of frontier-wellformed@v1 on 7c9332c92553566091e1ab03e9112b1c263fdfcb3092a4d18f5dfcc502c77f33 is sound and relevant `[95831459676c]`
+- critic: frontier-wellformed@v1 failed on 7c9332c92553 `[5869893ba7fb]`
+- nu: verdict of frontier-claim-honest@v1 on 7c9332c92553566091e1ab03e9112b1c263fdfcb3092a4d18f5dfcc502c77f33 is sound and relevant `[1ab5b4aa0894]`
+- critic: frontier-claim-honest@v1 failed on 7c9332c92553 `[e2080f8a3aae]`
+- nu: verdict of frontier-above-floor@v1 on 7c9332c92553566091e1ab03e9112b1c263fdfcb3092a4d18f5dfcc502c77f33 is sound and relevant `[ac18690b29dc]`
+- critic: frontier-above-floor@v1 failed on 7c9332c92553 `[36850662421c]`
+- nu: verdict of frontier-wellformed@v1 on 406c5cb1bd2fb624744093134d3ab0e2d9a2e6159ff6dffed3d7957afe886511 is sound and relevant `[7f77c72a3624]`
+- critic: frontier-wellformed@v1 failed on 406c5cb1bd2f `[b44704227f75]`
+- nu: verdict of frontier-claim-honest@v1 on 406c5cb1bd2fb624744093134d3ab0e2d9a2e6159ff6dffed3d7957afe886511 is sound and relevant `[69223377310f]`
+- critic: frontier-claim-honest@v1 failed on 406c5cb1bd2f `[e0d6bc86479f]`
+- nu: verdict of frontier-above-floor@v1 on 406c5cb1bd2fb624744093134d3ab0e2d9a2e6159ff6dffed3d7957afe886511 is sound and relevant `[b3915ff66d64]`
+- critic: frontier-above-floor@v1 failed on 406c5cb1bd2f `[3a1fbbb44f3b]`
+- nu: verdict of frontier-wellformed@v1 on 7d51762a654ddde7c8a758f6d1ee656f08cc26a0433f3770a145c7d81436b122 is sound and relevant `[bc28b40208d0]`
+- critic: frontier-wellformed@v1 failed on 7d51762a654d `[a8a219e94146]`
+- nu: verdict of frontier-claim-honest@v1 on 7d51762a654ddde7c8a758f6d1ee656f08cc26a0433f3770a145c7d81436b122 is sound and relevant `[b7d58da94822]`
+- critic: frontier-claim-honest@v1 failed on 7d51762a654d `[957212d8f88f]`
+- nu: verdict of frontier-above-floor@v1 on 7d51762a654ddde7c8a758f6d1ee656f08cc26a0433f3770a145c7d81436b122 is sound and relevant `[26aff5a5cf55]`
+- critic: frontier-above-floor@v1 failed on 7d51762a654d `[e7c99eae861b]`
+- nu: verdict of frontier-wellformed@v1 on d8140af8c2f7a6182a3155b99efeeb4577e1a04e30da599c7ebfc5bd549b255a is sound and relevant `[c4ad0209485a]`
+- critic: frontier-wellformed@v1 failed on d8140af8c2f7 `[a5ebc9de09be]`
+- nu: verdict of frontier-claim-honest@v1 on d8140af8c2f7a6182a3155b99efeeb4577e1a04e30da599c7ebfc5bd549b255a is sound and relevant `[f4e91bdc610e]`
+- critic: frontier-claim-honest@v1 failed on d8140af8c2f7 `[879b1251eec6]`
+- nu: verdict of frontier-above-floor@v1 on d8140af8c2f7a6182a3155b99efeeb4577e1a04e30da599c7ebfc5bd549b255a is sound and relevant `[53011a5a96b9]`
+- critic: frontier-above-floor@v1 failed on d8140af8c2f7 `[a1de2ce6b844]`
+- nu: verdict of frontier-wellformed@v1 on 5c229f1dd0df56dd5a65f95e5375d40c1fc1e3e175f87f73e8fc9d92f5f5c941 is sound and relevant `[625533c8e4dc]`
+- critic: frontier-wellformed@v1 failed on 5c229f1dd0df `[6f1d97870e6c]`
+- nu: verdict of frontier-claim-honest@v1 on 5c229f1dd0df56dd5a65f95e5375d40c1fc1e3e175f87f73e8fc9d92f5f5c941 is sound and relevant `[1831bb12ba51]`
+- critic: frontier-claim-honest@v1 failed on 5c229f1dd0df `[a06ccede5aba]`
+- nu: verdict of frontier-above-floor@v1 on 5c229f1dd0df56dd5a65f95e5375d40c1fc1e3e175f87f73e8fc9d92f5f5c941 is sound and relevant `[a87a8d535e0e]`
+- critic: frontier-above-floor@v1 failed on 5c229f1dd0df `[13b3a87051d0]`
+- nu: verdict of frontier-wellformed@v1 on 744fa20ee61c502abf7610624d597d806e868930001efd1049362be8a6665393 is sound and relevant `[94251af03e42]`
+- critic: frontier-wellformed@v1 failed on 744fa20ee61c `[6494ca9d38e7]`
+- nu: verdict of frontier-claim-honest@v1 on 744fa20ee61c502abf7610624d597d806e868930001efd1049362be8a6665393 is sound and relevant `[319f07c71d50]`
+- critic: frontier-claim-honest@v1 failed on 744fa20ee61c `[41989c0c3c93]`
+- nu: verdict of frontier-above-floor@v1 on 744fa20ee61c502abf7610624d597d806e868930001efd1049362be8a6665393 is sound and relevant `[c94c2d9ff364]`
+- critic: frontier-above-floor@v1 failed on 744fa20ee61c `[99d8d84792dc]`
+- nu: verdict of frontier-wellformed@v1 on 8f44f3f3f6f7830e6d8f723c7122cc3fcf20fc291d4061c81f19c2b4995fe7b5 is sound and relevant `[4cc16f57f1b5]`
+- critic: frontier-wellformed@v1 failed on 8f44f3f3f6f7 `[59ff9acef902]`
+- nu: verdict of frontier-claim-honest@v1 on 8f44f3f3f6f7830e6d8f723c7122cc3fcf20fc291d4061c81f19c2b4995fe7b5 is sound and relevant `[ddec3d8b0cd0]`
+- critic: frontier-claim-honest@v1 failed on 8f44f3f3f6f7 `[72d5968b113f]`
+- nu: verdict of frontier-above-floor@v1 on 8f44f3f3f6f7830e6d8f723c7122cc3fcf20fc291d4061c81f19c2b4995fe7b5 is sound and relevant `[2cb6de597897]`
+- critic: frontier-above-floor@v1 failed on 8f44f3f3f6f7 `[8d31c7c91952]`
+- nu: verdict of frontier-wellformed@v1 on c9962890947724e66ec1fc0acbe5ef1c4e43e1c9f1edd8d111626ef9256a9739 is sound and relevant `[f6668e4db99e]`
+- critic: frontier-wellformed@v1 failed on c99628909477 `[22645cfc8bc5]`
+- nu: verdict of frontier-claim-honest@v1 on c9962890947724e66ec1fc0acbe5ef1c4e43e1c9f1edd8d111626ef9256a9739 is sound and relevant `[ccd3c87ffc53]`
+- critic: frontier-claim-honest@v1 failed on c99628909477 `[3cbd94a7df33]`
+- nu: verdict of frontier-above-floor@v1 on c9962890947724e66ec1fc0acbe5ef1c4e43e1c9f1edd8d111626ef9256a9739 is sound and relevant `[2f1b498bfc65]`
+- critic: frontier-above-floor@v1 failed on c99628909477 `[4659be476f2b]`
+- nu: verdict of frontier-wellformed@v1 on 460903525b0e9faa0bcb2b7ff42b53d14ec34a00bfcaf6a5ba2caa29fb386ba7 is sound and relevant `[9b385527be13]`
+- critic: frontier-wellformed@v1 failed on 460903525b0e `[16cc3b8b4930]`
+- nu: verdict of frontier-claim-honest@v1 on 460903525b0e9faa0bcb2b7ff42b53d14ec34a00bfcaf6a5ba2caa29fb386ba7 is sound and relevant `[0fadd901f969]`
+- critic: frontier-claim-honest@v1 failed on 460903525b0e `[63b2b6e00ec7]`
+- nu: verdict of frontier-above-floor@v1 on 460903525b0e9faa0bcb2b7ff42b53d14ec34a00bfcaf6a5ba2caa29fb386ba7 is sound and relevant `[6bbb1356a6c6]`
+- critic: frontier-above-floor@v1 failed on 460903525b0e `[03f9e8ef586d]`
+- nu: verdict of frontier-wellformed@v1 on d0e245e87dc6b1f918c85ce3cc98ea2900f57591230ab88da7339a339b400a28 is sound and relevant `[3cd911bac4cb]`
+- critic: frontier-wellformed@v1 failed on d0e245e87dc6 `[b4ebfdac2406]`
+- nu: verdict of frontier-claim-honest@v1 on d0e245e87dc6b1f918c85ce3cc98ea2900f57591230ab88da7339a339b400a28 is sound and relevant `[2f006ac34d40]`
+- critic: frontier-claim-honest@v1 failed on d0e245e87dc6 `[35d4db604a80]`
+- nu: verdict of frontier-above-floor@v1 on d0e245e87dc6b1f918c85ce3cc98ea2900f57591230ab88da7339a339b400a28 is sound and relevant `[6b40da3d86ec]`
+- critic: frontier-above-floor@v1 failed on d0e245e87dc6 `[11b2249a011c]`
+- nu: verdict of frontier-wellformed@v1 on 4b9631a8e38cdf8d9b6e011fbf13693d213f59c484cf44a8195ea1bd76c48f72 is sound and relevant `[c324402ed023]`
+- critic: frontier-wellformed@v1 failed on 4b9631a8e38c `[82a163cd3961]`
+- nu: verdict of frontier-claim-honest@v1 on 4b9631a8e38cdf8d9b6e011fbf13693d213f59c484cf44a8195ea1bd76c48f72 is sound and relevant `[c45aaaaa7278]`
+- critic: frontier-claim-honest@v1 failed on 4b9631a8e38c `[61c957916b0b]`
+- nu: verdict of frontier-above-floor@v1 on 4b9631a8e38cdf8d9b6e011fbf13693d213f59c484cf44a8195ea1bd76c48f72 is sound and relevant `[08f8d2cd3c65]`
+- critic: frontier-above-floor@v1 failed on 4b9631a8e38c `[c0d7e03ffe7b]`
+- nu: verdict of frontier-wellformed@v1 on 032a432c0a32d562b8a02fe69535d749e333c7fa5c8a16479158ea3e18845c68 is sound and relevant `[64c9df24fe26]`
+- critic: frontier-wellformed@v1 failed on 032a432c0a32 `[7fa0be8e6652]`
+- nu: verdict of frontier-claim-honest@v1 on 032a432c0a32d562b8a02fe69535d749e333c7fa5c8a16479158ea3e18845c68 is sound and relevant `[6a97deb0ce1d]`
+- critic: frontier-claim-honest@v1 failed on 032a432c0a32 `[1f6c2703bceb]`
+- nu: verdict of frontier-above-floor@v1 on 032a432c0a32d562b8a02fe69535d749e333c7fa5c8a16479158ea3e18845c68 is sound and relevant `[eab0c11f20fc]`
+- critic: frontier-above-floor@v1 failed on 032a432c0a32 `[7ba846966440]`
+- nu: verdict of frontier-wellformed@v1 on 5a60ca355cc2403ca97b92980aa0c37d7a7d92d23edcda7cea922e5b3cf96210 is sound and relevant `[0522625f9769]`
+- critic: frontier-wellformed@v1 failed on 5a60ca355cc2 `[3af965f50715]`
+- nu: verdict of frontier-claim-honest@v1 on 5a60ca355cc2403ca97b92980aa0c37d7a7d92d23edcda7cea922e5b3cf96210 is sound and relevant `[1ec42c5f5e2e]`
+- critic: frontier-claim-honest@v1 failed on 5a60ca355cc2 `[aa5b14d8e322]`
+- nu: verdict of frontier-above-floor@v1 on 5a60ca355cc2403ca97b92980aa0c37d7a7d92d23edcda7cea922e5b3cf96210 is sound and relevant `[5fa2fee45588]`
+- critic: frontier-above-floor@v1 failed on 5a60ca355cc2 `[2188287bda35]`
+- nu: verdict of frontier-wellformed@v1 on c4d202afe0708b7e0bd1b3e1b5da9fef0462d6df865d1bbfe39f04ac7ab32132 is sound and relevant `[8dfbfe7b7a15]`
+- critic: frontier-wellformed@v1 failed on c4d202afe070 `[d51259f6603e]`
+- nu: verdict of frontier-claim-honest@v1 on c4d202afe0708b7e0bd1b3e1b5da9fef0462d6df865d1bbfe39f04ac7ab32132 is sound and relevant `[004573136980]`
+- critic: frontier-claim-honest@v1 failed on c4d202afe070 `[6eb97ae739d3]`
+- nu: verdict of frontier-above-floor@v1 on c4d202afe0708b7e0bd1b3e1b5da9fef0462d6df865d1bbfe39f04ac7ab32132 is sound and relevant `[a831bb4b5ec2]`
+- critic: frontier-above-floor@v1 failed on c4d202afe070 `[61f121d4e5a9]`
+- nu: verdict of frontier-wellformed@v1 on 5747d2bbe93a69c4d981ff3091deaf30d5c2d03199a41b2f7d27f9bdf6eacb00 is sound and relevant `[8f667c5835a5]`
+- critic: frontier-wellformed@v1 failed on 5747d2bbe93a `[4c42feae361f]`
+- nu: verdict of frontier-claim-honest@v1 on 5747d2bbe93a69c4d981ff3091deaf30d5c2d03199a41b2f7d27f9bdf6eacb00 is sound and relevant `[d0e9778e3e06]`
+- critic: frontier-claim-honest@v1 failed on 5747d2bbe93a `[839e91a5f8b0]`
+- nu: verdict of frontier-above-floor@v1 on 5747d2bbe93a69c4d981ff3091deaf30d5c2d03199a41b2f7d27f9bdf6eacb00 is sound and relevant `[da82a6f285ea]`
+- critic: frontier-above-floor@v1 failed on 5747d2bbe93a `[c6f2840c5058]`
+- nu: verdict of frontier-wellformed@v1 on 9d491176f9bf3908d233f06d47cc6133bc47ab1ff16b6bed577fb8b9897ae1a2 is sound and relevant `[9585c453033f]`
+- critic: frontier-wellformed@v1 failed on 9d491176f9bf `[7c43bea35720]`
+- nu: verdict of frontier-claim-honest@v1 on 9d491176f9bf3908d233f06d47cc6133bc47ab1ff16b6bed577fb8b9897ae1a2 is sound and relevant `[928e494a01a1]`
+- critic: frontier-claim-honest@v1 failed on 9d491176f9bf `[456125d5ca4a]`
+- nu: verdict of frontier-above-floor@v1 on 9d491176f9bf3908d233f06d47cc6133bc47ab1ff16b6bed577fb8b9897ae1a2 is sound and relevant `[57d14e14e2a3]`
+- critic: frontier-above-floor@v1 failed on 9d491176f9bf `[2d5901895d8c]`
+- nu: verdict of frontier-wellformed@v1 on 75860307efd04a0bed31d1557344131d3810c76fe11100110b83143edf616a92 is sound and relevant `[33ce7fc9766e]`
+- critic: frontier-wellformed@v1 failed on 75860307efd0 `[6fab48d3f14c]`
+- nu: verdict of frontier-claim-honest@v1 on 75860307efd04a0bed31d1557344131d3810c76fe11100110b83143edf616a92 is sound and relevant `[e3ffbf0554c7]`
+- critic: frontier-claim-honest@v1 failed on 75860307efd0 `[4d6af301ee6b]`
+- nu: verdict of frontier-above-floor@v1 on 75860307efd04a0bed31d1557344131d3810c76fe11100110b83143edf616a92 is sound and relevant `[ca106d63515e]`
+- critic: frontier-above-floor@v1 failed on 75860307efd0 `[fc86440f95b9]`
+- nu: verdict of frontier-wellformed@v1 on a7c3f7d49c3f334fb51494fb97e4dbefe449eb7f4bb2cdc1a11b2988f362e14a is sound and relevant `[7a0f641eb8a9]`
+- critic: frontier-wellformed@v1 failed on a7c3f7d49c3f `[9ba91b2f1f15]`
+- nu: verdict of frontier-claim-honest@v1 on a7c3f7d49c3f334fb51494fb97e4dbefe449eb7f4bb2cdc1a11b2988f362e14a is sound and relevant `[988844faca80]`
+- critic: frontier-claim-honest@v1 failed on a7c3f7d49c3f `[d70025ac289c]`
+- nu: verdict of frontier-above-floor@v1 on a7c3f7d49c3f334fb51494fb97e4dbefe449eb7f4bb2cdc1a11b2988f362e14a is sound and relevant `[e63342755426]`
+- critic: frontier-above-floor@v1 failed on a7c3f7d49c3f `[245f2ab3822d]`
+- nu: verdict of frontier-wellformed@v1 on 9d33e433f863d1eb86b70876a7a59ff21a0893e85dc97b9d80f5fbafb44833b7 is sound and relevant `[964380a07a45]`
+- critic: frontier-wellformed@v1 failed on 9d33e433f863 `[d99b8d21bba4]`
+- nu: verdict of frontier-claim-honest@v1 on 9d33e433f863d1eb86b70876a7a59ff21a0893e85dc97b9d80f5fbafb44833b7 is sound and relevant `[d73c26b3c70c]`
+- critic: frontier-claim-honest@v1 failed on 9d33e433f863 `[1ed26bd3da27]`
+- nu: verdict of frontier-above-floor@v1 on 9d33e433f863d1eb86b70876a7a59ff21a0893e85dc97b9d80f5fbafb44833b7 is sound and relevant `[486afc787790]`
+- critic: frontier-above-floor@v1 failed on 9d33e433f863 `[93ab1762b3b9]`
+- nu: verdict of frontier-wellformed@v1 on 1572edb1204d642704c7103059a2600119597a6622717b0dedea31b90ed65f89 is sound and relevant `[047d700cfa3a]`
+- critic: frontier-wellformed@v1 failed on 1572edb1204d `[171e22362f82]`
+- nu: verdict of frontier-claim-honest@v1 on 1572edb1204d642704c7103059a2600119597a6622717b0dedea31b90ed65f89 is sound and relevant `[0a81b4177ba9]`
+- critic: frontier-claim-honest@v1 failed on 1572edb1204d `[69d49f1527f3]`
+- nu: verdict of frontier-above-floor@v1 on 1572edb1204d642704c7103059a2600119597a6622717b0dedea31b90ed65f89 is sound and relevant `[fb0dbe775d68]`
+- critic: frontier-above-floor@v1 failed on 1572edb1204d `[7dc39691740f]`
+- nu: verdict of frontier-wellformed@v1 on bb757726b9d5d8dcc47aaef7ca1a891b77b7de685c7c571bc5759188c5d3c1e5 is sound and relevant `[c4cec84ce015]`
+- critic: frontier-wellformed@v1 failed on bb757726b9d5 `[98b542d72c64]`
+- nu: verdict of frontier-claim-honest@v1 on bb757726b9d5d8dcc47aaef7ca1a891b77b7de685c7c571bc5759188c5d3c1e5 is sound and relevant `[603165472b80]`
+- critic: frontier-claim-honest@v1 failed on bb757726b9d5 `[c9edc12218c5]`
+- nu: verdict of frontier-above-floor@v1 on bb757726b9d5d8dcc47aaef7ca1a891b77b7de685c7c571bc5759188c5d3c1e5 is sound and relevant `[b5ea15204b42]`
+- critic: frontier-above-floor@v1 failed on bb757726b9d5 `[e6670bac770e]`
+- nu: verdict of frontier-wellformed@v1 on efe221e82adaddc97dfbc96a4c8140ac252b555ba142fe16419f5b035c692b86 is sound and relevant `[9a595bc75bee]`
+- critic: frontier-wellformed@v1 failed on efe221e82ada `[3ea9edee35be]`
+- nu: verdict of frontier-claim-honest@v1 on efe221e82adaddc97dfbc96a4c8140ac252b555ba142fe16419f5b035c692b86 is sound and relevant `[602012a1b8b0]`
+- critic: frontier-claim-honest@v1 failed on efe221e82ada `[1967e4187706]`
+- nu: verdict of frontier-above-floor@v1 on efe221e82adaddc97dfbc96a4c8140ac252b555ba142fe16419f5b035c692b86 is sound and relevant `[9d4a533fe339]`
+- critic: frontier-above-floor@v1 failed on efe221e82ada `[5e629b761ea7]`
+- nu: verdict of frontier-wellformed@v1 on 92b8f0883ea8436ba81c22ce0399c7a27f7c25fdaf2940066f76952e25046c49 is sound and relevant `[63fd9df616c9]`
+- critic: frontier-wellformed@v1 failed on 92b8f0883ea8 `[af1ea93263bb]`
+- nu: verdict of frontier-claim-honest@v1 on 92b8f0883ea8436ba81c22ce0399c7a27f7c25fdaf2940066f76952e25046c49 is sound and relevant `[58c67400fe47]`
+- critic: frontier-claim-honest@v1 failed on 92b8f0883ea8 `[0a50f43eefda]`
+- nu: verdict of frontier-above-floor@v1 on 92b8f0883ea8436ba81c22ce0399c7a27f7c25fdaf2940066f76952e25046c49 is sound and relevant `[57fa7ab06a76]`
+- critic: frontier-above-floor@v1 failed on 92b8f0883ea8 `[93924573b69a]`
+- nu: verdict of frontier-wellformed@v1 on 4739d57599df1b7df4af27809ba29bcd2abd28aa386accb1dc32672a6252c951 is sound and relevant `[2b86cca9b5fd]`
+- critic: frontier-wellformed@v1 failed on 4739d57599df `[990bf4631bec]`
+- nu: verdict of frontier-claim-honest@v1 on 4739d57599df1b7df4af27809ba29bcd2abd28aa386accb1dc32672a6252c951 is sound and relevant `[e3082ff42c75]`
+- critic: frontier-claim-honest@v1 failed on 4739d57599df `[6ed41026d2a7]`
+- nu: verdict of frontier-above-floor@v1 on 4739d57599df1b7df4af27809ba29bcd2abd28aa386accb1dc32672a6252c951 is sound and relevant `[8038dad7473c]`
+- critic: frontier-above-floor@v1 failed on 4739d57599df `[bce9d7340a8b]`
+- {"cycle": 12, "evidence": {"conjecturer": {"n": 6, "repair_rate": 0.0, "truncation_rate": 0.0}}, "knobs": {"cap:conjecturer": 1953}} `[582d18b94487]`
+- nu: verdict of frontier-wellformed@v1 on 7c74612158968d52ff52acd005b008c55cdf8fbdf3b54fef31c740922e04fdf8 is sound and relevant `[6094cfff338a]`
+- critic: frontier-wellformed@v1 failed on 7c7461215896 `[64d37948c072]`
+- nu: verdict of frontier-claim-honest@v1 on 7c74612158968d52ff52acd005b008c55cdf8fbdf3b54fef31c740922e04fdf8 is sound and relevant `[4667e2534778]`
+- critic: frontier-claim-honest@v1 failed on 7c7461215896 `[499d14f4e61d]`
+- nu: verdict of frontier-above-floor@v1 on 7c74612158968d52ff52acd005b008c55cdf8fbdf3b54fef31c740922e04fdf8 is sound and relevant `[65dad8ebe8cd]`
+- critic: frontier-above-floor@v1 failed on 7c7461215896 `[d46edc29ea5f]`
+- nu: verdict of frontier-wellformed@v1 on 1a5c1a5e5c64fbeb8000d0b2f58c804a4018a1ed296fe66e9e06e7bb9d975372 is sound and relevant `[081174a8ddf7]`
+- critic: frontier-wellformed@v1 failed on 1a5c1a5e5c64 `[24df48feffc2]`
+- nu: verdict of frontier-claim-honest@v1 on 1a5c1a5e5c64fbeb8000d0b2f58c804a4018a1ed296fe66e9e06e7bb9d975372 is sound and relevant `[1f04a01f3d4e]`
+- critic: frontier-claim-honest@v1 failed on 1a5c1a5e5c64 `[bcc8a69c4bbc]`
+- nu: verdict of frontier-above-floor@v1 on 1a5c1a5e5c64fbeb8000d0b2f58c804a4018a1ed296fe66e9e06e7bb9d975372 is sound and relevant `[51b933601a77]`
+- critic: frontier-above-floor@v1 failed on 1a5c1a5e5c64 `[0cc13166dd4e]`
+- nu: verdict of frontier-wellformed@v1 on 1e0ce26d2df9e58723f31f14ec2d66e4bf3f9f37fe13fa2de8000af0f9927c39 is sound and relevant `[ff8805a5ec2a]`
+- critic: frontier-wellformed@v1 failed on 1e0ce26d2df9 `[9837b577d452]`
+- nu: verdict of frontier-claim-honest@v1 on 1e0ce26d2df9e58723f31f14ec2d66e4bf3f9f37fe13fa2de8000af0f9927c39 is sound and relevant `[e76881fb3fb4]`
+- critic: frontier-claim-honest@v1 failed on 1e0ce26d2df9 `[901db12e70fa]`
+- nu: verdict of frontier-above-floor@v1 on 1e0ce26d2df9e58723f31f14ec2d66e4bf3f9f37fe13fa2de8000af0f9927c39 is sound and relevant `[a14e2c31531c]`
+- critic: frontier-above-floor@v1 failed on 1e0ce26d2df9 `[a3439cc553ba]`
+- nu: verdict of frontier-wellformed@v1 on 969d779c2c11c98207e80da7bf527698bff5ff8fb29036713f71a277f5ccc990 is sound and relevant `[af835e50c067]`
+- critic: frontier-wellformed@v1 failed on 969d779c2c11 `[8096375c366c]`
+- nu: verdict of frontier-claim-honest@v1 on 969d779c2c11c98207e80da7bf527698bff5ff8fb29036713f71a277f5ccc990 is sound and relevant `[94211c1905c3]`
+- critic: frontier-claim-honest@v1 failed on 969d779c2c11 `[5bd2f9fc47f2]`
+- nu: verdict of frontier-above-floor@v1 on 969d779c2c11c98207e80da7bf527698bff5ff8fb29036713f71a277f5ccc990 is sound and relevant `[25cbf95deaf8]`
+- critic: frontier-above-floor@v1 failed on 969d779c2c11 `[141032451264]`
+- nu: verdict of frontier-wellformed@v1 on cca556597c931ca3ce92248b53d7bf2d8b5559f1fbfef27e54ac1d37827243b8 is sound and relevant `[b386f0d120ae]`
+- critic: frontier-wellformed@v1 failed on cca556597c93 `[9cc9ec8116e1]`
+- nu: verdict of frontier-claim-honest@v1 on cca556597c931ca3ce92248b53d7bf2d8b5559f1fbfef27e54ac1d37827243b8 is sound and relevant `[faa5a84d2cbf]`
+- critic: frontier-claim-honest@v1 failed on cca556597c93 `[12be5e6ed2e1]`
+- nu: verdict of frontier-above-floor@v1 on cca556597c931ca3ce92248b53d7bf2d8b5559f1fbfef27e54ac1d37827243b8 is sound and relevant `[b2b7a48c86e4]`
+- critic: frontier-above-floor@v1 failed on cca556597c93 `[f4525a281264]`
+- nu: verdict of frontier-wellformed@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant `[0617bcaf7bf8]`
+- critic: frontier-wellformed@v1 failed on 2edeaa42b5ef `[bd66f8f55726]`
+- nu: verdict of frontier-claim-honest@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant `[c67767aa37ab]`
+- critic: frontier-claim-honest@v1 failed on 2edeaa42b5ef `[edfb53d9321e]`
+- nu: verdict of frontier-above-floor@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant `[d6d9085c885a]`
+- critic: frontier-above-floor@v1 failed on 2edeaa42b5ef `[25dc1295fc98]`
+
+## Positions the record refuted
+
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.000000 `[51c814c49cfc]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 0.500000 POINT 0.500000 0.500000 POINT 1.000000 0.500000 POINT 0.000000 1.000000 POINT 0.500000 1.000000 POINT 1.000000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 CLAIM 0.000000 `[1cbdca31e6b9]`
+- POINT 0.050000 0.050000 POINT 0.500000 0.050000 POINT 0.950000 0.050000 POINT 0.050000 0.500000 POINT 0.950000 0.500000 POINT 0.050000 0.950000 POINT 0.500000 0.950000 POINT 0.950000 0.950000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.005000 `[cd1d472c40d8]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 0.333333 0.666667 POINT 0.666667 0.666667 POINT 0.500000 0.500000 CLAIM 0.027778 `[e05fd697fe17]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.031250 `[98420109f39d]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 0.333333 0.666667 POINT 0.666667 0.666667 POINT 0.500000 0.500000 CLAIM 0.020833 `[f8c9a563289d]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 POINT 0.500000 0.500000 CLAIM 0.015625 `[1a6887a8a44f]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.006944 `[782bfcc55988]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.333333 0.000000 POINT 0.666667 0.000000 POINT 0.000000 0.333333 POINT 0.000000 0.666667 POINT 1.000000 0.333333 POINT 1.000000 0.666667 POINT 0.333333 1.000000 POINT 0.666667 1.000000 POINT 0.500000 0.500000 CLAIM 0.055556 `[24d8ed036e63]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.250000 0.000000 POINT 0.750000 0.000000 POINT 0.000000 0.250000 POINT 0.000000 0.750000 POINT 1.000000 0.250000 POINT 1.000000 0.750000 POINT 0.250000 1.000000 POINT 0.750000 1.000000 POINT 0.500000 0.500000 CLAIM 0.031250 `[15c57dce4387]`
+- POINT 0.500000 0.500000 POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.133975 POINT 0.500000 0.866025 POINT 0.133975 0.500000 POINT 0.866025 0.500000 POINT 0.211325 0.211325 POINT 0.788675 0.211325 POINT 0.211325 0.788675 POINT 0.788675 0.788675 CLAIM 0.032515 `[8abced1e0ae5]`
+- A perturbed grid of 13 points arranged in 3-4-3 rows with explicit small y-displacements aims to avoid axis-aligned collinearity, targeting a minimum triangle area of approximately 0.020833. `[d3b07d1b3646]`
+- A 4-3-3-3 staggered grid layout with horizontal offsets between rows aims to break orthogonal collinearities and distribute points evenly, targeting a minimum triangle area of approximately 0.0113636. `[469cecbaa424]`
+- A deliberately asymmetric layout derived from 13 roughly equidistributed points on a circle with specific perturbations aims to break all symmetric collinearities, targeting a minimum triangle area of approximately 0.01. `[8e36e6cb95ed]`
+- A Fibonacci lattice (sunflower spiral) of 13 points scaled into the unit square is used for its quasi-random distribution, targeting a minimum triangle area of 0.006 to account for potential small triangles. `[c60c6a19986b]`
+- A diamond grid layout with 13 points arranged in concentric diamonds and a center point, claiming a minimum triangle area of 0.007. `[cfc75182206c]`
+- A scaled triangular lattice (hexagonal grid) with 13 points arranged in a 3-4-3-3 row configuration with specific offsets, claiming a minimum triangle area of 0.012. `[ad9e1f39e947]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.500000 POINT 0.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.500000 POINT 1.000000 1.000000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.000000 `[ea240936085e]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.750000 0.250000 POINT 0.071430 0.071430 CLAIM 0.004464 `[87faf95ebc76]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.750000 0.250000 POINT 0.500000 0.500000 POINT 0.200000 0.200000 CLAIM 0.000000 `[958fa7c704ce]`
+- Grid 5x3 truncated to 13 points, rows at y=0.5,1,0 (shifted to avoid 0-area); columns chosen to maximize minimal triangle area. Claimed minimum area 0.008333. `[1d9e89700bd4]`
+- Clustered grid with 13 points on a 7x2 grid (7 bottom, 6 top, staggered), claiming minimum triangle area 0.006944. `[4eac6e3d16f4]`
+- 13 points arranged as vertices of a regular 13-gon projected onto the unit square via affine transform, claiming minimum triangle area 0.0055. `[0019eeb77c3e]`
+- 13 points in a 4+4+4+1 layered configuration with each layer staggered, claiming minimum triangle area 0.0065. `[5f700ede15c2]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.5 0.5 CLAIM 0.0104167 `[3fa12e2ea4d1]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 0.75 POINT 0.25 1.0 POINT 0.75 1.0 POINT 0.5 0.5 CLAIM 0.0 `[a5a9ffc94b08]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.0 0.333333 POINT 1.0 0.333333 POINT 0.0 0.666667 POINT 1.0 0.666667 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.5 0.5 CLAIM 0.00925926 `[877096a9ea54]`
+- POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.333333 0.000000 POINT 0.333333 1.000000 POINT 0.666667 0.000000 POINT 0.666667 1.000000 POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 POINT 0.250000 0.500000 CLAIM 0.006944 `[dead52c2af98]`
+- POINT 0.500000 0.500000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 CLAIM 0.015625 `[c0c5af61ed86]`
+- POINT 0.500000 0.500000 POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 CLAIM 0.015625 `[446d2729f70c]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.250000 1.000000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 POINT 0.750000 1.000000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 CLAIM 0.007812 `[a3a3313e0a21]`
+- POINT 0.500000 0.500000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 CLAIM 0.010000 `[f33a22d20631]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.5 POINT 0.5 0 POINT 0.5 1 POINT 0 0.5 POINT 1 0.5 POINT 0.25 0.5 POINT 0.75 0.5 POINT 0.5 0.25 POINT 0.5 0.75 CLAIM 0 `[55d223a6d381]`
+- POINT 0.05 0.05 POINT 0.05 0.95 POINT 0.95 0.05 POINT 0.95 0.95 POINT 0.5 0.5 POINT 0.05 0.5 POINT 0.95 0.5 POINT 0.5 0.05 POINT 0.5 0.95 POINT 0.225 0.25 POINT 0.775 0.25 POINT 0.225 0.75 POINT 0.775 0.75 CLAIM 0.0045 `[b66227495fb1]`
+- POINT 0.048 0.065 POINT 0.045 0.935 POINT 0.955 0.045 POINT 0.965 0.935 POINT 0.522 0.5 POINT 0.065 0.5 POINT 0.965 0.5 POINT 0.5 0.065 POINT 0.5 0.935 POINT 0.291 0.302 POINT 0.722 0.301 POINT 0.281 0.716 POINT 0.731 0.693 CLAIM 0.004 `[ca7e2beb49c6]`
+- POINT 0.032 0.047 POINT 0.041 0.966 POINT 0.977 0.042 POINT 0.969 0.976 POINT 0.523 0.5 POINT 0.045 0.522 POINT 0.977 0.488 POINT 0.518 0.038 POINT 0.481 0.961 POINT 0.258 0.319 POINT 0.742 0.29 POINT 0.282 0.748 POINT 0.738 0.712 CLAIM 0.005 `[c61888f5316f]`
+- POINT 0.02 0.04 POINT 0.04 0.98 POINT 0.98 0.02 POINT 0.96 0.98 POINT 0.5 0.5 POINT 0.02 0.5 POINT 0.98 0.5 POINT 0.5 0.02 POINT 0.5 0.98 POINT 0.26 0.31 POINT 0.74 0.29 POINT 0.27 0.69 POINT 0.73 0.71 CLAIM 0.007 `[5322fce1a2f1]`
+- POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.000000 POINT 0.333333 0.333333 POINT 0.666667 0.666667 POINT 1.000000 0.000000 POINT 0.833333 0.166667 POINT 0.166667 0.833333 POINT 0.333333 0.000000 POINT 0.666667 0.000000 POINT 1.000000 0.250000 CLAIM 0.013888 `[dad237b50e8e]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 1.000000 0.500000 POINT 1.000000 1.000000 POINT 0.500000 1.000000 POINT 0.000000 1.000000 POINT 0.000000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.015625 `[0dbd1e71d1f0]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.500000 1.000000 POINT 0.000000 1.000000 POINT 0.000000 0.333333 POINT 0.000000 0.666667 POINT 0.333333 0.000000 POINT 0.666667 0.000000 POINT 0.333333 1.000000 POINT 0.666667 1.000000 POINT 1.000000 0.333333 CLAIM 0.000000 `[6a6cce66484d]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 0.866025 POINT 0.133975 0.500000 POINT 0.866025 0.500000 POINT 0.500000 0.133975 POINT 0.250000 0.250000 POINT 0.750000 0.750000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.500000 0.500000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 CLAIM 0.013888 `[3d5df227bbbb]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.500000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 CLAIM 0.000000 `[f508c67d95ba]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 0.866025 POINT 0.000000 0.666667 POINT 0.333333 0.000000 POINT 0.666667 0.000000 POINT 0.500000 0.577350 POINT 0.166667 0.288675 POINT 0.833333 0.288675 POINT 0.333333 0.577350 POINT 0.666667 0.577350 POINT 0.500000 0.000000 POINT 0.500000 0.866025 CLAIM 0.000000 `[c48ad002105c]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.020000 POINT 0.500000 0.980000 POINT 0.020000 0.500000 POINT 0.980000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.000000 `[ff3a9c4072b6]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.100000 0.100000 POINT 0.900000 0.900000 POINT 0.900000 0.100000 POINT 0.100000 0.900000 POINT 0.500000 0.100000 POINT 0.500000 0.900000 CLAIM 0.000000 `[1bf3a7cb06d7]`
+- POINT 0.000000 0.000000 POINT 0.333333 0.000000 POINT 0.666667 0.000000 POINT 1.000000 0.000000 POINT 0.000000 0.333333 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 1.000000 0.333333 POINT 0.000000 0.666667 POINT 0.333333 0.666667 POINT 0.666667 0.666667 POINT 1.000000 0.666667 POINT 0.500000 1.000000 CLAIM 0.000000 `[ccd7248dd6be]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 0.866025 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.250000 POINT 0.250000 0.125000 POINT 0.750000 0.125000 POINT 0.125000 0.062500 POINT 0.375000 0.187500 POINT 0.625000 0.187500 POINT 0.875000 0.062500 POINT 0.500000 0.433013 CLAIM 0.000000 `[a73332e6b4bb]`
+- POINT 0.5 0.5 POINT 0.0 0.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.0 1.0 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.1 0.5 POINT 0.9 0.5 POINT 0.5 0.1 POINT 0.5 0.9 POINT 0.15 0.15 POINT 0.85 0.85 CLAIM 0.005625 `[d90da18a716f]`
+- POINT 0.5 0.5 POINT 0.0 0.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.0 1.0 POINT 0.25 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.1 0.5 POINT 0.9 0.5 POINT 0.5 0.1 POINT 0.5 0.9 CLAIM 0.00625 `[d651d1bcaf93]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.05 POINT 0.5 0.95 POINT 0.05 0.5 POINT 0.95 0.5 POINT 0.33 0.67 POINT 0.67 0.33 POINT 0.2 0.8 POINT 0.8 0.2 POINT 0.5 0.5 CLAIM 0.005 `[a2c8a1d49f86]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.25 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.5 0.5 CLAIM 0.0 `[3faa77b1f9bb]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.1 POINT 0.5 0.9 POINT 0.1 0.5 POINT 0.9 0.5 POINT 0.33 0.67 POINT 0.67 0.33 POINT 0.2 0.8 POINT 0.8 0.2 POINT 0.5 0.5 CLAIM 0.004 `[50cf71363139]`
+- An 11-point triangular grid (3 rows: 5,4,3 points) spliced onto two boundary endpoints (0,0) and (1,1) yields a minimum triangle area of 0.0250. The mechanism is that the interior points enforce a uniform lattice spacing, and the boundary points fall on lattice lines, failing to create any smaller sheared triangles with the interior structure. Score = 0.025000 POINT 0.0 0.0 POINT 0.0 0.5 POINT 0.25 0.5 POINT 0.25 1.0 POINT 0.5 0.0 POINT 0.5 0.5 POINT 0.5 1.0 POINT 0.75 0.0 POINT 0.75 0.5 POINT 0.75 1.0 POINT 1.0 0.0 POINT 1.0 0.5 POINT 1.0 1.0 CLAIM 0.025000 `[8d8a4e8cb081]`
+- A 13-point configuration yielding a minimum triangle area of 0.025000, generated by perturbing a square grid to break collinearity while maintaining a large minimum area. Score = 0.025000 POINT 0.0 0.0 POINT 0.083333 0.083333 POINT 0.166667 0.166667 POINT 0.25 0.0 POINT 0.25 0.5 POINT 0.25 1.0 POINT 0.5 0.0 POINT 0.5 0.25 POINT 0.5 0.75 POINT 0.5 1.0 POINT 0.75 0.0 POINT 0.75 0.5 POINT 1.0 0.0 `[92ce32d18b12]`
+- A 13-point configuration using an optimized geometric layout to achieve a minimum triangle area of 0.025000. Score = 0.025000 POINT 0.0 0.0 POINT 0.25 0.0 POINT 0.5 0.0 POINT 0.75 0.0 POINT 0.0 0.25 POINT 0.25 0.25 POINT 0.5 0.25 POINT 0.75 0.25 POINT 0.0 0.5 POINT 0.25 0.5 POINT 0.5 0.5 POINT 0.75 0.5 POINT 1.0 0.5 `[8629e9e2224c]`
+- A 13-point configuration that achieves a minimum triangle area of 0.005000. Score = 0.005000 POINT 0.0 0.0 POINT 0.083333 0.0 POINT 0.166667 0.0 POINT 0.25 0.0 POINT 0.333333 0.0 POINT 0.416667 0.0 POINT 0.5 0.0 POINT 0.583333 0.0 POINT 0.666667 0.0 POINT 0.75 0.0 POINT 0.833333 0.0 POINT 0.916667 0.0 POINT 1.0 0.0 `[0568d8ebee56]`
+- POINT 0.0 0.0 POINT 0.0 0.4 POINT 0.0 0.8 POINT 0.333333 0.266667 POINT 0.333333 0.666667 POINT 0.666667 0.133333 POINT 0.666667 0.533333 POINT 0.666667 0.933333 POINT 1.0 0.4 POINT 1.0 0.8 POINT 0.2 0.45 POINT 0.5 0.85 POINT 0.8 0.25 CLAIM 0.013333 `[0833b4267536]`
+- POINT 0.0 0.0 POINT 0.0 0.5 POINT 0.0 1.0 POINT 0.25 0.25 POINT 0.25 0.75 POINT 0.5 0.0 POINT 0.5 0.5 POINT 0.5 1.0 POINT 0.75 0.25 POINT 0.75 0.75 POINT 1.0 0.0 POINT 1.0 0.5 POINT 1.0 1.0 CLAIM 0.03125 `[e694778a5e49]`
+- A 13-point configuration on a curved hexagonal lattice achieves a minimum triangle area of 0.005 by offsetting the 7th lattice point to create a slightly larger central cavity, ensuring all local triangles respect the boundary while passing the 0.005 floor. `[ef160be4cd5e]`
+- A standard undistorted 2x3 hexagonal lattice scaled to exactly fit the unit square achieves a minimum triangle area just above 0.005, representing the most natural covering principle for the 13-point problem. `[295b0c4c850e]`
+- A distorted dual-lattice covering with explicit point displacements achieves a minimum area of 0.00525 by sacrificing ideal hexagonal symmetry to increase the smallest gaps. `[2194b6e24ac7]`
+- An axis-aligned perturbed grid achieves a minimum triangle area of 0.01 by escaping lattice symmetry constraints entirely. `[d1ae9f57aecd]`
+- 13-point cubic-structured configuration with a claimed minimum triangle area of 0.012346. `[b461c5fc7b45]`
+- Perturbed grid configuration of 13 points with claimed score 0.008 `[a1ff51ad657e]`
+- 13-point sunflower / Vogel model configuration with claimed score 0.009 `[fa1be91558d5]`
+- Clustered corners configuration with 13 points with claimed score 0.0055 `[65ff3f88c3da]`
+- A lattice-perturbed configuration of 13 points achieving a minimum triangle area of 0.007812. Construction: POINT 0.0 0.0 POINT 0.5 0.0 POINT 1.0 0.0 POINT 0.0 0.5 POINT 0.5 0.5 POINT 1.0 0.5 POINT 0.0 1.0 POINT 0.5 1.0 POINT 1.0 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 CLAIM 0.007812 `[6fe6ad8b2980]`
+- A highly perturbed 4x4 lattice configuration of 13 points achieving a minimum triangle area of 0.004394. Construction: POINT 0.0 0.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 1.0 0.0 POINT 0.0 0.333333 POINT 1.0 0.333333 POINT 0.0 0.666667 POINT 1.0 0.666667 POINT 0.0 1.0 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 1.0 1.0 POINT 0.333333 0.333333 CLAIM 0.004394 `[20a027601fb9]`
+- A perturbed hexagonal packing configuration of 13 points achieving a minimum triangle area of 0.009615. Construction: POINT 0.047619 0.047619 POINT 0.309524 0.047619 POINT 0.571429 0.047619 POINT 0.833333 0.047619 POINT 0.178571 0.309524 POINT 0.440476 0.309524 POINT 0.702381 0.309524 POINT 0.964286 0.309524 POINT 0.309524 0.571429 POINT 0.571429 0.571429 POINT 0.833333 0.571429 POINT 0.047619 0.833333 POINT 0.309524 0.833333 CLAIM 0.009615 `[3020054e354d]`
+- POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 0.0 POINT 0.5 1.0 POINT 0.1 0.1 POINT 0.9 0.1 POINT 0.1 0.9 POINT 0.9 0.9 POINT 0.3 0.5 POINT 0.7 0.5 POINT 0.5 0.3 POINT 0.5 0.7 POINT 0.5 0.5 CLAIM 0.005 `[5ad08848eaa0]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.0 0.333333 POINT 0.0 0.666667 POINT 1.0 0.333333 POINT 1.0 0.666667 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.5 0.5 CLAIM 0.027778 `[c012a109bd03]`
+- POINT 0.05 0.05 POINT 0.95 0.05 POINT 0.05 0.95 POINT 0.95 0.95 POINT 0.35 0.05 POINT 0.65 0.05 POINT 0.05 0.35 POINT 0.05 0.65 POINT 0.95 0.35 POINT 0.95 0.65 POINT 0.35 0.95 POINT 0.65 0.95 POINT 0.5 0.5 CLAIM 0.024 `[b8256609f467]`
+- POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 0.0 POINT 0.5 1.0 POINT 0.1 0.1 POINT 0.9 0.1 POINT 0.1 0.9 POINT 0.9 0.9 POINT 0.2 0.5 POINT 0.8 0.5 POINT 0.5 0.2 POINT 0.5 0.8 POINT 0.5 0.5 CLAIM 0.002 `[fc73325630c6]`
+- POINT 0.0 0.0 POINT 0.3 0.0 POINT 0.6 0.0 POINT 0.0 0.3 POINT 0.3 0.3 POINT 0.6 0.3 POINT 0.0 0.6 POINT 0.3 0.6 POINT 0.6 0.6 POINT 0.9 0.0 POINT 0.9 0.3 POINT 0.9 0.6 POINT 0.45 0.45 CLAIM 0.01 `[5c7f14d6b470]`
+- POINT 0.05 0.0 POINT 0.95 0.0 POINT 0.05 1.0 POINT 0.95 1.0 POINT 0.35 0.0 POINT 0.65 0.0 POINT 0.0 0.35 POINT 0.0 0.65 POINT 1.0 0.35 POINT 1.0 0.65 POINT 0.35 1.0 POINT 0.65 1.0 POINT 0.5 0.5 CLAIM 0.018 `[b55f6e43a859]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.5 0.5 POINT 0 0.5 POINT 0.5 0 POINT 1 0.5 POINT 0.5 1 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 CLAIM 0.0625 `[8b57e8d65272]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 POINT 0.5 0.5 CLAIM 0.03125 `[718744ce2786]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.0 0.333333 POINT 0.0 0.666667 POINT 0.5 0.5 CLAIM 0.009259 `[97a743b653a7]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.5 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.5 0.5 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.125 0.75 POINT 0.375 0.75 POINT 0.625 0.75 POINT 0.875 0.75 POINT 0.5 0.875 CLAIM 0.007812 `[0c93de62632a]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.333333 1.0 POINT 0.666667 0.333333 POINT 1.0 0.666667 POINT 0.333333 0.666667 POINT 0.666667 1.0 POINT 0.0 0.333333 POINT 0.041667 0.625 POINT 0.375 0.291667 POINT 0.708333 0.625 POINT 0.708333 0.041667 POINT 0.375 0.958333 CLAIM 0.006944 `[2168dc91d748]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.333333 1.0 POINT 0.666667 0.333333 POINT 1.0 0.666667 POINT 0.333333 0.666667 POINT 0.666667 1.0 POINT 0.0 0.333333 POINT 0.041667 0.666667 POINT 0.375 0.333333 POINT 0.708333 0.666667 POINT 0.708333 0.041667 POINT 0.375 1.0 CLAIM 0.00463 `[df96d494ce88]`
+- POINT 0.0625 0.0625 POINT 0.5625 0.0625 POINT 1.0 0.0625 POINT 0.0625 0.5625 POINT 0.5625 0.5625 POINT 1.0 0.5625 POINT 0.0625 1.0 POINT 0.5625 1.0 POINT 1.0 1.0 POINT 0.8125 0.3125 POINT 0.3125 0.8125 POINT 0.8125 0.8125 POINT 0.3125 0.3125 CLAIM 0.003906 `[1a828e7f098c]`
+- POINT 0.0 0.0 POINT 0.25 0.0 POINT 0.75 0.0 POINT 1.0 0.0 POINT 0.5 0.5 POINT 0.0 1.0 POINT 0.25 1.0 POINT 0.75 1.0 POINT 1.0 1.0 POINT 0.125 0.5 POINT 0.875 0.5 POINT 0.5 0.125 POINT 0.5 0.875 CLAIM 0.03125 `[199a0c3c81a6]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.5 POINT 0.0 0.5 POINT 0.5 0.0 POINT 0.5 1.0 POINT 1.0 0.5 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.25 0.75 CLAIM 0.015625 `[9ba1ff761616]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.5 1.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 0.5 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 CLAIM 0.0 `[509aeb94cc7a]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.142857 POINT 0.000000 0.285714 POINT 0.000000 0.428571 POINT 0.000000 0.571429 POINT 0.000000 0.714286 POINT 0.000000 0.857143 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.142857 POINT 1.000000 0.285714 POINT 1.000000 0.428571 POINT 1.000000 0.571429 CLAIM 0.010204 `[ab85658ce1bb]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.200000 POINT 0.000000 0.400000 POINT 0.000000 0.600000 POINT 0.000000 0.800000 POINT 0.000000 1.000000 POINT 1.000000 0.100000 POINT 1.000000 0.300000 POINT 1.000000 0.500000 POINT 1.000000 0.700000 POINT 1.000000 0.900000 POINT 0.500000 0.500000 POINT 0.500000 0.000000 CLAIM 0.010204 `[09fb097076c7]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.250000 POINT 0.000000 0.500000 POINT 0.000000 0.750000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.250000 POINT 1.000000 0.500000 POINT 1.000000 0.750000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 CLAIM 0.010204 `[ee134491e5db]`
+- POINT 0.050000 0.050000 POINT 0.050000 0.200000 POINT 0.050000 0.350000 POINT 0.050000 0.500000 POINT 0.050000 0.650000 POINT 0.050000 0.800000 POINT 0.050000 0.950000 POINT 0.950000 0.125000 POINT 0.950000 0.375000 POINT 0.950000 0.625000 POINT 0.950000 0.875000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 CLAIM 0.010204 `[736cc47cf034]`
+- POINT 0.000000 0.050000 POINT 0.000000 0.150000 POINT 0.000000 0.250000 POINT 0.000000 0.350000 POINT 0.000000 0.450000 POINT 0.000000 0.550000 POINT 0.000000 0.650000 POINT 0.000000 0.750000 POINT 0.000000 0.850000 POINT 0.000000 0.950000 POINT 0.500000 0.050000 POINT 0.500000 0.550000 POINT 1.000000 0.550000 CLAIM 0.010204 `[7a8630eb22b5]`
+- POINT 0.000000 0.050000 POINT 0.000000 0.200000 POINT 0.000000 0.350000 POINT 0.000000 0.500000 POINT 0.000000 0.650000 POINT 0.000000 0.800000 POINT 0.000000 0.950000 POINT 1.000000 0.125000 POINT 1.000000 0.375000 POINT 1.000000 0.625000 POINT 1.000000 0.875000 POINT 0.500000 0.050000 POINT 0.500000 0.950000 CLAIM 0.010204 `[15795c39fb9c]`
+- POINT 0.000000 0.500000 POINT 0.091500 0.908500 POINT 0.091500 0.091500 POINT 0.250000 0.750000 POINT 0.250000 0.250000 POINT 0.408500 0.591500 POINT 0.408500 0.408500 POINT 0.500000 0.500000 POINT 0.591500 0.591500 POINT 0.591500 0.408500 POINT 0.750000 0.750000 POINT 0.750000 0.250000 POINT 0.908500 0.908500 CLAIM 0.008372 `[78e1dfc96719]`
+- POINT 0.000000 0.333333 POINT 0.000000 0.666667 POINT 0.166667 0.166667 POINT 0.166667 0.500000 POINT 0.166667 0.833333 POINT 0.500000 0.000000 POINT 0.500000 0.500000 POINT 0.500000 1.000000 POINT 0.833333 0.166667 POINT 0.833333 0.500000 POINT 0.833333 0.833333 POINT 1.000000 0.333333 POINT 1.000000 0.666667 CLAIM 0.013889 `[093f2c0a26d7]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.200000 POINT 0.000000 0.400000 POINT 0.000000 0.600000 POINT 0.000000 0.800000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.200000 POINT 1.000000 0.400000 POINT 1.000000 0.600000 POINT 1.000000 0.800000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 CLAIM 0.020000 `[f4e20aecc61d]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.250000 POINT 0.000000 0.500000 POINT 0.000000 0.750000 POINT 0.000000 1.000000 POINT 0.500000 0.500000 POINT 1.000000 0.000000 POINT 1.000000 0.250000 POINT 1.000000 0.500000 POINT 1.000000 0.750000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 CLAIM 0.000000 `[0a4563a0a8e4]`
+- POINT 0.5 1.0 POINT 0.0 0.833333 POINT 0.166667 0.833333 POINT 0.333333 0.833333 POINT 0.666667 0.833333 POINT 0.833333 0.833333 POINT 1.0 0.833333 POINT 0.25 0.0 POINT 0.75 0.0 POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 CLAIM 0.020833 `[e0c330dba4cd]`
+- POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.166667 0.166667 POINT 0.833333 0.166667 POINT 0.166667 0.833333 POINT 0.833333 0.833333 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.5 0.5 CLAIM 0.020833 `[7a4e088e5980]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 0.333333 0.666667 POINT 0.666667 0.666667 POINT 0.5 0.5 CLAIM 0.027778 `[fd8d53c72a3d]`
+- POINT 0.0 0.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 1.0 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.0 1.0 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 1.0 1.0 POINT 0.166667 0.75 POINT 0.833333 0.75 POINT 0.5 0.25 CLAIM 0.020833 `[3aadb1123715]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.5 1.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 POINT 0.5 0.5 CLAIM 0.020833 `[368237d11e27]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.5 0.288675 POINT 0.0 0.577350 POINT 1.0 0.577350 POINT 0.5 0.866025 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.5 0.5 CLAIM 0.015625 `[b9d6eebc1bcb]`
+- The 13 points on a 4x4 grid lattice (excluding corners) combined with adaptive boundaries provide a minimum triangle area of 0.03125 by minimizing collinearities and maximizing point spread. `[cc7370503603]`
+- A structured perturbation of a 3x3 grid with boundary anchors avoids collinearities and achieves a minimum triangle area of 0.041667 by ensuring small areas between adjacent points are maximized. `[f7fd0d17544d]`
+- By pushing 4 points to the corners and spacing the remaining 9 points on interior midlines with anti-collinear offsets, we ensure that no three points form a line, yielding a minimum area > 0. `[f24f6b711baf]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.02 POINT 0.02 0.5 POINT 0.98 0.5 POINT 0.5 0.98 POINT 0.27 0.27 POINT 0.73 0.27 POINT 0.27 0.73 POINT 0.73 0.73 POINT 0.5 0.5 CLAIM 0.0048 `[2029846dc5bf]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.5 0.866025 POINT 0.25 0.433013 POINT 0.75 0.433013 POINT 0.0 0.866025 POINT 1.0 0.866025 POINT 0.5 0.0 POINT 0.125 0.216506 POINT 0.875 0.216506 POINT 0.125 0.649519 POINT 0.875 0.649519 POINT 0.5 0.433013 CLAIM 0.008 `[6c11852870da]`
+- POINT 0.05 0.05 POINT 0.95 0.05 POINT 0.05 0.95 POINT 0.95 0.95 POINT 0.5 0.5 POINT 0.05 0.5 POINT 0.95 0.5 POINT 0.5 0.05 POINT 0.5 0.95 POINT 0.275 0.275 POINT 0.725 0.275 POINT 0.275 0.725 POINT 0.725 0.725 CLAIM 0.007 `[94bc7fd3b203]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.5 1.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.333 0.333 POINT 0.667 0.333 POINT 0.333 0.667 POINT 0.667 0.667 POINT 0.5 0.5 CLAIM 0.001 `[8ed62a94d3a2]`
+- POINT 0.0 0.0 POINT 0.1 0.0 POINT 0.2 0.0 POINT 0.3 0.0 POINT 0.4 0.0 POINT 0.5 0.0 POINT 0.6 0.0 POINT 0.7 0.0 POINT 0.8 0.0 POINT 0.9 0.0 POINT 1.0 0.0 POINT 0.5 0.01 POINT 0.5 1.0 CLAIM 0.0005 `[4e2a2102933d]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.05 POINT 0.05 0.5 POINT 0.95 0.5 POINT 0.5 0.95 POINT 0.33 0.33 POINT 0.67 0.33 POINT 0.33 0.67 POINT 0.67 0.67 POINT 0.5 0.5 CLAIM 0.0055 `[b6e00b7758d3]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.5 POINT 0.5 0.0 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.0 0.5 POINT 0.25 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.75 0.25 CLAIM 0.0 `[2186393ceaf3]`
+- POINT 0.0 0.0 POINT 0.0 0.28 POINT 0.0 0.56 POINT 0.0 0.84 POINT 0.333 0.14 POINT 0.333 0.42 POINT 0.333 0.7 POINT 0.333 0.98 POINT 0.666 0.0 POINT 0.666 0.28 POINT 0.666 0.56 POINT 0.666 0.84 POINT 0.98 0.42 CLAIM 0.0 `[101630c133a2]`
+- POINT 0.0 0.0 POINT 0.0 0.3 POINT 0.0 0.6 POINT 0.333 0.9 POINT 0.333 0.2 POINT 0.333 0.5 POINT 0.666 0.8 POINT 0.666 0.1 POINT 0.666 0.4 POINT 0.666 0.7 POINT 1.0 0.0 POINT 1.0 0.3 POINT 1.0 0.6 CLAIM 0.0 `[94591f3a1539]`
+- POINT 0.0 0.0 POINT 0.0 0.3 POINT 0.3 0.1 POINT 0.3 0.4 POINT 0.6 0.2 POINT 0.6 0.5 POINT 0.9 0.3 POINT 0.9 0.6 POINT 0.1 0.7 POINT 0.1 1.0 POINT 0.4 0.8 POINT 0.7 0.9 POINT 1.0 1.0 CLAIM 0.0045 `[765c8aa2d336]`
+- POINT 0.0 0.0 POINT 0.314 0.0 POINT 0.0 0.314 POINT 0.314 0.314 POINT 0.628 0.0 POINT 0.628 0.314 POINT 0.942 0.0 POINT 0.0 0.628 POINT 0.314 0.628 POINT 0.628 0.628 POINT 0.942 0.628 POINT 0.0 0.942 POINT 0.314 0.942 CLAIM 0.0 `[4882533963f4]`
+- POINT 0.05 0.05 POINT 0.05 0.35 POINT 0.35 0.05 POINT 0.35 0.35 POINT 0.65 0.05 POINT 0.65 0.35 POINT 0.95 0.05 POINT 0.05 0.65 POINT 0.35 0.65 POINT 0.65 0.65 POINT 0.95 0.65 POINT 0.35 0.95 POINT 0.65 0.95 CLAIM 0.0 `[f945e947236e]`
+- Affine lattice grid construction with 2 rows and 5 columns mapped to [0,1]x[0,1], interspersed with 3 additional points to maximize the minimum triangle area. The claimed score is at least 0.005. `[30d362c3c3ec]`
+- Diagonal lattice construction with 13 points arranged on a shifted 3x3 grid to avoid exact collinearities. The claimed score is at least 0.005. `[6d356cda7e51]`
+- Modified lattice with 13 points strategically placed to break symmetries and ensure minimum triangle area is bounded away from zero. The claimed score is at least 0.005. `[c7f41a6f0bbf]`
+- Truly random scattered configuration of 13 points in the unit square. The claimed score is at least 0.005. `[da6ea4fc943b]`
+- Crude triangular grid mapping of a 4x4 lattice to the unit square, dropping 3 points to achieve 13. The claimed score is at least 0.005. `[6b8f2f1fa757]`
+- POINT 0.0 0.0 POINT 0.0 0.5 POINT 0.0 1.0 POINT 0.5 0.0 POINT 0.5 0.5 POINT 0.5 1.0 POINT 1.0 0.0 POINT 1.0 0.5 POINT 1.0 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 CLAIM 0.0 `[4599f0fa6374]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.25 0.0 POINT 0.75 0.0 POINT 0.25 1.0 POINT 0.75 1.0 POINT 0.0 0.25 POINT 0.0 0.75 POINT 1.0 0.25 POINT 1.0 0.75 POINT 0.5 0.5 CLAIM 0.03125 `[55e4963e0063]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.200000 POINT 0.000000 0.400000 POINT 0.000000 0.600000 POINT 0.000000 0.800000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.200000 POINT 1.000000 0.400000 POINT 1.000000 0.600000 POINT 1.000000 0.800000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 CLAIM 0.020000 `[c61923ab01f9]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.5 POINT 0.25 0.25 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.5 0.25 POINT 0.5 0.75 POINT 0.25 0.5 POINT 0.75 0.5 CLAIM 0.03125 `[b45202f525dd]`
+- POINT 0.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 1.000000 0.500000 POINT 0.309017 0.154508 POINT 0.309017 0.845492 POINT 0.500000 0.500000 POINT 0.691000 0.154508 POINT 0.691000 0.845492 POINT 0.079785 0.369000 POINT 0.079785 0.631000 POINT 0.920215 0.369000 POINT 0.920215 0.631000 CLAIM 0.003500 `[49c12109b201]`
+- 13 points comprising a perturbed square boundary grid (12 on boundary, 1 interior center): A 3x3 regular grid occupies the boundary (excluding the center of the grid); an additional point is placed at the exact center of the square. All points are slightly perturbed to avoid high collinearities, yielding a claimed minimum triangle area of 0.0125. `[3ae8602a42f9]`
+- A deterministic constructive generator places 13 points by a transparent rule. POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 1.000000 POINT 0.500000 0.500000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.166667 0.666667 POINT 0.833333 0.666667 CLAIM 0.0026 `[e737b56b50fd]`
+- An empirically reported best configuration from iterative search. POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.000000 0.666667 POINT 1.000000 0.666667 POINT 0.333333 1.000000 POINT 0.666667 1.000000 POINT 0.500000 0.333333 POINT 0.166667 0.333333 POINT 0.833333 0.333333 POINT 0.500000 0.833333 CLAIM 0.005 `[62156c9ebe62]`
+- An open-claim configuration that invites the checker to find the best possible score. POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.125000 0.125000 POINT 0.875000 0.125000 POINT 0.125000 0.875000 POINT 0.875000 0.875000 POINT 0.500000 0.500000 CLAIM 0.005 `[96dda65d60a9]`
+- POINT 0.0 0.0 POINT 0.0 0.35 POINT 0.0 0.7 POINT 0.35 0.175 POINT 0.35 0.525 POINT 0.35 0.875 POINT 0.7 0.0 POINT 0.7 0.35 POINT 0.7 0.7 POINT 1.0 0.175 POINT 1.0 0.525 POINT 1.0 0.875 CLAIM 0.030625 `[46d109303c90]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.666667 POINT 0.000000 1.000000 POINT 0.333333 0.000000 POINT 0.333333 0.666667 POINT 0.333333 1.000000 POINT 0.666667 0.000000 POINT 0.666667 0.333333 POINT 0.666667 1.000000 POINT 1.000000 0.000000 POINT 1.000000 0.666667 POINT 1.000000 1.000000 POINT 0.833333 0.833333 CLAIM 0.018519 `[02272c43f7a1]`
+- POINT 0.0 0.0 POINT 0.0 0.5 POINT 0.0 1.0 POINT 0.5 0.0 POINT 0.5 0.5 POINT 0.5 1.0 POINT 1.0 0.0 POINT 1.0 0.5 POINT 1.0 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 CLAIM 0.03125 `[160662fc7e49]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.200000 0.000000 POINT 0.000000 0.200000 POINT 0.800000 1.000000 POINT 1.000000 0.800000 POINT 0.200000 1.000000 POINT 0.000000 0.800000 POINT 0.800000 0.000000 POINT 1.000000 0.200000 POINT 0.500000 0.500000 CLAIM 0.020000 `[920858250254]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.285714 POINT 1.000000 0.285714 POINT 0.500000 0.142857 POINT 0.000000 0.571428 POINT 1.000000 0.571428 POINT 0.500000 0.428571 POINT 0.000000 0.857142 POINT 1.000000 0.857142 POINT 0.500000 0.714285 POINT 0.500000 0.500000 CLAIM 0.005102 `[16461510ed79]`
+- POINT 0.000000 0.500000 POINT 0.071429 0.928571 POINT 0.142857 0.357143 POINT 0.214286 0.785714 POINT 0.285714 0.214286 POINT 0.357143 0.642857 POINT 0.428571 0.071429 POINT 0.500000 0.500000 POINT 0.571429 0.928571 POINT 0.642857 0.357143 POINT 0.714286 0.785714 POINT 0.785714 0.214286 POINT 0.857143 0.642857 CLAIM 0.012755 `[9a4ea7b72c7f]`
+- POINT 0.000000 0.500000 POINT 0.036500 0.000000 POINT 0.036500 1.000000 POINT 0.098500 0.500000 POINT 0.218500 0.000000 POINT 0.218500 1.000000 POINT 0.364500 0.500000 POINT 0.501000 0.000000 POINT 0.501000 1.000000 POINT 0.654000 0.500000 POINT 0.790500 0.000000 POINT 0.790500 1.000000 POINT 1.000000 0.500000 CLAIM 0.0036 `[c5a32d450e97]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.500000 0.030000 POINT 0.500000 0.970000 POINT 0.030000 0.500000 POINT 0.970000 0.500000 POINT 0.250000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.0035 `[6a40881ae83e]`
+- POINT 0.000000 0.500000 POINT 0.036000 0.000000 POINT 0.036000 1.000000 POINT 0.081000 0.500000 POINT 0.196000 0.000000 POINT 0.196000 1.000000 POINT 0.361000 0.500000 POINT 0.496000 0.000000 POINT 0.496000 1.000000 POINT 0.651000 0.500000 POINT 0.786000 0.000000 POINT 0.786000 1.000000 POINT 1.000000 0.500000 CLAIM 0.0034 `[09fc67437624]`
+- POINT 0.000000 0.030000 POINT 0.030000 0.970000 POINT 0.070000 0.070000 POINT 0.250000 0.500000 POINT 0.330000 0.000000 POINT 0.330000 1.000000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 POINT 0.670000 0.000000 POINT 0.670000 1.000000 POINT 0.930000 0.930000 POINT 0.970000 0.030000 POINT 1.000000 0.500000 CLAIM 0.0032 `[c8224818bb0e]`
+- POINT 0.000000 0.500000 POINT 0.036500 0.000000 POINT 0.036500 1.000000 POINT 0.098500 0.500000 POINT 0.218500 0.000000 POINT 0.218500 1.000000 POINT 0.364500 0.500000 POINT 0.501000 0.000000 POINT 0.501000 1.000000 POINT 0.654000 0.500000 POINT 0.790500 0.000000 POINT 0.790500 1.000000 POINT 1.000000 0.500000 CLAIM 0.0041 `[5a65dcf33e64]`
+- A 13-point grid with 3 points on y=0, 5 on y=0.5, and 5 on y=1 staggered so that no vertical line contains two points yields a guaranteed minimum triangle area of exactly 0.025. `[d30be612eddb]`
+- A 13-point configuration with 4 points on y=0, 5 on y=0.5, and 4 on y=1, with optimal horizontal spacing, achieves a minimum triangle area of 0.03125. `[6706f67b075b]`
+- A 13-point configuration with 5 points on y=0, 4 on y=0.5, and 4 on y=1 achieves a minimum triangle area of 0.03125. `[4e350b1d3139]`
+- A 13-point configuration with 5 points on y=0, 5 on y=0.5, and 3 on y=1 achieves a minimum triangle area of 0.025. `[cd09122a3205]`
+- A 13-point configuration with 3 points on y=0, 5 on y=0.5, and 5 on y=1 achieves a minimum triangle area of 0.025. `[2fbfdfa3e66c]`
+- A 13-point configuration with 4 points on y=0, 5 on y=0.5, and 4 on y=1, with non-uniform spacing, achieves a minimum triangle area of 0.03125. `[0110facb72c2]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.5 1.0 POINT 0.5 0.75 POINT 0.5 0.5 POINT 0.5 0.25 POINT 0.0 0.5 POINT 0.25 0.5 POINT 0.75 0.5 POINT 1.0 0.5 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 CLAIM 0.03125 `[308d52fa9697]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.0 0.333333 POINT 1.0 0.333333 POINT 0.0 0.666667 POINT 1.0 0.666667 POINT 0.5 0.5 CLAIM 0.055556 `[ad531b600b5d]`
+- POINT 0.0 0.0 POINT 0.5 0.0 POINT 1.0 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.0 1.0 POINT 0.5 1.0 POINT 1.0 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 POINT 0.5 0.5 CLAIM 0.0625 `[9e9d7ba42368]`
+- POINT 0.0 0.0 POINT 0.25 0.0 POINT 0.5 0.0 POINT 0.75 0.0 POINT 1.0 0.0 POINT 0.0 0.25 POINT 1.0 0.25 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.0 0.75 POINT 1.0 0.75 POINT 0.0 1.0 POINT 1.0 1.0 CLAIM 0.03125 `[4487dd11e321]`
+- POINT 0.0 0.0 POINT 0.2 0.0 POINT 0.4 0.0 POINT 0.6 0.0 POINT 0.8 0.0 POINT 1.0 0.0 POINT 0.1 0.2 POINT 0.3 0.2 POINT 0.5 0.2 POINT 0.7 0.2 POINT 0.9 0.2 POINT 0.0 0.4 POINT 1.0 0.4 CLAIM 0.02 `[decb84b8cf7c]`
+- POINT 0.0 0.0 POINT 0.1 0.0 POINT 0.2 0.0 POINT 0.3 0.0 POINT 0.4 0.0 POINT 0.5 0.0 POINT 0.6 0.0 POINT 0.7 0.0 POINT 0.8 0.0 POINT 0.9 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 CLAIM 0.005 `[c406360e5b50]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.478632 0.430849 POINT 0.0135 0.8618 POINT 0.9866 0.8725 POINT 0.8864 0.0123 POINT 0.4911 0.9865 POINT 0.5000 0.2111 POINT 0.7312 0.6875 POINT 0.2250 0.5625 POINT 0.7688 0.3125 CLAIM 0.0059 `[8e212e37e725]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.452179 0.379595 POINT 0.452179 0.620405 POINT 0.726089 0.189798 POINT 0.726089 0.810202 POINT 0.273911 0.189798 POINT 0.273911 0.810202 POINT 0.918022 0.5 POINT 0.081978 0.5 POINT 0.5 0.5 CLAIM 0.004906 `[36c9846968f2]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.381966 0 POINT 0.618034 0 POINT 0 0.381966 POINT 0 0.618034 POINT 0.381966 1 POINT 0.618034 1 POINT 1 0.381966 POINT 1 0.618034 POINT 0.5 0.5 CLAIM 0.00729 `[a78a204244bf]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.4000 0.4000 POINT 0.6000 0.4000 POINT 0.4000 0.6000 POINT 0.6000 0.6000 POINT 0.2000 0.5000 POINT 0.8000 0.5000 POINT 0.5000 0.2000 POINT 0.5000 0.8000 POINT 0.5000 0.5000 CLAIM 0.002 `[621fa36f33c6]`
+- Constructing 13 points near four unit-square corners and three interlocking orthogonal centroids yields minimum triangle area 0.000833 via corner-aligned grid pinch `[cc10c1307fbf]`
+- A uniformly spaced 5x5 grid with 12 missing corners and edge midpoints yields a minimum triangle area of 0.005 through regular spacing of 0.25 `[9250f3b16b56]`
+- An explicit 13-point configuration based on corner clusters and asymmetric interior pinch points achieves a minimum triangle area of 0.001 `[c9b79910524e]`
+- Distributing 13 points with approximate hexagonal packing at an effective spacing of 0.25 yields minimum triangle area 0.008 `[4bd9e0eafff3]`
+- Constructing 13 points with 4 near each corner plus 1 center yields minimum triangle area 0.00125 `[cd015fc48e02]`
+- 13 points on a specific curvilinear locus approximating a Reuleaux-type boundary yield minimum triangle area 0.003 `[24487d85de4b]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 POINT 0.500000 1.000000 CLAIM 0.000000 `[6636e5e30c6d]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.500000 POINT 0.500000 0.000000 POINT 1.000000 0.500000 POINT 0.500000 1.000000 POINT 0.000000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.750000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 CLAIM 0.020833 `[a7e560a62f43]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.333333 0.666667 POINT 0.666667 0.333333 POINT 0.125000 0.500000 POINT 0.875000 0.500000 CLAIM 0.008333 `[32f71523ebff]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.333333 0.333333 POINT 0.666667 0.666667 POINT 0.333333 0.666667 POINT 0.666667 0.333333 POINT 0.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 1.000000 0.500000 POINT 0.500000 0.500000 CLAIM 0.010417 `[893fbc0838d7]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.500000 0.250000 POINT 0.500000 0.750000 POINT 0.250000 0.250000 POINT 0.750000 0.750000 POINT 0.250000 0.750000 POINT 0.750000 0.250000 POINT 0.500000 0.500000 CLAIM 0.015625 `[d62ec23aa8b9]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.200000 0.500000 POINT 0.800000 0.500000 POINT 0.500000 0.200000 POINT 0.500000 0.800000 POINT 0.200000 0.200000 POINT 0.800000 0.800000 POINT 0.200000 0.800000 POINT 0.800000 0.200000 POINT 0.500000 0.500000 CLAIM 0.020000 `[407bccdce528]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.166667 0.500000 POINT 0.833333 0.500000 POINT 0.500000 0.166667 POINT 0.500000 0.833333 POINT 0.166667 0.166667 POINT 0.833333 0.833333 POINT 0.166667 0.833333 POINT 0.833333 0.166667 POINT 0.500000 0.500000 CLAIM 0.027778 `[c4b920e2beb9]`
+- POINT 0.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.000000 0.333333 POINT 0.333333 1.000000 POINT 1.000000 0.666667 POINT 0.666667 0.000000 POINT 0.333333 0.333333 POINT 0.666667 0.666667 POINT 0.333333 0.666667 POINT 0.666667 0.333333 POINT 0.500000 0.500000 CLAIM 0.018519 `[da233eb8f14e]`
+- A 4x3 perturbed grid arrangement of 12 points plus one centered point achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.000000 0.000000, POINT 0.000000 0.333333, POINT 0.000000 0.666667, POINT 0.000000 1.000000, POINT 0.333333 0.000000, POINT 0.333333 0.333333, POINT 0.333333 0.666667, POINT 0.333333 1.000000, POINT 0.666667 0.000000, POINT 0.666667 0.333333, POINT 0.666667 0.666667, POINT 0.666667 1.000000, POINT 1.000000 0.500000. CLAIM 0.005 `[0accc1bd4524]`
+- A square grid arrangement of 3x3 points plus 4 additional points on the edges achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.000000 0.000000, POINT 0.000000 0.500000, POINT 0.000000 1.000000, POINT 0.500000 0.000000, POINT 0.500000 0.500000, POINT 0.500000 1.000000, POINT 1.000000 0.000000, POINT 1.000000 0.500000, POINT 1.000000 1.000000, POINT 0.250000 0.250000, POINT 0.750000 0.250000, POINT 0.250000 0.750000, POINT 0.750000 0.750000. CLAIM 0.005 `[0c1e409c554d]`
+- A circular arrangement of 12 points with one central point achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.500000 0.500000, POINT 0.500000 1.000000, POINT 0.933013 0.750000, POINT 0.933013 0.250000, POINT 0.500000 0.000000, POINT 0.066987 0.250000, POINT 0.066987 0.750000, POINT 0.790569 0.904508, POINT 0.964185 0.547529, POINT 0.791184 0.094031, POINT 0.206107 0.094031, POINT 0.033268 0.547529, POINT 0.206107 0.904508. CLAIM 0.005 `[cbe01d661539]`
+- A randomized arrangement of 13 points in the unit square achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.050000 0.050000, POINT 0.950000 0.050000, POINT 0.050000 0.950000, POINT 0.950000 0.950000, POINT 0.500000 0.050000, POINT 0.500000 0.950000, POINT 0.050000 0.500000, POINT 0.950000 0.500000, POINT 0.500000 0.500000, POINT 0.250000 0.250000, POINT 0.750000 0.250000, POINT 0.250000 0.750000, POINT 0.750000 0.750000. CLAIM 0.005 `[dde3116f1700]`
+- A hexagonal lattice-like arrangement of 13 points achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.000000 0.000000, POINT 0.500000 0.000000, POINT 1.000000 0.000000, POINT 0.250000 0.433013, POINT 0.750000 0.433013, POINT 0.000000 0.866025, POINT 0.500000 0.866025, POINT 1.000000 0.866025, POINT 0.125000 0.216506, POINT 0.625000 0.216506, POINT 0.375000 0.649519, POINT 0.875000 0.649519, POINT 0.500000 0.433013. CLAIM 0.005 `[9821d3a28cca]`
+- A clustered arrangement of 13 points in a small region of the unit square achieves a minimum triangle area of 0.005. The coordinates are: POINT 0.400000 0.400000, POINT 0.400000 0.600000, POINT 0.600000 0.400000, POINT 0.600000 0.600000, POINT 0.400000 0.500000, POINT 0.600000 0.500000, POINT 0.500000 0.400000, POINT 0.500000 0.600000, POINT 0.500000 0.500000, POINT 0.450000 0.450000, POINT 0.550000 0.450000, POINT 0.450000 0.550000, POINT 0.550000 0.550000. CLAIM 0.005 `[6ce243ba570b]`
+- POINT 0.5 0.0 POINT 0.0 0.285714 POINT 1.0 0.285714 POINT 0.0 0.571429 POINT 1.0 0.571429 POINT 0.0 0.857143 POINT 1.0 0.857143 POINT 0.5 0.142857 POINT 0.5 0.428571 POINT 0.5 0.714286 POINT 0.25 0.214286 POINT 0.75 0.5 POINT 0.75 0.928571 CLAIM 0.005102 `[c20d50178915]`
+- POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.166667 0.333333 POINT 0.833333 0.333333 POINT 0.166667 0.666667 POINT 0.833333 0.666667 POINT 0.500000 0.500000 CLAIM 0.003906 `[6666e47af90a]`
+- POINT 0.0 0.0 POINT 1.0 0.0 POINT 0.0 1.0 POINT 1.0 1.0 POINT 0.5 0.166667 POINT 0.5 0.333333 POINT 0.5 0.5 POINT 0.5 0.666667 POINT 0.5 0.833333 POINT 0.2 0.4 POINT 0.8 0.4 POINT 0.2 0.8 POINT 0.8 0.8 CLAIM 0.0045 `[4afc8ff10da3]`
+- POINT 0.1 0.1 POINT 0.9 0.1 POINT 0.1 0.9 POINT 0.9 0.9 POINT 0.5 0.5 POINT 0.3 0.3 POINT 0.7 0.3 POINT 0.3 0.7 POINT 0.7 0.7 POINT 0.5 0.15 POINT 0.15 0.5 POINT 0.85 0.5 POINT 0.5 0.85 CLAIM 0.002 `[5779948d72fb]`
+- POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.166667 0.333333 POINT 0.833333 0.333333 POINT 0.166667 0.666667 POINT 0.833333 0.666667 POINT 0.500000 0.500000 CLAIM 0.005 `[8ddde40caaad]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.5 POINT 0.0 0.5 POINT 0.5 0.0 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.25 0.75 CLAIM 0.03125 `[3526a1b19bf0]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.5 0.5 POINT 0.25 0.5 POINT 0.5 0.25 POINT 0.5 0.75 POINT 0.75 0.5 CLAIM 0.03125 `[559db1885ab4]`
+- POINT 0.5 0.5 POINT 0.654508 0.975528 POINT 0.975528 0.345492 POINT 0.345492 0.024472 POINT 0.095492 0.793893 POINT 0.793893 0.904508 POINT 0.904508 0.206107 POINT 0.206107 0.095492 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.0 0.0 CLAIM 0.010048 `[7c9332c92553]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 0.666667 0.666667 POINT 0.333333 0.666667 POINT 0.5 0.5 CLAIM 0.037037 `[406c5cb1bd2f]`
+- POINT 0.0 0.0 POINT 0.5 0.0 POINT 1.0 0.0 POINT 0.0 0.5 POINT 1.0 0.5 POINT 0.0 1.0 POINT 0.5 1.0 POINT 1.0 1.0 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.5 0.5 CLAIM 0.0 `[7d51762a654d]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.333333 0.0 POINT 0.666667 0.0 POINT 0.0 0.333333 POINT 0.0 0.666667 POINT 1.0 0.333333 POINT 1.0 0.666667 POINT 0.333333 1.0 POINT 0.666667 1.0 POINT 0.5 0.5 CLAIM 0.018518 `[d8140af8c2f7]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.000000 1.000000 POINT 0.500000 1.000000 POINT 1.000000 1.000000 POINT 0.125000 0.250000 POINT 0.375000 0.250000 POINT 0.625000 0.250000 POINT 0.875000 0.250000 POINT 0.500000 0.750000 CLAIM 0.007812 `[5c229f1dd0df]`
+- POINT 0.000000 0.000000 POINT 0.500000 0.000000 POINT 1.000000 0.000000 POINT 0.250000 1.000000 POINT 0.750000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.500000 POINT 0.500000 1.000000 POINT 0.125000 0.250000 POINT 0.375000 0.250000 POINT 0.625000 0.250000 POINT 0.875000 0.250000 CLAIM 0.007812 `[744fa20ee61c]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.500000 1.000000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.000000 POINT 0.250000 0.000000 POINT 0.750000 0.000000 POINT 0.125000 0.250000 POINT 0.375000 0.250000 POINT 0.500000 0.500000 CLAIM 0.007812 `[8f44f3f3f6f7]`
+- POINT 0.500000 0.500000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.250000 POINT 0.000000 0.750000 POINT 1.000000 0.250000 POINT 1.000000 0.750000 POINT 0.250000 0.500000 POINT 0.750000 0.500000 POINT 0.250000 0.000000 POINT 0.750000 0.000000 POINT 0.250000 1.000000 POINT 0.750000 1.000000 CLAIM 0.015625 `[c99628909477]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.250000 0.250000 POINT 0.750000 0.250000 POINT 0.250000 0.750000 POINT 0.750000 0.750000 POINT 0.500000 0.500000 CLAIM 0.007812 `[460903525b0e]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.055728 POINT 0.5 0.944272 POINT 0.055728 0.5 POINT 0.944272 0.5 POINT 0.345492 0.345492 POINT 0.345492 0.654508 POINT 0.654508 0.345492 POINT 0.654508 0.654508 POINT 0.5 0.5 CLAIM 0.027864 `[d0e245e87dc6]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.0618 POINT 0.5 0.9382 POINT 0.0618 0.5 POINT 0.9382 0.5 POINT 0.3318 0.3318 POINT 0.3318 0.6682 POINT 0.6682 0.3318 POINT 0.6682 0.6682 POINT 0.5 0.5 CLAIM 0.0264 `[4b9631a8e38c]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.4 0.08 POINT 0.6 0.08 POINT 0.4 0.92 POINT 0.6 0.92 POINT 0.08 0.4 POINT 0.08 0.6 POINT 0.92 0.4 POINT 0.92 0.6 POINT 0.5 0.5 CLAIM 0.0065 `[032a432c0a32]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.333 0 POINT 0.667 0 POINT 0 1 POINT 0 0 POINT 1 0 POINT 1 1 POINT 0.5 0.333 POINT 0.5 0.667 POINT 0.5 0.5 CLAIM 0.001 `[5a60ca355cc2]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.333 0.04 POINT 0.667 0.04 POINT 0.04 0.333 POINT 0.04 0.667 POINT 0.333 0.96 POINT 0.667 0.96 POINT 0.96 0.333 POINT 0.96 0.667 POINT 0.5 0.5 CLAIM 0.0076 `[c4d202afe070]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.055728 POINT 0.5 0.944272 POINT 0.055728 0.5 POINT 0.944272 0.5 POINT 0.334 0.334 POINT 0.334 0.666 POINT 0.666 0.334 POINT 0.666 0.666 POINT 0.5 0.5 CLAIM 0.0275 `[5747d2bbe93a]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.25 0.25 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.5 0 POINT 0.5 1 POINT 0 0.5 POINT 1 0.5 CLAIM 0.125 `[9d491176f9bf]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0.5 POINT 0.5 0 POINT 0.5 1 POINT 0 0.5 POINT 1 0.5 POINT 0.25 0.25 POINT 0.25 0.75 POINT 0.75 0.25 CLAIM 0.125 `[75860307efd0]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.333 0 POINT 0.667 0 POINT 0.333 1 POINT 0.667 1 POINT 0 0.333 POINT 0 0.667 POINT 1 0.333 POINT 1 0.667 CLAIM 0.055556 `[a7c3f7d49c3f]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.2 0.2 POINT 0.2 0.8 POINT 0.8 0.2 POINT 0.8 0.8 POINT 0.5 0.2 POINT 0.5 0.8 POINT 0.2 0.5 POINT 0.8 0.5 CLAIM 0.04 `[9d33e433f863]`
+- POINT 0 0 POINT 0 1 POINT 1 0 POINT 1 1 POINT 0.5 0 POINT 0.5 1 POINT 0 0.5 POINT 1 0.5 POINT 0.25 0.25 POINT 0.25 0.75 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.5 0.5 CLAIM 0.0625 `[1572edb1204d]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.5 0 POINT 0 0.5 POINT 1 0.5 POINT 0.5 1 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 POINT 0.5 0.5 CLAIM 0.03125 `[bb757726b9d5]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.25 0 POINT 0 0.25 POINT 1 0.25 POINT 0.25 1 POINT 0.5 0.25 POINT 0.25 0.5 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.5 0.5 CLAIM 0.015625 `[efe221e82ada]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.5 0 POINT 0 0.5 POINT 1 0.5 POINT 0.5 1 POINT 0.333333 0 POINT 0 0.333333 POINT 1 0.333333 POINT 0.333333 1 POINT 0.5 0.5 CLAIM 0.009259 `[92b8f0883ea8]`
+- POINT 0 0 POINT 1 0 POINT 0 1 POINT 1 1 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.25 0.75 POINT 0.75 0.75 POINT 0.5 0.125 POINT 0.125 0.5 POINT 0.5 0.875 POINT 0.875 0.5 POINT 0.5 0.5 CLAIM 0.0078125 `[4739d57599df]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 0.000000 1.000000 POINT 1.000000 1.000000 POINT 0.500000 0.000000 POINT 0.000000 0.500000 POINT 0.500000 1.000000 POINT 1.000000 0.500000 POINT 0.666667 0.333333 POINT 0.333333 0.666667 POINT 0.666667 0.666667 POINT 0.333333 0.333333 POINT 0.500000 0.500000 CLAIM 0.000000 `[7c7461215896]`
+- POINT 0.0 0.0 POINT 0.0 1.0 POINT 1.0 0.0 POINT 1.0 1.0 POINT 0.5 0.0 POINT 1.0 0.5 POINT 0.5 1.0 POINT 0.0 0.5 POINT 0.25 0.25 POINT 0.75 0.25 POINT 0.75 0.75 POINT 0.25 0.75 POINT 0.5 0.5 CLAIM 0.03125 `[1a5c1a5e5c64]`
+- POINT 0.000000 0.000000 POINT 0.000000 0.333333 POINT 0.000000 0.666667 POINT 0.000000 1.000000 POINT 0.333333 0.000000 POINT 0.333333 0.333333 POINT 0.333333 0.666667 POINT 0.333333 1.000000 POINT 0.666667 0.000000 POINT 0.666667 0.333333 POINT 0.666667 0.666667 POINT 1.000000 0.000000 POINT 1.000000 1.000000 CLAIM 0.000000 `[1e0ce26d2df9]`
+- POINT 0.000000 0.000000 POINT 1.000000 0.000000 POINT 1.000000 1.000000 POINT 0.000000 1.000000 POINT 0.500000 0.000000 POINT 0.500000 1.000000 POINT 0.000000 0.500000 POINT 1.000000 0.500000 POINT 0.500000 0.500000 POINT 0.333333 0.333333 POINT 0.666667 0.333333 POINT 0.666667 0.666667 POINT 0.333333 0.666667 CLAIM 0.013889 `[969d779c2c11]`
+- POINT 0 0 POINT 0 0.5 POINT 0 1 POINT 0.5 0 POINT 0.5 0.5 POINT 0.5 1 POINT 1 0 POINT 1 0.5 POINT 1 1 POINT 0.333333 0.166667 POINT 0.666667 0.833333 POINT 0.166667 0.666667 POINT 0.833333 0.333333 CLAIM 0.020833 `[cca556597c93]`
+- POINT 0.0 0.0 POINT 0.25 0.0 POINT 0.5 0.0 POINT 0.75 0.0 POINT 1.0 0.0 POINT 0.125 1.0 POINT 0.375 1.0 POINT 0.625 1.0 POINT 0.875 1.0 POINT 0.25 0.5 POINT 0.5 0.5 POINT 0.75 0.5 POINT 1.0 0.5 CLAIM 0.00390625 `[2edeaa42b5ef]`
+
+---
+Every statement above is derived from the append-only run record; nothing was generated by a model for this report. Accepted does not mean true — it means the position survived recorded criticism so far, and the run remains continuable.

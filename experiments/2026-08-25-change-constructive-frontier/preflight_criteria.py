@@ -97,6 +97,9 @@ def main() -> int:
     # fails; a member is not required to fail for every reason.
     expected = {
         "M1 known-good construction": ("pass", "pass", "pass"),
+        # The envelope carries the same construction as M1 and must be
+        # judged identically -- the whole point of the fix.
+        "M9 JSON envelope, escaped newlines": ("pass", "pass", "pass"),
         # A duplicate breaks well-formedness, and the degenerate triple it
         # creates drops the achieved score to 0, which is below both the
         # claim and the floor.
