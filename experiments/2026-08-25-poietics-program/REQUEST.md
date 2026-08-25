@@ -246,3 +246,58 @@ states the bundle it analyses is `POIETICS_FULL_RECORD.zip` — "118 files after
 extraction: README.md, report/ (16 sections), data/ (7 JSON extracts),
 sources/ (docs, zoo, method library, instrument scripts)" — confirming that
 the bundle R5 names is a distinct artifact that has not arrived. See Q3.
+
+A3 — 2026-08-25, operator's answer to the judge-seat question, verbatim:
+
+> My bad. Deepseek V4 Pro 0813 for conjecturer, Kimi K3 for critic, Qwen 3.5
+> for judge one and GLM 5.2 for judge 3.
+
+Question that drew it (asked because CLAUDE.md requires any design leaning on
+LLM judges to consult the committed judge-audit evidence first): whether
+"solo, everything on" in R10c included judge seats, given the judge-evidence
+review tranche measured cross-family unanimous judges at 0-2.5% false
+conviction of sound work but same-family pairing — which a solo glm-5.2 run
+is — at 47-60%.
+
+### R17 (behavior) supersedes R10c's "solo"
+
+R10c said "solo, everything on (the operator's standing law)". A3 replaces
+the solo posture with a CROSS-FAMILY ensemble. Verbatim seat assignments:
+
+| seat | operator's words |
+|---|---|
+| conjecturer | "Deepseek V4 Pro 0813" |
+| critic | "Kimi K3" |
+| judge one | "Qwen 3.5" |
+| judge 3 | "GLM 5.2" |
+
+R10c's other clauses are NOT superseded and still bind: "everything on",
+"the two-call seat protocol now shipped", "bounded budget stated in PREREG",
+"cycles sized by the attempt-4 precedent (8+)".
+
+`R10c: superseded-by:R17` for the "solo, glm-5.2 profile" clause only.
+
+**Consequence recorded, not assumed:** this moves the run OUT of the
+same-family regime the judge-audit evidence measured at 47-60% false
+conviction and INTO the cross-family regime it measured at 0-2.5%. The
+operator's "My bad." is read as accepting the evidence, not as conceding an
+argument — the configuration change is the remedy.
+
+## Open questions (second batch, from A3)
+
+Q4: **"judge one" and "judge 3" name two judges and skip judge 2.** Either
+the ensemble is three judges with the middle seat unnamed, or "judge 3" is a
+slip for "judge 2" and the ensemble is two. The harness's measured
+false-conviction floor (0-2.5%) was taken on a UNANIMOUS cross-family
+ensemble, so the size of the ensemble is load-bearing, not cosmetic.
+
+Q5: **Eight of the eleven canonical roles are unassigned.** A3 names
+conjecturer, critic and the judge seats. `defender`, `variator`,
+`summarizer`, `synthesizer`, `vision_critic`, `property_designer`, `thesis`
+and `grounding_reviewer` still need routes, since `Config.roles` defaults to
+`{}` and any omitted role gets zero routes.
+
+Q6: **The four model identifiers must resolve to exact Ollama Cloud ids**
+before the config can compile to a reachable run. Compile no longer refuses
+an unreachable model (operator law 2026-08-12, "All configurations should be
+allowed"), so a wrong id fails at the point of use, mid-run, not at setup.
