@@ -1,0 +1,12 @@
+```json
+{
+  "contract": "repair.patch.v1",
+  "patches": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "a1b2c3d4e5f6"
+    }
+  ]
+}
+```

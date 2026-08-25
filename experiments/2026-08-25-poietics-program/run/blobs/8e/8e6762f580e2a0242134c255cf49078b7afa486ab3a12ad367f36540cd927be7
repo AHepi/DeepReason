@@ -1,0 +1,18 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The relation overcommits to a specific etiological claim without refuting alternatives: it asserts 'temporal ordering as the operative variable' when the data (1/9 vs 3-of-26) could equally reflect statistical noise, selection bias in the 'isolated' set, or an interaction between author expertise and task type. The refutation conditions are too narrow—requiring a 'formal policy' or 'different author'—when mere random variation across different orderings by the same author would falsify the temporal mechanism claim. By naming 'temporal ordering' rather than 'uncontrolled confounds' as the mechanism, it claims explanatory specificity not warranted by the summary.",
+      "premise": "The claim that 'temporal ordering' is the 'operative variable' asserts a causal mechanism beyond mere correlation",
+      "premise_evidence": [
+        {
+          "block": "SRC_001",
+          "quote": "SRC_004 integrates SRC_003's arbitrariness claim by adding temporal ordering as the operative variable"
+        }
+      ]
+    }
+  ]
+}
+```
