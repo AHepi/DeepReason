@@ -1,0 +1,22 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target commits a category error by treating the 3-of-26 result as mere statistical confounding when the record specifically identifies a systematic installation mechanism. The problem asks about the conditions under which tests constrain rather than describe, citing compile.py's 1/9 mutation loss under 'shown-to-fail-first installation' as critical evidence. The target's claim of autocorrelation ignores that the 3 survivors shared a specific structural feature (guards checking declared data but not added behavior) and that 'shown-to-fail-first' is a methodological ritual, not a random sampling artifact. By reducing a mechanism-based failure (ritual non-installation) to a small-sample problem, the target fails to account for the distribution's specificity: 1/9 vs 4/4-6/7 is not 'typical dispersion' but a signature of missing constraints.",
+      "premise": null,
+      "premise_evidence": [
+        {
+          "block": "028950f9751ab59a",
+          "quote": "The error was not noise, it was **masking**: mutations no guard catches were reported as caught."
+        },
+        {
+          "block": "057f5d8af80d2d12",
+          "quote": "THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR."
+        }
+      ]
+    }
+  ]
+}
+```

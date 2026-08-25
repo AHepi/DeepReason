@@ -197,16 +197,25 @@ def census(root: pathlib.Path) -> dict:
         })
 
     m2_hits = [c for c in verified_citations if c["in_record"]]
+    # PREREG.md §5 M2 registered "at least one CRITICISM artifact ... carries
+    # a citation". Conjecture-side citations (`evidence-citation:`, filed by
+    # rules/conj.py) are not that, however many there are: the milestone is
+    # about the critic seat engaging the dossier, which is a different claim
+    # from the conjecturer quoting it. An earlier draft of this census set
+    # `met` from all record-resolving citations and would have reported M2
+    # MET on 27 conjecture-side hits and zero critic-side ones. The
+    # registration is frozen; the instrument is what had to move.
+    critic_hits = [c for c in m2_hits if c["side"] == "premise-citation"]
     m2 = {
         "milestone": "M2 criticism citing a byte-checked dossier block",
         "required": True,
         "verified_citations_total": len(verified_citations),
         "verified_citations_into_record": len(m2_hits),
         "sources_cited": sorted({c["source"] for c in m2_hits}),
-        "critic_side_hits": sum(
-            1 for c in m2_hits if c["side"] == "premise-citation"
-        ),
-        "met": bool(m2_hits),
+        "critic_side_hits": len(critic_hits),
+        "conjecture_side_hits": len(m2_hits) - len(critic_hits),
+        "critic_sources_cited": sorted({c["source"] for c in critic_hits}),
+        "met": bool(critic_hits),
     }
 
     # ---- M3 -------------------------------------------------------------
@@ -280,10 +289,15 @@ def main() -> int:
     print(f"M2 {'MET' if m2['met'] else 'UNMET'}  "
           f"verified citations {m2['verified_citations_total']}, "
           f"into the record {m2['verified_citations_into_record']} "
-          f"(critic side {m2['critic_side_hits']})")
-    if m2["sources_cited"]:
-        for source in m2["sources_cited"]:
-            print(f"      cited: {source}")
+          f"= critic side {m2['critic_side_hits']} "
+          f"+ conjecture side {m2['conjecture_side_hits']}")
+    print("      M2 counts the CRITIC side only (PREREG.md §5); "
+          "conjecture-side citations are reported, never counted")
+    for source in m2["critic_sources_cited"]:
+        print(f"      critic cited: {source}")
+    for source in m2["sources_cited"]:
+        if source not in m2["critic_sources_cited"]:
+            print(f"      (conjecture cited: {source})")
     print(f"M3 {m3['status']}  "
           f"conjectures leaning on a withdrawn figure: "
           f"{len(m3['conjectures_leaning_on_a_withdrawn_figure'])}, "
