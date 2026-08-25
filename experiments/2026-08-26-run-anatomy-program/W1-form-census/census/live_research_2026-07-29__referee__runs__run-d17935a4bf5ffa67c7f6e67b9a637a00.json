@@ -1,0 +1,961 @@
+{
+ "schema": "run-anatomy.form-census.root.v1",
+ "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+ "run_id": "479dcc93b2de9582e5dbcee0aef119686d2942ff583ea3a9690efb48cbb160a9",
+ "state": "completed",
+ "stop_reason": "budget_exhausted",
+ "cycles_reached": 6,
+ "first_ts": "2026-07-29T15:38:48.045720+00:00",
+ "attempts": 15,
+ "valid_on_arrival": 14,
+ "validity_rate": 0.9333,
+ "repair_attempts": 0,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 0,
+ "cycle_join_exact": true,
+ "attempt_objects_missing": 0,
+ "attempt_key_collisions": 0,
+ "cumulative_log_tokens": 90937,
+ "token_limit": 100000,
+ "per_contract": {
+  "conjecturer.turn.v6": {
+   "attempts": 4,
+   "valid": 4,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 1.0
+  },
+  "batch-critic.v2": {
+   "attempts": 11,
+   "valid": 10,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 0.9091
+  }
+ },
+ "failure_classes": {
+  "SCRATCH_ALIAS_UNKNOWN": 2,
+  "UNCODED_OTHER": 2,
+  "TRUNCATED_MID_JSON": 1,
+  "WIRE_NO_COMPLETE_JSON": 1
+ },
+ "failure_fields": [],
+ "coercion": {
+  "escape_legal": 0,
+  "fabricated_handle": 0,
+  "handle_kinds": {}
+ },
+ "escape_followups": {},
+ "lossless_spelling_pointers": {},
+ "decomposition_events": [],
+ "route_seat_insufficient_capability": [],
+ "work_terminals": {
+  "budget_denied/token_budget_denied": 17,
+  "completed/critic_output_admitted": 10,
+  "abandoned/context_no_additional_context": 2,
+  "completed/semantic_admission_complete": 2,
+  "completed/semantic_admission_partial": 2,
+  "rejected/critic_repair_requested": 1
+ },
+ "repair_fights": [
+  {
+   "work_id": "sha256:10690d9a2091369e9290536073a2d96ce6f8137b9df3187752a57a53ef9c47ea",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": 1,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    []
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  }
+ ],
+ "content": {
+  "valid_responses_unparsed": 0,
+  "wire_shapes": {
+   "bare_json": 10,
+   "fenced_json": 4
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 7,
+    "fenced_json": 3
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 3,
+    "fenced_json": 1
+   }
+  },
+  "prose_wrapped_exemplars": [],
+  "field_kinds": {
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 16
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 15
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 14
+   },
+   "batch-critic.v2/cases/*/counterexample/*/first_call_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/idempotent": {
+    "bool": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/note": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/operation": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/second_call_result": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 16
+   },
+   "conjecturer.turn.v6/abstention": {
+    "null": 3
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 22
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 66
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/block": {
+    "string": 8
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/quote": {
+    "string": 8
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 22
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 7
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/requested_context_aliases/*": {
+    "string": 8
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 22
+   },
+   "conjecturer.turn.v6/context_request": {
+    "null": 2
+   },
+   "conjecturer.turn.v6/context_request/desired_retrieval_channels/*": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/context_request/query": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/context_request/requested_visible_aliases/*": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/research_proposals/*/purpose": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/research_proposals/*/request_identifier": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/research_proposals/*/urls/*": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/because": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "string": 8
+   }
+  },
+  "string_vocabularies": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 15,
+    "False": 1
+   },
+   "batch-critic.v2/cases/*/case": {
+    "<<long>>": 15
+   },
+   "batch-critic.v2/cases/*/counterexample/*/first_call_result": {
+    "log = [event]": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/idempotent": {
+    "False": 1,
+    "True": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/note": {
+    "<<long>>": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/operation": {
+    "append(event) on an append-only log": 1,
+    "append(event_with_dedup_key) where log checks key": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/second_call_result": {
+    "log = [event, event]": 1,
+    "log = [event] (duplicate detected and skipped)": 1
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 9,
+    "SRC_002": 6,
+    "SRC_003": 1
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "<<long>>": 22
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "<<long>>": 66
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/block": {
+    "721189b43373c57a": 3,
+    "9a37a74454f9366d": 3,
+    "00ac9e728cdcf18c": 1,
+    "09bcf3cbfa35a0e4": 1
+   },
+   "conjecturer.turn.v6/candidates/*/evidence_refs/*/quote": {
+    "<<long>>": 3,
+    "http \u2014 HTTP modules \u2014 Python 3.14.6 documentation": 2,
+    "HTTP Semantics RFC 9110": 2,
+    "http \u2014 HTTP modules": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "<<long>>": 22
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "SRC_001": 3,
+    "SRC_003": 2,
+    "SRC_002": 2
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/requested_context_aliases/*": {
+    "SCR_001": 3,
+    "SCR_003": 2,
+    "SCR_005": 1,
+    "SCR_006": 1,
+    "SCR_004": 1
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 5
+   },
+   "conjecturer.turn.v6/context_request/desired_retrieval_channels/*": {
+    "semantic": 1,
+    "keyword": 1,
+    "focus": 1
+   },
+   "conjecturer.turn.v6/context_request/query": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/context_request/requested_visible_aliases/*": {
+    "SCR_001": 1,
+    "SCR_003": 1,
+    "SCR_005": 1
+   },
+   "conjecturer.turn.v6/research_proposals/*/purpose": {
+    "<<long>>": 4
+   },
+   "conjecturer.turn.v6/research_proposals/*/request_identifier": {
+    "fetch-python-http-idempotency": 1,
+    "fetch-python-sqlite3-safety": 1,
+    "fetch_http_methods_rfc9110": 1,
+    "fetch_http_module_methods": 1
+   },
+   "conjecturer.turn.v6/research_proposals/*/urls/*": {
+    "https://docs.python.org/3/library/http.html": 2,
+    "https://docs.python.org/3/library/urllib.request.html": 1,
+    "https://docs.python.org/3/library/sqlite3.html": 1,
+    "https://docs.python.org/3.14/library/http.html": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/because": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "directed": 2,
+    "symmetric": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "NEW_001": 4,
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "<<long>>": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "SCR_001": 2,
+    "SCR_005": 2,
+    "SCR_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "Replay is purely reconstructive with no concurrent access": 1,
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "<<long>>": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "<<long>>": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "<<long>>": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "NEW_001": 3,
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "<<long>>": 6
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "SCR_002": 3,
+    "NEW_001": 3,
+    "NEW_002": 1,
+    "SCR_001": 1
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "insufficient": 1,
+    "n/a": 1
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "insufficient": 4
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "insufficient": 4
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 11,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "insufficient",
+    "value": "Idempotency (f(f(x))=f(x)) is the property an append-only event log must require of its writers; safety is a weaker, orthogonal property about not corrupting other operations and is insufficient alone. The exact distinction: idempotency constrains an operation's effect on itself under repeated appli"
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 11,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If 'safe' is defined in the cited literature to subsume idempotency (safe = idempotent + non-interfering), then safety would be the required property and idempotency alone would be insufficient."
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 81,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "insufficient",
+    "value": "Idempotency is the extensional property f(f(x))=f(x) \u2014 the observable result of applying an operation n\u22651 times equals applying it once. Safety is the intensional property that an operation's internal execution produces no harmful side effects, regardless of how many times it runs. For an append-onl"
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 81,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the writer's operation has external side effects (e.g., sends a notification) that occur during replay, then idempotency of the log state is insufficient and safety of side effects matters."
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 141,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_001's argument that safety is vacuous relies entirely on properties of the *replay* path \u2014 no concurrency, no interleaving, no observable intermediate states during reconstruction. But the problem asks what the log must require 'of its writers to survive at-least-once delivery,' which concerns t"
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 163,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "SRC_002's argument that both idempotency and safety are necessary rests on the claim that 'idempotency without safety permits transient inconsistency observable to concurrent replays.' But transient inconsistency during concurrent access is an isolation/atomicity concern, not a safety concern. An op"
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 193,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the replay system exposes intermediate states to concurrent readers during retry, idempotency alone may be insufficient and a stronger 'retriable safety' property is needed."
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 193,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "insufficient",
+    "value": "The log must require a composite property \u2014 'idempotent-and-safe' \u2014 where idempotency guarantees final-state equivalence and safety guarantees no harmful intermediate states or external side-effects during retry. Neither property alone suffices if the replay system can observe intermediate states or"
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 295,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the append-only system has concurrent observers during replay, idempotency alone may be insufficient because intermediate states during retry could violate safety (e.g., a brief gap during delete-then-re-add)."
+   },
+   {
+    "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+    "seq": 295,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "insufficient",
+    "value": "The append-only event log must require its writers to be SAFE in the RPC-retry sense ('retriable without causing harm'), which subsumes idempotency as a necessary component. In this reading, 'safe operation' is the broader property: it requires both that repeated execution converges (idempotency) AN"
+   }
+  ],
+  "numeric_precision": {
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "1": 9,
+    "2": 13
+   }
+  }
+ },
+ "rows": [
+  {
+   "seq": 11,
+   "ts": "2026-07-29T15:38:48.045720+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8801,
+   "max_tokens": 8192,
+   "work_id": "sha256:25979a9215b63bc2a81d98d295fd586c73670e774f4cf7d6638ca731c6707edf",
+   "raw_ref": "143edb80fe13a6b226c36f23f724658912db842d9694fd8d7f3cc332001131ab",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 39,
+   "ts": "2026-07-29T15:39:05.186092+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3306,
+   "max_tokens": 8192,
+   "work_id": "sha256:2fb64f92947e25736b6ce84607ebb0f613f679b3758944c1a461170fc3e1dd8d",
+   "raw_ref": "1b9918bd9a8c96d15b548b1c2473e48be08eafd84902be1177090f497b4359cc",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 52,
+   "ts": "2026-07-29T15:39:39.289544+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4838,
+   "max_tokens": 8192,
+   "work_id": "sha256:81d1ff57899208f5e5d5fcc3c1164acb4696ade8878959c1abd805ca6f5de11e",
+   "raw_ref": "452d43d39a4bb7ac6a0c2a63cff0e804f3bc16544a40ed91f2c66f644d3f903f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 65,
+   "ts": "2026-07-29T15:40:00.209790+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3011,
+   "max_tokens": 8192,
+   "work_id": "sha256:f197e9d0405c569c08771bc0a02b5219573835a32b76ebca27a8a7a244efd275",
+   "raw_ref": "cc3cae4027be64348eaa8ef45b95e40c76795397553215c0d19823e8f15fb69b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 81,
+   "ts": "2026-07-29T15:41:24.185383+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 11244,
+   "max_tokens": 8192,
+   "work_id": "sha256:9227b8f4983d186562778e4c6005b77194dda87776e710d94775453ab84c4d21",
+   "raw_ref": "a55a6cad49b30b902cd4880263e13bf59397f0db000ec38b8e4da2db888ce27e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 141,
+   "ts": "2026-07-29T15:42:23.119716+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 6559,
+   "max_tokens": 8192,
+   "work_id": "sha256:0ac468284e40eb439c1f7f2326d73435488d19add374e6954cdee540c58aec13",
+   "raw_ref": "b30e91a0bb5de682a3b135d31df023670f26b26e4b50002eaafbb3cb7bd55419",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 154,
+   "ts": "2026-07-29T15:42:43.609116+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2798,
+   "max_tokens": 8192,
+   "work_id": "sha256:6ef194e7bd6368e30119e7fdb85be3cb1ae341b032765aee4fb9a58cd3efe933",
+   "raw_ref": "b8d297e47f4b8bbd6f5b7f54af2cc7356de1a918f0330890ae30f87021cf29d2",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 163,
+   "ts": "2026-07-29T15:43:16.638975+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5136,
+   "max_tokens": 8192,
+   "work_id": "sha256:bbc95025da70f69d743a0d7565982fc250484aa39cd20a724e26bcb9e59835a1",
+   "raw_ref": "aea55cd19692ccfd890a9e1861b35d37241db6597b0dde0cce7b6b32d048a4d8",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 193,
+   "ts": "2026-07-29T15:44:13.081309+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 11631,
+   "max_tokens": 8192,
+   "work_id": "sha256:2aae45e20af33a56699de292d054edfc0d0bd14de9cdcb8bedf233f8b51fc4c4",
+   "raw_ref": "035882aecd49ec47a861cfd11293748348e083995087a7db846a01ae550084a8",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_007 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    },
+    {
+     "class": "UNCODED_OTHER",
+     "field": "",
+     "field_raw": null,
+     "message": "research source budget is exhausted",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 238,
+   "ts": "2026-07-29T15:44:34.595738+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3850,
+   "max_tokens": 8192,
+   "work_id": "sha256:d46018a527d759176e2703ba6335050aa7f9cac61c2538cd832b73c4a146cade",
+   "raw_ref": "3a187a3338ef8834d383e1b0876cc2c2284ccef939710ee978185d6ab04be523",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 251,
+   "ts": "2026-07-29T15:45:14.252440+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5137,
+   "max_tokens": 8192,
+   "work_id": "sha256:41a3c2c70d943a2965ded92db21bcb7f5b83a69c270fdda8730de182e18c4e61",
+   "raw_ref": "c60f9adc146215db30273811eb85246fd8ae4d2fe178275e1849efc85500b5be",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 262,
+   "ts": "2026-07-29T15:46:44.222404+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10276,
+   "max_tokens": 8192,
+   "work_id": "sha256:10690d9a2091369e9290536073a2d96ce6f8137b9df3187752a57a53ef9c47ea",
+   "raw_ref": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "TRUNCATED_MID_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "your output hit the length limit and was CUT OFF mid-JSON. Respond MORE COMPACTLY: fewer/shorter items, terse strings, same schema. Original error: no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "WIRE_NO_COMPLETE_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    }
+   ]
+  },
+  {
+   "seq": 267,
+   "ts": "2026-07-29T15:46:47.562503+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 338,
+   "max_tokens": 8192,
+   "work_id": "sha256:59c71f01cbff316a5a6f6d7531e8a1956a8fb234130aaac460597a31e4dfc118",
+   "raw_ref": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 295,
+   "ts": "2026-07-29T15:48:02.304790+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 12036,
+   "max_tokens": 8192,
+   "work_id": "sha256:048ac67deb01d43682feb88a3cad74923e5117c912827c717daec15ca7ff3a8f",
+   "raw_ref": "03538627319ff2bdc071a912cb18b782b4b663077f94bbab546718e17061fd81",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_007 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    },
+    {
+     "class": "UNCODED_OTHER",
+     "field": "",
+     "field_raw": null,
+     "message": "research source budget is exhausted",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 334,
+   "ts": "2026-07-29T15:48:12.979100+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-2b0b8d5e80f8ceaf2bdb626e",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1976,
+   "max_tokens": 8192,
+   "work_id": "sha256:a5ed385d54abc8f0c0f2b2a15fe9b62656ba70a09b134f6468af4a8e7d8bb9b5",
+   "raw_ref": "d6a0647e4eae7fa197609d079f7c5359f46e90060713d3883c3885fffd112f6d",
+   "admission_outcome": "admitted",
+   "failures": []
+  }
+ ]
+}

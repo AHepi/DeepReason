@@ -1,0 +1,1858 @@
+{
+ "schema": "run-anatomy.form-census.root.v1",
+ "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+ "run_id": "947d7fe89791bd61cc0bc3da2fb9911cd61e3845e00eaeb03e41cd05f558b19c",
+ "state": "completed",
+ "stop_reason": "budget_exhausted",
+ "cycles_reached": 8,
+ "first_ts": "2026-08-08T03:43:11.569584+00:00",
+ "attempts": 38,
+ "valid_on_arrival": 36,
+ "validity_rate": 0.9474,
+ "repair_attempts": 0,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 0,
+ "cycle_join_exact": true,
+ "attempt_objects_missing": 0,
+ "attempt_key_collisions": 0,
+ "cumulative_log_tokens": 140812,
+ "token_limit": null,
+ "per_contract": {
+  "conjecturer.turn.v6": {
+   "attempts": 11,
+   "valid": 9,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 0.8182
+  },
+  "batch-critic.v2": {
+   "attempts": 27,
+   "valid": 27,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 1.0
+  }
+ },
+ "failure_classes": {
+  "extra_forbidden": 4,
+  "SCRATCH_ALIAS_UNKNOWN": 2
+ },
+ "failure_fields": [
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links_meta",
+   "class": "extra_forbidden",
+   "count": 2
+  }
+ ],
+ "coercion": {
+  "escape_legal": 0,
+  "fabricated_handle": 0,
+  "handle_kinds": {}
+ },
+ "escape_followups": {},
+ "lossless_spelling_pointers": {},
+ "decomposition_events": [],
+ "route_seat_insufficient_capability": [],
+ "work_terminals": {
+  "completed/critic_output_admitted": 27,
+  "budget_denied/token_budget_denied": 8,
+  "completed/semantic_admission_complete": 7,
+  "completed/semantic_admission_partial": 2,
+  "rejected/conjecture_repair_step_rejected": 1,
+  "rejected/conjecture_repair_requested": 1,
+  "abandoned/context_no_additional_context": 1
+ },
+ "repair_fights": [
+  {
+   "work_id": "sha256:fab6146c5ac6b8b4f51580de74d6e4283077cf381aa1d67afd53387a83a1e895",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 1,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/links_meta"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_requested",
+   "task_kind": "conjecture"
+  },
+  {
+   "work_id": "sha256:33489ece38748c8f6ce56772434758d959fcfd2f684401151501c9731b9781f4",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 1,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/links_meta"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_step_rejected",
+   "task_kind": "repair"
+  }
+ ],
+ "content": {
+  "valid_responses_unparsed": 0,
+  "wire_shapes": {
+   "bare_json": 29,
+   "fenced_json": 6,
+   "prose_wrapped_fenced_json": 1
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 22,
+    "fenced_json": 5
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 7,
+    "fenced_json": 1,
+    "prose_wrapped_fenced_json": 1
+   }
+  },
+  "prose_wrapped_exemplars": [
+   {
+    "seq": 936,
+    "contract_id": "conjecturer.turn.v6",
+    "role": "conjecturer",
+    "shape": "prose_wrapped_fenced_json",
+    "preamble": "JSON Response\n\n```json\n"
+   }
+  ],
+  "field_kinds": {
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 51
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 49
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 24
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "string": 18
+   },
+   "batch-critic.v2/cases/*/counterexample/*/axis_kind": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_type": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/condition": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/consistency": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/deepest_test": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeats": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/diagnosis": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distance": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inconsistency": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/independence_evidence": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/interpretation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_magnitude": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_test": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quote": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refuted_if": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/relation_claim": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sensitivity": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/single_run_record": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/source": {
+    "string": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/verdict_change": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 51
+   },
+   "conjecturer.turn.v6/candidates/*/analogy": {
+    "null": 4
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/adopted_commitment_refs/*": {
+    "string": 16
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/disanalogies/*": {
+    "string": 31
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/overturn_conditions/*": {
+    "string": 28
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/shared_structure/*": {
+    "string": 39
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/source_memory_refs/*": {
+    "string": 22
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/transfer_claims/*": {
+    "string": 30
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 18
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "string": 28
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 53
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 18
+   },
+   "conjecturer.turn.v6/candidates/*/neighbours/*": {
+    "string": 68
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 39
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/requested_context_aliases/*": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 18
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 46
+   },
+   "conjecturer.turn.v6/op": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/path": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/member_refs/*": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/seed_focus": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/bears_on_refs/*": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "string": 6
+   }
+  },
+  "string_vocabularies": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 46,
+    "False": 5
+   },
+   "batch-critic.v2/cases/*/case": {
+    "<<long>>": 47,
+    "": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "<<long>>": 18
+   },
+   "batch-critic.v2/cases/*/counterexample/*/axis_kind": {
+    "qualitatively_distinct_not_semantic_distance": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim": {
+    "graduated_spectrum_with_independence_at_limit": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/claim_type": {
+    "Counting claim": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/condition": {
+    "oracle_reported_output_perturbation": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/consistency": {
+    "refutes_self_because_sensitivity_is_decorrelation_evidence": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/deepest_test": {
+    "cross_engine_SRC_004": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeats": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/diagnosis": {
+    "causal_sensitivity_to_oracle": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/distance": {
+    "\u21920": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/inconsistency": {
+    "limit_not_well_defined": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/independence_evidence": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/interpretation": {
+    "either_trivial_identity_or_undefined": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_magnitude": {
+    "\u21920": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/perturbation_test": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/problem": {
+    "flat_curve_misdiagnoses_the_proposed_structure": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/quote": {
+    "<<long>>": 4
+   },
+   "batch-critic.v2/cases/*/counterexample/*/refuted_if": {
+    "flat_curve": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/relation_claim": {
+    "contradiction_of_decorrelation": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "Same engine, frozen verifier module": 1,
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sensitivity": {
+    "nonzero_per_target": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/single_run_record": {
+    "Raw counter output: 7": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/source": {
+    "Problem statement": 1,
+    "SRC_001 claim": 1,
+    "SRC_002 claim": 1,
+    "SRC_002 countercondition": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/verdict_change": {
+    "systematic_flip": 1
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 26,
+    "SRC_002": 19,
+    "SRC_003": 6
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/adopted_commitment_refs/*": {
+    "SRC_001": 5,
+    "SRC_002": 5,
+    "SRC_004": 4,
+    "SRC_003": 2
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/disanalogies/*": {
+    "<<long>>": 31
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/overturn_conditions/*": {
+    "<<long>>": 26,
+    "The external oracle is shown to be unnecessary for verification.": 1,
+    "A non-testable claim is shown to be meaningfully verifiable.": 1
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/shared_structure/*": {
+    "<<long>>": 29,
+    "Verification is a procedure that can produce 'no' as an output.": 1,
+    "Mechanistic isolation can substitute for agent separation.": 1,
+    "Both can produce a 'verified' verdict.": 1,
+    "Both involve a causal link between the evidence and the verdict.": 1,
+    "Both involve a trade-off between independence and convenience.": 1,
+    "Both aim to break the circularity of self-verification.": 1,
+    "Both rely on a difference in training history or objective.": 1,
+    "Both can produce a confident verdict.": 1,
+    "The verdict is a function of the oracle, not the claimant.": 1,
+    "Causal independence is verified by perturbing the oracle output.": 1
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/source_memory_refs/*": {
+    "SRC_004": 5,
+    "SRC_002": 4,
+    "SRC_001": 3,
+    "SRC_003": 3,
+    "SRC_005": 3,
+    "SRC_006": 1,
+    "SCR_002": 1,
+    "SCR_001": 1,
+    "SRC_007": 1
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/transfer_claims/*": {
+    "<<long>>": 30
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "<<long>>": 18
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "<<long>>": 28
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "<<long>>": 52,
+    "The execution output in the record is shown to be hallucinated.": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "<<long>>": 18
+   },
+   "conjecturer.turn.v6/candidates/*/neighbours/*": {
+    "SRC_003": 15,
+    "SRC_002": 15,
+    "SRC_005": 14,
+    "SRC_001": 13,
+    "SRC_004": 11
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "SRC_004": 10,
+    "SRC_002": 6,
+    "SRC_003": 6,
+    "SRC_001": 5,
+    "SRC_005": 3,
+    "SRC_007": 3,
+    "SRC_008": 3,
+    "SRC_006": 3
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/requested_context_aliases/*": {
+    "SCR_002": 1,
+    "SCR_001": 1
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 18
+   },
+   "conjecturer.turn.v6/op": {
+    "remove": 1
+   },
+   "conjecturer.turn.v6/path": {
+    "/scratch_proposal/links_meta": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/member_refs/*": {
+    "NEW_001": 1,
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/cluster_suggestions/*/seed_focus": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "directed": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "NEW_001": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/bears_on_refs/*": {
+    "SRC_002": 1,
+    "SRC_004": 1,
+    "SRC_001": 1,
+    "SRC_003": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "NEW_001": 1,
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "<<long>>": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "NEW_001": 2,
+    "SCR_002": 2,
+    "NEW_002": 1,
+    "SCR_001": 1
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "insufficient": 7,
+    "n/a": 2,
+    "unable to": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/defeats": {
+    "insufficient": 1
+   },
+   "conjecturer.turn.v6/candidates/*/analogy/overturn_conditions/*": {
+    "insufficient": 2
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "insufficient": 4
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "insufficient": 3
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 45,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002 substitutes a population-level statistical requirement the problem never asked for, and by its own argument concedes the within-run evidence it dismisses is 'necessary.' The problem asks what within a single run's record distinguishes genuine verification from restatement and what to count/e"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 92,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "The verification module's training objective is shown to be insufficiently distinct from the generative module's."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 137,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002's perturbation-sensitivity criterion is vulnerable to a shared-prior correlation that the target itself flags but does not neutralize: its overturn_conditions admit an engine that anticipates the perturbation and games the ablation, yet it never says how to detect or exclude such gaming with"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 217,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "SRC_001 demands representational separation (different tokenizers/geometries) as necessary for independence, but this is stronger than the problem requires and is self-undermined by its own analogy. SRC_001 notes that a formal proof checker can verify a human's proof without sharing representation \u2014"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 217,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002 concedes that for executable claims the raw execution output is a sufficient single-run oracle witness and that deterministic oracles inject a known independence assumption substituting for population evidence. But the problem explicitly asks, 'Where a claim can be tested by counting or by e"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 217,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*/defeats",
+    "marker": "insufficient",
+    "value": "SRC_002's claim that single-run evidence is 'always insufficient' for independent verification."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 265,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/analogy/overturn_conditions/*",
+    "marker": "insufficient",
+    "value": "If a same-engine checker's verdict flips under ablation but the engine still has a systematically biased false-acceptance rate on claims it authored vs. claims it did not, causal sensitivity at the single-run level is insufficient for independence."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 265,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the problem demands a single-run diagnostic, population statistics are insufficient."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 265,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/analogy/overturn_conditions/*",
+    "marker": "insufficient",
+    "value": "If a single-engine architecture passes the ablation test but the engine's verdict on naturally occurring (non-injected) false claims is systematically more lenient than a cross-engine checker's, the single-run ablation is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 265,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the run record shows the execution preceding the claim but the engine's reasoning references the claim's content, temporal ordering is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 300,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_001 demands a causal mechanism for independent verification but reduces the entire mechanism to temporal ordering/blindness, then asserts that blindness is impossible within a single run. This leaves it with no actual mechanism by which verification could occur in the single-run case. More criti"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 313,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "SRC_002's own analogy carries an overturn condition that defeats its central claim. It states that if empirical false-claim rejection rates within a single engine are systematically more lenient than cross-engine rates, the single-run ablation is insufficient; and if shared training data makes decor"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 505,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "The isolated node contradicts SRC_003: SRC_003 argues that no single-run procedural criterion suffices for genuine verification, while the isolated node posits that a perturbation-sensitivity ablation (SCR_002) within a single run yields a causal-mechanism sufficient to distinguish genuine verificat"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 523,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The proposed relation is 'contradiction', but the content concedes that SRC_003's demand is for population statistics while the isolated node relies on a single-run ablation. Those positions are not logically incompatible: a single-run procedural criterion can be insufficient in general yet still co"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 532,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "SRC_001 names a relation (reduction/abstraction to SRC_003) and a refuter (n independent sub-checks within one record making it n>1), but it never states what the abstraction is REFUTED IF the reduction's core premise holds \u2014 it only refutes the downstream single-data-point critique. The covering pr"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 683,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "The isolated artifact inherits the covering principle from SRC_005 but extends it from a binary decorrelation criterion to a graduated spectrum: causal decorrelation is not a threshold property but admits degrees measured by the verdict's sensitivity to perturbations of increasing semantic distance "
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 699,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target proposes a strict cascade of progressively stronger causal-decorrelation tests, yet never identifies the causal mechanism that forces each level to depend on the prior: it asserts that higher-level checks 'verify' lower-level signals, but provides no mechanism explaining why a decorrelate"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 777,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "The isolated artifact 084384ac0b1e inherits the case-level falsification-capacity criterion from SRC_001 (the record must contain an operation whose result could have contradicted the claim) and sharpens it into a single-run diagnostic compatible with the population-level skepticism of SRC_003. The "
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 777,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/content",
+    "marker": "insufficient",
+    "value": "The isolated artifact 084384ac0b1e integrates the neighbourhood's fragmented verification tests into a layered protocol that depends on SRC_002's execution-trace criterion at the base layer, SRC_003's injected-false-claim controls at the statistical layer, and SRC_005's decorrelation invariant at th"
+   },
+   {
+    "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+    "seq": 817,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unable to",
+    "value": "The target's stated refutation condition only addresses the two extremes of sufficiency (a single layer alone suffices) and joint inconsistency. But this leaves an intermediate failure mode unhandled that the integration itself presupposes: the layers may be jointly consistent and no single layer in"
+   }
+  ],
+  "numeric_precision": {
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "1": 16,
+    "2": 30
+   }
+  }
+ },
+ "rows": [
+  {
+   "seq": 13,
+   "ts": "2026-08-08T03:43:11.569584+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10229,
+   "max_tokens": 16384,
+   "work_id": "sha256:a13a014199f15ff7dd608267e38b122a1377eb1bd83a6e7956c37bd06ee35622",
+   "raw_ref": "89fab72f58074c6f1283f9a244de5d1863697e29120adc42a4a6aa1083873bfc",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 45,
+   "ts": "2026-08-08T03:43:17.975525+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2301,
+   "max_tokens": 16384,
+   "work_id": "sha256:beba2ed029da2acc30c77605eb3a050d4877c1cf101a960fb2d08c2cd6dc3491",
+   "raw_ref": "1aaa5e90966f0f14664080ee06dceac4005644cd2f5d89601f79646b97814208",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 58,
+   "ts": "2026-08-08T03:43:27.557325+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2510,
+   "max_tokens": 16384,
+   "work_id": "sha256:bcce69c67631e721fb471e3688444e64818a7e634656c55ffd2d34e35190d7c5",
+   "raw_ref": "5e412fc89f33b91bc2356f5095f1a6481d9d58a8820bf7494540217084e94201",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 71,
+   "ts": "2026-08-08T03:43:43.464231+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2600,
+   "max_tokens": 16384,
+   "work_id": "sha256:f0ebbae2b2313914ea402c6196a8f0b57aaa801cc4c31cfa30ee49b9841a8bdd",
+   "raw_ref": "32bf4145fd69ba19fcc9a213dedbfc76b9a12d6484af701f87977f68ffbe5c78",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 92,
+   "ts": "2026-08-08T03:44:18.151665+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 9632,
+   "max_tokens": 16384,
+   "work_id": "sha256:6e281c633429e4461eb1b8cd6da211c2f7e8e1d7ea6982d661d4251de9b50ded",
+   "raw_ref": "e9602ffe91f9f119f9e470f0f3b3f4978937efb771f21122aee3199748f4cdec",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 124,
+   "ts": "2026-08-08T03:44:26.981238+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2519,
+   "max_tokens": 16384,
+   "work_id": "sha256:89572ea8d61e9292ac050be232feca165d35ef60c0d318723b81c4a237577bc0",
+   "raw_ref": "19b88dac131ef955b97c1a622566b6fcda0baa2c10ec0bb4e2d211cc5f51591e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 137,
+   "ts": "2026-08-08T03:44:34.231205+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2420,
+   "max_tokens": 16384,
+   "work_id": "sha256:a4cdf73b46ee9ec3cdd981dec8ed4a042708b82c991bbebbf2fa09ff85909082",
+   "raw_ref": "d3437f8ff02903d48e5011c05d7593e41b6cd5be371cb5f555a345a9e3825645",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 148,
+   "ts": "2026-08-08T03:44:39.434473+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2180,
+   "max_tokens": 16384,
+   "work_id": "sha256:a002565fb3afa603e78a18b53a7983200421e9fdb09595bd763582899ec51e82",
+   "raw_ref": "868adacb8f9edbded74b3d3e4de7c859dc6251721115403f57d31a9d4ffb2463",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 173,
+   "ts": "2026-08-08T03:45:28.941817+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10366,
+   "max_tokens": 16384,
+   "work_id": "sha256:fab6146c5ac6b8b4f51580de74d6e4283077cf381aa1d67afd53387a83a1e895",
+   "raw_ref": "35b351745146e32e5ee5268ce5a51ea22efa4c3fd20a8bf44af3cf8d075ea408",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /scratch_proposal/links_meta",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/scratch_proposal/links_meta",
+     "field_raw": "/scratch_proposal/links_meta",
+     "message": "extra field at /scratch_proposal/links_meta",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 178,
+   "ts": "2026-08-08T03:45:30.854104+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4454,
+   "max_tokens": 16384,
+   "work_id": "sha256:33489ece38748c8f6ce56772434758d959fcfd2f684401151501c9731b9781f4",
+   "raw_ref": "50646b8e8acbe2f5b9d57e6a775a48d42527f24971aebe9bd56b25e01f4a24dc",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /pointer",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/scratch_proposal/links_meta",
+     "field_raw": "/scratch_proposal/links_meta",
+     "message": "extra field at /scratch_proposal/links_meta",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 183,
+   "ts": "2026-08-08T03:45:32.388742+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4444,
+   "max_tokens": 16384,
+   "work_id": "sha256:de7407b608d8bfc5e848d7dc784ae9dfc13bfbe88faa2d12e5e5ccb5c93a6492",
+   "raw_ref": "e7543399079f7896db84eff14a62ef2ef34126033449db95d4b5d51e63737a3d",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_005 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 208,
+   "ts": "2026-08-08T03:45:40.234163+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1763,
+   "max_tokens": 16384,
+   "work_id": "sha256:c33796a82961367b0f30eda9a22c7c603cca42be12e4d2f1476e6a40b2cc7e7e",
+   "raw_ref": "bba5db888be7d3eeffc37fa1862c904e54aca529cc1f35d4118d7a9fdff374fd",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 217,
+   "ts": "2026-08-08T03:45:49.930853+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2531,
+   "max_tokens": 16384,
+   "work_id": "sha256:8330c3e3dd2f899ca5a03660aeb2116a307865c3cd6b7f819338e0ff5c5809fb",
+   "raw_ref": "12ab53af497096d8e1db7dc84d78ce160c929ada2b17e625a04ad06fbb8c37a2",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 232,
+   "ts": "2026-08-08T03:45:57.762239+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2326,
+   "max_tokens": 16384,
+   "work_id": "sha256:280fea66ecb9fe9e9549be320de030610f094e5dbb6f79b3c1981e7b02296f40",
+   "raw_ref": "3dde8e609aebe3d246ff04857d3e088de14c07e976bd0f7e3c17bdffd003ba55",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 265,
+   "ts": "2026-08-08T03:46:40.324225+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 9795,
+   "max_tokens": 16384,
+   "work_id": "sha256:bfb0af207b20a1f4a8f12d2c0f0b7c9f22f16b550781dd61746ef6f24c0b9168",
+   "raw_ref": "fec239bbab959d8d5fbbd06892fe942d8d7046820819e5d03fe67358b0c854b4",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 300,
+   "ts": "2026-08-08T03:46:51.202917+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2637,
+   "max_tokens": 16384,
+   "work_id": "sha256:1e0e48852100b29c91015b0b06b79c0f4458575c08938611900b5e79a07b70fe",
+   "raw_ref": "34dc3787e4b1a0583151e54d3332fd6d2627297b893fffe2b00a61681197845e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 313,
+   "ts": "2026-08-08T03:47:01.136348+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2788,
+   "max_tokens": 16384,
+   "work_id": "sha256:df63ef56ac55b1ac74a5276376bb41cd30b7ecdc1dc9791c57d108a712df06be",
+   "raw_ref": "1f3663a982b4e8a8b1f7dc0eb5bdc29cd020cf044e6ac17e70d86ac5835cb22b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 330,
+   "ts": "2026-08-08T03:47:07.207835+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1546,
+   "max_tokens": 16384,
+   "work_id": "sha256:a815ac162b1ad57234d8135f9e788fcd14dfa87f45b7d3ad0e1907da8c64985e",
+   "raw_ref": "b281a39c49801bccc05613005972304081d429b000dbcf4b037736d9926bcc23",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 505,
+   "ts": "2026-08-08T03:47:27.306664+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8159,
+   "max_tokens": 16384,
+   "work_id": "sha256:fff31c4c65f5c2dda928e03e9d51fedeb9e3901a9538f0e15054c8b42b0fb518",
+   "raw_ref": "7ab5db20e71e381b9d540d635d01cb195caa33735ce8fa52d8f04fc2b9c18d3b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 523,
+   "ts": "2026-08-08T03:47:34.629212+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1195,
+   "max_tokens": 16384,
+   "work_id": "sha256:61d3af223e946b6a6fc6e4a498f79ad703315e74ff9382a9bd05799f8eaea7cb",
+   "raw_ref": "f40426f8acb0d34190e745e9d0db2c5868f596acad6235a15425ae9334e5349e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 532,
+   "ts": "2026-08-08T03:47:40.671112+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1320,
+   "max_tokens": 16384,
+   "work_id": "sha256:718bc32d5aa72fb9b3206c9de95ddf29a3c4b3cb004cabb92f43862b53fc7c05",
+   "raw_ref": "3ae73e387bc1a57db97a8d40be49b9dc5324362f715f09ac7c55f63b444b7196",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 543,
+   "ts": "2026-08-08T03:47:47.094604+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1501,
+   "max_tokens": 16384,
+   "work_id": "sha256:7da765e8e53f856a417f49da25d1555cf082d7d100d3c7332ba1660448ee7740",
+   "raw_ref": "7340ec08e8d1f1cbbec2392b283dc6702a2221da569176d47a87a9e6720d4b5f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 590,
+   "ts": "2026-08-08T03:48:03.010990+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8069,
+   "max_tokens": 16384,
+   "work_id": "sha256:14a15b12267a4cd1ac95e88995ef6aa16541502e5c0df03be62f878cb86ccc1a",
+   "raw_ref": "da08b8f70a69baf624f96be261c08ccb4feb6f7e80cffa4795fc753cd9f7ae0d",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 608,
+   "ts": "2026-08-08T03:48:24.035478+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1830,
+   "max_tokens": 16384,
+   "work_id": "sha256:078567380b47787eba6b69478c08839c3896f0b332091592b0012f8a3cb1ec1d",
+   "raw_ref": "3a8d07612ea706767571577ff96c18d312a394fec0538df7234fde90be3b4a51",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 623,
+   "ts": "2026-08-08T03:48:32.259564+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1489,
+   "max_tokens": 16384,
+   "work_id": "sha256:f537df32e3f1c22224d749941622a8ddf3f8159d0b1e0d648f69376e20fd4d6b",
+   "raw_ref": "7aa63079b71c935997c56c47c90e0f78b50867a1f6b31c9de8f2dae4829b03c3",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 636,
+   "ts": "2026-08-08T03:48:37.017274+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1062,
+   "max_tokens": 16384,
+   "work_id": "sha256:8837c6dd06e8631e016aa49b388aca6b1909030406137974401a36b8d06cb58e",
+   "raw_ref": "1ab24043bc96054f5dafa604a6285cd4520837b59e28914fa6a81c0dd02b6858",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 683,
+   "ts": "2026-08-08T03:48:57.734660+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8486,
+   "max_tokens": 16384,
+   "work_id": "sha256:573ecf1d7aeaf86adfda34b409f94c8e2be2d36ac83bffa7be3c2affbbeed336",
+   "raw_ref": "3797e628737e508ac463a1f5ce2b869c9f634a1597987e4901b94af837d1e1e3",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 699,
+   "ts": "2026-08-08T03:49:07.071239+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1601,
+   "max_tokens": 16384,
+   "work_id": "sha256:b33feced9b16faa6c40345c343f8b171044479edc0715e1e4f4214b67f1aaf2e",
+   "raw_ref": "8d84d9417d9a1badf740276a249523cb74abc7676f44e9f245f5a89416f242de",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 712,
+   "ts": "2026-08-08T03:49:18.550410+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1955,
+   "max_tokens": 16384,
+   "work_id": "sha256:cf5675eb608f7b817d4c3a42cc2726397dd1b789761f77ad75a33bbb9d2a9ba0",
+   "raw_ref": "17c8ee02ba8bba8a514bdc0eb913af5233ac0ac1fcc90e08dde118aa145c3341",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 725,
+   "ts": "2026-08-08T03:49:23.131982+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1155,
+   "max_tokens": 16384,
+   "work_id": "sha256:b6c003bc56875a1061030bb19086d0a835cba0baea79ac9eda3f40a258f389c5",
+   "raw_ref": "eccc89e9a7871d5960128dd6e790694eee9ce3a56f2803ad1cee16a3a70f540f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 777,
+   "ts": "2026-08-08T03:49:42.636351+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8573,
+   "max_tokens": 16384,
+   "work_id": "sha256:8caec98e325b53f96bca902d916bbeb4fa915a0c5945a5f4cd4d4281b37ba433",
+   "raw_ref": "5110ed803483e660ff2397def27c7153fd3db85297f0f79222122e689970aaff",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 795,
+   "ts": "2026-08-08T03:49:50.841637+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1592,
+   "max_tokens": 16384,
+   "work_id": "sha256:81a435145ddd8a326e0b629c602c60b5b29064c2dcf9ce64dde1adaa551202de",
+   "raw_ref": "9e87837b2f63c901cf33d6d348834043ad8d8693754d203283fb963ab6307546",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 808,
+   "ts": "2026-08-08T03:49:59.057227+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1402,
+   "max_tokens": 16384,
+   "work_id": "sha256:434faf2902b916cdcee21aac57189872b09abf3d75766633a910f7466654f532",
+   "raw_ref": "2d2b59e4ee797c85d89333146f0eab202b3ae83a41daf8bf38a3c2a8e387bd8a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 817,
+   "ts": "2026-08-08T03:50:09.214268+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 3,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2125,
+   "max_tokens": 16384,
+   "work_id": "sha256:340816ca17590aa83bdc805be6eac89101c560eab86d71aeb718621ad6b64d1f",
+   "raw_ref": "fa8f0d99f0f48ec1d5e19dda345e8fa005aabe6bcb913e09f9ffeff1ab9d501e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 936,
+   "ts": "2026-08-08T03:55:32.867515+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 8,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8072,
+   "max_tokens": 16384,
+   "work_id": "sha256:83714b5a56b29da071022be37073a8aa99d4e9f3a43ee9fe78056a11c5c7facd",
+   "raw_ref": "4658e28ddfe6b487d7c05f2a6af72d7ab291b74060da1a7a954271994157ffa7",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_005 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 952,
+   "ts": "2026-08-08T03:55:46.036935+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 8,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1842,
+   "max_tokens": 16384,
+   "work_id": "sha256:b97d719dd1ce63f05986be7f1cf203e74ee0957a3cca459cdcd9280df934a4f8",
+   "raw_ref": "ea9dd11732d6dfa7fa7741ae18769dcc067591596a2b19bde5156edd998ef2c1",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 969,
+   "ts": "2026-08-08T03:55:52.117121+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 8,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1156,
+   "max_tokens": 16384,
+   "work_id": "sha256:686a050c812b03932468f2ab977bdfe1bbc60fc304b323037ece80cd22ad6fd8",
+   "raw_ref": "18763b3c5178b88b2416b5633fc0dab184275e58e4c9302d9f6ac5c9a7ae9fbf",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 978,
+   "ts": "2026-08-08T03:55:58.060948+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "provider-profile-a3e4b48c4e5354407606d9ca",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 8,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1187,
+   "max_tokens": 16384,
+   "work_id": "sha256:41e217ed3046b732cdd50162e561777b7933d701a2db0d4b9fab3a6fac28b4e3",
+   "raw_ref": "3a0333d5945f77a34d44866f3bdff3da7be7673978fba213c525a9fe0e7cc1aa",
+   "admission_outcome": "admitted",
+   "failures": []
+  }
+ ]
+}

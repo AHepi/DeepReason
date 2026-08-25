@@ -1,0 +1,1641 @@
+{
+ "schema": "run-anatomy.form-census.root.v1",
+ "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+ "run_id": "5363cd2291f5be1f218ac2a77f1f091da1bba4b0885c7a683263b808567d0eeb",
+ "state": "completed",
+ "stop_reason": "budget_exhausted",
+ "cycles_reached": 6,
+ "first_ts": "2026-07-27T21:24:26.205172+00:00",
+ "attempts": 26,
+ "valid_on_arrival": 22,
+ "validity_rate": 0.8462,
+ "repair_attempts": 1,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 0,
+ "cycle_join_exact": true,
+ "attempt_objects_missing": 0,
+ "attempt_key_collisions": 0,
+ "cumulative_log_tokens": 330396,
+ "token_limit": 200000,
+ "per_contract": {
+  "conjecturer.turn.v6": {
+   "attempts": 4,
+   "valid": 4,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 1.0
+  },
+  "batch-critic.v2": {
+   "attempts": 13,
+   "valid": 11,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 0.8462
+  },
+  "bridge.ledger.v3": {
+   "attempts": 2,
+   "valid": 0,
+   "repair_attempts": 1,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "validity_rate": 0.0
+  },
+  "bridge.ledger-batch.v1": {
+   "attempts": 7,
+   "valid": 7,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "validity_rate": 1.0
+  }
+ },
+ "failure_classes": {
+  "TRUNCATED_MID_JSON": 3,
+  "SCRATCH_ALIAS_UNKNOWN": 3,
+  "WIRE_NO_COMPLETE_JSON": 2,
+  "value_error": 2,
+  "WIRE_TRAILING_CONTENT": 1
+ },
+ "failure_fields": [
+  {
+   "contract_id": "bridge.ledger.v3",
+   "field": "/entries/*",
+   "class": "value_error",
+   "count": 2
+  }
+ ],
+ "coercion": {
+  "escape_legal": 0,
+  "fabricated_handle": 0,
+  "handle_kinds": {}
+ },
+ "escape_followups": {},
+ "lossless_spelling_pointers": {},
+ "decomposition_events": [
+  {
+   "source_contract_id": "bridge.ledger.v3",
+   "atomic_contract_id": "bridge.ledger-batch.v1",
+   "trigger": "schema_exhausted",
+   "role": "summarizer",
+   "seat": 0,
+   "children": 7
+  }
+ ],
+ "route_seat_insufficient_capability": [],
+ "work_terminals": {
+  "budget_denied/token_budget_denied": 14,
+  "completed/critic_output_admitted": 11,
+  "completed/bridge_output_admitted": 7,
+  "completed/semantic_admission_partial": 3,
+  "rejected/critic_repair_requested": 2,
+  "schema_exhausted/bridge_schema_exhausted": 1,
+  "completed/semantic_admission_complete": 1,
+  "rejected/bridge_repair_requested": 1
+ },
+ "repair_fights": [
+  {
+   "work_id": "sha256:88bfae61f2feadfbbe5de5da7053adb718b9cff0aa1b222ea03fa793a04f38c6",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": 1,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    []
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  },
+  {
+   "work_id": "sha256:8a18533ba6e9af8eba30c94b3a941411e321a8f49f559fccafeb213cf6e19ffa",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": 1,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    []
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  },
+  {
+   "work_id": "sha256:05da9d70a6d1dd6ff0bcca88370b1968a5582d28859373fa13aacc30b5659454",
+   "contract_id": "bridge.ledger.v3",
+   "role": "summarizer",
+   "seat": 0,
+   "cycle": 7,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    []
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "bridge_repair_requested",
+   "task_kind": "bridge_ledger"
+  },
+  {
+   "work_id": "sha256:d2f975002ab04bc6d6ab7cbc74725199bb13222206c812c9eb6a7b8ba46fb6dd",
+   "contract_id": "bridge.ledger.v3",
+   "role": "summarizer",
+   "seat": 0,
+   "cycle": 7,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/entries/*",
+     "/entries/*"
+    ]
+   ],
+   "came_back_at": [
+    "/entries/7"
+   ],
+   "terminal_status": "schema_exhausted",
+   "terminal_reason": "bridge_schema_exhausted",
+   "task_kind": "repair"
+  }
+ ],
+ "content": {
+  "valid_responses_unparsed": 0,
+  "wire_shapes": {
+   "bare_json": 19,
+   "fenced_json": 3
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 11
+   },
+   "bridge.ledger-batch.v1": {
+    "bare_json": 4,
+    "fenced_json": 3
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 4
+   }
+  },
+  "prose_wrapped_exemplars": [],
+  "field_kinds": {
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 19
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 19
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 8
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "string": 3
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 19
+   },
+   "bridge.ledger-batch.v1/entries/*/claim": {
+    "string": 35
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "string": 35
+   },
+   "bridge.ledger-batch.v1/entries/*/conflict_handles/*": {
+    "string": 8
+   },
+   "bridge.ledger-batch.v1/entries/*/entry_key": {
+    "string": 35
+   },
+   "bridge.ledger-batch.v1/entries/*/formal_artifact_handles/*": {
+    "string": 24
+   },
+   "bridge.ledger-batch.v1/entries/*/premise_keys/*": {
+    "string": 6
+   },
+   "bridge.ledger-batch.v1/entries/*/qualification": {
+    "string": 4
+   },
+   "bridge.ledger-batch.v1/entries/*/scratch_handles/*": {
+    "string": 3
+   },
+   "bridge.ledger-batch.v1/entries/*/source_conflict_keys/*": {
+    "string": 6
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflict_key": {
+    "string": 6
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflicting_handles/*": {
+    "string": 24
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/description": {
+    "string": 6
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/reason": {
+    "string": 4
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/related_entry_keys/*": {
+    "string": 14
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/requirement": {
+    "string": 9
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/scratch_handles/*": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/abstention": {
+    "null": 3
+   },
+   "conjecturer.turn.v6/candidates/*/analogy": {
+    "null": 12
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 24
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 72
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 24
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 39
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 12
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 24
+   },
+   "conjecturer.turn.v6/context_request": {
+    "null": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/because": {
+    "null": 2,
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "null": 2,
+    "string": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "null": 2,
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "null": 2,
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "string": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "null": 2,
+    "string": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "string": 2,
+    "null": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "string": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "string": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "string": 7
+   }
+  },
+  "string_vocabularies": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 19
+   },
+   "batch-critic.v2/cases/*/case": {
+    "<<long>>": 19
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "<<long>>": 3
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 10,
+    "SRC_002": 6,
+    "SRC_003": 2,
+    "SRC_004": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/claim": {
+    "<<long>>": 35
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "surviving_conjecture": 24,
+    "unknown": 8,
+    "conflict": 3
+   },
+   "bridge.ledger-batch.v1/entries/*/conflict_handles/*": {
+    "ART_1": 2,
+    "ART_2": 2,
+    "ART_3": 2,
+    "ART_4": 2
+   },
+   "bridge.ledger-batch.v1/entries/*/entry_key": {
+    "CLM_1": 7,
+    "CLM_2": 6,
+    "CLM_3": 6,
+    "CLM_4": 6,
+    "CLM_5": 6,
+    "CLM_6": 3,
+    "CLM_7": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/formal_artifact_handles/*": {
+    "ART_1": 6,
+    "ART_2": 6,
+    "ART_3": 6,
+    "ART_4": 6
+   },
+   "bridge.ledger-batch.v1/entries/*/premise_keys/*": {
+    "CLM_5": 2,
+    "CLM_1": 1,
+    "CLM_2": 1,
+    "CLM_3": 1,
+    "CLM_4": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/qualification": {
+    "<<long>>": 4
+   },
+   "bridge.ledger-batch.v1/entries/*/scratch_handles/*": {
+    "SCR_1": 1,
+    "SCR_2": 1,
+    "SCR_3": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/source_conflict_keys/*": {
+    "CNF_1": 6
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflict_key": {
+    "CNF_1": 6
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/conflicting_handles/*": {
+    "ART_1": 6,
+    "ART_2": 6,
+    "ART_3": 6,
+    "ART_4": 6
+   },
+   "bridge.ledger-batch.v1/source_conflicts/*/description": {
+    "<<long>>": 6
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/reason": {
+    "<<long>>": 4
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/related_entry_keys/*": {
+    "CLM_5": 4,
+    "CLM_6": 3,
+    "CLM_1": 3,
+    "CLM_7": 1,
+    "CLM_2": 1,
+    "CLM_3": 1,
+    "CLM_4": 1
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/requirement": {
+    "<<long>>": 9
+   },
+   "bridge.ledger-batch.v1/uncovered_requirements/*/scratch_handles/*": {
+    "SCR_1": 2,
+    "SCR_2": 2,
+    "SCR_3": 2
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "<<long>>": 24
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "<<long>>": 69,
+    "Consensus unavailability indefinitely blocks reclamation.": 1,
+    "Generation counter overflow or exhaustion.": 1,
+    "A content-addressed collision may cause a false linkage": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "<<long>>": 24
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "SRC_005": 8,
+    "SRC_007": 6,
+    "SRC_001": 5,
+    "SRC_006": 5,
+    "SRC_008": 5,
+    "SRC_002": 4,
+    "SRC_003": 3,
+    "SRC_004": 3
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 12
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/because": {
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/direction": {
+    "symmetric": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "NEW_001": 2,
+    "NEW_003": 2,
+    "NEW_004": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/holds_when": {
+    "Storage is content-addressed, persistent, and globally reachable": 1,
+    "The workspace is strictly deterministic and per-problem scoped.": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "<<long>>": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "NEW_002": 2,
+    "SCR_007": 1,
+    "SCR_001": 1,
+    "SCR_002": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/weakens_when": {
+    "Storage is strictly bounded, mutable, or process-local": 1,
+    "<<long>>": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "<<long>>": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "<<long>>": 2
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "<<long>>": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "NEW_001": 2,
+    "NEW_002": 2,
+    "NEW_003": 2,
+    "NEW_004": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "<<long>>": 4
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "NEW_001": 2,
+    "SCR_003": 2,
+    "NEW_003": 2,
+    "NEW_002": 1
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "no evidence": 1,
+    "insufficient": 1,
+    "unknown": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/claim": {
+    "unknown": 2,
+    "cannot be determined": 4,
+    "no evidence": 1
+   },
+   "bridge.ledger-batch.v1/entries/*/claim_class": {
+    "unknown": 8
+   },
+   "bridge.ledger-batch.v1/entries/*/qualification": {
+    "no evidence": 2
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "no evidence": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "no evidence": 4
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 45,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "The protocol guarantees safety by consulting the durable journal tail, but the problem specifies a crash while holding the workspace with no terminal record. If the process materialized completed evidence in the workspace and crashed just before the EvidenceCommitted append was durably synced, the j"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 176,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "no evidence",
+    "value": "A generation registry durably records the count and identity of completed evidence nodes per generation. When a process crashes without a terminal record, its workspace cannot be reclaimed until a consensus lease among surviving witnesses issues a proof-of-absence asserting that no evidence nodes fr"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 176,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/claim",
+    "marker": "no evidence",
+    "value": "The safest protocol is a conservative two-phase commitment where a workspace is never reclaimed after a crash unless a pre-declared 'prepared-to-terminate' record exists, allowing an external auditor to verify that no evidence was completed before the crash."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 176,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "no evidence",
+    "value": "Before a process begins its terminal phase, it must durably write a 'prepared' record containing the Merkle root of the workspace contents. If a crash occurs without a subsequent 'committed' terminal record, reclamation protocol mandates an external audit: recompute the workspace from the prepared r"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 176,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "no evidence",
+    "value": "Because the crashed process cannot testify to its own workspace contents, the protocol treats all such workspaces as potentially adversarial. Reclamation proceeds only after BFT consensus among a quorum of storage nodes confirms that no evidence-carrying object exists in the workspace region. The du"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 219,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target conflates reproducibility with the prevention of displacement. Recomputing a deterministic workspace after reclamation can regenerate identical evidence, but it does not prevent the original completed evidence from being silently displaced when the workspace is reclaimed; detectability af"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 219,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unknown",
+    "value": "The protocol mandates deterministic replay from the last barrier to reconstitute the workspace before deciding whether evidence was completed, but this replay step is a destructive write operation on the workspace itself. If the crashed process had in fact completed the evidence but merely failed to"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 265,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "no evidence",
+    "value": "Before computation, the process appends an intent record (problem_id, input_hash, lease_nonce) to a strongly durable, single-writer append-only log. The workspace itself is treated as weakly durable scratch. Upon completion, an immutable evidence artifact is written to a separate strongly durable st"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 542,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 542,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "unknown",
+    "value": "The safest reclamation protocol guaranteed never to silently displace completed evidence, and the exact durable records it must durably record, are unknown based on the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 547,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 552,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 552,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "cannot be determined",
+    "value": "The safest reclamation protocol guaranteed never to silently displace completed evidence, and the exact durable record it must produce, cannot be determined from the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 557,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 557,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "cannot be determined",
+    "value": "Which reclamation protocol is safest and guaranteed never to silently displace completed evidence cannot be determined from the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 557,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 557,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "cannot be determined",
+    "value": "What exactly the safest protocol must durably record cannot be determined from the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 562,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "no evidence",
+    "value": "The safest protocol is a conservative two-phase commitment where a workspace is never reclaimed after a crash unless a pre-declared 'prepared-to-terminate' record exists, allowing an external auditor to verify that no evidence was completed before the crash."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 562,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/qualification",
+    "marker": "no evidence",
+    "value": "Mechanism: durably write a 'prepared' record containing the Merkle root of workspace contents before terminal phase. If crash occurs without 'committed' record, recompute workspace from prepared root, verify no evidence nodes, then issue a signed attestation of emptiness. Durably recorded: prepared "
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 562,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/qualification",
+    "marker": "no evidence",
+    "value": "Mechanism: treat workspace as potentially adversarial; reclamation proceeds only after BFT consensus among a quorum of storage nodes confirms no evidence-carrying object exists. Durably recorded: BFT-signed emptiness certificate."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 562,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 562,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "unknown",
+    "value": "The safest reclamation protocol guaranteed never to silently displace completed evidence, and the exact durable record it must maintain, are unknown within the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 567,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 567,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim",
+    "marker": "cannot be determined",
+    "value": "The safest reclamation protocol guaranteed never to silently displace completed evidence, and the exact durable record required by that protocol, cannot be determined from the bounded record."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+    "seq": 572,
+    "contract_id": "bridge.ledger-batch.v1",
+    "field": "/entries/*/claim_class",
+    "marker": "unknown",
+    "value": "unknown"
+   }
+  ],
+  "numeric_precision": {
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "1": 10,
+    "2": 14
+   }
+  }
+ },
+ "rows": [
+  {
+   "seq": 11,
+   "ts": "2026-07-27T21:24:26.205172+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 13558,
+   "max_tokens": 16384,
+   "work_id": "sha256:fba6a051b7db7409810c5f4b010037384a02c5f274d5a3dd63ae951eea21fc10",
+   "raw_ref": "d9bf168bc92c984891245b07ee2403584a1dd5eb2aad80674057d5f92289e5df",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 45,
+   "ts": "2026-07-27T21:26:24.893779+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 13613,
+   "max_tokens": 16384,
+   "work_id": "sha256:c2bb0ce34d8b3226c3475f0c0a856ad97dc8a1a416886e817b6135ce6635fe43",
+   "raw_ref": "cbb091501eddac2bae8b931fd8ba653ad6bed08725076b9cb2204aab8b8d1ab6",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 58,
+   "ts": "2026-07-27T21:31:24.199091+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 17990,
+   "max_tokens": 16384,
+   "work_id": "sha256:88bfae61f2feadfbbe5de5da7053adb718b9cff0aa1b222ea03fa793a04f38c6",
+   "raw_ref": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "TRUNCATED_MID_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "your output hit the length limit and was CUT OFF mid-JSON. Respond MORE COMPACTLY: fewer/shorter items, terse strings, same schema. Original error: no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "WIRE_NO_COMPLETE_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    }
+   ]
+  },
+  {
+   "seq": 63,
+   "ts": "2026-07-27T21:31:33.919158+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1049,
+   "max_tokens": 16384,
+   "work_id": "sha256:9a1ba06677ebc5a03ae7cfff75b315e678acc8ffad63aefa08fe3635684f1eb2",
+   "raw_ref": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 72,
+   "ts": "2026-07-27T21:33:02.340505+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 9038,
+   "max_tokens": 16384,
+   "work_id": "sha256:73a00536b0c62cf27e90f6bb5e1582ff211d76e5acf3974ea2cf77d960e7d370",
+   "raw_ref": "8f56a293a16510289a25814be85e31c3d766db30b32db3bb3c9498624b780b55",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 93,
+   "ts": "2026-07-27T21:34:45.181657+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 15566,
+   "max_tokens": 16384,
+   "work_id": "sha256:89cda561caa806515085d2ca10ce68dab4d6734b01e547badcc97b9607b840f0",
+   "raw_ref": "79630b458c347efbba6d99585fa8083c3066743e914e0a0f99eb8f0dba3d3706",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_004 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 123,
+   "ts": "2026-07-27T21:35:47.966346+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 6951,
+   "max_tokens": 16384,
+   "work_id": "sha256:02cb0677261817a659dfd8582744c18e0600dc906754518e79a4514cd24f04fe",
+   "raw_ref": "a9d93b5fe082bf51bcc4435e05bed75c26ed3db59607e17c21ab192586b4350f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 132,
+   "ts": "2026-07-27T21:40:28.255615+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 18220,
+   "max_tokens": 16384,
+   "work_id": "sha256:73831a0452912b2a3ad00681b35ffc889ea25319176091ad92f446338f9b3ee7",
+   "raw_ref": "2e494033746f320ea01cbab9675e155290d64ab440124b07b10bdd7b6664624e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 153,
+   "ts": "2026-07-27T21:41:01.211526+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4593,
+   "max_tokens": 16384,
+   "work_id": "sha256:42862031aeb27b68938c7d1ab73cfed9ffbb194eaac7f66d787252d832cc7992",
+   "raw_ref": "acb6a603a93e3f04593101d50e9fbaac2b143ef62e630b4a702b91999eb67bd7",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 176,
+   "ts": "2026-07-27T21:42:48.912066+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 15627,
+   "max_tokens": 16384,
+   "work_id": "sha256:645dfd9efae7fe08328bdcbe4ab0499ca614d72d8044fc3a09a542f4e4093004",
+   "raw_ref": "5d0b8965fcbf01deb42692f2d2ebc3e96a315f7761bdc53bc936450e6141e081",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_004 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 206,
+   "ts": "2026-07-27T21:44:04.165973+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10279,
+   "max_tokens": 16384,
+   "work_id": "sha256:4c0702dcf3ef35e6044805bbc2264d5327839f64654caa10c8d5fb5f3dd60554",
+   "raw_ref": "7463ae41ec2baabe3ad03ee15f90d174665c36fe7c7e22716f35498ea3e9986d",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 219,
+   "ts": "2026-07-27T21:47:25.969976+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 11866,
+   "max_tokens": 16384,
+   "work_id": "sha256:729812bbf2d725d67497bc84f7cdf0401f565e6a1cf6e5ccd707a465d3ad0db2",
+   "raw_ref": "08e1a6b87053e68117672f8cf48fe83f01359707be291ebe057ecd385aa5019c",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 236,
+   "ts": "2026-07-27T21:47:59.367453+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3942,
+   "max_tokens": 16384,
+   "work_id": "sha256:ad8d7eb3e1c4178a3ebcd6d1187316428d0274a4a3e6e006aee38c1a9cdfe32f",
+   "raw_ref": "5bb9bbe48effa1a7287b2f42926e111f5db6f9a6d2cee3c91e809ec212f5428c",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 265,
+   "ts": "2026-07-27T21:51:42.308340+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 13991,
+   "max_tokens": 16384,
+   "work_id": "sha256:fce03ec7d86cfeb120aa1660349821615cc5171c6fadf4d82f69ca9cd49e7caa",
+   "raw_ref": "d40ece41e77000dc87dab6a83e2d7c3754f7563c8de286b633ee79c1c12e6aa2",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_004 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 295,
+   "ts": "2026-07-27T21:55:27.870997+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 11049,
+   "max_tokens": 16384,
+   "work_id": "sha256:1d5108ff4026ce216fb913d5a20d9815a590c9ce5ab352eaad067a266a3b471e",
+   "raw_ref": "a297e2f70d48f316162d9596563dfed2ce26c64143b41421719ae9e9ca727c57",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 308,
+   "ts": "2026-07-27T21:56:16.179509+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 6301,
+   "max_tokens": 16384,
+   "work_id": "sha256:248fba5f68148b4152543822618693e6930a9892c0d28bf9506119a5d7e4d979",
+   "raw_ref": "44b219764c12874266084caa3696324daa02d650be9077d491b5012f25df8855",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 317,
+   "ts": "2026-07-27T22:01:19.373130+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 18367,
+   "max_tokens": 16384,
+   "work_id": "sha256:8a18533ba6e9af8eba30c94b3a941411e321a8f49f559fccafeb213cf6e19ffa",
+   "raw_ref": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "TRUNCATED_MID_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "your output hit the length limit and was CUT OFF mid-JSON. Respond MORE COMPACTLY: fewer/shorter items, terse strings, same schema. Original error: no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "WIRE_NO_COMPLETE_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "no complete top-level JSON value at offset 0",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    }
+   ]
+  },
+  {
+   "seq": 531,
+   "ts": "2026-07-27T22:11:48.041616+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger.v3",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 25628,
+   "max_tokens": 16384,
+   "work_id": "sha256:05da9d70a6d1dd6ff0bcca88370b1968a5582d28859373fa13aacc30b5659454",
+   "raw_ref": "a5c69ddcc60c54c8a82965f976dc6f2721ee7c65e60ec5206320f85ebb172ebd",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "TRUNCATED_MID_JSON",
+     "field": "",
+     "field_raw": "",
+     "message": "your output hit the length limit and was CUT OFF mid-JSON. Respond MORE COMPACTLY: fewer/shorter items, terse strings, same schema. Original error: multiple top-level JSON values or trailing content",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "WIRE_TRAILING_CONTENT",
+     "field": "",
+     "field_raw": "",
+     "message": "multiple top-level JSON values or trailing content",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    }
+   ]
+  },
+  {
+   "seq": 536,
+   "ts": "2026-07-27T22:16:18.019399+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger.v3",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/entries/7",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 12188,
+   "max_tokens": 16384,
+   "work_id": "sha256:d2f975002ab04bc6d6ab7cbc74725199bb13222206c812c9eb6a7b8ba46fb6dd",
+   "raw_ref": "8073a7c8f600098fc0b2f065c75b2debc347ffc4a3dd1c09f73c9da6141190da",
+   "admission_outcome": "schema_exhausted",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/entries/*",
+     "field_raw": "/entries/7",
+     "message": "Value error, surviving_conjecture requires formal_artifact_handles but no external evidence",
+     "allowed": "type='object'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "value_error",
+     "field": "/entries/*",
+     "field_raw": "/entries/7",
+     "message": "Value error, surviving_conjecture requires formal_artifact_handles but no external evidence",
+     "allowed": "operation=replace; type='object'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 542,
+   "ts": "2026-07-27T22:20:18.185838+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 13363,
+   "max_tokens": 16384,
+   "work_id": "sha256:2226ad29d6758edd1c5b4ff80d7c136ea6c53ec66cffb169e0dbcd1d2f10ae31",
+   "raw_ref": "25fd03ce88d3c5768f0d3b7fcbbbf6314b327f5fac0c61ee380eaa4fe444d361",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 547,
+   "ts": "2026-07-27T22:22:13.515192+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 15895,
+   "max_tokens": 16384,
+   "work_id": "sha256:79b59370cff64de88435452fee5f11cbbc4c7460627baa1ed73983d35355abe7",
+   "raw_ref": "d326afd8acee4b605dd8dd7a8c30b516ba58baef35a649bfb74decb352812024",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 552,
+   "ts": "2026-07-27T22:23:55.020704+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 14785,
+   "max_tokens": 16384,
+   "work_id": "sha256:a87edcd712ad06a73d89b5d2bddabf02f632125b2e63fcbf228bb247809764f8",
+   "raw_ref": "6d27e057955ef58a3ed001c62c9fda8221c3b81f48af070bf8b80937679aa23f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 557,
+   "ts": "2026-07-27T22:25:17.385958+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 13800,
+   "max_tokens": 16384,
+   "work_id": "sha256:ae348bf8854ac64c094fef3f74699745e6979879e709de827ba26e32ba55e3dd",
+   "raw_ref": "8022ada9c07314f83fe74cca6dcc55ae61c18efe132b6bec045000b688a5ee95",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 562,
+   "ts": "2026-07-27T22:29:10.213310+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 15018,
+   "max_tokens": 16384,
+   "work_id": "sha256:e59d482efda44e5b75a80cb4714e2c2d3d133f82ffba3acb71ad532310fa96be",
+   "raw_ref": "432982a2f16fba68d0517701b01dd8ff4e036af74168885f6c1b8706dd496d96",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 567,
+   "ts": "2026-07-27T22:30:50.685186+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 15009,
+   "max_tokens": 16384,
+   "work_id": "sha256:95ef206128b7a9ae159161eac6e8b5b08d34fc8d7bd8bb46f428ece5d0be3bfa",
+   "raw_ref": "1f17bc1fc3f428a867060acfeee02bc1c52647a439d6dee728177a229a8bcb6a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 572,
+   "ts": "2026-07-27T22:34:30.942318+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "kimi-k2.6",
+   "seat": 0,
+   "endpoint_id": "provider-profile-3cb92ff4986f4786fc8ad2f6",
+   "contract_id": "bridge.ledger-batch.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 7,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 2,
+   "transport_diagnostics": [
+    "TimeoutError:The read operation timed out"
+   ],
+   "tokens": 12710,
+   "max_tokens": 16384,
+   "work_id": "sha256:fc72ff8770cb3210d44ab40fb4195684d1c7584a58ca0990a79c7aee912a7923",
+   "raw_ref": "a50a9129036c7ebca514987a637f330cfeeb285af966b54384bc509844abac23",
+   "admission_outcome": "admitted",
+   "failures": []
+  }
+ ]
+}

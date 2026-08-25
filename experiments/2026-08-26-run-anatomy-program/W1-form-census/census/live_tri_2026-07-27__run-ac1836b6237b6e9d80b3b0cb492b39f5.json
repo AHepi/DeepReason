@@ -1,0 +1,1847 @@
+{
+ "schema": "run-anatomy.form-census.root.v1",
+ "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+ "run_id": "49e9c1354452aef60eec59fbc81cd9854c70db40618fb93c4417ce2b66703175",
+ "state": "completed",
+ "stop_reason": "budget_exhausted",
+ "cycles_reached": 12,
+ "first_ts": "2026-07-27T23:35:36.682055+00:00",
+ "attempts": 36,
+ "valid_on_arrival": 34,
+ "validity_rate": 0.9444,
+ "repair_attempts": 2,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 0,
+ "cycle_join_exact": true,
+ "attempt_objects_missing": 0,
+ "attempt_key_collisions": 0,
+ "cumulative_log_tokens": 220682,
+ "token_limit": 200000,
+ "per_contract": {
+  "conjecturer.turn.v6": {
+   "attempts": 12,
+   "valid": 10,
+   "repair_attempts": 2,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 0.8333
+  },
+  "batch-critic.v2": {
+   "attempts": 22,
+   "valid": 22,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 1.0
+  },
+  "bridge.ledger.v3": {
+   "attempts": 1,
+   "valid": 1,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "validity_rate": 1.0
+  },
+  "bridge.composition.v2": {
+   "attempts": 1,
+   "valid": 1,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 2,
+    "maximum_schema_repairs": 1
+   },
+   "validity_rate": 1.0
+  }
+ },
+ "failure_classes": {
+  "SCRATCH_ALIAS_UNKNOWN": 5,
+  "string_pattern_mismatch": 4,
+  "value_error": 2
+ },
+ "failure_fields": [
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*/to_ref",
+   "class": "string_pattern_mismatch",
+   "count": 4
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+   "class": "value_error",
+   "count": 2
+  }
+ ],
+ "coercion": {
+  "escape_legal": 2,
+  "fabricated_handle": 2,
+  "handle_kinds": {
+   "unknown": 6
+  }
+ },
+ "escape_followups": {},
+ "lossless_spelling_pointers": {},
+ "decomposition_events": [],
+ "route_seat_insufficient_capability": [],
+ "work_terminals": {
+  "completed/critic_output_admitted": 22,
+  "budget_denied/token_budget_denied": 18,
+  "completed/semantic_admission_partial": 5,
+  "completed/semantic_admission_complete": 4,
+  "completed/bridge_output_admitted": 2,
+  "rejected/conjecture_repair_requested": 2,
+  "rejected/conjecture_repair_step_rejected": 1
+ },
+ "repair_fights": [
+  {
+   "work_id": "sha256:55fd0160268ac199e61d358b33ac8acfb339fed69671b2e9adb0e1ced795ddbe",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 4,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref"
+    ]
+   ],
+   "came_back_at": [
+    "/scratch_proposal/links/0/to_ref"
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_requested",
+   "task_kind": "conjecture"
+  },
+  {
+   "work_id": "sha256:c7589e1c75c9a17679f5db09b58d2eab90865d5cb32fed86c79ed16f88710513",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": 4,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/unresolved_questions/*/related_refs",
+     "/scratch_proposal/unresolved_questions/*/related_refs"
+    ]
+   ],
+   "came_back_at": [
+    "/scratch_proposal/unresolved_questions/1/related_refs"
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_requested",
+   "task_kind": "conjecture"
+  }
+ ],
+ "content": {
+  "valid_responses_unparsed": 0,
+  "wire_shapes": {
+   "bare_json": 34
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 22
+   },
+   "bridge.composition.v2": {
+    "bare_json": 1
+   },
+   "bridge.ledger.v3": {
+    "bare_json": 1
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 10
+   }
+  },
+  "prose_wrapped_exemplars": [],
+  "field_kinds": {
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 46
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 46
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 32
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "string": 14
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 46
+   },
+   "bridge.composition.v2/ledger_amendment_request": {
+    "null": 1
+   },
+   "bridge.composition.v2/resolution": {
+    "string": 1
+   },
+   "bridge.composition.v2/resolution_reason": {
+    "string": 1
+   },
+   "bridge.composition.v2/sections/*/ledger_entry_handles/*": {
+    "string": 1
+   },
+   "bridge.composition.v2/sections/*/span_id": {
+    "string": 1
+   },
+   "bridge.composition.v2/sections/*/text": {
+    "string": 1
+   },
+   "bridge.composition.v2/unresolved_items/*/description": {
+    "string": 1
+   },
+   "bridge.composition.v2/unresolved_items/*/ledger_entry_handles/*": {
+    "string": 33
+   },
+   "bridge.composition.v2/unresolved_items/*/reason": {
+    "null": 1
+   },
+   "bridge.ledger.v3/entries/*/claim": {
+    "string": 5
+   },
+   "bridge.ledger.v3/entries/*/claim_class": {
+    "string": 5
+   },
+   "bridge.ledger.v3/entries/*/conflict_handles/*": {
+    "string": 2
+   },
+   "bridge.ledger.v3/entries/*/entry_key": {
+    "string": 5
+   },
+   "bridge.ledger.v3/entries/*/formal_artifact_handles/*": {
+    "string": 3
+   },
+   "bridge.ledger.v3/entries/*/premise_keys/*": {
+    "string": 4
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/requirement": {
+    "string": 4
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/scratch_handles/*": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 35
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 100
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 35
+   },
+   "conjecturer.turn.v6/candidates/*/neighbours/*": {
+    "string": 13
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 34
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 35
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 41
+   },
+   "conjecturer.turn.v6/op": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/path": {
+    "string": 3
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "string": 5
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "string": 9
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "string": 6
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "string": 8,
+    "null": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "string": 7
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "string": 9
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "string": 11
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "string": 9
+   },
+   "conjecturer.turn.v6/value": {
+    "string": 2
+   }
+  },
+  "string_vocabularies": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 40,
+    "False": 6
+   },
+   "batch-critic.v2/cases/*/case": {
+    "<<long>>": 40,
+    "": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "<<long>>": 14
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 22,
+    "SRC_002": 17,
+    "SRC_003": 6,
+    "SRC_004": 1
+   },
+   "bridge.composition.v2/resolution": {
+    "answered": 1
+   },
+   "bridge.composition.v2/resolution_reason": {
+    "<<long>>": 1
+   },
+   "bridge.composition.v2/sections/*/ledger_entry_handles/*": {
+    "E34": 1
+   },
+   "bridge.composition.v2/sections/*/span_id": {
+    "S1": 1
+   },
+   "bridge.composition.v2/sections/*/text": {
+    "<<long>>": 1
+   },
+   "bridge.composition.v2/unresolved_items/*/description": {
+    "<<long>>": 1
+   },
+   "bridge.ledger.v3/entries/*/claim": {
+    "<<long>>": 5
+   },
+   "bridge.ledger.v3/entries/*/claim_class": {
+    "surviving_conjecture": 3,
+    "conflict": 1,
+    "supported_inference": 1
+   },
+   "bridge.ledger.v3/entries/*/conflict_handles/*": {
+    "ART_2": 1,
+    "ART_3": 1
+   },
+   "bridge.ledger.v3/entries/*/entry_key": {
+    "CLM_1": 1,
+    "CLM_2": 1,
+    "CLM_3": 1,
+    "CLM_4": 1,
+    "CLM_5": 1
+   },
+   "bridge.ledger.v3/entries/*/formal_artifact_handles/*": {
+    "ART_2": 1,
+    "ART_3": 1,
+    "ART_7": 1
+   },
+   "bridge.ledger.v3/entries/*/premise_keys/*": {
+    "CLM_1": 1,
+    "CLM_2": 1,
+    "CLM_3": 1,
+    "CLM_4": 1
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/requirement": {
+    "<<long>>": 4
+   },
+   "bridge.ledger.v3/uncovered_requirements/*/scratch_handles/*": {
+    "SCR_2": 1,
+    "SCR_7": 1,
+    "SCR_6": 1,
+    "SCR_8": 1,
+    "SCR_1": 1,
+    "SCR_5": 1
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "<<long>>": 35
+   },
+   "conjecturer.turn.v6/candidates/*/content": {
+    "<<long>>": 6
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "<<long>>": 97,
+    "The simulated clock must be part of the agent's state hash.": 1,
+    "The budget specification becomes complex.": 1,
+    "This approach may be overkill for a simple research agent.": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "<<long>>": 35
+   },
+   "conjecturer.turn.v6/candidates/*/neighbours/*": {
+    "SRC_004": 6,
+    "SRC_002": 4,
+    "SRC_003": 3
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "SRC_005": 9,
+    "SRC_006": 7,
+    "SRC_002": 4,
+    "SRC_007": 4,
+    "SRC_003": 3,
+    "SRC_008": 3,
+    "SRC_001": 2,
+    "SRC_004": 2
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 35
+   },
+   "conjecturer.turn.v6/op": {
+    "replace": 2,
+    "remove": 1
+   },
+   "conjecturer.turn.v6/path": {
+    "/scratch_proposal/links/0/to_ref": 1,
+    "/scratch_proposal/links/1/to_ref": 1,
+    "/scratch_proposal/unresolved_questions/1/related_refs": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/from_ref": {
+    "NEW_001": 3,
+    "NEW_002": 1,
+    "NEW_003": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/relation_hint": {
+    "<<long>>": 2,
+    "addresses the unresolved question about retries and budget": 1,
+    "addresses the unresolved question about caching and byte budget": 1,
+    "extends retry handling with a retry allowance budget": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/links/*/to_ref": {
+    "SCR_003": 2,
+    "SCR_001": 1,
+    "SCR_002": 1,
+    "SCR_004": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/content": {
+    "<<long>>": 9
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/possible_next_move": {
+    "<<long>>": 5,
+    "Integrate retry allowance into the typed terminal specification.": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/unfinished": {
+    "<<long>>": 7,
+    "Unresolved: how to balance reproducibility and robustness.": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/body/why_keep_this": {
+    "<<long>>": 6,
+    "Provides evidence for eliminating bytes-only.": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/new_blocks/*/local_key": {
+    "NEW_001": 5,
+    "NEW_002": 3,
+    "NEW_003": 1
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/question": {
+    "<<long>>": 11
+   },
+   "conjecturer.turn.v6/scratch_proposal/unresolved_questions/*/related_refs/*": {
+    "SCR_008": 3,
+    "SCR_006": 2,
+    "NEW_001": 1,
+    "SCR_003": 1,
+    "SCR_005": 1,
+    "SCR_007": 1
+   },
+   "conjecturer.turn.v6/value": {
+    "SCR_004": 1,
+    "SCR_008": 1
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "insufficient": 9,
+    "no evidence": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "cannot determine": 2,
+    "no evidence": 1
+   },
+   "bridge.ledger.v3/entries/*/claim": {
+    "insufficient": 1
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "insufficient": 1
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "insufficient": 1,
+    "unknown": 1
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 130,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "cannot determine",
+    "value": "Two deployments of the same agent with different alpha, beta values will exhaust credits at different points for identical fetch sequences, breaking replayability; the terminal state records the coefficients but does not justify them, so an auditor cannot determine if the budget was appropriate."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 160,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target fails to eliminate weaker rival denominations as required by the problem. It proposes a dual budget (requests primary, bytes secondary) but provides no evidence or argument to rule out a single-denomination approach (e.g., requests-only or bytes-only). The problem explicitly demands that "
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 183,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the agent's task requires a large number of small requests (e.g., probing many endpoints), a byte budget alone may be insufficient to prevent excessive server load, which could be considered a resource abuse."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 183,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "insufficient",
+    "value": "The agent maintains two token buckets: one for requests (capacity C_r, refill rate R_r requests per second) and one for bytes (capacity C_b, refill rate R_b bytes per second). Before a fetch, the agent attempts to consume 1 request token and estimated_bytes byte tokens. If either bucket has insuffic"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 227,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target fails to eliminate the rival denomination of a single unified cost budget (e.g., linear combination of requests and bytes) as required by the problem. It merely asserts that both dimensions are needed without addressing why a combined measure is insufficient, leaving a weaker rival unrefu"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 273,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/mechanism",
+    "marker": "unknown",
+    "value": "The agent is configured with a request limit R and a byte limit B. It maintains two counters: requests_made and bytes_transferred. Before each fetch, it checks if requests_made + 1 > R or if bytes_transferred + estimated_fetch_size > B (using a conservative estimate if exact size unknown). If either"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 303,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "The problem requires deciding the denomination (requests, bytes, or both) and eliminating weaker rival denominations. SRC_002 does not make a decision; it defers the denomination to the configuration, leaving the choice unspecified. It provides no evidence to eliminate either requests or bytes as we"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 316,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target claims the budget must be solely in requests, yet its own countercondition concedes that a request budget may allow excessive data transfer and suggests a separate data cap. This admission shows that requests alone are insufficient, contradicting the claim and failing to eliminate bytes a"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 623,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "cannot determine",
+    "value": "The agent stops fetching and records 'exhausted: true'. An auditor cannot determine whether the request limit or byte limit was reached, nor how many requests or bytes were actually consumed. This makes it impossible to verify budget adequacy or debug early termination."
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 645,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target's request-only denomination is insufficient because it fails to bound byte consumption, making it unsuitable for data-intensive tasks or environments with byte-based rate limits, as acknowledged by its own counterconditions. A replayable research agent must control data volume to prevent "
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 733,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target claims both denominations are necessary but provides no causal mechanism for why a single denomination (requests) is insufficient for replayability. It acknowledges counterconditions where a single denomination could suffice, yet fails to eliminate those weaker rivals as required. Without"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 748,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target fails to eliminate weaker rival denominations as required by the problem. It proposes a composite time-based metric but does not argue why pure request-count or byte-count budgets are insufficient for a replayable research agent, nor does it provide evidence that they would fail. The prob"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 748,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target does not eliminate weaker rival denominations as required. It presents a composite 'fetch-credits' metric but does not argue against requests-only or bytes-only budgets, nor does it provide evidence that those simpler denominations would be insufficient for replayability. The problem dema"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 748,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target fails to decide a denomination and specify how exhaustion must be recorded, as required by the problem. It only argues that single-denomination budgets are insufficient, but it does not propose a concrete budget specification (e.g., requests, bytes, or both) nor does it define a typed aud"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 860,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "insufficient",
+    "value": "The target claims that the fetch budget must be denominated in both requests and bytes, but it fails to eliminate the rival single-denomination approach (e.g., bytes-only) with evidence, as required by the problem. The problem asks to 'eliminate weaker rival denominations where the evidence allows,'"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 860,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "no evidence",
+    "value": "An agent that only fetches from APIs with negligible per-request overhead and whose primary cost is data transfer could operate correctly with a bytes-only budget. The target provides no evidence that such an environment is impossible for the agent, so the rival bytes-only denomination is not elimin"
+   },
+   {
+    "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+    "seq": 1189,
+    "contract_id": "bridge.ledger.v3",
+    "field": "/entries/*/claim",
+    "marker": "insufficient",
+    "value": "Since requests-only and bytes-only are mutually exclusive and each fails to account for a critical resource dimension, a single-denomination budget is insufficient; a dual-denomination budget that records exhaustion as a typed terminal with a state hash is required."
+   }
+  ],
+  "numeric_precision": {
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "1": 38,
+    "2": 3
+   }
+  }
+ },
+ "rows": [
+  {
+   "seq": 11,
+   "ts": "2026-07-27T23:35:36.682055+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8780,
+   "max_tokens": 8192,
+   "work_id": "sha256:412d7fafba44a73dc8bc141be40f2c1369da571226c4eeb138342c5fcd36879b",
+   "raw_ref": "5e7156ce7c06e8e21d51bc53c486fcfb0f57bc249e95576353a0d32d691c68dd",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 44,
+   "ts": "2026-07-27T23:35:48.113790+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2990,
+   "max_tokens": 8192,
+   "work_id": "sha256:f90237b799a56c45cbfe3bd19d74194f2d95f98b2e5bcf559417c21865cce30f",
+   "raw_ref": "a1bc95c5ae5a71189cfcd2d8d87018374aacc948384d7fabeb232837ff31bc50",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 57,
+   "ts": "2026-07-27T23:35:55.192271+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2470,
+   "max_tokens": 8192,
+   "work_id": "sha256:3859d0fe9d0cdd2a081a44b10fb82222c9a539c18433940c58b7b6ceb41ae51e",
+   "raw_ref": "0c4f79b92ed7bde31973dd96a5b2baff3d50a32d239efc7eaf26015b467c1b8a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 70,
+   "ts": "2026-07-27T23:36:15.102606+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4078,
+   "max_tokens": 8192,
+   "work_id": "sha256:c3cdc66c5974d7230e52f1a739c3b9509068afb488930d1ff8ecaf85fa6c7052",
+   "raw_ref": "5a8a24ae60859705a8fc687d90008226b275cc4948248eaf72220e25e00af251",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 91,
+   "ts": "2026-07-27T23:36:56.786364+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10467,
+   "max_tokens": 8192,
+   "work_id": "sha256:5da8a5e10be016a248a5371948c7f4066f37a9170db75cc874a0bec8538028da",
+   "raw_ref": "5c838aa0c910abcf61e167299b0928775a9b8fb24aedffcec44a0c9466a196eb",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 130,
+   "ts": "2026-07-27T23:37:19.496605+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5424,
+   "max_tokens": 8192,
+   "work_id": "sha256:8b6d080d31ca8e5152e0a0cd9995669f55297f357c4dc013df5455dba409c067",
+   "raw_ref": "592324e78f5fb6e292d53e11b203221ff87b3cc754a8386ba1647bc1b1a9f623",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 147,
+   "ts": "2026-07-27T23:37:35.768811+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4226,
+   "max_tokens": 8192,
+   "work_id": "sha256:9c8f606c43511d36ed0461be8d995dcac5121942af70567c231fe3ba8683318b",
+   "raw_ref": "71fceaad1515f3ee57f9d20cacc112ceacbdbd8751482676aa348fb04ff9beb4",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 160,
+   "ts": "2026-07-27T23:37:44.455111+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2145,
+   "max_tokens": 8192,
+   "work_id": "sha256:857c731afc00508ca38e79e8b243b92d1b667c53f6088146c52b8becd9e41093",
+   "raw_ref": "0b77768be5224a1073010494d36229766b3d6f3df9be9f9147a9dbc74429acc8",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 183,
+   "ts": "2026-07-27T23:38:28.726106+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10680,
+   "max_tokens": 8192,
+   "work_id": "sha256:67b37dd157ee24042ee1cd76a6d875f7df7bf28b4d9dff6ca3519fad3a7b893e",
+   "raw_ref": "7dd9bddfd51ea9cfc8f6c283886725020aa8abf75bd75c722636473d55d109af",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_009 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 214,
+   "ts": "2026-07-27T23:38:55.763075+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5094,
+   "max_tokens": 8192,
+   "work_id": "sha256:1130da9c9a546fb57491d72691e41230ed1afb28b6f8ca45b03998283b4ea000",
+   "raw_ref": "49cb71a116f86a99eacc2470a43eadede1464791394ed725a05e96392cf1d45f",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 227,
+   "ts": "2026-07-27T23:39:20.728647+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5281,
+   "max_tokens": 8192,
+   "work_id": "sha256:150e21163ce9d7041bf0c8b3913bafaec7a933425133758a12324e80c4a80858",
+   "raw_ref": "d6d113fb0865c4cb392d17d23514695b2374c3f55a00efa8ad2cc3e5bac85865",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 244,
+   "ts": "2026-07-27T23:39:33.332140+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2745,
+   "max_tokens": 8192,
+   "work_id": "sha256:3ff025c0d50650f9454bd86d2880e072db967be22108c6bfce9f07746b031d61",
+   "raw_ref": "4cbbc828d58ca0fa59b58d4f49103f8936df294102c84131bbffbc17461b52e8",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 273,
+   "ts": "2026-07-27T23:40:14.095612+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 9927,
+   "max_tokens": 8192,
+   "work_id": "sha256:5e195f59b5fd74be754c7b250c3a2bde041e750edd48c38fe5cc254c7104acf2",
+   "raw_ref": "95538b4d85b8f786f8a0f232e76d9ee0e61d49479e6f01381ce2cc35d9e98bbc",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_009 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 303,
+   "ts": "2026-07-27T23:40:26.630178+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3498,
+   "max_tokens": 8192,
+   "work_id": "sha256:a1d1febc3df64b7d818e2dabe944c54032ffaf92dc538badc9abcbe13d6b2f3b",
+   "raw_ref": "5cd435c50d1aa8bc9a74d1d7c9ef1e316b275851f1046fc0f6b2426fb4cf314c",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 316,
+   "ts": "2026-07-27T23:41:02.557031+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 1,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 7011,
+   "max_tokens": 8192,
+   "work_id": "sha256:3e147d27cd78c213c5b32fcecaff82a2bd03d8200d6cca309a3b52761c7c9f2c",
+   "raw_ref": "b5b333edef381771d8b5fff8543e2f2b2fc5a21e45c64f6e8e3bb193cf0e07d0",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 513,
+   "ts": "2026-07-27T23:41:36.292302+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 2,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10346,
+   "max_tokens": 8192,
+   "work_id": "sha256:6dee4c965b4b70342f583041aa363e2dda0d77e90da8e7d3dccf8215e19eda25",
+   "raw_ref": "9af524477cbe1bd74b492854af455359a6883ecdea09cbcb04d04c326eb1bc34",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 531,
+   "ts": "2026-07-27T23:41:49.861382+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 2,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2680,
+   "max_tokens": 8192,
+   "work_id": "sha256:94b6a59ca049d31fc74db911bad305cd7c867f5fd88860c462220c5066820451",
+   "raw_ref": "6350b73703e2bf1a6f4ebd5f481828743092cdbcaa314588a496cb222f7d105a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 544,
+   "ts": "2026-07-27T23:42:10.403021+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 2,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3690,
+   "max_tokens": 8192,
+   "work_id": "sha256:64e1ad3be195d1cf2adfa6e0de460982562872ca5dec22fcb25c56d4f3d2e4cd",
+   "raw_ref": "99bbd90660334748d909129c41bd4294ee8702d188623428c1b977fb1245a345",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 555,
+   "ts": "2026-07-27T23:42:29.818388+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 2,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3739,
+   "max_tokens": 8192,
+   "work_id": "sha256:360d11ab40f05b1eeb4b3a8f4988361f919f3a925cbdab6e701285f6bd456e2c",
+   "raw_ref": "90e07e13ea031865a8a1e41239f06611187f2e5b74ff41448d0e46023044aa86",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 604,
+   "ts": "2026-07-27T23:43:01.107116+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8737,
+   "max_tokens": 8192,
+   "work_id": "sha256:5cae2dd7384ec2c5f6ab60ef26e8eac054193dcb8c24b12b23dcb8d6f76dbd09",
+   "raw_ref": "3009f48b8a071f106fbd3b2a4bc6e7caa40bb9c74881e98663e4d490af54f12b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 623,
+   "ts": "2026-07-27T23:43:18.904228+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3019,
+   "max_tokens": 8192,
+   "work_id": "sha256:82929274c7c84512e79444962f6fcd2d50149ea43eaf1b323eaa76bc3662fdac",
+   "raw_ref": "ccea7b4c7d83ebb3493b403ec0273a881d9dfb567de65dbbfab5e7a7d7133802",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 636,
+   "ts": "2026-07-27T23:43:30.499089+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2481,
+   "max_tokens": 8192,
+   "work_id": "sha256:447de08af8a52c8f2e173dd81006e8834b5191077f5d48251ca4024aa3dac540",
+   "raw_ref": "bb91e4dc829161bcc8a295be46300a70fe203413a674a0b174cca83da1bdef66",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 645,
+   "ts": "2026-07-27T23:43:54.729119+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4427,
+   "max_tokens": 8192,
+   "work_id": "sha256:80e85fd800efe4428991c63cd48602ea13616a1fdbed291982a086395c2c0cc0",
+   "raw_ref": "f51dd7083c4379b37d8ef2b72692e54bbbca28b6f574e0c2b16148f79a93dbb1",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 693,
+   "ts": "2026-07-27T23:44:51.894352+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/scratch_proposal/links/0/to_ref",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 13283,
+   "max_tokens": 8192,
+   "work_id": "sha256:55fd0160268ac199e61d358b33ac8acfb339fed69671b2e9adb0e1ced795ddbe",
+   "raw_ref": "7ab670a51d578d801f4fe84192426fdd263a0532258a461d9b319abe65e81b09",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_004",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002",
+      "NEW_003",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_004",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002",
+      "NEW_003",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_008",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002",
+      "NEW_003",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 698,
+   "ts": "2026-07-27T23:44:58.494854+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4317,
+   "max_tokens": 8192,
+   "work_id": "sha256:ae1aafe642705a604ab56d837c4de715d7f5f9957ad310de207e351ce0736dd8",
+   "raw_ref": "a745fcb96f0488107a017077255092d908b3d95e6e7f706da71f94cb8a49ac9e",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_008",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002",
+      "NEW_003",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 703,
+   "ts": "2026-07-27T23:45:02.424005+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3989,
+   "max_tokens": 8192,
+   "work_id": "sha256:37e39202c6db18569fc94d4978512a48e75fc7b9a7cb3041a5c3026382f4d2ae",
+   "raw_ref": "6a4d94639ab0c3c4d86c3abe0600fbbca69431fa9a1f0969210aebb29d9dd862",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_009 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 733,
+   "ts": "2026-07-27T23:45:27.629103+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5165,
+   "max_tokens": 8192,
+   "work_id": "sha256:c5883eeb7f730765cb7d356a8d975d669fcf7df464e377593298ca07ec5f36bd",
+   "raw_ref": "9a37de7a17afe78b61e066de24225a6d5b790e8672c5df4922011a88c17bc23a",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 748,
+   "ts": "2026-07-27T23:45:55.592482+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5225,
+   "max_tokens": 8192,
+   "work_id": "sha256:7d4368e2fac4f49d94fcce22dbdb94646a617d8bc82820ee767e51613466a2e6",
+   "raw_ref": "c80db2db7712c697001d0064465cd2448ab137f3a7b42bf4e4625864a243d46d",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 808,
+   "ts": "2026-07-27T23:46:37.937280+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/scratch_proposal/unresolved_questions/1/related_refs",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 10290,
+   "max_tokens": 8192,
+   "work_id": "sha256:c7589e1c75c9a17679f5db09b58d2eab90865d5cb32fed86c79ed16f88710513",
+   "raw_ref": "c395c0919034d4852c3ae6e0a5fda94ae77bc59d6718c51dc785698c89cf21b8",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "type='array'",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "SCR_001",
+      "SCR_002",
+      "SCR_003",
+      "SCR_004",
+      "SCR_005",
+      "SCR_006",
+      "SCR_007",
+      "SCR_008",
+      "SCR_009",
+      "SCR_010",
+      "SCR_011"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 813,
+   "ts": "2026-07-27T23:46:57.417917+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4925,
+   "max_tokens": 8192,
+   "work_id": "sha256:f3db670c05467b23642a62badbfdbcb5faf5f0aa7fc258e5750ed3e6bdf36f06",
+   "raw_ref": "fad71a809d77ec1dcf9b5a6a0111c6bda03c4a1a4c7eea2bdd4d33ad4108589b",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_009 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 834,
+   "ts": "2026-07-27T23:47:34.001346+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5462,
+   "max_tokens": 8192,
+   "work_id": "sha256:705ca1e28c1f1ca3233d1f4b009624a37e44eab7032ddb245d5b19efa728b06e",
+   "raw_ref": "2d79a8f29333e3b1a3cb93419dd320a74b04c7b124552bf4973a0c063f254099",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 847,
+   "ts": "2026-07-27T23:47:52.346034+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3827,
+   "max_tokens": 8192,
+   "work_id": "sha256:fdd233eb241c25c53bf61605d40749cf7c5c50aaf8879ef0c19645c490fa6ae5",
+   "raw_ref": "fbe7a90439acda8a3c4ca1e666dbd155bccd0c29300b38afd9ebccf54bcdb879",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 860,
+   "ts": "2026-07-27T23:48:11.805916+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3358,
+   "max_tokens": 8192,
+   "work_id": "sha256:fb7561aebee16b319c2fba3147a8dbb53cf9b65951eb0d251a48292802e2e850",
+   "raw_ref": "ea023f8a0181ece20e33d26faef6f7d3abbe6509f3ec58854970c44cc02130c4",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 917,
+   "ts": "2026-07-27T23:48:46.517389+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 4,
+   "cycle_completed": true,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 9585,
+   "max_tokens": 8192,
+   "work_id": "sha256:68b88190461d5a881194a354b5bddaafb6b77cebb9217adba0e30d8abf8083b1",
+   "raw_ref": "6ce43a1193a29a24e2728017fe601c73bc9c5d68697dc76267368960be40eb50",
+   "admission_outcome": "admitted",
+   "failures": [
+    {
+     "class": "SCRATCH_ALIAS_UNKNOWN",
+     "field": "",
+     "field_raw": null,
+     "message": "SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_009 names no live block",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "component_failure"
+    }
+   ]
+  },
+  {
+   "seq": 1189,
+   "ts": "2026-07-28T00:00:38.947875+00:00",
+   "rule": "Control",
+   "role": "summarizer",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "bridge.ledger.v3",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 13,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 19911,
+   "max_tokens": 8192,
+   "work_id": "sha256:e1e3bc509515ce197064a86912429ea70ae95827af4aa157921cb1cfb5e8bc74",
+   "raw_ref": "0eb58a4b33110560fd5d5f1114e4d0ea7b336616db0933dfba19d196f3610620",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 1196,
+   "ts": "2026-07-28T00:01:04.933730+00:00",
+   "rule": "Control",
+   "role": "thesis",
+   "model": "deepseek-v4-pro",
+   "seat": 0,
+   "endpoint_id": "provider-profile-f1868494ebfc59c794599dd2",
+   "contract_id": "bridge.composition.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": 13,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 7410,
+   "max_tokens": 8192,
+   "work_id": "sha256:279516a41c263f4a8462fc3e5be1944cb07b00091723d8c3b7a11cdfbe0e47bc",
+   "raw_ref": "bd1ed9e375db92f5303cc668f919b6f7f093164510185b4b88bee3e0487d131d",
+   "admission_outcome": "admitted",
+   "failures": []
+  }
+ ]
+}

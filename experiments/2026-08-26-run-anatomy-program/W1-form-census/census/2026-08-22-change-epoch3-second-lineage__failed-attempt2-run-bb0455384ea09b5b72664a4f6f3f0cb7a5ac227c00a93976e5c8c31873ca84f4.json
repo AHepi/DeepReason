@@ -1,0 +1,3080 @@
+{
+ "schema": "run-anatomy.form-census.root.v1",
+ "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+ "run_id": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+ "state": "failed",
+ "stop_reason": "operational_failure",
+ "cycles_reached": 0,
+ "first_ts": "2026-08-23T10:23:47.135679+00:00",
+ "attempts": 56,
+ "valid_on_arrival": 47,
+ "validity_rate": 0.8393,
+ "repair_attempts": 3,
+ "truncated_attempts": 0,
+ "unnatural_stop_attempts": 0,
+ "cycle_join_exact": false,
+ "attempt_objects_missing": 0,
+ "attempt_key_collisions": 0,
+ "cumulative_log_tokens": 165466,
+ "token_limit": 200000,
+ "per_contract": {
+  "conjecturer.turn.v6": {
+   "attempts": 12,
+   "valid": 8,
+   "repair_attempts": 2,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 0.6667
+  },
+  "batch-critic.v2": {
+   "attempts": 31,
+   "valid": 26,
+   "repair_attempts": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 0.8387
+  },
+  "conjecturer.atomic-candidate.v1": {
+   "attempts": 12,
+   "valid": 12,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "validity_rate": 1.0
+  },
+  "critic.atomic-target.v1": {
+   "attempts": 1,
+   "valid": 1,
+   "repair_attempts": 0,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "validity_rate": 1.0
+  }
+ },
+ "failure_classes": {
+  "value_error": 19,
+  "string_pattern_mismatch": 12,
+  "extra_forbidden": 9,
+  "WIRE_TRAILING_CONTENT": 2
+ },
+ "failure_fields": [
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+   "class": "value_error",
+   "count": 19
+  },
+  {
+   "contract_id": "conjecturer.turn.v6",
+   "field": "/scratch_proposal/links/*/to_ref",
+   "class": "string_pattern_mismatch",
+   "count": 8
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/preise",
+   "class": "extra_forbidden",
+   "count": 4
+  },
+  {
+   "contract_id": "batch-critic.v2",
+   "field": "/cases/*/premise_evidence/*/block",
+   "class": "string_pattern_mismatch",
+   "count": 4
+  }
+ ],
+ "coercion": {
+  "escape_legal": 19,
+  "fabricated_handle": 19,
+  "handle_kinds": {
+   "unknown": 27
+  }
+ },
+ "escape_followups": {},
+ "lossless_spelling_pointers": {},
+ "decomposition_events": [
+  {
+   "source_contract_id": "conjecturer.turn.v6",
+   "atomic_contract_id": "conjecturer.atomic-candidate.v1",
+   "trigger": "schema_exhausted",
+   "role": "conjecturer",
+   "seat": 0,
+   "children": 6
+  },
+  {
+   "source_contract_id": "batch-critic.v2",
+   "atomic_contract_id": "critic.atomic-target.v1",
+   "trigger": "schema_exhausted",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "children": 1
+  },
+  {
+   "source_contract_id": "conjecturer.turn.v6",
+   "atomic_contract_id": "conjecturer.atomic-candidate.v1",
+   "trigger": "schema_exhausted",
+   "role": "conjecturer",
+   "seat": 0,
+   "children": 6
+  }
+ ],
+ "route_seat_insufficient_capability": [],
+ "work_terminals": {
+  "completed/critic_output_admitted": 25,
+  "completed/atomic_conjecture_output_admitted": 12,
+  "rejected/conjecture_repair_step_rejected": 6,
+  "rejected/critic_repair_requested": 3,
+  "schema_exhausted/conjecture_schema_exhausted": 2,
+  "completed/semantic_admission_complete": 2,
+  "rejected/conjecture_repair_requested": 2,
+  "rejected/critic_repair_step_rejected": 2,
+  "schema_exhausted/critic_schema_exhausted": 1,
+  "budget_denied/token_budget_denied": 1,
+  "completed/atomic_critic_output_admitted": 1
+ },
+ "repair_fights": [
+  {
+   "work_id": "sha256:a4ea8d721221bcfb12a65507c1b10e31f1c4be026a2ad4d07edd424bad66933e",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    []
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_requested",
+   "task_kind": "conjecture"
+  },
+  {
+   "work_id": "sha256:16c4970e4e5a4b20e34cedf9a3b9ffa9c31596eef962a70b39f69e7bad389f24",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/unresolved_questions/*/related_refs",
+     "/scratch_proposal/unresolved_questions/*/related_refs",
+     "/scratch_proposal/unresolved_questions/*/related_refs"
+    ]
+   ],
+   "came_back_at": [
+    "/scratch_proposal/links/0/to_ref"
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_step_rejected",
+   "task_kind": "repair"
+  },
+  {
+   "work_id": "sha256:9afd89ea49ec1ef584f2a263ca2117127b794a822da3db704f05b2b696806905",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/cases/*/preise"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  },
+  {
+   "work_id": "sha256:50de18faf89247db065d8dbd1d59c2d7ede07174b647f8c6a9e61bd7004dd4d7",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/links/*/to_ref",
+     "/scratch_proposal/unresolved_questions/*/related_refs",
+     "/scratch_proposal/unresolved_questions/*/related_refs"
+    ]
+   ],
+   "came_back_at": [
+    "/scratch_proposal/links/0/to_ref"
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "conjecture_repair_requested",
+   "task_kind": "conjecture"
+  },
+  {
+   "work_id": "sha256:8413e79719206b194ae47abb0e80ded6e61fbd6d8e2cf4668cff66b6f1c086e8",
+   "contract_id": "conjecturer.turn.v6",
+   "role": "conjecturer",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 5,
+    "maximum_schema_repairs": 4
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/scratch_proposal/unresolved_questions/*/related_refs"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "schema_exhausted",
+   "terminal_reason": "conjecture_schema_exhausted",
+   "task_kind": "repair"
+  },
+  {
+   "work_id": "sha256:6a8412d7b8bd0108b3fd92aeb06b7215515790235b17d20f663a2db4ac0f5d15",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/cases/*/premise_evidence/*/block",
+     "/cases/*/premise_evidence/*/block",
+     "/cases/*/premise_evidence/*/block"
+    ]
+   ],
+   "came_back_at": [
+    "/cases/0/premise_evidence/0/block"
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  },
+  {
+   "work_id": "sha256:9553aef4877d791eb9cb348eef179f6bcfd8a98d27429fca0bb7ad8ac967a7d0",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/cases/*/preise"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_requested",
+   "task_kind": "criticism"
+  },
+  {
+   "work_id": "sha256:a9750f8140ce683ec534ab6424c09f31e2403b71a95aa055f57007b42117cdf3",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/cases/*/preise"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "rejected",
+   "terminal_reason": "critic_repair_step_rejected",
+   "task_kind": "repair"
+  },
+  {
+   "work_id": "sha256:516c8ab42e600910d9c72fc6bf751c30b434fe63da25be1a1da6ff0d29d288af",
+   "contract_id": "batch-critic.v2",
+   "role": "argumentative_critic",
+   "seat": 0,
+   "cycle": null,
+   "calls_consumed": 1,
+   "grant": {
+    "maximum_provider_calls": 3,
+    "maximum_schema_repairs": 2
+   },
+   "arrival_validity": [
+    false
+   ],
+   "asked_for": [
+    [
+     "/cases/*/preise"
+    ]
+   ],
+   "came_back_at": [
+    ""
+   ],
+   "terminal_status": "schema_exhausted",
+   "terminal_reason": "critic_schema_exhausted",
+   "task_kind": "repair"
+  }
+ ],
+ "content": {
+  "valid_responses_unparsed": 0,
+  "wire_shapes": {
+   "bare_json": 32,
+   "fenced_json": 15
+  },
+  "wire_shapes_by_contract": {
+   "batch-critic.v2": {
+    "bare_json": 20,
+    "fenced_json": 6
+   },
+   "conjecturer.atomic-candidate.v1": {
+    "bare_json": 8,
+    "fenced_json": 4
+   },
+   "conjecturer.turn.v6": {
+    "bare_json": 4,
+    "fenced_json": 4
+   },
+   "critic.atomic-target.v1": {
+    "fenced_json": 1
+   }
+  },
+  "prose_wrapped_exemplars": [],
+  "field_kinds": {
+   "batch-critic.v2/cases/*/attack": {
+    "bool": 23
+   },
+   "batch-critic.v2/cases/*/case": {
+    "string": 20
+   },
+   "batch-critic.v2/cases/*/counterexample": {
+    "null": 6
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "string": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/actual_max_UHI_low": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/arid_city": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/city": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected_max_UHI_high": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/humid_city": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/implication": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log10_population": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/note": {
+    "string": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observation": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_arid_degC": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_humid_degC": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "string": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sky_view_factor_low": {
+    "number": 1
+   },
+   "batch-critic.v2/cases/*/premise": {
+    "null": 1,
+    "string": 19
+   },
+   "batch-critic.v2/cases/*/premise_evidence": {
+    "null": 3
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/block": {
+    "string": 29
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/quote": {
+    "string": 29
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "string": 23
+   },
+   "batch-critic.v2/operation": {
+    "string": 2
+   },
+   "batch-critic.v2/patch/op": {
+    "string": 1
+   },
+   "batch-critic.v2/patch/path": {
+    "string": 1
+   },
+   "batch-critic.v2/pointer": {
+    "string": 2
+   },
+   "batch-critic.v2/value": {
+    "string": 2
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/adopted_commitment_refs/*": {
+    "string": 2
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/disanalogies/*": {
+    "string": 10
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/overturn_conditions/*": {
+    "string": 10
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/shared_structure/*": {
+    "string": 10
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/source_memory_refs/*": {
+    "string": 7
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/transfer_claims/*": {
+    "string": 9
+   },
+   "conjecturer.atomic-candidate.v1/candidate/claim": {
+    "string": 12
+   },
+   "conjecturer.atomic-candidate.v1/candidate/counterconditions/*": {
+    "string": 44
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/block": {
+    "string": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/quote": {
+    "string": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/mechanism": {
+    "string": 12
+   },
+   "conjecturer.atomic-candidate.v1/candidate/optional_refs/*": {
+    "string": 20
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/requested_context_aliases/*": {
+    "string": 26
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/search_signal": {
+    "string": 10
+   },
+   "conjecturer.atomic-candidate.v1/candidate/typicality": {
+    "number": 12
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "string": 12
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "string": 37
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "string": 12
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "string": 37
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "string": 12
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "number": 12
+   },
+   "conjecturer.turn.v6/op": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/operation": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/operation": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/pointer": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/patch/value/*": {
+    "string": 2
+   },
+   "conjecturer.turn.v6/path": {
+    "string": 4
+   },
+   "conjecturer.turn.v6/pointer": {
+    "string": 1
+   },
+   "conjecturer.turn.v6/value": {
+    "string": 4
+   },
+   "critic.atomic-target.v1/attack": {
+    "bool": 1
+   },
+   "critic.atomic-target.v1/cited_input_aliases/*": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/claim": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/counterexample": {
+    "null": 1
+   },
+   "critic.atomic-target.v1/grounds": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/premise": {
+    "string": 1
+   },
+   "critic.atomic-target.v1/premise_evidence/*/block": {
+    "string": 2
+   },
+   "critic.atomic-target.v1/premise_evidence/*/quote": {
+    "string": 2
+   },
+   "critic.atomic-target.v1/target_alias": {
+    "string": 1
+   }
+  },
+  "string_vocabularies": {
+   "batch-critic.v2/cases/*/attack": {
+    "True": 20,
+    "False": 3
+   },
+   "batch-critic.v2/cases/*/case": {
+    "<<long>>": 20
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "<<long>>": 9
+   },
+   "batch-critic.v2/cases/*/counterexample/*/arid_city": {
+    "Phoenix": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/city": {
+    "Summer Phoenix, AZ at 03:00 local time": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/humid_city": {
+    "Houston": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/implication": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/note": {
+    "<<long>>": 2
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observation": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/scenario": {
+    "<<long>>": 1
+   },
+   "batch-critic.v2/cases/*/premise": {
+    "<<long>>": 19
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/block": {
+    "000000000000": 15,
+    "000000000001": 4,
+    "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845": 2,
+    "61636363383933663332386431633531": 1,
+    "36316637396235393436363339353332": 1,
+    "4dd62735b90864": 1,
+    "d6f1c3f1bd2d": 1,
+    "e2bb6b1cf3a4": 1,
+    "000000000000000000000000000000000000": 1,
+    "000000000000000000000000000000000001": 1,
+    "4dd62735b90864a75220e09b302500bc": 1
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/quote": {
+    "<<long>>": 27,
+    "with thermal mass playing a secondary role.": 1,
+    "greener cities have a smaller night-time temperature gap.": 1
+   },
+   "batch-critic.v2/cases/*/target_alias": {
+    "SRC_001": 23
+   },
+   "batch-critic.v2/operation": {
+    "replace": 2
+   },
+   "batch-critic.v2/patch/op": {
+    "remove": 1
+   },
+   "batch-critic.v2/patch/path": {
+    "/cases/0/preise": 1
+   },
+   "batch-critic.v2/pointer": {
+    "/cases/0/premise_evidence/0/block": 1,
+    "/cases/0/premise_evidence/1/block": 1
+   },
+   "batch-critic.v2/value": {
+    "00000000000000000000000000000000": 1,
+    "000000000000000000000000000001": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/adopted_commitment_refs/*": {
+    "30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81": 1,
+    "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/disanalogies/*": {
+    "<<long>>": 9,
+    "The system is open to fluid flow, unlike a sealed vessel.": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/overturn_conditions/*": {
+    "<<long>>": 10
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/shared_structure/*": {
+    "<<long>>": 9,
+    "The system retains energy due to a confined radiative geometry.": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/source_memory_refs/*": {
+    "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845": 1,
+    "SRC_001": 1,
+    "SRC_002": 1,
+    "SRC_003": 1,
+    "SRC_004": 1,
+    "922de524bda89045091bffe27e5f684a241ceb548f72af2f4d986794af18a844": 1,
+    "4537b03dbe868d2baff247f0b7d6046f845aba2e29dbff78317c8d8ef0a9dec1": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/analogy/transfer_claims/*": {
+    "<<long>>": 9
+   },
+   "conjecturer.atomic-candidate.v1/candidate/claim": {
+    "<<long>>": 12
+   },
+   "conjecturer.atomic-candidate.v1/candidate/counterconditions/*": {
+    "<<long>>": 44
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/block": {
+    "0fbf9215ae21376bdb25706f32652929a22c80e39cfc08994ad41f164e935a5f": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/evidence_refs/*/quote": {
+    "<<long>>": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/mechanism": {
+    "<<long>>": 12
+   },
+   "conjecturer.atomic-candidate.v1/candidate/optional_refs/*": {
+    "SRC_001": 8,
+    "SRC_003": 4,
+    "SRC_002": 2,
+    "SRC_004": 2,
+    "SRC_006": 2,
+    "SRC_005": 2
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/requested_context_aliases/*": {
+    "SRC_002": 8,
+    "SRC_001": 6,
+    "SRC_004": 4,
+    "SRC_003": 3,
+    "SRC_005": 2,
+    "SRC_007": 1,
+    "SRC_006": 1,
+    "SRC_008": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/sidecar/search_signal": {
+    "productive": 8,
+    "need_context": 2
+   },
+   "conjecturer.turn.v6/candidates/*/claim": {
+    "<<long>>": 12
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "<<long>>": 37
+   },
+   "conjecturer.turn.v6/candidates/*/mechanism": {
+    "<<long>>": 12
+   },
+   "conjecturer.turn.v6/candidates/*/optional_refs/*": {
+    "SRC_003": 10,
+    "SRC_001": 9,
+    "SRC_002": 7,
+    "SRC_004": 3,
+    "SRC_008": 3,
+    "SRC_005": 2,
+    "SRC_006": 2,
+    "SRC_007": 1
+   },
+   "conjecturer.turn.v6/candidates/*/sidecar/search_signal": {
+    "productive": 12
+   },
+   "conjecturer.turn.v6/op": {
+    "replace": 4
+   },
+   "conjecturer.turn.v6/operation": {
+    "replace": 1
+   },
+   "conjecturer.turn.v6/patch/operation": {
+    "replace": 1
+   },
+   "conjecturer.turn.v6/patch/pointer": {
+    "/scratch_proposal/unresolved_questions/0/related_refs": 1
+   },
+   "conjecturer.turn.v6/patch/value/*": {
+    "NEW_001": 1,
+    "NEW_002": 1
+   },
+   "conjecturer.turn.v6/path": {
+    "/scratch_proposal/links/0/to_ref": 2,
+    "/scratch_proposal/links/1/to_ref": 1,
+    "/scratch_proposal/unresolved_questions/0/related_refs": 1
+   },
+   "conjecturer.turn.v6/pointer": {
+    "/scratch_proposal/links/1/to_ref": 1
+   },
+   "conjecturer.turn.v6/value": {
+    "NEW_001": 3,
+    "NEW_002": 1
+   },
+   "critic.atomic-target.v1/attack": {
+    "True": 1
+   },
+   "critic.atomic-target.v1/cited_input_aliases/*": {
+    "SRC_001": 1
+   },
+   "critic.atomic-target.v1/claim": {
+    "<<long>>": 1
+   },
+   "critic.atomic-target.v1/grounds": {
+    "<<long>>": 1
+   },
+   "critic.atomic-target.v1/premise": {
+    "<<long>>": 1
+   },
+   "critic.atomic-target.v1/premise_evidence/*/block": {
+    "d5522d0ffff30a289f4f772c1b39279531ad9c1d712fdaa85f3dd9bb27263941": 2
+   },
+   "critic.atomic-target.v1/premise_evidence/*/quote": {
+    "<<long>>": 2
+   },
+   "critic.atomic-target.v1/target_alias": {
+    "SRC_001": 1
+   }
+  },
+  "string_hedges": {
+   "batch-critic.v2/cases/*/case": {
+    "no evidence": 1,
+    "unable to": 1,
+    "n/a": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*": {
+    "unable to": 1,
+    "no evidence": 1
+   },
+   "batch-critic.v2/cases/*/premise": {
+    "n/a": 1
+   },
+   "batch-critic.v2/cases/*/premise_evidence/*/quote": {
+    "unable to": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/counterconditions/*": {
+    "insufficient": 1
+   },
+   "conjecturer.turn.v6/candidates/*/counterconditions/*": {
+    "insufficient": 2,
+    "unable to": 1
+   }
+  },
+  "hedge_exemplars": [
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 19,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If the cross-city variation does not correlate with energy consumption or population density, this mechanism is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 19,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "unable to",
+    "value": "If rural areas are arid and lack vegetation, the evapotranspiration deficit would be small and unable to explain the UHI."
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 19,
+    "contract_id": "conjecturer.turn.v6",
+    "field": "/candidates/*/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If wind speed or anthropogenic heat dominates over surface moisture and emissivity, this mechanism is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 129,
+    "contract_id": "conjecturer.atomic-candidate.v1",
+    "field": "/candidate/counterconditions/*",
+    "marker": "insufficient",
+    "value": "If nocturnal UHI persists strongly in low-density, high-sky-view urban areas, the mechanism is insufficient."
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 170,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "no evidence",
+    "value": "SRC_001's own countercondition explicitly concedes that anthropogenic heat flux or impervious cover could be the better predictor of cross-city UHI variation. If the target already identifies a condition under which its central claim fails, and that condition corresponds to a widely documented empir"
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 281,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "unable to",
+    "value": "SRC_001 claims the primary nocturnal UHI mechanism is the evaporative-cooling deficit (impervious surfaces suppress evapotranspiration), but then states the cross-city modulator is 'vegetation and irrigation\u2014greener cities have a smaller night-time temperature gap.' That cross-city claim contradicts"
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 281,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/premise_evidence/*/quote",
+    "marker": "unable to",
+    "value": "If rural areas are arid and lack vegetation, the evapotranspiration deficit would be small and unable to explain the UHI."
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 281,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "unable to",
+    "value": "A desert city (e.g., Phoenix) and its arid surroundings both have negligible evapotranspiration, so by the target's own premise the deficit 'would be small and unable to explain the UHI,' yet such cities still exhibit a pronounced nocturnal UHI\u2014directly falsifying evaporative-cooling deficit as the "
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 412,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/premise",
+    "marker": "n/a",
+    "value": "The problem asks for the SINGLE mechanism that best explains why the night-time UHI gap is larger in some cities than in others. SRC_001's stated single cross-city modulator is vegetation/irrigation/aridity (the evaporative contrast), but its own derivation shows aridity cuts the wrong way: it says "
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 412,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/case",
+    "marker": "n/a",
+    "value": "SRC_001's cross-city modulator (evaporative contrast via vegetation/aridity) is internally inconsistent with observed arid-city UHI: it asserts drier surroundings reduce the urban-rural evaporative contrast and thus weaken the nocturnal gap, but arid cities like Phoenix exhibit large nocturnal UHI. "
+   },
+   {
+    "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+    "seq": 419,
+    "contract_id": "batch-critic.v2",
+    "field": "/cases/*/counterexample/*",
+    "marker": "no evidence",
+    "value": "Urban heating studies (e.g., Oke 1982; Sailor 2011) find anthropogenic heat emissions and high thermal-admittance building materials substantially raise nocturnal urban temperatures, so cross-city differences in energy use and material heat capacity\u2014not primarily sky-view factor\u2014can dominate the UHI"
+   }
+  ],
+  "numeric_precision": {
+   "batch-critic.v2/cases/*/counterexample/*/actual_max_UHI_low": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/expected_max_UHI_high": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/log10_population": {
+    "0": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_arid_degC": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/observed_nighttime_uhi_gap_humid_degC": {
+    "1": 1
+   },
+   "batch-critic.v2/cases/*/counterexample/*/sky_view_factor_low": {
+    "1": 1
+   },
+   "conjecturer.atomic-candidate.v1/candidate/typicality": {
+    "1": 5,
+    "2": 7
+   },
+   "conjecturer.turn.v6/candidates/*/typicality": {
+    "1": 3,
+    "2": 9
+   }
+  }
+ },
+ "rows": [
+  {
+   "seq": 19,
+   "ts": "2026-08-23T10:23:47.135679+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 7813,
+   "max_tokens": 32768,
+   "work_id": "sha256:05df0bbdebf672ca8888f9a10ed644d9138e7b10383cd32e92c4bc9571d1a111",
+   "raw_ref": "f5cdd9cc93140618bf65724eb064fd69008635e87636f1d9af6d6a68fddd2251",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 48,
+   "ts": "2026-08-23T10:23:49.024166+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2081,
+   "max_tokens": 32768,
+   "work_id": "sha256:60ecda05177ea767732087e1d26cd414194e8f6da9454c78ca94be95f6445a71",
+   "raw_ref": "e1906d1c504f3542e793eb54b312d17cdcba63b0c4593ec887854c896bdb1fa8",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 55,
+   "ts": "2026-08-23T10:23:51.881918+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2147,
+   "max_tokens": 32768,
+   "work_id": "sha256:1f2ed7d0582009b0a3e952e0fd1fcbc36eb51567578189041e3ed8a3d2290396",
+   "raw_ref": "4c8aab1590db823c3a6f15eee40121306b26f9908a527f47213b2c7ae7311306",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 69,
+   "ts": "2026-08-23T10:23:53.639339+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1917,
+   "max_tokens": 32768,
+   "work_id": "sha256:9a47219129577e4d6b2a7f4608b5efd9189cde3b9d96295e52ab227c66154ad1",
+   "raw_ref": "80fe2c5ca3ca43a02dfca34919ad4a8cedfbf2c53ec985674edabc1e480d3a5e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 76,
+   "ts": "2026-08-23T10:23:55.135198+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1873,
+   "max_tokens": 32768,
+   "work_id": "sha256:3d3349005f1baf3587b7109fad53634a11cd345fdf852b27d30ba1a48525f808",
+   "raw_ref": "aa2a13db117c11b636fb84db6574a7e6f27297ca839dc535039d87b8336b7ea9",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 83,
+   "ts": "2026-08-23T10:24:09.260544+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8614,
+   "max_tokens": 32768,
+   "work_id": "sha256:a4ea8d721221bcfb12a65507c1b10e31f1c4be026a2ad4d07edd424bad66933e",
+   "raw_ref": "facd2d8a0200b6e25822621769155c03a1605fb7eb54bd4a067f970c8defe37a",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "WIRE_TRAILING_CONTENT",
+     "field": "",
+     "field_raw": "",
+     "message": "multiple top-level JSON values or trailing content",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "WIRE_TRAILING_CONTENT",
+     "field": "",
+     "field_raw": "",
+     "message": "multiple top-level JSON values or trailing content",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    }
+   ]
+  },
+  {
+   "seq": 88,
+   "ts": "2026-08-23T10:24:19.410147+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/scratch_proposal/links/0/to_ref",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 5822,
+   "max_tokens": 32768,
+   "work_id": "sha256:16c4970e4e5a4b20e34cedf9a3b9ffa9c31596eef962a70b39f69e7bad389f24",
+   "raw_ref": "8d18ca52c9a90bcfe635772041f0d222eb56fd0b1e90ad608c1cfbd40b5333da",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/2/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_007",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 93,
+   "ts": "2026-08-23T10:24:20.318349+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4806,
+   "max_tokens": 32768,
+   "work_id": "sha256:8e7e2e4b7de4c81819b2df455e2d8533989ab418f1087b179c39fa061e093bd2",
+   "raw_ref": "557265ea8b8dd6707184db792f901509b8c00f63255c723a912d596bcd17375a",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/2/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_007",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 98,
+   "ts": "2026-08-23T10:24:21.145112+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 3,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4332,
+   "max_tokens": 32768,
+   "work_id": "sha256:3a3e580bd49d4d2dd7be1b6f07c33545b6cae1e5476a55a9a0867c79042bbe77",
+   "raw_ref": "27dd011c5d8ae272fe2acebfb902d87cbf7c68119b10df9b3f04f303f8c2a854",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/2/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_007",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 103,
+   "ts": "2026-08-23T10:24:21.982581+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 4,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3903,
+   "max_tokens": 32768,
+   "work_id": "sha256:1ebe9efd9278fea899139e5b87688fe62cadd3dcfc855e4568258569f76ef352",
+   "raw_ref": "a24922eddf703f73f15370597c830be87a2cdd941d00a0cc5f74e6900c57abbd",
+   "admission_outcome": "schema_exhausted",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/2/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_007",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 109,
+   "ts": "2026-08-23T10:24:24.897137+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2991,
+   "max_tokens": 32768,
+   "work_id": "sha256:dcda326b962f3d3a055acc6c926c5e0b0b3246c182eb88cf268ab788823273b8",
+   "raw_ref": "d8410f5de76984d0641c112876e03759174c9095899b0d5ff115b34033f1dfcd",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 114,
+   "ts": "2026-08-23T10:24:27.585534+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3010,
+   "max_tokens": 32768,
+   "work_id": "sha256:6706539b216440d7f11678b59f6ad43ac088533db03064081cdc49c197008767",
+   "raw_ref": "a9d651993c91bacfb874bd6f5c266a9ed15c8912731fa4401ea18c10ad3b5d44",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 119,
+   "ts": "2026-08-23T10:24:30.637281+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3112,
+   "max_tokens": 32768,
+   "work_id": "sha256:c92f24a461b26b4aec02f4e81355863ddef82c15103b1d685d18825f0c9b4846",
+   "raw_ref": "e8451a07f1426118a048ec9317b12d84c97fab802c410c746e75d8122db69f74",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 124,
+   "ts": "2026-08-23T10:24:34.675457+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3299,
+   "max_tokens": 32768,
+   "work_id": "sha256:33b6dc5371aad801f61b513f65d50a6d527285a5bff3b84cec53dc92fc1ad401",
+   "raw_ref": "25bfc260b11aac4f055e90d13fa549363375afcb137aca009a6bd106b15c7e1c",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 129,
+   "ts": "2026-08-23T10:24:37.134072+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3049,
+   "max_tokens": 32768,
+   "work_id": "sha256:72334693eef611041b2ecc89786a5efcf72b8b3eb86d0f0ce2c8f56012f9aa48",
+   "raw_ref": "ff5f667c3e6e11a43aa26513271ed9c9f5ab82672160a7204f4fada408ceeb4e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 134,
+   "ts": "2026-08-23T10:24:45.079521+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3743,
+   "max_tokens": 32768,
+   "work_id": "sha256:d4b6398a4d1a00c6aaeb0ba97aea044c9da54176ad3bb8abde297eef803bcee8",
+   "raw_ref": "71f4b6ba6a6477e0eb21fa1243bbc3f376a950eb5540b4aa33c2f52479b855db",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 163,
+   "ts": "2026-08-23T10:24:48.255267+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1891,
+   "max_tokens": 32768,
+   "work_id": "sha256:66a0dbc0b7592d910ddffcc1d6694d45e57a2aa67d21ee6d2ee23b2acd148808",
+   "raw_ref": "31acc79f71ba0f6f3b260dd3bfd9a97ab3bab50882b315f42d3fe02c9028cc6e",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 170,
+   "ts": "2026-08-23T10:24:51.328012+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2181,
+   "max_tokens": 32768,
+   "work_id": "sha256:97a7965c72994e66b88ec01f68fefda85f516e7c042af0e60118188232e0f720",
+   "raw_ref": "8fb2f0909af62221a5f581dbf3cae2ffc34b7bbf1080c8e7539888dae2cdb3d6",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 177,
+   "ts": "2026-08-23T10:24:54.840112+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2248,
+   "max_tokens": 32768,
+   "work_id": "sha256:77d4855aa89449f11202c445c3d7d9780557cae515a08e066b0d7362a6f80714",
+   "raw_ref": "4cd6ce0790309921c47cec2bacdb4e64d7956176f6aee864965aa3e8de52602b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 184,
+   "ts": "2026-08-23T10:24:57.503553+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2366,
+   "max_tokens": 32768,
+   "work_id": "sha256:8782155eff838f9b1c11bf3c0968d981bad830f344a4ac452a2580b280818be5",
+   "raw_ref": "b476afe35f8e7f43179dc0829d706444719bf34b07fcc23469c10a30d1846ebe",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 191,
+   "ts": "2026-08-23T10:25:00.237307+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1855,
+   "max_tokens": 32768,
+   "work_id": "sha256:19c2b76368eae504d00dbe19657f7d5447f999a5faabf65bd31222e744e3c4b6",
+   "raw_ref": "d7f58f281c0ac5a3d039f59b04cdbb0110f410d5003a663be19d9918e3e721ea",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 198,
+   "ts": "2026-08-23T10:25:02.367468+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2595,
+   "max_tokens": 32768,
+   "work_id": "sha256:324b380076f425e579cfda8121632e88c4c2f5078a497050ffdb1c37a2a54875",
+   "raw_ref": "e45f7898461de7767a46a5758fb94b08fc5c95ed4ea356b8ba1cdebe9fc4de84",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 205,
+   "ts": "2026-08-23T10:25:03.155296+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1793,
+   "max_tokens": 32768,
+   "work_id": "sha256:d40e39c3b52180a1611d87611c5e869d657eb70e0948c055e79535e160293a83",
+   "raw_ref": "b8578dbdff62dbd05e1b539a8d2b0204a67cf188d7909f1e2cee0d25e688a3f0",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 210,
+   "ts": "2026-08-23T10:25:06.121240+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2090,
+   "max_tokens": 32768,
+   "work_id": "sha256:94be27735d4d8875fb3f8f4cac11e2f2429eeb9e55dc1be26cd7b0889f3257df",
+   "raw_ref": "0c13ddd62b82068ce087999189aa728e17e7253e4afd8c4b36b2e69b3e308bf0",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 217,
+   "ts": "2026-08-23T10:25:17.968699+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 7904,
+   "max_tokens": 32768,
+   "work_id": "sha256:edb020f366b166ee3b37405b8dbd14c499f454e87e1e4b9273b44744af97e54a",
+   "raw_ref": "61ec284e5b0c5d198364f09f35a8b082c8f39cf9c4cdff97e14a9919d53a0af9",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 243,
+   "ts": "2026-08-23T10:25:22.489738+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2298,
+   "max_tokens": 32768,
+   "work_id": "sha256:ab2efdb501430dcf240658258fbf1e4a8cfd08f54b020d5a4d6b39b90b4ab6ad",
+   "raw_ref": "d2f0ecc34caba7630faac12830e0e345ec9d4a9f27dc7831f36b74b21c292dbc",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 250,
+   "ts": "2026-08-23T10:25:25.175120+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1893,
+   "max_tokens": 32768,
+   "work_id": "sha256:1d5b85605dcd40cf849a3b04ff70cf8fe059a00e764dd7e22441b82f6f5141f9",
+   "raw_ref": "634a6f0c333bc4aee06686894f1ac50c75debf154202513492064af24cde3707",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 257,
+   "ts": "2026-08-23T10:25:28.353545+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1936,
+   "max_tokens": 32768,
+   "work_id": "sha256:9afd89ea49ec1ef584f2a263ca2117127b794a822da3db704f05b2b696806905",
+   "raw_ref": "61383de4c8167a475eb5f7bd50709e7777436e0cbdc17216dc5cb3137da3509e",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/cases/*/preise",
+     "field_raw": "/cases/0/preise",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 262,
+   "ts": "2026-08-23T10:25:29.106485+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 819,
+   "max_tokens": 32768,
+   "work_id": "sha256:0b3e22473ab569f705a8590c54b2a7a66ef4661e6de62964e88121d4b7c174b8",
+   "raw_ref": "d6aca9df0b4c1758b20a57385c9c986b2d2e5580b892690e5a7c3f8c9b4f7ffc",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 269,
+   "ts": "2026-08-23T10:25:33.856425+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2254,
+   "max_tokens": 32768,
+   "work_id": "sha256:356b4e9b0a573b4a835438fe96aff2c6287d92b2cff1bdf5c5a4608cf1b36b5d",
+   "raw_ref": "dd065ce0a68106327bef6178fd353b7f1a4ef59b28d9d5610fd240f738b9fe20",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 276,
+   "ts": "2026-08-23T10:25:34.628267+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1715,
+   "max_tokens": 32768,
+   "work_id": "sha256:309d4f5d4bfb78b948ca5b28a5e462e7c1734845fb432e0c08af2d3b3ebadd3d",
+   "raw_ref": "83dce1d6374ae8ddcec78494156e0f24a661c7598dcf61f994ebb7fd8d0e32f0",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 281,
+   "ts": "2026-08-23T10:25:37.534874+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2070,
+   "max_tokens": 32768,
+   "work_id": "sha256:7af5c74d1cb56ea73f65440f164ea4eb6f94da0d07c409856aa82cd760c8516e",
+   "raw_ref": "9e9cb60b0b6331349c42469bd2aeb0c03c62f952d54d12babb1f4ed466476df1",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 288,
+   "ts": "2026-08-23T10:25:40.753495+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2243,
+   "max_tokens": 32768,
+   "work_id": "sha256:b1b37b94dd0c5fc49fca30ff1ae7168e90d67592b22a71854b414007221d7336",
+   "raw_ref": "3366f359bad164dcfdb842231753d03b577fd9db5db63cca298cf86b05c42109",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 295,
+   "ts": "2026-08-23T10:25:55.179197+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/scratch_proposal/links/0/to_ref",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 8559,
+   "max_tokens": 32768,
+   "work_id": "sha256:50de18faf89247db065d8dbd1d59c2d7ede07174b647f8c6a9e61bd7004dd4d7",
+   "raw_ref": "d7cb9e017265f4f6b5c853c39849ef6f9c85a7ad1a4df06964fbad5ad38db9fd",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/0/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 300,
+   "ts": "2026-08-23T10:25:56.129391+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 4388,
+   "max_tokens": 32768,
+   "work_id": "sha256:5c3972c7108a47cb46ed28545aaa68c032428c3e803b50fbc547b72abf9c1de5",
+   "raw_ref": "8b18cc683c37b1bbe3a445bfbd11462de58d7dd889a3bce6984e4ee72121a6ad",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/scratch_proposal/links/*/to_ref",
+     "field_raw": "/scratch_proposal/links/1/to_ref",
+     "message": "String should match pattern '^(?:SCR|NEW)_[0-9]{3,}$'",
+     "allowed": "operation=replace; type='string', pattern='^(?:SCR|NEW)_[0-9]{3,}$'",
+     "rejected_handle": "SRC_006",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": false,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 305,
+   "ts": "2026-08-23T10:25:57.038897+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3838,
+   "max_tokens": 32768,
+   "work_id": "sha256:fb9c2b07484f56c21ac4ae7003c1191ffaf159ea6936376cf326dd8c5f0dacc4",
+   "raw_ref": "950ce4f03b09f093d61018be2cc15526fc568f5212dcbfc5d9b3aa94a44381cb",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/0/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 310,
+   "ts": "2026-08-23T10:25:57.989125+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 3,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3357,
+   "max_tokens": 32768,
+   "work_id": "sha256:d5b2f3549c69877f0e99b776c4cee7e6fb146c1a2e5c82e2832317ce4531ead9",
+   "raw_ref": "56ee21914d38a47b98fa1596650d07b12c2ec59c0eb69db143f9569fbca47442",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 315,
+   "ts": "2026-08-23T10:25:58.741790+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.turn.v6",
+   "attempt_index": 4,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3073,
+   "max_tokens": 32768,
+   "work_id": "sha256:8413e79719206b194ae47abb0e80ded6e61fbd6d8e2cf4668cff66b6f1c086e8",
+   "raw_ref": "869a8ab1aaa224861e82ac297d57f7d10d7f79d241df77520f957274d3904492",
+   "admission_outcome": "schema_exhausted",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /code",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "value_error",
+     "field": "/scratch_proposal/unresolved_questions/*/related_refs",
+     "field_raw": "/scratch_proposal/unresolved_questions/1/related_refs",
+     "message": "Value error, unresolved questions may use only visible/local scratch refs",
+     "allowed": "operation=replace; type='array', maxItems=64",
+     "rejected_handle": "SRC_005",
+     "observed_handle_kind": "unknown",
+     "omission_or_unknown_legal": true,
+     "legal_handles": [
+      "NEW_001",
+      "NEW_002"
+     ],
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 321,
+   "ts": "2026-08-23T10:26:02.024996+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3067,
+   "max_tokens": 32768,
+   "work_id": "sha256:3edb983c38278b368b1ba6a29db4bcedf54140f83ab1953eff356d3e15ce5f82",
+   "raw_ref": "930529ac519a83e5e680f8d33010a828fa45fdc32858ac0ad82874d625e56db3",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 326,
+   "ts": "2026-08-23T10:26:05.375084+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3146,
+   "max_tokens": 32768,
+   "work_id": "sha256:7b23ea3a451fd239cf7fd7953df8cc6fd752a312ca680f4e5a8a45695694c2d8",
+   "raw_ref": "8016834775fbad341a04e8d158582d587360032261062527c91494e7d0c5a647",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 331,
+   "ts": "2026-08-23T10:26:12.086421+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3700,
+   "max_tokens": 32768,
+   "work_id": "sha256:7929aa9e0838f3e8de59b1009a6fda3523881eb26d1e34c45fead30a43208df5",
+   "raw_ref": "86d45b0810af824d04dcdde65f25731781bd7da832e3a13d9a86ecbf38b813ed",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 336,
+   "ts": "2026-08-23T10:26:15.459998+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3081,
+   "max_tokens": 32768,
+   "work_id": "sha256:8c50011145160c16e88d88c58d1b3bd933eb0e3789a5fc3336721345f3ff8941",
+   "raw_ref": "bda4d7c2ad7a22fa8ac68eee566434ff1469812129b13d2eeec79ca94a67765b",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 341,
+   "ts": "2026-08-23T10:26:18.411107+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3091,
+   "max_tokens": 32768,
+   "work_id": "sha256:aa2f5360821362a77129e4454a2b980be420d7d1ffdcce88e112327e4055905c",
+   "raw_ref": "c8ddf94b321e5da123e2d2e971faf744a943f351c4e406b54d8c839ee71689d9",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 346,
+   "ts": "2026-08-23T10:26:21.154345+00:00",
+   "rule": "Control",
+   "role": "conjecturer",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "conjecturer.atomic-candidate.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 3040,
+   "max_tokens": 32768,
+   "work_id": "sha256:18f38a858e8c765f5ee6750ec1143d9f16333a718cbe563299e16b382e885713",
+   "raw_ref": "5e72f711743bac7750a1b44aaaf5b4ce6424fa3718fe991bc3e8cd9e2ac9a211",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 376,
+   "ts": "2026-08-23T10:26:25.237591+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2264,
+   "max_tokens": 32768,
+   "work_id": "sha256:46422e737646df9991d26154956f6d85c68007a69e92831131727bc37a7f4cb9",
+   "raw_ref": "38b2d9235814943d1dec4167332414baaa321e7e31fc40af60ebecd8a1c9a176",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 383,
+   "ts": "2026-08-23T10:26:27.996183+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": true,
+   "repair_scope": "/cases/0/premise_evidence/0/block",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2136,
+   "max_tokens": 32768,
+   "work_id": "sha256:6a8412d7b8bd0108b3fd92aeb06b7215515790235b17d20f663a2db4ac0f5d15",
+   "raw_ref": "5774706728ed034891c376eb93f996eea42f5d595c7a0fe883d2969342acfcb8",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/cases/*/premise_evidence/*/block",
+     "field_raw": "/cases/0/premise_evidence/0/block",
+     "message": "String should match pattern '^[0-9a-f]{12,64}$'",
+     "allowed": "type='string', pattern='^[0-9a-f]{12,64}$'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/cases/*/premise_evidence/*/block",
+     "field_raw": "/cases/0/premise_evidence/0/block",
+     "message": "String should match pattern '^[0-9a-f]{12,64}$'",
+     "allowed": "operation=replace; type='string', pattern='^[0-9a-f]{12,64}$'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    },
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/cases/*/premise_evidence/*/block",
+     "field_raw": "/cases/0/premise_evidence/1/block",
+     "message": "String should match pattern '^[0-9a-f]{12,64}$'",
+     "allowed": "operation=replace; type='string', pattern='^[0-9a-f]{12,64}$'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 388,
+   "ts": "2026-08-23T10:26:28.735268+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1167,
+   "max_tokens": 32768,
+   "work_id": "sha256:d898336a69cf032085b427e422610f3c4fec4aaf7aabb5a9f0132ca4c44fa95f",
+   "raw_ref": "05b2b574fe4328c112bd4e38fee6c9190bcb9f5db8cc431a228816a2c9174c4e",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "string_pattern_mismatch",
+     "field": "/cases/*/premise_evidence/*/block",
+     "field_raw": "/cases/0/premise_evidence/1/block",
+     "message": "String should match pattern '^[0-9a-f]{12,64}$'",
+     "allowed": "operation=replace; type='string', pattern='^[0-9a-f]{12,64}$'",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 393,
+   "ts": "2026-08-23T10:26:29.765593+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1023,
+   "max_tokens": 32768,
+   "work_id": "sha256:587f98faf176c780e85b2c22490f6de2de744316e9b5a84cd42ba0694683299d",
+   "raw_ref": "d2e5274d4e51ea41a091020f5ab1b60ffc82929dce4d9382dfee078d76045617",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 400,
+   "ts": "2026-08-23T10:26:30.641991+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2263,
+   "max_tokens": 32768,
+   "work_id": "sha256:469d1e94aa94919778eb9dc67fbe2c483c568b8f2c31d079e0134fa2b82851ff",
+   "raw_ref": "6a86affd2e70eb567dbe51fdb70866ce3610867a83a6578d0511ca973338dfc6",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 405,
+   "ts": "2026-08-23T10:26:33.800672+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2240,
+   "max_tokens": 32768,
+   "work_id": "sha256:51e2c8a234a1f507bcd295d5e26cf0d787fbde7bab0dc1bc28ad575d56ac1168",
+   "raw_ref": "9d50d206f0ac7c256c6afdfb2b6aa37c7d71aeca20856c07dd1c3c56d60a8376",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 412,
+   "ts": "2026-08-23T10:26:36.761187+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 2045,
+   "max_tokens": 32768,
+   "work_id": "sha256:910aece6f5ca35a8bed0ef10ecc8b5eef54ef5251640673d40a974063cdf50fc",
+   "raw_ref": "14e72a75f96e075bf0e6b93134f7b2706650d2313e93dc6c989fe17d2616dc50",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 419,
+   "ts": "2026-08-23T10:26:39.342980+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1951,
+   "max_tokens": 32768,
+   "work_id": "sha256:5ce09770b46868eb4e53b9feac8cf09caefd1f8a9cbae9184008140915f5724d",
+   "raw_ref": "30712b5e1fc85ac0b60952fe7a992df0747097a2efef483d2166b01fb1122634",
+   "admission_outcome": "admitted",
+   "failures": []
+  },
+  {
+   "seq": 426,
+   "ts": "2026-08-23T10:26:43.837033+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1895,
+   "max_tokens": 32768,
+   "work_id": "sha256:9553aef4877d791eb9cb348eef179f6bcfd8a98d27429fca0bb7ad8ac967a7d0",
+   "raw_ref": "f335e6ae12f418c80b4ab8a1bfbaa3d9b1aea9bfb0658baae11f55c9875f2233",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/cases/*/preise",
+     "field_raw": "/cases/0/preise",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 431,
+   "ts": "2026-08-23T10:26:44.688461+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 1,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 783,
+   "max_tokens": 32768,
+   "work_id": "sha256:a9750f8140ce683ec534ab6424c09f31e2403b71a95aa055f57007b42117cdf3",
+   "raw_ref": "b5278330d693939c1604eed174b60e33fc49212cb4ebf40867ba88f5906fd804",
+   "admission_outcome": "rejected",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /type",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/cases/*/preise",
+     "field_raw": "/cases/0/preise",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 436,
+   "ts": "2026-08-23T10:26:45.451143+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "batch-critic.v2",
+   "attempt_index": 2,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": false,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 745,
+   "max_tokens": 32768,
+   "work_id": "sha256:516c8ab42e600910d9c72fc6bf751c30b434fe63da25be1a1da6ff0d29d288af",
+   "raw_ref": "eb6966be0d452e238696a0cf0a799f43ac8164b83df0538a7894334f1d5a4aad",
+   "admission_outcome": "schema_exhausted",
+   "failures": [
+    {
+     "class": "extra_forbidden",
+     "field": "",
+     "field_raw": "",
+     "message": "extra field at /code",
+     "allowed": "complete JSON value",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "field_diagnostic"
+    },
+    {
+     "class": "extra_forbidden",
+     "field": "/cases/*/preise",
+     "field_raw": "/cases/0/preise",
+     "message": "extra field at /cases/0/preise",
+     "allowed": "",
+     "rejected_handle": null,
+     "observed_handle_kind": null,
+     "omission_or_unknown_legal": null,
+     "legal_handles": null,
+     "kind": "repair_envelope"
+    }
+   ]
+  },
+  {
+   "seq": 442,
+   "ts": "2026-08-23T10:26:48.688117+00:00",
+   "rule": "Control",
+   "role": "argumentative_critic",
+   "model": "glm-5.2",
+   "seat": 0,
+   "endpoint_id": "ollama-glm-5.2",
+   "contract_id": "critic.atomic-target.v1",
+   "attempt_index": 0,
+   "attempt_object_found": true,
+   "is_repair": false,
+   "repair_scope": "",
+   "cycle": null,
+   "cycle_completed": false,
+   "valid_on_arrival": true,
+   "truncated": false,
+   "natural_stop": null,
+   "transport_attempts": 1,
+   "transport_diagnostics": [],
+   "tokens": 1951,
+   "max_tokens": 32768,
+   "work_id": "sha256:5e80d37bc3d8a07e3ddec169829f0ae712d32afd433929d7e5b35919c1f90457",
+   "raw_ref": "d1e040d741c067a65f101ab00113ad2ea45a8923e1377faefcbe4fb53e9231e5",
+   "admission_outcome": "admitted",
+   "failures": []
+  }
+ ]
+}
