@@ -1,0 +1,144 @@
+{
+ "assertion": "780feda2d16eec232db4e6c1a0e40545b8db181399dbcffbc69512e4d2834a50",
+ "carried": [
+  "question-4dd62735b90864a75220e09b302500bc"
+ ],
+ "consulted_before_the_fall": [
+  "780feda2d16eec232db4e6c1a0e40545b8db181399dbcffbc69512e4d2834a50"
+ ],
+ "fall_critic": "7189991b60b2a15ff22768ce7d201ee26e19047d0ffc824d2c06fb6b90f536f6",
+ "frame_renders": true,
+ "outcome": "L-6 PASS",
+ "problems": [
+  "conn:10b3c81d4ea6",
+  "conn:20d86b74d99c",
+  "conn:301cb117fcbd",
+  "conn:3412428c1dca",
+  "conn:431790ab193b",
+  "conn:444ebe9025bd",
+  "conn:620f580b1d40",
+  "conn:7af1c67a2e63",
+  "conn:862e69e78788",
+  "conn:9fb49e427e1f",
+  "conn:a2fcbbb9017d",
+  "conn:b6eb9dbda73f",
+  "conn:c16a40e60553",
+  "conn:c50397b24312",
+  "conn:ebd1ab67c28c",
+  "conn:f0c284d4fa28",
+  "conn:f68774f3a6e5",
+  "conn:fe533656a28f",
+  "disc:question-4dd62735b90864a75220e09b302500bc",
+  "promotion:084c7918142a",
+  "question-4dd62735b90864a75220e09b302500bc",
+  "research:reason-counter@053f604f1ad868ae45054137:c50397b24312",
+  "research:reason-counter@0afc88e0ca1524dedbc451e9:9fb49e427e1f",
+  "research:reason-counter@0c85e9ca507c382b223c05e0:b6eb9dbda73f",
+  "research:reason-counter@0dd3aca06bc1d26f3fa59945:3412428c1dca",
+  "research:reason-counter@11161b354d442b27f3db1846:862e69e78788",
+  "research:reason-counter@128452f60a99e2f05e704487:20d86b74d99c",
+  "research:reason-counter@13b613015cb482fcd7404c2e:9fb49e427e1f",
+  "research:reason-counter@1d18ae2f97c2515c1fd9c10e:3412428c1dca",
+  "research:reason-counter@1e2123452968bad242352dc9:f68774f3a6e5",
+  "research:reason-counter@26dbfc49faad2d47c3620dd9:10b3c81d4ea6",
+  "research:reason-counter@2ed3d98042087211d0801db5:c16a40e60553",
+  "research:reason-counter@2ef31c324b575c5fada8b225:fe533656a28f",
+  "research:reason-counter@300965836e6cfb59a3ff3eec:a2fcbbb9017d",
+  "research:reason-counter@30512ad6040f74cf51f26014:431790ab193b",
+  "research:reason-counter@30f5f5ed168e925da894aa03:20d86b74d99c",
+  "research:reason-counter@4030edfa283f777e8171a3ed:431790ab193b",
+  "research:reason-counter@4158397909c7695efdc4b3f1:431790ab193b",
+  "research:reason-counter@48d79d48e642f7cad97e6ff4:10b3c81d4ea6",
+  "research:reason-counter@51ca2774a2e099617f495402:b6eb9dbda73f",
+  "research:reason-counter@5aef08aa56d4d3e029b403f1:620f580b1d40",
+  "research:reason-counter@5e49255ef6c9d537a07a203f:10b3c81d4ea6",
+  "research:reason-counter@66470213fb4461d2cafe1956:c50397b24312",
+  "research:reason-counter@67c45fe46e4692c0f7ad6f69:20d86b74d99c",
+  "research:reason-counter@697a8f37583d1095255cb2b3:a2fcbbb9017d",
+  "research:reason-counter@69bb79a3fefa6297588ed519:620f580b1d40",
+  "research:reason-counter@72ca061195ee7e29532f9d49:620f580b1d40",
+  "research:reason-counter@7dac3f68f108da08c2d5cf4a:f68774f3a6e5",
+  "research:reason-counter@8129c6b91c3cd4a0fc2758f9:862e69e78788",
+  "research:reason-counter@82c9ed6f0552366067c0cb6e:c16a40e60553",
+  "research:reason-counter@852949eb1ff2980f6fa984ec:fe533656a28f",
+  "research:reason-counter@87aa136bba290b2ad46e0493:444ebe9025bd",
+  "research:reason-counter@89cda3cb46208414796e0907:9fb49e427e1f",
+  "research:reason-counter@8c4dc1ba5d057948a30f0196:301cb117fcbd",
+  "research:reason-counter@9c186cb1b1d99438c0851888:ebd1ab67c28c",
+  "research:reason-counter@9c410fec6183f306138a223c:f0c284d4fa28",
+  "research:reason-counter@a5768c5c35b060828a30b4c8:a2fcbbb9017d",
+  "research:reason-counter@a67882863c47c846a4c1c53e:20d86b74d99c",
+  "research:reason-counter@abbf85424c0a1852b182d175:b6eb9dbda73f",
+  "research:reason-counter@af6a9e692dc4c18837788c10:b6eb9dbda73f",
+  "research:reason-counter@afaf6f1bff242eb605de94c2:3412428c1dca",
+  "research:reason-counter@b312a8238ead7affc564973e:f68774f3a6e5",
+  "research:reason-counter@b4f7fb085584595116650d67:862e69e78788",
+  "research:reason-counter@ba07b2fe5cc93e8b67ca864a:fe533656a28f",
+  "research:reason-counter@ba13fee0f228f6362f4aab8e:7af1c67a2e63",
+  "research:reason-counter@bbe9def50e16f85844bb6358:ebd1ab67c28c",
+  "research:reason-counter@c195aee724fffba3ddcbcf25:862e69e78788",
+  "research:reason-counter@c2dd45e1203b7c002542997f:444ebe9025bd",
+  "research:reason-counter@c72cbaa6acdebf4f24d58172:c16a40e60553",
+  "research:reason-counter@d1660dba93c314ce4cdaa474:7af1c67a2e63",
+  "research:reason-counter@d5559517cb8d32134058fe58:301cb117fcbd",
+  "research:reason-counter@d5f52087cda84818d14d6cb4:9fb49e427e1f",
+  "research:reason-counter@dfa6ff2a2982aa04c27a10c8:620f580b1d40",
+  "research:reason-counter@e09a8e01f1662f38e0fa3b8e:a2fcbbb9017d",
+  "research:reason-counter@e12d34ed1f59e267ab01aa56:c16a40e60553",
+  "research:reason-counter@e1e7947f6ede04cc4effef49:f68774f3a6e5",
+  "research:reason-counter@e60342ae7de61e3a369a25f8:7af1c67a2e63",
+  "research:reason-counter@e61970cb5ac1accd886f384f:c50397b24312",
+  "research:reason-counter@ea06fc35627983efb496907b:444ebe9025bd",
+  "research:reason-counter@eb547dee12c7ea20b0e7a4df:f0c284d4fa28"
+ ],
+ "promotion_problem": "promotion:084c7918142a",
+ "prop_9_6": {
+  "assertion_status": "Status.ACCEPTED",
+  "marks_after_wound": {},
+  "standing_unchanged": true,
+  "subject_status_after_wound": "Status.REFUTED",
+  "wound_id": "eafb1f1292407a9a53da2d0f5e15e1465ec2e5b2cf85af0f4ed02e3f0aba50a5"
+ },
+ "root": "/home/user/DeepReason/experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+ "scope_token": "why",
+ "subject": "084c7918142a7430b466f0709bbdb2cae216e48ba47a5e56be52dabcbd85b883",
+ "subject_head": "inline:The artifact 10b3c81d4ea6 DEPENDS ON the thermal storage and cooling-rate",
+ "typed_outcomes": {
+  "assertion_status": "Status.REFUTED",
+  "batch_offers": [
+   {
+    "cause": "780feda2d16eec232db4e6c1a0e40545b8db181399dbcffbc69512e4d2834a50",
+    "grade": "premise-refuted",
+    "size": 1
+   }
+  ],
+  "fallen_frames": [
+   {
+    "assertion": "780feda2d16eec232db4e6c1a0e40545b8db181399dbcffbc69512e4d2834a50",
+    "grade": "fall",
+    "label": "refuted"
+   }
+  ],
+  "frame_still_renders": false,
+  "marks": {
+   "question-4dd62735b90864a75220e09b302500bc": "premise-refuted"
+  },
+  "open_orphans": {
+   "question-4dd62735b90864a75220e09b302500bc": "premise-refuted"
+  },
+  "standing_after_the_fall": []
+ },
+ "verify_root_after": {
+  "cascade_integrity": [],
+  "checks": [
+   "terminal-authority"
+  ],
+  "violations": 1
+ },
+ "verify_root_before": {
+  "checks": [
+   "terminal-authority"
+  ],
+  "violations": 1
+ }
+}

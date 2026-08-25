@@ -1,0 +1,34 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@90706bbea19ff47a66c95f84: program:reasoning_observation_pending
+- reason-counter@10f5e7ca562c927394d73d21: program:reasoning_observation_pending
+- reason-counter@9a1be2e69340f664f63a803f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":["uhi-energy-balance@v1","uhi-nocturnal-release@v1","uhi-cross-city-modulator@v1"],"disanalogies":["A greenhouse enclosure is typically transparent to shortwave solar radiation and opaque to longwave infrared, whereas urban buildings are partially opaque to both wavebands.","Urban canyon walls are not passive radiators: they store and release sensible heat, adding a thermal-mass pathway absent in a simple greenhouse.","A greenhouse enclosure is a single continuous barrier, while the urban canopy is a discontinuous set of geometric obstacles with complex mutual view factors.","Greenhouse glass transmits radiation; canyon walls reflect and re-emit, so the 'trapping' mechanism is radiative exchange between surfaces rather than spectral opacity."],"overturn_conditions":["Empirical studies show that nocturnal UHI intensity is uncorrelated with sky view factor after controlling for thermal mass and anthropogenic heat.","Measurements show that net longwave radiative flux from urban roofs is not significantly reduced compared to rural surfaces at the same air temperature.","Cities with high sky view factor but high thermal mass show the same nocturnal UHI as cities with low sky view factor and equivalent thermal mass."],"shared_structure":["A body surrounded by a partially enclosing enclosure loses heat more slowly than the same body in the open because a fraction of its emitted radiation is reabsorbed by the enclosure rather than escaping.","The degree of enclosure (quantified by a view factor or fill factor) determines the fraction of radiation that escapes versus is trapped, directly scaling the temperature differential.","Cooling is governed by the net radiative flux: the difference between emitted outgoing radiation and absorbed incoming radiation from the enclosure."],"source_memory_refs":["30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81","8c66b8f735eb5f5b6d5397d135891c52b989e52d8b32c13c1b95c0af4e293f1a"],"transfer_claims":["The cross-city nocturnal UHI gap should increase monotonically with average building height-to-width ratio (street canyon depth).","Cities with a higher proportion of dense, narrow-street core area should exhibit a larger nocturnal UHI than sprawling, low-density cities of the same population.","Areas within a single city that have undergone recent tall-building construction should show a measurable increase in nocturnal UHI intensity relative to unchanged areas."]},"claim":"The nocturnal urban heat island is a radiative-trap pheno

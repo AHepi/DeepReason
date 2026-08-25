@@ -1,0 +1,49 @@
+```json
+{
+  "candidate": {
+    "claim": "Nocturnal UHI arises because urban thermal mass stores daytime sensible heat and releases it slowly after sunset; the cross-city gap is modulated by building height and street-canyon geometry, which reduce sky view and trap longwave radiation, making the gap larger in denser, taller cities.",
+    "mechanism": "Impervious, high-heat-capacity surfaces absorb solar radiation during the day and release it as sensible heat at night. In dense cities, deep street canyons restrict sky view, reducing radiative cooling efficiency and trapping the released longwave radiation, so taller, denser cities retain more heat and exhibit a larger UHI gap.",
+    "counterconditions": [
+      "If wind speed is high, advection flushes the canyon and longwave trapping is negligible.",
+      "If cloud cover is present, downwelling longwave from the sky reduces the urban-rural radiative contrast.",
+      "If rural thermal mass equals urban thermal mass (e.g., bare rock), the storage-release advantage vanishes."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81",
+        "8c66b8f735eb5f5b6d5397d135891c52b989e52d8b32c13c1b95c0af4e293f1a"
+      ],
+      "shared_structure": [
+        "A reservoir accumulates energy during an input phase and releases it during an output phase",
+        "Release is retarded by a constriction that limits outflow rate",
+        "Total retained energy at a given time depends on both reservoir capacity and constriction strength"
+      ],
+      "disanalogies": [
+        "A physical reservoir releases a fluid, whereas the city releases longwave radiation and sensible heat via convection",
+        "The dam constriction is static, whereas urban sky view varies with building height and street width",
+        "Water in a dam is conserved, whereas urban heat is continuously replenished by anthropogenic sources"
+      ],
+      "transfer_claims": [
+        "The magnitude of nocturnal release should scale with stored energy and inversely with sky view",
+        "Cities with deeper canyons should show slower cooling rates and larger nocturnal UHI",
+        "Reducing building height or widening streets should increase sky view and weaken UHI"
+      ],
+      "overturn_conditions": [
+        "If empirical studies show sky view has no independent effect after controlling for thermal mass",
+        "If tall cities cool faster than low cities under identical wind conditions",
+        "If the nocturnal UHI is fully explained by anthropogenic heat alone without storage"
+      ]
+    },
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.85
+  }
+}
+```

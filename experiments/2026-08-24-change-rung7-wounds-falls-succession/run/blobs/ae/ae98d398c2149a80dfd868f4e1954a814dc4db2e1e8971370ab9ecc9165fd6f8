@@ -1,0 +1,13 @@
+```json
+{
+  "repair_patch": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "counterconditions01"
+    }
+  ],
+  "patch_type": "repair.patch.v1",
+  "baseline_sha256": "f7ebf249b060dc83a021fb6b52fcf5940ab0aa0e410e2c0fee4c1d93c43e4795"
+}
+```

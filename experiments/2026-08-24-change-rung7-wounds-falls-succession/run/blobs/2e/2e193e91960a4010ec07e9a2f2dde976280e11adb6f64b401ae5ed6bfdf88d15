@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal urban heat island is primarily an energy-balance phenomenon where dense impervious surfaces and building thermal mass absorb daytime sensible heat and release it as longwave radiation after sunset; the cross-city night-time gap scales most strongly with sky view factor, because denser street canyons trap longwave radiation and slow nocturnal cooling, making the UHI more pronounced in cities with lower sky view and higher built density.",
+    "mechanism": "During the day, urban impervious surfaces and building envelopes with high thermal mass and heat capacity absorb solar radiation as sensible heat. After sunset, rural areas cool rapidly via unhindered longwave radiative loss to the sky, while urban surfaces release stored heat. In dense street canyons, the sky view factor is reduced, so emitted longwave radiation is partially intercepted and re-absorbed by adjacent building walls, trapping heat. Therefore, cities with deeper canyons and lower sky view factors retain nocturnal heat more effectively, producing a larger night-time temperature gap than cities with open, dispersed layouts.",
+    "counterconditions": [
+      "If measured night-time UHI intensity does not correlate with sky view factor or street canyon geometry across cities, this mechanism is weakened.",
+      "If wind speed is high enough to homogenize air temperatures across city and countryside, the radiative trapping effect is overwhelmed and the gap collapses.",
+      "If cloud cover is continuous, downwelling longwave radiation dominates and reduces the differential cooling rate between urban and rural surfaces."
+    ],
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.78
+  }
+}
+```

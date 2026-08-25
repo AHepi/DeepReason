@@ -1,0 +1,1162 @@
+{
+  "branches": [
+    {
+      "description": "connect isolated 10b3c81d4ea6 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 6,
+      "problem": "conn:10b3c81d4ea6",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 20d86b74d99c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:20d86b74d99c",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 301cb117fcbd to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:301cb117fcbd",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 3412428c1dca to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:3412428c1dca",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 431790ab193b to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:431790ab193b",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 444ebe9025bd to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:444ebe9025bd",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 620f580b1d40 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:620f580b1d40",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 7af1c67a2e63 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:7af1c67a2e63",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 862e69e78788 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:862e69e78788",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated 9fb49e427e1f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:9fb49e427e1f",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated a2fcbbb9017d to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:a2fcbbb9017d",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated b6eb9dbda73f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:b6eb9dbda73f",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated c16a40e60553 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:c16a40e60553",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated c50397b24312 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:c50397b24312",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated ebd1ab67c28c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:ebd1ab67c28c",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated f0c284d4fa28 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:f0c284d4fa28",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated f68774f3a6e5 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:f68774f3a6e5",
+      "trigger": "connection"
+    },
+    {
+      "description": "connect isolated fe533656a28f to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation",
+      "positions_addressing": 0,
+      "problem": "conn:fe533656a28f",
+      "trigger": "connection"
+    },
+    {
+      "description": "discriminate between 18 surviving rivals for question-4dd62735b90864a75220e09b302500bc",
+      "positions_addressing": 0,
+      "problem": "disc:question-4dd62735b90864a75220e09b302500bc",
+      "trigger": "discrimination"
+    },
+    {
+      "description": "promote or refuse this explanation as the frame for the scope",
+      "positions_addressing": 1,
+      "problem": "promotion:084c7918142a",
+      "trigger": "promotion"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@053f604f1ad868ae45054137 on c50397b24312",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@053f604f1ad868ae45054137:c50397b24312",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@0afc88e0ca1524dedbc451e9 on 9fb49e427e1f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@0afc88e0ca1524dedbc451e9:9fb49e427e1f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@0c85e9ca507c382b223c05e0 on b6eb9dbda73f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@0c85e9ca507c382b223c05e0:b6eb9dbda73f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@0dd3aca06bc1d26f3fa59945 on 3412428c1dca",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@0dd3aca06bc1d26f3fa59945:3412428c1dca",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@11161b354d442b27f3db1846 on 862e69e78788",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@11161b354d442b27f3db1846:862e69e78788",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@128452f60a99e2f05e704487 on 20d86b74d99c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@128452f60a99e2f05e704487:20d86b74d99c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@13b613015cb482fcd7404c2e on 9fb49e427e1f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@13b613015cb482fcd7404c2e:9fb49e427e1f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@1d18ae2f97c2515c1fd9c10e on 3412428c1dca",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@1d18ae2f97c2515c1fd9c10e:3412428c1dca",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@1e2123452968bad242352dc9 on f68774f3a6e5",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@1e2123452968bad242352dc9:f68774f3a6e5",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@26dbfc49faad2d47c3620dd9 on 10b3c81d4ea6",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@26dbfc49faad2d47c3620dd9:10b3c81d4ea6",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@2ed3d98042087211d0801db5 on c16a40e60553",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@2ed3d98042087211d0801db5:c16a40e60553",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@2ef31c324b575c5fada8b225 on fe533656a28f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@2ef31c324b575c5fada8b225:fe533656a28f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@300965836e6cfb59a3ff3eec on a2fcbbb9017d",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@300965836e6cfb59a3ff3eec:a2fcbbb9017d",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@30512ad6040f74cf51f26014 on 431790ab193b",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@30512ad6040f74cf51f26014:431790ab193b",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@30f5f5ed168e925da894aa03 on 20d86b74d99c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@30f5f5ed168e925da894aa03:20d86b74d99c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@4030edfa283f777e8171a3ed on 431790ab193b",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@4030edfa283f777e8171a3ed:431790ab193b",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@4158397909c7695efdc4b3f1 on 431790ab193b",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@4158397909c7695efdc4b3f1:431790ab193b",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@48d79d48e642f7cad97e6ff4 on 10b3c81d4ea6",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@48d79d48e642f7cad97e6ff4:10b3c81d4ea6",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@51ca2774a2e099617f495402 on b6eb9dbda73f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@51ca2774a2e099617f495402:b6eb9dbda73f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@5aef08aa56d4d3e029b403f1 on 620f580b1d40",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@5aef08aa56d4d3e029b403f1:620f580b1d40",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@5e49255ef6c9d537a07a203f on 10b3c81d4ea6",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@5e49255ef6c9d537a07a203f:10b3c81d4ea6",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@66470213fb4461d2cafe1956 on c50397b24312",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@66470213fb4461d2cafe1956:c50397b24312",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@67c45fe46e4692c0f7ad6f69 on 20d86b74d99c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@67c45fe46e4692c0f7ad6f69:20d86b74d99c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@697a8f37583d1095255cb2b3 on a2fcbbb9017d",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@697a8f37583d1095255cb2b3:a2fcbbb9017d",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@69bb79a3fefa6297588ed519 on 620f580b1d40",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@69bb79a3fefa6297588ed519:620f580b1d40",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@72ca061195ee7e29532f9d49 on 620f580b1d40",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@72ca061195ee7e29532f9d49:620f580b1d40",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@7dac3f68f108da08c2d5cf4a on f68774f3a6e5",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@7dac3f68f108da08c2d5cf4a:f68774f3a6e5",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@8129c6b91c3cd4a0fc2758f9 on 862e69e78788",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@8129c6b91c3cd4a0fc2758f9:862e69e78788",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@82c9ed6f0552366067c0cb6e on c16a40e60553",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@82c9ed6f0552366067c0cb6e:c16a40e60553",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@852949eb1ff2980f6fa984ec on fe533656a28f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@852949eb1ff2980f6fa984ec:fe533656a28f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@87aa136bba290b2ad46e0493 on 444ebe9025bd",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@87aa136bba290b2ad46e0493:444ebe9025bd",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@89cda3cb46208414796e0907 on 9fb49e427e1f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@89cda3cb46208414796e0907:9fb49e427e1f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@8c4dc1ba5d057948a30f0196 on 301cb117fcbd",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@8c4dc1ba5d057948a30f0196:301cb117fcbd",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@9c186cb1b1d99438c0851888 on ebd1ab67c28c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@9c186cb1b1d99438c0851888:ebd1ab67c28c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@9c410fec6183f306138a223c on f0c284d4fa28",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@9c410fec6183f306138a223c:f0c284d4fa28",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@a5768c5c35b060828a30b4c8 on a2fcbbb9017d",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@a5768c5c35b060828a30b4c8:a2fcbbb9017d",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@a67882863c47c846a4c1c53e on 20d86b74d99c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@a67882863c47c846a4c1c53e:20d86b74d99c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@abbf85424c0a1852b182d175 on b6eb9dbda73f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@abbf85424c0a1852b182d175:b6eb9dbda73f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@af6a9e692dc4c18837788c10 on b6eb9dbda73f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@af6a9e692dc4c18837788c10:b6eb9dbda73f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@afaf6f1bff242eb605de94c2 on 3412428c1dca",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@afaf6f1bff242eb605de94c2:3412428c1dca",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@b312a8238ead7affc564973e on f68774f3a6e5",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@b312a8238ead7affc564973e:f68774f3a6e5",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@b4f7fb085584595116650d67 on 862e69e78788",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@b4f7fb085584595116650d67:862e69e78788",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@ba07b2fe5cc93e8b67ca864a on fe533656a28f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@ba07b2fe5cc93e8b67ca864a:fe533656a28f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@ba13fee0f228f6362f4aab8e on 7af1c67a2e63",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@ba13fee0f228f6362f4aab8e:7af1c67a2e63",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@bbe9def50e16f85844bb6358 on ebd1ab67c28c",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@bbe9def50e16f85844bb6358:ebd1ab67c28c",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@c195aee724fffba3ddcbcf25 on 862e69e78788",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@c195aee724fffba3ddcbcf25:862e69e78788",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@c2dd45e1203b7c002542997f on 444ebe9025bd",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@c2dd45e1203b7c002542997f:444ebe9025bd",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@c72cbaa6acdebf4f24d58172 on c16a40e60553",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@c72cbaa6acdebf4f24d58172:c16a40e60553",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@d1660dba93c314ce4cdaa474 on 7af1c67a2e63",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@d1660dba93c314ce4cdaa474:7af1c67a2e63",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@d5559517cb8d32134058fe58 on 301cb117fcbd",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@d5559517cb8d32134058fe58:301cb117fcbd",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@d5f52087cda84818d14d6cb4 on 9fb49e427e1f",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@d5f52087cda84818d14d6cb4:9fb49e427e1f",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@dfa6ff2a2982aa04c27a10c8 on 620f580b1d40",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@dfa6ff2a2982aa04c27a10c8:620f580b1d40",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@e09a8e01f1662f38e0fa3b8e on a2fcbbb9017d",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@e09a8e01f1662f38e0fa3b8e:a2fcbbb9017d",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@e12d34ed1f59e267ab01aa56 on c16a40e60553",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@e12d34ed1f59e267ab01aa56:c16a40e60553",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@e1e7947f6ede04cc4effef49 on f68774f3a6e5",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@e1e7947f6ede04cc4effef49:f68774f3a6e5",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@e60342ae7de61e3a369a25f8 on 7af1c67a2e63",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@e60342ae7de61e3a369a25f8:7af1c67a2e63",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@e61970cb5ac1accd886f384f on c50397b24312",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@e61970cb5ac1accd886f384f:c50397b24312",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@ea06fc35627983efb496907b on 444ebe9025bd",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@ea06fc35627983efb496907b:444ebe9025bd",
+      "trigger": "research"
+    },
+    {
+      "description": "obtain evidence for observation-valued reason-counter@eb547dee12c7ea20b0e7a4df on f0c284d4fa28",
+      "positions_addressing": 0,
+      "problem": "research:reason-counter@eb547dee12c7ea20b0e7a4df:f0c284d4fa28",
+      "trigger": "research"
+    },
+    {
+      "description": "Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?",
+      "positions_addressing": 24,
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "trigger": "seed"
+    }
+  ],
+  "capabilities": {
+    "citations": {},
+    "consumed_packages": 0,
+    "fetched": [],
+    "proposals": []
+  },
+  "criticism": {
+    "attacks_on_refuted": 7,
+    "attacks_recorded": 7,
+    "coverage_debt_records": 0,
+    "criticism_attempts": 0
+  },
+  "positions": {
+    "accepted": [
+      {
+        "claim": "The nocturnal urban heat island is primarily a thermal-storage-release phenomenon: impervious, high-thermal-mass materials absorb greater daytime insolation and then re-emit that stored energy as longwave radiation after sunset, while rural vegetation cools rapidly via evapotranspiration. The single best cross-city modulator of the nighttime gap is the sky-view factor: dense building geometry traps released longwave radiation, slowing nocturnal cooling, so cities with deeper street canyons exhibit a larger nighttime UHI.",
+        "id": "f0c284d4fa28",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nighttime UHI is a result of the suppression of evapotranspiration in cities. Impervious surfaces prevent soil moisture from accessing the surface, eliminating latent heat exchange. The nighttime gap is larger in cities located in arid or dry climates where surrounding natural vegetation is also sparse but irrigated urban green spaces create a paradoxical cool island, or alternatively, where extreme urban dryness maximizes sensible heat retention.",
+        "id": "301cb117fcbd",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nighttime urban heat island is fundamentally an aerodynamic phenomenon. The roughness of the urban canopy (buildings) reduces wind speed, creating a stagnant boundary layer that prevents the mixing of warm urban surface air with cooler rural air. The single best cross-city modulator is urban wind speed: cities with lower wind speeds or higher building density (aerodynamic roughness) exhibit larger nighttime UHIs.",
+        "id": "ebd1ab67c28c",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "nu: verdict of uhi-energy-balance@v1 on 7ae1a1b364889746a051cc569e8f683e67231ffecacd7ca4524c02b813201655 is sound and relevant",
+        "id": "f3d963e28ad2",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-energy-balance@v1 failed on 7ae1a1b36488",
+        "id": "2f2a20459a92",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of uhi-nocturnal-release@v1 on 7ae1a1b364889746a051cc569e8f683e67231ffecacd7ca4524c02b813201655 is sound and relevant",
+        "id": "9a3a31c818b5",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-nocturnal-release@v1 failed on 7ae1a1b36488",
+        "id": "3d7a8ee7b48b",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of uhi-cross-city-modulator@v1 on a5c34e463c4efe6480ff18028329467911e6cfe1da1af6621ca42f9995d44d0c is sound and relevant",
+        "id": "8d3051744e54",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-cross-city-modulator@v1 failed on a5c34e463c4e",
+        "id": "3da11f71a9d5",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of uhi-energy-balance@v1 on 52474e41cfed4150e29e37f6c0a1cb2e3903172470370c50a95d4a22c240ca76 is sound and relevant",
+        "id": "2582c737f619",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-energy-balance@v1 failed on 52474e41cfed",
+        "id": "c7e31df4e5ca",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The problem presupposes that a single dominant mechanism explains cross-city variation in nocturnal UHI. This presupposition is unfalsifiable as stated: no single observation could ever tell against it, because the question can always be re-scoped to whatever mechanism happens to dominate in the studied subset.",
+        "id": "9163e7802b5f",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "{\"premise\": \"9163e7802b5fef96bbd602a3f0097cd1d6fef276fc1b9aa1c308ed7849aa147a\", \"problem\": \"question-4dd62735b90864a75220e09b302500bc\"}",
+        "id": "72fe2cf99334",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001's own countercondition refutes its core claim. It states that if nighttime UHI is strongest in humid, well-irrigated cities, the aridity/evapotranspiration suppression mechanism is incorrect. Yet empirical literature consistently shows nighttime UHI is indeed strongest in humid, well-vegetated cities where the rural-urban evapotranspiration contrast is largest. The target's own counterexample is realized: humid cities like Singapore and Atlanta exhibit pronounced nighttime UHI, while arid cities like Phoenix frequently exhibit an urban cool island during the day. The mechanism is backw\u2026",
+        "id": "21d9c637efb5",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001's own overturn conditions concede that if the nighttime UHI is explained by radiative properties independent of wind speed, the aerodynamic mechanism is secondary. Under the problem's clear, calm-night conditions, rural wind mixing is already minimal, so the proposed mechanism\u2014reducing wind to suppress rural cooling\u2014has little differential cooling to suppress; the dominant mechanism is reduced radiative cooling via restricted sky view, which SRC_001 displaces by naming urban wind speed as the single best cross-city modulator.",
+        "id": "89f062c637a8",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The nighttime urban heat island is primarily a thermal-mass release phenomenon: dense impervious surfaces with high heat capacity and low albedo absorb far more solar energy during daytime than rural vegetation, and after sunset that stored heat is released as longwave radiation and sensible heat into the urban canopy layer. The single best explanation for why the nocturnal gap is larger in some cities than others is reduced sky view factor: taller buildings and narrower street canyons trap outgoing longwave radiation via radiative interception and multilateral reflection, so cities with lower\u2026",
+        "id": "9fb49e427e1f",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The cross-city variation in the nocturnal UHI gap is best explained by differences in daytime evapotranspiration (latent heat partitioning), not by urban thermal mass or geometry. Cities in arid climates exhibit the largest nighttime temperature gaps because the surrounding countryside has minimal evapotranspiration and therefore little cooling, while the irrigated and vegetated city itself provides evapotranspiration that actually narrows the gap; cities in humid climates with abundant vegetation show smaller nocturnal gaps because the countryside also evapotranspires. The built impervious su\u2026",
+        "id": "c16a40e60553",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The dominant single mechanism explaining the nocturnal UHI gap's cross-city variability is anthropogenic heat release. The baseline nighttime warmth of cities comes from stored thermal mass and low sky view, but the gap's variation is set by the density of anthropogenic heat injection: waste heat from buildings, transport, and industry that scales with population and built density. Cities with larger population, higher energy use, and higher building density inject more sensible heat throughout the night, maintaining a larger temperature gap than less dense cities.",
+        "id": "862e69e78788",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "No single mechanism explains cross-city variation in the nocturnal UHI gap. The nighttime gap is the product of a coupled energy-balance system: thermal mass storage and release, sky view factor geometry, anthropogenic heat injection, evapotranspiration suppression, and impervious surface fraction all interact nonlinearly. The gap in some cities is larger because the combination of these factors is more favorable, not because any one dominates. The claim of a single best explanation is a false choice.",
+        "id": "620f580b1d40",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI gap is best explained by the thermal admittance of urban materials, not by sky view factor or evapototranspiration. The key cross-city modulator is the bulk thermal admittance (product of thermal conductivity and heat capacity) of the dominant building and paving materials: cities with high-admittance materials store more heat per unit temperature rise during the day and release it slowly over the night, while cities with low-admittance surfaces reach lower nighttime temperatures faster. The single best explanation for cross-city variation is thus the material thermal admitta\u2026",
+        "id": "a2fcbbb9017d",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI gap is primarily a wind-sheltering effect: dense urban building arrays reduce near-surface wind speed, which suppresses turbulent sensible heat removal from the canopy layer, so the city cools more slowly than the open countryside after sunset. The single best explanation for why the gap is larger in some cities is greater aerodynamic resistance (lower wind speed) within the urban canopy, which scales with built density and building height.",
+        "id": "20d86b74d99c",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The target asserts that 'reduced sky view factor' is the SINGLE best explanation for cross-city variation in the nocturnal UHI gap, and claims it dominates over vegetation fraction. But the very countercondition it concedes \u2014 'If vegetation fraction correlates more strongly with nighttime UHI than sky view factor in cross-city studies, vegetation is the dominant modulator, not geometry' \u2014 is in fact empirically realized in the literature, which the target fails to acknowledge as established rather than merely hypothetical. Oke's own synthesis and multiple cross-city studies find evapotranspira\u2026",
+        "id": "f55aa230825c",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001's answer is internally contradictory about which cities have the largest nocturnal UHI gap. The 'claim' field states arid cities exhibit the LARGEST nighttime gaps, but the 'mechanism' field derives that arid cities have a SMALL sensible heat contrast (and may even reverse via the oasis effect), while humid cities have the LARGER sensible heat contrast and 'therefore a larger nocturnal UHI.' These cannot both be the answer to 'what single mechanism best explains why the night-time gap is larger in some cities than in others.' The stated claim and the mechanism's derivation point in opp\u2026",
+        "id": "31245b536da6",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001 names anthropogenic heat as the single mechanism for cross-city variation yet internally acknowledges sky view factor and thermal mass as alternative controls. The countercondition 'If the UHI gap scales with sky view factor rather than population density, anthropogenic heat is secondary' concedes a plausible alternative dominant modulator. By the problem's 'single mechanism' standard, admitting that the gap could instead be set by sky view factor undercuts the asserted dominance of anthropogenic heat without an empirical or theoretical basis for preferring the latter.",
+        "id": "57fb85e5eb77",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The problem explicitly asks 'what single mechanism best explains' why the night-time gap is larger in some cities than in others. SRC_001 asserts that this is a 'false choice' and insists no single mechanism explains cross-city variation. While a multi-factor account of UHI is legitimate, rejecting the problem's framing avoids answering it; empirical urban climatology (e.g., Oke) identifies reduced sky view factor as the leading cross-city modulator of nocturnal UHI, so a defensible answer could name a single best mechanism while acknowledging interactions. By denying any single best explanati\u2026",
+        "id": "94acfaec096a",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target asserts thermal admittance is the 'single best' cross-city modulator and explicitly rejects sky view factor. But the problem asks what makes the nocturnal UHI gap larger in SOME cities than others, and on a clear, calm night reduced sky view factor (the geometry that traps longwave radiation in street canyons) is the canonical cross-city explanation for nocturnal UHI intensity variation, scaling with building-density/height. By privileging material admittance and dismissing sky view factor, the answer overlooks the mechanism most directly tied to the specified nighttime, clear/calm \u2026",
+        "id": "c5508e30ce56",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001's wind-sheltering thesis is self-refuting under its own countercondition. It claims the primary mechanism is reduced near-surface wind speed suppressing sensible heat removal, and explicitly flags that if nocturnal UHI is larger on calm nights than windy nights this pattern must be interpreted against the sheltering claim. But the canonical observation is that the nocturnal UHI is largest under precisely the calm, clear conditions in the problem statement, and decreases with wind speed because wind mixes the canopy and destroys the stable surface layer. By its own countercondition logi\u2026",
+        "id": "d189c501468e",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's primary mechanism is thermal-storage release: dense materials absorb daytime insolation and re-emit it at night. But its single cross-city modulator is sky-view factor, which affects nighttime radiative loss only. A low sky-view factor (deep canyons) simultaneously shades surfaces during the day, reducing the stored heat available to be released. The target names no cross-city variable controlling daytime heat storage (albedo, impervious fraction, heat capacity), so it cannot explain why some cities have a LARGER nighttime gap\u2014only why cooling is slower in denser geometry. Under t\u2026",
+        "id": "0b240b03fd0a",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's central causal claim is internally contradictory. It states that 'The nighttime UHI is a result of the suppression of evapotranspiration in cities' and that 'drier cities... have a larger nighttime gap because the latent heat cooling pathway is maximally suppressed.' However, it simultaneously asserts that 'irrigated urban green spaces create a paradoxical cool island.' If irrigation creates an urban cool island (reducing urban temperatures), then the UHI gap (Urban minus Rural) would be smaller, not larger, in irrigated cities. This contradicts the claim that drier cities (or tho\u2026",
+        "id": "e6dfe520d598",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The nocturnal UHI is dominated by differential thermal storage and cooling rates: urban impervious materials with high thermal mass and heat capacity absorb more sensible heat during daytime and release it via longwave radiation after sunset, while rural vegetation partitions energy into latent heat via evapotranspiration; cross-city variation in the night-time gap scales primarily with built density (impervious surface fraction and building thermal mass), which determines the total stored heat available for nocturnal release.",
+        "id": "b6eb9dbda73f",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI is primarily an anthropogenic heat island: human energy consumption (transportation, industry, HVAC) injects sensible heat into the urban atmosphere continuously, and the night-time gap is larger in cities where this anthropogenic heat flux is greater relative to the surrounding rural energy balance.",
+        "id": "fe533656a28f",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI and its cross-city variation are governed by the urban moisture deficit: impervious surfaces eliminate evapotranspiration, forcing all incoming energy into sensible heat during the day, and the night-time gap scales with the extent of impervious surface and the aridity of the surrounding climate, because in humid regions rural evapotranspiration is lower, reducing the differential.",
+        "id": "10b3c81d4ea6",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI is primarily a radiative geometry effect: the street canyon reduces the sky view factor, trapping longwave radiation and slowing nocturnal cooling, and the cross-city variation is best explained by building height and street canyon density, which determine the effective emissivity of the urban surface to the cold sky sink.",
+        "id": "3412428c1dca",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI is a compound effect with no single dominant mechanism, but cross-city variation is best explained by the aridity of the climate: the gap is largest in cities where surrounding rural areas have the highest evapotranspiration rates, because the urban suppression of latent heat creates the largest sensible heat contrast, while in arid climates, the oasis effect and lack of rural moisture reduce the gap.",
+        "id": "431790ab193b",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "nu: verdict of uhi-energy-balance@v1 on 8828556fa400c58cc1a29c60d32cf158318e4e8a5e13d7080d39b510f27b1d97 is sound and relevant",
+        "id": "adc10fbf0038",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-energy-balance@v1 failed on 8828556fa400",
+        "id": "d8bf68fafa6c",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001 answers the cross-city part with two co-equal factors: total thermal storage reservoir (larger in denser cities) AND smaller sky view factor (also in denser cities), both slowing rural-relative cooling. Because it presents them jointly rather than selecting one as primary, it does not actually deliver the 'single mechanism' the problem demands; a grader cannot tell whether the intended answer is storage capacity or canyon radiation trapping, and the two are physically distinct (one governs heat inventory, the other governs cooling efficiency). The claim that the gap 'increases in citie\u2026",
+        "id": "63b2c8395894",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001 argues anthropogenic heat is 'primarily' the mechanism and that the gap 'scales with population density and energy consumption intensity,' implicitly making Q_f the principal cross-city modulator. This is a substantive fault for THIS problem because in clear, calm conditions the dominant control on the nocturnal gap is how efficiently the urban canopy can cool radiatively (low sky view in dense street canyons), and empirically population/energy metrics are weaker predictors of UHI magnitude than urban geometry and building density. Worse, SRC_001's own analogy overturn condition \u2014 'If \u2026",
+        "id": "45a5e84f7a94",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target is internally contradictory on the very mechanism it identifies as the single best explanation for why the nocturnal gap is larger in some cities than others. The claim states the gap 'scales with the extent of impervious surface and the aridity of the surrounding climate,' and the analogy's transfer claims assert 'Cities in humid climates exhibit larger nocturnal UHI... because the urban-rural moisture contrast is greater.' Yet the counterconditions list as an observation-evaluated case: 'If the nocturnal gap is largest in arid cities, the moisture deficit mechanism is insufficient\u2026",
+        "id": "5a9f21b11dc0",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The mechanism asserts cooling rate scales with the square of the sky view factor and attributes the entire nighttime temperature gap to radiative geometry, but this is physically incomplete and unproven: nocturnal UHI requires both reduced longwave loss AND stored urban heat released at night; if city and countryside had identical stored heat content, the radiative slowdown alone would not sustain 'several degrees' warmer air. The claim that cross-city variation is 'best explained' by geometry is a non-sequitur because aridity, irrigation, city size, and wind conditions are well-established mo\u2026",
+        "id": "316c91093c03",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's mechanism identifies aridity as the single best cross-city modulator but frames it through a daytime sensible-heat contrast pathway (humid rural areas partition energy into latent heat during the day, maximizing the urban-rural sensible contrast that is then maintained at night via stored-heat release). This framing misattributes the primary nocturnal UHI mechanism. The problem asks why the air stays warmer at night and what single mechanism best explains cross-city variation in the night-time gap. The target's own disanalogy notes that 'aridity modulates rural behavior rather tha\u2026",
+        "id": "d0a19c86e089",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's central claim asserts that the nighttime UHI is 'fundamentally an aerodynamic phenomenon' and that the single best cross-city modulator is urban wind speed. This causal framing is misdirected: on a clear, calm night, wind speeds are already near zero in both the city and the countryside, so the rural\u2013urban roughness contrast cannot be the primary driver of the temperature gap. The dominant physical mechanism for why the city stays warmer is the slow release of daytime heat stored in urban materials (thermal mass) and reduced radiative cooling due to reduced sky view factor. The ta\u2026",
+        "id": "9910433896f4",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's cross-city mechanism is self-contradictory: the mechanism section explicitly claims reduced sky view factor 'damps turbulent sensible-heat removal within the canyon,' attributing slower cooling partly to suppressed sensible heat, but the counterconditions section asserts that if 'increased wind speed does not reduce the nocturnal UHI gap, the claim that canyon trapping drives cross-city variation is weakened.' If the mechanism genuinely depends on damped turbulent sensible-heat removal, then wind speed increases should reduce the gap \u2014 but the target frames the absence of such an \u2026",
+        "id": "9bded5cd1ff5",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The night-time UHI is primarily a thermal-storage-release phenomenon: impervious, high-heat-capacity urban materials store daytime solar energy and release it as sensible heat after sunset, and the cross-city magnitude of the gap scales with thermal mass and sky-view factor differences between cities.",
+        "id": "f68774f3a6e5",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The dominant single mechanism explaining cross-city variation in nocturnal UHI is the reduction in longwave radiative cooling caused by low sky view factor in dense street canyons, which traps both stored thermal energy and anthropogenic heat.",
+        "id": "7af1c67a2e63",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The single dominant mechanism for cross-city variation is anthropogenic heat release: cities with higher population density and energy consumption inject more sensible heat into the urban boundary layer at night, and the gap scales with population and energy use.",
+        "id": "c50397b24312",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The nocturnal UHI and its cross-city variation are best explained by the coupling of reduced sky view factor with the three-dimensional thermal mass of street canyons: the canyon geometry both traps longwave radiation and provides a large volume of heat-storing material, and the gap scales with the product of thermal mass and the degree of radiative enclosure.",
+        "id": "444ebe9025bd",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "nu: verdict of uhi-nocturnal-release@v1 on 766ff19fc13579f836832aaa2834ff2eb6a7f10d33832586d0120631be3bfaf6 is sound and relevant",
+        "id": "d1a33fb40dc8",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-nocturnal-release@v1 failed on 766ff19fc135",
+        "id": "fee63b456226",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "nu: verdict of uhi-nocturnal-release@v1 on 94f92688869afcfe5280690a822bc1119151f43c914ccfaf6d9153ccf02797e2 is sound and relevant",
+        "id": "e95f3fbdf566",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "critic: uhi-nocturnal-release@v1 failed on 94f92688869a",
+        "id": "6859d3e31503",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001 identifies 'thermal mass and sky-view factor differences' as the cross-city modulator, but its own counterconditions and overturn_conditions concede anthropogenic heat may dominate. By failing to resolve whether anthropogenic heat or thermal mass/sky view is the dominant cross-city mechanism \u2014 and its listed conditions explicitly allow that anthropogenic heat output could correlate more strongly with UHI variation \u2014 the target does not establish a single best mechanism as the problem demands. The cross-city claim is therefore under-determined relative to the problem's requirement.",
+        "id": "05343fc09d30",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's cross-city mechanism is self-undermining: it asserts sky view factor is the 'dominant single mechanism' for cross-city variation, yet its own countercondition admits thermal mass may explain more variance, and its own overturn condition concedes 'thermal storage capacity explains more cross-city variance than geometry.' Since the question demands the single best cross-city explanation, an answer whose own stated uncertainties identify thermal storage as potentially dominant does not establish sky view factor as the single best mechanism.",
+        "id": "b7de4e1236d5",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target undercuts its own claim by listing a countercondition that would overturn it: 'If cross-city variance is better predicted by geometric or material properties than by energy use.' The transfer claim accordingly hedges\u2014'The nocturnal UHI should correlate more strongly with energy consumption than with sky view factor or thermal mass'\u2014admitting those rival mechanisms are live candidates. Empirically, sky-view factor is the widely accepted dominant explanation for nocturnal UHI variation because reduced radiative cooling explains the clear-night gap that the problem specifies; anthropog\u2026",
+        "id": "0cc737a7f504",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "SRC_001's central cross-city claim \u2014 that the gap scales with the PRODUCT of thermal mass and radiative enclosure \u2014 is not established as the 'single mechanism' the problem asks for. The target concedes in its own overturn_conditions that the mechanism might operate additively rather than multiplicatively. If the effects are additive, the product-scaling rule is wrong and the claimed coupling does not explain the cross-city variation better than the independent factors. Thus the target fails to justify why this specific multiplicative interaction, rather than ordinary additive effects (or anot\u2026",
+        "id": "20c81b054692",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target's claim and mechanism contradict each other on which cities exhibit the largest nocturnal UHI gap, making the proposed single mechanism internally incoherent. The claim states arid cities exhibit the largest nighttime gaps because the surrounding countryside has minimal evapotranspiration, while the irrigated city narrows the gap. But the mechanism argues the opposite for humid regions: that humid, well-vegetated regions generate a 'larger nocturnal UHI' because the rural latent heat flux is large while impervious urban surfaces suppress it. The stated single mechanism (aridity/humi\u2026",
+        "id": "ea62d7d4829b",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "The target asserts anthropogenic heat is the dominant cross-city modulator, but its own mechanism text contradicts this by naming sky view factor / street canyon geometry as the control on nighttime longwave release. The problem asks for the single mechanism that best explains why the nocturnal UHI gap is larger in some cities than in others. The target's top-level claim commits to anthropogenic heat release as that dominant single mechanism. However, the target's own mechanism passage says the baseline nighttime warmth comes from stored thermal mass and low sky view, and describes the anthrop\u2026",
+        "id": "e5fd9a6ad660",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "{\"cycle\": 2, \"evidence\": {\"argumentative_critic\": {\"n\": 6, \"repair_rate\": 0.0, \"truncation_rate\": 0.0}, \"conjecturer\": {\"n\": 5, \"repair_rate\": 0.0, \"truncation_rate\": 0.0}}, \"knobs\": {\"cap:argumentative_critic\": 20480, \"cap:conjecturer\": 20480}}",
+        "id": "74e58db08593",
+        "problems": [],
+        "role": "controller"
+      },
+      {
+        "claim": "The isolated artifact 10b3c81d4ea6 DEPENDS ON the moisture-deficit mechanism of SRC_005: the cross-city nocturnal UHI variation it describes reduces to the latent-heat contrast framework where impervious urban surfaces suppress evapotranspiration and the urban-rural moisture gap governs nighttime temperature differences. This dependence is REFUTED IF nocturnal UHI intensity is found to scale with a non-moisture variable (e.g., sky view factor or anthropogenic heat) after statistically controlling for impervious surface fraction and climate aridity across cities, which would demonstrate that th\u2026",
+        "id": "d13b3148f078",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The artifact 10b3c81d4ea6 DEPENDS ON the multi-factor energy-balance system of SRC_002: it integrates with a coupled framework where thermal mass, sky view factor, anthropogenic heat, evapotranspiration suppression, and impervious surface fraction interact nonlinearly, and the cross-city variation arises from distinct factor combinations rather than any single dominant mechanism. This integration is REFUTED IF principal component analysis across a diverse city sample reveals a single dominant factor explaining the majority of nocturnal UHI variance, or if single-variable prediction models matc\u2026",
+        "id": "545c6051245a",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The artifact 10b3c81d4ea6 CONTRADICTS the aridity-reversal claim of SRC_001: where SRC_001 predicts that arid cities exhibit the largest nocturnal UHI gaps due to minimal rural evapotranspiration while humid cities show smaller gaps, 10b3c81d4ea6 posits the opposite pattern \u2014 that humid cities show larger nocturnal gaps because the urban-rural moisture contrast is greatest when the rural environment evapotranspires strongly. This contradiction is REFUTED IF empirical measurements across matched-density arid and humid cities show that nocturnal UHI is consistently larger in arid cities, confirm\u2026",
+        "id": "c618b67e7e53",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The artifact 10b3c81d4ea6 DEPENDS ON the thermal storage and cooling-rate mechanism of SRC_003: the nocturnal UHI it describes reduces to a lumped-capacitance thermal discharge problem where high-thermal-admittance urban materials release stored daytime heat at night, and the cross-city variation scales with the square root of thermal admittance differences. This reduction is REFUTED IF measured urban heat storage is insufficient to account for the observed nocturnal temperature gap, or if urban and rural cooling rates are identical after controlling for wind speed, which would eliminate therm\u2026",
+        "id": "084c7918142a",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The artifact 10b3c81d4ea6 SHARES MECHANISM with SRC_004: both attribute nocturnal UHI to a continuous energy flux opposing nighttime cooling \u2014 10b3c81d4ea6 through persistent release of stored sensible heat and SRC_004 through anthropogenic heat injection \u2014 with the shared structure being a steady-state temperature offset proportional to the source strength divided by cooling efficiency. This shared mechanism is REFUTED IF cities with low per-capita energy consumption but high thermal mass show equal or greater nocturnal UHI than high-energy cities, or if the nocturnal temperature gap is uncor\u2026",
+        "id": "60db07097082",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The artifact 10b3c81d4ea6 ABSTRACTS from the single-mechanism claims of SRC_001 and SRC_004: it subsumes both the evapotranspiration-contrast and anthropogenic-heat explanations as special cases of a higher-order principle, positing that nocturnal UHI is governed by a universal moisture-availability axis along which cities are ranked by their effective moisture deficit (combining climate aridity, impervious surface fraction, and irrigation) rather than by any single physical factor. This abstraction is REFUTED IF the effective moisture deficit cannot be consistently measured across cities, or \u2026",
+        "id": "9a0bc2742951",
+        "problems": [
+          "conn:10b3c81d4ea6"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "claim": "The target asserts a SUBSTANTIVE abstraction relation, but the refutation condition it supplies ('REFUTED IF ... cities with identical moisture deficits show different nocturnal UHI intensities driven primarily by factors orthogonal to moisture, e.g., anthropogenic heat') concedes the very disconfirmation the abstraction is supposed to overcome: SRC_001 and SRC_004 are presented as competing single-mechanism explanations (evapotranspiration contrast vs. anthropogenic heat), so if anthropogenic heat can still drive UHI independently of moisture, the 'universal moisture-availability axis' does n\u2026",
+        "id": "77345b722ebb",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "TARGET SRC_001 rejects the premise that a single mechanism best explains cross-city variation, framing the question as a 'false choice.' The problem context explicitly asks 'what single mechanism best explains why that night-time gap is larger in some cities than in others?' SRC_001 fails this problem by refusing to identify a single mechanism. Instead, it asserts a coupled system of interacting factors and dismisses the requested single-mechanism explanation. While the target implies sky view factor is a primary modulator of cooling rate, it explicitly denies its sufficiency ('no single facto\u2026",
+        "id": "1f485d1e2e92",
+        "problems": [],
+        "role": "critic"
+      },
+      {
+        "claim": "reach record (staged, L-6): this subject was cited across the run's problem lineages",
+        "id": "0ba3ba5ad3a1",
+        "problems": [],
+        "role": "import"
+      },
+      {
+        "claim": "{\"departure_protocol\":\"declare which of its commitments you break with\",\"reach_case_refs\":[\"0ba3ba5ad3a1d0e9e292fe803108cbc020cdaad3538ae45e054353ab2fb9e65d\"],\"schema\":\"poietic.frame-assertion.v1\",\"scope\":{\"predicate\":{\"args\":[{\"field\":\"description\"},{\"text\":\"why\"}],\"op\":\"contains\"},\"schema\":\"declarative-scope.v1\"},\"subject_ref\":\"084c7918142a7430b466f0709bbdb2cae216e48ba47a5e56be52dabcbd85b883\",\"succeeded_wound_refs\":[],\"validity\":\"universal\"}",
+        "id": "780feda2d16e",
+        "problems": [
+          "promotion:084c7918142a"
+        ],
+        "role": "import"
+      },
+      {
+        "claim": "nu (staged, L-6): the wound on this subject is sound and relevant",
+        "id": "8adfae20030e",
+        "problems": [],
+        "role": "critic"
+      }
+    ],
+    "refuted": [
+      {
+        "attacked_by": [
+          "2f2a20459a92",
+          "3d7a8ee7b48b"
+        ],
+        "claim": "The nighttime urban heat island is predominantly caused by anthropogenic heat emissions (Q_f) from vehicles, buildings, and industry, which maintain a constant warm bias day and night. The cross-city variation in the nighttime gap is best explained by the magnitude of this anthropogenic heat flux, which scales with population density and energy consumption.",
+        "id": "7ae1a1b36488",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "3da11f71a9d5"
+        ],
+        "claim": "The nighttime UHI is primarily a radiative flux divergence caused by the urban greenhouse effect of atmospheric pollutants and aerosols, not surface properties. Cities with higher concentrations of particulate matter and greenhouse gases absorb outgoing longwave radiation and re-emit it downward, slowing cooling. The cross-city modulator is air pollution/aerosol concentration.",
+        "id": "a5c34e463c4e",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "c7e31df4e5ca"
+        ],
+        "claim": "The nighttime urban heat island is an emergent statistical artifact of the urban boundary layer depth. During the day, the rough urban surface mixes heat into a deeper boundary layer than the smooth rural surface. At night, the rural boundary layer decouples and cools rapidly via radiative inversion, while the urban boundary layer remains weakly coupled, retaining a larger total heat reservoir distributed vertically. The cross-city modulator is city size, which determines the depth and total heat content of the urban boundary layer.",
+        "id": "52474e41cfed",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "d8bf68fafa6c"
+        ],
+        "claim": "The nocturnal UHI is primarily a boundary layer turbulence effect: urban roughness suppresses nocturnal inversion formation and maintains a deeper, well-mixed boundary layer over the city, and the cross-city variation is best explained by urban roughness length and wind speed, which determine the turbulent heat transfer efficiency that prevents strong surface cooling.",
+        "id": "8828556fa400",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "fee63b456226"
+        ],
+        "claim": "The nocturnal UHI gap is primarily driven by the absence of evapotranspiration in cities: impervious surfaces eliminate latent heat flux, forcing all cooling into the sensible channel, and cross-city variation scales with the amount of green space and irrigation.",
+        "id": "766ff19fc135",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      },
+      {
+        "attacked_by": [
+          "6859d3e31503"
+        ],
+        "claim": "The nocturnal UHI gap is primarily a moisture-feedback phenomenon: impervious urban surfaces eliminate soil moisture evaporation, which desiccates the urban boundary layer, reducing its heat capacity and dew-point cooling, so the gap scales with aridity and inversely with urban irrigation.",
+        "id": "94f92688869a",
+        "problems": [
+          "question-4dd62735b90864a75220e09b302500bc"
+        ],
+        "role": "conjecturer"
+      }
+    ],
+    "suspended": []
+  },
+  "question": "Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?",
+  "rivalries": [
+    {
+      "problem": "conn:10b3c81d4ea6",
+      "rival_count": 6,
+      "rivals": [
+        "d13b3148f078",
+        "545c6051245a",
+        "c618b67e7e53",
+        "084c7918142a",
+        "60db07097082",
+        "9a0bc2742951"
+      ]
+    },
+    {
+      "problem": "question-4dd62735b90864a75220e09b302500bc",
+      "rival_count": 18,
+      "rivals": [
+        "f0c284d4fa28",
+        "301cb117fcbd",
+        "ebd1ab67c28c",
+        "9fb49e427e1f",
+        "c16a40e60553",
+        "862e69e78788",
+        "620f580b1d40",
+        "a2fcbbb9017d",
+        "20d86b74d99c",
+        "b6eb9dbda73f",
+        "fe533656a28f",
+        "10b3c81d4ea6",
+        "3412428c1dca",
+        "431790ab193b",
+        "f68774f3a6e5",
+        "7af1c67a2e63",
+        "c50397b24312",
+        "444ebe9025bd"
+      ]
+    }
+  ],
+  "root": "/home/user/DeepReason/experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+  "run": {
+    "cycle": 2,
+    "message": "token budget denied transactional work sha256:9cec8decb9513e763874d3c92e75fff707e094112779504b3fac9ac0c2ae3634",
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "token_limit": 150000,
+    "token_spend": 0
+  },
+  "schema": "deepreason-findings.v1",
+  "starved_branches": [
+    "conn:20d86b74d99c",
+    "conn:301cb117fcbd",
+    "conn:3412428c1dca",
+    "conn:431790ab193b",
+    "conn:444ebe9025bd",
+    "conn:620f580b1d40",
+    "conn:7af1c67a2e63",
+    "conn:862e69e78788",
+    "conn:9fb49e427e1f",
+    "conn:a2fcbbb9017d",
+    "conn:b6eb9dbda73f",
+    "conn:c16a40e60553",
+    "conn:c50397b24312",
+    "conn:ebd1ab67c28c",
+    "conn:f0c284d4fa28",
+    "conn:f68774f3a6e5",
+    "conn:fe533656a28f",
+    "disc:question-4dd62735b90864a75220e09b302500bc",
+    "research:reason-counter@053f604f1ad868ae45054137:c50397b24312",
+    "research:reason-counter@0afc88e0ca1524dedbc451e9:9fb49e427e1f",
+    "research:reason-counter@0c85e9ca507c382b223c05e0:b6eb9dbda73f",
+    "research:reason-counter@0dd3aca06bc1d26f3fa59945:3412428c1dca",
+    "research:reason-counter@11161b354d442b27f3db1846:862e69e78788",
+    "research:reason-counter@128452f60a99e2f05e704487:20d86b74d99c",
+    "research:reason-counter@13b613015cb482fcd7404c2e:9fb49e427e1f",
+    "research:reason-counter@1d18ae2f97c2515c1fd9c10e:3412428c1dca",
+    "research:reason-counter@1e2123452968bad242352dc9:f68774f3a6e5",
+    "research:reason-counter@26dbfc49faad2d47c3620dd9:10b3c81d4ea6",
+    "research:reason-counter@2ed3d98042087211d0801db5:c16a40e60553",
+    "research:reason-counter@2ef31c324b575c5fada8b225:fe533656a28f",
+    "research:reason-counter@300965836e6cfb59a3ff3eec:a2fcbbb9017d",
+    "research:reason-counter@30512ad6040f74cf51f26014:431790ab193b",
+    "research:reason-counter@30f5f5ed168e925da894aa03:20d86b74d99c",
+    "research:reason-counter@4030edfa283f777e8171a3ed:431790ab193b",
+    "research:reason-counter@4158397909c7695efdc4b3f1:431790ab193b",
+    "research:reason-counter@48d79d48e642f7cad97e6ff4:10b3c81d4ea6",
+    "research:reason-counter@51ca2774a2e099617f495402:b6eb9dbda73f",
+    "research:reason-counter@5aef08aa56d4d3e029b403f1:620f580b1d40",
+    "research:reason-counter@5e49255ef6c9d537a07a203f:10b3c81d4ea6",
+    "research:reason-counter@66470213fb4461d2cafe1956:c50397b24312",
+    "research:reason-counter@67c45fe46e4692c0f7ad6f69:20d86b74d99c",
+    "research:reason-counter@697a8f37583d1095255cb2b3:a2fcbbb9017d",
+    "research:reason-counter@69bb79a3fefa6297588ed519:620f580b1d40",
+    "research:reason-counter@72ca061195ee7e29532f9d49:620f580b1d40",
+    "research:reason-counter@7dac3f68f108da08c2d5cf4a:f68774f3a6e5",
+    "research:reason-counter@8129c6b91c3cd4a0fc2758f9:862e69e78788",
+    "research:reason-counter@82c9ed6f0552366067c0cb6e:c16a40e60553",
+    "research:reason-counter@852949eb1ff2980f6fa984ec:fe533656a28f",
+    "research:reason-counter@87aa136bba290b2ad46e0493:444ebe9025bd",
+    "research:reason-counter@89cda3cb46208414796e0907:9fb49e427e1f",
+    "research:reason-counter@8c4dc1ba5d057948a30f0196:301cb117fcbd",
+    "research:reason-counter@9c186cb1b1d99438c0851888:ebd1ab67c28c",
+    "research:reason-counter@9c410fec6183f306138a223c:f0c284d4fa28",
+    "research:reason-counter@a5768c5c35b060828a30b4c8:a2fcbbb9017d",
+    "research:reason-counter@a67882863c47c846a4c1c53e:20d86b74d99c",
+    "research:reason-counter@abbf85424c0a1852b182d175:b6eb9dbda73f",
+    "research:reason-counter@af6a9e692dc4c18837788c10:b6eb9dbda73f",
+    "research:reason-counter@afaf6f1bff242eb605de94c2:3412428c1dca",
+    "research:reason-counter@b312a8238ead7affc564973e:f68774f3a6e5",
+    "research:reason-counter@b4f7fb085584595116650d67:862e69e78788",
+    "research:reason-counter@ba07b2fe5cc93e8b67ca864a:fe533656a28f",
+    "research:reason-counter@ba13fee0f228f6362f4aab8e:7af1c67a2e63",
+    "research:reason-counter@bbe9def50e16f85844bb6358:ebd1ab67c28c",
+    "research:reason-counter@c195aee724fffba3ddcbcf25:862e69e78788",
+    "research:reason-counter@c2dd45e1203b7c002542997f:444ebe9025bd",
+    "research:reason-counter@c72cbaa6acdebf4f24d58172:c16a40e60553",
+    "research:reason-counter@d1660dba93c314ce4cdaa474:7af1c67a2e63",
+    "research:reason-counter@d5559517cb8d32134058fe58:301cb117fcbd",
+    "research:reason-counter@d5f52087cda84818d14d6cb4:9fb49e427e1f",
+    "research:reason-counter@dfa6ff2a2982aa04c27a10c8:620f580b1d40",
+    "research:reason-counter@e09a8e01f1662f38e0fa3b8e:a2fcbbb9017d",
+    "research:reason-counter@e12d34ed1f59e267ab01aa56:c16a40e60553",
+    "research:reason-counter@e1e7947f6ede04cc4effef49:f68774f3a6e5",
+    "research:reason-counter@e60342ae7de61e3a369a25f8:7af1c67a2e63",
+    "research:reason-counter@e61970cb5ac1accd886f384f:c50397b24312",
+    "research:reason-counter@ea06fc35627983efb496907b:444ebe9025bd",
+    "research:reason-counter@eb547dee12c7ea20b0e7a4df:f0c284d4fa28"
+  ]
+}

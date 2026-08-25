@@ -1,0 +1,11 @@
+```json
+{
+  "repair.patch.v1": [
+    {
+      "op": "replace",
+      "path": "/cases/0/premise_evidence/0/block",
+      "value": "counterconditions1234ab"
+    }
+  ]
+}
+```

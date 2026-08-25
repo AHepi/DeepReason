@@ -1,0 +1,49 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal UHI is primarily driven by reduced longwave radiative cooling due to the low sky view factor in dense street canyons; the cross-city gap is modulated by urban geometry, with deeper and denser canyons trapping more heat and producing a larger night-time gap.",
+    "mechanism": "During the day, urban materials store sensible heat. After sunset, the rate of cooling is governed by the efficiency of longwave radiative exchange with the cold sky. In dense street canyons, the sky view factor (SVF) is low, trapping longwave radiation and decelerating nocturnal cooling. In cities with deeper canyons and denser building heights, the SVF is smaller, the nocturnal release of stored heat is impeded, and the night-time UHI gap is larger.",
+    "counterconditions": [
+      "If the nocturnal UHI is dominated by anthropogenic heat release rather than radiative trapping, the SVF mechanism becomes secondary.",
+      "If wind speed is sufficiently high to mix the air and override radiative cooling dominance, the SVF effect is neutralized.",
+      "If a city has sparse building density and open canyons, the SVF mechanism fails to explain the UHI."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "Atacama Desert cooling: high SVF under clear skies yields extremely rapid nocturnal temperature drops."
+      ],
+      "shared_structure": [
+        "Nocturnal cooling rate is proportional to the effective view factor of the cold sky sink.",
+        "Obstruction of the hemispherical radiative sink decelerates cooling.",
+        "The system's energy loss is mediated by geometric exposure rather than material capacity alone."
+      ],
+      "disanalogies": [
+        "The desert has high thermal mass but lacks anthropogenic heat and moisture, whereas cities have both.",
+        "Desert surfaces are unshaded during the day, unlike canyon floors which have reduced daytime solar absorption."
+      ],
+      "transfer_claims": [
+        "If a city's sky view factor is artificially reduced (e.g., by taller buildings), its nocturnal UHI should increase proportionally.",
+        "If canopy coverage or overhangs are added, nocturnal cooling rates should decrease."
+      ],
+      "overturn_conditions": [
+        "If measurement shows that nocturnal UHI scales with city size but not with canyon depth, the geometric mechanism is overturned.",
+        "If wind speed is found to be the dominant modulator over geometry, the SVF claim is weakened."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002",
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.85
+  }
+}
+```

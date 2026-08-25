@@ -1,0 +1,14 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "Target misrepresents the problem's explanatory scope by asserting that thermal mass and anthropogenic heat are NOT the primary cause of nocturnal UHI, framing them as merely 'secondary' compared to radiative shielding. However, the problem asks 'Why does the air... stay warmer' and 'what single mechanism best explains why the gap is larger'. By answering the first part (why the air is warmer) with 'not primarily a thermal storage or anthropogenic heat phenomenon', the target ignores the substantial energy balance physics. The air stays warmer at night largely because urban materials (thermal mass/heat capacity) absorb solar radiation during the day and release it slowly after sunset, supplemented by anthropogenic heat. Reducing this to 'a radiative shielding effect' mischaracterizes the fundamental mechanism. Additionally, the claim that sky view factor modulates cross-city variation 'independent of thermal mass' is contradicted by urban climatology, where city size and thermal admittance are primary determinants of UHI magnitude. The problem explicitly asks for the single mechanism for the cross-city variation, not an assertion that other known mechanisms are irrelevant.",
+      "premise": "The problem asks for a single mechanism explaining why the nocturnal UHI gap is larger in some cities than in others.",
+      "premise_evidence": null,
+      "counterexample": null
+    }
+  ]
+}
+```

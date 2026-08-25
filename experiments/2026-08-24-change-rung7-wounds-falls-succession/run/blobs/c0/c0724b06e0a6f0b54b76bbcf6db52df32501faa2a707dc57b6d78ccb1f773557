@@ -1,0 +1,34 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@2bd096e9b704f2cfb2f3a536: program:reasoning_observation_pending
+- reason-counter@5fa852bf76641b206ac99a56: program:reasoning_observation_pending
+- reason-counter@0a07215f39d3bc910768056c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["A physical reservoir releases a fluid, whereas the city releases longwave radiation and sensible heat via convection","The dam constriction is static, whereas urban sky view varies with building height and street width","Water in a dam is conserved, whereas urban heat is continuously replenished by anthropogenic sources"],"overturn_conditions":["If empirical studies show sky view has no independent effect after controlling for thermal mass","If tall cities cool faster than low cities under identical wind conditions","If the nocturnal UHI is fully explained by anthropogenic heat alone without storage"],"shared_structure":["A reservoir accumulates energy during an input phase and releases it during an output phase","Release is retarded by a constriction that limits outflow rate","Total retained energy at a given time depends on both reservoir capacity and constriction strength"],"source_memory_refs":["30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81","8c66b8f735eb5f5b6d5397d135891c52b989e52d8b32c13c1b95c0af4e293f1a"],"transfer_claims":["The magnitude of nocturnal release should scale with stored energy and inversely with sky view","Cities with deeper canyons should show slower cooling rates and larger nocturnal UHI","Reducing building height or widening streets should increase sky view and weaken UHI"]},"claim":"Nocturnal UHI arises because urban thermal mass stores daytime sensible heat and releases it slowly after sunset; the cross-city gap is modulated by building height and street-canyon geometry, which reduce sky view and trap longwave radiation, making the gap larger in denser, taller cities.","counterconditions":[{"case":"If wind speed is high, advection flushes the canyon and longwave trapping is negligible.","checker_spec":null,"eval":"observation"},{"case":"If cloud cover is present, downwelling longwave from the sky reduces the urban-rural radiative contrast.","checker_spec":null,"eval":"observation"},{"case":"If rural thermal mass equals urban thermal mass (e.g., bare rock), the storage-release advantage vanishes.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Impervious, high-heat-capacity surfaces absorb solar radiation during the day and release it as sensible heat at night. In dense cities, deep street canyons restrict sky view, reducing radiative cooling efficiency and trapping the released longwave radiation, so taller, denser cities retain more heat

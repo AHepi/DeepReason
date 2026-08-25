@@ -1,0 +1,96 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The nocturnal UHI arises primarily from the slow release of sensible heat stored during the day in high-thermal-mass urban materials (concrete, asphalt); the cross-city gap is largest where nighttime cooling rates are slowest, which scales with urban thermal mass and impervious surface fraction.",
+      "mechanism": "During the day, dense urban materials with high heat capacity and low albedo absorb large amounts of solar energy. After sunset, the countryside cools rapidly via longwave radiative loss to the sky, but urban surfaces release their stored sensible heat slowly, keeping the air warmer. Cities with more impervious surface and thermal mass retain more daytime storage and cool more slowly, producing a larger nocturnal gap.",
+      "counterconditions": [
+        "If rural and urban cooling rates after sunset are measured to be equal, the thermal-mass-release mechanism is falsified.",
+        "If the nocturnal UHI is observed to be stronger in cities with low building density and high sky view factor, this mechanism is insufficient.",
+        "If daytime heat storage is not substantially greater in cities than in their surroundings, the mechanism fails."
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_005", "SRC_003"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Reduced evapotranspiration in cities is the dominant nocturnal UHI mechanism; the cross-city gap is largest where urban vegetation and irrigation are scarcest, because the absence of latent heat loss forces all energy into sensible heating of the air.",
+      "mechanism": "Vegetated countryside stays cool at night because daytime evapotranspiration removes latent heat, leaving little sensible heat to release after sunset. Cities, lacking vegetation and irrigation, partition incoming energy almost entirely into sensible heat, which warms the air directly. Cities with less green space and more impervious area therefore exhibit a larger nocturnal temperature gap.",
+      "counterconditions": [
+        "If heavily irrigated, vegetated cities still exhibit a large nocturnal UHI, the evapotranspiration mechanism is insufficient.",
+        "If the nocturnal UHI persists strongly during periods when evapotranspiration is negligible (e.g., after rainfall, in winter), the mechanism is weakened.",
+        "If cities with high vegetation cover show no reduction in the nocturnal gap compared to barren cities, the mechanism is falsified."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_007"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is governed by the urban sky view factor: dense street canyons trap longwave radiation, preventing nighttime cooling. The cross-city gap scales with building height and built density, which reduce radiative loss to the sky.",
+      "mechanism": "At night, surface cooling depends on longwave radiative loss to the sky. In dense urban canyons, the sky view factor is low, so emitted longwave radiation is intercepted by opposing walls and re-absorbed, trapping heat. Cities with taller buildings and greater built density have lower sky view factors, slower nocturnal cooling, and thus a larger UHI.",
+      "counterconditions": [
+        "If the nocturnal UHI is strongest in low-density, sprawling cities with high sky view factors, this mechanism is falsified.",
+        "If reducing sky view factor (e.g., adding height) does not increase the nocturnal gap, the mechanism fails.",
+        "If rural areas with equally low sky view factors (e.g., forests) do not exhibit comparable nighttime warmth, the mechanism is insufficient."
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_005", "SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_003"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Anthropogenic heat emissions (traffic, industry, HVAC) are the primary nocturnal UHI source, and the cross-city gap scales with population density and city size, which proxy for total heat output.",
+      "mechanism": "Cities continuously inject heat into the urban atmosphere from human activities. At night, this anthropogenic heat flux remains substantial and, in calm conditions, accumulates near the surface. Larger and denser cities emit more total anthropogenic heat, so the nocturnal UHI scales with population and city size.",
+      "counterconditions": [
+        "If the nocturnal UHI is large in small, low-population cities with minimal anthropogenic emissions, this mechanism is falsified.",
+        "If anthropogenic heat output is measured to be a small fraction of the total energy balance surplus, the mechanism is insufficient.",
+        "If the nocturnal gap does not correlate with population density or city size, the mechanism fails."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_008"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_008"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is primarily a differential cooling-rate phenomenon driven by the interplay of thermal mass and sky view factor; the cross-city gap is largest where urban materials have high emissivity but the geometry prevents that longwave radiation from escaping to the sky.",
+      "mechanism": "Urban surfaces often have high emissivity and would cool efficiently if unobstructed. However, street canyon geometry (low sky view factor) traps the emitted longwave radiation. The nocturnal UHI is therefore strongest where high-emissivity materials are paired with dense building geometry, creating a slow-release heat reservoir that cannot radiatively cool.",
+      "counterconditions": [
+        "If low-emissivity surfaces in dense canyons produce the same nocturnal UHI as high-emissivity surfaces, the emissivity-geometry interaction is not the driver.",
+        "If the UHI is stronger in open cities with high sky view factor than in dense canyons, the mechanism is falsified.",
+        "If thermal mass is shown to dominate over emissivity in predicting cooling rates, this mechanism is insufficient."
+      ],
+      "typicality": 0.65,
+      "optional_refs": ["SRC_005", "SRC_003"],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_003", "SRC_005"],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The nocturnal UHI is dominated by reduced turbulent sensible heat transfer: calm, stable nocturnal boundary layers over rough urban terrain trap heat near the surface. The cross-city gap is largest where wind speed is lowest and urban roughness is highest.",
+      "mechanism": "On clear, calm nights, a stable boundary layer forms. Over smooth rural terrain, residual heat can ventilate vertically, but over rough urban surfaces, turbulence is suppressed by stability, trapping sensible heat. Cities with higher roughness and lower wind speeds experience weaker nocturnal ventilation and a larger UHI.",
+      "counterconditions": [
+        "If the nocturnal UHI is largest under windy conditions, the reduced-turbulence mechanism is falsified.",
+        "If smooth, low-roughness cities exhibit larger nocturnal gaps than rough cities, the mechanism fails.",
+        "If measured turbulent sensible heat flux out of the urban canopy is not suppressed relative to rural areas, the mechanism is insufficient."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": ["SRC_002"],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

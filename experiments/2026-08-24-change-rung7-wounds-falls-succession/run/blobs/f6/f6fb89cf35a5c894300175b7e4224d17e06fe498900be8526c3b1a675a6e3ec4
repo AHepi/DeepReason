@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "claim": "The nocturnal urban heat island is primarily an optical-geometric effect: urban street canyons trap outgoing longwave radiation by reducing the sky view factor. The inter-city gap scales with built density and building height, as deeper canyons trap more radiation and slow nighttime cooling.",
+    "mechanism": "While rural surfaces radiate heat freely to the open sky, urban geometries restrict the view of the cold sky sink. This sky view factor reduction traps longwave radiation, keeping urban air warmer. The gap is larger in cities with taller buildings and narrower streets.",
+    "counterconditions": [
+      "If wind speed is high, advection mixes the air and neutralizes the radiative trapping.",
+      "If a city has very wide streets and low buildings, its sky view factor approaches that of the countryside, weakening the effect.",
+      "If the night is cloudy, downwelling longwave from the sky equalizes the rural and urban radiative sinks."
+    ],
+    "optional_refs": [
+      "SRC_003"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_003"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.75
+  }
+}

@@ -1,0 +1,34 @@
+Assess each named target independently and give one specific result per target.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+PROBLEM CONTEXT (question-4dd62735b90864a75220e09b302500bc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night, and what single mechanism best explains why that night-time gap is larger in some cities than in others?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- uhi-energy-balance@v1: predicate:sum(1 for t in ('albedo', 'thermal mass', 'heat capacity', 'evapotranspiration', 'longwave', 'sky view', 'anthropogenic heat', 'latent heat', 'sensible heat', 'emissivity', 'impervious') if t in content.lower()) >= 2
+- uhi-nocturnal-release@v1: predicate:any(t in content.lower() for t in ('night', 'nocturnal', 'after sunset')) and any(t in content.lower() for t in ('stored', 'storage', 'release', 'releas', 'retain', 'cooling rate', 'daytime'))
+- uhi-cross-city-modulator@v1: predicate:any(t in content.lower() for t in ('sky view', 'street canyon', 'building height', 'built density', 'vegetation', 'green space', 'irrigation', 'population', 'aridity', 'humidity', 'wind speed', 'city size')) and any(t in content.lower() for t in ('larger', 'greater', 'stronger', 'smaller', 'weaker', 'increase', 'decrease', 'more pronounced', 'less pronounced', 'scales with', 'proportional', 'depends on'))
+- reason-counter@685c28af19be7feaeed3c810: program:reasoning_observation_pending
+- reason-counter@e8a9ae33c151dad60777aa07: program:reasoning_observation_pending
+- reason-counter@24f574ea2460ce118ad315ac: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["The desert has high thermal mass but lacks anthropogenic heat and moisture, whereas cities have both.","Desert surfaces are unshaded during the day, unlike canyon floors which have reduced daytime solar absorption."],"overturn_conditions":["If measurement shows that nocturnal UHI scales with city size but not with canyon depth, the geometric mechanism is overturned.","If wind speed is found to be the dominant modulator over geometry, the SVF claim is weakened."],"shared_structure":["Nocturnal cooling rate is proportional to the effective view factor of the cold sky sink.","Obstruction of the hemispherical radiative sink decelerates cooling.","The system's energy loss is mediated by geometric exposure rather than material capacity alone."],"source_memory_refs":["Atacama Desert cooling: high SVF under clear skies yields extremely rapid nocturnal temperature drops."],"transfer_claims":["If a city's sky view factor is artificially reduced (e.g., by taller buildings), its nocturnal UHI should increase proportionally.","If canopy coverage or overhangs are added, nocturnal cooling rates should decrease."]},"claim":"The nocturnal UHI is primarily driven by reduced longwave radiative cooling due to the low sky view factor in dense street canyons; the cross-city gap is modulated by urban geometry, with deeper and denser canyons trapping more heat and producing a larger night-time gap.","counterconditions":[{"case":"If the nocturnal UHI is dominated by anthropogenic heat release rather than radiative trapping, the SVF mechanism becomes secondary.","checker_spec":null,"eval":"observation"},{"case":"If wind speed is sufficiently high to mix the air and override radiative cooling dominance, the SVF effect is neutralized.","checker_spec":null,"eval":"observation"},{"case":"If a city has sparse building density and open canyons, the SVF mechanism fails to explain the UHI.","checker_spec":null,"eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"During the day, urban materials store sensible heat. After sunset, the rate of cooling is governed by the efficiency of longwave radiative exchange with the cold sky. In dense street canyons, the sky view factor (SVF) is low, trapping longwave radiation and decelerating nocturnal cooling. In cities with deeper canyons and denser building heights, the SVF is smaller, the nocturnal release of stored heat is impeded, and the night-time UHI gap is larger.","premises":[],"schema":"deeprea

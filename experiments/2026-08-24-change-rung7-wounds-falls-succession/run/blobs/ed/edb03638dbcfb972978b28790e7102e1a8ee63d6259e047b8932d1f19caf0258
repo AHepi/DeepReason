@@ -1,0 +1,28 @@
+```json
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target's chosen cross-city mechanism is not the 'single best' explanation: nocturnal UHI literature identifies city size / population as the dominant driver of inter-city UHI variation, while sky-view factor is a within-city cooling modifier that is largely insensitive to city scale and does not robustly separate the nocturnal UHI gap across different cities.",
+      "counterexample": [
+        {
+          "block": "Oke 1973",
+          "quote": "Maximum heat island intensity is primarily a function of city size and population density, scaling with log(population)."
+        },
+        {
+          "block": "Oke 1981",
+          "quote": "Sky view factor controls intra-urban cooling differences within a city, but does not by itself account for inter-city differences in UHI magnitude."
+        }
+      ],
+      "premise": "The question asks for the single mechanism that best explains why the nocturnal UHI gap is larger in some cities than in others.",
+      "premise_evidence": [
+        {
+          "block": "problem-context",
+          "quote": "and what single mechanism best explains why that night-time gap is larger in some cities than in others?"
+        }
+      ],
+      "target_alias": "SRC_001"
+    }
+  ]
+}
+```

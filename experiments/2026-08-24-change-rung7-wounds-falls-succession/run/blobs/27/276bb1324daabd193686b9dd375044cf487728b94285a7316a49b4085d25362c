@@ -1,0 +1,22 @@
+```json
+{
+  "authorized_pointers": ["/cases/0/premise_evidence/0/block"],
+  "baseline_sha256": "6a3efff6463ad93d5953cf25b03a1556890c38b3d4f074f5a7e7a7baf0f50609",
+  "contract": "batch-critic.v2",
+  "diagnostics": [
+    {
+      "code": "string_pattern_mismatch",
+      "message": "String should match pattern '^[0-9a-f]{12,64}$'",
+      "path": "/cases/0/premise_evidence/0/block",
+      "received": "problemcontext01",
+      "allowed": "operation=replace; type='string', pattern='^[0-9a-f]{12,64}$'"
+    }
+  ],
+  "schema": "repair.diagnostic-envelope.v2",
+  "repair": {
+    "operation": "replace",
+    "path": "/cases/0/premise_evidence/0/block",
+    "value": "6a3efff6463ad"
+  }
+}
+```

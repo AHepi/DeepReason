@@ -1,0 +1,3 @@
+```json
+{"cases":[{"target_alias":"SRC_001","attack":false,"case":"Target correctly answers both parts of the problem: it identifies that urban surfaces store daytime heat and release it as longwave radiation after sunset (explaining why the city stays warmer at night), and it names sky view factor / street canyon geometry as the single cross-city modulator of the nocturnal gap. The mechanism, scope, and counterconditions are substantively coherent and satisfy the problem's requirements."}]}
+```

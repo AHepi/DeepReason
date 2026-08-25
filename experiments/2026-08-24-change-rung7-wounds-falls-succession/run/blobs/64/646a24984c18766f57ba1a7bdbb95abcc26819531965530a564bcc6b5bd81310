@@ -1,0 +1,59 @@
+```json
+{
+  "candidate": {
+    "claim": "The nocturnal urban heat island is a radiative-trap phenomenon: street canyons and low sky view factor block longwave radiative cooling, and the cross-city gap scales with built density and street canyon geometry.",
+    "mechanism": "After sunset, urban surfaces cool primarily by emitting longwave radiation to the sky. In dense cities, tall buildings reduce the effective sky view factor, so much of the emitted longwave radiation is intercepted by opposing walls rather than escaping to the cold sky. This radiative trapping slows the nocturnal cooling rate relative to open countryside, maintaining a warmer urban canopy layer. Cities with deeper street canyons and higher built density trap a greater fraction of outgoing longwave radiation, producing a larger night-time temperature gap.",
+    "counterconditions": [
+      "If a city has very wide streets and low building height-to-width ratios, the sky view factor approaches rural values and radiative trapping becomes negligible.",
+      "Under overcast skies the downward longwave radiation from clouds dominates, equalizing urban and rural cooling rates and eliminating the radiative-trap contribution.",
+      "If wind speeds are high enough to vertically mix the urban canopy layer with cooler air aloft, the radiative-trap effect is overwhelmed by turbulent sensible heat removal."
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "30be11905db881ea7a4e488a8e68f34e4f6b262380bb3b1a31ceb9763a9aea81",
+        "8c66b8f735eb5f5b6d5397d135891c52b989e52d8b32c13c1b95c0af4e293f1a"
+      ],
+      "shared_structure": [
+        "A body surrounded by a partially enclosing enclosure loses heat more slowly than the same body in the open because a fraction of its emitted radiation is reabsorbed by the enclosure rather than escaping.",
+        "The degree of enclosure (quantified by a view factor or fill factor) determines the fraction of radiation that escapes versus is trapped, directly scaling the temperature differential.",
+        "Cooling is governed by the net radiative flux: the difference between emitted outgoing radiation and absorbed incoming radiation from the enclosure."
+      ],
+      "disanalogies": [
+        "A greenhouse enclosure is typically transparent to shortwave solar radiation and opaque to longwave infrared, whereas urban buildings are partially opaque to both wavebands.",
+        "Urban canyon walls are not passive radiators: they store and release sensible heat, adding a thermal-mass pathway absent in a simple greenhouse.",
+        "A greenhouse enclosure is a single continuous barrier, while the urban canopy is a discontinuous set of geometric obstacles with complex mutual view factors.",
+        "Greenhouse glass transmits radiation; canyon walls reflect and re-emit, so the 'trapping' mechanism is radiative exchange between surfaces rather than spectral opacity."
+      ],
+      "transfer_claims": [
+        "The cross-city nocturnal UHI gap should increase monotonically with average building height-to-width ratio (street canyon depth).",
+        "Cities with a higher proportion of dense, narrow-street core area should exhibit a larger nocturnal UHI than sprawling, low-density cities of the same population.",
+        "Areas within a single city that have undergone recent tall-building construction should show a measurable increase in nocturnal UHI intensity relative to unchanged areas."
+      ],
+      "overturn_conditions": [
+        "Empirical studies show that nocturnal UHI intensity is uncorrelated with sky view factor after controlling for thermal mass and anthropogenic heat.",
+        "Measurements show that net longwave radiative flux from urban roofs is not significantly reduced compared to rural surfaces at the same air temperature.",
+        "Cities with high sky view factor but high thermal mass show the same nocturnal UHI as cities with low sky view factor and equivalent thermal mass."
+      ],
+      "adopted_commitment_refs": [
+        "uhi-energy-balance@v1",
+        "uhi-nocturnal-release@v1",
+        "uhi-cross-city-modulator@v1"
+      ]
+    },
+    "evidence_refs": [],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_003"
+    ],
+    "checker_specs": [],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_003"
+      ]
+    },
+    "typicality": 0.72
+  }
+}
+```

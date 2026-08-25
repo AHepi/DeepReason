@@ -1,0 +1,56 @@
+survivors (0):
+{
+ "assertion": "f62cfa8d507a97251405046b54ebf1aaf6a1a65c884f0d84f492489d2a6ccda3",
+ "carried_count": 1,
+ "carried_includes_seed": true,
+ "consulted_before_the_fall": [
+  "f62cfa8d507a97251405046b54ebf1aaf6a1a65c884f0d84f492489d2a6ccda3"
+ ],
+ "fall_critic": "7189991b60b2a15ff22768ce7d201ee26e19047d0ffc824d2c06fb6b90f536f6",
+ "frame_renders_before_the_fall": true,
+ "outcome": "L-6 PASS",
+ "promotion_problem": "promotion:0c0dbbe639eb",
+ "prop_9_6": {
+  "assertion_status_after_wound": "Status.ACCEPTED",
+  "frame_still_renders_after_wound": true,
+  "marks_after_wound": {},
+  "standing_unchanged": true,
+  "subject_status_after_wound": "Status.REFUTED",
+  "wound_id": "eafb1f1292407a9a53da2d0f5e15e1465ec2e5b2cf85af0f4ed02e3f0aba50a5"
+ },
+ "run_rc": 4,
+ "scope_token": "why",
+ "seed_problem": "question-4dd62735b90864a75220e09b302500bc",
+ "subject": "0c0dbbe639eb76e81971f236a48b821fbc4c5cf45143e28de87ae3662d0b5273",
+ "subject_head": "inline:{\"analogy\":null,\"claim\":\"The nocturnal urban heat island is primarily an energy-bal",
+ "typed_outcomes": {
+  "assertion_status": "Status.REFUTED",
+  "batch_offers": [
+   {
+    "cause": "f62cfa8d507a97251405046b54ebf1aaf6a1a65c884f0d84f492489d2a6ccda3",
+    "grade": "premise-refuted",
+    "size": 1
+   }
+  ],
+  "fallen_frame_still_renders": false,
+  "fallen_frames": [
+   {
+    "assertion": "f62cfa8d507a97251405046b54ebf1aaf6a1a65c884f0d84f492489d2a6ccda3",
+    "grade": "fall",
+    "label": "refuted"
+   }
+  ],
+  "marks": {
+   "question-4dd62735b90864a75220e09b302500bc": "premise-refuted"
+  },
+  "open_orphans": {
+   "question-4dd62735b90864a75220e09b302500bc": "premise-refuted"
+  },
+  "standing_after_the_fall": []
+ },
+ "verify_root": {
+  "checks": [],
+  "details": [],
+  "violations": 0
+ }
+}

@@ -1,0 +1,7 @@
+```json
+{
+  "operation": "replace",
+  "path": "/scratch_proposal/links/2/to_ref",
+  "value": "NEW_002"
+}
+```

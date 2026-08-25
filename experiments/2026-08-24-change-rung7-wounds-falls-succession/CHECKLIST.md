@@ -398,12 +398,92 @@ DONE-CRITERION: `python -m pytest tests/ -q -n 4` (0 real failures),
 `python scripts/wheel_smoke.py`, `python -u
 scripts/wheel_operational_smoke.py`, and both tool JSONs — all pasted.
 
+
+**DONE 2026-08-24.**
+
+```
+python -m pytest tests/ -q -n 4
+4080 passed, 6 skipped in 1085.92s (0:18:05)
+
+python scripts/wheel_smoke.py
+wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+points, module parity, MCP registration, and exact MCP schemas
+
+python -u scripts/wheel_operational_smoke.py
+exit code 0
+
+python tools/docs_verify.py
+docs_verify [full]: 64 documents, 1048 checks, 4 workers
+docs_verify: 3 failed        # all three CON-run-identity.md, shallow clone
+
+python tools/diff_budget.py 053c129ac --ceiling 700 --paths src
+{"areas": {"src": 1027}, "ceiling": 700, "verdict": "EXCEEDED"}   # Amendment 1
+
+python tools/blast_radius.py ...
+"frozen_surface_verdict": "CONTACT"   # surface 3 only, every row a reader
+                                      # the grant names; qualification digest
+                                      # and wheel pins both EMPTY
+```
+
+**0 real failures, and 104 more tests than the base carried.** The baseline
+was 3974 passed / 2 failed (both the `-n 4` MCP-thread flakes); this run is
+4080 passed / 0 failed, so the two flakes passed here as well.
+
+**The three docs failures are the operator's own stated baseline** — "3
+pre-existing shallow-clone failures (0 on a full clone)". Confirmed rather
+than assumed: `git rev-parse --is-shallow-repository` is `true`, the clone
+holds 85 commits, and `git cat-file -t 1637e808` returns "Not a valid object
+name" for the revision the check pins.
+
+**Three OTHER doc checks failed first, and all three were mine.** They are
+recorded in their own commit: the `fail()` count pin (220 → 223), the parsed
+rank tuple (the wound term), and the `consultability` proxy that grepped for a
+STRING where the claim was about CALLERS. Each moved with the code rather than
+being worked around.
+
+**C-PUBLIC holds.** Both smokes green and `wheel_smoke_pins` empty in the
+census — the public surface did not move, so no re-pin was owed and none was
+made.
+
 ## Step 14 — the cycle soak, before any live launch (S11; G6)
 
 `python -u scripts/cycle_soak.py --case epoch3`. The launch config is the
 epoch3 shape and is already in the case table, so no case is added.
 
 DONE-CRITERION: exit 0, with the soak's own summary pasted.
+
+
+**DONE 2026-08-25.**
+
+```
+python -u scripts/cycle_soak.py --case epoch3
+[soak] built root: manifest 814ff04708bd2a24…
+[soak] qualified in 2.7s
+[soak] driving 8 cycles …
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted'
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 8 of 8 requested
+  [PART] D1-seat-contract   zero repair attempts: the deterministic stub
+                            always returns a schema-valid response
+  [PASS] D2-route-lease     [PASS] D3-budget-auth    [PASS] D4-reservation-bound
+[soak] exit 0 (clean)
+```
+
+**Exit 0, and no case was added** — the launch config is the epoch3 shape,
+which the soak's case table already carries, so the CLAUDE.md law was satisfied
+by running the instrument rather than by extending it.
+
+`cascade-integrity` reported **0 violations** on a root the soak drove through
+eight cycles. That is the check's first exposure to a real driven record rather
+than a fixture, and it is silent there, which is what additive means.
+
+The `[PART]` on D1 is the instrument's own recorded limit, not a failure: the
+deterministic stub never returns an invalid response, so the repair path cannot
+be reached offline. Read
+`experiments/2026-08-23-change-cycle-soak-instrument/RESULTS.md` before treating
+a green soak as full coverage — three of its four death assertions are asserted
+rather than demonstrated.
 
 ## Step 15 — the live gate (S11; G6)
 
@@ -415,6 +495,71 @@ cascade fires, `verify_root` is clean.
 DONE-CRITERION: the run id, the typed mark with its grade, the cascade's
 own output, and `verify_root`'s verdict — all pasted.
 
+
+**DONE 2026-08-25. L-6 PASS**, on a live root, judged on typed outcomes only.
+
+```
+subject (model-written): {"analogy":null,"claim":"The nocturnal urban heat
+                          island is primarily an energy-bal…
+seed problem:            question-4dd62735b90864a75220e09b302500bc
+sigma:                   contains(description, "why")   -- from the seed's
+                                                           own first word
+carried: 1 problem, and it is the seed          frame renders before the fall: yes
+
+PROP 9.6, LIVE
+  subject_status_after_wound   Status.REFUTED
+  assertion_status_after_wound Status.ACCEPTED
+  standing_unchanged           true
+  marks_after_wound            {}
+  frame_still_renders          true
+
+THE FALL
+  assertion_status   Status.REFUTED
+  fallen_frames      [{grade: "fall", label: "refuted"}]
+  marks              {question-4dd62735…: "premise-refuted"}
+  open_orphans       {question-4dd62735…: "premise-refuted"}
+  batch_offers       [{grade: "premise-refuted", size: 1}]
+  standing_after     []
+
+verify_root          0 violations
+```
+
+**The mark appears with its grade, the cascade fires, verify_root is clean** —
+the three things the instruction names, on a record a live model wrote.
+
+**Two failures on the way, both recorded rather than tidied away.**
+
+1. **The launch config was not the one the soak covered.** The first ladder
+   built a profile through `deepreason setup`, and glm-5.2 qualified at the
+   SHALLOW tier under it — `QUALIFICATION_TIER_SHALLOW`, full V6 reasoning
+   refused. CLAUDE.md's law is that the soak must be green on the LAUNCH
+   config, and `scripts/cycle_soak.py`'s epoch3 case is
+   `experiments/2026-08-22-live-reach-rich-run/run-config.yaml` driven through
+   that tranche's `build_manifest`. The ladder now uses exactly those two.
+
+2. **Staging on the STOPPED root was refused by the harness, and the refusal
+   was right.** `verify_root` reported
+   `TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`. Proven to be the staging's doing
+   rather than the run's: replaying the log truncated to the last pre-staging
+   sequence (525) gives **0 violations**, so the run as it stopped was clean
+   and the post-horizon writes were mine. Rung 4's fixture note had said so in
+   words — "writing to a terminalized root would be exercising a state no
+   operator can reach" — and the record enforced it.
+
+   **My own gate script hid it.** It compared violation counts BEFORE and AFTER
+   staging, and "before" already carried the violation from a previous partial
+   attempt, so a delta test returned PASS on a dirty record. The driver now
+   tests the ABSOLUTE count, which is what L-6's "verify_root clean" says.
+   `refused-post-horizon-l6-outcomes.json` keeps that refused output.
+
+The fall is now staged INSIDE the run, on the open harness, which is the shape
+Rung 4's `_framed_manifest_root` already used and for the same reason. The
+staging runs in a `finally`: this config dies `operational_failure` at cycle 2
+on every attempt, and a staging that only ran on the clean path would have
+skipped the gate on exactly the runs that reached the frontier anyway. The run
+recorded 69 accepted and 6 refuted artifacts before it died, which is a real
+record whatever ended it.
+
 ## Step 16 — RESULTS.md and the §13 residue (G7)
 
 The tranche's RESULTS.md segment, carrying §13's residue VERBATIM and the
@@ -422,3 +567,16 @@ honest ledger of what remains unproven.
 
 DONE-CRITERION: the residue quoted verbatim, checked character for
 character against `docs/COMPUTABLE_CALCULUS.md`.
+
+**DONE 2026-08-25.** `RESULTS.md` carries the dated segment and the residue.
+
+§13's residue, checked character for character against
+`docs/COMPUTABLE_CALCULUS.md`:
+
+> And a wounded background with no arriving rival frames forever — refuted,
+> indicted in every pack, unreplaced, and never declared irreplaceable (N3).
+
+Extracted programmatically from the source rather than retyped (the source is
+line-wrapped across blank lines, so a hand copy is where a "verbatim" quote
+silently stops being one).
+
