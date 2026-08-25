@@ -67,11 +67,13 @@ def main() -> int:
 
     addressed = collections.Counter(pid for aid, pid in state.addr if aid in set(imports))
     print(f"IMPORT members address    {dict(addressed)}")
+    supported = len(stored) - len(imports)
+    counted_imports = reported - supported if isinstance(reported, int) else "?"
     print()
-    print(f"DEFECT: the invariant says import-role admission records never "
-          f"count as survivors.\n        The surface counts {len(imports)} of "
-          f"them, reporting {reported} where the record supports "
-          f"{len(stored) - len(imports)}.")
+    print(f"VERDICT: the invariant says import-role admission records never "
+          f"count as survivors.\n         The surface counts {counted_imports} "
+          f"of the {len(imports)} present, reporting {reported} where the "
+          f"record supports {supported}.")
     return 0
 
 

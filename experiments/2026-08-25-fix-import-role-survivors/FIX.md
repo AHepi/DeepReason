@@ -209,3 +209,15 @@ requires. The ceiling is re-priced against the actual split:
 **What would have been a real stop, and was not reached:** an unplanned `src/`
 change site, a frozen-surface contact, or a fix that grew because the
 diagnosis was wrong. None occurred.
+
+## Amendment 2 (2026-08-25) — a fifth map document was in contact
+
+`docs/map/SEAM-capabilities-x-rules.md:143` also pinned the moved literal
+(`grep -q "provenance.role != ProvenanceRole.IMPORT"`) inside a nine-clause
+check about where research evidence enters at `role="import"`, and its prose
+says "the scheduler excludes import-role artifacts from its survivor count" —
+a sentence that was true of the scheduler and false of every other surface.
+Found by `python tools/docs_verify.py` in FULL mode, not by `--fast`, which had
+a stale cached PASS for it. Added to the map documents moving in this commit,
+with the prose corrected to name the authority rather than the scheduler. No
+`src/` change site is added by this amendment.
