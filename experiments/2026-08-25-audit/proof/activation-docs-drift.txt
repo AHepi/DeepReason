@@ -1,0 +1,49 @@
+PLANT (dr-audit-docs-drift activation): docs/map/SEAM-harness-x-verification.md:147
+  PROSE numeral edited, check: line left untouched:
+    'a 1083-file committed one'  ->  'a 9999-file committed one'
+  The check on line 150 independently asserts len(c)==1083 against the real root.
+
+SCOPED RUN: python tools/docs_verify.py --fast
+docs_verify [fast]: 64 documents, 1069 checks, 1069 reused
+  FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
+      ->  (cached)
+  FAIL CON-run-identity.md:202: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]' (cached)
+  FAIL CON-run-identity.md:204: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]' (cached)
+docs_verify: 3 failed
+
+RESULT: BLIND, not red. 1069 checks reused, 3 failed -- the same three
+CON-run-identity git-history baseline failures, unrelated to the plant.
+The instrument did not notice the edit.
+
+This is a VALID activation outcome. dr-audit-docs-drift: 'confirm the
+check catches it OR row the miss as a toothless-check finding against
+that document ... Either outcome is a valid activation (the plant proves
+the instrument's edge, red or blind).'
+
+The edge it proves, stated precisely:
+  A check: line authenticates a CLAIM against the tree. Line 150 asserts
+  len(c)==1083 against the real root and passes, because the root really
+  does hold 1083 files. It never reads line 147. So PROSE THAT MERELY
+  RESTATES a checked number is unguarded -- the number in the check is
+  authenticated, the same number in the sentence beside it is not.
+
+  Full mode would be blind here too, and that is derivable from the
+  check's own text rather than needing a second nine-minute run: the
+  command on line 150 reads the filesystem and nothing else.
+
+  Separately, --fast reported '1069 reused' -- it re-ran NOTHING despite
+  the edited file, so it keys on the files a check touches, not on the
+  document's own mtime. This independently confirms CLAUDE.md's warning
+  that --fast cannot catch a document a src/ change just broke.
+
+NOT rowed as a toothless-check finding: --audit reported 0 findings, and
+the check on line 150 CAN fail (it would, if the root changed). An
+unguarded prose restatement is a known and accepted property of the
+check: mechanism, not a defect in this document.
+
+RESTORE: git checkout -- docs/map/SEAM-harness-x-verification.md
+git status --porcelain -- docs/map/SEAM-harness-x-verification.md:
+  (empty above = clean)
+1083-file committed one. (Until 2026-08-03 this check pinned the turmite root,

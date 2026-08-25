@@ -1,8 +1,0 @@
-{
-  "operation": "replace",
-  "path": "/values",
-  "value": {
-    "iterations": [10000],
-    "tolerance_sd": [2]
-  }
-}

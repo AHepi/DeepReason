@@ -1,8 +1,0 @@
-{
-  "type": "repair.patch.v1",
-  "baseline_sha256": "348e7d785a03370dd2df242bc12a6f31c245c293e6fd3d30e816dd97e24b3698",
-  "patch": {
-    "pointer": "/candidate/checker_specs/0/name",
-    "operation": "remove"
-  }
-}

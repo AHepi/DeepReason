@@ -1,0 +1,18 @@
+### L3
+src/deepreason/llm/firewall.py:341:def is_single_model_run(leases: Mapping[str, tuple[EndpointLease, ...]]) -> bool:
+src/deepreason/llm/adapter.py:30:    is_single_model_run,
+src/deepreason/llm/adapter.py:675:    def is_single_model(self) -> bool:
+src/deepreason/llm/adapter.py:678:        return is_single_model_run(self.leases)
+src/deepreason/informal/trial.py:904:    if adapter.is_single_model():
+src/deepreason/run_manifest.py:2607:def _select_single_model_seed(
+src/deepreason/run_manifest.py:3431:    single_model: str | None = None,
+src/deepreason/run_manifest.py:3459:    In single-model mode only the route explicitly carrying ``single_model``
+-- tests
+tests/test_run_manifest.py
+tests/test_calculus_succession_trial.py
+tests/test_allocation_signal_consumption.py
+tests/test_continuation.py
+tests/test_cli_setup_seats.py
+tests/test_budget.py
+tests/test_verify_workload_roots.py
+tests/test_judge_ensemble_boundary.py

@@ -1,0 +1,19 @@
+PLANT (dr-audit-broken activation): tests/test_error_catalog.py:24
+  assert len(CATALOG) == 48   ->   assert len(CATALOG) == 999999
+
+SCOPED RUN: python -m pytest tests/test_error_catalog.py -q
+>       assert len(CATALOG) == 999999
+E       AssertionError: assert 48 == 999999
+E        +  where 48 = len({'QUALIFICATION_V6_REQUIRED': ErrorCatalogEntry(code='QUALIFICATION_V6_REQUIRED', summary='Reusable production qualifi...fied this exact combination of manifest, routes, and provider profile.', next_action='Retry: deepreason qualify'), ...})
+
+tests/test_error_catalog.py:24: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_error_catalog.py::test_catalog_covers_48_entries - Assertio...
+1 failed, 7 passed in 0.27s
+
+RESTORE: git checkout -- tests/test_error_catalog.py
+git status --porcelain -- tests/test_error_catalog.py:
+  (empty above = clean)
+re-run green:
+........                                                                 [100%]
+8 passed in 0.24s

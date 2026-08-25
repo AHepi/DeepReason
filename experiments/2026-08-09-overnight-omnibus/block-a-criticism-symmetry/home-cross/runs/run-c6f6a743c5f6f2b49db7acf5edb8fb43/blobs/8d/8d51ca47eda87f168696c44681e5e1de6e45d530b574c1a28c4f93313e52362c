@@ -1,7 +1,0 @@
-{
-  "repair.patch.v1": {
-    "pointer": "/target_alias",
-    "operation": "add",
-    "value": "SRC_001"
-  }
-}

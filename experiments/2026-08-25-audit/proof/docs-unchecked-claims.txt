@@ -1,0 +1,57 @@
+Unchecked-claims census: docs/*.md top level (they carry no check: lines)
+Rule (dr-audit-docs-drift step 5): zero checks AND a header/Status line
+asserting a CURRENT-STATE claim -> verify that one claim by grep.
+
+ADMISSION_SPEC.md                              checks=0    3:Status: v1 IMPLEMENTED (2026-07-28) — all three decided build items are
+AGENT.md                                       checks=0    —
+AUDIT_BASELINES.md                             checks=0    —
+AUTONOMICS_REPORT.md                           checks=0    —
+AUTONOMOUS_SIMULATION_MIGRATION.md             checks=0    —
+BASIN_REPORT.md                                checks=0    5:*Status: single-run-per-condition, pre-registered, self-contained.*
+CACHE_DESIGN.md                                checks=0    —
+CAN_LLMS_EXPLORE.md                            checks=0    —
+COMPUTABLE_CALCULUS.md                         checks=0    —
+CONTROLLER_SPEC.md                             checks=0    —
+ERRATA.md                                      checks=3    —
+ERRATA_EXECUTOR.md                             checks=4    —
+EXPERIMENT_PROGRAM_2026-07.md                  checks=0    —
+FORM_DR1_RUN_APPLICATION.md                    checks=0    —
+HANDOVER_2026-07-27.md                         checks=0    —
+HANDOVER_2026-08-02.md                         checks=0    —
+HANDOVER_2026-08-03.md                         checks=0    —
+HANDOVER_MONITOR_2026-08-06.md                 checks=0    —
+HANDOVER_MONITOR_2026-08-10.md                 checks=0    —
+HIDDEN_LEGACY_INVENTORY.md                     checks=0    —
+INDEX.md                                       checks=0    —
+JOLT_CONTROL_PLANE_MIGRATION.md                checks=0    —
+LESSONS_LEARNED_2026-08-17.md                  checks=1    —
+MINI_PLAN.md                                   checks=0    3:*Original build status: BUILT AND LIVE-VERIFIED — see `mini/`. M0–M4 done;
+MINI_STRESS_REPORT.md                          checks=0    —
+OLLAMA_CLOUD_OPERATIONS.md                     checks=0    —
+OPERATOR_DIAGNOSIS.md                          checks=0    —
+POIETIC_CALCULUS_FORMALIZED.md                 checks=0    —
+POIETIC_CALCULUS_v0.1.md                       checks=0    5:Status: conjecture. Not computable as stated; deliberately so at one locus (§7). Grounded in the source map *Deutsch's Epistemology & Marletto's Co
+REPORT.md                                      checks=0    —
+RESEARCH_BACKEND.md                            checks=0    3:Status: tranche 1 IMPLEMENTED — the contained fetcher and the directed
+RESEARCH_CONVERGENCE_LOOPS_2026-08-22.md       checks=0    —
+RESEARCH_FINDINGS_Q1Q10_2026-08-22.md          checks=0    —
+RESEARCH_JUDGE_BLINDING_2026-08-22.md          checks=0    —
+RESEARCH_PROGRAM_2026-08-22.md                 checks=0    —
+RESEARCH_SHAPE_CRITIQUE_2026-08-22.md          checks=0    —
+RESEARCH_STRUCTURED_OUTPUT_COERCION_2026-08-22.md checks=0    —
+RUNTIME_IMPORTS.md                             checks=0    —
+RUN_PLAN_TEMPLATE.md                           checks=0    —
+SCRATCHPAD_GROUNDED_BRIDGE.md                  checks=0    —
+SELF_IMPROVEMENT.md                            checks=0    —
+SMALL_MODEL_COMPATIBILITY.md                   checks=0    —
+STATE_OF_THE_PROGRAM_2026-08-14.md             checks=0    —
+STATE_OF_THE_THEORY.md                         checks=0    —
+STRESS_INSIGHTS.md                             checks=0    —
+TOKEN_ECONOMY.md                               checks=0    —
+TRANCHE_A_AUTONOMOUS_SIMULATION.md             checks=0    —
+TREADLE_ASSEMBLY.md                            checks=1    8:Status: **UNREVIEWED by the owner at write time.** SETUP step 2 says to show
+harness-spec-v1.3.md                           checks=1    —
+harness-spec-v1.4-amendment.md                 checks=0    —
+harness-spec-v1.5-amendment.md                 checks=0    —
+harness-spec-v1.6-amendment.md                 checks=0    —
+harness-spec-v1.7-amendment.md                 checks=0    —

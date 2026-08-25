@@ -1,0 +1,10 @@
+### L1
+src/deepreason/oracle.py:55:# formally_backed's wider substantive set (rules/warrants.py).
+src/deepreason/informal/trial.py:38:    formally_backed,
+src/deepreason/informal/trial.py:920:    if formally_backed(harness, target_id):
+src/deepreason/programs.py:45:    prose immunity (``rules/warrants.formally_backed``). Declaring one is
+src/deepreason/rules/warrants.py:61:def formally_backed(harness, target_id: str) -> bool:
+src/deepreason/rules/relatedness.py:13:stands. `formally_backed`'s new per-commitment check (step 12) reads
+-- tests
+tests/test_oracle.py
+tests/test_prose_refutation_boundaries.py

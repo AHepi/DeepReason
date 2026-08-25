@@ -1,3 +1,0 @@
-```json
-{"cases": [{"target_alias": "SRC_001", "attack": false, "case": "Target proposes a substantive reduction relation between SRC_002 and SRC_003, correctly names the relation kind, and specifies a refutation condition."}]}
-```

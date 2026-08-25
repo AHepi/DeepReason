@@ -1,0 +1,12 @@
+PLANT: attempt to row 'verify_root' (exported, imported widely) as candidate-dead.
+STEP 2 SCAN: grep -rlw verify_root over src/ tests/ scripts/ tools/, excluding its defining file src/deepreason/invariants.py
+src/deepreason/verification/report.py
+src/deepreason/runtime/terminal_authority.py
+src/deepreason/capabilities/audit.py
+src/deepreason/informal/trial.py
+src/deepreason/amendment/state.py
+src/deepreason/cli/main.py
+src/deepreason/application/results.py
+src/deepreason/calculus/audit.py
+RESULT: hits >= 1 -> verdict 'referenced'. The candidate-dead row is REFUSED by the worker's own step 2.
+Instrument discriminates; nothing restored (read-only plant).

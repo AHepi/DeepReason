@@ -1,0 +1,29 @@
+The 26 deleted directories cited from docs/ prose, with their citing files.
+Recomputed after deletion; the directory names come from the delete list.
+
+2026-08-02-map-falsification                               docs/HANDOVER_2026-08-02.md docs/proposals/DETERMINISTIC_GATES_PREPLAN.md 
+2026-08-03-change-driving-skill                            docs/HANDOVER_2026-08-03.md 
+2026-08-03-change-rung1-sockets-on-paper                   docs/ERRATA.md docs/ERRATA_EXECUTOR.md 
+2026-08-03-change-rung2-bridge-unification                 docs/ERRATA_EXECUTOR.md 
+2026-08-03-change-rung2-config-inventory                   docs/ERRATA_EXECUTOR.md 
+2026-08-05-change-budget-ceiling-at-commit                 docs/proposals/DETERMINISTIC_GATES_PREPLAN.md 
+2026-08-05-fix-loopback-fixture-daemon                     docs/ERRATA.md docs/proposals/DETERMINISTIC_GATES_PREPLAN.md 
+2026-08-05-fix-smoke-failure-reporting                     docs/proposals/DETERMINISTIC_GATES_PREPLAN.md 
+2026-08-05-testphase-live-validation                       docs/ERRATA.md docs/HANDOVER_MONITOR_2026-08-06.md 
+2026-08-08-change-grounded-overlay-o1                      docs/ERRATA.md 
+2026-08-08-change-grounded-overlay-o2                      docs/ERRATA.md 
+2026-08-08-fix-l1-continue-resumable-crash                 docs/ERRATA.md 
+2026-08-08-parked-bronze-census-env                        docs/HANDOVER_MONITOR_2026-08-10.md 
+2026-08-09-change-adjudication-judge-seats-optins          docs/ERRATA.md docs/HIDDEN_LEGACY_INVENTORY.md docs/proposals/GATES_AND_PACKAGES_PREPLAN.md 
+2026-08-09-change-errata-sweep-and-automation              docs/ERRATA_EXECUTOR.md 
+2026-08-09-change-hard-question-set                        docs/ERRATA_EXECUTOR.md 
+2026-08-09-change-llm-probe-apparatus                      docs/ERRATA.md 
+2026-08-09-overnight-omnibus                               docs/ERRATA.md 
+2026-08-09-parked-full-power-matrix                        docs/HANDOVER_MONITOR_2026-08-10.md 
+2026-08-11-spec-drift-measurement                          docs/INDEX.md docs/harness-spec-v1.7-amendment.md 
+2026-08-11-sweep-smoke-currency                            docs/ERRATA.md 
+2026-08-12-change-skills-parked-followups                  docs/ERRATA.md 
+2026-08-15-change-rung3a-h1-successor-deletion             docs/ERRATA.md 
+2026-08-15-change-rung3d-website-remnant                   docs/ERRATA.md 
+2026-08-24-change-rung5-promotion-criteria                 docs/ERRATA.md 
+autonomous_inquiry_preflight_2026-07-16                    docs/AUTONOMOUS_SIMULATION_MIGRATION.md 

@@ -1,1 +1,0 @@
-{"allowed":"complete JSON value","contract":"critic.atomic-target.v1","error":"multiple top-level JSON values or trailing content","path":"","repair_scope":"","skeleton":{"attack":false,"target_alias":"SRC_001"}}

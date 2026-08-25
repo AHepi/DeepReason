@@ -1,0 +1,15 @@
+src/deepreason/brain|src/deepreason/brain/log.py|def last_json_line
+src/deepreason/brain|src/deepreason/brain/metrics.py|def retrieval_metrics
+src/deepreason/cli|src/deepreason/cli/main.py|def _cmd_check_proof
+src/deepreason/cli|src/deepreason/cli/main.py|def _cmd_code
+src/deepreason/cli|src/deepreason/cli/main.py|def _cmd_simulate
+src/deepreason/easy.py|src/deepreason/easy.py|def _slug
+src/deepreason/easy.py|src/deepreason/easy.py|def _fresh
+src/deepreason/easy.py|src/deepreason/easy.py|def _first_line
+src/deepreason/jolts.py|src/deepreason/jolts.py|def suppressible_lineage_exemplars
+src/deepreason/llm|src/deepreason/llm/packs.py|def _document_excerpt
+src/deepreason/llm|src/deepreason/llm/packs.py|def alias_references
+src/deepreason/rules|src/deepreason/rules/refl.py|def refl
+src/deepreason/rules|src/deepreason/rules/guards/anti_relapse.py|def domain_log_input
+src/deepreason/run_manifest.py|src/deepreason/run_manifest.py|def materialize_run_config
+src/deepreason/views|src/deepreason/views/jolt_signals.py|def record_trigger_decision

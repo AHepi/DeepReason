@@ -1,0 +1,99 @@
+AC2 FIDELITY PROOF
+====================================================================
+
+PART 1 — every extracted item is byte-identical to its source.
+Method: assert each item's exact verbatim block appears as a literal
+substring of experiments/OPEN_PARKS.md.
+
+  items checked:   71
+  byte-identical:  71
+  MISMATCHING:     0   (0 required)
+
+PART 2 — nothing was left behind.
+Method: for each source PARKED.md, every non-blank line after the
+preamble must fall inside some extracted item.
+
+  2026-07-30-change-amendment-epochs                       items=5  uncovered=0
+  2026-07-30-fix-citation-quote-check                      items=4  uncovered=0
+  2026-07-30-fix-sandbox-contract                          items=6  uncovered=0
+  2026-08-01-fix-decomposition-merge-pairing               items=9  uncovered=0
+  2026-08-02-map-falsification                             items=6  uncovered=0
+  2026-08-03-change-driving-skill                          items=3  uncovered=0
+  2026-08-03-change-rung1-sockets-on-paper                 items=6  uncovered=0
+  2026-08-03-change-rung2-bridge-unification               items=4  uncovered=0
+  2026-08-03-change-rung2-config-inventory                 items=6  uncovered=0
+  2026-08-05-fix-smoke-entry-point-reader                  items=4  uncovered=0
+  2026-08-08-change-rung-g1-actual-diff-budget             items=1  uncovered=0
+  2026-08-09-change-errata-sweep-and-automation            items=1  uncovered=0
+  2026-08-11-change-docs-reorg-steps-3-4                   items=1  uncovered=0
+  2026-08-14-change-rung1-vocabulary-groundwork            items=4  uncovered=0
+  2026-08-15-change-rung2-premise-channel                  items=2  uncovered=0
+  2026-08-15-change-rung3a-h1-successor-deletion           items=2  uncovered=0
+  2026-08-22-audit-scalarization                           items=3  uncovered=0
+  2026-08-24-change-rung5-promotion-criteria               items=4  uncovered=0
+
+  TOTAL uncovered non-blank lines after preamble: 0   (0 required)
+  Preambles are carried too, as a blockquote per tranche.
+
+PART 3 — the count correction.
+  audit reported:            60 (regex on P<n> labels only)
+  structural extraction:     71
+  difference:                11 items the label regex missed
+
+  Missed items carry non-P labels. Examples, all real park entries:
+     2026-07-30-change-amendment-epochs                   Resolution (R25)
+     2026-07-30-fix-citation-quote-check                  D2 — the sandboxed_python_v1 program contract never reache
+     2026-07-30-fix-citation-quote-check                  Q1 — an unquoted citation is recorded as "byte-verified"
+     2026-07-30-fix-citation-quote-check                  D1a — the wire contract still describes the old, stricter 
+     2026-07-30-fix-sandbox-contract                      D2a — a capability transition cannot say why it denied a p
+     2026-07-30-fix-sandbox-contract                      D1a — the wire contract still describes the old, stricter 
+     2026-07-30-fix-sandbox-contract                      Q1 — an unquoted citation is recorded as "byte-verified"
+     2026-07-30-fix-sandbox-contract                      D2c — the declarative_numeric_v1 document shape is still u
+     2026-07-30-fix-sandbox-contract                      D2e — the simulation contract text is disclosed unconditio
+     2026-08-01-fix-decomposition-merge-pairing           - `run-status.json` reports `accepted`/`refuted`/`suspende
+     2026-08-01-fix-decomposition-merge-pairing           - `run-stop.json` writes a fresh `StopMetrics` rather than
+     2026-08-01-fix-decomposition-merge-pairing           - `budget_exhausted` is a fall-through label applied when 
+     2026-08-01-fix-decomposition-merge-pairing           - Text workloads hard-return `TrialAuthority.OBSERVE_ONLY`
+     2026-08-01-fix-decomposition-merge-pairing           - The ritual detector cannot fire in the zero-attack case 
+     2026-08-01-fix-decomposition-merge-pairing           - `run-result.json` reported `epistemic_checks_passed: tru
+     2026-08-01-fix-decomposition-merge-pairing           - The supported v6 text launch path cannot seed a failable
+     2026-08-01-fix-decomposition-merge-pairing           - 11 of 42 roots under `experiments/` cannot be opened by 
+     2026-08-01-fix-decomposition-merge-pairing           - The simulation contract says "math is available and noth
+     2026-08-02-map-falsification                         - `SCHOOL_ROUTE_LEASE_MISMATCH` / `SCHOOL_ROUTE_ENDPOINT_M
+     2026-08-02-map-falsification                         - `resolve_conjecture_route` and `compile_criticism_assign
+     2026-08-02-map-falsification                         - `test_failed_control_append_rolls_live_materialization_b
+     2026-08-02-map-falsification                         - No test covers a context receipt without scratch exposur
+     2026-08-02-map-falsification                         - Writer-side torn-tail repair was uncovered by the ring t
+     2026-08-02-map-falsification                         - The sweep instrument vs direct-load census delta (11 ERR
+     2026-08-03-change-driving-skill                      - **R8, deferred in the operator's own words** ("the sub d
+     2026-08-03-change-driving-skill                      - A docs_verify mode for `.claude/skills/` checks — still 
+     2026-08-03-change-driving-skill                      - Flaky under parallel load:
+     2026-08-03-change-rung1-sockets-on-paper             - **Rungs 2-7 of the modularisation ladder** (`docs/HANDOV
+     2026-08-03-change-rung1-sockets-on-paper             - **The `INDEX.md` Subsystems-table gap for `amendment`/`a
+     2026-08-03-change-rung1-sockets-on-paper             - **Every `Seams-undocumented:` pair this tranche glossed 
+     2026-08-03-change-rung1-sockets-on-paper             - **14 of 20 `SEAM-*.md` documents have no `Sweep:` header
+     2026-08-03-change-rung1-sockets-on-paper             - **Writing the SEAM documents themselves** for any `Seams
+     2026-08-03-change-rung1-sockets-on-paper             - **`bridge × ontology` stays genuinely unwritten** in `IN
+     2026-08-03-change-rung2-bridge-unification           - **R1's literal instruction ("change BridgeConfig's defau
+     2026-08-03-change-rung2-bridge-unification           - **Rung 2's remaining inventory candidates, unchanged fro
+     2026-08-03-change-rung2-bridge-unification           - **`docs/map/CON-authority.md`'s "Adjacent, not authority
+     2026-08-03-change-rung2-bridge-unification           - **No structural guard against a future `BridgeConfig`-by
+     2026-08-03-change-rung2-config-inventory             - **Tranche 2 (the `engaged_criticism_policy` switch itsel
+     2026-08-03-change-rung2-config-inventory             - **Group B (`BridgeConfig` vs `engaged_bridge_source()`)*
+     2026-08-03-change-rung2-config-inventory             - **Group C's env-var-sourced switches** (`DEEPREASON_SIMU
+     2026-08-03-change-rung2-config-inventory             - **`DEEPREASON_DISABLE_V6_LAUNCHES`/`DEEPREASON_RELEASE_P
+     2026-08-03-change-rung2-config-inventory             - **`STANCE_LIBRARY`** (Group D, `capture/schools.py`) — h
+     2026-08-03-change-rung2-config-inventory             - **An exhaustive, unbounded scan of every hard-coded cons
+     2026-08-05-fix-smoke-entry-point-reader              S1 — the operational smoke's own loopback fixture stops se
+     2026-08-05-fix-smoke-entry-point-reader              S2 — both smokes carry byte-identical duplicate pins
+     2026-08-05-fix-smoke-entry-point-reader              S3 — nothing in `docs/map/` covers `scripts/`
+     2026-08-05-fix-smoke-entry-point-reader              S4 — carried, still parked
+     2026-08-14-change-rung1-vocabulary-groundwork        Ready-to-send prompt
+     2026-08-15-change-rung2-premise-channel              Ready-to-send prompt
+     2026-08-15-change-rung3a-h1-successor-deletion       Ready-to-send prompt
+
+  '## D2a' in 2026-07-30-fix-sandbox-contract was parked by explicit
+  operator instruction ('Park D2a'). A label-based count would have
+  deleted it with its directory.
+
+RESULT: PASS — 71/71 byte-identical, 0 summarized, 0 truncated, 0 left behind.

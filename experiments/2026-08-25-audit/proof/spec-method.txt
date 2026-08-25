@@ -1,0 +1,14 @@
+METHOD RECONCILIATION (2026-08-25 vs 2026-08-13)
+
+CLI flags: the 2026-08-13 audit matched the flag STEM (the token with the
+leading "--" stripped) against docs/harness-spec-*.md, not the literal
+"--flag" string. Verified by re-deriving its published number: stem match
+over the current 76 flags yields 34 silent, which is exactly the prior
+audit's 34. A literal "--flag" match yields 74 silent — an artifact of the
+matching rule, NOT a drift delta. This audit uses stem match so the two
+runs are comparable, and records the alternative here so the number is
+re-derivable either way.
+
+Config fields and typed strings: literal -F match in both audits; covered
+counts are identical across runs (24 config, 4 typed), so the whole delta
+in those two rows is new surface, not a methodology change.

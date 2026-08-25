@@ -1,5 +1,0 @@
-Looking at the diagnostic, the `values_json` field contains the string `"[12]"` instead of an actual array `[12]`. The parameter definition's `values_json` should hold a real array, not a JSON-encoded string. I'll replace the string value with the actual array.
-
-```json
-{"op": "replace", "path": "/simulation_proposals/0/parameter_definitions/0/values_json", "value": [12]}
-```

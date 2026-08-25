@@ -1,0 +1,26 @@
+### L7 — Old runs owe the future nothing (retirement of cross-version obligations)
+-- mechanism: version gate / UnsupportedRunManifestVersionError
+src/deepreason/run_manifest.py:100:class UnsupportedRunManifestVersionError(RunManifestError):
+src/deepreason/run_manifest.py:4221:        raise UnsupportedRunManifestVersionError(schema_version)
+-- root_sweep retirement (instrument removed from gates)
+tools/root_sweep.py
+.claude/skills/dr-ask-the-right-question/SKILL.md:22:| THE RECORD — `log.jsonl`, `objects/`, typed verdicts, blobs, instruments (`verify_root`, `tools/root_sweep.py`, `tools/docs_verify.py`, the gate) | what happened; which value was rejected; do two instruments agree; did anything move | a command |
+.claude/skills/dr-ask-the-right-question/SKILL.md:30:  `git ls-files` and 42 rows by `root_sweep.py`, which scans `experiments/`
+.claude/skills/dr-drive-harness/SKILL.md:139:(`python tools/root_sweep.py` — no committed root's verdict may move).
+.claude/skills/dr-spec-change/SKILL.md:79:   `tools/root_sweep.py` resets the byte-identity baseline, so it never
+.claude/skills/dr-audit-broken/SKILL.md:34:   `tools/root_sweep.py`. Write `proof/broken-sweep.txt` containing
+docs/AUDIT_BASELINES.md:52:- **root_sweep — RETIRED as an instrument** (operator ruling
+docs/AUDIT_BASELINES.md:57:- ~~**root_sweep**~~ (`python tools/root_sweep.py`): 11 ERROR lines, all
+-- tests pinning within-version replay integrity (the SCOPE BOUNDARY half)
+tests/test_invariant_call_outcomes.py
+tests/test_foreign_school_criticism_scheduler_c3.py
+tests/test_campaign_coordinator.py
+tests/test_v6_transaction_qualification.py
+tests/test_runtime_workload_integration.py
+tests/test_replay_reasoning.py
+tests/test_adjudication_blindness.py
+tests/test_school_execution_binding_v4.py
+tests/test_v6_reservation_bound_authority.py
+tests/test_v6_route_seat_model_classification.py
+tests/test_bridge_events_replay.py
+tests/test_trial_accounting.py

@@ -1,6 +1,0 @@
-{
-  "repair.patch.v1": {
-    "authorized_path": "/cases/0/target_alias_alt",
-    "op": "remove"
-  }
-}

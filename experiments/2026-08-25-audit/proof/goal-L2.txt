@@ -1,0 +1,18 @@
+### L2
+src/deepreason/intake_form.py
+src/deepreason/seat_events.py
+src/deepreason/preparation.py
+src/deepreason/error_catalog.py
+src/deepreason/harness.py
+src/deepreason/scheduler/scheduler.py
+src/deepreason/rules/encoding.py
+src/deepreason/seat_bindings.py
+-- tests
+tests/test_seat_bindings.py
+tests/test_reusable_qualification.py
+tests/test_seat_bindings_record.py
+tests/test_qualification_per_seat.py
+tests/test_cli_setup_seats.py
+tests/test_seats_evidence_law.py
+tests/test_run_preparation_service.py
+tests/test_module_fingerprints.py

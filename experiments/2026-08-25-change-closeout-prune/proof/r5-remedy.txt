@@ -1,0 +1,75 @@
+R5 REMEDY — the census miss, and why Q-E1 could not have caught it.
+=*70
+
+WHAT BROKE
+  tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure
+  Failure: UnsupportedRunManifestVersionError -- 'RunManifest schema
+  version 3 is unsupported; only schema version 6 is accepted'.
+  Surfaced by BOTH gates: docs_verify SUB-application.md:111 runs this
+  test as part of its check: line, and the pytest gate ran it directly.
+
+WHICH DIRECTORY
+  experiments/live_compare_2026-07-28
+
+WHY IT IS LOAD-BEARING
+  The test calls _smallest_root_logging_no_embedder(), which ranges over
+  every git-tracked run root and returns the SMALLEST carrying no embedder
+  stamp. At 6e64330fe exactly two such roots existed:
+     26180 bytes  experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16
+    127242 bytes  experiments/jolt_architecture_2026-07-16/run
+  The prune removed the smaller. The selector fell through to the larger,
+  whose manifest is schema_version 3 -- refused by the current reader.
+  The test's own docstring says 'Two exist', so the invariant it relies on
+  is that a USABLE no-embedder root is reachable. One was not enough.
+
+WHICH CENSUS QUESTION FAILED: Q-E1 (REFERENCED?)
+  Q-E1 greps tests/, src/, scripts/, tools/, docs/map/ for the DIRECTORY'S
+  PATH. This directory's path appears in NO source file, so the grep was
+  correct and still returned nothing.
+
+  The helper discovers roots dynamically:
+      def _tracked_roots() -> list[Path]:
+          """Every git-tracked run root, smallest log first (rule 1: committed evidence)."""
+      
+          listed = subprocess.run(
+              ["git", "ls-files", "experiments"],
+              cwd=REPO,
+              capture_output=True,
+              text=True,
+              check=True,
+          ).stdout.split()
+          roots = {
+              REPO / Path(entry).parent
+              for entry in listed
+              if entry.endswith("/log.jsonl")
+          }
+          return sorted(roots, key=lambda root: (root / "log.jsonl").stat().st_size)
+
+  It selects by SIZE and by PROPERTY, never by name. A path grep is
+  STRUCTURALLY BLIND to this: there is no path to find. Q-E1 cannot be
+  tightened to catch it -- it needs a different question entirely.
+
+SCALE OF THE EXPOSURE
+  53 of 113 committed run roots were removed, across 7 directories:
+     1 root   experiments/2026-08-05-testphase-live-validation
+     2 roots  experiments/2026-08-09-change-hard-question-set
+    42 roots  experiments/2026-08-09-overnight-omnibus
+     2 roots  experiments/bronze_feedback_v1_superseded_2026-07-14
+     4 roots  experiments/bronze_repertoire_v2_2026-07-14
+     1 root   experiments/live_coin_canonicity_2026-07-31
+     1 root   experiments/live_compare_2026-07-28   <-- RESTORED
+
+  Only ONE test broke. The full pytest gate found exactly one failure in
+  4162, and docs_verify found exactly one non-baseline failure. The other
+  52 removed roots were not selected by any test. That is measured, not
+  assumed -- but it is luck rather than design, and the methodology
+  finding is parked as P3 rather than treated as closed.
+
+REMEDY APPLIED
+  $ git checkout 6e64330fe -- experiments/live_compare_2026-07-28
+  $ python -m pytest tests/test_results_command.py::test_results_embedder_absence_is_typed_not_a_failure -q
+      .                                                                        [100%]
+      1 passed in 0.44s
+
+  experiments-census.md row 145 changed PRUNE -> KEEP with this reason.
+  Directory count: 84 -> 85 (82 KEEP + live_compare + 2 tranche dirs).

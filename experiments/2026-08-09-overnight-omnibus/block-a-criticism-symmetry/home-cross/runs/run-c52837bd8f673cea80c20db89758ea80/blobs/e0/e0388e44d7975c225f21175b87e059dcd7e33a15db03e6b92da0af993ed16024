@@ -1,3 +1,0 @@
-```json
-{"cases": [{"target_alias": "SRC_001", "attack": true, "case": "The target's evidence for a genuine reliability gain — decomposing judgment into independent Bernoulli trials with variance reduction — is undermined by its own countercondition: if checklist items are highly correlated (e.g., one shared misconception fails multiple items together), the independence assumption fails and variance is not reduced, so a high observed checklist score could be mere compliance tracking the right answer rather than a true reliability gain. Since this correlation scenario is not ruled out and directly falsifies the distinguishing evidence the argument relies on, the reasoning does not establish the claim as stated.", "counterexample": null}]}
-```

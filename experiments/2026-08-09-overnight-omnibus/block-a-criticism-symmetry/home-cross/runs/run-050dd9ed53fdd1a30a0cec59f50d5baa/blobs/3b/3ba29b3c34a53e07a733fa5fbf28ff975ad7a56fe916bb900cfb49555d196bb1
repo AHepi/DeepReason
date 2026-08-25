@@ -1,3 +1,0 @@
-```json
-{"cases":[{"attack":true,"case":"The target claims a 'reduces to' relation but the substance is a conditional prediction (trajectory reduces to scaffold efficacy IF a future observation fails), not a genuine dependence or reduction. 'Reduces to X when viewed through lens Y' is a re-framing assertion, and the actual content 'it is refuted if the same trajectory is observed in experts' is a falsification condition, not the reduction itself. The relation is not substantively stated — the reduction is merely named and immediately hedged by its own refutation clause, making the endpoint-summary describe a test rather than a demonstrated substantive reduction.","target_alias":"SRC_001"}]}
-```

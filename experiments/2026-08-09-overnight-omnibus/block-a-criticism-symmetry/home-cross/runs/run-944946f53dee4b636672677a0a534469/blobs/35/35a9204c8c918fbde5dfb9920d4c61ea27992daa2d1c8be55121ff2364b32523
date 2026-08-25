@@ -1,1 +1,0 @@
-{"authorized_pointers":["/cases/4"],"baseline_sha256":"72ff36412048c33c71fa657b20535afad8ead1cfbe7422748a8089ffb15b5563","contract":"batch-critic.v2","diagnostics":[{"allowed":"type='object'","code":"V6_WIRE_REFERENCE_INVALID","message":"batch critic returned more cases than assigned targets","path":"/cases/4"}],"frozen_subtree_hashes":[],"schema":"repair.diagnostic-envelope.v2"}

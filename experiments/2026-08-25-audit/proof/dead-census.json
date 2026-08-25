@@ -1,0 +1,690 @@
+{
+ "src/deepreason/locking.py": {
+  "symbols": 13,
+  "referenced": 13,
+  "intra": 8,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/controller.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/v6_policy.py": {
+  "symbols": 17,
+  "referenced": 17,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/authority.py": {
+  "symbols": 14,
+  "referenced": 14,
+  "intra": 5,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/report.py": {
+  "symbols": 6,
+  "referenced": 6,
+  "intra": 4,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/mcp_server.py": {
+  "symbols": 19,
+  "referenced": 19,
+  "intra": 9,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/oracle_sandbox.py": {
+  "symbols": 10,
+  "referenced": 10,
+  "intra": 5,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/webapp.py": {
+  "symbols": 9,
+  "referenced": 9,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/intake_form.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/mcp_registration.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/provider_profile.py": {
+  "symbols": 12,
+  "referenced": 12,
+  "intra": 3,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/premises.py": {
+  "symbols": 20,
+  "referenced": 20,
+  "intra": 3,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/proof_debt.py": {
+  "symbols": 8,
+  "referenced": 8,
+  "intra": 4,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/config.py": {
+  "symbols": 11,
+  "referenced": 11,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/frozen.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/seat_events.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/mcp_help.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/preparation.py": {
+  "symbols": 19,
+  "referenced": 19,
+  "intra": 8,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/shallow_fitness.py": {
+  "symbols": 5,
+  "referenced": 5,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/indexes.py": {
+  "symbols": 9,
+  "referenced": 9,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/oracle.py": {
+  "symbols": 36,
+  "referenced": 36,
+  "intra": 9,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/error_catalog.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/browser.py": {
+  "symbols": 7,
+  "referenced": 7,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/loop.py": {
+  "symbols": 1,
+  "referenced": 1,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/harness.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/signals.py": {
+  "symbols": 8,
+  "referenced": 8,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/run_manifest.py": {
+  "symbols": 83,
+  "referenced": 82,
+  "intra": 27,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 1
+ },
+ "src/deepreason/findings.py": {
+  "symbols": 6,
+  "referenced": 6,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/programs.py": {
+  "symbols": 37,
+  "referenced": 37,
+  "intra": 25,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/control_events.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/conjecture_events.py": {
+  "symbols": 2,
+  "referenced": 2,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/seat_bindings.py": {
+  "symbols": 13,
+  "referenced": 13,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/jolts.py": {
+  "symbols": 24,
+  "referenced": 23,
+  "intra": 9,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 1
+ },
+ "src/deepreason/easy.py": {
+  "symbols": 32,
+  "referenced": 29,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 3
+ },
+ "src/deepreason/readiness.py": {
+  "symbols": 8,
+  "referenced": 8,
+  "intra": 3,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/invariants.py": {
+  "symbols": 16,
+  "referenced": 16,
+  "intra": 11,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/canonical.py": {
+  "symbols": 2,
+  "referenced": 2,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/ops.py": {
+  "symbols": 15,
+  "referenced": 15,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/compat_eval.py": {
+  "symbols": 32,
+  "referenced": 32,
+  "intra": 9,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/allocation.py": {
+  "symbols": 10,
+  "referenced": 10,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/signals_read.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/qualification.py": {
+  "symbols": 29,
+  "referenced": 29,
+  "intra": 8,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/imports.py": {
+  "symbols": 13,
+  "referenced": 13,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/shallow.py": {
+  "symbols": 5,
+  "referenced": 5,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/manifest.py": {
+  "symbols": 19,
+  "referenced": 19,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/referee.py": {
+  "symbols": 16,
+  "referenced": 16,
+  "intra": 4,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/status_display.py": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/mcp_scratch_bridge.py": {
+  "symbols": 29,
+  "referenced": 29,
+  "intra": 20,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/module_events.py": {
+  "symbols": 3,
+  "referenced": 3,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/conjecture_turn.py": {
+  "symbols": 10,
+  "referenced": 10,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/unification": {
+  "symbols": 5,
+  "referenced": 5,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/log": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/skills": {
+  "symbols": 55,
+  "referenced": 55,
+  "intra": 15,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/verification": {
+  "symbols": 73,
+  "referenced": 73,
+  "intra": 20,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/runtime": {
+  "symbols": 74,
+  "referenced": 74,
+  "intra": 30,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/ui": {
+  "symbols": 4,
+  "referenced": 4,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/research": {
+  "symbols": 21,
+  "referenced": 21,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/views": {
+  "symbols": 61,
+  "referenced": 60,
+  "intra": 24,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 1
+ },
+ "src/deepreason/measures": {
+  "symbols": 22,
+  "referenced": 22,
+  "intra": 6,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/assets": {
+  "symbols": 6,
+  "referenced": 6,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/llm": {
+  "symbols": 274,
+  "referenced": 272,
+  "intra": 95,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 2
+ },
+ "src/deepreason/workloads": {
+  "symbols": 77,
+  "referenced": 77,
+  "intra": 23,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/scheduler": {
+  "symbols": 7,
+  "referenced": 7,
+  "intra": 2,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/capabilities": {
+  "symbols": 55,
+  "referenced": 55,
+  "intra": 12,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/informal": {
+  "symbols": 52,
+  "referenced": 52,
+  "intra": 15,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/workflows": {
+  "symbols": 27,
+  "referenced": 27,
+  "intra": 9,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/amendment": {
+  "symbols": 40,
+  "referenced": 40,
+  "intra": 18,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/rules": {
+  "symbols": 91,
+  "referenced": 89,
+  "intra": 41,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 2
+ },
+ "src/deepreason/storage": {
+  "symbols": 16,
+  "referenced": 16,
+  "intra": 3,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/cli": {
+  "symbols": 128,
+  "referenced": 125,
+  "intra": 67,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 3
+ },
+ "src/deepreason/application": {
+  "symbols": 155,
+  "referenced": 155,
+  "intra": 60,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/experiments": {
+  "symbols": 111,
+  "referenced": 111,
+  "intra": 54,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/packs": {
+  "symbols": 8,
+  "referenced": 8,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/capture": {
+  "symbols": 65,
+  "referenced": 65,
+  "intra": 12,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/workflow": {
+  "symbols": 171,
+  "referenced": 171,
+  "intra": 43,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/brain": {
+  "symbols": 70,
+  "referenced": 68,
+  "intra": 19,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 2
+ },
+ "src/deepreason/calculus": {
+  "symbols": 143,
+  "referenced": 143,
+  "intra": 40,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/bridge": {
+  "symbols": 226,
+  "referenced": 226,
+  "intra": 99,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/simulation": {
+  "symbols": 8,
+  "referenced": 8,
+  "intra": 5,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/evidence": {
+  "symbols": 47,
+  "referenced": 47,
+  "intra": 8,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/scratch": {
+  "symbols": 120,
+  "referenced": 120,
+  "intra": 23,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/ontology": {
+  "symbols": 23,
+  "referenced": 23,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/admission": {
+  "symbols": 34,
+  "referenced": 34,
+  "intra": 12,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/adjudication": {
+  "symbols": 7,
+  "referenced": 7,
+  "intra": 1,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/__init__.py": {
+  "symbols": 0,
+  "referenced": 0,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ },
+ "src/deepreason/__main__.py": {
+  "symbols": 0,
+  "referenced": 0,
+  "intra": 0,
+  "dynamic": 0,
+  "entry": 0,
+  "candidate": 0
+ }
+}

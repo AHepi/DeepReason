@@ -1,7 +1,0 @@
-{
-  "repair.patch.v1": {
-    "pointer": "/scratch_proposal/links/0/to_ref",
-    "operation": "replace",
-    "value": "NEW_001"
-  }
-}

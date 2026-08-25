@@ -1,0 +1,30 @@
+AC7 — nothing outside experiments/ changed.
+
+$ git status --porcelain -- src/ tests/ docs/ tools/ scripts/ .claude/ CLAUDE.md README.md pyproject.toml
+  (empty)
+  -> PASS
+
+AC8 — P5 (the docs prune) is untouched. All 13 PRUNE-CANDIDATE docs still present.
+
+  docs/HANDOVER_2026-07-27.md                                present
+  docs/HANDOVER_2026-08-02.md                                present
+  docs/HANDOVER_2026-08-03.md                                present
+  docs/HANDOVER_MONITOR_2026-08-06.md                        present
+  docs/POIETIC_CALCULUS_v0.1.md                              present
+  docs/RESEARCH_CONVERGENCE_LOOPS_2026-08-22.md              present
+  docs/RESEARCH_PROGRAM_2026-08-22.md                        present
+  docs/RUNTIME_IMPORTS.md                                    present
+  docs/proposals/CODER_AS_TOOL_PREPLAN.md                    present
+  docs/proposals/CRITICISM_SYMMETRY_RESEARCH_PREPLAN.md      present
+  docs/proposals/GROUNDED_OVERLAY_PREPLAN.md                 present
+  docs/proposals/HARD_QUESTION_SET_PROMPT.md                 present
+  docs/proposals/RECORD_LIFECYCLE_DEFECT_PLAN.md             present
+
+  PRUNE-CANDIDATE docs: 13, present: 13, missing: 0 (0 required)
+
+Whole-tree change summary (staged):
+ experiments/tier_v_checkers/tv-m09_checker.py      |   24 -
+ experiments/tier_v_checkers/tv-m10_checker.py      |   24 -
+ 54129 files changed, 335436 deletions(-)
+
+RESULT: PASS

@@ -1,6 +1,0 @@
-{
-  "schema": "repair.patch.v1",
-  "path": "/candidate/checker_specs/0/args",
-  "op": "replace",
-  "value": {}
-}

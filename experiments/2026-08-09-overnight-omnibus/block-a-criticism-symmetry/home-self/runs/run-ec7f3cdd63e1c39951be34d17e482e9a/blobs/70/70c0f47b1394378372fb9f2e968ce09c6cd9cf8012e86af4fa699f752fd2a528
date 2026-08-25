@@ -1,1 +1,0 @@
-{"component":"scratch","disposition":"omitted","error_code":"SCRATCH_ALIAS_UNKNOWN","error_type":"ScratchAuthoringError","message":"SCRATCH_ALIAS_UNKNOWN: visible scratch alias SCR_005 names no live block","partial_refs":[],"phase":"semantic_validation","schema":"conjecture-component-diagnostic.v1"}

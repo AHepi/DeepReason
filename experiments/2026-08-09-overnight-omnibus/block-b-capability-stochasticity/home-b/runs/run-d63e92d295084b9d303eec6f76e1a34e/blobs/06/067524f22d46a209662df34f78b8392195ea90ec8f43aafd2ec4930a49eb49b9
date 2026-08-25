@@ -1,8 +1,0 @@
-```json
-{
-  "repair.patch.v1": {
-    "pointer": "/candidate/checker_specs/0/name",
-    "operation": "remove"
-  }
-}
-```

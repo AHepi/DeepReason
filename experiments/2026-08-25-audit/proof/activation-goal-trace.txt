@@ -1,0 +1,8 @@
+PLANT: fabricated law 'L9 | Every conjecture must rhyme | 2026-01-01' added to a COPY of proof/goal-laws.txt
+SCAN a (mechanism): grep -rli 'conjecture must rhyme' src/deepreason/
+  (empty)
+SCAN b (test): grep -rli 'conjecture must rhyme' tests/
+  (empty)
+RESULT: both scans empty -> verdict unenforced, as required. Instrument discriminates.
+RESTORE: plant lived only in a copy; proof/goal-laws.txt has 8 rows, no L9:
+8

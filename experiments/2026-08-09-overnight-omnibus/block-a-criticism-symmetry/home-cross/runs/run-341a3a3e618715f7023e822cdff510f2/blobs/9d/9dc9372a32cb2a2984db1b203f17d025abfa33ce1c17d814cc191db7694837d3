@@ -1,3 +1,0 @@
-```json
-{"cases": [{"attack": true, "case": "The target states a relation (shared mechanism) but then defines its refutation condition using a comparative reliability test (panels with linear 'Yes' trails achieving equal/higher scores). This comparative test is an empirical correlation criterion, not a causal mechanism. A positive refutation result would show correlation, not causation: the absence of documented struggle might correlate with high scores without explaining the mechanism of reliability. The target fails to provide the causal mechanism demanded by school-0, using an empirical contrast instead of explaining the cause.", "counterexample": null, "target_alias": "SRC_001"}]}
-```

@@ -1,0 +1,18 @@
+### L5
+src/deepreason/intake_form.py:153:        `compile_notices` sink -- the clamped value IS the disclosure, the
+src/deepreason/run_manifest.py:1191:class CompileNoticeV1(BaseModel):
+src/deepreason/run_manifest.py:1209:CompileNoticeEmitter = Callable[..., None]
+src/deepreason/run_manifest.py:1213:    sink: list[CompileNoticeV1],
+src/deepreason/run_manifest.py:1221:        CompileNoticeV1(code=code, message=message, pointer=pointer, resolution=resolution)
+src/deepreason/run_manifest.py:1265:    compile_notices: tuple[CompileNoticeV1, ...] | None = None
+src/deepreason/run_manifest.py:1351:        if self.schema_version < 6 or not self.compile_notices:
+src/deepreason/run_manifest.py:1355:            payload.pop("compile_notices", None)
+-- tests
+tests/test_all_configs_allowed_remainder.py
+tests/test_run_manifest.py
+tests/test_foreign_criticism_policy_c3.py
+tests/test_allocation_signal_consumption.py
+tests/test_manifest_integration.py
+tests/test_run_manifest_v4.py
+tests/test_seats_evidence_law.py
+tests/test_run_manifest_scratch_bridge.py

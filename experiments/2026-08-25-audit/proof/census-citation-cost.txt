@@ -1,0 +1,42 @@
+# proof: cross-tranche citation cost of the prune
+
+Prose citations only. Neither `docs_verify` nor the pytest gate reads
+these, so BOTH GATES STAY GREEN after the prune -- this is a readability
+cost, not a correctness one, and git history keeps every target.
+Recorded so the operator prices it before approving.
+
+| PRUNE-rowed directory | KEEP-rowed tranches citing it |
+|---|---|
+| `live_compare_2026-07-28` | 13: 2026-08-06-change-qualification-per-seat-s4, 2026-08-08-corpus-enrichment-patrol-pilot, 2026-08-09-change-judge-evidence-review, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-change-results-retrieval-surface, 2026-08-13-defect-controller-steering-inert, 2026-08-16-change-embedder-auto-install, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix, live_jolt_2026-07-31 |
+| `2026-08-05-testphase-live-validation` | 12: 2026-08-06-change-qualification-per-seat-s4, 2026-08-06-change-seat-census-s1, 2026-08-07-change-seats-in-record-s5, 2026-08-08-corpus-enrichment-patrol-pilot, 2026-08-08-fix-module-fingerprints-double-stamp, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix |
+| `bronze_feedback_v1_superseded_2026-07-14` | 11: 2026-08-04-change-rung4-module-fingerprints, 2026-08-06-change-qualification-per-seat-s4, 2026-08-08-corpus-enrichment-patrol-pilot, 2026-08-09-change-judge-evidence-review, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix |
+| `bronze_repertoire_v2_2026-07-14` | 11: 2026-08-06-change-qualification-per-seat-s4, 2026-08-08-corpus-enrichment-patrol-pilot, 2026-08-09-change-judge-evidence-review, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix, results |
+| `2026-08-09-overnight-omnibus` | 9: 2026-08-09-change-fix-p-cepp-1-dual-mode-wiring, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-change-results-retrieval-surface, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix |
+| `live_coin_canonicity_2026-07-31` | 9: 2026-08-06-change-qualification-per-seat-s4, 2026-08-08-corpus-enrichment-patrol-pilot, 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix |
+| `2026-08-09-change-hard-question-set` | 8: 2026-08-12-change-all-configs-allowed, 2026-08-13-audit, 2026-08-13-change-results-retrieval-surface, 2026-08-13-defect-controller-steering-inert, 2026-08-21-change-rung1b-ii-signal-consumption, 2026-08-21-measure-reach-firing, 2026-08-22-measure-grounded-flip-rate, 2026-08-22-reach-structural-programs-fix |
+| `2026-08-01-fix-adjudication-blindness` | 3: 2026-08-01-change-prose-can-refute, 2026-08-09-change-judge-evidence-review, live_jolt_2026-07-31 |
+| `2026-08-06-change-seat-binding-design-s2` | 3: 2026-08-06-change-qualification-per-seat-s4, 2026-08-07-change-seats-in-record-s5, 2026-08-10-change-blast-radius-analysis |
+| `2026-08-06-change-seat-binding-wired-s3` | 3: 2026-08-06-change-qualification-per-seat-s4, 2026-08-07-change-seats-in-record-s5, 2026-08-08-change-pipeline-census-d1 |
+| `2026-08-04-change-rung6-plugin-conformance` | 2: 2026-08-04-change-rung7-authority-as-declared-policy, 2026-08-06-change-qualification-per-seat-s4 |
+| `2026-08-13-change-smoke-currency-audit` | 2: 2026-08-13-change-lifecycle-operation-parity, 2026-08-13-defect-controller-steering-inert |
+| `2026-07-30-fix-citation-quote-check` | 1: live_research_2026-07-29 |
+| `2026-08-01-fix-decomposition-merge-pairing` | 1: live_jolt_2026-07-31 |
+| `2026-08-02-map-falsification` | 1: 2026-08-02-stress-triplet |
+| `2026-08-03-change-rung1-sockets-on-paper` | 1: 2026-08-04-change-rung7-authority-as-declared-policy |
+| `2026-08-03-change-rung2-config-inventory` | 1: 2026-08-03-change-rung2-engaged-criticism-switch |
+| `2026-08-05-change-smoke-instrument-visibility` | 1: 2026-08-05-fix-expired-census-readers |
+| `2026-08-05-fix-loopback-fixture-daemon` | 1: 2026-08-05-fix-resumable-reason-guard-coverage |
+| `2026-08-05-fix-qualification-inventory-pins` | 1: 2026-08-05-fix-continue-run-rejection |
+| `2026-08-05-fix-smoke-entry-point-reader` | 1: 2026-08-05-fix-continue-run-rejection |
+| `2026-08-08-change-grounded-overlay-o1` | 1: 2026-08-08-corpus-enrichment-patrol-pilot |
+| `2026-08-08-change-load-dials-d4` | 1: 2026-08-10-change-blast-radius-analysis |
+| `2026-08-08-change-rung-g1-actual-diff-budget` | 1: 2026-08-10-change-blast-radius-analysis |
+| `2026-08-09-change-adjudication-judge-seats-optins` | 1: 2026-08-10-change-blast-radius-analysis |
+| `2026-08-09-cp1m-stratification-retrodiction` | 1: 2026-08-09-change-fix-p-cepp-1-dual-mode-wiring |
+| `2026-08-11-errata-checkpoint-audit` | 1: 2026-08-13-audit |
+| `2026-08-15-change-rung3a-h1-successor-deletion` | 1: 2026-08-14-change-calculus-reconciliation-v2 |
+| `2026-08-15-change-rung3d-website-remnant` | 1: 2026-08-16-defect-manifest-sha-doc-coupling |
+| `2026-08-24-change-rung5-promotion-criteria` | 1: 2026-08-24-change-rung6-frame-render-departures |
+| `live_turmite_2026-07-31` | 1: 2026-08-08-change-pipeline-census-d1 |
+
+**31 PRUNE-rowed directories, 105 citation pairs.**

@@ -1,3 +1,0 @@
-```json
-{"repair.patch.v1": {"patch": [{"op": "replace", "path": "/scratch_proposal/unresolved_questions/0/related_refs", "value": ["SCR_002"]}]}}
-```

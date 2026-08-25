@@ -1,0 +1,14 @@
+AC4 — every directory rowed KEEP is still present.
+
+  KEEP rows in the census: 82
+  still present:           82
+  MISSING:                 0   (0 required)
+
+  directories present but not KEEP-rowed: 2
+     experiments/2026-08-25-audit  (expected: this tranche or the audit tranche)
+     experiments/2026-08-25-change-closeout-prune  (expected: this tranche or the audit tranche)
+
+  AC3 arithmetic: 154 before - 70 removed = 84 = 82 KEEP + 2 tranche dirs
+  actual: 84 = 82 KEEP + 2 other
+
+RESULT: PASS
