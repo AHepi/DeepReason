@@ -1,0 +1,19 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target's core claim does not answer the problem's question. The problem asks 'Under what conditions does a test constrain its subject rather than describe it?' — this requires identifying a distinguishing condition or criterion. The target instead asserts that when guard and subject share a registry, 'the distinction between describing and constraining collapses,' which conflates the two categories rather than specifying when one holds versus the other. A collapse claim erases the very distinction the problem requires the target to draw, leaving the question unanswered.",
+      "premise": "claim",
+      "premise_evidence": [
+        {
+          "block": "a835741bebc4",
+          "quote": "the distinction between describing and constraining collapses"
+        }
+      ],
+      "counterexample": null
+    }
+  ]
+}
+```

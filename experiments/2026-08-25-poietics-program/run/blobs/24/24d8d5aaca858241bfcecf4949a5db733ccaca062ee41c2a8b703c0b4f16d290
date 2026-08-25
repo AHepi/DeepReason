@@ -1,0 +1,13 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposed relation 'integrates' is actually just a compatibility claim, not a substantive integration. The argument confuses correlation with subsumption: merely because a guard sharing a registry with its subject is structurally forced into reflexivity does not mean the registry-collapse mechanism in SRC_005 is *identical to* or *integrates* the reflexivity condition in SRC_002. Subsumption requires that the mechanism in SRC_005 *generates* or *constitutes* the condition in SRC_002, but the target only establishes that both phenomena track the same underlying configuration (shared registry). This is co-instantiation, not integration. The relation is REFUTED IF reflexivity in SRC_002 can be derived from a principle independent of the registry-sharing mechanism in SRC_005 (e.g., from closure under composition or topological properties of the state space).",
+      "premise": "SRC_002's reflexivity condition could stem from principles other than the registry-integration mechanism in SRC_005 (e.g., closure properties or invariants independent of the guard-subject registry overlap).",
+      "premise_evidence": null
+    }
+  ]
+}
+```

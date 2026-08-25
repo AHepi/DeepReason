@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "SRC_004 abstracts SRC_002: the sufficiency-condition framing in SRC_004 is the more general modal structure, of which reflexivity (a guard that catches the author's own mutation) is a special case of a test being sufficient for acceptance of only the surviving subject. Refuted if SRC_004's sufficiency condition can hold while SRC_002's reflexive guard condition fails to instantiate it in the compile.py case.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_004", "SRC_002"]
+    },
+    {
+      "content": "SRC_001 reduces to SRC_003: the planted-failure-before-first-run mechanism is the concrete installation ritual that makes the failure mode a required precondition for acceptance. Refuted if the failure mode can become a required precondition without being planted before the first test run.",
+      "typicality": 0.68,
+      "neighbours": ["SRC_001", "SRC_003"]
+    },
+    {
+      "content": "SRC_005 contradicts SRC_004: SRC_005 claims the registry is the point of collapse where describing and constraining become indistinguishable, while SRC_004 claims the collapse is modal and independent of registry location. Refuted if the 1/9 compile.py loss is explained by registry structure rather than by the sufficiency condition alone.",
+      "typicality": 0.41,
+      "neighbours": ["SRC_005", "SRC_004"]
+    },
+    {
+      "content": "SRC_003 shares mechanism with SRC_001: both treat the shown-to-fail-first installation as constitutive of the subject, differing only in whether the constitutive element is a precondition (SRC_003) or a planted gate (SRC_001). Refuted if the precondition and the planted gate are shown to operate through distinct causal pathways in the mutation loss data.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_003", "SRC_001"]
+    },
+    {
+      "content": "SRC_005 integrates SRC_002: the registry-collapse mechanism in SRC_005 subsumes the reflexivity condition in SRC_002, because a guard that shares a registry with its subject is structurally forced into reflexivity. Refuted if a non-reflexive guard can share a registry with its subject without the describe/constrain distinction collapsing.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_005", "SRC_002"]
+    },
+    {
+      "content": "SRC_004 depends on SRC_001: the modal sufficiency claim in SRC_004 requires the planted-failure installation ritual in SRC_001 as its empirical grounding; without planting, the test's failure being impossible is not a sufficient condition for the subject's acceptance. Refuted if SRC_004's sufficiency condition is observed without any planted failure preceding the test.",
+      "typicality": 0.62,
+      "neighbours": ["SRC_004", "SRC_001"]
+    }
+  ]
+}
+```
