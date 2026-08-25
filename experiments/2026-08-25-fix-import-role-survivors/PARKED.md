@@ -91,3 +91,47 @@ instead, which is the smallest honest thing.
 > document is: the scheduler owns what a survivor IS; the application layer
 > owns how a run's outcome is PUBLISHED and RETRIEVED, and must never
 > re-derive the first.
+
+---
+
+## P3 — a root's STORED finding-family breakdown and a fresh re-derivation disagree
+
+**What.** On `experiments/2026-08-25-poietics-program/run`:
+
+    run-result.json  verification.finding_counts   completion 120, operational 22
+    verify_root_report(<root>) re-derived           completion 121, operational 23
+
+**Not caused by this tranche, and measured rather than assumed.** The
+re-derivation returns **121/23 at the tranche base `43f408506` and at HEAD
+alike** — identical — so the gap predates this work and no part of this fix
+touches it. `valid` is True and violations are 0 in both.
+
+**Why it is worth recording.** `deepreason results` reports the STORED
+breakdown by default and the RE-DERIVED one under `--verify`, and the two
+disagree by one in two channels on the same root without saying so. A reader
+comparing a `--verify` run against a quoted figure (RESULTS.md quotes 120/22,
+correctly, from the stored payload) will see a discrepancy with nothing typed
+to explain it. Either the writer counted at a different seq than the reader
+re-derives from, or one channel gained a finding class after the payload was
+written; the record here does not separate those.
+
+**Ready-to-send prompt:**
+
+> Route through `deepreason-orchestrator` (a defect: two instruments disagree
+> about one root and neither says so). Goal: establish why
+> `run-result.json`'s stored `verification.finding_counts` and a fresh
+> `verify_root_report` over the same root differ by one in the `completion`
+> and `operational` channels.
+>
+> No live run. The fixture is committed:
+> `experiments/2026-08-25-poietics-program/run` — stored 120/22, re-derived
+> 121/23, and the re-derivation is IDENTICAL at `43f408506` and at the head
+> of `experiments/2026-08-25-fix-import-role-survivors/`, so the cause is
+> older than either. Check other committed roots for the same gap before
+> designing anything: if it is universal it is a writer/reader seq mismatch;
+> if it is one root it is that root's history.
+>
+> Note the surface consequence, which is what makes it worth fixing rather
+> than documenting: `deepreason results` prints the stored breakdown by
+> default and the re-derived one under `--verify`, with no typed statement
+> that the two can differ.
