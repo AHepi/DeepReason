@@ -73,6 +73,34 @@ def _tokens(root: pathlib.Path) -> dict:
         "token_budget": status.get("token_budget") or result.get("token_budget"),
         "cycles": status.get("cycle") or result.get("cycle"),
     }
+    # THE LOG IS THE AUTHORITY FOR SPEND, and this is not a preference.
+    # `run-status.json` reported "tokens spent vs budget: 0 / 3000000" for a
+    # run that had made 292 provider calls -- a zero that would have made the
+    # matched-budget rule (SPEC.md S9) unenforceable, since ARM S is matched
+    # against this number. Each `llm` block in log.jsonl carries its own
+    # `tokens` field, so the spend is summed from the calls that actually
+    # happened rather than from a counter that did not move.
+    log = root / "log.jsonl"
+    if log.is_file():
+        total = 0
+        calls = 0
+        for line in log.read_text().splitlines():
+            if not line.strip():
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            llm = event.get("llm")
+            if not llm:
+                continue
+            calls += 1
+            total += llm.get("tokens") or 0
+        out["tokens_from_log"] = total
+        out["llm_calls"] = calls
+        if not out["tokens_spent"]:
+            out["tokens_spent"] = total
+
     # progress.jsonl is the per-cycle ledger; its last line is the most
     # recent authoritative token count when run-status is terse.
     progress = root / "progress.jsonl"

@@ -1,0 +1,58 @@
+{
+  "M1": {
+    "arm_h_best": 0.0004075,
+    "arm_h_best_exact": "163/400000",
+    "arm_h_valid_count": 15,
+    "arm_s_best": 0.0135949364055,
+    "arm_s_best_exact": "27189872811/2000000000000",
+    "arm_s_valid_count": 23,
+    "met": true,
+    "milestone": "M1 best valid checker-confirmed score, per arm",
+    "required": true
+  },
+  "M2": {
+    "by_code": {
+      "CLAIM_INFLATED": 114,
+      "WRONG_COUNT": 3
+    },
+    "claim_inflated": 114,
+    "met": true,
+    "milestone": "M2 checker-refuted claims (criticism doing countable work)",
+    "required": true,
+    "structurally_invalid": 3,
+    "total_refuted": 117,
+    "valid_but_below_floor": 15
+  },
+  "M3": {
+    "milestone": "M3 a construction pattern that transfers across candidates",
+    "note": "REPORTED, NOT SCORED (R24c). Naming a pattern is not evidence the pattern did any work. No threshold is attached.",
+    "pattern_mentions": {
+      "avoid-collinearity": 15,
+      "boundary-loading": 4,
+      "golden-or-irrational": 1,
+      "greedy-or-local": 0,
+      "min-triangle-targeting": 0,
+      "perturbed-lattice": 11,
+      "rings-or-shells": 6,
+      "symmetry-breaking": 0
+    },
+    "required": false,
+    "scored": false,
+    "text_available": true,
+    "valid_candidates_examined": 15
+  },
+  "margin": {
+    "arm_h_best": 0.0004075,
+    "arm_h_tokens": 702789,
+    "arm_s_best": 0.0135949364055,
+    "arm_s_tokens": 709454,
+    "budget_matched_per_S9": true,
+    "comparison_admissible": true,
+    "harness_claims_value": false,
+    "margin_h_minus_s": -0.0131874364055
+  },
+  "run_state": "failed",
+  "run_stop_reason": "operational_failure",
+  "survivors_generative_only": 0,
+  "survivors_raw_INFLATED_see_P4": 0
+}

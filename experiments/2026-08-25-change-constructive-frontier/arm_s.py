@@ -129,7 +129,15 @@ def main() -> int:
             started = time.time()
             try:
                 payload = sample(api_key)
-            except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
+            except Exception as exc:  # noqa: BLE001
+                # Deliberately broad. A narrower tuple
+                # (URLError, HTTPError, TimeoutError) let
+                # http.client.RemoteDisconnected escape and kill the run at
+                # 72% of budget -- it is an OSError, not a URLError. Any
+                # transport failure must be RECORDED and stepped over, never
+                # allowed to end the arm early: an arm that dies partway
+                # through its budget is an unmatched arm, which is worse
+                # than a arm with a logged error in it.
                 errors += 1
                 # A transport failure is recorded, not retried into silence:
                 # an arm that hides its failures is not a measured arm.

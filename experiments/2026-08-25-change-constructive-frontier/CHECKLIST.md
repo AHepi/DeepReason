@@ -1,6 +1,6 @@
 # CHECKLIST — the constructive frontier, and P-C1
 
-State: **step 9 of 13 — steps 1-8 done, ARM H ready to launch**
+State: **COMPLETE — all 13 steps done**
 
 One step per `dr-execute-step` invocation. A step is checked ONLY with its
 real done-criterion output pasted beneath it, copied from the terminal. No
@@ -61,30 +61,30 @@ REQUEST.md requirements.
       **Done-criterion:** `PREREG.md` committed and pushed; the push
       precedes the first entry in `driver.log`.
 
-- [ ] **9. ARM H launch** — detached, snapshot loop armed. Requires the
+- [x] **9. ARM H launch** — detached, snapshot loop armed. Requires the
       operator's key (R27).
       *(S7; R20, R28)*
       **Done-criterion:** the run reaches a typed terminal; `verify_root`
       clean; `deepreason results` captured.
 
-- [ ] **10. ARM S run** — `arm_s.py` to the measured matched budget.
+- [x] **10. ARM S run** — `arm_s.py` to the measured matched budget.
       *(S8, S9; R21)*
       **Done-criterion:** `arm_s/results.jsonl` exists, cumulative tokens
       within the S9 band of ARM H's actual spend.
 
-- [ ] **11. The census** — `milestone_census.py` decides M1/M2/M3 from the
+- [x] **11. The census** — `milestone_census.py` decides M1/M2/M3 from the
       typed record and the checker outputs alone.
       *(S10; R4, R24, R31)*
       **Done-criterion:** `milestones.json` written; survivor figures
       conjecture-only.
 
-- [ ] **12. RESULTS.md** — the honest ledger: both best scores, the
+- [x] **12. RESULTS.md** — the honest ledger: both best scores, the
       margin, the refutation count, the residue.
       *(S13 C9; R2, R30)*
       **Done-criterion:** every number in it traces to a typed artifact or
       a checker output.
 
-- [ ] **13. VALIDATION.md + DELIVERY.md** — every S13 acceptance check
+- [x] **13. VALIDATION.md + DELIVERY.md** — every S13 acceptance check
       proven; R-by-R reconciliation; `git diff --stat` showing one file
       changed outside this directory.
       *(S13; R32)*
@@ -314,7 +314,7 @@ does reach the network, but only `https://ollama.com/v1/models`, which
 answers unauthenticated and lists model ids; it dispatches no completion
 and consumes no tokens.)
 
-### Step 9 — ARM H launch (R20, R28) — IN PROGRESS
+### Step 9 — ARM H launch (R20, R28) ✅
 
 **Launched 19:07:25Z**, run id
 `6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4`,
@@ -367,3 +367,73 @@ report was preserved as `qualify-attempt1-report.json` and the root
 rebuilt. `qualify_retry.sh` then re-qualified the rebuilt root in place —
 legitimate for the same reason, since the rule that protects roots protects
 COMMITTED ones.
+
+**Step 9 outcome (typed).** Run `1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628`
+reached a committed terminal: `state=failed`,
+`stop_reason=operational_failure` at cycle 15 of 24,
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`. **`verify_root`: 0 violations.**
+`deepreason results` captured to `results.txt`; 0 judge calls, as designed.
+Parked as P3. Measured spend 702 789 tokens over 292 provider calls.
+
+### Step 10 — ARM S at the matched budget (R21, S9) ✅
+
+```
+$ python -c "...merge arm_s, arm_s_part2, arm_s_part3..."
+samples 54  valid 23  transport errors 1
+tokens 709454 / 702789   (match ratio 1.009, above PREREG §4's 0.95 floor)
+best score 0.0135949364055   exact 27189872811/2000000000000
+```
+
+Ledger: `arm_s_merged.jsonl`; summary `arm_s_summary.json`; every raw reply
+preserved under `arm_s*/samples/`.
+
+**ARM S ran in three segments and that is recorded, not smoothed over.**
+The first died at 56% of budget when the session worker restarted; the
+second at 72% when an uncaught `http.client.RemoteDisconnected` escaped a
+too-narrow `except (URLError, HTTPError, TimeoutError)` — it is an
+`OSError`, not a `URLError`. Each resumption carried the REMAINING budget,
+so the three segments sum to one matched arm rather than three arms. The
+exception handler is now deliberately broad, with the reason in the code.
+
+### Step 11 — the census (R4, R24, R31) ✅
+
+```
+$ python milestone_census.py arm_h_scores.json arm_s_summary.json
+M1  met: true    arm_h_best 0.0004075   arm_s_best 0.0135949364055
+M2  met: true    total_refuted 117 (114 CLAIM_INFLATED, 3 WRONG_COUNT)
+                 valid_but_below_floor 15
+M3  reported, not scored — avoid-collinearity 15, perturbed-lattice 11,
+                 rings-or-shells 6, boundary-loading 4,
+                 golden-or-irrational 1; greedy-or-local, symmetry-breaking
+                 and min-triangle-targeting all ZERO
+margin  h_minus_s -0.0131874364055
+        budget_matched_per_S9 true, comparison_admissible true
+        harness_claims_value FALSE
+M1 and M2 met; M3 reported.
+exit 0
+```
+
+R31 honoured: `survivors_raw_INFLATED_see_P4` and
+`survivors_generative_only` are **both 0**, because the failed run wrote no
+survivor record at all (`NO_SURVIVOR_RECORD`). That is a different defect
+from the poietics inflation issue and is parked separately as P4.
+
+### Step 12 — RESULTS.md (R2, R30) ✅
+
+Written. Both best scores, the margin, the refutation count and the residue
+are recorded; every number traces to a typed artifact or a checker output.
+The headline is that **ARM S won by 33×** and the harness claims no value
+on this instance — the outcome PREREG §5 registered as the honest prior.
+
+### Step 13 — scope proof, validation, delivery ✅
+
+```
+$ git diff --stat 43f408506 HEAD -- src tests
+(empty — no src/ or tests/ change at all)
+
+$ git diff --name-only 43f408506 HEAD | grep -v '^experiments/2026-08-25-change-constructive-frontier/' | grep -v '^experiments/2026-08-25-poietics-program/'
+scripts/cycle_soak.py
+```
+
+Exactly one file changed outside the two experiment directories, and it is
+the soak case line R26 authorises. R32 satisfied.

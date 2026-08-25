@@ -1,0 +1,31 @@
+[arm-s] 0000 tokens= 18275 cum=   18275/193694 valid=False score=0.0 best=None
+[arm-s] 0001 tokens= 16643 cum=   34918/193694 valid=False score=0.007755369896 best=None
+[arm-s] 0002 tokens= 20493 cum=   55411/193694 valid=False score=0.011354295557 best=None
+[arm-s] 0003 tokens=  9634 cum=   65045/193694 valid=False score=0.0 best=None
+[arm-s] 0004 tokens= 21711 cum=   86756/193694 valid=True score=0.013307680842 best=0.013307680842
+[arm-s] 0005 tokens= 19574 cum=  106330/193694 valid=False score=0.0 best=0.013307680842
+[arm-s] 0006 tokens= 10283 cum=  116613/193694 valid=True score=0.0133077088625 best=0.0133077088625
+[arm-s] 0007 tokens=  7117 cum=  123730/193694 valid=False score=0.0 best=0.0133077088625
+[arm-s] 0008 tokens= 13962 cum=  137692/193694 valid=False score=0.0 best=0.0133077088625
+[arm-s] 0009 tokens=  6958 cum=  144650/193694 valid=True score=0.013307680842 best=0.0133077088625
+[arm-s] 0010 tokens=  8523 cum=  153173/193694 valid=True score=0.013307450175 best=0.0133077088625
+[arm-s] 0011 tokens= 10700 cum=  163873/193694 valid=True score=0.000578664352 best=0.0133077088625
+[arm-s] 0012 tokens= 11167 cum=  175040/193694 valid=True score=0.000455153391 best=0.0133077088625
+[arm-s] 0013 tokens= 16388 cum=  191428/193694 valid=False score=0.0 best=0.0133077088625
+[arm-s] 0014 tokens=  8931 cum=  200359/193694 valid=True score=0.000578619213 best=0.0133077088625
+[arm-s] budget reached: 200359 >= 193694
+{
+  "arm": "S",
+  "best_sample_index": 6,
+  "best_score": 0.0133077088625,
+  "best_score_exact": "1064616709/80000000000",
+  "max_tokens": 32768,
+  "model": "glm-5.2",
+  "n_refuted": 8,
+  "n_samples": 15,
+  "n_transport_errors": 0,
+  "n_valid": 7,
+  "temperature": 1.0,
+  "token_budget_matched_to_arm_h": 193694,
+  "tokens_spent": 200359
+}
