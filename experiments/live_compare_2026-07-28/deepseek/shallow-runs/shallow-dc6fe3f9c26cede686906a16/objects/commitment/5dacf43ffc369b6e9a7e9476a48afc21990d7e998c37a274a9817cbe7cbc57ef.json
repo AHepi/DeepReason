@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"Two conclusions with different ancestry tags are merged"},"steps":100000,"time_ms":2000},"eval":"program:causal_ancestry_check","id":"fc:d641947c8bf4","observation_valued":false},"id":"fc:d641947c8bf4","schema":"commitment"}

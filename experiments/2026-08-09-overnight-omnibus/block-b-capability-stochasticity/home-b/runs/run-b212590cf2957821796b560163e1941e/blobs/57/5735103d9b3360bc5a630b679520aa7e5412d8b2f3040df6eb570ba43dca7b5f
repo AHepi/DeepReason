@@ -1,2 +1,0 @@
-def check(input_item, seed, output):
-    return {"pass": True, "metrics": {"declared_observables": len(output)}}

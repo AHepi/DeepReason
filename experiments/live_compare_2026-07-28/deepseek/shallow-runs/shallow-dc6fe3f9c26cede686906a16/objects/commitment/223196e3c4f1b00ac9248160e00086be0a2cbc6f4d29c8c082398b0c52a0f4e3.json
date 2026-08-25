@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"The system refuses to merge any claims despite resource exhaustion, causing a crash or infinite loop that could have been avoided by merging."},"steps":100000,"time_ms":2000},"eval":"program:resource_exhaustion_no_merge","id":"fc:ef43d56d3147","observation_valued":false},"id":"fc:ef43d56d3147","schema":"commitment"}

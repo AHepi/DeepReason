@@ -1,7 +1,0 @@
-{
-  "repair.patch.v1": {
-    "op": "replace",
-    "path": "/0/content",
-    "value": "The checklist-panel evaluation inherits the need for a discriminating stratum: the panel's incremental correctness is evidence of genuine checklist-driven reliability only by partitioning cases into agreement (checklist matches expert) and divergence (checklist disagrees) strata and testing divergence-stratum correctness. This is REFUTED IF the divergence stratum is empty (checklist never disagrees with expert), because then a single-evaluation design cannot distinguish a genuine checklist contribution from a non-epistemic composition effect or compliance artifact."
-  }
-}

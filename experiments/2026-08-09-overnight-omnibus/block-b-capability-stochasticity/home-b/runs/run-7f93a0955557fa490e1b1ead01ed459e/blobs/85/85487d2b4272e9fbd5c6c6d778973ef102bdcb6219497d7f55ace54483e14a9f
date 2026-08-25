@@ -1,1 +1,0 @@
-{"contract":"critic.atomic-target.v1","path":"","error":"extra field at /claim_2","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"attack":false,"target_alias":"SRC_001"},"rejected_handle":null,"observed_handle_kind":null,"required_handle_kinds":null,"legal_handles":null,"omission_or_unknown_legal":null,"instruction":null}

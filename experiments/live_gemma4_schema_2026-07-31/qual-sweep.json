@@ -1,1 +1,0 @@
-{"cache_reused":false,"maximum_expected_provider_calls":1200,"model_id":"gemma4:31b","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"9a94b6e7efa60eb77b29800a4fb8e5202363e6e8c1ac7879cde76e0671a2e409","schema":"deepreason-qualification-result.v1","tier":"full"}

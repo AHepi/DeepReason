@@ -1,8 +1,0 @@
-{
-  "repair_type": "replace",
-  "target_path": "/scratch_proposal/cluster_suggestions/0/member_refs",
-  "delta": [
-    "NEW_001",
-    "NEW_002"
-  ]
-}

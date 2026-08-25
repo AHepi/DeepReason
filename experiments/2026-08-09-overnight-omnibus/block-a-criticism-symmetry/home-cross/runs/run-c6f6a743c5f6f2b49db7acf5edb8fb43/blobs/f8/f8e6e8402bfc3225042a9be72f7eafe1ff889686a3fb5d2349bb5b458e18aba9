@@ -1,9 +1,0 @@
-{
-  "patch": [
-    {
-      "op": "add",
-      "path": "/target_alias",
-      "value": "SRC_001"
-    }
-  ]
-}

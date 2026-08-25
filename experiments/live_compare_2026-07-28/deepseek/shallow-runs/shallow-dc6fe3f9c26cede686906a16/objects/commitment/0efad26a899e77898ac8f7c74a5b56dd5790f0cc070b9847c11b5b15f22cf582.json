@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"Two conclusions that are not logically equivalent but share some models are merged"},"steps":100000,"time_ms":2000},"eval":"program:model_equivalence_check","id":"fc:2687ba2294d5","observation_valued":false},"id":"fc:2687ba2294d5","schema":"commitment"}

@@ -1,7 +1,0 @@
-{
-  "repair.patch.v1": {
-    "pointer": "/candidates/2/optional_refs/0",
-    "op": "replace",
-    "value": "SRC_008"
-  }
-}

@@ -1,1 +1,0 @@
-QUALIFICATION_TIER_SHALLOW: this provider/model is qualified at tier "shallow" only; full V6 reasoning is refused. Use: deepreason reason --shallow "YOUR QUESTION"

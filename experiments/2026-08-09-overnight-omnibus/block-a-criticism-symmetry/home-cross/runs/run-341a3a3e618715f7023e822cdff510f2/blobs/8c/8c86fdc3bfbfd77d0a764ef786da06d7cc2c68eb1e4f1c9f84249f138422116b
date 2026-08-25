@@ -1,3 +1,0 @@
-```json
-{"cases":[{"attack":true,"case":"The target argues for non-experts but answers a different question: it specifies an evidence signal (cognitive friction) instead of arguing the claim that the panel produces more reliable judgments.","counterexample":null,"target_alias":"SRC_001"},{"attack":true,"case":"Same fault: it specifies an evidence signal instead of arguing the claim that the panel produces more reliable judgments.","counterexample":null,"target_alias":"SRC_002"},{"attack":false,"case":"SRC_3 is too short to judge","counterexample":null,"target_alias":"SRC_003"}]}
-```

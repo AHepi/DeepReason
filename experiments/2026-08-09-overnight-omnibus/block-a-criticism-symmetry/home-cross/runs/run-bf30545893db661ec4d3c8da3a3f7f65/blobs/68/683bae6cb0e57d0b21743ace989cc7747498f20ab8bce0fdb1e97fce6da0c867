@@ -1,3 +1,0 @@
-```json
-{"repair.patch.v1": {"patch": [{"op": "remove", "path": "/cases/4"}]}}
-```

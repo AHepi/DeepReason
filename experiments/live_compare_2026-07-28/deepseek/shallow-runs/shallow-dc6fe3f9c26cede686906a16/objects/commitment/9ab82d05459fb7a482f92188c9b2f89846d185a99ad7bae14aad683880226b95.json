@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"Two conclusions with different normalized forms are logically equivalent in all models of the knowledge base."},"steps":100000,"time_ms":2000},"eval":"program:check_logical_equivalence","id":"fc:86ff91552b85","observation_valued":false},"id":"fc:86ff91552b85","schema":"commitment"}

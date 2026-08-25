@@ -1,1 +1,0 @@
-{"contract":"conjecturer.turn.v6","path":"","error":"extra field at /candidates/0/typicality_estimate","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{},"rejected_handle":null,"observed_handle_kind":null,"required_handle_kinds":null,"legal_handles":null,"omission_or_unknown_legal":null,"instruction":null}

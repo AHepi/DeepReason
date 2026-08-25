@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"Two conclusions with the same embedding cluster have different truth values in a counterfactual model."},"steps":100000,"time_ms":2000},"eval":"program:check_counterfactual_truth","id":"fc:88011a6b3bd8","observation_valued":false},"id":"fc:88011a6b3bd8","schema":"commitment"}

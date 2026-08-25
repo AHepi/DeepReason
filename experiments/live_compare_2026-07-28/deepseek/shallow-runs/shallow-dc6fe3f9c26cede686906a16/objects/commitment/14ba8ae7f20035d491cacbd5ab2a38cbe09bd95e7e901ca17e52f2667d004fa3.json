@@ -1,1 +1,0 @@
-{"data":{"budget":{"extra":{"case":"Two conclusions with identical surface syntax but derived from disjoint premise sets are merged"},"steps":100000,"time_ms":2000},"eval":"program:derivation_isomorphism_check","id":"fc:e7c16b0f1d04","observation_valued":false},"id":"fc:e7c16b0f1d04","schema":"commitment"}

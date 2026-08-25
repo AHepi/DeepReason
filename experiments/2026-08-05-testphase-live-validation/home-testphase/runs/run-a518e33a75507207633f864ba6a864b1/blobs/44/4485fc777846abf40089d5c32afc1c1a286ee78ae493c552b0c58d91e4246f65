@@ -1,9 +1,0 @@
-```json
-{
-  "repair.patch.v1": {
-    "pointer": "/scratch_proposal/links/1/to_ref",
-    "operation": "replace",
-    "value": "NEW_001"
-  }
-}
-```
