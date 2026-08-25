@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "SRC_001 asserts that 0094852dcac7 'integrates' with SRC_004 by providing guard logic absent in SRC_004 (recorded as 'GAP REG-1'), yet the counterexample condition—whether SRC_004 records that this route was tried and failed without reversal—is a purely factual check that SRC_001 cannot satisfy. The relation rests on a hypothetical dependency: SRC_001 claims to fill a gap that SRC_004 allegedly registers, but offers no evidence that SRC_004 actually identifies 0094852dcac7 as the solution. The 'integration' is asserted, not demonstrated. Without showing that SRC_004 lacks a record of prior failed attempts, the relation is speculative and non-substantive as stated.",
+      "counterexample": "SRC_004 records that the route 0094852dcac7 proposes was tried and failed without reversal (or, more likely, SRC_004 is entirely unrelated code that happens to mention a 'GAP REG-1' not referring to 0094852dcac7 at all).",
+      "premise": "The proposed integration depends on SRC_004 registering a 'GAP REG-1' that specifically identifies 0094852dcac7 as its resolution, but SRC_001 presents no direct quotation or concrete linkage from SRC_004—only an inferred gap.",
+      "premise_evidence": [
+        {
+          "block": "000000000000000000000000",
+          "quote": "integrates SRC_004's mutation ledger: it provides the guard logic whose absence SRC_004 records as 'GAP REG-1' 0/6"
+        },
+        {
+          "block": "000000000000000000000000",
+          "quote": "This is refuted if SRC_004 already records that the route 0094852dcac7 proposes was tried and failed without reversal."
+        }
+      ]
+    }
+  ]
+}

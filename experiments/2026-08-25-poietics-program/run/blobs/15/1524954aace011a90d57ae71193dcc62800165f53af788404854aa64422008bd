@@ -1,0 +1,167 @@
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject, rather than describing it, exactly when the subject's code path is installed before the test's oracle is allowed to fail on it — the 'shown-to-fail-first' installation ritual turns a description of intended behavior into a guard that binds future mutations.",
+      "mechanism": "Under shown-to-fail-first installation, the failing test is planted in the registry as an already-failed expectation before the subject code is admitted. Compile.py's mutation pass then treats any mutation that would flip that pre-planted failure back to passing as a regression against the registry, so the test no longer reports what the code does but what the registry has committed the code must do. The 3-of-26 result is the surviving residue of mutations that alter declared data rather than added behavior — exactly the kind of change a pre-installed oracle cannot see because the oracle's failure was bound to the behavior, not the declaration.",
+      "counterconditions": [
+        "If the 1/9 compile.py mutation loss is shown to occur in a module without any pre-installed failing test, the installation mechanism is confounded.",
+        "If a control condition with fail-first installation reversed (pass-first) yields the same 3/26 distribution, the constraining effect is not installation-specific.",
+        "If all three surviving mutations are in modules with no ordinarily-guarded registry entries, the guard coverage story collapses.",
+        "If the record shows the 3/26 were proposed by models that had not read the acceptance record, the planted-failure interpretation is weakened."
+      ],
+      "typicality": 0.82,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12",
+          "quote": "\"THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR.\""
+        },
+        {
+          "block": "01cc9b7f77380bf9",
+          "quote": "\"| GAP REG-1 | 0/6 |\", \"| 6/6 | `src/poietics/pff/registry.py` |\""
+        }
+      ]
+    },
+    {
+      "claim": "The 3-of-26 distribution is not a property of the tests but of the registry's coverage boundary: a test constrains only when the subject's mutation surface overlaps the registry's declared-data schema, and describes whenever the mutation falls in the added-behavior region the registry does not index.",
+      "mechanism": "Ordinarily-guarded modules showed 4/4 to 6/7 because their registry entries enumerate declared data fields, and mutations that change those fields are caught by construction — the test is a tautological restatement of the registry schema. The compile.py mutation that escaped at 1/9 fell in a code region where no registry entry existed, so the test could only describe the observed behavior rather than derive it from a constraint. The three survivors are all one bug in two costumes: guards checking declared data cannot see added behavior, so the test describes the behavior it observes while appearing to constrain it.",
+      "counterconditions": [
+        "If a surviving mutation changes a declared-data field and still escapes, the registry-boundary explanation is insufficient.",
+        "If the 1/9 compile.py loss is in a registry-indexed code path, the mechanism fails.",
+        "If a module with full registry coverage still loses a mutation, the 4/4 to 6/7 pattern is confounded.",
+        "If the distribution is uniform across guarded and unguarded modules, the boundary claim is falsified."
+      ],
+      "typicality": 0.78,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        },
+        {
+          "block": "01ccc04a460b08fc",
+          "quote": "**Caveat on the strength of this.** It is one repository, one author, one week, and the mutations were proposed by models that had read the acceptance record."
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains rather than describes only when the subject is installed under a prior failure ritual; the 3/26 is the expected residue of a one-repository, one-author, one-week confound where the same care produced both the test and the mutation generator, so the test's constraining power is circular by construction.",
+      "mechanism": "The mutations were proposed by models that had read the acceptance record, so the mutation distribution is not independent of the test's own history. A test that constrains its subject should show a sharp drop in surviving mutations exactly where the pre-installed failure was planted; but because the same author wrote the test, the registry, and the mutation prompts in the same week, any such drop is indistinguishable from the author's own care reproducing itself. The 1/9 compile.py loss is the one mutation that escaped this circularity — a mutation outside the author's own mental model of what the test should catch — and its escape is the only non-tautological signal in the record.",
+      "counterconditions": [
+        "If the mutation set is shown to be generated by a model that had not read the acceptance record, the circularity claim weakens.",
+        "If a second repository with different authorship shows the same 3/26 distribution, the one-author confound is not explanatory.",
+        "If the 1/9 compile.py loss is in a code region the author explicitly tested, the escape is not outside the author's model.",
+        "If the 4/4 to 6/7 guarded-module results are replicated under independent mutation generation, the care-circularity is insufficient."
+      ],
+      "typicality": 0.74,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ]
+    },
+    {
+      "claim": "The constraint/description distinction collapses into installation order only when the test's oracle is a registry lookup; otherwise the test is always descriptive, and the 3/26 result is the registry size effect: three mutations survived because the registry had no entries for the added-behavior region.",
+      "mechanism": "A test that checks declared data is a constraint only in the degenerate sense that the registry already contains the answer — it is a restatement, not a derivation. The compile.py mutation at 1/9 is the one case where the test was forced to describe behavior it could not look up, and it failed. The distribution of survivors (3/26) is not a failure rate of tests but a measure of how many mutations fell outside the registry's index. Every ordinarily-guarded module showed 4/4 to 6/7 because its registry entries were complete for the mutation surface; where the registry was incomplete, the test described and the mutation escaped.",
+      "counterconditions": [
+        "If a mutation inside the registry's declared-data schema escapes, the registry-size mechanism is falsified.",
+        "If the 3/26 survivors are all outside the registry's index, the result is fully explained by registry size and the installation-order claim is redundant.",
+        "If adding registry entries for the added-behavior region does not eliminate the survivors, the constraint is not registry-mediated.",
+        "If the 1/9 compile.py loss is in a region with complete registry coverage, the descriptive-failure mechanism fails."
+      ],
+      "typicality": 0.70,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only when the failure is installed before the subject and the test's guard is designed to fire on its own author; the 3/26 result is the residue of tests that never fire on their author because the author's mutations are outside the guard's declared-data check.",
+      "mechanism": "The insight that a process guard that never fires on its author is probably not a guard applies directly: the 3/26 survivors are mutations the author's own guard could not catch because the guard checks declared data, not added behavior. The compile.py 1/9 loss is the same bug in a different costume — a mutation that adds behavior rather than changing declared data, so the guard does not fire. A test constrains only when it is designed for the case where it fires on the author's own changes; otherwise it describes the author's intentions while silently passing the very mutations it was meant to catch.",
+      "counterconditions": [
+        "If the 3/26 survivors are in declared-data regions and the guard still does not fire, the mechanism fails.",
+        "If the compile.py mutation loss is shown to be a declared-data change, the added-behavior explanation is wrong.",
+        "If the author's own guard fires on all three survivors, the never-fires-on-author mechanism is contradicted.",
+        "If the 4/4 to 6/7 results include mutations the author did not anticipate, the care-based explanation is insufficient."
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2",
+          "quote": "**Insight:** a process guard that never fires on its author is probably not a guard."
+        },
+        {
+          "block": "057f5d8af80d2d12"
+        }
+      ]
+    },
+    {
+      "claim": "The 3-of-26 result is an artifact of the mutation-generation process having read the acceptance record: a test constrains only when the mutation generator is blind to the test's installation history, and the distribution is the signature of a generator that was not blind.",
+      "mechanism": "When the mutation generator has read the acceptance record, it produces mutations that are conditionally independent of the test's planted failures only in the declared-data region, where the registry's schema makes the test's expectation obvious. In the added-behavior region, the generator's knowledge of the record biases it toward mutations the test cannot catch, producing the 3/26 survivors as a selection effect rather than a constraint failure. The compile.py 1/9 loss is the single mutation where the generator's knowledge of the record was incomplete or irrelevant, so the test's descriptive nature was exposed. The 4/4 to 6/7 results are the generator's own care reproducing the author's care, not evidence of constraint.",
+      "counterconditions": [
+        "If the mutation generator did not read the acceptance record and the 3/26 persists, the selection-effect claim is falsified.",
+        "If the survivors are in the declared-data region, the generator's bias explanation fails.",
+        "If a blinded generator produces the same distribution, the artifact claim is wrong.",
+        "If the 1/9 compile.py loss is in a region the generator's record-reading would have predicted, the exposure claim is confounded."
+      ],
+      "typicality": 0.45,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc"
+        }
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The constraint/description distinction is not a property of the test but of the installation order relative to the mutation generator's access to the acceptance record. A test constrains only when the mutation generator cannot see the test's planted failures. The 3/26 distribution is the residue of a generator that read the record and therefore produced mutations in the added-behavior region where the test's declared-data guards are blind. This is a confound of one repository, one author, one week: the same care that wrote the test also wrote the mutation prompts, so the test's constraining power is circular. The 1/9 compile.py loss is the one mutation that escaped this circularity.",
+          "why_keep_this": "This is the core mechanism connecting the 3/26 distribution to the shown-to-fail-first installation via the generator's record access.",
+          "possible_next_move": "Check whether the mutation generation prompts in the record explicitly reference the acceptance record or the registry schema."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: if the mutations had been proposed by a model blind to the acceptance record, would the 3/26 distribution collapse to 0/26? The record says the mutations were proposed by models that had read the acceptance record, so this counterfactual is untested. This is the single most important untested condition for the constraint claim.",
+          "why_keep_this": "Identifies the untested counterfactual that would discriminate between the installation mechanism and the selection-effect artifact.",
+          "possible_next_move": "Design a blinded mutation generation condition and compare survivor rates."
+        }
+      },
+      {
+        "local_key": "NEW_003",
+        "body": {
+          "content": "The three survivors are one bug in two costumes: a guard that checks declared data does not see added behavior. This suggests the constraint/description boundary is exactly the declared-data/added-behavior boundary in the registry schema. The compile.py 1/9 loss is the same bug: a mutation that adds behavior rather than changing declared data.",
+          "why_keep_this": "This is the most precise mechanistic statement available in the record, and it directly explains the distribution.",
+          "possible_next_move": "Map the three surviving mutations to their registry entries and confirm they are all in the added-behavior region."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Did the mutation generator have access to the shown-to-fail-first installation ritual, or only to the acceptance record's summary?",
+        "related_refs": [
+          "NEW_001"
+        ]
+      },
+      {
+        "question": "What would the 3/26 distribution be under a pass-first installation with the same mutation generator?",
+        "related_refs": [
+          "NEW_002"
+        ]
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_002",
+        "relation_hint": "NEW_001's mechanism depends on NEW_002's counterfactual being untested"
+      },
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_003",
+        "relation_hint": "NEW_003 is the precise boundary condition within NEW_001's mechanism"
+      }
+    ]
+  }
+}

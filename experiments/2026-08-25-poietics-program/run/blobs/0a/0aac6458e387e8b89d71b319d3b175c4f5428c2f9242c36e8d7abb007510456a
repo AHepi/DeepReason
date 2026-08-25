@@ -1,0 +1,7 @@
+{
+  "candidate": {
+    "content": "The 3-of-26 result reduces to an under-powered measurement artifact, refuted if a larger multi-author repository reproducing the same shown-to-fail ritual still yields a 3-of-26 survival ratio instead of exposing the confound.",
+    "typicality": 0.62,
+    "neighbours": ["SRC_001", "SRC_002"]
+  }
+}

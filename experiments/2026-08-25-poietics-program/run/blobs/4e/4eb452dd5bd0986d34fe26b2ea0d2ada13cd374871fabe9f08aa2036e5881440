@@ -1,0 +1,7 @@
+{
+  "candidate": {
+    "content": "The registry-confounding mechanism depends on the ad-hoc installation of shown-to-fail-first guards across modules. This relation is refuted if the same 3-of-26 distribution appears when the 26 mutations are re-run under a uniform, policy-driven installation order across the repository, because that would break the dependence on one-author ritual.",
+    "typicality": 0.72,
+    "neighbours": ["SRC_001", "SRC_002"]
+  }
+}
