@@ -1,0 +1,64 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "premise": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Premise"}, "premise_evidence": {"anyOf": [{"items": {"$ref": "#/$defs/QuotedEvidenceWireV1"}, "maxItems": 2, "type": "array"}, {"type": "null"}], "default": null, "title": "Premise Evidence"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}, "QuotedEvidenceWireV1": {"additionalProperties": false, "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"maxLength": 2000, "minLength": 1, "title": "Quote", "type": "string"}}, "required": ["block", "quote"], "title": "QuotedEvidenceWireV1", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+PROBLEM CONTEXT (conn:0094852dcac7) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0094852dcac7 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@863a92c071d1: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The connected artifact 0094852dcac7 abstracts the failure-mode catalogue in SRC_005's extracted episodes: where SRC_005 records concrete runs (the 'content-edit hole', the '59/3' masking trap), 0094852dcac7 supplies the covering principle that mutations and review reversals fail through masking rather than noise. This is refuted if 0094852dcac7 does not name a higher-level class under which at least two of SRC_005's episode-specific failures fall.
+commitments: hv-floor@2a45b7988522, lineage-ref@863a92c071d1, relation-form@578e42df713e
+
+PREMISE INVITATION (optional): every candidate offered for problem conn:0094852dcac7 so far has been refuted. If the PROBLEM ITSELF presupposes something that FORBIDS NOTHING — a presupposition no observation and no execution could ever tell against, so that the question is malformed rather than merely hard — state that presupposition in "premise". Leave it null otherwise; declining costs you nothing, and this never replaces your case against the target. If admitted evidence bears on that presupposition, cite it in "premise_evidence" as a block id from the CITABLE EVIDENCE BLOCKS list together with an EXACT quote from that block. The quote is byte-checked against the recorded bytes; an unquoted citation cannot be made here, and a citation of a block this call was not shown does not verify.
+
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[002779d3ed9dd0a6] ### The content-edit hole was in the code but not plainly in the record
+[0148655d7f44f7d5] "The AU-4 erratum (a closed-negative literal cannot name the generated `discharged(c)`; `validate_package` refuses the specification's own example with `unresol
+[01cc9b7f77380bf9] "evidence": "zoo/mutations/RUN_2026-08-25.md (\"| GAP REG-1 | 0/6 |\", \"| 6/6 | `src/poietics/pff/registry.py` |\"); zoo/report/10_MUTATION_TESTING.md \u00a710
+[01ccc04a460b08fc] **Caveat on the strength of this.** It is one repository, one author, one week, and the mutations were proposed by models that had read the acceptance record. T
+[02090442ee92f8f4] "reversal": "The author's own closure of the milestone-8 deliverable question was reversed to an ESCALATE by independent review." }, { "title": "FR-22 \u2014 de
+[025181d5ffe71cf7] RT-1's blast radius was measured at **22 packages**; implementation produced **346 failing tests**. The instrument enumerated packages built by *no-argument fix
+[028950f9751ab59a] **The specific trap in the "59/3" case is worth isolating.** The error was not noise, it was **masking**: mutations no guard catches were reported as caught. It
+[02c491a7db59d6b7] "prompt_sha256": "sha256:3be270c8db007632c98975bf23368fa134b4be5d72eba5bfc09fc33e62db7324", "reply_chars": 2092, "reply_sha256": "sha256:3778925e3508c97208fa668
+[02f1f719e3543ff2] "body": "Admit rule-target blocking: RT-2, RT-1 required, RT-6 narrow\n\nThe four remaining decisions of the RT cluster, implemented. 662 tests pass.\n\nRT-2: p
+[03093dbd40142ed5] ```diff - "status": status, "conflict": conflict, "why": dict(why or {}), + "status": status, "conflict": conflict, "why": {**dict(why or {}), "supported": stat
+[03be16ddea3ab3e2] **Insight:** a process guard that never fires on its author is probably not a guard. Design for the case where it fires on you, and treat weakening it as the fa
+[047055ae600ced87] > That zero-migration outcome is a consequence of the convention, not the reason for it — > the alternative convention … would force `pff-core+empirical/1` and 
+[047cf924ace5e006] "means": "EMPTY replies (reply_chars 0, reply_sha256 = sha256 of the empty string e3b0c442\u2026): seq 26 (cross-artifact-consistency, length|prompt_tokens=9851
+[04a8146c6fdfb0be] "what_was_found": "Two independent reasons, both verified against the code rather than argued: (1) `RuleRecord.certificate` is a mandatory `RecordRef` \u2014 `_
+[057f5d8af80d2d12] "what_was_found": "\"THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR.\" (1) report-exposes-accep
+[0615e03ec804152b] "what_was_found": "Three previously-true measurements became false and were kept, inverted, in place: (1) `test_the_registry_version_changes_nothing` \u2192 `te
+[0747dc116e7c3dfb] "The pages do not freeze response requiredness, JSON byte serialization, UTF-8 failure handling, duplicate keys, unknown fields, response limits, redirects, tim
+[07760c40f027edec] | section | bytes | subject | |---|---|---| | `00_EXECUTIVE_SUMMARY.md` | 6,045 | the whole cycle in two pages | | `01_TIMELINE.md` | 9,050 | 50 commits over 9 
+[078f1942afcd2f97] def status_of(self, atom: AtomRef) -> Status: """Return the derived status of an atom in this evaluation.""" ```
+[07b574665805ba3f] ```diff - "retention", "localisation", "recovery", } ) + "retention", "localisation", "recovery", "provenance", } ) ```
+[085d5949d68d14fb] - **Decision:** INV-draft-namespaces - **File:** `src/poietics/generation/extract.py` - **Reverses:** A language model may now emit a rule whose head names anot
+[08e6e945b58ed82f] **Claimed:** taking `RuleRecord.blocker_closure` as `required` would invalidate **22 packages**. **Actual on implementation:** **346 failing tests**. **Source:*
+[090c957e3a9cf26a] - **Decision:** INV-value-vocabulary - **File:** `src/poietics/canonical.py` - **Reverses:** A closure record is a semantic record, and its selector's where map
+[09208b033e714960] "The author" is the LLM agent. Eighteen field reports document its failure modes, and every remedy is a mechanism that fails loudly - not one is an intention to
+[094a0429bf566aa4] "test_compiler_does_not_call_validation_checker_or_evaluator", "test_compiler_project_imports_are_direct_and_allowlisted" ] }, { "file": "tests/test_pff_model.p
+[0a101afa1a34a0ba] "test_certificate_contract_subject_and_payload_are_bound_not_executed", "test_challenge_and_discharge_certificates_require_forward_subject_binding", "test_typed
+[0a201dc94a4c3f63] "means": "the true reach of RT-1 `required` when actually implemented \u2014 the number the '22 packages / 40 closures' lower bound understated by an order of m
+[0a5a41977d58bdb4] "body": "Install first authority, audit it, and revise the pin to v0.2\n\nThe core specification is now in the tree, byte-exact against the SHA-256 the\naccepte
+[0aade89eefe9dee8] "what_was_found": "TIER 1 \u2014 RT-2 ACCEPTED: amend profile \u00a76's 'only path' sentence; authorises the whole rule-target route and lifts the profile's \u0
+[0ad2b699aec466c1] The first `accepted-rt` review returned **MISSING** on its two most load-bearing rows. Neither was a claim about the code: `model.py` and the challenge-kind con
+[0b1ed241f40e4d9c] - **Decision:** INV-replay-fold - **File:** `src/poietics/cli.py` - **Reverses:** The command line now repairs the log before folding it, so a log that is not a
+[0b4076ae84559daa] "what_was_found": "`UNREACHABLE_BLOCKERS` declared `localisation_missing` and `recovery_missing` unreachable \"because localisation is an empirical-pack predica
+(+591 further citable blocks not shown)
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

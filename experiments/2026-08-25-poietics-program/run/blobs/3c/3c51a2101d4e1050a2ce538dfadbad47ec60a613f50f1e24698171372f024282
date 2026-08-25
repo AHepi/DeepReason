@@ -1,0 +1,74 @@
+{
+  "candidates": [
+    {
+      "content": "The connected artifact 0094852dcac7 abstracts the failure-mode catalogue in SRC_005's extracted episodes: where SRC_005 records concrete runs (the 'content-edit hole', the '59/3' masking trap), 0094852dcac7 supplies the covering principle that mutations and review reversals fail through masking rather than noise. This is refuted if 0094852dcac7 does not name a higher-level class under which at least two of SRC_005's episode-specific failures fall.",
+      "typicality": 0.78,
+      "evidence_refs": [
+        {
+          "block": "002779d3ed9dd0a6",
+          "quote": "The content-edit hole was in the code but not plainly in the record"
+        },
+        {
+          "block": "028950f9751ab59a",
+          "quote": "The error was not noise, it was **masking**: mutations no guard catches were reported as caught."
+        }
+      ],
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "The connected artifact 0094852dcac7 is compatible with the acceptance-record lineage in SRC_001's tests: both treat 'accepted-rt' review as the load-bearing arbiter, and 0094852dcac7 extends the test expectations without contradicting any byte-exact SHA-256 pins. This is refuted if 0094852dcac7 asserts a state change that violates an accepted-rt decision recorded in SRC_001.",
+      "typicality": 0.71,
+      "evidence_refs": [
+        {
+          "block": "0ad2b699aec466c1",
+          "quote": "The first `accepted-rt` review returned **MISSING** on its two most load-bearing rows."
+        }
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "The connected artifact 0094852dcac7 integrates SRC_004's mutation ledger: it provides the guard logic whose absence SRC_004 records as 'GAP REG-1' 0/6, so 0094852dcac7 is the recovered rule-target route that SRC_004's registry gap predicts. This is refuted if SRC_004 already records that the route 0094852dcac7 proposes was tried and failed without reversal.",
+      "typicality": 0.66,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9",
+          "quote": "zoo/mutations/RUN_2026-08-25.md (\"| GAP REG-1 | 0/6 |\", \"| 6/6 | `src/poietics/pff/registry.py` |\")"
+        }
+      ],
+      "neighbours": ["SRC_004"]
+    },
+    {
+      "content": "The connected artifact 0094852dcac7 contradicts SRC_002's review-ledger assumption that author-side closure of a milestone question is final: 0094852dcac7 encodes the independent-review reversal pattern that SRC_002 only records as an anomaly. This is refuted if SRC_002 already asserts reversals as a design feature rather than an exception.",
+      "typicality": 0.58,
+      "evidence_refs": [
+        {
+          "block": "02090442ee92f8f4",
+          "quote": "The author's own closure of the milestone-8 deliverable question was reversed to an ESCALATE by independent review."
+        }
+      ],
+      "neighbours": ["SRC_002"]
+    },
+    {
+      "content": "The connected artifact 0094852dcac7 depends on SRC_003's metrics schema: it reuses the same observable vocabulary (packages, failing tests, caught mutations) to restate SRC_003's measurements as a normative threshold. This is refuted if 0094852dcac7 introduces no metric that SRC_003 defines and instead invents a wholly disjoint measurement language.",
+      "typicality": 0.52,
+      "evidence_refs": [
+        {
+          "block": "025181d5ffe71cf7",
+          "quote": "RT-1's blast radius was measured at **22 packages**; implementation produced **346 failing tests**."
+        }
+      ],
+      "neighbours": ["SRC_003"]
+    },
+    {
+      "content": "The connected artifact 0094852dcac7 shares a mechanism with SRC_005's replay-fold decision: both repair before folding, so a log that is not already canonical becomes canonical in the same operation. This is refuted if 0094852dcac7 requires the log to be canonical before any repair step, inverting SRC_005's recorded INV-replay-fold reversal.",
+      "typicality": 0.39,
+      "evidence_refs": [
+        {
+          "block": "0b1ed241f40e4d9c",
+          "quote": "The command line now repairs the log before folding it, so a log that is not a"
+        }
+      ],
+      "neighbours": ["SRC_005"]
+    }
+  ]
+}
