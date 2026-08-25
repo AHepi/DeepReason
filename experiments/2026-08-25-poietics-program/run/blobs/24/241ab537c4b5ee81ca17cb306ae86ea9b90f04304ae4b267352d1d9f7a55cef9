@@ -1,0 +1,112 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A test constrains its subject when it is installed under a shown-to-fail-first ritual: the test is authored against a planted mutation that fails before the guard exists, so the test's passing later becomes a certificate of the guard's presence rather than a description of current behavior. The 3-of-26 result is the residue of this installation asymmetry — mutations lost under shown-to-fail-first installation are exactly those where the test was never re-run against the mutation after the guard landed, while every ordinarily-guarded module at 4/4 to 6/7 shows the same author's ritualized guard-then-test ordering.",
+      "mechanism": "Shown-to-fail-first installation inverts the evidential direction. In ordinary testing, a mutation is applied to code and the test either catches it or not; the test describes behavior. When the mutation is planted first and the test is shown failing, the subsequent fix installs a guard whose necessity has been pre-established by that failure. The test now constrains the fix — it passes only because the guard exists — rather than describing the code. The 1-of-9 loss in compile.py is the failure mode of this ritual: a mutation that would be caught by a test installed under ordinary order is lost when the shown-to-fail sequence terminates early, because the test is never executed against the mutation in the final configuration. The 3-of-26 distribution is the same mechanism at larger scale: mutations that survive are those where the shown-to-fail step was skipped, abbreviated, or the guard was weakened during installation.",
+      "counterconditions": [
+        "If the 3 surviving mutations are all in code paths with no test coverage at all, the loss is a coverage gap rather than an installation-order artifact.",
+        "If compile.py's 1-of-9 loss is attributable to a specific syntactic mutation class that shown-to-fail cannot express, the mechanism is class-specific not ritual-specific.",
+        "If an ordinarily-guarded module at 6/7 shows the same loss rate as shown-to-fail modules, the installation mode does no differential work.",
+        "If the mutation-testing harness re-runs all tests against all mutations regardless of installation order, the shown-to-fail ritual cannot cause a loss."
+      ],
+      "typicality": 0.82,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc",
+          "quote": "**Caveat on the strength of this.** It is one repository, one author, one week, and the mutations were proposed by models that had read the acceptance record."
+        },
+        {
+          "block": "03be16ddea3ab3e2",
+          "quote": "**Insight:** a process guard that never fires on its author is probably not a guard. Design for the case where it fires on you, and treat weakening it as the fa"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains rather than describes when its subject is a registry or rule-target system whose semantics are defined by the test's own installation history. The 3-of-26 result is a distribution artifact of registry-size confounds: with only 26 mutations across one author's one-week repository, the survival count is dominated by arbitrary registry entries that were never exercised by any test in the first place, not by a property of shown-to-fail-first installation.",
+      "mechanism": "In a registry-based system, a test that enumerates registry entries constrains the registry only if every entry was installed under a guard that the test can detect. When mutations are proposed by models that had read the acceptance record — the same record that defines which guards are expected — the mutation set is not independent of the test set. The 3 surviving mutations are confounds: they may be in registry paths never reached by the test harness, or they may be semantically equivalent to the original under the test's observable vocabulary. The 1-of-9 compile.py loss and the 4/4 to 6/7 spread in ordinarily-guarded modules are consistent with registry-size and coverage variance, not with a shown-to-fail mechanism. The magnitude of the effect is too small to distinguish installation-order from author-week confounds.",
+      "counterconditions": [
+        "If the 3 surviving mutations are re-run under ordinary installation order and are then caught, the registry confound is refuted.",
+        "If the 1-of-9 compile.py mutation is shown to be in a directly tested code path, the coverage-gap explanation fails.",
+        "If the registry has deterministic enumeration order and the 3 survivors cluster in a specific order, the confound explanation is weakened.",
+        "If the same shown-to-fail ritual on a larger, multi-author repository reproduces the 3-of-26 ratio, the one-author confound is not the cause."
+      ],
+      "typicality": 0.68,
+      "evidence_refs": [
+        {
+          "block": "01ccc04a460b08fc",
+          "quote": "**Caveat on the strength of this.** It is one repository, one author, one week, and the mutations were proposed by models that had read the acceptance record."
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when the test is a guard-installation certificate: the test passes only if a specific guard exists, and the guard exists only because the test was shown failing against a planted mutation. The 3-of-26 survivors are the three mutations where the guard checks declared data but the mutation adds behavior — a category the shown-to-fail ritual cannot see because the failing test was authored against declared structure, not added behavior.",
+      "mechanism": "The shown-to-fail-first installation creates a binding between test and guard that is asymmetric: the test can only constrain what it can name. When the planted mutation changes declared data, the test fails on the declared-data check and the guard is installed to check declared data. When a different mutation adds behavior without changing declared data, the guard passes silently — it constrains the declared subject but does not describe the added behavior. The 3 survivors are one bug in two costumes: a guard that checks declared data does not see added behavior. The 1-of-9 compile.py loss is the same asymmetry at compiler scale: the mutation lost under shown-to-fail-first was one that added behavior to a code path the guard's declared-data check could not reach.",
+      "counterconditions": [
+        "If the 3 surviving mutations are shown to change declared data and still survive, the declared-vs-added distinction does not hold.",
+        "If compile.py's lost mutation is in a purely syntactic transformation with no behavioral addition, the added-behavior mechanism fails.",
+        "If an ordinarily-guarded module at 6/7 catches a behavior-adding mutation that shown-to-fail modules miss, the installation mode is not the differentiator.",
+        "If the guard in question is demonstrated to check behavior via execution traces rather than declared data, the declared-data limitation is false."
+      ],
+      "typicality": 0.61,
+      "evidence_refs": [
+        {
+          "block": "057f5d8af80d2d12",
+          "quote": "\"THE THREE SURVIVORS ARE ONE BUG IN TWO COSTUMES: a guard that checks DECLARED DATA does not see ADDED BEHAVIOUR.\""
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject when the test is installed under a fail-first ritual that creates a circular dependency: the test's expected output is defined by the guard that was written to make the test pass. The 3-of-26 result is the number of mutations that fall outside this circular closure — mutations that neither the guard nor the test was ever constructed to address. The 1-of-9 compile.py loss and the 4/4 to 6/7 spread are both explained by the same tautological structure: a test that passes by construction against its own guard cannot describe mutations outside that construction.",
+      "mechanism": "In shown-to-fail-first installation, the sequence is: (1) plant mutation, (2) show test fails, (3) write guard, (4) test passes. Step 4 passes by construction because the guard was written to make the test pass. The test now constrains the guard but not the code — the test is a restatement of the guard's condition, not an independent description of behavior. Mutations that survive are those outside the circular closure: they are not addressed by any guard, so no test was ever shown failing for them, so no test constrains them. The 3 survivors are the residue of this circularity. The 1-of-9 compile.py loss is a mutation that fell outside the guard's construction closure and was therefore never re-tested after the guard landed.",
+      "counterconditions": [
+        "If the test is shown to fail for reasons independent of the guard's condition, the circularity claim is refuted.",
+        "If the 3 surviving mutations are demonstrably within the guard's stated condition and still pass, the closure mechanism fails.",
+        "If an ordinarily-guarded module shows a mutation caught by a test that was never shown failing, the circular dependency is not universal.",
+        "If the shown-to-fail ritual includes a re-run of all tests against all mutations after installation, the circular closure cannot cause loss."
+      ],
+      "typicality": 0.55,
+      "evidence_refs": [
+        {
+          "block": "03be16ddea3ab3e2",
+          "quote": "**Insight:** a process guard that never fires on its author is probably not a guard. Design for the case where it fires on you, and treat weakening it as the fa"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains its subject only if the test is re-executed against the mutation after the guard is installed. The 3-of-26 result and the 1-of-9 compile.py loss are artifacts of the shown-to-fail-first installation terminating before the re-execution step: the test was shown failing, the guard was installed, but the test was never run again against the mutation, so the mutation was recorded as lost when in fact the guard would have caught it.",
+      "mechanism": "The shown-to-fail-first ritual has a temporal asymmetry. The test is run against the mutation before the guard exists, producing a failure. The guard is then installed. If the harness does not re-run the test against the mutation after installation, the mutation is never given the chance to be caught by the now-installed guard. The loss is not a property of the test or the guard but of the installation sequence's termination condition. The 3-of-26 survivors are mutations where the post-installation re-run was skipped, and the 1-of-9 compile.py loss is the same skip at compiler scale. The 4/4 to 6/7 spread in ordinarily-guarded modules reflects variance in whether the re-run step was executed, not a difference in guard quality.",
+      "counterconditions": [
+        "If the harness demonstrably re-runs all tests against all mutations after every installation, the skipped-re-run mechanism is false.",
+        "If the 3 surviving mutations are re-run manually after installation and still survive, the loss is not a termination artifact.",
+        "If compile.py's lost mutation is shown to be caught by a re-run, the loss was an installation-order artifact and not a coverage gap.",
+        "If an ordinarily-guarded module at 4/4 is shown to have the same re-run skip as a shown-to-fail module at 6/7, the installation mode does not explain the spread."
+      ],
+      "typicality": 0.47,
+      "evidence_refs": [
+        {
+          "block": "01cc9b7f77380bf9",
+          "quote": "zoo/mutations/RUN_2026-08-25.md (\"| GAP REG-1 | 0/6 |\", \"| 6/6 | `src/poietics/pff/registry.py` |\"); zoo/report/10_MUTATION_TESTING.md"
+        }
+      ]
+    },
+    {
+      "claim": "A test constrains rather than describes when it is a rule-target blocker whose necessity was established by a planted failure that the author then treated as proof of the test's independence. The 3-of-26 result is the number of mutations that fall outside the rule-target route authorized by the acceptance record — mutations that no guard catches because no rule was ever written to target them, and the shown-to-fail-first installation only amplifies this by making the test's authority derive from the planted failure rather than from the code.",
+      "mechanism": "The acceptance record authorizes a rule-target route where guards are installed against specific mutations. When a mutation is planted and the test shown failing, the test's authority is established by that failure. But the failure was manufactured: the mutation was chosen by a model that had read the acceptance record, so the test was never independent of the rule-target structure. The 3 surviving mutations are those outside the rule-target route — they were never the subject of a rule, so no test was ever shown failing for them, so no test constrains them. The 1-of-9 compile.py loss is a mutation that would require a rule-target route but was never assigned one under the shown-to-fail-first installation. The 4/4 to 6/7 spread reflects how many rule-targets were authored per module, not the quality of the guards.",
+      "counterconditions": [
+        "If the 3 surviving mutations are shown to be within the rule-target route and still survive, the route-based explanation fails.",
+        "If compile.py's lost mutation is in a module with no rule-target route, the loss is a routing gap not an installation artifact.",
+        "If an ordinarily-guarded module catches a mutation outside its rule-target route, the route does not determine the result.",
+        "If the shown-to-fail ritual is applied to mutations chosen without reading the acceptance record, the manufactured-failure confound is removed and the ratio should change."
+      ],
+      "typicality": 0.38,
+      "evidence_refs": [
+        {
+          "block": "02f1f719e3543ff2",
+          "quote": "Admit rule-target blocking: RT-2, RT-1 required, RT-6 narrow"
+        }
+      ]
+    }
+  ]
+}
+```
