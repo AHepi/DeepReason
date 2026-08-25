@@ -152,6 +152,44 @@ its most plausible disguise — turns the differential red.
 `check: python -m pytest tests/test_allocation_signal_consumption.py -q -k "evidence or verdict"`
 `check: ! grep -qE "create_artifact|Warrant|att_add|dep_add" src/deepreason/allocation.py`
 
+## Two families read attack-target entropy, and they are not the same quantity
+
+The v2 program's V-6 row, decided at Rung 8
+(`experiments/2026-08-25-change-rung8-rent-audit-diagnostics/SPEC.md` §3 D1):
+**declare a distinct family; re-found neither Rung 2 signal.** Three populations
+carry these names on this tree, and each reads something different.
+
+| population | what it reads | declared? |
+|---|---|---|
+| `criticism.attack-target-entropy.v1` (Rung 2) | the WHOLE standing attack relation as it stands now — `state.att`, after closure | yes, registry |
+| `capture14.attack-target-entropy.v1` (§14.2, Rung 8) | only attacks NEWLY CARRIED inside a fixed sequence-number window `W_m(n)` — `state_diff.carry_add`, before closure | yes, registry |
+| `capture/detection.py::adjudicator_metrics` | four same-named quantities over an EVENT window, feeding `raw_flags` and nothing else | **no** — never emitted as a measure |
+
+The decision is not a preference. `problem.thrash.v1` has no §14 counterpart at
+all, so "re-found them" was only ever available for one of the two; the log
+records `att_add` and `carry_add` as separate relations, so the two registry
+entries are two quantities rather than two implementations of one; and changing
+what a declared name means while the name and its `.v1` stay put is exactly the
+drift the registry exists to prevent.
+
+Each registry entry names the other in its own `semantics`, from its own side.
+That is what the first check below holds in place — a future author who deletes
+one cross-reference has silently recreated the ambiguity.
+
+`check: python -c "from deepreason.signals import declaration as d; a=d('criticism.attack-target-entropy.v1'); b=d('capture14.attack-target-entropy.v1'); assert a and b and a.semantics != b.semantics and 'capture14.attack-target-entropy.v1' in a.semantics and 'criticism.attack-target-entropy.v1' in b.semantics"`
+
+The third population stays undeclared BECAUSE it is never emitted. That is a
+fact about `detection.py`, not a promise about it, so it is checked as one: the
+day someone wires `adjudicator_metrics` to `record_measure` without declaring
+it, this fails.
+
+`check: ! grep -q "record_measure" src/deepreason/capture/detection.py`
+
+All six §14 diagnostics are declared with a real unit and a real staleness — no
+new signal may carry the migration debt marker.
+
+`check: python -c "from deepreason.signals import declaration as d; ns=('stream-contraction','attack-target-entropy','criticism-debt','reinstatement-rate','validity-attack-rate','exogenous-grounding-ratio'); ds=[d('capture14.%s.v1' % n) for n in ns]; assert len(ds)==6 and all(x and x.unit=='ratio' and x.staleness=='cycle' for x in ds)"`
+
 ## Where to change what
 
 | To do this | Read | Test |

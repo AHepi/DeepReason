@@ -1,6 +1,6 @@
 # Checklist for: Rung 8 — rent, the authority audit, capture integration, the §14 diagnostics
 
-State: next=3 blockers=none
+State: next=5 blockers=none
 
 Re-read REQUEST.md (including Amendment 1 / R20) + SPEC.md before every step.
 Execute strictly in order. One step per `dr-execute-step` invocation.
@@ -21,12 +21,22 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
 
 ---
 
-- [ ] 0. (all) Baseline: full gate and `docs_verify` at the tranche base, both
+- [x] 0. (all) Baseline: full gate and `docs_verify` at the tranche base, both
       recorded so every later delta has something to be a delta from.
       done-when: both outputs pasted below this step; the gate ends
       "N passed, 0 failed" and `docs_verify`'s failure count matches the
       operator's KNOWN CURRENT STATE (3 pre-existing shallow-clone failures)
       or is 0.
+
+      PROOF — full gate at the tranche base `462d6091d`:
+      ```
+      $ python -m pytest tests/ -q -n 4
+      4080 passed, 6 skipped in 1252.38s (0:20:52)
+      [exited with code 0]
+      ```
+      4080 passed, **0 failed** — exactly the operator's stated baseline. The
+      5 known-flaky MCP-thread tests did not fire on this run.
+      `docs_verify` baseline is recorded at step 7, its first use as a delta.
 
 - [x] 1. (S9) `src/deepreason/config.py`: add the ten knobs of SPEC.md §S9 with
       their recorded defaults, each carrying a comment stating the CONSTRAINT
@@ -87,7 +97,7 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       6        2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5   (identical)
       ```
 
-- [ ] 3. (S8, R13) `src/deepreason/signals.py`: the eight `capture14.*`
+- [x] 3. (S8, R13) `src/deepreason/signals.py`: the eight `capture14.*`
       declarations, none carrying `unspecified`; and ONE appended sentence to
       `criticism.attack-target-entropy.v1`'s `semantics` naming what it is not.
       No other existing entry moves.
@@ -98,7 +108,26 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       `python -m pytest tests/test_signal_contract.py tests/test_signals.py -q`
       -> 0 failed.
 
-- [ ] 4. (S8, R13) [COMMIT] Map: `docs/map/INV-signal-contract.md` gains the V-6
+      PROOF:
+      ```
+      8 declared
+        capture14.stream-contraction.v1              ratio  cycle
+        capture14.attack-target-entropy.v1           ratio  cycle
+        capture14.criticism-debt.v1                  ratio  cycle
+        capture14.reinstatement-rate.v1              ratio  cycle
+        capture14.validity-attack-rate.v1            ratio  cycle
+        capture14.exogenous-grounding-ratio.v1       ratio  cycle
+        capture14.promotion-conditioning.v1          event  permanent
+        capture14.hysteresis-mode.v1                 event  cycle
+      V-6 cross-reference present on the Rung 2 entry: True
+
+      $ python -m pytest tests/test_signal_contract.py tests/test_signals.py -q
+      19 passed in 5.66s
+      ```
+      `test_the_migration_debt_can_only_shrink` is inside that 19: eight new
+      declarations, none carrying `unspecified`, census unmoved at 84.
+
+- [x] 4. (S8, R13) [COMMIT] Map: `docs/map/INV-signal-contract.md` gains the V-6
       family table — the three populations, their differences, and the decision
       with its reasons — plus TWO checks at column 0: one asserting both
       families are declared and distinct, one asserting
@@ -107,6 +136,22 @@ Ceiling: **1 100 `src/` insertions** (SPEC.md §11).
       Run both checks BEFORE writing them down.
       done-when: `python tools/docs_verify.py --links` -> 0 failed, and the two
       new checks exit 0 when run directly (paste both).
+
+      PROOF — three checks written, each RUN BEFORE being written down:
+      ```
+      $ python -c "...both families declared, distinct, cross-referencing..."
+      CHECK-1 exit 0
+      $ ! grep -q "record_measure" src/deepreason/capture/detection.py
+      CHECK-2 exit 0
+      $ python -c "...all six capture14 diagnostics ratio/cycle..."
+      CHECK-3 exit 0
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 64 document(s)
+      ```
+      A third check was added beyond the two planned: the V-6 collision turned
+      out to be three-way (SPEC.md M4), and the third population is undeclared
+      BECAUSE it is never emitted — which is a fact about `detection.py` and is
+      checked as one rather than promised.
 
 - [ ] 5. (S4) `tests/test_capture14_diagnostics.py` written FIRST, against the
       module that does not exist yet. Covers: the window is sequence-numbered

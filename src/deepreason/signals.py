@@ -464,7 +464,12 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "touched, near 0 means it is concentrated on a single "
                   "target, and 0.0 also covers 'fewer than two targets have "
                   "been attacked at all'. Dispersion only — it says nothing "
-                  "about whether any attack is sound or any target is wrong",
+                  "about whether any attack is sound or any target is wrong. "
+                  "NOT `capture14.attack-target-entropy.v1`, which is a "
+                  "different quantity over a different relation: that one "
+                  "reads only the attacks NEWLY CARRIED inside a fixed "
+                  "sequence-number window, this one reads the whole standing "
+                  "attack relation as it stands now (V-6)",
         staleness="cycle",
     ),
     SignalDeclaration(
@@ -607,6 +612,133 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "rather than a fault. Reading it changes only how much a "
                   "seat may spend, never what any artifact is",
         staleness="run",
+    ),
+    # §14's six capture diagnostics (v2 calculus Rung 8, RIDER 2 / R48). A
+    # DISTINCT FAMILY from the Rung 2 detection signals above, decided in that
+    # tranche's SPEC.md §3 D1 and named so the distinction cannot be lost: the
+    # `criticism.`/`problem.` family reads the standing graph as it stands, the
+    # `capture14.` family reads a fixed SEQUENCE-NUMBER window W_m(n) =
+    # {max(1, n-m+1) .. n}, never wall-clock and never an event count. Every
+    # value is canonically rounded at a precision the payload states (A10).
+    # All six price ATTENTION and none may reach a label (Theorem 14.1).
+    SignalDeclaration(
+        name="capture14.stream-contraction.v1",
+        unit="ratio",
+        semantics="§14.1's SC over the conjectures registered in a fixed "
+                  "sequence-number window: 1 − (N_eff − 1)/(N − 1), where "
+                  "N_eff = 1/Σp_z² over deterministic BEHAVIOURAL signatures "
+                  "(commitment-verdict vector, declared relations, problem "
+                  "lineage). Near 1 means the stream has collapsed into a few "
+                  "repeated forms; near 0 means every conjecture behaves "
+                  "differently. It measures the VARIETY of what is being "
+                  "proposed and says nothing about whether any of it is right "
+                  "— a contracted stream of correct conjectures reads the same "
+                  "as a contracted stream of wrong ones. Absent (`none`) when "
+                  "the window holds fewer than two conjectures",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.attack-target-entropy.v1",
+        unit="ratio",
+        semantics="§14.2's ATH: normalised Shannon entropy of how the attacks "
+                  "NEWLY CARRIED inside a fixed sequence-number window are "
+                  "distributed over the targets they attack. 1.0 = spread "
+                  "evenly, 0.0 = every new attack landed on one target. NOT "
+                  "`criticism.attack-target-entropy.v1`, which reads the whole "
+                  "standing attack relation rather than a window of new "
+                  "carriage; the two are different quantities over relations "
+                  "the log records separately, and neither supersedes the "
+                  "other (V-6). Dispersion only: it says nothing about whether "
+                  "any attack is sound. Absent (`none`) when the window "
+                  "carried no attack",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.criticism-debt.v1",
+        unit="ratio",
+        semantics="§14.3's Debt: of the unrefuted artifacts OLDER than a "
+                  "declared age floor h, the fraction with no live attacker "
+                  "(no attacker that is itself unrefuted). 1.0 means nothing "
+                  "old is currently being criticised; 0.0 means everything old "
+                  "is. It measures where criticism is NOT, and it is not "
+                  "evidence that the uncriticised artifacts are wrong, or "
+                  "right — only that nothing is currently arguing with them. "
+                  "Absent (`none`) when nothing in the record is old enough",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.reinstatement-rate.v1",
+        unit="ratio",
+        semantics="§14.4's RR: refuted→unrefuted label changes inside a fixed "
+                  "sequence-number window, per criticism registered in that "
+                  "window. A persistently zero rate can indicate that "
+                  "criticism only accumulates and is never itself criticised. "
+                  "'Can indicate' is the whole claim: a zero rate is equally "
+                  "consistent with criticism that has simply been right every "
+                  "time, and the signal cannot tell those apart. Absent "
+                  "(`none`) when the window registered no criticism",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.validity-attack-rate.v1",
+        unit="ratio",
+        semantics="§14.5's VAR: of the attacks newly carried inside a fixed "
+                  "sequence-number window, the fraction whose target is a "
+                  "warrant-VALIDITY artifact rather than an ordinary one — "
+                  "whether the machinery that turns judgments into attacks is "
+                  "itself under criticism. It reports exposure of that "
+                  "machinery, never its soundness: a high rate is not evidence "
+                  "the validity nodes are bad, and a zero rate is not evidence "
+                  "they are good. Absent (`none`) when the window carried no "
+                  "attack",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.exogenous-grounding-ratio.v1",
+        unit="ratio",
+        semantics="§14.6's EGR: of the live warrants registered inside a fixed "
+                  "sequence-number window, the fraction whose validity lineage "
+                  "terminates ONLY in budgeted program checks, recorded "
+                  "evidence or appellate rulings, rather than in a closed loop "
+                  "of mutually dependent judgments. It measures CONTACT with "
+                  "anchors outside the current judgment loop and establishes "
+                  "no correctness whatever: an externally grounded warrant can "
+                  "be wrong and a closed-loop one can be right. Absent "
+                  "(`none`) when the window registered no live warrant",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="capture14.promotion-conditioning.v1",
+        unit="event",
+        semantics="one half of a promotion's before/after conditioning "
+                  "measurement (inputs: [signal, phase, frame assertion id, "
+                  "payload digest]), where phase is `before` — recorded when a "
+                  "frame assertion is first consulted, carrying the §14 vector "
+                  "at elevation and the number of problems the new grant now "
+                  "frames — or `after`, recorded at the next diagnostics "
+                  "emission, carrying the same vector once the frame has "
+                  "conditioned a cycle of generation. A frame slice is the "
+                  "strongest conditioning this calculus applies (G-4), so the "
+                  "cost of applying it is measured rather than assumed. The "
+                  "pair is a MEASUREMENT of conditioning, not a verdict on it: "
+                  "it neither approves nor impugns the promotion, and no "
+                  "standing, label or rank reads it",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
+        name="capture14.hysteresis-mode.v1",
+        unit="event",
+        semantics="the attention mode a deterministic hysteresis controller "
+                  "entered or left, with the policy artifact that authorised "
+                  "it (inputs: [signal, mode, policy artifact id]). Entry "
+                  "needs a threshold predicate over the six §14 diagnostics; "
+                  "exit needs a STRICTLY stricter one, which is what makes it "
+                  "hysteresis rather than a toggle. The mode may widen render "
+                  "slices and may alter no attack edge, no dependency edge and "
+                  "no label (Theorem 14.1) — two states differing only in mode "
+                  "have identical labels. Reading it changes what a seat is "
+                  "SHOWN, never what anything IS",
+        staleness="cycle",
     ),
 )
 
