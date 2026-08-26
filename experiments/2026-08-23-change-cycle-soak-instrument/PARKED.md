@@ -9,6 +9,18 @@ STOP and say so."
 
 ## P1 — a repair under transactional authorization leaves a record `verify_root` rejects
 
+> **RESOLVED 2026-08-25** by `experiments/2026-08-25-defect-workflow-call-pairing/`.
+> The defect was real and is fixed, but this note's own framing was wrong twice over:
+> the failing event is NOT a repair (`attempt: 0`, four transport retries inside one
+> authorized attempt), and neither suspect below was the cause. `verify_root`'s
+> pairing check compared an absent raw blob spelled `None` on the durable attempt
+> against the same absence spelled `""` on the call — false by construction for every
+> `outcome="transport_failure"` attempt, repair or not. The checker over-specified;
+> the writer was right. See `docs/ERRATA.md` E53. The standing caveat below asked the
+> right question and it was answered: no committed root witnesses the class (0 of 459
+> attempts across 14 roots), so the fix rests on the induced witness plus the
+> structural argument, and that is recorded as such rather than glossed over.
+
 **What.** With one induced repair, the run produces a record that fails the
 `workflow-call-pairing` epistemic check: `event seq=24: provider result differs
 from its authorized attempt`. Deterministic — two runs of
@@ -70,6 +82,11 @@ verify_root's output shape may not move to make this green.
 ---
 
 ## P2 — the reservation-bound seam itself (D4), for the window that owns it
+
+> **RESOLVED** by `experiments/2026-08-23-fix-reservation-bound-authority/`; the soak
+> now reports `[PASS] D4-reservation-bound`. The `EXPECTED_RED` deletion this note's
+> prompt required was missed by that tranche and carried out 2026-08-25 by the P1
+> tranche above (`docs/ERRATA.md` E54). The map is now empty.
 
 **What.** The default soak (`--cycles 8`, no induction) dies at cycle 1 with
 `operational_failure` / `transactional reservation bound differs from rendered

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-workflow -->
-Verified-at: a7ace954e
+Verified-at: e9fac8671
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/workflow/transaction.py, src/deepreason/workflow/transaction_service.py, src/deepreason/workflow/repair_transaction.py, src/deepreason/bridge/transactional_adapter.py
 Sides: DR-SUB-llm, DR-SUB-workflow
@@ -275,6 +275,29 @@ The tests that catch you, cheapest first:
 `check: python -c "import pathlib; tests=('tests/test_adapter_workflow_authorization_c2.py','tests/test_v6_global_dispatch_guard.py','tests/test_v6_profile_authority.py','tests/test_v6_contract_schema_repair_runtime.py','tests/test_v6_live_repair_transactions.py','tests/test_v6_controller3_replay_verification.py','tests/test_v6_nonconjecture_recovery.py','tests/test_v6_bridge_transactions.py'); gone=[t for t in tests if not pathlib.Path(t).is_file()]; assert not gone, gone; assert 'fail(' + chr(34) + 'workflow-replay' + chr(34) in pathlib.Path('src/deepreason/invariants.py').read_text(), 'verify_root check name'"`
 
 ## Traps
+
+- **The two record types spell "no raw blob" differently, and only one reader
+  translated.** `LLMCall.raw_ref` is a plain `str` whose absence is `""`;
+  `ProviderAttemptV1.raw_ref` is `str | None` whose absence is `None`.
+  `record_provider_attempt` bridges them with `call.raw_ref or None`, and
+  `replay.py`'s copy of the six pairing agreements re-applies the same
+  translation — but `verify_root`'s copy compared the two raw. Because the
+  writer ALWAYS applies `or None`, that comparison was unsatisfiable for the
+  whole `outcome="transport_failure"` class: any dispatch that reached the
+  provider and got no body made a run fail its own verifier while terminating
+  cleanly. Reproduced offline by
+  `python -u scripts/cycle_soak.py --case epoch3 --induce-repairs 2` (violation
+  at seq=31; the same shape at seq=24 in the soak tranche's own two recorded
+  runs), parked as P1 in
+  `experiments/2026-08-23-change-cycle-soak-instrument/PARKED.md`, fixed by
+  `experiments/2026-08-25-defect-workflow-call-pairing/`. No committed root
+  witnessed it: 0 of 459 committed provider attempts across 14 roots are
+  `transport_failure`. The general lesson outlives this fix — when two record
+  types encode the same absence differently, a translation applied at the
+  writer is owed to EVERY reader of the same agreement, and the copy that
+  forgets it fails closed on a shape the writer cannot help producing.
+`check: python -c "import re, pathlib; inv=pathlib.Path('src/deepreason/invariants.py').read_text(); rep=pathlib.Path('src/deepreason/workflow/replay.py').read_text(); svc=pathlib.Path('src/deepreason/workflow/transaction_service.py').read_text(); assert 'attempt.raw_ref == (call.raw_ref or None)' in inv, 'verifier lost the translation'; assert 'attempt.raw_ref != (call.raw_ref or None)' in rep, 'replay lost the translation'; assert 'raw_ref=call.raw_ref or None,' in svc, 'writer lost the translation'" && python -m pytest tests/test_v6_transport_failure_pairing.py -q`
+
 
 - **The reservation bound is ONE number, and the adapter must not compute a
   second one.** Until 2026-08-23 `preview_request` returned a route's CEILING

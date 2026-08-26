@@ -92,10 +92,17 @@ Recorded 2026-08-12 at main 074ef1549.
   tranche's RESULTS.md for the standing honesty rows.
   `--induce-repairs N` is a PROBE, not part of this baseline: it makes the
   stub answer the run's first N wire schemas unusably once, to reach the
-  repair ladder the always-valid stub cannot. Under it the soak currently
-  exits 1 on a `workflow-call-pairing` violation, parked as P1 in that
-  tranche. Do not read that exit as a baseline delta; the baseline is the
+  repair ladder the always-valid stub cannot. **It now exits 0** — it exited 1
+  on a `workflow-call-pairing` violation until
+  `experiments/2026-08-25-defect-workflow-call-pairing/` fixed the verifier
+  (the check compared an absent raw blob spelled `None` on the durable attempt
+  against the same absence spelled `""` on the call). Seeing exit 1 under the
+  probe again is a FINDING, not a baseline. The baseline proper remains the
   bare invocation above.
+  `EXPECTED_RED` is now EMPTY, and that is its correct resting state: its one
+  entry (`D4-reservation-bound`) outlived its fix and was removed by the same
+  tranche. While the map is empty `_verdict` cannot return 3, so the
+  "empty map plus exit 3" finding above is unreachable rather than latent.
 
 ## Census anchors (move with the tree; verify before trusting)
 

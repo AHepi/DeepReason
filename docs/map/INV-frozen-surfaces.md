@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: 748c9ab61
+Verified-at: e9fac8671
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -151,6 +151,34 @@ proof of semantic contact" — so this is the gate working as documented, and th
 disposal is by measurement rather than by assurance.
 
 `check: ! grep -q "controller import clamp\|from deepreason.controller" src/deepreason/run_manifest.py`
+
+**Granted contact, 2026-08-25 — the `workflow-call-pairing` raw-blob normalization.** The
+operator forecast this contact in the tranche instruction and directed that the grant be
+requested in FIX.md before implementation ("if the fix wants contact, request the grant in
+FIX.md BEFORE implementing, with the reader-vs-writer asymmetry argued; the monitor reviews it
+there"). It was, with `tools/blast_radius.py`'s own `CONTACT` verdict and both contact rows
+pasted and disposed one by one, at
+`experiments/2026-08-25-defect-workflow-call-pairing/FIX.md`.
+
+What moved: ONE comparison inside `verify_root`'s pairing check — `attempt.raw_ref ==
+call.raw_ref` became `attempt.raw_ref == (call.raw_ref or None)`, matching the writer
+(`transaction_service.py`, `raw_ref=call.raw_ref or None`) and replay's copy of the same six
+agreements (`replay.py`, `attempt.raw_ref != (call.raw_ref or None)`). No check name, no
+`_EPISTEMIC_CHECKS` entry, no `report.py` channel, no record format.
+
+**This grant is NOT insertions-only, and does not claim to be.** Unlike the 2026-08-21,
+2026-08-22 and 2026-08-24 contacts (52+1, 87+1 and 11+0, zero deletions), this is a one-line
+modification, so additivity carries none of the safety argument. Two other things carry it
+instead, and both are measured. First, the predicate is ADD-ONLY in the sense this document's
+`SUB-verification` sibling requires: every pair accepted before is accepted after, and exactly
+one new pair — an absent attempt raw against an absent call raw — is admitted. Second, no
+committed root contains an event the changed line can decide differently: across the 14
+committed roots carrying `objects/workflow-provider-attempt-v1/`, 459 attempts in total, there
+are zero with `outcome: "transport_failure"` and zero with `"raw_ref": null`. The census, not a
+sweep, is the instrument — it says why no verdict COULD move rather than that none did.
+
+`check: python -c "import inspect; from deepreason.invariants import _controller_v3_history as h; src=inspect.getsource(h); assert 'attempt.raw_ref == (call.raw_ref or None)' in src" && grep -q "raw_ref=call.raw_ref or None," src/deepreason/workflow/transaction_service.py && grep -q "attempt.raw_ref != (call.raw_ref or None)" src/deepreason/workflow/replay.py && python -m pytest tests/test_v6_transport_failure_pairing.py -q`
+`check: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0`
 
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 

@@ -1,5 +1,5 @@
 <!-- DR-SUB-verification -->
-Verified-at: f9fcd1136
+Verified-at: e9fac8671
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
@@ -154,6 +154,28 @@ when `stats` was otherwise empty.
 `check: grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/verification/simulation.py && grep -q "imports are not allowed" src/deepreason/verification/simulation.py && grep -q "def guard(source, label):" src/deepreason/verification/contained.py && grep -q "may not import or mutate scope" src/deepreason/verification/contained.py && grep -q "def _containment_limits(" src/deepreason/verification/contained.py && grep -q "def containment_prefix(cls)" src/deepreason/verification/contained.py && grep -q "def seccomp_available()" src/deepreason/verification/_sandbox.py && grep -q "def _derive_v2(source: str) -> str:" src/deepreason/verification/brokered.py`
 
 ## Traps
+
+- **A check that compares two types' spellings of the same absence is
+  unsatisfiable, not strict.** `workflow-call-pairing`'s sixth agreement read
+  `attempt.raw_ref == call.raw_ref`, across `ProviderAttemptV1.raw_ref`
+  (`str | None`, absent is `None`) and `LLMCall.raw_ref` (`str`, absent is
+  `""`). The writer, `transaction_service.record_provider_attempt`, builds the
+  first from the second through `call.raw_ref or None`, so whenever the call
+  carried no body the comparison was `None == ""` — False by construction, for
+  every attempt in the `outcome="transport_failure"` class, forever. A run
+  could terminate `completed`/`budget_exhausted` at full cycle depth and still
+  fail its own verifier. What makes this specifically a VERIFICATION trap is
+  that the same file already ruled the other way on the same fact: the `blobs`
+  check computes `empty_raw_allowed = bool(trace and trace[-1].usage_unknown)`
+  and skips an empty `e.llm.raw_ref` — so `verify_root` contradicted itself,
+  and the contradiction was invisible because the two checks live 3 400 lines
+  apart. Fixed by `experiments/2026-08-25-defect-workflow-call-pairing/`; the
+  fix ADDS one authorized pair and removes none, per this document's own
+  add-only rule above. Before trusting a `verify_root` predicate, ask whether
+  any record the writer can produce satisfies it — a check no legal record can
+  pass is a defect that looks like rigour.
+`check: python -c "import inspect, re; from deepreason.invariants import verify_root, _controller_v3_history; pair=inspect.getsource(_controller_v3_history); blobs=inspect.getsource(verify_root); assert 'attempt.raw_ref == (call.raw_ref or None)' in pair, 'the pairing check lost its normalization'; assert re.search(r'empty_raw_allowed = bool\\(trace and trace\\[-1\\]\\.usage_unknown\\)', blobs), 'the blobs check lost its empty-raw rule'" && python -m pytest tests/test_v6_transport_failure_pairing.py -q`
+
 
 - **`attempt-limits` must re-derive the SAME control barrier the controller
   wrote against, or every steered run verifies as invalid.** A per-attempt
