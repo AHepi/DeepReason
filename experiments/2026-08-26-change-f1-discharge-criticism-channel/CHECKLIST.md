@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=16 blockers=none. `src/` sits at 899 of the 900 ceiling with ONE line of margin (R21; see step 14/15's R19 record) — no further `src/` change is planned, and any a later gate forces is a stop to raise, not absorb.
+State: next=17 blockers=none. `src/` sits at 899 of the 900 ceiling with ONE line of margin (R21; see step 14/15's R19 record) — no further `src/` change is planned, and any a later gate forces is a stop to raise, not absorb.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1081,7 +1081,7 @@ recorded here rather than left as a silent reordering.
       document asserts its anchor matched. The checkboxes and per-step records
       were correct throughout — only the header lied.
 
-- [ ] 16. (S8) Architecture-test check 3 — a fourth kind enters by
+- [x] 16. (S8) Architecture-test check 3 — a fourth kind enters by
       DECLARATION: a synthetic kind reaches the wire schema enum, the
       screening and the pack render with `rules/conj.py`, `llm/packs.py` and
       `llm/wire.py` UNEDITED, and none of those three files contains the
@@ -1092,6 +1092,46 @@ recorded here rather than left as a silent reordering.
       tests/test_discharge_contract.py -q` → 0 failed; (b)
       `grep -c FAILED proof/arch_red.txt` >= 1 AND
       `git status --porcelain src/` is empty
+
+      PASTED OUTPUT:
+      ```
+      (a) $ python -m pytest tests/test_discharge_contract.py -q
+          6 passed in 3.51s
+
+      (b) MUTATION: replace the registry-derived enum in llm/contracts.py with
+          the hard-coded three -- i.e. do exactly what the modularity law
+          forbids, adding a kind by editing a consumer instead of declaring it.
+
+          == RED ==
+          >   assert "scoped_out" in discharge_kind_enum()
+          E   AssertionError: assert 'scoped_out' in
+              ['revised', 'rebutted', 'departure_declared']
+          FAILED test_no_consumer_reaches_past_the_interface
+          FAILED test_a_fourth_kind_enters_by_declaration_alone
+          2 failed, 4 passed in 3.51s
+
+          == RESTORED, GREEN ==
+          6 passed in 3.56s
+
+      $ git status --porcelain src/      (empty)
+      ```
+      Committed at `proof/arch_red.txt`. `__pycache__` cleared before each
+      measurement — stale bytecode survives a revert, which `DR-SCHEMA`'s own
+      measurement rule records as having produced a phantom result once already.
+
+      **TWO checks fired, not one, and the second is the interesting one.**
+      `test_a_fourth_kind_enters_by_declaration_alone` catches the hard-coded
+      enum head-on, as designed. `test_no_consumer_reaches_past_the_interface`
+      ALSO went red — because un-deriving the enum removes
+      `llm/contracts.py`'s import of `deepreason.discharge`, which breaks the
+      pinned consumer pair. That pin was written as a positive anchor and then
+      CORRECTED at step 12 when it caught a real design consequence; it turns
+      out to independently guard the derivation too. Two checks, from different
+      directions, on the same law.
+
+      R14 is now discharged in the form the operator's amendment demanded: not
+      "the design is modular" but "here is the check, here is it going red on
+      the violation, here is it going green again".
 
 - [ ] 17. (S11) Move the map with the code: `DR-CON-discharge-channel`'s
       remaining checks now pass; `DR-CON-conjecture-source` gains the
