@@ -463,3 +463,75 @@ RESUMED, not restarted: `arm_s.py` appends to `results.jsonl`, 34 samples and
 226 986 tokens were already on disk, and P-C1's ARM S was resumed three times
 by the same mechanism. The §5.4 admissibility rule and Appendix A's
 shared-stream rule are unchanged and still bind.
+
+### APPENDIX A — AMENDMENT 2, 2026-08-26: the seat timeout
+
+**Appended, never an edit.** The second ARM H3 attempt is RETIRED, not
+deleted, and this records why.
+
+**What happened.** Amendment 1's `max_tokens: 100000` FIXED truncation —
+`truncated=False`, where 32 768 truncated 2 of 2. The call still arrived
+invalid, by a different route:
+
+    outcome: transport_failure   usage_status: unknown
+    tokens: 0   truncated: False   ms: 1 095 567   (18.3 minutes)
+
+**The arithmetic names the cause.** `1 095 567 ms / 180 s = 6.09` — six
+consecutive 180-second socket timeouts against the seat's `timeout_s: 180`,
+retried and cut off each time. Eighteen minutes spent, nothing recorded, no
+tokens counted, and NO ERROR TEXT ANYWHERE IN THE RECORD: a transport
+failure is silent in exactly the way a truncation is not.
+
+**Corroborated by the other arm, which is the useful part.** ARM S2 runs the
+SAME model with the SAME thinking enabled and survives: **median 101 s, max
+170 s** against its own 180 s timeout — right at the edge. It clears the wall
+only because it asks for a short answer under a 32 768 cap. A reasoning model
+asked for up to 100 000 tokens does not.
+
+So both earlier caps produced nothing, for OPPOSITE reasons:
+
+| cap | outcome |
+|---|---|
+| 32 768 | reasoning fills the cap → truncated, invalid |
+| 100 000 | reasoning runs past 180 s → transport failure, invalid |
+
+**`timeout_s` was the binding field throughout**, and neither earlier
+amendment touched it. Amendment 1 was not wrong — the cap really was too
+small — it was incomplete.
+
+**The operator's authorisation, verbatim: "Do it."** — on a stated
+recommendation of `timeout_s: 900` with the cap left at 100 000, offered
+against a cheaper alternative (`600` with the cap back to 65 536) which was
+not chosen.
+
+**The amendment.** `timeout_s` becomes **900** on every seat, ARM H3 only.
+Its registered delta from P-C1's config is now THREE seat fields —
+`reasoning` REMOVED, `max_tokens` 32 768 → 100 000, `timeout_s` 180 → 900 —
+plus `DISCHARGE_POLICY`. `preflight_pc2.py` S2 asserts all three VALUES and
+S4 asserts each whole TRANSITION, so a field that drifted to a fourth value
+still fails. No soak, per the standing ruling; requalification reruns because
+`timeout_s` is part of the route spec.
+
+**WALL CLOCK IS NOW THE BINDING CONSTRAINT, and it is registered here because
+the operator's standing law does not cover it.** "Tokens are cheap" is about
+money; this is about time. At these generation lengths a single successful
+call plausibly runs 5–15 minutes, and ARM H2 needed 135 calls to reach cycle
+11. A thinking-ON run at comparable depth is plausibly a FULL DAY of wall
+clock. If ARM H3 stops on cycles, tokens or time before reaching ARM H2's
+depth, **that shallower run is the result and is reported as one** — Appendix
+A registered exactly this, and it is not a fault of the cap, the timeout, or
+the harness.
+
+**Both retired attempts are kept as evidence and never quoted as ARM H3
+results.** Neither produced a cycle or a valid candidate:
+
+- `retired-truncation-cap32768-run-58fb0d20488be869/` — at 32 768,
+  thinking-ON glm-5.2 cannot answer this question at all: reasoning alone
+  fills the cap.
+- `retired-transport-timeout180-run-42ad288038dd606c/` — at 100 000 with a
+  180 s timeout, the answer never arrives.
+
+Both are measurements in their own right, and together they say something the
+successful run will not: **the operating envelope for a thinking-ON reasoning
+model on a hard construction question is narrow, and P-C1's inherited seat
+settings sat outside it in two independent ways.**

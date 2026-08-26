@@ -66,7 +66,19 @@ roles:
     max_tokens: 100000
     # reasoning: OMITTED (PREREG Appendix A). Not set to a value -- UNSET is
     # what makes the model think; any string sends a reasoning_effort.
-    timeout_s: 180
+    # 900, on the operator's authorisation 2026-08-26 ("Do it.").
+    # THE FIELD THAT WAS BINDING ALL ALONG. At cap 32768 the reply was
+    # truncated; at 100000 it was not, and the call died in TRANSPORT
+    # instead -- ms=1095567, which is 6.09 x 180s: six consecutive socket
+    # timeouts, retried and cut off each time, 18 minutes for nothing and
+    # no error text anywhere in the record.
+    #
+    # The other arm is the corroboration and the reason 180 looked safe:
+    # arm_s.py runs the SAME model with the SAME thinking at median 101s,
+    # max 170s, against its own 180s timeout -- right at the edge. It
+    # clears the wall only because it asks for a short answer under a
+    # 32768 cap. A reasoning model asked for up to 100000 tokens does not.
+    timeout_s: 900
     output_mode: json_object
   argumentative_critic: *solo_glm
   defender: *solo_glm

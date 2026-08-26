@@ -60,6 +60,10 @@ ARM_H3_MAX_TOKENS = 100_000
 # P-C1's cap, which ARM H2 also carried. Named so the accounting below asserts
 # the change is FROM the registered old value, not merely TO the new one.
 P_C1_MAX_TOKENS = 32_768
+# Amendment 2 (operator, 2026-08-26: "Do it."). The field that was binding
+# all along: 180s produced six stacked socket timeouts per call.
+ARM_H3_TIMEOUT_S = 900
+P_C1_TIMEOUT_S = 180
 
 
 def _is_registered_seat_change(path: str, old_v, new_v) -> bool:
@@ -74,6 +78,8 @@ def _is_registered_seat_change(path: str, old_v, new_v) -> bool:
         return old_v == "none" and new_v is None
     if path.endswith("/max_tokens"):
         return old_v == P_C1_MAX_TOKENS and new_v == ARM_H3_MAX_TOKENS
+    if path.endswith("/timeout_s"):
+        return old_v == P_C1_TIMEOUT_S and new_v == ARM_H3_TIMEOUT_S
     return False
 
 # S4's allowlist.  Each entry names the REBUILD tranche that owns the change,
@@ -166,17 +172,20 @@ def s2_config_delta() -> None:
         # registered delta. Both values are asserted, not just the field names:
         # a cap that drifted to some third number would be a third difference.
         caps = {spec.get("max_tokens") for spec in b.get("roles", {}).values()}
+        timeouts = {spec.get("timeout_s") for spec in b.get("roles", {}).values()}
         ok = (
             delta == [THE_ONE_FIELD, "roles"]
-            and set(seat_delta) == {"reasoning", "max_tokens"}
+            and set(seat_delta) == {"reasoning", "max_tokens", "timeout_s"}
             and thinking_on
             and caps == {ARM_H3_MAX_TOKENS}
+            and timeouts == {ARM_H3_TIMEOUT_S}
         )
         detail = (
             f"expected [{THE_ONE_FIELD!r}, 'roles'] with the ONLY seat-level "
-            f"deltas being `reasoning` REMOVED and `max_tokens` = "
-            f"{ARM_H3_MAX_TOKENS}; seat delta={sorted(set(seat_delta))}, "
-            f"reasoning absent on every seat={thinking_on}, caps={sorted(caps)}"
+            f"deltas being `reasoning` REMOVED, `max_tokens` = "
+            f"{ARM_H3_MAX_TOKENS} and `timeout_s` = {ARM_H3_TIMEOUT_S}; "
+            f"seat delta={sorted(set(seat_delta))}, reasoning absent on every "
+            f"seat={thinking_on}, caps={sorted(caps)}, timeouts={sorted(timeouts)}"
         )
 
     _check(
