@@ -94,3 +94,4 @@ every seat's model is listed
 [2026-08-26T20:09:41Z] === QUALIFY: production-contract doctor (concurrency=2) ===
 [2026-08-26T20:13:05Z] QUALIFY OK rc=0
 [2026-08-26T20:13:05Z] === REASON: run --budget cycles=24 --token-budget 3000000 ===
+[2026-08-26T21:25:52Z] REASON rc=4 -- see /home/user/DeepReason/experiments/2026-08-26-pc2-rematch/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)
