@@ -475,9 +475,28 @@ is the correct outcome — such a field must not use index replies.
   load-bearing claim, each of which must be able to fail
   (`docs_verify.py --audit`).
 - **Updated** `docs/map/INDEX.md` (invariants table row),
-  `docs/map/SUB-llm.md` (the new module), and
+  `docs/map/SUB-llm.md` (the new module),
   `docs/map/CON-packs-and-token-economy.md` (menus as sections, the new
-  `DISCLOSED_ON_DROP` members).
+  `DISCLOSED_ON_DROP` members), and `docs/map/SEAM-llm-x-rules.md`.
+
+  The seam update is REQUIRED, not optional, and was found by reading the
+  seam before the subsystems (CLAUDE.md's map preflight order). That
+  document's second `check:` asserts the set of names crossing
+  `rules/` → `llm/` with `mods >= {...}` and `seen >= {...}` — superset
+  tests, so a new `deepreason.llm.reference_menu` import from `conj.py`
+  and `crit.py` passes it. What does NOT survive unattended is the
+  document's own prose count, "Thirty-nine names cross the boundary",
+  and its "Where it is expressed" table, which has a row for every pack
+  renderer. Both move in the same commit as S4/S5.
+
+  Two constraints that document imposes on this design, recorded here
+  because discovering them at implementation time would be the expensive
+  order: (a) **`AllocatedPack` must be re-applied** to any post-allocation
+  suffix, or the adapter re-clips the whole prompt — which is exactly what
+  S3's `artifact_alias` suffix path does; (b) bytes a rule prepends come
+  out of the pack budget BEFORE rendering (`_conditioned_budget`), not
+  after, which is the shape S3's pre-allocation menus follow by entering
+  `_allocate_sections` as real sections.
 
 `accept:` `python tools/docs_verify.py` (FULL, not `--fast`) → 0 failed;
 `python tools/docs_verify.py --audit` → 0 refused; `python
