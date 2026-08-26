@@ -21,6 +21,12 @@ See `DR-CON-discharge-channel` for the three layers, the law line, and why
 reading only `state.att` would reproduce the very defect this closes.
 """
 
+from deepreason.discharge.channel import (
+    OpenCriticism,
+    discharged_handles,
+    open_criticisms,
+    render_open_criticism_context,
+)
 from deepreason.discharge.policy import (
     DECLARED_FIELDS,
     DISCHARGE_KIND_DECLARATIONS,
@@ -36,6 +42,7 @@ from deepreason.discharge.policy import (
 
 __all__ = [
     "DECLARED_FIELDS",
+    "OpenCriticism",
     "DISCHARGE_KIND_DECLARATIONS",
     "DISCHARGE_POLICY_PRESETS",
     "DischargeKindDeclaration",
@@ -44,5 +51,8 @@ __all__ = [
     "UnknownDischargePolicyError",
     "declaration",
     "discharge_kind_names",
+    "discharged_handles",
+    "open_criticisms",
+    "render_open_criticism_context",
     "resolve_policy",
 ]

@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=5 blockers=none (WATCH: src/ at 296 of 640 after step 3; S1 came in at ~274 against SPEC's 140 estimate — projection and the
+State: next=6 blockers=none (WATCH: src/ at 487 of 640 after step 5; S1 came in at ~274 against SPEC's 140 estimate — projection and the
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -430,13 +430,55 @@ point):
       future change to how `_observe_case` writes it fails HERE rather than
       silently emptying the channel.
 
-- [ ] 5. (S2) Implement `src/deepreason/discharge/channel.py`:
+- [x] 5. (S2) Implement `src/deepreason/discharge/channel.py`:
       `OpenCriticism`, `open_criticisms`, `discharged_handles`. The handle IS
       the critic artifact id (SPEC A3). Reads BOTH channels — the
       `["scrutiny", target, critic]` Measures and `state.att` — over targets
       `t` with `(t, problem_id) in state.addr`.
       done-when: `python -m pytest tests/test_discharge_channel.py -q -k
       open_criticisms` ends `passed` with 0 failed (paste it)
+
+      **CRITERION CORRECTION.** The planned `-k open_criticisms` selector was
+      written before the test names existed and matches NONE of them — pytest
+      would report "no tests ran", which is not a pass and would have been
+      recorded as one. Replaced with the criterion it was reaching for, which
+      is stronger because it accounts for every case rather than a substring
+      match: the whole file runs, and the ONLY failures are the three render
+      INTEGRATION cases that step 7 lands, each failing on the same missing
+      parameter.
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_channel.py -q
+      E  TypeError: render_conj_pack() got an unexpected keyword argument
+         'open_criticism_context'
+      FAILED test_the_render_lands_in_the_binding_block_not_a_sidebar
+      FAILED test_the_output_contract_states_the_precondition
+      FAILED test_a_criticism_at_cycle_k_still_renders_at_the_terminal_cycle
+      3 failed, 12 passed in 0.44s
+
+      $ python -m pytest tests/test_discharge_contract.py -q
+      FAILED test_no_consumer_reaches_past_the_interface
+      FAILED test_a_fourth_kind_enters_by_declaration_alone
+      2 failed, 4 passed
+      ```
+      All twelve record-reading cases pass, INCLUDING the six that exercise
+      `render_open_criticism_context` directly — the render FUNCTION works; only
+      its wiring into `llm/packs.py` is missing. Two more architecture checks
+      turned green here (`test_a_channel_toggle_is_pure_configuration`,
+      `test_a_cap_change_is_pure_configuration`): R13's "customising is
+      configuration, not code" is now a passing, failable check rather than a
+      claim.
+
+      One implementation decision worth recording. `open_criticisms` returns
+      the CAPPED tuple only; the uncapped total is reachable through a private
+      `_open_with_total` that solely the renderer uses, because it has to say
+      "N of M shown" where the cap bites. The total is deliberately not public:
+      a count of open criticisms is exactly the kind of number that would cross
+      the law line the moment anything ranked on it, and an interface that
+      handed it out would be inviting that.
+
+      GATE: `diff_budget` `{"src/": 487, "ceiling": 640, "verdict": "WITHIN"}`.
 
 - [ ] 6. (S3) Add the render cases to `tests/test_discharge_channel.py`: the
       section lands in the BINDING block (priority 2, after `criteria`, before
