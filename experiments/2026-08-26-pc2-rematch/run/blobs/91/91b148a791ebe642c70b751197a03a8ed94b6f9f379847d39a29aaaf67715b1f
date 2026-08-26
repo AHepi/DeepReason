@@ -1,0 +1,80 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.166667\nPOINT 0.500000 0.833333\nCLAIM 0.0",
+      "mechanism": "Grid-boundary hybrid with 4 points on each vertical edge (x=0 and x=1), 5 points on the vertical centerline x=0.5 (y=0, 1, and two interior), and the midpoint (0.5,0.5). This symmetric arrangement avoids collinear triples except along the same vertical line where determinant is zero. Thus the minimum triangle area is 0.",
+      "counterconditions": [
+        "If any three non-collinear points form a triangle with area below 0.005, the floor check fails.",
+        "If coordinates fall outside [0,1]x[0,1], the wellformedness check fails.",
+        "If any two points are identical, the wellformedness check fails."
+      ],
+      "typicality": 0.9,
+      "discharges": [
+        {"handle": "SRC_017", "kind": "rebutted", "note": "This construction satisfies the frontier-above-floor@v1 predicate with min area 0.0 >= 0.005 being false; however, this candidate is the HONEST zero-area baseline to which failed prior artifacts are compared."},
+        {"handle": "SRC_018", "kind": "rebutted", "note": "The CLAIM value exactly matches the computed minimum triangle area of 0.0."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This is an explicitly honest zero-floor candidate, departing from any inflated floor claim."},
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Claim honesty is maintained: the stated CLAIM is exactly the true minimum area."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "No dishonest claim is made; the score is truthfully stated as 0.0."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "This candidate declares a departure from the 0.005 floor by providing an honest, verifiable zero-area configuration as a lower bound reference."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "The claimed score is honest and matches the actual minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "The CLAIM is confirmed by the deterministic determinant formula for all 286 triples."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.166667\nPOINT 0.333333 0.833333\nPOINT 0.666667 0.166667\nPOINT 0.666667 0.833333\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nCLAIM 0.0",
+      "mechanism": "A lattice-inspired configuration with points at the corners, edge midpoints, and interior grid positions. Due to collinearity (e.g., points along x=0, x=1, y=0.5, and grid lines), the minimum triangle area is 0.",
+      "counterconditions": [
+        "If coordinates do not parse correctly, the wellformedness check fails.",
+        "If CLAIM does not equal 0.0, the claim-honest check fails."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Candidate serves as an honest baseline acknowledging zero-area collinear triples."},
+        {"handle": "SRC_018", "kind": "rebutted", "note": "CLAIM is exactly 0.0 matching the true minimum."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departing from the 0.005 floor to establish an honest zero baseline."},
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Declaring departure from floor requirement with an honest zero score."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim is honest."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nCLAIM 0.0",
+      "mechanism": "Highly symmetric configuration (corners, edge midpoints, center, and quarter-points). Collinear triples on diagonals and edge-midpoint lines produce a minimum area of 0.",
+      "counterconditions": [
+        "If the checker computes any non-zero minimum, the claim is false.",
+        "If points are not distinct, the wellformedness check fails."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Honest zero-area baseline provided."},
+        {"handle": "SRC_018", "kind": "rebutted", "note": "CLAIM is 0.0."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departing from floor."},
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Declaring departure from floor."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Claim is honest."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim is honest."}
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "The school stance is 'counterexample first', meaning an honest zero-area configuration is a valid starting point. The key challenge is finding 13 points in [0,1]^2 such that NO three are collinear, maximizing the minimum triangle area. Prior failures (SRC_005, SRC_006, etc.) involved either dishonest CLAIMs or sub-floor areas. A safe baseline is a zero-area (collinear-containing) configuration. To improve, one must perturb points off common lines.",
+          "why_keep_this": "Records the strategy of starting honest and then optimizing to avoid collinearity."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "What is the theoretical maximum minimum triangle area for 13 points in the unit square, and does a known construction achieve > 0.005?"
+      }
+    ]
+  }
+}
+```

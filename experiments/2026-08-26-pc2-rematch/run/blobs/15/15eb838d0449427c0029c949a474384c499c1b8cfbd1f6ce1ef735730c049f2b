@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+I'll propose several configurations for maximizing the minimum triangle area among 13 points in the unit square, all addressing the open criticisms by ensuring wellformedness, honest claims, and area above floor.
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {}}

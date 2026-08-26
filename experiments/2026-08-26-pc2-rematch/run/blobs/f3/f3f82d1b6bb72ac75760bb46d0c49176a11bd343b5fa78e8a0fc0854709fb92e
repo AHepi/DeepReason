@@ -1,0 +1,7 @@
+Return exactly one repair.patch.v1 JSON object. Choose one authorized path and one add, remove, or replace operation. Do not return the surrounding object. Frozen subtree hashes are immutable. If several diagnostics are listed, repair only one now; separate later attempts will address the remaining diagnostics.
+
+CURRENT JSON:
+{"error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {}}
+
+DIAGNOSTIC ENVELOPE:
+{"authorized_pointers": ["/error"], "baseline_sha256": "8a6699004714ef9e8b1bdf48d759019e7ad8aec964bebc9cf7e77a391c34e39d", "contract": "conjecturer.turn.v6", "diagnostics": [{"allowed": "", "code": "extra_forbidden", "message": "extra field at /error", "path": "/error"}], "frozen_subtree_hashes": [{"path": "/path", "sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"}, {"path": "/repair_scope", "sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"}, {"path": "/skeleton", "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}], "schema": "repair.diagnostic-envelope.v2"}

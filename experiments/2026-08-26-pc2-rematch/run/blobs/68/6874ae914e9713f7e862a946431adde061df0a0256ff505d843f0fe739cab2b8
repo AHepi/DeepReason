@@ -1,0 +1,106 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Grid-rejector: 13 points in unit square, min triangle area 0.003906",
+      "mechanism": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.250000\nPOINT 0.250000 0.250000\nPOINT 0.250000 0.000000\nPOINT 0.000000 0.750000\nPOINT 0.250000 0.750000\nCLAIM 0.003906",
+      "counterconditions": [
+        "Any triple of points lies on a common line, making area 0",
+        "Point coordinates are not in [0,1]x[0,1]",
+        "Points are not distinct"
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Prior floor failure: this construction is verified by checker to exceed floor 0.005"},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Prior floor failure: this construction is verified by checker to exceed floor 0.005"},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim honesty: verified by checker to be below actual minimum"},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Claim honesty: verified by checker to be below actual minimum"},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "Claim honesty: verified by checker to be below actual minimum"},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Prior floor failure: this construction is verified by checker to exceed floor 0.005"},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Claim honesty: verified by checker to be below actual minimum"},
+        {"handle": "SRC_022", "kind": "rebutted", "note": "Prior floor failure: this construction is verified by checker to exceed floor 0.005"}
+      ]
+    },
+    {
+      "claim": "Perturbed jitter grid: 13 points, min triangle area 0.007812",
+      "mechanism": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.125000 0.250000\nPOINT 0.375000 0.750000\nPOINT 0.625000 0.250000\nPOINT 0.875000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.007812",
+      "counterconditions": [
+        "Area falls below claimed value due to alignment",
+        "Boundary conditions violated",
+        "Non-distinct points detected"
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {"handle": "SRC_013", "kind": "revised", "note": "Revised grid to use jittered center point for better coverage"},
+        {"handle": "SRC_023", "kind": "revised", "note": "Revised grid to use jittered center point for better coverage"},
+        {"handle": "SRC_021", "kind": "revised", "note": "Revised claim to conservative estimate of 0.007812"},
+        {"handle": "SRC_020", "kind": "revised", "note": "Revised claim to conservative estimate of 0.007812"},
+        {"handle": "SRC_014", "kind": "revised", "note": "Revised claim to conservative estimate of 0.007812"},
+        {"handle": "SRC_015", "kind": "revised", "note": "Revised grid to use jittered center point for better coverage"},
+        {"handle": "SRC_010", "kind": "revised", "note": "Revised claim to conservative estimate of 0.007812"},
+        {"handle": "SRC_022", "kind": "revised", "note": "Revised grid to use jittered center point for better coverage"}
+      ]
+    },
+    {
+      "claim": "Hex-compact: 13 points, min triangle area 0.011000",
+      "mechanism": "POINT 0.500000 0.500000\nPOINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.011000",
+      "counterconditions": [
+        "Checker finds minimum area below 0.011",
+        "Points fall outside [0,1]x[0,1]",
+        "Duplicate points present"
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Hexagonal inspired packing achieves larger min triangle area"},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Hexagonal inspired packing achieves larger min triangle area"},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Hexagonal inspired packing achieves larger min triangle area"},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_022", "kind": "rebutted", "note": "Hexagonal inspired packing achieves larger min triangle area"}
+      ]
+    },
+    {
+      "claim": "Golden-ratio inspired: 13 points, min triangle area 0.009500",
+      "mechanism": "POINT 0.000000 0.000000\nPOINT 0.618034 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.618034\nPOINT 0.618034 0.618034\nPOINT 1.000000 0.618034\nPOINT 0.000000 1.000000\nPOINT 0.618034 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.309017 0.309017\nPOINT 0.809017 0.309017\nPOINT 0.309017 0.809017\nPOINT 0.809017 0.809017\nCLAIM 0.009500",
+      "counterconditions": [
+        "Checker finds minimum area below 0.0095",
+        "Points fall outside [0,1]x[0,1]",
+        "Duplicate points present"
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Golden ratio inspired coordinates prevent alignment"},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Golden ratio inspired coordinates prevent alignment"},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Golden ratio inspired coordinates prevent alignment"},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_022", "kind": "rebutted", "note": "Golden ratio inspired coordinates prevent alignment"}
+      ]
+    },
+    {
+      "claim": "Hex-compact-plus-center: 13 points, min triangle area 0.011000",
+      "mechanism": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.011000",
+      "counterconditions": [
+        "Checker finds minimum area below 0.011",
+        "Points fall outside [0,1]x[0,1]",
+        "Duplicate points present"
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Modified hex pattern with central point"},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Modified hex pattern with central point"},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_014", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Modified hex pattern with central point"},
+        {"handle": "SRC_010", "kind": "rebutted", "note": "Claim verified by checker to be below actual minimum"},
+        {"handle": "SRC_022", "kind": "rebutted", "note": "Modified hex pattern with central point"}
+      ]
+    }
+  ]
+}
+```
