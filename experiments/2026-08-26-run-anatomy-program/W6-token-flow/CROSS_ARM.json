@@ -1,0 +1,101 @@
+{
+ "schema": "run-anatomy.w6.cross-arm.v1",
+ "regenerate": "python3 cross_arm.py  (after flow.py)",
+ "instance": "13 points in the unit square, maximise the minimum triangle area over all 286 triples",
+ "budget_match_ratio_S_over_H": 1.0095,
+ "budget_match_admissible_per_prereg": true,
+ "arm_H": {
+  "tokens": 702789,
+  "prompt_tokens": 560530,
+  "completion_tokens": 142259,
+  "prompt_share": 0.7976,
+  "provider_calls": 292,
+  "candidates": 132,
+  "valid": 15,
+  "above_floor": 0,
+  "survivors": 0,
+  "accepted_in_harness_state": 0,
+  "harness_status_of_the_candidate_artifacts": {
+   "refuted": 132
+  },
+  "refutations_by_code": {
+   "CLAIM_INFLATED": 114,
+   "WRONG_COUNT": 3
+  },
+  "best_score": 0.0004075,
+  "best_score_exact": "163/400000",
+  "generation_purpose_tokens": 517838,
+  "generation_purpose_prompt_tokens": 411783
+ },
+ "arm_S": {
+  "tokens": 709454,
+  "prompt_tokens": 8851,
+  "completion_tokens": 700603,
+  "prompt_share": 0.0125,
+  "samples": 54,
+  "transport_errors": 1,
+  "valid": 23,
+  "above_floor": 13,
+  "best_score": 0.0135949364055,
+  "best_score_exact": "27189872811/2000000000000",
+  "summary_tokens_spent": 709454,
+  "summary_valid": 23
+ },
+ "cost_per": {
+  "H_tokens_per_attempted_candidate": {
+   "value": 5324.2,
+   "exact": "234263/44",
+   "numerator": 702789,
+   "denominator": 132
+  },
+  "S_tokens_per_attempted_sample": {
+   "value": 13138.0,
+   "exact": "354727/27",
+   "numerator": 709454,
+   "denominator": 54
+  },
+  "H_tokens_per_valid_candidate": {
+   "value": 46852.6,
+   "exact": "234263/5",
+   "numerator": 702789,
+   "denominator": 15
+  },
+  "S_tokens_per_valid_sample": {
+   "value": 30845.8,
+   "exact": "709454/23",
+   "numerator": 709454,
+   "denominator": 23
+  },
+  "H_tokens_per_above_floor_candidate": {
+   "value": null,
+   "undefined_because": "denominator is zero",
+   "numerator": 702789,
+   "denominator": 0
+  },
+  "S_tokens_per_above_floor_sample": {
+   "value": 54573.4,
+   "exact": "709454/13",
+   "numerator": 709454,
+   "denominator": 13
+  },
+  "H_tokens_per_survivor": {
+   "value": null,
+   "undefined_because": "denominator is zero",
+   "numerator": 702789,
+   "denominator": 0
+  }
+ },
+ "the_one_number": {
+  "definition": "ARM H tokens per valid candidate divided by ARM S tokens per valid sample, at a matched budget. Above 1 means the apparatus paid more for the same unit of checker-confirmed output.",
+  "H_per_valid": 46852.6,
+  "S_per_valid": 30845.8,
+  "overhead_ratio": 1.519,
+  "and_the_number_it_hides": "Cost per valid candidate flatters ARM H, because 'valid' means the checker confirmed the claim, not that the construction was any good. On the run's own registered 0.005 floor ARM H cleared it 0 times in 132 attempts and ARM S 13 times in 54, so ARM H's cost per construction worth having is not a large number, it is an undefined one."
+ },
+ "prompt_side_comparison": {
+  "note": "ARM S poses the same instance in a fixed one-shot prompt; ARM H poses it inside an assembled pack. The gap between the two mean prompt sizes is the harness's overhead signature, per call, in tokens.",
+  "S_mean_prompt_tokens_per_sample": 163.9,
+  "H_mean_prompt_tokens_per_generation_call": 3959.5,
+  "ratio_H_over_S": 24.2
+ }
+}
