@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=24 blockers=none. C1, C2 and C3 all built and proven. Ceiling 960 (R22); `src/` measures 943 and no further `src/` change is planned. Remaining work is the coupling instrument (R9), the label comparison, RESULTS.md and the final gates.
+State: next=25 blockers=none. R9 measured: W2's own instruments, unmodified, give coupling-placebo +1.0 with the channel on and 0.0 with it off. Ceiling 960 (R22); `src/` 943, unchanged by this step.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1375,7 +1375,7 @@ recorded here rather than left as a silent reordering.
       **R7 is discharged.** C3 is not a sentence in a spec: it is a check that
       goes red on the exact violation the law names and green again on restore.
 
-- [ ] 24. (S9) Write `coupling.py` and run it: two offline stub-driven roots,
+- [x] 24. (S9) Write `coupling.py` and run it: two offline stub-driven roots,
       identical but for `Config.DISCHARGE_POLICY`, each with a criticism whose
       warrant names a mechanical respect and a RESPONSIVE stub writer. Run
       W2's committed `census.py` and `q5.py` UNMODIFIED over both; if either
@@ -1387,6 +1387,73 @@ recorded here rather than left as a silent reordering.
       d['on']['R1_mechanical']['coupling_minus_placebo'] > 0; assert
       d['off']['R1_mechanical']['coupling_minus_placebo'] == 0"` exits 0
       (paste both rates)
+
+      PASTED OUTPUT:
+      ```
+      $ python coupling.py coupling.json
+       on: [W2 instrument] n=6   coupling=1.0  placebo=0.0
+                                 coupling-placebo=1.0  neglect=0.0
+                                 [reproduction agrees: True]
+      off: [W2 instrument] n=11  coupling=0.0  placebo=0.0
+                                 coupling-placebo=0.0  neglect=1.0
+                                 [reproduction agrees: True]
+      ```
+      **W2's OWN committed instruments ran** — `census.py` and `q5.py`,
+      unmodified, on both stub roots. SPEC S9 allowed a fallback if they could
+      not; they can, so they are the HEADLINE and this tranche's reproduction of
+      R1 is demoted to a CROSS-CHECK. That matters for what the number is worth:
+      a rate computed by the instrument that produced the original finding is
+      not open to the objection that the new tranche scored its own homework.
+      The two implementations agree on both arms, which is asserted in the JSON
+      rather than eyeballed — a disagreement would be a finding about an
+      instrument and would have to be resolved before either number was quoted.
+
+      Beside the headline, from W2's own output: the on-arm's `RepairRate` is
+      **1.0**, `helped` 6 of 6 coupled. Read carefully — "helped" here is W2's
+      FALLBACK measure for a root with no scalar score (the next candidate's
+      final status is ACCEPTED), not the exact checker it used on P-C1. It says
+      the coupled candidates survived; it does not say they were better in a
+      sense this run has any scale for.
+
+      ### THREE FAULTS IN THE INSTRUMENT, each found by disbelieving a zero
+
+      The first run reported **0.0 on BOTH arms**, which would have read as "the
+      channel does nothing". Each fault was in the instrument, not the channel,
+      and each was found by refusing to accept a convenient-looking number:
+
+      1. **A space after `predicate:`.** `evaluate` partitions on the colon and
+         hands the remainder to `ast.parse`, which reads a leading space as an
+         indent. EVERY verdict failed, for a reason with nothing to do with any
+         candidate. The repo's own commitments are all written without the
+         space — I had not looked.
+      2. **The placebo was undefined.** With ONE respect the run has exactly one
+         criticism, and that criticism has no candidate before it that is not
+         its own target, so W2's only admissible column could not be computed
+         (`placebo=None`). Fixed by SIX INDEPENDENT respects — not for
+         statistical comfort but because independence is what stops a candidate
+         answering respect j from accidentally satisfying respect i.
+      3. **The respects were interleaved.** W2's `next_candidate` is ROOT-WIDE:
+         the next candidate in log order, whoever posed it. Interleaving made
+         every criticism's "next candidate" belong to a different problem, so it
+         failed the criticized commitment for an unrelated reason and the on-arm
+         measured 0.0 while the channel worked perfectly. Working one respect to
+         completion is also what a real seat does — which is why W2's instrument
+         is sound on real roots and was unsound on my first arrangement of a
+         synthetic one.
+
+      Fault 3 is the one worth carrying forward: **a borrowed instrument carries
+      the assumptions of the runs it was written for.** Reusing W2's
+      operationalization was right; assuming it was arrangement-independent was
+      not.
+
+      One limit recorded rather than hidden, visible in the emitted JSON:
+      W2's EXPOSURE census reports zero in BOTH arms
+      (`n_mechanical_shown: 0`). It reads `workflow-context-exposure-v2`
+      records, which only the v6 workflow path writes, and an offline stub root
+      has none. The exposure census is INAPPLICABLE here; the coupling rate is
+      not, because it is computed from candidates and commitments alone. The
+      JSON field is named `exposure_census_inapplicable` so no later reader
+      quotes it as a zero.
 
 - [ ] 25. (S10) Add the `no_label_differs` case to
       `tests/test_discharge_law_line.py`: replay both step-24 roots and

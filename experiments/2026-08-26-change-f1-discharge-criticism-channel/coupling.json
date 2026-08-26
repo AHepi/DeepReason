@@ -1,0 +1,296 @@
+{
+  "claim": "This measures whether the CHANNEL DELIVERS -- a responsive writer couples above placebo iff the criticism reaches it. It does NOT measure whether a live provider model responds; that is PARKED as P2.",
+  "cross_check": {
+    "off": {
+      "agree": true,
+      "reproduction_coupling_minus_placebo": 0.0,
+      "w2_coupling_minus_placebo": 0.0
+    },
+    "on": {
+      "agree": true,
+      "reproduction_coupling_minus_placebo": 1.0,
+      "w2_coupling_minus_placebo": 1.0
+    }
+  },
+  "instrument": "F1 coupling, channel on vs off",
+  "off": {
+    "reproduction": {
+      "candidate_seqs": [
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        33,
+        36,
+        39,
+        42,
+        45
+      ],
+      "coupling": 0.0,
+      "coupling_minus_placebo": 0.0,
+      "n_criticisms": 12,
+      "n_measurable": 11,
+      "neglect": 1.0,
+      "placebo": 0.0,
+      "rows": [
+        {
+          "commitment": "k:accounts-for-respect-0",
+          "next": "e859a0427fa28e54e1b5bea787debbc60167dc7d3f2588807f9725f8367e369f",
+          "placebo": null,
+          "placebo_passes": null,
+          "seq": 14,
+          "target": "ca8cabd7ea7b9692ae969d177137b5a9d41c4e232ab15436789d701f3d1392f5",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-0",
+          "next": "d20bfa5a84f4f29eb4bfdbc58faca608ed0104a5204fbddc031474df123259f6",
+          "placebo": "ca8cabd7ea7b9692ae969d177137b5a9d41c4e232ab15436789d701f3d1392f5",
+          "placebo_passes": false,
+          "seq": 17,
+          "target": "e859a0427fa28e54e1b5bea787debbc60167dc7d3f2588807f9725f8367e369f",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-1",
+          "next": "c4d66d40f77dd2d637700499dfd0a6d8df4ed031a1a2cebde46e7e7d59916721",
+          "placebo": "e859a0427fa28e54e1b5bea787debbc60167dc7d3f2588807f9725f8367e369f",
+          "placebo_passes": false,
+          "seq": 20,
+          "target": "d20bfa5a84f4f29eb4bfdbc58faca608ed0104a5204fbddc031474df123259f6",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-1",
+          "next": "7b2b83212fb193253b264c53350f7268995d019cf83bcd7f8230cc110765c5b4",
+          "placebo": "d20bfa5a84f4f29eb4bfdbc58faca608ed0104a5204fbddc031474df123259f6",
+          "placebo_passes": false,
+          "seq": 23,
+          "target": "c4d66d40f77dd2d637700499dfd0a6d8df4ed031a1a2cebde46e7e7d59916721",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-2",
+          "next": "659a0909d4113dd36257a73cd7e95cd26c6fe37cc5c30c568b4357cd97baf175",
+          "placebo": "c4d66d40f77dd2d637700499dfd0a6d8df4ed031a1a2cebde46e7e7d59916721",
+          "placebo_passes": false,
+          "seq": 26,
+          "target": "7b2b83212fb193253b264c53350f7268995d019cf83bcd7f8230cc110765c5b4",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-2",
+          "next": "8d27e7e1b2685e098bd2ad2b69ff717a868dfb1a0dbc0bd79aeb4bae7cb3c005",
+          "placebo": "7b2b83212fb193253b264c53350f7268995d019cf83bcd7f8230cc110765c5b4",
+          "placebo_passes": false,
+          "seq": 29,
+          "target": "659a0909d4113dd36257a73cd7e95cd26c6fe37cc5c30c568b4357cd97baf175",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-3",
+          "next": "45db9db7520bd1b3e6a69a21b3d3b5f24255e324e9805d91ab5362d836c5f23e",
+          "placebo": "659a0909d4113dd36257a73cd7e95cd26c6fe37cc5c30c568b4357cd97baf175",
+          "placebo_passes": false,
+          "seq": 32,
+          "target": "8d27e7e1b2685e098bd2ad2b69ff717a868dfb1a0dbc0bd79aeb4bae7cb3c005",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-3",
+          "next": "268176581d48b9e70d253d668e77d818085ce73ea43eb1d946de582ace5275c8",
+          "placebo": "8d27e7e1b2685e098bd2ad2b69ff717a868dfb1a0dbc0bd79aeb4bae7cb3c005",
+          "placebo_passes": false,
+          "seq": 35,
+          "target": "45db9db7520bd1b3e6a69a21b3d3b5f24255e324e9805d91ab5362d836c5f23e",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-4",
+          "next": "379b78f3f17336af82a5483dc97fbdbed755a354ceefc843137e3a69685a460b",
+          "placebo": "45db9db7520bd1b3e6a69a21b3d3b5f24255e324e9805d91ab5362d836c5f23e",
+          "placebo_passes": false,
+          "seq": 38,
+          "target": "268176581d48b9e70d253d668e77d818085ce73ea43eb1d946de582ace5275c8",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-4",
+          "next": "24859c852b9cc9915d3243ed0e3225e6a17ed93548b08520685ee4d3674bc027",
+          "placebo": "268176581d48b9e70d253d668e77d818085ce73ea43eb1d946de582ace5275c8",
+          "placebo_passes": false,
+          "seq": 41,
+          "target": "379b78f3f17336af82a5483dc97fbdbed755a354ceefc843137e3a69685a460b",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-5",
+          "next": "22c81337b4d4143749b774fa883f6fb5f7abe5738fde0fddbd054782760817d0",
+          "placebo": "379b78f3f17336af82a5483dc97fbdbed755a354ceefc843137e3a69685a460b",
+          "placebo_passes": false,
+          "seq": 44,
+          "target": "24859c852b9cc9915d3243ed0e3225e6a17ed93548b08520685ee4d3674bc027",
+          "verdict": "neglected"
+        },
+        {
+          "commitment": "k:accounts-for-respect-5",
+          "next": null,
+          "placebo": "24859c852b9cc9915d3243ed0e3225e6a17ed93548b08520685ee4d3674bc027",
+          "placebo_passes": false,
+          "seq": 47,
+          "target": "22c81337b4d4143749b774fa883f6fb5f7abe5738fde0fddbd054782760817d0",
+          "verdict": "no-next-candidate"
+        }
+      ]
+    },
+    "w2": {
+      "R1_mechanical": {
+        "CouplingRate": 0.0,
+        "CouplingRate_minus_Placebo": 0.0,
+        "NeglectRate": 1.0,
+        "PlaceboRate": 0.0,
+        "RepairRate": null,
+        "coupled": 0,
+        "denominator_measurable": 11,
+        "helped": 0,
+        "neglected": 11,
+        "placebo_denominator": 10,
+        "verdicts": {
+          "neglected": 11,
+          "no-next-candidate": 1
+        }
+      },
+      "exposure_census_inapplicable": {
+        "critic_artifacts_shown_to_a_conjecture_dispatch": [],
+        "exposure_counts_by_task_namespace_role": {},
+        "n_llm_attacks_shown": 0,
+        "n_llm_attacks_total": 0,
+        "n_mechanical_shown": 0,
+        "n_mechanical_total": 6,
+        "n_shown": 0
+      },
+      "instrument": "experiments/2026-08-26-run-anatomy-w2-criticism/{census,q5}.py, unmodified",
+      "ran": true
+    }
+  },
+  "on": {
+    "reproduction": {
+      "candidate_seqs": [
+        12,
+        15,
+        16,
+        19,
+        20,
+        23,
+        24,
+        27,
+        28,
+        31,
+        32,
+        35
+      ],
+      "coupling": 1.0,
+      "coupling_minus_placebo": 1.0,
+      "n_criticisms": 6,
+      "n_measurable": 6,
+      "neglect": 0.0,
+      "placebo": 0.0,
+      "rows": [
+        {
+          "commitment": "k:accounts-for-respect-0",
+          "next": "7406533d3fa5abd93cbe2c5b6e84d59de9fef729516f86f633b686ce035c6872",
+          "placebo": null,
+          "placebo_passes": null,
+          "seq": 14,
+          "target": "ca8cabd7ea7b9692ae969d177137b5a9d41c4e232ab15436789d701f3d1392f5",
+          "verdict": "coupled"
+        },
+        {
+          "commitment": "k:accounts-for-respect-1",
+          "next": "ed3e7548840e83b078e27820960ea8b0fe2805243e953c6b813cdf0b59a090d6",
+          "placebo": "7406533d3fa5abd93cbe2c5b6e84d59de9fef729516f86f633b686ce035c6872",
+          "placebo_passes": false,
+          "seq": 18,
+          "target": "d20bfa5a84f4f29eb4bfdbc58faca608ed0104a5204fbddc031474df123259f6",
+          "verdict": "coupled"
+        },
+        {
+          "commitment": "k:accounts-for-respect-2",
+          "next": "110234d828a7e9483a8b7e49cd086ffc8e4e8577a37a9489447c5147c2f3a5cc",
+          "placebo": "ed3e7548840e83b078e27820960ea8b0fe2805243e953c6b813cdf0b59a090d6",
+          "placebo_passes": false,
+          "seq": 22,
+          "target": "7b2b83212fb193253b264c53350f7268995d019cf83bcd7f8230cc110765c5b4",
+          "verdict": "coupled"
+        },
+        {
+          "commitment": "k:accounts-for-respect-3",
+          "next": "9546a87684c8d075218f2c8d66b79954eef28eec5fe29831a167fb1f5a4fb6d2",
+          "placebo": "110234d828a7e9483a8b7e49cd086ffc8e4e8577a37a9489447c5147c2f3a5cc",
+          "placebo_passes": false,
+          "seq": 26,
+          "target": "8d27e7e1b2685e098bd2ad2b69ff717a868dfb1a0dbc0bd79aeb4bae7cb3c005",
+          "verdict": "coupled"
+        },
+        {
+          "commitment": "k:accounts-for-respect-4",
+          "next": "a42b840feeb2e8497a96c809f5a11eb539efb40462150830cbdd383d5ff6ee76",
+          "placebo": "9546a87684c8d075218f2c8d66b79954eef28eec5fe29831a167fb1f5a4fb6d2",
+          "placebo_passes": false,
+          "seq": 30,
+          "target": "268176581d48b9e70d253d668e77d818085ce73ea43eb1d946de582ace5275c8",
+          "verdict": "coupled"
+        },
+        {
+          "commitment": "k:accounts-for-respect-5",
+          "next": "1e1d2ea79eaa182fb8f2aa56e69bb800f20cf95c59d7b05e0abe7cadef7b5515",
+          "placebo": "a42b840feeb2e8497a96c809f5a11eb539efb40462150830cbdd383d5ff6ee76",
+          "placebo_passes": false,
+          "seq": 34,
+          "target": "24859c852b9cc9915d3243ed0e3225e6a17ed93548b08520685ee4d3674bc027",
+          "verdict": "coupled"
+        }
+      ]
+    },
+    "w2": {
+      "R1_mechanical": {
+        "CouplingRate": 1.0,
+        "CouplingRate_minus_Placebo": 1.0,
+        "NeglectRate": 0.0,
+        "PlaceboRate": 0.0,
+        "RepairRate": 1.0,
+        "coupled": 6,
+        "denominator_measurable": 6,
+        "helped": 6,
+        "neglected": 0,
+        "placebo_denominator": 5,
+        "verdicts": {
+          "coupled": 6
+        }
+      },
+      "exposure_census_inapplicable": {
+        "critic_artifacts_shown_to_a_conjecture_dispatch": [],
+        "exposure_counts_by_task_namespace_role": {},
+        "n_llm_attacks_shown": 0,
+        "n_llm_attacks_total": 0,
+        "n_mechanical_shown": 0,
+        "n_mechanical_total": 6,
+        "n_shown": 0
+      },
+      "instrument": "experiments/2026-08-26-run-anatomy-w2-criticism/{census,q5}.py, unmodified",
+      "ran": true
+    }
+  },
+  "operationalization": "W2 R1_mechanical, reproduced from experiments/2026-08-26-run-anatomy-w2-criticism/q5.py lines 175-217: coupled iff the next candidate PASSES the commitment the criticized one failed, re-evaluated by deepreason.programs.evaluate on the next candidate's own bytes; every rate carries the same evaluation on the candidate BEFORE the criticism as its placebo.",
+  "respects": [
+    "the solar forcing that sets the spring-neap range",
+    "the shallow-water overtides in this harbour",
+    "the inverse-barometer response to pressure",
+    "the annual cycle in the mean sea level",
+    "the wind setup along the estuary axis",
+    "the datum the predicted heights are referred to"
+  ]
+}
