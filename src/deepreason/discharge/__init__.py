@@ -23,7 +23,6 @@ reading only `state.att` would reproduce the very defect this closes.
 
 from deepreason.discharge.channel import (
     OpenCriticism,
-    discharged_handles,
     open_criticisms,
     render_open_criticism_context,
 )
@@ -57,7 +56,6 @@ __all__ = [
     "UnknownDischargePolicyError",
     "declaration",
     "discharge_kind_names",
-    "discharged_handles",
     "open_criticisms",
     "record_discharges",
     "render_open_criticism_context",

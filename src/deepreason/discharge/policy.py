@@ -20,8 +20,6 @@ weight for any configuration to set -- the formalism-optional guarantee
 
 from __future__ import annotations
 
-import hashlib
-import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -173,12 +171,6 @@ class DischargePolicyV1(BaseModel):
     def kind_names(self) -> tuple[str, ...]:
         """The kinds legal under this policy, resolved against the live registry."""
         return self.kinds or discharge_kind_names()
-
-    def policy_digest(self) -> str:
-        payload = json.dumps(
-            self.model_dump(mode="json", by_alias=True), sort_keys=True, separators=(",", ":")
-        )
-        return hashlib.sha256(payload.encode()).hexdigest()
 
 
 DISCHARGE_POLICY_PRESETS: dict[str, DischargePolicyV1] = {

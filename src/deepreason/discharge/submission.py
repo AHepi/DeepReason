@@ -38,28 +38,30 @@ class SubmissionScreening(BaseModel):
     verdict: str
     open_handles: tuple[str, ...] = ()
     undischarged: tuple[str, ...] = ()
-    accepted: tuple[str, ...] = ()
 
 
-def _discharged_by(candidate, legal: frozenset[str], policy) -> set[str]:
-    """The handles this candidate actually answered.
+def _answers(discharge, legal: frozenset[str]):
+    """The declaration this discharge satisfies, or None.
 
-    "Actually" is doing work. A discharge counts only when it names a handle
-    the pack listed AND carries the content its kind declares it requires. Both
-    checks exist to close the same hole from opposite sides: without the first
-    the channel is satisfiable by inventing a string, and without the second it
-    is satisfiable by a bare label -- which is the acknowledgment shape Q5
-    measured as actively harmful.
+    "Satisfies" is doing work, and ONE definition of it serves both the screen
+    and the recorder -- two copies of this rule would be two chances for the
+    thing a run discloses and the thing it records to disagree.
+
+    A discharge counts only when it names a handle the pack listed AND carries
+    the content its kind declares it requires. The two conditions close the
+    same hole from opposite sides: without the first the channel is satisfiable
+    by inventing a string, and without the second by a bare label -- the
+    acknowledgment shape Q5 measured as actively harmful. An undeclared kind
+    raises rather than returning None: the registry is the authority on what a
+    kind IS, and silently ignoring an unknown one would hide a wire/registry
+    drift the model is already acting on.
     """
-    answered = set()
-    for discharge in getattr(candidate, "discharges", ()) or ():
-        kind = declaration(discharge.kind)          # typed refusal on an undeclared kind
-        if discharge.handle not in legal:
-            continue
-        if any(not (getattr(discharge, field, None) or "").strip() for field in kind.requires):
-            continue
-        answered.add(discharge.handle)
-    return answered
+    kind = declaration(discharge.kind)
+    if discharge.handle not in legal:
+        return None
+    if any(not (getattr(discharge, field, None) or "").strip() for field in kind.requires):
+        return None
+    return kind
 
 
 def screen_submission(harness, problem_id: str, output, policy, *, reask_index: int = 0):
@@ -77,22 +79,23 @@ def screen_submission(harness, problem_id: str, output, policy, *, reask_index: 
         return SubmissionScreening(verdict="accept")
     legal = frozenset(criticism.handle for criticism in open_now)
 
-    answered: set[str] = set()
-    for candidate in getattr(output, "candidates", ()) or ():
-        answered |= _discharged_by(candidate, legal, policy)
+    answered = {
+        discharge.handle
+        for candidate in getattr(output, "candidates", ()) or ()
+        for discharge in getattr(candidate, "discharges", ()) or ()
+        if _answers(discharge, legal) is not None
+    }
     outstanding = tuple(sorted(legal - answered))
 
     if outstanding and policy.reask == "once" and reask_index == 0:
         return SubmissionScreening(
             verdict="reask",
             open_handles=outstanding,
-            accepted=tuple(sorted(answered)),
         )
     return SubmissionScreening(
         verdict="accept",
         open_handles=tuple(sorted(legal)),
         undischarged=outstanding if policy.disclose_undischarged else (),
-        accepted=tuple(sorted(answered)),
     )
 
 
@@ -117,10 +120,8 @@ def record_discharges(harness, problem_id: str, candidate_ref: str, discharges, 
     legal = frozenset(criticism.handle for criticism in open_now)
     registered = []
     for discharge in discharges or ():
-        kind = declaration(discharge.kind)
-        if discharge.handle not in legal:
-            continue
-        if any(not (getattr(discharge, field, None) or "").strip() for field in kind.requires):
+        kind = _answers(discharge, legal)
+        if kind is None:
             continue
         harness.record_measure(
             inputs=[f"discharge:{kind.name}", discharge.handle, candidate_ref, problem_id]

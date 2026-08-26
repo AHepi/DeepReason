@@ -40,7 +40,6 @@ class OpenCriticism(BaseModel):
     claim: str
     span: str | None
     target: str
-    source: str
 
 
 def _addressed(state, problem_id: str) -> set[str]:
@@ -112,13 +111,17 @@ def _open_with_total(harness, problem_id: str, policy) -> tuple[tuple[OpenCritic
     addressed = _addressed(state, problem_id)
     spent = discharged_handles(harness, problem_id)
 
-    found: dict[str, tuple[str, str]] = {}
+    # Both channels into one map, scrutiny first. Which channel a criticism
+    # arrived through is deliberately NOT carried forward: the writer answers
+    # the criticism, and a field naming its provenance would be a number-shaped
+    # invitation to treat the two as differently weighty.
+    found: dict[str, str] = {}
     for target, critic in _scrutiny_pairs(harness):
         if target in addressed:
-            found.setdefault(critic, (target, _SCRUTINY))
+            found.setdefault(critic, target)
     for attacker, target in state.att:
         if target in addressed:
-            found.setdefault(attacker, (target, "attack"))
+            found.setdefault(attacker, target)
 
     rows = []
     for handle in sorted(found):
@@ -126,7 +129,6 @@ def _open_with_total(harness, problem_id: str, policy) -> tuple[tuple[OpenCritic
             continue
         if state.status.get(handle) is Status.REFUTED:
             continue
-        target, source = found[handle]
         text = content_text(state.artifacts[handle], harness.blobs)
         quoted = _QUOTED.search(text)
         rows.append(
@@ -134,8 +136,7 @@ def _open_with_total(harness, problem_id: str, policy) -> tuple[tuple[OpenCritic
                 handle=handle,
                 claim=text[: policy.claim_head_chars].replace("\n", " ").strip(),
                 span=quoted.group(1)[: policy.span_head_chars] if quoted else None,
-                target=target,
-                source=source,
+                target=found[handle],
             )
         )
     return tuple(rows[: policy.handles_n]), len(rows)
