@@ -421,6 +421,24 @@ before treating a green soak as full coverage
   ("the record is the only admissible evidence") and is not touched by
   this law.
 
+- **Modularity is enforced, and customisation is easy** (2026-08-26,
+  operator's words verbatim: "There needs to be a priority that
+  enforces modularity. Customisation needs to be easy."): every
+  behavior a run can vary is reachable as CONFIGURATION or a
+  REGISTERED, VERSIONED ARTIFACT — never by editing code. New
+  machinery ships behind a declared interface on the signal-contract
+  pattern (FROZEN change protocol, VERSIONED registry/policy, FREE
+  parameters), and "enforced" means a check that can fail: each
+  module carries an architecture test that goes red when a consumer
+  bypasses its interface or when a customization point requires a
+  code edit to use. Stated as a PRIORITY: when a design forks between
+  a tighter coupling that is smaller and a declared interface that is
+  larger, the interface wins. Companions: the all-configurations law
+  (everything that parses compiles), operations parity (every
+  configuration gets the same lifecycle), and the signal contract
+  (the pattern this law generalizes). Ledgered during the REBUILD
+  program; the F1/F2/F3 tranches are its first bound implementations.
+
 - **The signal registry is a CONTRACT, and allocation changes are layered**
   (2026-08-14, operator's words verbatim: "The signal REGISTRY is a
   CONTRACT, not a wiring: a signal is anything declaring name, unit,
