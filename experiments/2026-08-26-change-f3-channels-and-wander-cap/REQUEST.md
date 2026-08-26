@@ -259,3 +259,30 @@ The operator's message binding it to this tranche, verbatim:
 >   the registry never lies about what is customizable.
 
 Lands as R18 and R19 above. SPEC.md must answer it explicitly.
+
+### Amendment 2 — 2026-08-26, the decision-to-dispatch connection (operator, mid-turn)
+
+Operator, verbatim:
+
+> Second addition, from the merged W7 synthesis
+> (docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md): the allocation
+> controller's 47 recorded decisions never reached a model call in
+> the measured population. Before building the wander-cap policy,
+> VERIFY the decision-to-dispatch connection actually exists on the
+> current tree (the E43 incident proves tuning reached the adapter at
+> least once — reconcile that with W7's finding and say which is true
+> now). If the connection is broken or absent, wiring it IS in scope
+> for H2 — a cap that computes but never acts is exactly the
+> inertness this rebuild exists to end.
+
+R20 (process): "Before building the wander-cap policy, VERIFY the
+decision-to-dispatch connection actually exists on the current tree ... and say
+which is true now" — with the E43 incident reconciled against W7's finding.
+
+R21 (behavior): "If the connection is broken or absent, wiring it IS in scope
+for H2 — a cap that computes but never acts is exactly the inertness this
+rebuild exists to end."
+
+Lands as SPEC items S0 (the verification, done before any code) and S19 (the
+wiring). The verification's result is recorded in SPEC.md §S0 and its
+Measurements M4–M6.
