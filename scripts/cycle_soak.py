@@ -76,11 +76,13 @@ DEEPEST_RECORDED_DEATH_CYCLE = 2
 # instead of 1).  The value is the branch whose merge is expected to clear
 # it.  Remove the entry when that branch lands -- an expected-red seam that
 # nobody clears is indistinguishable from a seam nobody fixed.
-EXPECTED_RED: dict[str, str] = {
-    # A parallel window is fixing the reservation-bound seam in
-    # llm/adapter.py:1400.  This soak DRIVES that code; it does not modify it.
-    "D4-reservation-bound": "the reservation-bound fix window (llm/adapter.py)",
-}
+# Empty is the correct resting state: every seam listed here is one nobody has
+# cleared yet, so an entry that outlives its fix makes exit 3 meaningless.
+# D4-reservation-bound was cleared by
+# experiments/2026-08-23-fix-reservation-bound-authority/ and removed by
+# experiments/2026-08-25-defect-workflow-call-pairing/.  While this map is
+# empty, _verdict cannot return 3 at all.
+EXPECTED_RED: dict[str, str] = {}
 
 
 # --------------------------------------------------------------------------

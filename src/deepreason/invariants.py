@@ -395,7 +395,12 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
                 and attempt.contract_id == authorization.contract_id
                 and attempt.route_lease == authorization.route_lease
                 and attempt.prompt_sha256 == authorization.prompt_sha256
-                and attempt.raw_ref == call.raw_ref
+                # LLMCall spells an absent raw blob "", ProviderAttemptV1 spells it
+                # None; record_provider_attempt builds the attempt through
+                # `call.raw_ref or None`, so the reader compares on the writer's side
+                # of that translation. An absent attempt raw pairs only with an absent
+                # call raw -- never with a body the call actually carried.
+                and attempt.raw_ref == (call.raw_ref or None)
             )
             if not exact_pair:
                 finding(
