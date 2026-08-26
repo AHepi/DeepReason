@@ -29,3 +29,6 @@
 {"index": 28, "error": "The read operation timed out", "tokens": 0}
 {"index": 29, "error": "The read operation timed out", "tokens": 0}
 {"index": 30, "tokens": 12663, "prompt_tokens": 167, "completion_tokens": 12496, "elapsed_s": 98.31, "cumulative_tokens": 211414, "valid": true, "code": null, "n_points": 13, "n_triples": 286, "score": 0.002958535503, "score_exact": "2958535503/1000000000000", "claim": 0.002958, "claim_confirmed": true, "above_floor": false}
+{"index": 31, "error": "The read operation timed out", "tokens": 0}
+{"index": 32, "tokens": 15572, "prompt_tokens": 167, "completion_tokens": 15405, "elapsed_s": 112.89, "cumulative_tokens": 226986, "valid": false, "code": "CLAIM_INFLATED", "n_points": 13, "n_triples": 286, "score": 0.00511455748, "score_exact": "127863937/25000000000", "claim": 0.0133, "claim_confirmed": false}
+{"index": 33, "error": "Remote end closed connection without response", "tokens": 0}

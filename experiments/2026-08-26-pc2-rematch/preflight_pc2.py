@@ -55,6 +55,26 @@ sys.path.insert(0, str(FRONTIER))
 
 QUESTION_SHA256 = "64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e"
 THE_ONE_FIELD = "DISCHARGE_POLICY"
+# PREREG Appendix A, Amendment 1 (operator, 2026-08-26: "pump to 100000").
+ARM_H3_MAX_TOKENS = 100_000
+# P-C1's cap, which ARM H2 also carried. Named so the accounting below asserts
+# the change is FROM the registered old value, not merely TO the new one.
+P_C1_MAX_TOKENS = 32_768
+
+
+def _is_registered_seat_change(path: str, old_v, new_v) -> bool:
+    """One manifest leaf that ARM H3's registered delta explains, or False.
+
+    Whitelisting FIELD NAMES would admit any change to those fields. This
+    asserts the whole transition -- which field, from what, to what -- so a
+    cap that moved to some third number, or a `reasoning` that acquired a
+    value instead of being removed, still fails.
+    """
+    if path.endswith("/reasoning"):
+        return old_v == "none" and new_v is None
+    if path.endswith("/max_tokens"):
+        return old_v == P_C1_MAX_TOKENS and new_v == ARM_H3_MAX_TOKENS
+    return False
 
 # S4's allowlist.  Each entry names the REBUILD tranche that owns the change,
 # so an unexplained field cannot hide behind a vague "expected differences".
@@ -142,15 +162,21 @@ def s2_config_delta() -> None:
         thinking_on = all(
             "reasoning" not in spec for spec in b.get("roles", {}).values()
         )
+        # Amendment 1 (operator, "pump to 100000") adds max_tokens to ARM H3's
+        # registered delta. Both values are asserted, not just the field names:
+        # a cap that drifted to some third number would be a third difference.
+        caps = {spec.get("max_tokens") for spec in b.get("roles", {}).values()}
         ok = (
             delta == [THE_ONE_FIELD, "roles"]
-            and set(seat_delta) == {"reasoning"}
+            and set(seat_delta) == {"reasoning", "max_tokens"}
             and thinking_on
+            and caps == {ARM_H3_MAX_TOKENS}
         )
         detail = (
             f"expected [{THE_ONE_FIELD!r}, 'roles'] with the ONLY seat-level "
-            f"delta being `reasoning` REMOVED; seat delta={sorted(set(seat_delta))}, "
-            f"reasoning absent on every seat={thinking_on}"
+            f"deltas being `reasoning` REMOVED and `max_tokens` = "
+            f"{ARM_H3_MAX_TOKENS}; seat delta={sorted(set(seat_delta))}, "
+            f"reasoning absent on every seat={thinking_on}, caps={sorted(caps)}"
         )
 
     _check(
@@ -242,21 +268,33 @@ def s4_manifest_delta(root: Path) -> None:
         if arm_h3 and key == "roles":
             leaves = _leaf_delta(da[key], db[key])
             if leaves and all(
-                path.endswith("/reasoning") and old_v == "none" and new_v is None
+                _is_registered_seat_change(path, old_v, new_v)
                 for path, old_v, new_v in leaves
             ):
-                _report["arm_h3_roles_delta"] = [p for p, _, _ in leaves]
+                _report["arm_h3_roles_delta"] = sorted(
+                    {p.rsplit("/", 1)[-1] for p, _, _ in leaves}
+                )
                 continue
         if arm_h3 and key in (
             "route_seat_behavioral_capability_plan",
             "route_seat_contract_decomposition_plan",
         ):
             leaves = _leaf_delta(da[key], db[key])
-            # A route digest is DERIVED from the route, so it must move when the
-            # route does -- and every entry must move to the SAME new value, or
-            # the seats have stopped sharing one route.
-            if leaves and all(path.endswith("/route_sha256") for path, _, _ in leaves) \
-               and len({new_v for _, _, new_v in leaves}) == 1:
+            # Two kinds of leaf, and both are DERIVED from the registered seat
+            # change rather than independent of it: the plan echoes the seat's
+            # completion cap, and the route digest must move when the route
+            # does. Every digest must move to the SAME new value, or the seats
+            # have stopped sharing one route -- which would be a real finding.
+            digests = {new_v for path, _, new_v in leaves if path.endswith("/route_sha256")}
+            if leaves and all(
+                path.endswith("/route_sha256")
+                or (
+                    path.endswith("/maximum_completion_tokens")
+                    and old_v == P_C1_MAX_TOKENS
+                    and new_v == ARM_H3_MAX_TOKENS
+                )
+                for path, old_v, new_v in leaves
+            ) and len(digests) <= 1:
                 continue
         if arm_h3 and key == "source_config_hash":
             continue  # the digest of the config file this arm registered

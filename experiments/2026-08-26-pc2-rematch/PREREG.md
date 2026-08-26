@@ -406,3 +406,60 @@ picks it.
   tokens on completion; with thinking on that share should rise sharply, so
   ARM H3 may reach FEWER cycles inside the same 3 000 000 cap. A shallower
   run is a real outcome and is reported as one, not as a fault of the cap.
+
+### APPENDIX A — AMENDMENT 1, 2026-08-26: the completion cap
+
+**Appended, never an edit.** Appendix A's ARM H3 table is amended in one
+field, on the operator's instruction, and the first ARM H3 attempt is
+RETIRED rather than deleted.
+
+**What happened.** ARM H3 launched at ARM H2's `max_tokens: 32768` and
+truncated **2 of 2 calls**: reasoning alone consumed 32 445 and 32 632 of
+the 32 768 cap, so the reply was cut off mid-JSON and arrived invalid both
+times (`truncated=True`, `natural_stop=False`, `arrival_valid=False`). It
+was still at cycle 0 after ~40 minutes at 60 757 tokens per call, which the
+3 000 000 cap would have exhausted in ~49 calls. That is not the harness at
+full strength; it is the harness strangled by a cap sized for thinking-OFF.
+
+CLAUDE.md's ledgered response to exactly this signature: **"a bigger cap,
+not a diagnosis."**
+
+**The operator's instructions, verbatim, in order:**
+
+> "No new soak. just requalification"
+> "pump to 100000"
+> "no just do it. tokens are cheap"
+
+**The amendment.** `max_tokens` becomes **100 000** on every seat, for ARM H3
+only. ARM H3's registered delta from P-C1's config is therefore now TWO seat
+fields — `reasoning` REMOVED and `max_tokens` raised — plus
+`DISCHARGE_POLICY`. `preflight_pc2.py`'s S2 asserts both VALUES, not just the
+field names, so a cap that drifted to a third number fails.
+
+**No soak, again on the operator's ruling.** Requalification is not waived:
+`max_tokens` is part of the route spec, so the subject digest moves and the
+battery reruns.
+
+**A CONSTRAINT NOBODY ENFORCES, recorded before launch so it is not a
+surprise afterwards.** `Adapter._completion_cap` books
+`min(settled, route ceiling)` and does NOT subtract the prompt. A 100 000
+completion cap against a 131 072 context window leaves **31 072 tokens for
+the prompt**, and the retired attempt's second call already carried a
+**45 045-token prompt**. Whether the provider caps, errors, or truncates when
+prompt + cap exceeds the window is UNMEASURED. The operator declined a probe
+("no just do it. tokens are cheap"), so this is registered as a live risk: if
+it bites it will surface as a typed seat failure, and RESULTS.md will report
+it as this amendment's own cost rather than as a property of the harness.
+
+**The retired attempt is kept as evidence**, at
+`retired-truncation-cap32768-run-58fb0d20488be869/`. It is NOT an ARM H3
+result and is never quoted as one — it produced no cycle and no valid
+candidate. It is the measurement that motivated this amendment, and it
+stands as a recorded fact in its own right: **at 32 768, thinking-ON glm-5.2
+cannot answer this question at all** — reasoning alone fills the cap.
+
+**ARM S2 was stopped in the same operation** that stopped ARM H3 and is
+RESUMED, not restarted: `arm_s.py` appends to `results.jsonl`, 34 samples and
+226 986 tokens were already on disk, and P-C1's ARM S was resumed three times
+by the same mechanism. The §5.4 admissibility rule and Appendix A's
+shared-stream rule are unchanged and still bind.

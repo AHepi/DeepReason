@@ -50,7 +50,20 @@ roles:
     family: glm
     api_key_env: OLLAMA_API_KEY
     context_window_tokens: 131072
-    max_tokens: 32768
+    # 100000, on the operator's instruction 2026-08-26 ("pump to 100000").
+    # The first ARM H3 attempt at 32768 truncated 2 of 2 calls: reasoning
+    # alone reached 32445 and 32632 of the 32768 cap, so the answer was cut
+    # off mid-JSON and arrived invalid both times. CLAUDE.md's ledgered
+    # response to exactly this is "a bigger cap, not a diagnosis".
+    #
+    # HEADROOM, stated because it is tight and nothing enforces it:
+    # `Adapter._completion_cap` books min(settled, route ceiling) and does
+    # NOT subtract the prompt, so a 100000 completion cap leaves 31072 of
+    # the 131072 context window for the prompt. The retired attempt's
+    # second call carried a 45045-token prompt. Whether the provider caps,
+    # errors, or truncates in that case is UNMEASURED, and if it bites it
+    # will show as a typed seat failure rather than silently.
+    max_tokens: 100000
     # reasoning: OMITTED (PREREG Appendix A). Not set to a value -- UNSET is
     # what makes the model think; any string sends a reasoning_effort.
     timeout_s: 180

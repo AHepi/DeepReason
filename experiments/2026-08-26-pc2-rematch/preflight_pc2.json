@@ -1,16 +1,7 @@
 {
  "arm_h3_roles_delta": [
-  "/argumentative_critic[0]/reasoning",
-  "/conjecturer[0]/reasoning",
-  "/defender[0]/reasoning",
-  "/grounding_reviewer[0]/reasoning",
-  "/judge[0]/reasoning",
-  "/property_designer[0]/reasoning",
-  "/summarizer[0]/reasoning",
-  "/synthesizer[0]/reasoning",
-  "/thesis[0]/reasoning",
-  "/variator[0]/reasoning",
-  "/vision_critic[0]/reasoning"
+  "max_tokens",
+  "reasoning"
  ],
  "checks": [
   {
@@ -19,7 +10,7 @@
    "ok": true
   },
   {
-   "detail": "ARM H3 via run-config-h3.yaml: fields differing from P-C1's config: ['DISCHARGE_POLICY', 'roles']; expected ['DISCHARGE_POLICY', 'roles'] with the ONLY seat-level delta being `reasoning` REMOVED; seat delta=['reasoning'], reasoning absent on every seat=True; DISCHARGE_POLICY='discharge-required.v1'",
+   "detail": "ARM H3 via run-config-h3.yaml: fields differing from P-C1's config: ['DISCHARGE_POLICY', 'roles']; expected ['DISCHARGE_POLICY', 'roles'] with the ONLY seat-level deltas being `reasoning` REMOVED and `max_tokens` = 100000; seat delta=['max_tokens', 'reasoning'], reasoning absent on every seat=True, caps=[100000]; DISCHARGE_POLICY='discharge-required.v1'",
    "id": "S2-registered-delta-only",
    "ok": true
   },
@@ -50,7 +41,7 @@
    "/research/maximum_sources": "REBUILD F3 -- research channel on by default"
   },
   "pc1_sha256": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
-  "pc2_sha256": "58fb0d20488be86939e4d8d7488bffb71e1e905e3995da146482a9280383a562"
+  "pc2_sha256": "42ad288038dd606c7a13352fb3f48ae8ec555f4d39c44bf51ecf140741c69273"
  },
  "schema": "pc2.preflight.v1"
 }
