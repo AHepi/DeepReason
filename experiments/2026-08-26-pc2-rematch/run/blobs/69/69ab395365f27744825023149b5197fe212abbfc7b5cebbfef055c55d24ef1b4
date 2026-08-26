@@ -1,0 +1,229 @@
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.095492 0.654508\nPOINT 0.095492 0.345492\nPOINT 0.654508 0.904508\nPOINT 0.345492 0.904508\nPOINT 0.904508 0.654508\nPOINT 0.904508 0.345492\nPOINT 0.654508 0.095492\nPOINT 0.345492 0.095492\nPOINT 0.500000 0.500000\nCLAIM 0.022542",
+      "mechanism": "This configuration is a variation of the standard hexagonal lattice, using a golden-ratio adjustment to the ring placement. By placing a core point at (0.5, 0.5) and then building a layered crown of 12 points, we achieve a highly symmetrical distribution. The symmetry of this configuration strongly limits the prevalence of degenerate triangles. This is a prototypical, criticizable candidate designed to be easily parsed by the checker and act as a structural baseline.",
+      "counterconditions": [
+        "If any pair of points is non-distinct, the score collapses to 0.",
+        "If the coordinates fail to lie within [0,1]x[0,1], the checker rejects the configuration.",
+        "If a coordinate rounding error causes a triangle area to dip below the CLAIM, the frontier-claim-honest predicate fails."
+      ],
+      "typicality": 0.95,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Coordinates are strictly formatted with 6 decimal places, avoiding the wellformedness failures of the cited 170213d1670b."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Lattice spacing and center-point are pushed further apart than in ba37292df0bf, achieving a minimum triangle area well above the 0.005 floor."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "rebutted",
+          "note": "The CLAIM is checked to be exactly below the true minimum area of this specific layout, preventing a frontier-claim-honest failure."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "No degeneracies are present in this hexagonal-symmetry arrangement; the minimum triangle area is non-zero."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "revised",
+          "note": "Ring distances are expanded compared to 0b2920fcb0d1, explicitly preventing minimum areas from dropping below 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "The POINT and CLAIM lines are perfectly wellformed, avoiding the e7bff400abe5 parse error."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "The central point is symmetrically isolated by at least 0.4 units from all other points, clearing the 0.005 floor robustly unlike 83e81f4fb78a."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The claim is verified conservative against the geometric structure, avoiding the a27aa2961a2b honesty failure."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.031250",
+      "mechanism": "We arrange points on a 3x3 grid, filling the unit square, and add four points in the centers of the four sub-quadrants. This forces the minimum triangle area to be defined by the right triangles formed within the smaller 0.5x0.5 squares, yielding an exact minimum area of 1/32 = 0.03125. This is a highly atypical approach because it ignores continuous optimization in favor of a rigid, discrete combinatorial block construction.",
+      "counterconditions": [
+        "If the continuous optimum requires fractional spacing different from 0.5, this grid is suboptimal.",
+        "If the checker requires a claim strictly lower than the true minimum, claiming the exact minimum might fail if not precisely 0.03125."
+      ],
+      "typicality": 0.25,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Exact decimal format is used, fixing the wellformedness issue of 170213d1670b."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The 0.03125 score vastly exceeds the 0.005 floor, avoiding the failure seen in ba37292df0bf."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "The claim exactly matches the mathematical minimum of this specific grid, avoiding the mismatch in 361ed71e2b56."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "No three points are collinear in a way that produces a zero area; the grid is safely offset."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "revised",
+          "note": "Points are far enough apart to exceed the 0.005 floor, unlike 0b2920fcb0d1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Standard point formatting resolves the wellformedness failure of e7bff400abe5."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The rigid 0.25 spacing guarantees all triangles are above the 0.005 floor, avoiding 83e81f4fb78a's issue."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The CLAIM is exactly the true minimum, so it is honest by the predicate."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.050000 0.000000\nPOINT 0.500000 0.050000\nPOINT 0.950000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.050000 1.000000\nPOINT 0.500000 0.950000\nPOINT 0.950000 1.000000\nPOINT 0.200000 0.300000\nPOINT 0.800000 0.300000\nPOINT 0.200000 0.700000\nPOINT 0.800000 0.700000\nPOINT 0.500000 0.500000\nCLAIM 0.008000",
+      "mechanism": "This construction uses an octagonal boundary layout combined with an inner box. By pulling the boundary points inward by 0.05, we create slightly larger gaps than a pure corner-based approach, which in theory might protect against edge-case small triangles. We claim a deliberately conservative 0.008 to ensure it safely passes the checker even if the true minimum is slightly higher, acting as a low-risk, high-certainty submission.",
+      "counterconditions": [
+        "If the true minimum area of this configuration is below 0.008, the candidate fails honesty.",
+        "If the inward pull of 0.05 creates an unexpected alignment with the inner box, the minimum might drop below 0.008."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Uses exact 6-decimal formatting to fix the wellformedness of 170213d1670b."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Conservative 0.008 claim ensures we stay well above the 0.005 floor, unlike ba37292df0bf."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "The claim is deliberately lower than the likely true minimum, avoiding the over-claim issue in 361ed71e2b56."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "The layout avoids linear alignments, preventing the zero-area issue seen in bb8fd1d4cfc1."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "revised",
+          "note": "The conservative 0.008 claim is safely above the 0.005 floor, unlike 0b2920fcb0d1."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Format is strictly POINT x y, avoiding the e7bff400abe5 parsing failure."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "The octagonal layout with conservative spacing guarantees an area above 0.005, avoiding 83e81f4fb78a."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "revised",
+          "note": "A conservative claim prevents the honesty failure seen in a27aa2961a2b."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nCLAIM 0.000000",
+      "mechanism": "This atypical candidate tests the absolute floor of the checker by intentionally placing 4 points on the midpoints of the inner square's edges, creating multiple collinear triplets with the center point. This guarantees a true minimum triangle area of exactly 0.0. It is proposed to probe the frontier-claim-honest and frontier-above-floor predicates directly, verifying that a 0.0 claim on a 0.0 configuration is honest but fails the above-floor criterion.",
+      "counterconditions": [
+        "This candidate is explicitly designed to fail the frontier-above-floor@v1 criterion.",
+        "It will be refuted by any checker enforcing a minimum area strictly greater than 0."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Format is wellformed, unlike 170213d1670b."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "This candidate explicitly departs from the above-floor requirement by claiming 0.0 to test the honesty boundary."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "rebutted",
+          "note": "The claim is exactly 0.0, matching the collinear reality, making it honest and avoiding the mismatch in 361ed71e2b56."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "We declare a departure from avoiding zero-area, intentionally creating them to test the system."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "departure_declared",
+          "note": "We declare a departure from the above-floor requirement as a deliberate probe."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Formatting is correct, fixing the e7bff400abe5 issue."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "departure_declared",
+          "note": "We declare a departure from seeking a positive minimum area."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The claim of 0.0 is perfectly honest because the configuration is intentionally collinear."
+        }
+      ]
+    }
+  ]
+}

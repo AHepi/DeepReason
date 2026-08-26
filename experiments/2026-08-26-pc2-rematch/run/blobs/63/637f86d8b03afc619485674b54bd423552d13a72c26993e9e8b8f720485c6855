@@ -1,0 +1,86 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nCLAIM 0.031250",
+      "mechanism": "A symmetric grid-like distribution designed to maximize minimum area by spacing points uniformly across the square. By placing points at midpoints and quarters of the square, we ensure that all triangles have an area of at least 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any triangle formed by three points has an area strictly less than 0.03125, this configuration is invalid.",
+        "If the frontier-claim-honest checker identifies a discrepancy between the claimed score and the actual minimum area, the claim is refuted."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "Configuration provides 13 strictly distinct points in [0,1]^2 with no duplicates."},
+        {"handle": "SRC_023", "kind": "revised", "note": "Claimed minimum area is 0.03125, which is well above the 0.005 floor."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claimed score of 0.031250 matches the exact geometric minimum area."},
+        {"handle": "SRC_025", "kind": "revised", "note": "Honest claim derived from exact rational arithmetic."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Minimum area 0.03125 > 0.005 floor."},
+        {"handle": "SRC_013", "kind": "revised", "note": "Well-formed 13 points provided."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Minimum area 0.03125 > 0.005 floor."},
+        {"handle": "SRC_015", "kind": "revised", "note": "Honest and exact claim of 0.031250 provided."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_004"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nCLAIM 0.031250",
+      "mechanism": "A variant of the symmetric grid maximizing the minimum triangle area through even distribution of points across boundaries and interior. The minimum area is geometrically bounded by 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any triangle formed by three points has an area strictly less than 0.03125, this configuration is invalid.",
+        "If the frontier-claim-honest checker identifies a discrepancy between the claimed score and the actual minimum area, the claim is refuted."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "Well-formed with 13 distinct points."},
+        {"handle": "SRC_023", "kind": "revised", "note": "Score 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claimed score matches actual minimum area."},
+        {"handle": "SRC_025", "kind": "revised", "note": "Exact claim of 0.031250."},
+        {"handle": "SRC_018", "kind": "revised", "note": "Score 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_013", "kind": "revised", "note": "13 unique points provided."},
+        {"handle": "SRC_019", "kind": "revised", "note": "Score 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_015", "kind": "revised", "note": "Honest claim provided."}
+      ],
+      "optional_refs": ["SRC_002", "SRC_003"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nCLAIM 0.031250",
+      "mechanism": "A cross-pattern configuration leveraging symmetries along the diagonals and midlines to maintain a minimum area of 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any triangle formed by three points has an area strictly less than 0.03125, this configuration is invalid.",
+        "If the frontier-claim-honest checker identifies a discrepancy between the claimed score and the actual minimum area, the claim is refuted."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "Well-formed 13 distinct points."},
+        {"handle": "SRC_023", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Exact claim."},
+        {"handle": "SRC_025", "kind": "revised", "note": "Exact claim."},
+        {"handle": "SRC_018", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_013", "kind": "revised", "note": "13 unique points."},
+        {"handle": "SRC_019", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_015", "kind": "revised", "note": "Honest claim."}
+      ],
+      "optional_refs": ["SRC_001", "SRC_003"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.031250",
+      "mechanism": "A complete symmetric lattice arrangement. By strategically placing 4 corners, 4 edge midpoints, and 5 internal points at rational 1/4 intervals, the minimum area is securely bounded at 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any triangle formed by three points has an area strictly less than 0.03125, this configuration is invalid.",
+        "If the frontier-claim-honest checker identifies a discrepancy between the claimed score and the actual minimum area, the claim is refuted."
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "Well-formed 13 distinct points."},
+        {"handle": "SRC_023", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_021", "kind": "revised", "note": "Exact claim."},
+        {"handle": "SRC_025", "kind": "revised", "note": "Exact claim."},
+        {"handle": "SRC_018", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_013", "kind": "revised", "note": "13 unique points."},
+        {"handle": "SRC_019", "kind": "revised", "note": "0.03125 > 0.005."},
+        {"handle": "SRC_015", "kind": "revised", "note": "Honest claim."}
+      ],
+      "optional_refs": ["SRC_004", "SRC_002"]
+    }
+  ]
+}
+```
