@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=6 blockers=none (WATCH: src/ at 487 of 640 after step 5; S1 came in at ~274 against SPEC's 140 estimate — projection and the
+State: next=7 blockers=none (WATCH: src/ at 487 of 640 after step 5; S1 came in at ~274 against SPEC's 140 estimate — projection and the
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -480,7 +480,7 @@ point):
 
       GATE: `diff_budget` `{"src/": 487, "ceiling": 640, "verdict": "WITHIN"}`.
 
-- [ ] 6. (S3) Add the render cases to `tests/test_discharge_channel.py`: the
+- [x] 6. (S3) Add the render cases to `tests/test_discharge_channel.py`: the
       section lands in the BINDING block (priority 2, after `criteria`, before
       `mandatory-interface`) and not among the advisory sections; an absent
       channel renders NOTHING rather than a "no criticisms" notice; and the
@@ -492,6 +492,37 @@ point):
       done-when: `python -m pytest tests/test_discharge_channel.py -q -k
       "binding_block or terminal_cycle or renders_nothing" 2>&1 | tail -5`
       shows failures (paste it)
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_channel.py -q -k \
+          "binding_block or terminal_cycle or renders_nothing"
+      tests/test_discharge_channel.py:313: TypeError
+      FAILED test_the_render_lands_in_the_binding_block_not_a_sidebar
+      FAILED test_a_criticism_at_cycle_k_still_renders_at_the_terminal_cycle
+      2 failed, 1 passed, 12 deselected in 0.17s
+      ```
+      These cases were written in step 4's pass (recorded there); this step
+      verifies them rather than writing them again, which is what that record
+      committed to. Two are RED on the missing `packs.py` parameter — the
+      integration step 7 lands. `test_an_absent_channel_renders_nothing` is
+      already GREEN, because it asserts on the render FUNCTION rather than the
+      pack, and N1's rule ("None, never a 'no criticisms' notice") is a
+      property of the function.
+
+      What the two red cases will actually prove once green, stated now so the
+      step-7 record cannot quietly weaken them:
+      - `binding_block` does NOT text-search the pack for the word criticism.
+        It parses `render_conj_pack`'s AST, reads the `_pack_section` priority
+        and flags, and asserts the exact tuple ordering `allocate_pack` sorts
+        by: `(2, "criteria") < (2, "open-criticisms") < (3,
+        "mandatory-interface")`, plus `droppable is False` and `compressible is
+        False`. A pack that merely MENTIONED criticism somewhere would pass a
+        text search and fail this.
+      - `terminal_cycle` drives eight cycles of accumulating ACCEPTED state,
+        injects at cycle 2 and asks at cycle 8, at `token_budget=200` — the
+        budget measured to cut a droppable section outright. A test at 400
+        would pass with the section made droppable and would prove nothing.
 
 - [ ] 7. (S3) Implement the render: `channel.py::
       render_open_criticism_context`; `llm/packs.py` gains the
