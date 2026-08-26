@@ -774,7 +774,7 @@ recorded here rather than left as a silent reordering.
 
 ## Commit 2 — wire, submission, discharge records (S4, S5, S6, S8, S11)
 
-- [ ] 11. (S4) Write `tests/test_discharge_wire.py`: `DischargeWireV1` shape;
+- [x] 11. (S4) Write `tests/test_discharge_wire.py`: `DischargeWireV1` shape;
       the `kind` enum in the EMITTED schema derives from the registry; and the
       PRUNING claim across ALL THREE embedding contracts —
       `ConjecturerWireContract`, `AtomicConjectureWireContractV1` and the v6
@@ -782,6 +782,29 @@ recorded here rather than left as a silent reordering.
       (SPEC's census). RED now.
       done-when: `python -m pytest tests/test_discharge_wire.py -q 2>&1 |
       tail -5` shows failures naming `DischargeWireV1` (paste it)
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_wire.py -q
+      E   ImportError: cannot import name 'DischargeWireV1' from
+          'deepreason.llm.wire'
+      ERROR tests/test_discharge_wire.py
+      !!!!!! Interrupted: 1 error during collection !!!!!!
+      1 error in 0.30s
+      ```
+      Ten cases. Three deserve naming because each closes a way the next step
+      could look right and be wrong:
+      - `test_the_field_is_present_when_the_channel_is_on` exists ONLY to stop
+        the pruning tests passing vacuously. Without it, deleting `discharges`
+        from the models entirely would satisfy every absence assertion.
+      - `test_the_three_committed_reads_of_the_candidate_def_are_unmoved`
+        asserts the candidate `$def`'s property set EXACTLY, so an unpruned
+        field fails here rather than three commits later in someone else's
+        test file. It is SPEC's blast-radius census turned into a check.
+      - `test_a_candidate_without_discharges_is_still_valid` pins R4's
+        disclose-never-die at the schema layer: a required field would make the
+        wire enforce a gate the design forbids, and no re-ask could ever be
+        attempted because the reply would not parse.
 
 - [ ] 12. (S4) Implement `DischargeWireV1` in `llm/wire.py`;
       `CompactConjectureCandidate.discharges` (list, max_length=32) and
