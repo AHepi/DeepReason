@@ -1,0 +1,345 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.25\nPOINT 0.0 0.5\nPOINT 0.0 0.75\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.25\nPOINT 1.0 0.5\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nPOINT 0.5 0.125\nPOINT 0.5 0.625\nCLAIM 0.0",
+      "mechanism": "Algorithm: Start with an empty set S. Repeatedly generate a random point p in [0,1]x[0,1]. Compute the minimum triangle area formed by p and all pairs of points in S. If this area is greater than the current global minimum (or S has fewer than 2 points), add p to S. Stop when |S|=13. This randomized greedy approach pushes points into regions that are currently 'safe', gradually building a configuration that avoids small-area triangles.",
+      "counterconditions": [
+        "The randomized greedy algorithm gets stuck in a local optimum and fails to reach 13 points.",
+        "The resulting configuration is not perfectly symmetric, leaving suboptimal gaps.",
+        "The minimum triangle area is less than 0.005, failing the floor check."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.2\nPOINT 0.0 0.4\nPOINT 0.0 0.6\nPOINT 0.0 0.8\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.2\nPOINT 1.0 0.4\nPOINT 1.0 0.6\nPOINT 1.0 0.8\nPOINT 1.0 1.0\nCLAIM 0.0",
+      "mechanism": "Grid: Place 13 points in a deterministic pattern, such as two vertical lines of 5 points each, with 3 points in the middle column. This deterministic approach provides a baseline configuration that can be easily verified for wellformedness and floor constraints.",
+      "counterconditions": [
+        "The grid pattern is too regular and leads to many collinear triples, resulting in a minimum area of 0.",
+        "The grid pattern does not optimize the minimum triangle area effectively."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.25\nPOINT 0.0 0.5\nPOINT 0.0 0.75\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.25\nPOINT 1.0 0.5\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nCLAIM 0.0",
+      "mechanism": "Algorithm: Start with a symmetric template and perturb points slightly to break collinearity. If any triangle area falls below a threshold, identify the responsible triple and apply a small targeted shift to the most constrained point. Iterate until all 286 areas are above a target value.",
+      "counterconditions": [
+        "The perturbation strategy fails to converge.",
+        "The targeted shifts move points out of the unit square.",
+        "The resulting configuration is not wellformed."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.25\nPOINT 0.0 0.5\nPOINT 0.0 0.75\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.25\nPOINT 1.0 0.5\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nPOINT 0.5 0.125\nPOINT 0.5 0.625\nPOINT 0.5 1.0\nCLAIM 0.0",
+      "mechanism": "Logic: Analyze the geometric constraints to find a theoretical upper bound on the minimum triangle area. If a configuration exists where all 13 points are placed such that any three form a triangle of area at least A, then A is a lower bound. We try to construct such a configuration by placing points on a lattice and then adjusting.",
+      "counterconditions": [
+        "The theoretical upper bound is too loose to be useful.",
+        "The constructed configuration does not achieve the theoretical bound."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.25\nPOINT 0.0 0.5\nPOINT 0.0 0.75\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.25\nPOINT 1.0 0.5\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nPOINT 0.25 0.25\nPOINT 0.5 0.5\nPOINT 0.75 0.75\nCLAIM 0.0",
+      "mechanism": "Random: Generate 13 points uniformly at random in the unit square. Check if the minimum triangle area is above a threshold. If not, discard and regenerate. This is a baseline approach.",
+      "counterconditions": [
+        "The probability of generating a valid configuration is extremely low.",
+        "The minimum triangle area is likely to be very small."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 0.0 0.25\nPOINT 0.0 0.5\nPOINT 0.0 0.75\nPOINT 0.0 1.0\nPOINT 1.0 0.0\nPOINT 1.0 0.25\nPOINT 1.0 0.5\nPOINT 1.0 0.75\nPOINT 1.0 1.0\nPOINT 0.5 0.5\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nCLAIM 0.0",
+      "mechanism": "Physics: Model the points as charged particles repelling each other within the unit square. Simulate the dynamics until they reach a stable equilibrium. The repulsion will naturally push points apart, potentially maximizing the minimum triangle area.",
+      "counterconditions": [
+        "The particles may collapse to the boundary, leading to small triangles.",
+        "The simulation may not converge to a global optimum.",
+        "The minimum triangle area may be smaller than other targeted approaches."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Departing from any previous structural assumptions."
+        }
+      ]
+    }
+  ]
+}
+```

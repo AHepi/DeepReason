@@ -1,0 +1,120 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "A grid-anchored construction (corners, edge midpoints, inner symmetric lattice) that maximizes structural symmetry; it fails the floor, serving as an explicit counterexample to the assumption that symmetry maximizes minimum area.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.005, this candidate is refuted as it scores 0.0.",
+        "If a collinear triple is absent among the 13 points, the minimum area is strictly positive."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nCLAIM 0.000000",
+      "mechanism": "A fully symmetric 4-fold configuration (corners, edge midpoints, center, and diagonal midpoints) that inevitably introduces collinear triples along the medians and diagonals, forcing the minimum area to zero.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.0, this candidate is refuted as it scores 0.0.",
+        "If the points do not form a highly symmetric pattern, the mechanism is invalid."
+      ],
+      "typicality": 0.9,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.250000 0.000000\nPOINT 0.000000 0.250000\nPOINT 1.000000 0.250000\nPOINT 0.750000 1.000000\nPOINT 0.250000 1.000000\nCLAIM 0.000000",
+      "mechanism": "An edge-dense asymmetric configuration that clusters points along the boundary (edges and corners) to test the trade-off between boundary packing and the induction of collinear triples, yielding zero minimum area.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.0, this candidate is refuted as it scores 0.0.",
+        "If the boundary points do not form multiple collinear triples, the mechanism is invalid."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nCLAIM 0.000000",
+      "mechanism": "A lattice-plus-diagonal configuration that maximizes structural rigidity and symmetry but inadvertently aligns the center, corners, and edge midpoints, producing collinear triples and a zero score.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.0, this candidate is refuted as it scores 0.0.",
+        "If the points do not lie on a grid with diagonal alignments, the mechanism is invalid."
+      ],
+      "typicality": 0.7,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "A symmetric grid of 13 points (4 corners, 4 edge midpoints, 4 inner square vertices, 1 center) designed for maximum regularity; the alignment of center, inner vertices, and corners forces collinear triples, yielding zero.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.0, this candidate is refuted as it scores 0.0.",
+        "If the points do not form a 3x3 grid with an additional center point, the mechanism is invalid."
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "A maximally symmetric 13-point grid (corners, edge midpoints, inner vertices, center) that achieves perfect structural regularity but inevitably introduces collinear triples along all diagonals and medians, yielding zero minimum area.",
+      "counterconditions": [
+        "If the minimum area of the 286 triangles exceeds 0.0, this candidate is refuted as it scores 0.0.",
+        "If the points do not form a symmetric grid with collinear triples, the mechanism is invalid."
+      ],
+      "typicality": 0.95,
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate provides exactly 13 distinct valid decimal points."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate explicitly fails the 0.005 floor by design."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim here is exactly 0.0 and is verifiable."},
+        {"handle": "SRC_020", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from prior wellformed failures; this candidate is wellformed."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from floor-achieving attempts; this candidate fails the floor."},
+        {"handle": "SRC_017", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."},
+        {"handle": "SRC_016", "kind": "departure_declared", "note": "Departure from claim-honest failures; the claim is verifiable."}
+      ]
+    }
+  ]
+}
+```

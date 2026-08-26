@@ -1,0 +1,159 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "ContextRequestWireV2": {"additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"query": {"minLength": 1, "type": "string"}}, "required": ["query"]}, {"properties": {"requested_visible_aliases": {"minItems": 1}}, "required": ["requested_visible_aliases"]}, {"properties": {"desired_retrieval_channels": {"minItems": 1}}, "required": ["desired_retrieval_channels"]}]}], "description": "V6 semantic retrieval using only SRC_### and SCR_### handles.", "properties": {"desired_retrieval_channels": {"items": {"enum": ["focus", "keyword", "link", "recent", "semantic"], "type": "string"}, "maxItems": 16, "title": "Desired Retrieval Channels", "type": "array", "uniqueItems": true}, "purpose": {"anyOf": [{"maxLength": 4096, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Purpose"}, "query": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Query"}, "requested_visible_aliases": {"items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018", "SRC_019", "SRC_020", "SRC_021", "SRC_022", "SRC_023", "SRC_024", "SRC_025"], "type": "string"}, "maxItems": 64, "title": "Requested Visible Aliases", "type": "array", "uniqueItems": true}}, "title": "ContextRequestWireV2", "type": "object"}, "DischargeWireV1": {"additionalProperties": false, "description": "One criticism, answered (REBUILD F1).\n\n`handle` is the criticism's handle exactly as the pack listed it, and it is\nleft a PLAIN STRING on purpose: its legal set has one authority --\n`deepreason.discharge.open_criticisms` -- and leaving the field open is what\nlets a menu renderer key on it by registering, without either side learning\nthe other's subsystem. A private enum here would close that seam.\n\nNOTHING here is evidence. A discharge is a precondition on SUBMISSION; no\nfield, kind or count may feed a label, a warrant, a rank or an admission\ndecision (`DR-CON-discharge-channel`, the law line).", "properties": {"handle": {"maxLength": 256, "minLength": 1, "title": "Handle", "type": "string"}, "kind": {"enum": ["revised", "rebutted", "departure_declared"], "minLength": 1, "title": "Kind", "type": "string"}, "note": {"default": "", "title": "Note", "type": "string"}, "where": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Where"}}, "required": ["handle", "kind"], "title": "DischargeWireV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018", "SRC_019", "SRC_020", "SRC_021", "SRC_022", "SRC_023", "SRC_024", "SRC_025"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "checker_specs": {"default": [], "items": {"anyOf": [{"additionalProperties": false, "type": "object"}, {"type": "null"}]}, "title": "Checker Specs", "type": "array"}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "discharges": {"default": [], "items": {"$ref": "#/$defs/DischargeWireV1"}, "title": "Discharges", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008", "SRC_009", "SRC_010", "SRC_011", "SRC_012", "SRC_013", "SRC_014", "SRC_015", "SRC_016", "SRC_017", "SRC_018", "SRC_019", "SRC_020", "SRC_021", "SRC_022", "SRC_023", "SRC_024", "SRC_025"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}, "ResearchFetchProposalWireV1": {"additionalProperties": false, "description": "Directed-fetch intent on the v6 wire: explicit https URLs only.\n\nThe model proposes sources; the harness alone validates them against\nthe frozen domain allowlist and executes them under containment. The\nwire shape mirrors ResearchFetchProposalDraftV1 exactly \u2014 which it did\nnot: the draft rejects a non-https or duplicated URL and the wire took\nboth, so the refusal landed in compile() after the response had been\naccepted, and the schema advertised neither rule.", "properties": {"purpose": {"maxLength": 2000, "minLength": 1, "title": "Purpose", "type": "string"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "urls": {"items": {"pattern": "^https://[^\\s]{1,2048}$", "type": "string"}, "maxItems": 3, "minItems": 1, "title": "Urls", "type": "array", "uniqueItems": true}}, "required": ["request_identifier", "purpose", "urls"], "title": "ResearchFetchProposalWireV1", "type": "object"}, "ScratchBlockDraftBodyV1": {"additionalProperties": false, "properties": {"bears_on_refs": {"anyOf": [{"items": {"pattern": "^SRC_[0-9]{3}$", "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Visible SRC_### artifacts this note was aimed at. A RELEVANCE hypothesis, not a grounding claim: nothing follows it, and it is admissible whether or not the aim turns out to be right. Read back later it is labelled as the aim held when the note was written, since source aliases are call-local.", "title": "Bears On Refs", "uniqueItems": true}, "content": {"maxLength": 262144, "minLength": 1, "title": "Content", "type": "string"}, "experiment_refs": {"anyOf": [{"items": {"maxLength": 128, "minLength": 1, "type": "string"}, "maxItems": 4, "type": "array"}, {"type": "null"}], "default": null, "description": "Simulation request identifiers this note came out of. Provenance only: naming an experiment here never makes this block evidence for anything, and never makes the experiment's result a fact.", "title": "Experiment Refs", "uniqueItems": true}, "possible_next_move": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Possible Next Move"}, "unfinished": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Unfinished"}, "why_keep_this": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Why Keep This"}}, "required": ["content"], "title": "ScratchBlockDraftBodyV1", "type": "object"}, "ScratchClusterSuggestionV1": {"additionalProperties": false, "properties": {"member_refs": {"items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "minItems": 1, "title": "Member Refs", "type": "array", "uniqueItems": true}, "seed_focus": {"maxLength": 262144, "minLength": 1, "title": "Seed Focus", "type": "string"}}, "required": ["seed_focus", "member_refs"], "title": "ScratchClusterSuggestionV1", "type": "object"}, "ScratchNewBlockDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "local_key": {"pattern": "^NEW_[0-9]{3,}$", "title": "Local Key", "type": "string"}}, "required": ["local_key", "body"], "title": "ScratchNewBlockDraftV1", "type": "object"}, "ScratchProposalLinkV1": {"additionalProperties": false, "properties": {"because": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Because"}, "direction": {"anyOf": [{"enum": ["directed", "symmetric"], "type": "string"}, {"type": "null"}], "default": null, "title": "Direction"}, "from_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "From Ref", "type": "string"}, "holds_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Holds When"}, "relation_hint": {"maxLength": 16384, "minLength": 1, "title": "Relation Hint", "type": "string"}, "to_ref": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "title": "To Ref", "type": "string"}, "weakens_when": {"anyOf": [{"maxLength": 262144, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Weakens When"}}, "required": ["from_ref", "to_ref", "relation_hint"], "title": "ScratchProposalLinkV1", "type": "object"}, "ScratchProposalV1": {"additionalProperties": false, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support.", "properties": {"cluster_suggestions": {"default": [], "items": {"$ref": "#/$defs/ScratchClusterSuggestionV1"}, "maxItems": 4, "title": "Cluster Suggestions", "type": "array"}, "links": {"default": [], "items": {"$ref": "#/$defs/ScratchProposalLinkV1"}, "maxItems": 4, "title": "Links", "type": "array"}, "new_blocks": {"default": [], "items": {"$ref": "#/$defs/ScratchNewBlockDraftV1"}, "maxItems": 4, "title": "New Blocks", "type": "array"}, "revisions": {"default": [], "items": {"$ref": "#/$defs/ScratchRevisionDraftV1"}, "maxItems": 4, "title": "Revisions", "type": "array"}, "unresolved_questions": {"default": [], "items": {"$ref": "#/$defs/ScratchQuestionDraftV1"}, "maxItems": 4, "title": "Unresolved Questions", "type": "array"}}, "title": "ScratchProposalV1", "type": "object"}, "ScratchQuestionDraftV1": {"additionalProperties": false, "properties": {"question": {"maxLength": 262144, "minLength": 1, "title": "Question", "type": "string"}, "related_refs": {"default": [], "items": {"pattern": "^(?:SCR|NEW)_[0-9]{3,}$", "type": "string"}, "maxItems": 64, "title": "Related Refs", "type": "array", "uniqueItems": true}}, "required": ["question"], "title": "ScratchQuestionDraftV1", "type": "object"}, "ScratchRevisionDraftV1": {"additionalProperties": false, "properties": {"body": {"$ref": "#/$defs/ScratchBlockDraftBodyV1"}, "target_alias": {"pattern": "^SCR_[0-9]{3,}$", "title": "Target Alias", "type": "string"}}, "required": ["target_alias", "body"], "title": "ScratchRevisionDraftV1", "type": "object"}, "SimulationParameterSetWireV1": {"additionalProperties": false, "properties": {"name": {"maxLength": 128, "minLength": 1, "title": "Name", "type": "string"}, "values_json": {"maxLength": 262144, "minLength": 2, "title": "Values Json", "type": "string"}}, "required": ["name", "values_json"], "title": "SimulationParameterSetWireV1", "type": "object"}, "SimulationProposalWireV1": {"additionalProperties": false, "properties": {"declared_assumptions": {"items": {"type": "string"}, "maxItems": 64, "title": "Declared Assumptions", "type": "array", "uniqueItems": true}, "discriminating_purpose": {"maxLength": 8192, "minLength": 1, "title": "Discriminating Purpose", "type": "string"}, "hypothesis": {"maxLength": 16384, "minLength": 1, "title": "Hypothesis", "type": "string"}, "interpretation_conditions": {"items": {"type": "string"}, "maxItems": 64, "minItems": 1, "title": "Interpretation Conditions", "type": "array", "uniqueItems": true}, "model_source": {"description": "The program itself; its required shape follows simulation_mode. For sandboxed_python_v1 the entire source must be exactly one function definition and nothing else: def simulate(inputs, rng), with no imports, no statements outside it, no decorators, no return annotation, and no default, keyword-only, or variadic arguments. It is called once per (input, seed) pair, where inputs is one mapping carrying parameter_set, parameters, and sealed_inputs, and rng is a seeded random.Random. It must return a JSON-safe mapping of observable name to finite value; that mapping is the only output recorded, so printing reports nothing. math is available and nothing else may be imported. For declarative_numeric_v1 this field is a JSON document instead of Python.", "maxLength": 262144, "minLength": 1, "title": "Model Source", "type": "string"}, "parameter_definitions": {"items": {"$ref": "#/$defs/SimulationParameterSetWireV1"}, "maxItems": 256, "title": "Parameter Definitions", "type": "array"}, "request_identifier": {"maxLength": 128, "minLength": 1, "title": "Request Identifier", "type": "string"}, "requested_observables": {"description": "The observable names this proposal is judged on. Each is an identifier, or up to eight identifiers joined by dots to reach into a nested result (a.b.c tries the literal key a.b.c first, then walks a, then b, then c). Every name must resolve in what the program produces: for sandboxed_python_v1 in the mapping simulate returns, for declarative_numeric_v1 among the document's observables. The two sets must match exactly. A name that does not resolve ends the run with declared observable missing, so stream names like stdout are never observables.", "items": {"pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}(?:\\.[A-Za-z][A-Za-z0-9_]{0,63}){0,7}$", "type": "string"}, "maxItems": 128, "minItems": 1, "title": "Requested Observables", "type": "array", "uniqueItems": true}, "requested_seed_set": {"items": {"maximum": 9223372036854775807, "minimum": -9223372036854775808, "type": "integer"}, "maxItems": 256, "title": "Requested Seed Set", "type": "array", "uniqueItems": true}, "rival_predictions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Rival Predictions", "type": "array", "uniqueItems": true}, "simulation_mode": {"enum": ["declarative_numeric_v1", "sandboxed_python_v1"], "title": "Simulation Mode", "type": "string"}}, "required": ["request_identifier", "hypothesis", "rival_predictions", "discriminating_purpose", "simulation_mode", "model_source", "requested_observables", "interpretation_conditions"], "title": "SimulationProposalWireV1", "type": "object"}}, "additionalProperties": false, "allOf": [{"anyOf": [{"properties": {"candidates": {"minItems": 1}}, "required": ["candidates"]}, {"properties": {"context_request": {"not": {"type": "null"}}}, "required": ["context_request"]}, {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, {"properties": {"simulation_proposals": {"minItems": 1}}, "required": ["simulation_proposals"]}, {"properties": {"scratch_proposal": {"not": {"type": "null"}}}, "required": ["scratch_proposal"]}, {"properties": {"research_proposals": {"minItems": 1}}, "required": ["research_proposals"]}]}, {"if": {"properties": {"abstention": {"not": {"type": "null"}}}, "required": ["abstention"]}, "then": {"properties": {"candidates": {"maxItems": 0}, "research_proposals": {"maxItems": 0}, "scratch_proposal": {"type": "null"}, "simulation_proposals": {"maxItems": 0}}}}], "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidates": {"items": {"$ref": "#/$defs/ReasoningCandidateProposal"}, "maxItems": 256, "title": "Candidates", "type": "array"}, "context_request": {"anyOf": [{"$ref": "#/$defs/ContextRequestWireV2"}, {"type": "null"}], "default": null}, "research_proposals": {"items": {"$ref": "#/$defs/ResearchFetchProposalWireV1"}, "maxItems": 2, "title": "Research Proposals", "type": "array"}, "scratch_proposal": {"anyOf": [{"$ref": "#/$defs/ScratchProposalV1"}, {"type": "null"}], "default": null, "description": "Optional imaginative workshop: speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are welcome. Scratch remains advisory; storage alone never makes it fact, evidence, a formal claim, or formal support."}, "simulation_proposals": {"items": {"$ref": "#/$defs/SimulationProposalWireV1"}, "maxItems": 1, "title": "Simulation Proposals", "type": "array"}}, "title": "ReasoningConjecturerTurnWireV6", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+SRC_001
+SRC_002
+SRC_003
+SRC_004
+SRC_005
+SRC_006
+SRC_007
+SRC_008
+SRC_009
+SRC_010
+SRC_011
+SRC_012
+SRC_013
+SRC_014
+SRC_015
+SRC_016
+SRC_017
+SRC_018
+SRC_019
+SRC_020
+SRC_021
+SRC_022
+SRC_023
+SRC_024
+SRC_025
+
+ONE SYNTAX EXAMPLE:
+
+{"abstention":{"search_signal":"stuck"}}
+
+INPUT:
+
+## problem
+PROBLEM question-64b724c4118320989925d111501a8e41
+Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line "POINT x y" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line "CLAIM v" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- frontier-wellformed@v1: predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) for raw in [re.findall(r'POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])])
+- frontier-claim-honest@v1: predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) and len(cl) > 0 and min(abs((u[0] - t[0]) * (v[1] - t[1]) - (v[0] - t[0]) * (u[1] - t[1])) for t in pts for u in pts for v in pts if t < u < v) / 2.0 >= float(cl[-1]) - 1e-12 for raw in [re.findall(r'POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])] for cl in [re.findall(r'CLAIM[ \t]+([-+0-9.eE]+)', content)])
+- frontier-above-floor@v1: predicate:all(len(raw) == 13 and sum(1 for t in pts for u in pts if t == u) == 13 and all(0.0 <= c <= 1.0 for p in pts for c in p) and min(abs((u[0] - t[0]) * (v[1] - t[1]) - (v[0] - t[0]) * (u[1] - t[1])) for t in pts for u in pts for v in pts if t < u < v) / 2.0 >= 0.005 for raw in [re.findall(r'POINT[ \t]+([0-9]*\.?[0-9]+)[ \t]+([0-9]*\.?[0-9]+)', content)] for pts in [sorted([(float(a), float(b)) for a, b in raw])])
+
+## open-criticisms
+OPEN CRITICISMS ON THIS PROBLEM (8 of 180 shown, by handle) -- these are part of what your candidate must answer, not advice.
+Every candidate you submit must DISCHARGE each handle below, one of:
+  - revised -- say WHAT changed and WHERE in the candidate
+  - rebutted -- say why the criticism fails. Your rebuttal enters the record as an ordinary claim and can be attacked like any other
+  - departure_declared -- say what you are breaking with. Declaring costs you nothing; nothing scores a departure
+  [SRC_012] against SRC_010
+      CLAIM: critic: frontier-wellformed@v1 failed on 170213d1670b
+      CITED SPAN: (none quoted)
+  [SRC_025] against SRC_024
+      CLAIM: critic: frontier-above-floor@v1 failed on ba37292df0bf
+      CITED SPAN: (none quoted)
+  [SRC_023] against SRC_022
+      CLAIM: critic: frontier-claim-honest@v1 failed on 361ed71e2b56
+      CITED SPAN: (none quoted)
+  [SRC_020] against SRC_018
+      CLAIM: critic: frontier-above-floor@v1 failed on 0b2920fcb0d1
+      CITED SPAN: (none quoted)
+  [SRC_013] against SRC_011
+      CLAIM: critic: frontier-wellformed@v1 failed on e7bff400abe5
+      CITED SPAN: (none quoted)
+  [SRC_021] against SRC_019
+      CLAIM: critic: frontier-above-floor@v1 failed on 83e81f4fb78a
+      CITED SPAN: (none quoted)
+  [SRC_017] against SRC_015
+      CLAIM: critic: frontier-claim-honest@v1 failed on a27aa2961a2b
+      CITED SPAN: (none quoted)
+  [SRC_016] against SRC_014
+      CLAIM: critic: frontier-claim-honest@v1 failed on 01bd4dbca7dc
+      CITED SPAN: (none quoted)
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- SRC_003: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- SRC_001: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- SRC_002: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- SRC_004: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- SRC_006: nu: verdict of frontier-claim-honest@v1 on SRC_005 is sound and relevant
+- SRC_007: critic: frontier-claim-honest@v1 failed on 69b331b52531
+- SRC_008: nu: verdict of frontier-above-floor@v1 on SRC_005 is sound and relevant
+- SRC_009: critic: frontier-above-floor@v1 failed on 69b331b52531
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates. EVERY candidate must carry a `discharges` entry for EVERY handle listed under OPEN CRITICISMS above. A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.
+
+REFERENCE MENU -- /candidates/*/optional_refs/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (25 legal values)
+  [0] OMIT -- leave "optional_refs" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+  [24] SRC_024
+  [25] SRC_025
+You may answer with the handle itself or with its [index].
+
+REFERENCE MENU -- /candidates/*/neighbours/*
+Choose a value for this field from this list ONLY. Any value not listed is rejected; do not write a handle that is not here.
+  idx  handle (25 legal values)
+  [0] OMIT -- leave "neighbours" empty for this candidate. A candidate that names no neighbour is a complete candidate.
+  [1] SRC_001
+  [2] SRC_002
+  [3] SRC_003
+  [4] SRC_004
+  [5] SRC_005
+  [6] SRC_006
+  [7] SRC_007
+  [8] SRC_008
+  [9] SRC_009
+  [10] SRC_010
+  [11] SRC_011
+  [12] SRC_012
+  [13] SRC_013
+  [14] SRC_014
+  [15] SRC_015
+  [16] SRC_016
+  [17] SRC_017
+  [18] SRC_018
+  [19] SRC_019
+  [20] SRC_020
+  [21] SRC_021
+  [22] SRC_022
+  [23] SRC_023
+  [24] SRC_024
+  [25] SRC_025
+You may answer with the handle itself or with its [index].

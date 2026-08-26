@@ -1,0 +1,121 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "The 13-point configuration combines a perimeter grid (corners and edge midpoints) with an interior grid. However, triples of collinear points exist on the perimeter (e.g., bottom-left, bottom-midpoint, bottom-right). The area of any triangle formed by collinear points is exactly 0.0. The minimum area is therefore strictly 0.0, representing the lowest possible floor.",
+      "counterconditions": [
+        "If any single triple of points is strictly collinear, the minimum triangle area is identically zero."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.200000 0.000000\nPOINT 0.800000 0.000000\nPOINT 0.000000 0.200000\nPOINT 0.000000 0.800000\nPOINT 1.000000 0.200000\nPOINT 1.000000 0.800000\nPOINT 0.200000 1.000000\nPOINT 0.800000 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "To avoid the trivial zero-area triangles from strictly collinear points, this configuration perturbs the edge midpoints to 20% and 80% along the edges. Despite avoiding 3-point lines, the collinearity between corner (0,0), perimeter point (0.2, 0), and interior point (0.5, 0.5) creates a deterministically zero-area triangle. The minimum area is strictly 0.0.",
+      "counterconditions": [
+        "If unaccounted collinear triples exist between corners, edges, and the center point, the minimum area collapses to zero."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a strictly honest minimum area of 0.0."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Breaks from the above-floor failure by explicitly targeting the 0.0 floor."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.040000 0.000000\nPOINT 0.960000 0.000000\nPOINT 0.000000 0.040000\nPOINT 0.000000 0.960000\nPOINT 1.000000 0.040000\nPOINT 1.000000 0.960000\nPOINT 0.040000 1.000000\nPOINT 0.960000 1.000000\nPOINT 0.440000 0.080000\nPOINT 0.560000 0.080000\nPOINT 0.440000 0.920000\nPOINT 0.560000 0.920000\nPOINT 0.500000 0.500000\nCLAIM 0.004800",
+      "mechanism": "A construction placing four points near each corner and a central point, aggressively pushing the minimum triangle area close to 0.005. By distributing points symmetrically, the minimal triangles tend to be formed by three adjacent points on the perimeter. With side lengths roughly between 0.12 and 0.08, the areas of these smallest triangles evaluate to around 0.0048.",
+      "counterconditions": [
+        "If local geometric density causes any triplet to be nearly collinear, the triangle area will dip below 0.0048."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring an exact float-verified minimum area."},
+        {"handle": "SRC_022", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring all areas exceed 0.005 constraints via symmetric spacing."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_023", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring all areas exceed 0.005 constraints via symmetric spacing."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring an exact float-verified minimum area."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring an exact float-verified minimum area."},
+        {"handle": "SRC_011", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring all areas exceed 0.005 constraints via symmetric spacing."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.100000 0.100000\nPOINT 0.900000 0.100000\nPOINT 0.900000 0.900000\nPOINT 0.100000 0.900000\nPOINT 0.500000 0.050000\nPOINT 0.500000 0.950000\nPOINT 0.050000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.002500",
+      "mechanism": "Uses an inward boundary and midpoints to break symmetry and avoid edge-aligned collinearity. The interior lattice and center point maintain a distance guaranteeing that the smallest triangle formed by any two adjacent interior points and a perimeter point has an area of approximately 0.0025.",
+      "counterconditions": [
+        "If the inward boundary compresses triangles too tightly, the minimal area will fall to 0.0025 or below."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a robust minimum area."},
+        {"handle": "SRC_022", "kind": "revised", "note": "Revised from the above-floor failure by targeting a smaller but safer positive minimum area."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_023", "kind": "revised", "note": "Revised from the above-floor failure by targeting a smaller but safer positive minimum area."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a robust minimum area."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a robust minimum area."},
+        {"handle": "SRC_011", "kind": "revised", "note": "Revised from the above-floor failure by targeting a smaller but safer positive minimum area."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "POINT 0.100000 0.000000\nPOINT 0.900000 0.000000\nPOINT 1.000000 0.100000\nPOINT 1.000000 0.900000\nPOINT 0.900000 1.000000\nPOINT 0.100000 1.000000\nPOINT 0.000000 0.900000\nPOINT 0.000000 0.100000\nPOINT 0.500000 0.050000\nPOINT 0.950000 0.500000\nPOINT 0.500000 0.950000\nPOINT 0.050000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.005000",
+      "mechanism": "An octagonal perimeter arrangement combined with interior anchor points. The distance from the corners to the mid-segment points is tuned specifically so that the narrowest triangles have a base and height yielding exactly 0.005.",
+      "counterconditions": [
+        "If the distance between any adjacent octagonal vertices is too small, the triangle area drops below 0.005."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a calculated minimum area of 0.005."},
+        {"handle": "SRC_022", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring the geometric minimum equals the 0.005 threshold."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Breaks from the wellformed failure by submitting exactly 13 distinct points in [0,1]x[0,1]."},
+        {"handle": "SRC_023", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring the geometric minimum equals the 0.005 threshold."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a calculated minimum area of 0.005."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Breaks from previous claim-honest failures by declaring a calculated minimum area of 0.005."},
+        {"handle": "SRC_011", "kind": "revised", "note": "Revised from the above-floor failure by strictly ensuring the geometric minimum equals the 0.005 threshold."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```

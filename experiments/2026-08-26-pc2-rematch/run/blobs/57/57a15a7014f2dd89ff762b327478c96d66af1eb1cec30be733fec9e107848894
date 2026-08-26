@@ -1,0 +1,266 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+      "mechanism": "13 points are placed on a 4x4 grid with a center point, ensuring all 13 points are distinct, lie in [0,1]x[0,1], and achieve a minimum triangle area of 1/32 = 0.03125.",
+      "counterconditions": [
+        "If any three points are collinear, the minimum area is 0, invalidating the claim.",
+        "If any point falls outside the unit square, the configuration is invalid."
+      ],
+      "typicality": 0.85,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Grid construction ensures 13 distinct points."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "revised",
+          "note": "Minimum area 0.03125 exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Claim 0.03125 is honestly verified by the geometry."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Minimum area 0.03125 exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Grid construction ensures 13 distinct points."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "Minimum area 0.03125 exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "Claim 0.03125 is honestly verified."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "revised",
+          "note": "Claim 0.03125 is honestly verified."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nCLAIM 0.027778",
+      "mechanism": "A mix of grid and midpoints, prioritizing a denser cluster at the bottom while avoiding collinearity to maximize the minimum triangle area safely above the floor.",
+      "counterconditions": [
+        "If the denser clustering introduces collinearity, the score drops to 0.",
+        "If points exceed the unit square bounds, the configuration is invalid."
+      ],
+      "typicality": 0.65,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "Explicit 13 points listed."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "revised",
+          "note": "Minimum area safely above 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Claim matches geometric calculation."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "Minimum area safely above 0.005 floor."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "Explicit 13 points listed."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "Minimum area safely above 0.005 floor."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "Claim matches geometric calculation."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "revised",
+          "note": "Claim matches geometric calculation."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.030000",
+      "mechanism": "Conservative claim on the standard 4x4 grid minus 3 points to ensure a safe buffer above the computational floor and avoid potential floating point discrepancies.",
+      "counterconditions": [
+        "If the actual minimum area is less than 0.03, the claim is refuted.",
+        "If any points are not distinct, the configuration is invalid."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "revised",
+          "note": "0.03 > 0.005."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Claim 0.03 is less than actual 0.03125, honest."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "0.03 > 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "0.03 > 0.005."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "Claim 0.03 is honest."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "revised",
+          "note": "Claim 0.03 is honest."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nCLAIM 0.020833",
+      "mechanism": "Optimized geometric layout pushing points closer to boundaries to increase density while maintaining a verified minimum triangle area of 1/48.",
+      "counterconditions": [
+        "If points are not optimally spaced, minimum area could drop below 0.020833.",
+        "If any point lies outside [0,1]x[0,1], invalid."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "revised",
+          "note": "0.020833 > 0.005."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Claim 0.020833 is honest."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "0.020833 > 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "0.020833 > 0.005."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "Claim 0.020833 is honest."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "revised",
+          "note": "Claim 0.020833 is honest."
+        }
+      ],
+      "optional_refs": []
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 1.000000 0.666667\nPOINT 1.000000 1.000000\nCLAIM 0.018519",
+      "mechanism": "A 4x4 grid restricted to 13 points by leaving out the top row's first 3 points, yielding a minimum area of 1/54.",
+      "counterconditions": [
+        "If the actual area for this subset of points is less than 1/54, the claim fails.",
+        "If the missing points from the grid alter the minimum calculation, it could be invalid."
+      ],
+      "typicality": 0.1,
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "revised",
+          "note": "0.018519 > 0.005."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Claim 0.018519 is honest."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "revised",
+          "note": "0.018519 > 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "revised",
+          "note": "13 points provided."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "0.018519 > 0.005."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "Claim 0.018519 is honest."
+        },
+        {
+          "handle": "SRC_016",
+          "kind": "revised",
+          "note": "Claim 0.018519 is honest."
+        }
+      ],
+      "optional_refs": []
+    }
+  ]
+}
+```

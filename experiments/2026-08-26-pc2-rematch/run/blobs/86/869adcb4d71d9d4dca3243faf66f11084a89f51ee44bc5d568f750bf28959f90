@@ -1,0 +1,75 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "A point set maximizing minimum triangle area by distributing points with symmetry on edges and inside of the unit square, following the known n=13 geometric extremal configuration.\nPOINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.800000\nPOINT 1.000000 0.800000\nPOINT 0.500000 0.000000\nPOINT 0.250000 0.400000\nPOINT 0.750000 0.400000\nPOINT 0.125000 0.800000\nPOINT 0.875000 0.800000\nPOINT 0.375000 0.800000\nPOINT 0.625000 0.800000\nPOINT 0.500000 0.400000\nCLAIM 0.012500",
+      "mechanism": "Symmetric lattice mapping distributes area equally among adjacent grid triangles.",
+      "counterconditions": [
+        "If the minimum triangle area checked is less than 0.0125, this specific claim is refuted."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from invalid raw parsing format."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from layouts failing the minimum area floor."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from unverified area claims."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from unverified area claims."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departure from sub-floor configurations."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from previous ill-formed format."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departure from configurations failing the floor."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departure from unverified area claims."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A high-symmetry extremal point distribution constructed using heuristic vertex nudging to balance small adjacent triangles.\nPOINT 0.020000 0.500000\nPOINT 0.500000 0.020000\nPOINT 0.980000 0.500000\nPOINT 0.500000 0.980000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.350000\nPOINT 0.650000 0.500000\nPOINT 0.500000 0.650000\nPOINT 0.350000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.008000",
+      "mechanism": "Central radial perturbation avoids collinear triples while maintaining high minimum spacing.",
+      "counterconditions": [
+        "If checker identifies an area below 0.008, claim is false."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from previous well-formed failures."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from sub-floor failures."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from dishonest claims."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from dishonest claims."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departure from sub-floor configurations."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from ill-formed formats."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departure from sub-floor configurations."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departure from dishonest claims."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "Grid-shifted semi-lattice configuration optimized for uniform triangle spreading.\nPOINT 0.100000 0.100000\nPOINT 0.900000 0.100000\nPOINT 0.100000 0.900000\nPOINT 0.900000 0.900000\nPOINT 0.500000 0.500000\nPOINT 0.050000 0.500000\nPOINT 0.950000 0.500000\nPOINT 0.500000 0.050000\nPOINT 0.500000 0.950000\nPOINT 0.300000 0.300000\nPOINT 0.700000 0.300000\nPOINT 0.300000 0.700000\nPOINT 0.700000 0.700000\nCLAIM 0.010000",
+      "mechanism": "Exploits corner avoidance to maximize interior central spacing while retaining geometric spread.",
+      "counterconditions": [
+        "If checker finds triangle area < 0.01, this is refuted."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [],
+      "discharges": [
+        {"handle": "SRC_012", "kind": "departure_declared", "note": "Departure from ill-formed setups."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure from layouts below floor."},
+        {"handle": "SRC_021", "kind": "departure_declared", "note": "Departure from unverified claims."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure from unverified claims."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departure from sub-floor setups."},
+        {"handle": "SRC_013", "kind": "departure_declared", "note": "Departure from ill-formed formats."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departure from sub-floor layouts."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departure from unverified claims."}
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}
+```
