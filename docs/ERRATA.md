@@ -1404,3 +1404,42 @@ is now empty, which makes exit 3 unreachable rather than merely unearned. The
 general lesson is the one P2 already wrote down and that nothing enforced: an
 expected-red carve-out needs an owner AND a deletion step in the fixing
 tranche's own checklist, because the carve-out silently outlives its reason.
+
+---
+
+## 2026-08-26 (F2 — the reference menu)
+
+**E55 — `SEAM-llm-x-rules.md`'s crossing-name count was already wrong, and
+its own check structurally could not see it.** The document read "Thirty-nine
+names cross the boundary, and every one of them is data or a refusal". At the
+tranche base `4760a32ef`, before this tranche touched anything, the tree
+carried FORTY:
+
+    $ python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in
+      pathlib.Path('src/deepreason/rules').rglob('*.py')]; n=[x for t in T
+      for x in ast.walk(t) if isinstance(x, ast.ImportFrom) and
+      (x.module or '').startswith('deepreason.llm')];
+      print(len({a.name for x in n for a in x.names}))"
+    40
+
+The cause is the interesting part, and it generalizes past this document.
+The check beneath that sentence asserts `seen >= {...}` and `mods >= {...}`
+— SUPERSET tests. They are the right shape for the claim they were written
+for ("these names must cross"), and they are structurally blind to the claim
+the prose actually makes ("thirty-nine names cross"). A superset test can
+never fail on an addition, so the number could drift upward indefinitely
+while every check stayed green.
+
+`SCHEMA.md` already states the rule this violated — "**Counts are claims.**
+`-ge N` floors hid a 6-file error and a 28-vs-29 mismatch; when the prose
+states a number, the check pins it with `-eq`" — which is why this is an
+erratum rather than a discovery: the governing rule existed and the document
+predated or ignored it.
+
+Corrected in place 2026-08-26 (commit `2a4b8edd6`): the prose now reads
+forty-one, reflecting this tranche's own addition of `reference_menu` to the
+names `rules/` imports from `llm/`, and a new `-eq` check pins the count so
+it fails in BOTH directions. The generalizable action for the next reader:
+where a map document states a number in prose, check whether the check under
+it is a floor or an equality, because a floor beside a number is a claim
+nothing is guarding.
