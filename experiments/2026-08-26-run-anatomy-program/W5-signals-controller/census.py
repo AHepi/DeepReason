@@ -374,7 +374,11 @@ def census_root(root_path):
                     "instance": allocation.seat_instance(role, seat, seats_bound),
                     "max_tokens": attempt.get("max_tokens"),
                     "timeout_s": attempt.get("timeout_s"),
+                    # `attempt.tokens` is prompt+completion for that leg;
+                    # `completion_tokens` is the call's completion side alone.
+                    # Only the second can be compared against a completion cap.
                     "tokens": attempt.get("tokens"),
+                    "completion_tokens": call.get("completion_tokens"),
                     "truncated": bool(call.get("truncated")),
                     "attempts": call.get("attempts"),
                 })
@@ -386,6 +390,7 @@ def census_root(root_path):
                     "instance": allocation.seat_instance(role, 0, seats_bound),
                     "max_tokens": None, "timeout_s": None,
                     "tokens": call.get("tokens"),
+                    "completion_tokens": call.get("completion_tokens"),
                     "truncated": bool(call.get("truncated")),
                     "attempts": call.get("attempts"),
                 })
@@ -549,8 +554,23 @@ def analyse_decisions(root_census):
                     "before_distinct": distinct_values(before, field),
                     "after_distinct": distinct_values(after, field),
                     "dispatches_after": len(after),
-                    "mean_tokens_before": mean_of(before[-12:], "tokens"),
-                    "mean_tokens_after": mean_of(after[:12], "tokens"),
+                    "mean_total_tokens_before": mean_of(before[-12:], "tokens"),
+                    "mean_total_tokens_after": mean_of(after[:12], "tokens"),
+                    "mean_completion_tokens_before": mean_of(
+                        before[-12:], "completion_tokens"),
+                    "mean_completion_tokens_after": mean_of(
+                        after[:12], "completion_tokens"),
+                    # The record-only test that needs no code reading: a cap
+                    # in force cannot be exceeded. Zero breaches is NOT proof
+                    # the cap was in force — it also happens when no call
+                    # wanted more than the cap allowed — so it is reported as
+                    # what it is, an untested cap.
+                    "completions_above_the_applied_cap": sum(
+                        1 for d in after
+                        if knob != "timeout:transport"
+                        and isinstance(d.get("completion_tokens"), int)
+                        and d["completion_tokens"] > value
+                    ),
                     "truncations_before": sum(
                         1 for d in before[-12:] if d["truncated"]),
                     "truncations_after": sum(
