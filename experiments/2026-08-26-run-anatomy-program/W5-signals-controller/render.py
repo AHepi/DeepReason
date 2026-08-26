@@ -90,7 +90,8 @@ def declared_vs_emitted(signals):
         "| signal | how the consumer actually gets it | can it ever be emitted? |",
         "|---|---|---|",
         "| `dropped-call` | read from the log by "
-        "`Controller._new_transport_drops` | **yes** — and it was, twice |",
+        "`Controller._new_transport_drops` | **yes** — 45 events across 21 of "
+        "the 54 roots, 2 of them in the nine-root population |",
         "| `allocation.seat-truncation.v1` | computed in-process from "
         "`event.llm.truncated` inside `Controller._process_signals` | no emit "
         "site exists in `src/` |",
