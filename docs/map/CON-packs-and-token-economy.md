@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: 748c9ab61
+Verified-at: 7e1ab8a54
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: 
@@ -77,7 +77,39 @@ tie-break is load-bearing in `render_crit_pack`: `target` and
 `target-support-chain` both sit at priority 4, and the chain follows the
 content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==17 and len(r)==13;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==18 and len(r)==13;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4;assert j['criteria']==j['open-criticisms']==2 and j['mandatory-interface']==3"`
+
+**The tie-break is load-bearing a second time, and this one carries meaning
+rather than presentation.** `open-criticisms` sits at priority 2 WITH
+`criteria`, so `"criteria" < "open-criticisms"` puts a problem's open
+indictments inside the block that states what a candidate is BOUND BY —
+above `mandatory-interface` (3) and far above the advisory sections
+(`scratch-advisory-context` 7, `neighbourhood` 8). That placement is the whole
+of `DR-CON-discharge-channel`'s R1: Q5 measured criticism reaching a solver
+through a separable ADVICE field as neglected, and criticism entering the
+working context with discharge-required re-submission as the interface that
+coupled. A sidebar here would be the same content in the place that was
+measured not to work — so ordering is NOT presentation-only for this one
+section, and the general "ordering is presentation only" line above does not
+cover it.
+
+Non-droppable AND non-compressible, for the two failures already paid for
+elsewhere on this page: a dropped section leaves no header, so a problem whose
+criticisms the budget cut would be byte-indistinguishable from one with none;
+and a compressible section can lose its middle while still looking present.
+Exact is affordable because every dimension is capped by the policy
+(`handles_n`, `claim_head_chars`, `span_head_chars`), and where a cap bites the
+render says so in band.
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());K={};[K.setdefault(c.args[0].value,[]).append({k.arg:getattr(k.value,'value',None) for k in c.keywords}) for c in ast.walk(T) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section' and isinstance(c.args[0],ast.Constant) and c.args[0].value=='open-criticisms'];assert len(K['open-criticisms'])==1 and K['open-criticisms'][0]['droppable'] is False and K['open-criticisms'][0]['compressible'] is False, K"`
+`check: python -m pytest tests/test_discharge_channel.py::test_the_render_lands_in_the_binding_block_not_a_sidebar tests/test_discharge_channel.py::test_a_criticism_at_cycle_k_still_renders_at_the_terminal_cycle -q`
+
+**The submission precondition rides the output contract, not the section.**
+Rendering open criticisms without saying they must be discharged would leave
+them advisory IN EFFECT however prominently they sat. So `output-contract`
+gains the requirement whenever the channel renders anything, and gains nothing
+when it does not — which is also what keeps a channel-off pack byte-identical
+to one built before the channel existed.
+`check: python -m pytest tests/test_discharge_channel.py::test_the_output_contract_states_the_precondition -q`
 
 **NO SILENT CAPS — a dropped section whose ABSENCE changes what the model may
 DO is named in the pack.** `allocate_pack` cuts an unaffordable optional

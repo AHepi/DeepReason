@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=7 blockers=none (WATCH: src/ at 487 of 640 after step 5; S1 came in at ~274 against SPEC's 140 estimate — projection and the
+State: next=9 blockers=none (WATCH: src/ at 555 of 640 after step 7; S1 came in at ~274 against SPEC's 140 estimate — projection and the
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -524,7 +524,7 @@ point):
         budget measured to cut a droppable section outright. A test at 400
         would pass with the section made droppable and would prove nothing.
 
-- [ ] 7. (S3) Implement the render: `channel.py::
+- [x] 7. (S3) Implement the render: `channel.py::
       render_open_criticism_context`; `llm/packs.py` gains the
       `open_criticism_context` parameter and the `open-criticisms` section at
       priority 2, `droppable=False, compressible=False`; the
@@ -534,7 +534,123 @@ point):
       done-when: `python -m pytest tests/test_discharge_channel.py -q` ends
       `passed` with 0 failed (paste it)
 
-- [ ] 8. (S11) Move the map WITH the code, same commit: update
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_channel.py -q
+      ...............                                            [100%]
+      15 passed in 0.42s
+
+      $ python -m pytest tests/test_discharge_contract.py -q
+      FAILED test_a_fourth_kind_enters_by_declaration_alone
+      1 failed, 5 passed in 3.63s
+
+      $ python -m pytest tests/test_frame_render.py tests/test_pack_prefix.py \
+          tests/test_easy.py tests/test_harness_fixes.py \
+          tests/test_prose_refutation_boundaries.py -q
+      136 passed, 1 skipped in 7.32s
+
+      $ python -m pytest tests/test_candidate_compilation.py \
+          tests/test_conjecturer_turn_v4.py tests/test_diversity.py \
+          tests/test_guards.py tests/test_loop.py tests/test_scheduler.py \
+          tests/test_runtime_workload_integration.py -q
+      72 passed in 10.01s
+      ```
+      Every channel case green. `test_no_consumer_reaches_past_the_interface`
+      turned green here too — its positive anchor now finds exactly one
+      consumer, `src/deepreason/rules/conj.py`, which is the pinned claim. The
+      single remaining architecture failure needs the wire (step 12).
+
+      **THE TWO COUNTS THIS PLAN PROMISED NOT TO DISTURB, re-verified:**
+      ```
+      $ cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py \
+          | grep -c 'adapter\.call('                          ->  8
+      $ grep -rl 'deepreason\.llm' --include=*.py src/deepreason/rules | wc -l
+                                                              ->  8
+      ```
+      Both hold. `conj.py` imports `deepreason.discharge`, not
+      `deepreason.llm`, and the render is threaded into the EXISTING
+      `render_conj_pack` call rather than opening a new dispatch.
+
+      GATES:
+      ```
+      $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 640
+      {"areas": {"src/": 555}, "ceiling": 640, "verdict": "WITHIN"}
+      $ python tools/blast_radius.py --files llm/packs.py rules/conj.py \
+          discharge/channel.py --symbols render_conj_pack conj ... --against 4760a32ef
+      verdict: CONTACT
+        SYMBOL_INDIRECT  replay-validation record formats (invariants.py) <- conj
+      adjacent: []
+      reachability: render_conj_pack REACHABLE->REACHABLE (unchanged);
+                    conj REACHABLE->REACHABLE (unchanged);
+                    render_open_criticism_context UNKNOWN->REACHABLE (null);
+                    open_criticisms UNKNOWN->UNREACHABLE (null)
+      ```
+      NO DRIFT. The one contact is the `invariants.py`/`conj` row SPEC.md
+      forecast and disposed by measurement (M1: zero imports of `rules.conj`
+      there; every hit is a substring of `conjecture`/`conjecturer`).
+      `render_open_criticism_context` flipped to REACHABLE, which is what step
+      3's record said this step had to achieve. `open_criticisms` reads
+      UNREACHABLE and that is ACCURATE rather than alarming: the renderer calls
+      the private `_open_with_total`, and the public reading is consumed by
+      `submission.py` at step 14 — **if it is still UNREACHABLE after step 14,
+      the public interface has a dead export and that is a stop.**
+
+**STEP 8 WAS EXECUTED INSIDE STEP 7, and the reason is a rule rather than
+convenience.** `dr-execute-step`'s map obligation is that a step changing
+behaviour updates the map IN THE SAME COMMIT, and `docs_verify` must pass
+before that commit. Step 7 breaks
+`DR-CON-packs-and-token-economy`'s `len(j)==17` pin the instant the section is
+added, so committing step 7 without step 8 would have committed a red map —
+the plan's separation of the two was wrong on the repo's own rule. Merged, and
+recorded here rather than left as a silent reordering.
+
+      What moved, and what each move claims:
+      - `DR-CON-packs-and-token-economy`: the section-count pin 17 → **18**,
+        extended to also pin the ordering
+        (`j['criteria']==j['open-criticisms']==2`,
+        `j['mandatory-interface']==3`); a new block stating that ordering is
+        NOT presentation-only for this one section, with the general
+        "ordering is presentation only" line explicitly excluded from covering
+        it; and the output-contract precondition.
+      - `DR-CON-discharge-channel`: **INSTALLED** from step 1's draft. Two
+        checks were held back rather than shipped passing-vacuously — the
+        fourth-kind check (needs the wire, step 12) and the law-line check
+        (step 22) — because a check must be RUN before it is written down.
+        Nine checks ship, and all nine were executed individually before this
+        commit: `rc=0` on every one.
+      - `DR-CON-criticism-source`: a new section saying where an `observe_only`
+        criticism now goes, and the sharper consequence — the
+        `["scrutiny", target, critic]` Measure inputs are now LOAD-BEARING for
+        a second consumer, so changing them silently empties the channel rather
+        than merely altering a diagnostic.
+      - `DR-CON-conjecture-source`: what the conjecturer is now shown.
+      - `DR-SEAM-llm-x-rules`: a row for the new boundary crossing, stating the
+        division — the rule decides what the criticism MEANS, `llm/` only
+        allocates the string it is handed.
+      - `INDEX.md`: the concept table and a routing row.
+
+      MAP GATE (FULL, not `--fast` — `--fast` reuses cached results and cannot
+      catch a document a `src/` change just broke):
+      ```
+      $ python tools/docs_verify.py
+        FAIL CON-run-identity.md:200 / :202 / :204
+      docs_verify: 3 failed
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 65 document(s)
+      ```
+      **3 failed — identical to the step-1 baseline**, the same three
+      `CON-run-identity` shallow-clone failures and no others. 65 documents,
+      one more than the baseline's 64: `CON-discharge-channel` is the new one.
+      `--links` clean, so every `DR-CON-discharge-channel` reference resolves.
+
+      `Verified-at:` advanced to `7e1ab8a54` on the five documents edited here,
+      because the FULL run above genuinely re-ran their checks. The stamp names
+      the commit the checks ran AGAINST (this tranche's step-6 head plus this
+      step's working tree), which is the repo's existing convention and is
+      honest about what was measured; it is not the commit this step creates,
+      which cannot be known before it exists.
+
+- [x] 8. (S11) Move the map WITH the code, same commit: update
       `DR-CON-packs-and-token-economy` (the `len(j)==17` → `18` pin, and the
       new section's non-droppable/non-compressible row with its own check),
       `DR-CON-criticism-source` (where an open criticism now goes),

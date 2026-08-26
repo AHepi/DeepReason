@@ -1,5 +1,5 @@
 <!-- DR-CON-criticism-source -->
-Verified-at: 69d3061e
+Verified-at: 7e1ab8a54
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/crit.py
 Seams: DR-SEAM-rules-x-scratch
@@ -80,6 +80,25 @@ warrant.
 | Which generators/properties `crit_fuzz` probes with | `rules/experiment.py` `accepted_generators`/`active_properties`/`promoted_properties` | `tests/test_experiment.py::test_refuted_generators_are_never_used` |
 | Whether criticism may read the scratchpad | `DR-SEAM-rules-x-scratch` — a seam change, not isolated; follow `docs/map/REC-change-a-seam.md` | `tests/test_prose_refutation_boundaries.py -k scratch` |
 | What a filed premise may cite, and how the citation is checked | `_file_attribution` / `_check_premise_citations` here; the checker itself is `DR-SUB-evidence` | `tests/test_p4_citable_evidence.py -k quote` |
+
+## Where an `observe_only` criticism goes next
+
+Until 2026-08-26 the answer was NOWHERE, and that was measured rather than
+suspected: across the two newest and largest committed roots, 0 of 196 LLM
+attacks were ever exposed to a later conjecture dispatch
+(`experiments/2026-08-26-run-anatomy-w2-criticism/RESULTS.md`). `_observe_case`
+was writing a correct, durable record that nothing which makes the next
+candidate ever read.
+
+It is now read. `DR-CON-discharge-channel` walks the
+`["scrutiny", target, critic]` Measures this module writes, together with
+`state.att`, and renders what it finds into the conjecturer's binding block.
+Nothing about this module changed — the channel is a READER of what
+`_observe_case` already records — but the record shape it writes is now
+LOAD-BEARING for a second consumer, so a change to those Measure inputs
+silently empties the channel rather than merely altering a diagnostic.
+`check: python -m pytest tests/test_discharge_channel.py::test_an_observe_only_criticism_is_open -q`
+`check: grep -q 'inputs = \["scrutiny", target_id, critic.id\]' src/deepreason/rules/crit.py`
 
 ## Traps
 

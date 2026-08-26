@@ -56,6 +56,12 @@ from deepreason.workloads.text import (
 )
 
 
+from deepreason.discharge import (
+    render_open_criticism_context,
+    resolve_policy as resolve_discharge_policy,
+)
+
+
 def _resolve_ref(target: str, artifacts: dict) -> str | None:
     """Backward-compatible unique-prefix resolver used by older callers."""
     if not target:
@@ -1390,6 +1396,14 @@ def conj(
 
     frame_slice_context = render_frame_slice_context(harness, problem_id)
     frame_crisis_context = render_frame_crisis_context(harness, problem_id)
+    # The open criticisms on this problem, rendered into the BINDING block
+    # (REBUILD F1). The whole channel reaches the tree through this module and
+    # `deepreason.discharge`'s public interface -- `llm/packs.py` is handed a
+    # plain string and never learns that criticism is what it is rendering.
+    discharge_policy = resolve_discharge_policy(config)
+    open_criticism_context = render_open_criticism_context(
+        harness, problem_id, discharge_policy
+    )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1413,6 +1427,7 @@ def conj(
         capability_result_context=v6_capability_result_context,
         frame_slice_context=frame_slice_context,
         frame_crisis_context=frame_crisis_context,
+        open_criticism_context=open_criticism_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
     )
     scratch_aliases = {}

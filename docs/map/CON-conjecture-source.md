@@ -1,5 +1,5 @@
 <!-- DR-CON-conjecture-source -->
-Verified-at: 21cae708
+Verified-at: 7e1ab8a54
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py
 Seams: DR-SEAM-rules-x-scratch
@@ -77,6 +77,17 @@ alone, and `conj.py` does not call it.
 | The conjecture turn contract version or its dispatch | the `active_v4`/`active_v5`/`active_v6` branch in `conj`, against `llm/wire.py` contracts | `tests/test_v6_conjecture_component_atomicity.py` |
 | What a candidate's interface is compiled from | `MandatoryInterface`/`compile_interface_draft` call sites in `conj.py`, `workloads/models.py` | `tests/test_relapse_domains.py` |
 | Whether/how conjecture reads or writes the scratchpad | `DR-SEAM-rules-x-scratch` — this is a seam change, not an isolated one; follow `docs/map/REC-change-a-seam.md` | `tests/test_conjecture_scratch_context_v4.py`, `tests/test_v6_conjecture_scratch_consumption.py` |
+
+## What the conjecturer is now shown about criticism
+
+`conj` renders the problem's OPEN CRITICISMS into the pack's binding block,
+beside `criteria` (`DR-CON-discharge-channel`). The socket reaches the channel
+through one public interface and hands `llm/packs.py` a plain string, so the
+pack layer never learns that criticism is what it is rendering, and the channel
+never learns what a pack is. This is the whole of the channel's contact with
+`rules/`: exactly one file imports it.
+`check: python -m pytest tests/test_discharge_contract.py::test_no_consumer_reaches_past_the_interface -q`
+`check: grep -q "from deepreason.discharge import" src/deepreason/rules/conj.py && grep -q "open_criticism_context=open_criticism_context" src/deepreason/rules/conj.py`
 
 ## Traps
 
