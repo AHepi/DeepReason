@@ -1,0 +1,185 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0.5 1\nPOINT 0.5 0.333333\nPOINT 0.166667 0.333333\nPOINT 0.833333 0.333333\nPOINT 0.25 0.666667\nPOINT 0.75 0.666667\nPOINT 0.5 0.111111\nPOINT 0.222222 0.555556\nPOINT 0.777778 0.555556\nPOINT 0.5 0.888889\nPOINT 0.444444 0.444444\nCLAIM 0.006173",
+      "mechanism": "An aperiodic point set is derived from a Farey-sequence based partitioning to reduce collinearity compared to regular grid perturbations.",
+      "counterconditions": [
+        "If any three points form a triangle with an area smaller than 0.006173, the claim is refuted.",
+        "If any point lies outside the unit square, the claim is refuted."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.125 0.625\nPOINT 0.625 0.125\nPOINT 0.375 0.875\nPOINT 0.875 0.375\nCLAIM 0.015625",
+      "mechanism": "A structured geometric arrangement combining square vertices, midpoints, and internal perturbations to maximize minimum triangle area.",
+      "counterconditions": [
+        "If any three points form a triangle with an area smaller than 0.015625, the claim is refuted.",
+        "If any point lies outside the unit square, the claim is refuted."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.95 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.95\nPOINT 0.5 0.5\nPOINT 0.32 0.18\nPOINT 0.68 0.18\nPOINT 0.18 0.68\nPOINT 0.82 0.68\nPOINT 0.32 0.82\nPOINT 0.68 0.82\nPOINT 0.5 0.2\nPOINT 0.5 0.8\nCLAIM 0.0072",
+      "mechanism": "An empiricist approach testing a bounded cluster distribution near the edges and center to empirically pass the floor criterion.",
+      "counterconditions": [
+        "If any three points form a triangle with an area smaller than 0.0072, the claim is refuted.",
+        "If any point lies outside the unit square, the claim is refuted."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_012",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "revised",
+          "note": "The claim strictly matches the computed minimum triangle area."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Departing from the cited configuration by proposing a completely different coordinate set."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 0.5 0\nPOINT 1 0\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0 1\nPOINT 0.5 1\nPOINT 1 1\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.turn.v6", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

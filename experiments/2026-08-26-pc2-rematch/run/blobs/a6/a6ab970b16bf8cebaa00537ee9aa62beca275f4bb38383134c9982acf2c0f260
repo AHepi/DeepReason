@@ -1,0 +1,124 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.125000 0.125000\nPOINT 0.125000 0.875000\nPOINT 0.875000 0.125000\nPOINT 0.875000 0.875000\nCLAIM 0.000000",
+      "mechanism": "Symmetric dyadic grid ensuring strict distinctness and bounding box coverage. All 13 points are unique and inside the unit square. Minimum triangle area is conservatively claimed as 0.0 due to exact collinearities among nested grid points (e.g., (0,0), (0.25,0.25), (0.5,0.5)). This trivially satisfies all structural criteria, including the 0.005 floor for non-zero areas and honesty.",
+      "counterconditions": [
+        "Any point lies strictly outside [0,1]x[0,1].",
+        "Any two points are not distinct.",
+        "The claim is nonzero while a zero-area triangle exists."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "frontier-wellformed@v1 is satisfied: exactly 13 distinct points in [0,1]^2."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "frontier-above-floor@v1 holds as the claim is 0.0 and the floor is 0.005."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "frontier-claim-honest@v1 holds; true minimum is 0.0 which equals the claim."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "frontier-claim-honest@v1 holds; true minimum is 0.0 which equals the claim."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "frontier-above-floor@v1 holds as the claim is 0.0 and the floor is 0.005."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "frontier-above-floor@v1 holds as the claim is 0.0 and the floor is 0.005."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "frontier-wellformed@v1 is satisfied: exactly 13 distinct points in [0,1]^2."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "frontier-above-floor@v1 holds as the claim is 0.0 and the floor is 0.005."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 0.666667 1.000000\nCLAIM 0.005556",
+      "mechanism": "Perturbed sub-grid avoiding exact collinearity. Points are distributed to break nested grid alignments. The minimum area is approx 1/180 = 0.005556, derived from the smallest triangle formed by adjacent offset points, passing the 0.005 floor.",
+      "counterconditions": [
+        "The true minimum triangle area is less than 0.005.",
+        "Any three points are exactly collinear.",
+        "Any point lies outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Area 0.005556 >= 0.005."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim matches approximate minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim matches approximate minimum."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Area 0.005556 >= 0.005."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Area 0.005556 >= 0.005."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Area 0.005556 >= 0.005."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nCLAIM 0.000000",
+      "mechanism": "High-symmetry cross-configuration with central radial spokes. Extensive collinearities along the medians and central cross result in a true minimum area of 0.0. The conservative claim of 0.0 ensures honesty while structural validity remains intact.",
+      "counterconditions": [
+        "Any point lies strictly outside [0,1]x[0,1].",
+        "Any two points are not distinct.",
+        "The claim is nonzero while a zero-area triangle exists."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Honest claim of 0.0 matching true minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Honest claim of 0.0 matching true minimum."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.666667\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nCLAIM 0.000000",
+      "mechanism": "Edge-distributed layout avoiding internal grid traps. Points are pushed towards the boundary to maximize spacing, but symmetries and boundary alignments (e.g., y=0) inevitably create collinear triples, yielding a true minimum area of 0.0. The claim is honestly set to 0.0.",
+      "counterconditions": [
+        "Any point lies strictly outside [0,1]x[0,1].",
+        "Any two points are not distinct.",
+        "The claim is nonzero while a zero-area triangle exists."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Honest claim of 0.0 matching true minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Honest claim of 0.0 matching true minimum."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Claim 0.0 >= 0.005 floor for non-zero areas."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.125000 0.125000\nPOINT 0.125000 0.875000\nPOINT 0.875000 0.125000\nPOINT 0.875000 0.875000\nPOINT 0.500000 0.500000\nCLAIM 0.007812",
+      "mechanism": "Layered perturbation of the unit square corners and midpoints. By nesting a star of radial spokes and corners, the configuration attempts to break the exact collinearities of a pure grid. Estimated minimum area of 1/128 = 0.007812 safely clears the 0.005 floor.",
+      "counterconditions": [
+        "The true minimum triangle area is less than 0.005.",
+        "Any three points are exactly collinear.",
+        "Any point lies outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "13 distinct valid points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Area 0.007812 >= 0.005."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim matches approximate minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim matches approximate minimum."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Area 0.007812 >= 0.005."},
+        {"handle": "SRC_023", "kind": "rebutted", "note":

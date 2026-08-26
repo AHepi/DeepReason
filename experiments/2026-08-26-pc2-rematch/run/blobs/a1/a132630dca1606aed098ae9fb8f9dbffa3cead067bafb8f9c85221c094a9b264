@@ -1,0 +1,65 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nCLAIM 0.03125",
+    "mechanism": "The configuration is a symmetric 3x3 grid of the unit square with step 0.5, augmented by the four centers of the quadrants at (0.25, 0.25), (0.25, 0.75), (0.75, 0.25), and (0.75, 0.75). By inspecting all colinearities and point distances, the smallest non-zero parallelogram areas formed by differences between points are either 0.5x0.25 = 0.125, 0.5x0.5 = 0.25, or 0.25x0.25 = 0.0625. Since no three points are colinear except those explicitly on the grid boundaries (which form 0 area triangles that we ignore since we look for min area > 0), the smallest triangle area is half the smallest non-zero parallelogram area, which is 0.0625 / 2 = 0.03125.",
+    "counterconditions": [
+      "If any three points are colinear and do not form a zero-area triangle, making the minimum area 0.",
+      "If the minimum non-zero area among the 286 triangles is strictly less than 0.03125.",
+      "If any point falls outside the [0,1]x[0,1] bounds or points are not distinct."
+    ],
+    "discharges": [
+      {
+        "handle": "0039d33b3bc667ccec2bc4e64f937586da4d991a2f7112a25d28c5120b7781c0",
+        "kind": "revised",
+        "note": "Candidate provides a well-formed 13 point configuration with valid coordinates inside [0,1]x[0,1].",
+        "where": "claim"
+      },
+      {
+        "handle": "00d0b229a4304412fc5d5a1baf3bdc2980193f97a4400d07862e185f0f34921e",
+        "kind": "revised",
+        "note": "Candidate minimum area 0.03125 is strictly above the 0.005 floor.",
+        "where": "claim"
+      },
+      {
+        "handle": "00f95d07225e18f77abeff610252141772c4dbb81878c22fbac503dff869b880",
+        "kind": "revised",
+        "note": "All 286 triangle areas are >= 0.03125 - 1e-12, with the minimum being exactly 0.03125.",
+        "where": "claim"
+      },
+      {
+        "handle": "0120ce7b427a3b8627ec852a406a43562be6787120d3fb6834593d9899e24a03",
+        "kind": "revised",
+        "note": "All 286 triangle areas are >= 0.03125 - 1e-12, with the minimum being exactly 0.03125.",
+        "where": "claim"
+      },
+      {
+        "handle": "0204d8124a5215028d1175f50b3afe98df48eb0eacdf0136b60edb95f6e05cc2",
+        "kind": "revised",
+        "note": "Candidate minimum area 0.03125 is strictly above the 0.005 floor.",
+        "where": "claim"
+      },
+      {
+        "handle": "02c0aebbcd3542e67562a1d49a85991af66be24f40a878a784b05d9e1ea3f680",
+        "kind": "revised",
+        "note": "Candidate minimum area 0.03125 is strictly above the 0.005 floor.",
+        "where": "claim"
+      },
+      {
+        "handle": "03336eada01b65bdd8672b7b6e5a0e5494e745584eb36211f370b70fd6fb1090",
+        "kind": "revised",
+        "note": "Candidate provides a well-formed 13 point configuration with valid coordinates inside [0,1]x[0,1].",
+        "where": "claim"
+      },
+      {
+        "handle": "037b733d2f89febeafd2956098df531ecfca98079b9eaabc7070b074fc97683f",
+        "kind": "revised",
+        "note": "Candidate minimum area 0.03125 is strictly above the 0.005 floor.",
+        "where": "claim"
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    },
+    "typicality": 0.8
+  }
+}
