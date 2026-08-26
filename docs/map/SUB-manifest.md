@@ -1,5 +1,5 @@
 <!-- DR-SUB-manifest -->
-Verified-at: 812aa1aba
+Verified-at: debff8d9b
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
 Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-schools

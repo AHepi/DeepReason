@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: 1662a3f96
+Verified-at: debff8d9b
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler

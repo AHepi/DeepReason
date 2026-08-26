@@ -1,8 +1,8 @@
 <!-- DR-TRANCHE-F3 -->
 # Validation — every acceptance check in SPEC.md, run
 
-Verdict: **PENDING** — filled in below as each instrument returns. The full
-gate and the wheel smokes are the last two.
+Verdict: **PASS**. Every acceptance check in SPEC.md ran and returned; every
+instrument is green; no assertion was weakened to get there.
 
 ## Per-item acceptance
 
@@ -42,7 +42,7 @@ gate and the wheel smokes are the last two.
 | `python tools/diff_budget.py 4760a32ef --ceiling 1900 --paths src tests docs` | **WITHIN** — 1870 (src 690, tests 699, docs 481) |
 | `python -m pytest tests/ -q -n 4` | **4233 passed, 6 skipped, 0 failed** in 1102.72s |
 | `python scripts/wheel_smoke.py` | **PASS** — "isolated V6-only contents, clean imports, exact entry points, module parity, MCP registration, and exact MCP schemas" |
-| `python -u scripts/wheel_operational_smoke.py` | pending |
+| `python -u scripts/wheel_operational_smoke.py` | **PASS** — installed setup, explicit qualification (80 qualification calls; 410 total), readiness, question-only reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP restart, budget ceiling, pre-V6 fail-closed admission |
 
 The wheel smoke passing UNCHANGED is itself a result worth stating: this
 tranche added a module (`channels.py`, `wander.py`) and three `Config` fields,
@@ -50,10 +50,12 @@ and the public surface it pins — console entry points, the MCP tool set and it
 schema sha, wheel layout — did not move. No pin needed updating, which is the
 correct outcome for a change that adds configuration rather than surface.
 
-Note on `--audit`: it was started concurrently with the operational smoke and
-KILLED rather than left to run, per the process-hygiene rule that two
-worker-spawning instruments contend and manufacture failures. Re-run alone; its
-result is recorded below when it returns.
+`python tools/docs_verify.py --audit`: **0 findings** — no map check in the
+tree is one that cannot fail. It was first started concurrently with the
+operational smoke and KILLED rather than left to run, per the process-hygiene
+rule that two worker-spawning instruments contend and manufacture failures;
+the result above is from the clean re-run on an idle box. Recorded rather than
+quietly repeated, because a measurement taken under load is not a measurement.
 
 ## Fixtures that moved, and the guarantee each still carries
 

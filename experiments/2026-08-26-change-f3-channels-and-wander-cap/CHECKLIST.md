@@ -1,9 +1,9 @@
 <!-- DR-TRANCHE-F3 -->
 # Checklist for: "turning research and, simulation and coding permanently on" + the wander cap
 
-State: next=29 blockers=none — Phases A/B/C/D steps 1-28 executed and
-committed; 29 (full map gate), 30 (full pytest gate), 31 (wheel smokes),
-32 (final push) remain. Budget amendment 1 recorded: 1870 actual against a
+State: next=32 blockers=none — Phases A/B/C/D steps 1-28 executed and
+committed; 29 (full map gate), 30 (full pytest gate) and 31 (wheel smokes)
+are done and green; only 32 (final push, clean tree) remains. Budget amendment 1 recorded: 1870 actual against a
 1602 plan, ceiling raised to 1900 with the itemized reason.
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -203,16 +203,16 @@ what refuses a knob at the point of use).
       forecast quoted, and the digest-preservation check.
       done-when: `python tools/docs_verify.py --fast` -> 0 failed.
 
-- [ ] 29. (all) Map gate, FULL (not `--fast`), on an otherwise idle box.
+- [x] 29. (all) Map gate, FULL (not `--fast`), on an otherwise idle box.
       done-when: `python tools/docs_verify.py` -> 0 failed, then
       `python tools/docs_verify.py --audit` -> 0 refused, then
       `python tools/docs_verify.py --links` -> 0 unresolved (paste all three).
 
-- [ ] 30. (all) Full gate, alone, nothing else running.
+- [x] 30. (all) Full gate, alone, nothing else running.
       done-when: `python -m pytest tests/ -q -n 4` ends "N passed, 0 failed"
       (paste it).
 
-- [ ] 31. (all) Wheel smokes — the public surface may have moved (a new
+- [x] 31. (all) Wheel smokes — the public surface may have moved (a new
       module, new Config fields).
       done-when: `python scripts/wheel_smoke.py` and `python -u
       scripts/wheel_operational_smoke.py` both exit 0, with pins updated in
