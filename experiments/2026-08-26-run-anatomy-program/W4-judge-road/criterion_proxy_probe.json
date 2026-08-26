@@ -1,0 +1,154 @@
+{
+ "artifacts_invisible_to_the_criterion_but_naming_the_distribution": 18,
+ "artifacts_with_inline_content": 527,
+ "criterion": "poietics-installation-mechanism@v1",
+ "of_those_refuted_on_this_criterion": 6,
+ "rows": [
+  {
+   "artifact": "4e0f8addb55afd118363645c773706e996e1f662e1e411e49eb637e4017903af",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test constrains its subject when it is installed before the code that could pass it is written, and the installation ritual forces failures to be visible as failures rather than silently absorbed by the test's own",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "55e4bfbdfb0ac64e38bebf17a7bb986189815ff1bcfda8172612eea607ff97e4",
+   "excerpt": "The 'refuted if' condition is tautological and self-immunizing. The claimed contradiction is that installation does not uniformly constrain registry targets (evidenced by 3-of-26 success rate). The proposed refutation condition\u2014'if the same",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "55f4310fe773b4f7ba290d01c12dff1baca295ce43321f800edae6d25ebeb12c",
+   "excerpt": "The 007dca563e8d result integrates the foundation artifacts' confound explanation by treating the 3-of-26 survival rate as a reduction to the test's own installation history: it depends on shown-to-fail-first ritual because registry entries",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "6d3631c4cfafd840fd9e89b2b25cd4ea3c278ed73b91192dbe9bb380d61d3f6d",
+   "excerpt": "The subject test is not simply descriptive of its subject; it is prescriptive because it forces the subject's architecture to comply with a strict behavioral contract. The target fails to account for how this pressure creates a selection bi",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "86df63c32f5a7b6aa4f82ab61bede673d225e709b6c89298d7fa2104ba5339c6",
+   "excerpt": "The proposed reduction relation is unidirectional, unidirectional only: it claims the 3-of-26 mutation survival result reduces to a registry-size confound. However, it fails to establish that registry size is the *only* or *primary* explana",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "aa69ba5ad78a024aef4eba64077b5707da5fe92e797c41fd3409ff99865a08cc",
+   "excerpt": "The 3-of-26 result contradicts the claim that shown-to-fail-first installation uniformly constrains registry targets; it is refuted if the same installation ritual reproduces the 3-of-26 ratio on a larger, multi-author repository.",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "b28003ee56024caa0987422c7a83eadbb4e57dca68b22d0815cad9d2266276cd",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test constrains its subject when the subject has no independent path to pass the test except by satisfying a condition the test itself installs; in the record, the 'shown-to-fail-first' ritual installs a guard bef",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "c2482ee553c4b3f8b844c40cc72f3adc1d5012bf664e2cfd1c244c48e1d28281",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test constrains its subject when the test's failure is a necessary condition for the subject's later passage; under shown-to-fail-first installation, the 3-of-26 result is an artifact of the test's own failure bei",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "c2c25a567c7a9eca2b5a2526ff3c633ab005edeb928a017929abc7a7c4a23112",
+   "excerpt": "The 3-of-26 mutation survival result reduces to an artifact of registry-size confounds: it is refuted if the same survival count appears in a mutation set where all entries are known to be exercised by tests, independent of installation ord",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "c3731a9a15b17f5757d2892ad257f8903634eec0aebb77e4155b06c51058dd5d",
+   "excerpt": "The confound explanation inherits from a more general sampling-artifact mechanism: a registry-size confound is refuted if the 3-of-26 survival ratio persists when the mutation set is expanded to include enough mutations that every registry ",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "c7d9022699a1bd4cd297ce73d7c9bd437b43c3bb0130f74e717a4ef5a38344b0",
+   "excerpt": "The target refutes itself by claiming the 3-of-26 result is explained by 'temporal ordering' while simultaneously asserting it is explained by 'one-author confound' \u2014 these are mutually exclusive mechanisms that cannot both be the operative",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "d2b7cedf27b082ccf340e589deeab73d09d0e80341dc6f6ad535263e99047d6a",
+   "excerpt": "The asserted reduction is backwards, so the relation fails the problem's demand for a SUBSTANTIVE, correctly-typed connection. A reduction ('X reduces to Y') requires that X's outcome is explained by, or collapses into, Y's mechanism. Here ",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "d57433c1606ec518fa486f33d288c8854f83007591bb1078da55d7ff6c172e84",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test describes its subject when the subject is the test's own installation condition; the 3-of-26 result is a description of the author's own care, not a constraint on the mutations, because the same author's ordi",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "db147c1959f9a43e11299d1b06025d3d9b46cd183d36402e751a07f478a8cfaf",
+   "excerpt": "The relation is not substantive but circular: it 'reduces' the 3-of-26 survival rate to the installation history that the test itself generated, using the test's own output as the explanatory mechanism without independent evidence that the ",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "ea51d45ff6883c903e7299aa3b8bada8f297894cb9602042b1c3f6ed418e5bff",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test constrains its subject only when the test would fail without the subject's independent contribution; in the shown-to-fail-first installation, the test fails before the mutation is even applied, so the test ca",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "f4601aeb646221e7b0ae84221224e15f928b02a3600605af03d6f90b9cd941c2",
+   "excerpt": "The source's 'reduces to' claim fails the connective task: a bare 3-of-26 survival ratio is a counting summary, not a mechanism. Naming a confound ('under-powered measurement artifact') doesn't specify what the artifact is (truncated trials",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  },
+  {
+   "artifact": "f5f4be11a05c711cf944dd6750532e140ae28810d253833dabceda7b2a9aaa29",
+   "excerpt": "{\"analogy\":null,\"claim\":\"A test constrains its subject rather than describes it when the test's counterexamples are drawn from the same authorial act that produced the code, because then the test cannot distinguish between 'the code is corr",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": true
+  },
+  {
+   "artifact": "f9471d2fef9ef0b65c9513d03c98bb1cea6922b1a4d985aca5698ff0a5e4d3db",
+   "excerpt": "The 3-of-26 result reduces to an under-powered measurement artifact, refuted if a larger multi-author repository reproducing the same shown-to-fail ritual still yields a 3-of-26 survival ratio instead of exposing the confound.",
+   "question_spellings_present": [
+    "3-of-26"
+   ],
+   "refuted_on_this_criterion": false
+  }
+ ],
+ "schema": "w4.criterion-proxy-probe.v1",
+ "verdicts_on_this_criterion_in_the_run": 8
+}

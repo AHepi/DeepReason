@@ -1,0 +1,1928 @@
+{
+ "rows": [
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.0, 0.5), (0.0, 1.0))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      0.0,
+      1.0
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1660,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 45,
+   "target": "0c61961a80851dc38919be84ffac65d52c7268eaa4128cc1f8569662aac08786",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.111111, 0.125), (0.111111, 0.375), (0.111111, 0.625))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.111111,
+      0.125
+     ],
+     [
+      0.111111,
+      0.375
+     ],
+     [
+      0.111111,
+      0.625
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1096,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 150,
+   "target": "496e195777d2d5876649194ecc728a24c414657d2a83d5550955dab1f0d89535",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.0, 0.2), (0.0, 0.8))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.2
+     ],
+     [
+      0.0,
+      0.8
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1443,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 292,
+   "target": "7dc8378457bed7a0c576b2173d4c3660cfbb003356d67104b54f880138088956",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 842,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 733,
+   "target": "374a5bf9131ea665a01dc6fab0fb99a0bddf6c4c1735bfb3ad5b0a02f54944cc",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.25, 0.25), (0.5, 0.5))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.25,
+      0.25
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1130,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 947,
+   "target": "ab7c4f125e1b245ef6ceb1b3d4dc6272b63b7ccf78bbb27812a35e58a6d658d2",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.02, 0.02), (0.02, 0.5), (0.02, 0.98))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.02,
+      0.02
+     ],
+     [
+      0.02,
+      0.5
+     ],
+     [
+      0.02,
+      0.98
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1129,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1055,
+   "target": "dc89ac46534818e6fed63026e06809f617b5f95b3c963469071089f8388a6dc9",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.0, 0.2), (0.0, 0.4))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.2
+     ],
+     [
+      0.0,
+      0.4
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1901,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1611,
+   "target": "84b650ff1d5e1c26eea0fa51c36a0da023224b85c279fd879991ba13f78eb355",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.25, 0.25), (0.5, 0.5))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.25,
+      0.25
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1208,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1868,
+   "target": "82ade00a67036dfe71af4f473758b71da0d62591610729024e4d30c0b77c4f0d",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1535,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 2380,
+   "target": "98fbc9b84c395a9ce21f1506b86d0b11ee776787d2278e200abaf5e3180f9260",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "min triangle area 0.0 vs floor 0.005, witness ((0.0, 0.0), (0.0, 0.5), (0.0, 1.0))",
+    "family": "geometry",
+    "floor": 0.005,
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      0.0,
+      1.0
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-above-floor@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 890,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 2601,
+   "target": "d5e83a8a5c341b7d83fd538a7063bf77440655ed557147eb8cd968ae704bf40e",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.015625,
+    "claims": [
+     "0.015625"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.015625, witness ((0.0, 0.0), (0.0, 0.5), (0.0, 1.0))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      0.0,
+      1.0
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1660,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 43,
+   "target": "0c61961a80851dc38919be84ffac65d52c7268eaa4128cc1f8569662aac08786",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.066116,
+    "claims": [
+     "0.066116"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.066116, witness ((0.0, 0.0), (0.0, 0.272727), (0.0, 0.727273))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.272727
+     ],
+     [
+      0.0,
+      0.727273
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1185,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 140,
+   "target": "aace3a7aeed0576e4f4f1088a2caa92ff73394398768f28033c277da6b40cc4c",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.005,
+    "claims": [
+     "0.005000"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.005, witness ((0.08, 0.08), (0.25, 0.25), (0.5, 0.5))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.08,
+      0.08
+     ],
+     [
+      0.25,
+      0.25
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1398,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 262,
+   "target": "bf2ea50fa9ff6c9771232c6ce038d6504d08c41190cc69c2bee68a2ae9937671",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1437,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 681,
+   "target": "7c5173d8992ce74bddaf1d19394aca681121245f9c593bc237aad7832656c0c5",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 3292,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 872,
+   "target": "f6c535512ba4bb295717332667a180cc5857f579f7c1ca38898b55940bf26861",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.01,
+    "claims": [
+     "0.010000"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.01, witness ((0.03, 0.03), (0.03, 0.5), (0.03, 0.97))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.03,
+      0.03
+     ],
+     [
+      0.03,
+      0.5
+     ],
+     [
+      0.03,
+      0.97
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1194,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1018,
+   "target": "5b271a7902fbe787983963708f7e15575a00dbbede6a6c64b6294e0dba7da224",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.015625,
+    "claims": [
+     "0.015625"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.015625, witness ((0.0, 0.0), (0.0, 0.25), (0.0, 0.5))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.25
+     ],
+     [
+      0.0,
+      0.5
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1405,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1605,
+   "target": "b4c6f8089e74bfcd29672ae8ef97c6609b148ecc687c4efe698ba44f65e8118a",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.0075,
+    "claims": [
+     "0.007500"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.0075, witness ((0.0, 0.25), (0.0, 0.5), (0.0, 0.75))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.25
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      0.0,
+      0.75
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1485,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1798,
+   "target": "03aa7d129c2d7d49637175418fcb2775be4326617fb6d66abf8823faf60fafcd",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.017,
+    "claims": [
+     "0.017000"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.017, witness ((0.0, 0.0), (0.105662, 0.105662), (0.5, 0.5))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.105662,
+      0.105662
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1243,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 2286,
+   "target": "69a29eca305e945514ded82dfca09ee76490b0ab32285cee8e553befa6642af6",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "claimed": 0.003906,
+    "claims": [
+     "0.003906"
+    ],
+    "decisive": "min triangle area 0.0 vs CLAIM 0.003906, witness ((0.0, 0.0), (0.0, 0.5), (0.0, 1.0))",
+    "family": "geometry",
+    "min_area_witness": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.5
+     ],
+     [
+      0.0,
+      1.0
+     ]
+    ],
+    "min_triangle_area": 0.0,
+    "n_distinct": 13,
+    "n_points": 13,
+    "predicate_holds": false,
+    "thirteen_distinct_points": true
+   },
+   "commitment": "frontier-claim-honest@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 890,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 2599,
+   "target": "d5e83a8a5c341b7d83fd538a7063bf77440655ed557147eb8cd968ae704bf40e",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 12 POINT lines, 12 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 12,
+    "n_points": 12,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1631,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 196,
+   "target": "409f8c509af3fddf32153939712a528db818524f62e32aff5e93bed9596db15a",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1397,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 655,
+   "target": "c6eaf4349f0c16ff137e641b51ac5a713eeddf6abf91d56672587d5204ddd5f0",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1406,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 673,
+   "target": "9213b604f43fda40e675b511605963204744f74b2440f09e898e2874507f9036",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 842,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 729,
+   "target": "374a5bf9131ea665a01dc6fab0fb99a0bddf6c4c1735bfb3ad5b0a02f54944cc",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 770,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 747,
+   "target": "b29dfff0e67a3777488daa36e9f2db171fe3fdf9ce401ffa43a25c9d8eb96622",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 2186,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 876,
+   "target": "374fc19c9d2cdae1ffcb135df07602211a70468488c5c4d120bb7a269ab4a920",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1301,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1643,
+   "target": "8e0347dc0d64c018909361789b53ec9965aa7c593b6f02c9fe53300c5944023c",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1239,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1661,
+   "target": "85913632c2412a2c75fd80e8d23ea860c47f8714d94a473d4a9027eb2d306b02",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 2846,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1719,
+   "target": "b75f202c392f5fcf3d7bb53636f86632ab028e8c77ce1f1129a517082af9e5bc",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "all_in_unit_square": true,
+    "decisive": "shape clause fails: 0 POINT lines, 0 distinct, all in [0,1]^2 = True",
+    "family": "geometry",
+    "n_distinct": 0,
+    "n_points": 0,
+    "predicate_holds": false,
+    "thirteen_distinct_points": false
+   },
+   "commitment": "frontier-wellformed@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1598,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-C1",
+   "ruling": "correct",
+   "seq": 1737,
+   "target": "2c4b569777068473e99d6c17de9f088f066b993f113243ca6313acb348652b92",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 2285,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 121,
+   "target": "68193572a2d7121f20c968a3553898528ed6b52bf3652103642222031e623a7c",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1988,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 236,
+   "target": "3ffebe94c6f508e612274bc73125fabf38564829e034ba4504b270601fe521cf",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1892,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 315,
+   "target": "b22a1bc7cbce26c2138d939f6fae60ee4d41cc5fd3cd4b6cfcbce613cd5f2d57",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 2321,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 861,
+   "target": "f5cd97837205f8ea8b441b255132c11d6dd77a6ca56f3c0b0905b43b6c1bb804",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "confound"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1995,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1002,
+   "target": "e3010953680c2395e27e2ce1704fca45c2e028cc4a8b75b9a474a3a52e55230a",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1891,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1388,
+   "target": "9b8538e1e16c88297ed17ba874f1a5dd1c60b1e6f22e9fa2ffa22ad3382a1c22",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1532,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1525,
+   "target": "59d2508901bca8a109470c23bdcc6bbc52bd744f223b980e6ff74bb4e1fd8b39",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1591,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1612,
+   "target": "bde87438f71bc387d599b0a47d583d185d15d93c592443d85db35bd88b7d3009",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "confound"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1779,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2050,
+   "target": "fd13ed49fe1f50e2c71cc39296cd98ae025e09f9802ba385095a5a14ef876479",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1728,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2242,
+   "target": "5636083542128bd738add692c7efdf606c3cd7eceacb4c23c21d481acb00355d",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1453,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2425,
+   "target": "4a4f30cf5d1f546dec10615d83401c2a9278fc2521aa3f3295a325cedb3ca04f",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 1,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-confound@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1284,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2497,
+   "target": "9986c97e951efa2d6e4264cf14ef2faaeb19b66cb508580728e36ec0384df10d",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1554,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 182,
+   "target": "b28ad32f0cee12bff83d20701ef87acc7395f0fc30bcb2a76d738ad60fa5d2fb",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1556,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 238,
+   "target": "92c7246c5f9a98173c58c0ac5d446f9b8dde10c1545363e219a88e691da2402c",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when ",
+       "only if"
+      ],
+      "n_found": 3
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 2202,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 863,
+   "target": "1f18fa09bcb66a3c8eb5d54dc256ff94e532f336f813a61e75bb0eef37b6772e",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1911,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1384,
+   "target": "6ab9c200b1e38149a04175959f07ebf6f5df5a3fe1c93ac602f6b3709247cc16",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1921,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1390,
+   "target": "70731be4560107d4913268a50d89773e1a97182deebfafdbc18d768a740a1cef",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1483,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1533,
+   "target": "37133a02bcf89a0fccb8dcef42aa5a9c55f50d2206192e7ec14ea83d3c727e98",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1491,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2144,
+   "target": "fc626c5f06becb0eb69e7e37329e9542be4af64022b3562badd1d9c34704bc06",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "condition",
+       "when "
+      ],
+      "n_found": 2
+     },
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "constrain"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-constraint-condition@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1799,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2240,
+   "target": "bfea4fdbcdac432abc6f86a1275efcd350f0bd77365ad429f463709ab73db55f",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "mutation"
+      ],
+      "n_found": 1
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1371,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1986,
+   "target": "f5f4be11a05c711cf944dd6750532e140ae28810d253833dabceda7b2a9aaa29",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "mutation"
+      ],
+      "n_found": 1
+     },
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "distribution"
+      ],
+      "n_found": 1
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1378,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 1990,
+   "target": "e55e624a30c254466414552862ee06fc4d5ff6fda4cd179dfb9a72bf318e13ad",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 2,
+      "found": [
+       "shown-to-fail",
+       "planted",
+       "install",
+       "ritual",
+       "mutation",
+       "guard"
+      ],
+      "n_found": 6
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1545,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2140,
+   "target": "b28003ee56024caa0987422c7a83eadbb4e57dca68b22d0815cad9d2266276cd",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 2,
+      "found": [
+       "install",
+       "mutation",
+       "guard"
+      ],
+      "n_found": 3
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1350,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2148,
+   "target": "d57433c1606ec518fa486f33d288c8854f83007591bb1078da55d7ff6c172e84",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 2,
+      "found": [
+       "shown-to-fail",
+       "install",
+       "ritual",
+       "mutation"
+      ],
+      "n_found": 4
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1351,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2152,
+   "target": "ea51d45ff6883c903e7299aa3b8bada8f297894cb9602042b1c3f6ed418e5bff",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 2,
+      "found": [
+       "shown-to-fail",
+       "install",
+       "ritual",
+       "mutation"
+      ],
+      "n_found": 4
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1423,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2158,
+   "target": "c2482ee553c4b3f8b844c40cc72f3adc1d5012bf664e2cfd1c244c48e1d28281",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 2,
+      "found": [
+       "install",
+       "ritual",
+       "registry",
+       "mutation",
+       "guard"
+      ],
+      "n_found": 5
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1893,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2236,
+   "target": "4e0f8addb55afd118363645c773706e996e1f662e1e411e49eb637e4017903af",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": false,
+      "floor": 2,
+      "found": [
+       "mutation"
+      ],
+      "n_found": 1
+     },
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "compile.py",
+       "1/9"
+      ],
+      "n_found": 2
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "poietics-installation-mechanism@v1",
+   "commitment_in_target_interface": true,
+   "content_chars": 1861,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 2244,
+   "target": "4809c3af2a616a8099734ccae212dc4bbb46a5c538d5a84928db90ffe63b0600",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "refuted if"
+      ],
+      "n_found": 1
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "relation-form@578e42df713e",
+   "commitment_in_target_interface": true,
+   "content_chars": 447,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 503,
+   "target": "efa788ebdd693b2a3636adf721844903b85dd9230a380dddd692e0c5c13a1ac9",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  },
+  {
+   "check": {
+    "clauses": [
+     {
+      "clause_holds": true,
+      "floor": 1,
+      "found": [
+       "refuted if"
+      ],
+      "n_found": 1
+     },
+     {
+      "clause_holds": false,
+      "floor": 1,
+      "found": [],
+      "n_found": 0
+     }
+    ],
+    "conjuncts": 2,
+    "family": "term-count",
+    "predicate_holds": false
+   },
+   "commitment": "relation-form@578e42df713e",
+   "commitment_in_target_interface": true,
+   "content_chars": 343,
+   "independent_predicate_holds": false,
+   "recorded_verdict": "fail",
+   "root": "P-R1",
+   "ruling": "correct",
+   "seq": 572,
+   "target": "987388779e824d66d2a36c6a4540b04f4a1aeef6bf422702f0c6c66bfd61929f",
+   "target_status_final": "refuted",
+   "warrant_materialized_attack_edge": true
+  }
+ ],
+ "schema": "w4.handcheck.v1",
+ "tally": {
+  "P-C1": {
+   "correct": 30
+  },
+  "P-R1": {
+   "correct": 30
+  }
+ }
+}
