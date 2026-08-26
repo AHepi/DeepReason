@@ -30,16 +30,21 @@ import pytest
 
 from deepreason.config import Config
 from deepreason.discharge import (
-    discharge_kind_names,
-    render_open_criticism_context,
-    resolve_policy,
-    screen_submission,
-)
-from deepreason.discharge.policy import (
     DISCHARGE_KIND_DECLARATIONS,
-    KINDS,
     DischargeKindDeclaration,
+    discharge_kind_names,
+    resolve_policy,
 )
+from deepreason.discharge.policy import KINDS
+
+# `render_open_criticism_context`, `open_criticisms` and `screen_submission`
+# are imported INSIDE the tests that use them, not here. Not style: this file
+# is written before them and must stay collectable while they land, so that
+# the checks it CAN make are running from the first step rather than waiting
+# for the last. Importing `deepreason.discharge.policy` for `KINDS` is the one
+# deliberate exception to this file's own interface rule -- `KINDS` is the
+# DERIVED view whose agreement with the registry is the thing under test, and
+# a test of a derivation has to be able to see both sides of it.
 
 SRC = pathlib.Path("src/deepreason")
 PACKAGE = SRC / "discharge"
@@ -205,9 +210,11 @@ def test_a_fourth_kind_enters_by_declaration_alone(harness, monkeypatch):
 
     # (b) the screen accepts it
     policy = resolve_policy(Config(DISCHARGE_POLICY="discharge-required.v1"))
-    assert "scoped_out" in policy.kinds or "scoped_out" in discharge_kind_names()
+    assert "scoped_out" in policy.kind_names()
 
     # (c) the render tells the writer it exists
+    from deepreason.discharge import render_open_criticism_context
+
     problem, criticism = _problem_with_one_open_criticism(harness)
     rendered = render_open_criticism_context(harness, problem.id, policy)
     assert rendered is not None
@@ -229,6 +236,8 @@ def test_a_channel_toggle_is_pure_configuration(harness):
     also pins the property every other test in the tranche leans on: with the
     channel off, the render produces NOTHING and no existing pack byte moves.
     """
+    from deepreason.discharge import render_open_criticism_context
+
     problem, _ = _problem_with_one_open_criticism(harness)
 
     off = resolve_policy(Config())
@@ -245,6 +254,8 @@ def test_a_cap_change_is_pure_configuration(harness):
     number is not a decoration -- an undisclosed cap is the silent truncation
     `_allocate_sections` exists to abolish, applied to a different section.
     """
+    from deepreason.discharge import render_open_criticism_context
+
     problem, _ = _problem_with_one_open_criticism(harness, extra=1)
 
     wide = resolve_policy(Config(DISCHARGE_POLICY="discharge-required.v1"))

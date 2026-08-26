@@ -1,6 +1,7 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=3 blockers=none
+State: next=4 blockers=none (WATCH: src/ at 296 of 640 after step 3; S1 came in at ~274 against SPEC's 140 estimate — projection and the
+R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -315,7 +316,7 @@ point):
       document moved in step 2b's own commit; (d) the pop is unconditional and
       a mutation proves the check enforcing that can fail.
 
-- [ ] 3. (S1) Create `src/deepreason/discharge/__init__.py` (the declared
+- [x] 3. (S1) Create `src/deepreason/discharge/__init__.py` (the declared
       interface, re-exporting exactly the nine names SPEC S1 lists) and
       `policy.py` (`DischargeKindDeclaration`, `DISCHARGE_KIND_DECLARATIONS`
       with three entries, the DERIVED `KINDS` view, `DischargePolicyV1`,
@@ -326,6 +327,68 @@ point):
       d in DISCHARGE_KIND_DECLARATIONS.items()}; assert
       set(discharge_kind_names()) ==
       {'revised','rebutted','departure_declared'}"` exits 0
+
+      PASTED OUTPUT:
+      ```
+      $ python -c "...S1 accept..."
+      S1 accept: exit 0
+      off    off                     False       99b3d6f8ec22707f
+      on     discharge-required.v1   True once 8 fe7fa08576d4a286
+      kinds under the on preset: ('revised', 'rebutted', 'departure_declared')
+
+      $ python -m pytest tests/test_discharge_contract.py -q
+      FAILED test_no_consumer_reaches_past_the_interface
+      FAILED test_a_fourth_kind_enters_by_declaration_alone
+      FAILED test_a_channel_toggle_is_pure_configuration
+      FAILED test_a_cap_change_is_pure_configuration
+      4 failed, 2 passed
+      ```
+      Two architecture checks are GREEN from this step:
+      `test_the_package_consumes_only_what_it_declares` (the package reaches
+      nothing outside `ontology`/`config`/`programs`) and
+      `test_no_consumer_names_a_discharge_kind_literally`. The four failures
+      are the expected RED-first state: three need the render (step 7) and one
+      needs the wire (step 12). `test_no_consumer_reaches_past_the_interface`
+      fails on its own positive anchor — there are ZERO consumers until step 7
+      wires `rules/conj.py` — which is the anchor working as intended.
+
+      Two design decisions worth recording, because both were forks:
+      - `kinds=()` on a preset means EVERY DECLARED KIND, resolved live through
+        `policy.kind_names()`. A preset that enumerated the three would have to
+        be edited when a fourth is declared, which is the coupling the law
+        forbids one level up from where anyone would look for it.
+      - `resolve_policy` RAISES on an unregistered id rather than falling back
+        to `off`. A silent fallback makes a typo indistinguishable from a
+        deliberate disable, and the operator would have no way to tell which
+        run they got. This is the all-configurations law applied correctly:
+        the config still COMPILES; impossibility surfaces at the point of use.
+
+      GATES:
+      ```
+      $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 640
+      {"areas": {"src/": 296}, "total_insertions": 296, "ceiling": 640,
+       "verdict": "WITHIN"}
+      $ python tools/blast_radius.py --files src/deepreason/discharge/*.py ...
+      verdict: CLEAR   contacts: []   adjacent: []
+      reachability: resolve_policy UNKNOWN->UNREACHABLE (direction null);
+                    discharge_kind_names UNKNOWN->UNREACHABLE (direction null)
+      ```
+      NO DRIFT. `UNREACHABLE` is correct and expected here: nothing calls the
+      package until step 7 wires `rules/conj.py`, and the gate reports
+      `direction: null` rather than `newly_dead`. **Step 7 must flip both to
+      REACHABLE**; if it does not, the channel is dead code and that is a stop.
+
+      **R19 WATCH, raised now rather than at the ceiling.** S1 was estimated at
+      140 `src/` lines and came in at ~274 (`policy.py` 215, `__init__.py` 50).
+      Projecting SPEC's remaining per-item estimates on top of the actual 296
+      gives ~796, which would EXCEED the declared 640. The operator's rider is
+      explicit — "a typed STOP if it grows beyond what SPEC now declares, not
+      silent growth" — so this is the early warning, not the stop. Two things
+      happen before step 10: the remaining items are written to their estimates
+      rather than to S1's density, and the step-10 `[COMMIT]` gate reads the
+      ACTUAL number. If it is over, step 10 stops and prices the options
+      (trim comment density / raise the ceiling with the operator's word /
+      split); it does not re-baseline.
 
 - [ ] 4. (S2) Write `tests/test_discharge_channel.py`'s `open_criticisms`
       cases: an `observe_only` scrutiny criticism with NO warrant IS in the
