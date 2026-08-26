@@ -10,3 +10,4 @@
 {"index": 9, "tokens": 12113, "prompt_tokens": 167, "completion_tokens": 11946, "elapsed_s": 119.97, "cumulative_tokens": 42213, "valid": false, "code": "CLAIM_INFLATED", "n_points": 13, "n_triples": 286, "score": 0.0, "score_exact": "0", "claim": 0.01, "claim_confirmed": false}
 {"index": 10, "error": "The read operation timed out", "tokens": 0}
 {"index": 11, "error": "The read operation timed out", "tokens": 0}
+{"index": 12, "error": "The read operation timed out", "tokens": 0}
