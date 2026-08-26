@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=2 blockers=none
+State: next=2a blockers=none
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -101,7 +101,7 @@ point):
       note (R18) is installed at step 26 with the wire, and the draft says so
       in-band rather than carrying a check that would pass vacuously.
 
-- [ ] 2. (S8) Write `tests/test_discharge_contract.py` — the architecture test,
+- [x] 2. (S8) Write `tests/test_discharge_contract.py` — the architecture test,
       all four checks (interface-only consumption; the package's own import
       confinement to `ontology`/`config`/`programs`; a fourth kind by
       declaration; a policy change as pure configuration). It must be RED now.
@@ -109,6 +109,82 @@ point):
       | tail -5` shows an import/collection failure naming
       `deepreason.discharge` (paste it) — the test can fail, which is what
       makes it a check rather than decoration
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_contract.py -q
+      tests/test_discharge_contract.py:32: in <module>
+          from deepreason.discharge import (
+      E   ModuleNotFoundError: No module named 'deepreason.discharge'
+      ERROR tests/test_discharge_contract.py
+      !!!!!! Interrupted: 1 error during collection !!!!!!
+      1 error in 0.21s
+      ```
+
+      One anchor was tightened while writing it, and it is worth recording
+      because it turned a weak check into a claim. The interface-only test's
+      positive anchor was drafted as `len(consumers) >= 2`; a floor of two
+      would have been FALSE on the delivered tree and, worse, unfalsifiable in
+      the direction that matters. The channel reaches the rest of the tree
+      through exactly ONE file, so the anchor now reads
+      `assert consumers == ["src/deepreason/rules/conj.py"]` — the blast radius
+      stated as a pinned count (`DR-SCHEMA` check-writing rule 6, "counts are
+      claims"). `llm/packs.py` is deliberately NOT a consumer: the render hands
+      it a plain string, so the pack layer never learns that criticism is what
+      it is rendering.
+
+      **ORDERING FAULT IN THE PLAN, found by writing the test (dr-execute-step
+      procedure item 3).** Two of the four architecture checks construct
+      `Config(DISCHARGE_POLICY=...)`, and `Config` is `extra="forbid"`, so they
+      cannot pass until that field exists. The plan put the field in commit 3
+      (steps 19–21) for narrative tidiness — grouping "the granted contact"
+      together — which inverts a real dependency: `resolve_policy(config)` is
+      part of S1 and S1 is step 3. Steps 9, 10, 16 and 18 would all have failed
+      their own done-criteria for a reason that is a planning error, not a code
+      one.
+      Correction, per the re-planning rule (touch only implicated steps; never
+      rewrite a CHECKED step's history): steps 19–21 are unchecked, so they are
+      RE-SEQUENCED to run here as **2a, 2b, 2c**, before step 3. Numbering of
+      every other step is untouched and the audit trail is intact. Nothing
+      moves in or out of scope; the granted contact's four riders are carried
+      verbatim onto the relocated steps, including rider (c) — the map's
+      frozen-surface document still moves in the SAME commit as the
+      `run_manifest.py` line.
+
+- [ ] 2a. (S13) [was step 19] Capture `proof/digest_before.txt` on the CURRENT
+      tree: the six `source_config_hash` values (v1..v6) and the qualification
+      subject digest, one command, output pasted into the file verbatim.
+      Rider (b).
+      done-when: `grep -c b9038b84efdea313 proof/digest_before.txt` is 1 AND
+      `grep -c 2624603035bc335e proof/digest_before.txt` is 4
+
+- [ ] 2b. (S13) [was step 20] THE GRANTED CONTACT, all in ONE step because
+      rider (c) requires the map to move in the SAME commit as the code: add
+      `Config.DISCHARGE_POLICY: str = "off"` (SPEC A7 — the DEFAULT is F3's, so
+      F1 ships it off); add `data.pop("DISCHARGE_POLICY", None)` to
+      `run_manifest.py::_versioned_source_config_data` UNCONDITIONALLY, outside
+      the `if schema_version < 3:` guard, per rider (d) and the
+      `ENGAGED_CRITICISM_AUTHORITY` trap the operator named as its ancestor;
+      and add the granted-contact block to `docs/map/INV-frozen-surfaces.md`
+      with its own `check:`.
+      done-when: ALL THREE pasted — (a) `python -c "from deepreason.config
+      import Config; from deepreason.run_manifest import source_config_hash;
+      h=[source_config_hash(Config(), schema_version=v) for v in
+      (1,2,3,4,5,6)]; assert
+      h[0]==h[1]=='6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81';
+      assert
+      h[2]==h[3]==h[4]==h[5]=='2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5'"`
+      exits 0; (b) `test "$(grep -c 'data.pop("DISCHARGE_POLICY", None)'
+      src/deepreason/run_manifest.py)" -eq 1` exits 0 AND the line is outside
+      every `schema_version` guard (paste the surrounding 6 lines);
+      (c) `python tools/docs_verify.py --fast` passes the new
+      `INV-frozen-surfaces` check
+
+- [ ] 2c. (S13) [was step 21] Capture `proof/digest_after.txt` with the SAME
+      command as 2a and diff the pair. This is the acceptance check for the
+      grant — not a green suite, the digest itself, at every schema version.
+      done-when: `diff proof/digest_before.txt proof/digest_after.txt` prints
+      nothing and exits 0 (paste the empty result and the exit code)
 
 - [ ] 3. (S1) Create `src/deepreason/discharge/__init__.py` (the declared
       interface, re-exporting exactly the nine names SPEC S1 lists) and
@@ -183,8 +259,15 @@ point):
 
 - [ ] 10. (S1,S2,S3,S8,S11,S15) [COMMIT] Ring, budget, commit, push.
       done-when: ALL FOUR pasted — (a) `python -m pytest
-      tests/test_discharge_channel.py tests/test_discharge_contract.py
-      tests/test_frame_render.py tests/test_pack_prefix.py -q` → 0 failed;
+      tests/test_discharge_channel.py "tests/test_discharge_contract.py::
+      test_a_fourth_kind_enters_by_declaration_alone" --deselect
+      tests/test_discharge_contract.py tests/test_frame_render.py
+      tests/test_pack_prefix.py -q` — i.e. the whole ring EXCEPT
+      `test_a_fourth_kind_enters_by_declaration_alone`, which reads the wire
+      schema enum that lands at step 12 — → 0 failed. Corrected here rather
+      than at step 10 (same ordering fault as step 2's record: the ring as
+      first written demanded a commit-2 surface inside commit 1). Step 18 runs
+      the file whole, with nothing deselected;
       (b) `python tools/diff_budget.py <base> --paths src/ --ceiling 640` →
       `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (EXCEEDED is a typed
       STOP to the operator, never a re-baselined ceiling — R19);
@@ -282,13 +365,17 @@ point):
 
 ## Commit 3 — the granted contact, the law line, the coupling proof, the gate
 
-- [ ] 19. (S13) Capture `proof/digest_before.txt` on the CURRENT tree: the six
+- [~] 19. (S13) **RE-SEQUENCED TO STEP 2a** (see step 2's record: two
+      architecture checks depend on `Config.DISCHARGE_POLICY`, so the field
+      cannot land after them). Original text kept for the audit trail.
+      ~~Capture `proof/digest_before.txt`~~ on the CURRENT tree: the six
       `source_config_hash` values (v1..v6) and the qualification subject
       digest, one command, output pasted into the file verbatim. Rider (b).
       done-when: `grep -c b9038b84efdea313 proof/digest_before.txt` is 1 AND
       `grep -c 2624603035bc335e proof/digest_before.txt` is 4
 
-- [ ] 20. (S13) THE GRANTED CONTACT, all in ONE step because rider (c) says
+- [~] 20. (S13) **RE-SEQUENCED TO STEP 2b.** Original text kept for the
+      audit trail. ~~THE GRANTED CONTACT~~, all in ONE step because rider (c) says
       the map moves in the SAME commit as the code: add
       `Config.DISCHARGE_POLICY: str = "off"` (SPEC A7 — the DEFAULT is F3's,
       so F1 ships it off); add `data.pop("DISCHARGE_POLICY", None)` to
@@ -310,7 +397,8 @@ point):
       (c) `python tools/docs_verify.py --fast` passes the new
       `INV-frozen-surfaces` check
 
-- [ ] 21. (S13) Capture `proof/digest_after.txt` with the SAME command as step
+- [~] 21. (S13) **RE-SEQUENCED TO STEP 2c.** Original text kept for the
+      audit trail. ~~Capture `proof/digest_after.txt`~~ with the SAME command as step
       19 and diff the pair. This is the acceptance check for the grant — not a
       green suite, the digest itself, at every schema version.
       done-when: `diff proof/digest_before.txt proof/digest_after.txt` prints
@@ -411,5 +499,6 @@ point):
 
 Every SPEC item reaches at least one step: S1→3,9,10; S2→4,5; S3→6,7;
 S4→11,12; S5→13,14; S6→15; S7→22,23; S8→2,9,16; S9→24; S10→25;
-S11→1,8,17,27; S12→28,29; S13→19,20,21; S14→26; S15→10,18,30; S16→31.
+S11→1,8,17,27; S12→28,29; S13→2a,2b,2c (re-sequenced from 19,20,21);
+S14→26; S15→10,18,30; S16→31.
 Every step carries an S-number; no step lacks a done-criterion.
