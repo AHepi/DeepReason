@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=1 blockers=none
+State: next=2 blockers=none
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -37,15 +37,69 @@ point):
 
 ## Commit 1 — interface, registry, record, render (S1, S2, S3, S8, S11)
 
-- [ ] 1. (S11) Draft `docs/map/CON-discharge-channel.md`: the agreement, the
-      three layers (FROZEN interface / VERSIONED registry / FREE parameters),
-      what the channel may never touch, and a `Traps` section. Write the
-      `check:` lines now, at column 0, for behaviour that does not exist yet —
-      they are the specification of what steps 3–7 must make true. Not
-      committed alone; it rides step 10.
-      done-when: `head -1 docs/map/CON-discharge-channel.md` is
-      `<!-- DR-CON-discharge-channel -->` AND
-      `grep -c '^`check:' docs/map/CON-discharge-channel.md` >= 6
+- [x] 1. (S11) Draft the `DR-CON-discharge-channel` map document: the
+      agreement, the three layers (FROZEN interface / VERSIONED registry / FREE
+      parameters), what the channel may never touch, and a `Traps` section.
+      Write the `check:` lines now, at column 0, for behaviour that does not
+      exist yet — they are the specification of what steps 3–7 must make true.
+      done-when: the drafted file's first line is
+      `<!-- DR-CON-discharge-channel -->` AND it carries >= 6 `check:` lines at
+      column 0
+
+      **PLAN CORRECTION, recorded rather than improvised (dr-execute-step
+      procedure item 2).** The step as planned said to draft the file directly
+      at `docs/map/CON-discharge-channel.md`. That contradicts the tree: this
+      skill requires `python tools/docs_verify.py` to PASS before any commit,
+      and `docs_verify` scans `docs/map/*.md`, so a draft whose checks describe
+      behaviour that does not exist yet would fail the gate at the very step
+      that creates it — every step from 1 to 7 would be uncommittable.
+      `check: grep -q 'MAP_DIR.glob("\*.md")' tools/docs_verify.py`
+      Correction, smallest available: the draft lives in the TRANCHE
+      directory as `DESIGN_CON-discharge-channel.md` (committed, so a fresh
+      session resumes from it; not scanned, so it cannot fail the map gate),
+      and step 8 installs it at `docs/map/CON-discharge-channel.md` in the same
+      commit as the code that makes its checks pass. Ordering rule 6 is
+      satisfied in full — the agreement is written down BEFORE the code, which
+      is how you find out whether you understand it. No scope moved.
+
+      PASTED OUTPUT:
+      ```
+      $ wc -l experiments/.../DESIGN_CON-discharge-channel.md
+      203
+      $ head -1 experiments/.../DESIGN_CON-discharge-channel.md
+      <!-- DR-CON-discharge-channel -->
+      $ grep -c '^`check:' experiments/.../DESIGN_CON-discharge-channel.md
+      11
+      ```
+      Eleven checks, not the six the criterion required. Two of them
+      (`test_a_fourth_kind_enters_by_declaration_alone`,
+      `test_no_consumer_reaches_past_the_interface`) name the architecture test
+      by node id, so the modularity claim is bound to a failable check from the
+      moment the document exists — R14's own requirement, written down before
+      the code rather than after it.
+
+      **THE `docs_verify` FULL BASELINE, captured here** because it can only be
+      measured on an untouched tree and step 8 compares against it:
+      ```
+      $ python tools/docs_verify.py            # FULL, on 4760a32ef, tree clean
+        FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status ...
+        FAIL CON-run-identity.md:202: git log -1 --format=%s 1637e808 | grep -qi retire
+        FAIL CON-run-identity.md:204: test -z "$(git show -M --diff-filter=R ...
+      docs_verify: 3 failed
+      ```
+      All three are the pre-existing `CON-run-identity` failures, and all three
+      fail for the same environmental reason rather than a rotted claim: they
+      reach for commits (`1637e808`, `f304fec1`) that this container's shallow
+      clone does not carry — `fatal: ambiguous argument 'f304fec1': unknown
+      revision`. Rung 6's own DELIVERY.md recorded the identical baseline ("3
+      failed — all three the pre-existing CON-run-identity shallow-clone
+      failures, unchanged from the base"), so this is a known, stable floor and
+      not a regression this tranche must clear. **3 is the number every later
+      step compares against; anything above 3 is this tranche's fault.**
+
+      One check in this draft is deliberately a placeholder: the F2 composition
+      note (R18) is installed at step 26 with the wire, and the draft says so
+      in-band rather than carrying a check that would pass vacuously.
 
 - [ ] 2. (S8) Write `tests/test_discharge_contract.py` — the architecture test,
       all four checks (interface-only consumption; the package's own import
