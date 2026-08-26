@@ -1,0 +1,1 @@
+{"index": 0, "tokens": 11828, "prompt_tokens": 167, "completion_tokens": 11661, "elapsed_s": 99.29, "cumulative_tokens": 11828, "valid": true, "code": null, "n_points": 13, "n_triples": 286, "score": 0.013307601454, "score_exact": "6653800727/500000000000", "claim": 0.01326, "claim_confirmed": true, "above_floor": true}
