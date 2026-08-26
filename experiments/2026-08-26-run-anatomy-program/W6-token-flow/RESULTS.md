@@ -244,7 +244,17 @@ reading because the mechanism has not fired.
    badly timed is a question for a fixing family, not for a census. Parked
    as P5 with that framing intact.
 
-8. **144 calls across 7 roots have no cycle.** Cycle is assigned from
+8. **One call in 3 155 has no work terminal.** Log seq 2413 of
+   `2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6`
+   — a repair re-ask at attempt index 3, arrival invalid — has a provider
+   attempt and a semantic admission but no `workflow-work-terminal-v1`
+   object. That root died `failed / operational_failure`, so a transaction
+   in flight at the moment of death having no terminal is the expected
+   shape of a crash rather than a gap in the record. It is carried through
+   the tables as `outcome: no-terminal-record` (2 276 tokens) rather than
+   folded into a neighbouring class.
+
+9. **144 calls across 7 roots have no cycle.** Cycle is assigned from
    `progress.jsonl`'s cumulative token marks, because `log.jsonl` stamps no
    cycle on an event at all. A root that never recorded a completed cycle —
    every one of these 7 died at cycle 0 to 2 — gets `cycle: null` rather
