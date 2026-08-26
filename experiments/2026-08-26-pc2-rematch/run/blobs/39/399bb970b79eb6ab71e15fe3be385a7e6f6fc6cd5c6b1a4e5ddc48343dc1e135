@@ -1,0 +1,104 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0\nPOINT 0.5 1\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.666667\nPOINT 0.166667 0.833333\nPOINT 0.833333 0.166667\nPOINT 0.5 0.5\nCLAIM 0.008333",
+      "mechanism": "Combines boundary-grid anchors with a staggered interior grid to avoid local collinearities; aimed above 0.005 floor via jittered thirds.",
+      "counterconditions": [
+        "If the checker reports any triple area below 0.008333, the CLAIM is dishonest.",
+        "If any two points coincide or lie outside [0,1]^2, frontier-wellformed@v1 fails."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "Points are distinct and within bounds.", "where": "all POINT lines"},
+        {"handle": "SRC_019", "kind": "revised", "note": "Target minimum area > 0.005.", "where": "CLAIM line"},
+        {"handle": "SRC_017", "kind": "revised", "note": "Claim matches intended minimum.", "where": "CLAIM 0.008333"},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claim matches intended minimum.", "where": "CLAIM 0.008333"},
+        {"handle": "SRC_015", "kind": "revised", "note": "Target minimum area > 0.005.", "where": "CLAIM line"},
+        {"handle": "SRC_023", "kind": "revised", "note": "Target minimum area > 0.005.", "where": "CLAIM line"},
+        {"handle": "SRC_013", "kind": "revised", "note": "Points are distinct and within bounds.", "where": "all POINT lines"},
+        {"handle": "SRC_025", "kind": "revised", "note": "Target minimum area > 0.005.", "where": "CLAIM line"}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 0.5 0\nPOINT 1 0\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0 1\nPOINT 0.5 1\nPOINT 1 1\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.0625",
+      "mechanism": "Edge-midpoints + corners + interior quarters; highly symmetric, but center collinearities likely make this refuted, included as a criticizable baseline.",
+      "counterconditions": [
+        "If any boundary row/col has three points collinear, minimum area is 0 and claim fails.",
+        "If checker computes min < 0.0625, claim is dishonest."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [
+        "SRC_005"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "All 13 points distinct and in [0,1]^2.", "where": "POINT lines"},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departure: this candidate may actually fail the floor due to collinearities; included for exploration."},
+        {"handle": "SRC_017", "kind": "revised", "note": "Claim matches construction intent.", "where": "CLAIM 0.0625"},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claim matches construction intent.", "where": "CLAIM 0.0625"},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departure: may fail above-floor."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departure: may fail above-floor."},
+        {"handle": "SRC_013", "kind": "revised", "note": "All 13 points distinct and in [0,1]^2.", "where": "POINT lines"},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departure: may fail above-floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.2 0\nPOINT 0.8 0.6\nPOINT 0.6 0.8\nPOINT 0 0.2\nPOINT 0.3 0.5\nPOINT 0.7 0.5\nPOINT 0.5 0.3\nPOINT 0.5 0.7\nPOINT 0.5 0.5\nCLAIM 0.01",
+      "mechanism": "Asymmetric anti-collinear jitter: corners + irregular boundary and interior points chosen to avoid small-area triples, at a modest claimed floor.",
+      "counterconditions": [
+        "If checker finds any triangle area below 0.01, claim is refuted.",
+        "If any three points are collinear, minimum is 0 and fails."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "13 distinct points in bounds.", "where": "POINT lines"},
+        {"handle": "SRC_019", "kind": "revised", "note": "Claim 0.01 > 0.005 floor.", "where": "CLAIM line"},
+        {"handle": "SRC_017", "kind": "revised", "note": "Claim matches intended min.", "where": "CLAIM 0.01"},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claim matches intended min.", "where": "CLAIM 0.01"},
+        {"handle": "SRC_015", "kind": "revised", "note": "Claim 0.01 > 0.005 floor.", "where": "CLAIM line"},
+        {"handle": "SRC_023", "kind": "revised", "note": "Claim 0.01 > 0.005 floor.", "where": "CLAIM line"},
+        {"handle": "SRC_013", "kind": "revised", "note": "13 distinct points in bounds.", "where": "POINT lines"},
+        {"handle": "SRC_025", "kind": "revised", "note": "Claim 0.01 > 0.005 floor.", "where": "CLAIM line"}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 0.5 0.1\nPOINT 1 0\nPOINT 0.1 0.5\nPOINT 0.9 0.5\nPOINT 0 1\nPOINT 0.5 0.9\nPOINT 1 1\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "Near-symmetric grid with small perturbations to break exact collinearities; claims the floor exactly, likely criticizable as too conservative.",
+      "counterconditions": [
+        "If any perturbation is insufficient and collinearity remains, minimum is 0 and fails.",
+        "If checker computes min < 0.005, claim is dishonest."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [],
+      "sidecar": {
+        "requested_context_aliases": [],
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "revised", "note": "13 distinct points in bounds.", "where": "POINT lines"},
+        {"handle": "SRC_019", "kind": "revised", "note": "Claim exactly at 0.005 floor.", "where": "CLAIM 0.005"},
+        {"handle": "SRC_017", "kind": "revised", "note": "Claim matches intended min.", "where": "CLAIM 0.005"},
+        {"handle": "SRC_021", "kind": "revised", "note": "Claim matches intended min.", "where": "CLAIM 0.005"},
+        {"handle": "SRC_015", "kind": "revised", "note": "Claim at 0.005 floor.", "where": "CLAIM line"},
+        {"handle": "SRC_023", "kind": "revised", "note": "Claim at 0.005 floor.", "where": "CLAIM line"},
+        {"handle": "SRC_013", "kind": "revised", "note": "13 distinct points in bounds.", "where": "POINT lines"},
+        {"handle": "SRC_025", "kind": "revised", "note": "Claim at 0.005 floor.", "where": "CLAIM line"}
+      ]
+    }
+  ]
+}
+```

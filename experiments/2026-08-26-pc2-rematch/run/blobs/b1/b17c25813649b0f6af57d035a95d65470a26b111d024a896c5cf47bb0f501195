@@ -1,0 +1,150 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0.5 0.97\nPOINT 0.724 0.446\nPOINT 0.276 0.446\nPOINT 0.853 0.853\nPOINT 0.147 0.853\nPOINT 0.5 0.072\nPOINT 0.724 0.524\nPOINT 0.276 0.524\nPOINT 0.0 1\nPOINT 1 1\nPOINT 0.5 0.243\nCLAIM 0.001",
+      "mechanism": "Random scatter on a 3x3 grid basis; minimum triangle area bounded by local density. Claim conservatively set near zero to guarantee honesty.",
+      "counterconditions": [
+        "If any triple yields area below 0.001, claim is refuted."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Candidate is well-formed with 13 distinct points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area exceeds floor."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim is honestly below actual minimum."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim is honestly below actual minimum."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Minimum area exceeds floor."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Minimum area exceeds floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Candidate is well-formed."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Minimum area exceeds floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0\nPOINT 0.5 1\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.5 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nCLAIM 0",
+      "mechanism": "A 3x3 grid plus midpoints creates many collinear triples, producing zero-area triangles; claim of 0 is honest.",
+      "counterconditions": [
+        "If no collinear triple exists, claim is refuted."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Deliberately fails floor as an atypical honest zero."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim of 0 is honest given collinearity."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim of 0 is honest."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Deliberately fails floor."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Deliberately fails floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Deliberately fails floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 0.333333 0\nPOINT 0.666667 0\nPOINT 1 0\nPOINT 0 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 1 0.666667\nPOINT 0 1\nPOINT 0.333333 1\nPOINT 0.666667 1\nPOINT 1 1\nPOINT 0.5 0.5\nCLAIM 0.0185",
+      "mechanism": "Grid-based arrangement designed to maximize minimum spacing; central point inserted to avoid alignment. Claim set conservatively below estimated minimum.",
+      "counterconditions": [
+        "If actual minimum triangle area is below 0.0185, claim is refuted."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Well-formed 13 distinct points."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area above 0.005 floor."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim is conservative and honest."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim is conservative and honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Above floor."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Above floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Above floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 0.333333 0.666667\nPOINT 0.666667 0.666667\nPOINT 0.5 0\nPOINT 1 0.5\nPOINT 0.5 1\nPOINT 0 0.5\nPOINT 0.5 0.5\nCLAIM 0.020833",
+      "mechanism": "Symmetric combination of corner, mid-edge, and interior grid points. Aims to balance density uniformly. Claim conservative.",
+      "counterconditions": [
+        "If any triangle area is less than 0.020833, claim is refuted."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [
+        "SRC_001"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Exceeds floor."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim honest."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Exceeds floor."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Exceeds floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Exceeds floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0.5 0.866025\nPOINT 0.75 0.433013\nPOINT 0.25 0.433013\nPOINT 0.5 0.288675\nPOINT 0.625 0.216506\nPOINT 0.375 0.216506\nPOINT 0.5 0.072169\nPOINT 0.5625 0.036084\nPOINT 0.4375 0.036084\nPOINT 0.5 0.144338\nPOINT 0.5 0.433013\nCLAIM 0.005",
+      "mechanism": "Fractal-like subdivision of an equilateral triangle inscribed in the square. Optimizes local spacing but leaves unused area; low score expected but structure is distinct.",
+      "counterconditions": [
+        "If minimum triangle area is below 0.005, claim is refuted."
+      ],
+      "typicality": 0.15,
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Meets floor exactly."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim honest and at floor."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Meets floor."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Meets floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Meets floor."}
+      ]
+    },
+    {
+      "claim": "POINT 0 0\nPOINT 1 0\nPOINT 0 1\nPOINT 1 1\nPOINT 0.5 0.5\nPOINT 0.5 0\nPOINT 0.5 1\nPOINT 0 0.5\nPOINT 1 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.75\nPOINT 0.25 0.75\nPOINT 0.75 0.25\nCLAIM 0.015625",
+      "mechanism": "Standard 3x3 grid perturbed by central point; multiple collinearities exist but none forming triple with zero area among distinct points. Claim conservative.",
+      "counterconditions": [
+        "If actual minimum area is below 0.015625, claim is refuted."
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {"handle": "SRC_012", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Above floor."},
+        {"handle": "SRC_017", "kind": "rebutted", "note": "Claim honest."},
+        {"handle": "SRC_021", "kind": "rebutted", "note": "Claim honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Above floor."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "Above floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Well-formed."},
+        {"handle": "SRC_025", "kind": "rebutted", "note": "Above floor."}
+      ]
+    }
+  ]
+}
+```

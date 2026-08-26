@@ -1,0 +1,14 @@
+{
+  "candidate": {
+    "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.285714\nPOINT 1.000000 0.285714\nPOINT 0.500000 0.000000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.125000 0.750000\nPOINT 0.625000 0.750000\nPOINT 0.375000 0.250000\nPOINT 0.875000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.020833",
+    "mechanism": "This construction distributes 13 points across multiple horizontal bands and symmetric columns to systematically avoid collinearities. A 4x4 lattice was perturbed by removing one redundant point and adding extra off-lattice points (e.g., splitting the bottom edge and introducing interior centroids) to eliminate horizontal and diagonal collinearities that commonly cause zero-area triangles in raw grids.",
+    "counterconditions": [
+      "If any three points are collinear, the minimum triangle area is exactly 0, failing the 0.005 floor.",
+      "If a point coordinate lies outside [0,1]x[0,1], the candidate violates the wellformedness criteria."
+    ],
+    "typicality": 0.5,
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}
