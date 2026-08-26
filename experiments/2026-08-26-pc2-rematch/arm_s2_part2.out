@@ -1,1 +1,4 @@
 [arm-s] 0000 tokens= 11828 cum=   11828/966023 valid=True score=0.013307601454 best=0.013307601454
+[arm-s] 0003 tokens=  6771 cum=   18599/966023 valid=True score=0.0004551149295 best=0.013307601454
+[arm-s] 0007 tokens= 11501 cum=   30100/966023 valid=False score=0.0 best=0.013307601454
+[arm-s] 0009 tokens= 12113 cum=   42213/966023 valid=False score=0.0 best=0.013307601454

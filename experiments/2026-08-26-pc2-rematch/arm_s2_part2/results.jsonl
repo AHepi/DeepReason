@@ -1,1 +1,11 @@
 {"index": 0, "tokens": 11828, "prompt_tokens": 167, "completion_tokens": 11661, "elapsed_s": 99.29, "cumulative_tokens": 11828, "valid": true, "code": null, "n_points": 13, "n_triples": 286, "score": 0.013307601454, "score_exact": "6653800727/500000000000", "claim": 0.01326, "claim_confirmed": true, "above_floor": true}
+{"index": 1, "error": "The read operation timed out", "tokens": 0}
+{"index": 2, "error": "The read operation timed out", "tokens": 0}
+{"index": 3, "tokens": 6771, "prompt_tokens": 167, "completion_tokens": 6604, "elapsed_s": 60.75, "cumulative_tokens": 18599, "valid": true, "code": null, "n_points": 13, "n_triples": 286, "score": 0.0004551149295, "score_exact": "910229859/2000000000000", "claim": 0.000455, "claim_confirmed": true, "above_floor": false}
+{"index": 4, "error": "The read operation timed out", "tokens": 0}
+{"index": 5, "error": "The read operation timed out", "tokens": 0}
+{"index": 6, "error": "The read operation timed out", "tokens": 0}
+{"index": 7, "tokens": 11501, "prompt_tokens": 167, "completion_tokens": 11334, "elapsed_s": 96.51, "cumulative_tokens": 30100, "valid": false, "code": "CLAIM_INFLATED", "n_points": 13, "n_triples": 286, "score": 0.0, "score_exact": "0", "claim": 0.01, "claim_confirmed": false}
+{"index": 8, "error": "The read operation timed out", "tokens": 0}
+{"index": 9, "tokens": 12113, "prompt_tokens": 167, "completion_tokens": 11946, "elapsed_s": 119.97, "cumulative_tokens": 42213, "valid": false, "code": "CLAIM_INFLATED", "n_points": 13, "n_triples": 286, "score": 0.0, "score_exact": "0", "claim": 0.01, "claim_confirmed": false}
+{"index": 10, "error": "The read operation timed out", "tokens": 0}
