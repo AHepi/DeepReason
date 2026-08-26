@@ -1,0 +1,2609 @@
+{
+ "authority_records": [
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scope": "full",
+   "seq": 48,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge#0",
+    "judge#1",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  },
+  {
+   "cycle": -1,
+   "open_loop": [],
+   "payload_present": true,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scope": "full",
+   "seq": 12,
+   "steerable": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "unsteerable": {}
+  }
+ ],
+ "consumers": {
+  "capture14.hysteresis-mode.v1": {
+   "reader": "capture.hysteresis.policies() -> mode() / slice_budgets(), reached from calculus/render.py",
+   "reliance": "the whole run \u2014 `reversed(policies(harness))` takes the most recent receipt whatever its age"
+  },
+  "controller-authority": {
+   "reader": "controller.Controller._rehydrate_process_state (episode dedupe on resume)",
+   "reliance": "the whole run \u2014 rehydration reads the LAST record whatever its age"
+  },
+  "dropped-call": {
+   "reader": "controller.Controller._new_transport_drops (TRANSPORT_DROP_TAG, matched on reason)",
+   "reliance": "within the step that consumes it; the counter is monotonic and never re-reads an old drop"
+  }
+ },
+ "decisions": [
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 334.8,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 1822.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "scheduler_cycle": 1,
+   "seq": 352
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 261.8,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 3023.1,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "scheduler_cycle": 1,
+   "seq": 352
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 295.8,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 1768.2,
+    "reached_the_wire": false,
+    "refusals_naming_value": [
+     {
+      "reason": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=32768 actual=20480",
+      "seq": 577
+     }
+    ],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "scheduler_cycle": 1,
+   "seq": 442
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 1168.5,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 5989.6,
+    "reached_the_wire": false,
+    "refusals_naming_value": [
+     {
+      "reason": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=32768 actual=20480",
+      "seq": 577
+     }
+    ],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "scheduler_cycle": 1,
+   "seq": 442
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 258.9,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 1724.4,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "scheduler_cycle": 1,
+   "seq": 429
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [],
+    "after_first": null,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 0,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": null,
+    "mean_completion_tokens_before": 2811.5,
+    "mean_total_tokens_after": null,
+    "mean_total_tokens_before": 8607.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 4,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "scheduler_cycle": 1,
+   "seq": 429
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 82,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 266.9,
+    "mean_completion_tokens_before": 248.6,
+    "mean_total_tokens_after": 1563.1,
+    "mean_total_tokens_before": 1725.4,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 1,
+   "seq": 390
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 15,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1456.2,
+    "mean_completion_tokens_before": 889.0,
+    "mean_total_tokens_after": 6766.5,
+    "mean_total_tokens_before": 5923.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 1,
+   "seq": 390
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 74,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 260.0,
+    "mean_completion_tokens_before": 277.1,
+    "mean_total_tokens_after": 1744.8,
+    "mean_total_tokens_before": 1585.3,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 3,
+   "seq": 541
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 14,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1342.6,
+    "mean_completion_tokens_before": 542.0,
+    "mean_total_tokens_after": 6402.1,
+    "mean_total_tokens_before": 5619.3,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 3,
+   "seq": 541
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 41,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 242.2,
+    "mean_completion_tokens_before": 189.2,
+    "mean_total_tokens_after": 1545.6,
+    "mean_total_tokens_before": 1369.0,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 5,
+   "seq": 989
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 9,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1245.4,
+    "mean_completion_tokens_before": 1129.0,
+    "mean_total_tokens_after": 6030.4,
+    "mean_total_tokens_before": 5756.0,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 5,
+   "seq": 989
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 8,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 135.9,
+    "mean_completion_tokens_before": 209.8,
+    "mean_total_tokens_after": 1225.4,
+    "mean_total_tokens_before": 1557.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 7,
+   "seq": 1381
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 1,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1176.0,
+    "mean_completion_tokens_before": 1330.8,
+    "mean_total_tokens_after": 7516.0,
+    "mean_total_tokens_before": 6393.1,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "scheduler_cycle": 7,
+   "seq": 1381
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 116,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 235.5,
+    "mean_completion_tokens_before": 301.9,
+    "mean_total_tokens_after": 1696.9,
+    "mean_total_tokens_before": 3636.7,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 1,
+   "seq": 369
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 33,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1450.4,
+    "mean_completion_tokens_before": 2230.2,
+    "mean_total_tokens_after": 8158.8,
+    "mean_total_tokens_before": 10611.0,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 4,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 1,
+   "seq": 369
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 86,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 285.3,
+    "mean_completion_tokens_before": 225.0,
+    "mean_total_tokens_after": 1929.5,
+    "mean_total_tokens_before": 1310.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 3,
+   "seq": 726
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 29,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1100.8,
+    "mean_completion_tokens_before": 1690.1,
+    "mean_total_tokens_after": 5915.5,
+    "mean_total_tokens_before": 9748.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 3,
+   "seq": 726
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 66,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 346.5,
+    "mean_completion_tokens_before": 182.8,
+    "mean_total_tokens_after": 2248.8,
+    "mean_total_tokens_before": 1250.6,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 5,
+   "seq": 1182
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 14,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 2072.8,
+    "mean_completion_tokens_before": 437.7,
+    "mean_total_tokens_after": 10299.9,
+    "mean_total_tokens_before": 3638.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 5,
+   "seq": 1182
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 54,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 216.7,
+    "mean_completion_tokens_before": 346.5,
+    "mean_total_tokens_after": 1294.2,
+    "mean_total_tokens_before": 2248.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 7,
+   "seq": 1634
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 10,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1850.3,
+    "mean_completion_tokens_before": 871.0,
+    "mean_total_tokens_after": 9910.0,
+    "mean_total_tokens_before": 5049.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 7,
+   "seq": 1634
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 3125,
+   "artifact": "b0b60aea537817d6a8c1a98bcb084dd869b21b29f1b723e96266b03d8b700c07",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 24,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 228.2,
+    "mean_completion_tokens_before": 227.8,
+    "mean_total_tokens_after": 1539.2,
+    "mean_total_tokens_before": 1571.3,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 8,
+   "policy_cycle": 10,
+   "preceding_heartbeat_cycle": 8,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 9,
+   "seq": 2270
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 3125,
+   "artifact": "b0b60aea537817d6a8c1a98bcb084dd869b21b29f1b723e96266b03d8b700c07",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 5,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1862.2,
+    "mean_completion_tokens_before": 1598.2,
+    "mean_total_tokens_after": 9926.4,
+    "mean_total_tokens_before": 8220.1,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 8,
+   "policy_cycle": 10,
+   "preceding_heartbeat_cycle": 8,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 9,
+   "seq": 2270
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1953,
+   "artifact": "07423eace98867aac6190d8eef8f9372945b5ccb11dd7eb138aca4be8c2af9e1",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 8,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 269.1,
+    "mean_completion_tokens_before": 222.2,
+    "mean_total_tokens_after": 1447.2,
+    "mean_total_tokens_before": 1533.4,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 10,
+   "policy_cycle": 12,
+   "preceding_heartbeat_cycle": 10,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 11,
+   "seq": 2608
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1953,
+   "artifact": "07423eace98867aac6190d8eef8f9372945b5ccb11dd7eb138aca4be8c2af9e1",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 1,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 686.0,
+    "mean_completion_tokens_before": 2033.4,
+    "mean_total_tokens_after": 7604.0,
+    "mean_total_tokens_before": 10260.9,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 10,
+   "policy_cycle": 12,
+   "preceding_heartbeat_cycle": 10,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "scheduler_cycle": 11,
+   "seq": 2608
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "56f9c6cb7b0d0acd506dcb502466ae38e91a0486fc30fa81b567fec322d9c7b1",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 77,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1448.0,
+    "mean_completion_tokens_before": 1028.1,
+    "mean_total_tokens_after": 7243.9,
+    "mean_total_tokens_before": 5893.1,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 1,
+   "seq": 207
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "c6e27bb93265a72d32728a3b72669d25ae3db486242adb62969e1d1ceca65af5",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 69,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1717.8,
+    "mean_completion_tokens_before": 1385.8,
+    "mean_total_tokens_after": 7510.4,
+    "mean_total_tokens_before": 7346.0,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 3,
+   "seq": 570
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "f7fda6a613082a58663a12625783875ad443b461c7e5910957a055ebce355d63",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 60,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1619.8,
+    "mean_completion_tokens_before": 1583.3,
+    "mean_total_tokens_after": 6790.4,
+    "mean_total_tokens_before": 7377.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 5,
+   "seq": 920
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "08f91786ac9dd9c66c30fecfbdc16d1d59f9117473ca66db2981a9fc2d0263f3",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 42,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 549.6,
+    "mean_completion_tokens_before": 780.2,
+    "mean_total_tokens_after": 4050.7,
+    "mean_total_tokens_before": 4352.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 7,
+   "seq": 1395
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 3125,
+   "artifact": "bedc42e2115d3abdc1542418b62d54cd4fcdbac5293ca9d845d9ec418bdda19d",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 24,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1647.7,
+    "mean_completion_tokens_before": 1283.1,
+    "mean_total_tokens_after": 6993.8,
+    "mean_total_tokens_before": 5914.6,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 2,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 8,
+   "policy_cycle": 10,
+   "preceding_heartbeat_cycle": 8,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 9,
+   "seq": 1856
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1953,
+   "artifact": "582d18b94487df3b98a4ac4bd1aabdf73472efee7cfa4f07042a9b21c49cb9d7",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 16,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 944.5,
+    "mean_completion_tokens_before": 1924.4,
+    "mean_total_tokens_after": 4347.8,
+    "mean_total_tokens_before": 8150.4,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 4,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 10,
+   "policy_cycle": 12,
+   "preceding_heartbeat_cycle": 10,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "scheduler_cycle": 11,
+   "seq": 2267
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "cc27c6740eb1c6df2292404d89903586fdb5974ffbc1eabb59d41f86aa5ff591",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 100,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 2280.5,
+    "mean_completion_tokens_before": 2320.8,
+    "mean_total_tokens_after": 8044.6,
+    "mean_total_tokens_before": 8476.0,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 4,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 0,
+   "policy_cycle": 2,
+   "preceding_heartbeat_cycle": 0,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 1,
+   "seq": 160
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 20480,
+   "artifact": "b76c0963c64c42cc40f8037ee55dbc7081fb09cdc63f1f0744eef64fd375da14",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 160,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 245.2,
+    "mean_completion_tokens_before": 226.3,
+    "mean_total_tokens_after": 1126.2,
+    "mean_total_tokens_before": 1064.7,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 3,
+   "seq": 602
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "b76c0963c64c42cc40f8037ee55dbc7081fb09cdc63f1f0744eef64fd375da14",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 92,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1855.8,
+    "mean_completion_tokens_before": 1925.3,
+    "mean_total_tokens_after": 6791.2,
+    "mean_total_tokens_before": 7648.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 2,
+   "policy_cycle": 4,
+   "preceding_heartbeat_cycle": 2,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 3,
+   "seq": 602
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 12800,
+   "artifact": "ca43beb48112514854833b5512a2d8c409ab65778b4e5462fa389144e5cbd231",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 151,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 305.2,
+    "mean_completion_tokens_before": 215.8,
+    "mean_total_tokens_after": 1183.0,
+    "mean_total_tokens_before": 1093.3,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 5,
+   "seq": 907
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "ca43beb48112514854833b5512a2d8c409ab65778b4e5462fa389144e5cbd231",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 88,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 826.1,
+    "mean_completion_tokens_before": 2280.5,
+    "mean_total_tokens_after": 4181.8,
+    "mean_total_tokens_before": 8044.6,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 4,
+   "policy_cycle": 6,
+   "preceding_heartbeat_cycle": 4,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 5,
+   "seq": 907
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 8000,
+   "artifact": "5af7411e974c69f2827e64f6348223482801313b4a7f3e3d178df69418a83eb6",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 108,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 124.7,
+    "mean_completion_tokens_before": 247.8,
+    "mean_total_tokens_after": 881.8,
+    "mean_total_tokens_before": 1047.7,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 7,
+   "seq": 1496
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "5af7411e974c69f2827e64f6348223482801313b4a7f3e3d178df69418a83eb6",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 69,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1237.9,
+    "mean_completion_tokens_before": 298.8,
+    "mean_total_tokens_after": 7061.5,
+    "mean_total_tokens_before": 2618.8,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 6,
+   "policy_cycle": 8,
+   "preceding_heartbeat_cycle": 6,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 7,
+   "seq": 1496
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 5000,
+   "artifact": "5081471767a29791579c8a9e5939830654e66d05eb09906331101bfb239d7867",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 99,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 116.9,
+    "mean_completion_tokens_before": 186.6,
+    "mean_total_tokens_after": 873.2,
+    "mean_total_tokens_before": 949.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 8,
+   "policy_cycle": 10,
+   "preceding_heartbeat_cycle": 8,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 9,
+   "seq": 1759
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 3125,
+   "artifact": "5081471767a29791579c8a9e5939830654e66d05eb09906331101bfb239d7867",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 65,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1112.2,
+    "mean_completion_tokens_before": 842.8,
+    "mean_total_tokens_after": 6310.8,
+    "mean_total_tokens_before": 4775.4,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 2,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 8,
+   "policy_cycle": 10,
+   "preceding_heartbeat_cycle": 8,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 9,
+   "seq": 1759
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 3125,
+   "artifact": "9c7fbd82be74c8939d93b424151ff335279668a13dc813f86644d14b34f8a7b4",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 53,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 135.5,
+    "mean_completion_tokens_before": 155.7,
+    "mean_total_tokens_after": 878.2,
+    "mean_total_tokens_before": 945.7,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 10,
+   "policy_cycle": 12,
+   "preceding_heartbeat_cycle": 10,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 11,
+   "seq": 2224
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1953,
+   "artifact": "9c7fbd82be74c8939d93b424151ff335279668a13dc813f86644d14b34f8a7b4",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 57,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 1027.0,
+    "mean_completion_tokens_before": 1237.9,
+    "mean_total_tokens_after": 4538.2,
+    "mean_total_tokens_before": 7061.5,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 4,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 10,
+   "policy_cycle": 12,
+   "preceding_heartbeat_cycle": 10,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 11,
+   "seq": 2224
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1953,
+   "artifact": "cdc06f900ad7e0679eea9b3a4347f0864ae8645a31eceedc584ac6bb39a1638c",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 45,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 109.0,
+    "mean_completion_tokens_before": 164.4,
+    "mean_total_tokens_after": 871.4,
+    "mean_total_tokens_before": 963.9,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 12,
+   "policy_cycle": 14,
+   "preceding_heartbeat_cycle": 12,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 13,
+   "seq": 2542
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1221,
+   "artifact": "cdc06f900ad7e0679eea9b3a4347f0864ae8645a31eceedc584ac6bb39a1638c",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 38,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 780.8,
+    "mean_completion_tokens_before": 782.5,
+    "mean_total_tokens_after": 4608.3,
+    "mean_total_tokens_before": 4103.9,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 4,
+    "truncations_before": 2,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 12,
+   "policy_cycle": 14,
+   "preceding_heartbeat_cycle": 12,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 13,
+   "seq": 2542
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 1221,
+   "artifact": "016fb74c82663136ff3e56c66c0f6bad595fce32c56f21bb81138c726a01b677",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 2,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 109.5,
+    "mean_completion_tokens_before": 107.2,
+    "mean_total_tokens_after": 844.5,
+    "mean_total_tokens_before": 807.2,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 0,
+    "truncations_before": 0,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "argumentative_critic",
+   "knob": "cap:argumentative_critic",
+   "lease_ceiling": 32768,
+   "log_cycle": 14,
+   "policy_cycle": 16,
+   "preceding_heartbeat_cycle": 14,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 15,
+   "seq": 3117
+  },
+  {
+   "anchor_cap": 32768,
+   "applied_value": 800,
+   "artifact": "016fb74c82663136ff3e56c66c0f6bad595fce32c56f21bb81138c726a01b677",
+   "clamped_by_lease": false,
+   "effect": {
+    "after_distinct": [
+     32768
+    ],
+    "after_first": 32768,
+    "before_distinct": [
+     32768
+    ],
+    "before_last": 32768,
+    "completions_above_the_applied_cap": 0,
+    "dispatches_after": 8,
+    "field": "max_tokens",
+    "mean_completion_tokens_after": 727.6,
+    "mean_completion_tokens_before": 484.3,
+    "mean_total_tokens_after": 3771.0,
+    "mean_total_tokens_before": 3307.6,
+    "reached_the_wire": false,
+    "refusals_naming_value": [],
+    "truncations_after": 5,
+    "truncations_before": 2,
+    "value_is_a_route_cap": false
+   },
+   "envelope": {
+    "dwell": 2,
+    "max": 32768,
+    "min": 800,
+    "step": 1.6
+   },
+   "evidence_for_seat": {
+    "n": 6,
+    "repair_rate": 0.0,
+    "truncation_rate": 0.0
+   },
+   "evidence_transport": null,
+   "in_envelope": true,
+   "instance": "conjecturer",
+   "knob": "cap:conjecturer",
+   "lease_ceiling": 32768,
+   "log_cycle": 14,
+   "policy_cycle": 16,
+   "preceding_heartbeat_cycle": 14,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "scheduler_cycle": 15,
+   "seq": 3117
+  }
+ ],
+ "drops": [
+  {
+   "cycle": 2,
+   "reason": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=32768 actual=20480",
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "seq": 577,
+   "transport_match": false
+  },
+  {
+   "cycle": 2,
+   "reason": "transactional reservation bound differs from rendered request",
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "seq": 555,
+   "transport_match": false
+  }
+ ],
+ "expected_open_loop_by_root": {
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4": [],
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4": [],
+  "experiments/2026-08-22-change-epoch3-second-lineage/run": [],
+  "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c": [],
+  "experiments/2026-08-22-live-reach-rich-run/run": [],
+  "experiments/2026-08-24-change-rung7-wounds-falls-succession/run": [],
+  "experiments/2026-08-25-change-constructive-frontier/run": [],
+  "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6": [],
+  "experiments/2026-08-25-poietics-program/run": []
+ },
+ "holds": [],
+ "open_loop": [],
+ "population_roots": [
+  "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "experiments/2026-08-22-live-reach-rich-run/run",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/run",
+  "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+  "experiments/2026-08-25-poietics-program/run",
+  "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+  "experiments/2026-08-25-change-constructive-frontier/run"
+ ],
+ "rehydrations": [],
+ "schema": "run-anatomy.w5.controller-census.v1"
+}

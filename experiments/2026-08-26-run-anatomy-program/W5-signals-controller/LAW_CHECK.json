@@ -1,0 +1,581 @@
+{
+ "per_root": [
+  {
+   "decision_cycles": [
+    0
+   ],
+   "label_changes_inside_signal_or_decision_events": 1,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 31
+   },
+   "label_changing_events_total": 35,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 352,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "signal_or_decision_events": 35,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0
+   ],
+   "label_changes_inside_signal_or_decision_events": 1,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 36
+   },
+   "label_changing_events_total": 40,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 442,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "signal_or_decision_events": 46,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [],
+   "label_changes_inside_signal_or_decision_events": 0,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 35
+   },
+   "label_changing_events_total": 39,
+   "policy_status_moves_exempt": [],
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "signal_or_decision_events": 34,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0
+   ],
+   "label_changes_inside_signal_or_decision_events": 1,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 33
+   },
+   "label_changing_events_total": 37,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 429,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "signal_or_decision_events": 42,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0,
+    2,
+    4,
+    6
+   ],
+   "label_changes_inside_signal_or_decision_events": 4,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 41,
+    "2": 5,
+    "3": 42,
+    "4": 6,
+    "6": 41,
+    "7": 4
+   },
+   "label_changing_events_total": 143,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 390,
+     "signal": null
+    },
+    {
+     "changed": [
+      "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83"
+     ],
+     "cycle": 2,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 541,
+     "signal": null
+    },
+    {
+     "changed": [
+      "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047"
+     ],
+     "cycle": 4,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 989,
+     "signal": null
+    },
+    {
+     "changed": [
+      "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626"
+     ],
+     "cycle": 6,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1381,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "signal_or_decision_events": 112,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [],
+   "label_changes_inside_signal_or_decision_events": 0,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 45
+   },
+   "label_changing_events_total": 49,
+   "policy_status_moves_exempt": [],
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "signal_or_decision_events": 24,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "label_changes_inside_signal_or_decision_events": 7,
+   "label_changes_per_cycle": {
+    "-1": 40,
+    "0": 54,
+    "1": 1,
+    "10": 57,
+    "11": 8,
+    "2": 36,
+    "3": 57,
+    "4": 6,
+    "6": 66,
+    "7": 7,
+    "8": 72
+   },
+   "label_changing_events_total": 404,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 369,
+     "signal": null
+    },
+    {
+     "changed": [
+      "470700ba6fb8431b55831f51e0a3048949b07e8e843ea555aea4d59bbb157f95"
+     ],
+     "cycle": 1,
+     "families": [
+      "capture14-hysteresis-policy"
+     ],
+     "rule": "Refl",
+     "seq": 403,
+     "signal": null
+    },
+    {
+     "changed": [
+      "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83"
+     ],
+     "cycle": 2,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 726,
+     "signal": null
+    },
+    {
+     "changed": [
+      "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047"
+     ],
+     "cycle": 4,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1182,
+     "signal": null
+    },
+    {
+     "changed": [
+      "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626"
+     ],
+     "cycle": 6,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1634,
+     "signal": null
+    },
+    {
+     "changed": [
+      "b0b60aea537817d6a8c1a98bcb084dd869b21b29f1b723e96266b03d8b700c07"
+     ],
+     "cycle": 8,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 2270,
+     "signal": null
+    },
+    {
+     "changed": [
+      "07423eace98867aac6190d8eef8f9372945b5ccb11dd7eb138aca4be8c2af9e1"
+     ],
+     "cycle": 10,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 2608,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "signal_or_decision_events": 482,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "label_changes_inside_signal_or_decision_events": 7,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 107,
+    "1": 95,
+    "10": 131,
+    "11": 37,
+    "2": 125,
+    "3": 88,
+    "4": 119,
+    "5": 118,
+    "6": 143,
+    "7": 124,
+    "8": 119,
+    "9": 130
+   },
+   "label_changing_events_total": 1340,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "56f9c6cb7b0d0acd506dcb502466ae38e91a0486fc30fa81b567fec322d9c7b1"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 207,
+     "signal": null
+    },
+    {
+     "changed": [
+      "7f71cb176a9976995a7ba4e7882e365e969ea53715ef02a08ed162519ace481b"
+     ],
+     "cycle": 1,
+     "families": [
+      "capture14-hysteresis-policy"
+     ],
+     "rule": "Refl",
+     "seq": 219,
+     "signal": null
+    },
+    {
+     "changed": [
+      "c6e27bb93265a72d32728a3b72669d25ae3db486242adb62969e1d1ceca65af5"
+     ],
+     "cycle": 2,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 570,
+     "signal": null
+    },
+    {
+     "changed": [
+      "f7fda6a613082a58663a12625783875ad443b461c7e5910957a055ebce355d63"
+     ],
+     "cycle": 4,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 920,
+     "signal": null
+    },
+    {
+     "changed": [
+      "08f91786ac9dd9c66c30fecfbdc16d1d59f9117473ca66db2981a9fc2d0263f3"
+     ],
+     "cycle": 6,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1395,
+     "signal": null
+    },
+    {
+     "changed": [
+      "bedc42e2115d3abdc1542418b62d54cd4fcdbac5293ca9d845d9ec418bdda19d"
+     ],
+     "cycle": 8,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1856,
+     "signal": null
+    },
+    {
+     "changed": [
+      "582d18b94487df3b98a4ac4bd1aabdf73472efee7cfa4f07042a9b21c49cb9d7"
+     ],
+     "cycle": 10,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 2267,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "signal_or_decision_events": 154,
+   "verdict": "CONFIRMED",
+   "violations": []
+  },
+  {
+   "decision_cycles": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14
+   ],
+   "label_changes_inside_signal_or_decision_events": 9,
+   "label_changes_per_cycle": {
+    "-1": 4,
+    "0": 81,
+    "1": 97,
+    "10": 21,
+    "12": 91,
+    "13": 66,
+    "14": 22,
+    "15": 10,
+    "2": 29,
+    "4": 137,
+    "5": 93,
+    "6": 35,
+    "8": 115,
+    "9": 65
+   },
+   "label_changing_events_total": 866,
+   "policy_status_moves_exempt": [
+    {
+     "changed": [
+      "cc27c6740eb1c6df2292404d89903586fdb5974ffbc1eabb59d41f86aa5ff591"
+     ],
+     "cycle": 0,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 160,
+     "signal": null
+    },
+    {
+     "changed": [
+      "6ceb59639c62ae7e96feb9de8c23e84cd2ce864d88554c9de8367929adc1b1f7"
+     ],
+     "cycle": 1,
+     "families": [
+      "capture14-hysteresis-policy"
+     ],
+     "rule": "Refl",
+     "seq": 172,
+     "signal": null
+    },
+    {
+     "changed": [
+      "b76c0963c64c42cc40f8037ee55dbc7081fb09cdc63f1f0744eef64fd375da14"
+     ],
+     "cycle": 2,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 602,
+     "signal": null
+    },
+    {
+     "changed": [
+      "ca43beb48112514854833b5512a2d8c409ab65778b4e5462fa389144e5cbd231"
+     ],
+     "cycle": 4,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 907,
+     "signal": null
+    },
+    {
+     "changed": [
+      "5af7411e974c69f2827e64f6348223482801313b4a7f3e3d178df69418a83eb6"
+     ],
+     "cycle": 6,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1496,
+     "signal": null
+    },
+    {
+     "changed": [
+      "5081471767a29791579c8a9e5939830654e66d05eb09906331101bfb239d7867"
+     ],
+     "cycle": 8,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 1759,
+     "signal": null
+    },
+    {
+     "changed": [
+      "9c7fbd82be74c8939d93b424151ff335279668a13dc813f86644d14b34f8a7b4"
+     ],
+     "cycle": 10,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 2224,
+     "signal": null
+    },
+    {
+     "changed": [
+      "cdc06f900ad7e0679eea9b3a4347f0864ae8645a31eceedc584ac6bb39a1638c"
+     ],
+     "cycle": 12,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 2542,
+     "signal": null
+    },
+    {
+     "changed": [
+      "016fb74c82663136ff3e56c66c0f6bad595fce32c56f21bb81138c726a01b677"
+     ],
+     "cycle": 14,
+     "families": [
+      "allocation-policy"
+     ],
+     "rule": "Refl",
+     "seq": 3117,
+     "signal": null
+    }
+   ],
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "signal_or_decision_events": 334,
+   "verdict": "CONFIRMED",
+   "violations": []
+  }
+ ],
+ "population_roots": [
+  "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "experiments/2026-08-22-live-reach-rich-run/run",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/run",
+  "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+  "experiments/2026-08-25-poietics-program/run",
+  "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+  "experiments/2026-08-25-change-constructive-frontier/run"
+ ],
+ "schema": "run-anatomy.w5.law-check.v1",
+ "verdict": "CONFIRMED"
+}
