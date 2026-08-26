@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=4 blockers=none (WATCH: src/ at 296 of 640 after step 3; S1 came in at ~274 against SPEC's 140 estimate — projection and the
+State: next=5 blockers=none (WATCH: src/ at 296 of 640 after step 3; S1 came in at ~274 against SPEC's 140 estimate — projection and the
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -390,7 +390,7 @@ point):
       (trim comment density / raise the ceiling with the operator's word /
       split); it does not re-baseline.
 
-- [ ] 4. (S2) Write `tests/test_discharge_channel.py`'s `open_criticisms`
+- [x] 4. (S2) Write `tests/test_discharge_channel.py`'s `open_criticisms`
       cases: an `observe_only` scrutiny criticism with NO warrant IS in the
       population (this is W2's own 0-of-196 population, so excluding it would
       leave the motivating defect in place); an attack-edge criticism IS; a
@@ -399,6 +399,36 @@ point):
       done-when: `python -m pytest tests/test_discharge_channel.py -q -k
       open_criticisms 2>&1 | tail -5` shows failures naming
       `open_criticisms` (paste it)
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_channel.py -q
+          from deepreason.discharge import open_criticisms, ...
+      E   ImportError: cannot import name 'open_criticisms' from
+          'deepreason.discharge'
+      ERROR tests/test_discharge_channel.py
+      !!!!!! Interrupted: 1 error during collection !!!!!!
+      1 error in 0.21s
+      ```
+
+      **STEP 6's CASES ARE IN THIS FILE TOO, written in the same pass.**
+      Recorded rather than concealed: the plan has step 4 (what is OPEN) and
+      step 6 (the render) as separate test-writing steps, and they share one
+      module, one fixture set and one set of helpers. Writing them apart would
+      have meant editing the same file twice with no verification gained in
+      between, since neither can run until step 5 and step 7 land. Step 6 is
+      NOT thereby skipped: it keeps its own done-criterion and verifies against
+      these cases rather than writing new ones, so nothing loses its check.
+
+      The `open_criticisms` cases pin the population argument the whole tranche
+      rests on. `test_an_observe_only_criticism_is_open` asserts `not
+      harness.state.att` FIRST and then demands the handle appear — so it is
+      not merely a test that the reader works, it is a test that the reader
+      sees the criticism W2 measured as invisible. The fixture builds the
+      record shape by hand (critic artifact + `["scrutiny", target, critic]`
+      Measure, no warrant) rather than going through `rules/crit.py`, so a
+      future change to how `_observe_case` writes it fails HERE rather than
+      silently emptying the channel.
 
 - [ ] 5. (S2) Implement `src/deepreason/discharge/channel.py`:
       `OpenCriticism`, `open_criticisms`, `discharged_handles`. The handle IS
