@@ -196,6 +196,11 @@ finding, recorded here rather than treated as a blocker: a new
 > 900
 
 
+### Message 5 — the second ceiling ruling (reply to the signal-contract STOP)
+
+> raise approved. keep going
+
+
 ## Requirements
 
 R1 (behavior): "open criticisms on a problem render INSIDE the conjecturer's
@@ -293,6 +298,14 @@ operator chose (ii). The `src/` ceiling is **900**; `tools/diff_budget.py`
 keeps gating on it at every `[COMMIT]` step, and R19's obligation is
 UNCHANGED — a typed STOP if the tranche grows beyond 900, never a second
 silent re-baseline.
+
+R22 (process, Amendment 4): "raise approved. keep going" — in answer to the
+second R19 STOP, raised when the SIGNAL CONTRACT (an operator design law of
+2026-08-14) required three new `SignalDeclaration` entries and took `src/` to
+943 against the 900 of R21. The ceiling is re-declared at **960**: the measured
+943 plus a stated margin. R19's obligation is unchanged and now attaches to 960
+— growth beyond it is a fresh typed STOP.
+
 
 ## Standing constraints
 
@@ -406,3 +419,13 @@ number. Recorded because the operator's own words in Amendment 2 required it:
 "a typed STOP if it grows beyond what SPEC now declares, not silent growth" —
 the ruling is what makes 900 "what SPEC now declares", so the instrument stays
 live rather than becoming a waiver.
+
+**Amendment 4 — 2026-08-26, the second ceiling ruling.** Message 5 above,
+verbatim. Lands as R22. Supersedes R21's 900 with **960**; supersedes nothing in
+R19. The growth was not discretionary: `tests/test_signals.py::
+test_every_emitted_signal_is_registered` refused the three Measures this channel
+emits until each was DECLARED, which is the 2026-08-14 signal-registry law
+working exactly as stated ("new setups add signals by declaration through this
+typed channel"). The number is final rather than projected: the FULL gate was
+run BEFORE the stop was raised (4225 passed, 6 skipped, 0 failed), so nothing
+further forces a `src/` change.

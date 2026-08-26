@@ -1,7 +1,7 @@
 <!-- DR-CON-discharge-channel -->
-Verified-at: 7e1ab8a54
-Verify: python -m pytest tests/test_discharge_contract.py tests/test_discharge_channel.py -q
-Owns: src/deepreason/discharge/__init__.py, src/deepreason/discharge/policy.py, src/deepreason/discharge/channel.py
+Verified-at: a5a435e3e
+Verify: python -m pytest tests/test_discharge_contract.py tests/test_discharge_channel.py tests/test_discharge_submission.py tests/test_discharge_wire.py -q
+Owns: src/deepreason/discharge/__init__.py, src/deepreason/discharge/policy.py, src/deepreason/discharge/channel.py, src/deepreason/discharge/submission.py
 Seams: DR-SEAM-llm-x-rules
 Seams-undocumented: discharge-channel x adjudication, discharge-channel x workflow
 
@@ -56,8 +56,11 @@ A NEW discharge kind enters by DECLARATION. It reaches the wire schema's enum,
 the submission screen and the pack render without `rules/conj.py`,
 `llm/packs.py` or `llm/wire.py` being edited — which is checkable, and is
 checked, because a modularity claim without a failable check is decoration.
-(The check naming that test is added by the tranche step that builds the wire
-half; today the derivation and the no-literal-names half below are checked.)
+The check is not merely green — it was driven RED by hard-coding the enum in
+`llm/contracts.py` and green again on restore
+(`experiments/2026-08-26-change-f1-discharge-criticism-channel/proof/arch_red.txt`).
+
+`check: python -m pytest tests/test_discharge_contract.py::test_a_fourth_kind_enters_by_declaration_alone -q`
 
 
 The three consumers name no kind literally; if one did, adding a kind would
@@ -113,7 +116,9 @@ numeric field, so there is no weight for any configuration to set.
 | Reading the record | `discharge/channel.py` | `open_criticisms`, `discharged_handles` |
 | The render | `discharge/channel.py` | `render_open_criticism_context` |
 | The pack section | `llm/packs.py` | `open-criticisms`, priority 2 |
-| The call site | `rules/conj.py` | render threading (the screen joins it in commit 2) |
+| The submission screen | `discharge/submission.py` | `screen_submission`, `record_discharges` |
+| The wire shape | `llm/contracts.py`, `workloads/text.py` | `DischargeWireV1`, `discharge_kind_enum`, the two `discharges` fields |
+| The two call sites | `rules/conj.py` | render threading; the screen before `candidate_rows` |
 | Which preset is in force (FREE) | `config.py` | `Config.DISCHARGE_POLICY` |
 
 ## What makes a criticism OPEN
@@ -171,6 +176,59 @@ identical at cycle 1 to one that carries it forever.
 
 `check: python -m pytest tests/test_discharge_channel.py::test_a_criticism_at_cycle_k_still_renders_at_the_terminal_cycle -q`
 
+## The submission boundary
+
+A submission with undischarged handles is returned ONCE with the open list and
+then ACCEPTED with a typed disclosure. **There is no verdict that refuses.**
+`SubmissionScreening.verdict` is `"reask"` or `"accept"`, and that vocabulary
+IS the promise — disclose, never die, the all-configurations law at the
+boundary it names.
+`check: python -c 'import inspect, re; from deepreason.discharge import screen_submission as s; src = inspect.getsource(inspect.getmodule(s)); v = set(re.findall(r"verdict=.([a-z]+).", src)); assert v == {"reask", "accept"}, v'`
+`check: python -m pytest tests/test_discharge_submission.py::test_no_candidate_is_ever_refused tests/test_discharge_submission.py::test_the_second_submission_is_accepted_with_a_disclosure -q`
+
+**The re-ask is not a repair grant**, and the distinction is not pedantry.
+Repair exists to fix a reply the SCHEMA rejected; a re-asked submission is
+schema-valid and the objection is epistemic. Treating them alike would spend a
+budget meant for transport faults on an epistemic one, and would let a repair
+ceiling silently cap how often criticism can be pressed. The re-ask re-enters
+`conj()` on the same recursion shape `_context_expansion_index` uses, so no new
+provider call site exists.
+`check: test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py | grep -c 'adapter\.call(')" -eq 8`
+
+**A discharge counts only when it names a listed handle AND carries the content
+its kind declares.** One definition of that rule serves both the screen and the
+recorder; two copies would be two chances for what a run discloses and what it
+records to disagree.
+`check: python -c 'import inspect; from deepreason.discharge import screen_submission as s; src = inspect.getsource(inspect.getmodule(s)); assert src.count("def _answers(") == 1 and src.count("_answers(") >= 3, src.count("_answers(")'`
+
+## What a REBUTTED discharge does to the graph
+
+It registers the rebuttal as an ORDINARY artifact carrying two MENTION refs —
+the criticism and the candidate — and no warrant. That is R6 in full: nothing
+protects it, so a critic attacks it exactly as they would attack anything else.
+
+The label-safety is structural rather than promised: `build_att` lifts attackers
+through EVIDENCE refs, never through mentions, so there is no edge along which a
+discharge could reach a pre-existing label. `file_departure_declaration` earned
+the same guarantee the same way, and declines the same temptation this does — no
+check runs on whether the rebuttal is EARNED, because refusing one would make
+the authoring path a judge of the criticism it answers.
+`check: python -m pytest tests/test_discharge_submission.py::test_a_rebuttal_carries_only_mention_refs tests/test_discharge_submission.py::test_a_rebuttal_is_itself_attackable tests/test_discharge_submission.py::test_a_rebuttal_moves_no_existing_label -q`
+
+## The wire field, and why it is pruned rather than merely unused
+
+`DischargeWireV1` lives in `llm/contracts.py`, not `llm/wire.py`: `wire.py`
+imports `ReasoningCandidateProposal` from `workloads/text.py`, and that model
+carries the field, so defining it in `wire.py` would close an import cycle.
+
+With the channel off the field is PRUNED from the emitted schema — the property,
+the constraints that still name it, and the `$def` — so a channel-off schema is
+byte-indistinguishable from one built before the field existed. That is a
+REQUIREMENT rather than an optimisation: `CompactConjectureCandidate` is embedded
+by contracts this channel has no business changing, and committed tests read its
+`$def` properties directly.
+`check: python -m pytest tests/test_discharge_wire.py -q`
+
 ## Traps
 
 - **Reading only `state.att` and calling it "the open criticisms."** That is
@@ -189,6 +247,13 @@ identical at cycle 1 to one that carries it forever.
   like a natural Measure and would cross the law line the moment anything
   ranked on it. Allocation touches efficiency, never evidence
   (`DR-INV-signal-contract`); this channel touches generation, never evidence.
+- **Reaching for a repair budget to fund the re-ask.** They are different
+  failures with different remedies, and the re-ask must not be capped by a
+  ceiling that exists for transport faults.
+- **Adding a rate over discharges.** A `DischargeRate` is the obvious next
+  Measure and is exactly what would cross the law line the moment anything
+  ranked on it. The uncapped open-criticism count is deliberately private to
+  the renderer for the same reason.
 - **Reading the channel's own record as proof that it worked.** F1 proves
   DELIVERY — that the channel carries, and that the off-state cannot. Whether a
   live provider model RESPONDS is a separate question, parked as P2, and Q1's

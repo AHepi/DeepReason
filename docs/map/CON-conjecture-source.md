@@ -1,5 +1,5 @@
 <!-- DR-CON-conjecture-source -->
-Verified-at: 7e1ab8a54
+Verified-at: a5a435e3e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py
 Seams: DR-SEAM-rules-x-scratch
@@ -88,6 +88,25 @@ never learns what a pack is. This is the whole of the channel's contact with
 `rules/`: exactly one file imports it.
 `check: python -m pytest tests/test_discharge_contract.py::test_no_consumer_reaches_past_the_interface -q`
 `check: grep -q "from deepreason.discharge import" src/deepreason/rules/conj.py && grep -q "open_criticism_context=open_criticism_context" src/deepreason/rules/conj.py`
+
+## The submission precondition
+
+After `conj` parses the model's turn and BEFORE it compiles any candidate, the
+submission is screened against the problem's open criticisms
+(`DR-CON-discharge-channel`). Screening before compilation is not tidiness: the
+decision is about the SUBMISSION rather than any one candidate, and re-asking
+after registration would leave a half-admitted turn on the record.
+
+The screen can return the turn ONCE with the open list, and then accepts it with
+the gap disclosed. It cannot refuse. That is the all-configurations law at the
+boundary it names, and it is why the channel adds no way for a candidate to die.
+`check: python -m pytest tests/test_discharge_submission.py::test_no_candidate_is_ever_refused -q`
+
+The re-ask re-enters `conj` on the same recursion shape
+`_context_expansion_index` uses, so this module's provider-call census is
+unchanged — the count `DR-SEAM-llm-x-rules` pins still reads 8 across this file
+and `crit.py`.
+`check: test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py | grep -c 'adapter\.call(')" -eq 8`
 
 ## Traps
 

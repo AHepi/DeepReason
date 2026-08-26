@@ -824,9 +824,14 @@ python3 -c "print(sum([150, 120, 110, 90]))"                    # 470  tests/
 python3 -c "print(sum([120, 60]))"                              # 180  docs/map/
 ```
 
-- `src/` ceiling: **900** lines — RE-DECLARED 2026-08-26 by the operator's
-  ruling on step 10's typed STOP (REQUEST.md Amendment 3, R21: "900"),
-  superseding the original 640. This is the number `tools/diff_budget.py
+- `src/` ceiling: **960** lines — RE-DECLARED 2026-08-26 by the operator's
+  ruling on the signal-contract STOP (REQUEST.md Amendment 4, R22: "raise
+  approved"), superseding the 900 of R21, which had itself superseded the
+  original 640. The measured total is **943**; 960 carries a stated margin.
+  The second raise was NOT discretionary drift: the signal registry refused the
+  three Measures this channel emits until each was declared, which is the
+  2026-08-14 registry law working. The number is final rather than projected —
+  the FULL gate ran before the stop was raised (4225 passed, 0 failed). This is the number `tools/diff_budget.py
   --paths src/` is checked against at every `[COMMIT]`, and R19's obligation
   attaches to it unchanged: growth beyond 900 is a typed STOP, never a second
   re-baseline.
@@ -847,7 +852,11 @@ python3 -c "print(sum([120, 60]))"                              # 180  docs/map/
   2026-08-26 (Q-OP-1, riders itemized at S13).**
 - Ceiling history, so no reader has to reconstruct it: 640 declared at spec
   time; typed STOP raised at step 10 while the gate still read `WITHIN`
-  (555/640), before commit 2 was written; **900** ruled by the operator. `invariants.py` disposed as a false positive (M1).
+  (555/640), before commit 2 was written; 900 ruled (R21); EXCEEDED at 907 and
+  brought back to 899 by DELETING dead code rather than re-baselining; EXCEEDED
+  again at 943 when the signal contract required three declarations; **960**
+  ruled (R22). Two raises, both measured before being asked for, and one breach
+  resolved without a raise at all. `invariants.py` disposed as a false positive (M1).
 
 Rubric: 6/6 yes (re-run 2026-08-26 after Amendment 2) — every R has a spec item
 with a machine-decidable accept (R1→S3, R2→S3, R3→S4/S5, R4→S5, R5→S7,

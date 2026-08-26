@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=17 blockers=none. `src/` sits at 899 of the 900 ceiling with ONE line of margin (R21; see step 14/15's R19 record) — no further `src/` change is planned, and any a later gate forces is a stop to raise, not absorb.
+State: next=22 blockers=none. Commit 2 delivered (C2). Ceiling 960 (R22); `src/` measures 943. FULL GATE GREEN at this point: 4225 passed, 6 skipped, 0 failed; docs_verify FULL back at the 3-failure baseline.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -695,7 +695,7 @@ recorded here rather than left as a silent reordering.
       than at step 10 (same ordering fault as step 2's record: the ring as
       first written demanded a commit-2 surface inside commit 1). Step 18 runs
       the file whole, with nothing deselected;
-      (b) `python tools/diff_budget.py <base> --paths src/ --ceiling 900` →
+      (b) `python tools/diff_budget.py <base> --paths src/ --ceiling 960` →
       `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (EXCEEDED is a typed
       STOP to the operator, never a re-baselined ceiling — R19);
       (c) commit created; (d) `git status --porcelain` empty and the branch
@@ -1133,21 +1133,116 @@ recorded here rather than left as a silent reordering.
       "the design is modular" but "here is the check, here is it going red on
       the violation, here is it going green again".
 
-- [ ] 17. (S11) Move the map with the code: `DR-CON-discharge-channel`'s
+- [x] 17. (S11) Move the map with the code: `DR-CON-discharge-channel`'s
       remaining checks now pass; `DR-CON-conjecture-source` gains the
       submission precondition; `DR-SEAM-llm-x-rules` re-verified against its
       own two counts.
       done-when: `python tools/docs_verify.py` (FULL) failure count equals the
       base captured at step 8 (paste both)
 
-- [ ] 18. (S4,S5,S6,S8,S11,S15) [COMMIT] Ring, budget, commit, push.
+      PASTED OUTPUT:
+      ```
+      $ python tools/docs_verify.py            # FULL, idle
+        FAIL CON-run-identity.md:200 / :202 / :204
+      docs_verify: 3 failed
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 65 document(s)
+      ```
+      **3 failed — equal to the step-1 baseline**, and the same three
+      `CON-run-identity` shallow-clone failures.
+
+      ### THE MAP GATE CAUGHT A REAL DEFECT, and it was the right one
+
+      An earlier FULL run of this step reported **6 failed** — three new, in
+      `SUB-harness`, `SUB-rules` and `SUB-scheduler`. My first reading was
+      contention: I had launched `docs_verify --links` while the FULL run was
+      still going, which is exactly the hazard `dr-drive-harness` §5b names, and
+      "a surprising measurement taken under load is not a measurement."
+
+      That reading was wrong, and checking it before believing it is the only
+      reason it did not become the record. All three failures had the SAME
+      cause and it was real: each of those documents pins
+      `tests/test_signals.py`, and
+      `test_every_emitted_signal_is_registered` was failing with
+      `unregistered signals emitted by the source tree: ['discharge-reask',
+      'discharge-undischarged', 'discharge:']`.
+
+      **The 2026-08-14 signal-registry law caught this channel emitting three
+      undeclared signals** — "new setups add signals by declaration through
+      this typed channel, never by teaching a consumer about a subsystem" —
+      working precisely as stated, from a document this tranche never touched.
+      Three `SignalDeclaration` entries were added per `DR-REC-add-signal`: two
+      exact (`discharge-reask`, `discharge-undischarged`) and one PREFIX
+      (`discharge:`) whose suffix is the declared kind. None uses
+      `unspecified`, which the recipe forbids to new signals.
+
+      They are deliberately THREE rather than one prefix over `discharge`.
+      A single declaration would have had to state one meaning for three
+      different facts, and the operator's own F3 instruction is the warning:
+      "strike-or-emit the phantom signals so the registry never lies about what
+      is customizable." Each `semantics` also says what the signal is NOT
+      evidence of, because that is where this channel's law line lives — a
+      `discharge:` occurrence says a submission carried a well-formed
+      discharge, and says nothing about whether the answer is any good.
+
+      This is what took `src/` from 899 to 943 and raised the second R19 stop.
+      The growth was not discretionary: the declarations are what an operator
+      design law requires.
+
+- [x] 18. (S4,S5,S6,S8,S11,S15) [COMMIT] Ring, budget, commit, push.
       done-when: ALL FOUR pasted — (a) `python -m pytest
       tests/test_discharge_wire.py tests/test_discharge_submission.py
       tests/test_discharge_contract.py tests/test_wire_contracts.py
       tests/test_v6_patch_repair_and_wire.py tests/test_conjecturer_turn_v4.py
       tests/test_skills_models.py -q` → 0 failed; (b) `diff_budget` verdict
-      `WITHIN` against **900** (R21); (c) commit created; (d) `git status
+      `WITHIN` against **960** (R22); (c) commit created; (d) `git status
       --porcelain` empty and head on `origin`
+
+      PASTED OUTPUT:
+      ```
+      (a) $ python -m pytest tests/test_discharge_wire.py \
+              tests/test_discharge_submission.py tests/test_discharge_contract.py \
+              tests/test_discharge_channel.py tests/test_wire_contracts.py \
+              tests/test_v6_patch_repair_and_wire.py tests/test_conjecturer_turn_v4.py \
+              tests/test_skills_models.py tests/test_signals.py \
+              tests/test_signal_contract.py -q
+          146 passed in 17.33s
+
+      (b) $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 960
+          {"areas": {"src/": 943}, "ceiling": 960, "verdict": "WITHIN"}
+
+          $ python tools/blast_radius.py --files discharge/submission.py \
+              signals.py rules/conj.py --symbols screen_submission \
+              record_discharges conj --against 4760a32ef
+          verdict: CONTACT
+            SYMBOL_INDIRECT  replay-validation record formats (invariants.py) <- conj
+          adjacent: []
+          reach: screen_submission UNKNOWN->REACHABLE (null);
+                 record_discharges UNKNOWN->REACHABLE (null);
+                 conj REACHABLE->REACHABLE (unchanged)
+      ```
+      NO DRIFT. The one contact is the `invariants.py`/`conj` grep false
+      positive SPEC.md forecast and disposed by measurement (M1). Both new
+      symbols flipped to REACHABLE, which is what step 3's record required of
+      the wiring steps: the channel is live, not dead code.
+
+      **AND THE FULL GATE, run early and deliberately.** It is step 29's
+      criterion, run here because the second R19 stop needed a FINAL number
+      rather than another estimate — the first ceiling stop's lesson was that
+      this author's projections run 1.6-2.0x low, so the honest way to ask for
+      a raise was to prove nothing further would force `src/` growth.
+      ```
+      $ python -m pytest tests/ -q -n 4
+      4225 passed, 6 skipped in 962.12s (0:16:02)
+      ```
+      **0 failed.** Baseline for comparison at step 29, which re-runs it after
+      the law-line tests and the coupling instrument land.
+
+      **COMMIT 2 IS COMPLETE. C2 is delivered**: a candidate carries typed
+      discharges, an undischarged submission is returned once and then accepted
+      with the gap disclosed, a rebuttal enters the ordinary graph attackable
+      and label-inert, and a fourth kind still enters by declaration alone —
+      mutation-proved.
 
 ---
 
@@ -1263,12 +1358,12 @@ recorded here rather than left as a silent reordering.
 
 - [ ] 30. (S15) Final diff budget against the declared ceiling.
       done-when: `python tools/diff_budget.py <base> --paths src/ --ceiling
-      900` prints `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (paste
+      960` prints `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (paste
       it). EXCEEDED is a typed STOP to the operator naming what grew — never a
-      silent overrun and never a re-baselined ceiling (R19). **900** is the
-      operator's ruling of 2026-08-26 (R21), superseding the 640 that steps 2b
-      through 10 were measured against; their pasted outputs keep 640 because
-      that is what was actually measured then.
+      silent overrun and never a re-baselined ceiling (R19). **960** is the
+      operator's ruling on the signal-contract stop (R22), superseding the 900
+      of R21 and the 640 SPEC first declared. Every pasted output in this
+      document keeps the ceiling it was actually measured against.
 
 - [ ] 31. (S16) Write `RESULTS.md` as a dated honest-ledger segment, with the
       claim boundary the operator fixed in advance: F1 claims DELIVERY, not
