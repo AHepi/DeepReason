@@ -3,11 +3,25 @@
 Traces: every item cites R/C numbers from REQUEST.md. Untraceable items are bugs.
 REQUEST.md re-read in full, including Amendment 1, before this was written.
 
-**STOP AT THIS PHASE.** `tools/blast_radius.py` returns
-`"frozen_surface_verdict": "CONTACT"` (pasted verbatim below). Per
-`dr-spec-change` step 3 this tranche stops here: SPEC.md is committed and
-pushed, and `dr-plan-steps` does not run until the operator's words arrive.
-Two questions are batched below, each with a recommendation.
+**STOP RESOLVED — GRANTED 2026-08-26.** `tools/blast_radius.py` returned
+`"frozen_surface_verdict": "CONTACT"` (pasted verbatim below), the tranche
+stopped at this phase, and the operator's words arrived
+(REQUEST.md Amendment 2, R16-R20, verbatim). All three batched questions are
+answered: Q-OP-1 **GRANTED 2026-08-26** with four riders (S13 below);
+Q-OP-2 resolved — C6 reads as "F2's fields", F1 proceeds (S14); Q-OP-3
+resolved — one tranche, three commits, ~640 `src/` lines accepted, with a
+typed STOP required if the ceiling grows (S15). `dr-plan-steps` may now run.
+
+**Size disclosure (C7), stated rather than stopped on.** This document was 701
+lines when the operator answered; recording Amendment 2 took it to 837. All 136
+added lines are the grant and its four riders (S13), the C6 disposition and the
+F2 composition note the operator asked be recorded (S14, R18), the ceiling
+discipline (S15) and the fixed claim boundary (S16) — i.e. answers to
+requirements the operator added, which they instructed SPEC.md to answer
+explicitly. Nothing designed grew: the `src/` ceiling is unchanged at 640 and
+S15 makes any growth in it a typed STOP. Disclosed here because C7 asks to be
+told what grew, and stopping to ask permission to record a grant just given
+would be theatre.
 
 ---
 
@@ -395,6 +409,124 @@ written down (`SCHEMA.md`).
   entry point, MCP tool, or wheel-layout change is planned; both are run as
   proof rather than assurance).
 
+
+### S13 (R16) — the granted contact, and its four riders
+
+Files: `src/deepreason/config.py`, `src/deepreason/run_manifest.py`,
+`docs/map/INV-frozen-surfaces.md`, this tranche's `proof/`.
+
+**GRANTED 2026-08-26** (rider a, discharged by this line and by the Q-OP-1
+block above). The grant covers exactly ONE insertion:
+`data.pop("DISCHARGE_POLICY", None)` in
+`run_manifest.py::_versioned_source_config_data`, joining the twelve unconditional
+pops already there. No schema, no validator, no Pydantic model, no check name,
+no record format.
+
+- **Rider (b) — pasted proof.** `proof/digest_before.txt` and
+  `proof/digest_after.txt` are committed, each the output of one command over
+  the tree at that moment: `source_config_hash(Config(), schema_version=v)` for
+  v1..v6 AND `qualification_subject_digest(_manifest(_profile()), _profile())`.
+  The claim is BYTE-IDENTICAL across the pair — `b9038b84efdea313…` before and
+  after, `2624603035bc335e…` for v3-v6, `6c2d01f6b8cbe65e…` for v1-v2. A green
+  suite is not the acceptance check; the digest is.
+- **Rider (c) — same commit.** `docs/map/INV-frozen-surfaces.md` gains the
+  granted-contact block in the SAME commit as the `run_manifest.py` line, with
+  its own `check:` that would fail if the pop were removed. Not a later
+  "update docs" commit — that is the commit that gets dropped.
+- **Rider (d) — every schema version.** The pop is UNCONDITIONAL, outside the
+  `if schema_version < 3:` guard, exactly as `ENGAGED_CRITICISM_AUTHORITY` and
+  the eleven after it are. The operator named that knob's trap as this grant's
+  ancestor, and the trap is precisely the scoped-fix that reasoned "no pinned
+  test exists above v3" and was refuted by two v5 goldens
+  (`DR-INV-frozen-surfaces` Traps). Acceptance is measured per version, not
+  argued: the digest table above is compared for ALL SIX.
+
+  accept: `python -c "from deepreason.config import Config; from
+  deepreason.run_manifest import source_config_hash;
+  h=[source_config_hash(Config(), schema_version=v) for v in (1,2,3,4,5,6)];
+  assert h[0]==h[1]=='6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81';
+  assert h[2]==h[3]==h[4]==h[5]=='2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5'"`
+  → exit 0; and `test "$(grep -c 'data.pop(\"DISCHARGE_POLICY\", None)'
+  src/deepreason/run_manifest.py)" -eq 1` with the line outside every
+  `schema_version` guard; and `python tools/docs_verify.py` passing the new
+  `INV-frozen-surfaces` check.
+
+### S14 (R17, R18) — the C6 disposition and the F2 composition note
+
+Files: this document; `docs/map/CON-discharge-channel.md`.
+
+**C6 is resolved (R17):** it reads as "F2's field definitions". F1 edits none
+of them; it adds two optional fields of its own, in a different region of
+`wire.py`, measured digest-byte-identical (M4) and pruned from the emitted
+schema when the channel is off (S4). Recorded here so the disposition is in
+the ledger rather than in a chat reply.
+
+**The composition note (R18), recorded for F2's window or a successor:**
+
+> `DischargeWireV1.handle` is a REFERENCE-BEARING field. Its legal set is not
+> free text: it is exactly `deepreason.discharge.open_criticisms(harness,
+> problem_id, policy)`, in that call's own order, capped at
+> `policy.handles_n` — ONE authority, computed from the record, already the
+> single source the pack section renders from. F1 deliberately leaves `handle`
+> as a plain `str` on the wire rather than inventing a private enum or menu,
+> so that F2's menu renderer can key on this field by REGISTERING against that
+> one-authority legal set, without F2 touching `discharge/` and without F1
+> touching F2's renderer. If F2 lands first, F1's field registers into it; if
+> F1 lands first, F2 finds a field already shaped for it. That is the
+> modularity law doing the work it was stated to do — neither side had to
+> learn about the other's subsystem.
+
+  accept: `grep -q "reference-bearing" docs/map/CON-discharge-channel.md &&
+  grep -q "open_criticisms" docs/map/CON-discharge-channel.md` → exit 0; and
+  `python -c "from deepreason.llm.wire import DischargeWireV1; import typing;
+  assert DischargeWireV1.model_fields['handle'].annotation is str"` → exit 0
+  (the field stays a plain string; a private enum here would close the seam
+  F2 needs).
+
+### S15 (R19) — the ceiling, and the typed STOP if it moves
+
+Files: none (a process obligation on `dr-execute-step`).
+
+The `src/` ceiling declared in Budget below is **640**. `dr-execute-step` runs
+`python tools/diff_budget.py <base> --paths src/ --ceiling 640` at every
+`[COMMIT]` step and records `DIFF_BUDGET_RESULT_V1` verbatim in
+CHECKLIST.md. An `EXCEEDED` verdict is a **typed STOP** presented to the
+operator with what grew and why — never a silent overrun and never a
+re-baselined ceiling. The operator's words: "a typed STOP if it grows beyond
+what SPEC now declares, not silent growth."
+
+This is Rung S5's recorded scar applied in advance: its own SPEC headline
+(220–300) contradicted its own itemization (~325–435), and nothing checked the
+ceiling against the ACTUAL diff until an executor noticed by hand.
+
+  accept: every `[COMMIT]` step in CHECKLIST.md pastes a
+  `DIFF_BUDGET_RESULT_V1` line; the final one carries `"verdict": "WITHIN"`
+  against `640`, or an EXCEEDED that was stopped on and ruled.
+
+### S16 (R20) — what RESULTS.md may claim, fixed now rather than at write-up
+
+Files: this tranche's `RESULTS.md` (written at delivery).
+
+The operator accepted the honesty paragraph AS SCOPED, so the claim boundary is
+fixed here, before the evidence exists, where it cannot be widened to fit a
+pleasing number:
+
+- **F1 claims DELIVERY, not RESPONSE.** The offline gate proves the channel
+  CARRIES criticism into the writer's working context and that the off-state
+  CANNOT — a responsive writer couples above placebo iff the channel is on.
+- **It does not claim a live provider model responds.** That is P2's question,
+  and Q1's finding forbids assuming it: a pack's own claim to have honoured a
+  standing instruction is the least reliable artifact in the trajectory.
+- **The parked four-arm A/B remains the live proof** (PARKED.md P2, designed as
+  Q5's four arms including vacuous-critique).
+- Operator clarification, recorded verbatim so it is not mistaken for silence:
+  "The upcoming P-C2 rematch will bear on it but does not replace P2's design."
+
+  accept: `RESULTS.md` contains a "What this does NOT establish" section
+  carrying all four points, and contains no sentence asserting that a live
+  model responded to the channel.
+
+
 ---
 
 ## Assumptions (operator may override)
@@ -455,9 +587,14 @@ tranche's modularity claim.
 
 ---
 
-## Questions for operator (STOP — non-empty)
+## Questions for operator — ALL ANSWERED 2026-08-26 (REQUEST.md Amendment 2)
 
 **Q-OP-1 — the frozen-surface grant (surface 4/5, `run_manifest.py`).**
+**GRANTED 2026-08-26** — operator verbatim: "GRANTED: the one-line
+versioned-source entry for DISCHARGE_POLICY in run_manifest.py. This is not an
+exception to the frozen surface — it is the documented recipe (a Config field
+is not done WITHOUT that line; the ENGAGED_CRITICISM_AUTHORITY trap is its
+ancestor)." Four riders bind; they are itemized as **S13**.
 `tools/blast_radius.py` returns `"frozen_surface_verdict": "CONTACT"` with the
 computed list pasted verbatim below. The contact is ONE line —
 `data.pop("DISCHARGE_POLICY", None)` in
@@ -481,6 +618,10 @@ check is the digest itself at every schema version, not a green suite.
   found, and R12 goes unmet.
 
 **Q-OP-2 — C6, the wire-contract boundary against F2.**
+**ANSWERED 2026-08-26** — operator verbatim: "read C6 as 'F2's fields' — that
+reading is the intent. The boundary exists to prevent collision, not to freeze
+the wire layer… The wire.py merge is the monitor's problem, not yours."
+Recommendation adopted; the composition note is **S14** (R18).
 C6 says "If you need to edit wire-contract FIELD definitions (F2's) … STOP and
 say so." This is the saying-so. F1 does **not** edit any existing field: it ADDS
 two optional fields (`CompactConjectureCandidate.discharges`,
@@ -499,7 +640,11 @@ the qualification subject digest (M4: `b9038b84efdea313…` unchanged).
   its field through F2's interface. Cost: F1 delivers nothing this tranche, and
   the coupling defect W2 measured stays live for another cycle.
 
-**Q-OP-3 — the size.** SPEC's own itemization sums to ~640 `src/` lines,
+**Q-OP-3 — the size.**
+**ANSWERED 2026-08-26** — operator verbatim: "one tranche, three commits, ~640
+lines accepted… The diff-budget discipline still applies at your stated ceiling
+— a typed STOP if it grows beyond what SPEC now declares, not silent growth."
+Recommendation adopted; the ceiling discipline is **S15** (R19). SPEC's own itemization sums to ~640 `src/` lines,
 against `dr-spec-change`'s ~300-line guidance (C7's ~700-line limit is on the
 SPEC document, which this is inside — 701 lines, one over the ~700 guidance, reported
 rather than trimmed). The interface (S1) is ~140 of
@@ -686,16 +831,18 @@ python3 -c "print(sum([120, 60]))"                              # 180  docs/map/
 - Commits: **3** — (1) interface + registry + record + render (S1–S3, S11 part);
   (2) wire + submission + records (S4–S6, S11 part); (3) law line + architecture
   test + coupling instrument + gate (S7–S10, S12).
-- Frozen surfaces touched: **1 — `run_manifest.py`, one insertion, GRANT
-  REQUESTED at Q-OP-1.** `invariants.py` disposed as a false positive (M1).
+- Frozen surfaces touched: **1 — `run_manifest.py`, one insertion, GRANTED
+  2026-08-26 (Q-OP-1, riders itemized at S13).** `invariants.py` disposed as a false positive (M1).
 
-Rubric: 6/6 yes — every R has a spec item with a machine-decidable accept
-(R1→S3, R2→S3, R3→S4/S5, R4→S5, R5→S7, R6→S6, R7→S7 pin 4, R8→S7 pins 2/3,
-R9→S9, R10→S10/S11/S12, R11→S5, R12→S1/S8, R13→S1/S8, R14→S8, R15→S1/Options);
+Rubric: 6/6 yes (re-run 2026-08-26 after Amendment 2) — every R has a spec item
+with a machine-decidable accept (R1→S3, R2→S3, R3→S4/S5, R4→S5, R5→S7,
+R6→S6, R7→S7 pin 4, R8→S7 pins 2/3, R9→S9, R10→S10/S11/S12, R11→S5,
+R12→S1/S8, R13→S1/S8, R14→S8, R15→S1/Options, R16→S13, R17→S14, R18→S14,
+R19→S15, R20→S16);
 blast-radius census pasted and every hit classified; frozen-surface contact
 forecast recorded with the tool's own list verbatim; every named mechanism
 traced to code it reaches (Rung 6 render machinery → `calculus/render.py` +
 `llm/packs.py` sections, traced; W2's R1 → `q5.py` lines 20–24, traced;
 `prune_property` → `ConjecturerTurnWireContractV6._omit_property`, traced);
 DESIGN-AND-STOP sections present (Measurements, Options) because this phase
-stops; nothing untraceable to an R/C number.
+stopped, and its stop is now resolved on the record (Amendment 2); nothing untraceable to an R/C number.

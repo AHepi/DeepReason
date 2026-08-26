@@ -150,6 +150,47 @@ finding, recorded here rather than treated as a blocker: a new
 >   pure configuration, and strike-or-emit the phantom signals so
 >   the registry never lies about what is customizable.
 
+### Message 3 — the grant (reply to SPEC.md's three batched questions)
+
+> GRANTED, PROCEED, ONE TRANCHE — the three words, with the standard
+> riders:
+>
+> Q1 GRANTED: the one-line versioned-source entry for
+> DISCHARGE_POLICY in run_manifest.py. This is not an exception to
+> the frozen surface — it is the documented recipe (a Config field
+> is not done WITHOUT that line; the ENGAGED_CRITICISM_AUTHORITY
+> trap is its ancestor). Riders, same as every prior grant: SPEC.md
+> records "GRANTED 2026-08-26"; the digest before/after measurement
+> (b9038b84... unchanged) is committed as pasted proof; the map's
+> frozen-surface document gains the contact line in the SAME commit
+> as the code; the line exists for EVERY schema version the
+> serializer handles, not just the newest.
+>
+> Q2: read C6 as "F2's fields" — that reading is the intent. The
+> boundary exists to prevent collision, not to freeze the wire
+> layer; two optional fields of your own, in a different region,
+> digest-byte-identical, hidden when the channel is off, is
+> additive per-call machinery done properly. The composition note
+> (discharges[].handle registering into F2's menu interface later)
+> is exactly the modularity law working — record it in SPEC so F2's
+> window or a successor finds it. The wire.py merge is the
+> monitor's problem, not yours.
+>
+> Q3: one tranche, three commits, ~640 lines accepted. The ~140
+> interface lines are the modularity law's own price, paid where
+> the operator said to pay it (R15: the interface wins the fork).
+> Rung 6's precedent stands. The diff-budget discipline still
+> applies at your stated ceiling — a typed STOP if it grows beyond
+> what SPEC now declares, not silent growth.
+>
+> And the honesty paragraph is accepted as scoped: F1 claims
+> DELIVERY, not response — the offline gate proves the channel
+> carries and the off-state cannot, RESULTS.md says a live model's
+> responsiveness is P2's question, and the parked four-arm A/B
+> remains the live proof. The upcoming P-C2 rematch will bear on it
+> but does not replace P2's design. Proceed.
+
+
 ## Requirements
 
 R1 (behavior): "open criticisms on a problem render INSIDE the conjecturer's
@@ -215,6 +256,30 @@ is decoration."
 R15 (process, Amendment 1): "At any design fork between a tighter coupling that
 is smaller and a declared interface that is larger, the interface wins — the
 operator has priced this and chosen."
+
+R16 (process, Amendment 2): "GRANTED: the one-line versioned-source entry for
+DISCHARGE_POLICY in run_manifest.py." With four riders, each a separate
+obligation: (a) "SPEC.md records \"GRANTED 2026-08-26\""; (b) "the digest
+before/after measurement (b9038b84... unchanged) is committed as pasted proof";
+(c) "the map's frozen-surface document gains the contact line in the SAME
+commit as the code"; (d) "the line exists for EVERY schema version the
+serializer handles, not just the newest."
+
+R17 (behavior, Amendment 2): "read C6 as \"F2's fields\" — that reading is the
+intent." Resolves Q5/Q-OP-2: F1's two optional additive fields proceed.
+
+R18 (artifact, Amendment 2): "The composition note (discharges[].handle
+registering into F2's menu interface later) is exactly the modularity law
+working — record it in SPEC so F2's window or a successor finds it."
+
+R19 (process, Amendment 2): "one tranche, three commits, ~640 lines accepted …
+The diff-budget discipline still applies at your stated ceiling — a typed STOP
+if it grows beyond what SPEC now declares, not silent growth."
+
+R20 (artifact, Amendment 2): "F1 claims DELIVERY, not response — the offline
+gate proves the channel carries and the off-state cannot, RESULTS.md says a
+live model's responsiveness is P2's question, and the parked four-arm A/B
+remains the live proof."
 
 ## Standing constraints
 
@@ -312,3 +377,11 @@ Supersedes nothing. Its own instruction — "Amend your REQUEST.md with it as a
 requirement and let SPEC.md answer it explicitly" — makes SPEC.md's explicit
 answer to R12–R15 a delivery obligation, reconciled in DELIVERY.md like any
 other requirement.
+
+**Amendment 2 — 2026-08-26, the grant.** Message 3 above, quoted verbatim in
+`## Verbatim`. Lands as R16–R20. Resolves and CLOSES open questions Q5 (via
+R17) and Q8 (via R16); SPEC.md's Q-OP-1, Q-OP-2 and Q-OP-3 are all answered.
+Supersedes nothing. One clarification the operator added that is not a
+requirement but is recorded so a later reader does not mistake it for silence:
+"The upcoming P-C2 rematch will bear on it but does not replace P2's design" —
+P2 stays parked as designed.
