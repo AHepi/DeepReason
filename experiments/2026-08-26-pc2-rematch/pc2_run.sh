@@ -17,6 +17,20 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
 
+# ARM SELECTION. One ladder drives both arms: a second copy would be a second
+# place for the preflights, the budgets and the audit steps to drift, and the
+# whole point of the rematch is that only the registered field differs.
+#   ARM H2 (thinking OFF, PREREG §4):   ./pc2_run.sh
+#   ARM H3 (thinking ON,  Appendix A):  PC2_CONFIG=run-config-h3.yaml \
+#                                       PC2_ROOT=$PWD/run_h3 ./pc2_run.sh
+# `build_manifest_pc2.py` and `preflight_pc2.py` read PC2_CONFIG themselves,
+# so exporting it here is the whole of the wiring.
+export PC2_CONFIG="${PC2_CONFIG:-run-config.yaml}"
+ARM="H2"; [ "${PC2_CONFIG}" = "run-config-h3.yaml" ] && ARM="H3"
+# Lower case for FILENAMES, so `arm_h2_scores.json` keeps the name the
+# committed evidence and `pc2_arm_s2.sh` already reference.
+ARMLC="$(echo "$ARM" | tr "[:upper:]" "[:lower:]")"
+
 if [ "${DRY_RUN:-0}" = "1" ]; then
   ROOT="$HERE/.dry-run-root"
   rm -rf "$ROOT"
@@ -75,6 +89,7 @@ if [ -e "$ROOT" ]; then
   exit 1
 fi
 
+log "=== ARM $ARM (config $PC2_CONFIG) ==="
 log "=== SETUP: build_manifest_pc2.py -> $ROOT ==="
 if ! python "$HERE/build_manifest_pc2.py" "$ROOT" 2>&1 | tee -a "$LOG"; then
   log "SETUP FAILED -- rc=1"
@@ -143,7 +158,7 @@ if python -m deepreason doctor \
     --run-manifest "$ROOT/run-manifest.json" \
     --production-contracts \
     --out "$ROOT/production-contract-qualification.json" \
-    > "$HERE/qualify.json" 2> "$HERE/qualify.stderr.log"; then
+    > "$HERE/qualify-$ARMLC.json" 2> "$HERE/qualify-$ARMLC.stderr.log"; then
   log "QUALIFY OK rc=0"
 else
   rc=$?
@@ -157,11 +172,11 @@ if python -m deepreason --root "$ROOT" run \
     --problem "$ROOT/problem.json" \
     --budget "cycles=$CYCLES" \
     --token-budget "$TOKENS" \
-    > "$HERE/reason.log" 2> "$HERE/reason.stderr.log"; then
+    > "$HERE/reason-$ARMLC.log" 2> "$HERE/reason-$ARMLC.stderr.log"; then
   log "REASON rc=0"
 else
   rc=$?
-  log "REASON rc=$rc -- see $HERE/reason.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)"
+  log "REASON rc=$rc -- see $HERE/reason-$ARMLC.{log,stderr.log} (a non-zero rc here can still be a typed stop; audit before treating it as failure)"
 fi
 
 STOP_REASON="$(python -c "
@@ -176,17 +191,17 @@ python -c "
 import json
 from deepreason.invariants import verify_root
 print(json.dumps(verify_root('$ROOT'), indent=1, sort_keys=True, default=str))
-" > "$HERE/verify_root.json" 2>&1 || true
-python -m deepreason --root "$ROOT" findings --json > "$HERE/findings.json" 2>&1 || true
+" > "$HERE/verify_root-$ARMLC.json" 2>&1 || true
+python -m deepreason --root "$ROOT" findings --json > "$HERE/findings-$ARMLC.json" 2>&1 || true
 # `results` takes its target POSITIONALLY; addressing it with --root falls
 # back to DEEPREASON_HOME and records a path error instead of the summary.
-python -m deepreason results "$ROOT" > "$HERE/results.txt" 2>&1 || true
+python -m deepreason results "$ROOT" > "$HERE/results-$ARMLC.txt" 2>&1 || true
 
 # Score every candidate the run produced with the OFFLINE EXACT checker.
 # The in-run battery is float64 and is an admission gate; this is the
 # authority for every number RESULTS.md quotes.
 log "=== SCORE: the exact checker over every artifact in the record ==="
-python "$FRONTIER/score_run.py" "$ROOT" > "$HERE/arm_h2_scores.json" 2>&1 || true
+python "$FRONTIER/score_run.py" "$ROOT" > "$HERE/arm_${ARMLC}_scores.json" 2>&1 || true
 python -c "
 import json,pathlib
 d=json.loads(pathlib.Path('$HERE/arm_h2_scores.json').read_text())
@@ -198,7 +213,7 @@ print('ARM H2 candidates:', d.get('n_candidates'), ' refuted:', d.get('n_refuted
 # NOT from `deepreason results`: P-C1's counter printed 0 after 292 provider
 # calls and that tranche parked it as P2.
 log "=== T_H: provider-counted tokens, from W6's flow scan ==="
-python - "$ROOT" > "$HERE/arm_h2_tokens.json" 2>&1 <<'PYTOK' || true
+python - "$ROOT" > "$HERE/arm_${ARMLC}_tokens.json" 2>&1 <<'PYTOK' || true
 import json, os, sys
 sys.path.insert(0, "experiments/2026-08-26-run-anatomy-program/W6-token-flow")
 import flow
@@ -210,6 +225,6 @@ print(json.dumps({
     "T_H": sum(r["total_tokens"] for r in rows),
 }, indent=1, sort_keys=True))
 PYTOK
-cat "$HERE/arm_h2_tokens.json" | tee -a "$LOG" || true
+cat "$HERE/arm_${ARMLC}_tokens.json" | tee -a "$LOG" || true
 
-log "=== DONE: ARM S2 is a SEPARATE step -- run ./pc2_arm_s2.sh with T_H ==="
+log "=== DONE (ARM $ARM): ARM S is a SEPARATE step -- see pc2_arm_s2.sh ==="

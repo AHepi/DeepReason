@@ -1,0 +1,86 @@
+# P-C2 ARM H3: the rebuilt harness with the model's THINKING ON.
+#
+# PREREG.md APPENDIX A, on the operator's ruling of 2026-08-26. This file is
+# ARM H2's `run-config.yaml` with exactly ONE field REMOVED -- `reasoning` --
+# and `preflight_pc2.py`'s S2 check asserts that delta against P-C1's config
+# (two fields: DISCHARGE_POLICY and reasoning) rather than trusting it.
+#
+# WHY THE FIELD IS REMOVED RATHER THAN SET.
+# `llm/providers.py::reasoning_disabled`: "Unset is NOT off. A profile
+# carrying None sends no reasoning field, and a reasoning model then thinks
+# by default." Measured on this endpoint with the frozen question bytes:
+# no field -> 9712 completion tokens and a 24409-character reasoning payload;
+# `reasoning_effort: "none"` -> 177 completion tokens and none at all. Any
+# string value would send a `reasoning_effort` and change the shape again, so
+# the only way to say "think normally" is to say nothing.
+#
+# ARM H2's original header follows, unchanged.
+#
+# P-C2 ARM H2: the REBUILT harness, solo, everything on, NO JUDGE.
+#
+# PREREG.md §4. This file is P-C1's run-config.yaml with exactly ONE field
+# added, and the identity is deliberate: every other field must stay put or
+# the rematch measures a re-tuned launch instead of the rebuild.
+#
+#   diff ../2026-08-25-change-constructive-frontier/run-config.yaml
+#   -> DISCHARGE_POLICY only.
+#
+# `preflight_pc2.py` ASSERTS that diff rather than trusting this comment.
+#
+# WHY DISCHARGE_POLICY IS WRITTEN HERE AT ALL, GIVEN F-A.
+# PREREG §3 records the finding: `run_manifest.py` pops this field from the
+# manifest's config echo, and the one run path rebuilds Config from that
+# echo, so a run reads the CODE DEFAULT and never this line. The line stays
+# because it states the tranche's intent at the place an operator would
+# look for it, and because `preflight_pc2.py` uses the mismatch between
+# this line and the reconstructed runtime Config as its live check that
+# deviation D1 (the code default) is still in force. Delete D1 and the
+# preflight goes red here.
+#
+# Everything below this point is P-C1's file, unchanged, comments included,
+# because a rewritten comment is a second thing to keep true.
+
+roles:
+  conjecturer: &solo_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    # reasoning: OMITTED (PREREG Appendix A). Not set to a value -- UNSET is
+    # what makes the model think; any string sends a reasoning_effort.
+    timeout_s: 180
+    output_mode: json_object
+  argumentative_critic: *solo_glm
+  defender: *solo_glm
+  variator: *solo_glm
+  judge: *solo_glm
+  summarizer: *solo_glm
+  synthesizer: *solo_glm
+  vision_critic: *solo_glm
+  property_designer: *solo_glm
+  thesis: *solo_glm
+  grounding_reviewer: *solo_glm
+
+SCHOOL_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+
+# The one deliberate exception to "everything on", required by P-C1's R15
+# and inherited unchanged: demonstrative criticism, no judge anywhere.
+JUDGE_SEATS_ENABLED: false
+
+ARGUMENTATIVE_AUTHORITY: observe_only
+ENGAGED_CRITICISM_AUTHORITY: defended_trial
+LEGACY_CRITICISM_ENABLED: false
+
+RESEARCH_BACKEND: agent
+
+# THE TRANCHE. REBUILD F1's channel: open criticisms -- including the
+# DEMONSTRATIVE fail warrants the in-run checker mints -- render inside the
+# conjecturer's binding block, and every later submission must carry a typed
+# discharge per handle.
+DISCHARGE_POLICY: discharge-required.v1

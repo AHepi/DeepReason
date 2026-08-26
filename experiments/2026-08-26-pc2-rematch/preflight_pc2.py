@@ -41,6 +41,7 @@ Exit 0 = launch is licensed by this file.  Any other exit = STOP.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -74,6 +75,20 @@ _failures: list[str] = []
 _report: dict = {"schema": "pc2.preflight.v1", "checks": []}
 
 
+def _leaf_delta(x, y, path=""):
+    """Every differing leaf between two JSON trees, as (path, old, new)."""
+    out = []
+    if isinstance(x, dict) and isinstance(y, dict):
+        for k in sorted(set(x) | set(y)):
+            out += _leaf_delta(x.get(k), y.get(k), f"{path}/{k}")
+    elif isinstance(x, list) and isinstance(y, list) and len(x) == len(y):
+        for i, (u, v) in enumerate(zip(x, y)):
+            out += _leaf_delta(u, v, f"{path}[{i}]")
+    elif x != y:
+        out.append((path, x, y))
+    return out
+
+
 def _check(cid: str, ok: bool, detail) -> None:
     _report["checks"].append({"id": cid, "ok": bool(ok), "detail": detail})
     print(f"[{'OK ' if ok else 'FAIL'}] {cid}: {detail}")
@@ -94,16 +109,55 @@ def s1_question() -> None:
 
 
 def s2_config_delta() -> None:
+    """The delta from P-C1's config must be EXACTLY what the arm registered.
+
+    ARM H2 (PREREG §4) registers ONE differing field. ARM H3 (Appendix A)
+    registers TWO: the same one, plus `reasoning` REMOVED from every seat.
+    Any third field means the rematch is comparing two re-tuned launches, so
+    this fails on a superset as readily as on a mismatch.
+    """
+    import os
+
+    config_name = os.environ.get("PC2_CONFIG", "run-config.yaml")
+    arm = "H3" if "h3" in config_name else "H2"
     a = yaml.safe_load((FRONTIER / "run-config.yaml").read_text()) or {}
-    b = yaml.safe_load((TRANCHE / "run-config.yaml").read_text()) or {}
+    b = yaml.safe_load((TRANCHE / config_name).read_text()) or {}
     delta = sorted(
         k for k in set(a) | set(b) if a.get(k, "<absent>") != b.get(k, "<absent>")
     )
+
+    if arm == "H2":
+        ok = delta == [THE_ONE_FIELD]
+        detail = f"expected exactly [{THE_ONE_FIELD!r}]"
+    else:
+        # `reasoning` lives INSIDE each role, so the top-level delta is
+        # `roles`. The seat-level delta is checked explicitly rather than
+        # inferred from it: a `roles` difference could be anything.
+        seat_delta = sorted(
+            k
+            for role in b.get("roles", {})
+            for k in set(a["roles"][role]) | set(b["roles"][role])
+            if a["roles"][role].get(k, "<absent>") != b["roles"][role].get(k, "<absent>")
+        )
+        thinking_on = all(
+            "reasoning" not in spec for spec in b.get("roles", {}).values()
+        )
+        ok = (
+            delta == [THE_ONE_FIELD, "roles"]
+            and set(seat_delta) == {"reasoning"}
+            and thinking_on
+        )
+        detail = (
+            f"expected [{THE_ONE_FIELD!r}, 'roles'] with the ONLY seat-level "
+            f"delta being `reasoning` REMOVED; seat delta={sorted(set(seat_delta))}, "
+            f"reasoning absent on every seat={thinking_on}"
+        )
+
     _check(
-        "S2-one-field-only",
-        delta == [THE_ONE_FIELD] and b.get(THE_ONE_FIELD) == "discharge-required.v1",
-        f"fields differing from P-C1's config: {delta}; "
-        f"{THE_ONE_FIELD}={b.get(THE_ONE_FIELD)!r}",
+        "S2-registered-delta-only",
+        bool(ok) and b.get(THE_ONE_FIELD) == "discharge-required.v1",
+        f"ARM {arm} via {config_name}: fields differing from P-C1's config: "
+        f"{delta}; {detail}; {THE_ONE_FIELD}={b.get(THE_ONE_FIELD)!r}",
     )
 
 
@@ -125,6 +179,41 @@ def s3_channel_live(root: Path) -> None:
     )
 
 
+def s5_thinking_on(root: Path) -> None:
+    """ARM H3 ONLY: prove the model will actually THINK.
+
+    This is S3's sibling and it exists for the same reason. ARM H2 ran with
+    `reasoning_effort: "none"` and nothing in its typed record said the model
+    was not thinking -- the confound was found only by probing the endpoint
+    afterwards. An ARM H3 that silently kept thinking off would be ARM H2
+    wearing a new name, and no artifact would say so.
+
+    Asserted where it actually bites: the body `providers.reasoning_body`
+    builds from the RECONSTRUCTED runtime route, which is what the adapter
+    sends. An empty body means no `reasoning_effort` field, which is what
+    makes glm-5.2 think (measured: 9712 completion tokens vs 177).
+    """
+    from deepreason.llm.providers import reasoning_body
+    from deepreason.run_manifest import config_from_run_manifest, load_run_manifest
+
+    manifest = load_run_manifest(root / "run-manifest.json")
+    runtime = config_from_run_manifest(manifest)
+    bodies = {}
+    for role, spec in runtime.roles.items():
+        specs = spec if isinstance(spec, list) else [spec]
+        for one in specs:
+            data = one if isinstance(one, dict) else json.loads(one.model_dump_json())
+            bodies[role] = reasoning_body(data.get("provider"), data.get("reasoning"))
+    every_seat_thinks = all(body == {} for body in bodies.values())
+    _check(
+        "S5-thinking-ON-at-runtime",
+        every_seat_thinks and len(bodies) == 11,
+        f"{len(bodies)} seats; request-body reasoning field per seat: "
+        f"{sorted({json.dumps(b, sort_keys=True) for b in bodies.values()})} "
+        f"(an empty body = no reasoning_effort sent = the model thinks)",
+    )
+
+
 def s4_manifest_delta(root: Path) -> None:
     from deepreason.run_manifest import load_run_manifest
 
@@ -140,11 +229,38 @@ def s4_manifest_delta(root: Path) -> None:
     unexplained += [f"engine_config_json:{k}" for k in echo_delta]
 
     da, db = json.loads(a.model_dump_json()), json.loads(b.model_dump_json())
+    arm_h3 = "h3" in os.environ.get("PC2_CONFIG", "")
     for key in sorted(set(da) | set(db)):
         if key == "engine_config_json" or da.get(key) == db.get(key):
             continue
-        if key not in ACCOUNTED_TOP_LEVEL:
-            unexplained.append(f"manifest:{key}")
+        if key in ACCOUNTED_TOP_LEVEL:
+            continue
+        # ARM H3's registered change is `reasoning` REMOVED from every seat.
+        # That is accounted STRUCTURALLY, not by naming keys: each of the three
+        # affected fields must differ ONLY in the leaf the change can reach, or
+        # something else moved and this must still fail.
+        if arm_h3 and key == "roles":
+            leaves = _leaf_delta(da[key], db[key])
+            if leaves and all(
+                path.endswith("/reasoning") and old_v == "none" and new_v is None
+                for path, old_v, new_v in leaves
+            ):
+                _report["arm_h3_roles_delta"] = [p for p, _, _ in leaves]
+                continue
+        if arm_h3 and key in (
+            "route_seat_behavioral_capability_plan",
+            "route_seat_contract_decomposition_plan",
+        ):
+            leaves = _leaf_delta(da[key], db[key])
+            # A route digest is DERIVED from the route, so it must move when the
+            # route does -- and every entry must move to the SAME new value, or
+            # the seats have stopped sharing one route.
+            if leaves and all(path.endswith("/route_sha256") for path, _, _ in leaves) \
+               and len({new_v for _, _, new_v in leaves}) == 1:
+                continue
+        if arm_h3 and key == "source_config_hash":
+            continue  # the digest of the config file this arm registered
+        unexplained.append(f"manifest:{key}")
 
     pa = json.loads(a.inquiry_capability_policy.model_dump_json())
     pb = json.loads(b.inquiry_capability_policy.model_dump_json())
@@ -189,6 +305,8 @@ def main() -> int:
     s1_question()
     s2_config_delta()
     s3_channel_live(root)
+    if "h3" in os.environ.get("PC2_CONFIG", ""):
+        s5_thinking_on(root)
     s4_manifest_delta(root)
 
     (TRANCHE / "preflight_pc2.json").write_text(

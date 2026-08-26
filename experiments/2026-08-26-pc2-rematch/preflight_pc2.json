@@ -1,4 +1,17 @@
 {
+ "arm_h3_roles_delta": [
+  "/argumentative_critic[0]/reasoning",
+  "/conjecturer[0]/reasoning",
+  "/defender[0]/reasoning",
+  "/grounding_reviewer[0]/reasoning",
+  "/judge[0]/reasoning",
+  "/property_designer[0]/reasoning",
+  "/summarizer[0]/reasoning",
+  "/synthesizer[0]/reasoning",
+  "/thesis[0]/reasoning",
+  "/variator[0]/reasoning",
+  "/vision_critic[0]/reasoning"
+ ],
  "checks": [
   {
    "detail": "question_sha256=64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e (PREREG \u00a72 froze 64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e)",
@@ -6,13 +19,18 @@
    "ok": true
   },
   {
-   "detail": "fields differing from P-C1's config: ['DISCHARGE_POLICY']; DISCHARGE_POLICY='discharge-required.v1'",
-   "id": "S2-one-field-only",
+   "detail": "ARM H3 via run-config-h3.yaml: fields differing from P-C1's config: ['DISCHARGE_POLICY', 'roles']; expected ['DISCHARGE_POLICY', 'roles'] with the ONLY seat-level delta being `reasoning` REMOVED; seat delta=['reasoning'], reasoning absent on every seat=True; DISCHARGE_POLICY='discharge-required.v1'",
+   "id": "S2-registered-delta-only",
    "ok": true
   },
   {
    "detail": "runtime DISCHARGE_POLICY='discharge-required.v1' enabled=True reask='once' handles_n=8 (deviation D1 absent would read 'off' here)",
    "id": "S3-discharge-channel-live-at-runtime",
+   "ok": true
+  },
+  {
+   "detail": "11 seats; request-body reasoning field per seat: ['{}'] (an empty body = no reasoning_effort sent = the model thinks)",
+   "id": "S5-thinking-ON-at-runtime",
    "ok": true
   },
   {
@@ -32,7 +50,7 @@
    "/research/maximum_sources": "REBUILD F3 -- research channel on by default"
   },
   "pc1_sha256": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
-  "pc2_sha256": "957f4446dcc6d07a8114846ef5061858dcb3370ca35a990481bb045e9b52bd7e"
+  "pc2_sha256": "58fb0d20488be86939e4d8d7488bffb71e1e905e3995da146482a9280383a562"
  },
  "schema": "pc2.preflight.v1"
 }

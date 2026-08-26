@@ -7,3 +7,7 @@
 [arm-s] 0010 tokens=  8711 cum=   82216/1193009 valid=True score=0.013307680842 best=0.013307680842
 [arm-s] 0012 tokens= 12708 cum=   94924/1193009 valid=False score=0.0 best=0.013307680842
 [arm-s] 0013 tokens=  8065 cum=  102989/1193009 valid=True score=0.001 best=0.013307680842
+[arm-s] 0015 tokens= 15760 cum=  118749/1193009 valid=False score=0.0 best=0.013307680842
+[arm-s] 0016 tokens= 13719 cum=  132468/1193009 valid=False score=0.013497010038 best=0.013307680842
+[arm-s] 0018 tokens= 16362 cum=  148830/1193009 valid=True score=0.001 best=0.013307680842
+[arm-s] 0019 tokens=  7049 cum=  155879/1193009 valid=False score=0.002958535503 best=0.013307680842

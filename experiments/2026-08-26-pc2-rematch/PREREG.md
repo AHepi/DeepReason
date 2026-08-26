@@ -285,3 +285,124 @@ repeats this sentence.
   the four 2026-08-22 operational deaths offline; the other three are
   asserted, not demonstrated. A green soak licenses the launch; it does not
   guarantee it.
+
+---
+
+## APPENDIX A — 2026-08-26, post-launch: ARM H3, the harness with thinking ON
+
+**Appended, never an edit.** §1–§10 stand exactly as registered, and the
+ARM H2 / ARM S2 comparison they govern is reported as registered.
+
+### What was found, after ARM H2 had run
+
+**The two arms were not running the same model configuration.** Measured by
+two calls to the same endpoint with the same frozen question bytes,
+differing in exactly one field (`reasoning_probe.md`):
+
+| | ARM S2's shape (no reasoning field) | ARM H2's shape (`reasoning_effort: "none"`) |
+|---|---|---|
+| completion tokens | **9 712** | **177** |
+| visible content | 326 chars | 326 chars |
+| reasoning payload | **24 409 chars** | **0** |
+
+The harness runs glm-5.2 with THINKING DISABLED; the sampler runs it with
+THINKING ON. `reasoning: "none"` is inherited unchanged from P-C1's
+`run-config.yaml` — §4 required P-C2 to differ from P-C1 in exactly one
+field, and it does — and `arm_s.py` has never sent a reasoning parameter.
+The codebase had already measured this and recorded it at
+`llm/providers.py::reasoning_disabled` ("Unset is NOT off"); nobody
+connected that note to this experiment.
+
+**Scope: P-C1's committed 33x result carries the same confound**, and so
+does anything derived from it.
+
+### The operator's ruling, 2026-08-26
+
+Presented as a four-way fork with a recommendation. The operator chose
+**"Re-run the harness with thinking ON"** — the fairer test of the harness at
+full strength, over the cheaper matched-sampler road this document's author
+recommended. That ruling is the authority for everything below.
+
+### ARM H3, registered before any provider call
+
+Identical to ARM H2 in every field except the one named:
+
+| field | ARM H2 | ARM H3 |
+|---|---|---|
+| `reasoning` on every seat | `"none"` (thinking OFF) | **UNSET (thinking ON)** |
+| everything else | — | unchanged: solo glm-5.2 across 11 roles, 24 cycles, 3 000 000 token cap, no judges, `rubric_policy: forbid`, empty dossier, `max_tokens` 32768, `DISCHARGE_POLICY: discharge-required.v1` |
+
+`preflight_pc2.py`'s S2 check is amended for this arm ONLY, to assert a
+TWO-field delta from P-C1's config (`DISCHARGE_POLICY` and `reasoning`) and
+to fail on any third. S1, S3 and S4 are unchanged and still binding.
+
+**The ARM H2 root is NOT overwritten and NOT renamed.** It stays at `run/`,
+where committed evidence already references it; ARM H3 takes `run_h3/`. A
+new `reasoning` value mints a new manifest and therefore a new run id, so
+the two roots cannot contend.
+
+**NO SOAK. Operator ruling, 2026-08-26, verbatim: "No new soak. just
+requalification".** The soak law ("the rebuilt config is a NEW case ... run
+it, paste exit 0") is WAIVED for ARM H3 by the operator, on the record, and
+this is what that costs, stated so nobody has to reconstruct it later:
+
+- The soak is what licenses a launch against the four 2026-08-22 cycle-0-to-2
+  operational deaths. ARM H3 launches without that licence.
+- It is a smaller gap here than it would be in general, and the reason is
+  measured rather than argued: ARM H3's shape differs from the shape the
+  `pc2` case DID soak (exit 0, 24 of 24 cycles, verify_root clean, A5/A6
+  green) in exactly one field, `reasoning`, which changes what the PROVIDER
+  does with a request and touches no harness code path. The soak's stub
+  ignores the field entirely, so a `pc3` soak would have driven byte-identical
+  machinery and returned the same green.
+- What a soak could NOT have caught here anyway is the death ARM H2 actually
+  hit — `conjecturer.atomic-candidate.v1` seat exhaustion — because a
+  deterministic stub always answers schema-valid and can never drive a repair.
+  §10 registered that limit before launch and the soak states it in its own
+  output.
+
+**Requalification is NOT waived** and is the operator's stated requirement.
+`reasoning` is part of the route spec and therefore of the manifest, so the
+qualification subject digest moves and the full battery reruns (~14 min,
+~1160 calls). That is by design, not a fault.
+
+**Re-qualification is expected and budgeted.** `reasoning` is part of the
+route spec and therefore of the manifest, so the qualification subject
+digest moves and the full battery reruns (~14 min, ~1160 calls). That is by
+design, not a fault.
+
+### How ARM S is matched to TWO harness arms — REGISTERED NOW, BEFORE T_H3 IS KNOWN
+
+This rule is written down before ARM H3 runs so it cannot be chosen after
+the numbers are in.
+
+ARM S2's samples are i.i.d., blind and one-shot: no sample sees another, and
+none sees a score. §5's rule is "sample until cumulative provider-counted
+tokens would exceed `T_H`". That rule is applied to the SAME sample stream
+at each arm's own `T_H`:
+
+- **ARM H2's comparison** uses the prefix of the stream whose cumulative
+  tokens do not exceed `T_H2` = 1 193 009.
+- **ARM H3's comparison** uses the prefix whose cumulative tokens do not
+  exceed `T_H3`, measured the same way after ARM H3 stops. If `T_H3` exceeds
+  what the stream has reached, the sampler is RESUMED with the remainder,
+  exactly as P-C1's ARM S was resumed three times.
+
+**The cut is by CUMULATIVE TOKENS ONLY, never by score**, and the
+admissibility floor `T_S / T_H >= 0.95` of §5.4 applies unchanged to each
+comparison separately. A prefix chosen for its best score would be
+fabrication, and `merge_arm_s2.py` takes the cut as a parameter so no human
+picks it.
+
+### What ARM H3 can and cannot settle
+
+- It CAN say whether the harness, at the model's full strength, beats blind
+  sampling at matched measured budget on this instance.
+- It CANNOT rescue §6's verdict for ARM H2. That verdict was registered and
+  is reported as registered, whatever ARM H3 does.
+- It CANNOT isolate the discharge channel, the menus or the wander cap from
+  each other; §9's honesty line binds ARM H3 exactly as it binds ARM H2.
+- **Thinking ON changes the budget shape.** ARM H2 spent 27.5 % of its
+  tokens on completion; with thinking on that share should rise sharply, so
+  ARM H3 may reach FEWER cycles inside the same 3 000 000 cap. A shallower
+  run is a real outcome and is reported as one, not as a fault of the cap.

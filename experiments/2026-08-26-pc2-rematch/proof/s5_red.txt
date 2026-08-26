@@ -1,0 +1,4 @@
+Driving S5 against ARM H2's OWN root, where thinking was OFF:
+[FAIL] S5-thinking-ON-at-runtime: 11 seats; request-body reasoning field per seat: ['{"reasoning_effort": "none"}'] (an empty body = no reasoning_effort sent = the model thinks)
+
+MUTATION PROOF OK: S5 goes RED on a thinking-OFF root

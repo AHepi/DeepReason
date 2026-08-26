@@ -85,7 +85,11 @@ from deepreason.v6_policy import (  # noqa: E402
     engaged_local_simulation_toolchain,
 )
 
-CONFIG_PATH = TRANCHE / "run-config.yaml"
+# ARM H3 (PREREG Appendix A) selects the thinking-ON config by ENV rather
+# than by a second builder: two builders would be two places for the
+# question digest, the dossier shape and the compile call to drift.
+import os
+CONFIG_PATH = TRANCHE / os.environ.get("PC2_CONFIG", "run-config.yaml")
 
 # P-C1's value, held still on purpose (see the module docstring).
 COMPILED_AT = "2026-08-25T00:00:00Z"
