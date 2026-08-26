@@ -57,8 +57,10 @@ from deepreason.workloads.text import (
 
 
 from deepreason.discharge import (
+    record_discharges,
     render_open_criticism_context,
     resolve_policy as resolve_discharge_policy,
+    screen_submission,
 )
 
 
@@ -720,6 +722,7 @@ def conj(
     _v6_context_continuation=None,
     _v6_context_request: ContextRequestV1 | None = None,
     _v6_prior_context_plan=None,
+    _discharge_reask_index: int = 0,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -2110,7 +2113,69 @@ def conj(
         if score is not None:
             harness.record_measure(inputs=[f"spec-transmission:{score:.4f}", problem_id])
 
-    candidate_rows: list[tuple[ConjectureCandidate, tuple, str]] = []
+    # THE SUBMISSION BOUNDARY (REBUILD F1, C2). Screened BEFORE any candidate
+    # is compiled, because the decision is about the submission rather than
+    # about any one candidate, and re-asking after registration would leave a
+    # half-admitted turn behind.
+    discharge_screening = screen_submission(
+        harness,
+        problem_id,
+        output,
+        discharge_policy,
+        reask_index=_discharge_reask_index,
+    )
+    if discharge_screening.verdict == "reask":
+        # A typed re-ask, NOT a repair grant. Repair exists to fix a reply the
+        # SCHEMA rejected; this reply is schema-valid and the objection is
+        # epistemic, so it consumes no repair budget, touches no repair
+        # contract, and never reaches `workflow_repair_observer`. It is the
+        # same re-entry shape `_context_expansion_index` already uses.
+        harness.record_measure(
+            inputs=[
+                "discharge-reask",
+                problem_id,
+                ",".join(discharge_screening.open_handles),
+            ]
+        )
+        return conj(
+            harness,
+            problem_id,
+            adapter,
+            config,
+            diagnostics,
+            school=school,
+            tail_weighted=tail_weighted,
+            complement=complement,
+            specs=specs,
+            embedder=embedder,
+            mandatory_interface=mandatory_interface,
+            workload_profile=workload_profile,
+            contract_id=contract_id,
+            component_spec=component_spec,
+            theorem_interface=theorem_interface,
+            generation_context=generation_context,
+            suppressed_exemplars=suppressed_exemplars,
+            capture_candidate_content=capture_candidate_content,
+            endpoint_lease=endpoint_lease,
+            execution_school_id=execution_school_id,
+            conjecture_context_plan=conjecture_context_plan,
+            run_manifest=run_manifest,
+            _context_expansion_index=_context_expansion_index,
+            candidate_observer=candidate_observer,
+            workflow_work_order_id=None,
+            workflow_control_trace=workflow_control_trace,
+            _capability_result_context=_capability_result_context,
+            _simulation_follow_up_index=_simulation_follow_up_index,
+            _discharge_reask_index=_discharge_reask_index + 1,
+        )
+
+    # The fourth element is the WIRE candidate's discharges, carried alongside
+    # the canonical candidate rather than folded into it: `ConjectureCandidate`
+    # is a canonical contract model shared by every conjecture path, and a
+    # discharge is a submission-time fact about ONE turn, not part of what a
+    # candidate IS. Widening the canonical model would also put a
+    # discharge field within reach of code that must never see one.
+    candidate_rows: list[tuple[ConjectureCandidate, tuple, str, tuple]] = []
     if reasoning:
         # Selection is attention-only, so it must happen before drafting
         # countercondition commitments. Drafts are pure Commitment objects
@@ -2145,13 +2210,17 @@ def conj(
                     ),
                     compiled,
                     proposal.sidecar.search_signal,
+                    tuple(getattr(proposal, "discharges", ()) or ()),
                 )
             )
     else:
         proposals = list(output.candidates)
         if tail_weighted:  # stagnation response (§11.4): fund the atypical tail
             proposals.sort(key=lambda proposal: proposal.typicality)
-        candidate_rows = [(candidate, (), "productive") for candidate in proposals[: config.VS_K]]
+        candidate_rows = [
+            (candidate, (), "productive", tuple(getattr(candidate, "discharges", ()) or ()))
+            for candidate in proposals[: config.VS_K]
+        ]
 
     # Compile semantic candidates first, without running a guard or touching
     # the registry.  C1 can then record the provider receipt at the real
@@ -2159,7 +2228,7 @@ def conj(
     prepared_rows = []
     occurrences: dict[str, int] = {}
     family = root_problem_family(harness.state, problem.id)
-    for candidate, draft_pool, search_signal in candidate_rows:
+    for candidate, draft_pool, search_signal, candidate_discharges in candidate_rows:
         base = mandatory_interface or MandatoryInterface()
         candidate_mandatory = MandatoryInterface(
             commitments=tuple(
@@ -2202,6 +2271,7 @@ def conj(
                 candidate_mandatory,
                 candidate,
                 search_signal,
+                candidate_discharges,
             )
         )
 
@@ -2324,6 +2394,7 @@ def conj(
         candidate_mandatory,
         candidate,
         search_signal,
+        candidate_discharges,
     ) in prepared_rows:
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
         effective_workload = "text" if reasoning else workload_profile
@@ -2406,6 +2477,20 @@ def conj(
         seen.add(artifact.id)
         batch.append((artifact, []))
         observe_candidate(artifact.id, "admit", "passed")
+        if candidate_discharges:
+            # Recorded at ADMISSION, beside the citation checks, because a
+            # discharge is a fact about a candidate that entered the record --
+            # a blocked or deduplicated candidate discharged nothing.
+            record_discharges(
+                harness, problem_id, artifact.id, candidate_discharges, discharge_policy
+            )
+        for handle in discharge_screening.undischarged:
+            # The typed undischarged disclosure (R4). The submission was
+            # ACCEPTED with the gap on the record rather than refused for it --
+            # disclose, never die.
+            harness.record_measure(
+                inputs=["discharge-undischarged", problem_id, artifact.id, handle]
+            )
         if domain is not None:
             candidate_domains[artifact.id] = domain
         if candidate.evidence_refs:

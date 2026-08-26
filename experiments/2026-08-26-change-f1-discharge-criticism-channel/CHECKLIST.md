@@ -940,7 +940,7 @@ recorded here rather than left as a silent reordering.
       and depending on one concrete wire class here would pin the screen to a
       contract version it has no business knowing about.
 
-- [ ] 14. (S5) Implement `src/deepreason/discharge/submission.py::
+- [x] 14. (S5) Implement `src/deepreason/discharge/submission.py::
       screen_submission` and wire it into `rules/conj.py` immediately after
       `output` is parsed and BEFORE `candidate_rows` is built; the re-ask
       re-enters `conj(..., _discharge_reask_index=1, ...)` on the existing
@@ -952,7 +952,69 @@ recorded here rather than left as a silent reordering.
       --include=*.py src/deepreason/rules | wc -l)" -eq 8` exits 0 (the two
       pinned counts this plan promised not to disturb)
 
-- [ ] 15. (S6) Implement `record_discharges`: one Measure per accepted
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_submission.py \
+          tests/test_discharge_channel.py tests/test_discharge_contract.py \
+          tests/test_discharge_wire.py -q
+      50 passed in 4.41s
+
+      $ cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py \
+          | grep -c 'adapter\.call('                              ->  8
+      $ grep -rl 'deepreason\.llm' --include=*.py src/deepreason/rules | wc -l
+                                                                  ->  8
+
+      $ python -m pytest tests/test_candidate_compilation.py \
+          tests/test_conjecturer_turn_v4.py tests/test_diversity.py \
+          tests/test_guards.py tests/test_loop.py tests/test_scheduler.py \
+          tests/test_runtime_workload_integration.py \
+          tests/test_v6_conjecture_component_atomicity.py \
+          tests/test_v6_context_continuation.py tests/test_evidence_citations.py \
+          tests/test_p4_citable_evidence.py -q
+      115 passed in 40.62s
+      ```
+      Both pinned counts hold at 8. The re-ask re-enters `conj()` on the
+      existing recursion shape rather than opening a dispatch, so no new
+      `adapter.call` site exists.
+
+      **A TEST CAUGHT MY OWN PROSE, and the check was made stronger rather
+      than the prose quieter.** `test_no_kind_is_satisfied_by_acknowledgment`
+      grepped raw source for acknowledgment-shaped names and fired on the
+      COMMENT in `submission.py` explaining why an acknowledgment must not be
+      built. A prohibition documented is the opposite of a prohibition
+      violated, and a check that punishes the documentation teaches the next
+      author to delete it. The check now walks the AST — identifiers, argument
+      names, attribute accesses, and non-docstring string literals — so it sees
+      what the code DOES; comments never enter an AST at all. It ships with a
+      PERMANENT mutation companion (`test_the_acknowledgment_check_can_fail`)
+      that plants `d.acknowledged` and demands it be caught, and plants a
+      documented prohibition and demands it be ignored. `docs_verify --audit`
+      refuses map checks that cannot fail; a test has no such auditor, so it
+      carries its own.
+
+      Three implementation decisions worth recording:
+      - **There is no verdict that refuses.** `SubmissionScreening.verdict` is
+        `"reask"` or `"accept"`, and the vocabulary itself is the promise. The
+        test asserts over the vocabulary rather than the two values, so a
+        future third verdict cannot quietly become a gate.
+      - **A discharge counts only when it names a listed handle AND carries the
+        content its kind declares.** The two checks close the same hole from
+        opposite sides: without the first the channel is satisfiable by
+        inventing a string, without the second by a bare label.
+      - **Discharges ride ALONGSIDE the canonical candidate, not inside it.**
+        `ConjectureCandidate` is shared by every conjecture path, and a
+        discharge is a submission-time fact about one turn rather than part of
+        what a candidate IS. Widening it would also put a discharge field
+        within reach of code that must never see one.
+      - `record_discharges` runs at ADMISSION, beside the citation checks: a
+        blocked or deduplicated candidate discharged nothing.
+      - **No check runs on whether a rebuttal is EARNED.** Refusing one would
+        make the authoring path a judge of the criticism it answers, and a
+        rebuttal a critic disputes is a criticism they mount, not an authoring
+        error — `file_departure_declaration` declines the same temptation for
+        the same reason, and says so in its own docstring.
+
+- [x] 15. (S6) Implement `record_discharges`: one Measure per accepted
       discharge (`["discharge:<kind>", handle, candidate_ref, problem_id]`),
       and for `rebutted` ONLY, register the rebuttal as an ordinary artifact
       with TWO `MENTION` refs and no dependence and no warrant — mirroring

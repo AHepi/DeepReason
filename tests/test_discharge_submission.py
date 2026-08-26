@@ -19,6 +19,7 @@ easy to write by accident:
   pins it structurally rather than by wording.
 """
 
+import ast
 import pathlib
 
 import pytest
@@ -217,24 +218,92 @@ def test_an_undeclared_kind_is_refused_typed(harness, policy):
         screen_submission(harness, problem.id, turn, policy, reask_index=0)
 
 
+ACKNOWLEDGMENT_SHAPES = ("acknowledg", "noted", "seen_it", "confirm_read")
+
+
+def _code_names(path: pathlib.Path) -> set[str]:
+    """Every identifier and non-docstring literal in a module.
+
+    Deliberately NOT a text scan. The first version of this test grepped raw
+    source and fired on the comment in `submission.py` explaining WHY an
+    acknowledgment must not be built -- a prohibition documented is the
+    opposite of a prohibition violated, and a check that punishes the
+    documentation would teach the next author to delete it. This walks the AST
+    instead, so it sees what the code DOES: identifiers, argument names,
+    attribute accesses, and string literals used as data. Docstrings are
+    excluded by construction; comments never enter an AST at all.
+    """
+    tree = ast.parse(path.read_text())
+    docstrings = {
+        node.body[0].value
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.body
+        and isinstance(node.body[0], ast.Expr)
+        and isinstance(node.body[0].value, ast.Constant)
+        and isinstance(node.body[0].value.value, str)
+    }
+    names: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name):
+            names.add(node.id)
+        elif isinstance(node, ast.arg):
+            names.add(node.arg)
+        elif isinstance(node, ast.Attribute):
+            names.add(node.attr)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.add(node.name)
+        elif isinstance(node, ast.keyword) and node.arg:
+            names.add(node.arg)
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            if node not in docstrings:
+                names.add(node.value)
+    return {name.lower() for name in names}
+
+
 def test_no_kind_is_satisfied_by_acknowledgment():
     """R11, structural rather than by wording.
 
-    Q5: "Do not add an acknowledgment requirement. Documented to hurt." So no
-    declared kind may have an empty `requires` -- there is no way to discharge
-    by merely noting a criticism -- and no acknowledgment-shaped name appears
-    anywhere in the package.
+    Q5: "Do not add an acknowledgment requirement. Documented to hurt." Two
+    halves. No declared kind may have an empty `requires`, so there is no way
+    to discharge by merely noting a criticism. And nothing the package DOES --
+    no field, no kind name, no branch -- is acknowledgment-shaped.
     """
-    for name, declaration in DISCHARGE_KIND_DECLARATIONS.items():
-        assert declaration.requires, name
+    for name, kind in DISCHARGE_KIND_DECLARATIONS.items():
+        assert kind.requires, name
 
     package = pathlib.Path("src/deepreason/discharge")
     files = list(package.rglob("*.py"))
     assert files, package                                  # positive anchor
     for path in files:
-        text = path.read_text().lower()
-        for shape in ("acknowledg", "noted", "seen_it", "confirm_read"):
-            assert shape not in text, (path, shape)
+        names = _code_names(path)
+        assert names, path                                 # positive anchor
+        for shape in ACKNOWLEDGMENT_SHAPES:
+            offending = sorted(name for name in names if shape in name)
+            assert not offending, (path, offending)
+
+
+def test_the_acknowledgment_check_can_fail():
+    """The mutation companion, permanent rather than a one-off proof.
+
+    `docs_verify --audit` refuses map checks that cannot fail; a test has no
+    such auditor, so the check ships with the thing it is supposed to catch and
+    demands that it be caught.
+    """
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as directory:
+        planted = pathlib.Path(directory) / "planted.py"
+        planted.write_text("def discharge(d):\n    return d.acknowledged\n")
+        names = _code_names(planted)
+        assert any(shape in name for name in names for shape in ACKNOWLEDGMENT_SHAPES)
+
+        documented = pathlib.Path(directory) / "documented.py"
+        documented.write_text('''"""Never build an acknowledgment requirement."""\n'''
+                              "# acknowledgment is forbidden here\n"
+                              "def discharge(d):\n    return d.note\n")
+        names = _code_names(documented)
+        assert not any(shape in name for name in names for shape in ACKNOWLEDGMENT_SHAPES)
 
 
 # --- R3/R6: the discharge records, and the rebuttal in the graph ----------- #

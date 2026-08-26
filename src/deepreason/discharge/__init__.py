@@ -27,6 +27,11 @@ from deepreason.discharge.channel import (
     open_criticisms,
     render_open_criticism_context,
 )
+from deepreason.discharge.submission import (
+    SubmissionScreening,
+    record_discharges,
+    screen_submission,
+)
 from deepreason.discharge.policy import (
     DECLARED_FIELDS,
     DISCHARGE_KIND_DECLARATIONS,
@@ -43,6 +48,7 @@ from deepreason.discharge.policy import (
 __all__ = [
     "DECLARED_FIELDS",
     "OpenCriticism",
+    "SubmissionScreening",
     "DISCHARGE_KIND_DECLARATIONS",
     "DISCHARGE_POLICY_PRESETS",
     "DischargeKindDeclaration",
@@ -53,6 +59,8 @@ __all__ = [
     "discharge_kind_names",
     "discharged_handles",
     "open_criticisms",
+    "record_discharges",
     "render_open_criticism_context",
+    "screen_submission",
     "resolve_policy",
 ]
