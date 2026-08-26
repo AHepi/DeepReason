@@ -1,0 +1,49 @@
+MUTATION PROOF for the 2026-08-26 granted contact (DISCHARGE_POLICY).
+Rider (d): the pop exists for EVERY schema version, not just the newest.
+Each mutation is applied to src/deepreason/run_manifest.py, measured, reverted.
+__pycache__ is cleared before every measurement -- stale bytecode survives a
+revert (DR-SCHEMA's own measurement rule).
+
+== M-A: the pop REMOVED ==
+  v1  3a57366892ff22dee62ecd16e3afa25fa4a3b76ba6d62b40c3a0cc31adf1e9f8
+  v2  3a57366892ff22dee62ecd16e3afa25fa4a3b76ba6d62b40c3a0cc31adf1e9f8
+  v3  80425b81f1dd1ec684df21ce49ac150be97ae20643f584ea0e6e5590bb735c23
+  v4  80425b81f1dd1ec684df21ce49ac150be97ae20643f584ea0e6e5590bb735c23
+  v5  80425b81f1dd1ec684df21ce49ac150be97ae20643f584ea0e6e5590bb735c23
+  v6  80425b81f1dd1ec684df21ce49ac150be97ae20643f584ea0e6e5590bb735c23
+  subject  d1591ff09c72c2eb24fbc8edeab26f40fcdf43da5beb8003c0e05de1fb0b8972
+  VERDICT: every value MOVED -> the check can fail. RED.
+
+== M-B: the pop INDENTED under 'if schema_version < 3:' (rider (d)'s own failure mode) ==
+  guard-scoped pop present at 8 spaces: True
+  VERDICT (check as FIRST written): PASSED -- it could not detect a
+    guard-scoped pop, because the eight-space line CONTAINS the four-space
+    string as a substring. The check was vacuous for the one arrangement it
+    existed to forbid. Found here, by mutation, before it was written down.
+  v6 hash under a guard-scoped pop: 80425b81f1dd1ec684df21ce49ac150be97ae20643f584ea0e6e5590bb735c23
+  (v6 is exactly the version the guard-scoped form fails to protect, so the
+   DIGEST check caught it even while the structural one did not -- two
+   instruments, and they disagreed, which is a finding about the instrument)
+
+== M-B2: the same mutation, against the TIGHTENED check ==
+  The check now compares the pop's line at its EXACT indent (splitlines +
+  strip) rather than asking whether the source contains the string.
+
+  $ python -c "...found == ['    data.pop(\"DISCHARGE_POLICY\", None)']..."
+  Traceback (most recent call last):
+    File "<string>", line 5, in <module>
+  AssertionError: ['        data.pop("DISCHARGE_POLICY", None)']
+  VERDICT: check FAILED -> rider (d) is enforced, not merely stated. RED.
+
+  Restored, same check on the real tree: GREEN on the real tree
+
+== RESTORED ==
+source_config_hash(Config()) by schema version:
+  v1  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81
+  v2  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81
+  v3  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+  v4  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+  v5  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+  v6  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+qualification_subject_digest(_manifest(_profile()), _profile()):
+  b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386

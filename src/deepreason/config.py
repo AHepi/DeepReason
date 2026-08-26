@@ -383,6 +383,19 @@ class Config(BaseModel):
     # reaches no label. Unmeasured.
     FRAME_SLICE_ATTACKERS: int = 5
     FRAME_SLICE_DEPARTURES: int = 4
+    # Which discharge-channel policy preset is in force (REBUILD F1). The
+    # FREE layer of `DR-CON-discharge-channel`'s three: the preset itself is
+    # a versioned declaration, this names one. Unknown ids fail typed at
+    # `discharge.resolve_policy`, never at compile -- an unreachable value is
+    # an impossibility at the point of use, not a configuration that should
+    # have been refused (the all-configurations law).
+    #
+    # "off" is F1's default because turning the channel ON is a DEFAULT, and
+    # defaults are F3's to set; F1 ships the machinery, not the decision. It
+    # is also what makes the channel-on/channel-off label comparison provable
+    # rather than argued: with this off, no pack byte, no wire byte and no
+    # label moves.
+    DISCHARGE_POLICY: str = "off"
     # The §14 capture diagnostics. The window is a count of SEQUENCE NUMBERS,
     # never of wall-clock time and never of events: W_m(n) = {max(1, n-m+1) ..
     # n}. CAPTURE_W above is a different instrument's event window and the two

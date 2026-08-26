@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=2b blockers=none
+State: next=2c blockers=none
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -182,7 +182,7 @@ point):
       reader can re-run. It resolves the repository root from its own path, so
       it works from any working directory.
 
-- [ ] 2b. (S13) [was step 20] THE GRANTED CONTACT, all in ONE step because
+- [x] 2b. (S13) [was step 20] THE GRANTED CONTACT, all in ONE step because
       rider (c) requires the map to move in the SAME commit as the code: add
       `Config.DISCHARGE_POLICY: str = "off"` (SPEC A7 — the DEFAULT is F3's, so
       F1 ships it off); add `data.pop("DISCHARGE_POLICY", None)` to
@@ -203,6 +203,90 @@ point):
       every `schema_version` guard (paste the surrounding 6 lines);
       (c) `python tools/docs_verify.py --fast` passes the new
       `INV-frozen-surfaces` check
+
+      PASTED OUTPUT:
+      ```
+      (a) $ python -c "...source_config_hash at v1..v6..."
+          digests unmoved at every schema version                    -> exit 0
+
+      (b) $ grep -c 'data.pop("DISCHARGE_POLICY", None)' src/deepreason/run_manifest.py
+          1
+          $ sed -n '2385,2406p' src/deepreason/run_manifest.py   # surrounding lines
+              data.pop("LEGACY_CRITICISM_ENABLED", None)
+              # ADJUDICATION_STATUS_AUTHORITY_ENABLED postdates every schema version's
+              ...
+              data.pop("ADJUDICATION_STATUS_AUTHORITY_ENABLED", None)
+              # DISCHARGE_POLICY postdates every schema version's frozen wire-byte
+              # goldens for the same reason, and the pop is UNCONDITIONAL ...
+              data.pop("DISCHARGE_POLICY", None)
+              # JUDGE_SEATS_ENABLED and its throttle knobs postdate every schema
+          Four-space indent, in the flat run of twelve unconditional pops --
+          outside the `if schema_version < 3:` guard, whose body is at eight.
+
+      (c) $ python tools/docs_verify.py --fast
+          docs_verify [fast]: 64 documents, 1073 checks, 963 reused, 4 workers
+          docs_verify: 3 failed
+          The same three CON-run-identity shallow-clone failures as the step-1
+          baseline. The three new INV-frozen-surfaces checks are not among
+          them.
+      ```
+
+      **A DEFECT IN MY OWN CHECK, found by mutation before it was written
+      down** (durable rule 3), and recorded because the near-miss is the
+      instructive part. Rider (d)'s structural check was first written as
+      `assert '    data.pop("DISCHARGE_POLICY", None)' in body`. Mutation M-B
+      moved the pop INSIDE the `if schema_version < 3:` guard — the exact
+      arrangement rider (d) forbids — and the check PASSED, because the
+      eight-space line contains the four-space string as a substring. It was
+      vacuous for the one thing it existed to forbid.
+      Two instruments disagreed and that disagreement was the finding: the
+      DIGEST check caught the same mutation (v6 moved to `80425b81f1dd1ec6…`)
+      while the structural one did not. The check now compares the pop's line
+      at its exact indent (`splitlines` + `strip`), and M-B2 re-runs the same
+      mutation against it: `AssertionError: ['        data.pop("DISCHARGE_
+      POLICY", None)']` — RED — then GREEN on the real tree.
+
+      Full mutation record, committed:
+      `proof/granted_contact_mutation.txt`. M-A (pop removed) moves every
+      value — v1/v2 `6c2d01f6…`→`3a573668…`, v3-v6 `2624603035…`→`80425b81…`,
+      subject `b9038b84…`→`d1591ff0…` — and restoring returns all of them.
+      That is the operator's own grant condition measured on THIS tree rather
+      than inherited from a prior tranche: the line's effect is to PRESERVE
+      digests, not to move them.
+
+      One number worth reconciling so a later reader does not think two
+      measurements disagree: SPEC.md's M5 probe recorded the without-pop
+      subject digest as `a8991192b625c609…`, and M-A records `d1591ff09c72c2eb…`.
+      Both are right. M5 used a placeholder field named `PROBE_M5_POLICY`; the
+      KEY NAME enters the hash, so the real field's name gives a different
+      moved value. What both measure — that it MOVES without the pop — is the
+      same, and is the claim.
+
+      GATES AT THIS [COMMIT]-EQUIVALENT STEP (it changes `src/`, so both run):
+      ```
+      $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 640
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "4760a32ef",
+       "areas": {"src/": 22}, "total_insertions": 22, "ceiling": 640,
+       "verdict": "WITHIN"}
+
+      $ python tools/blast_radius.py --files src/deepreason/config.py \
+          src/deepreason/run_manifest.py --symbols DISCHARGE_POLICY \
+          _versioned_source_config_data --against 4760a32ef
+      frozen_surface_verdict: CONTACT
+      frozen_surface_contacts:
+        DIRECT           run_manifest.py  (target file is surface path)
+        SYMBOL_INDIRECT  DISCHARGE_POLICY               in run_manifest.py
+        SYMBOL_INDIRECT  _versioned_source_config_data  in run_manifest.py
+      frozen_adjacent_contacts: []
+      reachability: DISCHARGE_POLICY UNKNOWN->UNKNOWN (direction null);
+                    _versioned_source_config_data REACHABLE->REACHABLE
+                    (direction "unchanged")
+      ```
+      NO DRIFT. Every contact names the ONE surface SPEC.md forecast and the
+      operator granted — `run_manifest.py`. The two extra rows are
+      SYMBOL_INDIRECT views of the very symbols the grant covers, on that same
+      surface, not a second surface. `frozen_adjacent_contacts` is empty, and
+      no `reachability` row is `newly_dead` or `newly_live`.
 
 - [ ] 2c. (S13) [was step 21] Capture `proof/digest_after.txt` with the SAME
       command as 2a and diff the pair. This is the acceptance check for the
