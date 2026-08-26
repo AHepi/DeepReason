@@ -299,7 +299,7 @@ had dropped the request.
 ## 2026-08-26 — segment 6: the gate
 
     $ git diff --stat origin/main | tail -1
-     20 files changed, ... insertions(+)   # all under
+     21 files changed, 9444 insertions(+)  # all under
                                            # W4-judge-road/
 
     $ git diff --name-only origin/main | grep -E '^(src|tests)/'
