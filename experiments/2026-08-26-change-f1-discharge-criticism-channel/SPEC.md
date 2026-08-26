@@ -501,7 +501,7 @@ the qualification subject digest (M4: `b9038b84efdea313…` unchanged).
 
 **Q-OP-3 — the size.** SPEC's own itemization sums to ~640 `src/` lines,
 against `dr-spec-change`'s ~300-line guidance (C7's ~700-line limit is on the
-SPEC document, which this is inside — 700 lines exactly at the limit, reported
+SPEC document, which this is inside — 701 lines, one over the ~700 guidance, reported
 rather than trimmed). The interface (S1) is ~140 of
 that and exists because R15 chose it over the ~40-line tighter coupling.
 - **Continue as one tranche, three commits (RECOMMENDED)**: the S9 gate proof
