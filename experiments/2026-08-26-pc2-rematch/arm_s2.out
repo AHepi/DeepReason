@@ -13,3 +13,4 @@
 [arm-s] 0019 tokens=  7049 cum=  155879/1193009 valid=False score=0.002958535503 best=0.013307680842
 [arm-s] 0020 tokens= 13262 cum=  169141/1193009 valid=True score=0.013307723273 best=0.013307723273
 [arm-s] 0024 tokens=  8103 cum=  177244/1193009 valid=True score=0.013307678068 best=0.013307723273
+[arm-s] 0027 tokens= 21507 cum=  198751/1193009 valid=False score=0.0 best=0.013307723273
