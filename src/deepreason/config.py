@@ -424,7 +424,7 @@ class Config(BaseModel):
     # is also what makes the channel-on/channel-off label comparison provable
     # rather than argued: with this off, no pack byte, no wire byte and no
     # label moves.
-    DISCHARGE_POLICY: str = "off"
+    DISCHARGE_POLICY: str = "discharge-required.v1"
     # The §14 capture diagnostics. The window is a count of SEQUENCE NUMBERS,
     # never of wall-clock time and never of events: W_m(n) = {max(1, n-m+1) ..
     # n}. CAPTURE_W above is a different instrument's event window and the two

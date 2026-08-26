@@ -1539,3 +1539,70 @@ the only acceptable result) and a way to get the current number, which
 
 Evidence: `experiments/2026-08-26-change-f1-discharge-criticism-channel/`
 CHECKLIST.md steps 18 and 29 (both runs pasted), VALIDATION.md "Full gate".
+
+---
+
+## E56 — REBUILD F1's discharge channel shipped unreachable, and F3 did not take the hand-off it was left
+
+**Documents corrected:** `experiments/2026-08-26-change-f1-discharge-criticism-channel/DELIVERY.md` (reconciliation rows R12 and R13), and by implication `SPEC.md`'s assumption A7.
+
+F1's DELIVERY.md reconciles R13 — the operator's "every knob reachable as
+CONFIGURATION or a REGISTERED VERSIONED ARTIFACT" — as **done**, with the
+proof "S8 (toggle and cap both pure configuration)". R12 reconciles the
+policy registry the same way. Both claims are true about the layer they
+tested and false about the run.
+
+`Config.DISCHARGE_POLICY` selects a registered preset, and the resolver is
+configuration-driven; S8 proves that much. What nothing tested is the path
+from a YAML file to a running scheduler. `run_manifest.py` pops
+`DISCHARGE_POLICY` from the manifest's config echo — deliberately, and for a
+good reason it records: echoing it would move every qualification subject
+digest. The single run path then rebuilds Config with
+`config_from_run_manifest`, so the field falls back to its CODE DEFAULT and
+the YAML line is inert. `Config` is a plain `BaseModel`, so no environment
+road exists either. Measured by compiling a manifest from a config that sets
+the field:
+
+    source config DISCHARGE_POLICY = discharge-required.v1
+    engine_config_json has DISCHARGE_POLICY: False
+    RUNTIME config DISCHARGE_POLICY = off
+
+F1 anticipated the remaining half and said so — "The channel ships OFF —
+turning it on is a Config default and belongs to F3" (DELIVERY.md; SPEC
+assumption A7). **F3 did not take it.** `grep -i discharge` over the whole
+F3 tranche returns nothing. So between the two tranches the channel was
+built, proven at the unit layer, and left in a state where no run could
+reach it — which is how a delivered organ ships dead.
+
+Two things follow for a reader.
+
+**An architecture test that proves a resolver is configuration-driven does
+not prove a knob is reachable.** F1's R17 architecture test goes red when a
+consumer bypasses the interface, which is the property it claims; it says
+nothing about whether any live configuration path delivers a value to that
+interface. The end-to-end check — a YAML naming a policy, through the real
+`start_manifest_run`, reaching a scheduler that resolves it — is the one the
+modularity law actually asks for, and it is still missing.
+
+**A hand-off stated in a DELIVERY.md is not a mechanism.** F1's sentence
+naming F3 as the owner of the default is the only thing that was supposed to
+close the gap, and prose cannot fail a gate.
+
+Corrected in place by nothing: P-C2 worked around it with a code default
+(deviation D1, ledgered in that tranche's PREREG §3) rather than fixing it,
+and the defect stays OPEN at
+`experiments/2026-08-26-pc2-rematch/PARKED.md` F-A with a ready-to-send
+prompt. The work-around's own cost is recorded there too: the channel is now
+on for every run and off for none, so the same unreachability now bites in
+the other direction.
+
+**A second defect found in the same place, and FIXED.** F1's discharge
+re-ask returns from `rules/conj.py::conj` before both sites that persist
+`llm_call`, so a re-asked call's tokens were metered and never logged;
+`verify_root`'s accounting check reports the delta as a violation
+(`test_chaos_invariants.py`: "meter says 7674 tokens, log accounts for 6674").
+Fixed in the P-C2 tranche by carrying the call on the `discharge-reask`
+Measure, conditional on the v6/v4 paths not having logged it already.
+
+Evidence: `experiments/2026-08-26-pc2-rematch/PREREG.md` §3, `PARKED.md`
+F-A and F-B, `preflight_pc2.json` check S3.

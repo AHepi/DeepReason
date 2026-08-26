@@ -1,0 +1,14 @@
+E       assert not True
+E        +  where True = is_alive()
+E        +    where is_alive = <Thread(deepreason-bridge-31a71ea2, started daemon 139766517462720)>.is_alive
+
+tests/test_mcp_scratch_bridge.py:870: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_mcp_run.py::test_start_poll_result_and_progress_notifications
+FAILED tests/test_mcp_run.py::test_cancel_waits_for_safe_boundary - Assertion...
+FAILED tests/test_mcp_run.py::test_typed_v6_stop_can_continue_and_append - As...
+FAILED tests/test_mcp_scratch_bridge.py::test_bridge_start_poll_result_claims_and_unresolved_success
+FAILED tests/test_mcp_scratch_bridge.py::test_system_exit_progress_callback_cannot_strand_worker_locks
+5 failed, 4323 passed, 6 skipped in 1938.11s (0:32:18)
+
+[exited with code 0]

@@ -2175,12 +2175,22 @@ def conj(
         # epistemic, so it consumes no repair budget, touches no repair
         # contract, and never reaches `workflow_repair_observer`. It is the
         # same re-entry shape `_context_expansion_index` already uses.
+        # THE RE-ASKED CALL'S SPEND REACHES THE LOG HERE, and it must.
+        # This return is EARLY: it precedes both sites that would otherwise
+        # persist `llm_call` -- the registration event it is attached to, and
+        # the `conj-noregister` fallback -- so without this the tokens are
+        # metered and never logged, and `verify_root`'s accounting check
+        # reports the delta as a violation (§0: every call reaches the log
+        # exactly once). Conditional on `source_call_seq`, because the v6 and
+        # v4/work-order paths above have ALREADY logged this call and a second
+        # record would double-count it.
         harness.record_measure(
             inputs=[
                 "discharge-reask",
                 problem_id,
                 ",".join(discharge_screening.open_handles),
-            ]
+            ],
+            llm=llm_call if source_call_seq is None else None,
         )
         return conj(
             harness,

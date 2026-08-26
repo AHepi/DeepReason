@@ -122,7 +122,11 @@ def test_loop_end_to_end(tmp_path):
 
 def test_anti_relapse_blocks_resubmitted_refuted_idea(harness):
     _setup(harness)
-    config = Config(VS_K=1)
+    # The channel pinned OFF, not inherited: this adapter supplies an EXACT
+    # response budget, and REBUILD F1's re-ask spends one call per submission
+    # carrying an undischarged handle. Inheriting the default would make the
+    # scenario depend on a knob this test does not test.
+    config = Config(VS_K=1, DISCHARGE_POLICY="off")
     adapter = _adapter(harness, [_vs("the tides are magic"), _vs("the tides are magic")])
     result = run_problem(harness, "pi-tides", adapter, config, cycles=2)
     assert result["survivors"] == []
@@ -136,7 +140,7 @@ def test_gate_block_is_persisted_to_the_log(harness):
     blocks — every block leaves a Measure event, not just an in-memory
     diagnostic."""
     _setup(harness)
-    config = Config(VS_K=1)
+    config = Config(VS_K=1, DISCHARGE_POLICY="off")  # exact response budget; see above
     adapter = _adapter(harness, [_vs("the tides are magic"), _vs("the tides are magic")])
     run_problem(harness, "pi-tides", adapter, config, cycles=2)
     gate_measures = [

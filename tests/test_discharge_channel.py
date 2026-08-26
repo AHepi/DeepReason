@@ -123,7 +123,7 @@ def test_the_channel_is_empty_when_the_policy_is_off(harness):
     """R13/A7. Off is off, at the reader as well as the renderer."""
     problem = _problem(harness)
     _scrutiny(harness, _candidate(harness, problem), "critic: the solar term is omitted")
-    assert open_criticisms(harness, problem.id, resolve_policy(Config())) == ()
+    assert open_criticisms(harness, problem.id, resolve_policy(Config(DISCHARGE_POLICY="off"))) == ()
 
 
 def test_a_handle_is_the_critic_artifact_id_and_does_not_renumber(harness, policy):

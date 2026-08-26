@@ -121,6 +121,62 @@ numeric field, so there is no weight for any configuration to set.
 | The two call sites | `rules/conj.py` | render threading; the screen before `candidate_rows` |
 | Which preset is in force (FREE) | `config.py` | `Config.DISCHARGE_POLICY` |
 
+## The default, and the road that does not exist (Traps)
+
+**The channel is ON by default** as of the P-C2 tranche, 2026-08-26. F1 shipped
+it OFF and named the flip as F3's ("turning it on is a Config default, and
+defaults are F3's to set" — `discharge/policy.py`, SPEC assumption A7). F3 did
+not take the hand-off; `grep -i discharge` over that tranche returns nothing.
+
+`check: python -c "from deepreason.config import Config; assert Config().DISCHARGE_POLICY == 'discharge-required.v1', Config().DISCHARGE_POLICY"`
+
+**The default is the ONLY road, and that is a defect, not a design.**
+`Config.DISCHARGE_POLICY` is listed as the FREE layer above, and at the
+resolver it is: `resolve_policy` reads whatever Config carries. But no live
+launch can put a value there. `run_manifest.py` pops the field from the
+manifest's config echo — deliberately, and for the reason recorded at that
+line: echoing it would move every qualification subject digest. The one run
+path (`application/text_runs.py::start_manifest_run`, the operations-parity
+law's single entry) then rebuilds Config with `config_from_run_manifest`, so
+the field falls back to its CODE DEFAULT and a YAML line naming a preset is
+inert. `Config` is a plain `BaseModel`, so no environment road exists either.
+
+The consequence to hold on to: **the FREE layer of this document's own
+three-layer table is, today, reachable only by editing code** — which is what
+the modularity law forbids. F1's R13 architecture test proves the RESOLVER is
+configuration-driven and does not test the path from a file to a scheduler,
+which is where the break is.
+
+`check: python -c "
+import json
+from deepreason.config import Config
+from deepreason.run_manifest import compile_run_manifest, config_from_run_manifest
+from deepreason.v6_policy import engaged_control_plane_policy_v3, engaged_inquiry_capability_policy, engaged_local_simulation_toolchain
+route = {'endpoint': 'https://example.invalid/v1', 'endpoint_id': 'e', 'provider': 'ollama', 'model': 'm', 'model_revision': 'm', 'family': 'glm', 'api_key_env': 'K'}
+c = Config(DISCHARGE_POLICY='off', roles={r: route for r in ('conjecturer', 'argumentative_critic', 'defender', 'variator', 'judge', 'summarizer', 'synthesizer', 'vision_critic', 'property_designer', 'thesis', 'grounding_reviewer')})
+m = compile_run_manifest(c, schema_version=6, workload_profile='text', rubric_policy='forbid', single_model='m', concurrency=2, compiled_at='2026-08-25T00:00:00Z', control_plane_policy=engaged_control_plane_policy_v3(), toolchains=(engaged_local_simulation_toolchain(),), inquiry_capability_policy=engaged_inquiry_capability_policy(attached_evidence=False), run_input_digest='0'*64)
+assert 'DISCHARGE_POLICY' not in json.loads(m.engine_config_json)
+assert config_from_run_manifest(m).DISCHARGE_POLICY == 'discharge-required.v1', 'the pop no longer discards the configured value -- F-A may be fixed; re-read this section'
+"`
+
+That check asserts the DEFECT and says so: it passes while a configured `off`
+is silently discarded in favour of the default, and goes red the day a real
+configuration road lands — at which point this section is what to re-read.
+Open, with a ready-to-send prompt, at
+`experiments/2026-08-26-pc2-rematch/PARKED.md` F-A; `docs/ERRATA.md` E56.
+
+**Traps — the re-ask spends tokens, and they must reach the log.**
+`screen_submission`'s `reask` verdict returns from `rules/conj.py::conj`
+EARLY, before both sites that persist `llm_call` — the registration event and
+the `conj-noregister` fallback. Until 2026-08-26 those tokens were metered and
+never logged, and `verify_root`'s accounting check reported the delta as a
+violation ("meter says 7674 tokens, log accounts for 6674"). The
+`discharge-reask` Measure now carries the call, conditional on
+`source_call_seq is None` because the v6 and v4/work-order paths log it
+upstream and a second record would double-count it.
+
+`check: python -m pytest tests/test_chaos_invariants.py::test_disagreeing_ensemble_and_weak_defender -q`
+
 ## What makes a criticism OPEN
 
 BOTH channels, because the population W2 measured as unrouted is the

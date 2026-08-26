@@ -67,6 +67,7 @@ REACH_RICH = REPO / "experiments" / "2026-08-22-live-reach-rich-run"
 EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
 POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
 FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
+REMATCH = REPO / "experiments" / "2026-08-26-pc2-rematch"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -233,6 +234,27 @@ CASES: dict[str, SoakCase] = {
         default_cycles=24,
         default_token_budget=3_000_000,
     ),
+    "pc2": SoakCase(
+        id="pc2",
+        description=(
+            "the P-C2 ARM H2 REBUILT shape: P-C1's constructive shape with "
+            "REBUILD F1's discharge channel LIVE (discharge-required.v1), F2's "
+            "reference menus and F3's default-on evidence channels, driving "
+            "the same three predicate: criteria that score a Heilbronn "
+            "construction"
+        ),
+        config_path=REMATCH / "run-config.yaml",
+        builder="build_manifest_pc2",
+        builder_dir=REMATCH,
+        attached_evidence=False,
+        # Same reason as pc1: the builder owns root construction, and an
+        # instrument that soaks the wrong shape is worse than no instrument
+        # because it reports green.
+        delegates_to_builder=True,
+        # The launch's own depth and budget, not a sample of them.
+        default_cycles=24,
+        default_token_budget=3_000_000,
+    ),
     "reach-rich": SoakCase(
         id="reach-rich",
         description=(
@@ -281,6 +303,13 @@ def _loopback_config(source: Path, dest: Path, port: int) -> Path:
     document["roles"] = {name: _redirect(route) for name, route in roles.items()}
     dest.write_text(yaml.safe_dump(document, sort_keys=True))
     return dest
+
+
+# Cases whose value depends on an IN-RUN EVALUATION actually firing and
+# actually reaching the writer.  Listed rather than inferred: a case acquires
+# this obligation by DESIGN, and a soak that guessed would either miss the
+# obligation or invent one.
+IN_RUN_EVALUATION_CASES = frozenset({"pc2"})
 
 
 def _case_symbols(case: SoakCase):
@@ -551,6 +580,61 @@ def _object_counts(root: Path) -> dict[str, int]:
     }
 
 
+def _channel_facts(root: Path, criteria: list[str]) -> dict:
+    """Did the in-run checker FIRE, and did its refutations REACH the writer?
+
+    Two counts, and they are separate on purpose because the failure this
+    answers is the one P-C1 paid a whole run for: a battery that is present,
+    configured and INERT produces a record that reads exactly like "the model
+    could not do it".  The rebuilt shape adds a second way to be silently
+    inert -- a discharge channel that is on in the YAML and off at runtime
+    (`DR-INV-frozen-surfaces`; the field is popped from the manifest's config
+    echo) -- and that one is invisible in the same way.
+
+    ``refutations`` counts DEMONSTRATIVE fail warrants naming one of this
+    case's own criteria, read from the log rather than from any summary: the
+    record is the only admissible evidence.  ``channel_measures`` counts the
+    three Measures REBUILD F1 declares in ``signals.py`` -- ``discharge-reask``,
+    ``discharge-undischarged`` and ``discharge:<kind>``.  A run with the first
+    and not the second executed every candidate and told nobody.
+    """
+    wanted = set(criteria)
+    facts: dict = {"criteria_watched": sorted(wanted)}
+
+    # The two halves are read INDEPENDENTLY and each records its own failure.
+    # A single try would let one reader's exception report the other's count as
+    # absent, and "the channel carried nothing" is exactly the finding that
+    # must never be manufactured by a bug in the instrument.
+    try:
+        refutations = 0
+        directory = root / "objects" / "warrant"
+        for path in sorted(directory.glob("*.json")):
+            data = json.loads(path.read_text())["data"]
+            if data.get("verdict") == "fail" and data.get("commitment") in wanted:
+                refutations += 1
+        facts["demonstrative_refutations"] = refutations
+    except Exception as error:
+        facts["refutation_error"] = f"{type(error).__name__}: {error}"
+
+    try:
+        from deepreason.harness import Harness
+
+        measures: dict[str, int] = {}
+        for event in Harness(root, read_only=True).log.read():
+            inputs = list(event.inputs)
+            if not inputs:
+                continue
+            head = str(inputs[0])
+            if head.startswith("discharge"):
+                key = head.split(":", 1)[0] if head.startswith("discharge:") else head
+                measures[key] = measures.get(key, 0) + 1
+        facts["channel_measures"] = measures
+    except Exception as error:
+        facts["measure_error"] = f"{type(error).__name__}: {error}"
+
+    return facts
+
+
 def _attempt_facts(root: Path) -> dict:
     """Repair depth and lease completeness, from the attempt records."""
 
@@ -665,8 +749,17 @@ def assess_seams(root: Path, status: dict, driven: dict) -> list[dict]:
     return rows
 
 
-def assess_run(root: Path, driven: dict, *, cycles: int) -> list[dict]:
-    """S1's four terminal assertions."""
+def assess_run(
+    root: Path, driven: dict, *, cycles: int, case: SoakCase | None = None,
+    criteria: list[str] | None = None,
+) -> list[dict]:
+    """S1's four terminal assertions, plus any the case itself requires.
+
+    A1-A4 are universal.  A5/A6 are added only for a case that declares an
+    IN-RUN EVALUATION, because for such a case "the run reached cycle N" is
+    not the whole question: a battery that never fired, or that fired and
+    reached nobody, produces a green soak and a dead experiment.
+    """
 
     status = _status(root)
     stop_reason = str(status.get("stop_reason") or "")
@@ -726,6 +819,32 @@ def assess_run(root: Path, driven: dict, *, cycles: int) -> list[dict]:
             ),
         },
     ]
+
+    if case is not None and case.id in IN_RUN_EVALUATION_CASES:
+        facts = _channel_facts(root, criteria or [])
+        checks.append(
+            {
+                "id": "A5-in-run-checker-fired",
+                "ok": int(facts.get("demonstrative_refutations") or 0) > 0,
+                "detail": (
+                    f"{facts.get('demonstrative_refutations')} demonstrative "
+                    f"fail warrant(s) naming {facts.get('criteria_watched')}"
+                    + (f" -- {facts['refutation_error']}" if facts.get("refutation_error") else "")
+                ),
+            }
+        )
+        checks.append(
+            {
+                "id": "A6-discharge-channel-carried-them",
+                "ok": bool(facts.get("channel_measures")),
+                "detail": (
+                    f"REBUILD F1 channel Measures on the record: "
+                    f"{facts.get('channel_measures')}"
+                    + (f" -- {facts['measure_error']}" if facts.get("measure_error") else "")
+                ),
+            }
+        )
+
     return checks
 
 
@@ -959,7 +1078,10 @@ def main(argv: list[str] | None = None) -> int:
         report["status"] = _status(root)
         report["object_counts"] = _object_counts(root)
         report["attempts"] = _attempt_facts(root)
-        report["checks"] = assess_run(root, report["drive"], cycles=cycles)
+        report["checks"] = assess_run(
+            root, report["drive"], cycles=cycles, case=case,
+            criteria=list(report["case"].get("criteria") or []),
+        )
         report["seams"] = assess_seams(root, report["status"], report["drive"])
         report["provider_calls"] = state.total_calls
         report["induced_schemas"] = sorted(induced)

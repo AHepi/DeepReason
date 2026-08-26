@@ -1,0 +1,216 @@
+{
+ "C1_construction_validity": {
+  "baseline": {
+   "arm_h_artifact_level": 0.1136,
+   "arm_h_constructions": 133,
+   "arm_h_mechanism_census": 0.1128,
+   "arm_h_valid": 15,
+   "arm_s_artifact_level": 0.434,
+   "population": "P-C1's ARM H root, MECHANISM census (blob-level: 15 VALID of 133 constructions the model wrote). The 11.36% / 43.4% figures are the ARTIFACT-level rates from arm_h_scores.json and arm_s_merged.jsonl and are quoted separately -- the two are not interchangeable",
+   "source": "W1-form-census/PC1_HEADLINE.json (`mechanism.arm_h`)"
+  },
+  "constructions_found": 133,
+  "min_area_zero_rate": 0.9699,
+  "valid": 15,
+  "value": 0.1128,
+  "verdicts": {
+   "CLAIM_INFLATED": 115,
+   "VALID": 15,
+   "WRONG_COUNT": 3
+  },
+  "zero_cause_signature": {
+   "axis_aligned_triple": 126,
+   "not_scored_wrong_count": 3,
+   "oblique_collinear_triple_only": 3
+  }
+ },
+ "C2_invented_handle": {
+  "attempts": 292,
+  "baseline": {
+   "pc1_root_invented": 2,
+   "pc1_root_wire_failures": 77,
+   "pc1_root_wire_validity": 0.8767,
+   "population": "TWO POPULATIONS, never substituted: P-C1's own root (2 of 77 wire failures = 2.6%; wire validity 87.67% over 292 attempts), and the 54-root population F2 cites (737 of 1178, 62.6%)",
+   "population_54_root_share": 0.626,
+   "source": "W1-form-census/CENSUS_PER_ROOT.json; F2 DELIVERY.md"
+  },
+  "failure_classes": {
+   "TRUNCATED_MID_JSON": 16,
+   "V6_WIRE_REFERENCE_INVALID": 2,
+   "WIRE_NO_COMPLETE_JSON": 8,
+   "WIRE_TRAILING_CONTENT": 18,
+   "extra_forbidden": 15,
+   "list_type": 2,
+   "missing": 2,
+   "string_pattern_mismatch": 6,
+   "value_error": 8
+  },
+  "invented_handle_failures": 2,
+  "value": 0.026,
+  "wire_failures_total": 77,
+  "wire_validity_rate": 0.8767
+ },
+ "C3_coupling": {
+  "baseline": {
+   "R1_mechanical_coupling_minus_placebo": 0.05865102639296187,
+   "R1_mechanical_neglect": 0.906158357771261,
+   "R2_prose_quote": "INADMISSIBLE as a rate (W2's own residue)",
+   "llm_attacks_reaching_a_later_conjecture_dispatch": "0 of 196",
+   "population": "P-C1's own root",
+   "source": "run-anatomy-w2-criticism/pc1_q5.json"
+  },
+  "value": {
+   "R1_mechanical": {
+    "CouplingRate": 0.093841642228739,
+    "CouplingRate_minus_Placebo": 0.05865102639296187,
+    "NeglectRate": 0.906158357771261,
+    "PlaceboRate": 0.03519061583577713,
+    "RepairRate": 0.0,
+    "coupled": 32,
+    "denominator_measurable": 341,
+    "helped": 0,
+    "neglected": 309,
+    "placebo_denominator": 341,
+    "verdicts": {
+     "coupled": 32,
+     "neglected": 309,
+     "no-next-candidate": 4
+    }
+   },
+   "R2_prose_quote": {
+    "CouplingRate": 1.0,
+    "CouplingRate_minus_Placebo": 0.0,
+    "NeglectRate": 0.0,
+    "PlaceboRate": 1.0,
+    "RepairRate": 0.0,
+    "coupled": 60,
+    "denominator_measurable": 60,
+    "helped": 0,
+    "neglected": 0,
+    "placebo_denominator": 60,
+    "verdicts": {
+     "coupled": 60,
+     "no-next-candidate": 1,
+     "no-verbatim-quote-to-track": 49,
+     "unlocatable-in-log": 1
+    }
+   },
+   "exposure": {
+    "critic_artifacts_shown_to_a_conjecture_dispatch": [
+     "7ea4588bbf1713def69b23ac55498ee985c4e910b25fcf54bf4a1adf93075031",
+     "882d2a85d1edc524189d8adab6dad5aa28f6dcf88dd74a171169de8eb5f38450",
+     "c834d872d3dbe6260b74e393e6cd3105717145be60b5778ac3871646c925f93d",
+     "f39654e03f89d79548ee7ad8184ee52c9113334fea8f898156d71b9d3510e229"
+    ],
+    "exposure_counts_by_task_namespace_role": {
+     "conjecture|source|conjecturer": 517,
+     "conjecture|source|critic": 47,
+     "conjecture|source|seed": 158,
+     "criticism|source|conjecturer": 175,
+     "repair|source|non-artifact": 56
+    },
+    "n_llm_attacks_shown": 0,
+    "n_llm_attacks_total": 110,
+    "n_mechanical_shown": 2,
+    "n_mechanical_total": 345,
+    "n_shown": 4
+   },
+   "n_criticism_events_total": 455
+  }
+ },
+ "C4_operator_question_share": {
+  "baseline": {
+   "calls": 61,
+   "competing": {
+    "audit:ritual": 0.412,
+    "repair_reasks": 0.056
+   },
+   "population": "P-C1's ARM H root",
+   "share": 0.532,
+   "source": "W6-token-flow/PC1_POSTMORTEM.json",
+   "tokens": 373903
+  },
+  "by_call_kind": {
+   "decomposition-leg": {
+    "calls": 42,
+    "completion_tokens": 18152,
+    "mean_total_per_call": 2922.3,
+    "prompt_share": 0.8521,
+    "prompt_tokens": 104583,
+    "prompt_tokens_known": 42,
+    "total_tokens": 122735
+   },
+   "first-ask": {
+    "calls": 222,
+    "completion_tokens": 112451,
+    "mean_total_per_call": 2436.2,
+    "prompt_share": 0.7921,
+    "prompt_tokens": 428393,
+    "prompt_tokens_known": 222,
+    "total_tokens": 540844
+   },
+   "repair": {
+    "calls": 28,
+    "completion_tokens": 11656,
+    "mean_total_per_call": 1400.4,
+    "prompt_share": 0.7027,
+    "prompt_tokens": 27554,
+    "prompt_tokens_known": 28,
+    "total_tokens": 39210
+   }
+  },
+  "by_purpose": {
+   "criticism": {
+    "calls": 188,
+    "completion_tokens": 36204,
+    "mean_total_per_call": 983.8,
+    "prompt_share": 0.8043,
+    "prompt_tokens": 148747,
+    "prompt_tokens_known": 188,
+    "total_tokens": 184951
+   },
+   "generation": {
+    "calls": 104,
+    "completion_tokens": 106055,
+    "mean_total_per_call": 4979.2,
+    "prompt_share": 0.7952,
+    "prompt_tokens": 411783,
+    "prompt_tokens_known": 104,
+    "total_tokens": 517838
+   }
+  },
+  "calls": 292,
+  "log_total_tokens": 702789,
+  "no_problem_line_in_prompt": {
+   "calls": 28,
+   "tokens": 39210
+  },
+  "on_problems_the_run_spawned_for_itself": {
+   "calls": 203,
+   "problem_ids": [
+    "audit:ritual"
+   ],
+   "tokens": 289676
+  },
+  "on_the_seed_question": {
+   "calls": 61,
+   "tokens": 373903
+  },
+  "seed_question_id": "question-64b724c4118320989925d111501a8e41",
+  "value": 0.532
+ },
+ "C5_tokens_per_valid_candidate": {
+  "baseline": {
+   "population": "P-C1's ARM H run (702 789 log tokens / 15 valid)",
+   "source": "P-C1 RESULTS.md",
+   "value": 46852.6
+  },
+  "log_total_tokens": 702789,
+  "valid_constructions": 15,
+  "value": 46852.6
+ },
+ "root": "experiments/2026-08-25-change-constructive-frontier/run",
+ "schema": "pc2.report-card.v1"
+}
+
+SELF-CHECK OK: every instrument reproduces PREREG §7's baseline on P-C1's root

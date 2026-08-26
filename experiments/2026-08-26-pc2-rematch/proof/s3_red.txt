@@ -1,0 +1,4 @@
+MUTATION APPLIED: Config.DISCHARGE_POLICY default restored to 'off' (D1 removed)
+[FAIL] S3-discharge-channel-live-at-runtime: runtime DISCHARGE_POLICY='off' enabled=False reask='never' handles_n=0 (deviation D1 absent would read 'off' here)
+
+MUTATION PROOF OK: S3 goes RED when deviation D1 is absent.

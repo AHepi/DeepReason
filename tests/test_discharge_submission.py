@@ -178,7 +178,7 @@ def test_the_channel_off_screen_accepts_everything(harness):
     """A7/R10. Off is off at the submission boundary too, so a channel-off run
     behaves exactly as it did before this tranche."""
     problem, _, _ = _open_problem(harness)
-    off = resolve_policy(Config())
+    off = resolve_policy(Config(DISCHARGE_POLICY="off"))
     screening = screen_submission(
         harness, problem.id, _Turn(_Candidate("c")), off, reask_index=0
     )

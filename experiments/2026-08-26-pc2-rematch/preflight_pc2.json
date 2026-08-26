@@ -1,0 +1,38 @@
+{
+ "checks": [
+  {
+   "detail": "question_sha256=64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e (PREREG \u00a72 froze 64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e)",
+   "id": "S1-question-frozen",
+   "ok": true
+  },
+  {
+   "detail": "fields differing from P-C1's config: ['DISCHARGE_POLICY']; DISCHARGE_POLICY='discharge-required.v1'",
+   "id": "S2-one-field-only",
+   "ok": true
+  },
+  {
+   "detail": "runtime DISCHARGE_POLICY='discharge-required.v1' enabled=True reask='once' handles_n=8 (deviation D1 absent would read 'off' here)",
+   "id": "S3-discharge-channel-live-at-runtime",
+   "ok": true
+  },
+  {
+   "detail": "accounted: 6 policy leaf/leaves + ['inquiry_capability_policy', 'run_input_digest']; unexplained: none",
+   "id": "S4-manifest-delta-accounted",
+   "ok": true
+  }
+ ],
+ "manifest_delta": {
+  "engine_config_echo_delta": [],
+  "inquiry_policy_leaves": {
+   "/research/backend_identity": "REBUILD F3 -- research channel on by default",
+   "/research/domain_allowlist": "REBUILD F3 -- the default frozen allowlist an enabled research channel requires",
+   "/research/enabled": "REBUILD F3 -- research channel on by default",
+   "/research/maximum_requests": "REBUILD F3 -- research channel on by default",
+   "/research/maximum_response_bytes": "REBUILD F3 -- research channel on by default",
+   "/research/maximum_sources": "REBUILD F3 -- research channel on by default"
+  },
+  "pc1_sha256": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
+  "pc2_sha256": "957f4446dcc6d07a8114846ef5061858dcb3370ca35a990481bb045e9b52bd7e"
+ },
+ "schema": "pc2.preflight.v1"
+}

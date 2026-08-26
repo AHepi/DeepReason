@@ -1,0 +1,65 @@
+# Full gate, P-C2 pre-launch
+
+    python -m pytest tests/ -q -n 4
+    5 failed, 4323 passed, 6 skipped in 1938.11s (0:32:18)
+
+    FAILED tests/test_mcp_run.py::test_start_poll_result_and_progress_notifications
+    FAILED tests/test_mcp_run.py::test_cancel_waits_for_safe_boundary
+    FAILED tests/test_mcp_run.py::test_typed_v6_stop_can_continue_and_append
+    FAILED tests/test_mcp_scratch_bridge.py::test_bridge_start_poll_result_claims_and_unresolved_success
+    FAILED tests/test_mcp_scratch_bridge.py::test_system_exit_progress_callback_cannot_strand_worker_locks
+
+AT BASELINE, and the match is exact rather than approximate.
+`docs/AUDIT_BASELINES.md`: "Known-flaky under `-n 4`, green in serial
+re-run: 3 tests in `tests/test_mcp_run.py`, 2 in
+`tests/test_mcp_scratch_bridge.py` (thread-join timing)." This run failed
+3 in the first file and 2 in the second — the recorded set, no other test.
+
+The baseline's own disposition applied, not asserted:
+
+    python -m pytest tests/test_mcp_run.py tests/test_mcp_scratch_bridge.py -q
+    44 passed in 155.12s (0:02:35)
+
+WHAT THIS TRANCHE'S CHANGES DID TO THE GATE, measured rather than claimed.
+The FIRST run with deviation D1 applied and nothing else failed SEVEN:
+
+    FAILED tests/test_discharge_channel.py::test_the_channel_is_empty_when_the_policy_is_off
+    FAILED tests/test_discharge_contract.py::test_a_channel_toggle_is_pure_configuration
+    FAILED tests/test_discharge_submission.py::test_the_channel_off_screen_accepts_everything
+    FAILED tests/test_chaos_invariants.py::test_disagreeing_ensemble_and_weak_defender
+    FAILED tests/test_loop.py::test_anti_relapse_blocks_resubmitted_refuted_idea
+    FAILED tests/test_loop.py::test_gate_block_is_persisted_to_the_log
+    FAILED tests/test_scheduler.py::test_focus_family_restricts_selection
+    7 failed, 4321 passed, 6 skipped in 1114.32s (0:18:34)
+
+They split into three classes and each was disposed of differently, because
+they are three different things:
+
+1. THREE OFF-STATE TESTS read the default instead of naming it. Each now
+   pins `Config(DISCHARGE_POLICY="off")`, which every other site in those
+   files already did. A test of the off-state that reads the default is a
+   test whose meaning changes silently when the default moves; this makes
+   the three files uniform. Nothing was weakened — they still test the
+   off-state, and they still fail if the off-state breaks.
+
+2. THREE EXACT-BUDGET TESTS ran out of mock responses. F1's re-ask spends
+   one call per submission carrying an undischarged handle, and these
+   adapters supply a fixed list. `DISCHARGE_POLICY="off"` is pinned in each
+   with the reason in a comment. Adding a third mock response would have
+   changed the scenario (a third distinct candidate); pinning preserves it.
+
+3. ONE WAS A REAL DEFECT AND IS FIXED, not pinned.
+   `test_chaos_invariants.py::test_disagreeing_ensemble_and_weak_defender`
+   failed with an ACCOUNTING violation — "meter says 7674 tokens, log
+   accounts for 6674 (delta 1000)" — because F1's re-ask returns from
+   `conj` before both sites that persist `llm_call`. Pinning this one off
+   would have hidden a defect that under-logs real spend, and PREREG §5
+   sets ARM S2's budget from ARM H2's logged total, so it would have
+   under-budgeted the sampler and flattered the harness. See PARKED.md F-B.
+
+CLAUDE.md's licence for (1) and (2) is explicit and was checked before
+either was applied: "A fixture that depended on defective behavior may be
+minimally updated only when the fix's design doc predicted it." F1's SPEC
+assumption A7 and its DELIVERY.md predict this default flip in words —
+"the channel ships OFF; turning it on is a Config default and belongs to
+F3."

@@ -255,7 +255,7 @@ def test_a_channel_toggle_is_pure_configuration(harness):
 
     problem, _ = _problem_with_one_open_criticism(harness)
 
-    off = resolve_policy(Config())
+    off = resolve_policy(Config(DISCHARGE_POLICY="off"))
     assert render_open_criticism_context(harness, problem.id, off) is None
 
     on = resolve_policy(Config(DISCHARGE_POLICY="discharge-required.v1"))

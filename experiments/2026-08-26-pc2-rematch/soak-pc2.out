@@ -1,0 +1,56 @@
+[soak] stub provider on 127.0.0.1:46705 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2-b
+[soak] built root: manifest ebd61bb4e5c4aa73…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 4.4s
+[soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case pc2
+========================================================================
+  manifest sha256        ebd61bb4e5c4aa73f9165b746236e32b5669a06dfc4d3cb79e4c8abec72812b0
+  criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
+  attached evidence      False
+  cycles requested       24
+  qualification          rc=0 (4.4s)
+  drive                  917.8s, 27 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+  [PASS] A5-in-run-checker-fired      3 demonstrative fail warrant(s) naming ['frontier-above-floor@v1', 'frontier-claim-honest@v1', 'frontier-wellformed@v1']
+  [PASS] A6-discharge-channel-carried-them REBUILD F1 channel Measures on the record: {'discharge-reask': 95}
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 191}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 191}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 191}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 191}
+
+-- record census -------------------------------------------------------
+      20  artifact
+       5  commitment
+       1  problem
+       3  warrant
+     191  workflow-context-exposure-v2
+     191  workflow-context-pack-plan-v1
+     191  workflow-dispatch-authorization-v1
+       1  workflow-model-classification-binding-v1
+     191  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      96  workflow-semantic-admission-v1
+     191  workflow-token-reservation-v2
+     765  workflow-work-lifecycle-transition-v1
+     191  workflow-work-preparation-v1
+      96  workflow-work-terminal-v1
+
+[soak] report /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2-b/soak-report.json
+[soak] exit 0 (clean)

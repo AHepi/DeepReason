@@ -121,7 +121,12 @@ def test_reach_hit_logged_and_spawns_debt(tmp_path):
 
 def test_integration_budget_share_caps_connection_work(tmp_path):
     harness = _setup(tmp_path / "run")
-    config = Config(VS_K=1, N_SCHOOLS=0, FLOOR=1, INTEGRATION_BUDGET_SHARE=0.0)
+    # DISCHARGE_POLICY pinned OFF: this adapter supplies an exact response
+    # budget and REBUILD F1's re-ask would spend one call beyond it.
+    config = Config(
+        VS_K=1, N_SCHOOLS=0, FLOOR=1, INTEGRATION_BUDGET_SHARE=0.0,
+        DISCHARGE_POLICY="off",
+    )
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint(lambda p: _vs("the moon pulls the sea"))},
         harness.blobs,
@@ -159,9 +164,14 @@ def test_focus_family_restricts_selection(tmp_path):
     conj = json.dumps({"candidates": [{"content": "another idea", "typicality": 0.9}]})
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint([conj] * 6)}, harness.blobs, retry_max=2)
+    # DISCHARGE_POLICY pinned OFF: this test mints a fail warrant on purpose,
+    # which REBUILD F1's channel reads as an OPEN CRITICISM and answers with a
+    # re-ask -- one call beyond this adapter's exact budget. The focus lock,
+    # not the channel, is what is under test here.
     scheduler = Scheduler(
         harness, adapter, Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0,
-                                 FOCUS_FAMILY="pi-stage"))
+                                 FOCUS_FAMILY="pi-stage",
+                                 DISCHARGE_POLICY="off"))
     for _ in range(4):
         scheduler.step()
     family = problem_family(harness.state, "pi-stage")
