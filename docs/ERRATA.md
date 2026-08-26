@@ -1349,3 +1349,58 @@ tranche's committed artifact and rewriting its disposition column would edit
 the record of what was decided when. This entry is the correction, and the
 authority for "which rung owes which row" is `LADDER.md` plus the delivering
 tranche's own DELIVERY.md — never the drift table's rung numbers.
+
+---
+
+## 2026-08-25 (the workflow-call-pairing defect tranche)
+
+**E53 — PARKED.md P1 framed the defect as a REPAIR defect and named two
+suspects; the failing event is not a repair, and neither suspect was the
+cause.** `experiments/2026-08-23-change-cycle-soak-instrument/PARKED.md` titles
+P1 "a repair under transactional authorization leaves a record `verify_root`
+rejects" and reasons: "`llm/adapter.py` already knows a repair cannot reuse an
+authorization bundle — the branch immediately above the reservation-bound check
+raises `WorkflowAuthorizationError("transactional repair requires a new
+authorization bundle")` when `attempt != 0` under a dispatch authorization. In
+the observed run that guard did not fire; the repair dispatched and the
+resulting attempt record did not pair with its authorization. So either the
+guard has a hole, or the pairing check and the guard disagree about what a
+repaired attempt should look like."
+
+Both disjuncts are false, and the record says so directly. The failing event's
+attempt trace records `attempt: 0` with `transport_attempts: 4` — one authorized
+semantic attempt whose TRANSPORT was retried inside the endpoint, never a second
+authorized attempt. The clamp had nothing to fire at and has no hole. Nor do the
+guard and the check disagree about repairs: the check's sixth agreement compared
+`attempt.raw_ref` against `call.raw_ref` across two types that spell absence
+differently (`None` vs `""`), which is false by construction for the whole
+`outcome="transport_failure"` class whether a repair is anywhere in sight or not.
+`--induce-repairs` was simply the shortest reachable route to a transport
+failure, because the inducer makes the stub answer HTTP 500.
+
+Cause, and it is worth keeping: the parking note reasoned from the FEATURE THAT
+PRODUCED the witness (the repair inducer) rather than from the failing event's
+own attempt trace. The trace was one field away — `attempt: 0` — and settles it.
+This is the blob-first discipline (CLAUDE.md's cycle-0 invariant) applied to a
+parked finding rather than to a run death: read the event before naming the
+subsystem. The park itself was right to refuse a diagnosis it had not earned;
+what drifted was the hypothesis it volunteered alongside.
+
+Uncorrected in place: P1 is a delivered tranche's committed artifact. Its
+disposition is recorded at that file's own P1 resolution line and in
+`experiments/2026-08-25-defect-workflow-call-pairing/DIAGNOSIS.md`.
+
+**E54 — `scripts/cycle_soak.py`'s `EXPECTED_RED` claimed a fix was still in
+flight nine days after it landed.** The entry read: "A parallel window is fixing
+the reservation-bound seam in `llm/adapter.py:1400`. This soak DRIVES that code;
+it does not modify it." That window delivered as
+`experiments/2026-08-23-fix-reservation-bound-authority/`, and the soak has been
+reporting `[PASS] D4-reservation-bound` since; PARKED.md P2's own ready-to-send
+prompt instructed whoever cleared it to "delete the D4-reservation-bound entry
+from EXPECTED_RED in the same commit — an expected-red seam nobody clears is
+indistinguishable from a seam nobody fixed, and the soak's exit 3 stops meaning
+anything." It was not deleted. Removed 2026-08-25 by the tranche above; the map
+is now empty, which makes exit 3 unreachable rather than merely unearned. The
+general lesson is the one P2 already wrote down and that nothing enforced: an
+expected-red carve-out needs an owner AND a deletion step in the fixing
+tranche's own checklist, because the carve-out silently outlives its reason.
