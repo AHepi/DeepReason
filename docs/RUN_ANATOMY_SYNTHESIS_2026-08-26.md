@@ -105,7 +105,7 @@ of those two numbers.
 | 4 | **Scratch** — the working notepad a conjecturer may write to and later read back | **WORKS**, where reading back is switched on | **36 of 199 notes (18.1 %)** leave distinctive verbatim wording in a later artifact where retrieval is enabled, against **5 of 115 (4.3 %)** in the retrieval-disabled control; Fisher exact, two-sided, **p = 0.0004** | W3 `RESULTS.md` F8 *(branch `claude/run-anatomy-w3-census-p5pgmb`)* |
 | 5 | **Evidence citation** — the attached dossier, the citable legend, and the byte-check that verifies a quote against admitted text | **HARMFUL-AS-WIRED** | **591 of 623 admitted blocks (902 387 bytes, 93 % of the dossier) were never rendered to any model**, and nothing in the record discloses the truncation | W3 `RESULTS.md` F1; W3 `TABLES.md` §1d |
 | 6 | **Judge road — entry** — the path from "a criticism exists" to "a defended trial convenes" | **UNEXERCISED** | **1 of 54 roots ever entered a defended trial**; 161 trials in that one root, 0 in the other 53 | W4 `FUNNEL.md`, "The standing fact, re-derived over all 54 roots"; W4 `RESULTS.md` segments 1 and 3 |
-| 7 | **Trial guards** — the six gates a convened trial must clear before a prose criticism may refute anything | **WORKS** | **114 of 122 convened trials were turned away by the guards; 8 sustained (6.6 %)** — 39 to formal supremacy, 62 to the two judge families disagreeing, 37 to the defence, 12 to a ruling that did not quote the exchange, 22 to paraphrase | W4 `FUNNEL.md` leg 2; W4 `RESULTS.md` segment 2 |
+| 7 | **Trial guards** — the six gates a convened trial must clear before a prose criticism may refute anything | **WORKS** | **114 of 122 convened trials were turned away by the guards; 8 sustained (6.6 %)** — 43 to the two judge families disagreeing, 37 to the defence surviving, 12 to a ruling that did not quote the exchange, 22 to a ruling that did not survive paraphrase; a further 39 never convened at all, taken by formal supremacy before any seat spent | W4 `FUNNEL.md` leg 2; W4 `RESULTS.md` segment 2 |
 | 8 | **Signal registry** — the declared contract of named measurements the harness promises to produce | **PHANTOM** | **79 of 111 declared names have never carried a value in any of the 54 roots**, and 84 of 111 declare no staleness bound at all | W5 `RESULTS.md` segment 1, headline 1; W5 `DECLARED_VS_EMITTED.md`; W5 `STALENESS.md` |
 | 9 | **Allocation controller** — the loop that reads those signals and tunes each seat's token caps | **INERT** | **47 tuning decisions; 0 of them became the `max_tokens` of any later call.** The conjecturer's cap was driven 32 768 → 20 480 → 12 800 → 8 000 → 5 000 → 3 125 → 1 953 → 1 221 → 800 across sixteen cycles while **every single dispatch went out at 32 768** | W5 `RESULTS.md` segment 1, headline 3 and "What 'tuned and nothing changed' looks like"; W5 `DECISIONS_AND_EFFECT.md`, the `wire` column, `no` in all 47 |
 | 10 | **Token economy / metering** — the three counters that each state a run's provider spend | **HARMFUL-AS-WIRED** | **18 of 54 roots report `token_spend: 0`** while the log and the accounting agree exactly on a real figure. P-C1 ARM H — 702 789 tokens — prints zero on `deepreason results`, the one sanctioned retrieval surface | W6 `RESULTS.md`, "three token instruments, 27 disagreements"; W6 `TABLES.md` T10; `METER_RECONCILIATION.json` |
@@ -481,10 +481,12 @@ and has never been driven far enough by a committed run to be tested.
    influence, not an estimate of influence — paraphrase is invisible to
    an 8-word verbatim test.
 3. **The trial guards.** On their one live outing they turned away **114
-   of 122** convened trials: 39 to formal supremacy, 62 to the two model
-   families disagreeing, 37 to the defence surviving, 12 to a ruling that
-   did not quote the exchange it was given, 22 to a ruling that flipped
-   under paraphrase. Eight survived (W4 `FUNNEL.md` leg 2). Against the
+   of 122** convened trials: 43 to the two model families disagreeing, 37
+   to the defence surviving, 12 to a ruling that did not quote the
+   exchange it was given, and 22 to a ruling that did not survive
+   paraphrase (19 a split on re-ruling, 3 an outright flip). Eight
+   survived. A further 39 never convened at all, taken by formal
+   supremacy before any seat spent (W4 `FUNNEL.md` leg 2). Against the
    operator's standing caution that judges "prosecute without any
    discernable discrimination", this is the opposite failure mode — and
    W4 is careful that 8 sustained trials out of 122 neither confirms nor
