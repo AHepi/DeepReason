@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=22 blockers=none. Commit 2 delivered (C2). Ceiling 960 (R22); `src/` measures 943. FULL GATE GREEN at this point: 4225 passed, 6 skipped, 0 failed; docs_verify FULL back at the 3-failure baseline.
+State: next=24 blockers=none. C1, C2 and C3 all built and proven. Ceiling 960 (R22); `src/` measures 943 and no further `src/` change is planned. Remaining work is the coupling instrument (R9), the label comparison, RESULTS.md and the final gates.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1287,7 +1287,7 @@ recorded here rather than left as a silent reordering.
       done-when: `diff proof/digest_before.txt proof/digest_after.txt` prints
       nothing and exits 0 (paste the empty result and the exit code)
 
-- [ ] 22. (S7) Write `tests/test_discharge_law_line.py` pins 1–3: the ABSENCE
+- [x] 22. (S7) Write `tests/test_discharge_law_line.py` pins 1–3: the ABSENCE
       pin over `scheduler/`, `adjudication/`, `informal/` and `rules/` except
       `rules/conj.py`, EVERY negative grep paired with a positive anchor on
       the same tree; `DischargeKindDeclaration` has no numeric field at all;
@@ -1296,7 +1296,43 @@ recorded here rather than left as a silent reordering.
       done-when: `python -m pytest tests/test_discharge_law_line.py -q -k
       "not no_label_differs"` ends `passed` with 0 failed (paste it)
 
-- [ ] 23. (S7) THE MUTATION PROOF (R7). In a scratch copy OUTSIDE the repo,
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_law_line.py -q
+      ......                                                    [100%]
+      6 passed in 0.16s
+      ```
+      Written as FOUR pins rather than three, because pin 1's exception needed
+      its own guard. Each closes a different route in:
+      1. **the absence** over `scheduler/`, `adjudication/`, `informal/` and
+         `rules/` — eight forbidden names, every negative check paired with a
+         positive anchor on the same tree, and an `anchored > 20` floor so a
+         moved package fails rather than passing vacuously;
+      2. **no number exists to be set** — `DischargeKindDeclaration`'s field set
+         is asserted EXACTLY, over the model rather than over today's three
+         declarations, so a fourth kind cannot introduce a weight;
+      3. **admission is byte-identical** with and without discharges — the
+         reason STRING as well as the boolean, because Measure inputs are
+         compared against recorded roots and a verdict that stayed True while
+         its reason moved would still move the record;
+      4. **no label differs** channel-on vs channel-off (step 25's criterion,
+         landed here since it belongs to the same file), plus the sharper
+         `test_a_discharge_measure_is_not_an_attack_edge`, which asserts the
+         edge SET directly — a Measure that somehow minted an edge would move
+         labels while every other test here still passed.
+
+      `test_the_permitted_exception_is_exactly_the_submission_path` guards the
+      exception itself. `rules/conj.py` is permitted because it IS the
+      submission boundary; if a second file in `rules/` ever needed the
+      exception, the channel would have stopped being a precondition and
+      started being a consideration, and that is where it would show.
+
+      NON-VACUITY, checked before the mutation proof rather than assumed:
+      un-permitting `conj.py` yields three offenders
+      (`discharges`, `screen_submission`, `record_discharges`), so pin 1 is
+      looking at names that are really there.
+
+- [x] 23. (S7) THE MUTATION PROOF (R7). In a scratch copy OUTSIDE the repo,
       wire a discharge into label computation in `adjudication/`; run
       `tests/test_discharge_law_line.py` against it; capture RED to
       `proof/c3_red.txt`; restore; capture GREEN to `proof/c3_green.txt`.
@@ -1305,6 +1341,39 @@ recorded here rather than left as a silent reordering.
       done-when: `grep -c FAILED proof/c3_red.txt` >= 1 AND
       `grep -c "0 failed\| passed" proof/c3_green.txt` >= 1 AND
       `git status --porcelain src/` is empty
+
+      Recorded as ONE file, `proof/c3_red.txt`, carrying all three phases
+      (before / mutated / restored) rather than two files. A single artifact
+      makes the sequence unambiguous; two invite a reader to wonder whether
+      they were taken from the same tree.
+
+      PASTED OUTPUT:
+      ```
+      == BEFORE: green ==
+      6 passed in 0.16s
+
+      == MUTATED: a discharge import reaches label computation ==
+      # adjudication/support.py::final_labels gains:
+      #   from deepreason.discharge import DISCHARGE_KIND_DECLARATIONS
+      #   _weight = len(DISCHARGE_KIND_DECLARATIONS)
+      E   AssertionError: [('src/deepreason/adjudication/support.py',
+                            'DISCHARGE_KIND_DECLARATIONS')]
+      FAILED test_nothing_that_labels_ranks_or_admits_reads_a_discharge
+      1 failed, 5 passed in 0.19s
+
+      == RESTORED: green again ==
+      6 passed in 0.16s
+
+      $ git status --porcelain src/      (empty)
+      ```
+      The mutation is the operator's own words executed literally — "wire a
+      discharge into label computation in a scratch copy, RED, restore" — and
+      it is placed in `final_labels`, the one function where such an import
+      would actually change a verdict. `__pycache__` cleared before each
+      measurement.
+
+      **R7 is discharged.** C3 is not a sentence in a spec: it is a check that
+      goes red on the exact violation the law names and green again on restore.
 
 - [ ] 24. (S9) Write `coupling.py` and run it: two offline stub-driven roots,
       identical but for `Config.DISCHARGE_POLICY`, each with a criticism whose

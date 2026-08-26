@@ -1,0 +1,53 @@
+MUTATION PROOF for THE LAW LINE (REBUILD F1, C3/R7).
+
+The claim: no discharge field, kind, count or record may feed a label, a
+warrant, a rank, an admission decision, or any adjudication pass.
+
+The mutation, exactly as the operator specified it -- 'wire a discharge into
+label computation in a scratch copy, RED, restore': adjudication/support.py's
+final_labels is made to consult the discharge machinery. This is the move the
+law forbids, done in the one place where it would actually change a verdict.
+__pycache__ cleared before each measurement (DR-SCHEMA's measurement rule:
+stale bytecode survives a revert and has produced a phantom result here before).
+
+== BEFORE: green ==
+......                                                                   [100%]
+6 passed in 0.17s
+
+== MUTATED: a discharge import reaches label computation ==
+F.....                                                                   [100%]
+=================================== FAILURES ===================================
+__________ test_nothing_that_labels_ranks_or_admits_reads_a_discharge __________
+
+    def test_nothing_that_labels_ranks_or_admits_reads_a_discharge():
+        """R5. No module that decides anything may name the discharge machinery.
+    
+        Every negative check is paired with a POSITIVE ANCHOR on the same tree
+        (`DR-SCHEMA` check-writing rule 1): a moved or renamed package would
+        otherwise make this vacuous rather than failing, and four documents in this
+        repo have already carried checks that passed with their subject deleted.
+        """
+        anchored = 0
+        offenders = []
+        for package in DECIDING_PACKAGES:
+            files = [p for p in package.rglob("*.py") if p not in PERMITTED]
+            assert files, package                              # positive anchor
+            anchored += len(files)
+            for path in files:
+                text = path.read_text()
+                for name in FORBIDDEN_NAMES:
+                    if name in text:
+                        offenders.append((str(path), name))
+        assert anchored > 20, anchored                         # positive anchor
+>       assert not offenders, offenders
+E       AssertionError: [('src/deepreason/adjudication/support.py', 'DISCHARGE_KIND_DECLARATIONS')]
+E       assert not [('src/deepreason/adjudication/support.py', 'DISCHARGE_KIND_DECLARATIONS')]
+
+tests/test_discharge_law_line.py:102: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_discharge_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_discharge
+1 failed, 5 passed in 0.19s
+
+== RESTORED: green again ==
+......                                                                   [100%]
+6 passed in 0.16s
