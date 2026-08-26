@@ -1404,3 +1404,66 @@ is now empty, which makes exit 3 unreachable rather than merely unearned. The
 general lesson is the one P2 already wrote down and that nothing enforced: an
 expected-red carve-out needs an owner AND a deletion step in the fixing
 tranche's own checklist, because the carve-out silently outlives its reason.
+
+## 2026-08-26 (F3 — channels on by default, and the wander cap)
+
+**E54 — `DR-SEAM-llm-x-scheduler` documented the allocation seam as a
+two-party agreement and left out the party that CONSUMES it; the omission is
+what let 47 controller decisions reach nothing while the document read as
+complete.** That seam was written after run `40e713b30a147dfc` died, and it
+was written around the failure in front of it: the controller PROPOSES a
+completion cap, the route firewall REFUSES an inadmissible one, and the
+document's "Where it is expressed" table names both sides plus the envelope,
+the licence, the ceiling and the barrier. Every row is accurate. None of them
+is the row that decides whether a decision reaches a dispatch at all, which is
+`Adapter._completion_cap` — the one reader of the field `Controller._apply_cap`
+writes.
+
+Between 2026-08-23 and 2026-08-26 that reader returned the ROUTE CEILING on
+every route declaring qualified capacity, so the settled cap was unreachable.
+The two components went on agreeing perfectly about a field neither end
+consumed. W7's anatomy measured the result across the whole committed
+population: **47 tuning decisions, 0 becoming the `max_tokens` of any later
+call**, with one run's conjecturer cap driven 32768 → 800 across sixteen cycles
+while every dispatch went out at 32768
+(`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` row 9;
+`experiments/2026-08-26-run-anatomy-program/W5-signals-controller/`).
+
+The generalizable correction, and the reason this is an erratum rather than an
+ordinary fix: **a seam document that lists only the parties who can REFUSE each
+other will miss this failure class every time.** Refusal is loud and therefore
+gets documented; consumption is silent and therefore does not. The seam's own
+Traps section now carries "a field both ends agree about, and neither end
+reads", and its expression table carries the consuming link with a check that
+goes red if the ceiling-only expression returns
+(`experiments/2026-08-26-change-f3-channels-and-wander-cap/`, SPEC.md §S0/S19).
+
+Two further points the record supports and this entry should not overstate.
+First, no fix in the chain was wrong: E43's relaxation and the epoch-3
+reservation fix were each correct for the run that motivated them, and only
+their COMPOSITION severed the link. Second, the direction of travel is the part
+worth remembering — before E43 an ineffective steering decision killed the run
+and named itself in a typed drop; after it, the same decision was recorded as a
+successful policy and disappeared. **The failure mode changed from loud to
+silent**, which is the worse of the two.
+
+**E55 — `DR-CON-scheduler-ranking`'s "Must never do" named disk and labels and
+omitted the LOG, and an implementer who obeyed it exactly still broke two
+committed suites.** The socket contract read: "write to disk or assign a
+`Status`/`hv`/`reach` value — attention and ranking only". A `record_measure`
+call is neither of those, and it is still forbidden here: `_select_problem` is
+called on a TIME-TRAVEL harness opened read-only for replay, which refuses
+every write, and on callers that want the ranking and nothing else.
+
+Found by doing it. The wander cap's first implementation emitted its typed
+disclosure from inside the ranking function — a Measure, not a status, not a
+file — and turned `tests/test_scheduler_promotion_rank.py::test_the_rank_term_moves_no_label`
+and `tests/test_amendment_epochs.py::test_reshaped_question_wins_the_continuation_first_cycle`
+red, the second with `ReadOnlyHarnessError: time-travel harness is read-only`.
+The shipped code stashes the decision on `_pending_wander` and the cycle body
+emits it.
+
+The document now states the log prohibition explicitly, with its own check, and
+says why it is not obvious. Recorded rather than silently fixed because the
+original sentence was not wrong — it was INCOMPLETE in a way that reads as
+exhaustive, which is the more dangerous shape for a "must never do" list.

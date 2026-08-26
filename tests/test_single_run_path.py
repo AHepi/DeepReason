@@ -343,7 +343,24 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     committed = json.loads(
         (GROUNDED_ROOT / MANIFEST_NAME).read_text(encoding="utf-8")
     )
-    assert _without_evidence(compiled) == _without_evidence(committed)
+    # Field by field, EXCEPT the one field a default legitimately moved. F3
+    # (2026-08-26) turned research on by default, so a recompile of the same
+    # config now carries an enabled research policy the August run did not
+    # have. That delta is asserted below rather than waived -- excluding a
+    # field without pinning what changed inside it is how a second, unnoticed
+    # drift would ride along.
+    moved = "inquiry_capability_policy"
+    assert _without_evidence(compiled).keys() == _without_evidence(committed).keys()
+    assert {
+        k: v for k, v in _without_evidence(compiled).items() if k != moved
+    } == {k: v for k, v in _without_evidence(committed).items() if k != moved}
+    # Inside the moved field, research and only research differs, and it
+    # differs in exactly the direction the operator asked for.
+    compiled_caps = dict(compiled[moved])
+    committed_caps = dict(committed[moved])
+    assert compiled_caps.pop("research")["enabled"] is True
+    assert committed_caps.pop("research")["enabled"] is False
+    assert compiled_caps == committed_caps
     # The evidence half is identity too, so it is asserted, not waived:
     # it must address the dossier this compile actually admitted.
     assert compiled[EVIDENCE_BEARING_MANIFEST_FIELD] == summary["run_input_digest"]

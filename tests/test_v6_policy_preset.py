@@ -159,7 +159,11 @@ def test_engaged_simulation_policy_is_declarative_local_and_modest():
     assert topology.simulation == policy
     assert topology.attached_evidence.enabled is False
     assert topology.formalization.enabled is False
-    assert topology.research.enabled is False
+    # Research joined simulation as a default-ON evidence channel in F3
+    # (2026-08-26). Formalization did NOT: it is Lean, not one of the
+    # operator's four protected channels, and its manifest validator refuses
+    # to enable it at all.
+    assert topology.research.enabled is True
 
 
 def test_engaged_simulation_toolchain_pin_is_derived_not_hardcoded():
@@ -269,17 +273,37 @@ def test_policy_factories_return_equal_independent_frozen_models():
     assert engaged_control_plane_policy_v3() is not engaged_control_plane_policy_v3()
 
 
-def test_engaged_research_policy_is_operator_opted_and_default_silent():
-    """Research stays byte-identical OFF without the operator env; a named
-    allowlist enables the contained backend with that frozen list."""
+def test_engaged_research_policy_is_on_by_default_and_the_env_names_the_list():
+    """Research is ON by default; the env var names WHICH hosts, not whether.
+
+    Was ``..._is_operator_opted_and_default_silent`` until F3 (2026-08-26).
+    Operator, verbatim: "now the fix. including turning research and,
+    simulation and coding permanently on". The old default -- silent unless
+    someone remembered ``DEEPREASON_RESEARCH_ALLOWLIST`` -- meant research did
+    not exist for any run nobody had configured.
+
+    Three properties, and the second and third are the ones that were here
+    before: the DEFAULT is on with the declared allowlist; a named allowlist
+    still overrides it, normalised and deduplicated exactly as before; and the
+    OFF state is still reachable and still byte-identical to the empty policy,
+    now through the channel registry rather than through an unset variable.
+    """
 
     from deepreason.canonical import canonical_json
+    from deepreason.config import Config
     from deepreason.v6_policy import (
         engaged_inquiry_capability_policy,
         engaged_research_policy,
     )
+    from deepreason import channels
 
-    disabled = engaged_research_policy(environ={})
+    default_on = engaged_research_policy(environ={})
+    assert default_on.enabled is True
+    assert default_on.domain_allowlist == channels.DEFAULT_RESEARCH_ALLOWLIST
+
+    disabled = engaged_research_policy(
+        environ={}, config=Config(CHANNELS_DISABLED=("research",))
+    )
     assert disabled.enabled is False
     assert canonical_json(
         disabled.model_dump(mode="json", by_alias=True)
@@ -304,6 +328,7 @@ def test_engaged_research_policy_is_operator_opted_and_default_silent():
 
     # The preset factory embeds the same operator decision.
     assert engaged_inquiry_capability_policy().research == engaged_research_policy()
+    assert engaged_inquiry_capability_policy().research.enabled is True
 
 
 def test_attached_evidence_default_stays_disabled_and_attach_opts_in():

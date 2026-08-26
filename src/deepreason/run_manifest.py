@@ -2382,6 +2382,17 @@ def _versioned_source_config_data(
     # unconditionally rather than tracking which versions happen to have
     # a pinned test today.
     data.pop("ENGAGED_CRITICISM_AUTHORITY", None)
+    # The three F3 knobs (2026-08-26) drop unconditionally, for the reason the
+    # eight above them do and with the operator's forecast of this contact in
+    # the tranche instruction itself ("Config knob, versioned-source line for
+    # every schema version"). The two attention knobs are consulted inside a
+    # run and never written to a manifest; CHANNELS_DISABLED's effect is
+    # already visible in the compiled manifest's own capability policies.
+    # Their presence in the echo would move every qualification subject digest
+    # and every frozen manifest golden; their absence PRESERVES both.
+    data.pop("SEED_PROBLEM_BUDGET_FLOOR", None)
+    data.pop("ATTENTION_ALLOCATION_POLICY", None)
+    data.pop("CHANNELS_DISABLED", None)
     # LEGACY_CRITICISM_ENABLED postdates every schema version's frozen
     # wire-byte goldens for the same reason: its effect is already visible
     # in the compiled manifest's own criticism_policy (None vs populated),

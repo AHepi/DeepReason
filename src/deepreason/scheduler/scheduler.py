@@ -12,6 +12,7 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 from collections.abc import Iterable, Mapping
 import json
 
+from deepreason import wander
 from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture import diagnostics as capture14
@@ -48,7 +49,7 @@ from deepreason.premises import (
     premise_work_invited,
     retired_problems,
 )
-from deepreason.ontology import Rule, SpawnTrigger, Status
+from deepreason.ontology import Provenance, Rule, SpawnTrigger, Status
 from deepreason.ontology.state import counts_as_survivor
 from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
@@ -371,6 +372,13 @@ class Scheduler:
         self._intervention_until: dict[str, int] = {}
         self._cycles = 0
         self._integration_cycles = 0
+        # Worked cycles spent on the OPERATOR-SEEDED lineage, and whether the
+        # wander cap is currently engaged. Non-epistemic and rebuildable, like
+        # `_problem_worked` and `_integration_cycles` beside them: they price
+        # attention and are never read by anything that assigns a status.
+        self._seed_cycles = 0
+        self._wander_engaged = False
+        self._pending_wander = None
         self._arg_crit_this_cycle = 0
         self._advisory_trials_this_cycle = 0
         self._judge_summons_this_cycle = 0
@@ -1112,6 +1120,33 @@ class Scheduler:
             and p.id not in retired
             and not self._disc_paused(p)
         ]
+        # The WANDER CAP (F3, 2026-08-26). One cut higher than
+        # INTEGRATION_BUDGET_SHARE above and in exactly its shape: a
+        # budget-share gate on CANDIDACY, never a term in the rank key, so
+        # every guarantee DR-CON-scheduler-ranking pins on that key is
+        # untouched. The policy is selected by id from `wander.LINEAGE_POLICIES`
+        # and consumed ONLY through `wander.decide` -- the scheduler is never
+        # taught which throttle it is running.
+        decision = wander.decide(
+            self.config,
+            wander.reading_from(
+                self.config, cycles=self._cycles, seed_worked=self._seed_cycles
+            ),
+        )
+        if decision.engaged:
+            # Yield candidacy to seeded work -- but only while there IS seeded
+            # work. A throttle that could empty the pool would lose a cycle to
+            # protect a lineage that has nothing to do, which is not a floor.
+            seeded = [
+                p for p in candidates if p.provenance.trigger == SpawnTrigger.SEED
+            ]
+            if seeded:
+                candidates = seeded
+        # STASHED, not emitted. Selection is a read-only ranking function --
+        # `DR-CON-scheduler-ranking`'s "must never do" -- and a time-travel
+        # harness opened for replay refuses every write. The cycle body emits
+        # this a few lines below, where writing is what the caller came to do.
+        self._pending_wander = decision
         if self.config.FOCUS_FAMILY is not None:
             # Stage isolation (attention only): without it, an earlier
             # stage's unsolved successor leftovers out-age this stage's
@@ -1156,6 +1191,7 @@ class Scheduler:
 
             best = min(candidates, key=rank)
             self._problem_worked[best.id] = self._cycles
+            self._count_lineage(best)
             return best
         # Unsolved problems first, then round-robin rotation by cycle count.
         # Stable sort keeps registration order within each class while seeds
@@ -1171,7 +1207,72 @@ class Scheduler:
                 p.id in reflexive,
             ),
         )
-        return pool[self._cycles % len(pool)]
+        selected = pool[self._cycles % len(pool)]
+        self._count_lineage(selected)
+        return selected
+
+    def _count_lineage(self, problem) -> None:
+        """Tally one worked cycle to its lineage class.
+
+        The cut is the problem's OWN spawn trigger, not the transitive family
+        closure `problem_family` computes. W6's post-mortem is why: the run it
+        measured spawned `audit:ritual` from artifacts addressing the seed
+        problem, so a family closure would have swallowed the 41.2% the floor
+        exists to bound and the cap would never bind on the very record that
+        motivated it. An alternative cut is a different registered policy, not
+        an edit here.
+        """
+        if problem is not None and problem.provenance.trigger == SpawnTrigger.SEED:
+            self._seed_cycles += 1
+
+    def _disclose_wander(self) -> None:
+        """Emit the reading every cycle, and the throttle on its transition.
+
+        Two records, because they answer different questions. The share is a
+        per-cycle reading a reader can plot; the throttle is an EVENT, and
+        emitting it every cycle would make a single decision look like fifty.
+        Both are Measures -- attention evidence about the run's own process --
+        and neither touches a status, a warrant or an edge.
+        """
+        decision = self._pending_wander
+        if decision is None:
+            return
+        self._pending_wander = None
+        self.harness.record_measure(
+            inputs=[
+                "allocation.seed-lineage-share.v1",
+                f"{decision.share:.6f}",
+                f"{decision.floor:.6f}",
+            ]
+        )
+        if decision.engaged and not self._wander_engaged:
+            self.harness.record_measure(
+                inputs=[
+                    "allocation.wander-throttled.v1",
+                    decision.policy_id,
+                    decision.disclosure(),
+                ]
+            )
+            # Policy-as-attackable-artifact (calculus P6): a limit nobody can
+            # contest is a status privilege by another name. The same design
+            # `controller.py::_emit_policy` and `capture/hysteresis.py` already
+            # carry, and the ONE artifact the evidence differential excludes.
+            self.harness.create_artifact(
+                json.dumps(
+                    {
+                        "schema": "allocation.wander-cap.v1",
+                        "policy": decision.policy_id,
+                        "share": round(decision.share, 6),
+                        "floor": round(decision.floor, 6),
+                        "cycle": self._cycles,
+                        "fallback_from": decision.fallback_from,
+                    },
+                    sort_keys=True,
+                ),
+                provenance=Provenance(role="controller"),
+                rule=Rule.REFL,
+            )
+        self._wander_engaged = decision.engaged
 
     def _school_dict(self, school_id: str) -> dict:
         policy = self.schools[school_id]
@@ -1957,6 +2058,7 @@ class Scheduler:
         # heartbeat belongs to this cycle — the log segments itself, live
         # progress is tail-able, and stalls become diagnosable post hoc.
         harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
+        self._disclose_wander()
         self._selection_window.append(problem.id if problem else "-")
         del self._selection_window[:-_THRASH_WINDOW]
         self._record_detection_signals()

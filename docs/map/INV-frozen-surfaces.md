@@ -230,6 +230,56 @@ the surface MORE stable rather than less. Ledgered at
 
 `check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && test "$(grep -c 'data.pop(\"SPLIT_BUDGET_' src/deepreason/run_manifest.py)" -eq 2`
 
+**Granted contact, 2026-08-26 — the three F3 knobs (channels and the wander
+cap).** The operator FORECAST this contact in the tranche instruction and named
+its exact content: "the operator-seeded lineage gets a declared budget-share
+FLOOR (**Config knob, versioned-source line for every schema version**)". The
+request was written into
+`experiments/2026-08-26-change-f3-channels-and-wander-cap/SPEC.md` with
+`tools/blast_radius.py`'s own `frozen_surface_contacts` list pasted verbatim,
+before a line of code existed — the same discipline as the 2026-08-21,
+2026-08-22 and 2026-08-24 grants.
+
+What moved: THREE `data.pop` lines in `_versioned_source_config_data` —
+`SEED_PROBLEM_BUDGET_FLOOR`, `ATTENTION_ALLOCATION_POLICY` and
+`CHANNELS_DISABLED` — joining the sixteen already there. **Insertions only, and
+no schema, validator, Pydantic model, check name or record format was touched.**
+Their effect is to PRESERVE digests: `source_config_hash` is byte-identical at
+every schema version, and the two attention knobs never reach a manifest at all.
+
+The engaged preset's qualification SUBJECT digest did move, from
+`d47cb2bf2702…` to `f3bb65623852…` — but not because of these lines. It moved
+because research now compiles ENABLED by default, which is the change the
+operator asked for and whose price was measured before the code and reported
+rather than avoided (that tranche's MEASUREMENTS.md). The two causes are kept
+separable by a check rather than by a claim: the pin now asserts the digest AND
+that none of the three knobs reaches `engine_config_json`.
+
+`check: python -c "
+import json
+from deepreason.config import Config
+from deepreason.run_manifest import source_config_hash
+from tests.test_reusable_qualification import _manifest, _profile
+c = json.loads(_manifest(_profile()).engine_config_json)
+leaked = sorted(k for k in c if k in ('SEED_PROBLEM_BUDGET_FLOOR','ATTENTION_ALLOCATION_POLICY','CHANNELS_DISABLED'))
+assert not leaked, leaked
+h = [source_config_hash(Config(), schema_version=v) for v in (1,2,3,4,5,6)]
+assert h[0]==h[1] and h[2]==h[3]==h[4]==h[5]
+" && test "$(grep -c 'data.pop(\"SEED_PROBLEM_BUDGET_FLOOR\|data.pop(\"ATTENTION_ALLOCATION_POLICY\|data.pop(\"CHANNELS_DISABLED' src/deepreason/run_manifest.py)" -eq 3`
+
+**A naming constraint this grant surfaced, worth keeping.** Every `Config` field
+is echoed BY NAME inside this file's drop list, so a field name must satisfy
+every invariant that greps this file. `DR-SEAM-manifest-x-schools` holds — with
+a `check:` — that the words `stance`, `lineage`, `crossover` and `reseed` never
+occur in `run_manifest.py`, which is what keeps the manifest unable to describe
+what a SCHOOL is. The F3 knobs were first written `SEED_LINEAGE_BUDGET_FLOOR`
+and `LINEAGE_ALLOCATION_POLICY`, in the operator's own vocabulary and about a
+PROBLEM lineage rather than a school one, and they turned that check red. They
+were renamed rather than the check carved up: a blunt tripwire is worth more
+than a word, and `wander.py` keeps the vocabulary throughout.
+
+`check: sh -c '! grep -qiE "\bstance\b|lineage|crossover|reseed" src/deepreason/run_manifest.py'`
+
 **Rung 8 took the same grant, for ten knobs, and PROVED the preservation
 directly.** `SCOPE_MAX_DEPTH`, `SCOPE_MAX_NODES`, `FRAME_SLICE_ATTACKERS`,
 `FRAME_SLICE_DEPARTURES` and the six `CAPTURE14_*` values are `Config` fields

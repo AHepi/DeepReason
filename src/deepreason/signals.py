@@ -613,6 +613,37 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
                   "seat may spend, never what any artifact is",
         staleness="run",
     ),
+    # The lineage-allocation pair (F3, 2026-08-26). Both are EMITTED by the
+    # policy that reads them -- W5's census found four of five
+    # `allocation.POLICY_SIGNALS` with no emit site anywhere in src/, and a
+    # registry that declares a reading the record never carries is a registry
+    # that lies about what a run can be asked.
+    SignalDeclaration(
+        name="allocation.seed-lineage-share.v1",
+        unit="ratio",
+        semantics="the share of a run's worked cycles spent on the "
+                  "OPERATOR-SEEDED problem lineage rather than on lineages the "
+                  "run spawned for itself. A process fact about where attention "
+                  "went, counted from the scheduler's own per-cycle selection "
+                  "and never from an outcome: it prices which problem a cycle "
+                  "looks at next and may never reach a label. Measured because "
+                  "one recorded run spent 41.2% of its budget on a problem it "
+                  "invented about its own critic while the operator's question "
+                  "got 53.2%",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="allocation.wander-throttled.v1",
+        unit="event",
+        semantics="the lineage-allocation policy has engaged: the seeded "
+                  "lineage's share has fallen below its configured floor, so "
+                  "self-spawned lineages yield candidacy for a cycle while any "
+                  "seeded work remains. Emitted on the TRANSITION into "
+                  "throttling rather than every cycle, so the record stays "
+                  "proportional to the decision. Attention only -- it moves no "
+                  "status, mints no warrant, and constructs no edge",
+        staleness="cycle",
+    ),
     # §14's six capture diagnostics (v2 calculus Rung 8, RIDER 2 / R48). A
     # DISTINCT FAMILY from the Rung 2 detection signals above, decided in that
     # tranche's SPEC.md §3 D1 and named so the distinction cannot be lost: the

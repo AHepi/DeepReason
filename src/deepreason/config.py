@@ -284,6 +284,35 @@ class Config(BaseModel):
     FLOOR: int = 1
     K: int = 4
     INTEGRATION_BUDGET_SHARE: float = 0.30
+    # The WANDER CAP (F3, 2026-08-26). The share of worked cycles guaranteed
+    # to the operator-seeded lineage; self-spawned lineages are gated out of
+    # candidacy for a cycle when the seed's share has fallen below it, in the
+    # same shape INTEGRATION_BUDGET_SHARE above already uses. Attention only,
+    # never a label. Motivated by W6's P-C1 post-mortem: 41.2% of a 702 789
+    # token run went to a problem the run invented about its own critic while
+    # the operator's question got 53.2% (and 48.3% after the spawn), so 0.5 is
+    # the value that would have bound on that record and not before it.
+    SEED_PROBLEM_BUDGET_FLOOR: float = Field(default=0.5, ge=0.0, le=1.0)
+    # Named SEED_PROBLEM_* rather than SEED_LINEAGE_*, and ATTENTION_*
+    # rather than LINEAGE_*, for one specific reason: every Config field is
+    # echoed by name inside run_manifest.py's versioned-source drop list, and
+    # DR-SEAM-manifest-x-schools holds that the words `stance`, `lineage`,
+    # `crossover` and `reseed` do not occur in that file at all -- the
+    # tripwire that keeps the manifest unable to describe what a SCHOOL is.
+    # The concept here is a PROBLEM lineage and unrelated to schools, but a
+    # blunt tripwire is worth more than the word, and `wander.py` keeps the
+    # operator's own vocabulary throughout.
+    #
+    # Which lineage-allocation policy decides that. Selectable by id from
+    # `wander.LINEAGE_POLICIES` -- the VERSIONED layer of the signal contract
+    # -- so a different throttle is a configuration, never a code edit. An
+    # unknown id falls back to the shipped default and discloses.
+    ATTENTION_ALLOCATION_POLICY: str = "wander-cap.v1"
+    # Evidence channels turned OFF by choice, by declared id (see
+    # `deepreason.channels`). Empty is the default and means all three
+    # protected channels are live. An id naming no declared channel is a typed
+    # notice, never a refusal.
+    CHANNELS_DISABLED: tuple[str, ...] = ()
     HV_MIN: float | None = None
     HV_K: int = 8
     # Informal domains (§10)

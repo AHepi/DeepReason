@@ -311,6 +311,7 @@ def _config_for_profile(
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
     criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
+    channels_disabled: tuple[str, ...] = (),
 ) -> Config:
     endpoint = profile.endpoint_spec()
     # seat_bindings overrides specific roles onto a DIFFERENT profile's
@@ -345,6 +346,10 @@ def _config_for_profile(
         # deterministic hashing embedder: no optional neural dependency may
         # decide public manifest identity.
         EMBEDDER_MODEL=None,
+        # Evidence channels this preparation turns off, by declared id. Empty
+        # is the default and means all three protected channels are live: the
+        # setting names WHICH channels are off, never whether channels exist.
+        CHANNELS_DISABLED=tuple(channels_disabled),
         roles=roles,
     )
 
@@ -423,6 +428,7 @@ def build_preparation_manifest(
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
     criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
+    channels_disabled: tuple[str, ...] = (),
 ):
     """Build the in-memory V6 manifest used by qualification and preparation.
 
@@ -455,6 +461,7 @@ def build_preparation_manifest(
         seat_bindings=seat_bindings,
         school_seats=school_seats,
         criticism_seats=criticism_seats,
+        channels_disabled=channels_disabled,
     )
     if (school_seats or criticism_seats) and not config.SCHOOL_SEATS_ENABLED:
         raise RunManifestError(
@@ -503,8 +510,12 @@ def build_preparation_manifest(
                 seat_map=criticism_seat_map,
             )
         ),
+        # The channel registry decides which evidence channels this manifest
+        # compiles ON, from the SAME config every other setting here comes
+        # from -- so turning one off is an ordinary setting on the one run
+        # path, not a second door.
         inquiry_capability_policy=engaged_inquiry_capability_policy(
-            attached_evidence=attached_evidence
+            attached_evidence=attached_evidence, config=config
         ),
         run_input_digest=run_input_digest,
         # The one frozen simulation toolchain is derived from the executing

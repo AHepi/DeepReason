@@ -66,8 +66,33 @@ else told a reader it existed.
 | The licence, applied | `controller.py` | `Controller._apply_cap` | the single chokepoint every application passes through — `step`, the fail-static revert, and rehydration of a policy an older version logged |
 | The ceiling itself | `controller.py` | `Controller._lease_ceiling` | reads the seat's own lease; returns `None` for an unqualified route, which is what keeps legacy widening lawful |
 | The barrier, unchanged | `controller.py` | `cap_envelope` | deliberately NOT the ceiling's home: `invariants.py` re-derives this function to decide what a logged policy authorized, and that is a frozen surface |
+| **The envelope actually booked** | `llm/adapter.py` | `Adapter._completion_cap` | the seat's SETTLED cap, bounded by the qualified route's ceiling — the one reader of what `_apply_cap` writes, and therefore the link that decides whether a decision reaches a dispatch at all |
 
-`check: python -m pytest tests/test_route_lease_maxtokens_tuning.py -q`
+`check: python -m pytest tests/test_route_lease_maxtokens_tuning.py tests/test_controller_reaches_the_wire.py -q`
+
+**The third link, added 2026-08-26 (F3), because for two days it was missing.**
+This seam was written as a two-party agreement — the controller proposes, the
+firewall refuses — and that framing hid a third party: whatever READS the
+settled cap when a request is built. Between 2026-08-23 and 2026-08-26 nothing
+did. `_completion_cap` returned the route ceiling on every qualified route,
+`Controller._apply_cap` went on writing `endpoint.max_tokens`, and the two
+components agreed perfectly about a field neither end consumed. W7's anatomy
+measured the result over the whole committed population: **47 tuning decisions,
+0 becoming the `max_tokens` of any later call**, with one run's conjecturer cap
+driven 32768 → 800 across sixteen cycles while every dispatch went out at 32768
+(`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` row 9;
+`experiments/2026-08-26-run-anatomy-program/W5-signals-controller/`).
+
+A seam document that lists only the parties who can REFUSE each other will miss
+this class of failure every time. The consuming link belongs in the table.
+
+`check: python -c "
+import inspect
+from deepreason.llm.adapter import LLMAdapter
+src = inspect.getsource(LLMAdapter._completion_cap)
+assert 'getattr(endpoint' in src, 'the settled cap is unreachable again: the controller is severed from the wire'
+assert 'min(settled, ceiling)' in src, 'the qualified branch no longer bounds the settled cap at the leased ceiling'
+"`
 
 ## Invariants
 
@@ -91,6 +116,23 @@ else told a reader it existed.
 
 ## Traps
 
+- **A field both ends agree about, and neither end reads.** The composition of
+  two correct fixes severed this seam without breaking either side of it. E43
+  relaxed the firewall from an identity to a ceiling so a narrowing stopped
+  killing the run; the epoch-3 fix then made `_completion_cap` return the route
+  ceiling, because preview and call each recomputed the cap and a controller
+  settling a seat between them parted the two sides of the reservation guard.
+  Each was right for the failure in front of it. Together they left the
+  controller writing to an object nothing consulted — and **the failure mode
+  changed from loud to silent**: before E43 an ineffective steering decision
+  killed the run and named itself in a typed drop; after it, the same decision
+  was recorded as a successful policy and disappeared. FIXED 2026-08-26 (F3,
+  `experiments/2026-08-26-change-f3-channels-and-wander-cap/` S19) by booking
+  the settled cap bounded by the ceiling. The recompute defect stays closed by
+  different machinery, which is why the fix is safe: under an authorization
+  `call` CONSUMES `reservation_record.completion_bound_tokens` rather than
+  recomputing it, so the two reads cannot part again.
+`check: python -m pytest tests/test_controller_reaches_the_wire.py tests/test_v6_reservation_bound_authority.py::test_call_never_recomputes_a_cap_under_authorization -q`
 - **Two components can each be lawful and still terminate a run together.**
   In reach-rich epoch 2 (run `40e713b3…`, `log.jsonl` seq 442 then 577) the
   controller settled the conjecturer seat from its leased 32768 to

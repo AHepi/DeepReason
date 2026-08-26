@@ -1,0 +1,33 @@
+=== S12 mutation proof — the efficiency-never-evidence boundary ===
+Tranche: experiments/2026-08-26-change-f3-channels-and-wander-cap/
+Instrument: tests/test_wander_cap.py -k 'labels_are_identical or constructs_no_evidence'
+
+--- BASELINE (unmutated tree): both guards must be GREEN ---
+..                                                                       [100%]
+2 passed, 14 deselected in 0.40s
+
+--- MUTATION A: mint a warrant against a conjecture whenever the cap engages ---
+    (the forbidden move in its most plausible disguise: 'so the throttle has teeth')
+E         ...Full output truncated (4 lines hidden), use '-vv' to show
+
+tests/test_wander_cap.py:449: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_labels_are_identical_whether_or_not_the_cap_engaged
+1 failed, 1 passed, 14 deselected in 0.37s
+
+--- MUTATION B: the policy module reaches for the graph (create_artifact + Status) ---
+E             ...Full output truncated (78 lines hidden), use '-vv' to show
+
+tests/test_wander_cap.py:478: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_the_wander_module_constructs_no_evidence
+1 failed, 1 passed, 14 deselected in 0.37s
+
+--- RESTORED: both guards GREEN again on the unmutated tree ---
+..                                                                       [100%]
+2 passed, 14 deselected in 0.29s
+
+VERDICT: both guards are FAILABLE. Mutation A turns the differential RED
+(a warrant minted on a throttle is a label moved by allocation); mutation B
+turns the structural check RED (a policy module that can reach the graph is
+allocation adjudicating). Neither guard passes by doing nothing.

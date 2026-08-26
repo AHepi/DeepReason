@@ -80,13 +80,60 @@ assert src.count('promotion_wounds.get(p.id, 0)') == 2, 'both sort keys'
 **What it is handed:** the harness's `state` (problems, artifacts, status —
 read only, never mutated here); `reflexive_problems(state)`, the lineage-
 following meta-work set; the `Config` knobs `FOCUS_PROBLEM`, `FOCUS_FAMILY`,
-`LIVENESS_QUEUE`, `INTEGRATION_BUDGET_SHARE`; and the scheduler's own
-per-instance attention cache `_problem_worked` (liveness ages — rebuildable,
-non-epistemic).
+`LIVENESS_QUEUE`, `INTEGRATION_BUDGET_SHARE`, `SEED_PROBLEM_BUDGET_FLOOR` and
+`ATTENTION_ALLOCATION_POLICY`; and the scheduler's own per-instance attention
+caches `_problem_worked` (liveness ages) and `_seed_cycles` (worked cycles on
+the seeded lineage) — both rebuildable and non-epistemic.
+
+**The wander cap is a CANDIDACY gate, never a rank term** (F3, 2026-08-26).
+This is the sharpest thing to know about it. It sits beside
+`INTEGRATION_BUDGET_SHARE` — which gates reflexive problems out of candidacy
+when they are over their share — one lineage class higher, and it touches the
+sort key not at all. Every guarantee this document pins on that key (the seed's
+tie-break win, the wound term's position after it) is therefore untouched by
+construction rather than by re-derivation. When the seeded lineage's share of
+worked cycles falls below its floor, self-spawned problems yield candidacy FOR
+THAT CYCLE — and only while seeded work remains, so no cycle is ever lost.
+
+The policy is selected by id from `wander.LINEAGE_POLICIES` and consumed only
+through `wander.decide`; the decision is STASHED, never emitted here, because
+selection is read-only (below). Motivated by W6's post-mortem: one run spent
+41.2 % of its budget on a problem it invented about its own critic while the
+operator's question got 53.2 %
+(`experiments/2026-08-26-run-anatomy-program/W6-token-flow/`).
+
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler._select_problem)
+gate = src.index('decision.engaged')
+assert 'wander.decide(' in src and 'self._pending_wander = decision' in src
+rank = src.index('def rank(p)')
+assert gate < rank, 'the wander gate must sit in candidacy, before the rank key'
+assert 'decision' not in src[rank:src.index('best = min(')], 'the throttle leaked into the rank key'
+"`
+`check: python -m pytest tests/test_wander_cap.py -q -k "floor_holds or starves or never_loses or yields"`
 
 **Must never do:** write to disk or assign a `Status`/`hv`/`reach` value —
 attention and ranking only, exactly like the rest of `DR-SUB-scheduler`
 (the package-wide guarantee this socket inherits, not a separate one).
+
+**It must not write to the LOG either, and that is not obvious.** The
+prohibition above names disk and labels; a `record_measure` call is neither,
+and it still breaks this socket. `_select_problem` is called on a TIME-TRAVEL
+harness opened read-only for replay, which refuses every write, and it is
+called by callers that only want the ranking. The wander cap's first
+implementation emitted its disclosure from inside the ranking function and
+turned two committed suites red — one of them precisely on the read-only
+harness. The decision is stashed on `_pending_wander`; the cycle body emits it.
+
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler._select_problem)
+for w in ('record_measure', 'create_artifact', '_commit('):
+    assert w not in src, w
+"`
 `check: ! grep -rqE "open\(|write_text|write_bytes|\.mkdir\(" src/deepreason/scheduler/ --include=*.py && ! grep -rqE "state\.(status|hv|reach)\[[^]]*\] *=" src/deepreason/scheduler/ --include=*.py`
 
 Select a `RESEARCH`-triggered problem for ordinary gamma work — research

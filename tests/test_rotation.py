@@ -88,8 +88,21 @@ def _blocked_attempts(harness) -> int:
 
 
 def test_legacy_starvation_reproduced(tmp_path):
+    """The recorded defect, reproduced -- with the wander cap turned OFF.
+
+    Reproducing a PRE-CAP defect requires the pre-cap policy, and since
+    F3 (2026-08-26) that is a lawful configuration rather than a code state:
+    `ATTENTION_ALLOCATION_POLICY="open-lineage.v1"` is the null throttle in
+    `wander.LINEAGE_POLICIES`. Leaving it at the shipped default would not
+    reproduce anything, because the cap rescues exactly this shape -- which is
+    the point of the test below.
+    """
     harness, scheduler, conj_calls = _starvation_setup(
-        tmp_path, DISC_ATTEMPTS_MAX=None, DISC_COOLDOWN=0, LIVENESS_QUEUE=False
+        tmp_path,
+        DISC_ATTEMPTS_MAX=None,
+        DISC_COOLDOWN=0,
+        LIVENESS_QUEUE=False,
+        ATTENTION_ALLOCATION_POLICY="open-lineage.v1",
     )
     for _ in range(6):
         scheduler.step()
@@ -100,14 +113,52 @@ def test_legacy_starvation_reproduced(tmp_path):
     assert conj_calls[0] == 0
 
 
+def test_the_wander_cap_rescues_the_legacy_starvation_shape(tmp_path):
+    """The same fixture, the shipped default, and the root gets worked.
+
+    Free evidence, and worth pinning: the starvation this module was written
+    for is a SELF-SPAWNED lineage crowding out the operator's seeded problem,
+    which is the same failure W6 measured at scale (41.2 % of one run's budget
+    on a problem it invented about its own critic). The cap was designed from
+    the token post-mortem, not from this fixture, and it happens to close the
+    fixture's own defect with no rotation machinery involved at all --
+    `DISC_ATTEMPTS_MAX=None`, `DISC_COOLDOWN=0`, legacy round-robin selection.
+
+    This is a floor, not a cure: the discrimination problem still runs, and
+    the assertion below says the root is worked, never that the rival work
+    stopped.
+    """
+    harness, scheduler, conj_calls = _starvation_setup(
+        tmp_path, DISC_ATTEMPTS_MAX=None, DISC_COOLDOWN=0, LIVENESS_QUEUE=False
+    )
+    for _ in range(6):
+        scheduler.step()
+
+    assert conj_calls[0] > 0, "the seeded root starved under the shipped default"
+    assert _blocked_attempts(harness) >= 1, "the rival work was not stopped"
+
+
 def test_attempt_cap_frees_the_rotation(tmp_path):
+    """The futility cap holds at 2 and the root gets worked.
+
+    Twelve cycles rather than the original eight, and the extra four are the
+    wander cap working (F3, 2026-08-26). `disc:rivals` is a SELF-SPAWNED
+    lineage and `pi-root` is the operator's seed, so once the seed's share of
+    worked cycles falls below `SEED_PROBLEM_BUDGET_FLOOR` the discrimination
+    problem yields candidacy and reaches its second attempt later in wall-cycle
+    terms. The GUARANTEE is unchanged and is now pinned harder: still exactly
+    2 at twelve cycles, and still exactly 2 at twenty-four.
+    """
     harness, scheduler, conj_calls = _starvation_setup(
         tmp_path, DISC_ATTEMPTS_MAX=2, DISC_COOLDOWN=1
     )
-    for _ in range(8):
+    for _ in range(12):
         scheduler.step()
     assert _blocked_attempts(harness) == 2  # capped — never retried after that
     assert conj_calls[0] > 0                # the root problem got worked
+    for _ in range(12):
+        scheduler.step()
+    assert _blocked_attempts(harness) == 2  # and still capped, twelve later
     exhausted = [
         e for e in harness.log.read()
         if e.rule == Rule.MEASURE and e.inputs
