@@ -854,8 +854,8 @@ recorded here rather than left as a silent reordering.
       tests/test_discharge_contract.py tests/test_wire_contracts.py
       tests/test_v6_patch_repair_and_wire.py tests/test_conjecturer_turn_v4.py
       tests/test_skills_models.py -q` → 0 failed; (b) `diff_budget` verdict
-      `WITHIN` against 640; (c) commit created; (d) `git status --porcelain`
-      empty and head on `origin`
+      `WITHIN` against **900** (R21); (c) commit created; (d) `git status
+      --porcelain` empty and head on `origin`
 
 ---
 
@@ -971,9 +971,12 @@ recorded here rather than left as a silent reordering.
 
 - [ ] 30. (S15) Final diff budget against the declared ceiling.
       done-when: `python tools/diff_budget.py <base> --paths src/ --ceiling
-      640` prints `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (paste
+      900` prints `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (paste
       it). EXCEEDED is a typed STOP to the operator naming what grew — never a
-      silent overrun and never a re-baselined ceiling (R19).
+      silent overrun and never a re-baselined ceiling (R19). **900** is the
+      operator's ruling of 2026-08-26 (R21), superseding the 640 that steps 2b
+      through 10 were measured against; their pasted outputs keep 640 because
+      that is what was actually measured then.
 
 - [ ] 31. (S16) Write `RESULTS.md` as a dated honest-ledger segment, with the
       claim boundary the operator fixed in advance: F1 claims DELIVERY, not
