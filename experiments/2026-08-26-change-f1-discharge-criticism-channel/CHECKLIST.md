@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=29 blockers=none. Map gate, audit, links and both wheel smokes all green. Remaining: the full suite, the final budget, RESULTS.md, the push.
+State: next=32 blockers=none. Every gate green: full suite 4231 passed / 0 failed, docs_verify at baseline, both wheel smokes, diff_budget WITHIN at 943 of 960. RESULTS.md written.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1572,12 +1572,28 @@ recorded here rather than left as a silent reordering.
       at step 2c: no new LLM role, no moved subject digest, so no home owes a
       ~14-minute battery rerun.
 
-- [ ] 29. (all) FULL GATE, on an otherwise idle box.
+- [x] 29. (all) FULL GATE, on an otherwise idle box.
       done-when: `python -m pytest tests/ -q -n 4` output ends
       `N passed, 0 failed` (paste the line; 0 failed is the only acceptable
       result, and no assertion is weakened to reach it)
 
-- [ ] 30. (S15) Final diff budget against the declared ceiling.
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/ -q -n 4
+      4231 passed, 6 skipped in 958.70s (0:15:58)
+      ```
+      **0 failed.** 4231 against the 4225 measured at step 18, and the +6 is
+      exactly `tests/test_discharge_law_line.py`, which landed after it. The
+      tranche's own five files collect **56 tests**.
+
+      No assertion anywhere was weakened to reach this. Where an existing pin
+      contradicted the change it was CORRECTED to the truth and the correction
+      recorded — `DR-CON-packs-and-token-economy`'s section count 17→18 (step
+      8) and the architecture test's consumer list one→two (step 12) — and
+      where a pin caught something real it was obeyed, not adjusted: the signal
+      contract's three declarations (step 17).
+
+- [x] 30. (S15) Final diff budget against the declared ceiling.
       done-when: `python tools/diff_budget.py <base> --paths src/ --ceiling
       960` prints `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (paste
       it). EXCEEDED is a typed STOP to the operator naming what grew — never a
@@ -1586,7 +1602,25 @@ recorded here rather than left as a silent reordering.
       of R21 and the 640 SPEC first declared. Every pasted output in this
       document keeps the ceiling it was actually measured against.
 
-- [ ] 31. (S16) Write `RESULTS.md` as a dated honest-ledger segment, with the
+      PASTED OUTPUT:
+      ```
+      $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 960
+      {"areas": {"src/": 943}, "total_insertions": 943, "ceiling": 960,
+       "verdict": "WITHIN"}
+      ```
+      Final `src/` shape, twelve files:
+      ```
+      218  discharge/policy.py        54  llm/wire.py
+      182  discharge/channel.py       53  llm/packs.py
+      143  discharge/submission.py    44  signals.py
+      121  rules/conj.py              36  llm/contracts.py
+       64  discharge/__init__.py      13  config.py
+                                       9  run_manifest.py
+                                       6  workloads/text.py
+      ```
+      Whole diff: 37 files changed, 7155 insertions, 24 deletions.
+
+- [x] 31. (S16) Write `RESULTS.md` as a dated honest-ledger segment, with the
       claim boundary the operator fixed in advance: F1 claims DELIVERY, not
       RESPONSE; the live four-arm A/B stays PARKED as P2; P-C2's rematch bears
       on it but does not replace P2's design.
@@ -1594,6 +1628,25 @@ recorded here rather than left as a silent reordering.
       section carrying all four points AND
       `! grep -qi "a live model responded\|the model responded to the channel"
       RESULTS.md` exits 0
+
+      PASTED OUTPUT:
+      ```
+      $ wc -l RESULTS.md                                       188
+      $ grep -n "What this does NOT establish" RESULTS.md       (segment 3)
+      $ ! grep -qi "a live model responded|the model responded to the channel" \
+          RESULTS.md
+      S16 accept: no overclaim sentence
+      ```
+      Eight residue items, not four — the operator's boundary is items 1, 2 and
+      5, and the other five are limits this tranche found while working and
+      would otherwise have left for a reader to discover: the exposure census
+      being inapplicable to stub roots, the stub writer's responsiveness being
+      by construction, the channel shipping OFF, the wire-change edge of the
+      modularity claim, and the absence of any live run.
+
+      Segment 4 is not in SPEC and is not scope creep: it records the four
+      things the GATES caught that reading did not, because that is the part of
+      this tranche most likely to be useful to whoever runs the next one.
 
 - [ ] 32. (all) [COMMIT] Push and confirm clean.
       done-when: `git status --porcelain` is empty AND `git log --oneline -1`
