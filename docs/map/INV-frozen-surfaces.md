@@ -361,6 +361,67 @@ subject digest moves, and no home owes a ~14-minute battery rerun. See
 
 `check: python -m pytest tests/test_promotion_solo.py::test_no_promotion_module_can_reach_a_seat -q`
 
+**Granted contact, 2026-08-26 — `DISCHARGE_POLICY` and the discharge channel
+(REBUILD F1).** The discharge-required criticism channel needs one per-run mode:
+which policy preset governs how open criticisms render and how an undischarged
+submission is handled. The operator forecast the contact when the tranche's
+SPEC.md requested it — with `tools/blast_radius.py`'s own `"frozen_surface_
+verdict": "CONTACT"` and both contact rows pasted and disposed one by one — and
+granted it in those terms: "This is not an exception to the frozen surface — it
+is the documented recipe (a Config field is not done WITHOUT that line; the
+ENGAGED_CRITICISM_AUTHORITY trap is its ancestor)."
+
+What moved: ONE `data.pop("DISCHARGE_POLICY", None)` line in
+`_versioned_source_config_data`, joining the twelve unconditional pops already
+there. **Insertions only — 9 and 0.** No schema, no validator, no Pydantic
+model, no check name, no record format.
+
+The pop is UNCONDITIONAL, and that is the grant's fourth rider rather than a
+style choice: the `ENGAGED_CRITICISM_AUTHORITY` trap below is the recorded case
+where scoping such a fix to `schema_version < 4` — reasoning "no pinned-hash
+test exists above v3" — was itself refuted by two v5 goldens. The check above
+compares the pop's line at its EXACT indent rather than asking whether the
+source contains it, because the first version of that check did the latter and
+a mutation proved it vacuous: an eight-space guard-scoped pop CONTAINS the
+four-space string as a substring, so the check passed on the one arrangement it
+existed to forbid, while v6's hash had already moved to `80425b81f1dd1ec6…`
+(`experiments/2026-08-26-change-f1-discharge-criticism-channel/proof/
+granted_contact_mutation.txt`, M-B). Preservation is
+measured per version, not argued, and the instrument is committed:
+`experiments/2026-08-26-change-f1-discharge-criticism-channel/digests.py`
+prints the six `source_config_hash` values and the qualification subject digest,
+and its before/after captures under that tranche's `proof/` diff EMPTY.
+
+Surface 5 stayed at ZERO for the tranche's other half too, and that is measured
+rather than assumed: the channel adds two optional wire fields to
+`CompactConjectureCandidate` and `ReasoningCandidateProposal`, and the
+qualification subject embeds `contract_id` STRINGS rather than any wire schema,
+so the subject digest over a committed fixture is unchanged at
+`b9038b84efdea313…`.
+
+`check: python -c "
+import inspect
+from deepreason.run_manifest import _versioned_source_config_data as f
+found = [ln for ln in inspect.getsource(f).splitlines() if ln.strip() == 'data.pop(\"DISCHARGE_POLICY\", None)']
+assert found == ['    data.pop(\"DISCHARGE_POLICY\", None)'], found
+"`
+`check: python -c "
+from deepreason.config import Config
+from deepreason.run_manifest import source_config_hash
+h = [source_config_hash(Config(), schema_version=v) for v in (1, 2, 3, 4, 5, 6)]
+assert h[0] == h[1] == '6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81', h
+assert h[2] == h[3] == h[4] == h[5] == '2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5', h
+"`
+`check: python -c "
+import json
+from tests.test_reusable_qualification import _manifest, _profile
+from deepreason.qualification import qualification_subject_digest
+p = _profile()
+assert qualification_subject_digest(_manifest(p), p) == 'b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386'
+leaked = sorted(k for k in json.loads(_manifest(p).engine_config_json) if k == 'DISCHARGE_POLICY')
+assert not leaked, leaked
+"`
+
 ## The instruments that prove you did not break anything
 
 ### The full gate

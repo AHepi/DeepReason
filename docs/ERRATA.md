@@ -1506,3 +1506,36 @@ it fails in BOTH directions. The generalizable action for the next reader:
 where a map document states a number in prose, check whether the check under
 it is a floor or an equality, because a floor beside a number is a claim
 nothing is guarding.
+
+---
+
+## 2026-08-26 (REBUILD F1 — the discharge-required criticism channel)
+
+**E58 (renumbered at merge from E55; that number was taken same-day) — CLAUDE.md's full-gate expectation understates the suite by ~36% and
+its duration by half.** "Build and test" reads:
+
+    pytest tests/ -q -n 4                       # full gate, ~8 min
+                                                # expect ~3100 passed, 0 failed
+
+Measured twice on `4760a32ef` + this tranche, on an otherwise idle box:
+**4225 passed, 6 skipped in 962.12s (16:02)** mid-tranche, and **4231 passed,
+6 skipped in 958.70s (15:58)** at its close. The count is 36% above the stated
+figure and the wall clock is twice it.
+
+Both halves mislead in a way that costs something. The COUNT is the number a
+reader compares against to decide whether their run collected everything; a
+reader seeing 4231 against an expected ~3100 has no way to tell drift from a
+duplicated collection. The DURATION is worse: `~8 min` invites killing a gate
+at ten minutes in the belief that it has hung, which on this container is
+exactly when it is halfway through.
+
+Uncorrected in place, deliberately. The number drifts every time a tranche
+adds tests — this one added 56 — so a figure baked into CLAUDE.md is a
+claim that decays by design, and replacing 3100 with 4231 would only reset
+the clock on the same error. What a reader needs is the SHAPE (`0 failed` is
+the only acceptable result) and a way to get the current number, which
+`.pytest_cache` already holds. Recorded here so the next reader who measures
+16 minutes knows the document is behind rather than the box.
+
+Evidence: `experiments/2026-08-26-change-f1-discharge-criticism-channel/`
+CHECKLIST.md steps 18 and 29 (both runs pasted), VALIDATION.md "Full gate".

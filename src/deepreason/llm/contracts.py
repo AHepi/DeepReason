@@ -16,6 +16,42 @@ class CandidateRef(BaseModel):
     role: Literal["dependence", "mention"] = "dependence"
 
 
+def discharge_kind_enum() -> list[str]:
+    """The legal discharge kinds, read LIVE from the declaration registry.
+
+    A literal here would make a declared kind legal in Python and invisible on
+    the wire, which is worse than not declaring it: the model can only act on
+    what the schema offers. Imported lazily -- `deepreason.discharge` is a
+    consumer-facing interface and a module-level import would invert the
+    dependency this file's own seam document states.
+    """
+    from deepreason.discharge import discharge_kind_names
+
+    return list(discharge_kind_names())
+
+
+class DischargeWireV1(BaseModel):
+    """One criticism, answered (REBUILD F1).
+
+    `handle` is the criticism's handle exactly as the pack listed it, and it is
+    left a PLAIN STRING on purpose: its legal set has one authority --
+    `deepreason.discharge.open_criticisms` -- and leaving the field open is what
+    lets a menu renderer key on it by registering, without either side learning
+    the other's subsystem. A private enum here would close that seam.
+
+    NOTHING here is evidence. A discharge is a precondition on SUBMISSION; no
+    field, kind or count may feed a label, a warrant, a rank or an admission
+    decision (`DR-CON-discharge-channel`, the law line).
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    handle: str = Field(min_length=1, max_length=256)
+    kind: str = Field(min_length=1, json_schema_extra=lambda s: s.update(enum=discharge_kind_enum()))
+    note: str = ""
+    where: str | None = None
+
+
 class EvidenceRefClaimV1(BaseModel):
     """One claimed grounding in an admitted dossier block (admission §4).
 

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-llm-x-rules -->
-Verified-at: d40d3de3e
+Verified-at: 7e1ab8a54
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/adapter.py, src/deepreason/llm/firewall.py, src/deepreason/llm/packs.py, src/deepreason/llm/wire.py, src/deepreason/llm/contracts.py, src/deepreason/rules/conj.py, src/deepreason/rules/crit.py
 Sides: DR-SUB-llm, DR-SUB-rules
@@ -64,6 +64,7 @@ direction rather than only when a name disappears.
 | Route resolution | `llm/adapter.py` | `_render_request`: role/seat identity, then `lease.verify(endpoint)` | the seat a rule names must be the seat the manifest froze |
 | School routing needs a lease | `llm/adapter.py` | `"school-routed calls require an explicit endpoint lease"` | a `school_id` cannot select a route by itself |
 | Control-field firewall | `llm/adapter.py`, `llm/firewall.py` | `reject_model_control_fields(candidate)` before `wire_contract.validate_value` | model JSON may not name a route, tool, delegate, permission or status |
+| Criticism enters the pack as TEXT | `rules/conj.py`, `llm/packs.py` | `open_criticism_context=` on `render_conj_pack` | the rule reads the record and decides what the criticism MEANS; `llm/` only allocates the string it is handed — the pack layer never imports `deepreason.discharge` |
 | The same firewall, second site | `llm/wire.py` | `WireContract._preflight_value` | runs before `_reject_unknown_fields`, so a control field is a typed `ModelControlFieldError`, not `extra field at /model` |
 | Index resolution is DOWNSTREAM of the firewall | `llm/wire.py` | `WireContract._resolve_menu_indices`, called after `_preflight_value` | a seat may answer a reference field with its menu `[index]`; resolution maps that to a handle the call already listed as legal, and it runs after the control-field firewall so no model-written token reaches it unfiltered. It can replace a listed value or delete an optional one; it never adds a key (`DR-INV-reference-menu`) |
 | Sanitized repair | `llm/adapter.py`, `llm/firewall.py` | `note_control_invalid(e, sanitize_model_control_fields_for_repair(candidate))` | authored routing language never reaches the next model-facing pack |

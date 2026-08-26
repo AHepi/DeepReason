@@ -502,6 +502,7 @@ def render_conj_pack(
     capability_result_context: str | None = None,
     frame_slice_context: str | None = None,
     frame_crisis_context: str | None = None,
+    open_criticism_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
     reference_menus: tuple[MenuRender, ...] = (),
 ) -> str:
@@ -536,6 +537,32 @@ def render_conj_pack(
             provenance_refs=tuple(problem.criteria),
         )
     )
+    if open_criticism_context:
+        # PRIORITY 2, beside `criteria`, and that placement IS the change.
+        # `allocate_pack` admits in (priority, id) order, so "criteria" <
+        # "open-criticisms" puts the open indictments in the block stating what
+        # a candidate is BOUND BY -- above `mandatory-interface` (3) and far
+        # above the advisory sections. Q5 measured the alternative: criticism
+        # reaching a solver through a separable ADVICE field is neglected,
+        # while criticism entering the working context with discharge-required
+        # re-submission is the interface that coupled. A sidebar here would be
+        # the same content in the place that was measured not to work.
+        #
+        # Non-droppable AND non-compressible for the two failures Rung 6 paid
+        # for: a dropped section leaves no header, so a problem whose
+        # criticisms the budget cut is byte-indistinguishable from one with
+        # none; and a compressible section can lose its middle while still
+        # looking present. Exact is affordable because every dimension is
+        # capped by the policy in `discharge/channel.py`.
+        sections.append(
+            _pack_section(
+                "open-criticisms",
+                open_criticism_context,
+                2,
+                droppable=False,
+                compressible=False,
+            )
+        )
     # FOUNDATION before the volatile sections: frozen into the lineage
     # commitment's id, hence static per problem (cache-prefix, angle 4).
     foundation = _lineage_foundation(problem, state, commitments, blobs)
@@ -746,20 +773,35 @@ def render_conj_pack(
                 compressible=False,
             )
         )
+    directive = (
+        f"DIRECTIVE: return up to {vs_k} diverse candidates with typicality "
+        "estimates. You may instead or additionally request bounded context, "
+        "or abstain when no responsible proposal is available. Return at "
+        "least one meaningful outcome; never invent a candidate to fill a "
+        "quota. Include atypical candidates when proposing candidates."
+        if allow_no_candidate_outcome
+        else f"DIRECTIVE: return exactly {vs_k} diverse candidates with "
+        "typicality estimates. Include atypical candidates, not just the "
+        "modal answer."
+    )
+    if open_criticism_context:
+        # The obligation is on the SUBMISSION, so it belongs in the contract
+        # the submission is written against. Rendering the criticisms without
+        # this line would leave them advisory in effect however prominently
+        # they sat -- the interface Q5 measured as neglected. Note what this
+        # is NOT: it does not ask the writer to acknowledge anything.
+        # ACK-required was tested and LOWERED accuracy; every discharge kind
+        # demands substantive content instead.
+        directive += (
+            " EVERY candidate must carry a `discharges` entry for EVERY handle "
+            "listed under OPEN CRITICISMS above. A submission missing any of "
+            "them is returned to you once with the open list, and then accepted "
+            "with the gap recorded."
+        )
     sections.append(
         _pack_section(
             "output-contract",
-            (
-                f"DIRECTIVE: return up to {vs_k} diverse candidates with typicality "
-                "estimates. You may instead or additionally request bounded context, "
-                "or abstain when no responsible proposal is available. Return at "
-                "least one meaningful outcome; never invent a candidate to fill a "
-                "quota. Include atypical candidates when proposing candidates."
-                if allow_no_candidate_outcome
-                else f"DIRECTIVE: return exactly {vs_k} diverse candidates with "
-                "typicality estimates. Include atypical candidates, not just the "
-                "modal answer."
-            ),
+            directive,
             12,
             droppable=False,
             compressible=False,

@@ -1,0 +1,122 @@
+MUTATION PROOF for the modularity architecture test (REBUILD F1, R14).
+
+The claim: a FOURTH discharge kind reaches the wire schema, the submission
+screen and the pack render by DECLARATION ALONE, with rules/conj.py,
+llm/packs.py and llm/wire.py byte-unchanged.
+
+The mutation: replace the registry-derived enum in llm/contracts.py with the
+hard-coded three -- i.e. do exactly what the operator's modularity law
+forbids, adding a kind by editing a consumer instead of by declaring.
+__pycache__ cleared before measuring (DR-SCHEMA's own measurement rule).
+
+== RED ==
+F..F..                                                                   [100%]
+=================================== FAILURES ===================================
+_________________ test_no_consumer_reaches_past_the_interface __________________
+
+    def test_no_consumer_reaches_past_the_interface():
+        """R14. The package exports an interface; consumers may use only that.
+    
+        `test_signal_contract.py::test_the_allocation_controller_consumes_only_the
+        _interface` is the model, including its reason for existing: this passes on
+        the tree as it stands, so its value is not that it turns anything green
+        today. It is that it FAILS the day someone imports
+        `deepreason.discharge.submission` directly and starts depending on an
+        internal that the interface never promised.
+        """
+        offenders = []
+        for path in sorted(SRC.rglob("*.py")):
+            if PACKAGE.resolve() in path.resolve().parents:
+                continue
+            deep = sorted(
+                m for m in _imported_modules(path)
+                if m.startswith("deepreason.discharge.")
+            )
+            if deep:
+                offenders.append((str(path), deep))
+        assert not offenders, (
+            f"these reach past the interface into discharge internals: {offenders}"
+        )
+    
+        # Positive anchor (DR-SCHEMA check-writing rule 1): a moved or renamed
+        # package would make the loop above vacuous rather than failing, so the
+        # test also demands that the interface is actually being consumed. The list
+        # is pinned with `==` and the files named, because it IS the claim (rule 6,
+        # "counts are claims"): the channel reaches the rest of the tree through
+        # exactly TWO files, and each is there for a reason the design states.
+        #
+        #   rules/conj.py     renders the criticisms into the pack and screens the
+        #                     submission -- the behavioural consumer.
+        #   llm/contracts.py  derives `DischargeWireV1.kind`'s schema enum from the
+        #                     declaration registry. This one is REQUIRED by R12
+        #                     rather than incidental: a literal enum here would
+        #                     make a declared kind legal in Python and invisible on
+        #                     the wire, and the model can only act on what the
+        #                     schema offers it. It consumes the public interface
+        #                     (`discharge_kind_names`), lazily, so no cycle forms.
+        #
+        # `llm/packs.py` is deliberately NOT on this list -- the render hands it a
+        # plain string, so the pack layer never learns that criticism is what it is
+        # rendering.
+        consumers = [
+            str(p) for p in sorted(SRC.rglob("*.py"))
+            if PACKAGE.resolve() not in p.resolve().parents
+            and "deepreason.discharge" in _imported_modules(p)
+        ]
+>       assert consumers == [
+            "src/deepreason/llm/contracts.py",
+            "src/deepreason/rules/conj.py",
+        ], consumers
+E       AssertionError: ['src/deepreason/rules/conj.py']
+E       assert ['src/deeprea...ules/conj.py'] == ['src/deeprea...ules/conj.py']
+E         
+E         At index 0 diff: 'src/deepreason/rules/conj.py' != 'src/deepreason/llm/contracts.py'
+E         Right contains one more item: 'src/deepreason/rules/conj.py'
+E         Use -v to get more diff
+
+tests/test_discharge_contract.py:143: AssertionError
+________________ test_a_fourth_kind_enters_by_declaration_alone ________________
+
+harness = <deepreason.harness.Harness object at 0x7ff37b24cb10>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ff37b1a7690>
+
+    def test_a_fourth_kind_enters_by_declaration_alone(harness, monkeypatch):
+        """R12/R14, the load-bearing check: declaration is sufficient.
+    
+        A synthetic fourth kind is REGISTERED and nothing else is touched. It must
+        reach all three surfaces a kind has to reach -- the wire schema the model
+        reads, the screen that accepts a discharge, and the render that tells the
+        writer the kind exists -- with `rules/conj.py`, `llm/packs.py` and
+        `llm/wire.py` byte-unchanged.
+    
+        Mutation-proved rather than asserted: hard-coding the kind tuple in a
+        scratch copy turns this RED (`proof/arch_red.txt`).
+        """
+        from deepreason.discharge import open_criticisms
+        from deepreason.llm.wire import discharge_kind_enum
+    
+        before = {p: p.read_bytes() for p in CONSUMERS}
+    
+        synthetic = DischargeKindDeclaration(
+            name="scoped_out",
+            asserts="the criticism is outside the problem as posed",
+            requires=("note",),
+            directive_line="scoped_out -- say which part of the problem excludes it",
+            attackable=False,
+        )
+        monkeypatch.setitem(DISCHARGE_KIND_DECLARATIONS, "scoped_out", synthetic)
+    
+        # (a) the wire schema the model actually reads
+>       assert "scoped_out" in discharge_kind_enum()
+E       AssertionError: assert 'scoped_out' in ['revised', 'rebutted', 'departure_declared']
+E        +  where ['revised', 'rebutted', 'departure_declared'] = <function discharge_kind_enum at 0x7ff37bd4ef20>()
+
+tests/test_discharge_contract.py:224: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_discharge_contract.py::test_no_consumer_reaches_past_the_interface
+FAILED tests/test_discharge_contract.py::test_a_fourth_kind_enters_by_declaration_alone
+2 failed, 4 passed in 3.51s
+
+== RESTORED, GREEN ==
+......                                                                   [100%]
+6 passed in 3.56s

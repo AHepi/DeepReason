@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: d40d3de3e
+Verified-at: 7e1ab8a54
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -28,6 +28,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | give a reference-bearing field its legal handles, or add a new one | `INV-reference-menu.md` |
 | know why an artifact is (or is not) framing its problems | `CON-standing-and-background.md`, then `SUB-calculus.md` |
 | know what a pack shows about the frame it is posed in | `SEAM-calculus-x-rules.md`, then `CON-packs-and-token-economy.md` |
+| know what a pack shows about the criticism already made of a problem | `CON-discharge-channel.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -71,6 +72,7 @@ than you need.
 | `CON-seats.md` | how a role becomes a provider request: `select_lease`, `EndpointLease`, and today's one-profile-per-run mint |
 | `CON-conjecture-kinds.md` | formal vs informal, where kind is signaled, and the R-g guardrail against ranking/admission/acceptance on kind |
 | `CON-proof-debt-and-localization.md` | what a derived judgment rests on (`KERNEL_CHECK`/`OPEN_CERTIFICATES`/`AXIOM_DEBT`), and what it takes to blame one member of a bundle |
+| `CON-discharge-channel.md` | criticism in the writer's working context, and what it takes to discharge it |
 
 ## Invariants and recipes
 

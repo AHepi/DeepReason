@@ -778,7 +778,50 @@ _DECLARED: tuple[SignalDeclaration, ...] = (
 # _PREFIX_MEANINGS for the same reason _DECLARED is separate from
 # _SIGNAL_MEANINGS: that dict is the pre-contract migration pool and every
 # entry in it carries `unspecified`, which a new signal may not.
+_DISCHARGE_SIGNALS: tuple[SignalDeclaration, ...] = (
+    SignalDeclaration(
+        name="discharge-reask",
+        unit="event",
+        semantics="one submission returned to its writer ONCE, carrying the "
+                  "handles it left open (inputs: [signal, problem id, "
+                  "comma-joined handles]). It records that the turn was "
+                  "re-dispatched, never that anything was refused: the second "
+                  "submission is accepted whatever it carries. It is NOT a "
+                  "repair event and shares no budget with one - repair fixes a "
+                  "reply the SCHEMA rejected, and a re-asked reply is "
+                  "schema-valid",
+        staleness="cycle",
+    ),
+    SignalDeclaration(
+        name="discharge-undischarged",
+        unit="event",
+        semantics="one open criticism an ADMITTED candidate did not answer "
+                  "(inputs: [signal, problem id, candidate id, criticism "
+                  "handle]). The typed disclosure that closes the "
+                  "disclose-never-die road: the candidate entered the record "
+                  "WITH the gap stated rather than being refused for it. It "
+                  "is NOT a quality judgment of the candidate and nothing may "
+                  "rank on it",
+        staleness="permanent",
+    ),
+)
+
+
 _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
+    SignalDeclaration(
+        name="discharge:",
+        unit="event",
+        semantics="one open criticism ANSWERED by an admitted candidate "
+                  "(suffix = the declared discharge kind; inputs: [signal, "
+                  "criticism handle, candidate id, problem id]). It says the "
+                  "submission carried a discharge naming a handle the pack "
+                  "listed and bearing the content that kind declares it "
+                  "requires. It is NOT evidence that the answer is good: no "
+                  "discharge may reach a label, a warrant, a rank or an "
+                  "admission decision, and a REBUTTED one enters the graph as "
+                  "an ordinary attackable artifact to be judged there",
+        staleness="permanent",
+    ),
     SignalDeclaration(
         name="premise-citation:",
         unit="event",
@@ -801,6 +844,7 @@ _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
 # The declarations are the contract; these two are derived views of it.
 SIGNAL_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_SIGNAL_MEANINGS)
 SIGNAL_DECLARATIONS.update({d.name: d for d in _DECLARED})
+SIGNAL_DECLARATIONS.update({d.name: d for d in _DISCHARGE_SIGNALS})
 PREFIX_DECLARATIONS: dict[str, SignalDeclaration] = _migrated(_PREFIX_MEANINGS)
 PREFIX_DECLARATIONS.update({d.name: d for d in _DECLARED_PREFIXES})
 

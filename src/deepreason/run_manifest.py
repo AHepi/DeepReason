@@ -2405,6 +2405,15 @@ def _versioned_source_config_data(
     # Config echo drops it unconditionally for the same reason every other
     # authority knob was never added here in the first place.
     data.pop("ADJUDICATION_STATUS_AUTHORITY_ENABLED", None)
+    # DISCHARGE_POLICY postdates every schema version's frozen wire-byte
+    # goldens for the same reason, and the pop is UNCONDITIONAL for the reason
+    # ENGAGED_CRITICISM_AUTHORITY's own entry above records: a fix scoped to
+    # the versions that happen to carry a pinned test today was itself refuted
+    # by the full gate. The knob selects a GENERATION-side policy preset that
+    # is never written to the manifest at all, so the echo has nothing to
+    # preserve and dropping it keeps every qualification subject digest still.
+    # Granted contact, 2026-08-26; see DR-INV-frozen-surfaces.
+    data.pop("DISCHARGE_POLICY", None)
     # JUDGE_SEATS_ENABLED and its throttle knobs postdate every schema
     # version's frozen wire-byte goldens too, for the same reason as
     # ADJUDICATION_STATUS_AUTHORITY_ENABLED above: the master judge-dispatch
