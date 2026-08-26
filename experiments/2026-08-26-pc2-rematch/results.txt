@@ -1,0 +1,44 @@
+# Results for /home/user/DeepReason/experiments/2026-08-26-pc2-rematch/run
+  (resolved from a root)
+
+## Question
+  Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line "POINT x y" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line "CLAIM v" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.
+
+## Run
+  run id (the deterministic identity of this run): 957f4446dcc6d07a8114846ef5061858dcb3370ca35a990481bb045e9b52bd7e
+  state: failed
+  stop_reason (the typed reason it ended, never a crash): operational_failure
+  cycles completed: 11
+  tokens spent vs budget: 0 / 3000000
+  manifest (the compiled configuration the run carries) present: yes, schema version 6
+
+## Artifacts
+  accepted / refuted / suspended: 843 / 220 / 0
+  survivors (positions still standing at the end): — not recorded (NO_SURVIVOR_RECORD)
+  frontier (the open edge of the inquiry): — not recorded (NO_FRONTIER_RECORD) artifacts, problem None
+
+## Adjudication (defended trials — a criticism argued and judged)
+  ran: no
+  judge calls: 0
+  trial verdicts observed: none
+  trials declined (the case did not sustain): none
+  trials blocked by a guard: none
+
+## Measurement instrument
+  embedder (the model that turned this run's text into vectors, so its novelty, near-duplicate and school-distance readings are on that model's scale): neural (nomic-ai/nomic-embed-text-v1.5)
+
+## Verification
+  verify_root verdict (the replay check that re-derives the whole run from its log and confirms nothing in the record is corrupt or altered): yes
+  read from: stored (pass --verify to re-derive it instead of reading the stored verdict)
+  violations: 0
+  finding families: completion=2, epistemic=0, integrity=0, operational=62, security=0
+
+## Amendment and terminal readiness
+  amendment epochs (later question/evidence appended without editing anything): 0
+  stands at a valid typed terminal: yes (terminal epoch 0)
+  stop reason is resumable: no
+  ready for `deepreason amend` / `deepreason continue`: no
+
+## Not recorded by this root
+  NO_FRONTIER_RECORD
+  NO_SURVIVOR_RECORD
