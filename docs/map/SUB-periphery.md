@@ -1,5 +1,5 @@
 <!-- DR-SUB-periphery -->
-Verified-at: 748c9ab61
+Verified-at: d40d3de3e
 Verify: python -m pytest tests/test_torn_append.py tests/test_merge.py tests/test_pack_ir.py tests/test_workload_text.py tests/test_admission.py tests/test_research.py tests/test_schools.py tests/test_simulation_compiler.py tests/test_webapp.py tests/test_campaign_coordinator.py -q
 Owns: src/deepreason/log/, src/deepreason/storage/, src/deepreason/evidence/, src/deepreason/admission/, src/deepreason/packs/, src/deepreason/workloads/, src/deepreason/capture/, src/deepreason/research/, src/deepreason/simulation/, src/deepreason/unification/, src/deepreason/views/, src/deepreason/ui/, src/deepreason/brain/, src/deepreason/skills/, src/deepreason/experiments/, src/deepreason/mcp_server.py, src/deepreason/webapp.py, src/deepreason/imports.py, src/deepreason/compat_eval.py
 Seams: DR-SEAM-periphery-x-verification

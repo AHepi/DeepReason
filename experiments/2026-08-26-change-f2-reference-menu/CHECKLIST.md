@@ -1,6 +1,6 @@
 # Checklist for: reference grounding — the model chooses handles from a menu
 
-State: next=validation blockers=diff_budget EXCEEDED 2505/2400 (SPEC Amendment 2); all 35 steps checked, full gate 4214 passed 0 failed
+State: next=delivery blockers=diff_budget EXCEEDED 2505/2400 (SPEC Amendment 2); all 37 steps checked
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
@@ -506,3 +506,34 @@ S6 (19-21), S7 (22,23), S8 (18,24,33), S9 (25,26), S10 (8), S11 (27),
 S12 (2,27), S13 (2,3), S14 (28), S15 (2,25,26), S16 (1,5,16,30,32),
 S17 (34), S18 (31). Every S-number has at least one step; every step
 cites an S-number.
+
+## Re-planned after validation (dr-plan-steps: append only, never rewrite)
+
+Validation's `docs_verify --stale` pass reported this tranche's own commits
+against two owned documents. `--coverage` reported 2 findings and 17 seams
+without a `Sweep:` header, but those are IDENTICAL at the tranche base
+(verified by re-running the tool on `4760a32ef`), so they are pre-existing
+and not this tranche's to fix.
+
+- [x] 36. (S16) Advance `Verified-at:` on every map document this tranche
+      EDITED, after re-running each one's own `Verify:` command. A stale
+      stamp is honest and a false one is not, so this is done by running the
+      checks, not by stamping. `SUB-rules.md` is deliberately NOT advanced:
+      this tranche changed files it owns but no claim it makes, and the
+      agreement that did move — what `conj.py`/`crit.py` put in a pack — is
+      `DR-SEAM-llm-x-rules`', which was updated in the same commit as the
+      behaviour.
+      done-when: `python tools/docs_verify.py` -> 0 failed AND every edited
+      document's `Verified-at:` is this tranche's head
+      PROOF: every edited document's OWN `Verify:` command was re-run before
+      its stamp moved -- `docs_verify` full `65 documents, 1085 checks,
+      0 failed`; `--links` `0 dangling`; SUB-llm's pytest set `121 passed`.
+      Seven stamps advanced to d40d3de3e: INV-reference-menu, SUB-periphery,
+      SEAM-llm-x-rules, SEAM-rules-x-scratch, INDEX, SUB-llm,
+      CON-packs-and-token-economy. SUB-rules.md left at b41c5cf10 for the
+      reason stated in the step.
+
+- [x] 37. (all) [COMMIT] Push the stamp advance; re-run validation.
+      done-when: `git status --porcelain` empty AND local HEAD on origin
+
+      PROOF: committed and pushed; tree clean; local HEAD on origin.

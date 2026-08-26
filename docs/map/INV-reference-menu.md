@@ -1,5 +1,5 @@
 <!-- DR-INV-reference-menu -->
-Verified-at: 4760a32ef
+Verified-at: d40d3de3e
 Verify: python -m pytest tests/test_reference_menu.py -q
 Owns: src/deepreason/llm/reference_menu.py
 Seams: DR-SEAM-llm-x-rules, DR-SEAM-rules-x-scratch
