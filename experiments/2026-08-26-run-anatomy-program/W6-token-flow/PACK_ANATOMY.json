@@ -1,0 +1,419 @@
+{
+ "schema": "run-anatomy.w6.pack-anatomy.v1",
+ "regenerate": "python3 pack_anatomy.py  (after flow.py)",
+ "calls_analysed": 3155,
+ "prompt_blobs_missing": 0,
+ "estimator": "deepreason.packs.allocate.approximate_tokens, (len+3)//4",
+ "by_contract": {
+  "conjecturer.turn.v6": {
+   "calls": 816,
+   "preamble_tokens_est": 70636,
+   "schema_tokens_est": 1866025,
+   "interstitial_tokens_est": 950161,
+   "body_tokens_est": 723169,
+   "total_tokens_est": 3623348,
+   "provider_prompt_tokens": 4017868,
+   "sectioned_calls": 491,
+   "schema_located_calls": 491,
+   "preamble_share": 0.0195,
+   "schema_share": 0.515,
+   "interstitial_share": 0.2622,
+   "body_share": 0.1996,
+   "fixed_toll_share": 0.5345,
+   "estimator_vs_provider": 0.9018,
+   "mean_prompt_tokens_est_per_call": 4440.4
+  },
+  "batch-critic.v2": {
+   "calls": 1384,
+   "preamble_tokens_est": 148899,
+   "schema_tokens_est": 293663,
+   "interstitial_tokens_est": 1324020,
+   "body_tokens_est": 0,
+   "total_tokens_est": 1767184,
+   "provider_prompt_tokens": 1822069,
+   "sectioned_calls": 0,
+   "schema_located_calls": 1286,
+   "preamble_share": 0.0843,
+   "schema_share": 0.1662,
+   "interstitial_share": 0.7492,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.2504,
+   "estimator_vs_provider": 0.9699,
+   "mean_prompt_tokens_est_per_call": 1276.9
+  },
+  "conjecturer.atomic-candidate.v1": {
+   "calls": 373,
+   "preamble_tokens_est": 18112,
+   "schema_tokens_est": 345113,
+   "interstitial_tokens_est": 47632,
+   "body_tokens_est": 369335,
+   "total_tokens_est": 785888,
+   "provider_prompt_tokens": 911733,
+   "sectioned_calls": 351,
+   "schema_located_calls": 351,
+   "preamble_share": 0.023,
+   "schema_share": 0.4391,
+   "interstitial_share": 0.0606,
+   "body_share": 0.47,
+   "fixed_toll_share": 0.4622,
+   "estimator_vs_provider": 0.862,
+   "mean_prompt_tokens_est_per_call": 2106.9
+  },
+  "judgeruling.direct.v1": {
+   "calls": 342,
+   "preamble_tokens_est": 29412,
+   "schema_tokens_est": 38646,
+   "interstitial_tokens_est": 362880,
+   "body_tokens_est": 0,
+   "total_tokens_est": 431022,
+   "provider_prompt_tokens": 358172,
+   "sectioned_calls": 0,
+   "schema_located_calls": 342,
+   "preamble_share": 0.0682,
+   "schema_share": 0.0897,
+   "interstitial_share": 0.8419,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.1579,
+   "estimator_vs_provider": 1.2034,
+   "mean_prompt_tokens_est_per_call": 1260.3
+  },
+  "bridge.ledger.v3": {
+   "calls": 18,
+   "preamble_tokens_est": 2376,
+   "schema_tokens_est": 17142,
+   "interstitial_tokens_est": 114251,
+   "body_tokens_est": 0,
+   "total_tokens_est": 133769,
+   "provider_prompt_tokens": 141142,
+   "sectioned_calls": 0,
+   "schema_located_calls": 12,
+   "preamble_share": 0.0178,
+   "schema_share": 0.1281,
+   "interstitial_share": 0.8541,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.1459,
+   "estimator_vs_provider": 0.9478,
+   "mean_prompt_tokens_est_per_call": 7431.6
+  },
+  "defender.direct.v1": {
+   "calls": 122,
+   "preamble_tokens_est": 8418,
+   "schema_tokens_est": 5612,
+   "interstitial_tokens_est": 42143,
+   "body_tokens_est": 0,
+   "total_tokens_est": 56108,
+   "provider_prompt_tokens": 46071,
+   "sectioned_calls": 0,
+   "schema_located_calls": 122,
+   "preamble_share": 0.15,
+   "schema_share": 0.1,
+   "interstitial_share": 0.7511,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.2501,
+   "estimator_vs_provider": 1.2179,
+   "mean_prompt_tokens_est_per_call": 459.9
+  },
+  "critic.atomic-target.v1": {
+   "calls": 34,
+   "preamble_tokens_est": 1462,
+   "schema_tokens_est": 8381,
+   "interstitial_tokens_est": 1166,
+   "body_tokens_est": 30327,
+   "total_tokens_est": 42400,
+   "provider_prompt_tokens": 46203,
+   "sectioned_calls": 34,
+   "schema_located_calls": 34,
+   "preamble_share": 0.0345,
+   "schema_share": 0.1977,
+   "interstitial_share": 0.0275,
+   "body_share": 0.7153,
+   "fixed_toll_share": 0.2321,
+   "estimator_vs_provider": 0.9177,
+   "mean_prompt_tokens_est_per_call": 1247.1
+  },
+  "bridge.ledger-batch.v1": {
+   "calls": 13,
+   "preamble_tokens_est": 506,
+   "schema_tokens_est": 13776,
+   "interstitial_tokens_est": 19406,
+   "body_tokens_est": 0,
+   "total_tokens_est": 33684,
+   "provider_prompt_tokens": 35643,
+   "sectioned_calls": 0,
+   "schema_located_calls": 11,
+   "preamble_share": 0.015,
+   "schema_share": 0.409,
+   "interstitial_share": 0.5761,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.424,
+   "estimator_vs_provider": 0.945,
+   "mean_prompt_tokens_est_per_call": 2591.1
+  },
+  "variator.direct.v1": {
+   "calls": 30,
+   "preamble_tokens_est": 3300,
+   "schema_tokens_est": 4680,
+   "interstitial_tokens_est": 23235,
+   "body_tokens_est": 0,
+   "total_tokens_est": 31204,
+   "provider_prompt_tokens": 26404,
+   "sectioned_calls": 0,
+   "schema_located_calls": 30,
+   "preamble_share": 0.1058,
+   "schema_share": 0.15,
+   "interstitial_share": 0.7446,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.2557,
+   "estimator_vs_provider": 1.1818,
+   "mean_prompt_tokens_est_per_call": 1040.1
+  },
+  "bridge.composition.v2": {
+   "calls": 12,
+   "preamble_tokens_est": 1473,
+   "schema_tokens_est": 7384,
+   "interstitial_tokens_est": 19717,
+   "body_tokens_est": 0,
+   "total_tokens_est": 28579,
+   "provider_prompt_tokens": 38927,
+   "sectioned_calls": 0,
+   "schema_located_calls": 10,
+   "preamble_share": 0.0515,
+   "schema_share": 0.2584,
+   "interstitial_share": 0.6899,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.3099,
+   "estimator_vs_provider": 0.7342,
+   "mean_prompt_tokens_est_per_call": 2381.6
+  },
+  "config-referee.v1": {
+   "calls": 6,
+   "preamble_tokens_est": 954,
+   "schema_tokens_est": 996,
+   "interstitial_tokens_est": 7077,
+   "body_tokens_est": 0,
+   "total_tokens_est": 9025,
+   "provider_prompt_tokens": 14823,
+   "sectioned_calls": 0,
+   "schema_located_calls": 6,
+   "preamble_share": 0.1057,
+   "schema_share": 0.1104,
+   "interstitial_share": 0.7842,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.2161,
+   "estimator_vs_provider": 0.6089,
+   "mean_prompt_tokens_est_per_call": 1504.2
+  },
+  "bridge.composition-batch.v1": {
+   "calls": 5,
+   "preamble_tokens_est": 243,
+   "schema_tokens_est": 2613,
+   "interstitial_tokens_est": 3197,
+   "body_tokens_est": 0,
+   "total_tokens_est": 6057,
+   "provider_prompt_tokens": 8090,
+   "sectioned_calls": 0,
+   "schema_located_calls": 4,
+   "preamble_share": 0.0401,
+   "schema_share": 0.4314,
+   "interstitial_share": 0.5278,
+   "body_share": 0.0,
+   "fixed_toll_share": 0.4715,
+   "estimator_vs_provider": 0.7487,
+   "mean_prompt_tokens_est_per_call": 1211.4
+  }
+ },
+ "by_section": {
+  "mandatory-interface": {
+   "kind": "protocol",
+   "appearances": 170,
+   "tokens_est": 229041,
+   "share_of_sectioned_body": 0.204,
+   "mean_tokens_est": 1347.3
+  },
+  "scratch-advisory-context": {
+   "kind": "steering",
+   "appearances": 271,
+   "tokens_est": 171750,
+   "share_of_sectioned_body": 0.153,
+   "mean_tokens_est": 633.8
+  },
+  "neighbourhood": {
+   "kind": "prior-candidates",
+   "appearances": 558,
+   "tokens_est": 164882,
+   "share_of_sectioned_body": 0.1468,
+   "mean_tokens_est": 295.5
+  },
+  "citable-evidence-blocks": {
+   "kind": "evidence",
+   "appearances": 167,
+   "tokens_est": 152653,
+   "share_of_sectioned_body": 0.136,
+   "mean_tokens_est": 914.1
+  },
+  "problem": {
+   "kind": "frame",
+   "appearances": 842,
+   "tokens_est": 115463,
+   "share_of_sectioned_body": 0.1028,
+   "mean_tokens_est": 137.1
+  },
+  "output-contract": {
+   "kind": "protocol",
+   "appearances": 678,
+   "tokens_est": 98775,
+   "share_of_sectioned_body": 0.088,
+   "mean_tokens_est": 145.7
+  },
+  "criteria": {
+   "kind": "frame",
+   "appearances": 842,
+   "tokens_est": 97896,
+   "share_of_sectioned_body": 0.0872,
+   "mean_tokens_est": 116.3
+  },
+  "frozen-evidence-context": {
+   "kind": "evidence",
+   "appearances": 96,
+   "tokens_est": 51611,
+   "share_of_sectioned_body": 0.046,
+   "mean_tokens_est": 537.6
+  },
+  "target": {
+   "kind": "prior-candidates",
+   "appearances": 34,
+   "tokens_est": 11775,
+   "share_of_sectioned_body": 0.0105,
+   "mean_tokens_est": 346.3
+  },
+  "school-stance": {
+   "kind": "steering",
+   "appearances": 533,
+   "tokens_est": 7250,
+   "share_of_sectioned_body": 0.0065,
+   "mean_tokens_est": 13.6
+  },
+  "target-commitments": {
+   "kind": "frame",
+   "appearances": 34,
+   "tokens_est": 6235,
+   "share_of_sectioned_body": 0.0056,
+   "mean_tokens_est": 183.4
+  },
+  "problem-context": {
+   "kind": "frame",
+   "appearances": 34,
+   "tokens_est": 4298,
+   "share_of_sectioned_body": 0.0038,
+   "mean_tokens_est": 126.4
+  },
+  "machine-evaluation-boundary": {
+   "kind": "protocol",
+   "appearances": 34,
+   "tokens_est": 3876,
+   "share_of_sectioned_body": 0.0035,
+   "mean_tokens_est": 114.0
+  },
+  "complement-directive": {
+   "kind": "steering",
+   "appearances": 107,
+   "tokens_est": 3531,
+   "share_of_sectioned_body": 0.0031,
+   "mean_tokens_est": 33.0
+  },
+  "target-support-content": {
+   "kind": "prior-candidates",
+   "appearances": 21,
+   "tokens_est": 2107,
+   "share_of_sectioned_body": 0.0019,
+   "mean_tokens_est": 100.3
+  },
+  "target-support-chain": {
+   "kind": "prior-candidates",
+   "appearances": 22,
+   "tokens_est": 1274,
+   "share_of_sectioned_body": 0.0011,
+   "mean_tokens_est": 57.9
+  },
+  "context-withheld": {
+   "kind": "protocol",
+   "appearances": 3,
+   "tokens_est": 414,
+   "share_of_sectioned_body": 0.0004,
+   "mean_tokens_est": 138.0
+  }
+ },
+ "by_section_kind": {
+  "protocol": {
+   "appearances": 885,
+   "tokens_est": 332106,
+   "share_of_sectioned_body": 0.2958
+  },
+  "frame": {
+   "appearances": 1752,
+   "tokens_est": 223892,
+   "share_of_sectioned_body": 0.1994
+  },
+  "evidence": {
+   "appearances": 263,
+   "tokens_est": 204264,
+   "share_of_sectioned_body": 0.1819
+  },
+  "steering": {
+   "appearances": 911,
+   "tokens_est": 182531,
+   "share_of_sectioned_body": 0.1626
+  },
+  "prior-candidates": {
+   "appearances": 635,
+   "tokens_est": 180038,
+   "share_of_sectioned_body": 0.1603
+  }
+ },
+ "sectioned_calls": 876,
+ "unsectioned_calls": 2279,
+ "unsectioned_contracts": {
+  "conjecturer.turn.v6": 325,
+  "conjecturer.atomic-candidate.v1": 22,
+  "batch-critic.v2": 1384,
+  "defender.direct.v1": 122,
+  "judgeruling.direct.v1": 342,
+  "variator.direct.v1": 30,
+  "bridge.ledger.v3": 18,
+  "bridge.composition.v2": 12,
+  "bridge.composition-batch.v1": 5,
+  "config-referee.v1": 6,
+  "bridge.ledger-batch.v1": 13
+ },
+ "by_prompt_form": {
+  "packed": {
+   "calls": 876,
+   "prompt_tokens_est": 3459074,
+   "provider_prompt_tokens": 3952673
+  },
+  "flat": {
+   "calls": 1889,
+   "prompt_tokens_est": 2495840,
+   "provider_prompt_tokens": 2472793
+  },
+  "repair-patch": {
+   "calls": 390,
+   "prompt_tokens_est": 993354,
+   "provider_prompt_tokens": 1041679
+  }
+ },
+ "repair_prompts": {
+  "calls": 390,
+  "returned_rejected_json_tokens_est": 765008,
+  "diagnostic_envelope_tokens_est": 194383,
+  "provider_prompt_tokens": 1041679,
+  "by_contract": {
+   "conjecturer.turn.v6": 292,
+   "batch-critic.v2": 80,
+   "conjecturer.atomic-candidate.v1": 16,
+   "bridge.composition.v2": 1,
+   "bridge.composition-batch.v1": 1
+  },
+  "note": "a repair re-ask sends the model its own rejected JSON back verbatim plus a diagnostic envelope, and no pack"
+ }
+}

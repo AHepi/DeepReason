@@ -11,8 +11,17 @@ Nothing here invents a taxonomy.  Every class is a field the record already
 carries:
 
     purpose   <- contract_id (which form was being filled)
-    call_kind <- attempt_trace.repair_scope: empty is a first ask, non-empty
-                 names the JSON pointer a repair re-ask was aimed at
+    call_kind <- workflow-work-lifecycle-transition-v1's `work_prepared`
+                 trigger_ref for this (work_id, attempt_index): `conjecture:`
+                 and `criticism:` are first asks, `repair:` is a re-ask,
+                 `decomposition-child:` is one leg of a split contract, and
+                 `trial:` / `bridge:` are the adjudication and report-pass
+                 first asks.
+                 NOT attempt_trace.repair_scope: that field is populated on
+                 only 128 of the inventory's 1128 repair re-asks -- it names
+                 the JSON pointer a repair was aimed at, when one was named,
+                 and reading it as the repair marker undercounts the repair
+                 bill by an order of magnitude
     outcome   <- workflow-work-terminal-v1.status + .reason_code
     admission <- workflow-semantic-admission-v1.outcome
     fate      <- the replayed EpistemicState's status for the artifacts the
@@ -155,6 +164,11 @@ def scan_root(root: str) -> dict:
         (t["work_id"], t["attempt_index"]): t
         for t in load_objects(abs_root, "workflow-work-terminal-v1")
     }
+    prepared = {
+        (t["work_id"], t["attempt_index"]): t
+        for t in load_objects(abs_root, "workflow-work-lifecycle-transition-v1")
+        if t.get("transition_kind") == "work_prepared"
+    }
     admissions = {
         (a["work_id"], a["attempt_index"]): a
         for a in load_objects(abs_root, "workflow-semantic-admission-v1")
@@ -211,6 +225,18 @@ def scan_root(root: str) -> dict:
             prompt_t, compl_t, usage, key = llm.get("prompt_tokens"), llm.get("completion_tokens"), None, None
         term = terminals.get(key) if key else None
         adm = admissions.get(key) if key else None
+        prep = prepared.get(key) if key else None
+        trigger = (prep or {}).get("trigger_ref") or ""
+        trigger_kind = trigger.split(":", 1)[0] if ":" in trigger else (trigger or "unrecorded")
+        call_kind = {
+            "conjecture": "first-ask",
+            "criticism": "first-ask",
+            "config-referee": "first-ask",
+            "trial": "first-ask",
+            "bridge": "first-ask",
+            "repair": "repair",
+            "decomposition-child": "decomposition-leg",
+        }.get(trigger_kind, f"unclassified:{trigger_kind}")
 
         # the downstream window: artifacts this call's admitted output created
         lo, hi = e["seq"], next_call[e["seq"]]
@@ -239,7 +265,8 @@ def scan_root(root: str) -> dict:
             "contract_id": contract,
             "purpose": purpose,
             "purpose_detail": detail,
-            "call_kind": "repair" if repair_scope else "first-ask",
+            "call_kind": call_kind,
+            "trigger_kind": trigger_kind,
             "repair_scope": repair_scope,
             "validation_path": trace.get("validation_path") or "",
             "arrival_valid": trace.get("valid"),
@@ -431,6 +458,15 @@ def main() -> int:
         "program_by_outcome": rollup(all_rows, ("outcome",)),
         "program_by_outcome_reason": rollup(all_rows, ("outcome", "terminal_reason_code")),
         "program_by_call_kind": rollup(all_rows, ("call_kind",)),
+        "program_by_call_kind_and_purpose": rollup(all_rows, ("call_kind", "purpose_detail")),
+        "repair_scope_coverage": {
+            "calls_classified_repair_by_lifecycle_trigger": sum(
+                1 for r in all_rows if r["call_kind"] == "repair"),
+            "calls_carrying_a_non_empty_repair_scope": sum(
+                1 for r in all_rows if r["repair_scope"]),
+            "note": "repair_scope names the JSON pointer a repair was aimed "
+                    "at when one was named; it is not the repair marker.",
+        },
         "program_tokens_by_artifact_fate": dict(fate_tokens.most_common()),
         "program_by_fate_class": rollup(all_rows, ("fate_class",)),
         "program_by_fate_class_and_purpose": rollup(all_rows, ("fate_class", "purpose_detail")),

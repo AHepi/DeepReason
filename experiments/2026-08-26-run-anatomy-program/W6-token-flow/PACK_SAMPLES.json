@@ -1,0 +1,1492 @@
+{
+ "schema": "run-anatomy.w6.pack-samples.v1",
+ "regenerate": "python3 pack_anatomy.py  (after flow.py)",
+ "samples": {
+  "experiments/2026-08-25-change-constructive-frontier/run": [
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 26,
+    "cycle": 1,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6008,
+    "provider_completion_tokens": 2216,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16765,
+    "schema_tokens_est": 4192,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 3187,
+    "body_tokens_est": 799,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 371,
+      "tokens_est": 93
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 20544,
+    "total_tokens_est": 5136
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 177,
+    "cycle": 2,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6205,
+    "provider_completion_tokens": 2385,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16930,
+    "schema_tokens_est": 4233,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 3487,
+    "body_tokens_est": 874,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 671,
+      "tokens_est": 168
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21009,
+    "total_tokens_est": 5253
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 360,
+    "cycle": 3,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 4811,
+    "provider_completion_tokens": 1755,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 14730,
+    "schema_tokens_est": 3683,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 1478,
+    "body_tokens_est": 371,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 83,
+      "tokens_est": 21
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 60,
+      "tokens_est": 15
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 671,
+      "tokens_est": 168
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 16800,
+    "total_tokens_est": 4200
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 629,
+    "cycle": 5,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6275,
+    "provider_completion_tokens": 2453,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 3973,
+    "body_tokens_est": 996,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1157,
+      "tokens_est": 290
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21462,
+    "total_tokens_est": 5366
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 922,
+    "cycle": 6,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6254,
+    "provider_completion_tokens": 1962,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 3918,
+    "body_tokens_est": 982,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1157,
+      "tokens_est": 290
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21389,
+    "total_tokens_est": 5348
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 1140,
+    "cycle": 7,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 4866,
+    "provider_completion_tokens": 819,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 14708,
+    "schema_tokens_est": 3677,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 1909,
+    "body_tokens_est": 479,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 83,
+      "tokens_est": 21
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 60,
+      "tokens_est": 15
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1157,
+      "tokens_est": 290
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 17191,
+    "total_tokens_est": 4298
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 1522,
+    "cycle": 9,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6289,
+    "provider_completion_tokens": 1816,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 4114,
+    "body_tokens_est": 1031,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21452,
+    "total_tokens_est": 5363
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 1774,
+    "cycle": 10,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6289,
+    "provider_completion_tokens": 1545,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 4114,
+    "body_tokens_est": 1031,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21452,
+    "total_tokens_est": 5363
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 1951,
+    "cycle": 11,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 4901,
+    "provider_completion_tokens": 547,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 14708,
+    "schema_tokens_est": 3677,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 2105,
+    "body_tokens_est": 528,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 83,
+      "tokens_est": 21
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 60,
+      "tokens_est": 15
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 17254,
+    "total_tokens_est": 4314
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 2251,
+    "cycle": 13,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6289,
+    "provider_completion_tokens": 1831,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 4114,
+    "body_tokens_est": 1031,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21452,
+    "total_tokens_est": 5363
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 2557,
+    "cycle": 14,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6289,
+    "provider_completion_tokens": 1221,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 4114,
+    "body_tokens_est": 1031,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21452,
+    "total_tokens_est": 5363
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 2819,
+    "cycle": 15,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 4901,
+    "provider_completion_tokens": 623,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 14708,
+    "schema_tokens_est": 3677,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 2105,
+    "body_tokens_est": 528,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 83,
+      "tokens_est": 21
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 60,
+      "tokens_est": 15
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 17254,
+    "total_tokens_est": 4314
+   },
+   {
+    "root": "experiments/2026-08-25-change-constructive-frontier/run",
+    "seq": 3132,
+    "cycle": 16,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6289,
+    "provider_completion_tokens": 800,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16897,
+    "schema_tokens_est": 4225,
+    "interstitial_chars": 187,
+    "interstitial_tokens_est": 47,
+    "body_chars": 4114,
+    "body_tokens_est": 1031,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 734,
+      "tokens_est": 184
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1418,
+      "tokens_est": 355
+     },
+     {
+      "id": "neighbourhood",
+      "kind": "prior-candidates",
+      "chars": 1353,
+      "tokens_est": 339
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 21452,
+    "total_tokens_est": 5363
+   }
+  ],
+  "experiments/2026-08-25-poietics-program/run": [
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 85,
+    "cycle": 1,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8382,
+    "provider_completion_tokens": 2488,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 10297,
+    "body_tokens_est": 2577,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2211,
+      "tokens_est": 553
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27593,
+    "total_tokens_est": 6899
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 418,
+    "cycle": 3,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 7736,
+    "provider_completion_tokens": 962,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 14642,
+    "schema_tokens_est": 3661,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 9719,
+    "body_tokens_est": 2433,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 321,
+      "tokens_est": 81
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 403,
+      "tokens_est": 101
+     },
+     {
+      "id": "mandatory-interface",
+      "kind": "protocol",
+      "chars": 5630,
+      "tokens_est": 1408
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 2701,
+      "tokens_est": 676
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 24987,
+    "total_tokens_est": 6247
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 443,
+    "cycle": 3,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "first-ask",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "criticism",
+    "provider_prompt_tokens": 1075,
+    "provider_completion_tokens": 303,
+    "prompt_form": "flat",
+    "schema_located": true,
+    "preamble_chars": 584,
+    "preamble_tokens_est": 146,
+    "schema_chars": 1275,
+    "schema_tokens_est": 319,
+    "interstitial_chars": 1958,
+    "interstitial_tokens_est": 490,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "sectioned": false,
+    "sections": [],
+    "total_chars": 3819,
+    "total_tokens_est": 955
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 576,
+    "cycle": 3,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "first-ask",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "criticism",
+    "provider_prompt_tokens": 3059,
+    "provider_completion_tokens": 306,
+    "prompt_form": "flat",
+    "schema_located": true,
+    "preamble_chars": 584,
+    "preamble_tokens_est": 146,
+    "schema_chars": 1275,
+    "schema_tokens_est": 319,
+    "interstitial_chars": 8849,
+    "interstitial_tokens_est": 2213,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "sectioned": false,
+    "sections": [],
+    "total_chars": 10710,
+    "total_tokens_est": 2678
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 742,
+    "cycle": 4,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8383,
+    "provider_completion_tokens": 2719,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 10297,
+    "body_tokens_est": 2577,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2211,
+      "tokens_est": 553
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27593,
+    "total_tokens_est": 6899
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1064,
+    "cycle": 5,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6923,
+    "provider_completion_tokens": 966,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 509,
+    "preamble_tokens_est": 128,
+    "schema_chars": 14642,
+    "schema_tokens_est": 3661,
+    "interstitial_chars": 0,
+    "interstitial_tokens_est": 0,
+    "body_chars": 10197,
+    "body_tokens_est": 2552,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 321,
+      "tokens_est": 81
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 403,
+      "tokens_est": 101
+     },
+     {
+      "id": "mandatory-interface",
+      "kind": "protocol",
+      "chars": 8554,
+      "tokens_est": 2139
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 50,
+      "tokens_est": 13
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 320,
+      "tokens_est": 80
+     },
+     {
+      "id": "context-withheld",
+      "kind": "protocol",
+      "chars": 549,
+      "tokens_est": 138
+     }
+    ],
+    "total_chars": 25458,
+    "total_tokens_est": 6365
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1159,
+    "cycle": 5,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "first-ask",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "criticism",
+    "provider_prompt_tokens": 1058,
+    "provider_completion_tokens": 355,
+    "prompt_form": "flat",
+    "schema_located": true,
+    "preamble_chars": 584,
+    "preamble_tokens_est": 146,
+    "schema_chars": 1275,
+    "schema_tokens_est": 319,
+    "interstitial_chars": 1892,
+    "interstitial_tokens_est": 473,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "sectioned": false,
+    "sections": [],
+    "total_chars": 3753,
+    "total_tokens_est": 939
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1341,
+    "cycle": 7,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8348,
+    "provider_completion_tokens": 2833,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 131,
+    "interstitial_tokens_est": 33,
+    "body_chars": 10297,
+    "body_tokens_est": 2577,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2211,
+      "tokens_est": 553
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 55,
+      "tokens_est": 14
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27404,
+    "total_tokens_est": 6851
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1563,
+    "cycle": 7,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8351,
+    "provider_completion_tokens": 2390,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 131,
+    "interstitial_tokens_est": 33,
+    "body_chars": 10299,
+    "body_tokens_est": 2578,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2223,
+      "tokens_est": 556
+     },
+     {
+      "id": "school-stance",
+      "kind": "steering",
+      "chars": 45,
+      "tokens_est": 12
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27406,
+    "total_tokens_est": 6852
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1668,
+    "cycle": 8,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6870,
+    "provider_completion_tokens": 933,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 14642,
+    "schema_tokens_est": 3661,
+    "interstitial_chars": 163,
+    "interstitial_tokens_est": 41,
+    "body_chars": 10147,
+    "body_tokens_est": 2539,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 321,
+      "tokens_est": 81
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 403,
+      "tokens_est": 101
+     },
+     {
+      "id": "mandatory-interface",
+      "kind": "protocol",
+      "chars": 8554,
+      "tokens_est": 2139
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 320,
+      "tokens_est": 80
+     },
+     {
+      "id": "context-withheld",
+      "kind": "protocol",
+      "chars": 549,
+      "tokens_est": 138
+     }
+    ],
+    "total_chars": 25233,
+    "total_tokens_est": 6309
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 1941,
+    "cycle": 9,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8355,
+    "provider_completion_tokens": 1872,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 131,
+    "interstitial_tokens_est": 33,
+    "body_chars": 10298,
+    "body_tokens_est": 2577,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2267,
+      "tokens_est": 567
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27387,
+    "total_tokens_est": 6847
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 2173,
+    "cycle": 9,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "repair",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "repair",
+    "provider_prompt_tokens": 996,
+    "provider_completion_tokens": 71,
+    "prompt_form": "repair-patch",
+    "schema_located": false,
+    "sectioned": false,
+    "sections": [],
+    "preamble_chars": 313,
+    "preamble_tokens_est": 79,
+    "schema_chars": 0,
+    "schema_tokens_est": 0,
+    "interstitial_chars": 2737,
+    "interstitial_tokens_est": 685,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "total_chars": 3087,
+    "total_tokens_est": 772,
+    "returned_rejected_json_chars": 1259,
+    "returned_rejected_json_tokens_est": 315,
+    "diagnostic_envelope_chars": 1478,
+    "diagnostic_envelope_tokens_est": 370
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 2325,
+    "cycle": 11,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 8353,
+    "provider_completion_tokens": 2646,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 16666,
+    "schema_tokens_est": 4167,
+    "interstitial_chars": 131,
+    "interstitial_tokens_est": 33,
+    "body_chars": 10298,
+    "body_tokens_est": 2577,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 358,
+      "tokens_est": 90
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 1131,
+      "tokens_est": 283
+     },
+     {
+      "id": "citable-evidence-blocks",
+      "kind": "evidence",
+      "chars": 5933,
+      "tokens_est": 1484
+     },
+     {
+      "id": "frozen-evidence-context",
+      "kind": "evidence",
+      "chars": 2267,
+      "tokens_est": 567
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 609,
+      "tokens_est": 153
+     }
+    ],
+    "total_chars": 27387,
+    "total_tokens_est": 6847
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 2509,
+    "cycle": 11,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "first-ask",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "criticism",
+    "provider_prompt_tokens": 1697,
+    "provider_completion_tokens": 317,
+    "prompt_form": "flat",
+    "schema_located": true,
+    "preamble_chars": 137,
+    "preamble_tokens_est": 35,
+    "schema_chars": 1275,
+    "schema_tokens_est": 319,
+    "interstitial_chars": 4657,
+    "interstitial_tokens_est": 1165,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "sectioned": false,
+    "sections": [],
+    "total_chars": 6071,
+    "total_tokens_est": 1518
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 2635,
+    "cycle": 12,
+    "contract_id": "conjecturer.turn.v6",
+    "purpose_detail": "conjecture-turn",
+    "call_kind": "first-ask",
+    "role": "conjecturer",
+    "seat": 0,
+    "trigger_kind": "conjecture",
+    "provider_prompt_tokens": 6918,
+    "provider_completion_tokens": 686,
+    "prompt_form": "packed",
+    "schema_located": true,
+    "preamble_chars": 189,
+    "preamble_tokens_est": 48,
+    "schema_chars": 14642,
+    "schema_tokens_est": 3661,
+    "interstitial_chars": 163,
+    "interstitial_tokens_est": 41,
+    "body_chars": 10226,
+    "body_tokens_est": 2559,
+    "sectioned": true,
+    "sections": [
+     {
+      "id": "problem",
+      "kind": "frame",
+      "chars": 321,
+      "tokens_est": 81
+     },
+     {
+      "id": "criteria",
+      "kind": "frame",
+      "chars": 403,
+      "tokens_est": 101
+     },
+     {
+      "id": "mandatory-interface",
+      "kind": "protocol",
+      "chars": 8633,
+      "tokens_est": 2159
+     },
+     {
+      "id": "output-contract",
+      "kind": "protocol",
+      "chars": 320,
+      "tokens_est": 80
+     },
+     {
+      "id": "context-withheld",
+      "kind": "protocol",
+      "chars": 549,
+      "tokens_est": 138
+     }
+    ],
+    "total_chars": 25312,
+    "total_tokens_est": 6328
+   },
+   {
+    "root": "experiments/2026-08-25-poietics-program/run",
+    "seq": 2680,
+    "cycle": 12,
+    "contract_id": "batch-critic.v2",
+    "purpose_detail": "batch-critic",
+    "call_kind": "first-ask",
+    "role": "argumentative_critic",
+    "seat": 0,
+    "trigger_kind": "criticism",
+    "provider_prompt_tokens": 1014,
+    "provider_completion_tokens": 203,
+    "prompt_form": "flat",
+    "schema_located": true,
+    "preamble_chars": 137,
+    "preamble_tokens_est": 35,
+    "schema_chars": 1275,
+    "schema_tokens_est": 319,
+    "interstitial_chars": 2126,
+    "interstitial_tokens_est": 532,
+    "body_chars": 0,
+    "body_tokens_est": 0,
+    "sectioned": false,
+    "sections": [],
+    "total_chars": 3540,
+    "total_tokens_est": 885
+   }
+  ]
+ }
+}

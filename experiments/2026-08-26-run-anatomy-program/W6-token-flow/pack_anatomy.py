@@ -51,7 +51,23 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROGRAM = os.path.abspath(os.path.join(HERE, ".."))
 REPO = os.path.abspath(os.path.join(PROGRAM, "..", ".."))
 
-SCHEMA_CUE = "Respond with ONLY a JSON object conforming to this JSON Schema"
+# The JSON Schema is located STRUCTURALLY, not by its cue sentence.  The
+# cue varies by contract family -- "Respond with ONLY a JSON object
+# conforming to this JSON Schema" on the v6 wire contracts, "Return ONLY one
+# JSON value matching this closed schema:" on the compact atomic ones -- and
+# an instrument keyed to one sentence silently mis-splits the other family.
+# Sizing it wrong is not a rounding error: on the atomic contracts it put
+# the entire prompt into the fixed toll and reported a body of zero.
+# A repair re-ask is a DIFFERENT PROMPT FORM, not a pack with a note on it:
+# it carries the model's own rejected JSON back verbatim under CURRENT JSON,
+# plus a diagnostic envelope, and no pack at all.  Reporting it inside the
+# packed-prompt tables would attribute its whole cost to "unsectioned body"
+# and hide what the run is actually re-sending.
+REPAIR_CURRENT = "CURRENT JSON:"
+REPAIR_ENVELOPE = "DIAGNOSTIC ENVELOPE:"
+
+SCHEMA_MIN_CHARS = 100
+SCHEMA_KEYS = {"$defs", "properties", "anyOf", "allOf", "type", "items"}
 
 # Section id -> what kind of context it is.  The operator's question is
 # "how much of this is protocol boilerplate vs evidence vs prior candidates
@@ -114,58 +130,141 @@ def blob(root: str, ref: str) -> str | None:
         return fh.read()
 
 
+def find_schema_line(lines: list[str]) -> int | None:
+    """Index of the line carrying the output contract's JSON Schema.
+
+    Located by shape -- a long line that parses as a JSON object carrying
+    schema keys -- so the split holds across every contract family in the
+    inventory rather than only the one whose cue sentence was sampled first.
+    """
+    for i, line in enumerate(lines):
+        t = line.strip()
+        if len(t) < SCHEMA_MIN_CHARS or not t.startswith("{") or not t.endswith("}"):
+            continue
+        try:
+            obj = json.loads(t)
+        except ValueError:
+            continue
+        if isinstance(obj, dict) and SCHEMA_KEYS & set(obj):
+            return i
+    return None
+
+
+def is_section_header(line: str) -> bool:
+    """`## <section id>` exactly as `allocate_pack` emits it.
+
+    A section id is one token: the allocator writes `f"## {section.id}"` and
+    PackSection ids are slugs.  Requiring a single token keeps a Markdown
+    heading inside quoted model content from being read as a section.
+    """
+    if not line.startswith("## "):
+        return False
+    rest = line[3:].strip()
+    return bool(rest) and " " not in rest
+
+
+def split_repair(lines: list[str]) -> dict | None:
+    """The repair re-ask form: preamble, the rejected JSON, the envelope."""
+    cur = next((i for i, l in enumerate(lines) if l.strip() == REPAIR_CURRENT), None)
+    env = next((i for i, l in enumerate(lines) if l.strip() == REPAIR_ENVELOPE), None)
+    if cur is None or env is None or env < cur:
+        return None
+    preamble = "\n".join(lines[:cur])
+    current = "\n".join(lines[cur + 1:env])
+    envelope = "\n".join(lines[env + 1:])
+    return {
+        "preamble_chars": len(preamble),
+        "preamble_tokens_est": approximate_tokens(preamble) if preamble else 0,
+        "returned_rejected_json_chars": len(current),
+        "returned_rejected_json_tokens_est": approximate_tokens(current) if current else 0,
+        "diagnostic_envelope_chars": len(envelope),
+        "diagnostic_envelope_tokens_est": approximate_tokens(envelope) if envelope else 0,
+    }
+
+
 def split_prompt(text: str) -> dict:
-    """role-preamble / output-contract-schema / pack-body, then sections."""
+    """Four parts: preamble, schema, interstitial, then the `## ` sections.
+
+    preamble + schema is the FIXED TOLL -- what the run pays merely to ask,
+    before any of its own state is shown.  The interstitial is what sits
+    between the schema and the pack (alias legends, a syntax example, an
+    atomic-slot directive); it is neither toll nor state, so it is reported
+    on its own rather than folded into either.
+    """
     lines = text.split("\n")
-    cue = next((i for i, l in enumerate(lines) if l.startswith(SCHEMA_CUE)), None)
-    if cue is None:
-        preamble, schema, body_start = "\n".join(lines), "", len(lines)
+    repair = split_repair(lines)
+    if repair is not None:
+        return {
+            "prompt_form": "repair-patch",
+            "schema_located": False,
+            "sectioned": False,
+            "sections": [],
+            "preamble_chars": repair["preamble_chars"],
+            "preamble_tokens_est": repair["preamble_tokens_est"],
+            "schema_chars": 0,
+            "schema_tokens_est": 0,
+            "interstitial_chars": (repair["returned_rejected_json_chars"]
+                                   + repair["diagnostic_envelope_chars"]),
+            "interstitial_tokens_est": (repair["returned_rejected_json_tokens_est"]
+                                        + repair["diagnostic_envelope_tokens_est"]),
+            "body_chars": 0,
+            "body_tokens_est": 0,
+            "total_chars": len(text),
+            "total_tokens_est": approximate_tokens(text),
+            **{k: v for k, v in repair.items()
+               if k.startswith(("returned_", "diagnostic_"))},
+        }
+    sidx = find_schema_line(lines)
+    if sidx is None:
+        preamble, schema, after = "", "", lines
     else:
-        preamble = "\n".join(lines[:cue])
-        # the schema is the cue line plus every line up to the first blank
-        end = cue + 1
-        while end < len(lines) and lines[end].strip():
-            end += 1
-        schema = "\n".join(lines[cue:end])
-        body_start = end
-    body_lines = lines[body_start:]
-    body = "\n".join(body_lines)
+        preamble = "\n".join(lines[:sidx])
+        schema = lines[sidx]
+        after = lines[sidx + 1:]
+
+    first_section = next((i for i, l in enumerate(after) if is_section_header(l)), None)
+    if first_section is None:
+        interstitial, body_lines = "\n".join(after), []
+    else:
+        interstitial = "\n".join(after[:first_section])
+        body_lines = after[first_section:]
 
     sections: list[dict] = []
-    cur_id, cur: list[str] = None, []
-    lead: list[str] = []
+    cur_id: str | None = None
+    cur: list[str] = []
     for line in body_lines:
-        if line.startswith("## ") and len(line) > 3 and " " not in line[3:].strip():
+        if is_section_header(line):
             if cur_id is not None:
                 sections.append({"id": cur_id, "text": "\n".join(cur)})
             cur_id, cur = line[3:].strip(), []
-        elif cur_id is None:
-            lead.append(line)
         else:
             cur.append(line)
     if cur_id is not None:
         sections.append({"id": cur_id, "text": "\n".join(cur)})
 
-    out_sections = []
-    for s in sections:
-        out_sections.append({
-            "id": s["id"],
-            "kind": SECTION_KIND.get(s["id"], "unassigned"),
-            "chars": len(s["text"]),
-            "tokens_est": approximate_tokens(s["text"]),
-        })
-    unsectioned = "\n".join(lead).strip()
+    out_sections = [{
+        "id": s["id"],
+        "kind": SECTION_KIND.get(s["id"], "unassigned"),
+        "chars": len(s["text"]),
+        "tokens_est": approximate_tokens(s["text"]),
+    } for s in sections]
+
+    def tok(t: str) -> int:
+        return approximate_tokens(t) if t else 0
+
     return {
+        "prompt_form": "packed" if out_sections else "flat",
+        "schema_located": sidx is not None,
         "preamble_chars": len(preamble),
-        "preamble_tokens_est": approximate_tokens(preamble),
+        "preamble_tokens_est": tok(preamble),
         "schema_chars": len(schema),
-        "schema_tokens_est": approximate_tokens(schema),
-        "body_chars": len(body),
-        "body_tokens_est": approximate_tokens(body),
+        "schema_tokens_est": tok(schema),
+        "interstitial_chars": len(interstitial),
+        "interstitial_tokens_est": tok(interstitial),
+        "body_chars": sum(s["chars"] for s in out_sections),
+        "body_tokens_est": sum(s["tokens_est"] for s in out_sections),
         "sectioned": bool(out_sections),
         "sections": out_sections,
-        "unsectioned_body_chars": len(unsectioned),
-        "unsectioned_body_tokens_est": approximate_tokens(unsectioned) if unsectioned else 0,
         "total_chars": len(text),
         "total_tokens_est": approximate_tokens(text),
     }
@@ -207,6 +306,7 @@ def main() -> int:
                 "root": root, "seq": r["seq"], "cycle": r["cycle"],
                 "contract_id": r["contract_id"], "purpose_detail": r["purpose_detail"],
                 "call_kind": r["call_kind"], "role": r["role"], "seat": r["seat"],
+            "trigger_kind": r.get("trigger_kind"),
                 "provider_prompt_tokens": r["prompt_tokens"],
                 "provider_completion_tokens": r["completion_tokens"],
                 **an,
@@ -217,12 +317,15 @@ def main() -> int:
     for c in per_call:
         a = by_contract.setdefault(c["contract_id"], {
             "calls": 0, "preamble_tokens_est": 0, "schema_tokens_est": 0,
-            "body_tokens_est": 0, "total_tokens_est": 0,
-            "provider_prompt_tokens": 0, "sectioned_calls": 0,
+            "interstitial_tokens_est": 0, "body_tokens_est": 0,
+            "total_tokens_est": 0, "provider_prompt_tokens": 0,
+            "sectioned_calls": 0, "schema_located_calls": 0,
         })
         a["calls"] += 1
         a["sectioned_calls"] += 1 if c["sectioned"] else 0
-        for k in ("preamble_tokens_est", "schema_tokens_est", "body_tokens_est",
+        a["schema_located_calls"] += 1 if c["schema_located"] else 0
+        for k in ("preamble_tokens_est", "schema_tokens_est",
+                  "interstitial_tokens_est", "body_tokens_est",
                   "total_tokens_est"):
             a[k] += c[k]
         a["provider_prompt_tokens"] += c["provider_prompt_tokens"] or 0
@@ -230,6 +333,7 @@ def main() -> int:
         t = a["total_tokens_est"] or 1
         a["preamble_share"] = round(a["preamble_tokens_est"] / t, 4)
         a["schema_share"] = round(a["schema_tokens_est"] / t, 4)
+        a["interstitial_share"] = round(a["interstitial_tokens_est"] / t, 4)
         a["body_share"] = round(a["body_tokens_est"] / t, 4)
         a["fixed_toll_share"] = round(
             (a["preamble_tokens_est"] + a["schema_tokens_est"]) / t, 4)
@@ -319,6 +423,32 @@ def main() -> int:
         "unsectioned_calls": sum(1 for c in per_call if not c["sectioned"]),
         "unsectioned_contracts": dict(Counter(
             c["contract_id"] for c in per_call if not c["sectioned"])),
+        "by_prompt_form": {
+            form: {
+                "calls": sum(1 for c in per_call if c["prompt_form"] == form),
+                "prompt_tokens_est": sum(c["total_tokens_est"] for c in per_call
+                                         if c["prompt_form"] == form),
+                "provider_prompt_tokens": sum(c["provider_prompt_tokens"] or 0
+                                              for c in per_call
+                                              if c["prompt_form"] == form),
+            }
+            for form in ("packed", "flat", "repair-patch")
+        },
+        "repair_prompts": {
+            "calls": sum(1 for c in per_call if c["prompt_form"] == "repair-patch"),
+            "returned_rejected_json_tokens_est": sum(
+                c.get("returned_rejected_json_tokens_est", 0) for c in per_call),
+            "diagnostic_envelope_tokens_est": sum(
+                c.get("diagnostic_envelope_tokens_est", 0) for c in per_call),
+            "provider_prompt_tokens": sum(
+                c["provider_prompt_tokens"] or 0 for c in per_call
+                if c["prompt_form"] == "repair-patch"),
+            "by_contract": dict(Counter(
+                c["contract_id"] for c in per_call
+                if c["prompt_form"] == "repair-patch")),
+            "note": "a repair re-ask sends the model its own rejected JSON "
+                    "back verbatim plus a diagnostic envelope, and no pack",
+        },
     }, open(os.path.join(HERE, "PACK_ANATOMY.json"), "w"), indent=1)
 
     json.dump({
