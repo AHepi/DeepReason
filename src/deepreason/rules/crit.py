@@ -353,6 +353,9 @@ def _v6_transactional_batch_call(
     contract = BatchCriticWireContractV2(
         aliases,
         expected_targets=targets,
+        # The same block set the pack's menu showed, so the repair diagnostic
+        # can name the legal handles instead of only the pattern that failed.
+        citable_block_ids=tuple(block.id for block in citable_blocks),
     )
     if recover_existing:
         matches = [

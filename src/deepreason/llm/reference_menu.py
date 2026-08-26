@@ -55,7 +55,9 @@ __all__ = [
     "register_handle_source",
     "register_reference_field",
     "render_reference_menu",
+    "pointer_template",
     "resolve_index_reply",
+    "resolve_indices_in",
     "unregister_handle_source",
     "unregister_reference_field",
 ]
@@ -277,12 +279,20 @@ class ReferenceFieldDeclaration:
     omission_legal: bool
     omission_first_ask: str
     omission_repair: str
+    # What an omission actually REMOVES. "self" drops this key or element;
+    # "parent" drops the object that contains it. A handle nested inside a
+    # composite -- `evidence_refs/*/block` inside a {block, quote} pair --
+    # cannot be dropped alone without leaving the pair malformed, which
+    # would turn a legal escape into a new validation failure.
+    omission_scope: str = "self"
 
     def __post_init__(self) -> None:
         if not self.contract or not self.pointer.startswith("/"):
             raise ValueError(f"reference field declaration incomplete: {self!r}")
         if self.handle_kind not in _HANDLE_SOURCES:
             raise ValueError(f"unregistered handle kind {self.handle_kind!r}")
+        if self.omission_scope not in {"self", "parent"}:
+            raise ValueError(f"unknown omission scope {self.omission_scope!r}")
         if self.omission_legal and not (
             self.omission_first_ask.strip() and self.omission_repair.strip()
         ):
@@ -328,6 +338,7 @@ REFERENCE_FIELD_DECLARATIONS: dict[str, ReferenceFieldDeclaration] = _declare(
         pointer="/candidates/*/evidence_refs/*/block",
         handle_kind="citable_block",
         omission_legal=True,
+        omission_scope="parent",
         omission_first_ask=(
             'OMIT -- leave "evidence_refs" out of this candidate entirely. '
             "This is a legal, complete answer; prefer it to a guess."
@@ -422,6 +433,7 @@ REFERENCE_FIELD_DECLARATIONS: dict[str, ReferenceFieldDeclaration] = _declare(
         pointer="/cases/*/premise_evidence/*/block",
         handle_kind="citable_block",
         omission_legal=True,
+        omission_scope="parent",
         omission_first_ask=(
             'OMIT -- leave "premise_evidence" out of this case entirely. '
             "Declining costs you nothing and never weakens your case."
@@ -704,3 +716,74 @@ def resolve_index_reply(
         return OMISSION if legal.omission_legal else value
     resolved = legal.handle_at(index)
     return value if resolved is None else resolved
+
+_POINTER_INDEX = re.compile(r"/[0-9]+(?=/|$)")
+
+
+def pointer_template(pointer: str) -> str:
+    """The registry is keyed by SHAPE; the record writes concrete indices."""
+
+    return _POINTER_INDEX.sub("/*", pointer)
+
+
+def resolve_indices_in(
+    value: Any,
+    contract: str,
+    binding: MenuBinding,
+    *,
+    policy: MenuRenderPolicy = DEFAULT_MENU_POLICY,
+) -> Any:
+    """Resolve every index reply in one response against its field's menu.
+
+    Runs BEFORE validation, so the validators see handles and the schema the
+    model read is unchanged. Nothing here can accept a value the validators
+    would reject: an index token is not a legal handle under any registered
+    field's grammar, an unresolvable index is returned untouched, and an
+    index 0 on a field whose validators do not permit omission is left
+    alone rather than dropped.
+    """
+
+    declarations = {
+        declaration.pointer: declaration
+        for declaration in declarations_for_contract(contract)
+    }
+    if not declarations:
+        return value
+
+    def walk(node: Any, path: str) -> Any:
+        template = pointer_template(path)
+        declaration = declarations.get(template)
+        if declaration is not None and isinstance(node, str):
+            return resolve_index_reply(
+                declaration.field_id, node, binding, policy=policy
+            )
+        if isinstance(node, dict):
+            resolved = {}
+            for key, item in node.items():
+                child = walk(item, f"{path}/{key}")
+                if child is OMISSION:
+                    child_declaration = declarations.get(
+                        pointer_template(f"{path}/{key}")
+                    )
+                    if (
+                        child_declaration is not None
+                        and child_declaration.omission_scope == "parent"
+                    ):
+                        # Dropping the handle alone would leave its composite
+                        # malformed, turning a legal escape into a new failure.
+                        return OMISSION
+                    continue
+                resolved[key] = child
+            return resolved
+        if isinstance(node, list):
+            items = []
+            for index, item in enumerate(node):
+                child = walk(item, f"{path}/{index}")
+                if child is OMISSION:
+                    continue
+                items.append(child)
+            return items
+        return node
+
+    resolved = walk(value, "")
+    return value if resolved is OMISSION else resolved

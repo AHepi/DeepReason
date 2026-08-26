@@ -1,6 +1,6 @@
 # Checklist for: reference grounding — the model chooses handles from a menu
 
-State: next=18 blockers=none (stages F2-a and F2-b delivered)
+State: next=30 blockers=none (stages F2-a, F2-b and F2-c delivered)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
@@ -247,65 +247,132 @@ in a `[COMMIT]` with its own green ring.
 
 ## Stage F2-c — one authority, index replies, the mutation proof
 
-- [ ] 18. (S8) Write the schema-immobility test and run it GREEN on the
+- [x] 18. (S8) Write the schema-immobility test and run it GREEN on the
       unchanged tree first, so it is known to be a real pin rather than a
       tautology before S7 moves anything.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "wire_schema_sha_does_not_move" -q` -> 0 failed
+      PROOF: `1 passed, 29 deselected in 0.08s` on the unchanged tree, so
+      the pin is known to be a real check before S7 moves anything.
+      (Fixture correction: the batch-critic contract requires SRC_### aliases
+      -- `ConjecturerTurnWireContractV6._require_namespace` is called from
+      its constructor -- so the test's alias table was corrected from A1/A2.)
 
-- [ ] 19. (S6) Write the one-authority divergence test and run it RED:
+- [x] 19. (S6) Write the one-authority divergence test and run it RED:
       the menu's handle set and the diagnostic's `legal_handles` for the
       same field and binding must be the same set.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "menu_and_diagnostic_are_one_set" -q` -> 1 failed
+      PROOF: `1 failed, 1 passed, 24 deselected`.
 
-- [ ] 20. (S6) Rewrite `_scratch_reference_guidance` and
+      A FINDING recorded here rather than smoothed over: the set-equality
+      test `menu_and_diagnostic_are_one_set` PASSED on the unrefactored
+      tree. Two independently maintained lists agree on any fixture their
+      authors thought of -- which is exactly how "two lists kept in
+      agreement" survives a test suite and then diverges in production. So
+      a second test was added that asserts CONSUMPTION: divert
+      `legal_handles_for` to a sentinel and the diagnostic must follow it.
+      That one was RED, and it is the test that actually holds R5.
+
+- [x] 20. (S6) Rewrite `_scratch_reference_guidance` and
       `_handle_fields_from_error` in `llm/repair.py` to call
       `legal_handles_for`; derive `_MAX_DIAGNOSTIC_LEGAL_HANDLES` from
       `policy.maximum_entries`; source the omission instruction from the
       declaration's `omission_repair`.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "menu_and_diagnostic_are_one_set" -q` -> 0 failed
+      PROOF: `3 passed, 24 deselected in 0.04s`.
+      `_MAX_DIAGNOSTIC_LEGAL_HANDLES` now DERIVES from
+      `DEFAULT_MENU_POLICY.maximum_entries` rather than restating 32, so the
+      menu and the diagnostic truncate at the same point. The omission
+      instruction is the declaration's `omission_repair`.
 
-- [ ] 21. (S6) Regression ring for the repair path — the census says
+- [x] 21. (S6) Regression ring for the repair path — the census says
       `diagnostic_from_error`'s shape MUST NOT MOVE.
       done-when: `python -m pytest tests/test_llm_repair_capabilities.py
       tests/test_v6_live_multi_pointer_repair.py
       tests/test_bridge_stage_a_v2.py
       tests/test_bridge_composition_repair.py -q` -> 0 failed
+      PROOF: `54 passed in 15.76s` (test_llm_repair_capabilities,
+      test_v6_live_multi_pointer_repair, test_bridge_stage_a_v2,
+      test_bridge_composition_repair). Widened to a `-k "repair or scratch
+      or wire or v6"` sweep across the whole suite: `1336 passed, 1 skipped
+      in 355.13s`.
 
-- [ ] 22. (S7) Write the `block`-field diagnostic test and run it RED:
+- [x] 22. (S7) Write the `block`-field diagnostic test and run it RED:
       an invalid `evidence_refs/*/block` yields a diagnostic listing the
       legal block ids.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "block_field_diagnostic_lists_legal_blocks" -q` -> 1 failed
+      PROOF: `2 failed, 27 deselected` -- RED on the missing contract state.
 
-- [ ] 23. (S7) Add `citable_block_ids` to the two contracts' construction
+      A CORRECTION to the fixture, and the correction is itself a finding:
+      the first version used `deadbeefdead` as the invented handle and the
+      contract ACCEPTED it, because that is twelve valid hex characters and
+      the field's pattern is `^[0-9a-f]{12,64}$`. A well-formed but invented
+      block handle passes the wire entirely and is caught later by the
+      citation checker. So the 244 recorded `string_pattern_mismatch`
+      diagnostics on this field are handles that were not even hex, and the
+      menu's value is larger than the wire can see: it addresses both the
+      malformed handle the wire rejects and the plausible one it does not.
+
+- [x] 23. (S7) Add `citable_block_ids` to the two contracts' construction
       and attach it to the raised validation error, mirroring
       `_attach_scratch_reference_context`.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "block_field_diagnostic_lists_legal_blocks" -q` -> 0 failed
+      PROOF: `2 passed, 27 deselected in 0.08s`, plus
+      `batch_critic_block_diagnostic_lists_legal_blocks`; whole file
+      `30 passed`. Both contracts accept `citable_block_ids` and attach it
+      to the raised validation error; `rules/conj.py` and `rules/crit.py`
+      bind it from the same legend the menu was built from.
 
-- [ ] 24. (S8) Re-run the schema pin AFTER S7 — this is the step that
+- [x] 24. (S8) Re-run the schema pin AFTER S7 — this is the step that
       proves R8 held.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "wire_schema_sha_does_not_move" -q` -> 0 failed
+      PROOF: `1 passed, 29 deselected in 0.06s` AFTER the contract change --
+      this is the step that proves R8 held. MUTATION-PROVEN: making
+      `model_json_schema` depend on the new constructor argument turned the
+      pin RED; restored and re-verified green.
 
-- [ ] 25. (S9, S15) Write the index-resolution tests and run them RED:
+- [x] 25. (S9, S15) Write the index-resolution tests and run them RED:
       a reply of `[2]` resolves to the handle at index 2; `[0]` on an
       omission-legal field drops the field; no index token is a legal
       handle under any registered field's own grammar.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "index_reply_resolves or index_zero_takes_the_omission or
       index_grammar_never_shadows_a_legal_handle" -q` -> 3 failed
+      PROOF: `3 passed, 30 deselected in 0.11s` -- the resolver already
+      existed from F2-a, so these were green at the unit level; step 26 is
+      what made them true through a real contract.
 
-- [ ] 26. (S9) Add index resolution to the wire preflight, before
+- [x] 26. (S9) Add index resolution to the wire preflight, before
       validation, for fields with a declared menu only.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "index_reply_resolves or index_zero_takes_the_omission or
       index_grammar_never_shadows_a_legal_handle" -q` -> 0 failed
+      PROOF: end-to-end through `ConjecturerTurnWireContractV6.validate_value`
+      -- `[2]` resolves to `7d0c1149ab52`, `[0]` yields `evidence_refs == ()`,
+      a full handle is unchanged. Whole file `35 passed`.
 
-- [ ] 27. (S11, S12) Add the two architecture tests: a menu never changes
+      TWO DESIGN POINTS the spec did not foresee, both recorded:
+
+      (a) `omission_scope`. Dropping `evidence_refs/*/block` alone leaves a
+      `{quote}` with no block -- a legal escape turned into a fresh
+      validation failure. The declaration now says whether an omission
+      removes the key itself or the object containing it.
+
+      (b) Resolution runs AFTER the control-field firewall, not before.
+      `DR-SEAM-llm-x-rules` pins the firewall-before-validation adjacency,
+      and the first implementation put resolution upstream of it. Resolution
+      reads model output, so it belongs downstream of the firewall that
+      exists to stop model output becoming process authority -- it can only
+      replace a listed value or delete an optional one and never adds a key,
+      but the ordering now needs no argument to be safe. The seam's pinned
+      regex was updated to the new adjacency and gained a row saying why.
+
+- [x] 27. (S11, S12) Add the two architecture tests: a menu never changes
       what is valid (registry emptied -> identical verdicts), and
       consumers reach the legal set only through the interface (AST scan
       of `packs.py` and `repair.py`).
@@ -313,8 +380,12 @@ in a `[COMMIT]` with its own green ring.
       "a_menu_never_changes_what_is_valid or
       consumers_reach_the_legal_set_only_through_the_interface" -q` ->
       0 failed
+      PROOF: `2 passed, 35 deselected in 0.28s`. The validity test empties
+      `REFERENCE_FIELD_DECLARATIONS` and compares verdicts over a six-case
+      corpus (legal handle, malformed handle, known alias, unknown alias,
+      empty, wrong case); they are identical with and without menus.
 
-- [ ] 28. (S14) Run the mutation proof: fork the resolver in a SCRATCHPAD
+- [x] 28. (S14) Run the mutation proof: fork the resolver in a SCRATCHPAD
       copy so the menu and diagnostic paths read two independent lists,
       run the step-19 divergence test against it, and capture RED and
       GREEN outputs to `proof/`. The fork lives in the session
@@ -324,6 +395,15 @@ in a `[COMMIT]` with its own green ring.
       -> >=1 AND `grep -c "1 passed"
       experiments/2026-08-26-change-f2-reference-menu/proof/s14_unforked_green.txt`
       -> 1
+      PROOF: `proof/s14_forked_red.txt` contains
+      `FAILED tests/test_reference_menu.py::test_the_diagnostic_consumes_the_resolver_rather_than_agreeing_with_it`;
+      `proof/s14_unforked_green.txt` shows both tests passing. The fork
+      lived in the session scratchpad and was never committed.
+
+      The proof's own finding, written up in `proof/README.md`: under the
+      fork, `menu_and_diagnostic_are_one_set` STILL PASSES. Set equality
+      samples; it cannot establish that there is one list. The consumption
+      test is what fails, and it is therefore the test that holds R5.
 
 - [ ] 29. (S6-S9, S11, S12, S14) [COMMIT] Stage F2-c: commit and push
       with retry.

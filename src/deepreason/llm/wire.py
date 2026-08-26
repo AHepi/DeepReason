@@ -928,6 +928,33 @@ class WireContract(Generic[CanonicalOutput]):
                 field["enum"] = values
                 field["type"] = "string"
 
+    def _menu_binding(self, value: Any) -> Any:
+        """The call-local facts this contract's reference menus were built
+        from, or None when it declares none.
+
+        Overridden by the contracts that carry a legal handle set. The
+        default returns None, so index resolution is a no-op everywhere it
+        was not declared -- a contract cannot acquire the behaviour by
+        accident.
+        """
+
+        return None
+
+    def _resolve_menu_indices(self, value: Any) -> Any:
+        """Turn a seat's `[2]` into the handle its menu showed at index 2.
+
+        Runs before every firewall and validator, and can only ever replace
+        an index token -- which no registered field's grammar admits as a
+        handle -- with a value the menu already listed as legal.
+        """
+
+        binding = self._menu_binding(value)
+        if binding is None:
+            return value
+        from deepreason.llm.reference_menu import resolve_indices_in
+
+        return resolve_indices_in(value, self.contract_id, binding)
+
     def _preflight_value(self, value: Any) -> None:
         """Apply transport firewalls before contract-specific validation."""
 
@@ -946,7 +973,24 @@ class WireContract(Generic[CanonicalOutput]):
             # nested wrappers still fail exact validation unchanged.
             value = value[0]
         self._preflight_value(value)
-        return self.wire_model.model_validate(value)
+        # AFTER the control-field firewall, never before it: resolution reads
+        # model output, and the firewall exists so that nothing the model
+        # writes becomes process authority. Resolution can only replace a
+        # value with one this call already listed as legal, or delete an
+        # optional one -- it never adds a key -- but it still runs downstream
+        # of the firewall so the ordering needs no argument to be safe.
+        value = self._resolve_menu_indices(value)
+        try:
+            return self.wire_model.model_validate(value)
+        except ValidationError as error:
+            # Diagnostic sourcing: a reference-bearing field's legal set is
+            # durable contract state, and a rejection that carries it can
+            # name the legal handles instead of only the pattern that failed.
+            # Attached, never consulted for validity.
+            blocks = getattr(self, "citable_block_ids", ())
+            if blocks:
+                error.citable_block_ids = blocks
+            raise
 
     def validate_json(self, raw: str) -> BaseModel:
         return self.validate_value(parse_one_json_value(raw).value)
@@ -1922,6 +1966,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         scratch_authoring_policy: Any | None = None,
         research_enabled: bool = False,
         maximum_research_proposals: int = 0,
+        citable_block_ids: tuple[str, ...] = (),
         contract_id: str = CONJECTURER_TURN_CONTRACT_V6,
     ) -> None:
         formal = tuple(aliases.aliases)
@@ -1953,6 +1998,13 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         elif maximum_research_proposals != 0:
             raise ValueError("disabled research must have a zero proposal maximum")
 
+        # Diagnostic sourcing ONLY. Not read by `model_json_schema`, so the
+        # form the model reads is unchanged whether or not a call knows which
+        # blocks are citable -- pinned by
+        # `tests/test_reference_menu.py::test_wire_schema_sha_does_not_move`.
+        self.citable_block_ids = tuple(
+            block for block in citable_block_ids if isinstance(block, str)
+        )
         self.research_enabled = bool(research_enabled)
         self.maximum_research_proposals = maximum_research_proposals
         self.simulation_enabled = bool(simulation_enabled)
@@ -2278,11 +2330,33 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             "new_block_keys": new_keys,
         }
 
+    def _menu_binding(self, value: Any) -> Any:
+        from deepreason.llm.reference_menu import MenuBinding
+
+        new_keys: tuple[str, ...] = ()
+        scratch = value.get("scratch_proposal") if isinstance(value, dict) else None
+        if isinstance(scratch, dict):
+            blocks = scratch.get("new_blocks")
+            if isinstance(blocks, (list, tuple)):
+                new_keys = tuple(
+                    block.get("local_key")
+                    for block in blocks
+                    if isinstance(block, dict)
+                    and isinstance(block.get("local_key"), str)
+                )
+        return MenuBinding(
+            citable_block_ids=self.citable_block_ids,
+            scratch_handles=tuple(sorted(self.scratch_aliases)),
+            new_block_keys=new_keys,
+            aliases=tuple(self.aliases.aliases),
+        )
+
     def validate_value(self, value: Any) -> BaseModel:
         # The strict proposal records intentionally use immutable tuples.
         # Validate through Pydantic's JSON boundary so JSON arrays are accepted
         # as tuples without enabling Python-side scalar coercion.
         self._preflight_value(value)
+        value = self._resolve_menu_indices(value)
         raw = json.dumps(
             value,
             sort_keys=True,
@@ -2293,6 +2367,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             return self.wire_model.model_validate_json(raw)
         except ValidationError as error:
             self._attach_scratch_reference_context(error, value)
+            error.citable_block_ids = self.citable_block_ids
             raise
 
     def compile(self, wire: BaseModel) -> BaseModel:
@@ -2370,11 +2445,16 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
         self,
         aliases: AliasTable,
         expected_targets: tuple[str, ...] | None = None,
+        citable_block_ids: tuple[str, ...] = (),
     ) -> None:
         if not aliases.aliases:
             raise AliasTableRequiredError(
                 "batch-critic.v2 requires a nonempty call-local target catalog"
             )
+        # Diagnostic sourcing ONLY; never read by `model_json_schema`.
+        self.citable_block_ids = tuple(
+            block for block in citable_block_ids if isinstance(block, str)
+        )
         ConjecturerTurnWireContractV6._require_namespace(
             tuple(aliases.aliases), "SRC"
         )
@@ -2395,6 +2475,14 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
             BatchCriticOutput,
             aliases=aliases,
             variant="compact.v2",
+        )
+
+    def _menu_binding(self, value: Any) -> Any:
+        from deepreason.llm.reference_menu import MenuBinding
+
+        return MenuBinding(
+            citable_block_ids=self.citable_block_ids,
+            aliases=self.expected_aliases,
         )
 
     def model_json_schema(self) -> dict:

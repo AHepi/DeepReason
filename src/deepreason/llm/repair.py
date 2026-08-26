@@ -889,6 +889,13 @@ def minimal_skeleton(schema: dict, _root: dict | None = None) -> Any:
     return None
 
 
+from deepreason.llm.reference_menu import (
+    DEFAULT_MENU_POLICY,
+    MenuBinding,
+    declaration_for,
+    legal_handles_for,
+)
+
 _SCRATCH_REFERENCE_HANDLE = re.compile(r"^(?:SCR|NEW)_[0-9]{3,}$")
 _SCRATCH_SCALAR_REFERENCE_POINTER = re.compile(
     r"^/scratch_proposal/(?:links/[0-9]+/(?:from_ref|to_ref)"
@@ -898,7 +905,24 @@ _SCRATCH_ARRAY_REFERENCE_POINTER = re.compile(
     r"^/scratch_proposal/(?:unresolved_questions/[0-9]+/related_refs"
     r"|cluster_suggestions/[0-9]+/member_refs)(?:/[0-9]+)?$"
 )
-_MAX_DIAGNOSTIC_LEGAL_HANDLES = 32
+# Derived, never restated. The diagnostic's list and the prompt menu must
+# truncate at the SAME point or "identical to the menu shown" is false the
+# moment a run has more legal handles than either bound.
+_MAX_DIAGNOSTIC_LEGAL_HANDLES = DEFAULT_MENU_POLICY.maximum_entries
+
+
+_POINTER_INDEX = re.compile(r"/[0-9]+(?=/|$)")
+
+
+def _field_id_for_pointer(pointer: str, contract: str = "conjecturer.turn.v6") -> str:
+    """Turn a concrete failure pointer into its declaration's field id.
+
+    The record writes concrete indices (`/links/0/to_ref`); the registry is
+    keyed by the shape (`/links/*/to_ref`). Normalising here rather than
+    storing both spellings keeps the registry one fact instead of two.
+    """
+
+    return f"{contract}:{_POINTER_INDEX.sub('/*', pointer)}"
 
 
 def _scratch_handle_kind(handle: str) -> str:
@@ -927,6 +951,65 @@ def _handle_fields_from_error(error: Exception) -> dict[str, Any]:
         "required_handle_kinds": required or None,
         "legal_handles": legal[:_MAX_DIAGNOSTIC_LEGAL_HANDLES] or None,
         "omission_or_unknown_legal": None if omission is None else bool(omission),
+    }
+
+
+_BLOCK_REFERENCE_POINTER = re.compile(
+    r"^/(?:candidates/[0-9]+/evidence_refs|cases/[0-9]+/premise_evidence)"
+    r"/[0-9]+/block$"
+)
+
+
+def _block_reference_guidance(
+    error: Exception,
+    pointer: str,
+    received: Any,
+) -> dict[str, Any] | None:
+    """Handle-aware guidance for an evidence-block reference failure.
+
+    These are the largest single failure class in the committed record --
+    244 + 129 diagnostics -- and until this layer they carried no list at
+    all, because the field is a bare pattern and NOTHING in the tree owned
+    the legal set. The contract now carries it for exactly this purpose;
+    validity is decided by the pattern, unchanged.
+    """
+
+    blocks = tuple(
+        block
+        for block in getattr(error, "citable_block_ids", ()) or ()
+        if isinstance(block, str)
+    )
+    if _BLOCK_REFERENCE_POINTER.fullmatch(pointer) is None:
+        return None
+    contract = (
+        "batch-critic.v2" if pointer.startswith("/cases/") else "conjecturer.turn.v6"
+    )
+    declaration = declaration_for(_field_id_for_pointer(pointer, contract))
+    if declaration is None:
+        return None
+    resolved = legal_handles_for(
+        declaration.field_id, MenuBinding(citable_block_ids=blocks)
+    )
+    legal = () if resolved is None else resolved.handles
+    rejected = received if isinstance(received, str) else None
+    if isinstance(received, dict) and isinstance(received.get("block"), str):
+        rejected = received["block"]
+    if legal:
+        instruction = "Use only a listed legal handle for this reference field."
+    else:
+        instruction = (
+            "No admitted evidence block is citable on this call; do not invent "
+            "one. A candidate that cites nothing is a complete candidate."
+        )
+    if declaration.omission_legal:
+        instruction += " " + declaration.omission_repair
+    return {
+        "rejected_handle": None if rejected is None else rejected[:128],
+        "observed_handle_kind": None if rejected is None else "unknown",
+        "required_handle_kinds": ("citable_evidence_block",),
+        "legal_handles": legal,
+        "omission_or_unknown_legal": declaration.omission_legal,
+        "instruction": instruction,
     }
 
 
@@ -960,8 +1043,26 @@ def _scratch_reference_guidance(
         key for key in context.get("scratch_handles", ()) if isinstance(key, str)
     )
     revision_target = pointer.endswith("/target_alias")
-    legal = scratch_handles if revision_target else (*new_keys, *scratch_handles)
-    legal = tuple(dict.fromkeys(legal))[:_MAX_DIAGNOSTIC_LEGAL_HANDLES]
+    declaration = declaration_for(_field_id_for_pointer(pointer))
+    resolved = (
+        None
+        if declaration is None
+        else legal_handles_for(
+            declaration.field_id,
+            MenuBinding(scratch_handles=scratch_handles, new_block_keys=new_keys),
+        )
+    )
+    legal = (
+        resolved.handles
+        if resolved is not None
+        else tuple(
+            dict.fromkeys(
+                scratch_handles
+                if revision_target
+                else (*new_keys, *scratch_handles)
+            )
+        )[:_MAX_DIAGNOSTIC_LEGAL_HANDLES]
+    )
     required = (
         ("scratch_block_handle",)
         if revision_target
@@ -977,7 +1078,11 @@ def _scratch_reference_guidance(
         ):
             rejected = item[:128]
             break
-    omission_legal = bool(array_field or proposal_root)
+    omission_legal = (
+        bool(array_field or proposal_root)
+        if declaration is None
+        else declaration.omission_legal
+    )
     if legal:
         instruction = "Use only a listed legal handle for this reference field."
     else:
@@ -985,10 +1090,15 @@ def _scratch_reference_guidance(
             "No legal handle exists for this reference field; do not invent one."
         )
     if omission_legal:
+        # The declaration owns BOTH spellings of the escape road, so the
+        # repair cannot describe an omission differently from the menu that
+        # offered it on the first ask.
         instruction += (
-            " Omission is legal: a remove operation at this path, or a replace "
-            "that drops the offending entry, is a valid repair; never invent a "
-            "handle to fill an optional reference."
+            " " + declaration.omission_repair
+            if declaration is not None
+            else " Omission is legal: a remove operation at this path, or a "
+            "replace that drops the offending entry, is a valid repair; "
+            "never invent a handle to fill an optional reference."
         )
     return {
         "rejected_handle": rejected,
@@ -1136,7 +1246,9 @@ def diagnostic_from_error(
         for key in ("type", "enum", "const", "pattern", "minimum", "maximum"):
             if key in child_schema:
                 allowed_bits.append(f"{key}={child_schema[key]!r}")
-        guidance = _scratch_reference_guidance(error, path, detail.get("input"))
+        guidance = _scratch_reference_guidance(
+            error, path, detail.get("input")
+        ) or _block_reference_guidance(error, path, detail.get("input"))
         return RepairDiagnostic(
             contract=contract,
             path=path,
@@ -1233,7 +1345,7 @@ def diagnostic_envelope_from_error(
             )
             guidance = _scratch_reference_guidance(
                 error, pointer, detail.get("input")
-            )
+            ) or _block_reference_guidance(error, pointer, detail.get("input"))
             diagnostics.append(
                 RepairDiagnosticV2(
                     path=pointer,

@@ -1558,6 +1558,7 @@ def conj(
             maximum_research_proposals=(
                 _RESEARCH_TURN_MAXIMUM if v6_research_policy.enabled else 0
             ),
+            citable_block_ids=tuple(block.id for block in citable_blocks_shown),
             contract_id=configured_turn_contract,
         )
     elif active_v4:

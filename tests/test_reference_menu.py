@@ -578,3 +578,489 @@ def test_crit_packs_without_menus_do_not_move(harness):
         )
         assert first == second
         assert "REFERENCE MENU" not in first
+
+
+# --- the wire schema does not move ---------------------------------------- #
+
+
+def _v6_contract(**overrides):
+    from deepreason.llm.wire import AliasTable, ConjecturerTurnWireContractV6
+
+    values = {"reasoning": True, "aliases": AliasTable({"SRC_001": "c1"})}
+    values.update(overrides)
+    return ConjecturerTurnWireContractV6(**values)
+
+
+def _batch_critic_contract(**overrides):
+    from deepreason.llm.wire import AliasTable, BatchCriticWireContractV2
+
+    values = {"aliases": AliasTable({"SRC_001": "artifact-one", "SRC_002": "artifact-two"})}
+    values.update(overrides)
+    return BatchCriticWireContractV2(**values)
+
+
+def _schema_sha(contract) -> str:
+    import hashlib
+    import json
+
+    payload = json.dumps(
+        contract.model_json_schema(), sort_keys=True, separators=(",", ":")
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def test_wire_schema_sha_does_not_move(monkeypatch):
+    """R8: this layer is prompt rendering and validation-message sourcing.
+    No property is added, removed or re-typed on any contract.
+
+    Written to be meaningful BEFORE the citable-block state lands and after
+    it: the schema a model reads must not depend on whether the contract was
+    told which blocks are citable, because that fact is diagnostic sourcing
+    and not part of the form.
+    """
+
+    blocks = ("a3f19c2b8e04", "7d0c1149ab52")
+    for build in (_v6_contract, _batch_critic_contract):
+        bare = _schema_sha(build())
+        try:
+            informed = _schema_sha(build(citable_block_ids=blocks))
+        except TypeError:
+            # The parameter has not landed yet; the pin is still meaningful
+            # as a same-shape check and becomes the real one once it does.
+            informed = _schema_sha(build())
+        assert bare == informed, (
+            f"{build.__name__}: model_json_schema moved when the contract was "
+            f"given its citable-block set; that set is diagnostic sourcing, "
+            f"not part of the form the model reads"
+        )
+
+
+# --- one authority: the menu and the diagnostic are the same set ---------- #
+
+
+def _scratch_error(scratch_handles, new_keys, bad="SCR_999"):
+    """A validation error carrying the durable scratch state, exactly as
+    `ConjecturerTurnWireContractV6._attach_scratch_reference_context`
+    attaches it."""
+
+    error = ValueError("unknown scratch handle")
+    error.scratch_reference_context = {
+        "scratch_handles": tuple(scratch_handles),
+        "new_block_keys": tuple(new_keys),
+    }
+    return error
+
+
+def test_menu_and_diagnostic_are_one_set():
+    """R5: the diagnostic's legal list is guaranteed identical to the menu
+    shown, because both are renderings of ONE `legal_handles_for` result.
+
+    Two lists kept in agreement is what E26's law forbids, and it is what
+    the tree did before this module existed: `wire.py` attached the scratch
+    namespace to the error and `repair.py` independently re-derived a list
+    from it, while the pack showed a third thing.
+    """
+
+    from deepreason.llm.repair import _scratch_reference_guidance
+
+    scratch = tuple(f"SCR_{i:03d}" for i in range(1, 15))
+    new_keys = ("NEW_001", "NEW_002")
+    binding = rm.MenuBinding(scratch_handles=scratch, new_block_keys=new_keys)
+
+    cases = [
+        (
+            "/scratch_proposal/unresolved_questions/0/related_refs",
+            "conjecturer.turn.v6:/scratch_proposal/unresolved_questions/*/related_refs",
+        ),
+        (
+            "/scratch_proposal/links/0/to_ref",
+            "conjecturer.turn.v6:/scratch_proposal/links/*/to_ref",
+        ),
+        (
+            "/scratch_proposal/revisions/0/target_alias",
+            "conjecturer.turn.v6:/scratch_proposal/revisions/*/target_alias",
+        ),
+    ]
+    for pointer, field_id in cases:
+        guidance = _scratch_reference_guidance(
+            _scratch_error(scratch, new_keys), pointer, "SCR_999"
+        )
+        assert guidance is not None, pointer
+        menu = rm.legal_handles_for(field_id, binding)
+        assert menu is not None, field_id
+        assert tuple(guidance["legal_handles"]) == menu.handles, (
+            f"{pointer}: the diagnostic's legal list and the menu's differ; "
+            f"there must be exactly one resolver for a field's legal set"
+        )
+        assert bool(guidance["omission_or_unknown_legal"]) == menu.omission_legal
+
+
+def test_the_diagnostic_consumes_the_resolver_rather_than_agreeing_with_it(
+    monkeypatch,
+):
+    """Set equality alone cannot distinguish ONE authority from two that
+    happen to agree -- and on the obvious fixture they do agree, which is
+    how "two lists kept in agreement" survives a test suite. So this asserts
+    CONSUMPTION: divert the resolver and the diagnostic must follow it.
+    """
+
+    from deepreason.llm import repair
+
+    sentinel = rm.LegalHandleSet(
+        field_id="sentinel",
+        handles=("SCR_777", "NEW_777"),
+        total=2,
+        truncated=False,
+        omission_legal=True,
+    )
+    monkeypatch.setattr(
+        repair, "legal_handles_for", lambda *a, **k: sentinel, raising=True
+    )
+    guidance = repair._scratch_reference_guidance(
+        _scratch_error(("SCR_001",), ()),
+        "/scratch_proposal/unresolved_questions/0/related_refs",
+        "SCR_999",
+    )
+    assert tuple(guidance["legal_handles"]) == ("SCR_777", "NEW_777"), (
+        "the diagnostic did not follow the resolver; it is re-deriving the "
+        "legal set locally, which is the second list E26's law forbids"
+    )
+
+
+def test_the_diagnostic_omission_wording_comes_from_the_declaration():
+    """One escape road, one owner. The repair-mode spelling is the
+    declaration's `omission_repair`, so the diagnostic cannot describe an
+    escape differently from the menu that offered it."""
+
+    from deepreason.llm.repair import _scratch_reference_guidance
+
+    scratch = ("SCR_001",)
+    guidance = _scratch_reference_guidance(
+        _scratch_error(scratch, ()),
+        "/scratch_proposal/unresolved_questions/0/related_refs",
+        "SCR_999",
+    )
+    declaration = rm.REFERENCE_FIELD_DECLARATIONS[
+        "conjecturer.turn.v6:/scratch_proposal/unresolved_questions/*/related_refs"
+    ]
+    assert declaration.omission_repair in guidance["instruction"]
+
+
+# --- the two block fields gain a legal-set owner --------------------------- #
+
+
+def test_block_field_diagnostic_lists_legal_blocks():
+    """W1's largest single class: 244 + 129 diagnostics on `.../block`, and
+    every one of them a bare `string_pattern_mismatch` with no list, because
+    nothing in the tree owned the legal block set. The contract now carries
+    it, so the diagnostic can say what the menu said.
+    """
+
+    from deepreason.llm.repair import diagnostic_from_error
+
+    blocks = ("a3f19c2b8e04", "7d0c1149ab52")
+    contract = _v6_contract(citable_block_ids=blocks)
+    # A handle that is not even well-formed hex, which is what the 244
+    # recorded `string_pattern_mismatch` diagnostics on this field are. Note
+    # that a well-formed but INVENTED hex handle passes this pattern and is
+    # caught later by the citation checker -- the menu's job is to stop both,
+    # and only the first is visible to the wire.
+    value = {
+        "candidates": [
+            {
+                "claim": "the moon pulls the sea",
+                "mechanism": "tidal bulge",
+                "counterconditions": ["none"],
+                "checker_specs": [],
+                "typicality": 0.5,
+                "optional_refs": [],
+                "evidence_refs": [{"block": "the-tides-paper", "quote": "q"}],
+            }
+        ]
+    }
+    try:
+        contract.validate_value(value)
+    except Exception as error:  # noqa: BLE001 - the diagnostic is the subject
+        diagnostics = diagnostic_from_error(
+            contract.contract_id, error, contract.model_json_schema()
+        )
+    else:  # pragma: no cover - the fixture is invalid by construction
+        raise AssertionError("the invented block handle was accepted")
+
+    items = diagnostics if isinstance(diagnostics, list) else [diagnostics]
+    listed = [
+        item
+        for item in items
+        if getattr(item, "legal_handles", None)
+        and set(blocks) <= set(item.legal_handles)
+    ]
+    assert listed, (
+        f"no diagnostic listed the legal block set; got "
+        f"{[(getattr(i, 'path', None), getattr(i, 'legal_handles', None)) for i in items]}"
+    )
+
+
+def test_a_contract_told_no_blocks_offers_no_block_list():
+    """Absence is not an empty menu. A run with no citable evidence must not
+    receive a menu implying one exists -- that is the empty slot the judge
+    blinding research measured as worse than a populated one."""
+
+    contract = _v6_contract()
+    assert contract.citable_block_ids == ()
+    assert (
+        rm.render_reference_menu(
+            "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block",
+            rm.MenuBinding(),
+        )
+        is None
+    )
+
+
+def test_batch_critic_block_diagnostic_lists_legal_blocks():
+    """The critic's half of the same class: 129 diagnostics on
+    /cases/*/premise_evidence/*/block, likewise with no list until now."""
+
+    from deepreason.llm.repair import diagnostic_from_error
+
+    blocks = ("a3f19c2b8e04", "7d0c1149ab52")
+    contract = _batch_critic_contract(citable_block_ids=blocks)
+    value = {
+        "cases": [
+            {
+                "target_alias": "SRC_001",
+                "attack": True,
+                "case": "the mechanism is unstated",
+                "premise_evidence": [
+                    {"block": "the-tides-paper", "quote": "q"}
+                ],
+            }
+        ]
+    }
+    try:
+        contract.validate_value(value)
+    except Exception as error:  # noqa: BLE001 - the diagnostic is the subject
+        diagnostics = diagnostic_from_error(
+            contract.contract_id, error, contract.model_json_schema()
+        )
+    else:  # pragma: no cover - invalid by construction
+        raise AssertionError("the malformed block handle was accepted")
+
+    items = diagnostics if isinstance(diagnostics, list) else [diagnostics]
+    listed = [
+        item
+        for item in items
+        if getattr(item, "legal_handles", None)
+        and set(blocks) <= set(item.legal_handles)
+    ]
+    assert listed, (
+        f"no diagnostic listed the legal block set; got "
+        f"{[(getattr(i, 'path', None), getattr(i, 'legal_handles', None)) for i in items]}"
+    )
+
+
+# --- a seat replying by index resolves to the right handle ----------------- #
+
+
+def test_index_reply_resolves_to_the_menu_entry():
+    """R9. The menu says 'you may answer with the handle itself or with its
+    [index]', so an index reply must land on the handle the menu showed at
+    that index -- the same `legal_handles_for` ordering, not a re-derivation.
+    """
+
+    field_id = "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block"
+    blocks = tuple(f"{i:012x}" for i in range(1, 12))
+    binding = _binding(citable_block_ids=blocks)
+    for index, expected in enumerate(blocks, start=1):
+        for spelling in (f"[{index}]", str(index), f"#{index}", f" {index} "):
+            assert (
+                rm.resolve_index_reply(field_id, spelling, binding) == expected
+            ), f"{spelling!r} did not resolve to entry {index}"
+
+
+def test_index_zero_takes_the_omission_where_it_is_legal():
+    """The escape road as a structural act rather than prose advice: the
+    seat selects [0] and the field is dropped. W1 measured what advice
+    achieves -- 7 of 120 ladders took an escape the diagnostic spelled out.
+    """
+
+    legal_field = "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block"
+    assert (
+        rm.resolve_index_reply(legal_field, "[0]", _binding()) is rm.OMISSION
+    )
+    closed_field = "conjecturer.turn.v6:/scratch_proposal/links/*/to_ref"
+    assert rm.resolve_index_reply(closed_field, "[0]", _binding()) == "[0]", (
+        "an omission was resolved for a field whose validators do not accept "
+        "one; a menu may never decide validity"
+    )
+
+
+def test_an_out_of_range_or_unknown_index_is_left_untouched():
+    """Resolution never guesses. A reply this menu cannot address stays
+    exactly as the model wrote it, so the validators see the real value and
+    the diagnostic reports the real mistake."""
+
+    field_id = "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block"
+    binding = _binding()  # three blocks
+    assert rm.resolve_index_reply(field_id, "[99]", binding) == "[99]"
+    assert rm.resolve_index_reply(field_id, "a3f19c2b8e04", binding) == "a3f19c2b8e04"
+    assert rm.resolve_index_reply("no.such.field:/x", "[1]", binding) == "[1]"
+    assert rm.resolve_index_reply(field_id, "[1]", rm.MenuBinding()) == "[1]"
+    assert rm.resolve_index_reply(field_id, 7, binding) == 7
+
+
+def test_a_seat_replying_by_index_validates_end_to_end():
+    """R9, through the real contract rather than the resolver alone: the
+    value the validators see is a handle, so the schema the model read is
+    unchanged and nothing about validity moved."""
+
+    contract = _v6_contract(citable_block_ids=("a3f19c2b8e04", "7d0c1149ab52"))
+
+    def candidate(block):
+        return {
+            "claim": "the moon pulls the sea",
+            "mechanism": "tidal bulge",
+            "counterconditions": ["none"],
+            "checker_specs": [],
+            "typicality": 0.5,
+            "optional_refs": [],
+            "evidence_refs": [{"block": block, "quote": "q"}],
+        }
+
+    turn = contract.validate_value({"candidates": [candidate("[2]")]})
+    assert turn.candidates[0].evidence_refs[0].block == "7d0c1149ab52"
+
+    # [0] is the escape, and it removes the whole reference rather than
+    # leaving a {quote} with no block -- which would turn a legal omission
+    # into a fresh validation failure.
+    omitted = contract.validate_value({"candidates": [candidate("[0]")]})
+    assert omitted.candidates[0].evidence_refs == ()
+
+    # A handle written out in full still works, unchanged.
+    direct = contract.validate_value({"candidates": [candidate("a3f19c2b8e04")]})
+    assert direct.candidates[0].evidence_refs[0].block == "a3f19c2b8e04"
+
+
+def test_index_resolution_is_a_no_op_for_a_contract_that_declares_no_menu():
+    """A contract cannot acquire this behaviour by accident: the base hook
+    returns no binding, so resolution never runs where it was not declared."""
+
+    from deepreason.llm.wire import AliasTable, CriticWireContract
+    from deepreason.llm.contracts import ArgumentativeCriticOutput
+
+    contract = CriticWireContract(
+        aliases=AliasTable({"A1": "artifact-one"}),
+        expected_target="artifact-one",
+    )
+    assert contract._menu_binding({}) is None
+    assert contract._resolve_menu_indices({"x": "[2]"}) == {"x": "[2]"}
+
+
+# --- architecture: the interface is enforced, not merely offered ---------- #
+
+
+def test_a_menu_never_changes_what_is_valid():
+    """FROZEN clause (b), and F2's instance of the harness's oldest
+    invariant: measures never adjudicate.
+
+    A menu changes what the model is SHOWN. It may never change what the
+    validators ACCEPT. Emptying the registry removes every menu and every
+    index resolution; the verdicts must not move.
+    """
+
+    saved = dict(rm.REFERENCE_FIELD_DECLARATIONS)
+
+    def candidate(block, refs=()):
+        return {
+            "claim": "the moon pulls the sea",
+            "mechanism": "tidal bulge",
+            "counterconditions": ["none"],
+            "checker_specs": [],
+            "typicality": 0.5,
+            "optional_refs": list(refs),
+            "evidence_refs": [{"block": block, "quote": "q"}],
+        }
+
+    corpus = [
+        {"candidates": [candidate("a3f19c2b8e04")]},
+        {"candidates": [candidate("the-tides-paper")]},
+        {"candidates": [candidate("a3f19c2b8e04", refs=["SRC_001"])]},
+        {"candidates": [candidate("a3f19c2b8e04", refs=["SRC_999"])]},
+        {"candidates": []},
+        {"candidates": [candidate("A3F19C2B8E04")]},
+    ]
+
+    def verdicts():
+        out = []
+        contract = _v6_contract(citable_block_ids=("a3f19c2b8e04", "7d0c1149ab52"))
+        for value in corpus:
+            try:
+                contract.validate_value(value)
+                out.append("VALID")
+            except Exception as error:  # noqa: BLE001 - the verdict is the subject
+                out.append(type(error).__name__)
+        return out
+
+    with_menus = verdicts()
+    try:
+        rm.REFERENCE_FIELD_DECLARATIONS.clear()
+        without_menus = verdicts()
+    finally:
+        rm.REFERENCE_FIELD_DECLARATIONS.update(saved)
+
+    assert with_menus == without_menus, (
+        f"the menu machinery moved a verdict: {with_menus} vs {without_menus}; "
+        f"a menu is presentation and may never decide validity"
+    )
+    assert verdicts() == with_menus, "the registry was not restored"
+
+
+def test_consumers_reach_the_legal_set_only_through_the_interface():
+    """The other half of enforced modularity, mirroring
+    tests/test_signal_contract.py's controller check.
+
+    This passes on the tree as it stands, so its value is not that it turns
+    anything green today: it FAILS the day a consumer re-derives a legal
+    handle set itself, which is exactly what `repair.py` did before this
+    module existed -- and what made the prompt, the wire and the diagnostic
+    three lists of one fact.
+    """
+
+    import ast
+    import pathlib
+
+    from deepreason.llm import packs, repair
+
+    for module in (packs, repair):
+        source = pathlib.Path(module.__file__).read_text()
+        tree = ast.parse(source)
+        reaches_interface = any(
+            isinstance(node, ast.ImportFrom)
+            and (node.module or "").endswith("reference_menu")
+            for node in ast.walk(tree)
+        ) or any(
+            isinstance(node, ast.ImportFrom)
+            and (node.module or "") == "deepreason.llm"
+            and any(a.name == "reference_menu" for a in node.names)
+            for node in ast.walk(tree)
+        )
+        assert reaches_interface, (
+            f"{module.__name__} does not consume the reference-menu interface"
+        )
+
+    # `repair.py` must not rebuild a legal list from a subsystem's state: the
+    # only local composition of scratch handles left is the fallback for a
+    # pointer the registry does not cover, and it is guarded by the
+    # declaration being None.
+    source = pathlib.Path(repair.__file__).read_text()
+    guidance = source.split("def _scratch_reference_guidance", 1)[1].split(
+        "\ndef ", 1
+    )[0]
+    assert "legal_handles_for(" in guidance, (
+        "the scratch diagnostic stopped consuming the resolver"
+    )
+    block_guidance = source.split("def _block_reference_guidance", 1)[1].split(
+        "\ndef ", 1
+    )[0]
+    assert "legal_handles_for(" in block_guidance, (
+        "the block diagnostic stopped consuming the resolver"
+    )

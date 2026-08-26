@@ -1,0 +1,47 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+____ test_the_diagnostic_consumes_the_resolver_rather_than_agreeing_with_it ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f9b1050b1d0>
+
+    def test_the_diagnostic_consumes_the_resolver_rather_than_agreeing_with_it(
+        monkeypatch,
+    ):
+        """Set equality alone cannot distinguish ONE authority from two that
+        happen to agree -- and on the obvious fixture they do agree, which is
+        how "two lists kept in agreement" survives a test suite. So this asserts
+        CONSUMPTION: divert the resolver and the diagnostic must follow it.
+        """
+    
+        from deepreason.llm import repair
+    
+        sentinel = rm.LegalHandleSet(
+            field_id="sentinel",
+            handles=("SCR_777", "NEW_777"),
+            total=2,
+            truncated=False,
+            omission_legal=True,
+        )
+        monkeypatch.setattr(
+            repair, "legal_handles_for", lambda *a, **k: sentinel, raising=True
+        )
+        guidance = repair._scratch_reference_guidance(
+            _scratch_error(("SCR_001",), ()),
+            "/scratch_proposal/unresolved_questions/0/related_refs",
+            "SCR_999",
+        )
+>       assert tuple(guidance["legal_handles"]) == ("SCR_777", "NEW_777"), (
+            "the diagnostic did not follow the resolver; it is re-deriving the "
+            "legal set locally, which is the second list E26's law forbids"
+        )
+E       AssertionError: the diagnostic did not follow the resolver; it is re-deriving the legal set locally, which is the second list E26's law forbids
+E       assert ('SCR_001',) == ('SCR_777', 'NEW_777')
+E         
+E         At index 0 diff: 'SCR_001' != 'SCR_777'
+E         Right contains one more item: 'NEW_777'
+E         Use -v to get more diff
+
+tests/test_reference_menu.py:724: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_reference_menu.py::test_the_diagnostic_consumes_the_resolver_rather_than_agreeing_with_it
+1 failed, 1 passed, 35 deselected in 0.06s
