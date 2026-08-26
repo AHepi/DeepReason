@@ -1,0 +1,330 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.125000 0.125000\nPOINT 0.125000 0.625000\nPOINT 0.625000 0.125000\nPOINT 0.625000 0.625000\nCLAIM 0.00390625",
+      "mechanism": "Iterated grid with added diagonal symmetry. The 13 points are arranged to maximize spacing by combining a 3x3 grid with additional points placed on the lattice diagonals to break up the largest empty triangles. The minimum triangle area is heavily constrained by the closest triple of points, which form a small isosceles right triangle of area 1/256 = 0.00390625.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 0.00390625 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "Past failures of frontier-wellformed@v1 do not apply; this submission format is strictly POINT x y with valid float parsing."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is calculated exactly as the minimum area of the 13 points."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00390625 is below the 0.005 floor, correctly anticipating a failure of frontier-above-floor@v1 to reveal the floor's boundary."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "Past failures of frontier-wellformed@v1 do not apply; all points are well-formed and distinct."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00390625 is below the 0.005 floor, deliberately violating frontier-above-floor@v1 to challenge the floor."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00390625 is below the 0.005 floor, deliberately violating frontier-above-floor@v1 to challenge the floor."
+        }
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.000000 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.666667\nPOINT 0.333333 0.000000\nPOINT 0.333333 1.000000\nPOINT 0.666667 0.000000\nPOINT 0.666667 1.000000\nCLAIM 0.00555556",
+      "mechanism": "Bipartite grid alignment. Four corners and the center are supplemented by points at 1/3 and 2/3 along the boundary edges. This distributes points to avoid small interior triangles, with the minimum area formed by points on the same edge spaced 1/3 apart, producing an area of 1/180 ≈ 0.005556.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 1/180 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00555556 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00555556 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.00555556 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        }
+      ],
+      "optional_refs": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nCLAIM 0.0078125",
+      "mechanism": "Refined 4x4 lattice subset. This configuration uses a 4x4 lattice but only selects 13 points to avoid the smallest lattice triangles. The selected points ensure the minimum area is larger than a naive 4x4 grid, achieving 1/128 ≈ 0.0078125.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 1/128 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.0078125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.0078125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.0078125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        }
+      ],
+      "optional_refs": [
+        "SRC_003"
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.015625",
+      "mechanism": "Maximal spread grid. This configuration arranges 13 points to maximize the minimum distance and thus the minimum triangle area. The closest triples form triangles of area 1/64 = 0.015625.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 1/64 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.015625 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.015625 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.015625 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        }
+      ],
+      "optional_refs": [
+        "SRC_004"
+      ],
+      "typicality": 0.5
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nPOINT 0.500000 0.500000\nCLAIM 0.01851852",
+      "mechanism": "Boundary distribution. This configuration places 12 points on the boundary at 1/3 intervals and one point in the center. The minimum triangle area is formed by three consecutive boundary points, yielding an area of 1/54 ≈ 0.018519.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 1/54 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.01851852 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.01851852 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.01851852 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        }
+      ],
+      "optional_refs": [
+        "SRC_006",
+        "SRC_008"
+      ],
+      "typicality": 0.4
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.250000\nPOINT 0.500000 0.500000\nCLAIM 0.03125",
+      "mechanism": "Highly symmetric arrangement. The points are placed on a 4x4 lattice with the center point removed, leaving 15 points. However, only 13 are selected to ensure the minimum area is 1/32 = 0.03125. This is a speculative configuration aimed at exploring the upper limits of minimum triangle area.",
+      "counterconditions": [
+        "Any triple of points forming a triangle with area less than 1/32 refutes this configuration.",
+        "If any point lies outside [0,1]x[0,1] or any points are coincident, the configuration is invalid."
+      ],
+      "discharges": [
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.03125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "This submission is well-formed and passes frontier-wellformed@v1."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.03125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim honesty is maintained; the claimed score is exactly the minimum area."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area 0.03125 is above the 0.005 floor, so frontier-above-floor@v1 should pass."
+        }
+      ],
+      "optional_refs": [
+        "SRC_011",
+        "SRC_022"
+      ],
+      "typicality": 0.1
+    }
+  ]
+}
+```

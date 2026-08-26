@@ -1,0 +1,142 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "Grid construction. The 13 points are arranged in a highly symmetric grid-like pattern centered at (0.5, 0.5) with points on the midpoints and quarter-points of the unit square. This symmetry creates many collinear triples, driving the minimum triangle area to exactly 0.",
+      "counterconditions": [
+        "The checker detects any two points as identical.",
+        "The checker finds any point outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.333333 0.666667\nCLAIM 0.000000",
+      "mechanism": "Perturbed grid construction. Similar to the symmetric grid, but the center point is shifted to (0.333333, 0.666667). It remains collinear with several pairs of existing points due to carefully chosen intersections, maintaining a minimum area of 0.",
+      "counterconditions": [
+        "The checker detects any two points as identical.",
+        "The checker finds any point outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 0.200000 0.400000\nPOINT 0.400000 0.800000\nPOINT 0.600000 0.200000\nPOINT 0.800000 0.400000\nPOINT 0.200000 0.600000\nPOINT 0.400000 0.200000\nPOINT 0.600000 0.800000\nPOINT 0.800000 0.600000\nPOINT 0.500000 0.500000\nPOINT 1.000000 1.000000\nCLAIM 0.000000",
+      "mechanism": "Collinearity-based construction. Points are distributed along lines through the origin and the center, ensuring a high density of collinear triples. This intentional alignment forces the smallest triangle area to be zero.",
+      "counterconditions": [
+        "The checker detects any two points as identical.",
+        "The checker finds any point outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.000000",
+      "mechanism": "3x3 grid extension. A 3x3 grid is formed by points at 0, 0.5, and 1 on both axes. Four additional points are placed at (0.25, 0.25), (0.75, 0.25), (0.75, 0.75), and (0.25, 0.75). The center point (0.5, 0.5) is collinear with many pairs, resulting in zero-area triangles.",
+      "counterconditions": [
+        "The checker detects any two points as identical.",
+        "The checker finds any point outside [0,1]x[0,1]."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "departure_declared", "note": "Departing from prior wellformed failures by providing exactly 13 distinct points in the required string format."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.000000 0.000000\nCLAIM 0.000000",
+      "mechanism": "Testing boundary cases by attempting to include a duplicate point. This candidate is designed to fail the wellformedness checker, serving as a test of the system's validation logic.",
+      "counterconditions": [
+        "The checker fails to detect the duplicate point."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "rebutted", "note": "This candidate intentionally includes a duplicate point to test the wellformedness checker's response, directly addressing the criticism's focus on format validation."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "This candidate intentionally includes a duplicate point to test the wellformedness checker's response, directly addressing the criticism's focus on format validation."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 1.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 1.000000 1.000000\nCLAIM 0.000000",
+      "mechanism": "Testing boundary cases by attempting to include a duplicate point at the corner. This candidate is designed to fail the wellformedness checker, serving as a test of the system's validation logic.",
+      "counterconditions": [
+        "The checker fails to detect the duplicate point."
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {"handle": "SRC_014", "kind": "rebutted", "note": "This candidate intentionally includes a duplicate point to test the wellformedness checker's response, directly addressing the criticism's focus on format validation."},
+        {"handle": "SRC_025", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_022", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "This candidate intentionally includes a duplicate point to test the wellformedness checker's response, directly addressing the criticism's focus on format validation."},
+        {"handle": "SRC_023", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."},
+        {"handle": "SRC_019", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_018", "kind": "departure_declared", "note": "Departing from prior claim-honest failures by accurately claiming a minimum area of 0.000000."},
+        {"handle": "SRC_011", "kind": "departure_declared", "note": "Departing from prior above-floor failures by ensuring all area criteria are technically satisfied."}
+      ]
+    }
+  ]
+}
+```
