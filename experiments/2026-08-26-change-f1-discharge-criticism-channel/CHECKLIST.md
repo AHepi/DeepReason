@@ -695,7 +695,7 @@ recorded here rather than left as a silent reordering.
       than at step 10 (same ordering fault as step 2's record: the ring as
       first written demanded a commit-2 surface inside commit 1). Step 18 runs
       the file whole, with nothing deselected;
-      (b) `python tools/diff_budget.py <base> --paths src/ --ceiling 640` →
+      (b) `python tools/diff_budget.py <base> --paths src/ --ceiling 900` →
       `DIFF_BUDGET_RESULT_V1` with `"verdict": "WITHIN"` (EXCEEDED is a typed
       STOP to the operator, never a re-baselined ceiling — R19);
       (c) commit created; (d) `git status --porcelain` empty and the branch
@@ -764,7 +764,11 @@ recorded here rather than left as a silent reordering.
         returns EXCEEDED at every remaining `[COMMIT]` step, so the instrument
         is dead for the rest of the tranche and each stop is a formality.
 
-      Commit 2 does not begin until this is answered.
+      **ANSWERED 2026-08-26: "900".** Option (ii), the recommendation. The
+      ceiling is re-declared in SPEC.md's Budget and ledgered as REQUEST.md
+      Amendment 3 / R21; every remaining `[COMMIT]` step gates against 900 and
+      R19's typed-STOP obligation attaches to the new number unchanged. The
+      instrument stays live, which is what distinguishes this from a waiver.
 
 ---
 

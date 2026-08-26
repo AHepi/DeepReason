@@ -824,15 +824,30 @@ python3 -c "print(sum([150, 120, 110, 90]))"                    # 470  tests/
 python3 -c "print(sum([120, 60]))"                              # 180  docs/map/
 ```
 
-- `src/` ceiling: **640** lines (S1 140, S2 110, S3 90, S4 45, S5 130, S6 60,
-  S7-support 40, S8-support 25). This is the number
-  `tools/diff_budget.py --paths src/` is checked against at every `[COMMIT]`.
+- `src/` ceiling: **900** lines — RE-DECLARED 2026-08-26 by the operator's
+  ruling on step 10's typed STOP (REQUEST.md Amendment 3, R21: "900"),
+  superseding the original 640. This is the number `tools/diff_budget.py
+  --paths src/` is checked against at every `[COMMIT]`, and R19's obligation
+  attaches to it unchanged: growth beyond 900 is a typed STOP, never a second
+  re-baseline.
+
+  The original itemization is kept below rather than rewritten, because the gap
+  between it and the measurement is the useful record. Estimated: S1 140, S2
+  110, S3 90, S4 45, S5 130, S6 60, S7-support 40, S8-support 25 = 640.
+  Measured at commit 1: S1 **284** (est. 140), S2+S3 **249** (est. 200), the
+  granted contact 22. SPEC's per-item numbers ran 1.6-2.0x low throughout, on
+  every item built. Rung 6's comparable overrun was 560 -> 810 (1.45x).
+  The re-declared 900 is the same author's remaining estimate (~305)
+  carried at the same measured discount, not a round number.
 - `tests/` ~470, `docs/map/` ~180, tranche artifacts + instrument ~350.
 - Commits: **3** — (1) interface + registry + record + render (S1–S3, S11 part);
   (2) wire + submission + records (S4–S6, S11 part); (3) law line + architecture
   test + coupling instrument + gate (S7–S10, S12).
 - Frozen surfaces touched: **1 — `run_manifest.py`, one insertion, GRANTED
-  2026-08-26 (Q-OP-1, riders itemized at S13).** `invariants.py` disposed as a false positive (M1).
+  2026-08-26 (Q-OP-1, riders itemized at S13).**
+- Ceiling history, so no reader has to reconstruct it: 640 declared at spec
+  time; typed STOP raised at step 10 while the gate still read `WITHIN`
+  (555/640), before commit 2 was written; **900** ruled by the operator. `invariants.py` disposed as a false positive (M1).
 
 Rubric: 6/6 yes (re-run 2026-08-26 after Amendment 2) — every R has a spec item
 with a machine-decidable accept (R1→S3, R2→S3, R3→S4/S5, R4→S5, R5→S7,

@@ -191,6 +191,11 @@ finding, recorded here rather than treated as a blocker: a new
 > but does not replace P2's design. Proceed.
 
 
+### Message 4 — the ceiling ruling (reply to step 10's R19 typed STOP)
+
+> 900
+
+
 ## Requirements
 
 R1 (behavior): "open criticisms on a problem render INSIDE the conjecturer's
@@ -280,6 +285,14 @@ R20 (artifact, Amendment 2): "F1 claims DELIVERY, not response — the offline
 gate proves the channel carries and the off-state cannot, RESULTS.md says a
 live model's responsiveness is P2's question, and the parked four-arm A/B
 remains the live proof."
+
+R21 (process, Amendment 3): "900" — in answer to step 10's typed STOP, which
+offered "(ii) Re-declare the ceiling at 900 and keep gating on it
+(RECOMMENDED)", "(i) Trim to fit 640", and "(iii) Continue and disclose". The
+operator chose (ii). The `src/` ceiling is **900**; `tools/diff_budget.py`
+keeps gating on it at every `[COMMIT]` step, and R19's obligation is
+UNCHANGED — a typed STOP if the tranche grows beyond 900, never a second
+silent re-baseline.
 
 ## Standing constraints
 
@@ -385,3 +398,11 @@ Supersedes nothing. One clarification the operator added that is not a
 requirement but is recorded so a later reader does not mistake it for silence:
 "The upcoming P-C2 rematch will bear on it but does not replace P2's design" —
 P2 stays parked as designed.
+
+**Amendment 3 — 2026-08-26, the ceiling ruling.** Message 4 above, verbatim.
+Lands as R21. Supersedes SPEC.md's declared `src/` ceiling of 640 with **900**;
+supersedes nothing in R19, whose typed-STOP obligation now attaches to the new
+number. Recorded because the operator's own words in Amendment 2 required it:
+"a typed STOP if it grows beyond what SPEC now declares, not silent growth" —
+the ruling is what makes 900 "what SPEC now declares", so the instrument stays
+live rather than becoming a waiver.
