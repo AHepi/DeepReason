@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=27 blockers=none. All twelve SPEC items are landed; what remains is the gates (map, wheel smokes, full suite, budget), RESULTS.md and the final push.
+State: next=29 blockers=none. Map gate, audit, links and both wheel smokes all green. Remaining: the full suite, the final budget, RESULTS.md, the push.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1511,7 +1511,7 @@ recorded here rather than left as a silent reordering.
       plain `str`, because a private enum there would close the exact seam F2
       needs to register against.
 
-- [ ] 27. (S11) Map gate, FULL — never concurrently with the test gate
+- [x] 27. (S11) Map gate, FULL — never concurrently with the test gate
       (`dr-drive-harness` §5b: both fan out workers and the contention
       manufactures failures).
       done-when: ALL THREE pasted — `python tools/docs_verify.py` failure
@@ -1519,12 +1519,58 @@ recorded here rather than left as a silent reordering.
       refuses none of this tranche's new checks; `python tools/docs_verify.py
       --links` exits 0
 
-- [ ] 28. (all) Wheel smokes — no gate runs them, so a public-surface change
+      PASTED OUTPUT:
+      ```
+      $ python tools/docs_verify.py            # FULL, idle
+        FAIL CON-run-identity.md:200 / :202 / :204
+      docs_verify: 3 failed
+      $ python tools/docs_verify.py --audit
+      docs_verify --audit: 0 finding(s)
+      $ python tools/docs_verify.py --links
+      docs_verify --links: 0 dangling reference(s), 65 document(s)
+      ```
+      **3 failed — equal to the step-1 baseline**, the same three
+      `CON-run-identity` shallow-clone failures and no others.
+
+      `--audit` matters more than the count here. It refuses checks that CANNOT
+      fail, and this tranche added twenty-odd of them across four documents; a
+      zero means none of them is decoration. Two were rewritten earlier in the
+      tranche precisely because they would have been: the granted contact's
+      indent check (step 2b) and the two multi-line checks in
+      `CON-discharge-channel` that the runner could not execute at all (step
+      17).
+
+- [x] 28. (all) Wheel smokes — no gate runs them, so a public-surface change
       would rot the pins silently. No console entry point, MCP tool or wheel
       layout is planned to move; these run as proof rather than assurance.
       done-when: `python scripts/wheel_smoke.py` and `python -u
       scripts/wheel_operational_smoke.py` both PASS with pins unchanged, AND
       `git diff -- scripts/` is empty (paste all three)
+
+      PASTED OUTPUT:
+      ```
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+
+      $ python -u scripts/wheel_operational_smoke.py
+      wheel operational smoke passed: installed setup, explicit qualification
+      (80 qualification calls; 418 total calls), readiness, question-only
+      reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP
+      restart, budget ceiling, and pre-V6 fail-closed admission
+
+      $ git diff -- scripts/       (empty)
+      ```
+      Both green, pins unmoved, and no gate would have run either for me.
+
+      Two numbers in that output are the ones worth reading rather than the
+      word "passed". **"exact MCP schemas"** — the wire additions did not reach
+      the MCP tool schema sha, which is what the first smoke pins; a
+      `discharges` field that had leaked into the published surface would have
+      failed here and nowhere else. **"80 qualification calls"** — unchanged,
+      which is the operational restatement of the frozen-surface claim proved
+      at step 2c: no new LLM role, no moved subject digest, so no home owes a
+      ~14-minute battery rerun.
 
 - [ ] 29. (all) FULL GATE, on an otherwise idle box.
       done-when: `python -m pytest tests/ -q -n 4` output ends
