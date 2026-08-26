@@ -117,18 +117,33 @@ def test_no_consumer_reaches_past_the_interface():
 
     # Positive anchor (DR-SCHEMA check-writing rule 1): a moved or renamed
     # package would make the loop above vacuous rather than failing, so the
-    # test also demands that the interface is actually being consumed. The
-    # count is pinned with `==` and the file named, because it IS the claim
-    # (rule 6, "counts are claims"): the whole channel reaches the rest of the
-    # tree through ONE file. `llm/packs.py` is deliberately not on this list --
-    # the render hands it a plain string, so the pack layer never learns that
-    # criticism is what it is rendering.
+    # test also demands that the interface is actually being consumed. The list
+    # is pinned with `==` and the files named, because it IS the claim (rule 6,
+    # "counts are claims"): the channel reaches the rest of the tree through
+    # exactly TWO files, and each is there for a reason the design states.
+    #
+    #   rules/conj.py     renders the criticisms into the pack and screens the
+    #                     submission -- the behavioural consumer.
+    #   llm/contracts.py  derives `DischargeWireV1.kind`'s schema enum from the
+    #                     declaration registry. This one is REQUIRED by R12
+    #                     rather than incidental: a literal enum here would
+    #                     make a declared kind legal in Python and invisible on
+    #                     the wire, and the model can only act on what the
+    #                     schema offers it. It consumes the public interface
+    #                     (`discharge_kind_names`), lazily, so no cycle forms.
+    #
+    # `llm/packs.py` is deliberately NOT on this list -- the render hands it a
+    # plain string, so the pack layer never learns that criticism is what it is
+    # rendering.
     consumers = [
         str(p) for p in sorted(SRC.rglob("*.py"))
         if PACKAGE.resolve() not in p.resolve().parents
         and "deepreason.discharge" in _imported_modules(p)
     ]
-    assert consumers == ["src/deepreason/rules/conj.py"], consumers
+    assert consumers == [
+        "src/deepreason/llm/contracts.py",
+        "src/deepreason/rules/conj.py",
+    ], consumers
 
 
 # --- 2: the package consumes only what it declares ------------------------- #

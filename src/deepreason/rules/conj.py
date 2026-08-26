@@ -457,6 +457,7 @@ def _v6_atomic_conjecture_fallback(
     aliases: AliasTable,
     exposure_items: tuple,
     transition,
+    discharge_enabled: bool = False,
 ):
     """Execute or recover all deterministic single-candidate child calls."""
 
@@ -477,7 +478,9 @@ def _v6_atomic_conjecture_fallback(
     ):
         raise ValueError("atomic conjecture differs from decomposition authority")
     reasoning = bool(strong_payload.get("reasoning", False))
-    contract = AtomicConjectureWireContractV1(aliases, reasoning=reasoning)
+    contract = AtomicConjectureWireContractV1(
+        aliases, reasoning=reasoning, discharge_enabled=discharge_enabled
+    )
     output_model = ReasoningConjecturerTurnV6 if reasoning else ConjectureTurnV6
     service = InquiryTransactionService(harness, manifest, adapter.meter)
     child_count = transition.maximum_children
@@ -730,6 +733,21 @@ def conj(
             raise ValueError("Conj endpoint lease must belong to the conjecturer role")
     if workflow_work_order_id is not None and workflow_control_trace is not None:
         raise ValueError("Conj accepts only one workflow binding seam")
+
+    # The open criticisms on this problem, rendered into the BINDING block
+    # (REBUILD F1). The whole channel reaches the tree through this module and
+    # `deepreason.discharge`'s public interface -- `llm/packs.py` is handed a
+    # plain string and never learns that criticism is what it is rendering.
+    #
+    # Computed HERE rather than beside the pack because the atomic-decomposition
+    # recovery path builds its own contract long before the pack render, and a
+    # contract that pruned `discharges` while the pack it is answering listed
+    # open handles would ask the model for something it cannot express. It is a
+    # pure read -- no event, no label (`test_rendering_writes_nothing_to_the_log`).
+    discharge_policy = resolve_discharge_policy(config)
+    open_criticism_context = render_open_criticism_context(
+        harness, problem_id, discharge_policy
+    )
 
     active_v4 = False
     active_v5 = False
@@ -1023,6 +1041,7 @@ def conj(
                 aliases=recovered_aliases,
                 exposure_items=tuple(source_root.exposure.exposed_items),
                 transition=transition,
+                discharge_enabled=bool(open_criticism_context),
             )
             recovered_source_seqs = [
                 event.seq
@@ -1396,14 +1415,6 @@ def conj(
 
     frame_slice_context = render_frame_slice_context(harness, problem_id)
     frame_crisis_context = render_frame_crisis_context(harness, problem_id)
-    # The open criticisms on this problem, rendered into the BINDING block
-    # (REBUILD F1). The whole channel reaches the tree through this module and
-    # `deepreason.discharge`'s public interface -- `llm/packs.py` is handed a
-    # plain string and never learns that criticism is what it is rendering.
-    discharge_policy = resolve_discharge_policy(config)
-    open_criticism_context = render_open_criticism_context(
-        harness, problem_id, discharge_policy
-    )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1543,6 +1554,11 @@ def conj(
                 _RESEARCH_TURN_MAXIMUM if v6_research_policy.enabled else 0
             ),
             contract_id=configured_turn_contract,
+            # The wire half of the channel: the `discharges` field is offered
+            # to the model ONLY when the pack actually carries open criticisms.
+            # Otherwise it is pruned, so a run with nothing to discharge emits
+            # the schema bytes it emitted before this channel existed.
+            discharge_enabled=bool(open_criticism_context),
         )
     elif active_v4:
         turn_contract = (
@@ -2025,6 +2041,7 @@ def conj(
                     transaction_context_authorization.exposure_receipt.exposed_items
                 ),
                 transition=transition,
+                discharge_enabled=bool(open_criticism_context),
             )
             llm_call = atomic_calls[-1]
             atomic_fallback_completed = True

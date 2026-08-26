@@ -806,7 +806,7 @@ recorded here rather than left as a silent reordering.
         wire enforce a gate the design forbids, and no re-ask could ever be
         attempted because the reply would not parse.
 
-- [ ] 12. (S4) Implement `DischargeWireV1` in `llm/wire.py`;
+- [x] 12. (S4) Implement `DischargeWireV1` in `llm/wire.py`;
       `CompactConjectureCandidate.discharges` (list, max_length=32) and
       `ReasoningCandidateProposal.discharges` (tuple) in
       `workloads/text.py` — both additive and optional, the precedent
@@ -819,6 +819,75 @@ recorded here rather than left as a silent reordering.
       assert qualification_subject_digest(_manifest(p), p) ==
       'b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386'"`
       exits 0
+
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_wire.py tests/test_discharge_channel.py \
+          tests/test_discharge_contract.py -q
+      32 passed in 4.65s
+
+      $ python -m pytest tests/test_wire_contracts.py \
+          tests/test_v6_patch_repair_and_wire.py tests/test_conjecturer_turn_v4.py \
+          tests/test_v6_conjecture_component_atomicity.py \
+          tests/test_v6_context_continuation.py tests/test_skills_models.py \
+          tests/test_semantic_freedom_constitution.py \
+          tests/test_live_smoke_regressions.py -q
+      (all green)
+
+      $ python -m pytest tests/test_v6_transaction_qualification.py \
+          tests/test_reusable_qualification.py tests/test_run_manifest.py \
+          tests/test_research_conjecture_wire.py \
+          tests/test_v6_engaged_public_defaults.py -q
+      164 passed in 58.96s
+      ```
+      The subject-digest assertion is now a COMMITTED TEST
+      (`test_the_qualification_subject_digest_does_not_move`) rather than a
+      session measurement, so SPEC's M4 is re-derivable by anyone.
+
+      **STEP 16'S TARGET IS ALREADY GREEN.**
+      `test_a_fourth_kind_enters_by_declaration_alone` passes as a consequence
+      of this step: the enum is derived from the live registry, so a
+      monkeypatched fourth kind reaches the wire schema, the screen and the
+      render with the three consumer files byte-unchanged. Step 16 keeps its
+      own job — the mutation proof that the check CAN fail.
+
+      **THE ARCHITECTURE TEST CAUGHT A REAL CONSEQUENCE, and the pin was
+      corrected to the truth rather than bent to fit.** Deriving the wire enum
+      from the registry means `llm/contracts.py` now consumes
+      `deepreason.discharge` too, so the pinned consumer list of ONE was wrong.
+      It is now TWO, each named with the reason the design gives:
+      `rules/conj.py` (renders and screens — the behavioural consumer) and
+      `llm/contracts.py` (derives the schema enum). The second is REQUIRED by
+      R12, not incidental: a literal enum there would make a declared kind
+      legal in Python and invisible on the wire, and a model can only act on
+      what the schema offers it. Both consume the PUBLIC interface, so the
+      interface-only rule is untouched — only the count was.
+
+      Two implementation decisions worth recording:
+      - `DischargeWireV1` lives in `llm/contracts.py`, not `llm/wire.py`,
+        because `wire.py` imports `ReasoningCandidateProposal` from
+        `workloads/text.py` and that model needs the field — a definition in
+        `wire.py` would have closed an import cycle. `contracts.py` is the home
+        both already share for `EvidenceRefClaimV1`.
+      - The render is computed EARLY in `conj()`, not beside the pack, because
+        the atomic-decomposition recovery path builds its own contract long
+        before the pack render. A contract that pruned `discharges` while the
+        pack it answers listed open handles would ask the model for something
+        it cannot express. Moving it is safe because the render is a pure read,
+        which `test_rendering_writes_nothing_to_the_log` pins.
+
+      GATES:
+      ```
+      $ python tools/diff_budget.py 4760a32ef --paths src/ --ceiling 900
+      {"areas": {"src/": 669}, "ceiling": 900, "verdict": "WITHIN"}
+      $ python tools/blast_radius.py --files llm/wire.py llm/contracts.py \
+          workloads/text.py rules/conj.py --symbols DischargeWireV1 ... --against 4760a32ef
+      verdict: CLEAR    contacts: []    adjacent: []    wheel pins: []
+      ```
+      **CLEAR** — the wire half touches no frozen surface at all, which is the
+      measured form of SPEC's M4 claim. `wheel_smoke_pins` empty: no console
+      entry point, MCP tool or wheel-layout change, so the pins are not owed
+      (both smokes still run at step 28, as proof rather than assurance).
 
 - [ ] 13. (S5) Write `tests/test_discharge_submission.py`: an undischarged
       submission is re-asked ONCE with the open list; the SECOND submission is

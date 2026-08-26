@@ -9,7 +9,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
-from deepreason.llm.contracts import EvidenceRefClaimV1
+from deepreason.llm.contracts import DischargeWireV1, EvidenceRefClaimV1
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
 
 
@@ -165,6 +165,11 @@ class ReasoningCandidateProposal(BaseModel):
     # Claimed groundings in admitted evidence blocks (admission §4); checked
     # deterministically after admission, never trusted on arrival.
     evidence_refs: tuple[EvidenceRefClaimV1, ...] = Field(default=(), max_length=8)
+    # REBUILD F1: per-criticism discharges, additive and optional for exactly
+    # the reason `checker_specs` above is -- the proposal's own wire TYPE must
+    # not change, and an undischarged submission has to stay parseable so it
+    # can be re-asked rather than rejected.
+    discharges: tuple[DischargeWireV1, ...] = ()
     analogy: AnalogyClaim | None = None
     sidecar: OperationalSidecar = Field(default_factory=OperationalSidecar)
 

@@ -48,7 +48,9 @@ from deepreason.llm.contracts import (
     CandidateRef,
     ConjectureCandidate,
     ConjecturerOutput,
+    DischargeWireV1,
     EvidenceRefClaimV1,
+    discharge_kind_enum,
     QuotedEvidenceRefV1,
     DefenderOutput,
     JudgeRuling,
@@ -867,12 +869,19 @@ class WireContract(Generic[CanonicalOutput]):
         *,
         aliases: AliasTable | None = None,
         variant: str = "direct",
+        discharge_enabled: bool = False,
     ) -> None:
         self.contract_id = contract_id
         self.wire_model = wire_model
         self.canonical_model = canonical_model
         self.aliases = aliases or AliasTable()
         self.variant = variant
+        # Default OFF for every contract, so a run with the discharge channel
+        # disabled emits the schema bytes it emitted before the channel
+        # existed. `CompactConjectureCandidate` is embedded by contracts this
+        # tranche has no business changing, and committed tests read its `$def`
+        # properties directly.
+        self.discharge_enabled = discharge_enabled
 
     #: Fields whose values must be call-local aliases. Named here so the
     #: schema can state the legal set instead of leaving the model to guess
@@ -884,7 +893,26 @@ class WireContract(Generic[CanonicalOutput]):
     def model_json_schema(self) -> dict:
         schema = _strict_schema(self.wire_model.model_json_schema())
         self._bind_alias_fields(schema)
+        self._bind_discharge_field(schema)
         return schema
+
+    def _bind_discharge_field(self, schema: dict) -> None:
+        """Prune `discharges` unless this contract opted in.
+
+        Absence has to be TOTAL, not merely a property removal: `prune_property`
+        also drops the constraints that still name the field, because
+        `additionalProperties: false` beside a surviving `allOf` branch
+        advertising it yields a schema no document can satisfy. The `$def`
+        itself goes too, so a pruned schema is byte-indistinguishable from one
+        built before the field was declared.
+        """
+        definitions = schema.get("$defs", {})
+        if self.discharge_enabled:
+            return
+        for definition in (schema, *definitions.values()):
+            if isinstance(definition, dict):
+                prune_property(definition, "discharges")
+        definitions.pop("DischargeWireV1", None)
 
     def _bind_alias_fields(self, schema: dict) -> None:
         """Name the legal aliases in the schema, as an enum.
@@ -1007,6 +1035,14 @@ class CompactConjectureCandidate(StrictWireModel):
     # The claim model is already strict and frozen, so it serves as its own
     # wire shape; citations are byte-checked after admission, never trusted.
     evidence_refs: list[EvidenceRefClaimV1] = Field(default_factory=list, max_length=8)
+    # Additive and optional, so the candidate's own wire TYPE never changes and
+    # no contract-version bump is owed -- the same narrower alternative
+    # `ReasoningCandidateProposal.checker_specs` took for the same reason.
+    # OPTIONAL is also R4: an undischarged submission is returned once and then
+    # accepted with a disclosure, so a required field would make the wire
+    # enforce a gate the design forbids, and no re-ask could be attempted
+    # because the reply would not parse.
+    discharges: list[DischargeWireV1] = Field(default_factory=list, max_length=32)
 
 
 class CompactConjecturer(StrictWireModel):
@@ -1014,13 +1050,16 @@ class CompactConjecturer(StrictWireModel):
 
 
 class ConjecturerWireContract(WireContract[ConjecturerOutput]):
-    def __init__(self, aliases: AliasTable | None = None) -> None:
+    def __init__(
+        self, aliases: AliasTable | None = None, *, discharge_enabled: bool = False
+    ) -> None:
         super().__init__(
             "conjecturer.compact.v1",
             CompactConjecturer,
             ConjecturerOutput,
             aliases=aliases,
             variant="compact",
+            discharge_enabled=discharge_enabled,
         )
 
     def compile(self, wire: CompactConjecturer) -> ConjecturerOutput:
@@ -1088,7 +1127,13 @@ class AtomicReasoningConjectureCandidateWireV1(StrictWireModel):
 class AtomicConjectureWireContractV1(WireContract[BaseModel]):
     """Separately named single-candidate contract for authorized decomposition."""
 
-    def __init__(self, aliases: AliasTable, *, reasoning: bool = False) -> None:
+    def __init__(
+        self,
+        aliases: AliasTable,
+        *,
+        reasoning: bool = False,
+        discharge_enabled: bool = False,
+    ) -> None:
         self.reasoning = bool(reasoning)
         self.visible_aliases = tuple(sorted(aliases.aliases))
         super().__init__(
@@ -1101,6 +1146,7 @@ class AtomicConjectureWireContractV1(WireContract[BaseModel]):
             ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6,
             aliases=aliases,
             variant="atomic.v1",
+            discharge_enabled=discharge_enabled,
         )
 
     def model_json_schema(self) -> dict:
@@ -1487,6 +1533,7 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
         aliases: AliasTable,
         scratch_aliases: Mapping[str, str] | None = None,
         permitted_retrieval_channels: tuple[str, ...] = (),
+        discharge_enabled: bool = False,
     ) -> None:
         self.reasoning = reasoning
         self.scratch_aliases = MappingProxyType(dict(scratch_aliases or {}))
@@ -1499,6 +1546,7 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
             ReasoningConjecturerTurnV4 if reasoning else ConjecturerTurnV4,
             aliases=aliases,
             variant="compact.v4",
+            discharge_enabled=discharge_enabled,
         )
 
     def _resolve_context_alias(self, alias: str) -> str:
@@ -1835,6 +1883,7 @@ class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
         scratch_aliases: Mapping[str, str] | None = None,
         permitted_retrieval_channels: tuple[str, ...] = (),
         maximum_simulation_proposals: int = 0,
+        discharge_enabled: bool = False,
     ) -> None:
         self.maximum_simulation_proposals = maximum_simulation_proposals
         ConjecturerTurnWireContractV4.__init__(
@@ -1843,6 +1892,7 @@ class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
             aliases=aliases,
             scratch_aliases=scratch_aliases,
             permitted_retrieval_channels=permitted_retrieval_channels,
+            discharge_enabled=discharge_enabled,
         )
         self.contract_id = "conjecturer.turn.v5"
         self.wire_model = (
@@ -1923,6 +1973,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         research_enabled: bool = False,
         maximum_research_proposals: int = 0,
         contract_id: str = CONJECTURER_TURN_CONTRACT_V6,
+        discharge_enabled: bool = False,
     ) -> None:
         formal = tuple(aliases.aliases)
         scratch = tuple((scratch_aliases or {}).keys())
@@ -1969,6 +2020,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             scratch_aliases=scratch_aliases,
             permitted_retrieval_channels=permitted_retrieval_channels,
             maximum_simulation_proposals=maximum_simulation_proposals,
+            discharge_enabled=discharge_enabled,
         )
         if contract_id not in (CONJECTURER_TURN_CONTRACT_V6, CONJECTURER_TURN_CONTRACT_V7):
             raise ValueError(f"unknown conjecturer-turn contract id: {contract_id}")
