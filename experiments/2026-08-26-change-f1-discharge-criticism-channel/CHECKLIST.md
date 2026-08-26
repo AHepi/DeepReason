@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=2c blockers=none
+State: next=3 blockers=none
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -288,11 +288,32 @@ point):
       surface, not a second surface. `frozen_adjacent_contacts` is empty, and
       no `reachability` row is `newly_dead` or `newly_live`.
 
-- [ ] 2c. (S13) [was step 21] Capture `proof/digest_after.txt` with the SAME
+- [x] 2c. (S13) [was step 21] Capture `proof/digest_after.txt` with the SAME
       command as 2a and diff the pair. This is the acceptance check for the
       grant — not a green suite, the digest itself, at every schema version.
       done-when: `diff proof/digest_before.txt proof/digest_after.txt` prints
       nothing and exits 0 (paste the empty result and the exit code)
+
+      PASTED OUTPUT:
+      ```
+      $ python experiments/.../digests.py > proof/digest_after.txt
+      $ diff proof/digest_before.txt proof/digest_after.txt
+      $ echo $?
+      0
+      ```
+      Empty diff, exit 0. The granted contact is proven to PRESERVE the
+      qualification subject digest and every schema version's
+      `source_config_hash` — measured at both ends with the same committed
+      instrument, on the same tree, with the field and its pop in place
+      between them. This, not the test suite, is the grant's acceptance
+      check, and rider (d) is what makes it meaningful at all six versions
+      rather than only the newest.
+
+      **S13 is now complete.** All four riders discharged: (a) SPEC.md records
+      GRANTED 2026-08-26; (b) this pasted before/after proof plus
+      `proof/granted_contact_mutation.txt`; (c) the map's frozen-surface
+      document moved in step 2b's own commit; (d) the pop is unconditional and
+      a mutation proves the check enforcing that can fail.
 
 - [ ] 3. (S1) Create `src/deepreason/discharge/__init__.py` (the declared
       interface, re-exporting exactly the nine names SPEC S1 lists) and
