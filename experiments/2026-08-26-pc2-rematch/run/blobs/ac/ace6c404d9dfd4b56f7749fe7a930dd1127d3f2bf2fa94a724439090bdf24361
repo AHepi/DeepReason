@@ -1,0 +1,333 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nCLAIM 0.015625",
+      "mechanism": "Symmetric grid-based placement forming a 4x4 lattice missing three points. Spacing of 0.5 and 0.25 in alternating patterns ensures the minimal triangle area is bounded by the unit spacing squared.",
+      "counterconditions": [
+        "Points are not distinct",
+        "Points lie outside [0,1]x[0,1]",
+        "Minimum triangle area is less than 0.015625"
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "New geometric construction."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.5 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.75\nPOINT 0.1 0.1\nPOINT 0.9 0.9\nCLAIM 0.0",
+      "mechanism": "Exploratory diagonal cluster attempting to maximize spacing on off-diagonal points.",
+      "counterconditions": [
+        "Minimum triangle area is greater than 0"
+      ],
+      "typicality": 0.1,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "Exploratory construction."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.333 0.0\nPOINT 0.667 0.0\nPOINT 0.0 0.333\nPOINT 0.0 0.667\nPOINT 0.333 0.333\nPOINT 0.667 0.667\nPOINT 0.333 1.0\nPOINT 1.0 0.333\nPOINT 0.667 0.0\nCLAIM 0.055511",
+      "mechanism": "Perturbed boundary-favoring arrangement distributing points on edges and interior diagonals to maximize local spacing.",
+      "counterconditions": [
+        "Points do not form 13 distinct entities",
+        "Calculated area falls below 0.055511"
+      ],
+      "typicality": 0.4,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.95 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.95\nPOINT 0.5 0.05\nPOINT 0.5 0.95\nPOINT 0.05 0.5\nPOINT 0.95 0.5\nPOINT 0.5 0.5\nPOINT 0.275 0.275\nPOINT 0.725 0.275\nPOINT 0.275 0.725\nPOINT 0.725 0.725\nCLAIM 0.01890625",
+      "mechanism": "Inset grid approach pulling points slightly from the boundary to potentially avoid edge degeneracies while maintaining regular spacing.",
+      "counterconditions": [
+        "Any triangle formed has area less than 0.01890625"
+      ],
+      "typicality": 0.5,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.25\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nPOINT 0.5 0.5\nCLAIM 0.03125",
+      "mechanism": "Highly symmetric layout leveraging midpoints and quarters to balance all triangles. Replaces a center point with a 0.5,0.5 anchor.",
+      "counterconditions": [
+        "Minimum triangle area is less than 0.03125"
+      ],
+      "typicality": 0.9,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.0 0.0\nPOINT 1.0 0.0\nPOINT 0.0 1.0\nPOINT 1.0 1.0\nPOINT 0.5 0.0\nPOINT 0.5 1.0\nPOINT 0.0 0.5\nPOINT 1.0 0.5\nPOINT 0.25 0.25\nPOINT 0.75 0.75\nPOINT 0.2 0.5\nPOINT 0.8 0.5\nPOINT 0.5 0.5\nCLAIM 0.005",
+      "mechanism": "Atypical configuration testing tight lower bound threshold limits with colinear-ish placements.",
+      "counterconditions": [
+        "Area falls below 0.005"
+      ],
+      "typicality": 0.05,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive"
+      },
+      "discharges": [
+        {
+          "handle": "SRC_016",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_017",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_021",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_025",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "departure_declared",
+          "note": "New candidate."
+        }
+      ]
+    }
+  ]
+}
+```

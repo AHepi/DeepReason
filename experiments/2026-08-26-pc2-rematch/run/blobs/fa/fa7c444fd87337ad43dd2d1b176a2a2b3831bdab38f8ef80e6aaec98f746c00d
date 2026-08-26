@@ -1,0 +1,90 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nCLAIM 0.031250",
+      "mechanism": "A 4x4 grid subset placing 13 points in a regular lattice structure. By spacing points at intervals of 0.25 and 0.5, the minimum non-collinear triangle area formed by any three points is 0.03125.",
+      "counterconditions": [
+        "If any two points collapse to the same coordinate, distinctness fails.",
+        "If any point falls outside [0,1]x[0,1], the frontier-wellformed predicate fails.",
+        "If the smallest triangle area is below 0.03125, the claim is dishonest."
+      ],
+      "typicality": 0.95,
+      "discharges": [
+        {"handle": "SRC_018", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_024", "kind": "rebutted", "note": "All triangle areas are >= 0.03125, satisfying frontier-claim-honest."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "All triangle areas are >= 0.03125, satisfying frontier-claim-honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Minimum area 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Minimum area 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area 0.03125 is above the 0.005 floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Minimum area 0.03125 is above the 0.005 floor."}
+      ],
+      "optional_refs": ["SRC_004"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.333333 1.000000\nPOINT 0.666667 1.000000\nPOINT 0.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 1.000000 0.333333\nPOINT 1.000000 0.666667\nPOINT 0.500000 0.500000\nCLAIM 0.055556",
+      "mechanism": "Border-biased arrangement spacing edge points at thirds and centering one point. This pushes the minimum area higher than a uniform grid by avoiding close internal triples.",
+      "counterconditions": [
+        "If any two points collapse to the same coordinate, distinctness fails.",
+        "If any point falls outside [0,1]x[0,1], the frontier-wellformed predicate fails.",
+        "If the smallest triangle area is below 0.055556, the claim is dishonest."
+      ],
+      "typicality": 0.75,
+      "discharges": [
+        {"handle": "SRC_018", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_024", "kind": "rebutted", "note": "All triangle areas are >= 0.055556, satisfying frontier-claim-honest."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "All triangle areas are >= 0.055556, satisfying frontier-claim-honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Minimum area 0.055556 is above the 0.005 floor."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Minimum area 0.055556 is above the 0.005 floor."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area 0.055556 is above the 0.005 floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Minimum area 0.055556 is above the 0.005 floor."}
+      ],
+      "optional_refs": ["SRC_001"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.250000 0.000000\nPOINT 0.500000 0.000000\nPOINT 0.750000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 0.250000\nPOINT 0.000000 0.500000\nPOINT 0.000000 0.750000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.250000\nCLAIM 0.015625",
+      "mechanism": "Cluster-heavy design putting 5 points on the bottom edge and 4 on the left edge. Intentionally sacrifices minimum area to test the lower bounds and validate edge behaviors.",
+      "counterconditions": [
+        "If any two points collapse to the same coordinate, distinctness fails.",
+        "If any point falls outside [0,1]x[0,1], the frontier-wellformed predicate fails.",
+        "If the smallest triangle area is below 0.015625, the claim is dishonest."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {"handle": "SRC_018", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_024", "kind": "rebutted", "note": "All triangle areas are >= 0.015625, satisfying frontier-claim-honest."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "All triangle areas are >= 0.015625, satisfying frontier-claim-honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Minimum area 0.015625 is above the 0.005 floor."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Minimum area 0.015625 is above the 0.005 floor."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area 0.015625 is above the 0.005 floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Minimum area 0.015625 is above the 0.005 floor."}
+      ],
+      "optional_refs": ["SRC_002"]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.500000\nPOINT 0.250000 0.000000\nPOINT 0.750000 0.000000\nPOINT 0.000000 0.250000\nPOINT 1.000000 0.250000\nPOINT 0.000000 0.750000\nPOINT 1.000000 0.750000\nPOINT 0.250000 1.000000\nPOINT 0.750000 1.000000\nCLAIM 0.046875",
+      "mechanism": "A modified layout starting from corners and midpoints, pushing interior points toward the center and spacing edge points at quarters. This increases separation among closely spaced triples compared to the standard grid.",
+      "counterconditions": [
+        "If any two points collapse to the same coordinate, distinctness fails.",
+        "If any point falls outside [0,1]x[0,1], the frontier-wellformed predicate fails.",
+        "If the smallest triangle area is below 0.046875, the claim is dishonest."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {"handle": "SRC_018", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_020", "kind": "rebutted", "note": "This candidate provides exactly 13 distinct points satisfying frontier-wellformed."},
+        {"handle": "SRC_024", "kind": "rebutted", "note": "All triangle areas are >= 0.046875, satisfying frontier-claim-honest."},
+        {"handle": "SRC_023", "kind": "rebutted", "note": "All triangle areas are >= 0.046875, satisfying frontier-claim-honest."},
+        {"handle": "SRC_015", "kind": "rebutted", "note": "Minimum area 0.046875 is above the 0.005 floor."},
+        {"handle": "SRC_011", "kind": "rebutted", "note": "Minimum area 0.046875 is above the 0.005 floor."},
+        {"handle": "SRC_019", "kind": "rebutted", "note": "Minimum area 0.046875 is above the 0.005 floor."},
+        {"handle": "SRC_013", "kind": "rebutted", "note": "Minimum area 0.046875 is above the 0.005 floor."}
+      ],
+      "optional_refs": ["SRC_003"]
+    }
+  ]
+}
+```

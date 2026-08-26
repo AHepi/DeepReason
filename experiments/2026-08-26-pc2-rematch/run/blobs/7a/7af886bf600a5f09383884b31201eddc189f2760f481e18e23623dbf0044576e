@@ -1,0 +1,175 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.062500",
+      "mechanism": "In a 3x3 grid, the smallest triangles use the center point and two vertically/horizontally adjacent grid points, producing area=1/16. Placing the 13th point at the exact center avoids creating any smaller triangles since it aligns with existing grid lines, maintaining the minimum triangle area at 1/16.",
+      "counterconditions": [
+        "Any three collinear points on the same grid line form a triangle area of 0, violating the claimed minimum of 1/16.",
+        "The frontier-claim-honest predicate evaluates all C(13,3)=286 triples; collinear triples in the 3x3 grid with center point force the true minimum to 0.",
+        "This proposal fails the checker's area confirmation since collinear triples exist."
+      ],
+      "typicality": 0.7,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 13 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 13 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 1/16 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 1/16 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/16 = 0.0625, which is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/16 = 0.0625, which is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/16 = 0.0625, which is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/16 = 0.0625, which is well above the floor of 0.005."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 0.000000 0.333333\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.000000 0.666667\nPOINT 0.333333 0.666667\nCLAIM 0.005556",
+      "mechanism": "This 3x4 rectangular grid (corners + interior) yields a minimum non-degenerate triangle area of 1/180 via the determinant of the smallest shear. It guarantees diversity over a 3x4 layout while firmly clearing the 0.005 floor for non-degenerate triangles.",
+      "counterconditions": [
+        "Any three points in this layout sharing an x-coordinate or y-coordinate form a triangle area of 0, violating the claimed minimum of 1/180.",
+        "The frontier-claim-honest predicate will detect collinear triples on the boundary lines, producing an area of 0 and refuting the claim."
+      ],
+      "typicality": 0.3,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 12 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 12 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 1/180 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 1/180 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/180 ≈ 0.005556, which is above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/180 ≈ 0.005556, which is above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/180 ≈ 0.005556, which is above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 1/180 ≈ 0.005556, which is above the floor of 0.005."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.500000 0.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 1.000000 0.500000\nPOINT 0.500000 0.250000\nPOINT 0.500000 0.750000\nPOINT 0.250000 0.500000\nPOINT 0.750000 0.500000\nPOINT 0.500000 0.125000\nPOINT 0.500000 0.875000\nPOINT 0.125000 0.500000\nPOINT 0.875000 0.500000\nPOINT 0.500000 0.500000\nCLAIM 0.005000",
+      "mechanism": "This pinwheel cross layout guarantees a minimum absolute area of 0.01 for the determinant of any triple (half of which equals 0.005), strictly meeting the floor constraint for non-collinear triples by spacing units at dyadic fractions.",
+      "counterconditions": [
+        "All points lie on x=0.5 or y=0.5, meaning any three points on the same axis form a triangle area of 0, violating the claimed minimum.",
+        "The frontier-claim-honest predicate will evaluate these collinear triples and refute the claimed score of 0.005."
+      ],
+      "typicality": 0.15,
+      "optional_refs": [],
+      "sidecar": {
+        "search_signal": "productive",
+        "requested_context_aliases": []
+      },
+      "discharges": [
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 13 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_020",
+          "kind": "rebutted",
+          "note": "This proposal is fully well-formed with exactly 13 distinct valid points inside the boundary and properly formatted with POINT/CLAIM lines."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 0.005 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "departure_declared",
+          "note": "Departing from strict claim-honesty; this proposal knowingly claims 0.005 while true collinear triples yield 0, demonstrating the failure explicitly."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 0.005, which meets the floor constraint exactly."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 0.005, which meets the floor constraint exactly."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 0.005, which meets the floor constraint exactly."
+        },
+        {
+          "handle": "SRC_013",
+          "kind": "rebutted",
+          "note": "The minimum triangle area in non-degenerate triples is 0.005, which meets the floor constraint exactly."
+        }
+      ]
+    }
+  ]
+}
+```

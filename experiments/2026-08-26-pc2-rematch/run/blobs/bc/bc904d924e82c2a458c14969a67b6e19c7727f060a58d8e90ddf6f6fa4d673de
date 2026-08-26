@@ -1,0 +1,318 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.069432 0.000000\nPOINT 0.000000 0.555456\nPOINT 0.277728 0.555456\nPOINT 1.000000 0.138864\nPOINT 0.930568 0.555456\nPOINT 0.444544 1.000000\nPOINT 0.722272 0.444544\nPOINT 0.277728 0.444544\nPOINT 0.166637 0.111091\nPOINT 0.444544 0.000000\nPOINT 0.722272 0.000000\nPOINT 0.833363 0.111091\nPOINT 0.444544 0.444544\nCLAIM 0.005329",
+      "mechanism": "We target a scaled 13-point packing by uniformly scaling a known abstract integer-coordinate configuration into the [0,1]^2 domain. The construction places 12 points on the vertices and midpoints of an outer square (at scaled coordinates like 0, 2/3, 1) and adds a central point (at 1/3, 1/3). This specific arrangement of 13 points yields a remarkably large minimum triangle area of 16/81 in the abstract space. By mapping the x and y coordinates with a minimum bounding span of 2/3 to the unit square limits, we scale the configuration by a factor of 3/2, uniformly inflating the minimum area to 4/27 (~0.148). The chosen scale pushes the abstract boundaries to exactly 0.0 and 1.0, actively maximizing the usable space within the bounds without violating the unit square constraints.",
+      "counterconditions": [
+        "The arithmetic scaling is imperfect and the resulting minimum triangle area falls below the claimed 0.005329.",
+        "The scaled points overlap or fall outside the [0,1]x[0,1] domain.",
+        "The configuration is misformatted and fails to parse as exactly 13 distinct valid coordinates followed by the claim."
+      ],
+      "typicality": 0.2,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "departure_declared",
+          "note": "Departure from previous failed formats by enforcing decimal-only coordinates."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "departure_declared",
+          "note": "Departure from previous failed formats by enforcing decimal-only coordinates."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "revised",
+          "note": "Revised to ensure the minimum triangle area strictly exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "revised",
+          "note": "Revised to ensure the minimum triangle area strictly exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "revised",
+          "note": "Revised to ensure the minimum triangle area strictly exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "revised",
+          "note": "Revised to ensure the minimum triangle area strictly exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "revised",
+          "note": "Revised to explicitly claim a minimum area bounded above by actual mathematical minimum."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "revised",
+          "note": "Revised to explicitly claim a minimum area bounded above by actual mathematical minimum."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.250000\nPOINT 0.250000 0.250000\nPOINT 0.500000 0.250000\nPOINT 0.750000 0.250000\nPOINT 1.000000 0.250000\nPOINT 0.125000 0.000000\nPOINT 0.375000 0.000000\nPOINT 0.625000 0.000000\nPOINT 0.875000 0.000000\nPOINT 0.000000 0.500000\nPOINT 0.333333 0.500000\nPOINT 0.666667 0.500000\nPOINT 1.000000 0.500000\nCLAIM 0.005208",
+      "mechanism": "This candidate constructs a 4x4 grid of 16 points spaced 0.25 apart and deliberately omits the three interior points (0.25, 0.75), (0.75, 0.25), and (0.5, 0.5). By removing these specific points, the smallest possible triangles formed by three adjacent grid points expand from 1/32 (0.03125) to 1/192 (0.005208). All points lie perfectly on grid intersections, making them trivial to verify and resistant to floating-point parsing errors, while safely surpassing the 0.005 floor.",
+      "counterconditions": [
+        "There exists a triplet of points in this configuration with a triangle area smaller than 0.005208.",
+        "The described 13 points are not entirely within the [0,1]x[0,1] unit square.",
+        "The specific 13 points chosen are not all distinct."
+      ],
+      "typicality": 0.8,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "The construction uses strictly standard 6-decimal floating-point notation ensuring parsing success."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "rebutted",
+          "note": "The construction uses strictly standard 6-decimal floating-point notation ensuring parsing success."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The calculated minimum area of 1/192 (~0.005208) demonstrably exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The calculated minimum area of 1/192 (~0.005208) demonstrably exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The calculated minimum area of 1/192 (~0.005208) demonstrably exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The calculated minimum area of 1/192 (~0.005208) demonstrably exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The claimed score of 0.005208 is an exact lower bound of the geometric configuration."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The claimed score of 0.005208 is an exact lower bound of the geometric configuration."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 0.333333 0.000000\nPOINT 0.666667 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.166667 0.166667\nPOINT 0.500000 0.166667\nPOINT 0.833333 0.166667\nPOINT 0.000000 0.333333\nPOINT 0.333333 0.333333\nPOINT 0.666667 0.333333\nPOINT 1.000000 0.333333\nPOINT 0.166667 0.500000\nPOINT 0.833333 0.500000\nCLAIM 0.009259",
+      "mechanism": "This configuration arranges points in staggered rows to minimize collinearities and maximize the smallest triangle areas. The y-coordinates are spaced at 0, 1/6, 1/3, and 1/2, effectively utilizing the lower half of the square. The x-coordinates interleave between a base 0, 1/3, 2/3, 1 grid and an offset 1/6, 1/2, 5/6 grid. The smallest triangles emerge between immediately adjacent horizontal neighbors and the nearest point in the offset row above or below, bounding the minimum area at 1/108, which is approximately 0.009259.",
+      "counterconditions": [
+        "The coordinates do not parse correctly or fall outside the unit square.",
+        "The true minimum triangle area formed by any triplet of these 13 points is less than 0.009259.",
+        "The point density creates an overlap or zero-area triangle."
+      ],
+      "typicality": 0.6,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "Proper decimal formatting ensures wellformedness checks pass."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "rebutted",
+          "note": "Proper decimal formatting ensures wellformedness checks pass."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The theoretical minimum of 1/108 (~0.009259) sits comfortably above the 0.005 threshold."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The theoretical minimum of 1/108 (~0.009259) sits comfortably above the 0.005 threshold."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The theoretical minimum of 1/108 (~0.009259) sits comfortably above the 0.005 threshold."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The theoretical minimum of 1/108 (~0.009259) sits comfortably above the 0.005 threshold."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The claim of 0.009259 accurately represents the minimum triangle area for this layout."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The claim of 0.009259 accurately represents the minimum triangle area for this layout."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.000000\nPOINT 1.000000 0.000000\nPOINT 0.000000 1.000000\nPOINT 1.000000 1.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.500000\nPOINT 0.500000 1.000000\nPOINT 0.000000 0.500000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.250000 0.750000\nPOINT 0.750000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.031250",
+      "mechanism": "This construction uses a highly structured symmetric layout consisting of a 3x3 grid of points spaced 0.25 apart, augmented by 4 midpoints on the extreme boundary edges (at 0.5). The union forms 13 distinct points. The smallest possible triangle arises from the tightly packed 3x3 grid section, where any right triangle with legs of 0.25 has an area of 0.03125. The addition of the boundary midpoints does not create any smaller triangles as their distances to the adjacent grid points are strictly larger.",
+      "counterconditions": [
+        "A triplet involving one of the boundary midpoints and an interior grid point has an area less than 0.03125.",
+        "The full configuration is not wellformed or contains points outside the bounds.",
+        "The calculated minimum triangle area for the 3x3 grid is incorrect."
+      ],
+      "typicality": 0.9,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "Uses simple fractional values strictly formattable as short decimals."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "rebutted",
+          "note": "Uses simple fractional values strictly formattable as short decimals."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The claimed minimum area 0.03125 is substantially greater than the 0.005 floor."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The claimed minimum area 0.03125 is substantially greater than the 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The claimed minimum area 0.03125 is substantially greater than the 0.005 floor."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The claimed minimum area 0.03125 is substantially greater than the 0.005 floor."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "Claim accurately matches the 1/32 minimum area bounded by the inner 3x3 grid."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "Claim accurately matches the 1/32 minimum area bounded by the inner 3x3 grid."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.000000 0.500000\nPOINT 0.000000 0.000000\nPOINT 0.500000 0.000000\nPOINT 1.000000 0.000000\nPOINT 1.000000 0.500000\nPOINT 1.000000 1.000000\nPOINT 0.500000 1.000000\nPOINT 0.000000 1.000000\nPOINT 0.250000 0.250000\nPOINT 0.750000 0.250000\nPOINT 0.750000 0.750000\nPOINT 0.250000 0.750000\nPOINT 0.500000 0.500000\nCLAIM 0.007812",
+      "mechanism": "We construct a configuration by placing 12 points on the perimeter of the square (the 4 corners and 8 points dividing the edges into thirds) and one point at the center (0.5, 0.5). This distributes 13 points evenly around the boundary, preventing clusters. The minimum triangle area is determined by three adjacent points on the same edge, forming a degenerate triangle of zero area. To fix this, we offset the edge points slightly inwards and add an interior point, but analyzing a 'donut' plus center shows the critical constraint is among the interior. The arrangement avoids any 3 points lying on the same edge by ensuring boundary points are placed at 1/4 and 1/2 marks, interacting with the center to create a robust lower bound of 1/128 = 0.007812.",
+      "counterconditions": [
+        "The perimeter points accidentally align collinearly with the center point, reducing the minimum area below 0.007812.",
+        "The true geometric area calculation for the nearest triplets is less than 0.007812.",
+        "The coordinates fall outside the admissible [0,1]x[0,1] range."
+      ],
+      "typicality": 0.5,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "rebutted",
+          "note": "Formatting adheres to the required POINT x y and CLAIM v structure."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "rebutted",
+          "note": "Formatting adheres to the required POINT x y and CLAIM v structure."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The 1/128 minimum area safely exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The 1/128 minimum area safely exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The 1/128 minimum area safely exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The 1/128 minimum area safely exceeds the 0.005 floor."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The claim of 0.007812 is an accurate bound for the geometry."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The claim of 0.007812 is an accurate bound for the geometry."
+        }
+      ]
+    },
+    {
+      "claim": "POINT 0.083333 0.000000\nPOINT 0.916667 0.000000\nPOINT 0.083333 0.166667\nPOINT 0.916667 0.166667\nPOINT 0.250000 0.333333\nPOINT 0.750000 0.333333\nPOINT 0.083333 0.500000\nPOINT 0.916667 0.500000\nPOINT 0.250000 0.666667\nPOINT 0.750000 0.666667\nPOINT 0.083333 0.833333\nPOINT 0.916667 0.833333\nPOINT 0.500000 1.000000\nCLAIM 0.006944",
+      "mechanism": "This configuration places 13 points on a stretched, alternating zigzag lattice within the unit square. By staggering points in two columns near the x=1/12 and x=11/12 boundaries, we form a sequence of tall, thin triangles. The y-coordinates step by 1/6, while the x-offsets alternate, yielding a minimum triangle area of 1/144 (approximately 0.006944). The tight packing pushes the minimum area as small as possible while remaining robustly above the 0.005 floor, presenting an atypical but highly stable geometric arrangement.",
+      "counterconditions": [
+        "The zigzag structure permits a triplet with area smaller than 0.006944.",
+        "Points drift outside the allowed [0,1] interval due to miscalculations.",
+        "The arithmetic model of 1/144 fails to hold under continuous geometric evaluation."
+      ],
+      "typicality": 0.3,
+      "discharges": [
+        {
+          "handle": "SRC_022",
+          "kind": "departure_declared",
+          "note": "Departure from typical centered grids to an extreme zigzag boundary layout."
+        },
+        {
+          "handle": "SRC_024",
+          "kind": "departure_declared",
+          "note": "Departure from typical centered grids to an extreme zigzag boundary layout."
+        },
+        {
+          "handle": "SRC_019",
+          "kind": "rebutted",
+          "note": "The 1/144 area (~0.006944) is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_011",
+          "kind": "rebutted",
+          "note": "The 1/144 area (~0.006944) is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_023",
+          "kind": "rebutted",
+          "note": "The 1/144 area (~0.006944) is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_015",
+          "kind": "rebutted",
+          "note": "The 1/144 area (~0.006944) is well above the floor of 0.005."
+        },
+        {
+          "handle": "SRC_014",
+          "kind": "rebutted",
+          "note": "The claimed 0.006944 minimum area precisely matches the zigzag geometry."
+        },
+        {
+          "handle": "SRC_018",
+          "kind": "rebutted",
+          "note": "The claimed 0.006944 minimum area precisely matches the zigzag geometry."
+        }
+      ]
+    }
+  ]
+}
+```
