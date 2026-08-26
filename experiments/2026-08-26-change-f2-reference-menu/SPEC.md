@@ -703,7 +703,7 @@ for label, n in items: print(f'{n:5d}  {label}')
   150  S16 INV-reference-menu.md + three map updates
 ```
 
-**~1 420 insertions.** Over the skill's ~300-line threshold, so the split
+**~1 420 insertions** as first estimated; corrected to **2 400** by measurement at stage F2-a — see Amendment 1 at the end of this document. Over the skill's ~300-line threshold, so the split
 it asks for is declared here as four ORDERED, INDIVIDUALLY GATED stages,
 each its own commit with its own green gate. They are stages of one
 tranche rather than four REQUEST ledgers, because CLAUDE.md's cross-routing
@@ -743,3 +743,53 @@ citable-block menus (A6), `_pack_section`/`DISCLOSED_ON_DROP` reach the
 pack path (S3); not a DESIGN-AND-STOP request, so Measurements/Options are
 not required — the load-bearing counts in §0 are pasted from W1's
 committed artifacts regardless; nothing untraceable to an R/C number (§10).
+
+---
+
+## Amendment 1 — the budget ceiling was wrong, measured at stage F2-a
+
+Recorded at the F2-a commit rather than at the commit that would have
+tripped it, because a ceiling discovered by breaking it is a ceiling that
+already failed to do its job.
+
+**What was measured.** `tools/diff_budget.py 4760a32ef --ceiling 1420
+--paths src/deepreason tests docs/map` at the end of stage F2-a:
+
+```
+{"result_type": "DIFF_BUDGET_RESULT_V1", "base": "4760a32ef",
+ "areas": {"src/deepreason": 706, "tests": 339, "docs/map": 142},
+ "total_insertions": 1187, "ceiling": 1420, "verdict": "WITHIN"}
+```
+
+Stage F2-a was itemized at 490 src insertions (S1 330 + S2 90 + S3 70) and
+landed 706. **Measured ratio 1.44**, on the first stage of four, with
+1 187 of a 1 420 ceiling already spent.
+
+**Why, stated so it is not repeated a fourth time.** This is the same
+error `docs/ERRATA.md`-adjacent Rungs 6 and 7 both made (759 against 560;
+1 027 against 700) and that Rung 8's SPEC corrected by switching the unit
+to insertions. Switching the UNIT was necessary and not sufficient: this
+spec estimated in insertions and still under-counted, because the estimate
+was made against machinery while the file is roughly half docstring and
+comment — which this repo's conventions require, and which
+`diff_budget.py` counts. The correction is to the RATIO, not the unit.
+
+**The revised ceiling, derived rather than wished.** Remaining itemization
+at the original estimate: src S4 110 + S5 85 + S6 75 + S7 60 + S9 70 =
+400; tests ~250; map ~120.
+
+```
+$ python3 -c "print(1187 + round(400*1.44) + round(250*1.44) + round(120*1.44))"
+2266
+```
+
+**New ceiling: 2 400 insertions** (2 266 plus a 6% margin), replacing
+1 420. Every later `[COMMIT]` step checks against 2 400.
+
+**What this does NOT mean.** No scope moved. The four stages, the eighteen
+spec items and the ten declarations are exactly as specified; the
+Out-of-scope list is unchanged and nothing left PARKED.md. The overrun is
+in explanatory prose inside files the spec already named, not in machinery
+the spec did not name — which is the distinction a sprawl ceiling exists
+to police, and it is why this is recorded as a corrected estimate rather
+than as a scope change.

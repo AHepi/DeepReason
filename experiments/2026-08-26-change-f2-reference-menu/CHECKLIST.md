@@ -1,6 +1,6 @@
 # Checklist for: reference grounding — the model chooses handles from a menu
 
-State: next=1 blockers=none
+State: next=8 blockers=none (stage F2-a delivered)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
@@ -20,7 +20,7 @@ in a `[COMMIT]` with its own green ring.
 
 ## Stage F2-a — the interface, before any consumer
 
-- [ ] 1. (S16) Write `docs/map/INV-reference-menu.md` — the three layers,
+- [x] 1. (S16) Write `docs/map/INV-reference-menu.md` — the three layers,
       the one-authority rule, the never-decides-validity rule, `Owns:`
       the new module, one `check:` per load-bearing claim. Written BEFORE
       the code, per dr-plan-steps rule 6: writing down the agreement is
@@ -28,8 +28,10 @@ in a `[COMMIT]` with its own green ring.
       step 4; that is expected and is recorded in the step output.
       done-when: `test -f docs/map/INV-reference-menu.md && head -1
       docs/map/INV-reference-menu.md` -> `<!-- DR-INV-reference-menu -->`
+      PROOF: `head -1 docs/map/INV-reference-menu.md` ->
+      `<!-- DR-INV-reference-menu -->`
 
-- [ ] 2. (S1, S2, S13, S15) Write `tests/test_reference_menu.py` with the
+- [x] 2. (S1, S2, S13, S15) Write `tests/test_reference_menu.py` with the
       F2-a tests ONLY, and run them RED: registry shape, declaration
       completeness, omission-is-entry-zero, index grammar, long-list same
       grammar, index order not key order, index grammar never shadows a
@@ -37,8 +39,10 @@ in a `[COMMIT]` with its own green ring.
       done-when: `python -m pytest tests/test_reference_menu.py -q` exits
       nonzero with every test ERRORing on the missing module (paste the
       summary line)
+      PROOF: `ImportError: cannot import name 'reference_menu' from
+      'deepreason.llm'` / `1 error in 0.14s` -- RED for the expected cause.
 
-- [ ] 3. (S1, S2) [COMMIT] Create
+- [x] 3. (S1, S2) [COMMIT] Create
       `src/deepreason/llm/reference_menu.py`: `HandleKind`,
       `ReferenceFieldDeclaration`, `REFERENCE_FIELD_DECLARATIONS` (ten),
       `MenuBinding`, `LegalHandleSource` + three implementations +
@@ -49,23 +53,63 @@ in a `[COMMIT]` with its own green ring.
       0 failed, AND `python -c "from deepreason.llm.reference_menu import
       REFERENCE_FIELD_DECLARATIONS as D; assert len(D)==10; assert
       all(d.field_id==k for k,d in D.items()); print('ok')"` -> `ok`
+      PROOF: `12 passed in 0.04s`; the registry probe printed `ok`
+      (len == 10, every key equals its declaration's field_id).
 
-- [ ] 4. (S3) Add the token accounting and truncation disclosure to
+- [x] 4. (S3) Add the token accounting and truncation disclosure to
       `MenuRender`: `tokens` from `packs.approximate_tokens`, `total`,
       `shown`, `truncated`, and the disclosure line rendered INSIDE the
       menu text. Add the three truncation/token tests.
       done-when: `python -m pytest tests/test_reference_menu.py -k
       "truncation_is_disclosed or menu_tokens_are_counted" -q` -> 0 failed
+      PROOF: `2 passed, 15 deselected in 0.06s`, then `17 passed` for the
+      whole file. MUTATION-PROVEN: replacing `if legal.truncated:` with
+      `if False:` turned `test_truncation_is_disclosed_inside_the_menu_text`
+      RED (`1 failed, 16 deselected`); restored and re-verified `17 passed`.
 
-- [ ] 5. (S16) Verify the map document written in step 1 now passes, and
+- [x] 5. (S16) Verify the map document written in step 1 now passes, and
       that its checks can fail.
       done-when: `python tools/docs_verify.py --fast 2>&1 | tail -3` ->
       0 failed, AND `python tools/docs_verify.py --audit 2>&1 | tail -3`
       -> 0 refused checks
+      PROOF: `docs_verify [full]: 65 documents, 1078 checks, 4 workers` ->
+      `docs_verify: 0 failed`; `docs_verify --audit: 0 finding(s)`.
 
-- [ ] 6. (S1-S3, S13, S15) Ring: the affected test files only.
+      TWO CORRECTIONS, recorded rather than quietly fixed:
+
+      (a) The document as first written carried four checks naming tests
+      that land in stage F2-c (`a_menu_never_changes_what_is_valid`,
+      `menu_and_diagnostic_are_one_set`,
+      `consumers_reach_the_legal_set_only_through_the_interface`,
+      `wire_schema_sha_does_not_move`). A map document that describes
+      behaviour the commit does not ship is a document that lies for one
+      commit, so those SECTIONS were moved out to arrive with their code,
+      and a note in the FROZEN section says where they went. This is the
+      "map moves in the same commit as the code" rule applied to a
+      document written deliberately early.
+
+      (b) `docs/map/SUB-periphery.md:99` FAILED because of this change, and
+      the failure was real: its check pinned `llm/packs.py` as the ONLY
+      file outside `packs/` importing `deepreason.packs`, and
+      `reference_menu.py` imports `approximate_tokens`. The check was
+      stricter than the claim above it, which is about `allocate_pack`'s
+      callers. Both were tightened to match: the check now pins the
+      allocator's caller set AND the package's importer set exactly, and
+      the prose says why. Kept failable -- a third importer or a rename
+      breaks either set.
+
+      (c) Three further failures (`CON-run-identity.md` x3) were PRE-EXISTING
+      and not caused by this tranche: verified by `git stash` on the clean
+      tree (`docs_verify: 3 failed`). Cause: the container's clone was
+      SHALLOW, so the commits those checks name were unreachable.
+      `git fetch --unshallow origin` fixed it (138 -> 2538 commits) and the
+      full run is now 0 failed.
+
+- [x] 6. (S1-S3, S13, S15) Ring: the affected test files only.
       done-when: `python -m pytest tests/test_reference_menu.py
       tests/test_pack_prefix.py -q` -> 0 failed (paste the summary line)
+      PROOF: `21 passed in 0.21s`
+      (tests/test_reference_menu.py + tests/test_pack_prefix.py).
 
 - [ ] 7. (S1-S3, S13, S15, S16) [COMMIT] Stage F2-a: commit the module,
       its tests and the map document together, and push with retry.
