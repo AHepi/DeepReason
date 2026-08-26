@@ -1,0 +1,2051 @@
+{
+ "inventory": "experiments/2026-08-26-run-anatomy-program/ROOT_INVENTORY.json",
+ "roots": [
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 17,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 45,
+   "llm_calls_by_role": {
+    "argumentative_critic": 9,
+    "conjecturer": 36
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+   "run_id": "4e9897f86aeeab8b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 47,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 42,
+   "llm_calls_by_role": {
+    "argumentative_critic": 22,
+    "conjecturer": 20
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+   "run_id": "2e8904aa31694454",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 45,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 52,
+   "llm_calls_by_role": {
+    "argumentative_critic": 27,
+    "conjecturer": 25
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+   "run_id": "7098a900b2b194c9",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 32,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 31,
+   "llm_calls_by_role": {
+    "argumentative_critic": 15,
+    "conjecturer": 16
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "run_id": "64cc945753f3a9a9",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 16,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 24,
+   "llm_calls_by_role": {
+    "argumentative_critic": 9,
+    "conjecturer": 15
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "run_id": "c87d5802b5f51583",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 36,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 59,
+   "llm_calls_by_role": {
+    "argumentative_critic": 34,
+    "conjecturer": 25
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+   "run_id": "a45501493e81871b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 36,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 63,
+   "llm_calls_by_role": {
+    "argumentative_critic": 26,
+    "conjecturer": 37
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+   "run_id": "c2dcb87e33616c32",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 29,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 55,
+   "llm_calls_by_role": {
+    "argumentative_critic": 25,
+    "conjecturer": 30
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+   "run_id": "c336e3e2ad956c35",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 28,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 48,
+   "llm_calls_by_role": {
+    "argumentative_critic": 28,
+    "conjecturer": 20
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+   "run_id": "6e193328f7c2d559",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 37,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 58,
+   "llm_calls_by_role": {
+    "argumentative_critic": 28,
+    "conjecturer": 30
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+   "run_id": "fad450c0c6530902",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 34,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 53,
+   "llm_calls_by_role": {
+    "argumentative_critic": 37,
+    "conjecturer": 16
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+   "run_id": "43c51c7e28836214",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 35,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 78,
+   "llm_calls_by_role": {
+    "argumentative_critic": 34,
+    "conjecturer": 44
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+   "run_id": "eacd3b0030fd3125",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 45,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 56,
+   "llm_calls_by_role": {
+    "argumentative_critic": 31,
+    "conjecturer": 25
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+   "run_id": "d1f434411fa7aa76",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 32,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 64,
+   "llm_calls_by_role": {
+    "argumentative_critic": 32,
+    "conjecturer": 32
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+   "run_id": "910c3a2285d5fd8c",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 17,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 56,
+   "llm_calls_by_role": {
+    "argumentative_critic": 32,
+    "conjecturer": 24
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+   "run_id": "0d3f6545627c9462",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 33,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 41,
+   "llm_calls_by_role": {
+    "argumentative_critic": 25,
+    "conjecturer": 16
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+   "run_id": "a6c39cf0f55d2177",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 82,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 57,
+   "llm_calls_by_role": {
+    "argumentative_critic": 39,
+    "conjecturer": 18
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+   "run_id": "0c91885760965df2",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 46,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 38,
+   "llm_calls_by_role": {
+    "argumentative_critic": 27,
+    "conjecturer": 11
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+   "run_id": "947d7fe89791bd61",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "defended_trial",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 2,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 16,
+   "judge_calls": 342,
+   "judge_models_dispatched": {
+    "mistral-large-3:675b": 171,
+    "qwen3.5:397b": 171
+   },
+   "llm_calls": 666,
+   "llm_calls_by_role": {
+    "argumentative_critic": 123,
+    "conjecturer": 49,
+    "defender": 122,
+    "judge": 342,
+    "variator": 30
+   },
+   "ran": true,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 119,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 153
+   },
+   "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+   "run_id": "8e22d0431fd2b98d",
+   "trial_blocked": {},
+   "trial_declined": {
+    "defence-sustained": 37,
+    "ensemble-split": 62,
+    "execution-backed": 39,
+    "paraphrase-flip": 3,
+    "referential-integrity": 12
+   },
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "defended_trial",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 2,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 0,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 4,
+   "llm_calls_by_role": {
+    "conjecturer": 4
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+   "run_id": "8e22d0431fd2b98d",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "defended_trial",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 2,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 0,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 7,
+   "llm_calls_by_role": {
+    "conjecturer": 7
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+   "run_id": "8e22d0431fd2b98d",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "defended_trial",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 2,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 0,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 14,
+   "llm_calls_by_role": {
+    "conjecturer": 14
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+   "run_id": "8e22d0431fd2b98d",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 26,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 56,
+   "llm_calls_by_role": {
+    "argumentative_critic": 32,
+    "conjecturer": 24
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "run_id": "bb0455384ea09b5b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 24,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 49,
+   "llm_calls_by_role": {
+    "argumentative_critic": 45,
+    "conjecturer": 4
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "run_id": "bb0455384ea09b5b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 91,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 140,
+   "llm_calls_by_role": {
+    "argumentative_critic": 109,
+    "conjecturer": 31
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "run_id": "bb0455384ea09b5b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 21,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 41,
+   "llm_calls_by_role": {
+    "argumentative_critic": 24,
+    "conjecturer": 17
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "run_id": "40e713b30a147dfc",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 30,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 47,
+   "llm_calls_by_role": {
+    "argumentative_critic": 39,
+    "conjecturer": 8
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "run_id": "40e713b30a147dfc",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 26,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 38,
+   "llm_calls_by_role": {
+    "argumentative_critic": 24,
+    "conjecturer": 14
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "run_id": "40e713b30a147dfc",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 459,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 292,
+   "llm_calls_by_role": {
+    "argumentative_critic": 188,
+    "conjecturer": 104
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "run_id": "1950b3d0ee228113",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 642,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 84,
+   "llm_calls_by_role": {
+    "conjecturer": 84
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "run_id": "6913328037a61ca6",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": null,
+    "criticism_policy_present": false,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 2,
+    "manifest": true,
+    "rubric_policy": "require_cross_family",
+    "schema_version": 6
+   },
+   "crit_events": 207,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 163,
+   "llm_calls_by_role": {
+    "argumentative_critic": 126,
+    "conjecturer": 37
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "run_id": "1b31f0065687bd24",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 28,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 29,
+   "llm_calls_by_role": {
+    "argumentative_critic": 14,
+    "conjecturer": 10,
+    "summarizer": 1,
+    "thesis": 4
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+   "run_id": "a37208a539d9fcec",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 18,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 57,
+   "llm_calls_by_role": {
+    "argumentative_critic": 21,
+    "conjecturer": 24,
+    "summarizer": 5,
+    "thesis": 7
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+   "run_id": "acfa496ccc1745c7",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 14,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 31,
+   "llm_calls_by_role": {
+    "argumentative_critic": 7,
+    "conjecturer": 24
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+   "run_id": "47ca0551cf0fc365",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 6,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 20,
+   "llm_calls_by_role": {
+    "argumentative_critic": 3,
+    "conjecturer": 17
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+   "run_id": "f36b122383ed8368",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 6,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 18,
+   "llm_calls_by_role": {
+    "argumentative_critic": 3,
+    "conjecturer": 15
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+   "run_id": "410bf6349ee41363",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 15,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 26,
+   "llm_calls_by_role": {
+    "argumentative_critic": 9,
+    "conjecturer": 17
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+   "run_id": "91bb8195d1c16bea",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 6,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 23,
+   "llm_calls_by_role": {
+    "argumentative_critic": 3,
+    "conjecturer": 20
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+   "run_id": "384d5671a3298023",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 15,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 15,
+   "llm_calls_by_role": {
+    "argumentative_critic": 11,
+    "conjecturer": 4
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+   "run_id": "479dcc93b2de9582",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 4,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 18,
+   "llm_calls_by_role": {
+    "argumentative_critic": 5,
+    "conjecturer": 13
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+   "run_id": "c02d82870dc6abe6",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 12,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 38,
+   "llm_calls_by_role": {
+    "argumentative_critic": 11,
+    "conjecturer": 27
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+   "run_id": "d13c506c29b09405",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 12,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 42,
+   "llm_calls_by_role": {
+    "argumentative_critic": 16,
+    "conjecturer": 26
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+   "run_id": "887a2ccbd89efbb9",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 11,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 40,
+   "llm_calls_by_role": {
+    "argumentative_critic": 15,
+    "conjecturer": 25
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+   "run_id": "aa97a67dac8674f7",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 10,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 27,
+   "llm_calls_by_role": {
+    "argumentative_critic": 13,
+    "conjecturer": 14
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+   "run_id": "c381d9e48accc09e",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 3,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 7,
+   "llm_calls_by_role": {
+    "argumentative_critic": 3,
+    "conjecturer": 4
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+   "run_id": "7575fa009beb04b7",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 12,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 35,
+   "llm_calls_by_role": {
+    "argumentative_critic": 6,
+    "conjecturer": 29
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+   "run_id": "45c17980581a06b4",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 8,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 16,
+   "llm_calls_by_role": {
+    "argumentative_critic": 10,
+    "conjecturer": 6
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+   "run_id": "f69d6211ebd4f295",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 6,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 17,
+   "llm_calls_by_role": {
+    "argumentative_critic": 6,
+    "conjecturer": 9,
+    "summarizer": 1,
+    "thesis": 1
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+   "run_id": "5f25d072f10846a9",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 29,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 49,
+   "llm_calls_by_role": {
+    "argumentative_critic": 18,
+    "conjecturer": 23,
+    "summarizer": 8
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+   "run_id": "728f11ff917fa36b",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 11,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 21,
+   "llm_calls_by_role": {
+    "argumentative_critic": 9,
+    "conjecturer": 9,
+    "summarizer": 2,
+    "thesis": 1
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+   "run_id": "594d29e006d57dab",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 11,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 21,
+   "llm_calls_by_role": {
+    "argumentative_critic": 6,
+    "conjecturer": 13,
+    "summarizer": 1,
+    "thesis": 1
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+   "run_id": "1e538d1b04537819",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 40,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 36,
+   "llm_calls_by_role": {
+    "argumentative_critic": 22,
+    "conjecturer": 12,
+    "summarizer": 1,
+    "thesis": 1
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+   "run_id": "49e9c1354452aef6",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 15,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 22,
+   "llm_calls_by_role": {
+    "argumentative_critic": 10,
+    "conjecturer": 7,
+    "summarizer": 3,
+    "thesis": 2
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+   "run_id": "17b98372bd1e2df3",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  },
+  {
+   "config": {
+    "ADJUDICATION_STATUS_AUTHORITY_ENABLED": "<absent>",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "ENGAGED_CRITICISM_AUTHORITY": "<absent>",
+    "JUDGE_SEATS_ENABLED": "<absent>",
+    "LEGACY_CRITICISM_ENABLED": "<absent>",
+    "criticism_policy_authority": "observe_only",
+    "criticism_policy_present": true,
+    "defender_seats_declared": 1,
+    "judge_seats_declared": 1,
+    "manifest": true,
+    "rubric_policy": "forbid",
+    "schema_version": 6
+   },
+   "crit_events": 19,
+   "judge_calls": 0,
+   "judge_models_dispatched": {},
+   "llm_calls": 26,
+   "llm_calls_by_role": {
+    "argumentative_critic": 13,
+    "conjecturer": 4,
+    "summarizer": 9
+   },
+   "ran": false,
+   "road_markers": {
+    "left_road_execution_supremacy": 0,
+    "left_road_recovery_no_provider": 0,
+    "trial_ran_advisory": 0,
+    "trial_ran_case_failed": 0
+   },
+   "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+   "run_id": "5363cd2291f5be1f",
+   "trial_blocked": {},
+   "trial_declined": {},
+   "trial_observations": {}
+  }
+ ],
+ "schema": "w4.trial-sweep.v1",
+ "totals": {
+  "crit_events": 2500,
+  "criticism_policy_authorities": {
+   "None": 9,
+   "defended_trial": 4,
+   "observe_only": 41
+  },
+  "judge_calls": 342,
+  "road_markers": {
+   "left_road_execution_supremacy": 0,
+   "left_road_recovery_no_provider": 119,
+   "trial_ran_advisory": 0,
+   "trial_ran_case_failed": 153
+  },
+  "roots": 54,
+  "roots_declaring_judge_seats": 54,
+  "roots_with_any_judge_call": 1,
+  "roots_with_criticism_policy": 45,
+  "roots_with_ran_true": 1,
+  "trial_blocked": 0,
+  "trial_declined": 153,
+  "trial_observations": 0
+ }
+}

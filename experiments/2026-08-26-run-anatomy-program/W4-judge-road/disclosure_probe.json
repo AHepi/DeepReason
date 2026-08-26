@@ -1,0 +1,24 @@
+{
+ "P1_config_as_written": {
+  "ADJUDICATION_STATUS_AUTHORITY_ENABLED": true,
+  "ARGUMENTATIVE_AUTHORITY": "observe_only",
+  "ENGAGED_CRITICISM_AUTHORITY": "defended_trial",
+  "JUDGE_SEATS_ENABLED": true,
+  "LEGACY_CRITICISM_ENABLED": false
+ },
+ "P2_compiled_as_the_builder_did": {
+  "ENGAGED_CRITICISM_AUTHORITY_in_engine_config_echo": false,
+  "compile_notices": [],
+  "criticism_policy": null,
+  "judge_seats_frozen_in_roles": 2,
+  "notices_mentioning_criticism_or_authority": []
+ },
+ "P3_compiled_the_managed_way": {
+  "criticism_policy": "defended_trial"
+ },
+ "committed_root": {
+  "compile_notices": null,
+  "criticism_policy": null
+ },
+ "verdict": "P-R1's judge road ended at the AUTHORITY GATE. The same committed config compiles to observe_only through the builder's call shape and to defended_trial through the managed one; the difference is which door was used, and compile discloses nothing either way."
+}
