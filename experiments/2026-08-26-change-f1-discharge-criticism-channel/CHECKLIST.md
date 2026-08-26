@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=2a blockers=none
+State: next=2b blockers=none
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per `dr-execute-step` invocation. Every step cites its S-number.
@@ -151,12 +151,36 @@ point):
       frozen-surface document still moves in the SAME commit as the
       `run_manifest.py` line.
 
-- [ ] 2a. (S13) [was step 19] Capture `proof/digest_before.txt` on the CURRENT
+- [x] 2a. (S13) [was step 19] Capture `proof/digest_before.txt` on the CURRENT
       tree: the six `source_config_hash` values (v1..v6) and the qualification
       subject digest, one command, output pasted into the file verbatim.
       Rider (b).
       done-when: `grep -c b9038b84efdea313 proof/digest_before.txt` is 1 AND
       `grep -c 2624603035bc335e proof/digest_before.txt` is 4
+
+      PASTED OUTPUT:
+      ```
+      $ python experiments/.../digests.py > proof/digest_before.txt
+      source_config_hash(Config()) by schema version:
+        v1  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81
+        v2  6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81
+        v3  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+        v4  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+        v5  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+        v6  2624603035bc335e59da63f25426d3ae6619bf7f84d48657e8f25310de49edc5
+      qualification_subject_digest(_manifest(_profile()), _profile()):
+        b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386
+      $ grep -c b9038b84efdea313 proof/digest_before.txt   ->  1
+      $ grep -c 2624603035bc335e proof/digest_before.txt   ->  4
+      ```
+      Both values are byte-identical to the ones `DR-INV-frozen-surfaces`
+      records for Rung 8 and to SPEC.md's M2/M3, measured independently here.
+
+      The capture is a COMMITTED INSTRUMENT (`digests.py`) rather than a
+      one-off shell line, for the reason the durable-evidence rule gives: a
+      proof file whose command died with the session proves nothing a later
+      reader can re-run. It resolves the repository root from its own path, so
+      it works from any working directory.
 
 - [ ] 2b. (S13) [was step 20] THE GRANTED CONTACT, all in ONE step because
       rider (c) requires the map to move in the SAME commit as the code: add
