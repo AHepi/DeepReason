@@ -1,0 +1,6169 @@
+{
+ "declared": [
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "allocation.policy-authorized.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "allocation.policy-contested.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "allocation.seat-repair.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "allocation.seat-truncation.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "arg-crit",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "arg-crit-cx-rejected",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "arg-crit-overridden-by-execution",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "assembled",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "audit-llm",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "batch-crit",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "batch-crit-cx-retry",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "browser-pass",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "browser-spec-overrun",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.attack-target-entropy.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.criticism-debt.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.exogenous-grounding-ratio.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 3,
+   "kind": "exact",
+   "name": "capture14.hysteresis-mode.v1",
+   "population_emitted": 3,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "capture14.promotion-conditioning.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "permanent",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.reinstatement-rate.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.stream-contraction.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 40,
+   "kind": "exact",
+   "name": "capture14.validity-attack-rate.v1",
+   "population_emitted": 40,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "conj-noregister",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "conjecture-turn-call",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 12,
+   "kind": "exact",
+   "name": "controller-authority",
+   "population_emitted": 9,
+   "population_roots": 9,
+   "roots_ever": 12,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "controller-rehydration",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "controller-update",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "cycle",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 59,
+   "kind": "exact",
+   "name": "criticism.attack-target-entropy.v1",
+   "population_emitted": 59,
+   "population_roots": 9,
+   "roots_ever": 9,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 413,
+   "kind": "exact",
+   "name": "cycle",
+   "population_emitted": 59,
+   "population_roots": 9,
+   "roots_ever": 54,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "demarcation-variation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "permanent",
+   "unit": "tokens"
+  },
+  {
+   "ever_emitted": 18,
+   "kind": "exact",
+   "name": "disc-attempts-exhausted",
+   "population_emitted": 2,
+   "population_roots": 2,
+   "roots_ever": 17,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "disc-transport-deferred",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "dossier-pack-receipt.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 45,
+   "kind": "exact",
+   "name": "dropped-call",
+   "population_emitted": 2,
+   "population_roots": 2,
+   "roots_ever": 21,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 66,
+   "kind": "exact",
+   "name": "embedder",
+   "population_emitted": 9,
+   "population_roots": 9,
+   "roots_ever": 54,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 6,
+   "kind": "exact",
+   "name": "embedder-fallback",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 4,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "encoder-delegation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "experiment-design",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "experimental-v5-override.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 1660,
+   "kind": "exact",
+   "name": "foreign-criticism-coverage.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 42,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "hv",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "hv-nomeasure",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 49,
+   "kind": "exact",
+   "name": "hv-skip-oversize",
+   "population_emitted": 8,
+   "population_roots": 1,
+   "roots_ever": 12,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "import-deferred",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "infra-review-no-case",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "integration-repair",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "jolt-action",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "jolt-false-trigger",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "jolt-functional-observation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "jolt-trigger",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "pairwise-observation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 7,
+   "kind": "exact",
+   "name": "premise.attribution-filed.v1",
+   "population_emitted": 7,
+   "population_roots": 6,
+   "roots_ever": 6,
+   "staleness": "permanent",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 41,
+   "kind": "exact",
+   "name": "premise.batch-translation-offered.v1",
+   "population_emitted": 41,
+   "population_roots": 4,
+   "roots_ever": 4,
+   "staleness": "cycle",
+   "unit": "count"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "premise.rent-undecided.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "run",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 21,
+   "kind": "exact",
+   "name": "premise.work-invited.v1",
+   "population_emitted": 21,
+   "population_roots": 3,
+   "roots_ever": 3,
+   "staleness": "cycle",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 59,
+   "kind": "exact",
+   "name": "problem.independence-resolution-rate.v1",
+   "population_emitted": 59,
+   "population_roots": 9,
+   "roots_ever": 9,
+   "staleness": "run",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 59,
+   "kind": "exact",
+   "name": "problem.thrash.v1",
+   "population_emitted": 59,
+   "population_roots": 9,
+   "roots_ever": 9,
+   "staleness": "cycle",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "property-checker-crash",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "property-design",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "property-relevance-declined",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "property-relevance-trial",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "property-wipeout-quarantine",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "proposal-envelope-invalid",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "reach",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "reach-provisional",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "relatedness-trial",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "research-agent-requested",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 47,
+   "kind": "exact",
+   "name": "research-awaiting-agent",
+   "population_emitted": 1,
+   "population_roots": 1,
+   "roots_ever": 36,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "research-evidence-registered",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "research-fetch-exhausted",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "research-fetch-failed",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 1,
+   "kind": "exact",
+   "name": "research-off",
+   "population_emitted": 1,
+   "population_roots": 1,
+   "roots_ever": 1,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 14,
+   "kind": "exact",
+   "name": "run-resume",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 12,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 23,
+   "kind": "exact",
+   "name": "run-stop",
+   "population_emitted": 7,
+   "population_roots": 7,
+   "roots_ever": 23,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "scheduler-stop",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "scratch-call-failed",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "scratch-guide-stale",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 1319,
+   "kind": "exact",
+   "name": "scrutiny",
+   "population_emitted": 373,
+   "population_roots": 8,
+   "roots_ever": 49,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "skills-adoption",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "skills-retrieval",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "spec-generation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "stage-pick",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "stop-escape",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "succession.trial-flip-rate.v1",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "run",
+   "unit": "ratio"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "synth-noregister",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 153,
+   "kind": "exact",
+   "name": "trial-declined",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 1,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "trial-llm",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "trial-observation",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "vision-crit",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "vision-crit-overridden-by-execution",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-compact-call",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-compact-critic-dropped",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-compact-dropped",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-design-mode",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-stage",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "exact",
+   "name": "website-terminal",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "audit-blocked:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "audit-hit:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 5,
+   "kind": "prefix",
+   "name": "config-critique:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 4,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "controller-hold:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "cycle",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 863,
+   "kind": "prefix",
+   "name": "evidence-citation:",
+   "population_emitted": 263,
+   "population_roots": 4,
+   "roots_ever": 27,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "gate:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "hv-floor-nomeasure:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 32,
+   "kind": "prefix",
+   "name": "intervention:",
+   "population_emitted": 2,
+   "population_roots": 2,
+   "roots_ever": 27,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "judge-error-rate:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "judge-self-preference:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "judge-verbosity-bias:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 8,
+   "kind": "prefix",
+   "name": "premise-citation:",
+   "population_emitted": 8,
+   "population_roots": 4,
+   "roots_ever": 4,
+   "staleness": "permanent",
+   "unit": "event"
+  },
+  {
+   "ever_emitted": 8,
+   "kind": "prefix",
+   "name": "research-allowance:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 4,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "research-fetch:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "spec-transmission:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  },
+  {
+   "ever_emitted": 0,
+   "kind": "prefix",
+   "name": "trial-blocked:",
+   "population_emitted": 0,
+   "population_roots": 0,
+   "roots_ever": 0,
+   "staleness": "unspecified",
+   "unit": "unspecified"
+  }
+ ],
+ "declared_exact": 95,
+ "declared_prefix": 16,
+ "declared_total": 111,
+ "per_root": [
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 3
+   },
+   "controller_event_seqs": [
+    12,
+    352
+   ],
+   "crit_per_cycle": {
+    "0": 21
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2
+   ],
+   "decisions": [
+    {
+     "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 352
+    }
+   ],
+   "drops": [],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 3,
+    "cycle": 3,
+    "embedder": 1,
+    "intervention:": 1,
+    "premise.attribution-filed.v1": 1,
+    "problem.independence-resolution-rate.v1": 3,
+    "problem.thrash.v1": 3,
+    "run-stop": 1,
+    "scrutiny": 17
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "embedder": 11,
+    "intervention:": 423,
+    "premise.attribution-filed.v1": 91,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 428,
+    "scrutiny": 51
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     419,
+     1
+    ],
+    [
+     424,
+     2
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {},
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "intervention:": {
+     "1": 1
+    },
+    "premise.attribution-filed.v1": {
+     "0": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "run-stop": {
+     "2": 1
+    },
+    "scrutiny": {
+     "0": 17
+    }
+   },
+   "progress_cycle_max": 2,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    51,
+    58,
+    65,
+    91,
+    93,
+    144,
+    151,
+    158,
+    165,
+    172,
+    203,
+    210,
+    233,
+    242,
+    249,
+    256,
+    263,
+    270,
+    419,
+    420,
+    421,
+    422,
+    423,
+    424,
+    425,
+    426,
+    427,
+    428
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 2,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 15
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4
+   },
+   "controller_event_seqs": [
+    12,
+    442
+   ],
+   "crit_per_cycle": {
+    "0": 30
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2
+   ],
+   "decisions": [
+    {
+     "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 442
+    }
+   ],
+   "drops": [
+    {
+     "cycle": 2,
+     "reason": "ROUTE_LEASE_MISMATCH role='conjecturer' seat=0 field=max_tokens expected=32768 actual=20480",
+     "seq": 577,
+     "transport_match": false
+    }
+   ],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 3,
+    "cycle": 3,
+    "dropped-call": 1,
+    "embedder": 1,
+    "problem.independence-resolution-rate.v1": 3,
+    "problem.thrash.v1": 3,
+    "run-stop": 1,
+    "scrutiny": 29
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "dropped-call": 577,
+    "embedder": 11,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 578,
+    "scrutiny": 49
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     568,
+     1
+    ],
+    [
+     572,
+     2
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {},
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "dropped-call": {
+     "2": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "run-stop": {
+     "2": 1
+    },
+    "scrutiny": {
+     "0": 29
+    }
+   },
+   "progress_cycle_max": 2,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    49,
+    56,
+    63,
+    80,
+    87,
+    135,
+    142,
+    149,
+    156,
+    163,
+    170,
+    177,
+    184,
+    215,
+    222,
+    229,
+    236,
+    243,
+    250,
+    273,
+    282,
+    340,
+    357,
+    364,
+    371,
+    378,
+    401,
+    410,
+    417,
+    568,
+    569,
+    570,
+    571,
+    572,
+    573,
+    574,
+    575,
+    577,
+    578
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 2,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 24
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4
+   },
+   "controller_event_seqs": [
+    12
+   ],
+   "crit_per_cycle": {
+    "0": 26
+   },
+   "cycles_seen": [
+    0
+   ],
+   "decisions": [],
+   "drops": [],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 1,
+    "cycle": 1,
+    "embedder": 1,
+    "evidence-citation:": 1,
+    "premise-citation:": 2,
+    "premise.attribution-filed.v1": 1,
+    "problem.independence-resolution-rate.v1": 1,
+    "problem.thrash.v1": 1,
+    "run-stop": 1,
+    "scrutiny": 23
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "embedder": 11,
+    "evidence-citation:": 137,
+    "premise-citation:": 58,
+    "premise.attribution-filed.v1": 64,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 451,
+    "scrutiny": 52
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {},
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1
+    },
+    "cycle": {
+     "0": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "evidence-citation:": {
+     "0": 1
+    },
+    "premise-citation:": {
+     "0": 2
+    },
+    "premise.attribution-filed.v1": {
+     "0": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1
+    },
+    "run-stop": {
+     "0": 1
+    },
+    "scrutiny": {
+     "0": 23
+    }
+   },
+   "progress_cycle_max": 0,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    52,
+    58,
+    59,
+    64,
+    66,
+    73,
+    80,
+    137,
+    167,
+    174,
+    181,
+    188,
+    195,
+    202,
+    214,
+    247,
+    254,
+    266,
+    273,
+    285,
+    292,
+    380,
+    397,
+    409,
+    416,
+    423,
+    446,
+    451
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 1,
+    "module-fingerprints.v1": 1
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4
+   },
+   "controller_event_seqs": [
+    12,
+    429
+   ],
+   "crit_per_cycle": {
+    "0": 24
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2
+   ],
+   "decisions": [
+    {
+     "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 4,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 429
+    }
+   ],
+   "drops": [
+    {
+     "cycle": 2,
+     "reason": "transactional reservation bound differs from rendered request",
+     "seq": 555,
+     "transport_match": false
+    }
+   ],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 3,
+    "cycle": 3,
+    "dropped-call": 1,
+    "embedder": 1,
+    "premise-citation:": 2,
+    "premise.attribution-filed.v1": 1,
+    "problem.independence-resolution-rate.v1": 3,
+    "problem.thrash.v1": 3,
+    "run-stop": 1,
+    "scrutiny": 22
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "dropped-call": 555,
+    "embedder": 11,
+    "premise-citation:": 255,
+    "premise.attribution-filed.v1": 261,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 556,
+    "scrutiny": 64
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     544,
+     1
+    ],
+    [
+     548,
+     2
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {},
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "dropped-call": {
+     "2": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "premise-citation:": {
+     "0": 2
+    },
+    "premise.attribution-filed.v1": {
+     "0": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1
+    },
+    "run-stop": {
+     "2": 1
+    },
+    "scrutiny": {
+     "0": 22
+    }
+   },
+   "progress_cycle_max": 2,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    64,
+    71,
+    78,
+    95,
+    126,
+    133,
+    140,
+    163,
+    172,
+    189,
+    221,
+    255,
+    256,
+    261,
+    263,
+    275,
+    282,
+    289,
+    296,
+    308,
+    349,
+    356,
+    379,
+    388,
+    395,
+    544,
+    545,
+    546,
+    547,
+    548,
+    549,
+    550,
+    551,
+    555,
+    556
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 2,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 23
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4,
+    "2": 1,
+    "3": 4,
+    "4": 1,
+    "6": 4,
+    "7": 1
+   },
+   "controller_event_seqs": [
+    12,
+    390,
+    541,
+    989,
+    1381
+   ],
+   "crit_per_cycle": {
+    "0": 26,
+    "2": 3,
+    "3": 29,
+    "4": 3,
+    "6": 27,
+    "7": 3
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "decisions": [
+    {
+     "artifact": "492b41029fbd2b6f16eef2f520818a65c84e5f504ff59ab70d419fb334bf4003",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 390
+    },
+    {
+     "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 12800,
+      "cap:conjecturer": 12800
+     },
+     "log_cycle": 2,
+     "parsed": true,
+     "policy_cycle": 4,
+     "seq": 541
+    },
+    {
+     "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 8000,
+      "cap:conjecturer": 8000
+     },
+     "log_cycle": 4,
+     "parsed": true,
+     "policy_cycle": 6,
+     "seq": 989
+    },
+    {
+     "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 5000,
+      "cap:conjecturer": 5000
+     },
+     "log_cycle": 6,
+     "parsed": true,
+     "policy_cycle": 8,
+     "seq": 1381
+    }
+   ],
+   "drops": [],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 8,
+    "cycle": 8,
+    "embedder": 1,
+    "evidence-citation:": 7,
+    "premise-citation:": 1,
+    "premise.attribution-filed.v1": 1,
+    "problem.independence-resolution-rate.v1": 8,
+    "problem.thrash.v1": 8,
+    "research-off": 1,
+    "scrutiny": 64
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "embedder": 11,
+    "evidence-citation:": 1477,
+    "premise-citation:": 117,
+    "premise.attribution-filed.v1": 122,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "research-off": 540,
+    "scrutiny": 47
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     468,
+     1
+    ],
+    [
+     472,
+     2
+    ],
+    [
+     543,
+     3
+    ],
+    [
+     934,
+     4
+    ],
+    [
+     1015,
+     5
+    ],
+    [
+     1019,
+     6
+    ],
+    [
+     1470,
+     7
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {
+    "reach-sweep": 1
+   },
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "evidence-citation:": {
+     "7": 7
+    },
+    "premise-citation:": {
+     "0": 1
+    },
+    "premise.attribution-filed.v1": {
+     "0": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1
+    },
+    "research-off": {
+     "2": 1
+    },
+    "scrutiny": {
+     "0": 18,
+     "2": 3,
+     "3": 20,
+     "4": 2,
+     "6": 18,
+     "7": 3
+    }
+   },
+   "progress_cycle_max": 8,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    47,
+    54,
+    61,
+    68,
+    117,
+    122,
+    124,
+    131,
+    138,
+    145,
+    152,
+    240,
+    247,
+    270,
+    284,
+    296,
+    319,
+    359,
+    366,
+    373,
+    468,
+    469,
+    470,
+    471,
+    472,
+    473,
+    474,
+    475,
+    514,
+    526,
+    533,
+    540,
+    543,
+    544,
+    545,
+    546,
+    581,
+    588,
+    595,
+    602,
+    609,
+    621,
+    667,
+    674,
+    681,
+    693,
+    728,
+    735,
+    747,
+    759,
+    766,
+    773,
+    809,
+    816,
+    823,
+    830,
+    934,
+    935,
+    936,
+    937,
+    962,
+    969,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021,
+    1022,
+    1058,
+    1070,
+    1077,
+    1125,
+    1132,
+    1139,
+    1146,
+    1153,
+    1181,
+    1255,
+    1262,
+    1269,
+    1292,
+    1301,
+    1334,
+    1341,
+    1358,
+    1365,
+    1470,
+    1471,
+    1472,
+    1473,
+    1477,
+    1478,
+    1479,
+    1480,
+    1481,
+    1482,
+    1483,
+    1524,
+    1531,
+    1538
+   ],
+   "state": "completed",
+   "stop_reason": "budget_exhausted",
+   "undeclared": {
+    "contract-decomposition-effect": 4,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 80
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4
+   },
+   "controller_event_seqs": [
+    12
+   ],
+   "crit_per_cycle": {
+    "0": 26
+   },
+   "cycles_seen": [
+    0
+   ],
+   "decisions": [],
+   "drops": [],
+   "emissions": {
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 1,
+    "cycle": 1,
+    "embedder": 1,
+    "premise.attribution-filed.v1": 1,
+    "premise.batch-translation-offered.v1": 1,
+    "problem.independence-resolution-rate.v1": 1,
+    "problem.thrash.v1": 1,
+    "run-stop": 1,
+    "scrutiny": 15
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "embedder": 11,
+    "premise.attribution-filed.v1": 119,
+    "premise.batch-translation-offered.v1": 17,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 360,
+    "scrutiny": 47
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [],
+   "payload_families": {},
+   "per_cycle": {
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1
+    },
+    "cycle": {
+     "0": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "premise.attribution-filed.v1": {
+     "0": 1
+    },
+    "premise.batch-translation-offered.v1": {
+     "0": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1
+    },
+    "run-stop": {
+     "0": 1
+    },
+    "scrutiny": {
+     "0": 15
+    }
+   },
+   "progress_cycle_max": 0,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    47,
+    54,
+    61,
+    119,
+    121,
+    130,
+    137,
+    144,
+    151,
+    158,
+    165,
+    260,
+    272,
+    279,
+    302,
+    347,
+    360
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 2,
+    "module-fingerprints.v1": 1
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 48,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge#0",
+      "judge#1",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4,
+    "2": 4,
+    "3": 4,
+    "4": 1,
+    "6": 4,
+    "7": 1,
+    "8": 4,
+    "10": 4,
+    "11": 1
+   },
+   "controller_event_seqs": [
+    48,
+    369,
+    403,
+    726,
+    1182,
+    1634,
+    2270,
+    2608
+   ],
+   "crit_per_cycle": {
+    "0": 29,
+    "2": 26,
+    "3": 31,
+    "4": 4,
+    "6": 35,
+    "7": 6,
+    "8": 39,
+    "10": 30,
+    "11": 7
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "decisions": [
+    {
+     "artifact": "70019db9d83485af2d154116fec07d28d42a4ae571abe3323e4d0d86b48dc03b",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 4,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 369
+    },
+    {
+     "artifact": "e3551516077ab01f085f21ef35dc53c8a0c24bfc8b4af718204a0b7d929cae83",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 12800,
+      "cap:conjecturer": 12800
+     },
+     "log_cycle": 2,
+     "parsed": true,
+     "policy_cycle": 4,
+     "seq": 726
+    },
+    {
+     "artifact": "51511155376dc80afab064c214dc17bc74d3ff0cfcb91e048d5ce367d398b047",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 8000,
+      "cap:conjecturer": 8000
+     },
+     "log_cycle": 4,
+     "parsed": true,
+     "policy_cycle": 6,
+     "seq": 1182
+    },
+    {
+     "artifact": "c8959f36996ce472e43de0ae4d92ae39a56001d0ae4371edd2069fe4f174b626",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 5000,
+      "cap:conjecturer": 5000
+     },
+     "log_cycle": 6,
+     "parsed": true,
+     "policy_cycle": 8,
+     "seq": 1634
+    },
+    {
+     "artifact": "b0b60aea537817d6a8c1a98bcb084dd869b21b29f1b723e96266b03d8b700c07",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 3125,
+      "cap:conjecturer": 3125
+     },
+     "log_cycle": 8,
+     "parsed": true,
+     "policy_cycle": 10,
+     "seq": 2270
+    },
+    {
+     "artifact": "07423eace98867aac6190d8eef8f9372945b5ccb11dd7eb138aca4be8c2af9e1",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 1953,
+      "cap:conjecturer": 1953
+     },
+     "log_cycle": 10,
+     "parsed": true,
+     "policy_cycle": 12,
+     "seq": 2608
+    }
+   ],
+   "drops": [],
+   "emissions": {
+    "capture14.attack-target-entropy.v1": 12,
+    "capture14.criticism-debt.v1": 12,
+    "capture14.exogenous-grounding-ratio.v1": 12,
+    "capture14.hysteresis-mode.v1": 1,
+    "capture14.reinstatement-rate.v1": 12,
+    "capture14.stream-contraction.v1": 12,
+    "capture14.validity-attack-rate.v1": 12,
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 12,
+    "cycle": 12,
+    "disc-attempts-exhausted": 1,
+    "embedder": 1,
+    "evidence-citation:": 234,
+    "hv-skip-oversize": 8,
+    "premise-citation:": 3,
+    "premise.attribution-filed.v1": 2,
+    "premise.batch-translation-offered.v1": 12,
+    "premise.work-invited.v1": 2,
+    "problem.independence-resolution-rate.v1": 12,
+    "problem.thrash.v1": 12,
+    "research-awaiting-agent": 1,
+    "scrutiny": 89
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "capture14.attack-target-entropy.v1": 78,
+    "capture14.criticism-debt.v1": 79,
+    "capture14.exogenous-grounding-ratio.v1": 82,
+    "capture14.hysteresis-mode.v1": 404,
+    "capture14.reinstatement-rate.v1": 80,
+    "capture14.stream-contraction.v1": 77,
+    "capture14.validity-attack-rate.v1": 81,
+    "controller-authority": 48,
+    "criticism.attack-target-entropy.v1": 74,
+    "cycle": 72,
+    "disc-attempts-exhausted": 2311,
+    "embedder": 47,
+    "evidence-citation:": 86,
+    "hv-skip-oversize": 341,
+    "premise-citation:": 586,
+    "premise.attribution-filed.v1": 593,
+    "premise.batch-translation-offered.v1": 76,
+    "premise.work-invited.v1": 739,
+    "problem.independence-resolution-rate.v1": 75,
+    "problem.thrash.v1": 73,
+    "research-awaiting-agent": 725,
+    "scrutiny": 136
+   },
+   "heartbeats": [
+    [
+     72,
+     0
+    ],
+    [
+     392,
+     1
+    ],
+    [
+     405,
+     2
+    ],
+    [
+     728,
+     3
+    ],
+    [
+     1051,
+     4
+    ],
+    [
+     1316,
+     5
+    ],
+    [
+     1327,
+     6
+    ],
+    [
+     1655,
+     7
+    ],
+    [
+     1928,
+     8
+    ],
+    [
+     2300,
+     9
+    ],
+    [
+     2312,
+     10
+    ],
+    [
+     2622,
+     11
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [
+    {
+     "artifact": "470700ba6fb8431b55831f51e0a3048949b07e8e843ea555aea4d59bbb157f95",
+     "evidence": {},
+     "family": "capture14-hysteresis-policy",
+     "knobs": {},
+     "log_cycle": 1,
+     "parsed": true,
+     "policy_cycle": null,
+     "seq": 403
+    }
+   ],
+   "payload_families": {},
+   "per_cycle": {
+    "capture14.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.criticism-debt.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.exogenous-grounding-ratio.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.hysteresis-mode.v1": {
+     "1": 1
+    },
+    "capture14.reinstatement-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.stream-contraction.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.validity-attack-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "disc-attempts-exhausted": {
+     "9": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "evidence-citation:": {
+     "0": 46,
+     "2": 29,
+     "3": 38,
+     "4": 2,
+     "6": 42,
+     "8": 39,
+     "10": 38
+    },
+    "hv-skip-oversize": {
+     "0": 8
+    },
+    "premise-citation:": {
+     "2": 2,
+     "6": 1
+    },
+    "premise.attribution-filed.v1": {
+     "2": 1,
+     "6": 1
+    },
+    "premise.batch-translation-offered.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "premise.work-invited.v1": {
+     "3": 1,
+     "6": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "research-awaiting-agent": {
+     "2": 1
+    },
+    "scrutiny": {
+     "0": 9,
+     "2": 24,
+     "3": 9,
+     "4": 4,
+     "6": 11,
+     "7": 6,
+     "8": 11,
+     "10": 8,
+     "11": 7
+    }
+   },
+   "progress_cycle_max": 12,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "kimi-k3",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "deepseek-v4-pro:0813",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "qwen3.5:397b",
+      "timeout_s": 180
+     },
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "1b31f0065687bd24f64bb08acae1245446b4b31c31b90b141ff95cd5759c9a97",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge#0",
+    "judge#1",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    47,
+    48,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    136,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    189,
+    196,
+    203,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    253,
+    260,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    275,
+    276,
+    277,
+    278,
+    279,
+    280,
+    324,
+    331,
+    338,
+    341,
+    343,
+    345,
+    349,
+    351,
+    355,
+    359,
+    361,
+    392,
+    393,
+    394,
+    395,
+    396,
+    397,
+    398,
+    399,
+    400,
+    401,
+    402,
+    404,
+    405,
+    406,
+    407,
+    408,
+    409,
+    410,
+    411,
+    412,
+    413,
+    414,
+    415,
+    419,
+    420,
+    421,
+    422,
+    423,
+    424,
+    440,
+    447,
+    454,
+    461,
+    468,
+    475,
+    487,
+    491,
+    492,
+    493,
+    494,
+    495,
+    496,
+    514,
+    531,
+    538,
+    545,
+    552,
+    556,
+    557,
+    558,
+    559,
+    560,
+    561,
+    562,
+    580,
+    586,
+    587,
+    593,
+    595,
+    602,
+    609,
+    616,
+    623,
+    630,
+    634,
+    635,
+    636,
+    637,
+    638,
+    639,
+    640,
+    641,
+    642,
+    643,
+    659,
+    676,
+    683,
+    690,
+    697,
+    725,
+    728,
+    729,
+    730,
+    731,
+    732,
+    733,
+    734,
+    735,
+    736,
+    737,
+    738,
+    739,
+    743,
+    744,
+    745,
+    746,
+    747,
+    748,
+    749,
+    750,
+    751,
+    752,
+    753,
+    754,
+    755,
+    797,
+    804,
+    811,
+    818,
+    822,
+    823,
+    824,
+    825,
+    826,
+    827,
+    828,
+    884,
+    888,
+    889,
+    890,
+    891,
+    892,
+    893,
+    894,
+    895,
+    896,
+    942,
+    954,
+    958,
+    959,
+    960,
+    961,
+    962,
+    963,
+    964,
+    965,
+    966,
+    1019,
+    1026,
+    1051,
+    1052,
+    1053,
+    1054,
+    1055,
+    1056,
+    1057,
+    1058,
+    1059,
+    1060,
+    1061,
+    1118,
+    1119,
+    1139,
+    1156,
+    1163,
+    1175,
+    1316,
+    1317,
+    1318,
+    1319,
+    1320,
+    1321,
+    1322,
+    1323,
+    1324,
+    1325,
+    1326,
+    1327,
+    1328,
+    1329,
+    1330,
+    1331,
+    1332,
+    1333,
+    1334,
+    1335,
+    1336,
+    1337,
+    1338,
+    1342,
+    1343,
+    1344,
+    1345,
+    1346,
+    1347,
+    1408,
+    1415,
+    1419,
+    1420,
+    1421,
+    1422,
+    1423,
+    1424,
+    1425,
+    1426,
+    1427,
+    1428,
+    1429,
+    1430,
+    1472,
+    1479,
+    1486,
+    1493,
+    1497,
+    1498,
+    1499,
+    1500,
+    1501,
+    1502,
+    1542,
+    1548,
+    1551,
+    1553,
+    1560,
+    1564,
+    1565,
+    1566,
+    1567,
+    1568,
+    1569,
+    1570,
+    1571,
+    1572,
+    1573,
+    1574,
+    1575,
+    1576,
+    1577,
+    1578,
+    1579,
+    1580,
+    1581,
+    1623,
+    1630,
+    1655,
+    1656,
+    1657,
+    1658,
+    1659,
+    1660,
+    1661,
+    1662,
+    1663,
+    1664,
+    1665,
+    1694,
+    1701,
+    1724,
+    1738,
+    1745,
+    1752,
+    1928,
+    1929,
+    1930,
+    1931,
+    1932,
+    1933,
+    1934,
+    1935,
+    1936,
+    1937,
+    1938,
+    1942,
+    1943,
+    1944,
+    1945,
+    1946,
+    1947,
+    1999,
+    2006,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2062,
+    2069,
+    2081,
+    2088,
+    2095,
+    2109,
+    2110,
+    2111,
+    2112,
+    2113,
+    2114,
+    2115,
+    2116,
+    2117,
+    2183,
+    2192,
+    2196,
+    2197,
+    2198,
+    2199,
+    2200,
+    2201,
+    2202,
+    2203,
+    2204,
+    2205,
+    2206,
+    2207,
+    2257,
+    2264,
+    2300,
+    2301,
+    2302,
+    2303,
+    2304,
+    2305,
+    2306,
+    2307,
+    2308,
+    2309,
+    2310,
+    2311,
+    2312,
+    2313,
+    2314,
+    2315,
+    2316,
+    2317,
+    2318,
+    2319,
+    2320,
+    2321,
+    2322,
+    2326,
+    2327,
+    2328,
+    2329,
+    2330,
+    2331,
+    2332,
+    2333,
+    2334,
+    2335,
+    2336,
+    2337,
+    2381,
+    2388,
+    2397,
+    2398,
+    2399,
+    2400,
+    2401,
+    2402,
+    2442,
+    2454,
+    2458,
+    2459,
+    2460,
+    2461,
+    2462,
+    2463,
+    2464,
+    2465,
+    2466,
+    2467,
+    2468,
+    2469,
+    2470,
+    2529,
+    2538,
+    2542,
+    2543,
+    2544,
+    2545,
+    2546,
+    2547,
+    2548,
+    2593,
+    2605,
+    2622,
+    2623,
+    2624,
+    2625,
+    2626,
+    2627,
+    2628,
+    2629,
+    2630,
+    2631,
+    2632,
+    2651,
+    2658,
+    2665,
+    2677,
+    2684,
+    2691,
+    2698
+   ],
+   "state": "completed",
+   "stop_reason": "budget_exhausted",
+   "undeclared": {
+    "contract-decomposition-effect": 3,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 117
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4,
+    "1": 4,
+    "2": 4,
+    "3": 4,
+    "4": 4,
+    "5": 4,
+    "6": 4,
+    "7": 4,
+    "8": 4,
+    "9": 4,
+    "10": 4,
+    "11": 1
+   },
+   "controller_event_seqs": [
+    12,
+    207,
+    219,
+    570,
+    920,
+    1395,
+    1856,
+    2267
+   ],
+   "crit_per_cycle": {
+    "0": 51,
+    "1": 45,
+    "2": 60,
+    "3": 42,
+    "4": 57,
+    "5": 57,
+    "6": 69,
+    "7": 60,
+    "8": 57,
+    "9": 63,
+    "10": 63,
+    "11": 18
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "decisions": [
+    {
+     "artifact": "56f9c6cb7b0d0acd506dcb502466ae38e91a0486fc30fa81b567fec322d9c7b1",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 207
+    },
+    {
+     "artifact": "c6e27bb93265a72d32728a3b72669d25ae3db486242adb62969e1d1ceca65af5",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 12800
+     },
+     "log_cycle": 2,
+     "parsed": true,
+     "policy_cycle": 4,
+     "seq": 570
+    },
+    {
+     "artifact": "f7fda6a613082a58663a12625783875ad443b461c7e5910957a055ebce355d63",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 8000
+     },
+     "log_cycle": 4,
+     "parsed": true,
+     "policy_cycle": 6,
+     "seq": 920
+    },
+    {
+     "artifact": "08f91786ac9dd9c66c30fecfbdc16d1d59f9117473ca66db2981a9fc2d0263f3",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 5000
+     },
+     "log_cycle": 6,
+     "parsed": true,
+     "policy_cycle": 8,
+     "seq": 1395
+    },
+    {
+     "artifact": "bedc42e2115d3abdc1542418b62d54cd4fcdbac5293ca9d845d9ec418bdda19d",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 3125
+     },
+     "log_cycle": 8,
+     "parsed": true,
+     "policy_cycle": 10,
+     "seq": 1856
+    },
+    {
+     "artifact": "582d18b94487df3b98a4ac4bd1aabdf73472efee7cfa4f07042a9b21c49cb9d7",
+     "evidence": {
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 1953
+     },
+     "log_cycle": 10,
+     "parsed": true,
+     "policy_cycle": 12,
+     "seq": 2267
+    }
+   ],
+   "drops": [],
+   "emissions": {
+    "capture14.attack-target-entropy.v1": 12,
+    "capture14.criticism-debt.v1": 12,
+    "capture14.exogenous-grounding-ratio.v1": 12,
+    "capture14.hysteresis-mode.v1": 1,
+    "capture14.reinstatement-rate.v1": 12,
+    "capture14.stream-contraction.v1": 12,
+    "capture14.validity-attack-rate.v1": 12,
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 12,
+    "cycle": 12,
+    "embedder": 1,
+    "premise.batch-translation-offered.v1": 12,
+    "premise.work-invited.v1": 11,
+    "problem.independence-resolution-rate.v1": 12,
+    "problem.thrash.v1": 12,
+    "run-stop": 1
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "capture14.attack-target-entropy.v1": 19,
+    "capture14.criticism-debt.v1": 20,
+    "capture14.exogenous-grounding-ratio.v1": 23,
+    "capture14.hysteresis-mode.v1": 220,
+    "capture14.reinstatement-rate.v1": 21,
+    "capture14.stream-contraction.v1": 18,
+    "capture14.validity-attack-rate.v1": 22,
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "embedder": 11,
+    "premise.batch-translation-offered.v1": 17,
+    "premise.work-invited.v1": 221,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 2414
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     208,
+     1
+    ],
+    [
+     375,
+     2
+    ],
+    [
+     571,
+     3
+    ],
+    [
+     730,
+     4
+    ],
+    [
+     921,
+     5
+    ],
+    [
+     1114,
+     6
+    ],
+    [
+     1396,
+     7
+    ],
+    [
+     1652,
+     8
+    ],
+    [
+     1857,
+     9
+    ],
+    [
+     2051,
+     10
+    ],
+    [
+     2268,
+     11
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [
+    {
+     "artifact": "7f71cb176a9976995a7ba4e7882e365e969ea53715ef02a08ed162519ace481b",
+     "evidence": {},
+     "family": "capture14-hysteresis-policy",
+     "knobs": {},
+     "log_cycle": 1,
+     "parsed": true,
+     "policy_cycle": null,
+     "seq": 219
+    }
+   ],
+   "payload_families": {},
+   "per_cycle": {
+    "capture14.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.criticism-debt.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.exogenous-grounding-ratio.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.hysteresis-mode.v1": {
+     "1": 1
+    },
+    "capture14.reinstatement-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.stream-contraction.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "capture14.validity-attack-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "premise.batch-translation-offered.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "premise.work-invited.v1": {
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1
+    },
+    "run-stop": {
+     "11": 1
+    }
+   },
+   "progress_cycle_max": 11,
+   "rehydrations": [],
+   "replay_ok": false,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "6913328037a61ca68c7599ca0f10ba78de3bab616884503b4d28a110ca6dbca4",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    220,
+    221,
+    375,
+    376,
+    377,
+    378,
+    379,
+    380,
+    381,
+    382,
+    383,
+    384,
+    385,
+    386,
+    571,
+    572,
+    573,
+    574,
+    575,
+    576,
+    577,
+    578,
+    579,
+    580,
+    581,
+    582,
+    730,
+    731,
+    732,
+    733,
+    734,
+    735,
+    736,
+    737,
+    738,
+    739,
+    740,
+    741,
+    921,
+    922,
+    923,
+    924,
+    925,
+    926,
+    927,
+    928,
+    929,
+    930,
+    931,
+    932,
+    1114,
+    1115,
+    1116,
+    1117,
+    1118,
+    1119,
+    1120,
+    1121,
+    1122,
+    1123,
+    1124,
+    1125,
+    1396,
+    1397,
+    1398,
+    1399,
+    1400,
+    1401,
+    1402,
+    1403,
+    1404,
+    1405,
+    1406,
+    1407,
+    1652,
+    1653,
+    1654,
+    1655,
+    1656,
+    1657,
+    1658,
+    1659,
+    1660,
+    1661,
+    1662,
+    1663,
+    1857,
+    1858,
+    1859,
+    1860,
+    1861,
+    1862,
+    1863,
+    1864,
+    1865,
+    1866,
+    1867,
+    1868,
+    2051,
+    2052,
+    2053,
+    2054,
+    2055,
+    2056,
+    2057,
+    2058,
+    2059,
+    2060,
+    2061,
+    2062,
+    2268,
+    2269,
+    2270,
+    2271,
+    2272,
+    2273,
+    2274,
+    2275,
+    2276,
+    2277,
+    2278,
+    2279,
+    2414
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 1
+   }
+  },
+  {
+   "authority": [
+    {
+     "cycle": -1,
+     "open_loop": [],
+     "payload_present": true,
+     "scope": "full",
+     "seq": 12,
+     "steerable": [
+      "argumentative_critic",
+      "conjecturer",
+      "defender",
+      "grounding_reviewer",
+      "judge",
+      "property_designer",
+      "summarizer",
+      "synthesizer",
+      "thesis",
+      "variator",
+      "vision_critic"
+     ],
+     "unsteerable": {}
+    }
+   ],
+   "bound_roles": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "conj_per_cycle": {
+    "0": 4,
+    "1": 4,
+    "2": 4,
+    "4": 4,
+    "5": 4,
+    "6": 4,
+    "8": 4,
+    "9": 4,
+    "10": 4,
+    "12": 4,
+    "13": 4,
+    "14": 4,
+    "15": 1
+   },
+   "controller_event_seqs": [
+    12,
+    160,
+    172,
+    602,
+    907,
+    1496,
+    1759,
+    2224,
+    2542,
+    3117
+   ],
+   "crit_per_cycle": {
+    "0": 38,
+    "1": 46,
+    "2": 24,
+    "4": 69,
+    "5": 48,
+    "6": 30,
+    "8": 57,
+    "9": 33,
+    "10": 16,
+    "12": 44,
+    "13": 32,
+    "14": 17,
+    "15": 5
+   },
+   "cycles_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "decisions": [
+    {
+     "artifact": "cc27c6740eb1c6df2292404d89903586fdb5974ffbc1eabb59d41f86aa5ff591",
+     "evidence": {
+      "conjecturer": {
+       "n": 4,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:conjecturer": 20480
+     },
+     "log_cycle": 0,
+     "parsed": true,
+     "policy_cycle": 2,
+     "seq": 160
+    },
+    {
+     "artifact": "b76c0963c64c42cc40f8037ee55dbc7081fb09cdc63f1f0744eef64fd375da14",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 20480,
+      "cap:conjecturer": 12800
+     },
+     "log_cycle": 2,
+     "parsed": true,
+     "policy_cycle": 4,
+     "seq": 602
+    },
+    {
+     "artifact": "ca43beb48112514854833b5512a2d8c409ab65778b4e5462fa389144e5cbd231",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 12800,
+      "cap:conjecturer": 8000
+     },
+     "log_cycle": 4,
+     "parsed": true,
+     "policy_cycle": 6,
+     "seq": 907
+    },
+    {
+     "artifact": "5af7411e974c69f2827e64f6348223482801313b4a7f3e3d178df69418a83eb6",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 8000,
+      "cap:conjecturer": 5000
+     },
+     "log_cycle": 6,
+     "parsed": true,
+     "policy_cycle": 8,
+     "seq": 1496
+    },
+    {
+     "artifact": "5081471767a29791579c8a9e5939830654e66d05eb09906331101bfb239d7867",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 5000,
+      "cap:conjecturer": 3125
+     },
+     "log_cycle": 8,
+     "parsed": true,
+     "policy_cycle": 10,
+     "seq": 1759
+    },
+    {
+     "artifact": "9c7fbd82be74c8939d93b424151ff335279668a13dc813f86644d14b34f8a7b4",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 3125,
+      "cap:conjecturer": 1953
+     },
+     "log_cycle": 10,
+     "parsed": true,
+     "policy_cycle": 12,
+     "seq": 2224
+    },
+    {
+     "artifact": "cdc06f900ad7e0679eea9b3a4347f0864ae8645a31eceedc584ac6bb39a1638c",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 1953,
+      "cap:conjecturer": 1221
+     },
+     "log_cycle": 12,
+     "parsed": true,
+     "policy_cycle": 14,
+     "seq": 2542
+    },
+    {
+     "artifact": "016fb74c82663136ff3e56c66c0f6bad595fce32c56f21bb81138c726a01b677",
+     "evidence": {
+      "argumentative_critic": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      },
+      "conjecturer": {
+       "n": 6,
+       "repair_rate": 0.0,
+       "truncation_rate": 0.0
+      }
+     },
+     "family": "allocation-policy",
+     "knobs": {
+      "cap:argumentative_critic": 1221,
+      "cap:conjecturer": 800
+     },
+     "log_cycle": 14,
+     "parsed": true,
+     "policy_cycle": 16,
+     "seq": 3117
+    }
+   ],
+   "drops": [],
+   "emissions": {
+    "capture14.attack-target-entropy.v1": 16,
+    "capture14.criticism-debt.v1": 16,
+    "capture14.exogenous-grounding-ratio.v1": 16,
+    "capture14.hysteresis-mode.v1": 1,
+    "capture14.reinstatement-rate.v1": 16,
+    "capture14.stream-contraction.v1": 16,
+    "capture14.validity-attack-rate.v1": 16,
+    "controller-authority": 1,
+    "criticism.attack-target-entropy.v1": 16,
+    "cycle": 16,
+    "disc-attempts-exhausted": 1,
+    "embedder": 1,
+    "evidence-citation:": 21,
+    "intervention:": 1,
+    "premise.batch-translation-offered.v1": 16,
+    "premise.work-invited.v1": 8,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 16,
+    "run-stop": 1,
+    "scrutiny": 114
+   },
+   "expected_open_loop": [],
+   "first_seq": {
+    "capture14.attack-target-entropy.v1": 19,
+    "capture14.criticism-debt.v1": 20,
+    "capture14.exogenous-grounding-ratio.v1": 23,
+    "capture14.hysteresis-mode.v1": 173,
+    "capture14.reinstatement-rate.v1": 21,
+    "capture14.stream-contraction.v1": 18,
+    "capture14.validity-attack-rate.v1": 22,
+    "controller-authority": 12,
+    "criticism.attack-target-entropy.v1": 15,
+    "cycle": 13,
+    "disc-attempts-exhausted": 2236,
+    "embedder": 11,
+    "evidence-citation:": 1194,
+    "intervention:": 346,
+    "premise.batch-translation-offered.v1": 17,
+    "premise.work-invited.v1": 174,
+    "problem.independence-resolution-rate.v1": 16,
+    "problem.thrash.v1": 14,
+    "run-stop": 3198,
+    "scrutiny": 374
+   },
+   "heartbeats": [
+    [
+     13,
+     0
+    ],
+    [
+     161,
+     1
+    ],
+    [
+     347,
+     2
+    ],
+    [
+     604,
+     3
+    ],
+    [
+     615,
+     4
+    ],
+    [
+     908,
+     5
+    ],
+    [
+     1127,
+     6
+    ],
+    [
+     1497,
+     7
+    ],
+    [
+     1508,
+     8
+    ],
+    [
+     1760,
+     9
+    ],
+    [
+     1938,
+     10
+    ],
+    [
+     2225,
+     11
+    ],
+    [
+     2237,
+     12
+    ],
+    [
+     2543,
+     13
+    ],
+    [
+     2806,
+     14
+    ],
+    [
+     3118,
+     15
+    ]
+   ],
+   "holds": [],
+   "hysteresis_policies": [
+    {
+     "artifact": "6ceb59639c62ae7e96feb9de8c23e84cd2ce864d88554c9de8367929adc1b1f7",
+     "evidence": {},
+     "family": "capture14-hysteresis-policy",
+     "knobs": {},
+     "log_cycle": 1,
+     "parsed": true,
+     "policy_cycle": null,
+     "seq": 172
+    }
+   ],
+   "payload_families": {},
+   "per_cycle": {
+    "capture14.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "capture14.criticism-debt.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "capture14.exogenous-grounding-ratio.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "capture14.hysteresis-mode.v1": {
+     "1": 1
+    },
+    "capture14.reinstatement-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "capture14.stream-contraction.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "capture14.validity-attack-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "controller-authority": {
+     "-1": 1
+    },
+    "criticism.attack-target-entropy.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "cycle": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "disc-attempts-exhausted": {
+     "11": 1
+    },
+    "embedder": {
+     "-1": 1
+    },
+    "evidence-citation:": {
+     "6": 15,
+     "14": 6
+    },
+    "intervention:": {
+     "1": 1
+    },
+    "premise.batch-translation-offered.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "premise.work-invited.v1": {
+     "1": 1,
+     "4": 1,
+     "5": 1,
+     "8": 1,
+     "9": 1,
+     "12": 1,
+     "13": 1,
+     "15": 1
+    },
+    "problem.independence-resolution-rate.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "problem.thrash.v1": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1,
+     "4": 1,
+     "5": 1,
+     "6": 1,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "10": 1,
+     "11": 1,
+     "12": 1,
+     "13": 1,
+     "14": 1,
+     "15": 1
+    },
+    "run-stop": {
+     "15": 1
+    },
+    "scrutiny": {
+     "2": 24,
+     "4": 6,
+     "5": 7,
+     "6": 30,
+     "8": 4,
+     "9": 5,
+     "10": 16,
+     "12": 2,
+     "13": 2,
+     "14": 17,
+     "15": 1
+    }
+   },
+   "progress_cycle_max": 15,
+   "rehydrations": [],
+   "replay_ok": true,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "routes": {
+    "argumentative_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "conjecturer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "defender": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "grounding_reviewer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "judge": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "property_designer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "summarizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "synthesizer": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "thesis": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "variator": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ],
+    "vision_critic": [
+     {
+      "context_window_tokens": 131072,
+      "max_tokens": 32768,
+      "model_id": "glm-5.2",
+      "timeout_s": 180
+     }
+    ]
+   },
+   "run_id": "1950b3d0ee2281137ee3a54def61252b129a955ff30a938feb9044d5ed7ff628",
+   "seat_instances": [
+    "argumentative_critic",
+    "conjecturer",
+    "defender",
+    "grounding_reviewer",
+    "judge",
+    "property_designer",
+    "summarizer",
+    "synthesizer",
+    "thesis",
+    "variator",
+    "vision_critic"
+   ],
+   "signal_event_seqs": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    173,
+    174,
+    346,
+    347,
+    348,
+    349,
+    350,
+    351,
+    352,
+    353,
+    354,
+    355,
+    356,
+    357,
+    374,
+    381,
+    388,
+    395,
+    402,
+    420,
+    427,
+    434,
+    441,
+    448,
+    455,
+    462,
+    469,
+    485,
+    492,
+    499,
+    506,
+    513,
+    520,
+    527,
+    534,
+    567,
+    574,
+    581,
+    604,
+    605,
+    606,
+    607,
+    608,
+    609,
+    610,
+    611,
+    612,
+    613,
+    614,
+    615,
+    616,
+    617,
+    618,
+    619,
+    620,
+    621,
+    622,
+    623,
+    624,
+    625,
+    626,
+    690,
+    697,
+    763,
+    770,
+    899,
+    906,
+    908,
+    909,
+    910,
+    911,
+    912,
+    913,
+    914,
+    915,
+    916,
+    917,
+    918,
+    919,
+    970,
+    977,
+    1027,
+    1034,
+    1067,
+    1119,
+    1126,
+    1127,
+    1128,
+    1129,
+    1130,
+    1131,
+    1132,
+    1133,
+    1134,
+    1135,
+    1136,
+    1137,
+    1194,
+    1195,
+    1196,
+    1197,
+    1198,
+    1199,
+    1200,
+    1201,
+    1202,
+    1203,
+    1204,
+    1205,
+    1206,
+    1207,
+    1208,
+    1217,
+    1224,
+    1231,
+    1238,
+    1245,
+    1252,
+    1259,
+    1266,
+    1284,
+    1291,
+    1298,
+    1305,
+    1312,
+    1319,
+    1326,
+    1333,
+    1351,
+    1358,
+    1365,
+    1372,
+    1379,
+    1386,
+    1393,
+    1400,
+    1413,
+    1425,
+    1437,
+    1444,
+    1451,
+    1469,
+    1497,
+    1498,
+    1499,
+    1500,
+    1501,
+    1502,
+    1503,
+    1504,
+    1505,
+    1506,
+    1507,
+    1508,
+    1509,
+    1510,
+    1511,
+    1512,
+    1513,
+    1514,
+    1515,
+    1516,
+    1517,
+    1518,
+    1519,
+    1563,
+    1570,
+    1689,
+    1753,
+    1760,
+    1761,
+    1762,
+    1763,
+    1764,
+    1765,
+    1766,
+    1767,
+    1768,
+    1769,
+    1770,
+    1771,
+    1807,
+    1814,
+    1846,
+    1892,
+    1932,
+    1938,
+    1939,
+    1940,
+    1941,
+    1942,
+    1943,
+    1944,
+    1945,
+    1946,
+    1947,
+    1948,
+    1991,
+    1998,
+    2011,
+    2018,
+    2047,
+    2054,
+    2061,
+    2068,
+    2101,
+    2113,
+    2125,
+    2138,
+    2150,
+    2162,
+    2190,
+    2199,
+    2225,
+    2226,
+    2227,
+    2228,
+    2229,
+    2230,
+    2231,
+    2232,
+    2233,
+    2234,
+    2235,
+    2236,
+    2237,
+    2238,
+    2239,
+    2240,
+    2241,
+    2242,
+    2243,
+    2244,
+    2245,
+    2246,
+    2247,
+    2248,
+    2393,
+    2541,
+    2543,
+    2544,
+    2545,
+    2546,
+    2547,
+    2548,
+    2549,
+    2550,
+    2551,
+    2552,
+    2553,
+    2554,
+    2578,
+    2621,
+    2806,
+    2807,
+    2808,
+    2809,
+    2810,
+    2811,
+    2812,
+    2813,
+    2814,
+    2815,
+    2816,
+    2829,
+    2846,
+    2858,
+    2865,
+    2883,
+    2905,
+    2912,
+    2919,
+    2926,
+    2933,
+    2980,
+    2981,
+    2982,
+    2983,
+    2984,
+    2985,
+    3004,
+    3011,
+    3023,
+    3046,
+    3068,
+    3085,
+    3092,
+    3118,
+    3119,
+    3120,
+    3121,
+    3122,
+    3123,
+    3124,
+    3125,
+    3126,
+    3127,
+    3128,
+    3129,
+    3161,
+    3198
+   ],
+   "state": "failed",
+   "stop_reason": "operational_failure",
+   "undeclared": {
+    "contract-decomposition-effect": 2,
+    "module-fingerprints.v1": 1,
+    "v6-model-phase-deferred.v1": 93
+   }
+  }
+ ],
+ "population_cutoff": "2026-08-22",
+ "population_roots": [
+  "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "experiments/2026-08-22-live-reach-rich-run/run",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/run",
+  "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+  "experiments/2026-08-25-poietics-program/run",
+  "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+  "experiments/2026-08-25-change-constructive-frontier/run"
+ ],
+ "schema": "run-anatomy.w5.signal-census.v1",
+ "silence_population_roots": 54,
+ "undeclared_tags_ever": {
+  "contract-decomposition-effect": 31,
+  "criticism.assignment.v1": 1742,
+  "criticism.attempt.v1": 1767,
+  "criticism.coverage-debt.v1": 11764,
+  "defended-trial-deferred": 119,
+  "module-fingerprints.v1": 38,
+  "seat-bindings.v1": 22,
+  "v6-model-phase-deferred.v1": 2668
+ }
+}

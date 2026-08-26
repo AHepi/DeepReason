@@ -1,0 +1,1521 @@
+{
+ "declared_total": 111,
+ "population_roots": [
+  "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+  "experiments/2026-08-22-live-reach-rich-run/run",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+  "experiments/2026-08-22-change-epoch3-second-lineage/run",
+  "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+  "experiments/2026-08-25-poietics-program/run",
+  "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+  "experiments/2026-08-25-change-constructive-frontier/run"
+ ],
+ "rows": [
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "allocation.policy-authorized.v1",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "allocation.policy-contested.v1",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "allocation.seat-repair.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "allocation.seat-truncation.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "arg-crit",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "arg-crit-cx-rejected",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "arg-crit-overridden-by-execution",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "assembled",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "audit-blocked:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "audit-hit:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "audit-llm",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "batch-crit",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "batch-crit-cx-retry",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "browser-pass",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "browser-spec-overrun",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.attack-target-entropy.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.criticism-debt.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.exogenous-grounding-ratio.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 3,
+   "kind": "exact",
+   "per_root": [
+    {
+     "age_of_the_last_occurrence_at_run_end_in_cycles": 10,
+     "emitted_in_cycles": [
+      1
+     ],
+     "last_cycle_of_the_run": 11,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "age_of_the_last_occurrence_at_run_end_in_cycles": 10,
+     "emitted_in_cycles": [
+      1
+     ],
+     "last_cycle_of_the_run": 11,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "age_of_the_last_occurrence_at_run_end_in_cycles": 14,
+     "emitted_in_cycles": [
+      1
+     ],
+     "last_cycle_of_the_run": 15,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": "capture.hysteresis.policies() -> mode() / slice_budgets(), reached from calculus/render.py",
+   "reason": "declared bound is `cycle`, but its reader (capture.hysteresis.policies() -> mode() / slice_budgets(), reached from calculus/render.py) relies on it for the whole run \u2014 `reversed(policies(harness))` takes the most recent receipt whatever its age; the last occurrence was up to 14 cycles old and still in force. The reliance is deliberate, so the mismatch is in the DECLARATION, not in the reader.",
+   "reliance": "the whole run \u2014 `reversed(policies(harness))` takes the most recent receipt whatever its age",
+   "signal": "capture14.hysteresis-mode.v1",
+   "staleness": "cycle",
+   "unit": "event",
+   "verdict": "EXCEEDED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "capture14.promotion-conditioning.v1",
+   "staleness": "permanent",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.reinstatement-rate.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.stream-contraction.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 40,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "capture14.validity-attack-rate.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "config-critique:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "conj-noregister",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "conjecture-turn-call",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 9,
+   "kind": "exact",
+   "per_root": [],
+   "reader": "controller.Controller._rehydrate_process_state (episode dedupe on resume)",
+   "reason": "bound is `run`; every read of a logged value happens inside the run that logged it, so the bound cannot be exceeded by construction",
+   "signal": "controller-authority",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "controller-hold:",
+   "staleness": "cycle",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "controller-rehydration",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "controller-update",
+   "staleness": "cycle",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 59,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c"
+    },
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-live-reach-rich-run/run"
+    },
+    {
+     "cycles_carrying_the_signal": 1,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 1,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+     "cycles_carrying_the_signal": 8,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 8,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/run"
+    },
+    {
+     "cycles_carrying_the_signal": 1,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 1,
+     "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "criticism.attack-target-entropy.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 59,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "cycle",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "demarcation-variation",
+   "staleness": "permanent",
+   "unit": "tokens",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 2,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "disc-attempts-exhausted",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "disc-transport-deferred",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "dossier-pack-receipt.v1",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 2,
+   "kind": "exact",
+   "per_root": [],
+   "reader": "controller.Controller._new_transport_drops (TRANSPORT_DROP_TAG, matched on reason)",
+   "reason": "bound is `run`; every read of a logged value happens inside the run that logged it, so the bound cannot be exceeded by construction",
+   "signal": "dropped-call",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 9,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "embedder",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "embedder-fallback",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "encoder-delegation",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 263,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "evidence-citation:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "experiment-design",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "experimental-v5-override.v1",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "foreign-criticism-coverage.v1",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "gate:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "hv",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "hv-floor-nomeasure:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "hv-nomeasure",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 8,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "hv-skip-oversize",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "import-deferred",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "infra-review-no-case",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "integration-repair",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 2,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "intervention:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "jolt-action",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "jolt-false-trigger",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "jolt-functional-observation",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "jolt-trigger",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "judge-error-rate:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "judge-self-preference:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "judge-verbosity-bias:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "pairwise-observation",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 8,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "bound is `permanent`; every read of a logged value happens inside the run that logged it, so the bound cannot be exceeded by construction",
+   "signal": "premise-citation:",
+   "staleness": "permanent",
+   "unit": "event",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 7,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "bound is `permanent`; every read of a logged value happens inside the run that logged it, so the bound cannot be exceeded by construction",
+   "signal": "premise.attribution-filed.v1",
+   "staleness": "permanent",
+   "unit": "event",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 41,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 1,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 1,
+     "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "premise.batch-translation-offered.v1",
+   "staleness": "cycle",
+   "unit": "count",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "premise.rent-undecided.v1",
+   "staleness": "run",
+   "unit": "event",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 21,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "an `event` signal with a `cycle` bound that no committed reader consumes: the bound is a promise nothing relies on, so nothing can break it",
+   "signal": "premise.work-invited.v1",
+   "staleness": "cycle",
+   "unit": "event",
+   "verdict": "NO-CONSUMER"
+  },
+  {
+   "emitted_in_population": 59,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "bound is `run`; every read of a logged value happens inside the run that logged it, so the bound cannot be exceeded by construction",
+   "signal": "problem.independence-resolution-rate.v1",
+   "staleness": "run",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 59,
+   "kind": "exact",
+   "per_root": [
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c"
+    },
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-live-reach-rich-run/run"
+    },
+    {
+     "cycles_carrying_the_signal": 1,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 1,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+     "cycles_carrying_the_signal": 3,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 3,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+     "cycles_carrying_the_signal": 8,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 8,
+     "root": "experiments/2026-08-22-change-epoch3-second-lineage/run"
+    },
+    {
+     "cycles_carrying_the_signal": 1,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 1,
+     "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-poietics-program/run"
+    },
+    {
+     "cycles_carrying_the_signal": 12,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 12,
+     "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+     "cycles_carrying_the_signal": 16,
+     "cycles_missing_it": [],
+     "cycles_with_a_heartbeat": 16,
+     "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    }
+   ],
+   "reader": null,
+   "reason": "bound is `cycle` and the series is complete: every cycle that has a heartbeat also carries this signal, so no consumer can read a value from a previous cycle",
+   "signal": "problem.thrash.v1",
+   "staleness": "cycle",
+   "unit": "ratio",
+   "verdict": "PASS"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "property-checker-crash",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "property-design",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "property-relevance-declined",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "property-relevance-trial",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "property-wipeout-quarantine",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "proposal-envelope-invalid",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "reach",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "reach-provisional",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "relatedness-trial",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-agent-requested",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-allowance:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 1,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-awaiting-agent",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-evidence-registered",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-fetch-exhausted",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-fetch-failed",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-fetch:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 1,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "research-off",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "run-resume",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 7,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "run-stop",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "scheduler-stop",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "scratch-call-failed",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "scratch-guide-stale",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 373,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "scrutiny",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "skills-adoption",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "skills-retrieval",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "spec-generation",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "spec-transmission:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "stage-pick",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "stop-escape",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "never emitted in the population, so no value exists that could be believed past its bound",
+   "signal": "succession.trial-flip-rate.v1",
+   "staleness": "run",
+   "unit": "ratio",
+   "verdict": "NOT-APPLICABLE"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "synth-noregister",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "prefix",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "trial-blocked:",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "trial-declined",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "trial-llm",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "trial-observation",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "vision-crit",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "vision-crit-overridden-by-execution",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-compact-call",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-compact-critic-dropped",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-compact-dropped",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-design-mode",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-stage",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  },
+  {
+   "emitted_in_population": 0,
+   "kind": "exact",
+   "per_root": [],
+   "reader": null,
+   "reason": "migration debt marker: the author stated no staleness bound, so there is no promise here to keep or break",
+   "signal": "website-terminal",
+   "staleness": "unspecified",
+   "unit": "unspecified",
+   "verdict": "NO-BOUND-DECLARED"
+  }
+ ],
+ "schema": "run-anatomy.w5.staleness.v1",
+ "verdict_counts": {
+  "EXCEEDED": 1,
+  "NO-BOUND-DECLARED": 84,
+  "NO-CONSUMER": 1,
+  "NOT-APPLICABLE": 11,
+  "PASS": 14
+ },
+ "with_a_declared_bound": 27
+}
