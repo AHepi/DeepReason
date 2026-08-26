@@ -1,0 +1,37 @@
+{
+  "VERDICT": {
+    "answer": "UNMATCHED -- no margin claimed",
+    "best_H2": 0.0,
+    "best_S2": 0.013307680842,
+    "harness_claims_value": false,
+    "rule": "value is claimed iff best_H2 > best_S2"
+  },
+  "admissibility_rule": "PREREG \u00a75.4 -- below 0.95 the comparison is UNMATCHED and no margin is claimed",
+  "admissible": false,
+  "arm": "S2",
+  "best_sample_index": 1,
+  "best_score": 0.013307680842,
+  "best_score_exact": "6653840421/500000000000",
+  "match_ratio": 0.0863,
+  "max_tokens": 32768,
+  "model": "glm-5.2",
+  "n_refuted": 5,
+  "n_samples": 14,
+  "n_transport_errors": 5,
+  "n_valid": 4,
+  "parts": [
+    "arm_s2"
+  ],
+  "segments_note": "ARM S2 ran in one or more segments; each resumption carried the REMAINING budget, so the segments sum to one matched arm rather than several arms. Same procedure as P-C1's ARM S.",
+  "temperature": 1.0,
+  "token_budget_matched_to_arm_h2": 1193009,
+  "tokens_spent": 102989,
+  "transport_error_rate": 0.3571,
+  "transport_errors_note": "A timed-out request buys nothing and is excluded from tokens_spent. P-C1's ARM S recorded 1 transport error in 54 samples; a materially higher rate here is an operational fact about this session's network path, recorded rather than smoothed.",
+  "valid_scores_desc": [
+    0.013307680842,
+    0.013307680842,
+    0.013307680842,
+    0.001
+  ]
+}
