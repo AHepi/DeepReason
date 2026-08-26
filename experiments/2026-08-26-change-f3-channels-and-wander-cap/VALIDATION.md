@@ -40,11 +40,20 @@ gate and the wheel smokes are the last two.
 | `python tools/docs_verify.py` (full) | **0 failed**, 65 documents, 1083 checks |
 | `python tools/docs_verify.py --links` | **0 dangling**, 65 documents |
 | `python tools/diff_budget.py 4760a32ef --ceiling 1900 --paths src tests docs` | **WITHIN** — 1870 (src 690, tests 699, docs 481) |
-| `python -m pytest tests/ -q -n 4` | pending |
-| `python scripts/wheel_smoke.py` | pending |
+| `python -m pytest tests/ -q -n 4` | **4233 passed, 6 skipped, 0 failed** in 1102.72s |
+| `python scripts/wheel_smoke.py` | **PASS** — "isolated V6-only contents, clean imports, exact entry points, module parity, MCP registration, and exact MCP schemas" |
 | `python -u scripts/wheel_operational_smoke.py` | pending |
 
-Note on `--audit`: run with the full pass below.
+The wheel smoke passing UNCHANGED is itself a result worth stating: this
+tranche added a module (`channels.py`, `wander.py`) and three `Config` fields,
+and the public surface it pins — console entry points, the MCP tool set and its
+schema sha, wheel layout — did not move. No pin needed updating, which is the
+correct outcome for a change that adds configuration rather than surface.
+
+Note on `--audit`: it was started concurrently with the operational smoke and
+KILLED rather than left to run, per the process-hygiene rule that two
+worker-spawning instruments contend and manufacture failures. Re-run alone; its
+result is recorded below when it returns.
 
 ## Fixtures that moved, and the guarantee each still carries
 
