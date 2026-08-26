@@ -425,6 +425,65 @@ written so it goes RED on the bypass it names, not merely on a rename.
 
     accept: python -m pytest tests/test_channel_and_wander_modularity.py -q -> 0 failed
 
+**S21 (R22, R7, C1) — the design consequence, stated.**
+
+**A configuration with channels on gives the criticism machinery a ROAD TO
+MACHINE VERDICTS on testable claims.** That is what the three channels are for,
+and it is why they belong in the REBUILD rather than in a preferences menu. The
+operator's own question names the stake: "Otherwise how is an LLM supposed to
+test code". With the channels off, every criticism a run can produce is prose
+about prose — a case that must be believed, adjudicated by a judge seat the
+operator has recorded as suspect-by-default. With them on, a critic can COMPUTE
+a verdict: run a checker against a claim's own counterconditions
+(code-testing), execute a declarative program and read its observables
+(simulation), or fetch a document and cite bytes out of it (research). W7's
+anatomy found the demonstrative class is the one doing real work; the prose
+class, measured over the two newest large runs, showed 0 of 196 model-written
+attacks ever reaching a later dispatch. So H1 is a supply decision about the
+only criticism class that has been shown to bite.
+
+It follows that the DEFAULT matters more than the toggle. A channel that is on
+only when an operator remembers an environment variable is, for every run
+nobody configured, a channel that does not exist — which is precisely the state
+research was in before this tranche.
+
+    accept: this section exists in SPEC.md and is cited by S22's docstring
+    -> present
+
+**S22 (R23) — the road exists in every launch path, not merely the flags.**
+Files: `tests/test_channel_and_wander_modularity.py`.
+Before: S17's five checks prove the toggles are pure configuration. They do NOT
+prove a compiled run can actually reach a machine verdict — a default that is
+`True` while the road downstream is severed is exactly the failure S0 found in
+the allocation controller, and it is the failure this check exists to forbid
+for the channels.
+After: a sixth architecture check, one row per launch path. The
+operations-parity law means there is ONE run path
+(`application/text_runs.py::TextRunApplicationService.start_manifest_run`), so
+"every launch path" is every entry that COMPILES a manifest into it: the
+managed `deepreason reason` preparation, a precompiled
+`deepreason run --run-manifest`, and a ladder's own preparation. For each, the
+check asserts the ROAD and not the flag:
+
+* the compiled `InquiryCapabilityPolicyV1` has `research.enabled` and
+  `simulation.enabled` True, AND the enabled policies carry the finite bounds
+  their validators require — an enabled channel with a zero budget is a severed
+  road wearing an enabled flag;
+* research's `domain_allowlist` is non-empty, since an enabled research policy
+  with no reachable host can mint no evidence;
+* the simulation controller CONSTRUCTS against that compiled manifest —
+  `SimulationCapabilityController(harness, manifest)` "refuses to exist
+  without one", so construction is the road's first real gate;
+* the code-testing road is reachable end to end: a `program:` commitment
+  registered on a run evaluates through `programs.evaluate` to a PASS/FAIL
+  verdict with no enablement consulted anywhere on the path.
+
+Written so it goes RED on a severed road, not on a renamed flag: each assertion
+names the value a dispatch or a controller would actually consume.
+
+    accept: python -m pytest tests/test_channel_and_wander_modularity.py -q -k
+    "road" -> 0 failed
+
 **S18 (R17) — the gates, and the map moving with the code.**
 Files: `docs/map/INV-evidence-channels.md` (new), `docs/map/INV-signal-contract.md`,
 `docs/map/REC-revise-allocation-policy.md`, `docs/map/CON-scheduler-ranking.md`,
@@ -709,10 +768,10 @@ S19's accept check runs them.
 
 ## Budget
 
-    $ python -c "print(sum([130,140,22,8,55,22,18,30,70,12,150,170,260,150,90,60,55,30]))"
-    1472
+    $ python -c "print(sum([130,140,22,8,55,22,18,30,70,12,150,170,260,210,90,60,55,30]))"
+    1532
 
-~1472 insertions (ceiling), 7 commits — one per phase boundary plus one per
+~1532 insertions (ceiling), 7 commits — one per phase boundary plus one per
 half. Frozen surfaces touched: **surface 4, `run_manifest.py`, three `data.pop`
 lines, grant requested above with the tool's own contact list pasted.**
 
@@ -733,7 +792,7 @@ Itemization, which sums to the headline above:
 | 150 | `tests/test_controller_reaches_the_wire.py` (S20) |
 | 170 | `tests/test_evidence_channels.py` |
 | 260 | `tests/test_wander_cap.py` |
-| 150 | `tests/test_channel_and_wander_modularity.py` |
+| 210 | `tests/test_channel_and_wander_modularity.py` (S17 + S22) |
 | 90 | map: `INV-evidence-channels.md` (new) |
 | 60 | map: `INV-signal-contract.md`, `REC-revise-allocation-policy.md` |
 | 55 | map: `CON-scheduler-ranking.md`, `SUB-capabilities.md`, `INDEX.md` |
@@ -745,7 +804,7 @@ separately in VALIDATION.md, per S7.
 Rubric: 6/6 yes — every R has a spec item with a machine-decidable accept
 (R1→S1/S3, R2→S1/S4, R3→S1/S5, R4→S2/S4, R5→S6, R6→S7, R7→the headline line,
 R8→S8, R9→S9/S10, R10→S11, R11→S12, R12→S9/S11/S14, R13→S13/S14, R14→S15,
-R15→S16, R16→S14/S16, R17→S18, R18→S1/S2/S8/S9/S17, R19→S17, R20→S0 with M4-M6, R21→S19/S20); blast-radius
+R15→S16, R16→S14/S16, R17→S18, R18→S1/S2/S8/S9/S17, R19→S17, R20→S0 with M4-M6, R21→S19/S20, R22→S21, R23→S22); blast-radius
 census pasted from the tool and every hit classified; frozen-surface contact
 forecast recorded with the tool's verbatim list and the grant requested; every
 named mechanism traced to code it reaches (M3 is the trace that killed one);

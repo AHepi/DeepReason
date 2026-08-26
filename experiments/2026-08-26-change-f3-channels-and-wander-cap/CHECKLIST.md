@@ -14,8 +14,8 @@ prescribed order): `DR-INV-frozen-surfaces` → `DR-INV-signal-contract` →
 `DR-CON-problem-layer-lifecycle`, `DR-SEAM-llm-x-scheduler` (S19's own seam:
 what refuses a knob at the point of use).
 
-**Ceiling:** 1472 insertions (SPEC Budget). Checked with
-`python tools/diff_budget.py 4760a32ef --ceiling 1472` at every `[COMMIT]`.
+**Ceiling:** 1532 insertions (SPEC Budget). Checked with
+`python tools/diff_budget.py 4760a32ef --ceiling 1532` at every `[COMMIT]`.
 
 ---
 
@@ -46,7 +46,7 @@ what refuses a knob at the point of use).
       new checks appear in the run.
 
 - [ ] 5. (S19, S20) [COMMIT] Commit Phase A alone.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1472`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase B — the channel registry (H1)
@@ -111,7 +111,7 @@ what refuses a knob at the point of use).
       done-when: `python tools/docs_verify.py --fast` -> 0 failed.
 
 - [ ] 16. (H1) [COMMIT] Commit Phase B.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1472`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase C — the wander cap (H2)
@@ -166,7 +166,7 @@ what refuses a knob at the point of use).
       done-when: `python tools/docs_verify.py --fast` -> 0 failed.
 
 - [ ] 25. (H2) [COMMIT] Commit Phase C.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1472`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase D — modularity, and the gates
@@ -175,6 +175,12 @@ what refuses a knob at the point of use).
       architecture checks, each written to go RED on the bypass it names.
       done-when: `python -m pytest
       tests/test_channel_and_wander_modularity.py -q` -> 0 failed.
+
+- [ ] 26b. (S21, S22) Add the sixth architecture check — the ROAD exists in
+      every launch path (compiled policy bounds, non-empty allowlist, the
+      simulation controller constructs, the code-testing road evaluates).
+      done-when: `python -m pytest
+      tests/test_channel_and_wander_modularity.py -q -k "road"` -> 0 failed.
 
 - [ ] 27. (S17) Prove the architecture test FAILS on a bypass: in a scratch
       copy, make `scheduler.py` call the policy function directly.

@@ -286,3 +286,30 @@ rebuild exists to end."
 Lands as SPEC items S0 (the verification, done before any code) and S19 (the
 wiring). The verification's result is recorded in SPEC.md §S0 and its
 Measurements M4–M6.
+
+### Amendment 3 — 2026-08-26, why the channels matter (operator, mid-turn)
+
+Operator, verbatim:
+
+> simulation and code backends are important. so is research. Otherwise how is
+> an LLM supposed to test code
+
+The operator's agent, binding it to this tranche:
+
+> This is the RATIONALE line for H1: the channels are not a convenience
+> toggle, they are how criticism becomes demonstrative (a verdict
+> computed by execution) instead of prose. SPEC.md should state, as a
+> design consequence: a configuration with channels on gives the
+> criticism machinery a road to machine verdicts on testable claims,
+> and the H1 architecture test should cover that the road exists in
+> every launch path, not merely that the flags default true.
+
+R22 (artifact): SPEC.md states, as a DESIGN CONSEQUENCE, that "a configuration
+with channels on gives the criticism machinery a road to machine verdicts on
+testable claims".
+
+R23 (behavior, gate): "the H1 architecture test should cover that the road
+exists in every launch path, not merely that the flags default true."
+
+Lands as SPEC items S21 (the design consequence, stated) and S22 (the
+road-exists test, which widens S17).
