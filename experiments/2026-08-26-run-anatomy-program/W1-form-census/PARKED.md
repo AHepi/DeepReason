@@ -27,11 +27,16 @@ already owns a better-performing alternative that it only reaches after
 paying for failure.
 
 Evidence, all in experiments/2026-08-26-run-anatomy-program/W1-form-census/:
-- CENSUS_AGGREGATE.json "by_contract": conjecturer.turn.v6 816 attempts,
-  541 valid (66.3%); conjecturer.atomic-candidate.v1 373 attempts, 354 valid
-  (94.9%). Same role, same seat instance, same route_sha256.
+- Held to glm-5.2 alone (75% of the corpus), so model is controlled:
+  conjecturer.turn.v6 659 attempts / 61.9% valid, against
+  conjecturer.atomic-candidate.v1 339 attempts / 96.8% valid. Same role,
+  same seat instance, same route_sha256.
 - The atomic contract runs only on work the composite one already failed, so
-  94.9% is measured on a harder sample, not an easier one.
+  96.8% is measured on a harder sample, not an easier one.
+- COUNTEREXAMPLE, do not omit it from the spec: deepseek-v4-flash:0731 goes
+  the OTHER way (84.6% composite on 52 attempts, 63.6% atomic on 22). Small
+  samples, but the effect is not established as universal, so the change
+  should be a per-route-seat policy rather than a global default.
 - CENSUS_AGGREGATE.json "repair_fights": conjecturer.turn.v6 opens 134 repair
   ladders consuming 459 provider calls, and hits its grant ceiling 52 times.
 

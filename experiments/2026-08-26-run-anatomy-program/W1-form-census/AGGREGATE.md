@@ -33,6 +33,38 @@ Machine-readable source: `CENSUS_AGGREGATE.json`. 54 roots, 3155 provider attemp
 | `deepseek-v4-pro:0813` | 37 | 36 | 0.973 | 0 | 0 |
 | `gemma4:31b` | 34 | 30 | 0.8824 | 0 | 0 |
 
+## Model × contract — the only admissible model comparison
+
+`by_model` alone is confounded: models did not run the same forms.
+Compare models only within a row of the same contract.
+
+| model | contract | attempts | valid | rate |
+|---|---|---|---|---|
+| `glm-5.2` | `batch-critic.v2` | 1196 | 1113 | 0.9306 |
+| `glm-5.2` | `conjecturer.turn.v6` | 659 | 408 | 0.6191 |
+| `glm-5.2` | `conjecturer.atomic-candidate.v1` | 339 | 328 | 0.9676 |
+| `qwen3.5:397b` | `judgeruling.direct.v1` | 171 | 171 | 1.0 |
+| `mistral-large-3:675b` | `judgeruling.direct.v1` | 171 | 171 | 1.0 |
+| `kimi-k3` | `batch-critic.v2` | 123 | 107 | 0.8699 |
+| `glm-5.2` | `defender.direct.v1` | 122 | 122 | 1.0 |
+| `deepseek-v4-flash:0731` | `conjecturer.turn.v6` | 52 | 44 | 0.8462 |
+| `gemma4:31b` | `conjecturer.turn.v6` | 34 | 30 | 0.8824 |
+| `glm-5.2` | `critic.atomic-target.v1` | 31 | 31 | 1.0 |
+| `deepseek-v4-pro:0813` | `conjecturer.turn.v6` | 31 | 30 | 0.9677 |
+| `deepseek-v4-flash:0731` | `variator.direct.v1` | 30 | 30 | 1.0 |
+| `deepseek-v4-pro` | `batch-critic.v2` | 28 | 28 | 1.0 |
+| `kimi-k2.6` | `batch-critic.v2` | 23 | 20 | 0.8696 |
+| `deepseek-v4-flash:0731` | `conjecturer.atomic-candidate.v1` | 22 | 14 | 0.6364 |
+| `deepseek-v4-pro` | `conjecturer.turn.v6` | 19 | 14 | 0.7368 |
+| `mistral-large-3:675b` | `batch-critic.v2` | 14 | 14 | 1.0 |
+| `kimi-k2.6` | `conjecturer.turn.v6` | 11 | 8 | 0.7273 |
+| `mistral-large-3:675b` | `conjecturer.turn.v6` | 10 | 7 | 0.7 |
+| `glm-5.2` | `bridge.ledger.v3` | 10 | 5 | 0.5 |
+| `kimi-k2.6` | `bridge.ledger-batch.v1` | 7 | 7 | 1.0 |
+| `deepseek-v4-pro:0813` | `conjecturer.atomic-candidate.v1` | 6 | 6 | 1.0 |
+| `glm-5.2` | `bridge.composition.v2` | 6 | 4 | 0.6667 |
+| `glm-5.2` | `config-referee.v1` | 6 | 5 | 0.8333 |
+
 ## Arrival validity by role and seat instance
 
 | role#seat | attempts | valid | rate |

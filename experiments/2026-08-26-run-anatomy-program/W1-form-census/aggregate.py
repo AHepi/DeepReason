@@ -48,6 +48,11 @@ def main() -> int:
     by_model = defaultdict(lambda: Counter())
     by_role_seat = defaultdict(lambda: Counter())
     by_attempt_index = defaultdict(lambda: Counter())
+    # Model x contract, because the by-model table alone is CONFOUNDED: models
+    # did not run the same forms, so a model's headline validity is a
+    # statement about its workload mix. Every model-comparison claim in
+    # RESULTS.md is made from this cell, not from `by_model`.
+    by_model_contract = defaultdict(lambda: Counter())
     failure_classes = Counter()
     failure_by_contract_field = Counter()
     failure_class_by_contract = Counter()
@@ -67,6 +72,9 @@ def main() -> int:
             b["repair_scoped"] += int(r["is_repair"])
             b["truncated"] += int(r["truncated"])
             b["unnatural_stop"] += int(r["natural_stop"] is False)
+        bmc = by_model_contract[f"{model} | {cid}"]
+        bmc["attempts"] += 1
+        bmc["valid"] += int(r["valid_on_arrival"])
         tm = truncation_by_model[model]
         tm["attempts"] += 1
         tm["truncated"] += int(r["truncated"])
@@ -77,7 +85,7 @@ def main() -> int:
             if f["field"]:
                 failure_by_contract_field[(cid, f["field"], f["class"])] += 1
 
-    for bucket in (by_contract, by_model, by_role_seat, by_attempt_index):
+    for bucket in (by_contract, by_model, by_role_seat, by_attempt_index, by_model_contract):
         for _, b in bucket.items():
             b["validity_rate"] = rate(b["valid"], b["attempts"])
 
@@ -173,6 +181,16 @@ def main() -> int:
         "by_contract": {k: dict(v) for k, v in sorted(by_contract.items())},
         "by_model": {k: dict(v) for k, v in sorted(by_model.items())},
         "by_role_seat": {k: dict(v) for k, v in sorted(by_role_seat.items())},
+        "by_model_and_contract": {
+            k: dict(v)
+            for k, v in sorted(by_model_contract.items(), key=lambda x: -x[1]["attempts"])
+        },
+        "by_model_caveat": (
+            "`by_model` is confounded: models did not run the same contracts. "
+            "qwen3.5:397b's 100% is 171 calls of the two-field judge form; "
+            "glm-5.2's 85% spans seven contracts including the hardest. Make "
+            "model comparisons from `by_model_and_contract` only."
+        ),
         "by_attempt_index": {str(k): dict(v) for k, v in sorted(by_attempt_index.items(), key=lambda x: x[0] or 0)},
         "failure_classes": dict(failure_classes.most_common()),
         "failure_class_by_contract": [
@@ -299,6 +317,22 @@ def write_tables(docs: list[dict], agg: dict) -> None:
         out.append(
             f"| `{m}` | {b['attempts']} | {b['valid']} | {b['validity_rate']} "
             f"| {b['truncated']} | {b['unnatural_stop']} |"
+        )
+    out += [
+        "",
+        "## Model × contract — the only admissible model comparison",
+        "",
+        "`by_model` alone is confounded: models did not run the same forms.",
+        "Compare models only within a row of the same contract.",
+        "",
+        "| model | contract | attempts | valid | rate |",
+        "|---|---|---|---|---|",
+    ]
+    for k, b in list(a["by_model_and_contract"].items())[:24]:
+        model, contract = k.split(" | ", 1)
+        out.append(
+            f"| `{model}` | `{contract}` | {b['attempts']} | {b['valid']} "
+            f"| {b['validity_rate']} |"
         )
     out += [
         "",

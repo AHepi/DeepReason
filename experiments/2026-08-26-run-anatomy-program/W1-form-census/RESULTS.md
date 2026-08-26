@@ -26,7 +26,7 @@ collisions, across all 54 roots. Cycle attribution is exact on 48 roots and
 unavailable on 6 — those six completed no cycle, so per-cycle numbers for
 them are absent, not estimated.
 
-### 1. The form's SIZE predicts whether it gets filled correctly. The model does not.
+### 1. Form size moves validity far more than anything else measured here
 
 | contract | attempts | valid on arrival |
 |---|---|---|
@@ -38,20 +38,36 @@ them are absent, not estimated.
 | `batch-critic.v2` (a batch of targets) | 1 384 | 92.6% |
 | `conjecturer.turn.v6` (a whole turn) | 816 | **66.3%** |
 
-The controlled comparison is the last two rows against the fifth. When
-`conjecturer.turn.v6` exhausts its repair grant, the controller decomposes
-it into `conjecturer.atomic-candidate.v1` — **same role, same seat instance,
-same route, same problem, one candidate per call instead of a whole turn.**
-Validity goes from 66.3% to 94.9%. The atomic form runs on the HARDER cases
-by construction, since it only exists because the composite one already
-failed, which makes the 29-point gain a lower bound rather than a selection
-effect.
+The controlled comparison is not that table — it is the pair of rows that
+share a model, a seat instance, a route and a problem. When
+`conjecturer.turn.v6` exhausts its repair grant, the controller decomposes it
+into `conjecturer.atomic-candidate.v1`: same everything, one candidate per
+call instead of a whole turn. Held to **glm-5.2**, which is 75% of the
+corpus:
 
-By model, the spread is much narrower than by form: qwen3.5:397b 100% (171),
-mistral-large-3:675b 97.5% (200), deepseek-v4-pro:0813 97.3% (37),
-deepseek-v4-pro 91.2% (57), gemma4:31b 88.2% (34), kimi-k3 87.3% (126),
-glm-5.2 85.0% (2 378), deepseek-v4-flash:0731 84.6% (104), kimi-k2.6 81.3%
-(48). Every model does well on small forms and badly on the big one.
+| | attempts | valid |
+|---|---|---|
+| glm-5.2 on `conjecturer.turn.v6` | 659 | **61.9%** |
+| glm-5.2 on `conjecturer.atomic-candidate.v1` | 339 | **96.8%** |
+
+35 points, on a thousand calls, with the smaller form running on the HARDER
+sample by construction — it exists only because the composite one already
+failed. That makes 35 points a lower bound, not a selection effect.
+
+**And one model reverses it.** `deepseek-v4-flash:0731` goes the other way:
+84.6% on the composite form (52 attempts) against 63.6% on the atomic one
+(22). On those sample sizes that is not evidence against the effect, but it
+is evidence against calling the effect universal, and it is recorded here
+rather than left out of the table.
+
+**The by-model table must NOT be read as a model ranking.** Models did not
+run the same forms. `qwen3.5:397b`'s 100% is 171 calls, every one of them the
+two-field judge form; `glm-5.2`'s 85% is 2 378 calls across seven contracts
+including the hardest one. Held to the same hard form, the models do differ —
+glm-5.2 61.9% (659 attempts), deepseek-v4-flash 84.6% (52), gemma4:31b 88.2%
+(34), deepseek-v4-pro:0813 96.8% (31) — but only the first has a sample worth
+quoting, so the honest statement is that form size is measured and model
+effect is suggested.
 
 This is an in-house replication of the coercion research's schema-weight
 dose-response (`docs/RESEARCH_STRUCTURED_OUTPUT_COERCION_2026-08-22.md`,
@@ -369,11 +385,17 @@ reporting half of what it knows.
    absent on 6. It reconciles to the byte on P-C1 (702 789 cumulative log
    tokens against that tranche's independently measured 702 789), which is
    evidence the join is sound but not proof it is sound everywhere.
-6. **Blob-level and artifact-level construction counts differ by one** in
+6. **The model comparison is confounded and is reported as such.** Models
+   did not run the same contracts, so the by-model validity table is a
+   statement about workload mix, not capability. The one within-form
+   comparison with real power is glm-5.2 on `conjecturer.turn.v6`; every
+   other model has between 10 and 52 attempts on it. A window that wants a
+   model ranking needs runs designed for one.
+7. **Blob-level and artifact-level construction counts differ by one** in
    P-C1 (133 vs 132). The artifact-level count remains authoritative for the
    headline; the extra blob construction is a restatement the scorer
    deduplicated differently. Not chased.
-7. **This census reproduced E42's own mistake before avoiding it.** The first
+8. **This census reproduced E42's own mistake before avoiding it.** The first
    patch-pointer extractor read only the canonical `operations`/`path`
    spelling and scored 398 repairs off-target — the identical false finding
    `docs/ERRATA.md` E42 records. Read against the eight container names the

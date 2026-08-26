@@ -246,6 +246,184 @@
    "validity_rate": 1.0
   }
  },
+ "by_model_and_contract": {
+  "glm-5.2 | batch-critic.v2": {
+   "attempts": 1196,
+   "valid": 1113,
+   "validity_rate": 0.9306
+  },
+  "glm-5.2 | conjecturer.turn.v6": {
+   "attempts": 659,
+   "valid": 408,
+   "validity_rate": 0.6191
+  },
+  "glm-5.2 | conjecturer.atomic-candidate.v1": {
+   "attempts": 339,
+   "valid": 328,
+   "validity_rate": 0.9676
+  },
+  "qwen3.5:397b | judgeruling.direct.v1": {
+   "attempts": 171,
+   "valid": 171,
+   "validity_rate": 1.0
+  },
+  "mistral-large-3:675b | judgeruling.direct.v1": {
+   "attempts": 171,
+   "valid": 171,
+   "validity_rate": 1.0
+  },
+  "kimi-k3 | batch-critic.v2": {
+   "attempts": 123,
+   "valid": 107,
+   "validity_rate": 0.8699
+  },
+  "glm-5.2 | defender.direct.v1": {
+   "attempts": 122,
+   "valid": 122,
+   "validity_rate": 1.0
+  },
+  "deepseek-v4-flash:0731 | conjecturer.turn.v6": {
+   "attempts": 52,
+   "valid": 44,
+   "validity_rate": 0.8462
+  },
+  "gemma4:31b | conjecturer.turn.v6": {
+   "attempts": 34,
+   "valid": 30,
+   "validity_rate": 0.8824
+  },
+  "glm-5.2 | critic.atomic-target.v1": {
+   "attempts": 31,
+   "valid": 31,
+   "validity_rate": 1.0
+  },
+  "deepseek-v4-pro:0813 | conjecturer.turn.v6": {
+   "attempts": 31,
+   "valid": 30,
+   "validity_rate": 0.9677
+  },
+  "deepseek-v4-flash:0731 | variator.direct.v1": {
+   "attempts": 30,
+   "valid": 30,
+   "validity_rate": 1.0
+  },
+  "deepseek-v4-pro | batch-critic.v2": {
+   "attempts": 28,
+   "valid": 28,
+   "validity_rate": 1.0
+  },
+  "kimi-k2.6 | batch-critic.v2": {
+   "attempts": 23,
+   "valid": 20,
+   "validity_rate": 0.8696
+  },
+  "deepseek-v4-flash:0731 | conjecturer.atomic-candidate.v1": {
+   "attempts": 22,
+   "valid": 14,
+   "validity_rate": 0.6364
+  },
+  "deepseek-v4-pro | conjecturer.turn.v6": {
+   "attempts": 19,
+   "valid": 14,
+   "validity_rate": 0.7368
+  },
+  "mistral-large-3:675b | batch-critic.v2": {
+   "attempts": 14,
+   "valid": 14,
+   "validity_rate": 1.0
+  },
+  "kimi-k2.6 | conjecturer.turn.v6": {
+   "attempts": 11,
+   "valid": 8,
+   "validity_rate": 0.7273
+  },
+  "mistral-large-3:675b | conjecturer.turn.v6": {
+   "attempts": 10,
+   "valid": 7,
+   "validity_rate": 0.7
+  },
+  "glm-5.2 | bridge.ledger.v3": {
+   "attempts": 10,
+   "valid": 5,
+   "validity_rate": 0.5
+  },
+  "kimi-k2.6 | bridge.ledger-batch.v1": {
+   "attempts": 7,
+   "valid": 7,
+   "validity_rate": 1.0
+  },
+  "deepseek-v4-pro:0813 | conjecturer.atomic-candidate.v1": {
+   "attempts": 6,
+   "valid": 6,
+   "validity_rate": 1.0
+  },
+  "glm-5.2 | bridge.composition.v2": {
+   "attempts": 6,
+   "valid": 4,
+   "validity_rate": 0.6667
+  },
+  "glm-5.2 | config-referee.v1": {
+   "attempts": 6,
+   "valid": 5,
+   "validity_rate": 0.8333
+  },
+  "glm-5.2 | bridge.ledger-batch.v1": {
+   "attempts": 6,
+   "valid": 3,
+   "validity_rate": 0.5
+  },
+  "deepseek-v4-pro | conjecturer.atomic-candidate.v1": {
+   "attempts": 6,
+   "valid": 6,
+   "validity_rate": 1.0
+  },
+  "kimi-k2.6 | bridge.ledger.v3": {
+   "attempts": 5,
+   "valid": 2,
+   "validity_rate": 0.4
+  },
+  "kimi-k3 | critic.atomic-target.v1": {
+   "attempts": 3,
+   "valid": 3,
+   "validity_rate": 1.0
+  },
+  "glm-5.2 | bridge.composition-batch.v1": {
+   "attempts": 3,
+   "valid": 3,
+   "validity_rate": 1.0
+  },
+  "mistral-large-3:675b | bridge.composition.v2": {
+   "attempts": 2,
+   "valid": 1,
+   "validity_rate": 0.5
+  },
+  "mistral-large-3:675b | bridge.composition-batch.v1": {
+   "attempts": 2,
+   "valid": 1,
+   "validity_rate": 0.5
+  },
+  "deepseek-v4-pro | bridge.ledger.v3": {
+   "attempts": 2,
+   "valid": 2,
+   "validity_rate": 1.0
+  },
+  "deepseek-v4-pro | bridge.composition.v2": {
+   "attempts": 2,
+   "valid": 2,
+   "validity_rate": 1.0
+  },
+  "kimi-k2.6 | bridge.composition.v2": {
+   "attempts": 2,
+   "valid": 2,
+   "validity_rate": 1.0
+  },
+  "mistral-large-3:675b | bridge.ledger.v3": {
+   "attempts": 1,
+   "valid": 1,
+   "validity_rate": 1.0
+  }
+ },
+ "by_model_caveat": "`by_model` is confounded: models did not run the same contracts. qwen3.5:397b's 100% is 171 calls of the two-field judge form; glm-5.2's 85% spans seven contracts including the hardest. Make model comparisons from `by_model_and_contract` only.",
  "by_attempt_index": {
   "0": {
    "attempts": 2699,
