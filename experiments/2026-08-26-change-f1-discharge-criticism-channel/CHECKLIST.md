@@ -889,7 +889,7 @@ recorded here rather than left as a silent reordering.
       entry point, MCP tool or wheel-layout change, so the pins are not owed
       (both smokes still run at step 28, as proof rather than assurance).
 
-- [ ] 13. (S5) Write `tests/test_discharge_submission.py`: an undischarged
+- [x] 13. (S5) Write `tests/test_discharge_submission.py`: an undischarged
       submission is re-asked ONCE with the open list; the SECOND submission is
       ACCEPTED with a typed undischarged-disclosure Measure and NOT re-asked
       again; no candidate is ever refused for an undischarged handle; the
@@ -898,6 +898,47 @@ recorded here rather than left as a silent reordering.
       package, and no kind whose `requires` is empty. RED now.
       done-when: `python -m pytest tests/test_discharge_submission.py -q 2>&1
       | tail -5` shows failures naming `screen_submission` (paste it)
+
+      PASTED OUTPUT (the collection error names `record_discharges`, the first
+      missing name the import list reaches, rather than `screen_submission`;
+      both are absent and the criterion's intent — the file cannot run until
+      step 14 lands — is met):
+      ```
+      $ python -m pytest tests/test_discharge_submission.py -q
+      E   ImportError: cannot import name 'record_discharges' from
+          'deepreason.discharge'
+      ERROR tests/test_discharge_submission.py
+      !!!!!! Interrupted: 1 error during collection !!!!!!
+      1 error in 0.27s
+      ```
+      Eighteen cases. The file is organised around the TWO OPPOSITE ways a
+      "required" channel gets written wrong, because both are easy to reach by
+      accident:
+      - **A gate.** Refusing an undischarged candidate is the natural reading
+        of "required" and is forbidden. `test_no_candidate_is_ever_refused`
+        asserts over the whole verdict VOCABULARY rather than the two verdicts
+        that exist today, so a future third verdict cannot quietly become a
+        refusal.
+      - **An acknowledgment.** `test_no_kind_is_satisfied_by_acknowledgment`
+        pins it structurally, not by wording: no declared kind may have an
+        empty `requires`, and no acknowledgment-shaped name may appear anywhere
+        in the package. `test_a_discharge_missing_its_required_content_does_not
+        _discharge` is the same rule at runtime — a `revised` with an empty
+        `where` is a label with nothing behind it, which is exactly the shape
+        Q5 measured as harmful.
+
+      Two more that close cheap fakes:
+      `test_a_discharge_naming_an_unknown_handle_does_not_discharge_anything`
+      (otherwise the channel is satisfiable by inventing a string), and
+      `test_a_fully_discharged_submission_is_accepted_with_nothing_disclosed`
+      (without it, every other assertion would pass on a screen that always
+      returned `reask`).
+
+      The turn is a STAND-IN class, not a real `ConjecturerTurnWireV6`. That is
+      deliberate: the screen must work on any turn shape carrying candidates
+      with discharges — v4, v5, v6, reasoning or compact, atomic or batched —
+      and depending on one concrete wire class here would pin the screen to a
+      contract version it has no business knowing about.
 
 - [ ] 14. (S5) Implement `src/deepreason/discharge/submission.py::
       screen_submission` and wire it into `rules/conj.py` immediately after
