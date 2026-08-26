@@ -114,8 +114,16 @@ if ! python "$FRONTIER/mutation_proof.py" 2>&1 | tee -a "$LOG"; then
 fi
 log "CHECKER OK rc=0"
 
+# REUSED, and deliberately NOT invoked in place. `preflight_models.py` writes
+# `preflight_models.json` beside its own __file__, so running it from P-C1's
+# directory OVERWRITES P-C1's COMMITTED EVIDENCE with this run's catalogue --
+# which it did on the first P-C2 launch (catalogue_size 19 -> 20), restored
+# with `git checkout`. A committed root's contents are never edited, and that
+# rule covers a committed tranche's preflight output too. Copying the source
+# to a shim in THIS directory keeps the reuse (the bytes are read at run time,
+# so the two can never drift) while landing the output where it belongs.
 log "=== PREFLIGHT: the seat model exists in the live catalogue ==="
-if ! python "$FRONTIER/preflight_models.py" 2>&1 | tee -a "$LOG"; then
+if ! python "$HERE/run_model_preflight.py" 2>&1 | tee -a "$LOG"; then
   log "MODEL PREFLIGHT FAILED (a seat names a model the provider does not list) -- rc=1"
   exit 1
 fi

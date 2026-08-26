@@ -24,7 +24,7 @@ while true; do
   # is not a risk worth trusting to a glob pattern alone.
   git reset -q -- "$TRANCHE_REL/env" >/dev/null 2>&1 || true
   if ! git diff --cached --quiet -- "$TRANCHE_REL" 2>/dev/null; then
-    git commit -q -m "P-C1 ARM H live-run snapshot ($(date -u +%FT%TZ))" -- "$TRANCHE_REL" >/dev/null 2>&1 || true
+    git commit -q -m "P-C2 ARM H2 live-run snapshot ($(date -u +%FT%TZ))" -- "$TRANCHE_REL" >/dev/null 2>&1 || true
     for attempt in 1 2 3 4; do
       git push -u origin "$BRANCH" >/dev/null 2>&1 && break
       sleep $((2 ** attempt))

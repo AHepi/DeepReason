@@ -1,0 +1,2 @@
+[2026-08-26T21:30:44Z] ARM S2 budget from ARM H2's measured spend: 1193009
+[2026-08-26T21:30:44Z] === ARM S2: python arm_s.py --token-budget 1193009 --out /home/user/DeepReason/experiments/2026-08-26-pc2-rematch/arm_s2 ===

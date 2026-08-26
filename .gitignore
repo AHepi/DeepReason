@@ -60,3 +60,4 @@ tools/treadle/.venv/
 tools/treadle/src/treadle.egg-info/
 .treadle/
 zoo/reviews/*.transcript.tmp
+.preflight_models_shim.py
