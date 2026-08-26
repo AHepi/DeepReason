@@ -23,6 +23,10 @@ from deepreason.packs import PackIR, PackSection, allocate_pack
 from deepreason.packs.allocate import approximate_tokens
 from deepreason.programs import content_text
 from deepreason.llm.profiles import ModelProfile, ProfileSpec, clip_pack
+from deepreason.llm.reference_menu import (
+    REFERENCE_FIELD_DECLARATIONS,
+    MenuRender,
+)
 from deepreason.llm.wire import AliasTable
 
 _CHARS_PER_TOKEN = 4
@@ -294,6 +298,38 @@ def _withheld_notice(dropped: tuple[str, ...]) -> str:
     )
 
 
+def _menu_sections(
+    reference_menus: "tuple[MenuRender, ...]",
+    priority: int,
+) -> list[PackSection]:
+    """One PackSection per rendered menu: EXACT and MANDATORY.
+
+    Not compressible, because compression cuts the tail of a section and a
+    menu's tail is its truncation notice -- compressing one would remove
+    both some handles and the statement that handles were removed, which is
+    precisely the silent cap this layer exists to abolish.
+
+    Not droppable either, and that pairing is forced rather than chosen: a
+    droppable section that is also exact is admitted on its `min_tokens`
+    and then rendered at full source size, overshooting the budget with no
+    accounting signal (`DR-CON-packs-and-token-economy`, the NEGATIVE rule
+    and its exhibiting check). Exact is affordable here for the same reason
+    it is affordable for `frame-crisis`: the content is bounded by
+    construction, at `MenuRenderPolicy.maximum_entries`.
+    """
+
+    return [
+        _pack_section(
+            menu.section_id,
+            menu.text,
+            priority,
+            droppable=False,
+            compressible=False,
+        )
+        for menu in reference_menus
+    ]
+
+
 def _allocate_sections(
     role: str, token_budget: int, sections: list[PackSection]
 ) -> str:
@@ -467,6 +503,7 @@ def render_conj_pack(
     frame_slice_context: str | None = None,
     frame_crisis_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
+    reference_menus: tuple[MenuRender, ...] = (),
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -728,6 +765,11 @@ def render_conj_pack(
             compressible=False,
         )
     )
+    # Priority 4 puts a menu beside the section that carries its field's
+    # content -- `citable-evidence-blocks` and the scratch context both sit
+    # at 4 -- so the legal set is adjacent to what it is legal FOR, rather
+    # than in a block of its own at the end of the pack.
+    sections += _menu_sections(reference_menus, 4)
     return _allocate_sections("conjecturer", token_budget, sections)
 
 
@@ -741,6 +783,7 @@ def render_batch_crit_pack(
     simulation_enabled: bool = False,
     premise_invitation: str | None = None,
     citable_evidence_context: str | None = None,
+    reference_menus: tuple[MenuRender, ...] = (),
 ) -> str:
     """One critic pass over several targets (§14 batching): the commitment
     schemas — usually shared, since batch-mates come from one problem —
@@ -807,6 +850,13 @@ def render_batch_crit_pack(
         ]
         if citable_evidence_context:
             lines += ["", citable_evidence_context]
+    # Menus sit immediately before the directive, so the legal set is the
+    # last thing read before the instruction that uses it. This renderer
+    # clips a joined string rather than allocating sections, so a menu here
+    # is subject to the same `_clip` as everything else -- which is why the
+    # truncation notice lives inside the menu text and not beside it.
+    for menu in reference_menus:
+        lines += ["", menu.text]
     lines += [
         "",
         "DIRECTIVE: return exactly one entry per target id above — the "
@@ -1003,6 +1053,7 @@ def render_crit_pack(
     citable_evidence_context: str | None = None,
     frame_slice_context: str | None = None,
     frame_crisis_context: str | None = None,
+    reference_menus: tuple[MenuRender, ...] = (),
 ) -> str:
     target = state.artifacts[target_id]
     # Commitments render BEFORE the target (angle 4): problem criteria lead
@@ -1215,4 +1266,5 @@ def render_crit_pack(
             compressible=False,
         )
     )
+    sections += _menu_sections(reference_menus, 4)
     return _allocate_sections("argumentative-critic", token_budget, sections)

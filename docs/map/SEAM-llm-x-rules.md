@@ -38,12 +38,20 @@ transaction agreement, so `conj.py`/`crit.py`'s own eight-site share is
 unchanged.
 `check: ! grep -rq "deepreason\.rules" --include=*.py src/deepreason/llm && test "$(for f in $(grep -rl llm --include=*.py src/deepreason); do grep -ql rules "$f" && echo x; done | wc -l)" -ge 25 && test "$(grep -rl "deepreason\.llm" --include=*.py src/deepreason/rules | wc -l)" -eq 8 && test "$(grep -rl "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 7 && test "$(grep -rh "adapter\.call(" --include=*.py src/deepreason/rules | wc -l)" -eq 15 && test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/crit.py | grep -c "adapter\.call(")" -eq 8`
 
-Thirty-nine names cross the boundary, and every one of them is data or a refusal:
+Forty-one names cross the boundary, and every one of them is data or a refusal:
 five exception types, eleven canonical output models, six pack renderers with two
 alias builders and `AllocatedPack`, six wire-contract classes with
 `wire_contract_for` and `AliasTable`, `EndpointLease` and `route_fingerprint`,
-`get_profile`/`ModelProfile`, `specs.transmission_score`, and the embedder's
-`distance`. What does not cross is every transport primitive — no `LLMAdapter`,
+`get_profile`/`ModelProfile`, `specs.transmission_score`, the embedder's
+`distance`, and `reference_menu` — the reference-menu interface a rule uses to
+build the legal-handle menus its pack carries (`DR-INV-reference-menu`).
+
+The count is pinned with `-eq` below, and it is pinned because it had already
+drifted: this sentence read "Thirty-nine" while the tree carried FORTY, and the
+`seen >=` superset test above cannot see an addition. A count is a claim
+(`SCHEMA.md`), so it gets a check that fails when the number is wrong in either
+direction rather than only when a name disappears.
+`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')]; n=[x for t in T for x in ast.walk(t) if isinstance(x, ast.ImportFrom) and (x.module or '').startswith('deepreason.llm')]; print(len({a.name for x in n for a in x.names}))")" = "41" What does not cross is every transport primitive — no `LLMAdapter`,
 `build_adapter`, `TokenMeter`, endpoint class, `select_lease`,
 `render_role_prompt` or `reject_model_control_fields` is importable by a rule.
 `check: python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path('src/deepreason/rules').rglob('*.py')]; n=[x for t in T for x in ast.walk(t) if isinstance(x, ast.ImportFrom) and (x.module or '').startswith('deepreason.llm')]; mods={x.module for x in n}; seen={a.name for x in n for a in x.names}; plain={a.name for t in T for x in ast.walk(t) if isinstance(x, ast.Import) for a in x.names if a.name.startswith('deepreason.llm')}; attrs={x.attr for t in T for x in ast.walk(t) if isinstance(x, ast.Attribute)}; banned={'LLMAdapter','build_adapter','TokenMeter','Reservation','OpenAICompatEndpoint','MockEndpoint','render_role_prompt','reject_model_control_fields','select_lease','resolve_school_role_lease','probe_capabilities','apply_model_profile','clip_pack'}; assert not (seen & banned), sorted(seen & banned); assert not plain, sorted(plain); assert not (attrs & banned), sorted(attrs & banned); assert mods >= {'deepreason.llm.adapter','deepreason.llm.contracts','deepreason.llm.firewall','deepreason.llm.packs','deepreason.llm.wire'}; assert seen >= {'EndpointError','SchemaRepairError','EndpointLease','RouteFirewallError','WorkflowAuthorizationError','RequestEnvelopeExceeded'}" && test "$(grep -rh "LLMAdapter" --include=*.py src/deepreason/rules | wc -l)" -eq 1 && grep -q "LLMAdapter" src/deepreason/rules/crit.py`
@@ -63,6 +71,8 @@ alias builders and `AllocatedPack`, six wire-contract classes with
 | Batch roster | `llm/wire.py`, `rules/crit.py` | `BatchCriticWireV2._one_case_per_target`; `if case.target not in target_ids` | one case per assigned target; an unassigned target registers nothing |
 | Contracts fail closed | `llm/wire.py` | `CriticTargetRequiredError`, `AliasTableRequiredError` | a compact critic or conjecturer call refuses to build without its target / call-local table |
 | Model-facing bodies | `llm/packs.py` | `render_conj_pack`, `render_crit_pack`, `render_batch_crit_pack`, `render_cx_retry_pack`, `render_experiment_pack`, `render_property_pack` | every budgeted pack is rendered inside `llm/`, from raw state |
+| Legal-handle menus cross as RENDERED MENUS | `rules/conj.py`, `rules/crit.py`, `llm/packs.py`, `llm/reference_menu.py` | `reference_menus=` on the three pack renderers; `menu_renders_for` | a rule supplies the call-local BINDING (which blocks are citable, which aliases exist); `llm/` decides the menu's layout, its bound and its token cost. The same shape `citable_evidence_context` and `frame_slice_context` already cross by — except that a menu is also read by the REPAIR diagnostic, which is why its legal set has one resolver rather than one per consumer (`DR-INV-reference-menu`) |
+| The alias menu is POST-allocation | `rules/conj.py` | `AllocatedPack(pack + ...)` after `aliases_for_pack` | the alias table is derived from the RENDERED pack, so an artifact-alias menu cannot exist before allocation; appending without re-wrapping lets the adapter re-clip a pack already budgeted section-by-section |
 | The frame slice crosses as TEXT | `rules/conj.py`, `rules/crit.py`, `llm/packs.py` | `frame_slice_context`, `frame_crisis_context` | a rule computes what a consulted frame says (`calculus/render.py`); `llm/` decides what it costs. The same shape `frozen_evidence_context` and `citable_evidence_context` already cross by |
 | No pack in scope renders without its frame | `rules/conj.py`, `rules/crit.py` | all three `render_*_pack` call sites pass both | §9.5's "in every pack in scope" is a census over call sites, not a property of one |
 | Allocation marker | `llm/packs.py`, `rules/conj.py`, `llm/adapter.py` | `AllocatedPack`; `pack_is_allocated` | a rule that appends bytes after PackIR allocation must re-wrap, or the adapter re-clips the whole prompt |
@@ -154,7 +164,7 @@ cross-family independence is the path that calls the asserting reader.
 
 A pack that survives allocation must survive the rule's own edits too, and bytes
 a rule adds must be paid for before the pack is built, not after.
-`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 3 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && test "$(grep -c "token_budget=" src/deepreason/rules/crit.py)" -eq "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" && test "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" -ge 5 && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
+`check: test "$(grep -c "AllocatedPack(" src/deepreason/rules/conj.py)" -eq 4 && grep -q "if profile is not None and not pack_is_allocated:" src/deepreason/llm/adapter.py && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "def _conditioned_budget(" src/deepreason/rules/crit.py && test "$(grep -c "token_budget=" src/deepreason/rules/crit.py)" -eq "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" && test "$(grep -c "token_budget=_conditioned_budget(" src/deepreason/rules/crit.py)" -ge 5 && python -m pytest tests/test_v6_context_continuation.py::test_wide_allocated_pack_dispatches_advisory_context_intact -q`
 
 ## What is deliberately absent
 

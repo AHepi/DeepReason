@@ -216,7 +216,12 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
   section-by-section, cutting the sealed advisory context mid-JSON out of the
   dispatched prompt. The comment above the re-wrap in `conj.py` is the record of
   this; every post-allocation insertion below it is separately byte-accounted.
-`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 3 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
+  The FOURTH re-wrap is the reference menus whose handles do not exist until
+  after allocation -- the artifact-alias table is derived from the rendered
+  pack, and the scratch handles come from the context render that follows it
+  (`DR-INV-reference-menu`). It re-wraps for exactly the reason the other
+  three do.
+`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 4 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
 - **Render-receipt handle maps reload key-sorted, and this seam reads them
   twice.** The receipt is persisted through `canonical_json`, whose sorted keys
   interleave `B10` between `B1` and `B2`. `validate_conjecture_context_call`

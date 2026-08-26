@@ -337,3 +337,244 @@ def test_a_policy_that_contradicts_itself_is_refused():
         rm.MenuRenderPolicy(inline_threshold=40, maximum_entries=8)
     with pytest.raises(ValueError):
         rm.MenuRenderPolicy(inline_threshold=0, maximum_entries=8)
+
+
+# --- reuse, not modification ---------------------------------------------- #
+
+
+def test_the_reused_modules_are_not_modified_by_the_menu_machinery():
+    """SPEC section 1's disposition, made failable.
+
+    `tools/blast_radius.py` reports CONTACT with the replay-validation
+    surface for any change declaring `ordered_refs`, because
+    `invariants.py` references that symbol. This tranche only CALLS it.
+    The durable form of that claim is not a byte pin on those files -- a
+    later tranche may legitimately edit `invariants.py` -- but that the
+    menu machinery reaches them read-only, through their own accessors,
+    and imports none of them. The tranche-scoped byte proof lives at
+    `experiments/2026-08-26-change-f2-reference-menu/proof/`.
+    """
+
+    import ast
+    import pathlib
+
+    source = pathlib.Path(rm.__file__).read_text()
+    tree = ast.parse(source)
+
+    imported = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module:
+            imported.add(node.module)
+        elif isinstance(node, ast.Import):
+            imported.update(alias.name for alias in node.names)
+    forbidden = {
+        module
+        for module in imported
+        if module.startswith(
+            (
+                "deepreason.invariants",
+                "deepreason.verification",
+                "deepreason.scratch",
+                "deepreason.evidence",
+                "deepreason.harness",
+                "deepreason.run_manifest",
+                "deepreason.capabilities",
+            )
+        )
+    }
+    assert not forbidden, (
+        f"reference_menu.py imports {sorted(forbidden)}; the menu consumes a "
+        f"render receipt duck-typed and must not reach a frozen surface"
+    )
+
+    # The render receipt is touched only through its read-only accessors.
+    receipt_calls = {
+        node.func.attr
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and isinstance(node.func.value, ast.Name)
+        and node.func.value.id == "receipt"
+    }
+    assert receipt_calls <= {"ordered_refs", "alias_map"}, (
+        f"reference_menu.py calls {sorted(receipt_calls - {'ordered_refs', 'alias_map'})} "
+        f"on a render receipt; only the read accessors are reuse"
+    )
+    assert "ordered_refs" in receipt_calls, (
+        "the scratch menu no longer goes through ordered_refs; CLAUDE.md's "
+        "ledgered invariant says a handle map is compared by handle INDEX, "
+        "never through .values()"
+    )
+
+
+# --- the menu reaches the FIRST ask --------------------------------------- #
+
+
+def _conj_problem(harness):
+    from deepreason.ontology import Commitment, Problem, ProblemProvenance
+
+    harness.register_commitment(
+        Commitment(id="k-moon", eval="predicate:'moon' in content")
+    )
+    problem = Problem(
+        id="pi-tides",
+        description="explain the tides",
+        criteria=["k-moon"],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    )
+    harness.register_problem(problem)
+    return problem
+
+
+def test_conj_pack_carries_the_menu_on_the_first_ask(harness):
+    """R4: the legal set arrives BEFORE the first attempt, not after it.
+
+    W1 section 5 is the cost of the current ordering: the first ask is
+    91.7% valid across 2 699 attempts, and every repair attempt afterwards
+    is ~58% and does not improve with repetition -- so a legal-handle list
+    that only appears in a repair diagnostic is a list delivered into the
+    worst-converting turn the harness has.
+    """
+
+    from deepreason.llm.packs import render_conj_pack
+
+    problem = _conj_problem(harness)
+    field_id = "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block"
+    binding = _binding()
+    menus = (rm.render_reference_menu(field_id, binding),)
+    pack = render_conj_pack(
+        problem,
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        vs_k=2,
+        token_budget=4000,
+        citable_evidence_context="CITABLE EVIDENCE BLOCKS\n[a3f19c2b8e04] a claim",
+        reference_menus=menus,
+    )
+    assert "/candidates/*/evidence_refs/*/block" in pack
+    assert "a3f19c2b8e04" in pack
+    assert rm.INDEX_REPLY_GUIDANCE in pack
+    # The escape road is a selectable item in the pack, not advice beside it.
+    assert "[0]" in pack
+
+
+def test_a_pack_without_menus_is_byte_identical_to_the_pack_before_this_change(
+    harness,
+):
+    """The census (SPEC section 7) classifies every existing render_conj_pack
+    caller as MUST NOT MOVE. `reference_menus` defaults to (), so a caller
+    that passes nothing renders exactly what it rendered before."""
+
+    from deepreason.llm.packs import render_conj_pack
+
+    problem = _conj_problem(harness)
+    without = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs, 2, 4000
+    )
+    explicitly_empty = render_conj_pack(
+        problem,
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        2,
+        4000,
+        reference_menus=(),
+    )
+    assert without == explicitly_empty
+    assert "REFERENCE MENU" not in without
+
+
+def test_menu_sections_are_exact_and_mandatory():
+    """A menu may be neither compressed nor dropped, and both halves are
+    forced rather than preferred.
+
+    Compression cuts a section's tail, and a menu's tail is its truncation
+    notice -- so a compressed menu loses handles AND the statement that
+    handles were lost. Dropping is worse still in this codebase: a droppable
+    section that is also exact is admitted on its `min_tokens` and then
+    rendered at full source size, overshooting the budget with no accounting
+    signal (DR-CON-packs-and-token-economy's NEGATIVE rule and its own
+    exhibiting check). Exact-and-mandatory is the only pairing that is
+    neither, and it is affordable for the same reason it is affordable for
+    `frame-crisis`: the content is bounded by construction, here at
+    `MenuRenderPolicy.maximum_entries`.
+    """
+
+    from deepreason.llm import packs
+
+    menus = (
+        rm.render_reference_menu(
+            "conjecturer.turn.v6:/candidates/*/evidence_refs/*/block", _binding()
+        ),
+    )
+    sections = packs._menu_sections(menus, 4)
+    assert sections
+    for section in sections:
+        assert section.droppable is False, "a dropped menu leaves no header"
+        assert section.compressible is False, "a compressed menu loses handles"
+
+
+def test_batch_crit_pack_carries_the_menu(harness):
+    """The critic's premise_evidence block field is W1's third-commonest
+    failure (129 diagnostics), and it fails the same way the conjecturer's
+    does: a free pattern with no legal-set owner anywhere."""
+
+    from deepreason.llm.packs import render_batch_crit_pack
+    from deepreason.ontology import Commitment, Interface, Provenance
+
+    harness.register_commitment(
+        Commitment(id="k-moon", eval="predicate:'moon' in content")
+    )
+    target = harness.create_artifact(
+        "the moon pulls the sea",
+        interface=Interface(commitments=["k-moon"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    field_id = "batch-critic.v2:/cases/*/premise_evidence/*/block"
+    menus = (rm.render_reference_menu(field_id, _binding()),)
+    pack = render_batch_crit_pack(
+        [target.id],
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        4000,
+        reference_menus=menus,
+    )
+    assert "/cases/*/premise_evidence/*/block" in pack
+    assert "a3f19c2b8e04" in pack
+    assert rm.INDEX_REPLY_GUIDANCE in pack
+
+
+def test_crit_packs_without_menus_do_not_move(harness):
+    """Every existing critic-pack caller is MUST NOT MOVE in the census."""
+
+    from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
+    from deepreason.ontology import Commitment, Interface, Provenance
+
+    harness.register_commitment(
+        Commitment(id="k-moon", eval="predicate:'moon' in content")
+    )
+    target = harness.create_artifact(
+        "the moon pulls the sea",
+        interface=Interface(commitments=["k-moon"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    for render in (render_crit_pack, render_batch_crit_pack):
+        first = render(
+            [target.id] if render is render_batch_crit_pack else target.id,
+            harness.state,
+            harness.commitments,
+            harness.blobs,
+            4000,
+        )
+        second = render(
+            [target.id] if render is render_batch_crit_pack else target.id,
+            harness.state,
+            harness.commitments,
+            harness.blobs,
+            4000,
+            reference_menus=(),
+        )
+        assert first == second
+        assert "REFERENCE MENU" not in first

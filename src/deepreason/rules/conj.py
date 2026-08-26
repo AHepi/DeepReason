@@ -36,6 +36,7 @@ from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, Conjectu
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, RouteFirewallError
 from deepreason.llm.packs import AllocatedPack, aliases_for_pack, render_conj_pack
+from deepreason.llm import reference_menu
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
     AliasTable,
@@ -1390,6 +1391,17 @@ def conj(
 
     frame_slice_context = render_frame_slice_context(harness, problem_id)
     frame_crisis_context = render_frame_crisis_context(harness, problem_id)
+    # The legal set moves to the FIRST ask. Only the two kinds whose handles
+    # exist BEFORE allocation are rendered here; the artifact-alias menu is
+    # appended after `aliases` is derived from the rendered pack.
+    pre_allocation_binding = reference_menu.MenuBinding(
+        citable_block_ids=tuple(block.id for block in citable_blocks_shown),
+    )
+    pre_allocation_menus = reference_menu.menu_renders_for(
+        "conjecturer.turn.v6",
+        pre_allocation_binding,
+        handle_kinds=("citable_block",),
+    )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1414,6 +1426,7 @@ def conj(
         frame_slice_context=frame_slice_context,
         frame_crisis_context=frame_crisis_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
+        reference_menus=pre_allocation_menus,
     )
     scratch_aliases = {}
     v6_scratch_rendered_text = None
@@ -1472,6 +1485,24 @@ def conj(
         )
     else:
         aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
+    # The remaining menus can only be built now: the alias table is DERIVED
+    # from the rendered pack, and the scratch handles come from the context
+    # render that happens after allocation. Appending re-wraps in
+    # AllocatedPack -- without the marker the adapter re-applies the
+    # profile's aggregate prefix clip to a pack already budgeted
+    # section-by-section (DR-SEAM-llm-x-rules).
+    post_allocation_menus = reference_menu.menu_renders_for(
+        "conjecturer.turn.v6",
+        reference_menu.MenuBinding(
+            scratch_handles=tuple(scratch_aliases),
+            aliases=tuple(aliases.aliases),
+        ),
+        handle_kinds=("artifact_alias", "scratch_local", "scratch_existing"),
+    )
+    if post_allocation_menus:
+        pack = AllocatedPack(
+            pack + "\n\n" + "\n\n".join(menu.text for menu in post_allocation_menus)
+        )
     reasoning = any(
         harness.commitments[commitment_id].eval == "program:reasoning-envelope-wf"
         for commitment_id in problem.criteria

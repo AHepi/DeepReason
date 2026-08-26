@@ -1300,6 +1300,28 @@ def _citable_blocks(harness, run_manifest) -> tuple:
     return union_citable_blocks(harness.root)
 
 
+def _premise_evidence_menus(legend):
+    """The legal block set for a critic's premise_evidence, as a menu.
+
+    Sourced from the legend's `shown` rather than from the run's blocks:
+    rendering drops a block whose bytes cannot be recovered, so a menu built
+    from the input list would offer handles the byte-check rejects -- and a
+    menu that offers a rejected handle is worse than no menu.
+    """
+
+    from deepreason.llm import reference_menu
+
+    if legend is None:
+        return ()
+    return reference_menu.menu_renders_for(
+        "batch-critic.v2",
+        reference_menu.MenuBinding(
+            citable_block_ids=tuple(block.id for block in legend.shown),
+        ),
+        handle_kinds=("citable_block",),
+    )
+
+
 def _citable_legend(harness, run_manifest=None):
     """The rendered legend, or None when the run has nothing citable.
 
@@ -1466,6 +1488,7 @@ def crit_argumentative(
         ),
         frame_slice_context=single_frame_slice,
         frame_crisis_context=single_frame_crisis,
+        reference_menus=_premise_evidence_menus(single_legend),
     )
     pack = _condition_pack(pack, school_prefix)
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
@@ -1729,6 +1752,7 @@ def crit_argumentative_batch(
             citable_evidence_context=(
                 None if batch_legend is None else batch_legend.text
             ),
+            reference_menus=_premise_evidence_menus(batch_legend),
         )
         return _condition_pack(pack, school_prefix)
 
