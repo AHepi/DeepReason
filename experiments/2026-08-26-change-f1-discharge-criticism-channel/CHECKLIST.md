@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=32 blockers=none. Every gate green: full suite 4231 passed / 0 failed, docs_verify at baseline, both wheel smokes, diff_budget WITHIN at 943 of 960. RESULTS.md written.
+State: ALL 32 STEPS DONE (19, 20, 21 re-sequenced to 2a, 2b, 2c at step 2). Every gate green. Next phase: dr-validate-change.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1648,7 +1648,7 @@ recorded here rather than left as a silent reordering.
       things the GATES caught that reading did not, because that is the part of
       this tranche most likely to be useful to whoever runs the next one.
 
-- [ ] 32. (all) [COMMIT] Push and confirm clean.
+- [x] 32. (all) [COMMIT] Push and confirm clean.
       done-when: `git status --porcelain` is empty AND `git log --oneline -1`
       equals `git log --oneline -1
       origin/claude/rebuild-discharge-criticism-channel-2b8z8i` (paste both)
