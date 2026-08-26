@@ -1,0 +1,368 @@
+{
+ "schema": "run-anatomy.w6.pc1-postmortem.v1",
+ "regenerate": "python3 pc1_postmortem.py  (after flow.py)",
+ "root": "experiments/2026-08-25-change-constructive-frontier/run",
+ "total_tokens": 702789,
+ "calls": 292,
+ "seed_question_id": "question-64b724c4118320989925d111501a8e41",
+ "problems_in_the_run": {
+  "audit:ritual": {
+   "description": "audit the critic: adjudication-ritual flags sustained (\u00a711.3)",
+   "provenance": {
+    "from": [],
+    "trigger": "audit-critic"
+   }
+  },
+  "disc:audit:ritual": {
+   "description": "discriminate between 20 surviving rivals for audit:ritual",
+   "provenance": {
+    "from": [
+     "audit:ritual",
+     "033eab748c73445d9f6c9268a3fc8a1d604b7cb444a4274791ad0653653383a7",
+     "0a005733269b610a94ebb3f15d642967dbf4545da015c2fb9f0c7f96ea0a4e97",
+     "0be477d2dcadeadf3e0b5388b613ec6effadf3f4f328c399a9353d1d6faaf6c9",
+     "167ab415ec741cb639b0a8339ddc97a55b1ae4850139df722b7c080f89dc4466",
+     "16e96923b58ed524dc454614b7e82398ef048e0aba54785a1b5a886d4ac70ae7",
+     "2b596ab6b62847caffaa38bbc9e4d56efd9b6f298440f540389e33f691d449e1",
+     "579b3c9627658dbb4570cc4f2c5abf947fbc586dba59632b55900597f87d7377",
+     "6b0cb63c1fb6b1b7ce426c2a55832739f92a0551b82931ec95f43b497c5cc8c9",
+     "7869e847305ac84b7c59bd483b334f14665eb7aafcc3ff5a60571f0a428f8dd1",
+     "843cefb9d510742355b505ed529b2645d090eb0e54152a8eb7715ef4dcafb44b",
+     "9eed37298d1e4af630377b289d6e7184d5e8bb5f267f50c94f0b97b16ac90221",
+     "aee8c8f7efbe8d02cd4ad342748faf98d13dfe9e8f65a5a97bd0bc75a2115b13",
+     "b750145ec63b8fae622ab1b7ae0bf612767e1b2efc0057198c70ef95a22a9b8c",
+     "b8a37785307c04b68e61a7bba7c641d956b06d155e19b732efbc143c1fb218da",
+     "b8b2f5a4a953c69b6b1eab8b87d168660c475d39e9655c75cbd6d3f9aa810e20",
+     "dfcc562d97853b4679aed7d501b01cff7e568cddb386fb1658df9f547a200d21",
+     "f5abd733565938092d0dc5658f86b021844b47276f5fafd273d56634b1b57777",
+     "f5c122ac8d682c37f67ea8eb04ac8b822caf386c4f34d49e49d4f7087708a648",
+     "f71bce81c0f3a0155c972e9512869e9d026abdddd3dc46bc9397d83a100f8745",
+     "feaa7edf5347028462123676118306ee084b12a70645be2df8302a7a75fadfb2"
+    ],
+    "trigger": "discrimination"
+   }
+  },
+  "question-64b724c4118320989925d111501a8e41": {
+   "description": "Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line \"POINT x y\" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line \"CLAIM v\" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.",
+   "provenance": {
+    "from": [],
+    "trigger": "seed"
+   }
+  }
+ },
+ "problem_ids_seen_in_prompts_but_not_in_objects": [],
+ "the_line_that_matters": {
+  "question": "how much of the budget was spent on the question the operator asked?",
+  "on_the_seed_question": {
+   "calls": 61,
+   "tokens": 373903,
+   "share": 0.532
+  },
+  "on_problems_the_run_spawned_for_itself": {
+   "calls": 203,
+   "tokens": 289676,
+   "share": 0.4122,
+   "problem_ids": [
+    "audit:ritual"
+   ]
+  },
+  "on_repair_re_asks_carrying_no_pack_and_so_no_problem_line": {
+   "calls": 28,
+   "tokens": 39210,
+   "share": 0.0558
+  },
+  "arm_S_share_on_the_seed_question": 1.0,
+  "arm_S_note": "ARM S poses the instance and nothing else; it has no mechanism for spawning a sub-problem, so its whole budget is on the question by construction."
+ },
+ "the_spawn": {
+  "audit_ritual_spawned_at_log_seq": 345,
+  "log_events_in_root": 3200,
+  "before_the_spawn": {
+   "calls": 8,
+   "tokens": 66842,
+   "seed_share": 1.0
+  },
+  "after_the_spawn": {
+   "calls": 284,
+   "tokens": 635947,
+   "seed_share": 0.4828
+  },
+  "spawn_provenance": {
+   "from": [],
+   "trigger": "audit-critic"
+  }
+ },
+ "by_problem": {
+  "question-64b724c4118320989925d111501a8e41": {
+   "calls": 61,
+   "tokens": 373903,
+   "prompt_tokens": 294746,
+   "completion_tokens": 79157,
+   "share": 0.532
+  },
+  "audit:ritual": {
+   "calls": 203,
+   "tokens": 289676,
+   "prompt_tokens": 238230,
+   "completion_tokens": 51446,
+   "share": 0.4122
+  },
+  "no-problem-line-in-prompt": {
+   "calls": 28,
+   "tokens": 39210,
+   "prompt_tokens": 27554,
+   "completion_tokens": 11656,
+   "share": 0.0558
+  }
+ },
+ "by_problem_and_purpose": {
+  "question-64b724c4118320989925d111501a8e41 | conjecture-turn": {
+   "calls": 34,
+   "tokens": 277612,
+   "prompt_tokens": 212720,
+   "completion_tokens": 64892,
+   "share": 0.395
+  },
+  "audit:ritual | batch-critic": {
+   "calls": 172,
+   "tokens": 171994,
+   "prompt_tokens": 137786,
+   "completion_tokens": 34208,
+   "share": 0.2447
+  },
+  "question-64b724c4118320989925d111501a8e41 | conjecture-atomic-leg": {
+   "calls": 27,
+   "tokens": 96291,
+   "prompt_tokens": 82026,
+   "completion_tokens": 14265,
+   "share": 0.137
+  },
+  "audit:ritual | conjecture-turn": {
+   "calls": 16,
+   "tokens": 91238,
+   "prompt_tokens": 77887,
+   "completion_tokens": 13351,
+   "share": 0.1298
+  },
+  "no-problem-line-in-prompt | conjecture-turn": {
+   "calls": 13,
+   "tokens": 27194,
+   "prompt_tokens": 17574,
+   "completion_tokens": 9620,
+   "share": 0.0387
+  },
+  "audit:ritual | conjecture-atomic-leg": {
+   "calls": 12,
+   "tokens": 22760,
+   "prompt_tokens": 19668,
+   "completion_tokens": 3092,
+   "share": 0.0324
+  },
+  "no-problem-line-in-prompt | batch-critic": {
+   "calls": 13,
+   "tokens": 9273,
+   "prompt_tokens": 8072,
+   "completion_tokens": 1201,
+   "share": 0.0132
+  },
+  "audit:ritual | critic-atomic-leg": {
+   "calls": 3,
+   "tokens": 3684,
+   "prompt_tokens": 2889,
+   "completion_tokens": 795,
+   "share": 0.0052
+  },
+  "no-problem-line-in-prompt | conjecture-atomic-leg": {
+   "calls": 2,
+   "tokens": 2743,
+   "prompt_tokens": 1908,
+   "completion_tokens": 835,
+   "share": 0.0039
+  }
+ },
+ "by_purpose_detail": {
+  "conjecture-turn": {
+   "calls": 63,
+   "tokens": 396044,
+   "prompt_tokens": 308181,
+   "completion_tokens": 87863,
+   "share": 0.5635
+  },
+  "batch-critic": {
+   "calls": 185,
+   "tokens": 181267,
+   "prompt_tokens": 145858,
+   "completion_tokens": 35409,
+   "share": 0.2579
+  },
+  "conjecture-atomic-leg": {
+   "calls": 41,
+   "tokens": 121794,
+   "prompt_tokens": 103602,
+   "completion_tokens": 18192,
+   "share": 0.1733
+  },
+  "critic-atomic-leg": {
+   "calls": 3,
+   "tokens": 3684,
+   "prompt_tokens": 2889,
+   "completion_tokens": 795,
+   "share": 0.0052
+  }
+ },
+ "by_call_kind": {
+  "first-ask": {
+   "calls": 222,
+   "tokens": 540844,
+   "prompt_tokens": 428393,
+   "completion_tokens": 112451,
+   "share": 0.7696
+  },
+  "decomposition-leg": {
+   "calls": 42,
+   "tokens": 122735,
+   "prompt_tokens": 104583,
+   "completion_tokens": 18152,
+   "share": 0.1746
+  },
+  "repair": {
+   "calls": 28,
+   "tokens": 39210,
+   "prompt_tokens": 27554,
+   "completion_tokens": 11656,
+   "share": 0.0558
+  }
+ },
+ "by_fate_class": {
+  "bought-an-artifact-that-ended-accepted": {
+   "calls": 164,
+   "tokens": 444327,
+   "prompt_tokens": 345306,
+   "completion_tokens": 99021,
+   "share": 0.6322
+  },
+  "bought-nothing-in-window-admitted-artifact-producing-contract": {
+   "calls": 89,
+   "tokens": 141422,
+   "prompt_tokens": 123882,
+   "completion_tokens": 17540,
+   "share": 0.2012
+  },
+  "bought-nothing-output-rejected-or-discarded": {
+   "calls": 39,
+   "tokens": 117040,
+   "prompt_tokens": 91342,
+   "completion_tokens": 25698,
+   "share": 0.1665
+  }
+ },
+ "by_cycle": {
+  "cycle-13": {
+   "calls": 27,
+   "tokens": 90650,
+   "prompt_tokens": 72588,
+   "completion_tokens": 18062,
+   "share": 0.129
+  },
+  "cycle-14": {
+   "calls": 27,
+   "tokens": 86634,
+   "prompt_tokens": 71762,
+   "completion_tokens": 14872,
+   "share": 0.1233
+  },
+  "cycle-07": {
+   "calls": 50,
+   "tokens": 77935,
+   "prompt_tokens": 64432,
+   "completion_tokens": 13503,
+   "share": 0.1109
+  },
+  "cycle-15": {
+   "calls": 46,
+   "tokens": 66344,
+   "prompt_tokens": 56257,
+   "completion_tokens": 10087,
+   "share": 0.0944
+  },
+  "cycle-03": {
+   "calls": 32,
+   "tokens": 57798,
+   "prompt_tokens": 43758,
+   "completion_tokens": 14040,
+   "share": 0.0822
+  },
+  "cycle-11": {
+   "calls": 42,
+   "tokens": 55630,
+   "prompt_tokens": 48009,
+   "completion_tokens": 7621,
+   "share": 0.0792
+  },
+  "cycle-05": {
+   "calls": 13,
+   "tokens": 48478,
+   "prompt_tokens": 32986,
+   "completion_tokens": 15492,
+   "share": 0.069
+  },
+  "cycle-06": {
+   "calls": 12,
+   "tokens": 42626,
+   "prompt_tokens": 32199,
+   "completion_tokens": 10427,
+   "share": 0.0607
+  },
+  "cycle-09": {
+   "calls": 13,
+   "tokens": 40774,
+   "prompt_tokens": 32006,
+   "completion_tokens": 8768,
+   "share": 0.058
+  },
+  "cycle-10": {
+   "calls": 12,
+   "tokens": 37221,
+   "prompt_tokens": 31277,
+   "completion_tokens": 5944,
+   "share": 0.053
+  },
+  "cycle-01": {
+   "calls": 4,
+   "tokens": 33904,
+   "prompt_tokens": 24621,
+   "completion_tokens": 9283,
+   "share": 0.0482
+  },
+  "cycle-02": {
+   "calls": 4,
+   "tokens": 32938,
+   "prompt_tokens": 24818,
+   "completion_tokens": 8120,
+   "share": 0.0469
+  },
+  "cycle-16": {
+   "calls": 10,
+   "tokens": 31857,
+   "prompt_tokens": 25817,
+   "completion_tokens": 6040,
+   "share": 0.0453
+  }
+ },
+ "what_it_all_bought": {
+  "candidates_attempted": 132,
+  "checker_valid": 15,
+  "checker_refuted": 117,
+  "refutations_by_code": {
+   "CLAIM_INFLATED": 114,
+   "WRONG_COUNT": 3
+  },
+  "valid_but_below_the_registered_floor": 15,
+  "above_the_registered_floor": 0,
+  "survivors": 0,
+  "best_score": 0.0004075,
+  "arm_S_best_score": 0.0135949364055,
+  "tokens_per_candidate_attempted": 5324.2,
+  "seed_question_tokens_per_candidate_attempted": 2832.6
+ }
+}

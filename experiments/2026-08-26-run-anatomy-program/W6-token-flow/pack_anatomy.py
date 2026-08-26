@@ -63,8 +63,13 @@ REPO = os.path.abspath(os.path.join(PROGRAM, "..", ".."))
 # plus a diagnostic envelope, and no pack at all.  Reporting it inside the
 # packed-prompt tables would attribute its whole cost to "unsectioned body"
 # and hide what the run is actually re-sending.
+# There are TWO repair forms, and both return the model's own rejected
+# output: the PATCH form ("CURRENT JSON:" + "DIAGNOSTIC ENVELOPE:", asking
+# for one JSON-pointer operation) and the FULL-VALUE form ("INVALID JSON:",
+# asking for the whole corrected object back).
 REPAIR_CURRENT = "CURRENT JSON:"
 REPAIR_ENVELOPE = "DIAGNOSTIC ENVELOPE:"
+REPAIR_INVALID = "INVALID JSON:"
 
 SCHEMA_MIN_CHARS = 100
 SCHEMA_KEYS = {"$defs", "properties", "anyOf", "allOf", "type", "items"}
@@ -168,11 +173,25 @@ def split_repair(lines: list[str]) -> dict | None:
     cur = next((i for i, l in enumerate(lines) if l.strip() == REPAIR_CURRENT), None)
     env = next((i for i, l in enumerate(lines) if l.strip() == REPAIR_ENVELOPE), None)
     if cur is None or env is None or env < cur:
-        return None
+        inv = next((i for i, l in enumerate(lines) if l.strip() == REPAIR_INVALID), None)
+        if inv is None:
+            return None
+        preamble = "\n".join(lines[:inv])
+        current = "\n".join(lines[inv + 1:])
+        return {
+            "repair_form": "full-value",
+            "preamble_chars": len(preamble),
+            "preamble_tokens_est": approximate_tokens(preamble) if preamble else 0,
+            "returned_rejected_json_chars": len(current),
+            "returned_rejected_json_tokens_est": approximate_tokens(current) if current else 0,
+            "diagnostic_envelope_chars": 0,
+            "diagnostic_envelope_tokens_est": 0,
+        }
     preamble = "\n".join(lines[:cur])
     current = "\n".join(lines[cur + 1:env])
     envelope = "\n".join(lines[env + 1:])
     return {
+        "repair_form": "patch",
         "preamble_chars": len(preamble),
         "preamble_tokens_est": approximate_tokens(preamble) if preamble else 0,
         "returned_rejected_json_chars": len(current),
@@ -211,6 +230,7 @@ def split_prompt(text: str) -> dict:
             "body_tokens_est": 0,
             "total_chars": len(text),
             "total_tokens_est": approximate_tokens(text),
+            "repair_form": repair["repair_form"],
             **{k: v for k, v in repair.items()
                if k.startswith(("returned_", "diagnostic_"))},
         }
@@ -343,6 +363,36 @@ def main() -> int:
         )
         a["mean_prompt_tokens_est_per_call"] = round(t / a["calls"], 1)
 
+    # per-contract-AND-FORM rollup.  Mixing a contract's packed calls with
+    # its repair re-asks averages two different prompts into one that does
+    # not exist: the packed form is mostly schema, the repair form has no
+    # schema at all.  The shares only mean something split.
+    by_contract_form: dict[str, dict] = {}
+    for c in per_call:
+        k = f"{c['contract_id']} | {c['prompt_form']}"
+        a = by_contract_form.setdefault(k, {
+            "calls": 0, "preamble_tokens_est": 0, "schema_tokens_est": 0,
+            "interstitial_tokens_est": 0, "body_tokens_est": 0,
+            "total_tokens_est": 0, "provider_prompt_tokens": 0,
+        })
+        a["calls"] += 1
+        for f in ("preamble_tokens_est", "schema_tokens_est",
+                  "interstitial_tokens_est", "body_tokens_est",
+                  "total_tokens_est"):
+            a[f] += c[f]
+        a["provider_prompt_tokens"] += c["provider_prompt_tokens"] or 0
+    for a in by_contract_form.values():
+        t = a["total_tokens_est"] or 1
+        a["preamble_share"] = round(a["preamble_tokens_est"] / t, 4)
+        a["schema_share"] = round(a["schema_tokens_est"] / t, 4)
+        a["interstitial_share"] = round(a["interstitial_tokens_est"] / t, 4)
+        a["body_share"] = round(a["body_tokens_est"] / t, 4)
+        a["fixed_toll_share"] = round(
+            (a["preamble_tokens_est"] + a["schema_tokens_est"]) / t, 4)
+        a["mean_prompt_tokens_est_per_call"] = round(t / a["calls"], 1)
+        a["mean_provider_prompt_tokens_per_call"] = round(
+            a["provider_prompt_tokens"] / a["calls"], 1)
+
     # per-section rollup, over the IR packs only
     by_section: dict[str, dict] = {}
     by_kind: dict[str, dict] = {}
@@ -366,7 +416,10 @@ def main() -> int:
     growth: dict[str, dict] = {}
     for c in per_call:
         g = growth.setdefault(c["root"], {})
-        key = f"{c['contract_id']}|cycle={c['cycle']}"
+        # split by prompt form: a cycle that mixes packed first asks with
+        # repair re-asks has a mean that describes neither, and the dip it
+        # produces reads as a shrinking pack when nothing shrank
+        key = f"{c['contract_id']}|{c['prompt_form']}|cycle={c['cycle']}"
         a = g.setdefault(key, {"calls": 0, "prompt_tokens_est": 0,
                                "provider_prompt_tokens": 0, "body_tokens_est": 0})
         a["calls"] += 1
@@ -415,6 +468,8 @@ def main() -> int:
         "estimator": "deepreason.packs.allocate.approximate_tokens, (len+3)//4",
         "by_contract": dict(sorted(by_contract.items(),
                                    key=lambda kv: -kv[1]["total_tokens_est"])),
+        "by_contract_and_form": dict(sorted(
+            by_contract_form.items(), key=lambda kv: -kv[1]["total_tokens_est"])),
         "by_section": dict(sorted(by_section.items(),
                                   key=lambda kv: -kv[1]["tokens_est"])),
         "by_section_kind": dict(sorted(by_kind.items(),
@@ -445,6 +500,9 @@ def main() -> int:
                 if c["prompt_form"] == "repair-patch"),
             "by_contract": dict(Counter(
                 c["contract_id"] for c in per_call
+                if c["prompt_form"] == "repair-patch")),
+            "by_repair_form": dict(Counter(
+                c.get("repair_form") for c in per_call
                 if c["prompt_form"] == "repair-patch")),
             "note": "a repair re-ask sends the model its own rejected JSON "
                     "back verbatim plus a diagnostic envelope, and no pack",

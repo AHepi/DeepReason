@@ -1312,6 +1312,7 @@
     "body_tokens_est": 0,
     "total_chars": 3087,
     "total_tokens_est": 772,
+    "repair_form": "patch",
     "returned_rejected_json_chars": 1259,
     "returned_rejected_json_tokens_est": 315,
     "diagnostic_envelope_chars": 1478,
