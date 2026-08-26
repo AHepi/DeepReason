@@ -1,6 +1,6 @@
 # Checklist for: reference grounding — the model chooses handles from a menu
 
-State: next=30 blockers=none (stages F2-a, F2-b and F2-c delivered)
+State: next=validation blockers=diff_budget EXCEEDED 2505/2400 (SPEC Amendment 2); all 35 steps checked, full gate 4214 passed 0 failed
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in
 order. One step per dr-execute-step invocation.
@@ -412,39 +412,92 @@ in a `[COMMIT]` with its own green ring.
 
 ## Stage F2-d — the map, the gate, the deliberate non-measurement
 
-- [ ] 30. (S16) Update `docs/map/INDEX.md` (invariants row),
+- [x] 30. (S16) Update `docs/map/INDEX.md` (invariants row),
       `docs/map/SUB-llm.md` (the new module) and
       `docs/map/CON-packs-and-token-economy.md` (menus as sections, the
       new `DISCLOSED_ON_DROP` members).
       done-when: `python tools/docs_verify.py --links 2>&1 | tail -3` ->
       0 unresolved
+      PROOF: `docs_verify --links: 0 dangling reference(s), 65 document(s)`.
+      INDEX.md gains the invariant row and a routing row; SUB-llm.md gains
+      the module with its own check; CON-packs-and-token-economy.md gains
+      the menu section family, exact and mandatory, with its check.
 
-- [ ] 31. (S18) Confirm nothing was measured: no new signal, no sweep
+- [x] 31. (S18) Confirm nothing was measured: no new signal, no sweep
       probe.
       done-when: `git diff --stat origin/main --
       src/deepreason/signals.py tools/root_sweep.py` -> empty output
+      PROOF: `git diff --stat 4760a32ef -- src/deepreason/signals.py
+      tools/root_sweep.py src/deepreason/config.py` -> EMPTY. No signal, no
+      sweep probe, no Config knob: R7's "measure nothing here" and the F3
+      concurrency boundary both hold by construction.
 
-- [ ] 32. (all) Map check, FULL mode — `--fast` reuses cached results and
+- [x] 32. (all) Map check, FULL mode — `--fast` reuses cached results and
       cannot catch a document this tranche's `src/` change just broke
       (dr-drive-harness §4). Run it on an otherwise idle box, never
       concurrently with the gate (§5b).
       done-when: `python tools/docs_verify.py 2>&1 | tail -3` -> 0
       failed, AND `python tools/docs_verify.py --audit 2>&1 | tail -3` ->
       0 refused
+      PROOF: `docs_verify [full]: 65 documents, 1085 checks, 4 workers` ->
+      `0 failed`; `docs_verify --audit: 0 finding(s)`.
 
-- [ ] 33. (S8) Wheel smokes — no gate runs these, and R8 predicts no
+      FULL MODE EARNED ITS KEEP. `--fast` had reported 0 failed moments
+      earlier; full mode found `SEAM-rules-x-scratch.md:107`, a cached
+      signature pin on the two critic renderers that `reference_menus` moved.
+      Updated -- and the claim it guards ("criticism is given no scratch
+      content") prompted a real addition rather than a bare pin bump: that
+      section warns that the danger is "a scratch parameter arriving
+      disguised as one more" optional argument, and `reference_menus` is
+      exactly that shape. A new test and check re-establish the refusal for
+      it instead of trusting the current caller.
+
+- [x] 33. (S8) Wheel smokes — no gate runs these, and R8 predicts no
       re-pin.
       done-when: `python scripts/wheel_smoke.py` -> exit 0 AND `python -u
       scripts/wheel_operational_smoke.py` -> exit 0
+      PROOF: `wheel smoke passed: isolated V6-only contents, clean imports,
+      exact entry points, module parity, MCP registration, and exact MCP
+      schemas` (rc 0). `wheel operational smoke passed: installed setup,
+      explicit qualification (80 qualification calls; 416 total calls),
+      readiness, question-only reasoning, replay-verified terminal
+      retrieval, cache reuse, opaque MCP restart, budget ceiling, and
+      pre-V6 fail-closed admission` (rc 0). No pin moved -- R8's prediction
+      of no re-pin holds.
 
-- [ ] 34. (S17) Full gate. One instrument at a time on an idle box.
+- [x] 34. (S17) Full gate. One instrument at a time on an idle box.
       done-when: `python -m pytest tests/ -q -n 4` output ends "N passed,
       0 failed" (paste it)
+      PROOF: `4214 passed, 6 skipped in 762.85s (0:12:42)`, 0 failed.
 
-- [ ] 35. (all) [COMMIT] Stage F2-d: commit, push with retry, confirm a
+      THE FIRST RUN FOUND A REAL DEFECT, and it is worth stating what it was
+      not. `test_offline_semantic_freedom_baseline_is_measurable` failed on
+      `tokens_per_admitted_useful_candidate` moving 784.5 -> 875.0, with
+      every epistemic metric in that fixture identical. The tempting reading
+      is "menus cost tokens, update the baseline". That reading was WRONG:
+      the post-allocation menus were appended OUTSIDE the `active_v6` guard,
+      so a pre-v6 run received a menu for `optional_refs` -- a field its own
+      form does not have. Gating both menu builds on `active_v6` restored
+      the fixture EXACTLY; no fixture was weakened. The guard carries a
+      mutation-proven regression test
+      (`test_a_pre_v6_conjecture_pack_carries_no_v6_menu`: forcing the guard
+      true turns it red).
+
+      That fixture was NOT in SPEC section 7's blast-radius census, because
+      it names no target symbol -- it reaches the pack through the
+      conjecture rule and pins a derived quantity. Recorded as a census miss
+      in SPEC Amendment 2, with the generalizable lesson.
+
+- [x] 35. (all) [COMMIT] Stage F2-d: commit, push with retry, confirm a
       clean tree on origin.
       done-when: `git status --porcelain` empty AND local HEAD is on
       origin
+      PROOF: committed and pushed; tree clean; local HEAD on origin.
+      BUDGET: `diff_budget 4760a32ef --ceiling 2400` -> EXCEEDED, 2505 of
+      2400 (over by 105, 4.4%). Itemized and disposed in SPEC Amendment 2;
+      raised to the operator as a STOP in the delivery message rather than
+      absorbed silently. All 105 are defect-driven work inside files the
+      spec already named -- no scope moved.
 
 ---
 

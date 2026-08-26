@@ -44,7 +44,13 @@ one function.
 
 Pack construction and the cost model are documented separately in
 DR-CON-packs-and-token-economy; school-to-seat routing in DR-CON-schools; the
-surfaces here that may not move in DR-INV-frozen-surfaces.
+surfaces here that may not move in DR-INV-frozen-surfaces. `reference_menu.py`
+is this package's newest module and has its own invariant document,
+DR-INV-reference-menu: it owns the single answer to "what may this
+reference-bearing field contain", which both `packs.py` (the prompt menu) and
+`repair.py` (the diagnostic's legal list) consume rather than each deriving.
+
+`check: grep -q "^def legal_handles_for(" src/deepreason/llm/reference_menu.py && grep -q "reference_menu" src/deepreason/llm/packs.py && grep -q "reference_menu" src/deepreason/llm/repair.py && python -m pytest tests/test_reference_menu.py -q`
 
 ## Entry points
 

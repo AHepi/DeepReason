@@ -113,6 +113,20 @@ against a bound of `len(sections) + 1`.
 `check: python -m pytest tests/test_frame_render.py::test_the_disclosure_loop_reaches_a_fixed_point tests/test_frame_render.py::test_a_dropped_citable_legend_is_disclosed_in_the_pack tests/test_frame_render.py::test_nothing_dropped_means_no_withheld_notice_at_all -q`
 `check: python -c "from deepreason.llm.packs import DISCLOSED_ON_DROP; assert DISCLOSED_ON_DROP == {'citable-evidence-blocks','frozen-evidence-context','premise-invitation','standing-attacks'}, sorted(DISCLOSED_ON_DROP)"`
 
+**Reference menus are a section family, and they are EXACT and MANDATORY.**
+A menu lists the legal handles for one reference-bearing field
+(DR-INV-reference-menu). It may not be compressed, because compression cuts a
+section's tail and a menu's tail is its truncation notice — a compressed menu
+loses handles AND the statement that handles were lost. It may not be dropped
+either, and that half is forced by the NEGATIVE rule below rather than chosen:
+droppable-and-exact overshoots the budget silently. Exact is affordable for the
+same reason it is affordable for `frame-crisis` — the content is bounded by
+construction, at `MenuRenderPolicy.maximum_entries`. Menus whose handles do not
+exist until after allocation (the artifact-alias table is derived from the
+RENDERED pack) are appended post-allocation and re-wrapped in `AllocatedPack`.
+
+`check: python -m pytest tests/test_reference_menu.py -k "menu_sections_are_exact_and_mandatory or truncation_is_disclosed or menu_tokens_are_counted" -q`
+
 **Slow-changing sections precede volatile ones** so a provider prefix cache
 bills the repeated head at the cached rate — problem context and commitment
 schemas before the target, school stance before the neighbourhood. Pure

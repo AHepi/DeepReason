@@ -793,3 +793,54 @@ in explanatory prose inside files the spec already named, not in machinery
 the spec did not name — which is the distinction a sprawl ceiling exists
 to police, and it is why this is recorded as a corrected estimate rather
 than as a scope change.
+
+---
+
+## Amendment 2 — the ceiling was EXCEEDED, and by what
+
+`tools/diff_budget.py 4760a32ef --ceiling 2400 --paths src/deepreason tests
+docs/map` at the end of stage F2-d:
+
+```
+{"result_type": "DIFF_BUDGET_RESULT_V1", "base": "4760a32ef",
+ "areas": {"src/deepreason": 1123, "tests": 1140, "docs/map": 242},
+ "total_insertions": 2505, "ceiling": 2400, "verdict": "EXCEEDED"}
+```
+
+**2 505 against 2 400 — over by 105 insertions, 4.4%.** Recorded as a
+verdict rather than a footnote, per `dr-execute-step`.
+
+**Where the 105 went, itemized rather than characterised.** Amendment 1's
+2 400 was derived at the end of stage F2-a from the four stages as then
+specified. Three things landed after it that no estimate covered, and all
+three were forced by evidence rather than chosen:
+
+| insertions | what | why it was not in the estimate |
+|---|---|---|
+| ~35 | `omission_scope` on the declaration, and the walker limb that honours it | discovered at step 26: dropping `evidence_refs/*/block` alone leaves a `{quote}` with no block, turning a legal escape into a fresh validation failure |
+| ~45 | `test_a_pre_v6_conjecture_pack_carries_no_v6_menu` and the `active_v6` guards | the FULL GATE found a defect: the post-allocation menus were appended outside the v6 guard, so a pre-v6 run received a menu for a field its own form does not have |
+| ~40 | `test_no_critic_menu_can_carry_scratch_content` and its seam prose | `DR-SEAM-rules-x-scratch` warns in writing that the danger is "a scratch parameter arriving disguised as one more" optional argument; `reference_menus` is exactly that shape, so the refusal had to be re-established rather than assumed |
+
+**What this does NOT mean.** No scope was added. Nothing moved out of
+PARKED.md, no requirement grew, and the Out-of-scope list is unchanged. The
+overrun is defect-driven work inside files the spec already named, plus the
+tests that keep those defects fixed.
+
+**The census miss, stated as the finding it is.** Two of the three were
+invisible to SPEC §7's blast-radius census, and one of them —
+`tests/test_semantic_freedom_constitution.py` — is the kind the census is
+supposed to catch. It never names a target symbol; it reaches the pack
+through the conjecture rule and pins a token cost. This is the third
+consecutive recorded instance of the same class (rung 4's prediction too
+narrow, rung 5's spec predicting nothing, now this), and the honest reading
+is that a symbol-keyed census structurally cannot see a fixture that pins a
+DERIVED quantity. The generalizable lesson, offered for the next spec: a
+change that adds bytes to any pack should census on the pinned-metric
+fixtures, not only on the callers.
+
+**What the gate bought.** The failure was
+`tokens_per_admitted_useful_candidate` moving 784.5 → 875.0 while every
+epistemic metric that fixture records stayed identical. The tempting reading
+is "the menu costs tokens, update the baseline". That reading was wrong: the
+menus were reaching a pre-v6 form, and gating them restored the fixture
+EXACTLY. No fixture was weakened, and the fix is mutation-proven.

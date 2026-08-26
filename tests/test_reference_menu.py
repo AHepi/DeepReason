@@ -1064,3 +1064,77 @@ def test_consumers_reach_the_legal_set_only_through_the_interface():
     assert "legal_handles_for(" in block_guidance, (
         "the block diagnostic stopped consuming the resolver"
     )
+
+
+def test_no_critic_menu_can_carry_scratch_content():
+    """DR-SEAM-rules-x-scratch's structural refusal, extended to cover the
+    new parameter.
+
+    Criticism is given no scratch content, and that section warns in writing
+    that the danger is "a scratch parameter arriving disguised as one more"
+    optional argument. `reference_menus` is exactly such an argument, so the
+    refusal is re-established for it here rather than left to the current
+    caller's good behaviour: no scratch-kind field is declared on a critic
+    contract, and `rules/crit.py` requests only citable-block menus.
+    """
+
+    import pathlib
+
+    from deepreason.rules import crit
+
+    for declaration in rm.declarations_for_contract("batch-critic.v2"):
+        assert not declaration.handle_kind.startswith("scratch"), (
+            f"{declaration.field_id} would put scratch content in a critic pack"
+        )
+
+    source = pathlib.Path(crit.__file__).read_text()
+    body = source.split("def _premise_evidence_menus", 1)[1].split("\ndef ", 1)[0]
+    assert 'handle_kinds=("citable_block",)' in body, (
+        "the critic's menu builder no longer restricts itself to citable "
+        "blocks; a scratch-kind menu would reach a criticism pack"
+    )
+
+
+def test_a_pre_v6_conjecture_pack_carries_no_v6_menu():
+    """Regression (full gate, F2-d): the post-allocation menus were appended
+    outside the v6 guard, so a pre-v6 run received a menu for
+    `optional_refs` -- a field its own form does not have.
+
+    Caught by `tests/test_semantic_freedom_constitution.py::
+    test_offline_semantic_freedom_baseline_is_measurable`, whose pinned
+    `tokens_per_admitted_useful_candidate` moved 784.5 -> 875.0 while every
+    epistemic metric it records stayed identical. The token cost was the
+    only visible symptom of a menu naming a field the seat cannot fill.
+    The fixture was NOT updated: gating the menus restored it exactly.
+    """
+
+    import ast
+    import pathlib
+
+    from deepreason.rules import conj
+
+    source = pathlib.Path(conj.__file__).read_text()
+    tree = ast.parse(source)
+    calls = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "menu_renders_for"
+    ]
+    assert calls, "conj.py no longer builds reference menus at all"
+    for call in calls:
+        parent_conditions = [
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, ast.IfExp)
+            and any(child is call for child in ast.walk(node.body))
+        ]
+        assert parent_conditions, (
+            "a menu_renders_for call in conj.py is unguarded; the v6 turn "
+            "contract's fields must not be offered to a pre-v6 form"
+        )
+        guard = parent_conditions[0].test
+        assert isinstance(guard, ast.Name) and guard.id == "active_v6", (
+            f"menu build is guarded by {ast.dump(guard)[:80]}, not active_v6"
+        )

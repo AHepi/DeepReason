@@ -1397,10 +1397,14 @@ def conj(
     pre_allocation_binding = reference_menu.MenuBinding(
         citable_block_ids=tuple(block.id for block in citable_blocks_shown),
     )
-    pre_allocation_menus = reference_menu.menu_renders_for(
-        "conjecturer.turn.v6",
-        pre_allocation_binding,
-        handle_kinds=("citable_block",),
+    pre_allocation_menus = (
+        reference_menu.menu_renders_for(
+            "conjecturer.turn.v6",
+            pre_allocation_binding,
+            handle_kinds=("citable_block",),
+        )
+        if active_v6
+        else ()
     )
     pack = render_conj_pack(
         problem,
@@ -1491,13 +1495,22 @@ def conj(
     # AllocatedPack -- without the marker the adapter re-applies the
     # profile's aggregate prefix clip to a pack already budgeted
     # section-by-section (DR-SEAM-llm-x-rules).
-    post_allocation_menus = reference_menu.menu_renders_for(
-        "conjecturer.turn.v6",
-        reference_menu.MenuBinding(
-            scratch_handles=tuple(scratch_aliases),
-            aliases=tuple(aliases.aliases),
-        ),
-        handle_kinds=("artifact_alias", "scratch_local", "scratch_existing"),
+    #
+    # Gated on the v6 path because the fields these menus describe belong to
+    # the v6 turn contract. An earlier version was not, and a pre-v6 run got
+    # a menu for `optional_refs` on a form that has no such field -- a menu
+    # naming a field the seat cannot fill is worse than no menu at all.
+    post_allocation_menus = (
+        reference_menu.menu_renders_for(
+            "conjecturer.turn.v6",
+            reference_menu.MenuBinding(
+                scratch_handles=tuple(scratch_aliases),
+                aliases=tuple(aliases.aliases),
+            ),
+            handle_kinds=("artifact_alias", "scratch_local", "scratch_existing"),
+        )
+        if active_v6
+        else ()
     )
     if post_allocation_menus:
         pack = AllocatedPack(
