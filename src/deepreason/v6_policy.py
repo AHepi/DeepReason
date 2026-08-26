@@ -24,6 +24,7 @@ import sys
 from collections.abc import Mapping
 from pathlib import Path
 
+from deepreason import channels
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.policy import (
@@ -295,6 +296,21 @@ PUBLIC_SIMULATION_TOOLCHAIN_ID = "python@deepreason-public-local.v1"
 PUBLIC_CONTAINED_TOOLCHAIN_ID = "python@deepreason-public-contained.v1"
 
 
+def _channel_enabled(channel_id: str, config) -> bool:
+    """Is this evidence channel on for this run's configuration?
+
+    ``config=None`` resolves to the default configuration rather than to
+    "disabled", so a caller that predates channel awareness gets the DEFAULT
+    topology -- which is every channel on. Constructing the default here, at
+    call time, keeps this module free of an import-time dependency on Config
+    and keeps the answer identical to the one a real run computes.
+    """
+
+    from deepreason.config import Config
+
+    return channels.enabled(channel_id, Config() if config is None else config)
+
+
 def _contained_runner_opted(environ=None) -> bool:
     env = os.environ if environ is None else environ
     runner = str(env.get("DEEPREASON_SIMULATION_RUNNER", "")).strip().lower()
@@ -307,8 +323,16 @@ def _contained_runner_opted(environ=None) -> bool:
     return True
 
 
-def engaged_simulation_policy(environ=None) -> SimulationCapabilityPolicyV1:
+def engaged_simulation_policy(
+    environ=None, *, config=None
+) -> SimulationCapabilityPolicyV1:
     """Return the public simulation authority, declarative-numeric by default.
+
+    The channel is ON unless this run's configuration names it in
+    ``CHANNELS_DISABLED`` (F3, 2026-08-26). A disabled channel returns the
+    all-zero policy, which is a VALID, compiling policy and not a refusal --
+    the all-configurations law. ``config=None`` means the default
+    configuration, so every existing caller keeps its exact behaviour.
 
     Default (``DEEPREASON_SIMULATION_RUNNER`` unset or ``declarative``): only
     the trusted declarative-numeric compiler path is reachable — the runner
@@ -327,6 +351,8 @@ def engaged_simulation_policy(environ=None) -> SimulationCapabilityPolicyV1:
     subject, exactly like a changed research allowlist.
     """
 
+    if not _channel_enabled("simulation", config):
+        return SimulationCapabilityPolicyV1()
     if _contained_runner_opted(environ):
         return SimulationCapabilityPolicyV1(
             enabled=True,
@@ -374,30 +400,49 @@ def engaged_simulation_policy(environ=None) -> SimulationCapabilityPolicyV1:
     )
 
 
-def engaged_research_policy(environ=None) -> ResearchCapabilityPolicyV1:
-    """Return the operator-opted contained research authority, default OFF.
+def engaged_research_policy(
+    environ=None, *, config=None
+) -> ResearchCapabilityPolicyV1:
+    """Return the contained research authority, default ON (F3, 2026-08-26).
 
-    Research stays disabled — byte-identical to the historical preset, so
-    every existing qualification subject is untouched — unless the operator
-    names an explicit frozen domain allowlist via
-    ``DEEPREASON_RESEARCH_ALLOWLIST`` (comma-separated bare lowercase
-    hosts). The allowlist is part of the compiled manifest, hence part of
-    the qualification behavior subject: a different list is a different
-    subject and requalifies. Bounds stay modest: the budget is denominated
+    Research used to stay disabled unless the operator named a frozen domain
+    allowlist via ``DEEPREASON_RESEARCH_ALLOWLIST``. Operator, 2026-08-26:
+    "now the fix. including turning research and, simulation and coding
+    permanently on". A channel that is on only when someone remembers an
+    environment variable is, for every run nobody configured, a channel that
+    does not exist.
+
+    So the channel decides, and the env var still names the LIST: unset falls
+    back to ``channels.DEFAULT_RESEARCH_ALLOWLIST``, and naming hosts
+    overrides it exactly as before. The allowlist is part of the compiled
+    manifest, hence part of the qualification behavior subject: a different
+    list is a different subject and requalifies — including the change from
+    "no research" to this default, which is the digest cost this tranche
+    priced rather than avoided. Bounds stay modest: the budget is denominated
     in dispatched requests, and a per-response byte ceiling is containment.
     """
 
     env = os.environ if environ is None else environ
-    raw = str(env.get("DEEPREASON_RESEARCH_ALLOWLIST", "")).strip()
-    if not raw:
+    if not _channel_enabled("research", config):
         return ResearchCapabilityPolicyV1()
-    domains = tuple(
-        dict.fromkeys(
-            domain.strip().lower()
-            for domain in raw.split(",")
-            if domain.strip()
+    raw = str(env.get("DEEPREASON_RESEARCH_ALLOWLIST", "")).strip()
+    domains = (
+        tuple(
+            dict.fromkeys(
+                domain.strip().lower()
+                for domain in raw.split(",")
+                if domain.strip()
+            )
         )
+        if raw
+        else channels.DEFAULT_RESEARCH_ALLOWLIST
     )
+    if not domains:
+        # An enabled research policy with no reachable host can mint nothing,
+        # and its own validator refuses that shape. An operator who set the
+        # variable to a blank list gets the declared default rather than a
+        # crash: the setting names WHICH hosts, never WHETHER research runs.
+        domains = channels.DEFAULT_RESEARCH_ALLOWLIST
     return ResearchCapabilityPolicyV1(
         enabled=True,
         backend_identity="web.contained.v1",
@@ -456,17 +501,25 @@ def engaged_attached_evidence_policy(
 
 
 def engaged_inquiry_capability_policy(
-    environ=None, *, attached_evidence: bool = False
+    environ=None, *, attached_evidence: bool = False, config=None
 ) -> InquiryCapabilityPolicyV1:
-    """Return the engaged topology: simulation ON, research operator-opted."""
+    """Return the engaged topology: every protected channel ON by default.
+
+    Simulation and research both read the channel registry, so a run that
+    names one in ``CHANNELS_DISABLED`` compiles a topology with that channel's
+    all-zero policy and nothing refuses. The config referee stays
+    operator-opted: it is a JUDGE seat, not an evidence channel, and the
+    operator's standing caution about judge seats applies to it and not to
+    these three.
+    """
 
     return InquiryCapabilityPolicyV1(
         capability_profile="inquiry-capabilities.v2",
         attached_evidence=engaged_attached_evidence_policy(
             attached=attached_evidence
         ),
-        simulation=engaged_simulation_policy(environ),
-        research=engaged_research_policy(environ),
+        simulation=engaged_simulation_policy(environ, config=config),
+        research=engaged_research_policy(environ, config=config),
         config_referee=engaged_config_referee_policy(environ),
     )
 

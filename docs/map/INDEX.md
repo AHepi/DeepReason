@@ -21,6 +21,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | find where something lives | the subsystem table below |
 | change how two things interact | the seam table, then `REC-change-a-seam.md` |
 | know whether you are allowed to change it | `INV-frozen-surfaces.md` — **first, always** |
+| know which outside-reaching channels a run has, and how one is turned off | `INV-evidence-channels.md` |
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
@@ -75,6 +76,7 @@ than you need.
 | Document | Covers |
 |---|---|
 | `INV-frozen-surfaces.md` | the five surfaces you may not change, and the two instruments that prove you did not |
+| `INV-evidence-channels.md` | the three evidence-minting channels, on by default, and the one field that turns any of them off |
 | `INV-axiom-basis.md` | the eleven axioms the calculus rests on, which rung proves each, and which rungs must not break it |
 | `REC-change-a-seam.md` | the recipe for the commonest large change, worked on schools × scratchpad |
 

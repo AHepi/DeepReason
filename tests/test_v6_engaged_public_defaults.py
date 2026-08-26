@@ -567,10 +567,19 @@ def test_public_manifest_enables_declarative_local_simulation():
     assert simulation.runner_profile == "simulation.declarative.v1"
     assert simulation.maximum_proposals_per_turn == 1
     assert simulation.input_catalog == ()
-    # Every other Tranche-A capability stays OFF (research is ON HOLD).
+    # Research became a default-ON evidence channel in F3 (2026-08-26) --
+    # "turning research and, simulation and coding permanently on" -- so the
+    # public manifest now compiles it enabled, with the declared allowlist and
+    # the finite bounds its validator requires. The two that stay OFF stay off
+    # for their own reasons: attached evidence is the operator's per-run
+    # attach gesture, and formalization is Lean, which the manifest validator
+    # refuses to enable at all.
     assert capabilities.attached_evidence.enabled is False
     assert capabilities.formalization.enabled is False
-    assert capabilities.research.enabled is False
+    assert capabilities.research.enabled is True
+    assert capabilities.research.domain_allowlist
+    assert capabilities.research.maximum_requests > 0
+    assert capabilities.research.maximum_sources > 0
     # One frozen local no-network toolchain, pinned to the preparing
     # interpreter rather than any hardcoded path.
     (toolchain,) = manifest.toolchains

@@ -17,6 +17,7 @@ Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x o
 | capabilities x harness | undocumented | real: every capability transition is a chained, typed event through the ordinary append-only log — "a denial is a durable record rather than silence" |
 | capabilities x verification | undocumented | real: this document's own claim names "the replay validator" as shared machinery between the two capabilities — `DR-SUB-verification`'s territory |
 | capabilities x llm | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+| capabilities x channels | undocumented | real: `DR-INV-evidence-channels` decides whether the simulation and research policies this package consumes compile ENABLED at all. The registry owns enablement; this package owns the lifecycle that follows from it |
 | capabilities x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
 
 ## What it is
@@ -102,6 +103,23 @@ Grepping `research` in `scheduler.py` finds that one, not this package.
 - `events.CapabilityEventPayloadV1` — the only admissible capability event body.
 - `models` — every phase record, plus `capability_next_process_digest` and
   `OBSERVABLE_NAME_PATTERN`.
+**Two of the five opt-ins stopped being opt-ins on 2026-08-26.** `simulation`
+and `research` now compile ENABLED by default, decided by
+`DR-INV-evidence-channels` from `Config.CHANNELS_DISABLED` rather than by an
+environment variable (operator: "turning research and, simulation and coding
+permanently on"). `attached_evidence`, `formalization` and `config_referee` are
+unchanged and still opt-in — the first is a per-run attach gesture, the second
+is Lean and its own validator refuses to enable it, and the third is a JUDGE
+seat, which the operator's standing caution about judge seats covers and the
+three evidence channels do not.
+`check: python -c "
+from deepreason.v6_policy import engaged_inquiry_capability_policy as p
+t = p({})
+assert t.research.enabled and t.simulation.enabled
+assert not t.attached_evidence.enabled and not t.formalization.enabled
+assert t.config_referee is None
+"`
+
 - `policy.InquiryCapabilityPolicyV1` — the whole opt-in topology
   (`attached_evidence`, `simulation`, `formalization`, `research`,
   `config_referee`) that the manifest freezes. FOUR of the five expose their own

@@ -418,11 +418,26 @@ def test_seat_identity_is_read_from_the_attempt_trace(tmp_path):
 def test_the_shipped_qualification_subject_digest_does_not_move():
     """No role was added, and no compile notice reaches the shipped path.
 
-    The pinned value was measured at this tranche's base commit. A role added
+    The pin exists so an ACCIDENTAL digest move is loud: a role added
     anywhere, or a `compile_notices` entry appearing on the preparation
-    manifest, moves it -- and moving it costs a ~14-minute qualification
-    battery per home, which is the whole reason R3 says "do NOT add a role".
+    manifest, costs a ~14-minute qualification battery per home, which is the
+    whole reason R3 said "do NOT add a role".
+
+    The value moved ONCE, deliberately, on 2026-08-26 (F3): the operator
+    turned research on by default ("turning research and, simulation and
+    coding permanently on"), so the compiled manifest now carries an enabled
+    research policy with a frozen allowlist, and every subject built from the
+    engaged preset is a different subject. That cost was measured before the
+    code (that tranche's SPEC.md, M1) and priced in its DELIVERY.md rather
+    than discovered here.
+
+        d47cb2bf27021474aa17933bc3dcfeeb5dfb1c23b0cfe49452941aace39088dc  before
+        f3bb65623852cf7c5387ba4ef745dc4ebeadb62ca3493416fecfb475c6d80f9e  after
+
+    The two structural assertions are unchanged and are what this test is
+    actually for; only the constant moved, and it moved for a recorded reason.
     """
+    from deepreason.config import Config
     from deepreason.preparation import qualification_subject_manifest
     from deepreason.qualification import qualification_subject_digest
     from tests.test_public_v6_facade import _profile
@@ -431,8 +446,20 @@ def test_the_shipped_qualification_subject_digest_does_not_move():
     manifest = qualification_subject_manifest(profile)
     assert manifest.compile_notices is None
     assert qualification_subject_digest(manifest, profile) == (
-        "d47cb2bf27021474aa17933bc3dcfeeb5dfb1c23b0cfe49452941aace39088dc"
+        "f3bb65623852cf7c5387ba4ef745dc4ebeadb62ca3493416fecfb475c6d80f9e"
     )
+    # The three F3 Config knobs are dropped from the versioned source echo, so
+    # THEY moved nothing: the digest above is the price of the research
+    # default alone. Asserting it here keeps the two causes separable if the
+    # value ever moves again.
+    assert manifest.inquiry_capability_policy.research.enabled is True
+    for knob in (
+        "SEED_PROBLEM_BUDGET_FLOOR",
+        "ATTENTION_ALLOCATION_POLICY",
+        "CHANNELS_DISABLED",
+    ):
+        assert knob in type(Config()).model_fields, knob
+        assert knob not in manifest.engine_config_json, knob
 
 
 # --- S5 (R4): the compiled configuration matrix -------------------------- #
