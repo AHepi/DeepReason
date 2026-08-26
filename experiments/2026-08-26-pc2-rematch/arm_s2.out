@@ -1,3 +1,5 @@
 [arm-s] 0000 tokens= 10426 cum=   10426/1193009 valid=False score=0.013592343842 best=None
 [arm-s] 0001 tokens=  5199 cum=   15625/1193009 valid=True score=0.013307680842 best=0.013307680842
 [arm-s] 0002 tokens= 10233 cum=   25858/1193009 valid=False score=0.002958535503 best=0.013307680842
+[arm-s] 0004 tokens= 14667 cum=   40525/1193009 valid=False score=0.0 best=0.013307680842
+[arm-s] 0005 tokens= 15056 cum=   55581/1193009 valid=False score=0.0 best=0.013307680842

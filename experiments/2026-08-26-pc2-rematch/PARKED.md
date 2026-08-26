@@ -119,3 +119,61 @@ Named so nobody re-finds them:
 - P-C1 residue 6: survivor counts were unusable (`NO_SURVIVOR_RECORD` after
   a failed run). Whether P-C2 produces a survivor record is unknown until it
   terminates.
+
+---
+
+## F-C — the battery rewards SURRENDER: an honest zero discharges everything
+
+**Status: OPEN. Found by P-C2's own result, registered nowhere in advance.**
+
+**What was seen.** All 37 of ARM H2's valid constructions claimed exactly
+`0.0` and all 37 claims were confirmed. Not one valid construction claimed a
+positive score. The population split cleanly with nothing in between:
+overclaim and be refuted (168 `CLAIM_INFLATED`), or claim zero and be
+accepted (37).
+
+**The asymmetry that causes it.** Three criteria fire, and only one of them
+is a criticism the writer must answer:
+
+| criterion | fires | is it discharge-bearing? |
+|---|---|---|
+| `frontier-claim-honest@v1` | 183 | YES — an inflated claim is a refutation the next candidate must discharge |
+| `frontier-above-floor@v1` | 220 | it mints a fail warrant, and a candidate claiming 0.0 has nothing to answer: its claim was honest |
+| `frontier-wellformed@v1` | 15 | structural |
+
+So the channel applies real pressure to CLAIM HONESTY and no effective
+pressure to PERFORMANCE. A model that cannot construct well can always
+satisfy the first by placing three points on a line and truthfully reporting
+zero. The model did exactly that, and said so in its own `counterconditions`
+field: "If the checker finds any collinear triple, the minimum area is 0 and
+this claim is honest."
+
+**Why this is a defect and not a result.** P-C1's registered floor (0.005)
+was designed as "checker-backed refutation of underperforming claims", and
+it does refute them — but a refutation nobody must discharge exerts no
+generative pressure. The tranche measured the discharge channel against a
+battery whose strongest signal rewards the degenerate answer, so the loss
+partly measures the battery rather than the harness.
+
+**Ready-to-send prompt:**
+
+    Defect: P-C2's criticism battery makes an honest zero the safest answer.
+    All 37 valid constructions claimed exactly 0.0 and all were accepted,
+    while 168 that claimed more were refuted CLAIM_INFLATED. The claim-honesty
+    criterion is discharge-bearing and the above-floor criterion effectively
+    is not: a candidate that claims 0.0 truthfully has already answered every
+    criticism addressed to its claim. Evidence:
+    experiments/2026-08-26-pc2-rematch/RESULTS.md, "the channel bought honesty
+    by SURRENDERING the objective", and arm_h2_scores.json.
+
+    Route: dr-change-orchestrator, and the design question is the interesting
+    part -- what does a DEMONSTRATIVE criticism of UNDERPERFORMANCE look like
+    when the writer can always retreat to a true claim? Note the constraint
+    before designing: the operator's formalism-optional law forbids weighting
+    outcomes on conjecture KIND, and nothing may rank on a count of
+    criticisms. A candidate-vs-candidate comparison (this construction scores
+    below one already on the record, here it is) is demonstrative, discharge-
+    bearing, and ranks nothing -- start there.
+
+    Do NOT respond by removing the floor criterion; that would delete the only
+    signal about performance the run has.
