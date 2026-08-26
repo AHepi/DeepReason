@@ -458,8 +458,26 @@ def census(root: pathlib.Path) -> dict:
             })
     lineage.sort(key=lambda r: r["seq"])
 
+    # The harness's OWN citation checks, which are Measures on the log, not
+    # this census's re-derivation.  `evidence-citation:` codes come from a
+    # CANDIDATE's `evidence_refs`; `premise-citation:` codes come from a
+    # CRITIC's `premise_evidence`.  The two channels are counted apart
+    # because they are checked by different call sites and it turns out they
+    # are checked at very different rates.
+    citation_checks: collections.Counter = collections.Counter()
+    for ev in events:
+        if ev.get("rule") != "Measure":
+            continue
+        for i in ev.get("inputs") or []:
+            if isinstance(i, str) and i.split(":")[0] in (
+                "evidence-citation", "premise-citation"
+            ):
+                parts = i.split(":")
+                citation_checks[f"{parts[0]}:{parts[1] if len(parts) > 1 else ''}"] += 1
+
     return {
         "root": str(root),
+        "citation_checks": dict(citation_checks),
         "problem_criteria": [
             {"id": c.get("id"), "eval": c.get("eval")}
             for c in (problem_doc.get("criteria") or [])

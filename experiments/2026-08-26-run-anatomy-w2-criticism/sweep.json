@@ -1,0 +1,1245 @@
+{
+ "totals": {
+  "roots": 60,
+  "criticism_events": 2639,
+  "roots_with_workflow_objects": 51,
+  "roots_where_a_criticism_reached_a_conjecturer": 35,
+  "critic_artifacts_shown_to_conjecture_total": 250,
+  "critic_artifacts_total": 3901,
+  "warrant_types": {
+   "demonstrative": 1215,
+   "argumentative": 32
+  },
+  "criticism_dispatch_authority": {
+   "observe_only": 492,
+   "None": 893
+  }
+ },
+ "roots": [
+  {
+   "crit_events": 642,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "n_artifacts": 1509,
+   "n_critic_artifacts": 1284,
+   "warrant_types": {
+    "demonstrative": 642
+   },
+   "warrant_verdicts": {
+    "fail": 642
+   },
+   "task_kinds": {
+    "conjecture": 69,
+    "repair": 17
+   },
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 84,
+   "critic_artifacts_shown_to_conjecture": 4,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 459,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "n_artifacts": 1076,
+   "n_critic_artifacts": 804,
+   "warrant_types": {
+    "demonstrative": 345
+   },
+   "warrant_verdicts": {
+    "fail": 345
+   },
+   "task_kinds": {
+    "criticism": 175,
+    "conjecture": 91,
+    "repair": 28
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 172,
+    "None": 3
+   },
+   "n_context_exposures_joined": 292,
+   "critic_artifacts_shown_to_conjecture": 4,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 207,
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "n_artifacts": 539,
+   "n_critic_artifacts": 330,
+   "warrant_types": {
+    "demonstrative": 118
+   },
+   "warrant_verdicts": {
+    "fail": 118
+   },
+   "task_kinds": {
+    "criticism": 112,
+    "conjecture": 36,
+    "repair": 18
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 109,
+    "None": 3
+   },
+   "n_context_exposures_joined": 163,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 91,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "n_artifacts": 216,
+   "n_critic_artifacts": 120,
+   "warrant_types": {
+    "demonstrative": 27
+   },
+   "warrant_verdicts": {
+    "fail": 27
+   },
+   "task_kinds": {
+    "conjecture": 26,
+    "criticism": 94,
+    "repair": 25
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 90,
+    "None": 4
+   },
+   "n_context_exposures_joined": 140,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 82,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+   "n_artifacts": 177,
+   "n_critic_artifacts": 82,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 37,
+    "criticism": 46,
+    "repair": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 46
+   },
+   "n_context_exposures_joined": 57,
+   "critic_artifacts_shown_to_conjecture": 15,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 68,
+   "root": "experiments/glm_judge_2026-07-14",
+   "n_artifacts": 146,
+   "n_critic_artifacts": 97,
+   "warrant_types": {
+    "demonstrative": 27,
+    "argumentative": 2
+   },
+   "warrant_verdicts": {
+    "fail": 27,
+    "null": 2
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 47,
+   "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+   "n_artifacts": 117,
+   "n_critic_artifacts": 48,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "repair": 4,
+    "conjecture": 26,
+    "criticism": 22
+   },
+   "criticism_dispatch_authority": {
+    "None": 22
+   },
+   "n_context_exposures_joined": 42,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 46,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+   "n_artifacts": 102,
+   "n_critic_artifacts": 46,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 18,
+    "criticism": 27,
+    "repair": 2
+   },
+   "criticism_dispatch_authority": {
+    "None": 27
+   },
+   "n_context_exposures_joined": 38,
+   "critic_artifacts_shown_to_conjecture": 10,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 45,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+   "n_artifacts": 113,
+   "n_critic_artifacts": 48,
+   "warrant_types": {
+    "demonstrative": 3
+   },
+   "warrant_verdicts": {
+    "fail": 3
+   },
+   "task_kinds": {
+    "conjecture": 36,
+    "criticism": 31,
+    "repair": 9
+   },
+   "criticism_dispatch_authority": {
+    "None": 31
+   },
+   "n_context_exposures_joined": 56,
+   "critic_artifacts_shown_to_conjecture": 6,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 45,
+   "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+   "n_artifacts": 100,
+   "n_critic_artifacts": 45,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 26,
+    "criticism": 27,
+    "repair": 8
+   },
+   "criticism_dispatch_authority": {
+    "None": 27
+   },
+   "n_context_exposures_joined": 52,
+   "critic_artifacts_shown_to_conjecture": 10,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 40,
+   "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+   "n_artifacts": 96,
+   "n_critic_artifacts": 40,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 25,
+    "conjecture": 24,
+    "bridge_ledger": 1,
+    "repair": 3,
+    "bridge_composition": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 25
+   },
+   "n_context_exposures_joined": 36,
+   "critic_artifacts_shown_to_conjecture": 11,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 37,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+   "n_artifacts": 95,
+   "n_critic_artifacts": 37,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 29,
+    "conjecture": 37,
+    "repair": 8
+   },
+   "criticism_dispatch_authority": {
+    "None": 29
+   },
+   "n_context_exposures_joined": 58,
+   "critic_artifacts_shown_to_conjecture": 12,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 36,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+   "n_artifacts": 97,
+   "n_critic_artifacts": 38,
+   "warrant_types": {
+    "demonstrative": 2
+   },
+   "warrant_verdicts": {
+    "fail": 2
+   },
+   "task_kinds": {
+    "criticism": 27,
+    "conjecture": 41,
+    "repair": 15
+   },
+   "criticism_dispatch_authority": {
+    "None": 27
+   },
+   "n_context_exposures_joined": 63,
+   "critic_artifacts_shown_to_conjecture": 11,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 36,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+   "n_artifacts": 100,
+   "n_critic_artifacts": 37,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "repair": 11,
+    "criticism": 32,
+    "conjecture": 29
+   },
+   "criticism_dispatch_authority": {
+    "None": 32
+   },
+   "n_context_exposures_joined": 59,
+   "critic_artifacts_shown_to_conjecture": 6,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 35,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+   "n_artifacts": 100,
+   "n_critic_artifacts": 35,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 36,
+    "conjecture": 32,
+    "repair": 19
+   },
+   "criticism_dispatch_authority": {
+    "None": 36
+   },
+   "n_context_exposures_joined": 78,
+   "critic_artifacts_shown_to_conjecture": 11,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 34,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+   "n_artifacts": 116,
+   "n_critic_artifacts": 35,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "repair": 2,
+    "criticism": 38,
+    "conjecture": 29
+   },
+   "criticism_dispatch_authority": {
+    "None": 38
+   },
+   "n_context_exposures_joined": 53,
+   "critic_artifacts_shown_to_conjecture": 7,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 33,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+   "n_artifacts": 95,
+   "n_critic_artifacts": 33,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 28,
+    "conjecture": 16,
+    "repair": 6
+   },
+   "criticism_dispatch_authority": {
+    "None": 28
+   },
+   "n_context_exposures_joined": 41,
+   "critic_artifacts_shown_to_conjecture": 13,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/jolt_architecture_2026-07-16/run",
+   "n_artifacts": 83,
+   "n_critic_artifacts": 32,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+   "n_artifacts": 94,
+   "n_critic_artifacts": 33,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "criticism": 32,
+    "conjecture": 42,
+    "repair": 12
+   },
+   "criticism_dispatch_authority": {
+    "None": 32
+   },
+   "n_context_exposures_joined": 64,
+   "critic_artifacts_shown_to_conjecture": 6,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "n_artifacts": 71,
+   "n_critic_artifacts": 32,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 15,
+    "conjecture": 26,
+    "repair": 4
+   },
+   "criticism_dispatch_authority": {
+    "None": 15
+   },
+   "n_context_exposures_joined": 31,
+   "critic_artifacts_shown_to_conjecture": 16,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 30,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "n_artifacts": 60,
+   "n_critic_artifacts": 31,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "criticism": 31,
+    "repair": 12,
+    "conjecture": 5
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 29,
+    "None": 2
+   },
+   "n_context_exposures_joined": 47,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 29,
+   "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+   "n_artifacts": 73,
+   "n_critic_artifacts": 29,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "repair": 14,
+    "criticism": 18,
+    "conjecture": 37,
+    "bridge_ledger": 5
+   },
+   "criticism_dispatch_authority": {
+    "None": 18
+   },
+   "n_context_exposures_joined": 49,
+   "critic_artifacts_shown_to_conjecture": 11,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 29,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+   "n_artifacts": 85,
+   "n_critic_artifacts": 31,
+   "warrant_types": {
+    "demonstrative": 2
+   },
+   "warrant_verdicts": {
+    "fail": 2
+   },
+   "task_kinds": {
+    "conjecture": 40,
+    "repair": 9,
+    "criticism": 25
+   },
+   "criticism_dispatch_authority": {
+    "None": 25
+   },
+   "n_context_exposures_joined": 55,
+   "critic_artifacts_shown_to_conjecture": 7,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 28,
+   "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+   "n_artifacts": 69,
+   "n_critic_artifacts": 29,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "conjecture": 16,
+    "criticism": 17,
+    "bridge_composition": 2,
+    "repair": 6,
+    "bridge_ledger": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 17
+   },
+   "n_context_exposures_joined": 29,
+   "critic_artifacts_shown_to_conjecture": 11,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 28,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+   "n_artifacts": 91,
+   "n_critic_artifacts": 28,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 28,
+    "repair": 4,
+    "conjecture": 34
+   },
+   "criticism_dispatch_authority": {
+    "None": 28
+   },
+   "n_context_exposures_joined": 48,
+   "critic_artifacts_shown_to_conjecture": 3,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 26,
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "n_artifacts": 68,
+   "n_critic_artifacts": 39,
+   "warrant_types": {
+    "demonstrative": 11
+   },
+   "warrant_verdicts": {
+    "fail": 11
+   },
+   "task_kinds": {
+    "criticism": 21,
+    "conjecture": 11,
+    "repair": 8
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 19,
+    "None": 2
+   },
+   "n_context_exposures_joined": 38,
+   "critic_artifacts_shown_to_conjecture": 1,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 26,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "n_artifacts": 59,
+   "n_critic_artifacts": 31,
+   "warrant_types": {
+    "demonstrative": 3
+   },
+   "warrant_verdicts": {
+    "fail": 3
+   },
+   "task_kinds": {
+    "criticism": 28,
+    "repair": 13,
+    "conjecture": 16
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 27,
+    "None": 1
+   },
+   "n_context_exposures_joined": 56,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 24,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "n_artifacts": 57,
+   "n_critic_artifacts": 28,
+   "warrant_types": {
+    "demonstrative": 2
+   },
+   "warrant_verdicts": {
+    "fail": 2
+   },
+   "task_kinds": {
+    "criticism": 30,
+    "repair": 15,
+    "conjecture": 5
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 28,
+    "None": 2
+   },
+   "n_context_exposures_joined": 50,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 21,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "n_artifacts": 50,
+   "n_critic_artifacts": 27,
+   "warrant_types": {
+    "demonstrative": 4
+   },
+   "warrant_verdicts": {
+    "fail": 4
+   },
+   "task_kinds": {
+    "conjecture": 8,
+    "criticism": 20,
+    "repair": 13
+   },
+   "criticism_dispatch_authority": {
+    "observe_only": 18,
+    "None": 2
+   },
+   "n_context_exposures_joined": 41,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 19,
+   "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+   "n_artifacts": 47,
+   "n_critic_artifacts": 19,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 17,
+    "repair": 3,
+    "bridge_ledger": 8,
+    "criticism": 12,
+    "bridge_composition": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 12
+   },
+   "n_context_exposures_joined": 27,
+   "critic_artifacts_shown_to_conjecture": 10,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 18,
+   "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+   "n_artifacts": 70,
+   "n_critic_artifacts": 18,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "repair": 14,
+    "conjecture": 46,
+    "criticism": 22,
+    "bridge_composition": 6,
+    "bridge_ledger": 3
+   },
+   "criticism_dispatch_authority": {
+    "None": 22
+   },
+   "n_context_exposures_joined": 57,
+   "critic_artifacts_shown_to_conjecture": 12,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 17,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+   "n_artifacts": 94,
+   "n_critic_artifacts": 18,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {
+    "conjecture": 26,
+    "criticism": 32,
+    "repair": 6
+   },
+   "criticism_dispatch_authority": {
+    "None": 32
+   },
+   "n_context_exposures_joined": 56,
+   "critic_artifacts_shown_to_conjecture": 3,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 17,
+   "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+   "n_artifacts": 42,
+   "n_critic_artifacts": 17,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "repair": 15,
+    "conjecture": 28,
+    "criticism": 11
+   },
+   "criticism_dispatch_authority": {
+    "None": 11
+   },
+   "n_context_exposures_joined": 45,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 16,
+   "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+   "n_artifacts": 304,
+   "n_critic_artifacts": 32,
+   "warrant_types": {
+    "demonstrative": 8,
+    "argumentative": 8
+   },
+   "warrant_verdicts": {
+    "fail": 8,
+    "null": 8
+   },
+   "task_kinds": {
+    "defended_trial_step": 494,
+    "conjecture": 67,
+    "criticism": 119,
+    "repair": 5
+   },
+   "criticism_dispatch_authority": {
+    "None": 119
+   },
+   "n_context_exposures_joined": 666,
+   "critic_artifacts_shown_to_conjecture": 1,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 16,
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "n_artifacts": 38,
+   "n_critic_artifacts": 16,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 11,
+    "criticism": 9,
+    "repair": 5
+   },
+   "criticism_dispatch_authority": {
+    "None": 9
+   },
+   "n_context_exposures_joined": 24,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+   "n_artifacts": 37,
+   "n_critic_artifacts": 15,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 33,
+    "criticism": 9,
+    "repair": 6,
+    "bridge_ledger": 2,
+    "bridge_composition": 2
+   },
+   "criticism_dispatch_authority": {
+    "None": 9
+   },
+   "n_context_exposures_joined": 22,
+   "critic_artifacts_shown_to_conjecture": 7,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+   "n_artifacts": 47,
+   "n_critic_artifacts": 15,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 19,
+    "criticism": 14,
+    "repair": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 14
+   },
+   "n_context_exposures_joined": 15,
+   "critic_artifacts_shown_to_conjecture": 2,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+   "n_artifacts": 42,
+   "n_critic_artifacts": 15,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 10,
+    "conjecture": 22,
+    "repair": 3
+   },
+   "criticism_dispatch_authority": {
+    "None": 10
+   },
+   "n_context_exposures_joined": 26,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 14,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+   "n_artifacts": 46,
+   "n_critic_artifacts": 14,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 11,
+    "conjecture": 18,
+    "repair": 8
+   },
+   "criticism_dispatch_authority": {
+    "None": 11
+   },
+   "n_context_exposures_joined": 31,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+   "n_artifacts": 43,
+   "n_critic_artifacts": 12,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 34,
+    "repair": 9,
+    "criticism": 8
+   },
+   "criticism_dispatch_authority": {
+    "None": 8
+   },
+   "n_context_exposures_joined": 35,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+   "n_artifacts": 79,
+   "n_critic_artifacts": 12,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 29,
+    "criticism": 20,
+    "repair": 12
+   },
+   "criticism_dispatch_authority": {
+    "None": 20
+   },
+   "n_context_exposures_joined": 42,
+   "critic_artifacts_shown_to_conjecture": 1,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+   "n_artifacts": 32,
+   "n_critic_artifacts": 12,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "repair": 16,
+    "conjecture": 21,
+    "criticism": 11
+   },
+   "criticism_dispatch_authority": {
+    "None": 11
+   },
+   "n_context_exposures_joined": 38,
+   "critic_artifacts_shown_to_conjecture": 5,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+   "n_artifacts": 27,
+   "n_critic_artifacts": 11,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 23,
+    "criticism": 6,
+    "repair": 5,
+    "bridge_composition": 1,
+    "bridge_ledger": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 6
+   },
+   "n_context_exposures_joined": 21,
+   "critic_artifacts_shown_to_conjecture": 6,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+   "n_artifacts": 39,
+   "n_critic_artifacts": 11,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 10,
+    "conjecture": 18,
+    "bridge_composition": 1,
+    "repair": 6,
+    "bridge_ledger": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 10
+   },
+   "n_context_exposures_joined": 21,
+   "critic_artifacts_shown_to_conjecture": 7,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+   "n_artifacts": 59,
+   "n_critic_artifacts": 11,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 15,
+    "conjecture": 20,
+    "repair": 9
+   },
+   "criticism_dispatch_authority": {
+    "None": 15
+   },
+   "n_context_exposures_joined": 40,
+   "critic_artifacts_shown_to_conjecture": 5,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro",
+   "n_artifacts": 34,
+   "n_critic_artifacts": 22,
+   "warrant_types": {
+    "demonstrative": 3,
+    "argumentative": 8
+   },
+   "warrant_verdicts": {
+    "fail": 3,
+    "null": 8
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 10,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+   "n_artifacts": 53,
+   "n_critic_artifacts": 10,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 11,
+    "criticism": 13,
+    "repair": 4
+   },
+   "criticism_dispatch_authority": {
+    "None": 13
+   },
+   "n_context_exposures_joined": 27,
+   "critic_artifacts_shown_to_conjecture": 5,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+   "n_artifacts": 30,
+   "n_critic_artifacts": 8,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 9,
+    "conjecture": 4,
+    "repair": 4
+   },
+   "criticism_dispatch_authority": {
+    "None": 9
+   },
+   "n_context_exposures_joined": 16,
+   "critic_artifacts_shown_to_conjecture": 4,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/gemma4_dna_unattended_2026-07-12",
+   "n_artifacts": 35,
+   "n_critic_artifacts": 16,
+   "warrant_types": {
+    "argumentative": 2,
+    "demonstrative": 6
+   },
+   "warrant_verdicts": {
+    "null": 2,
+    "fail": 6
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b",
+   "n_artifacts": 25,
+   "n_critic_artifacts": 16,
+   "warrant_types": {
+    "argumentative": 8
+   },
+   "warrant_verdicts": {
+    "null": 8
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+   "n_artifacts": 20,
+   "n_critic_artifacts": 6,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 6,
+    "conjecture": 16,
+    "bridge_ledger": 1,
+    "repair": 5,
+    "bridge_composition": 1
+   },
+   "criticism_dispatch_authority": {
+    "None": 6
+   },
+   "n_context_exposures_joined": 17,
+   "critic_artifacts_shown_to_conjecture": 3,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+   "n_artifacts": 22,
+   "n_critic_artifacts": 6,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "repair": 8,
+    "criticism": 5,
+    "conjecture": 20
+   },
+   "criticism_dispatch_authority": {
+    "None": 5
+   },
+   "n_context_exposures_joined": 23,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+   "n_artifacts": 22,
+   "n_critic_artifacts": 6,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 12,
+    "repair": 3,
+    "criticism": 3
+   },
+   "criticism_dispatch_authority": {
+    "None": 3
+   },
+   "n_context_exposures_joined": 18,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+   "n_artifacts": 22,
+   "n_critic_artifacts": 6,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "conjecture": 16,
+    "criticism": 5,
+    "repair": 9
+   },
+   "criticism_dispatch_authority": {
+    "None": 5
+   },
+   "n_context_exposures_joined": 20,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+   "n_artifacts": 20,
+   "n_critic_artifacts": 4,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 8,
+    "conjecture": 15,
+    "repair": 3
+   },
+   "criticism_dispatch_authority": {
+    "None": 8
+   },
+   "n_context_exposures_joined": 18,
+   "critic_artifacts_shown_to_conjecture": 4,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/gemma4_dna_unattended_3_2026-07-12",
+   "n_artifacts": 22,
+   "n_critic_artifacts": 8,
+   "warrant_types": {
+    "argumentative": 1,
+    "demonstrative": 3
+   },
+   "warrant_verdicts": {
+    "null": 1,
+    "fail": 3
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6",
+   "n_artifacts": 15,
+   "n_critic_artifacts": 8,
+   "warrant_types": {
+    "argumentative": 3,
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "null": 3,
+    "fail": 1
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 3,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+   "n_artifacts": 34,
+   "n_critic_artifacts": 3,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {
+    "criticism": 3,
+    "conjecture": 4,
+    "repair": 2
+   },
+   "criticism_dispatch_authority": {
+    "None": 3
+   },
+   "n_context_exposures_joined": 8,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": true
+  },
+  {
+   "crit_events": 3,
+   "root": "experiments/bronze_pilot_2026-07-14",
+   "n_artifacts": 12,
+   "n_critic_artifacts": 3,
+   "warrant_types": {},
+   "warrant_verdicts": {},
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  },
+  {
+   "crit_events": 1,
+   "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16",
+   "n_artifacts": 28,
+   "n_critic_artifacts": 2,
+   "warrant_types": {
+    "demonstrative": 1
+   },
+   "warrant_verdicts": {
+    "fail": 1
+   },
+   "task_kinds": {},
+   "criticism_dispatch_authority": {},
+   "n_context_exposures_joined": 0,
+   "critic_artifacts_shown_to_conjecture": 0,
+   "has_workflow_objects": false
+  }
+ ]
+}

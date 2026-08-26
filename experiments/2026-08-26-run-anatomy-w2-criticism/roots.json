@@ -1,0 +1,246 @@
+{
+ "n_roots_with_criticism": 60,
+ "total_criticism_events": 2639,
+ "roots": [
+  {
+   "crit_events": 642,
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+  },
+  {
+   "crit_events": 459,
+   "root": "experiments/2026-08-25-change-constructive-frontier/run"
+  },
+  {
+   "crit_events": 207,
+   "root": "experiments/2026-08-25-poietics-program/run"
+  },
+  {
+   "crit_events": 91,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run"
+  },
+  {
+   "crit_events": 82,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd"
+  },
+  {
+   "crit_events": 68,
+   "root": "experiments/glm_judge_2026-07-14"
+  },
+  {
+   "crit_events": 47,
+   "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc"
+  },
+  {
+   "crit_events": 46,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484"
+  },
+  {
+   "crit_events": 45,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7"
+  },
+  {
+   "crit_events": 45,
+   "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829"
+  },
+  {
+   "crit_events": 40,
+   "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5"
+  },
+  {
+   "crit_events": 37,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b"
+  },
+  {
+   "crit_events": 36,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1"
+  },
+  {
+   "crit_events": 36,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea"
+  },
+  {
+   "crit_events": 35,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008"
+  },
+  {
+   "crit_events": 34,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913"
+  },
+  {
+   "crit_events": 33,
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949"
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/jolt_architecture_2026-07-16/run"
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726"
+  },
+  {
+   "crit_events": 32,
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c"
+  },
+  {
+   "crit_events": 30,
+   "root": "experiments/2026-08-22-live-reach-rich-run/run"
+  },
+  {
+   "crit_events": 29,
+   "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346"
+  },
+  {
+   "crit_events": 29,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7"
+  },
+  {
+   "crit_events": 28,
+   "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf"
+  },
+  {
+   "crit_events": 28,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70"
+  },
+  {
+   "crit_events": 26,
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run"
+  },
+  {
+   "crit_events": 26,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+  },
+  {
+   "crit_events": 24,
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+  },
+  {
+   "crit_events": 21,
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c"
+  },
+  {
+   "crit_events": 19,
+   "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c"
+  },
+  {
+   "crit_events": 18,
+   "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332"
+  },
+  {
+   "crit_events": 17,
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06"
+  },
+  {
+   "crit_events": 17,
+   "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752"
+  },
+  {
+   "crit_events": 16,
+   "root": "experiments/2026-08-12-live-grounded-extension-expansion/run"
+  },
+  {
+   "crit_events": 16,
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c"
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03"
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00"
+  },
+  {
+   "crit_events": 15,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593"
+  },
+  {
+   "crit_events": 14,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5"
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a"
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a"
+  },
+  {
+   "crit_events": 12,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0"
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345"
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847"
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a"
+  },
+  {
+   "crit_events": 11,
+   "root": "experiments/bronze_flat_2026-07-13/deepseek-v4-pro"
+  },
+  {
+   "crit_events": 10,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a"
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100"
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/gemma4_dna_unattended_2026-07-12"
+  },
+  {
+   "crit_events": 8,
+   "root": "experiments/bronze_flat_2026-07-13/qwen3_5_397b"
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be"
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5"
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7"
+  },
+  {
+   "crit_events": 6,
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5"
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107"
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/gemma4_dna_unattended_3_2026-07-12"
+  },
+  {
+   "crit_events": 4,
+   "root": "experiments/bronze_flat_2026-07-13/kimi-k2_6"
+  },
+  {
+   "crit_events": 3,
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a"
+  },
+  {
+   "crit_events": 3,
+   "root": "experiments/bronze_pilot_2026-07-14"
+  },
+  {
+   "crit_events": 1,
+   "root": "experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16"
+  }
+ ]
+}

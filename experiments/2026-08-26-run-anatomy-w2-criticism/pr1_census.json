@@ -473,6 +473,14 @@
    "c00eb1ae11620c9ee64f0da353ea816ba73e53cce6e7f9eb733d98ce641e9a1c"
   ]
  ],
+ "citation_checks": {
+  "evidence-citation:EVIDENCE_CITATION_VERIFIED": 210,
+  "evidence-citation:EVIDENCE_QUOTE_MISMATCH": 20,
+  "evidence-citation:EVIDENCE_REF_NOT_EXPOSED": 2,
+  "evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK": 2,
+  "premise-citation:EVIDENCE_CITATION_VERIFIED": 2,
+  "premise-citation:EVIDENCE_QUOTE_MISMATCH": 1
+ },
  "dispatches": [
   {
    "attempt_index": 0,
