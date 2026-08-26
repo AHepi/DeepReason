@@ -581,6 +581,11 @@ def census_root(root: pathlib.Path) -> dict:
             "by_code": dict(Counter(c["code"] for c in citations)),
             "by_side": dict(Counter(c["side"] for c in citations)),
             "verified_by_side": dict(Counter(c["side"] for c in verified)),
+            "cycles_by_problem": [
+                {"cycle": n, "problem": pid, "verified_citations": sum(
+                    1 for c in verified if c["cycle"] == n)}
+                for _seq, n, pid in marks
+            ],
             "verified_by_cycle": dict(sorted(
                 Counter(str(c["cycle"]) for c in verified).items(),
                 key=lambda kv: int(kv[0]) if kv[0].isdigit() else -1)),

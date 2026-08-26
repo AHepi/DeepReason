@@ -50,6 +50,38 @@
         "by_side": {
           "conjecture-side": 14
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-1a585e9647728d95c37d95ec939c7898",
+            "verified_citations": 14
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-1a585e9647728d95c37d95ec939c7898",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:0a0fe41784c9",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-1a585e9647728d95c37d95ec939c7898",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:1368f4c947ab",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-1a585e9647728d95c37d95ec939c7898",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 14,
         "unverified": 0,
         "verified": 14,
@@ -976,6 +1008,38 @@
         "by_side": {
           "conjecture-side": 74
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-2d75a71328957032505c67f7d41250bc",
+            "verified_citations": 56
+          },
+          {
+            "cycle": 1,
+            "problem": "simulation-request:sha256:98cbf11e309d9758243f47f9c6c8c57de1fc10b96a4836a96d3a2ba1ea7524ad",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-2d75a71328957032505c67f7d41250bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "conn:024cbd0e1e4f",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:026a1c585082",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-2d75a71328957032505c67f7d41250bc",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 74,
         "unverified": 18,
         "verified": 56,
@@ -1382,6 +1446,38 @@
         "by_side": {
           "conjecture-side": 1
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "simulation-request:sha256:00dcbee35800d7a14013a1baf2d493295996af9c52bc848fe103b34d735d9f19",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "conn:00c2c5ea25de",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:054e7dd27c45",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 1,
         "unverified": 1,
         "verified": 0,
@@ -1520,6 +1616,38 @@
         "by_side": {
           "conjecture-side": 1
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "conn:04d78b513f10",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:099c8bad1779",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-d88a06210fd0758d035f9b86ffac8ab4",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 1,
         "unverified": 1,
         "verified": 0,
@@ -1682,6 +1810,68 @@
         "by_side": {
           "conjecture-side": 5
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:190d009cd72e",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:274e86c9d466",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:2c5bf6893801",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "disc:question-17f006091d6deeb318c5448f91949f54",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:274e86c9d466",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 5,
         "unverified": 5,
         "verified": 0,
@@ -1809,6 +1999,58 @@
         "by_side": {
           "conjecture-side": 6
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:05ae27a040f0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:1655c0c1da78",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:5057e25fe07a",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-6c5085280a8996cec99c1fbe5873ccf0",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 6,
         "unverified": 6,
         "verified": 0,
@@ -2091,6 +2333,58 @@
         "by_side": {
           "conjecture-side": 19
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:0b13382ebfe2",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:110f4193568b",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:2316baad7b12",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-e5bd6570d04d8805b7a344fcb96da8db",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 19,
         "unverified": 19,
         "verified": 0,
@@ -2357,6 +2651,68 @@
         "by_side": {
           "conjecture-side": 4
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:07a139da8aba",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:0d3303c07350",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:0fd4d62cbad4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "disc:question-65a709e755f5ace91f631c29da0b8b59",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:0d3303c07350",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 4,
         "unverified": 4,
         "verified": 0,
@@ -2599,6 +2955,68 @@
         "by_side": {
           "conjecture-side": 14
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:14ab0ddd3b5e",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:00b9136cb146",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:06da32b68fda",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "disc:question-5a0c75b86712457e928a099a5d8b3df1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:00b9136cb146",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 14,
         "unverified": 14,
         "verified": 0,
@@ -3040,6 +3458,168 @@
         "by_side": {
           "conjecture-side": 149
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 53
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "disc:succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:21256139649b",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "conn:3e200f5e7e7e",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:4fc07d1cf29c",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "disc:succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 48
+          },
+          {
+            "cycle": 10,
+            "problem": "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 11,
+            "problem": "conn:07c3398912d4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 12,
+            "problem": "disc:succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 13,
+            "problem": "succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 14,
+            "problem": "succ:18df3647b4c8",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 15,
+            "problem": "disc:succ:18df3647b4c8",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 16,
+            "problem": "succ:5e33451687b1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 17,
+            "problem": "disc:succ:5e33451687b1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 18,
+            "problem": "succ:e2a71196cb02",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 19,
+            "problem": "conn:0f02e3cf66e2",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 20,
+            "problem": "conn:1c73ea6a1b56",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 21,
+            "problem": "conn:2d45b057ee2c",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 22,
+            "problem": "disc:succ:18df3647b4c8",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 23,
+            "problem": "disc:succ:5e33451687b1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "disc:question-6fcc770419da1e9c8fccb2db8ed32bbe",
+            "verified_citations": 53
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:succ:18df3647b4c8",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:succ:5e33451687b1",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "disc:succ:b06d99eca5e7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "succ:e2a71196cb02",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:succ:e2a71196cb02",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "succ:4bdcc8b0c28d",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "disc:succ:4bdcc8b0c28d",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 149,
         "unverified": 48,
         "verified": 101,
@@ -7175,6 +7755,13 @@
           "conjecture-side": 1,
           "critic-side": 2
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 3,
         "unverified": 3,
         "verified": 0,
@@ -7642,6 +8229,23 @@
         "by_side": {
           "critic-side": 2
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:1b3bec012b12",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 2,
         "unverified": 2,
         "verified": 0,
@@ -8108,6 +8712,48 @@
           "conjecture-side": 7,
           "critic-side": 1
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:07c58a1d6b34",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:13f027942733",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-4dd62735b90864a75220e09b302500bc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:0793267d0d4d",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 8,
         "unverified": 8,
         "verified": 0,
@@ -8574,6 +9220,88 @@
         "by_side": {
           "conjecture-side": 21
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "disc:audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 7,
+            "problem": "disc:audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 9,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 10,
+            "problem": "audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 11,
+            "problem": "disc:audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 12,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 13,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 14,
+            "problem": "audit:ritual",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 15,
+            "problem": "question-64b724c4118320989925d111501a8e41",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 21,
         "unverified": 21,
         "verified": 0,
@@ -9155,6 +9883,68 @@
           "conjecture-side": 234,
           "critic-side": 3
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 46
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:0094852dcac7",
+            "verified_citations": 25
+          },
+          {
+            "cycle": 3,
+            "problem": "question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 31
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:007dca563e8d",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 6,
+            "problem": "question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 41
+          },
+          {
+            "cycle": 7,
+            "problem": "conn:0b35ed752e77",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 8,
+            "problem": "question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 34
+          },
+          {
+            "cycle": 9,
+            "problem": "disc:question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 10,
+            "problem": "question-aa835741bebc4b4cb189f4b08bef649a",
+            "verified_citations": 35
+          },
+          {
+            "cycle": 11,
+            "problem": "conn:0c9d02e6f822",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 237,
         "unverified": 25,
         "verified": 212,
@@ -17167,6 +17957,98 @@
         "by_side": {
           "conjecture-side": 11
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:14e084ed5ca7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:15769cf44a85",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "conn:14e084ed5ca7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:15769cf44a85",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 0,
+            "problem": "conn:15769cf44a85",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:10011f68166e",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-27633c5a9c5c7a55f009bf27b0b8c744",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 11,
         "unverified": 11,
         "verified": 0,
@@ -17315,6 +18197,38 @@
         "by_side": {
           "conjecture-side": 44
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 12
+          },
+          {
+            "cycle": 1,
+            "problem": "simulation-request:sha256:8f9fd01fff46aaa59cdbfb16e11a7b23389eee8d6ad2009d240e3724cc847026",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "simulation-request:sha256:29dfe6a8334288222219fde41a6f1c09b2e7898959f1a484753184332fad57b7",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "disc:question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:033a31b2855d",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "conn:0a0b0b506831",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 44,
         "unverified": 32,
         "verified": 12,
@@ -18129,6 +19043,38 @@
         "by_side": {
           "conjecture-side": 32
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 21
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:24c9294f73e6",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:391b32384c70",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 32,
         "unverified": 11,
         "verified": 21,
@@ -18890,6 +19836,13 @@
         "by_side": {
           "conjecture-side": 19
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 5
+          }
+        ],
         "measure_events": 19,
         "unverified": 14,
         "verified": 5,
@@ -19657,6 +20610,38 @@
         "by_side": {
           "conjecture-side": 46
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-71b4c653b03a234c64e9e018293e8927",
+            "verified_citations": 4
+          },
+          {
+            "cycle": 1,
+            "problem": "simulation-request:sha256:480ef6d2abfa46076131681d0f9a444fd553832d479c4a840901192c52402f83",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-71b4c653b03a234c64e9e018293e8927",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "conn:021f2c13e764",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:0c73ed8015d9",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-71b4c653b03a234c64e9e018293e8927",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 46,
         "unverified": 42,
         "verified": 4,
@@ -20699,6 +21684,38 @@
         "by_side": {
           "conjecture-side": 20
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 8
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:29ac84b3125f",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:63658fdafdfb",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-b9510316be66b626d54bf59c1e3483cc",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 20,
         "unverified": 12,
         "verified": 8,
@@ -21526,6 +22543,38 @@
         "by_side": {
           "conjecture-side": 8
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-c2d9800e69e1f4456a91a6dfb99aed90",
+            "verified_citations": 5
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:04aeef0fff33",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-c2d9800e69e1f4456a91a6dfb99aed90",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-c2d9800e69e1f4456a91a6dfb99aed90",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:182916b7a7b8",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-c2d9800e69e1f4456a91a6dfb99aed90",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 8,
         "unverified": 3,
         "verified": 5,
@@ -21769,6 +22818,38 @@
         "by_side": {
           "conjecture-side": 15
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-050eb4e61ec9139bd93a50ec17aacbb3",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:18174034ea0c",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "disc:question-050eb4e61ec9139bd93a50ec17aacbb3",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-050eb4e61ec9139bd93a50ec17aacbb3",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:29aeb084f941",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "question-050eb4e61ec9139bd93a50ec17aacbb3",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 15,
         "unverified": 15,
         "verified": 0,
@@ -22091,6 +23172,38 @@
         "by_side": {
           "conjecture-side": 33
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "conn:0e26d6be54fd",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:0f99efbab8a4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 33,
         "unverified": 33,
         "verified": 0,
@@ -26491,6 +27604,28 @@
         "by_side": {
           "conjecture-side": 22
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "conn:0e26d6be54fd",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 22,
         "unverified": 22,
         "verified": 0,
@@ -30867,6 +32002,23 @@
         "by_side": {
           "conjecture-side": 15
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "conn:0e26d6be54fd",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 15,
         "unverified": 15,
         "verified": 0,
@@ -35227,6 +36379,18 @@
         "by_side": {
           "conjecture-side": 11
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 1,
+            "problem": "conn:0e26d6be54fd",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 11,
         "unverified": 11,
         "verified": 0,
@@ -39615,6 +40779,38 @@
         "by_side": {
           "conjecture-side": 37
         },
+        "cycles_by_problem": [
+          {
+            "cycle": 0,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 28
+          },
+          {
+            "cycle": 1,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 2,
+            "problem": "conn:0e26d6be54fd",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 3,
+            "problem": "question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 4,
+            "problem": "conn:0f99efbab8a4",
+            "verified_citations": 0
+          },
+          {
+            "cycle": 5,
+            "problem": "disc:question-98a0e3a77a0e29bd56195f9c531f6092",
+            "verified_citations": 0
+          }
+        ],
         "measure_events": 37,
         "unverified": 9,
         "verified": 28,

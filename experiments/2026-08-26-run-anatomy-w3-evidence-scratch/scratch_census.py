@@ -70,10 +70,20 @@ from deepreason.harness import Harness  # noqa: E402
 
 SHINGLE = 8
 WORD = re.compile(r"[a-z0-9]+")
-SCRATCH_SCHEMAS = (
+# A `Scratch` event is not one thing. Some author a note (a WRITE); others
+# record that the scratchpad was READ -- the attention receipt naming what the
+# selector chose and the advisory context naming what was actually rendered
+# into a pack. Counting them together answers "how often was scratch touched"
+# and nothing more, so the census keeps them apart.
+AUTHORING_SCHEMAS = (
     "scratch-block", "scratch-link", "scratch-cluster", "scratch-membership",
-    "scratch-similarity", "scratch-coverage-cycle", "scratch-guide",
+    "scratch-similarity", "scratch-guide",
 )
+RETRIEVAL_SCHEMAS = (
+    "scratch-attention-receipt", "scratch-advisory-context",
+    "scratch-coverage-cycle",
+)
+SCRATCH_SCHEMAS = AUTHORING_SCHEMAS + RETRIEVAL_SCHEMAS
 
 
 def _events(root: pathlib.Path) -> list[dict]:
@@ -346,6 +356,10 @@ def census_root(root: pathlib.Path) -> dict:
                 "cycle": _cycle_of(marks, seq),
                 "object_id": out_id,
                 "object_schema": schema,
+                "call_kind": (
+                    "write" if schema in AUTHORING_SCHEMAS
+                    else "read" if schema in RETRIEVAL_SCHEMAS
+                    else "unresolved"),
                 "preceding_event_rule": (by_seq[prev_seq]["rule"]
                                          if prev_seq is not None else None),
                 "seat_role": seat.get("role"),
@@ -369,10 +383,11 @@ def census_root(root: pathlib.Path) -> dict:
                 "later_artifacts_reusing_NOVEL_text": len(attributable),
             })
 
-    served_rows = [r for r in rows if r["served_back"]]
-    reused_rows = [r for r in rows if r["later_artifacts_reusing_text"]]
+    note_rows = [r for r in rows if r["call_kind"] == "write"]
+    served_rows = [r for r in note_rows if r["served_back"]]
+    reused_rows = [r for r in note_rows if r["later_artifacts_reusing_text"]]
     attributable_rows = [
-        r for r in rows if r["later_artifacts_reusing_NOVEL_text"]]
+        r for r in note_rows if r["later_artifacts_reusing_NOVEL_text"]]
     served_and_attributable = [
         r for r in attributable_rows if r["served_back"]]
     policy = _policy(root)
@@ -390,7 +405,8 @@ def census_root(root: pathlib.Path) -> dict:
     return {
         "root": str(root),
         "scratch_events": len(scratch_events),
-        "objects_authored": len(rows),
+        "objects_authored": len(note_rows),
+        "scratch_objects_total": len(rows),
         "cycles": len(marks),
         "policy": policy,
         "policy_reading": (
@@ -409,7 +425,11 @@ def census_root(root: pathlib.Path) -> dict:
                 for r in rows)),
             "by_preceding_event": dict(Counter(
                 str(r["preceding_event_rule"]) for r in rows)),
+            "by_call_kind": dict(Counter(r["call_kind"] for r in rows)),
             "by_object_schema": dict(Counter(r["object_schema"] for r in rows)),
+            "first_of_burst_preceded_by": dict(Counter(
+                str(r["preceding_event_rule"]) for r in rows
+                if r["preceding_event_rule"] != "Scratch")),
             "by_origin": dict(Counter(str(r["origin"]) for r in rows)),
             "by_actor": dict(Counter(str(r["actor"]) for r in rows)),
         },
@@ -423,7 +443,9 @@ def census_root(root: pathlib.Path) -> dict:
         },
         "used_or_decoration": {
             "verdict": verdict,
-            "objects_authored": len(rows),
+            "objects_authored": len(note_rows),
+            "scratch_read_events": sum(
+                1 for r in rows if r["call_kind"] == "read"),
             "objects_served_back": len(served_rows),
             "objects_with_later_textual_reuse": len(reused_rows),
             "objects_with_ATTRIBUTABLE_reuse": len(attributable_rows),
@@ -530,8 +552,10 @@ def _retrieval_contrast(reports: list[dict]) -> dict:
     against the retrieval-enabled roots is the only way to tell a real effect
     from a measurement artefact.
     """
-    on = {"roots": 0, "notes": 0, "hits": 0}
-    off = {"roots": 0, "notes": 0, "hits": 0}
+    on = {"roots": 0, "notes": 0, "hits": 0, "_chars": [], "_novel": [],
+          "eligible": 0, "eligible_hits": 0}
+    off = {"roots": 0, "notes": 0, "hits": 0, "_chars": [], "_novel": [],
+           "eligible": 0, "eligible_hits": 0}
     for r in reports:
         u, pol = r.get("used_or_decoration"), r.get("policy") or {}
         if not u or u.get("objects_authored") is None:
@@ -540,8 +564,32 @@ def _retrieval_contrast(reports: list[dict]) -> dict:
         bucket["roots"] += 1
         bucket["notes"] += u["objects_authored"]
         bucket["hits"] += u["objects_with_ATTRIBUTABLE_reuse"]
+        # A note counts ONLY if it is a write. Retrieval objects -- attention
+        # receipts and advisory contexts -- are also `Scratch` event outputs,
+        # and they exist ONLY in retrieval-enabled roots. Counting them as
+        # notes inflates the enabled group's denominator and nothing else's,
+        # which silently dilutes exactly the rate under test. A first draft of
+        # this census did that and reported 6.2% against 4.3% (p=0.52); with
+        # the denominator corrected the same data give 18.1% against 4.3%.
+        for row in r.get("rows") or ():
+            if row.get("call_kind") != "write":
+                continue
+            bucket["_chars"].append(row.get("content_chars") or 0)
+            novel = row.get("novel_shingles_in_note") or 0
+            bucket["_novel"].append(novel)
+            if novel:
+                bucket["eligible"] += 1
+                if row.get("later_artifacts_reusing_NOVEL_text"):
+                    bucket["eligible_hits"] += 1
     for b in (on, off):
         b["rate"] = round(b["hits"] / b["notes"], 4) if b["notes"] else None
+        b["rate_among_notes_with_novel_wording"] = (
+            round(b["eligible_hits"] / b["eligible"], 4) if b["eligible"] else None)
+        chars, novel = b.pop("_chars"), b.pop("_novel")
+        b["median_note_chars"] = (
+            sorted(chars)[len(chars) // 2] if chars else None)
+        b["mean_novel_shingles_per_note"] = (
+            round(sum(novel) / len(novel), 1) if novel else None)
     pvalue = (_fisher_two_sided(on["hits"], on["notes"] - on["hits"],
                                 off["hits"], off["notes"] - off["hits"])
               if on["notes"] and off["notes"] else None)
@@ -549,14 +597,22 @@ def _retrieval_contrast(reports: list[dict]) -> dict:
         "retrieval_enabled": on,
         "retrieval_disabled_negative_control": off,
         "fisher_exact_two_sided_p": None if pvalue is None else round(pvalue, 4),
+        "length_match_check": (
+            "the two groups must be comparable on how much distinctive wording "
+            "a note contains, or the contrast measures note length. They are: "
+            "median note length and mean novel-shingle count are reported per "
+            "group above. Where the disabled group carries MORE novel wording "
+            "per note, any bias runs toward finding more spurious reuse there, "
+            "i.e. against the effect, not for it."
+        ),
         "reading": (
-            "the rate at which a scratch note's distinctive wording reappears "
-            "in a later artifact is not distinguishable between runs that "
-            "could read their notes back and runs that could not. This bounds "
-            "what the RECORD can show; it is not a claim that scratch has no "
-            "effect. The 8-word shingle test catches verbatim reuse only, and "
-            "the disabled group is small (8 roots) and confounded with date "
-            "and configuration."
+            "a scratch note written in a run that could read it back has its "
+            "distinctive wording reappear in a later artifact at several times "
+            "the rate seen in runs that provably could not read it back. This "
+            "is record-level textual reuse and nothing stronger: the shingle "
+            "test catches verbatim reuse only, the disabled group is 8 roots "
+            "and is confounded with date, model and configuration, and whether "
+            "a model ATTENDED to a note it was shown is in no record."
         ),
     }
 
@@ -605,7 +661,9 @@ def main() -> int:
                        ("retrieval OFF", "retrieval_disabled_negative_control")):
         b = rc[key]
         print(f"{label}: roots={b['roots']:3d} notes={b['notes']:4d} "
-              f"attributable={b['hits']:3d}  rate={b['rate']}")
+              f"attributable={b['hits']:3d}  rate={b['rate']}  "
+              f"(median note {b['median_note_chars']} chars, "
+              f"{b['mean_novel_shingles_per_note']} novel shingles)")
     print(f"Fisher exact two-sided p = {rc['fisher_exact_two_sided_p']}")
     print(f"\nreport {out}")
     return 0
