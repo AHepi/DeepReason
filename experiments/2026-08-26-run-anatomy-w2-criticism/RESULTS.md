@@ -228,3 +228,20 @@ criticism was the problem's own admission test.
 
 Gate for a read-only tranche: `git diff --stat origin/main` names no path
 under `src/` or `tests/`.
+
+---
+
+## 2026-08-26 — segment 3: the gate
+
+    $ git diff --stat origin/main
+     17 files changed, 40201 insertions(+)     # all under
+                                               # experiments/2026-08-26-run-anatomy-w2-criticism/
+    $ git diff --name-only origin/main | grep -E '^(src|tests)/'
+    (no output)                                # GATE PASS
+
+    $ git status --short experiments/2026-08-25-poietics-program \
+                         experiments/2026-08-25-change-constructive-frontier
+    (no output)                                # no committed root modified
+
+Every root was opened `read_only=True`. `tables.py` re-run from the
+committed JSONs reproduces `TABLES.md` byte-for-byte.
