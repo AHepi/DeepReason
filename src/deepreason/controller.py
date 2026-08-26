@@ -424,6 +424,37 @@ class Controller:
             }
         return out
 
+    def _emit_seat_signals(self, signals: dict[str, dict]) -> None:
+        """Write the two per-seat process readings the update rule consumes.
+
+        W5's census (2026-08-26) found these declared, consumed IN-PROCESS, and
+        emitted nowhere in `src/` -- so a reader of any committed root could
+        not see the numbers that moved a cap, only the cap. The registry
+        promises a signal is "anything declaring name, unit, producer-agnostic
+        semantics and a staleness bound"; a declared reading the record never
+        carries is a promise the record cannot keep.
+
+        Keyed by SEAT INSTANCE, matching both declarations, and emitted once
+        per cycle per instance so the staleness bound (`cycle`) is true of the
+        record and not only of the docstring.
+        """
+        for instance in sorted(signals):
+            reading = signals[instance]
+            self.harness.record_measure(
+                inputs=[
+                    "allocation.seat-truncation.v1",
+                    instance,
+                    f"{reading['truncation_rate']:.6f}",
+                ]
+            )
+            self.harness.record_measure(
+                inputs=[
+                    "allocation.seat-repair.v1",
+                    instance,
+                    f"{reading['repair_rate']:.6f}",
+                ]
+            )
+
     def _current_caps(self) -> dict[str, int]:
         # Per SEAT INSTANCE. For a role bound to one seat this is that seat's
         # cap under the bare role name, exactly as before; for a role bound to
@@ -549,11 +580,15 @@ class Controller:
             # Fail-static: a contested policy freezes the controller and the
             # caps revert to the last ACCEPTED policy (forbidden #6).
             self._revert_to_last_accepted()
+            self.harness.record_measure(
+                inputs=["allocation.policy-contested.v1", last]
+            )
             self.harness.record_measure(inputs=["controller-hold:fail-static", last])
             return None
 
         self._state_authority()
         signals = self._process_signals()
+        self._emit_seat_signals(signals)
         caps = self._current_caps()
         deltas = self._propose(caps, signals)
         evidence = dict(signals)
@@ -598,6 +633,13 @@ class Controller:
             body = self._policy_payload(aid)
             if body is None:
                 continue
+            # The reading the revert ACTED on. Emitted here and not at every
+            # call of `policy_is_authorized`: a reading that changed nothing is
+            # not a signal, and one event per consult would bury the decisions
+            # under the polling.
+            self.harness.record_measure(
+                inputs=["allocation.policy-authorized.v1", aid]
+            )
             for knob, value in self._validated_policy_knobs(body).items():
                 self._apply_cap(knob, value)
             return

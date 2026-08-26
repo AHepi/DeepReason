@@ -46,6 +46,36 @@ that reports the result.
 `check: grep -q "def cap_envelope" src/deepreason/controller.py && grep -q "def clamp" src/deepreason/controller.py`
 `check: grep -q "_policy_payload" src/deepreason/controller.py`
 
+## Two policy families now, and the recipe covers both
+
+`controller.py` steers per-seat COMPLETION CAPS from process signals.
+`wander.py` steers ATTENTION between problem lineages from the scheduler's own
+selection counts. They share this recipe, the three layers, and the
+efficiency-never-evidence row; they share no code.
+
+The second family adds one step to step 1: a lineage policy is REGISTERED in
+`wander.LINEAGE_POLICIES` under its own versioned id and selected by
+`Config.ATTENTION_ALLOCATION_POLICY`. A new throttle is a registry entry, never
+an edit to the scheduler — and the check that this stays true is in
+`DR-INV-signal-contract` ("the consumer reads the interface and nothing else").
+
+`check: python -c "
+from deepreason import wander
+assert set(wander.LINEAGE_POLICIES) >= {'wander-cap.v1', 'open-lineage.v1'}
+assert wander.DEFAULT_POLICY_ID in wander.LINEAGE_POLICIES
+from deepreason.config import Config
+assert Config().ATTENTION_ALLOCATION_POLICY in wander.LINEAGE_POLICIES
+"`
+
+**Step 5 has teeth now.** "Record the decision, typed" used to be the weakest
+step here, because E28's warning — the controller was believed to steer for
+months and zero committed logs contained a policy body — had no counterpart
+check. It does now: every name in `allocation.POLICY_SIGNALS` must appear at an
+emit site in `src/`, tested rather than audited, so a policy that reads a
+reading the record never carries fails the gate.
+
+`check: python -m pytest tests/test_wander_cap.py -q -k emit_site`
+
 ## What this recipe may NOT do
 
 - It may not let allocation touch a status. Efficiency, never evidence.

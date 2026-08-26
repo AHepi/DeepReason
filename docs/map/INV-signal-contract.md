@@ -1,7 +1,7 @@
 <!-- DR-INV-signal-contract -->
 Verified-at: 748c9ab61
 Verify: python -m pytest tests/test_signal_contract.py tests/test_allocation_signal_consumption.py -q
-Owns: src/deepreason/signals.py, src/deepreason/allocation.py
+Owns: src/deepreason/signals.py, src/deepreason/allocation.py, src/deepreason/wander.py
 Seams: 
 Seams-undocumented: scheduler x signal-contract
 
@@ -169,6 +169,94 @@ turns both the differential AND the structural check red.
 `check: python -m pytest tests/test_capture14_hysteresis.py -q -k "theorem_14_1 or constructs_no_edge"`
 `check: ! grep -qE "att_add|dep_add|Warrant\(|register_fail_warrant|_adjudicate" src/deepreason/capture/hysteresis.py`
 
+## The THIRD controller, and the row it takes (F3, 2026-08-26)
+
+`wander.py` is a lineage-allocation policy: a FLOOR on the share of worked
+cycles the operator-seeded lineage gets, with self-spawned lineages yielding
+candidacy while the floor is unmet. It sits in the VERSIONED layer exactly as
+the cap policy does — `LINEAGE_POLICIES` is a registry keyed by policy id,
+`Config.ATTENTION_ALLOCATION_POLICY` selects from it, and
+`Config.SEED_PROBLEM_BUDGET_FLOOR` is a FREE-layer parameter. An unknown policy
+id falls back to the shipped default and discloses (`fallback_from`), never
+refuses: the all-configurations law applied to a policy selector.
+
+W6 measured why it exists. One run spent **41.2 % of 702 789 tokens** on
+`audit:ritual`, a problem it invented about its own critic, while the
+operator's question got 53.2 % — and 48.3 % after the spawn appeared at log seq
+345 of 3 200
+(`experiments/2026-08-26-run-anatomy-program/W6-token-flow/` TABLES.md T12).
+
+`check: python -c "
+from deepreason import wander
+from deepreason.config import Config
+r = wander.LineageReading(cycles=10, seed_worked=3, other_worked=7, floor=0.5)
+assert wander.decide(Config(), r).engaged
+assert wander.decide(Config(SEED_PROBLEM_BUDGET_FLOOR=0.1), wander.reading_from(Config(SEED_PROBLEM_BUDGET_FLOOR=0.1), cycles=10, seed_worked=3)).engaged is False
+assert wander.decide(Config(ATTENTION_ALLOCATION_POLICY='open-lineage.v1'), r).engaged is False
+assert wander.decide(Config(ATTENTION_ALLOCATION_POLICY='nope'), r).fallback_from == 'nope'
+"`
+
+**The same strictest row, for the THIRD controller.** Allocation touches
+EFFICIENCY, NEVER EVIDENCE, and this policy gets the identical guard: a
+differential on one scripted record, run with the cap throttling every cycle
+and with the null policy never throttling, every status, edge, warrant and
+dependency identical. The cap's OWN policy artifact is excluded — that is the
+design (P6) — and nothing else may move. `wander.py` is stricter than
+`allocation.py` in one respect: it may not even create that artifact, because
+the scheduler does, so it imports no `deepreason` module at all.
+
+Mutation-proven twice, in a scratch copy
+(`experiments/2026-08-26-change-f3-channels-and-wander-cap/proof/s12_mutation.txt`):
+minting a warrant against a conjecture whenever the cap engages — "so the
+throttle has teeth" — turns the differential RED, and letting the policy module
+reach the graph turns the structural check RED.
+
+`check: python -m pytest tests/test_wander_cap.py -q -k "labels_are_identical or constructs_no_evidence"`
+`check: ! grep -qE "create_artifact|att_add|dep_add|Warrant|Status|from deepreason|import deepreason" src/deepreason/wander.py`
+
+**The consumer reads the interface and nothing else.** `scheduler.py` calls
+`wander.decide` and `wander.reading_from`; it never names a policy function. A
+scheduler that knew it was running `wander_cap_v1` would have to be edited to
+run anything else, which is the coupling the registry exists to prevent.
+
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler)
+assert 'wander.decide(' in src and 'wander.reading_from(' in src
+for fn in ('wander_cap_v1', 'open_lineage_v1', 'LINEAGE_POLICIES'):
+    assert fn not in src, fn
+"`
+
+**Selection STAYS read-only.** The decision is computed and STASHED inside
+`_select_problem`; the cycle body emits it. `DR-CON-scheduler-ranking` says
+selection may not write, and a time-travel harness opened for replay refuses
+every write — the first implementation here emitted from the ranking function
+and turned two committed suites red, one of them on a read-only harness.
+
+`check: python -c "
+import inspect
+from deepreason.scheduler.scheduler import Scheduler
+src = inspect.getsource(Scheduler._select_problem)
+assert 'self._pending_wander = decision' in src
+assert 'record_measure' not in src and 'create_artifact' not in src
+"`
+
+## Every declared policy signal now has an EMIT SITE
+
+W5's census (2026-08-26) found four of the five `POLICY_SIGNALS` declared,
+consumed IN-PROCESS, and emitted nowhere in `src/`: a reader of any committed
+root could see the cap a controller applied but not the numbers that moved it.
+None was struck — all four are genuinely consumed, and striking a consumed
+signal makes the registry LESS true — so all four gained an emit site at the
+point where the controller ACTS on the reading, and the two lineage signals
+ship with theirs.
+
+The census is now a test rather than an audit, so a sixth silent name fails the
+gate the day it is added.
+
+`check: python -m pytest tests/test_wander_cap.py -q -k "phantom or emit_site"`
+
 ## Two families read attack-target entropy, and they are not the same quantity
 
 The v2 program's V-6 row, decided at Rung 8
@@ -216,6 +304,7 @@ new signal may carry the migration debt marker.
 | retire a signal's `unspecified` marker | `REC-add-signal.md` §"paying down the debt" | the pinned census |
 | key signals by seat instance | `REC-revise-allocation-policy.md`; the seat-instance section above | `tests/test_allocation_signal_consumption.py` |
 | add a signal the POLICY reads | `REC-add-signal.md`, then `allocation.POLICY_SIGNALS` **and its producer predicate** | `tests/test_signal_contract.py` |
+| change how a run's attention splits between lineages | `REC-revise-allocation-policy.md`; register a policy in `wander.LINEAGE_POLICIES` | `tests/test_wander_cap.py` |
 
 ## Traps
 

@@ -1,0 +1,25 @@
+=== S17 bypass proof — the architecture test is failable ===
+Tranche: experiments/2026-08-26-change-f3-channels-and-wander-cap/
+
+--- BASELINE: the interface-only check is GREEN ---
+..                                                                       [100%]
+2 passed, 12 deselected in 0.26s
+
+--- BYPASS: the scheduler reaches past wander.decide into the registry ---
+    (scheduler.py now calls wander.LINEAGE_POLICIES['wander-cap.v1'] directly,
+     so ATTENTION_ALLOCATION_POLICY selects nothing — customisation by code edit)
+E       assert 'wander.decide(' in 'class Scheduler:\n    def __init__(\n        self,\n        harness,\n        adapter,\n        config,\n        embe...attention only, never a status."""\n        return run_report(self.harness, self.config, diagnostics=self.diagnostics)'
+
+tests/test_channel_and_wander_modularity.py:137: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_channel_and_wander_modularity.py::test_the_scheduler_consumes_only_the_wander_interface
+1 failed, 1 passed, 12 deselected in 0.26s
+
+--- RESTORED: GREEN again ---
+...                                                                      [100%]
+3 passed, 11 deselected in 0.25s
+
+VERDICT: the interface-only check is FAILABLE. A consumer that reaches past
+wander.decide into the registry turns it RED — which is the bypass the operator's
+law names: 'an ARCHITECTURE TEST that goes RED when a consumer bypasses the
+interface — a modularity claim without a failable check is decoration.'

@@ -103,6 +103,8 @@ POLICY_SIGNALS: tuple[str, ...] = (
     "dropped-call",
     "allocation.policy-authorized.v1",
     "allocation.policy-contested.v1",
+    "allocation.seed-lineage-share.v1",
+    "allocation.wander-throttled.v1",
 )
 
 
@@ -124,6 +126,13 @@ _PRODUCERS = {
     "dropped-call": _has_any_seat,
     "allocation.policy-authorized.v1": _has_any_seat,
     "allocation.policy-contested.v1": _has_attacking_seat,
+    # The lineage pair is produced by any topology that runs cycles at all --
+    # the reading is over problem selection, not over a seat's output -- so
+    # neither can ever be an open loop for a run that reaches cycle 1. Stated
+    # as a predicate rather than assumed, because the census must be able to
+    # answer for every policy-referenced signal without exception.
+    "allocation.seed-lineage-share.v1": _has_any_seat,
+    "allocation.wander-throttled.v1": _has_any_seat,
 }
 
 # What would close each loop. Stated per signal rather than inferred, because
@@ -138,6 +147,8 @@ _RESOLUTIONS = {
         f"bind the {ATTACKING_ROLE} role; without it no controller policy can "
         f"be attacked, so fail-static can never fire"
     ),
+    "allocation.seed-lineage-share.v1": "bind at least one role to a route",
+    "allocation.wander-throttled.v1": "bind at least one role to a route",
 }
 
 
