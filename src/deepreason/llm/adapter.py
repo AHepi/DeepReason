@@ -785,18 +785,26 @@ class LLMAdapter:
         attempt 3, run bb0455384ea09b5b...), because the two reads happen at
         different instants and a controller may settle a seat between them.
 
-        A route declaring qualified capacity binds its CEILING, not the
-        endpoint's currently settled cap: the ceiling is the only value stable
-        across the booking window, and `Controller._lease_ceiling` bounds every
-        controller proposal at it, so nothing the seat may later be raised to
-        can escape a bound booked from it.
+        A route declaring qualified capacity binds its CEILING, and the seat's
+        settled cap books UNDER it. Returning the ceiling alone was the whole
+        of the envelope for two days, and it severed the allocation controller
+        from the wire: `Controller._apply_cap` writes `endpoint.max_tokens` and
+        this was the only reader, so 47 recorded decisions across the committed
+        population became the `max_tokens` of no call at all (W7 synthesis
+        2026-08-26, row 9). The stability the ceiling was standing in for is
+        owned elsewhere now — under an authorization `call` CONSUMES the booked
+        `completion_bound_tokens` rather than recomputing, so the two reads that
+        parted in run bb0455384ea09b5b cannot part again — and the escape it was
+        refusing is owned by `EndpointLease.verify`'s own ceiling branch, which
+        the `min` below keeps this side inside.
         """
 
-        maximum = (
-            lease.route.max_tokens
-            if lease.route.context_window_tokens is not None
-            else getattr(endpoint, "max_tokens", lease.route.max_tokens)
-        )
+        settled = getattr(endpoint, "max_tokens", None)
+        if lease.route.context_window_tokens is not None:
+            ceiling = lease.route.max_tokens
+            maximum = min(settled, ceiling) if settled is not None else ceiling
+        else:
+            maximum = settled if settled is not None else lease.route.max_tokens
         return int(maximum or 0)
 
     def _render_request(

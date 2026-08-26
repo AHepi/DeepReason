@@ -14,8 +14,8 @@ prescribed order): `DR-INV-frozen-surfaces` → `DR-INV-signal-contract` →
 `DR-CON-problem-layer-lifecycle`, `DR-SEAM-llm-x-scheduler` (S19's own seam:
 what refuses a knob at the point of use).
 
-**Ceiling:** 1532 insertions (SPEC Budget). Checked with
-`python tools/diff_budget.py 4760a32ef --ceiling 1532` at every `[COMMIT]`.
+**Ceiling:** 1602 insertions (SPEC Budget). Checked with
+`python tools/diff_budget.py 4760a32ef --ceiling 1602 --paths src tests docs` at every `[COMMIT]`.
 
 ---
 
@@ -46,7 +46,7 @@ what refuses a knob at the point of use).
       new checks appear in the run.
 
 - [ ] 5. (S19, S20) [COMMIT] Commit Phase A alone.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1602 --paths src tests docs`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase B — the channel registry (H1)
@@ -64,6 +64,14 @@ what refuses a knob at the point of use).
       rows. Prove RED (no `channels` module yet).
       done-when: `python -m pytest tests/test_evidence_channels.py -q` fails
       on `ModuleNotFoundError: deepreason.channels` (paste it).
+
+- [ ] 7b. (S23) Add the prose-standing guard to
+      `tests/test_evidence_channels.py`: the channels-on/channels-off
+      differential over every prose criticism in one scripted record, the
+      structural check over `channels.py`/`wander.py`, and the kind-blindness
+      census. Prose keeps its full standing, checked not promised.
+      done-when: `python -m pytest tests/test_evidence_channels.py -q -k
+      "prose or kind_blind"` -> 0 failed (after step 8 lands the module).
 
 - [ ] 8. (S1) Create `src/deepreason/channels.py` — `ChannelDeclaration`,
       `CHANNEL_DECLARATIONS`, `DECOMMISSIONED`,
@@ -111,7 +119,7 @@ what refuses a knob at the point of use).
       done-when: `python tools/docs_verify.py --fast` -> 0 failed.
 
 - [ ] 16. (H1) [COMMIT] Commit Phase B.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1602 --paths src tests docs`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase C — the wander cap (H2)
@@ -166,7 +174,7 @@ what refuses a knob at the point of use).
       done-when: `python tools/docs_verify.py --fast` -> 0 failed.
 
 - [ ] 25. (H2) [COMMIT] Commit Phase C.
-      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1532`
+      done-when: `python tools/diff_budget.py 4760a32ef --ceiling 1602 --paths src tests docs`
       verdict is not EXCEEDED, and `git status --porcelain` is empty.
 
 ## Phase D — modularity, and the gates

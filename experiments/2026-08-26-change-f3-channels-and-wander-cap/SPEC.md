@@ -437,18 +437,58 @@ operator has recorded as suspect-by-default. With them on, a critic can COMPUTE
 a verdict: run a checker against a claim's own counterconditions
 (code-testing), execute a declarative program and read its observables
 (simulation), or fetch a document and cite bytes out of it (research). W7's
-anatomy found the demonstrative class is the one doing real work; the prose
-class, measured over the two newest large runs, showed 0 of 196 model-written
-attacks ever reaching a later dispatch. So H1 is a supply decision about the
-only criticism class that has been shown to bite.
+anatomy measured what each class DID on the committed roots: 0 of 196
+model-written attacks in the two newest large runs were ever shown to a later
+conjecture dispatch. **That is a finding about the WIRING, not about the
+class.** Those 196 attacks were written, recorded and never carried anywhere —
+the criticism channel is inert as plumbed, which is a defect in the road and
+not a verdict on prose. So H1 is a SUPPLY decision: it adds a road that did not
+exist for most runs. It removes none.
 
 It follows that the DEFAULT matters more than the toggle. A channel that is on
 only when an operator remembers an environment variable is, for every run
 nobody configured, a channel that does not exist — which is precisely the state
 research was in before this tranche.
 
-    accept: this section exists in SPEC.md and is cited by S22's docstring
-    -> present
+**And it is bounded, by the operator's own words (R24): "This doesn't demote
+prose as legitimate criticism."** A demonstrative verdict is an ADDITIONAL road
+this tranche opens, never a preferred one. Read the sentence above carefully:
+channels on give the machinery *a* road to machine verdicts *on testable
+claims*. Most claims worth criticising are not testable, the critic who writes
+prose about them is doing the harness's central work, and nothing here weights
+admission, rank, exposure, authority or acceptance on the KIND of a criticism.
+That is the criticism-side reading of the standing 2026-08-08 law — formalism
+is an option, never an obligation — and S23 checks it rather than promising it.
+
+    accept: this section exists in SPEC.md and is cited by S22's and S23's
+    docstrings -> present
+
+**S23 (R24) — prose keeps its full standing, and it is CHECKED.**
+Files: `tests/test_evidence_channels.py`.
+Before: nothing would catch a later author reading S21 as a licence to prefer
+execution-backed criticism.
+After: three failable checks, written as a guard on THIS tranche's own surface
+rather than as a re-test of the existing prose-immunity machinery.
+(1) **A differential**: the same scripted record, adjudicated with all three
+channels ON and with all three OFF, produces IDENTICAL status, edges and
+warrants for every PROSE criticism in it — turning a channel on takes nothing
+away from a prose case. (2) **A structural check**: neither `channels.py` nor
+`wander.py` names a criticism kind, an authority value, a warrant, an
+attack edge or a status — the same shape `INV-signal-contract` requires of
+`allocation.py`. (3) **A census**: this tranche's diff adds no branch on
+conjecture or criticism kind anywhere in `src/`, asserted over the tranche's
+own changed files so it goes RED if a later step sneaks one in.
+
+    accept: python -m pytest tests/test_evidence_channels.py -q -k
+    "prose or kind_blind" -> 0 failed
+    accept: python -c "
+    import pathlib
+    for m in ('channels', 'wander'):
+        s = pathlib.Path(f'src/deepreason/{m}.py').read_text()
+        for bad in ('Warrant', 'att_add', 'dep_add', 'create_artifact',
+                    'formally_backed', 'execution-backed', 'ARGUMENTATIVE'):
+            assert bad not in s, (m, bad)
+    print('ok')" -> ok
 
 **S22 (R23) — the road exists in every launch path, not merely the flags.**
 Files: `tests/test_channel_and_wander_modularity.py`.
@@ -768,10 +808,10 @@ S19's accept check runs them.
 
 ## Budget
 
-    $ python -c "print(sum([130,140,22,8,55,22,18,30,70,12,150,170,260,210,90,60,55,30]))"
-    1532
+    $ python -c "print(sum([130,140,22,8,55,22,18,30,70,12,150,240,260,210,90,60,55,30]))"
+    1602
 
-~1532 insertions (ceiling), 7 commits — one per phase boundary plus one per
+~1602 insertions (ceiling), 7 commits — one per phase boundary plus one per
 half. Frozen surfaces touched: **surface 4, `run_manifest.py`, three `data.pop`
 lines, grant requested above with the tool's own contact list pasted.**
 
@@ -790,7 +830,7 @@ Itemization, which sums to the headline above:
 | 70 | `scheduler/scheduler.py` (reading, decide, candidacy, emission, artifact) |
 | 12 | `llm/adapter.py` (S19, the one-expression wiring fix) |
 | 150 | `tests/test_controller_reaches_the_wire.py` (S20) |
-| 170 | `tests/test_evidence_channels.py` |
+| 240 | `tests/test_evidence_channels.py` (S1-S6, S15, S23) |
 | 260 | `tests/test_wander_cap.py` |
 | 210 | `tests/test_channel_and_wander_modularity.py` (S17 + S22) |
 | 90 | map: `INV-evidence-channels.md` (new) |
@@ -798,13 +838,20 @@ Itemization, which sums to the headline above:
 | 55 | map: `CON-scheduler-ranking.md`, `SUB-capabilities.md`, `INDEX.md` |
 | 30 | map: `INV-frozen-surfaces.md` (granted-contact row) |
 
+**What the ceiling covers, stated so the gate can be run correctly:** the
+DELIVERABLE — `src/`, `tests/` and `docs/`. The tranche's own artifacts
+(REQUEST.md, SPEC.md, CHECKLIST.md, VALIDATION.md, DELIVERY.md, PARKED.md,
+`proof/`) are excluded, because a ceiling that counts its own specification
+tightens every time the operator amends the request, which is backwards. Run it
+as `python tools/diff_budget.py 4760a32ef --ceiling 1602 --paths src tests docs`.
+
 Goldens that will need regeneration are NOT in this ceiling and are counted
 separately in VALIDATION.md, per S7.
 
 Rubric: 6/6 yes — every R has a spec item with a machine-decidable accept
 (R1→S1/S3, R2→S1/S4, R3→S1/S5, R4→S2/S4, R5→S6, R6→S7, R7→the headline line,
 R8→S8, R9→S9/S10, R10→S11, R11→S12, R12→S9/S11/S14, R13→S13/S14, R14→S15,
-R15→S16, R16→S14/S16, R17→S18, R18→S1/S2/S8/S9/S17, R19→S17, R20→S0 with M4-M6, R21→S19/S20, R22→S21, R23→S22); blast-radius
+R15→S16, R16→S14/S16, R17→S18, R18→S1/S2/S8/S9/S17, R19→S17, R20→S0 with M4-M6, R21→S19/S20, R22→S21, R23→S22, R24→S23); blast-radius
 census pasted from the tool and every hit classified; frozen-surface contact
 forecast recorded with the tool's verbatim list and the grant requested; every
 named mechanism traced to code it reaches (M3 is the trace that killed one);

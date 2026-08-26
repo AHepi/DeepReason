@@ -155,8 +155,15 @@ def test_settled_cap_below_the_route_ceiling_still_dispatches(tmp_path):
     prompt, booked_cap, authorized, aliases, contract, base_profile = _issue(
         adapter, harness, manifest
     )
-    assert booked_cap == ceiling
-    assert authorized.reservation.amount == conservative_prompt_bound(prompt) + ceiling
+    # The settled cap is what books, bounded by the ceiling (F3, 2026-08-26):
+    # returning the ceiling here is what left 47 controller decisions reaching
+    # no dispatch. The guarantee this test carries is that a settled cap below
+    # the ceiling still DISPATCHES, and that guarantee is untouched.
+    assert booked_cap == ceiling // 2
+    assert (
+        authorized.reservation.amount
+        == conservative_prompt_bound(prompt) + ceiling // 2
+    )
 
     _output, call = _call(adapter, authorized, aliases, contract, base_profile)
     assert endpoints["conjecturer"].last_transport_attempts == 1
@@ -168,6 +175,13 @@ def test_attempt3_shape_books_and_spends_one_cap(tmp_path, monkeypatch):
     Regression (epoch-3 attempt 3, run bb0455384ea09b5b...): with that run's
     own numbers the two sides differed by 12288, the ceiling minus the settled
     cap. They may not differ by anything now.
+
+    The number the three sides agree ON became the SETTLED cap in F3
+    (2026-08-26): booking the ceiling severed the allocation controller from
+    the wire, 47 decisions reaching no call. What this test guarantees is the
+    EQUALITY CHAIN, not the constant, and every link of it is still asserted
+    below — now on the value the controller actually applied, which is the
+    stronger reading.
     """
     root = tmp_path / "run"
     manifest = _attempt3_manifest(monkeypatch)
@@ -182,20 +196,23 @@ def test_attempt3_shape_books_and_spends_one_cap(tmp_path, monkeypatch):
     prompt, booked_cap, authorized, aliases, contract, base_profile = _issue(
         adapter, harness, manifest
     )
-    assert booked_cap == 32_768
+    assert booked_cap == 20_480
     assert (
         authorized.reservation_record.completion_bound_tokens
         == booked_cap
-        == 32_768
+        == 20_480
     )
-    assert authorized.reservation.amount == conservative_prompt_bound(prompt) + 32_768
+    assert authorized.reservation.amount == conservative_prompt_bound(prompt) + 20_480
 
     _output, call = _call(adapter, authorized, aliases, contract, base_profile)
 
     # The attempt trace records the envelope the reservation booked, which is
-    # what ontology/event.py's own max_tokens comment says it must be.
+    # what ontology/event.py's own max_tokens comment says it must be. On this
+    # run's own numbers that is now the cycle-2 policy's 20480 — the sixteen
+    # rows of "tuned to X, dispatched 32768" in W5's table are what a ceiling
+    # here looks like from the record.
     assert call.attempt_trace, "a dispatched call records at least one attempt"
-    assert [a.max_tokens for a in call.attempt_trace] == [32_768] * len(
+    assert [a.max_tokens for a in call.attempt_trace] == [20_480] * len(
         call.attempt_trace
     )
 

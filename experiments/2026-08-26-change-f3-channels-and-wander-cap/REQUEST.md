@@ -313,3 +313,23 @@ exists in every launch path, not merely that the flags default true."
 
 Lands as SPEC items S21 (the design consequence, stated) and S22 (the
 road-exists test, which widens S17).
+
+### Amendment 4 — 2026-08-26, prose is not demoted (operator, mid-turn)
+
+Operator, verbatim:
+
+> One more. This doesn't demote prose as legitimate criticism
+
+R24 (behavior, standing): "This doesn't demote prose as legitimate criticism."
+Nothing in this tranche may weight admission, rank, exposure, authority or
+acceptance on the KIND of a criticism. The channels widen what a critic MAY
+reach for; they take nothing away from a critic that reaches for prose.
+
+This is the criticism-side statement of the operator's standing 2026-08-08 law
+("Formalism is an option, never an obligation ... nothing may penalize a
+conjecture for being informal — not admission, not rank, not criticism
+exposure, not acceptance"), and it BOUNDS Amendment 3's rationale: R22's
+"road to machine verdicts" is an ADDITIONAL road, never a preferred one.
+
+Lands as SPEC item S23 (the guard, checked) and as a correction to S21's
+wording.
