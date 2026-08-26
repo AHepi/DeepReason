@@ -215,6 +215,65 @@ So truncation is detected semantically, after the fact, by noticing the JSON
 does not close — and the transport-level flag that exists to report it is
 inert. Parked as a finding, not diagnosed here.
 
+
+### 9. The two priority roots, read individually
+
+The census covers all 54 roots (`PER_ROOT.md`). The two the W1 prompt names
+as priority read as follows.
+
+**P-C1 ARM H — `experiments/2026-08-25-change-constructive-frontier/run`,
+run `1950b3d0ee228113`, 292 attempts, 256 valid (87.7%).** One model
+(glm-5.2), two roles. It is the only root in the corpus that died of
+`V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY` — "route seat has terminally
+exhausted its smallest authorized contract" — and the census shows the whole
+descent: `conjecturer.turn.v6` 44/63 valid, decomposed seven times into
+`conjecturer.atomic-candidate.v1` (38/41) — with three further
+`batch-critic.v2` → `critic.atomic-target.v1` decompositions on the critic
+seat — and then the atomic contract itself exhausted. The terminal object records the ladder verbatim:
+`attempted_contract_ids: [turn.v6, turn.v6, atomic-candidate.v1,
+atomic-candidate.v1]`. Its dominant wire failures are not field failures at
+all — 18 `WIRE_TRAILING_CONTENT`, 16 `TRUNCATED_MID_JSON`, 8
+`WIRE_NO_COMPLETE_JSON`: 42 of its 77 diagnostics are the JSON not arriving
+whole. Note also that `run-status.json` reports `token_spend: 0` for this
+root because it failed operationally, while the log's own attempts sum to
+702 789 — the figure that tranche measured and matched ARM S against.
+
+**P-R1 — `experiments/2026-08-25-poietics-program/run`, run
+`1b31f0065687bd24`, 163 attempts, 146 valid (89.6%), completed on
+`budget_exhausted` at cycle 12.** Two models on one route family (kimi-k3
+126 attempts, deepseek-v4-pro:0813 37) and the only priority root with
+`attached_evidence` enabled. Its failure profile is almost entirely ONE
+class: **51 of its 64 diagnostics are `string_pattern_mismatch`**, and they
+are evidence-block handles failing `^[0-9a-f]{12,64}$`. This is the
+reference-fabrication finding of §2 concentrated in a single root — the run
+that was given a dossier is the run that spent its errors inventing citations
+into it. 18 repair attempts, 16 patch-mode, **all 16 on target**; 4
+decompositions to atomic contracts; 3 works abandoned with
+`context_capability_not_granted`. Zero coerced-fabrication diagnostics fire
+here, because this root's failures are pattern mismatches rather than
+handle-kind rejections — the CFR measure of §3 is silent on it, which is
+exactly the residue item 2 below.
+
+### 10. Seats, not roles
+
+Keyed by seat INSTANCE as the signal-registry contract requires, the corpus
+has 8 seats across 7 roles, and one role runs two seats:
+
+| seat | attempts | valid |
+|---|---|---|
+| `argumentative_critic#seat0` | 1 424 | 92.8% |
+| `conjecturer#seat0` | 1 189 | 75.3% |
+| `judge#seat0` | 171 | 100% |
+| `judge#seat1` | 171 | 100% |
+| `defender#seat0` | 122 | 100% |
+| `summarizer#seat0` | 31 | 64.5% |
+| `variator#seat0` | 30 | 100% |
+| `thesis#seat0` | 17 | 76.5% |
+
+The two judge seats are split exactly 171/171 and behave identically at the
+form level. `summarizer#seat0` is the worst seat in the corpus at 64.5%, on
+only 31 attempts — flagged as a small sample, not a finding.
+
 ---
 
 ## 2026-08-26 — the P-C1 headline, attributed
