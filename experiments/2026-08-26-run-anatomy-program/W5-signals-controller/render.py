@@ -177,6 +177,52 @@ def declared_vs_emitted(signals):
             f"{sum(root['emissions'].values())} | "
             f"{len(root['undeclared'])} |"
         )
+
+    # The per-root x per-signal matrix, and the per-cycle spread beside it.
+    roots = signals["per_root"]
+    names = sorted({name for root in roots for name in root["emissions"]})
+    out += [
+        "",
+        "## The matrix: which signal carried a value in which root",
+        "",
+        "Cell = emissions in that root. `cyc a/b` = the signal carried a "
+        "value in `a` of the root's `b` cycles — the per-cycle spread the "
+        "staleness verdicts are computed from. The full per-cycle series is "
+        "in `SIGNAL_CENSUS.json` under `per_root[].per_cycle`.",
+        "",
+        "| signal | " + " | ".join(
+            f"R{index + 1}" for index in range(len(roots))) + " |",
+        "|---|" + "---|" * len(roots),
+    ]
+    for name in names:
+        cells = []
+        for root in roots:
+            count = root["emissions"].get(name, 0)
+            if not count:
+                cells.append(".")
+                continue
+            cycles = [c for c in root["cycles_seen"] if c >= 0]
+            carried = len({
+                int(c) for c, n in root["per_cycle"].get(name, {}).items()
+                if n and int(c) >= 0
+            } & set(cycles))
+            cells.append(f"{count}<br><sub>cyc {carried}/{len(cycles)}</sub>")
+        out.append(f"| `{name}` | " + " | ".join(cells) + " |")
+    out += ["", "| key | root |", "|---|---|"]
+    for index, root in enumerate(roots):
+        out.append(f"| R{index + 1} | `{short(root['root'])}` |")
+    out += [
+        "",
+        "A `.` is silence in that root, not silence everywhere — the "
+        "everywhere question is the `ever` column of the first two tables.",
+        "",
+        "A cell reading `1 / cyc 0/N` is not a contradiction: the signal was "
+        "emitted once, BEFORE the run's first `cycle` heartbeat, so it "
+        "belongs to the pre-cycle setup phase and carries no cycle. "
+        "`controller-authority` and `embedder` are both stated once at "
+        "attach time and read that way in every root.",
+    ]
+
     return out
 
 

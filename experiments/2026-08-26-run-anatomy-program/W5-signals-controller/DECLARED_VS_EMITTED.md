@@ -176,3 +176,52 @@ A sixth, `controller-update`, is declared with a real unit (`event`) and a real 
 | `2026-08-25-poietics-program/run` | completed | 12 | 22 | 475 | 3 |
 | `2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6` | failed | 12 | 16 | 147 | 2 |
 | `2026-08-25-change-constructive-frontier/run` | failed | 16 | 20 | 325 | 3 |
+
+## The matrix: which signal carried a value in which root
+
+Cell = emissions in that root. `cyc a/b` = the signal carried a value in `a` of the root's `b` cycles — the per-cycle spread the staleness verdicts are computed from. The full per-cycle series is in `SIGNAL_CENSUS.json` under `per_root[].per_cycle`.
+
+| signal | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9 |
+|---|---|---|---|---|---|---|---|---|---|
+| `capture14.attack-target-entropy.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `capture14.criticism-debt.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `capture14.exogenous-grounding-ratio.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `capture14.hysteresis-mode.v1` | . | . | . | . | . | . | 1<br><sub>cyc 1/12</sub> | 1<br><sub>cyc 1/12</sub> | 1<br><sub>cyc 1/16</sub> |
+| `capture14.reinstatement-rate.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `capture14.stream-contraction.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `capture14.validity-attack-rate.v1` | . | . | . | . | . | . | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `controller-authority` | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/1</sub> | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/8</sub> | 1<br><sub>cyc 0/1</sub> | 1<br><sub>cyc 0/12</sub> | 1<br><sub>cyc 0/12</sub> | 1<br><sub>cyc 0/16</sub> |
+| `criticism.attack-target-entropy.v1` | 3<br><sub>cyc 3/3</sub> | 3<br><sub>cyc 3/3</sub> | 1<br><sub>cyc 1/1</sub> | 3<br><sub>cyc 3/3</sub> | 8<br><sub>cyc 8/8</sub> | 1<br><sub>cyc 1/1</sub> | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `cycle` | 3<br><sub>cyc 3/3</sub> | 3<br><sub>cyc 3/3</sub> | 1<br><sub>cyc 1/1</sub> | 3<br><sub>cyc 3/3</sub> | 8<br><sub>cyc 8/8</sub> | 1<br><sub>cyc 1/1</sub> | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `disc-attempts-exhausted` | . | . | . | . | . | . | 1<br><sub>cyc 1/12</sub> | . | 1<br><sub>cyc 1/16</sub> |
+| `dropped-call` | . | 1<br><sub>cyc 1/3</sub> | . | 1<br><sub>cyc 1/3</sub> | . | . | . | . | . |
+| `embedder` | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/1</sub> | 1<br><sub>cyc 0/3</sub> | 1<br><sub>cyc 0/8</sub> | 1<br><sub>cyc 0/1</sub> | 1<br><sub>cyc 0/12</sub> | 1<br><sub>cyc 0/12</sub> | 1<br><sub>cyc 0/16</sub> |
+| `evidence-citation:` | . | . | 1<br><sub>cyc 1/1</sub> | . | 7<br><sub>cyc 1/8</sub> | . | 234<br><sub>cyc 7/12</sub> | . | 21<br><sub>cyc 2/16</sub> |
+| `hv-skip-oversize` | . | . | . | . | . | . | 8<br><sub>cyc 1/12</sub> | . | . |
+| `intervention:` | 1<br><sub>cyc 1/3</sub> | . | . | . | . | . | . | . | 1<br><sub>cyc 1/16</sub> |
+| `premise-citation:` | . | . | 2<br><sub>cyc 1/1</sub> | 2<br><sub>cyc 1/3</sub> | 1<br><sub>cyc 1/8</sub> | . | 3<br><sub>cyc 2/12</sub> | . | . |
+| `premise.attribution-filed.v1` | 1<br><sub>cyc 1/3</sub> | . | 1<br><sub>cyc 1/1</sub> | 1<br><sub>cyc 1/3</sub> | 1<br><sub>cyc 1/8</sub> | 1<br><sub>cyc 1/1</sub> | 2<br><sub>cyc 2/12</sub> | . | . |
+| `premise.batch-translation-offered.v1` | . | . | . | . | . | 1<br><sub>cyc 1/1</sub> | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `premise.work-invited.v1` | . | . | . | . | . | . | 2<br><sub>cyc 2/12</sub> | 11<br><sub>cyc 11/12</sub> | 8<br><sub>cyc 8/16</sub> |
+| `problem.independence-resolution-rate.v1` | 3<br><sub>cyc 3/3</sub> | 3<br><sub>cyc 3/3</sub> | 1<br><sub>cyc 1/1</sub> | 3<br><sub>cyc 3/3</sub> | 8<br><sub>cyc 8/8</sub> | 1<br><sub>cyc 1/1</sub> | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `problem.thrash.v1` | 3<br><sub>cyc 3/3</sub> | 3<br><sub>cyc 3/3</sub> | 1<br><sub>cyc 1/1</sub> | 3<br><sub>cyc 3/3</sub> | 8<br><sub>cyc 8/8</sub> | 1<br><sub>cyc 1/1</sub> | 12<br><sub>cyc 12/12</sub> | 12<br><sub>cyc 12/12</sub> | 16<br><sub>cyc 16/16</sub> |
+| `research-awaiting-agent` | . | . | . | . | . | . | 1<br><sub>cyc 1/12</sub> | . | . |
+| `research-off` | . | . | . | . | 1<br><sub>cyc 1/8</sub> | . | . | . | . |
+| `run-stop` | 1<br><sub>cyc 1/3</sub> | 1<br><sub>cyc 1/3</sub> | 1<br><sub>cyc 1/1</sub> | 1<br><sub>cyc 1/3</sub> | . | 1<br><sub>cyc 1/1</sub> | . | 1<br><sub>cyc 1/12</sub> | 1<br><sub>cyc 1/16</sub> |
+| `scrutiny` | 17<br><sub>cyc 1/3</sub> | 29<br><sub>cyc 1/3</sub> | 23<br><sub>cyc 1/1</sub> | 22<br><sub>cyc 1/3</sub> | 64<br><sub>cyc 6/8</sub> | 15<br><sub>cyc 1/1</sub> | 89<br><sub>cyc 9/12</sub> | . | 114<br><sub>cyc 11/16</sub> |
+
+| key | root |
+|---|---|
+| R1 | `2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c` |
+| R2 | `2026-08-22-live-reach-rich-run/run` |
+| R3 | `2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4` |
+| R4 | `2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4` |
+| R5 | `2026-08-22-change-epoch3-second-lineage/run` |
+| R6 | `2026-08-24-change-rung7-wounds-falls-succession/run` |
+| R7 | `2026-08-25-poietics-program/run` |
+| R8 | `2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6` |
+| R9 | `2026-08-25-change-constructive-frontier/run` |
+
+A `.` is silence in that root, not silence everywhere — the everywhere question is the `ever` column of the first two tables.
+
+A cell reading `1 / cyc 0/N` is not a contradiction: the signal was emitted once, BEFORE the run's first `cycle` heartbeat, so it belongs to the pre-cycle setup phase and carries no cycle. `controller-authority` and `embedder` are both stated once at attach time and read that way in every root.
