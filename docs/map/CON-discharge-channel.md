@@ -229,6 +229,29 @@ by contracts this channel has no business changing, and committed tests read its
 `$def` properties directly.
 `check: python -m pytest tests/test_discharge_wire.py -q`
 
+## The F2 composition note
+
+Recorded at the operator's instruction (REQUEST.md Amendment 2, R18) so F2's
+window or a successor finds it without having to reconstruct the reasoning.
+
+> `DischargeWireV1.handle` is a REFERENCE-BEARING field. Its legal set is not
+> free text: it is exactly `deepreason.discharge.open_criticisms(harness,
+> problem_id, policy)`, in that call's own order, capped at
+> `policy.handles_n` — ONE authority, computed from the record, and already the
+> single source the pack section renders from. F1 deliberately leaves `handle`
+> as a plain `str` on the wire rather than inventing a private enum or menu, so
+> that F2's menu renderer can key on this field by REGISTERING against that
+> one-authority legal set, without F2 touching `discharge/` and without F1
+> touching F2's renderer. If F2 lands first, F1's field registers into it; if
+> F1 lands first, F2 finds a field already shaped for it. That is the
+> modularity law doing the work it was stated to do — neither side had to learn
+> about the other's subsystem.
+
+The `str` annotation is the load-bearing part, so it is checked rather than
+described: a private enum here would close the seam F2 needs.
+`check: python -c 'from deepreason.llm.wire import DischargeWireV1; assert DischargeWireV1.model_fields["handle"].annotation is str'`
+`check: python -m pytest tests/test_discharge_channel.py::test_a_handle_is_the_critic_artifact_id_and_does_not_renumber -q`
+
 ## Traps
 
 - **Reading only `state.att` and calling it "the open criticisms."** That is

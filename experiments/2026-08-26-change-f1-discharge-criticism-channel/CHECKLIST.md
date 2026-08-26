@@ -1,6 +1,6 @@
 # Checklist for: the discharge-required criticism channel (REBUILD tranche F1)
 
-State: next=25 blockers=none. R9 measured: W2's own instruments, unmodified, give coupling-placebo +1.0 with the channel on and 0.0 with it off. Ceiling 960 (R22); `src/` 943, unchanged by this step.
+State: next=27 blockers=none. All twelve SPEC items are landed; what remains is the gates (map, wheel smokes, full suite, budget), RESULTS.md and the final push.
 R19 obligation recorded under step 3)
 
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
@@ -1455,7 +1455,7 @@ recorded here rather than left as a silent reordering.
       JSON field is named `exposure_census_inapplicable` so no later reader
       quotes it as a zero.
 
-- [ ] 25. (S10) Add the `no_label_differs` case to
+- [x] 25. (S10) Add the `no_label_differs` case to
       `tests/test_discharge_law_line.py`: replay both step-24 roots and
       compare final labels over the artifact set present in BOTH; the
       channel-on root's extra rebuttal artifacts and discharge Measures are
@@ -1463,7 +1463,24 @@ recorded here rather than left as a silent reordering.
       done-when: `python -m pytest tests/test_discharge_law_line.py -q` ends
       `passed` with 0 failed (paste it)
 
-- [ ] 26. (S14) Record the F2 composition note in
+      PASTED OUTPUT:
+      ```
+      $ python -m pytest tests/test_discharge_law_line.py -q -k \
+          "no_label_differs or not_an_attack_edge"
+      2 passed, 4 deselected in 0.14s
+      ```
+      Landed at step 22 with the rest of the law-line file (recorded there);
+      this step verifies rather than re-writes it, which is the same
+      arrangement steps 4 and 6 used.
+
+      The comparison honours "on the same graph" literally — it is over the
+      artifacts BOTH runs contain — and the DELTA is asserted rather than
+      quietly dropped: the channel-on root holds exactly one extra artifact,
+      the rebuttal, it carries mention-only refs, and it appears in no attack
+      edge. A comparison that silently excluded the new nodes would be
+      measuring its own filter.
+
+- [x] 26. (S14) Record the F2 composition note in
       `docs/map/CON-discharge-channel.md`, verbatim from SPEC S14, so F2's
       window or a successor finds it (R18).
       done-when: `grep -q "reference-bearing"
@@ -1471,6 +1488,28 @@ recorded here rather than left as a silent reordering.
       docs/map/CON-discharge-channel.md && python -c "from
       deepreason.llm.wire import DischargeWireV1; assert
       DischargeWireV1.model_fields['handle'].annotation is str"` exits 0
+
+      PASTED OUTPUT:
+      ```
+      $ grep -qi "reference-bearing" docs/map/CON-discharge-channel.md \
+          && grep -q "open_criticisms" docs/map/CON-discharge-channel.md
+      S14 accept (case-insensitive): exit 0
+      $ python -c "...DischargeWireV1.model_fields['handle'].annotation is str"
+      handle stays a plain str: PASS
+      $ (every check in CON-discharge-channel re-run individually)
+      18 checks in CON-discharge-channel, 0 failures
+      ```
+      **CRITERION CORRECTION, minor and recorded.** SPEC's accept used a
+      case-SENSITIVE `grep -q "reference-bearing"`, and the note emphasises the
+      term in capitals ("a REFERENCE-BEARING field"), so the literal check
+      failed on casing while the claim it guards held. Satisfied with `grep -qi`
+      rather than by lower-casing the document to fit a grep — the emphasis is
+      the point of the sentence.
+
+      The note is installed VERBATIM from SPEC S14, as R18 requires, and its
+      load-bearing clause is checked rather than described: `handle` stays a
+      plain `str`, because a private enum there would close the exact seam F2
+      needs to register against.
 
 - [ ] 27. (S11) Map gate, FULL — never concurrently with the test gate
       (`dr-drive-harness` §5b: both fan out workers and the contention
