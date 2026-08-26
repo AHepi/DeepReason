@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: 748c9ab61
+Verified-at: d40d3de3e
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -25,6 +25,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
+| give a reference-bearing field its legal handles, or add a new one | `INV-reference-menu.md` |
 | know why an artifact is (or is not) framing its problems | `CON-standing-and-background.md`, then `SUB-calculus.md` |
 | know what a pack shows about the frame it is posed in | `SEAM-calculus-x-rules.md`, then `CON-packs-and-token-economy.md` |
 | write or update a map document | `SCHEMA.md` |
@@ -78,6 +79,7 @@ than you need.
 | `INV-frozen-surfaces.md` | the five surfaces you may not change, and the two instruments that prove you did not |
 | `INV-evidence-channels.md` | the three evidence-minting channels, on by default, and the one field that turns any of them off |
 | `INV-axiom-basis.md` | the eleven axioms the calculus rests on, which rung proves each, and which rungs must not break it |
+| `INV-reference-menu.md` | the one authority for every legal handle set, and why a menu may never decide validity |
 | `REC-change-a-seam.md` | the recipe for the commonest large change, worked on schools × scratchpad |
 
 ## Seam matrix

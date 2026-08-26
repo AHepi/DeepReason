@@ -1,5 +1,5 @@
 <!-- DR-SUB-llm -->
-Verified-at: debff8d9b
+Verified-at: d40d3de3e
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
 Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler
@@ -44,7 +44,13 @@ one function.
 
 Pack construction and the cost model are documented separately in
 DR-CON-packs-and-token-economy; school-to-seat routing in DR-CON-schools; the
-surfaces here that may not move in DR-INV-frozen-surfaces.
+surfaces here that may not move in DR-INV-frozen-surfaces. `reference_menu.py`
+is this package's newest module and has its own invariant document,
+DR-INV-reference-menu: it owns the single answer to "what may this
+reference-bearing field contain", which both `packs.py` (the prompt menu) and
+`repair.py` (the diagnostic's legal list) consume rather than each deriving.
+
+`check: grep -q "^def legal_handles_for(" src/deepreason/llm/reference_menu.py && grep -q "reference_menu" src/deepreason/llm/packs.py && grep -q "reference_menu" src/deepreason/llm/repair.py && python -m pytest tests/test_reference_menu.py -q`
 
 ## Entry points
 

@@ -136,7 +136,7 @@ this tranche's commits.
 
 ## Errata
 
-**E54** — `DR-SEAM-llm-x-scheduler` documented the allocation seam as a
+**E57** (renumbered from E54 at merge; the number was taken same-day) — `DR-SEAM-llm-x-scheduler` documented the allocation seam as a
 two-party agreement and omitted the party that CONSUMES it; a seam document
 listing only who can REFUSE whom misses this failure class every time.
 

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: b41c5cf10
+Verified-at: d40d3de3e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
@@ -104,7 +104,16 @@ the operator's R5/R6 requirement: the scratchpad authority chain and the
 conjecture/criticism adjudication chain must not exist together. Reading the
 absence as an oversight and "wiring the critic to the workshop" is the specific
 mistake this section exists to prevent.
-`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context','frame_slice_context','frame_crisis_context'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
+
+`reference_menus` (2026-08-26) is precisely the shape this warns about: an
+optional argument on both critic renderers that COULD carry scratch handles,
+because a reference menu is generic over handle kind. It does not, and the
+refusal is re-established rather than assumed — no scratch-kind field is
+declared on a critic contract, and `rules/crit.py`'s menu builder asks for
+citable blocks only.
+
+`check: python -m pytest tests/test_reference_menu.py -k "no_critic_menu_can_carry_scratch_content" -q`
+`check: python -c "import inspect;from deepreason.llm import packs;F={n:inspect.signature(getattr(packs,n)) for n in dir(packs) if n.startswith('render_') and callable(getattr(packs,n))};bad=[n for n,s in F.items() if any('scratch' in p for p in s.parameters)];assert bad==['render_conj_pack'],bad;C={n:list(s.parameters) for n,s in F.items() if 'crit' in n};assert C=={'render_crit_pack':['target_id','state','commitments','blobs','token_budget','premise_invitation','citable_evidence_context','frame_slice_context','frame_crisis_context','reference_menus'],'render_batch_crit_pack':['target_ids','state','commitments','blobs','token_budget','simulation_proposals','simulation_enabled','premise_invitation','citable_evidence_context','reference_menus']},C" && python -m pytest tests/test_prose_refutation_boundaries.py::test_the_criticism_pack_cannot_be_given_scratch -q`
 
 **Criticism cannot WRITE to the workshop either.** The conjecturer turn contract
 takes `scratch_aliases` and its wire model carries `scratch_proposal`; no critic
@@ -216,7 +225,12 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
   section-by-section, cutting the sealed advisory context mid-JSON out of the
   dispatched prompt. The comment above the re-wrap in `conj.py` is the record of
   this; every post-allocation insertion below it is separately byte-accounted.
-`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 3 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
+  The FOURTH re-wrap is the reference menus whose handles do not exist until
+  after allocation -- the artifact-alias table is derived from the rendered
+  pack, and the scratch handles come from the context render that follows it
+  (`DR-INV-reference-menu`). It re-wraps for exactly the reason the other
+  three do.
+`check: test "$(grep -c "pack = AllocatedPack(" src/deepreason/rules/conj.py)" -eq 4 && grep -q "class AllocatedPack(str):" src/deepreason/llm/packs.py && grep -q "pack_is_allocated = isinstance(pack, AllocatedPack)" src/deepreason/llm/adapter.py`
 - **Render-receipt handle maps reload key-sorted, and this seam reads them
   twice.** The receipt is persisted through `canonical_json`, whose sorted keys
   interleave `B10` between `B1` and `B2`. `validate_conjecture_context_call`
