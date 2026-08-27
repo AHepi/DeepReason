@@ -149,4 +149,58 @@ applies.
 
 ## Amendments
 
+### Amendment 1 — 2026-08-27, after the NOT PROVEN verdict was reported
+
+Operator, verbatim:
+
+> can you fix please. Frozen surface changes are permitted as long as you
+> document what is affected.
+
+**R7 (behavior): FIX the containment.** "can you fix please" — close the
+escape SAFETY.md demonstrated, on every guard of that family, not only the
+two the probe exercised. Supersedes R6's park-don't-fix instruction FOR
+THE CONTAINMENT DEFECT ONLY (PARKED.md P1 and P2); every other parked
+finding stays parked.
+
+**C7 (constraint): frozen surfaces are GRANTED, conditional on
+documentation.** "Frozen surface changes are permitted as long as you
+document what is affected." This supersedes C2's "no exceptions
+pre-granted" and the tranche instruction's STOP-and-ask requirement for
+the surfaces this fix needs. The condition is not a formality: every
+frozen surface touched is named, with what moved, why, and what it can
+and cannot change about any committed root — recorded in FIX.md BEFORE
+implementation and in `docs/map/INV-frozen-surfaces.md` as a granted
+contact, per the discipline that document already records for the
+2026-08-21, 2026-08-22, 2026-08-24, 2026-08-25 and 2026-08-27 grants.
+
+**R8 (behavior): the switch-on the fix unblocks.** R3–R5 are unchanged
+and still standing. The operator's original "If so switch both on" was
+conditional on a SAFE verdict; the verdict was NOT PROVEN because of the
+defect R7 now fixes. So once R7 lands, R2's assessment is re-run, and if
+it returns SAFE the pre-authorized R4/R5 fire. If it does not return SAFE,
+R3 stops the tranche again — the gate survives the fix.
+
+### Amendment 2 — 2026-08-27, same exchange
+
+Operator, verbatim:
+
+> oh and it doesn't break other modules
+
+**C8 (constraint): the fix may not break anything else.** This is an
+acceptance check with teeth, not a reassurance. Discharged three ways,
+all of which must pass:
+
+1. The full gate at 0 failed — every module's own tests.
+2. A POSITIVE test per hardened guard: legitimate model-authored code
+   that uses ordinary attributes (`math.sqrt`, `rng.randint`, list and
+   dict methods, a model-defined class's own attributes) still runs and
+   still returns its verdict. A guard that closed the escape by
+   rejecting everything would pass the gate and fail the operator.
+3. An enumeration test proving the rejected set is exactly the
+   introspection surface and nothing more — so "does not break other
+   modules" is a property that can be re-derived, not a claim about
+   today's test suite.
+
+## Amendments (continued)
+
 (append-only; later operator messages land here)

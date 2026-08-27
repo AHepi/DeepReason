@@ -35,6 +35,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.sandbox_guard import forbidden_attribute, forbidden_name
 from deepreason.verification.models import VerificationResult
 from deepreason.workloads.code import SimulationSpec
 
@@ -99,13 +100,16 @@ def _step_budget(limit: int):
 
 
 def _guard(tree: ast.AST) -> None:
+    # The attribute boundary is owned by deepreason.sandbox_guard, not by this
+    # module. An underscore-only rule here admitted the frame walk
+    # `g.gi_frame.f_back.f_back.f_globals` straight to the worker's own globals.
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom)):
             raise ValueError("imports are not allowed")
-        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
-            raise ValueError(f"underscore attribute .{node.attr}")
-        if isinstance(node, ast.Name) and node.id.startswith("_"):
-            raise ValueError(f"underscore name {node.id}")
+        if isinstance(node, ast.Attribute) and forbidden_attribute(node.attr):
+            raise ValueError(f"forbidden attribute .{node.attr}")
+        if isinstance(node, ast.Name) and forbidden_name(node.id):
+            raise ValueError(f"forbidden name {node.id}")
         if isinstance(node, (ast.Global, ast.Nonlocal)):
             raise ValueError("global/nonlocal is not allowed")
         if isinstance(node, ast.Pow):

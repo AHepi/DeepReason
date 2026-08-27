@@ -36,6 +36,7 @@ from contextlib import contextmanager
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.commitment import Budget, Commitment
+from deepreason.sandbox_guard import forbidden_attribute, forbidden_name
 from deepreason.oracle_sandbox import (
     SandboxAborted as OracleSandboxAborted,
 )
@@ -91,17 +92,22 @@ def _step_budget(step_limit: int):
 
 def _guard(tree: ast.AST) -> None:
     """Reject the untrusted-code escape family (same shape as programs._validate_
-    predicate, extended for a def+body): no imports, no underscore names/attrs
-    (blocks the .__class__... walk), no ** (int bomb), no global/nonlocal, and
+    predicate, extended for a def+body): no imports, nothing outside the
+    sandbox_guard attribute boundary, no ** (int bomb), no global/nonlocal, and
     no integer literal above the cap (blocks range(10**9)-style C-level hangs the
-    line-event bound cannot see)."""
+    line-event bound cannot see).
+
+    The attribute boundary is NOT local to this module. An underscore-only rule
+    was what this guard carried until 2026-08-27, and `gg.gi_frame.f_back.
+    f_back.f_globals` walked through it to the real builtins — a demonstrated
+    escape to the open network from this exact call site (SAFETY.md E3)."""
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom)):
             raise ValueError("imports are not allowed")
-        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
-            raise ValueError(f"underscore attribute .{node.attr}")
-        if isinstance(node, ast.Name) and node.id.startswith("_"):
-            raise ValueError(f"underscore name {node.id}")
+        if isinstance(node, ast.Attribute) and forbidden_attribute(node.attr):
+            raise ValueError(f"forbidden attribute .{node.attr}")
+        if isinstance(node, ast.Name) and forbidden_name(node.id):
+            raise ValueError(f"forbidden name {node.id}")
         if isinstance(node, (ast.Global, ast.Nonlocal)):
             raise ValueError("global/nonlocal not allowed")
         if isinstance(node, ast.Pow):

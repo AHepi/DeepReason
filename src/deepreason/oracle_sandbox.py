@@ -14,6 +14,7 @@ import subprocess
 import sys
 
 from deepreason.canonical import canonical_json
+from deepreason.sandbox_os import network_denial_prefix
 
 MEMORY_CAP_BYTES = 512 * 1024 * 1024
 IPC_CAP_BYTES = 8 * 1024 * 1024
@@ -96,8 +97,26 @@ def run_isolated(
     )
     if len(request) > IPC_CAP_BYTES:
         raise SandboxAborted("request exceeds sandbox IPC limit")
+    # OS-level network denial, when the host provides it. The code-testing
+    # channel is ON by default and carried NO OS boundary at all until
+    # 2026-08-27, when a frame walk through the AST guard reached the real
+    # `builtins` and opened a TCP connection to the open internet from inside
+    # this worker (SAFETY.md E3). The guard is fixed; this is the layer that
+    # does not depend on the guard being right.
+    #
+    # UNLIKE the opt-in contained runner, this DEGRADES rather than refusing:
+    # a host without user namespaces must still be able to test code (operator,
+    # 2026-08-26: "Otherwise how is an LLM supposed to test code"). The
+    # degradation is visible rather than silent -- `sandbox_os.
+    # network_denial_available()` is what tests assert.
     process = subprocess.Popen(  # noqa: S603 - fixed interpreter/module command
-        [sys.executable, "-m", "deepreason.oracle_sandbox", "--worker"],
+        [
+            *network_denial_prefix(),
+            sys.executable,
+            "-m",
+            "deepreason.oracle_sandbox",
+            "--worker",
+        ],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -133,6 +152,16 @@ def run_isolated(
 
 
 def _apply_worker_limits(cpu_seconds: int) -> None:
+    """Apply the worker's resource ceilings, or refuse to run.
+
+    This used to swallow every failure (`except (...): pass`), so a host that
+    refused a limit got an UNLIMITED worker and said nothing. Inverted
+    2026-08-27 to match `verification/contained.py`'s posture: a containment
+    limit that cannot be applied is a refused execution, not a softer one. The
+    `resource` module's absence is still tolerated -- that is a platform
+    without rlimits at all (Windows), not a limit that was refused.
+    """
+
     try:
         import resource
     except ImportError:
@@ -143,10 +172,7 @@ def _apply_worker_limits(cpu_seconds: int) -> None:
         ceiling = requested if hard == resource.RLIM_INFINITY else min(requested, hard)
         resource.setrlimit(kind, (ceiling, ceiling))
 
-    try:
-        _bounded_limit(resource.RLIMIT_AS, MEMORY_CAP_BYTES)
-    except (AttributeError, ValueError, OSError):
-        pass
+    _bounded_limit(resource.RLIMIT_AS, MEMORY_CAP_BYTES)
     try:
         soft = max(1, cpu_seconds)
         hard = soft + 1
@@ -161,7 +187,10 @@ def _apply_worker_limits(cpu_seconds: int) -> None:
                 raise _ResourceAbort("cpu limit")
 
             signal.signal(signal.SIGXCPU, _cpu_abort)
-    except (AttributeError, ValueError, OSError):
+    except AttributeError:
+        # No RLIMIT_CPU on this platform at all. The wall-clock watchdog in
+        # run_isolated still bounds the worker, so this is a missing limit
+        # rather than a refused one.
         pass
 
 

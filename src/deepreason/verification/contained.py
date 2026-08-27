@@ -39,6 +39,7 @@ from pathlib import Path
 from typing import Any, ClassVar, Literal
 
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.sandbox_guard import WORKER_GUARD_SOURCE
 from deepreason.verification.simulation import (
     SimulationRequest,
     SimulationVerificationResult,
@@ -56,7 +57,7 @@ _WALL_STARTUP_GRACE_MS = 2_000
 # nothing inside the namespace can import repository code. Its sha256 appears
 # in every execution fingerprint: a changed worker is a changed runtime
 # identity, visible in each immutable receipt.
-CONTAINED_WORKER_SOURCE_V1 = '''\
+_CONTAINED_WORKER_TEMPLATE = '''\
 """DeepReason contained simulation worker: job.json in, result.json out."""
 import ast
 import builtins
@@ -77,13 +78,16 @@ class StepExceeded(Exception):
     pass
 
 
+__DEEPREASON_SANDBOX_GUARD__
+
+
 def guard(source, label):
     tree = ast.parse(source)
     for node in ast.walk(tree):
         if isinstance(node, (ast.Import, ast.ImportFrom, ast.Global, ast.Nonlocal)):
             raise ValueError(label + " may not import or mutate scope")
-        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
-            raise ValueError(label + " may not traverse private attributes")
+        if isinstance(node, ast.Attribute) and forbidden_attribute(node.attr):
+            raise ValueError(label + " may not traverse ." + node.attr)
     return tree
 
 
@@ -350,6 +354,10 @@ def main():
 if __name__ == "__main__":
     raise SystemExit(main())
 '''
+
+CONTAINED_WORKER_SOURCE_V1 = _CONTAINED_WORKER_TEMPLATE.replace(
+    "__DEEPREASON_SANDBOX_GUARD__", WORKER_GUARD_SOURCE.rstrip("\n")
+)
 
 CONTAINED_WORKER_SHA256 = sha256_hex(CONTAINED_WORKER_SOURCE_V1.encode("utf-8"))
 

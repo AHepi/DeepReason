@@ -1,0 +1,17 @@
+=== RED: the historical underscore-only rule ===
+
+tests/test_sandbox_guard.py:176: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_predicate_eval_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_code_testing_channel_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_declarative_simulation_worker_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_the_escape_chain_is_rejected_attribute_by_attribute
+FAILED tests/test_sandbox_guard.py::test_the_prefix_set_covers_every_public_introspection_attribute
+FAILED tests/test_sandbox_guard.py::test_attribute_violation_reports_the_first_offending_access
+FAILED tests/test_sandbox_guard.py::test_contained_runner_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_names_are_judged_by_the_underscore_rule_only
+8 failed, 8 passed in 0.95s
+
+=== GREEN: the boundary restored ===
+................                                                         [100%]
+16 passed in 0.87s

@@ -17,6 +17,7 @@ import re
 from dataclasses import dataclass
 from typing import Callable, Literal
 
+from deepreason.sandbox_guard import forbidden_attribute, forbidden_name
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 
@@ -65,21 +66,23 @@ class UnsafePredicate(ValueError):
 def _validate_predicate(expr: str) -> None:
     """Defense-in-depth for the predicate eval() (stress-campaign RCE).
     eval() with __builtins__={} is escapable via `().__class__.__base__.
-    __subclasses__()` — every such escape needs a dunder attribute or
-    name. Reject any Attribute or Name touching an underscore-prefixed
-    identifier, which blocks the entire escape family while leaving every
-    legitimate predicate (len(content) > 120, 'x' in content.lower(),
-    comprehensions over content.split()) untouched. Parse errors are
-    unsafe by default."""
+    __subclasses__()` — but NOT every such escape needs a dunder. The
+    frame walk `g.gi_frame.f_back.f_globals` needs none, and until
+    2026-08-27 an underscore-only rule admitted it here and at three
+    sibling call sites. The boundary now lives in one place,
+    `deepreason.sandbox_guard`, which rejects CPython's whole
+    introspection prefix set while leaving every legitimate predicate
+    (len(content) > 120, 'x' in content.lower(), comprehensions over
+    content.split()) untouched. Parse errors are unsafe by default."""
     try:
         tree = ast.parse(expr, mode="eval")
     except SyntaxError as e:
         raise UnsafePredicate(f"unparseable predicate: {e}") from e
     for node in ast.walk(tree):
-        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
-            raise UnsafePredicate(f"dunder attribute access: .{node.attr}")
-        if isinstance(node, ast.Name) and node.id.startswith("_"):
-            raise UnsafePredicate(f"underscore name: {node.id}")
+        if isinstance(node, ast.Attribute) and forbidden_attribute(node.attr):
+            raise UnsafePredicate(f"forbidden attribute access: .{node.attr}")
+        if isinstance(node, ast.Name) and forbidden_name(node.id):
+            raise UnsafePredicate(f"forbidden name: {node.id}")
         # No legitimate boolean predicate exponentiates; ** is only useful
         # here as an integer bomb (9**9**9). Cheap to forbid.
         if isinstance(node, ast.Pow):

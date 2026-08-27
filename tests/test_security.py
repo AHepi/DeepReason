@@ -65,7 +65,12 @@ def test_layer2_direct_predicate_eval_is_sandboxed(tmp_path):
     kappa = Commitment(id="k-evil", eval=payload)
     verdict, trace = evaluate(kappa, h.state.artifacts[art.id], h.blobs)
     assert verdict == "fail"
-    assert "dunder" in trace["error"]
+    # The diagnostic names the refused access. It used to say "dunder"; the
+    # boundary is no longer dunder-shaped (2026-08-27: `gi_frame.f_back.
+    # f_globals` carries no underscore and escaped every guard that thought it
+    # was), so the assertion pins the refusal and the offending attribute.
+    assert "forbidden attribute" in trace["error"]
+    assert "__builtins__" in trace["error"]
     assert not sentinel.exists()
 
 
