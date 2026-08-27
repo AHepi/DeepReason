@@ -288,3 +288,50 @@ Est. ~150 lines of production change across four files, of which the
 frozen-surface part is one additive block. If it runs materially over,
 that is a STOP under the orchestrator's scope contract, not a silent
 widening.
+
+---
+
+# AMENDMENT 1 (2026-08-27, after the boundary gate) — a fixture update this document did NOT predict
+
+Recorded as an amendment rather than folded into §"Fixture updates this
+design PREDICTS" above, because back-dating a prediction is the one
+thing that discipline exists to prevent.
+
+**What went red.** The full gate at the boundary: 1 failed, 4343
+passed, 6 skipped.
+`tests/test_incident_wave_a_v2_fixtures.py::test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic`
+— fixture **A3**'s `generated_root_sha256` moved from `5bccbcafb361…`
+to `31aebf8cea4e…`.
+
+**Why my prediction missed it.** I enumerated the tests that ASSERT on
+the changed fields by name and updated those. This one asserts on no
+field at all: it hashes every byte of a root the test GENERATES, so it
+is sensitive to the record's serialized shape without naming any part
+of it. That is exactly what a byte-freeze is for, and it is the class
+of consumer a name-based search cannot find.
+
+**Cause, measured and bounded rather than inferred.** The A3 root was
+generated on this tree and on `ba4720a95` with `src/` swapped between
+them and everything else held fixed. `diff -rq` over the two roots
+reports ONE differing file, `log.jsonl`, and one differing event
+(seq 3), whose whole diff is:
+
+    -    "split_leg": "",
+    -    "split_max_tokens": null,
+    +    "split_legs": [],
+         "split_notice": "",
+
+Two removed fields replaced by one, on one attempt. Nothing semantic
+moved: same events, same count, same order, same every other field.
+A1 and A2 are byte-identical between the two trees.
+
+**Disposition: update A3's pin, do not weaken the check.** The
+descriptor files are untouched (`descriptor_sha256` still passes), so
+the fixture's INPUT is unchanged and only what today's code generates
+from it moved — which is the change this tranche is. The pin is
+re-derived, not deleted, so the freeze keeps catching the next
+unintended move. It is NOT a frozen surface: `blast_radius.py` reports
+`wheel_smoke_pins: []`, and no committed run root is involved — this
+root is built at test time.
+
+`check: python -m pytest tests/test_incident_wave_a_v2_fixtures.py -q`
