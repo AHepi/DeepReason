@@ -1,1 +1,4 @@
 [arm-s] 0002 tokens= 22717 cum=   22717/923810 valid=False score=0.00025 best=None
+[arm-s] 0003 tokens=  7604 cum=   30321/923810 valid=False score=0.0 best=None
+[arm-s] 0005 tokens=  5490 cum=   35811/923810 valid=False score=0.000448 best=None
+[arm-s] 0006 tokens=  4481 cum=   40292/923810 valid=False score=0.0 best=None
