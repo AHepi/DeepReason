@@ -38,7 +38,7 @@ Twelve ontology names reach `rules/` — the seven models above plus `RefRole`,
 `Rule`, `SpawnTrigger`, `Status`, `WarrantType` — and the thirteen that do not
 are the log line, the process payloads, the materialized view and the test
 vocabulary.
-`check: python -c "import ast,pathlib; N={a.name for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom) and (n.module or '').startswith('deepreason.ontology') for a in n.names}; import deepreason.ontology as o; assert N-set(o.__all__)=={'RefRole'}, sorted(N); assert set(o.__all__)-N=={'Budget','Commitment','ConjectureContextCallReceiptV1','ConjectureTurnEventPayloadV1','ControlEventPayloadV1','ControlEventPayloadV2','ControlEventPayloadV3','EpistemicState','Event','LLMAttempt','LLMCall','SchoolRouteReceiptV1','StateDiff'}, sorted(set(o.__all__)-N)"`
+`check: python -c "import ast,pathlib; N={a.name for p in pathlib.Path('src/deepreason/rules').rglob('*.py') for n in ast.walk(ast.parse(p.read_text())) if isinstance(n,ast.ImportFrom) and (n.module or '').startswith('deepreason.ontology') for a in n.names}; import deepreason.ontology as o; assert N-set(o.__all__)=={'RefRole'}, sorted(N); assert set(o.__all__)-N=={'Budget','Commitment','ConjectureContextCallReceiptV1','ConjectureTurnEventPayloadV1','ControlEventPayloadV1','ControlEventPayloadV2','ControlEventPayloadV3','EpistemicState','Event','LLMAttempt','LLMCall','LLMSplitLegV1','SchoolRouteReceiptV1','StateDiff'}, sorted(set(o.__all__)-N)"`
 
 ## Where it is expressed
 

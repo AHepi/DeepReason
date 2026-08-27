@@ -180,6 +180,54 @@ sweep, is the instrument — it says why no verdict COULD move rather than that 
 `check: python -c "import inspect; from deepreason.invariants import _controller_v3_history as h; src=inspect.getsource(h); assert 'attempt.raw_ref == (call.raw_ref or None)' in src" && grep -q "raw_ref=call.raw_ref or None," src/deepreason/workflow/transaction_service.py && grep -q "attempt.raw_ref != (call.raw_ref or None)" src/deepreason/workflow/replay.py && python -m pytest tests/test_v6_transport_failure_pairing.py -q`
 `check: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0`
 
+**Granted contact, 2026-08-27 — the `split-legs` family (a leg is not a repair).**
+The tranche instruction forecast this contact and directed that the grant be requested in
+FIX.md before implementation ("this touches invariants.py/verification (surface 3) — request
+the grant in FIX.md BEFORE implementing, with the writer/reader design stated; the monitor
+reviews it there"). It was, with `tools/blast_radius.py`'s own `CONTACT` verdict and all
+three contact rows plus the qualification-digest row pasted verbatim and disposed one by
+one, at `experiments/2026-08-27-defect-split-leg-recording/FIX.md`, before a line of the
+check existed.
+
+What moved: ONE additive `split-legs` family at the END of `verify_root` — six limbs
+(shape, token accounting, the `B_r + B_a` envelope, trace continuity, blob reachability,
+request provenance). **Insertions only, zero deletions**, and no existing check's name,
+shape, order or detail string changed. `verification/report.py` was NOT touched and no
+`_EPISTEMIC_CHECKS` entry was added: `split-legs` falls through `_legacy_channel` to
+`integrity`, which is where all four checks it relieves already sit, so the request
+narrowed during implementation rather than widened.
+
+Additive is provable here more strongly than in the 2026-08-22 and 2026-08-24 grants,
+which recognised their inputs by bodies no older root contains. Every limb is guarded on
+`attempt.split_legs`, **a field that did not exist before this commit**: `FrozenRecord`
+sets only `frozen=True`, so pydantic's `extra="ignore"` applies, every attempt in every
+committed root deserialises with `split_legs == ()`, and no limb can reach a `fail`.
+Pinned by a probe against a real committed root rather than a fixture.
+
+Why the reader had to change at all, since readers-may-be-fixed is this document's own
+asymmetry: the WRITER was the defect. `llm/adapter.py` spliced the split protocol's
+deliberation leg into `attempt_trace`, which `verify_root` reads as a repair ladder, so
+every thinking-ON run was replay-invalid — 260 violations across four unrelated checks on a
+run that CONVERGED, plus an `LLMAttempt.prompt_ref=None` operational failure. The writer is
+fixed; this family is what makes the new record READ rather than merely accepted, so a leg
+recorded wrongly still fails. `LLMAttempt.split_leg` and `split_max_tokens` were REMOVED,
+which the 2026-08-14 law permits and which no committed root feels: 0 of 3 155 attempts
+carry a non-empty `split_leg` (`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` §3.2), the
+protocol having never run live before this tranche.
+
+`harness.py` (surface 2) took ZERO contact, and that was measured rather than assumed:
+both of its `attempt_trace` reads are attempt-level, and they now see strictly fewer and
+more correct entries. The seam is written up at `DR-SEAM-llm-x-verification`, which did not
+exist — and whose absence is why the defect shipped.
+
+`check: grep -q "split-legs" src/deepreason/invariants.py && ! grep -q "split-legs" src/deepreason/verification/report.py && python -c "
+from deepreason.verification.report import _legacy_channel
+assert _legacy_channel('split-legs', 'x') == 'integrity'
+from deepreason.ontology.event import LLMAttempt as A
+assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
+" && python -m pytest tests/test_split_leg_recording.py -q`
+`check: python -m pytest tests/test_split_leg_recording.py::test_an_attempt_from_a_committed_root_deserialises_with_no_legs -q`
+
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 
 Not only the Pydantic models: the validators too. Admitting a value a validator

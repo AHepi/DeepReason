@@ -2,8 +2,8 @@
 Verified-at: e9fac8671
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
-Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification
-Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, llm x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
+Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification, DR-SEAM-llm-x-verification
+Seams-undocumented: adjudication x verification, amendment x verification, application x verification, capabilities x verification, manifest x verification, run-identity x verification, scratch x verification, verification x warrants-and-attacks, verification x workflow
 
 # Verification — replay validation of a run root, and the pinned mechanical verifiers
 
@@ -138,6 +138,7 @@ when `stats` was otherwise empty.
 | To change... | Edit | Test |
 |---|---|---|
 | Add or tighten a replay invariant | a new `fail("<name>", ...)` inside `verify_root`, `src/deepreason/invariants.py` | `python -m pytest tests/test_chaos_invariants.py -q` |
+| What a split-budget seat call's two legs must satisfy | the `split-legs` family at the END of `verify_root` — read DR-SEAM-llm-x-verification BEFORE either side, because the writer and the reader share no import and only that document names their agreement | `python -m pytest tests/test_split_leg_recording.py -q` |
 | Which conjecturer-turn contract versions replay authorizes | two membership checks inside `verify_root` (the legacy `work_orders` walk; `validate_conjecture_turn`'s `event.conjecture_turn` check) — both widened for v7 (P-CEPP-1) though BOTH are unreachable for schema 6 in the current codebase: `harness.py`'s `record_conjecture_turn_event` (frozen) refuses any `attempt.contract_id` outside `{v4, v5}`, and `h.workflow_state.work_orders` stays empty for a transactional dispatch (`transaction_work` instead) | `python -m pytest tests/test_v6_transaction_qualification.py::test_live_v7_conjecture_dispatch_mints_a_v7_contracted_commitment tests/test_conjecturer_turn_v4.py::test_v7_configured_expansion_replay_validates -q` |
 | Which dimension a finding lands in (and so whether it flips `valid`) | `_SECURITY_CHECKS` / `_OPERATIONAL_CHECKS` / `_EPISTEMIC_CHECKS` / `_legacy_channel`, `verification/report.py` | `python -m pytest "tests/test_r0_terminal_verification.py::test_verify_root_report_separates_completion_from_false_authority" -q` |
 | Add a finding derived from the terminal projection, not the log | `_terminal_findings`, `_terminal_authority_findings`, `_model_execution_findings`, `_transaction_findings`, `verification/report.py` | `python -m pytest tests/test_r0_terminal_verification.py -q` |
@@ -154,6 +155,38 @@ when `stats` was otherwise empty.
 `check: grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/verification/simulation.py && grep -q "imports are not allowed" src/deepreason/verification/simulation.py && grep -q "def guard(source, label):" src/deepreason/verification/contained.py && grep -q "may not import or mutate scope" src/deepreason/verification/contained.py && grep -q "def _containment_limits(" src/deepreason/verification/contained.py && grep -q "def containment_prefix(cls)" src/deepreason/verification/contained.py && grep -q "def seccomp_available()" src/deepreason/verification/_sandbox.py && grep -q "def _derive_v2(source: str) -> str:" src/deepreason/verification/brokered.py`
 
 ## Traps
+
+- **A leg is not a repair attempt, and `attempt_trace` cannot be borrowed to
+  hold one.** The split-budget seat protocol (`llm/split.py`) turns one seat
+  call into two provider legs, and the adapter used to splice the deliberation
+  leg into `attempt_trace` — a list whose index means "how many times this call
+  was told its value was wrong". Four unrelated checks then fired on the same
+  mismatch, which is what made the diagnosis hard rather than easy:
+  `attempt-accounting` (the trace summed leg one twice), `attempt-order` (two
+  entries both claiming `attempt=0`), `attempt-blobs` (a diagnostic demanded of
+  a leg that is invalid BY DESIGN and was never a validation failure), and
+  `repair-metadata` (`attempts>1` demanding `DIAGNOSTIC:` in a prompt that was
+  the extraction envelope). Every thinking-ON run was replay-invalid, including
+  runs that CONVERGED — the reasoning was fine and only the record of it was
+  not. **It shipped because no document said what `attempt_trace` meant to a
+  reader outside `invariants.py`:** this subsystem imports nothing from `llm/`,
+  the whole agreement travels in the `LLMAttempt` record, and no coupling
+  metric can see that. `DR-SEAM-llm-x-verification` now exists for exactly
+  that reason. Fixed 2026-08-27; the legs are `LLMSplitLegV1` records on the
+  attempt they produced, and the `split-legs` family reads them.
+  Reproduced by `python -u scripts/cycle_soak.py --case split-legs` (exit 1,
+  260 violations, before) and by that tranche's own soak of the P-C2b shape
+  (`--case pc2b`, exit 1, 50 violations plus an `LLMAttempt.prompt_ref=None`
+  operational failure).
+`check: python -m pytest tests/test_split_leg_recording.py::test_a_leg_is_never_read_as_a_repair_attempt tests/test_split_leg_recording.py::test_verify_root_accepts_a_thinking_on_record -q && python -c "
+import inspect
+from deepreason.invariants import verify_root
+block = inspect.getsource(verify_root)
+block = block[block.index('Split-budget legs'):]
+# Six limbs, and every one guarded on a field no older record can carry.
+assert block.count('fail(') == 6, block.count('fail(')
+assert 'if not legs:' in block and 'continue' in block
+"`
 
 - **A check that compares two types' spellings of the same absence is
   unsatisfiable, not strict.** `workflow-call-pairing`'s sixth agreement read

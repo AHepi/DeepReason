@@ -2433,9 +2433,9 @@ def _versioned_source_config_data(
     # frozen wire-byte goldens too, and belong here for the same reason: they
     # are process/transport policy consulted at the adapter's dispatch site and
     # never written to the manifest. Their effect IS recorded, per attempt
-    # rather than per manifest -- LLMAttempt.split_leg / split_max_tokens /
-    # split_notice say exactly which leg produced what and under which budget,
-    # which is a stronger record than a Config echo would be. Dropping them
+    # rather than per manifest -- LLMAttempt.split_legs / split_notice say
+    # exactly which legs produced what and under which budget, which is a
+    # stronger record than a Config echo would be. Dropping them
     # also keeps a transport choice from costing every home a ~14-minute
     # qualification battery for a subject whose behaviour contract is unchanged.
     data.pop("SPLIT_BUDGET_SEAT_PROTOCOL", None)
