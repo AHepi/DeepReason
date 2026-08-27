@@ -1,0 +1,1300 @@
+{
+ "schema": "formalism-audit.kind-reads.v1",
+ "raw_hits": 1865,
+ "code_hits": 1143,
+ "kind_reads": 176,
+ "dropped": {
+  "not-executable": 722,
+  "outcome-word-only-no-kind-signal": 794,
+  "plumbing-not-a-boolean-position": 173
+ },
+ "per_file": {
+  "src/deepreason/rules/crit.py": 14,
+  "src/deepreason/calculus/promotion.py": 14,
+  "src/deepreason/scheduler/scheduler.py": 12,
+  "src/deepreason/workloads/text.py": 10,
+  "src/deepreason/capture/detection.py": 8,
+  "src/deepreason/easy.py": 7,
+  "src/deepreason/measures/hv.py": 7,
+  "src/deepreason/rules/experiment.py": 7,
+  "src/deepreason/llm/packs.py": 6,
+  "src/deepreason/informal/skeleton.py": 6,
+  "src/deepreason/rules/guards/anti_relapse.py": 6,
+  "src/deepreason/harness.py": 5,
+  "src/deepreason/rules/conj.py": 5,
+  "src/deepreason/views/evidence.py": 4,
+  "src/deepreason/workloads/models.py": 4,
+  "src/deepreason/calculus/nomination.py": 4,
+  "src/deepreason/rules/act.py": 3,
+  "src/deepreason/rules/spawn.py": 3,
+  "src/deepreason/rules/warrants.py": 3,
+  "src/deepreason/premises.py": 2,
+  "src/deepreason/proof_debt.py": 2,
+  "src/deepreason/report.py": 2,
+  "src/deepreason/skills/validate.py": 2,
+  "src/deepreason/views/export.py": 2,
+  "src/deepreason/measures/demarcation.py": 2,
+  "src/deepreason/measures/reach.py": 2,
+  "src/deepreason/informal/trial.py": 2,
+  "src/deepreason/workflows/website.py": 2,
+  "src/deepreason/capture/diagnostics.py": 2,
+  "src/deepreason/calculus/audit.py": 2,
+  "src/deepreason/calculus/standing.py": 2,
+  "src/deepreason/bridge/derived.py": 2,
+  "src/deepreason/bridge/harness.py": 2,
+  "src/deepreason/authority.py": 1,
+  "src/deepreason/imports.py": 1,
+  "src/deepreason/jolts.py": 1,
+  "src/deepreason/ops.py": 1,
+  "src/deepreason/run_manifest.py": 1,
+  "src/deepreason/signals.py": 1,
+  "src/deepreason/research/backends.py": 1,
+  "src/deepreason/views/knowledge.py": 1,
+  "src/deepreason/views/theory.py": 1,
+  "src/deepreason/informal/audits.py": 1,
+  "src/deepreason/amendment/apply.py": 1,
+  "src/deepreason/rules/synth.py": 1,
+  "src/deepreason/rules/vision.py": 1,
+  "src/deepreason/storage/merge.py": 1,
+  "src/deepreason/application/text_runs.py": 1,
+  "src/deepreason/capture/ladder.py": 1,
+  "src/deepreason/workflow/conjecture_recovery.py": 1,
+  "src/deepreason/calculus/render.py": 1,
+  "src/deepreason/calculus/views.py": 1,
+  "src/deepreason/evidence/render.py": 1
+ },
+ "sites": [
+  {
+   "file": "src/deepreason/authority.py",
+   "line": 97,
+   "term": "ARGUMENTATIVE",
+   "code": true,
+   "text": "if value not in _ARGUMENTATIVE_VALUES:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 604,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 635,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if gate.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 656,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kappa.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 678,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kappa.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 702,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kappa.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 739,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kappa.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/easy.py",
+   "line": 865,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kappa.id not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/harness.py",
+   "line": 360,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment.id in self.commitments:"
+  },
+  {
+   "file": "src/deepreason/harness.py",
+   "line": 507,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/harness.py",
+   "line": 508,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid not in self.commitments:"
+  },
+  {
+   "file": "src/deepreason/harness.py",
+   "line": 1976,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if warrant.commitment and warrant.commitment not in self.commitments:"
+  },
+  {
+   "file": "src/deepreason/harness.py",
+   "line": 1982,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if warrant.commitment and self.commitments[warrant.commitment].eval.startswith("
+  },
+  {
+   "file": "src/deepreason/imports.py",
+   "line": 353,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment.id not in self.harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/jolts.py",
+   "line": 446,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for key, value in sorted(harness.commitments.items())"
+  },
+  {
+   "file": "src/deepreason/ops.py",
+   "line": 91,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if \"skeleton-wf\" in criteria and \"skeleton-wf\" not in harness.commitments:"
+  },
+  {
+   "file": "src/deepreason/premises.py",
+   "line": 173,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/premises.py",
+   "line": 506,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if PREMISE_RENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/proof_debt.py",
+   "line": 126,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if DERIVATION_MANIFEST_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/proof_debt.py",
+   "line": 199,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if not programs.evaluable(kappa):"
+  },
+  {
+   "file": "src/deepreason/report.py",
+   "line": 372,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "and w.commitment in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/report.py",
+   "line": 373,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "and harness.commitments[w.commitment].eval.startswith(\"rubric:\")"
+  },
+  {
+   "file": "src/deepreason/run_manifest.py",
+   "line": 4514,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/signals.py",
+   "line": 535,
+   "term": "demarcat",
+   "code": true,
+   "text": "semantics=\"a premise was NOT refuted by demarcation, and why (inputs: \""
+  },
+  {
+   "file": "src/deepreason/skills/validate.py",
+   "line": 174,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for commitment_id in source.state.artifacts[current].interface.commitments"
+  },
+  {
+   "file": "src/deepreason/skills/validate.py",
+   "line": 183,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/research/backends.py",
+   "line": 263,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "criteria = [c for c in problem.criteria if c in harness.commitments]"
+  },
+  {
+   "file": "src/deepreason/views/evidence.py",
+   "line": 68,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/views/evidence.py",
+   "line": 70,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/views/evidence.py",
+   "line": 76,
+   "term": "observation_valued",
+   "code": true,
+   "text": "obs = \" \u00b7 observation-valued\" if kappa.observation_valued else \"\""
+  },
+  {
+   "file": "src/deepreason/views/evidence.py",
+   "line": 102,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "kappa = harness.commitments.get(w.commitment) if w.commitment else None"
+  },
+  {
+   "file": "src/deepreason/views/export.py",
+   "line": 43,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "(kappa := harness.commitments.get(cid)) is not None"
+  },
+  {
+   "file": "src/deepreason/views/export.py",
+   "line": 45,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/views/knowledge.py",
+   "line": 52,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if not crit(artifact, harness.commitments):"
+  },
+  {
+   "file": "src/deepreason/views/theory.py",
+   "line": 40,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/measures/demarcation.py",
+   "line": 42,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "return any(cid in commitments for cid in artifact.interface.commitments)"
+  },
+  {
+   "file": "src/deepreason/measures/demarcation.py",
+   "line": 64,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if not is_hv_floor(harness.commitments[cid])"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 52,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "own = [c for c in sorted(set(artifact.interface.commitments))"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 53,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if c in harness.commitments and programs.evaluable(harness.commitments[c])]"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 54,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "foreign = [c for c in sorted(harness.commitments)"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 55,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if c not in set(own) and programs.evaluable(harness.commitments[c])]"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 104,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 105,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if cid in commitments and programs.evaluable(commitments[cid])"
+  },
+  {
+   "file": "src/deepreason/measures/hv.py",
+   "line": 134,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "text, [harness.commitments[c].eval for c in battery], k, kernel == \"mu_struct\""
+  },
+  {
+   "file": "src/deepreason/measures/reach.py",
+   "line": 87,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if not programs.evaluable(commitment):"
+  },
+  {
+   "file": "src/deepreason/measures/reach.py",
+   "line": 137,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if c in harness.commitments and _substantive(harness.commitments[c])"
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 37,
+   "term": "EXEC_PROGRAMS",
+   "code": true,
+   "text": "_EXECUTION_EVALS = {f\"program:{p}\" for p in EXEC_PROGRAMS}"
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 200,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 842,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in state.artifacts[tid].interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 858,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "f\"commitments: {', '.join(target.interface.commitments) or '(none)'}\","
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 1050,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/llm/packs.py",
+   "line": 1111,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/workloads/models.py",
+   "line": 101,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for commitment_id in (*problem.criteria, *owned.commitments)"
+  },
+  {
+   "file": "src/deepreason/workloads/models.py",
+   "line": 102,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in harness.commitments or commitment_id in drafts"
+  },
+  {
+   "file": "src/deepreason/workloads/models.py",
+   "line": 142,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in interface.commitments"
+  },
+  {
+   "file": "src/deepreason/workloads/models.py",
+   "line": 143,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid in drafts and cid not in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 81,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "is_candidate_checker = self.eval == \"program:candidate_checker\""
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 83,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "if is_candidate_checker and not (v and v.get(\"source\") and v.get(\"entry\") and v.get(\"tests\")):"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 87,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "if not is_candidate_checker and v is not None:"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 90,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "\"eval == 'program:candidate_checker'\")"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 178,
+   "term": "checker_spec",
+   "code": true,
+   "text": "if self.checker_specs and len(self.checker_specs) != len(self.counterconditions):"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 191,
+   "term": "checker_spec",
+   "code": true,
+   "text": "specs = candidate.checker_specs or (None,) * len(candidate.counterconditions)"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 224,
+   "term": "observation_valued",
+   "code": true,
+   "text": "observation_valued = evaluation == \"observation\""
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 225,
+   "term": "observation_valued",
+   "code": true,
+   "text": "if observation_valued:"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 243,
+   "term": "checker_spec",
+   "code": true,
+   "text": "if countercondition.checker_spec is not None:"
+  },
+  {
+   "file": "src/deepreason/workloads/text.py",
+   "line": 280,
+   "term": "is_pure_code",
+   "code": true,
+   "text": "if is_pure_code(getattr(envelope, field)):"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 221,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for c in state.artifacts[aid].interface.commitments"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 222,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if c in harness.commitments and programs.evaluable(harness.commitments[c])"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 830,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "self.harness.commitments[commitment_id].eval == \"program:reasoning-envelope-wf\""
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 832,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in self.harness.commitments"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 1326,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 1330,
+   "term": "hv_floor|is_hv_floor|run_hv_floor",
+   "code": true,
+   "text": "if is_hv_floor(kappa):"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 1396,
+   "term": "EXEC_PROGRAMS",
+   "code": true,
+   "text": "execution_evals = {f\"program:{p}\" for p in EXEC_PROGRAMS}"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 1412,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "(kappa := harness.commitments.get(cid)) is not None"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 1414,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 2588,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "(kappa := harness.commitments.get(cid)) is not None and kappa.eval == property_eval"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 2589,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/scheduler/scheduler.py",
+   "line": 2668,
+   "term": "active_properties",
+   "code": true,
+   "text": "if len(active_properties(self.harness, cid)) >= config.PROP_MAX:"
+  },
+  {
+   "file": "src/deepreason/informal/audits.py",
+   "line": 27,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "kappa = harness.commitments.get(warrant.commitment) if warrant.commitment else None"
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 67,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "is_candidate_checker = self.eval == \"program:candidate_checker\""
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 69,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "if is_candidate_checker and not (v and v.get(\"source\") and v.get(\"entry\") and v.get(\"tests\")):"
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 73,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "if not is_candidate_checker and v is not None:"
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 76,
+   "term": "candidate_checker",
+   "code": true,
+   "text": "\"eval == 'program:candidate_checker'\")"
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 119,
+   "term": "is_pure_code",
+   "code": true,
+   "text": "if is_pure_code(getattr(skeleton, field)):"
+  },
+  {
+   "file": "src/deepreason/informal/skeleton.py",
+   "line": 136,
+   "term": "checker_spec",
+   "code": true,
+   "text": "if case.checker_spec is not None:"
+  },
+  {
+   "file": "src/deepreason/informal/trial.py",
+   "line": 920,
+   "term": "formally_backed",
+   "code": true,
+   "text": "if formally_backed(harness, target_id):"
+  },
+  {
+   "file": "src/deepreason/informal/trial.py",
+   "line": 1298,
+   "term": "execution_backed",
+   "code": true,
+   "text": "if execution_backed(harness, loser):"
+  },
+  {
+   "file": "src/deepreason/workflows/website.py",
+   "line": 578,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for commitment_id, commitment in self.harness.commitments.items()"
+  },
+  {
+   "file": "src/deepreason/workflows/website.py",
+   "line": 585,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if manifest_commitments.intersection(artifact.interface.commitments)"
+  },
+  {
+   "file": "src/deepreason/amendment/apply.py",
+   "line": 319,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if item.id in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/act.py",
+   "line": 52,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in harness.state.artifacts[target_id].interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/act.py",
+   "line": 77,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/act.py",
+   "line": 95,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/conj.py",
+   "line": 950,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "harness.commitments[commitment_id].eval == \"program:reasoning-envelope-wf\""
+  },
+  {
+   "file": "src/deepreason/rules/conj.py",
+   "line": 952,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/conj.py",
+   "line": 1549,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "harness.commitments[commitment_id].eval == \"program:reasoning-envelope-wf\""
+  },
+  {
+   "file": "src/deepreason/rules/conj.py",
+   "line": 1551,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/conj.py",
+   "line": 2290,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "dict.fromkeys((*base.commitments, *(item.id for item in draft_pool)))"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 840,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "(kappa := harness.commitments.get(cid)) is not None"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 842,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 877,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 945,
+   "term": "property_oracle",
+   "code": true,
+   "text": "if not saw_property_oracle:"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 954,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 956,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if kappa is None or not programs.evaluable(kappa):"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1005,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1083,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in prop.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1084,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if (kappa := harness.commitments.get(cid)) is not None"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1141,
+   "term": "active_properties",
+   "code": true,
+   "text": "for prop_id, claim, prop_source in active_properties(harness, base.id):"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1544,
+   "term": "execution_backed",
+   "code": true,
+   "text": "if execution_backed(harness, target_id):"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 1551,
+   "term": "property_oracle",
+   "code": true,
+   "text": "retries = config.CX_RETRY_MAX if _has_property_oracle(harness, target_id) else 0"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 2157,
+   "term": "execution_backed",
+   "code": true,
+   "text": "if execution_backed(harness, case.target):"
+  },
+  {
+   "file": "src/deepreason/rules/crit.py",
+   "line": 2174,
+   "term": "property_oracle",
+   "code": true,
+   "text": "if _has_property_oracle(harness, case.target):"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 60,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 62,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if kappa is None or not programs.evaluable(kappa):"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 122,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if base_commitment_id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 258,
+   "term": "active_properties",
+   "code": true,
+   "text": "for aid, _claim, source in active_properties(harness, base_commitment_id):"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 298,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if aid != target_id and base.id in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 435,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if base.id in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/experiment.py",
+   "line": 461,
+   "term": "active_properties",
+   "code": true,
+   "text": "existing = [claim for _, claim, _ in active_properties(harness, base.id)]"
+  },
+  {
+   "file": "src/deepreason/rules/spawn.py",
+   "line": 123,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if c in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/spawn.py",
+   "line": 182,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/spawn.py",
+   "line": 184,
+   "term": "observation_valued",
+   "code": true,
+   "text": "if kappa is None or not kappa.observation_valued:"
+  },
+  {
+   "file": "src/deepreason/rules/synth.py",
+   "line": 57,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "commitments=[c for c in problem.criteria if c in harness.commitments],"
+  },
+  {
+   "file": "src/deepreason/rules/vision.py",
+   "line": 91,
+   "term": "execution_backed",
+   "code": true,
+   "text": "if execution_backed(harness, target_id):"
+  },
+  {
+   "file": "src/deepreason/rules/warrants.py",
+   "line": 45,
+   "term": "EXEC_PROGRAMS",
+   "code": true,
+   "text": "execution_evals = {f\"program:{p}\" for p in EXEC_PROGRAMS}"
+  },
+  {
+   "file": "src/deepreason/rules/warrants.py",
+   "line": 50,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/warrants.py",
+   "line": 104,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in target.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 131,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "lookup = harness.commitments if commitments is None else commitments"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 134,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 135,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "if cid in lookup and programs.evaluable(lookup[cid])"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 249,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "cid for cid in ids if cid in commitments and programs.evaluable(commitments[cid])"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 256,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "lookup = harness.commitments if commitments is None else commitments"
+  },
+  {
+   "file": "src/deepreason/rules/guards/anti_relapse.py",
+   "line": 294,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "lookup = harness.commitments if commitments is None else commitments"
+  },
+  {
+   "file": "src/deepreason/storage/merge.py",
+   "line": 34,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "or oid in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/application/text_runs.py",
+   "line": 447,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "harness.commitments.get(item.id) if harness is not None else None"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 167,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if s == Status.ACCEPTED and harness.state.artifacts[aid].interface.commitments"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 173,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "cid in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 174,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "and not programs.evaluable(harness.commitments[cid])"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 176,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in harness.state.artifacts[aid].interface.commitments"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 217,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if w.commitment in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 218,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "and not harness.commitments[w.commitment].eval.startswith(\"rubric:\")"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 249,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/capture/detection.py",
+   "line": 251,
+   "term": "observation_valued",
+   "code": true,
+   "text": "if kappa is not None and kappa.observation_valued:"
+  },
+  {
+   "file": "src/deepreason/capture/diagnostics.py",
+   "line": 352,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/capture/diagnostics.py",
+   "line": 356,
+   "term": "programs\\.evaluable",
+   "code": true,
+   "text": "and programs.evaluable(kappa)"
+  },
+  {
+   "file": "src/deepreason/capture/ladder.py",
+   "line": 52,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if status == Status.ACCEPTED and harness.state.artifacts[aid].interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/workflow/conjecture_recovery.py",
+   "line": 303,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if commitment_id in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/audit.py",
+   "line": 130,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in subject.interface.commitments if subject is not None else ():"
+  },
+  {
+   "file": "src/deepreason/calculus/audit.py",
+   "line": 245,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if kind == \"commitment\" and oid not in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/nomination.py",
+   "line": 182,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid in harness.commitments and _substantive(harness.commitments[cid])"
+  },
+  {
+   "file": "src/deepreason/calculus/nomination.py",
+   "line": 260,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "return \"declared-only\" if crit(artifact, harness.commitments) else \"no-attack-surface\""
+  },
+  {
+   "file": "src/deepreason/calculus/nomination.py",
+   "line": 310,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/nomination.py",
+   "line": 349,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 174,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for commitment in certificate.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 225,
+   "term": "observation_valued",
+   "code": true,
+   "text": "and spec.observation_valued"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 231,
+   "term": "observation_valued",
+   "code": true,
+   "text": "and spec.observation_valued"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 232,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in subject.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 239,
+   "term": "demarcat",
+   "code": true,
+   "text": "if subject.demarcation == \"no-attack-surface\":"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 245,
+   "term": "demarcat",
+   "code": true,
+   "text": "if subject.demarcation == \"declared-only\":"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 461,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if len(rival.commitments) >= 2:"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 477,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for component in sorted(rival.commitments):"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 483,
+   "term": "observation_valued",
+   "code": true,
+   "text": "if spec is not None and spec.observation_valued:"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 550,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if not subject.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 554,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for cid in subject.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 626,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if cid in harness.commitments"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 627,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "and harness.commitments[cid].eval.partition(\":\")[2] in PROMOTION_PROGRAMS"
+  },
+  {
+   "file": "src/deepreason/calculus/promotion.py",
+   "line": 633,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if FRAME_ASSERTION_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/render.py",
+   "line": 183,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if DEPARTURE_DECLARATION_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/standing.py",
+   "line": 72,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if FRAME_ASSERTION_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/standing.py",
+   "line": 101,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if FRAME_ASSERTION_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/calculus/views.py",
+   "line": 29,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "if PROBLEM_SUBJECT_COMMITMENT.id not in artifact.interface.commitments:"
+  },
+  {
+   "file": "src/deepreason/bridge/derived.py",
+   "line": 404,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "**{key: (\"commitment\", value) for key, value in harness.commitments.items()},"
+  },
+  {
+   "file": "src/deepreason/bridge/derived.py",
+   "line": 446,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "for key in sorted(harness.commitments)"
+  },
+  {
+   "file": "src/deepreason/bridge/harness.py",
+   "line": 1272,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "or source.commitments != source_commitments_before"
+  },
+  {
+   "file": "src/deepreason/bridge/harness.py",
+   "line": 1275,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "or harness.commitments != sink_commitments_before"
+  },
+  {
+   "file": "src/deepreason/evidence/render.py",
+   "line": 113,
+   "term": "\\.commitments",
+   "code": true,
+   "text": "criteria = [criterion for criterion in problem.criteria if criterion in harness.commitments]"
+  }
+ ]
+}
