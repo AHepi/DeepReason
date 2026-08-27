@@ -1,0 +1,57 @@
+[soak] stub provider on 127.0.0.1:38161 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-autkw4tg
+[soak] built root: manifest 736e2cf230f67081…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 3.1s
+[soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case pc2b
+========================================================================
+  manifest sha256        736e2cf230f670810cda7cebd80f7cddc984e058247edb992f7e032f3325d3b7
+  criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
+  attached evidence      False
+  cycles requested       24
+  qualification          rc=0 (3.1s)
+  drive                  179.8s, 27 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 22}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 22}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 22}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 22}
+
+-- record census -------------------------------------------------------
+      21  artifact
+       5  commitment
+       1  problem
+       3  warrant
+      22  workflow-context-exposure-v2
+      22  workflow-context-pack-plan-v1
+      22  workflow-dispatch-authorization-v1
+       1  workflow-lifecycle-decision
+       1  workflow-lifecycle-snapshot
+       1  workflow-model-classification-binding-v1
+      22  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      22  workflow-semantic-admission-v1
+       1  workflow-stop-metrics-observation
+      22  workflow-token-reservation-v2
+     258  workflow-work-lifecycle-transition-v1
+      96  workflow-work-preparation-v1
+      96  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-autkw4tg/soak-report.json
+[soak] exit 0 (clean)
