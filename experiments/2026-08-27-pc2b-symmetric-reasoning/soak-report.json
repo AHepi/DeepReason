@@ -1,0 +1,506 @@
+{
+  "attempts": {
+    "attempts": 10,
+    "attempts_without_complete_lease": 0,
+    "distinct_contracts": [
+      "conjecturer.turn.v6"
+    ],
+    "distinct_roles": [
+      "conjecturer"
+    ],
+    "repairs": 0
+  },
+  "case": {
+    "attached_evidence_enabled": false,
+    "case": "pc2b",
+    "compile_notices": [],
+    "criteria": [
+      "frontier-wellformed@v1",
+      "frontier-claim-honest@v1",
+      "frontier-above-floor@v1"
+    ],
+    "discharge_policy_at_runtime": "discharge-required.v1",
+    "discharge_policy_declared_in_yaml": "discharge-required.v1",
+    "dossier_sources": 0,
+    "judge_seats_enabled": false,
+    "manifest_sha256": "0e59d796e0f0aead16dd054fae6f9a773d7b4c244ddad738bad12a57b72ec176",
+    "problem_id": "question-64b724c4118320989925d111501a8e41",
+    "question_sha256": "64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e",
+    "run_input_digest": "2ad0bf50b9e277ece0f35928c27671c59d775ab0b9fbef8800465bffa7bacf6f"
+  },
+  "checks": [
+    {
+      "detail": "state='failed' stop_reason='operational_failure' typed_error=None",
+      "id": "A1-typed-terminal",
+      "ok": true
+    },
+    {
+      "detail": "stop_reason='operational_failure' message='1 validation error for LLMAttempt\\nprompt_ref\\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type'",
+      "id": "A2-no-operational-failure",
+      "ok": false
+    },
+    {
+      "detail": "50 violation(s): [{'check': 'attempt-accounting', 'detail': 'event seq=27: trace tokens=15573 but call tokens=10001'}, {'check': 'attempt-blobs', 'detail': 'event seq=27 attempt=0: missing diagnostic ref'}, {'check': 'attempt-order', 'detail': 'event seq=27 attempt=1: recorded attempt index=0'}]",
+      "id": "A3-verify-root-clean",
+      "ok": false
+    },
+    {
+      "detail": "reached cycle 1 of 24 requested; the deepest recorded death was cycle 2",
+      "id": "A4-cycles-reached",
+      "ok": false
+    },
+    {
+      "detail": "3 demonstrative fail warrant(s) naming ['frontier-above-floor@v1', 'frontier-claim-honest@v1', 'frontier-wellformed@v1']",
+      "id": "A5-in-run-checker-fired",
+      "ok": true
+    },
+    {
+      "detail": "REBUILD F1 channel Measures on the record: {'discharge-reask': 5}",
+      "id": "A6-discharge-channel-carried-them",
+      "ok": true
+    }
+  ],
+  "cycles": 24,
+  "drive": {
+    "elapsed_s": 62.2,
+    "max_cycle_seen": 1,
+    "progress_events": 4,
+    "terminal": {
+      "canonical_bridge_eligible": false,
+      "completion_status": "incomplete",
+      "error": "1 validation error for LLMAttempt\nprompt_ref\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+      "error_type": "ValidationError",
+      "model_execution": {
+        "base_profile": "standard",
+        "event_horizon_seq": 101,
+        "mode": "base_only",
+        "recovery_routes": [],
+        "route_seat_bases": [
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "argumentative_critic",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "conjecturer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "defender",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "grounding_reviewer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "judge",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "property_designer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "summarizer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "synthesizer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "thesis",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "variator",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          },
+          {
+            "base_profile": "standard",
+            "endpoint_id": "ollama-glm-5.2",
+            "role": "vision_critic",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-base-projection.v1",
+            "seat": 0,
+            "selection_basis": "manifest_default"
+          }
+        ],
+        "route_seat_model_classifications": [
+          {
+            "authorized_contract_ids": [
+              "batch-critic.v2",
+              "critic.atomic-target.v1"
+            ],
+            "behavioral_grant_sha256": "b102917d6cc86ba242e54122cb925962de3daf88a6f847392a29e46c7d3057fc",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [
+              "sha256:89c6f19d669a12c87169ac474cc13caca2f4985bdda3fb130d099df4e2ecda8b",
+              "sha256:b59c709c876a01e9dcb8efbb24fd23f6af5a1630545c70fd18ae7a643b2aedcf"
+            ],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "argumentative_critic",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "qualified_exact_behavior"
+          },
+          {
+            "authorized_contract_ids": [
+              "conjecturer.atomic-candidate.v1",
+              "conjecturer.turn.v6"
+            ],
+            "behavioral_grant_sha256": "bd7016ea0fe37a147dc5b5f964a60a8e3a7ed5566dc63a2d29536c347e7ce097",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [
+              "sha256:49d40f06c7ece674c0b81dd51eca2ae02e1c2e47f6ab6d90e171060d5ef3dcff",
+              "sha256:b21236535e4b4c19218e4da2b6e15c3f66958f9d6dc6387229aedb9212c8f124"
+            ],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "conjecturer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "qualified_exact_behavior"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "559e0f32792bbe7a729ab597aa6b8b3f1b406b37c7f8f785a8fae4b3001a2cbe",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "defender",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "2e85362a111e5d2fccace8fe114b0306ab4f19ccf180d100533e10bb0805ad13",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "grounding_reviewer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "fb818a4e6524977b76b96144f8e42e6757888ba3b131362fdf8091e4263815c6",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "judge",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "04c9e3e83a422e5f21cf914c745bfbe4be782b8fd2d3a3eb6c795f678a624485",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "property_designer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "1f00b07056c43dcbee400d73dce9d5c686ce893da5dec657b444f45afc4cc695",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "summarizer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "0a5122596627f47e379f960e9882213994fafde8ae78c06ef2a177a59d7e63e5",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "synthesizer",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "144a20f1d2080aa3f0f579a22992e0e22d21aa1c3d5f73aa0100ab8c1e0f2029",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "thesis",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "20724b347383496cc8b63d444a6803b19f59c1a909673cb8d79dbf4699383942",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "variator",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          },
+          {
+            "authorized_contract_ids": [],
+            "behavioral_grant_sha256": "787e5cea39aa83a91068b9422387e8a04854b276cee15372788529956961053d",
+            "classification_binding_ref": "sha256:ddb66763e8dd284d026b85325d3562fd272cbe9cf265d1cb73a6b93d047338a9",
+            "classification_plan_ref": "sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1",
+            "endpoint_id": "ollama-glm-5.2",
+            "evidence_pair_ids": [],
+            "qualification_evidence_sha256": "2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e",
+            "role": "vision_critic",
+            "route_sha256": "a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1",
+            "schema": "route-seat-model-classification-projection.v1",
+            "seat": 0,
+            "selected_class": "inactive_no_authorized_contract"
+          }
+        ],
+        "schema": "model-execution-summary.v1"
+      },
+      "schema": "deepreason-run-result-v2",
+      "state": "failed",
+      "stop": {
+        "digest": "7dcc4af83b8f7fd6ace2f7f0a03b973ea0adebb6529059e4f90ba41c1f804ffa",
+        "event_seq": 101,
+        "metrics": {
+          "criticism_debt": 0.0,
+          "cycle": 1,
+          "frontier_delta": 0,
+          "gate_orbit": false,
+          "new_admissions": 0,
+          "new_problems": 0,
+          "open_research": 0,
+          "pending_deterministic_checks": 0,
+          "repair_exhausted": false,
+          "status_churn": 0,
+          "stuck_signal": false,
+          "workload_complete": false
+        },
+        "policy_digest": "76a98a16373c7575acfc41e8877c17b2f3476622cb06f8cbcefc8d388101b147",
+        "reason": "operational_failure",
+        "schema": "deepreason-run-stop-v1"
+      },
+      "terminal_commitment_ref": "sha256:1349e4e4ec529d8a3d247c4f80bc176d706c257c6d37b49b180d168e17194965",
+      "verification": {
+        "completion_satisfied": false,
+        "epistemic_checks_passed": true,
+        "finding_counts": {
+          "completion": 1,
+          "epistemic": 0,
+          "integrity": 50,
+          "operational": 7,
+          "security": 0
+        },
+        "integrity_valid": false,
+        "operational_checks_passed": false,
+        "schema": "verification.summary.v2",
+        "security_valid": true,
+        "valid": false
+      },
+      "workload": "text"
+    },
+    "typed_error": null
+  },
+  "exit_status": 1,
+  "induce_repairs": 0,
+  "induced_schemas": [],
+  "object_counts": {
+    "artifact": 12,
+    "commitment": 5,
+    "problem": 1,
+    "warrant": 3,
+    "workflow-context-exposure-v2": 11,
+    "workflow-context-pack-plan-v1": 11,
+    "workflow-dispatch-authorization-v1": 11,
+    "workflow-model-classification-binding-v1": 1,
+    "workflow-provider-attempt-v1": 10,
+    "workflow-route-seat-model-classification-plan-v1": 1,
+    "workflow-run-terminal-commitment-v1": 1,
+    "workflow-run-terminal-result-draft-v1": 1,
+    "workflow-semantic-admission-v1": 5,
+    "workflow-token-reservation-v2": 11,
+    "workflow-work-lifecycle-transition-v1": 42,
+    "workflow-work-preparation-v1": 11,
+    "workflow-work-terminal-v1": 5
+  },
+  "provider_calls": 101,
+  "qualification": {
+    "elapsed_s": 4.0,
+    "report_written": true,
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": "2387e8a04854b276cee15372788529956961053d\",\n        \"endpoint_id\": \"ollama-glm-5.2\",\n        \"evidence_pair_ids\": [],\n        \"role\": \"vision_critic\",\n        \"route_sha256\": \"a11a121121330cfed3465a51d9933c1df94fca3f65168d617bd0ec844e8f81b1\",\n        \"seat\": 0,\n        \"selected_class\": \"inactive_no_authorized_contract\"\n      }\n    ],\n    \"id\": \"sha256:cbf3d6ba912ba0ec1d3765ca38ab1a29fc1a5a9501a3808dc9b5c780f7a2afb1\",\n    \"manifest_digest\": \"0e59d796e0f0aead16dd054fae6f9a773d7b4c244ddad738bad12a57b72ec176\",\n    \"qualification_evidence_sha256\": \"2bdb2ccb0cffeca287d94031403688b373afd0f451208de75ee7faeeda72449e\",\n    \"schema\": \"workflow.route-seat-model-classification-plan.v1\"\n  },\n  \"run_manifest_schema_version\": 6,\n  \"run_manifest_sha256\": \"0e59d796e0f0aead16dd054fae6f9a773d7b4c244ddad738bad12a57b72ec176\",\n  \"schema\": \"deepreason-production-contract-doctor-v1\",\n  \"summary\": {\n    \"alias_failures\": 0,\n    \"case_count\": 80,\n    \"eventual_valid_count\": 80,\n    \"first_pass_valid_count\": 80,\n    \"pair_count\": 4,\n    \"qualified\": true,\n    \"qualified_pair_count\": 4,\n    \"re_exercised_pair_count\": 0,\n    \"repair_count\": 0,\n    \"scope_violations\": 0,\n    \"semantic_admission_count\": 80\n  }\n}\n"
+  },
+  "seams": [
+    {
+      "detail": {
+        "distinct_contracts": [
+          "conjecturer.turn.v6"
+        ],
+        "reached_by": {
+          "workflow-contract-decomposition-transition-v1": 0,
+          "workflow-provider-attempt-v1": 10
+        },
+        "repairs": 0
+      },
+      "disposition": "partial",
+      "expected_red_until": null,
+      "id": "D1-seat-contract",
+      "reason": "seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline",
+      "what": "seat contracts with repairs"
+    },
+    {
+      "detail": {
+        "attempts": 10,
+        "attempts_without_complete_lease": 0,
+        "reached_by": {
+          "workflow-provider-attempt-v1": 10
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": null,
+      "id": "D2-route-lease",
+      "reason": "",
+      "what": "lease-checked routes with tuning"
+    },
+    {
+      "detail": {
+        "reached_by": {
+          "workflow-dispatch-authorization-v1": 11
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": null,
+      "id": "D3-budget-auth",
+      "reason": "",
+      "what": "budget authorization"
+    },
+    {
+      "detail": {
+        "reached_by": {
+          "workflow-token-reservation-v2": 11
+        }
+      },
+      "disposition": "covered",
+      "expected_red_until": null,
+      "id": "D4-reservation-bound",
+      "reason": "",
+      "what": "reservation/dispatch bounds"
+    }
+  ],
+  "status": {
+    "accepted": 0,
+    "activity": "operational failure",
+    "artifact_id": null,
+    "completed_units": null,
+    "cycle": 1,
+    "determinate": false,
+    "display_status_counts": {},
+    "frontier_size": 0,
+    "message": "1 validation error for LLMAttempt\nprompt_ref\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type",
+    "phase": "stop",
+    "problem_id": null,
+    "queued_checks": 0,
+    "queued_criticism": 0,
+    "refuted": 0,
+    "run_id": "0e59d796e0f0aead16dd054fae6f9a773d7b4c244ddad738bad12a57b72ec176",
+    "seq": 4,
+    "state": "failed",
+    "stop_reason": "operational_failure",
+    "suspended": 0,
+    "token_limit": 200000,
+    "token_spend": 0,
+    "total_units": null,
+    "workload": "text"
+  },
+  "token_budget": 200000
+}

@@ -1,0 +1,36 @@
+{
+ "checks": [
+  {
+   "detail": "question_sha256=64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e",
+   "id": "S1-question-frozen",
+   "ok": true
+  },
+  {
+   "detail": "top=['DISCHARGE_POLICY', 'roles']; seat=['reasoning', 'timeout_s']; thinking_on=True; caps=[32768] (must stay 32768); timeouts=[900]; DISCHARGE_POLICY='discharge-required.v1'",
+   "id": "S2-registered-delta-only",
+   "ok": true
+  },
+  {
+   "detail": "runtime DISCHARGE_POLICY='discharge-required.v1' enabled=True reask='once' handles_n=8",
+   "id": "S3-discharge-channel-live",
+   "ok": true
+  },
+  {
+   "detail": "11 seats; request-body reasoning field: ['{}'] (empty = no reasoning_effort sent = the model thinks)",
+   "id": "S4-thinking-ON-at-runtime",
+   "ok": true
+  },
+  {
+   "detail": "harness plan(s)=[(True, 32256, 512, 'none')]; sampler plan=(True, 32256, 512, 'none'); mode='auto' extraction=512; sampler timeout=900 vs seat 900",
+   "id": "S5-arms-are-symmetric",
+   "ok": true
+  }
+ ],
+ "schema": "pc2b.preflight.v1",
+ "split": {
+  "harness": [
+   "(True, 32256, 512, 'none')"
+  ],
+  "sampler": "(True, 32256, 512, 'none')"
+ }
+}

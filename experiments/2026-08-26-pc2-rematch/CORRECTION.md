@@ -66,3 +66,21 @@ no split, so nothing in them depends on this.
 **The rule I broke** is CLAUDE.md's own: *"When a run dies at cycle 0, READ
 THE DIAGNOSTIC BLOB before theorising."* I read a summary instrument's row
 instead of the attempt trace, and theorised from it twice.
+
+---
+
+## AMENDMENT, same day: "working" was too generous
+
+P-C2b's soak found that the split protocol writes a record `verify_root`
+rejects — the two legs go into `attempt_trace`, which replay validation reads
+as a repair ladder. The retired 32 768 root carries **15 violations** across
+four checks.
+
+So this document's claim that the run "was working" holds for the PROVIDER
+legs (all three extraction legs valid, natural stop) and **fails for the
+record it wrote**. In this project the record is the only admissible
+evidence, so both halves must be stated together: the legs succeeded and the
+record is not replay-valid.
+
+Full diagnosis, contrast table and ready-to-send prompt:
+`experiments/2026-08-27-pc2b-symmetric-reasoning/BLOCKER.md`.

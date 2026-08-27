@@ -68,6 +68,7 @@ EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
 POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
 FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
 REMATCH = REPO / "experiments" / "2026-08-26-pc2-rematch"
+SYMMETRIC = REPO / "experiments" / "2026-08-27-pc2b-symmetric-reasoning"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -255,6 +256,23 @@ CASES: dict[str, SoakCase] = {
         default_cycles=24,
         default_token_budget=3_000_000,
     ),
+    "pc2b": SoakCase(
+        id="pc2b",
+        description=(
+            "the P-C2b ARM H shape: P-C2's rebuilt constructive shape with the "
+            "model's REASONING MODE ON (the `reasoning` field removed, which "
+            "also arms llm/split.py's two-leg protocol under its `auto` "
+            "default), the discharge channel live, and timeout_s raised to 900"
+        ),
+        config_path=SYMMETRIC / "run-config.yaml",
+        builder="build_manifest_pc2b",
+        builder_dir=SYMMETRIC,
+        attached_evidence=False,
+        delegates_to_builder=True,
+        default_cycles=24,
+        # PREREG §5: the LAUNCH's own budget, not a sample of it.
+        default_token_budget=200_000,
+    ),
     "reach-rich": SoakCase(
         id="reach-rich",
         description=(
@@ -309,7 +327,7 @@ def _loopback_config(source: Path, dest: Path, port: int) -> Path:
 # actually reaching the writer.  Listed rather than inferred: a case acquires
 # this obligation by DESIGN, and a soak that guessed would either miss the
 # obligation or invent one.
-IN_RUN_EVALUATION_CASES = frozenset({"pc2"})
+IN_RUN_EVALUATION_CASES = frozenset({"pc2", "pc2b"})
 
 
 def _case_symbols(case: SoakCase):

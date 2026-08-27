@@ -1,0 +1,99 @@
+# P-C2b ARM H: the rebuilt harness with the model's REASONING MODE ON.
+#
+# Operator's controlling instruction, 2026-08-27: reasoning enabled in BOTH
+# arms, symmetric, 200000 tokens per arm. This file is P-C2's ARM H2 config
+# with `reasoning` REMOVED and `timeout_s` raised; the completion cap and
+# every other field stay exactly where P-C1 put them, because symmetry with
+# ARM S is the property this tranche exists to hold.
+#
+# P-C2's ARM H2 header follows, unchanged.
+#
+# P-C2 ARM H2: the REBUILT harness, solo, everything on, NO JUDGE.
+#
+# PREREG.md §4. This file is P-C1's run-config.yaml with exactly ONE field
+# added, and the identity is deliberate: every other field must stay put or
+# the rematch measures a re-tuned launch instead of the rebuild.
+#
+#   diff ../2026-08-25-change-constructive-frontier/run-config.yaml
+#   -> DISCHARGE_POLICY only.
+#
+# `preflight_pc2.py` ASSERTS that diff rather than trusting this comment.
+#
+# WHY DISCHARGE_POLICY IS WRITTEN HERE AT ALL, GIVEN F-A.
+# PREREG §3 records the finding: `run_manifest.py` pops this field from the
+# manifest's config echo, and the one run path rebuilds Config from that
+# echo, so a run reads the CODE DEFAULT and never this line. The line stays
+# because it states the tranche's intent at the place an operator would
+# look for it, and because `preflight_pc2.py` uses the mismatch between
+# this line and the reconstructed runtime Config as its live check that
+# deviation D1 (the code default) is still in force. Delete D1 and the
+# preflight goes red here.
+#
+# Everything below this point is P-C1's file, unchanged, comments included,
+# because a rewritten comment is a second thing to keep true.
+
+roles:
+  conjecturer: &solo_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    # 32768, UNCHANGED from P-C1 and from P-C2's ARM S -- and that is the
+    # symmetry the operator's instruction requires ("same effective caps").
+    #
+    # It is also the EVIDENCED value, not an inherited default. CORRECTION.md
+    # in the P-C2 tranche: at this ceiling the split protocol ran three seat
+    # calls and ALL THREE extraction legs came back valid with a natural stop.
+    # P-C2's Amendment 1 raised it to 100000 on a misdiagnosis and that gave
+    # the reason leg 99488 tokens, which then ran past the socket timeout.
+    max_tokens: 32768
+    # reasoning: OMITTED -- thinking ON. `reasoning_disabled`: "Unset is NOT
+    # off. A profile carrying None sends no reasoning field, and a reasoning
+    # model then thinks by default." Measured on this endpoint with these
+    # question bytes: no field -> 9712 completion tokens and a 24409-character
+    # reasoning payload; `reasoning_effort: "none"` -> 177 and none at all.
+    #
+    # This ALSO arms the split-budget seat protocol. `llm/split.py`'s "auto"
+    # mode (Config default) splits exactly the seats whose ROUTE says they
+    # think, so removing this line is the whole of the wiring: no Config knob,
+    # no code edit. Planner output at this ceiling: B_r=32256, B_a=512,
+    # extraction leg with thinking off.
+    # 900, and this one IS needed. Measured wall clock per seat call at
+    # ceiling 32768, both legs: 737s, 420s, 460s (mean 539s). Every one
+    # exceeds 180s, so a thinking seat at this ceiling cannot complete inside
+    # the inherited timeout. ARM S mirrors this value in `arm_s_split.py`.
+    timeout_s: 900
+    output_mode: json_object
+  argumentative_critic: *solo_glm
+  defender: *solo_glm
+  variator: *solo_glm
+  judge: *solo_glm
+  summarizer: *solo_glm
+  synthesizer: *solo_glm
+  vision_critic: *solo_glm
+  property_designer: *solo_glm
+  thesis: *solo_glm
+  grounding_reviewer: *solo_glm
+
+SCHOOL_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+
+# The one deliberate exception to "everything on", required by P-C1's R15
+# and inherited unchanged: demonstrative criticism, no judge anywhere.
+JUDGE_SEATS_ENABLED: false
+
+ARGUMENTATIVE_AUTHORITY: observe_only
+ENGAGED_CRITICISM_AUTHORITY: defended_trial
+LEGACY_CRITICISM_ENABLED: false
+
+RESEARCH_BACKEND: agent
+
+# THE TRANCHE. REBUILD F1's channel: open criticisms -- including the
+# DEMONSTRATIVE fail warrants the in-run checker mints -- render inside the
+# conjecturer's binding block, and every later submission must carry a typed
+# discharge per handle.
+DISCHARGE_POLICY: discharge-required.v1
