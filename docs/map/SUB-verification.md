@@ -156,6 +156,39 @@ when `stats` was otherwise empty.
 
 ## Traps
 
+- **An underscore is not the escape surface, and believing it was cost this
+  package two of its five containment properties.** Until 2026-08-27 the
+  contained worker's `guard()` and `simulation.py`'s `_guard` rejected
+  attributes beginning with `_`, on the reasoning that the escape family runs
+  through `().__class__.__base__.__subclasses__()`. It does not have to:
+  `gg.gi_frame.f_back.f_back.f_globals` reaches a running generator's frame,
+  then its caller, then the WORKER MODULE's own globals — and every attribute
+  in that chain is public. From there the real `builtins` is a dict subscript
+  away. Demonstrated against this package: a file written outside the ephemeral
+  scratch directory and `os.system` at harness privilege, both while the
+  recorded verdict stayed `pass`
+  (`experiments/2026-08-27-change-execution-safety/SAFETY.md` E1/E2;
+  `proof/containment_probe_BEFORE.out` is the pre-fix output). FIXED the same
+  day: the boundary moved to `deepreason.sandbox_guard`, which denies CPython's
+  whole introspection prefix set, and the frozen worker interpolates that one
+  definition rather than carrying a copy. The grant for the frozen-surface
+  contact is recorded at `DR-INV-frozen-surfaces` surface 3.
+`check: python -m pytest tests/test_sandbox_guard.py -q -k "contained or declarative or brokered or frozen_worker"`
+- **The network namespace was the property that HELD, and it held because it
+  never depended on the guard.** In the same reproduction, with a full language
+  escape and `os.system` available, a connect attempt still returned
+  `ENETUNREACH`. That is the argument for layering rather than a lucky detail:
+  `verification/contained.py` fails CLOSED when the namespace is unavailable,
+  and as of 2026-08-27 `oracle_sandbox.py` runs behind the same probe (shared at
+  `deepreason.sandbox_os`) instead of carrying no OS boundary at all.
+`check: python -m pytest tests/test_sandbox_guard.py -q -k "network"`
+- **A containment property pinned by a string the backend reports about itself
+  is not pinned.** `resource_limits()` returned `"network": False` and
+  `"filesystem": "ephemeral scratch workdir"` throughout the period when
+  neither was true of model-authored code. The committed suite asserted those
+  strings. Assert a DIFFERENTIAL — run the probe inside and outside the
+  containment and compare — or the test cannot fail for the reason it exists.
+
 - **A leg is not a repair attempt, and `attempt_trace` cannot be borrowed to
   hold one.** The split-budget seat protocol (`llm/split.py`) turns one seat
   call into two provider legs, and the adapter used to splice the deliberation

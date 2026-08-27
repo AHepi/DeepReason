@@ -228,6 +228,74 @@ assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
 " && python -m pytest tests/test_split_leg_recording.py -q`
 `check: python -m pytest tests/test_split_leg_recording.py::test_an_attempt_from_a_committed_root_deserialises_with_no_legs -q`
 
+**Granted contact, 2026-08-27 — the sandbox attribute boundary (the escape fix).**
+The operator granted this contact IN CHAT, conditionally, after being shown the
+verdict it unblocks: "can you fix please. Frozen surface changes are permitted
+as long as you document what is affected." The condition is the grant, so the
+disposition is written out in full at
+`experiments/2026-08-27-change-execution-safety/FIX.md` — what moved, what did
+not, and why no committed root can change verdict.
+
+Why the contact was unavoidable. Every AST guard over model-authored Python in
+this repository rejected attributes beginning with an underscore and nothing
+else, and `gg.gi_frame.f_back.f_back.f_globals` contains no underscore. Two of
+the five guards live inside this surface. The escape was demonstrated, not
+inferred: a file written outside the ephemeral scratch directory, an arbitrary
+shell command at harness privilege, and — on the code-testing channel, which is
+ON by default — a TCP connection to the open internet, each while the recorded
+verdict stayed `pass`
+(`.../SAFETY.md` E1-E3, reproduced by `proof/containment_probe.py` whose pre-fix
+output is committed at `proof/containment_probe_BEFORE.out`).
+
+What moved, inside this surface, and only this. In `verification/contained.py`:
+the frozen worker's `guard()` tests `forbidden_attribute(node.attr)` instead of
+`node.attr.startswith("_")`, and the worker source became a template that
+interpolates the ONE boundary definition from `deepreason.sandbox_guard` — the
+worker runs in a scrubbed environment with no `PYTHONPATH` and cannot import
+this repository, so it receives the rule as generated source rather than a
+hand-copied twin. In `verification/simulation.py`: the same two conditions
+inside `_guard`. Nothing else in either module.
+
+**`CONTAINED_WORKER_SHA256` MOVES, and `BROKERED_WORKER_SHA256_V2` with it**
+(`brokered.py` derives its worker from V1 and was not edited). That is this
+surface's design working rather than a cost to route around — `contained.py`'s
+own docstring says a changed worker is a changed runtime identity, "visible in
+each immutable receipt". No test pins a literal digest; each asserts the digest
+equals the hash of the source, which stays true.
+
+**This grant is NOT insertions-only and does not claim to be** — like the
+2026-08-25 contact, it modifies conditions rather than appending a check. What
+carries it instead is a categorical argument rather than a census, and the
+distinction matters: the changed code runs INSIDE a worker at EXECUTION time
+and decides whether a future proposal's source is admitted. It is not a reader.
+No record format, no digest algorithm, no manifest schema, no `_EPISTEMIC_CHECKS`
+entry, no `verify_root` finding and no `report.py` channel changed. A committed
+root's stored `SimulationVerificationResult` is bytes that no code path in this
+change reads, writes or re-derives — so the governing principle at the top of
+this document lands on the ordinary-work side: this alters what a FUTURE run
+may do, not how a PAST run verifies.
+
+The rejected set is CLOSED and the closure is re-derived rather than asserted:
+the test walks the live `dir()` of every scope-bearing object type and pins the
+residue to eight names, so a future CPython adding an introspection attribute
+under a new prefix turns it RED. That is the property the old rule — a denylist
+over an OPEN set — could never have.
+
+`check: python -c "
+from deepreason.verification import contained
+from deepreason.sandbox_guard import WORKER_GUARD_SOURCE
+import ast
+assert 'forbidden_attribute(node.attr)' in contained.CONTAINED_WORKER_SOURCE_V1
+assert '__DEEPREASON_SANDBOX_GUARD__' not in contained.CONTAINED_WORKER_SOURCE_V1
+assert WORKER_GUARD_SOURCE.rstrip() in contained.CONTAINED_WORKER_SOURCE_V1
+ast.parse(contained.CONTAINED_WORKER_SOURCE_V1)
+import inspect
+from deepreason.verification import simulation
+assert 'forbidden_attribute(node.attr)' in inspect.getsource(simulation._guard)
+"`
+`check: python -m pytest tests/test_sandbox_guard.py -q`
+`check: ! git diff --name-only origin/main...HEAD | grep -qE "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"`
+
 ### 4. Manifest schemas AND their validators — `run_manifest.py`
 
 Not only the Pydantic models: the validators too. Admitting a value a validator

@@ -218,10 +218,15 @@ does not refuse.
   commitment returned `pass`. Verdict, gap list and a re-runnable
   self-cleaning reproduction:
   `experiments/2026-08-27-change-execution-safety/SAFETY.md` and its
-  `proof/`. Hardening is parked at that tranche's PARKED.md P1 (this channel)
-  and P2 (the contained runner). Nothing was switched on: the operator's
-  2026-08-27 authorization was conditional on a SAFE verdict and the verdict
-  is NOT PROVEN.
+  `proof/`. **FIXED the same day**, on the operator's instruction ("can you fix
+  please"): the attribute boundary moved to `deepreason.sandbox_guard`, which
+  denies CPython's whole introspection prefix set and proves that set closed by
+  re-derivation; and this channel's worker now runs behind the network
+  namespace `deepreason.sandbox_os` probes, where before it carried no OS
+  boundary whatsoever. The entry stays because a Trap is never deleted: the
+  lesson is that a channel being ON says nothing about the containment of the
+  road it opens, and that both facts have to be checked separately.
+`check: python -m pytest tests/test_sandbox_guard.py -q -k "code_testing or network"`
 - **Adding a channel is a row; adding a KNOB for it is a mistake.** One toggle
   field serves every channel. A second field would move every qualification
   subject digest again and would make the registry no longer the one authority
