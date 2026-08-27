@@ -1,0 +1,12 @@
+{
+  "patch": [
+    {
+      "op": "add",
+      "path": "/simulation_proposals/0/requested_observables",
+      "value": [
+        "minimum_triangle_area",
+        "minimum_absolute_determinant"
+      ]
+    }
+  ]
+}

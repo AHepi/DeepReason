@@ -1,0 +1,1 @@
+{"op":"add","path":"/simulation_proposals/0/discriminating_purpose","value":"Identify which rival prediction holds by determining whether the minimum absolute determinant among all triples of the 13 points is 0, exactly 1, or at least 2, thereby distinguishing collinearity from the claimed 1/162 area floor versus a larger minimum."}

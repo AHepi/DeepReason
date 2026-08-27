@@ -94,3 +94,25 @@ catalogue lists 20 models; this config names 1 distinct
 every seat's model is listed
 [2026-08-27T05:21:10Z] MODEL PREFLIGHT OK rc=0
 [2026-08-27T05:21:10Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-27T05:25:02Z] QUALIFY OK rc=0
+[2026-08-27T05:25:02Z] === REASON: run --budget cycles=24 --token-budget 200000 ===
+[2026-08-27T05:42:58Z] REASON rc=0
+[2026-08-27T05:42:58Z] REASON stop_reason=converged
+[2026-08-27T05:42:58Z] === AUDIT: verify_root + findings + results ===
+[2026-08-27T05:43:20Z] === SCORE: the exact checker over every artifact in the record ===
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/usr/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/user/DeepReason/experiments/2026-08-27-pc2b-symmetric-reasoning/arm_h2_scores.json'
+[2026-08-27T05:43:23Z] === T_H: provider-counted tokens, from W6's flow scan ===
+{
+ "T_H": 198156,
+ "llm_calls": 10,
+ "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run"
+}
+[2026-08-27T05:43:25Z] === DONE (ARM H): ARM S is a SEPARATE step -- see pc2b_arm_s.sh ===

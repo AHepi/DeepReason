@@ -1,0 +1,29 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The minimum triangle area among all C(13,3)=286 triangles determined by the 13 proposed points is approximately 0.00617, satisfying the minimum area threshold of 0.005.",
+      "mechanism": "The points are placed on a 10x10 integer grid spanning coordinates (0,0) to (9,9), which is then scaled to the unit square [0,1]x[0,1] by dividing all coordinates by 9. On an integer grid, the signed area of a triangle is an integer multiple of 1/2. If no three points are exactly collinear, the absolute integer determinant of any triple is at least 1, guaranteeing a minimum grid triangle area of 1/2. After scaling to the unit square, the effective scaling factor is 1/9 for distances, and 1/81 for areas. The minimum triangle area in the unit square is therefore strictly bounded below by (1/2) * (1/81) = 1/162, which is approximately 0.00617. This is strictly greater than the 0.005 floor.",
+      "counterconditions": [
+        "If any three of the 13 points are collinear, the area of that triangle is exactly 0, violating the threshold.",
+        "If the points are scaled such that the bounding box is larger than 9 units across before fitting to the unit square, the minimum area could drop below 0.00617.",
+        "If the minimum absolute determinant among all triples is 0 due to a hidden collinearity, the claim fails."
+      ],
+      "typicality": 0.8,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "heilbronn_13_pts_min_area",
+      "hypothesis": "The minimum triangle area among all 286 triangles formed by the specific 13-point configuration is exactly 1/162 (~0.00617), driven by a triple with an integer determinant of 1.",
+      "rival_predictions": [
+        "The minimum triangle area is 0 because at least three points are collinear.",
+        "The minimum triangle area is greater than 2/162 (~0.0123) because all integer determinants are 2 or greater."
+      ]
+    }
+  ]
+}
+```

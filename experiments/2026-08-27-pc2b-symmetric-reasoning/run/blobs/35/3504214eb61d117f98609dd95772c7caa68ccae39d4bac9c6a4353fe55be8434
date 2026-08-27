@@ -1,0 +1,5 @@
+{
+  "operation": "add",
+  "path": "/simulation_proposals/0/simulation_mode",
+  "value": "declarative_numeric_v1"
+}

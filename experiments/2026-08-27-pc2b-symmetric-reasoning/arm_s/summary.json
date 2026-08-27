@@ -1,0 +1,22 @@
+{
+  "arm": "S (P-C2b, split-mirroring)",
+  "best_sample_index": 9,
+  "best_score": 0.013307723273,
+  "best_score_exact": "13307723273/1000000000000",
+  "model": "glm-5.2",
+  "n_refuted": 4,
+  "n_samples": 7,
+  "n_transport_errors": 3,
+  "n_valid": 3,
+  "reasoning": "ON (no reasoning field on the reason leg)",
+  "split": {
+    "ceiling": 32768,
+    "extract_max_tokens": 512,
+    "extract_reasoning": "none",
+    "reason_max_tokens": 32256,
+    "source": "deepreason.llm.split.plan_split -- the SHIPPED planner"
+  },
+  "temperature": 1.0,
+  "token_budget": 198156,
+  "tokens_spent": 203071
+}

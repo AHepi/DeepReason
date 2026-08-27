@@ -1,0 +1,92 @@
+{
+  "accepted_count": 25,
+  "arm": "H",
+  "best_artifact": null,
+  "best_score": null,
+  "best_score_exact": null,
+  "candidates": [
+    {
+      "accepted": false,
+      "artifact": "305a72d19b3be8a93a5ec25c612c761e4e10d648127fce3b4dc252a82c308c5b",
+      "claim": 0.005,
+      "claim_confirmed": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "role": "conjecturer",
+      "score": 0.0,
+      "score_exact": "0",
+      "survivor": false,
+      "text": null,
+      "valid": false
+    },
+    {
+      "accepted": false,
+      "artifact": "559b426a0d540fcee3900fca220a5ec54294490c4fbbe32161a5e5880e3b68ca",
+      "claim": 0.005,
+      "claim_confirmed": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "role": "conjecturer",
+      "score": 0.0,
+      "score_exact": "0",
+      "survivor": false,
+      "text": null,
+      "valid": false
+    },
+    {
+      "accepted": false,
+      "artifact": "b68e0539c9d09b9fd6d1ebdd4c8242032356fada3238ba3e3ff9223bfb26e7cd",
+      "claim": 0.005,
+      "claim_confirmed": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "role": "conjecturer",
+      "score": 0.0,
+      "score_exact": "0",
+      "survivor": false,
+      "text": null,
+      "valid": false
+    },
+    {
+      "accepted": false,
+      "artifact": "d3d6ef593f531d46e7d40a3e224135621842b5882785271967246bfc874241f1",
+      "claim": 0.005,
+      "claim_confirmed": false,
+      "code": "CLAIM_INFLATED",
+      "n_points": 13,
+      "n_triples": 286,
+      "role": "conjecturer",
+      "score": 0.0,
+      "score_exact": "0",
+      "survivor": false,
+      "text": null,
+      "valid": false
+    }
+  ],
+  "cycles": 17,
+  "llm_calls": 10,
+  "n_artifacts": 29,
+  "n_below_floor": 0,
+  "n_candidates": 4,
+  "n_refuted": 4,
+  "n_valid": 0,
+  "progress_last": {
+    "cycle": 17,
+    "phase": "stop",
+    "state": "completed"
+  },
+  "refutations_by_code": {
+    "CLAIM_INFLATED": 4
+  },
+  "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run",
+  "state": "completed",
+  "stop_reason": "converged",
+  "survivors_generative_only": 0,
+  "survivors_raw_INFLATED_see_P4": 0,
+  "token_budget": null,
+  "tokens_from_log": 198156,
+  "tokens_spent": 198156
+}

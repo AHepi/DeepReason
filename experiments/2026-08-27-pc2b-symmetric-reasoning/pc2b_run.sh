@@ -193,7 +193,7 @@ log "=== SCORE: the exact checker over every artifact in the record ==="
 python "$FRONTIER/score_run.py" "$ROOT" > "$HERE/arm_${ARMLC}_scores.json" 2>&1 || true
 python -c "
 import json,pathlib
-d=json.loads(pathlib.Path('$HERE/arm_h2_scores.json').read_text())
+d=json.loads(pathlib.Path('$HERE/arm_${ARMLC}_scores.json').read_text())
 print('ARM H2 best valid score:', d.get('best_score'))
 print('ARM H2 candidates:', d.get('n_candidates'), ' refuted:', d.get('n_refuted'))
 " 2>&1 | tee -a "$LOG" || true

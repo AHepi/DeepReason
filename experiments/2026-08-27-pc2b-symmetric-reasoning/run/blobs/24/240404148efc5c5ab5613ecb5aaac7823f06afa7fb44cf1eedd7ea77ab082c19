@@ -1,0 +1,18 @@
+```json
+{
+  "candidate": {
+    "claim": "POINT 0.990000 0.500000\nPOINT 0.933870 0.727710\nPOINT 0.778350 0.903260\nPOINT 0.559060 0.986430\nPOINT 0.326250 0.958150\nPOINT 0.133230 0.824930\nPOINT 0.024240 0.617260\nPOINT 0.024240 0.382740\nPOINT 0.133230 0.175070\nPOINT 0.326250 0.041850\nPOINT 0.559060 0.013570\nPOINT 0.778350 0.096740\nPOINT 0.933870 0.272290\nCLAIM 0.012760",
+    "mechanism": "Thirteen points are placed evenly on a circle of radius 0.49 centered at (0.5, 0.5), which maximizes the minimum area of any triangle formed by three consecutive points while keeping all points within the unit square. The minimum area triangle is formed by three adjacent points, yielding a score of approximately 0.01276.",
+    "counterconditions": [
+      "Any three points are collinear, reducing the minimum area to 0.",
+      "A point falls outside the unit square [0,1]x[0,1].",
+      "The claimed minimum area exceeds the actual computed minimum area from the 286 triangles."
+    ],
+    "typicality": 0.8,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
+```

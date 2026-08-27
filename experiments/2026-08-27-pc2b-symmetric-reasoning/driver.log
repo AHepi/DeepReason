@@ -272,3 +272,65 @@ catalogue lists 20 models; this config names 1 distinct
 every seat's model is listed
 [2026-08-27T05:21:10Z] MODEL PREFLIGHT OK rc=0
 [2026-08-27T05:21:10Z] === QUALIFY: production-contract doctor (concurrency=2) ===
+[2026-08-27T05:25:02Z] QUALIFY OK rc=0
+[2026-08-27T05:25:02Z] === REASON: run --budget cycles=24 --token-budget 200000 ===
+[2026-08-27T05:42:58Z] REASON rc=0
+[2026-08-27T05:42:58Z] REASON stop_reason=converged
+[2026-08-27T05:42:58Z] === AUDIT: verify_root + findings + results ===
+[2026-08-27T05:43:20Z] === SCORE: the exact checker over every artifact in the record ===
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/usr/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/user/DeepReason/experiments/2026-08-27-pc2b-symmetric-reasoning/arm_h2_scores.json'
+[2026-08-27T05:43:23Z] === T_H: provider-counted tokens, from W6's flow scan ===
+{
+ "T_H": 198156,
+ "llm_calls": 10,
+ "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run"
+}
+[2026-08-27T05:43:25Z] === DONE (ARM H): ARM S is a SEPARATE step -- see pc2b_arm_s.sh ===
+[2026-08-27T05:44:08Z] ARM S budget from ARM H's measured logged total: 198156
+[2026-08-27T05:44:08Z] === ARM S: arm_s_split.py --token-budget 198156 --out /home/user/DeepReason/experiments/2026-08-27-pc2b-symmetric-reasoning/arm_s ===
+[2026-08-27T06:08:56Z] ARM S rc=0
+[arm-s] 0008 tokens= 18377 cum= 158202/198156 (86s) valid=False score=5e-10 best=0.013307680842
+[arm-s] 0009 tokens= 44869 cum= 203071/198156 (174s) valid=True score=0.013307723273 best=0.013307723273
+[arm-s] budget reached: 203071 >= 198156
+{
+  "arm": "S (P-C2b, split-mirroring)",
+  "best_sample_index": 9,
+  "best_score": 0.013307723273,
+  "best_score_exact": "13307723273/1000000000000",
+  "model": "glm-5.2",
+  "n_refuted": 4,
+  "n_samples": 7,
+  "n_transport_errors": 3,
+  "n_valid": 3,
+  "reasoning": "ON (no reasoning field on the reason leg)",
+  "split": {
+    "ceiling": 32768,
+    "extract_max_tokens": 512,
+    "extract_reasoning": "none",
+    "reason_max_tokens": 32256,
+    "source": "deepreason.llm.split.plan_split -- the SHIPPED planner"
+  },
+  "temperature": 1.0,
+  "token_budget": 198156,
+  "tokens_spent": 203071
+}
+[2026-08-27T06:08:56Z] === ADMISSIBILITY: PREREG §5, |T_S - T_H| within 5% ===
+import json, pathlib, sys
+out, budget = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+s = json.loads((out / "summary.json").read_text()) if (out / "summary.json").exists() else {}
+spent = int(s.get("tokens_spent") or 0)
+ratio = spent / budget if budget else 0.0
+print(json.dumps({
+    "T_H": budget, "T_S": spent, "ratio": round(ratio, 4),
+    "within_5pc": abs(ratio - 1.0) <= 0.05,
+    "rule": "PREREG §5 -- outside 5% the comparison is NOT quoted",
+}, indent=1, sort_keys=True))
+[2026-08-27T06:08:56Z] === DONE: ARM S ===

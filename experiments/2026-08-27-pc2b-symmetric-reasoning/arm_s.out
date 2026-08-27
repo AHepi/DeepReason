@@ -1,0 +1,34 @@
+[arm-s] mirroring the harness split: B_r=32256 B_a=512 extract_reasoning='none'
+[arm-s] 0000 tokens=  9952 cum=   9952/198156 (47s) valid=True score=0.013307680842 best=0.013307680842
+[arm-s] 0001 tokens= 35259 cum=  45211/198156 (168s) valid=False score=0.013307723273 best=0.013307680842
+[arm-s] 0002 tokens= 41128 cum=  86339/198156 (176s) valid=False score=0.0 best=0.013307680842
+[arm-s] 0003 TRANSPORT RemoteDisconnected: Remote end closed connection without response
+[arm-s] 0004 tokens= 40996 cum= 127335/198156 (166s) valid=False score=0.0 best=0.013307680842
+[arm-s] 0005 TRANSPORT RemoteDisconnected: Remote end closed connection without response
+[arm-s] 0006 TRANSPORT HTTPError: HTTP Error 500: Internal Server Error
+[arm-s] 0007 tokens= 12490 cum= 139825/198156 (62s) valid=True score=0.0004551149295 best=0.013307680842
+[arm-s] 0008 tokens= 18377 cum= 158202/198156 (86s) valid=False score=5e-10 best=0.013307680842
+[arm-s] 0009 tokens= 44869 cum= 203071/198156 (174s) valid=True score=0.013307723273 best=0.013307723273
+[arm-s] budget reached: 203071 >= 198156
+{
+  "arm": "S (P-C2b, split-mirroring)",
+  "best_sample_index": 9,
+  "best_score": 0.013307723273,
+  "best_score_exact": "13307723273/1000000000000",
+  "model": "glm-5.2",
+  "n_refuted": 4,
+  "n_samples": 7,
+  "n_transport_errors": 3,
+  "n_valid": 3,
+  "reasoning": "ON (no reasoning field on the reason leg)",
+  "split": {
+    "ceiling": 32768,
+    "extract_max_tokens": 512,
+    "extract_reasoning": "none",
+    "reason_max_tokens": 32256,
+    "source": "deepreason.llm.split.plan_split -- the SHIPPED planner"
+  },
+  "temperature": 1.0,
+  "token_budget": 198156,
+  "tokens_spent": 203071
+}

@@ -1,0 +1,13 @@
+{
+ "T_H": 198156,
+ "T_S": 203071,
+ "best_H": null,
+ "best_S": 0.013307723273,
+ "best_S_exact": "13307723273/1000000000000",
+ "harness_claims_value": false,
+ "ratio": 1.0248,
+ "rule": "PREREG \u00a75 -- outside 5% the comparison is NOT quoted",
+ "schema": "pc2b.admissibility.v1",
+ "verdict_condition": "best_H > best_S",
+ "within_5pc": true
+}

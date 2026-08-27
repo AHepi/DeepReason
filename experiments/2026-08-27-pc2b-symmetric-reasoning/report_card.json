@@ -1,0 +1,195 @@
+{
+ "C1_construction_validity": {
+  "baseline": {
+   "arm_h_artifact_level": 0.1136,
+   "arm_h_constructions": 133,
+   "arm_h_mechanism_census": 0.1128,
+   "arm_h_valid": 15,
+   "arm_s_artifact_level": 0.434,
+   "population": "P-C1's ARM H root, MECHANISM census (blob-level: 15 VALID of 133 constructions the model wrote). The 11.36% / 43.4% figures are the ARTIFACT-level rates from arm_h_scores.json and arm_s_merged.jsonl and are quoted separately -- the two are not interchangeable",
+   "source": "W1-form-census/PC1_HEADLINE.json (`mechanism.arm_h`)"
+  },
+  "constructions_found": 6,
+  "min_area_zero_rate": 0.8333,
+  "valid": 1,
+  "value": 0.1667,
+  "verdicts": {
+   "CLAIM_INFLATED": 5,
+   "VALID": 1
+  },
+  "zero_cause_signature": {
+   "axis_aligned_triple": 4,
+   "oblique_collinear_triple_only": 1
+  }
+ },
+ "C2_invented_handle": {
+  "attempts": 10,
+  "baseline": {
+   "pc1_root_invented": 2,
+   "pc1_root_wire_failures": 77,
+   "pc1_root_wire_validity": 0.8767,
+   "population": "TWO POPULATIONS, never substituted: P-C1's own root (2 of 77 wire failures = 2.6%; wire validity 87.67% over 292 attempts), and the 54-root population F2 cites (737 of 1178, 62.6%)",
+   "population_54_root_share": 0.626,
+   "source": "W1-form-census/CENSUS_PER_ROOT.json; F2 DELIVERY.md"
+  },
+  "failure_classes": {
+   "TRUNCATED_MID_JSON": 2,
+   "WIRE_NO_COMPLETE_JSON": 1,
+   "WIRE_TRAILING_CONTENT": 1,
+   "missing": 15
+  },
+  "invented_handle_failures": 0,
+  "value": 0.0,
+  "wire_failures_total": 19,
+  "wire_validity_rate": 0.7
+ },
+ "C3_coupling": {
+  "baseline": {
+   "R1_mechanical_coupling_minus_placebo": 0.05865102639296187,
+   "R1_mechanical_neglect": 0.906158357771261,
+   "R2_prose_quote": "INADMISSIBLE as a rate (W2's own residue)",
+   "llm_attacks_reaching_a_later_conjecture_dispatch": "0 of 196",
+   "population": "P-C1's own root",
+   "source": "run-anatomy-w2-criticism/pc1_q5.json"
+  },
+  "value": {
+   "R1_mechanical": {
+    "CouplingRate": null,
+    "CouplingRate_minus_Placebo": null,
+    "NeglectRate": null,
+    "PlaceboRate": null,
+    "RepairRate": null,
+    "coupled": 0,
+    "denominator_measurable": 0,
+    "helped": 0,
+    "neglected": 0,
+    "placebo_denominator": 0,
+    "verdicts": {
+     "no-next-candidate": 8
+    }
+   },
+   "R2_prose_quote": {
+    "CouplingRate": null,
+    "CouplingRate_minus_Placebo": null,
+    "NeglectRate": null,
+    "PlaceboRate": null,
+    "RepairRate": null,
+    "coupled": 0,
+    "denominator_measurable": 0,
+    "helped": 0,
+    "neglected": 0,
+    "placebo_denominator": 0,
+    "verdicts": {}
+   },
+   "exposure": {
+    "critic_artifacts_shown_to_a_conjecture_dispatch": [
+     "3b99a2f8978ce0e92924a9d36d170f816b96c5a04353da44e6d368ce0151a4cb",
+     "3fb3d563deabc89b392991425402d02e3ed69cc415449e3bc36c3a2e2968aa7a",
+     "4c756ac4d14efedb77ba683576f3b262fe1b74437f3759b3ac53c24bcf9ff937",
+     "88e22c703009866a724ec927fa04627da78c49d62f1c394d710803602db7c6c0",
+     "a38c3abfb4111158467aaa1bf6efa4193a4827a605b216eb1dc1c0c10eb8e643",
+     "b9322acd4f35946559aae7e0dd673eb602d09fedbcb281e6d8ef0e8c7ff0e394",
+     "bdaad3ec0790911aed2ce91ff17ae1ad34a7a7515cb9fd413c88c1ebd033d641",
+     "e5709b6807a0c3e0f89dfcb4a4895d6cb2b542b55bb72ddab23f2e2d2e9b0968",
+     "f3dd90a5d3d56ced79829c9d2094fb472ff6fa4e03d158c5ba53f970bba9f7d9",
+     "f86ce9d2255b933c92b5d33217853812928a1cd4908d454450e22fe7a600c0ce"
+    ],
+    "exposure_counts_by_task_namespace_role": {
+     "conjecture|source|conjecturer": 4,
+     "conjecture|source|controller": 2,
+     "conjecture|source|critic": 10,
+     "conjecture|source|seed": 24,
+     "repair|source|non-artifact": 8
+    },
+    "n_llm_attacks_shown": 0,
+    "n_llm_attacks_total": 0,
+    "n_mechanical_shown": 8,
+    "n_mechanical_total": 8,
+    "n_shown": 10
+   },
+   "n_criticism_events_total": 8
+  }
+ },
+ "C4_operator_question_share": {
+  "baseline": {
+   "calls": 61,
+   "competing": {
+    "audit:ritual": 0.412,
+    "repair_reasks": 0.056
+   },
+   "population": "P-C1's ARM H root",
+   "share": 0.532,
+   "source": "W6-token-flow/PC1_POSTMORTEM.json",
+   "tokens": 373903
+  },
+  "by_call_kind": {
+   "decomposition-leg": {
+    "calls": 2,
+    "completion_tokens": 29703,
+    "mean_total_per_call": 17714.5,
+    "prompt_share": 0.1616,
+    "prompt_tokens": 5726,
+    "prompt_tokens_known": 2,
+    "total_tokens": 35429
+   },
+   "first-ask": {
+    "calls": 4,
+    "completion_tokens": 84132,
+    "mean_total_per_call": 38377.2,
+    "prompt_share": 0.4519,
+    "prompt_tokens": 69377,
+    "prompt_tokens_known": 4,
+    "total_tokens": 153509
+   },
+   "repair": {
+    "calls": 4,
+    "completion_tokens": 2961,
+    "mean_total_per_call": 2304.5,
+    "prompt_share": 0.6788,
+    "prompt_tokens": 6257,
+    "prompt_tokens_known": 4,
+    "total_tokens": 9218
+   }
+  },
+  "by_purpose": {
+   "generation": {
+    "calls": 10,
+    "completion_tokens": 116796,
+    "mean_total_per_call": 19815.6,
+    "prompt_share": 0.4106,
+    "prompt_tokens": 81360,
+    "prompt_tokens_known": 10,
+    "total_tokens": 198156
+   }
+  },
+  "calls": 10,
+  "log_total_tokens": 198156,
+  "no_problem_line_in_prompt": {
+   "calls": 4,
+   "tokens": 9218
+  },
+  "on_problems_the_run_spawned_for_itself": {
+   "calls": 0,
+   "problem_ids": [],
+   "tokens": 0
+  },
+  "on_the_seed_question": {
+   "calls": 6,
+   "tokens": 188938
+  },
+  "seed_question_id": "question-64b724c4118320989925d111501a8e41",
+  "value": 0.9535
+ },
+ "C5_tokens_per_valid_candidate": {
+  "baseline": {
+   "population": "P-C1's ARM H run (702 789 log tokens / 15 valid)",
+   "source": "P-C1 RESULTS.md",
+   "value": 46852.6
+  },
+  "log_total_tokens": 198156,
+  "valid_constructions": 1,
+  "value": 198156.0
+ },
+ "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run",
+ "schema": "pc2.report-card.v1"
+}

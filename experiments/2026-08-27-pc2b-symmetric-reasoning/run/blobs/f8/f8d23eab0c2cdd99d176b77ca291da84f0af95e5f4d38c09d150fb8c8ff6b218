@@ -1,0 +1,46 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "POINT 0.01 0.01\nPOINT 0.95 0.01\nPOINT 0.01 0.99\nPOINT 0.99 0.99\nPOINT 0.50 0.50\nPOINT 0.40 0.15\nPOINT 0.85 0.50\nPOINT 0.55 0.80\nPOINT 0.15 0.50\nPOINT 0.30 0.25\nPOINT 0.75 0.30\nPOINT 0.25 0.75\nPOINT 0.75 0.75\nCLAIM 0.005",
+      "mechanism": "A geometric construction placing 13 points in the unit square. By arranging points in a nested, perturbed diamond-like structure around the center, we avoid collinearities and maintain a minimum triangle area above the 0.005 floor. The configuration is manually verified to avoid collinear triples and minimize small-area triangles.",
+      "counterconditions": [
+        "The minimum triangle area among the 286 triples is less than 0.005.",
+        "Any two points are identical or lie outside the [0,1]x[0,1] square.",
+        "Any three points are collinear, resulting in a zero-area triangle."
+      ],
+      "typicality": 0.8
+    },
+    {
+      "claim": "POINT 0.05 0.05\nPOINT 0.95 0.05\nPOINT 0.05 0.95\nPOINT 0.95 0.95\nPOINT 0.50 0.50\nPOINT 0.45 0.20\nPOINT 0.80 0.50\nPOINT 0.55 0.80\nPOINT 0.20 0.50\nPOINT 0.35 0.25\nPOINT 0.70 0.30\nPOINT 0.30 0.70\nPOINT 0.65 0.75\nCLAIM 0.005",
+      "mechanism": "A modified nested diamond configuration with points inset from the boundaries. This reduces the maximum possible empty space but maintains a safe distance between points to avoid small triangle areas, easily satisfying the required area floor.",
+      "counterconditions": [
+        "The minimum triangle area among the 286 triples is less than 0.005.",
+        "Any two points are identical or lie outside the [0,1]x[0,1] square.",
+        "The configuration contains 3 collinear points."
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "POINT 0.02 0.02\nPOINT 0.98 0.02\nPOINT 0.02 0.98\nPOINT 0.98 0.98\nPOINT 0.50 0.50\nPOINT 0.42 0.18\nPOINT 0.82 0.52\nPOINT 0.58 0.82\nPOINT 0.18 0.48\nPOINT 0.32 0.28\nPOINT 0.72 0.32\nPOINT 0.28 0.72\nPOINT 0.72 0.72\nCLAIM 0.005",
+      "mechanism": "An asymmetric perturbed grid and diamond arrangement. The slight asymmetries in point placement (e.g., shifting (0.18, 0.48) and (0.82, 0.52)) deliberately break potential collinearities while preserving a robust minimum triangle area.",
+      "counterconditions": [
+        "The minimum triangle area among the 286 triples is less than 0.005.",
+        "Any point falls outside the allowed unit square boundaries.",
+        "Any three points are collinear."
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "POINT 0.01 0.01\nPOINT 0.99 0.01\nPOINT 0.01 0.99\nPOINT 0.99 0.99\nPOINT 0.50 0.50\nPOINT 0.40 0.10\nPOINT 0.90 0.50\nPOINT 0.60 0.90\nPOINT 0.10 0.50\nPOINT 0.20 0.20\nPOINT 0.80 0.20\nPOINT 0.20 0.80\nPOINT 0.80 0.80\nCLAIM 0.005",
+      "mechanism": "A concentric configuration using the four corners, four edge midpoints (perturbed), and an inner 3x3 grid-like subset. The distances between adjacent points in this set are sufficiently large to ensure no triangle falls below the 0.005 area threshold.",
+      "counterconditions": [
+        "The minimum triangle area among the 286 triples is less than 0.005.",
+        "Two points share the exact same coordinates.",
+        "A triangle formed by three of the points has an area of zero."
+      ],
+      "typicality": 0.5
+    }
+  ]
+}
+```
