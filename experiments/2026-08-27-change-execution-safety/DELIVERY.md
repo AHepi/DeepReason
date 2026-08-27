@@ -86,6 +86,7 @@ Five findings parked with ready-to-send prompts, none fixed here:
 | P4 | MEDIUM | containment tests pin self-reported strings instead of differentials — this is how the escape survived a committed containment proof |
 | P5 | LOW | `docs/map/SEAM-capabilities-x-channels.md` does not exist; this tranche's whole subject lives on it |
 | P6 | LOW | the documented gate needs `jsonschema` and `pytest-xdist`, which the documented install does not declare; CLAUDE.md's ~3100-passed baseline is stale at 4334 |
+| P7 | HIGH | the 2026-08-25 frozen-surface grant's census ("zero roots carry a `transport_failure` attempt") was falsified by a root committed 2026-08-26; `docs_verify` red on it since |
 
 ---
 
@@ -144,4 +145,47 @@ run collected 4334 passed, 15 skipped.
 
 ### docs_verify
 
-Appended at the tail of this document.
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 68 documents, 1126 checks, 4 workers
+  FAIL CON-run-identity.md:200  (git log over retired run roots)
+  FAIL CON-run-identity.md:202  fatal: ambiguous argument '1637e808': unknown revision
+  FAIL CON-run-identity.md:204  fatal: ambiguous argument 'f304fec1': unknown revision
+  FAIL INV-frozen-surfaces.md:181
+      test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' \
+              -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+docs_verify: 4 failed
+```
+
+**Four, not the three the tranche instruction forecast.** The three
+`CON-run-identity.md` failures are the known shallow-clone ones — they walk
+git history for commits this clone does not carry, and two say so verbatim
+(`unknown revision`).
+
+**The fourth is not a shallow-clone failure and is not this tranche's.**
+It is a real, falsified census. Confirmed by measurement:
+
+```
+$ find experiments runs -path '*workflow-provider-attempt-v1/*.json' \
+      -exec grep -l 'transport_failure' {} + 2>/dev/null
+experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c/objects/workflow-provider-attempt-v1/f750d2979c3e248e549efb5754bfb11b947cba1cfa7fb2bb8c1d77babad3b570.json
+
+$ git log --oneline -1 origin/main -- <that path>
+50885d29f P-C2 Appendix A Amendment 2: raise ARM H3's seat timeout to 900s
+
+$ git diff --name-only origin/main...HEAD | grep -c "workflow-provider-attempt-v1"
+0
+```
+
+The file is on `origin/main`, committed 2026-08-26; this tranche added no
+file matching that path. It matters beyond a red line: that check is the
+census carrying the safety argument for the 2026-08-25 frozen-surface grant
+in `INV-frozen-surfaces.md` — "zero with `outcome: transport_failure`", which
+is why that one-line reader change could not move any committed verdict. The
+census is now false. Parked as P7.
+
+**Effective docs_verify: 3 known shallow-clone failures + 1 pre-existing
+falsified census, none introduced here.** The map edit this tranche made
+(two Traps entries in `INV-evidence-channels.md`) introduced no failure, and
+`Verified-at:` was deliberately not advanced — that document's checks were
+not re-derived.

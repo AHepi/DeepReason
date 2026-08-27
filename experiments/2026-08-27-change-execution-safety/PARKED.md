@@ -324,3 +324,67 @@ reset, a fresh virtualenv is the equivalent and must be shown.
 
 GATE: pytest tests/ -q -n 4, 0 failed. python tools/docs_verify.py.
 ```
+
+---
+
+## P7 — HIGH: the 2026-08-25 frozen-surface grant's census is now false
+
+**What.** `docs/map/INV-frozen-surfaces.md:181` asserts that no committed
+root carries a `transport_failure` workflow-provider attempt. That census
+is the safety argument for the 2026-08-25 granted contact with frozen
+surface 3 — the `workflow-call-pairing` raw-blob normalization, whose
+grant explicitly does NOT claim to be insertions-only and rests instead on
+"no committed root contains an event the changed line can decide
+differently". One now does:
+`experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c/objects/workflow-provider-attempt-v1/f750d2979c3e248e549efb5754bfb11b947cba1cfa7fb2bb8c1d77babad3b570.json`,
+committed 2026-08-26 by `50885d29f`. `docs_verify` has been red on it
+since. Found incidentally by this tranche's phase-boundary gate; not
+introduced by it.
+
+**Prompt:**
+
+```
+TARGET REPOSITORY: AHepi/DeepReason.
+
+Route through deepreason-orchestrator. One tranche, one goal: re-derive
+the safety argument for the 2026-08-25 frozen-surface grant, whose census
+a later commit falsified.
+
+THE FACTS, already measured — cite, do not re-derive:
+experiments/2026-08-27-change-execution-safety/DELIVERY.md, the
+"docs_verify" section. docs/map/INV-frozen-surfaces.md:181 checks that
+zero committed roots carry a transport_failure workflow-provider attempt.
+Exactly one now does, in
+experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c/,
+committed 2026-08-26 by 50885d29f. The file is on origin/main.
+
+WHY IT MATTERS. That census is not decoration. The 2026-08-25 grant
+changed one comparison inside verify_root — attempt.raw_ref ==
+call.raw_ref became attempt.raw_ref == (call.raw_ref or None) — and the
+grant document states plainly that this "is NOT insertions-only, and does
+not claim to be". Two measured facts carry it instead, and the census is
+the second: no committed root holds an event the changed line could
+decide differently. A root that does now exists.
+
+WHAT TO ESTABLISH, in this order:
+1. Read that attempt record. Does the changed predicate decide it
+   differently — i.e. does it pair under the new reading and not the old,
+   or vice versa? Answer from the record, not from the code.
+2. If it does NOT: the check's THRESHOLD is what rotted, not the
+   argument. Rewrite the check so it states the property that actually
+   matters (no attempt whose pairing the predicate decides differently),
+   and say in the grant document why the count moved without the
+   guarantee moving.
+3. If it DOES: the grant's second safety leg is gone and the first
+   (add-only predicate) has to carry it alone, or the grant needs
+   re-requesting. That is an operator decision — STOP and ask, with both
+   readings priced.
+
+FROZEN SURFACES: INV-frozen-surfaces.md is a map document about frozen
+surfaces, not itself frozen — editing it is ordinary work. Do NOT touch
+invariants.py in this tranche; the goal is the argument, not the code.
+
+GATE: python tools/docs_verify.py — this check green, and the three known
+shallow-clone CON-run-identity.md failures unchanged. --audit must not
+refuse whatever check replaces it.
+```
