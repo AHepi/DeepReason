@@ -44,6 +44,60 @@ class Rule(str, Enum):
     CAPABILITY = "Capability"
 
 
+class LLMSplitLegV1(FrozenRecord):
+    """One provider leg of the split-budget seat protocol (`llm/split.py`).
+
+    A LEG IS NOT AN ATTEMPT.  ``LLMAttempt.attempt`` counts how many times a
+    call was told its value was wrong; the two legs of a split are not two
+    such tellings but two provider requests that jointly produce ONE value.
+    They therefore carry no index in that ordering, consume no repair grant,
+    and are recorded HERE -- on the attempt they produced -- rather than in
+    ``LLMCall.attempt_trace``, which is the repair ladder and nothing else.
+
+    Recording them in that ladder is a real, recorded defect: it made every
+    thinking-ON run replay-invalid against four separate checks
+    (`experiments/2026-08-27-defect-split-leg-recording/`).
+    """
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True
+    )
+
+    schema_: Literal["llm-split-leg.v1"] = Field(
+        "llm-split-leg.v1", alias="schema"
+    )
+    leg: Literal["reason", "extract"]
+    # This leg's OWN request and output.  The attempt's own prompt_ref stays
+    # the seat's request, so the deliberation and extraction envelopes the
+    # protocol synthesizes are reachable without displacing it.
+    prompt_ref: str = Field(min_length=1)
+    raw_ref: str = Field(min_length=1)
+    # The deliberation this leg PRODUCED (reason) or CONSUMED (extract).
+    # Blob refs are content addresses, so equality across the pair is proof
+    # that the emission leg served the deliberation that preceded it, rather
+    # than a claim that it did.
+    trace_ref: str = Field(min_length=1)
+    # The completion cap THIS leg put on the wire: a division of the
+    # attempt's authorized envelope, never a substitute for it.  The pair
+    # can never exceed it -- B_a is taken OUT of the ceiling, never added.
+    max_tokens: int = Field(gt=0)
+    tokens: int = Field(default=0, ge=0)
+    ms: int = Field(default=0, ge=0)
+    # WRITTEN AND NEVER READ, for the same reason as LLMAttempt.natural_stop:
+    # a correctness signal that no guard, rank, status or warrant may consume.
+    natural_stop: bool | None = None
+    # Typed reason the protocol was not fully honored on this leg.  A notice
+    # is never a refusal.
+    notice: str = ""
+    transport_attempts: int = Field(default=1, ge=1)
+    transport_diagnostics: list[str] = Field(default_factory=FrozenList)
+
+    @field_validator("transport_diagnostics", mode="after")
+    @classmethod
+    def _freeze_diagnostics(cls, value):
+        return FrozenList(value)
+
+
 class LLMAttempt(FrozenRecord):
     """Process-only trace for one provider completion attempt.
 
@@ -94,20 +148,18 @@ class LLMAttempt(FrozenRecord):
     # become an evidence signal. None means the provider reported no finish
     # reason, which is not the same as a truncated one.
     natural_stop: bool | None = None
-    # Which leg of the split-budget seat protocol produced this attempt:
-    # "" for an undivided call, else "reason" or "extract" (llm/split.py).
-    # Both legs of one split share this attempt's index and route identity.
-    split_leg: str = ""
     # Typed reason the split protocol was not honored on this call. Empty when
     # the protocol ran as configured. A notice is never a refusal: the call
-    # proceeds undivided and records why.
+    # proceeds undivided and records why.  It lives on the ATTEMPT rather than
+    # on a leg because the seats it describes are exactly the ones that have
+    # no legs.
     split_notice: str = ""
-    # The completion cap THIS leg put on the wire, which is a division of
-    # max_tokens rather than a substitute for it: max_tokens stays the envelope
-    # the route or a logged controller policy AUTHORIZED, because that is the
-    # value replay validation admits and the token reservation booked. None on
-    # every undivided call.
-    split_max_tokens: int | None = Field(default=None, gt=0)
+    # The two provider legs that jointly produced this attempt, or empty on
+    # every undivided call.  They are NOT entries in the repair ladder: see
+    # LLMSplitLegV1.  `max_tokens` above stays the envelope the route or a
+    # logged controller policy AUTHORIZED -- each leg records its own wire cap,
+    # and their sum can never exceed it.
+    split_legs: tuple[LLMSplitLegV1, ...] = ()
 
     @field_validator("transport_diagnostics", mode="after")
     @classmethod

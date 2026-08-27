@@ -4266,6 +4266,125 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             f"{fallen.subject_id}, so it was never consultable",
         )
 
+    # ------------------------------------------------------------------
+    # Split-budget legs.  A LEG IS NOT A REPAIR ATTEMPT.
+    #
+    # `attempt_trace` is the repair ladder and its index means "how many
+    # times this call was told its value was wrong".  The split-budget seat
+    # protocol (`llm/split.py`) turns ONE seat call into TWO provider legs
+    # that jointly produce ONE value, and recording those legs as ladder
+    # entries made every thinking-ON run replay-invalid against four
+    # unrelated checks at once
+    # (`experiments/2026-08-27-defect-split-leg-recording/`).  They are now a
+    # declared shape on the attempt they produced, and this family is the
+    # reading that shape is owed: the ladder's own checks say nothing about
+    # legs, so without these limbs a leg would be recorded and unexamined.
+    #
+    # ADDITIVE: every limb is guarded on `attempt.split_legs`, a field no
+    # record written before this layer can carry, so no committed root
+    # yields a finding here.
+    for e in events:
+        if e.llm is None:
+            continue
+        for index, attempt in enumerate(e.llm.attempt_trace):
+            legs = tuple(attempt.split_legs)
+            if not legs:
+                continue
+            prefix = f"event seq={e.seq} attempt={index}"
+
+            # L1 -- shape.  The protocol deliberates and then serializes; a
+            # pair in any other shape is not the protocol that ran.
+            if tuple(leg.leg for leg in legs) != ("reason", "extract"):
+                fail(
+                    "split-legs",
+                    f"{prefix}: leg sequence is "
+                    f"{[leg.leg for leg in legs]}, expected ['reason', 'extract']",
+                )
+                continue
+            reason, extract = legs
+
+            # L2 -- accounting.  The legs account for the attempt exactly:
+            # no more (which would double-count, the defect's own signature)
+            # and no less (which would hide a provider request's cost).
+            leg_tokens = reason.tokens + extract.tokens
+            if leg_tokens != attempt.tokens:
+                fail(
+                    "split-legs",
+                    f"{prefix}: legs total {leg_tokens} tokens but the "
+                    f"attempt records {attempt.tokens}",
+                )
+
+            # L3 -- envelope.  `split.py`: B_a is taken OUT of the ceiling,
+            # never added to it, so the pair can never escape the bound the
+            # route or a logged controller policy authorized.
+            if attempt.max_tokens is not None:
+                leg_caps = reason.max_tokens + extract.max_tokens
+                if leg_caps > attempt.max_tokens:
+                    fail(
+                        "split-legs",
+                        f"{prefix}: leg caps total {leg_caps}, above the "
+                        f"authorized envelope {attempt.max_tokens}",
+                    )
+
+            # L4 -- continuity.  The emission leg serialized the deliberation
+            # that preceded it, or names the empty trace and says why.  Blob
+            # refs are content addresses, so this is proof rather than claim.
+            if extract.trace_ref != reason.trace_ref:
+                empty_ref = None
+                try:
+                    empty_ref = h.blobs.get(extract.trace_ref)
+                except KeyError:
+                    empty_ref = None
+                if extract.notice == "" or empty_ref not in (b"", None):
+                    fail(
+                        "split-legs",
+                        f"{prefix}: extraction leg references trace "
+                        f"{extract.trace_ref[:12]} but the deliberation leg "
+                        f"produced {reason.trace_ref[:12]}",
+                    )
+
+            # L5 -- blobs.  Every leg's own request, output and trace stay
+            # reachable; a leg whose evidence is gone is a claim about a
+            # provider call nobody can inspect.
+            for leg in legs:
+                for ref, kind in (
+                    (leg.prompt_ref, "prompt"),
+                    (leg.raw_ref, "raw"),
+                    (leg.trace_ref, "trace"),
+                ):
+                    try:
+                        h.blobs.get(ref)
+                    except KeyError:
+                        fail(
+                            "split-legs",
+                            f"{prefix} leg={leg.leg}: {kind} blob "
+                            f"{ref[:12]} missing",
+                        )
+
+            # L6 -- provenance, and the limb that lets the two shapes coexist.
+            # `deliberation_request` is the attempt's own request plus a fixed
+            # instruction, so the reason leg's prompt must START with it.  The
+            # repair ladder requires its diagnostic in the call's final prompt;
+            # this proves that whatever is in that prompt -- a diagnostic
+            # included -- is what actually reached the provider, so a split
+            # call and a genuine repair are two orthogonal facts about one
+            # call rather than two readings of one list.
+            try:
+                seat_request = h.blobs.get(attempt.prompt_ref)
+                leg_request = h.blobs.get(reason.prompt_ref)
+            except KeyError:
+                seat_request = leg_request = None
+            if (
+                seat_request is not None
+                and leg_request is not None
+                and not leg_request.startswith(seat_request)
+            ):
+                fail(
+                    "split-legs",
+                    f"{prefix}: the deliberation leg's request does not "
+                    f"carry the attempt's own request",
+                )
+
     return {"violations": violations, "stats": stats}
 
 
