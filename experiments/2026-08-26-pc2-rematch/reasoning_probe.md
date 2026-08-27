@@ -60,3 +60,32 @@ confound changes is what the number MEANS: the tranche compares a harness
 with the model's reasoning switched OFF against a sampler with it switched
 ON. It does not isolate the harness, and no P-C result should be read as if
 it did until this is settled.
+
+---
+
+## PROBE 2 — the model's hard output ceiling, 2026-08-26
+
+Asked whether the endpoint would accept a larger completion cap, before
+changing anything. It refuses, and names the limit:
+
+    max_tokens=200000  REFUSED  HTTP 400:
+      "max_tokens (200000) exceeds model's maximum output tokens (131072)
+       for model glm-5.2"
+
+**glm-5.2's maximum output is 131 072 tokens** — the same number as the
+context window this tranche's config already declared, which is therefore a
+real limit rather than a guess inherited from P-C1.
+
+What that bounds:
+
+- ARM H3's `max_tokens: 100000` (Amendment 1) sits at **76 % of everything
+  the model can ever emit**. The remaining headroom is ~31 000 tokens, not
+  the 100 000 a naive doubling would assume.
+- The retired 32 768 attempt was at **25 %** of the ceiling, which is why
+  reasoning alone filled it.
+- No further cap increase can buy much. If ARM H3 fails again at 100 000 for
+  a length-related reason, the answer is NOT a bigger cap — the road is
+  nearly out — and the diagnosis has to go elsewhere.
+
+Recorded because the two retired attempts were both sizing failures, and
+this is the measurement that says how much sizing room was ever available.

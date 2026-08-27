@@ -1,0 +1,11 @@
+[2026-08-27T00:22:16Z] === ARM H3 RE-ENTRY (container restart 2026-08-27 ~00:17Z) on /home/user/DeepReason/experiments/2026-08-26-pc2-rematch/run_h3 ===
+[2026-08-27T00:22:16Z] === PREFLIGHT: question frozen, registered delta, CHANNEL LIVE, THINKING ON ===
+[OK ] S1-question-frozen: question_sha256=64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e (PREREG §2 froze 64b724c4118320989925d111501a8e41cd4518d9b631bb81a6ae048d3cfb5c7e)
+[OK ] S2-registered-delta-only: ARM H3 via run-config-h3.yaml: fields differing from P-C1's config: ['DISCHARGE_POLICY', 'roles']; expected ['DISCHARGE_POLICY', 'roles'] with the ONLY seat-level deltas being `reasoning` REMOVED, `max_tokens` = 100000 and `timeout_s` = 900; seat delta=['max_tokens', 'reasoning', 'timeout_s'], reasoning absent on every seat=True, caps=[100000], timeouts=[900]; DISCHARGE_POLICY='discharge-required.v1'
+[OK ] S3-discharge-channel-live-at-runtime: runtime DISCHARGE_POLICY='discharge-required.v1' enabled=True reask='once' handles_n=8 (deviation D1 absent would read 'off' here)
+[OK ] S5-thinking-ON-at-runtime: 11 seats; request-body reasoning field per seat: ['{}'] (an empty body = no reasoning_effort sent = the model thinks)
+[OK ] S4-manifest-delta-accounted: accounted: 6 policy leaf/leaves + ['inquiry_capability_policy', 'run_input_digest']; unexplained: none
+
+PREFLIGHT OK: all four P-C2-specific checks hold
+[2026-08-27T00:22:18Z] P-C2 PREFLIGHT OK rc=0
+[2026-08-27T00:22:18Z] === QUALIFY: production-contract doctor (concurrency=2) ===

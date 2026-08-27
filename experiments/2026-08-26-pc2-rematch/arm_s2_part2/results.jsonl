@@ -11,3 +11,4 @@
 {"index": 10, "error": "The read operation timed out", "tokens": 0}
 {"index": 11, "error": "The read operation timed out", "tokens": 0}
 {"index": 12, "error": "The read operation timed out", "tokens": 0}
+{"index": 13, "error": "Remote end closed connection without response", "tokens": 0}
