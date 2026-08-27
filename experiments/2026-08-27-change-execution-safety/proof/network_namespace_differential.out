@@ -1,0 +1,6 @@
+=== INSIDE the backend's own probed prefix (unshare --map-root-user --net) ===
+CONNECT_DENIED OSError [Errno 101] Network is unreachable
+INTERFACES [(1, 'lo')]
+=== OUTSIDE (host namespace) ===
+CONNECT_OK
+INTERFACES [(1, 'lo'), (2, 'ifb0'), (3, 'ifb1'), (4, 'eth0')]

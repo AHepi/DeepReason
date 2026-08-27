@@ -191,6 +191,37 @@ does not refuse.
   declared default requalifies every home (~14 min, ~1160 calls). That is the
   price of the default, and it was measured before the code rather than
   discovered after (that tranche's SPEC.md, M1).
+- **An enabled channel can still be a severed ROAD one layer down, and the
+  simulation channel was.** The flag said ON from 2026-08-26; every
+  `sandboxed_python_v1` proposal was nonetheless denied
+  `runner_profile_mismatch`, because `engaged_simulation_policy` returns
+  `runner_profile="simulation.declarative.v1"` by default while binding
+  `PUBLIC_SIMULATION_TOOLCHAIN_ID` — a Python toolchain the declarative
+  profile can never dispatch to. Four live epochs were read as model
+  reluctance before the record said otherwise (commit `74d9f71ca`, branch
+  `claude/spec-to-code-technique-k5209o`). This is the first Trap above
+  happening for real: the registry was accurate, and accuracy about the
+  FLAG is not accuracy about the ROAD. Census and citations:
+  `experiments/2026-08-27-change-execution-safety/SPEC.md` F2/F3. The typed
+  disclosure this shape requires under the all-configurations law is parked
+  at that tranche's PARKED.md P3.
+- **`code-testing` executes model-authored Python TODAY, and its containment
+  is weaker than the channel that is off.** The row above says the channel is
+  ungated; what that means operationally is that `codec="code:python"`
+  artifacts and model-authored `checker_spec.source` run on every run through
+  `oracle_sandbox`, which has no network namespace and applies its rlimits
+  fail-OPEN. A 2026-08-27 assessment escaped both that guard and
+  `verification/contained.py`'s by a running-generator frame walk
+  (`gg.gi_frame.f_back.f_back.f_globals` — no leading-underscore attribute
+  anywhere, so neither denylist sees it), reached the real `builtins`, and
+  opened a TCP connection to the open internet while the exec-oracle
+  commitment returned `pass`. Verdict, gap list and a re-runnable
+  self-cleaning reproduction:
+  `experiments/2026-08-27-change-execution-safety/SAFETY.md` and its
+  `proof/`. Hardening is parked at that tranche's PARKED.md P1 (this channel)
+  and P2 (the contained runner). Nothing was switched on: the operator's
+  2026-08-27 authorization was conditional on a SAFE verdict and the verdict
+  is NOT PROVEN.
 - **Adding a channel is a row; adding a KNOB for it is a mistake.** One toggle
   field serves every channel. A second field would move every qualification
   subject digest again and would make the registry no longer the one authority
