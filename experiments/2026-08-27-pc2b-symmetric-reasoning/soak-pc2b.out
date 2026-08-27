@@ -1,56 +1,57 @@
-[soak] stub provider on 127.0.0.1:42725 (reused from wheel_operational_smoke)
-[soak] working directory /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2b
-[soak] built root: manifest 0e59d796e0f0aead…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
-[soak] qualified in 4.0s
+[soak] stub provider on 127.0.0.1:36353 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2b-fixed
+[soak] built root: manifest 457e0f9042e57933…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 3.8s
 [soak] driving 24 cycles …
 
 ========================================================================
 CYCLE SOAK -- case pc2b
 ========================================================================
-  manifest sha256        0e59d796e0f0aead16dd054fae6f9a773d7b4c244ddad738bad12a57b72ec176
+  manifest sha256        457e0f9042e5793354b95f3dff50c1005ce8e6a266d801576cdb1521654f62ed
   criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
   attached evidence      False
   cycles requested       24
-  qualification          rc=0 (4.0s)
-  drive                  62.2s, 4 progress events
+  qualification          rc=0 (3.8s)
+  drive                  250.3s, 27 progress events
 
 -- S1 run assertions ---------------------------------------------------
-  [PASS] A1-typed-terminal            state='failed' stop_reason='operational_failure' typed_error=None
-  [FAIL] A2-no-operational-failure    stop_reason='operational_failure' message='1 validation error for LLMAttempt\nprompt_ref\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type'
-  [FAIL] A3-verify-root-clean         50 violation(s): [{'check': 'attempt-accounting', 'detail': 'event seq=27: trace tokens=15573 but call tokens=10001'}, {'check': 'attempt-blobs', 'detail': 'event seq=27 attempt=0: missing diagnostic ref'}, {'check': 'attempt-order', 'detail': 'event seq=27 attempt=1: recorded attempt index=0'}]
-  [FAIL] A4-cycles-reached            reached cycle 1 of 24 requested; the deepest recorded death was cycle 2
+  [PASS] A1-typed-terminal            state='completed' stop_reason='budget_exhausted' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='budget_exhausted'
+  [PASS] A3-verify-root-clean         0 violation(s)
+  [PASS] A4-cycles-reached            reached cycle 24 of 24 requested; the deepest recorded death was cycle 2
   [PASS] A5-in-run-checker-fired      3 demonstrative fail warrant(s) naming ['frontier-above-floor@v1', 'frontier-claim-honest@v1', 'frontier-wellformed@v1']
-  [PASS] A6-discharge-channel-carried-them REBUILD F1 channel Measures on the record: {'discharge-reask': 5}
+  [PASS] A6-discharge-channel-carried-them REBUILD F1 channel Measures on the record: {'discharge-reask': 12}
 
 -- S2/S4 seam coverage -------------------------------------------------
   [PART] D1-seat-contract         seat contracts with repairs
          reason: seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline
-         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 10}
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 21}
   [PASS] D2-route-lease           lease-checked routes with tuning
-         reached: {'workflow-provider-attempt-v1': 10}
+         reached: {'workflow-provider-attempt-v1': 21}
   [PASS] D3-budget-auth           budget authorization
-         reached: {'workflow-dispatch-authorization-v1': 11}
+         reached: {'workflow-dispatch-authorization-v1': 21}
   [PASS] D4-reservation-bound     reservation/dispatch bounds
-         reached: {'workflow-token-reservation-v2': 11}
+         reached: {'workflow-token-reservation-v2': 21}
 
 -- record census -------------------------------------------------------
-      12  artifact
+      20  artifact
        5  commitment
        1  problem
        3  warrant
-      11  workflow-context-exposure-v2
-      11  workflow-context-pack-plan-v1
-      11  workflow-dispatch-authorization-v1
+      21  workflow-context-exposure-v2
+      21  workflow-context-pack-plan-v1
+      21  workflow-dispatch-authorization-v1
        1  workflow-model-classification-binding-v1
-      10  workflow-provider-attempt-v1
+      21  workflow-provider-attempt-v1
        1  workflow-route-seat-model-classification-plan-v1
        1  workflow-run-terminal-commitment-v1
        1  workflow-run-terminal-result-draft-v1
-       5  workflow-semantic-admission-v1
-      11  workflow-token-reservation-v2
-      42  workflow-work-lifecycle-transition-v1
-      11  workflow-work-preparation-v1
-       5  workflow-work-terminal-v1
+       9  workflow-semantic-admission-v1
+      21  workflow-token-reservation-v2
+     255  workflow-work-lifecycle-transition-v1
+     108  workflow-work-preparation-v1
+      96  workflow-work-terminal-v1
 
-[soak] report /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2b/soak-report.json
-[soak] exit 1 (FAILED)
+[soak] report /tmp/claude-0/-home-user-DeepReason/d8bb720d-8070-56ab-99b2-bacb061134f1/scratchpad/soak-pc2b-fixed/soak-report.json
+[soak] exit 0 (clean)
+SOAK_EXIT=0

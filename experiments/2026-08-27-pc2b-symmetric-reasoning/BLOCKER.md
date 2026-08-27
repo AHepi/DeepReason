@@ -1,5 +1,18 @@
 # BLOCKER — the split-budget protocol writes a replay-INVALID record
 
+> **LIFTED 2026-08-27.** Fixed on main by merge `0a23ae081`: a split-budget
+> leg is now a typed leg structure on ONE attempt, and `verify_root` reads it
+> as such. Merged here at `919dd378a` (two additive conflicts, both resolved
+> keeping both sides). `cycle_soak.py --case pc2b` re-run VERBATIM on the
+> merged tree: **exit 0**, A3 from 50 violations to 0, A2 from
+> `operational_failure` to `budget_exhausted`, A4 from cycle 1 to 24 of 24 —
+> with A5 and A6 still green, so the fix did not quiet the organs under test.
+> Report: `soak-pc2b.out`. The diagnosis below stands as written; it is kept
+> because it is the evidence the fix was built from, and because errata E59
+> records the general lesson: "never exercised" licenses no verdict about
+> soundness in either direction.
+
+
 **P-C2b is STOPPED before any provider call.** The soak the operator required
 caught this; the key has not been used.
 

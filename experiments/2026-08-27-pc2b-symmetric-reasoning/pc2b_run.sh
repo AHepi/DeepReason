@@ -78,7 +78,7 @@ if [ -e "$ROOT" ]; then
   exit 1
 fi
 
-log "=== ARM $ARM (config $PC2B_CONFIG) ==="
+log "=== ARM $ARM (config run-config.yaml, reasoning ON, symmetric with arm_s_split.py) ==="
 log "=== SETUP: build_manifest_pc2b.py -> $ROOT ==="
 if ! python "$HERE/build_manifest_pc2b.py" "$ROOT" 2>&1 | tee -a "$LOG"; then
   log "SETUP FAILED -- rc=1"
