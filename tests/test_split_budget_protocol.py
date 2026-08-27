@@ -17,9 +17,17 @@ possibly-truncated, possibly-empty trace and emits the schema-valid envelope at
 nor their sum can escape the route lease ceiling (the E43 bound, R9).
 
 What these tests assert. Typed outcomes only: the compiled contract value, the
-`LLMAttempt` records both legs write, the `max_tokens` each leg actually put on
-the wire, and the typed `split_notice` recorded whenever the protocol could not
-be honored. No assertion reads model prose as evidence of anything.
+`LLMSplitLegV1` records both legs write on the ONE attempt they produce, the
+`max_tokens` each leg actually put on the wire, and the typed `split_notice`
+recorded whenever the protocol could not be honored. No assertion reads model
+prose as evidence of anything.
+
+A LEG IS NOT AN ATTEMPT, and these tests read the legs where they live. An
+earlier version of this file asserted them as entries in `attempt_trace` --
+the repair ladder -- which is precisely the defect
+`experiments/2026-08-27-defect-split-leg-recording/` fixed: it made every
+thinking-ON run replay-invalid. Every assertion below says what it said
+before, about the record that now holds it.
 """
 
 from __future__ import annotations
@@ -86,7 +94,14 @@ def _adapter(endpoint, tmp_path, *, mode, extraction_tokens=512, **kwargs):
 
 
 def _legs(call):
-    return [a.split_leg for a in call.attempt_trace]
+    """The leg sequence of a call's single attempt -- `[]` when undivided.
+
+    Reads `split_legs` on the attempt, never `attempt_trace`: the ladder holds
+    attempts, and a helper that conflated the two is how the recording defect
+    stayed invisible to this file.
+    """
+
+    return [leg.leg for leg in call.attempt_trace[-1].split_legs]
 
 
 # --- R2: what "auto" arms on -------------------------------------------------
@@ -204,14 +219,16 @@ def test_the_wire_budgets_obey_the_same_three_bounds(tmp_path):
     assert sum(sent) <= ceiling, sent
 
     # The record says the same three things about the wire (SPEC Amendment 1).
-    recorded = [a.split_max_tokens for a in call.attempt_trace]
+    legs = call.attempt_trace[-1].split_legs
+    recorded = [leg.max_tokens for leg in legs]
     assert recorded == sent
     assert sum(recorded) <= ceiling
 
-    # And max_tokens keeps the route-authorized envelope on both legs, which is
-    # the only value invariants.py's attempt-limits check admits. Recording a
-    # leg's share there would make every split call fail replay validation.
-    assert [a.max_tokens for a in call.attempt_trace] == [ceiling, ceiling]
+    # And the ATTEMPT keeps the route-authorized envelope, which is the only
+    # value invariants.py's attempt-limits check admits. Recording a leg's
+    # share there would make every split call fail replay validation; the
+    # split-legs family checks the pair against it instead.
+    assert call.attempt_trace[-1].max_tokens == ceiling
 
 
 # --- R4/R11: the failure this tranche exists to remove -----------------------
@@ -231,8 +248,10 @@ def test_the_old_path_yields_the_empty_completion_typed_failure(tmp_path):
         adapter.call("summarizer", "PACK", ProseOutput)
     assert "no schema-valid output after bounded repair" in str(raised.value)
     assert len(raised.value.spend.attempt_trace) == 3
-    # Nothing about the old path is split-shaped.
-    assert _legs(raised.value.spend) == ["", "", ""]
+    # Nothing about the old path is split-shaped: three ladder entries, and
+    # not one of them carries a leg.
+    assert _legs(raised.value.spend) == []
+    assert all(a.split_legs == () for a in raised.value.spend.attempt_trace)
 
 
 def test_the_split_path_extracts_an_answer_from_a_truncated_trace(tmp_path):
@@ -258,13 +277,22 @@ def test_the_split_path_extracts_an_answer_from_a_truncated_trace(tmp_path):
     assert out.prose == "the extracted answer"
     assert _legs(call) == [SPLIT_LEG_REASON, SPLIT_LEG_EXTRACT]
 
-    # The reasoning leg is recorded as a real provider request that produced no
-    # contract-valid value; the extraction leg is the one that did.
-    assert [a.valid for a in call.attempt_trace] == [False, True]
-    # Both legs belong to the same attempt and the same frozen route.
-    assert {a.attempt for a in call.attempt_trace} == {0}
-    assert len({a.route_sha256 for a in call.attempt_trace}) == 1
+    # ONE attempt, valid, carrying both legs. The reasoning leg produced no
+    # contract-valid value and was never asked to -- which is why it is not an
+    # entry in the repair ladder, where `valid=False` means "told it was
+    # wrong" and demands a diagnostic.
+    assert len(call.attempt_trace) == 1
+    assert call.attempt_trace[0].valid is True
+    assert call.attempt_trace[0].attempt == 0
     assert call.tokens > 0
+
+    # The legs account for the attempt exactly -- no more (double-counting was
+    # the defect's own signature) and no less.
+    legs = call.attempt_trace[0].split_legs
+    assert sum(leg.tokens for leg in legs) == call.attempt_trace[0].tokens
+    # The emission leg serialized the deliberation that preceded it. Blob refs
+    # are content addresses, so this is proof, not a claim.
+    assert legs[1].trace_ref == legs[0].trace_ref
 
     # The deliberation the emission leg actually worked from is the one the
     # provider produced, recovered from its side channel rather than discarded
@@ -298,7 +326,7 @@ def test_the_split_path_survives_a_null_completion_on_the_reasoning_leg(tmp_path
     assert out.prose == "the extracted answer"
     assert _legs(call) == [SPLIT_LEG_REASON, SPLIT_LEG_EXTRACT]
     # The reasoning leg terminated at the cap, not on its own (R6).
-    assert call.attempt_trace[0].natural_stop is False
+    assert call.attempt_trace[0].split_legs[0].natural_stop is False
 
 
 def test_the_extraction_leg_is_not_a_thinking_call(tmp_path):
@@ -345,7 +373,8 @@ def test_a_provider_that_cannot_disable_thinking_still_compiles(tmp_path):
         "summarizer", "PACK", ProseOutput
     )
     assert out.prose == "the extracted answer"
-    assert call.attempt_trace[1].split_notice == plan.notice
+    assert call.attempt_trace[-1].split_notice == plan.notice
+    assert call.attempt_trace[-1].split_legs[-1].notice == plan.notice
     # No reasoning field was forced onto a provider that cannot carry one.
     assert endpoint.calls[1]["reasoning"] is None
 
@@ -359,9 +388,9 @@ def test_a_seat_that_cannot_split_records_a_notice_and_behaves_as_before(tmp_pat
         "summarizer", "PACK", ProseOutput
     )
     assert out.prose == "the extracted answer"
-    assert _legs(call) == [""]
+    assert _legs(call) == []
     assert call.attempt_trace[0].split_notice
-    assert call.attempt_trace[0].split_max_tokens is None
+    assert call.attempt_trace[0].split_legs == ()
 
 
 def test_auto_says_nothing_about_a_seat_that_was_never_a_candidate(tmp_path):
@@ -377,7 +406,7 @@ def test_auto_says_nothing_about_a_seat_that_was_never_a_candidate(tmp_path):
     _out, call = _adapter(endpoint, tmp_path, mode="auto").call(
         "summarizer", "PACK", ProseOutput
     )
-    assert _legs(call) == [""]
+    assert _legs(call) == []
     assert call.attempt_trace[0].split_notice == ""
 
     # The planner still knows why, for a caller that asks.

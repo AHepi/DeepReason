@@ -2,7 +2,7 @@
 Verified-at: 1662a3f96
 Verify: python -m pytest tests/test_ontology.py -q
 Owns: src/deepreason/ontology/
-Seams: DR-SEAM-ontology-x-rules, DR-SEAM-evaluation-x-ontology
+Seams: DR-SEAM-ontology-x-rules, DR-SEAM-evaluation-x-ontology, DR-SEAM-llm-x-verification
 Seams-undocumented: adjudication x ontology, bridge x ontology, capabilities x ontology, harness x ontology, ontology x scratch, ontology x workflow
 
 # Ontology — the one schema every other subsystem speaks
@@ -44,7 +44,7 @@ the bytes on disk.
 - `Status` — the four labels the two-pass adjudicator assigns.
 - `Event`, `Rule` — one append-only log line and the fifteen rules that can produce one.
 - `StateDiff` — the graph delta an event applies, under its on-record aliases (`att+`, `dep+`, `A+`, `Π+`, `addr+`, `carry+`).
-- `LLMCall`, `LLMAttempt` — provider accounting and per-attempt repair trace; process-only, never graph state. `LLMAttempt.natural_stop` (did the provider end this completion on its own, or at the cap?) is WRITTEN AND NEVER READ: it is a correctness signal, and letting a guard, rank, status, label or warrant consume it would make it an evidence signal, which the seats/evidence law forbids. `split_leg` / `split_notice` / `split_max_tokens` name which leg of the split-budget seat protocol (`llm/split.py`) produced the attempt, the typed reason the protocol was not honored when it was not, and the completion cap that leg put on the wire. `split_max_tokens` exists rather than reusing `max_tokens` because `invariants.py`'s `attempt-limits` check admits only route-authorized caps, and a leg's share of the ceiling is not one: the two fields say two different true things, the authorized envelope and the wire value.
+- `LLMCall`, `LLMAttempt` — provider accounting and per-attempt repair trace; process-only, never graph state. `LLMAttempt.natural_stop` (did the provider end this completion on its own, or at the cap?) is WRITTEN AND NEVER READ: it is a correctness signal, and letting a guard, rank, status, label or warrant consume it would make it an evidence signal, which the seats/evidence law forbids. `split_legs` carries the two `LLMSplitLegV1` records of one split-budget seat call (`llm/split.py`), and `split_notice` the typed reason the protocol was not honored when it was not — on the ATTEMPT rather than on a leg, because the seats it describes are exactly the ones with no legs. **A LEG IS NOT AN ATTEMPT**, and this is the field that says so: `attempt_trace` is the repair ladder, whose index means "how many times this call was told its value was wrong", and the two legs of a split are one such value produced by two provider requests. Recording them as ladder entries is a real recorded defect — it made every thinking-ON run replay-invalid against four unrelated checks at once (`experiments/2026-08-27-defect-split-leg-recording/`). Each leg keeps its own wire cap rather than reusing `max_tokens`, because `invariants.py`'s `attempt-limits` check admits only route-authorized caps and a leg's share of the ceiling is not one: `LLMAttempt.max_tokens` is the authorized envelope, `LLMSplitLegV1.max_tokens` the wire value, and `DR-SEAM-llm-x-verification` checks the pair against the envelope.
 - `SchoolRouteReceiptV1`, `ConjectureContextCallReceiptV1` — durable proof of the routing and the advisory scratch a conjecture call actually saw.
 - `deepreason.ontology.frozen` — compatibility re-export of `FrozenRecord`/`FrozenList`/`FrozenDict` from `deepreason.frozen`, used by the two process-payload modules (`scratch/events.py`, `bridge/events.py`) that reach back through the ontology package; the other three import `deepreason.frozen` directly.
 
@@ -97,7 +97,17 @@ for module in (Scheduler, results):
     assert 'ProvenanceRole.IMPORT' not in text, module
 "`
 
-`check: python -c "from deepreason.ontology.event import LLMAttempt as A; assert {'natural_stop', 'split_leg', 'split_notice', 'split_max_tokens'} <= set(A.model_fields); a = A(prompt_ref='blob:p'); assert (a.natural_stop, a.split_leg, a.split_notice, a.split_max_tokens) == (None, '', '', None), a" && test -z "$(grep -rl natural_stop src/deepreason --include=*.py | grep -vE '^src/deepreason/(ontology/event|llm/(adapter|split))\.py$')"`
+`check: python -c "
+from deepreason.ontology.event import LLMAttempt as A, LLMSplitLegV1 as L
+assert {'natural_stop', 'split_notice', 'split_legs'} <= set(A.model_fields)
+# The leg fields are GONE from the attempt: a leg name on a non-leg record is
+# the borrowed costume the 2026-08-27 defect was made of.
+assert not {'split_leg', 'split_max_tokens'} & set(A.model_fields)
+a = A(prompt_ref='blob:p')
+assert (a.natural_stop, a.split_notice, a.split_legs) == (None, '', ()), a
+# A leg carries no attempt index and cannot be given one.
+assert 'attempt' not in L.model_fields
+" && test -z "$(grep -rl natural_stop src/deepreason --include=*.py | grep -vE '^src/deepreason/(ontology/event|llm/(adapter|split))\.py$')"`
 
 **The survivor rule was spelled out at each surface, and one copy drifted.**
 `selfstudy run-9175f0ec` installed "import-role admission records never count as

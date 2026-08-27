@@ -2,8 +2,8 @@
 Verified-at: d40d3de3e
 Verify: python -m pytest tests/test_llm.py tests/test_model_firewall.py tests/test_wire_contracts.py tests/test_llm_repair_capabilities.py tests/test_adapter_attempt_logging.py tests/test_compact_profiles.py tests/test_providers.py tests/test_budget.py -q
 Owns: src/deepreason/llm/
-Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler
-Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x schools, llm x scratch, llm x verification
+Seams: DR-SEAM-llm-x-workflow, DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-bridge-x-llm, DR-SEAM-llm-x-scheduler, DR-SEAM-llm-x-verification
+Seams-undocumented: capabilities x llm, harness x llm, llm x ontology, llm x schools, llm x scratch
 
 # The LLM boundary — one bounded `pack -> schema-valid JSON` function on a frozen route
 
@@ -91,7 +91,8 @@ reference-bearing field contain", which both `packs.py` (the prompt menu) and
   — the split-budget seat protocol: one seat call becomes a deliberation leg at
   `B_r` and a non-thinking emission leg at `B_a`, against the same route, lease
   and authorization, with `B_r + B_a == ceiling`. Pure: it plans and renders,
-  and `LLMAdapter._dispatch_split` spends.
+  and `LLMAdapter._dispatch_split` spends and records both legs as
+  `LLMSplitLegV1` on the attempt they produce.
 - `reject_model_control_fields` / `sanitize_model_control_fields_for_repair` /
   `route_fingerprint` / `select_lease` / `resolve_school_role_lease` — the
   route-and-authority firewall.
@@ -114,10 +115,13 @@ website directives that have no standard-profile template at all.
 writes a secret-free JSON map keyed by `(provider, endpoint, model, revision,
 probe_version)` at a path the caller chooses. Nothing else in the package
 opens, creates or writes a file. Prompt, raw and diagnostic bytes are handed to
-an *injected* blob store — eight `blobs.put` sites in `LLMAdapter.call`, five on
-the undivided path and three more for the split-budget protocol's deliberation
-prompt, its raw prose, and the emission prompt — whose `objects/` directory
-belongs to DR-SUB-harness.
+an *injected* blob store — twelve `blobs.put` sites in `LLMAdapter.call`, six on
+the undivided path and six more for the split-budget protocol: each leg's own
+prompt and raw, the deliberation trace, and the empty trace an over-envelope
+emission leg names in its place. The trace is blobbed ONCE and both legs name
+that ref, which is what makes their agreement checkable rather than a claim
+(DR-SEAM-llm-x-verification, limb L4). The `objects/` directory belongs to
+DR-SUB-harness.
 
 **In memory, per adapter:** `_compact_recovery_roles` (roles armed for compact
 transport on their next ordinary call), `_v6_authority_harness` /
@@ -129,7 +133,7 @@ outstanding `reserved` bound, all under one lock. Per endpoint object:
 after `complete()`, to build the attempt trace. There is also a module-level
 `_MODEL_CACHE` in `endpoints.py` memoizing `/models` per `(base_url, api_key)`
 for the `auto` / `auto-alt` sentinels; it is process-global, not per-run.
-`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && test "$(grep -rlE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/ --include=*.py)" = "src/deepreason/llm/capabilities.py" && grep -q "^_MODEL_CACHE: dict\[tuple\[str, str | None\]" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 9`
+`check: grep -q "self.path.write_text" src/deepreason/llm/capabilities.py && test "$(grep -rlE "write_text|write_bytes|\.mkdir\(" src/deepreason/llm/ --include=*.py)" = "src/deepreason/llm/capabilities.py" && grep -q "^_MODEL_CACHE: dict\[tuple\[str, str | None\]" src/deepreason/llm/endpoints.py && grep -q "self._compact_recovery_roles: set\[str\] = set()" src/deepreason/llm/adapter.py && test "$(grep -c "self.blobs.put" src/deepreason/llm/adapter.py)" -eq 12`
 
 **Typed records it constructs** (shapes owned by DR-SUB-ontology): `LLMCall`,
 one per completed or abandoned call; `LLMAttempt`, one per provider request
@@ -137,6 +141,10 @@ including transport failures, carrying `contract_id`, `endpoint_id`,
 `route_sha256`, `seat`, `model_profile` (frozen/base) vs `transport_profile`
 (effective), `repair_scope`, `validation_path`, `diagnostic_ref`, the
 controller's effective `max_tokens`/`timeout_s`, and the transport diagnostics;
+`LLMSplitLegV1`, two per split seat call, hanging off the ONE attempt they
+jointly produced and NEVER an entry in `attempt_trace` — that list is the
+repair ladder, and putting legs in it made every thinking-ON run replay-invalid
+(`experiments/2026-08-27-defect-split-leg-recording/`);
 `SchoolRouteReceiptV1` and `ConjectureContextCallReceiptV1` when the call is
 school-routed or carries advisory context. Every one of these reaches the log
 through the caller, including on the failure paths.
@@ -153,7 +161,8 @@ through the caller, including on the failure paths.
 | Move a rule from prompt prose into the schema | `llm/wire.py` primitives: `present_and_nonempty`, `absent_or_empty`, `outcome_shape_schema`, `discriminated_shape_schema`, `restrict_discriminator_values`, `prune_property` | `tests/test_schema_carries_every_prose_rule.py` |
 | Which transport a role gets at a given profile | `wire_contract_for`; `ProfileSpec.direct_contracts` in `llm/profiles.py` | `tests/test_compact_profiles.py::test_alias_dependent_hot_roles_fail_closed_without_a_table` |
 | Whether a seat splits its completion budget, or the budgets it splits into | `llm/split.py`: `plan_split`, `MIN_EXTRACT_TOKENS`; `Config.SPLIT_BUDGET_SEAT_PROTOCOL` / `SPLIT_BUDGET_EXTRACTION_TOKENS` | `tests/test_split_budget_protocol.py::test_neither_leg_nor_their_sum_exceeds_the_route_lease_ceiling` |
-| What a split leg records, or when the protocol stands down | `LLMAdapter._split_plan` / `_dispatch_split`; the `NOTICE_` constants in `llm/split.py` | `tests/test_split_budget_protocol.py::test_a_provider_that_cannot_disable_thinking_still_compiles` |
+| What a split leg records, or when the protocol stands down | `LLMAdapter._split_plan` / `_dispatch_split`; `LLMSplitLegV1` in `ontology/event.py`; the `NOTICE_` constants in `llm/split.py` | `tests/test_split_budget_protocol.py::test_a_provider_that_cannot_disable_thinking_still_compiles`, `tests/test_split_leg_recording.py::test_a_split_call_records_two_legs_on_one_attempt` |
+| Anything a split call writes into the RECORD | `LLMSplitLegV1` and the `split-legs` family that reads it — see DR-SEAM-llm-x-verification BEFORE either side | `tests/test_split_leg_recording.py::test_verify_root_accepts_a_thinking_on_record` |
 | Repair protocol shape or attempt ceiling | `BoundedRepairSession` (legacy, `retry_max` capped at 2) or `V6PatchRepairSession` (one authorization per attempt) | `tests/test_llm_repair_capabilities.py::test_repair_exhaustion_is_bounded_even_with_large_retry_max` |
 | Which output mechanism a route uses | `select_output_mechanism` at setup; `OpenAICompatEndpoint.build_body` for the wire form | `tests/test_llm_repair_capabilities.py::test_output_mechanism_priority_is_fixed`, `::test_runtime_cannot_change_frozen_lease_mechanism` |
 | What model output may never name | `FORBIDDEN_MODEL_CONTROL_FIELDS` / `_OPAQUE_DATA_FIELDS` in `llm/firewall.py` | `tests/test_model_firewall.py` |

@@ -124,9 +124,10 @@ traffic at all.
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
 | — | llm × scheduler | `SEAM-llm-x-scheduler.md` |
+| — | llm × verification | `SEAM-llm-x-verification.md` |
 | — | calculus × rules | `SEAM-calculus-x-rules.md` |
 
-The last nine carry no import-count because at least one side is a concept
+The last ten carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification and calculus × rules cases — every import between
 the sides is function-local, which the coupling metric cannot see. The adjudication ×
@@ -141,6 +142,17 @@ document covers — the allocation controller against the route lease — is
 carried entirely by `controller.py`, which imports nothing from `llm/` and
 reaches the leases duck-typed off the adapter. A count taken over the packages
 would have read 10 and pointed at the wrong traffic.
+
+The llm × verification case is the newest and cost the most: the two sides
+import NOTHING from each other in either direction, so the pair was absent
+from this matrix entirely — which reads as "no interaction" and is not. Their
+whole agreement is what the fields of one record MEAN, and when the
+split-budget seat protocol was written against `attempt_trace` with nothing to
+say what that list meant to its only reader, every run of a whole operating
+mode came out replay-invalid
+(`experiments/2026-08-27-defect-split-leg-recording/`). **A pair with zero
+measured traffic can still be load-bearing; absence from this table is
+evidence about the metric, not about the code.**
 
 `check: python tools/docs_verify.py --links`
 

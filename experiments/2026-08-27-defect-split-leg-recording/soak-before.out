@@ -1,0 +1,57 @@
+[soak] stub provider on 127.0.0.1:40039 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/cycle-soak-eu0cqe6t
+[soak] built root: manifest 3678c4bef52ffa50…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 3.2s
+[soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case split-legs
+========================================================================
+  manifest sha256        3678c4bef52ffa5044f297e00af981abc9486295d88eb08d715f5a4a0baa7142
+  criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
+  attached evidence      False
+  cycles requested       24
+  qualification          rc=0 (3.2s)
+  drive                  202.8s, 16 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='completed' stop_reason='converged' typed_error=None
+  [PASS] A2-no-operational-failure    stop_reason='converged'
+  [FAIL] A3-verify-root-clean         260 violation(s): [{'check': 'attempt-accounting', 'detail': 'event seq=27: trace tokens=15573 but call tokens=10001'}, {'check': 'attempt-blobs', 'detail': 'event seq=27 attempt=0: missing diagnostic ref'}, {'check': 'attempt-order', 'detail': 'event seq=27 attempt=1: recorded attempt index=0'}]
+  [PASS] A4-cycles-reached            reached cycle 13 of 24 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 52}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 52}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 52}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 52}
+
+-- record census -------------------------------------------------------
+      13  artifact
+       5  commitment
+       1  problem
+       3  warrant
+      52  workflow-context-exposure-v2
+      52  workflow-context-pack-plan-v1
+      52  workflow-dispatch-authorization-v1
+       1  workflow-lifecycle-decision
+       1  workflow-lifecycle-snapshot
+       1  workflow-model-classification-binding-v1
+      52  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      52  workflow-semantic-admission-v1
+       1  workflow-stop-metrics-observation
+      52  workflow-token-reservation-v2
+     260  workflow-work-lifecycle-transition-v1
+      52  workflow-work-preparation-v1
+      52  workflow-work-terminal-v1
+
+[soak] report /tmp/cycle-soak-eu0cqe6t/soak-report.json
+[soak] exit 1 (FAILED)

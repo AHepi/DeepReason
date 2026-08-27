@@ -1,0 +1,54 @@
+[soak] stub provider on 127.0.0.1:36143 (reused from wheel_operational_smoke)
+[soak] working directory /tmp/claude-0/-home-user-DeepReason/968c4f65-8e09-5405-b89c-f9bf27db1023/scratchpad/soak-b
+[soak] built root: manifest f55bd13f2ebfe28e…  criteria ['frontier-wellformed@v1', 'frontier-claim-honest@v1', 'frontier-above-floor@v1']
+[soak] qualified in 3.1s
+[soak] driving 24 cycles …
+
+========================================================================
+CYCLE SOAK -- case split-legs
+========================================================================
+  manifest sha256        f55bd13f2ebfe28eeb75e8cf37bda56cc513fc3bfc33e5429b3c5531b766e87b
+  criteria               frontier-wellformed@v1, frontier-claim-honest@v1, frontier-above-floor@v1
+  attached evidence      False
+  cycles requested       24
+  qualification          rc=0 (3.1s)
+  drive                  52.5s, 5 progress events
+
+-- S1 run assertions ---------------------------------------------------
+  [PASS] A1-typed-terminal            state='failed' stop_reason='operational_failure' typed_error=None
+  [FAIL] A2-no-operational-failure    stop_reason='operational_failure' message='1 validation error for LLMAttempt\nprompt_ref\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_type'
+  [FAIL] A3-verify-root-clean         55 violation(s): [{'check': 'attempt-accounting', 'detail': 'event seq=27: trace tokens=15573 but call tokens=10001'}, {'check': 'attempt-blobs', 'detail': 'event seq=27 attempt=0: missing diagnostic ref'}, {'check': 'attempt-order', 'detail': 'event seq=27 attempt=1: recorded attempt index=0'}]
+  [FAIL] A4-cycles-reached            reached cycle 2 of 24 requested; the deepest recorded death was cycle 2
+
+-- S2/S4 seam coverage -------------------------------------------------
+  [PART] D1-seat-contract         seat contracts with repairs
+         reason: seat contracts exercised, but zero repair attempts: the deterministic stub always returns a schema-valid response, so attempt_index never advances past 0 offline
+         reached: {'workflow-contract-decomposition-transition-v1': 0, 'workflow-provider-attempt-v1': 11}
+  [PASS] D2-route-lease           lease-checked routes with tuning
+         reached: {'workflow-provider-attempt-v1': 11}
+  [PASS] D3-budget-auth           budget authorization
+         reached: {'workflow-dispatch-authorization-v1': 12}
+  [PASS] D4-reservation-bound     reservation/dispatch bounds
+         reached: {'workflow-token-reservation-v2': 12}
+
+-- record census -------------------------------------------------------
+      12  artifact
+       5  commitment
+       1  problem
+       3  warrant
+      12  workflow-context-exposure-v2
+      12  workflow-context-pack-plan-v1
+      12  workflow-dispatch-authorization-v1
+       1  workflow-model-classification-binding-v1
+      11  workflow-provider-attempt-v1
+       1  workflow-route-seat-model-classification-plan-v1
+       1  workflow-run-terminal-commitment-v1
+       1  workflow-run-terminal-result-draft-v1
+      11  workflow-semantic-admission-v1
+      12  workflow-token-reservation-v2
+      57  workflow-work-lifecycle-transition-v1
+      12  workflow-work-preparation-v1
+      11  workflow-work-terminal-v1
+
+[soak] report /tmp/claude-0/-home-user-DeepReason/968c4f65-8e09-5405-b89c-f9bf27db1023/scratchpad/soak-b/soak-report.json
+[soak] exit 1 (FAILED)

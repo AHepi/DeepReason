@@ -67,6 +67,7 @@ from deepreason.llm.wire import (
 from deepreason.ontology.event import (
     ConjectureContextCallReceiptV1,
     LLMAttempt,
+    LLMSplitLegV1,
     LLMCall,
     SchoolRouteReceiptV1,
 )
@@ -1028,7 +1029,7 @@ class LLMAdapter:
         try:
             _enforce_request_envelope(role, deliberation, lease)
         except RequestEnvelopeExceeded:
-            return None, stand_down(NOTICE_ENVELOPE), [], None, None, None
+            return None, stand_down(NOTICE_ENVELOPE), [], None, None
 
         # The emission leg's prompt is not covered by the reservation the
         # caller already booked, so book its upper bound before spending
@@ -1042,10 +1043,10 @@ class LLMAdapter:
             try:
                 extra_reserve = self.meter.reserve(prompt_tokens=bound, max_tokens=0)
             except TokenBudgetExceeded:
-                return None, stand_down(NOTICE_NO_HEADROOM), [], None, None, None
+                return None, stand_down(NOTICE_NO_HEADROOM), [], None, None
 
         try:
-            legs: list[LLMAttempt] = []
+            legs: list[LLMSplitLegV1] = []
             usage = {"prompt_tokens": 0, "completion_tokens": 0}
 
             def _send(text: str, cap: int, **extra):
@@ -1079,21 +1080,22 @@ class LLMAdapter:
                 allow_empty_content=True,
             )
             trace = spoken or getattr(endpoint, "last_reasoning_trace", None) or ""
-            legs.append(LLMAttempt(
+            # The trace is blobbed ONCE and both legs name that ref: the
+            # reason leg as what it produced, the emission leg as what it
+            # consumed.  Blob refs are content addresses, so their equality is
+            # what proves the pair belongs together -- there is no second copy
+            # that could drift from the first.
+            trace_ref = self.blobs.put(trace.encode())
+            legs.append(LLMSplitLegV1(
+                leg=SPLIT_LEG_REASON,
                 prompt_ref=self.blobs.put(deliberation.encode()),
                 raw_ref=self.blobs.put(spoken.encode()),
-                attempt=0,
-                **trace_identity,
-                **transport_limits,
-                split_leg=SPLIT_LEG_REASON,
-                split_max_tokens=plan.reason_max_tokens,
-                split_notice=plan.notice if plan.disclosed else "",
+                trace_ref=trace_ref,
+                max_tokens=plan.reason_max_tokens,
+                notice=plan.notice if plan.disclosed else "",
                 natural_stop=stopped,
                 tokens=spent["prompt_tokens"] + spent["completion_tokens"],
                 ms=int((time.monotonic() - started) * 1000),
-                # Prose is not a contract value and was never asked to be one.
-                valid=False,
-                output_mechanism=mechanism.value,
                 transport_attempts=max(
                     1, int(getattr(endpoint, "last_transport_attempts", 1) or 1)
                 ),
@@ -1104,6 +1106,7 @@ class LLMAdapter:
 
             emission = extraction_request(schema=schema_json, trace=trace)
             notice = plan.notice
+            emission_trace_ref = trace_ref
             try:
                 _enforce_request_envelope(role, emission, lease)
             except RequestEnvelopeExceeded:
@@ -1112,23 +1115,52 @@ class LLMAdapter:
                 # where a thinking one cut off at the cap answers nothing.
                 emission = extraction_request(schema=schema_json, trace="")
                 notice = NOTICE_ENVELOPE
+                # The emission leg served no deliberation, and says so by
+                # naming the empty trace rather than the one it could not
+                # carry.  A leg that pointed at a trace it never saw would
+                # make the pair's continuity check pass on a false premise.
+                emission_trace_ref = self.blobs.put(b"")
 
             extract_kwargs = dict(schema_kwargs)
             if plan.extract_reasoning is not None:
                 extract_kwargs["reasoning"] = plan.extract_reasoning
-            emission_ref = self.blobs.put(emission.encode())
-            raw, _spent, stopped = _send(
+            emission_started = time.monotonic()
+            raw, extract_spent, stopped = _send(
                 emission, plan.extract_max_tokens, **extract_kwargs
             )
-            fields = {
-                "split_leg": SPLIT_LEG_EXTRACT,
-                "split_max_tokens": plan.extract_max_tokens,
-                "split_notice": (
-                    notice if (plan.disclosed or notice != plan.notice) else ""
+            extract_notice = (
+                notice if (plan.disclosed or notice != plan.notice) else ""
+            )
+            legs.append(LLMSplitLegV1(
+                leg=SPLIT_LEG_EXTRACT,
+                prompt_ref=self.blobs.put(emission.encode()),
+                raw_ref=self.blobs.put(raw.encode()),
+                trace_ref=emission_trace_ref,
+                max_tokens=plan.extract_max_tokens,
+                notice=extract_notice,
+                natural_stop=stopped,
+                tokens=(
+                    extract_spent["prompt_tokens"]
+                    + extract_spent["completion_tokens"]
                 ),
+                ms=int((time.monotonic() - emission_started) * 1000),
+                transport_attempts=max(
+                    1, int(getattr(endpoint, "last_transport_attempts", 1) or 1)
+                ),
+                transport_diagnostics=list(
+                    getattr(endpoint, "last_transport_diagnostics", ())
+                ),
+            ))
+            # Stamped onto whichever attempt the emission becomes -- valid,
+            # invalid, or a transport failure -- so a split call records the
+            # same shape on every exit path.  The attempt keeps the seat's own
+            # prompt_ref; each leg's envelope is reachable through the leg.
+            fields = {
+                "split_legs": tuple(legs),
+                "split_notice": extract_notice,
                 "natural_stop": stopped,
             }
-            return raw, plan, legs, usage, fields, emission_ref
+            return raw, plan, legs, usage, fields
         finally:
             if extra_reserve is not None:
                 # The real usage of both legs settles through the caller's own
@@ -1559,7 +1591,6 @@ class LLMAdapter:
                         split_legs,
                         split_usage,
                         split_fields,
-                        emission_ref,
                     ) = self._dispatch_split(
                         endpoint=endpoint,
                         lease=lease,
@@ -1574,11 +1605,15 @@ class LLMAdapter:
                         mechanism=mechanism,
                         attempt_started=attempt_started,
                     )
-                    # The deliberation leg is a provider request in its own
-                    # right and is recorded before the emission leg's outcome
-                    # is known, so a failure below still shows both.
-                    attempt_trace.extend(split_legs)
-                    prompt_ref = emission_ref
+                    # A LEG IS NOT AN ATTEMPT.  Both legs travel on
+                    # `split_fields` and are stamped onto the ONE attempt they
+                    # jointly produce; `attempt_trace` stays the repair ladder,
+                    # whose index means "how many times this call was told it
+                    # was wrong".  Splicing them in here is the defect this
+                    # deletion closes, and `prompt_ref` deliberately stays the
+                    # seat's own request -- the emission envelope is reachable
+                    # through the extract leg, and a repair diagnostic has to
+                    # remain where the repair ladder looks for it.
                     exact_prompt_tokens += 0  # totals settle from split_usage
                 if not plan.armed:
                     # Either the seat was never a candidate, or a run-time
