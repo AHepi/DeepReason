@@ -272,3 +272,55 @@ The document's Traps section owns that story, with its run id.
 GATE: python tools/docs_verify.py, and --audit must not refuse any check
 you write.
 ```
+
+---
+
+## P6 — LOW: the documented gate needs two dependencies the install does not declare
+
+**What.** CLAUDE.md's gate command is `pytest tests/ -q -n 4`, and
+`tests/test_schema_carries_every_prose_rule.py:170` imports `jsonschema`.
+Neither `pytest-xdist` (which `-n 4` requires) nor `jsonschema` appears in
+`pyproject.toml` — `dependencies` has three entries and
+`optional-dependencies.dev` has `pytest` and `ruff` only. A fresh container
+that runs the documented setup and then the documented gate gets one failure
+that looks like a code defect and is not. This tranche hit it:
+`1 failed, 4334 passed` on `ModuleNotFoundError: No module named 'jsonschema'`.
+
+**Prompt:**
+
+```
+TARGET REPOSITORY: AHepi/DeepReason.
+
+Route through deepreason-orchestrator. One tranche, one goal: the setup
+CLAUDE.md documents must be sufficient for the gate CLAUDE.md documents.
+
+THE DEFECT, already observed — cite, do not re-derive:
+experiments/2026-08-27-change-execution-safety/DELIVERY.md, the "Full gate"
+section. A fresh container that runs
+    pip install -e . --break-system-packages
+then
+    pytest tests/ -q -n 4
+fails on ModuleNotFoundError: No module named 'jsonschema'
+(tests/test_schema_carries_every_prose_rule.py:170), and cannot use -n 4 at
+all without pytest-xdist. Neither is declared: pyproject.toml dependencies
+carries pydantic, pyyaml and fastembed; optional-dependencies.dev carries
+pytest and ruff.
+
+THE FIX: declare what the gate actually needs in
+optional-dependencies.dev — at minimum jsonschema and pytest-xdist. Take
+the census from the tests rather than from this prompt: grep the suite for
+third-party imports and reconcile the whole set against pyproject.toml, so
+this is fixed once rather than one module at a time.
+
+WHILE YOU ARE THERE: CLAUDE.md's Build-and-test section says "expect ~3100
+passed, 0 failed". The 2026-08-27 run collected 4334 passed, 15 skipped.
+Update the baseline in the same commit and record the new number, so the
+next session can tell a real regression from a stale expectation. Check
+docs/AUDIT_BASELINES.md for the same number.
+
+PROOF OBLIGATION: a clean-container reproduction — install from the
+declared extras alone, run the gate, 0 failed. If the container cannot be
+reset, a fresh virtualenv is the equivalent and must be shown.
+
+GATE: pytest tests/ -q -n 4, 0 failed. python tools/docs_verify.py.
+```

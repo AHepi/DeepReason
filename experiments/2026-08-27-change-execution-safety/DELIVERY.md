@@ -85,6 +85,7 @@ Five findings parked with ready-to-send prompts, none fixed here:
 | P3 | HIGH | the "everything on" preset advertises a channel it cannot reach; needs a typed disclosure, not a silent dead channel |
 | P4 | MEDIUM | containment tests pin self-reported strings instead of differentials — this is how the escape survived a committed containment proof |
 | P5 | LOW | `docs/map/SEAM-capabilities-x-channels.md` does not exist; this tranche's whole subject lives on it |
+| P6 | LOW | the documented gate needs `jsonschema` and `pytest-xdist`, which the documented install does not declare; CLAUDE.md's ~3100-passed baseline is stale at 4334 |
 
 ---
 
@@ -112,4 +113,35 @@ it is a price, not a defect.
 
 ## Gate
 
-Full gate and `docs_verify` results: appended below at the phase boundary.
+### Full gate
+
+```
+$ python -m pytest tests/ -q -n 4
+1 failed, 4334 passed, 15 skipped in 994.44s (0:16:34)
+FAILED tests/test_schema_carries_every_prose_rule.py::test_alias_bearing_fields_name_their_legal_values_in_the_schema
+E       ModuleNotFoundError: No module named 'jsonschema'
+```
+
+The one failure is an ENVIRONMENT gap in this fresh container, not a code
+failure: `pip install -e .` did not pull `jsonschema`, which that test
+imports at line 170. Installed and re-run, the file is green:
+
+```
+$ pip install jsonschema --break-system-packages -q
+$ python -m pytest tests/test_schema_carries_every_prose_rule.py -q
+....                                                                     [100%]
+4 passed in 0.15s
+```
+
+**Effective gate: 0 failed.** No `src/` file changed in this tranche, so
+nothing in the suite could have been affected by it. Recorded rather than
+smoothed over, because the container-rollback note in CLAUDE.md's
+Environment section does not mention `jsonschema` and the next fresh
+session will hit the same wall.
+
+Note for the baseline: CLAUDE.md's "expect ~3100 passed" is stale — this
+run collected 4334 passed, 15 skipped.
+
+### docs_verify
+
+Appended at the tail of this document.
