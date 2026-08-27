@@ -372,3 +372,70 @@ n = 216 artifacts — **0** formal-by-this-reading, **216** prose-by-this-readin
 | in the knowledge view | 0/0 (—) | 1/216 (0.5 %) | — |
 | *mean attacks received* | 0.00 | 0.12 | -0.12 |
 
+---
+
+## Admission — what the model wrote against what became an artifact
+
+The denominator is every candidate object in a conjecturer's RAW provider response, parsed from the blob — including candidates that never survived wire validation, which is the population the P-C2b incident was about. `offers_checker` is the one formality signal a candidate can carry in its own wire output (`checker_specs`, or a `checker_spec` on a forbidden case / countercondition).
+
+| root | conjecturer calls | candidates written | prose-only | with a checker | artifacts minted | admission rate |
+|---|---|---|---|---|---|---|
+| P-R1 | 37 | 168 | 168 | 0 | 162 | 96.4 % |
+| P-C1 ARM H | 104 | 267 | 267 | 0 | 259 | 97.0 % |
+| P-C2b | 10 | 7 | 7 | 0 | 4 | 57.1 % |
+| attempt-4 | 31 | 94 | 94 | 0 | 88 | 93.6 % |
+| `experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752` | 36 | 35 | 35 | 0 | 18 | 51.4 % |
+| `experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc` | 20 | 64 | 64 | 0 | 59 | 92.2 % |
+| `experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829` | 25 | 63 | 63 | 0 | 51 | 81.0 % |
+| `experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c` | 16 | 41 | 41 | 0 | 35 | 85.4 % |
+| `experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c` | 15 | 30 | 30 | 0 | 18 | 60.0 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea` | 25 | 63 | 63 | 0 | 59 | 93.7 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1` | 37 | 66 | 66 | 0 | 55 | 83.3 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7` | 30 | 62 | 62 | 0 | 50 | 80.6 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70` | 20 | 65 | 65 | 0 | 59 | 90.8 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b` | 30 | 66 | 66 | 0 | 54 | 81.8 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913` | 16 | 77 | 77 | 0 | 77 | 100.0 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008` | 44 | 71 | 71 | 0 | 61 | 85.9 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7` | 25 | 67 | 67 | 0 | 61 | 91.0 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726` | 32 | 68 | 68 | 0 | 57 | 83.8 % |
+| `experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06` | 24 | 78 | 78 | 0 | 72 | 92.3 % |
+| `experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949` | 16 | 58 | 58 | 0 | 58 | 100.0 % |
+| `experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd` | 18 | 91 | 91 | 0 | 91 | 100.0 % |
+| `experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484` | 11 | 52 | 52 | 0 | 52 | 100.0 % |
+| `experiments/2026-08-12-live-grounded-extension-expansion/run` | 49 | 250 | 250 | 0 | 250 | 100.0 % |
+| `experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d` | 4 | 1 | 1 | 0 | 0 | 0.0 % |
+| `experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d` | 7 | 4 | 4 | 0 | 0 | 0.0 % |
+| `experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d` | 14 | 3 | 3 | 0 | 0 | 0.0 % |
+| `experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4` | 24 | 36 | 36 | 0 | 24 | 66.7 % |
+| `experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4` | 4 | 24 | 24 | 0 | 24 | 100.0 % |
+| `experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c` | 17 | 28 | 27 | 1 | 18 | 64.3 % |
+| `experiments/2026-08-22-live-reach-rich-run/run` | 8 | 24 | 24 | 0 | 24 | 100.0 % |
+| `experiments/2026-08-24-change-rung7-wounds-falls-succession/run` | 14 | 29 | 29 | 0 | 23 | 79.3 % |
+| `experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6` | 84 | 225 | 224 | 1 | 214 | 95.1 % |
+| `experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf` | 10 | 36 | 36 | 0 | 36 | 100.0 % |
+| `experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332` | 24 | 58 | 58 | 0 | 42 | 72.4 % |
+| `experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5` | 24 | 25 | 25 | 0 | 18 | 72.0 % |
+| `experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5` | 17 | 20 | 20 | 0 | 6 | 30.0 % |
+| `experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7` | 15 | 9 | 9 | 0 | 6 | 66.7 % |
+| `experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593` | 17 | 15 | 15 | 0 | 15 | 100.0 % |
+| `experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5` | 20 | 20 | 20 | 0 | 6 | 30.0 % |
+| `experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00` | 4 | 22 | 22 | 0 | 22 | 100.0 % |
+| `experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107` | 13 | 22 | 22 | 0 | 10 | 45.5 % |
+| `experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0` | 27 | 34 | 34 | 0 | 16 | 47.1 % |
+| `experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a` | 26 | 54 | 54 | 0 | 48 | 88.9 % |
+| `experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a` | 25 | 44 | 44 | 0 | 29 | 65.9 % |
+| `experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a` | 14 | 30 | 30 | 0 | 24 | 80.0 % |
+| `experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a` | 4 | 12 | 12 | 0 | 12 | 100.0 % |
+| `experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a` | 29 | 26 | 26 | 0 | 12 | 46.2 % |
+| `experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100` | 6 | 16 | 16 | 0 | 16 | 100.0 % |
+| `experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be` | 9 | 27 | 27 | 0 | 10 | 37.0 % |
+| `experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346` | 23 | 46 | 46 | 0 | 40 | 87.0 % |
+| `experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847` | 9 | 24 | 24 | 0 | 24 | 100.0 % |
+| `experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345` | 13 | 24 | 24 | 0 | 12 | 50.0 % |
+| `experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5` | 12 | 52 | 52 | 0 | 52 | 100.0 % |
+| `experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03` | 7 | 18 | 18 | 0 | 18 | 100.0 % |
+| `experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c` | 4 | 24 | 24 | 0 | 24 | 100.0 % |
+| **all roots** | | **2935** | **2933** | **2** | **2575** | **87.7 %** |
+
+**The candidate-side formality channel is essentially unused.** With 2 of 2935 written candidates offering a checker, the admission comparison BY CANDIDATE KIND has no denominator worth quoting on the formal side. That absence is itself the measurement: the optional formal channel is available and the model does not take it, so no admission penalty for declining it can be observed — and none can be ruled out either.
+

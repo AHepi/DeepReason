@@ -1,0 +1,1012 @@
+{
+ "schema": "formalism-audit.admission-census.v1",
+ "roots_read": 55,
+ "roots_failed": [],
+ "roots": [
+  {
+   "root": "experiments/2026-08-25-poietics-program/run",
+   "conjecturer_calls": {
+    "total": 37,
+    "wire_valid": 36,
+    "wire_invalid_or_unknown": 1
+   },
+   "conj_events": 27,
+   "candidates_written": {
+    "prose_only": 168
+   },
+   "artifacts_minted": {
+    "battery_carrying": 162
+   },
+   "candidates_written_total": 168,
+   "artifacts_minted_total": 162,
+   "label": "P-R1"
+  },
+  {
+   "root": "experiments/2026-08-25-change-constructive-frontier/run",
+   "conjecturer_calls": {
+    "total": 104,
+    "wire_valid": 82,
+    "wire_invalid_or_unknown": 22,
+    "unparseable_blob": 16
+   },
+   "conj_events": 49,
+   "candidates_written": {
+    "prose_only": 267
+   },
+   "artifacts_minted": {
+    "battery_carrying": 163,
+    "prose_only": 96
+   },
+   "candidates_written_total": 267,
+   "artifacts_minted_total": 259,
+   "label": "P-C1 ARM H"
+  },
+  {
+   "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run",
+   "conjecturer_calls": {
+    "total": 10,
+    "wire_valid": 7,
+    "wire_invalid_or_unknown": 3,
+    "unparseable_blob": 2
+   },
+   "conj_events": 1,
+   "candidates_written": {
+    "prose_only": 7
+   },
+   "artifacts_minted": {
+    "battery_carrying": 4
+   },
+   "candidates_written_total": 7,
+   "artifacts_minted_total": 4,
+   "label": "P-C2b"
+  },
+  {
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/run",
+   "conjecturer_calls": {
+    "total": 31,
+    "wire_valid": 26,
+    "wire_invalid_or_unknown": 5,
+    "unparseable_blob": 1
+   },
+   "conj_events": 15,
+   "candidates_written": {
+    "prose_only": 94
+   },
+   "artifacts_minted": {
+    "battery_carrying": 88
+   },
+   "candidates_written_total": 94,
+   "artifacts_minted_total": 88,
+   "label": "attempt-4"
+  },
+  {
+   "root": "experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752",
+   "conjecturer_calls": {
+    "total": 36,
+    "wire_invalid_or_unknown": 17,
+    "wire_valid": 19,
+    "unparseable_blob": 2
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 35
+   },
+   "artifacts_minted": {
+    "battery_carrying": 18
+   },
+   "candidates_written_total": 35,
+   "artifacts_minted_total": 18,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+   "conjecturer_calls": {
+    "total": 20,
+    "wire_valid": 16,
+    "wire_invalid_or_unknown": 4
+   },
+   "conj_events": 10,
+   "candidates_written": {
+    "prose_only": 64
+   },
+   "artifacts_minted": {
+    "battery_carrying": 59
+   },
+   "candidates_written_total": 64,
+   "artifacts_minted_total": 59,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829",
+   "conjecturer_calls": {
+    "total": 25,
+    "wire_invalid_or_unknown": 9,
+    "unparseable_blob": 1,
+    "wire_valid": 16
+   },
+   "conj_events": 9,
+   "candidates_written": {
+    "prose_only": 63
+   },
+   "artifacts_minted": {
+    "battery_carrying": 51
+   },
+   "candidates_written_total": 63,
+   "artifacts_minted_total": 51,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "conjecturer_calls": {
+    "total": 16,
+    "wire_valid": 12,
+    "wire_invalid_or_unknown": 4
+   },
+   "conj_events": 6,
+   "candidates_written": {
+    "prose_only": 41
+   },
+   "artifacts_minted": {
+    "battery_carrying": 35
+   },
+   "candidates_written_total": 41,
+   "artifacts_minted_total": 35,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+   "conjecturer_calls": {
+    "total": 15,
+    "wire_invalid_or_unknown": 6,
+    "unparseable_blob": 1,
+    "wire_valid": 9
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 30
+   },
+   "artifacts_minted": {
+    "battery_carrying": 18
+   },
+   "candidates_written_total": 30,
+   "artifacts_minted_total": 18,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea",
+   "conjecturer_calls": {
+    "total": 25,
+    "wire_valid": 19,
+    "wire_invalid_or_unknown": 6,
+    "unparseable_blob": 1
+   },
+   "conj_events": 11,
+   "candidates_written": {
+    "prose_only": 63
+   },
+   "artifacts_minted": {
+    "battery_carrying": 59
+   },
+   "candidates_written_total": 63,
+   "artifacts_minted_total": 59,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1",
+   "conjecturer_calls": {
+    "total": 37,
+    "wire_valid": 24,
+    "wire_invalid_or_unknown": 13
+   },
+   "conj_events": 10,
+   "candidates_written": {
+    "prose_only": 66
+   },
+   "artifacts_minted": {
+    "battery_carrying": 55
+   },
+   "candidates_written_total": 66,
+   "artifacts_minted_total": 55,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7",
+   "conjecturer_calls": {
+    "total": 30,
+    "wire_valid": 23,
+    "wire_invalid_or_unknown": 7
+   },
+   "conj_events": 9,
+   "candidates_written": {
+    "prose_only": 62
+   },
+   "artifacts_minted": {
+    "battery_carrying": 50
+   },
+   "candidates_written_total": 62,
+   "artifacts_minted_total": 50,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70",
+   "conjecturer_calls": {
+    "total": 20,
+    "wire_valid": 17,
+    "wire_invalid_or_unknown": 3
+   },
+   "conj_events": 10,
+   "candidates_written": {
+    "prose_only": 65
+   },
+   "artifacts_minted": {
+    "battery_carrying": 59
+   },
+   "candidates_written_total": 65,
+   "artifacts_minted_total": 59,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b",
+   "conjecturer_calls": {
+    "total": 30,
+    "wire_valid": 20,
+    "wire_invalid_or_unknown": 10
+   },
+   "conj_events": 10,
+   "candidates_written": {
+    "prose_only": 66
+   },
+   "artifacts_minted": {
+    "battery_carrying": 54
+   },
+   "candidates_written_total": 66,
+   "artifacts_minted_total": 54,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913",
+   "conjecturer_calls": {
+    "total": 16,
+    "wire_valid": 14,
+    "wire_invalid_or_unknown": 2
+   },
+   "conj_events": 14,
+   "candidates_written": {
+    "prose_only": 77
+   },
+   "artifacts_minted": {
+    "battery_carrying": 77
+   },
+   "candidates_written_total": 77,
+   "artifacts_minted_total": 77,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008",
+   "conjecturer_calls": {
+    "total": 44,
+    "wire_valid": 25,
+    "wire_invalid_or_unknown": 19
+   },
+   "conj_events": 13,
+   "candidates_written": {
+    "prose_only": 71
+   },
+   "artifacts_minted": {
+    "battery_carrying": 61
+   },
+   "candidates_written_total": 71,
+   "artifacts_minted_total": 61,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+   "conjecturer_calls": {
+    "total": 25,
+    "wire_valid": 18,
+    "wire_invalid_or_unknown": 7
+   },
+   "conj_events": 11,
+   "candidates_written": {
+    "prose_only": 67
+   },
+   "artifacts_minted": {
+    "battery_carrying": 61
+   },
+   "candidates_written_total": 67,
+   "artifacts_minted_total": 61,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726",
+   "conjecturer_calls": {
+    "total": 32,
+    "wire_invalid_or_unknown": 12,
+    "wire_valid": 20,
+    "unparseable_blob": 1
+   },
+   "conj_events": 10,
+   "candidates_written": {
+    "prose_only": 68
+   },
+   "artifacts_minted": {
+    "battery_carrying": 57
+   },
+   "candidates_written_total": 68,
+   "artifacts_minted_total": 57,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06",
+   "conjecturer_calls": {
+    "total": 24,
+    "wire_valid": 20,
+    "wire_invalid_or_unknown": 4
+   },
+   "conj_events": 12,
+   "candidates_written": {
+    "prose_only": 78
+   },
+   "artifacts_minted": {
+    "battery_carrying": 72
+   },
+   "candidates_written_total": 78,
+   "artifacts_minted_total": 72,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+   "conjecturer_calls": {
+    "total": 16,
+    "wire_valid": 12,
+    "wire_invalid_or_unknown": 4
+   },
+   "conj_events": 12,
+   "candidates_written": {
+    "prose_only": 58
+   },
+   "artifacts_minted": {
+    "battery_carrying": 58
+   },
+   "candidates_written_total": 58,
+   "artifacts_minted_total": 58,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd",
+   "conjecturer_calls": {
+    "total": 18,
+    "wire_valid": 18
+   },
+   "conj_events": 18,
+   "candidates_written": {
+    "prose_only": 91
+   },
+   "artifacts_minted": {
+    "battery_carrying": 91
+   },
+   "candidates_written_total": 91,
+   "artifacts_minted_total": 91,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484",
+   "conjecturer_calls": {
+    "total": 11,
+    "wire_valid": 9,
+    "wire_invalid_or_unknown": 2
+   },
+   "conj_events": 9,
+   "candidates_written": {
+    "prose_only": 52
+   },
+   "artifacts_minted": {
+    "battery_carrying": 52
+   },
+   "candidates_written_total": 52,
+   "artifacts_minted_total": 52,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+   "conjecturer_calls": {
+    "total": 49,
+    "wire_valid": 47,
+    "wire_invalid_or_unknown": 2,
+    "unparseable_blob": 1
+   },
+   "conj_events": 42,
+   "candidates_written": {
+    "prose_only": 250
+   },
+   "artifacts_minted": {
+    "prose_only": 155,
+    "battery_carrying": 95
+   },
+   "candidates_written_total": 250,
+   "artifacts_minted_total": 250,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d",
+   "conjecturer_calls": {
+    "total": 4,
+    "wire_invalid_or_unknown": 4,
+    "unparseable_blob": 2
+   },
+   "conj_events": 0,
+   "candidates_written": {
+    "prose_only": 1
+   },
+   "artifacts_minted": {},
+   "candidates_written_total": 1,
+   "artifacts_minted_total": 0,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d",
+   "conjecturer_calls": {
+    "total": 7,
+    "wire_invalid_or_unknown": 4,
+    "unparseable_blob": 2,
+    "wire_valid": 3
+   },
+   "conj_events": 0,
+   "candidates_written": {
+    "prose_only": 4
+   },
+   "artifacts_minted": {},
+   "candidates_written_total": 4,
+   "artifacts_minted_total": 0,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d",
+   "conjecturer_calls": {
+    "total": 14,
+    "wire_invalid_or_unknown": 6,
+    "unparseable_blob": 2,
+    "wire_valid": 8
+   },
+   "conj_events": 0,
+   "candidates_written": {
+    "prose_only": 3
+   },
+   "artifacts_minted": {},
+   "candidates_written_total": 3,
+   "artifacts_minted_total": 0,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "conjecturer_calls": {
+    "total": 24,
+    "wire_valid": 20,
+    "wire_invalid_or_unknown": 4,
+    "unparseable_blob": 1
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 36
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 36,
+   "artifacts_minted_total": 24,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4",
+   "conjecturer_calls": {
+    "total": 4,
+    "wire_valid": 4
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 24
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 24,
+   "artifacts_minted_total": 24,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c",
+   "conjecturer_calls": {
+    "total": 17,
+    "wire_valid": 11,
+    "wire_invalid_or_unknown": 6
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 27,
+    "with_checker": 1
+   },
+   "artifacts_minted": {
+    "battery_carrying": 18
+   },
+   "candidates_written_total": 28,
+   "artifacts_minted_total": 18,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-22-live-reach-rich-run/run",
+   "conjecturer_calls": {
+    "total": 8,
+    "wire_valid": 6,
+    "wire_invalid_or_unknown": 2
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 24
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 24,
+   "artifacts_minted_total": 24,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run",
+   "conjecturer_calls": {
+    "total": 14,
+    "wire_valid": 13,
+    "wire_invalid_or_unknown": 1
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 29
+   },
+   "artifacts_minted": {
+    "battery_carrying": 23
+   },
+   "candidates_written_total": 29,
+   "artifacts_minted_total": 23,
+   "label": null
+  },
+  {
+   "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+   "conjecturer_calls": {
+    "total": 84,
+    "wire_invalid_or_unknown": 14,
+    "wire_valid": 70,
+    "unparseable_blob": 6
+   },
+   "conj_events": 45,
+   "candidates_written": {
+    "prose_only": 224,
+    "with_checker": 1
+   },
+   "artifacts_minted": {
+    "battery_carrying": 214
+   },
+   "candidates_written_total": 225,
+   "artifacts_minted_total": 214,
+   "label": null
+  },
+  {
+   "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+   "conjecturer_calls": {
+    "total": 10,
+    "wire_valid": 7,
+    "wire_invalid_or_unknown": 3
+   },
+   "conj_events": 6,
+   "candidates_written": {
+    "prose_only": 36
+   },
+   "artifacts_minted": {
+    "battery_carrying": 36
+   },
+   "candidates_written_total": 36,
+   "artifacts_minted_total": 36,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+   "conjecturer_calls": {
+    "total": 24,
+    "wire_invalid_or_unknown": 4,
+    "wire_valid": 20
+   },
+   "conj_events": 8,
+   "candidates_written": {
+    "prose_only": 58
+   },
+   "artifacts_minted": {
+    "battery_carrying": 42
+   },
+   "candidates_written_total": 58,
+   "artifacts_minted_total": 42,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+   "conjecturer_calls": {
+    "total": 24,
+    "wire_invalid_or_unknown": 2,
+    "wire_valid": 22
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 25
+   },
+   "artifacts_minted": {
+    "battery_carrying": 18
+   },
+   "candidates_written_total": 25,
+   "artifacts_minted_total": 18,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5",
+   "conjecturer_calls": {
+    "total": 17,
+    "wire_invalid_or_unknown": 4,
+    "wire_valid": 13
+   },
+   "conj_events": 1,
+   "candidates_written": {
+    "prose_only": 20
+   },
+   "artifacts_minted": {
+    "battery_carrying": 6
+   },
+   "candidates_written_total": 20,
+   "artifacts_minted_total": 6,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7",
+   "conjecturer_calls": {
+    "total": 15,
+    "wire_invalid_or_unknown": 6,
+    "unparseable_blob": 3,
+    "wire_valid": 9
+   },
+   "conj_events": 1,
+   "candidates_written": {
+    "prose_only": 9
+   },
+   "artifacts_minted": {
+    "battery_carrying": 6
+   },
+   "candidates_written_total": 9,
+   "artifacts_minted_total": 6,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593",
+   "conjecturer_calls": {
+    "total": 17,
+    "wire_invalid_or_unknown": 4,
+    "unparseable_blob": 2,
+    "wire_valid": 13
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 15
+   },
+   "artifacts_minted": {
+    "battery_carrying": 15
+   },
+   "candidates_written_total": 15,
+   "artifacts_minted_total": 15,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5",
+   "conjecturer_calls": {
+    "total": 20,
+    "wire_invalid_or_unknown": 4,
+    "wire_valid": 16
+   },
+   "conj_events": 1,
+   "candidates_written": {
+    "prose_only": 20
+   },
+   "artifacts_minted": {
+    "battery_carrying": 6
+   },
+   "candidates_written_total": 20,
+   "artifacts_minted_total": 6,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+   "conjecturer_calls": {
+    "total": 4,
+    "wire_valid": 4
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 22
+   },
+   "artifacts_minted": {
+    "battery_carrying": 22
+   },
+   "candidates_written_total": 22,
+   "artifacts_minted_total": 22,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+   "conjecturer_calls": {
+    "total": 13,
+    "wire_valid": 9,
+    "wire_invalid_or_unknown": 4,
+    "unparseable_blob": 1
+   },
+   "conj_events": 2,
+   "candidates_written": {
+    "prose_only": 22
+   },
+   "artifacts_minted": {
+    "battery_carrying": 10
+   },
+   "candidates_written_total": 22,
+   "artifacts_minted_total": 10,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0",
+   "conjecturer_calls": {
+    "total": 27,
+    "wire_invalid_or_unknown": 8,
+    "unparseable_blob": 2,
+    "wire_valid": 19
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 34
+   },
+   "artifacts_minted": {
+    "battery_carrying": 16
+   },
+   "candidates_written_total": 34,
+   "artifacts_minted_total": 16,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+   "conjecturer_calls": {
+    "total": 26,
+    "wire_invalid_or_unknown": 9,
+    "wire_valid": 17,
+    "unparseable_blob": 1
+   },
+   "conj_events": 8,
+   "candidates_written": {
+    "prose_only": 54
+   },
+   "artifacts_minted": {
+    "battery_carrying": 48
+   },
+   "candidates_written_total": 54,
+   "artifacts_minted_total": 48,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+   "conjecturer_calls": {
+    "total": 25,
+    "wire_valid": 19,
+    "wire_invalid_or_unknown": 6,
+    "unparseable_blob": 1
+   },
+   "conj_events": 5,
+   "candidates_written": {
+    "prose_only": 44
+   },
+   "artifacts_minted": {
+    "battery_carrying": 29
+   },
+   "candidates_written_total": 44,
+   "artifacts_minted_total": 29,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a",
+   "conjecturer_calls": {
+    "total": 14,
+    "wire_valid": 10,
+    "wire_invalid_or_unknown": 4
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 30
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 30,
+   "artifacts_minted_total": 24,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a",
+   "conjecturer_calls": {
+    "total": 4,
+    "wire_invalid_or_unknown": 1,
+    "wire_valid": 3
+   },
+   "conj_events": 2,
+   "candidates_written": {
+    "prose_only": 12
+   },
+   "artifacts_minted": {
+    "battery_carrying": 12
+   },
+   "candidates_written_total": 12,
+   "artifacts_minted_total": 12,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a",
+   "conjecturer_calls": {
+    "total": 29,
+    "wire_invalid_or_unknown": 6,
+    "wire_valid": 23,
+    "unparseable_blob": 1
+   },
+   "conj_events": 2,
+   "candidates_written": {
+    "prose_only": 26
+   },
+   "artifacts_minted": {
+    "battery_carrying": 12
+   },
+   "candidates_written_total": 26,
+   "artifacts_minted_total": 12,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100",
+   "conjecturer_calls": {
+    "total": 6,
+    "wire_invalid_or_unknown": 3,
+    "unparseable_blob": 1,
+    "wire_valid": 3
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 16
+   },
+   "artifacts_minted": {
+    "battery_carrying": 16
+   },
+   "candidates_written_total": 16,
+   "artifacts_minted_total": 16,
+   "label": null
+  },
+  {
+   "root": "experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be",
+   "conjecturer_calls": {
+    "total": 9,
+    "wire_valid": 4,
+    "wire_invalid_or_unknown": 5
+   },
+   "conj_events": 2,
+   "candidates_written": {
+    "prose_only": 27
+   },
+   "artifacts_minted": {
+    "battery_carrying": 10
+   },
+   "candidates_written_total": 27,
+   "artifacts_minted_total": 10,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+   "conjecturer_calls": {
+    "total": 23,
+    "wire_invalid_or_unknown": 8,
+    "wire_valid": 15
+   },
+   "conj_events": 7,
+   "candidates_written": {
+    "prose_only": 46
+   },
+   "artifacts_minted": {
+    "battery_carrying": 40
+   },
+   "candidates_written_total": 46,
+   "artifacts_minted_total": 40,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+   "conjecturer_calls": {
+    "total": 9,
+    "wire_valid": 4,
+    "wire_invalid_or_unknown": 5
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 24
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 24,
+   "artifacts_minted_total": 24,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345",
+   "conjecturer_calls": {
+    "total": 13,
+    "wire_valid": 10,
+    "wire_invalid_or_unknown": 3
+   },
+   "conj_events": 2,
+   "candidates_written": {
+    "prose_only": 24
+   },
+   "artifacts_minted": {
+    "battery_carrying": 12
+   },
+   "candidates_written_total": 24,
+   "artifacts_minted_total": 12,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+   "conjecturer_calls": {
+    "total": 12,
+    "wire_valid": 10,
+    "wire_invalid_or_unknown": 2
+   },
+   "conj_events": 9,
+   "candidates_written": {
+    "prose_only": 52
+   },
+   "artifacts_minted": {
+    "battery_carrying": 52
+   },
+   "candidates_written_total": 52,
+   "artifacts_minted_total": 52,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03",
+   "conjecturer_calls": {
+    "total": 7,
+    "wire_invalid_or_unknown": 3,
+    "wire_valid": 4
+   },
+   "conj_events": 3,
+   "candidates_written": {
+    "prose_only": 18
+   },
+   "artifacts_minted": {
+    "battery_carrying": 18
+   },
+   "candidates_written_total": 18,
+   "artifacts_minted_total": 18,
+   "label": null
+  },
+  {
+   "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+   "conjecturer_calls": {
+    "total": 4,
+    "wire_valid": 4
+   },
+   "conj_events": 4,
+   "candidates_written": {
+    "prose_only": 24
+   },
+   "artifacts_minted": {
+    "battery_carrying": 24
+   },
+   "candidates_written_total": 24,
+   "artifacts_minted_total": 24,
+   "label": null
+  }
+ ]
+}
