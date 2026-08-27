@@ -535,3 +535,52 @@ Both are measurements in their own right, and together they say something the
 successful run will not: **the operating envelope for a thinking-ON reasoning
 model on a hard construction question is narrow, and P-C1's inherited seat
 settings sat outside it in two independent ways.**
+
+### APPENDIX A — AMENDMENT 3, 2026-08-26/27: the RUN's token budget
+
+**Appended, never an edit.** This amendment corrects an author's
+misreading, and says so.
+
+**What was misread.** The operator asked to "try 200000 with harness thinking
+on". This document's author read `200000` as the per-call completion cap
+(`max_tokens`) and probed the endpoint for it; the operator clarified that the
+subject was **a 200k harness RUN — the run's TOKEN BUDGET**, the
+`--token-budget` argument, not a seat field. The probe was not wasted (it
+established glm-5.2's hard 131 072 output ceiling, recorded in
+`reasoning_probe.md` PROBE 2) but it answered a question nobody asked.
+
+**The amendment.** ARM H3's run token budget becomes **200 000**, from
+3 000 000. Everything else stands: 24 cycles requested, and the three seat
+fields Amendments 1 and 2 registered.
+
+**Why this changes nothing about run identity, and why that matters here.**
+`--token-budget` is a CLI argument to `deepreason run`, not part of the
+compiled manifest. It moves no manifest byte, no qualification subject digest
+and no run id, so **no requalification and no rebuild** — the amendment is
+strictly a change to when the run STOPS. The re-entry caught it at the ideal
+moment: qualification had passed at 00:25:50 and reasoning had made **zero
+provider calls**, so nothing was spent under the wrong budget.
+
+**WHAT A 200 000 BUDGET BUYS, stated before the run so the result is not
+read as more than it is.** ARM H3's calls at cap 100 000 with thinking ON
+cost roughly 44 000–61 000 tokens each (measured on the retired attempts:
+43 837 and 60 757). So 200 000 buys approximately **THREE TO FIVE CALLS**.
+
+- ARM H2 needed **135 calls** to reach cycle 11.
+- Three to five calls will very likely not complete a single cycle.
+- The expected typed terminal is therefore `budget_exhausted` at cycle 0 or 1.
+
+This is registered as a **SCOUTING RUN**, and it is a sensible one given that
+wall clock — not tokens — became the binding constraint (Amendment 2): it
+answers, cheaply and in under an hour, the question the two retired attempts
+left open, namely **whether a thinking-ON harness call completes AT ALL** at
+these settings. It does NOT answer §6's verdict question, and no §6 verdict
+may be read from it.
+
+**§5's matched-budget rule is unaffected and still binds.** Appendix A's
+shared-stream rule already applies §5 at each arm's own measured `T_H`, so a
+small `T_H3` simply takes a short prefix of ARM S2's stream. The cut stays by
+CUMULATIVE TOKENS ONLY, never by score, and §5.4's 0.95 floor applies to that
+comparison separately. A comparison at ~200 000 tokens is a comparison at
+~200 000 tokens, and RESULTS.md will label it that way rather than beside the
+1 193 009-token ARM H2 figure as though the two were peers.

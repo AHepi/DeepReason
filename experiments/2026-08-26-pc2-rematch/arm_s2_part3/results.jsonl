@@ -1,0 +1,3 @@
+{"index": 0, "error": "The read operation timed out", "tokens": 0}
+{"index": 1, "error": "The read operation timed out", "tokens": 0}
+{"index": 2, "tokens": 22717, "prompt_tokens": 167, "completion_tokens": 22550, "elapsed_s": 172.95, "cumulative_tokens": 22717, "valid": false, "code": "CLAIM_INFLATED", "n_points": 13, "n_triples": 286, "score": 0.00025, "score_exact": "1/4000", "claim": 0.02, "claim_confirmed": false}
