@@ -67,6 +67,7 @@ REACH_RICH = REPO / "experiments" / "2026-08-22-live-reach-rich-run"
 EPOCH3 = REPO / "experiments" / "2026-08-22-change-epoch3-second-lineage"
 POIETICS = REPO / "experiments" / "2026-08-25-poietics-program"
 FRONTIER = REPO / "experiments" / "2026-08-25-change-constructive-frontier"
+SPLIT_LEGS = REPO / "experiments" / "2026-08-27-defect-split-leg-recording"
 
 # The deepest cycle any of the four recorded deaths reached.  A soak that
 # stops at or below this depth has not looked where they died.
@@ -230,6 +231,28 @@ CASES: dict[str, SoakCase] = {
         delegates_to_builder=True,
         # R20's "cycles sized deep"; the launch's own depth, not a sample
         # of it -- the soak must drive the configuration the launch uses.
+        default_cycles=24,
+        default_token_budget=3_000_000,
+    ),
+    "split-legs": SoakCase(
+        id="split-legs",
+        description=(
+            "the P-C1 ARM H constructive shape with the model's REASONING "
+            "MODE ON -- its committed config with the single line "
+            "`reasoning: \"none\"` deleted, which is the whole of the wiring "
+            "that arms llm/split.py's two-leg split-budget protocol under "
+            "its `auto` default. The one case in this file that drives a "
+            "SPLIT seat call, and therefore the one that can see a split "
+            "leg recorded as a repair attempt"
+        ),
+        config_path=SPLIT_LEGS / "run-config.yaml",
+        # The P-C1 builder, unchanged and imported rather than copied: the
+        # shape under test differs from pc1 by the config's one line, so a
+        # second builder could only drift away from it.
+        builder="build_manifest_pc1",
+        builder_dir=FRONTIER,
+        attached_evidence=False,
+        delegates_to_builder=True,
         default_cycles=24,
         default_token_budget=3_000_000,
     ),

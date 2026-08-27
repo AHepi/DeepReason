@@ -1,0 +1,103 @@
+# SPLIT-LEGS: the P-C1 ARM H shape with the model's REASONING MODE ON.
+#
+# This file is `../2026-08-25-change-constructive-frontier/run-config.yaml`
+# with EXACTLY ONE LINE DELETED -- `reasoning: "none"`. That deletion is the
+# whole of the wiring under test:
+#
+#   `reasoning_disabled` treats UNSET as NOT OFF, so a reasoning model with
+#   no explicit setting still thinks; and `llm/split.py`'s "auto" mode (the
+#   Config default) splits exactly the seats whose ROUTE says they think.
+#   So removing this one line arms the two-leg split-budget protocol with no
+#   Config knob and no code edit.
+#
+# One deleted line is the entire instrument, and deliberately so: anything
+# else that differed would make a green soak ambiguous about which change
+# bought it. `tests/test_split_leg_recording.py` ASSERTS the one-line diff
+# rather than trusting this comment.
+#
+# The P-C1 header follows, unchanged.
+#
+# P-C1 ARM H: SOLO source configuration, everything on, NO JUDGE.
+#
+# SPEC.md S7, REQUEST.md R20 ("solo run, everything on") and R15
+# ("demonstrative criticism, no judge anywhere").
+#
+# Every V3 canonical role sits on ONE route -- glm-5.2 on Ollama Cloud.
+# Config.roles defaults to {} and any role omitted gets zero routes, so
+# every role is populated explicitly even though they share one profile.
+#
+# WHY NO JUDGE, WHEN "EVERYTHING ON" IS THE BRIEF.  R15 is explicit that
+# criticism here is demonstrative: a candidate's commitment IS its claimed
+# score, and the checker settles it by computation.  A judge seat could
+# only add an opinion about a number that is already decided, which is the
+# one thing this design has no use for.  It also honours the operator's
+# standing caution, recorded in CLAUDE.md's design laws: "turning on judges
+# at all should be done with caution. I would prefer to do without, since
+# they prosecute without any discernable discrimination."
+#
+# The solo-run law is satisfied in the direction that matters: sole-model
+# operation is not locked out of any capability here.  Status-changing
+# criticism still runs -- through the ENGAGED criticism engine below, whose
+# refutations are the predicate battery in criteria.py, not a seat's ruling.
+#
+# EVIDENCE THAT THIS COMBINATION WORKS is the soak, not this comment.
+# P-R1 ran ENGAGED_CRITICISM_AUTHORITY=defended_trial to a typed terminal
+# with ZERO judge calls in twelve cycles, which shows defended trials do
+# not depend on judges firing; but P-R1 had judge seats ENABLED, and this
+# config disables them, so that is a different shape. cycle_soak.py --case
+# pc1 drives THIS shape to cycle 8 offline, and that is what licenses the
+# launch (R26).
+#
+# max_tokens 32768, not 16384: glm-5.2 is a reasoning model and a hard
+# question can burn the whole completion cap on hidden reasoning and emit
+# nothing (typed seat failure). The ledgered response is a bigger cap, not
+# a diagnosis. This question is hard on purpose, so the cap matters more
+# here than in the tranches that pinned it.
+
+roles:
+  conjecturer: &solo_glm
+    endpoint: https://ollama.com/v1
+    endpoint_id: ollama-glm-5.2
+    provider: ollama
+    model: glm-5.2
+    model_revision: glm-5.2
+    family: glm
+    api_key_env: OLLAMA_API_KEY
+    context_window_tokens: 131072
+    max_tokens: 32768
+    timeout_s: 180
+    output_mode: json_object
+  argumentative_critic: *solo_glm
+  defender: *solo_glm
+  variator: *solo_glm
+  judge: *solo_glm
+  summarizer: *solo_glm
+  synthesizer: *solo_glm
+  vision_critic: *solo_glm
+  property_designer: *solo_glm
+  thesis: *solo_glm
+  grounding_reviewer: *solo_glm
+
+# "Everything on" (R20), stated explicitly rather than inherited, because
+# several of these ship the other way and silence would read as a copy of
+# the reach-rich config rather than as a decision.
+SCHOOL_SEATS_ENABLED: true
+ADJUDICATION_STATUS_AUTHORITY_ENABLED: true
+
+# The one deliberate exception to "everything on", required by R15.
+JUDGE_SEATS_ENABLED: false
+
+# ARGUMENTATIVE_AUTHORITY stays at its shipped default. Declaring it
+# "trial_required" trips CALIBRATION_RECEIPT_REQUIRED for ANY text workload
+# (authority.py::_preflight_text_authority) whose verifier is a permanent
+# stub that can never pass. Real status-changing authority comes through
+# the engaged criticism engine below, which that wall never inspects --
+# the route P-R1 and the grounded-extension tranche both took.
+ARGUMENTATIVE_AUTHORITY: observe_only
+ENGAGED_CRITICISM_AUTHORITY: defended_trial
+LEGACY_CRITICISM_ENABLED: false
+
+# Research backend ON. The field's shipped default is "agent", but
+# "everything on" must be written down rather than inherited: the
+# reach-rich config sets it to null, so silence here would read as a copy.
+RESEARCH_BACKEND: agent
