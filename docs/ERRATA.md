@@ -1539,3 +1539,40 @@ the only acceptable result) and a way to get the current number, which
 
 Evidence: `experiments/2026-08-26-change-f1-discharge-criticism-channel/`
 CHECKLIST.md steps 18 and 29 (both runs pasted), VALIDATION.md "Full gate".
+
+---
+
+## 2026-08-27 (the split-budget leg recording defect)
+
+**E59 — `docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` filed the two-call split
+leg under "Unexercised — nothing here is broken", and it was broken.** That
+document's §3.2 opens "Nothing here is broken. Each is a path that exists, is
+believed sound, and has never been driven far enough by a committed run to be
+tested", and item 1 is the two-call split leg, correctly counted as 0 of 3 155
+attempts carrying a non-empty `split_leg`.
+
+The census is right and the verdict is wrong. Driven one day later, the path
+produced a REPLAY-INVALID record every time: 260 `verify_root` violations
+across four checks on a run that CONVERGED, plus an
+`LLMAttempt.prompt_ref=None` operational failure on its stand-down path. The
+protocol wrote its two legs into `attempt_trace`, which `verify_root` reads as
+a repair ladder.
+
+The correction is to the INFERENCE, not the count, and it generalises: **"never
+exercised" licenses no verdict about soundness in either direction.** §3.2's
+own framing ("believed sound") is doing the work of a measurement it explicitly
+says was never taken, and a reader scanning that section for risk would have
+skipped the one item that was about to stop a launch. The neighbouring §3.3
+item 4 cross-reference makes the same path visible twice under the same
+verdict.
+
+Corrected by the tranche rather than in place: the mechanism is fixed, so the
+item is no longer unexercised. Recorded here because the SHAPE of the error —
+a confident "nothing here is broken" over a set defined by not having been
+tested — is the part that will recur in the next such synthesis.
+
+Evidence: `experiments/2026-08-27-defect-split-leg-recording/` (REPRO.md for
+the 260 violations and the byte-identical crash; RESULTS.md for the before/after
+table), `experiments/2026-08-27-pc2b-symmetric-reasoning/BLOCKER.md` at
+`ee0563cf1` for the independent first sighting, and
+`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` §3.2 item 1 for the claim.
