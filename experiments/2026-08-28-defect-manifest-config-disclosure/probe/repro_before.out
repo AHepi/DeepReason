@@ -1,0 +1,13 @@
+manifest.criticism_policy = None
+manifest.compile_notices  = (CompileNoticeV1(code='SECOND_JUDGE_FAMILY_REQUIRED', message='rubric workloads require at least two frozen judge families; supply --judge-family or use --rubric-policy forbid only for program/predicate workloads', pointer='/roles/judge', resolution=None),)
+
+  REVERTED JUDGE_SEATS_ENABLED                      configured=True             run time=False
+  REVERTED ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True             run time=False
+  REVERTED ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial' run time='observe_only'
+  REVERTED LEGACY_CRITICISM_ENABLED                 configured=False            run time=True
+  REVERTED SCHOOL_SEATS_ENABLED                     configured=True             run time=False
+
+  reverted: 5 of 5
+  disclosed in compile_notices: 0
+
+DEFECT REPRODUCED: silently reverted with no notice: ['JUDGE_SEATS_ENABLED', 'ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
