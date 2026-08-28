@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: HEADSHA
+Verified-at: a40450f1c
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
