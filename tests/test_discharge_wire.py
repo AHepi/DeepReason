@@ -193,13 +193,27 @@ def test_the_qualification_subject_digest_does_not_move():
     The qualification subject embeds `contract_id` STRINGS and the manifest, not
     any wire schema, so a wire field cannot reach it. Surface 5 stays at zero
     for this half of the tranche, and it is checked rather than argued.
+
+    The constant moved on 2026-08-28 (execution-safety tranche) because the
+    MANIFEST half changed, which is exactly what this pin is supposed to be
+    sensitive to: the default simulation runner became the contained one, so
+    the compiled policy binds `python@deepreason-public-contained.v1` and the
+    contained envelope's bounds. The claim this test makes — that a WIRE field
+    cannot reach the subject — is untouched; a manifest change reaching it is
+    the pin working, not the pin failing.
+
+        b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386  before
+        02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713  after
+
+    Priced before the code: that tranche's REQUEST.md C6 and its DELIVERY.md
+    state the ~14-minute requalification per home as the cost of the default.
     """
     from deepreason.qualification import qualification_subject_digest
     from tests.test_reusable_qualification import _manifest, _profile
 
     profile = _profile()
     assert qualification_subject_digest(_manifest(profile), profile) == (
-        "b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386"
+        "02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713"
     )
 
 

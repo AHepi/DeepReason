@@ -60,7 +60,7 @@ from deepreason.v6_policy import (
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
     engaged_inquiry_capability_policy,
-    engaged_local_simulation_toolchain,
+    engaged_simulation_toolchain,
     engaged_simulation_policy,
 )
 from tests.test_cli_production_doctor_v6 import _admitted_case
@@ -562,9 +562,12 @@ def test_public_manifest_enables_declarative_local_simulation():
     simulation = capabilities.simulation
     assert simulation == engaged_simulation_policy()
     assert simulation.enabled is True
-    # Declarative-numeric only, one bounded proposal per turn, no sealed
-    # inputs in question-only public preparation.
-    assert simulation.runner_profile == "simulation.declarative.v1"
+    # The CONTAINED runner since 2026-08-28, so model-authored
+    # `sandboxed_python_v1` executes on a run nobody configured. Declarative
+    # numeric documents still run too — the container profile serves both, and
+    # is the stronger home for the harness-compiled one. One bounded proposal
+    # per turn, no sealed inputs in question-only public preparation.
+    assert simulation.runner_profile == "simulation.container.v1"
     assert simulation.maximum_proposals_per_turn == 1
     assert simulation.input_catalog == ()
     # Research became a default-ON evidence channel in F3 (2026-08-26) --
@@ -580,11 +583,13 @@ def test_public_manifest_enables_declarative_local_simulation():
     assert capabilities.research.domain_allowlist
     assert capabilities.research.maximum_requests > 0
     assert capabilities.research.maximum_sources > 0
-    # One frozen local no-network toolchain, pinned to the preparing
-    # interpreter rather than any hardcoded path.
+    # One frozen no-network toolchain, pinned to the preparing interpreter
+    # rather than any hardcoded path, and PAIRED with the runner the policy
+    # names — a configuration must never carry a toolchain its runner cannot
+    # dispatch to.
     (toolchain,) = manifest.toolchains
     assert toolchain.id == simulation.python_toolchain_identity
-    assert toolchain.runner == "local"
+    assert toolchain.runner == "container"
     assert toolchain.network is False
     assert toolchain.executable == str(Path(sys.executable).resolve())
 
@@ -630,7 +635,10 @@ def _public_preset_mock_manifest():
         criticism_policy=engaged_criticism_policy("critic-route-0"),
         inquiry_capability_policy=engaged_inquiry_capability_policy(),
         run_input_digest="f" * 64,
-        toolchains=(engaged_local_simulation_toolchain(),),
+        # Track the ENGAGED policy rather than hardcoding the local toolchain:
+        # the manifest validator requires the bound toolchain to match the
+        # policy's runner, and the default runner changed on 2026-08-28.
+        toolchains=(engaged_simulation_toolchain(),),
     )
     return config, manifest
 
@@ -761,7 +769,10 @@ def _legacy_criticism_mock_manifest():
         criticism_policy=None,
         inquiry_capability_policy=engaged_inquiry_capability_policy(),
         run_input_digest="f" * 64,
-        toolchains=(engaged_local_simulation_toolchain(),),
+        # Track the ENGAGED policy rather than hardcoding the local toolchain:
+        # the manifest validator requires the bound toolchain to match the
+        # policy's runner, and the default runner changed on 2026-08-28.
+        toolchains=(engaged_simulation_toolchain(),),
     )
     return config, manifest
 

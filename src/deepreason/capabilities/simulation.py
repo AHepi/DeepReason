@@ -150,13 +150,37 @@ class SimulationCapabilityController:
                 and toolchain.version_output_sha256 == sha256_hex(version.encode("utf-8"))
                 and ContainedSimulationBackend.containment_available()
             )
+        # A declarative-numeric program runs under EITHER profile, and this
+        # asymmetry with the branch above is the point rather than an
+        # oversight. Its executed source is HARNESS-authored -- compiled from a
+        # validated document by `compile_declarative_numeric` -- so the
+        # container profile is not a weaker home for it but a strictly stronger
+        # one: the same trusted program, additionally inside an unshared
+        # network namespace.
+        #
+        # Binding it to the declarative profile alone was what made the
+        # 2026-08-28 default flip a trade rather than a fix: with the contained
+        # runner as the default, every declarative_numeric_v1 proposal would
+        # have been denied `runner_profile_mismatch` -- the exact defect this
+        # tranche exists to remove, pointed the other way.
+        if proposal.simulation_mode != "declarative_numeric_v1":
+            return False
+        if toolchain.network is not False:
+            return False
+        if Path(toolchain.executable).resolve() != Path(sys.executable).resolve():
+            return False
+        if toolchain.version_output_sha256 != sha256_hex(version.encode("utf-8")):
+            return False
+        if self.policy.runner_profile == "simulation.container.v1":
+            from deepreason.verification.contained import ContainedSimulationBackend
+
+            return (
+                toolchain.runner == "container"
+                and ContainedSimulationBackend.containment_available()
+            )
         return (
-            proposal.simulation_mode == "declarative_numeric_v1"
-            and self.policy.runner_profile == "simulation.declarative.v1"
+            self.policy.runner_profile == "simulation.declarative.v1"
             and toolchain.runner == "local"
-            and toolchain.network is False
-            and Path(toolchain.executable).resolve() == Path(sys.executable).resolve()
-            and toolchain.version_output_sha256 == sha256_hex(version.encode("utf-8"))
         )
 
     def _compile_inputs(self, proposal: SimulationProposalV1) -> tuple[bytes, str | None]:
@@ -578,12 +602,15 @@ class SimulationCapabilityController:
         ):
             reason = "generated_code_bytes_exceeded"
 
-        expected_profile = (
-            "simulation.declarative.v1"
-            if proposal.simulation_mode == "declarative_numeric_v1"
-            else "simulation.container.v1"
-        )
-        if self.policy.runner_profile != expected_profile:
+        # Model-authored Python requires the contained runner and nothing else.
+        # A declarative-numeric document runs under either profile, because its
+        # executed source is harness-compiled rather than model-authored -- see
+        # the readiness check above for why the container profile is the
+        # stronger home for it, not a weaker one.
+        if (
+            proposal.simulation_mode == "sandboxed_python_v1"
+            and self.policy.runner_profile != "simulation.container.v1"
+        ):
             reason = reason or "runner_profile_mismatch"
         if reason is None:
             try:

@@ -6,6 +6,7 @@ from deepreason.config import BridgeConfig, Config
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     PUBLIC_SCHOOL_COUNT,
+    PUBLIC_CONTAINED_TOOLCHAIN_ID,
     PUBLIC_SIMULATION_TOOLCHAIN_ID,
     conservative_control_plane_policy_v3,
     conservative_policy_digest,
@@ -128,24 +129,29 @@ def test_engaged_policy_digest_reflects_the_bridge_source():
     assert engaged_policy_digest() != without_bridge
 
 
-def test_engaged_simulation_policy_is_declarative_local_and_modest():
+def test_engaged_simulation_policy_is_contained_and_modest():
     policy = engaged_simulation_policy()
 
     assert policy.enabled is True
-    # Declarative-numeric only: no model-authored Python can reach the
-    # local subprocess backend under this runner profile.
-    assert policy.runner_profile == "simulation.declarative.v1"
-    assert policy.python_toolchain_identity == PUBLIC_SIMULATION_TOOLCHAIN_ID
+    # The CONTAINED runner since 2026-08-28: model-authored `sandboxed_python_v1`
+    # executes, inside an unshared network namespace with hard rlimits and a
+    # fail-closed refusal when containment is unavailable. Model-authored Python
+    # still never reaches the LOCAL subprocess backend — that pairing is what
+    # `_ready_for_dispatch` refuses. The bounds are the contained envelope's:
+    # a larger code allowance than the declarative DSL needs, the same modest
+    # request budget.
+    assert policy.runner_profile == "simulation.container.v1"
+    assert policy.python_toolchain_identity == PUBLIC_CONTAINED_TOOLCHAIN_ID
     assert policy.maximum_simulation_requests == 2
     assert policy.maximum_simulation_executions == 2
     assert policy.maximum_proposals_per_turn == 1
-    assert policy.maximum_generated_code_bytes == 16_384
+    assert policy.maximum_generated_code_bytes == 65_536
     assert policy.maximum_input_bytes == 16_384
-    assert policy.maximum_output_bytes == 16_384
-    assert policy.maximum_wall_ms == 10_000
-    assert policy.maximum_memory_bytes == 256 * 1024 * 1024
-    assert policy.maximum_steps == 50_000
-    assert policy.maximum_samples == 32
+    assert policy.maximum_output_bytes == 65_536
+    assert policy.maximum_wall_ms == 20_000
+    assert policy.maximum_memory_bytes == 512 * 1024 * 1024
+    assert policy.maximum_steps == 2_000_000
+    assert policy.maximum_samples == 64
     assert policy.deterministic_seed_policy == "fixed_manifest"
     assert policy.fixed_seed_set == (7,)
     assert policy.maximum_follow_up_reasoning_turns == 2

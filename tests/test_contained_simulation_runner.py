@@ -259,34 +259,62 @@ def test_policy_pairs_container_profile_with_contained_backend():
     assert paired.backend_identity == "simulation-python-contained"
 
 
-def test_engaged_preset_default_is_byte_identical_declarative():
+def test_engaged_preset_default_is_the_contained_runner():
+    """The default INVERTED on 2026-08-28 (execution-safety tranche).
+
+    It was `declarative`, which refused every `sandboxed_python_v1` proposal,
+    so model-authored code execution was off for any run nobody had configured
+    — four live epochs' worth (commit `74d9f71ca`). The operator authorized the
+    switch conditional on a safety verdict; the verdict is at
+    `experiments/2026-08-27-change-execution-safety/SAFETY.md`.
+
+    Both spellings of the default agree, so an explicit `contained` is not a
+    different subject from an unset variable.
+    """
+
     policy = engaged_simulation_policy({})
-    assert policy.runner_profile == "simulation.declarative.v1"
-    assert policy.backend_identity == "simulation-python"
-    assert policy.python_toolchain_identity == PUBLIC_SIMULATION_TOOLCHAIN_ID
-    # The opt-out spellings are equivalent to the historical preset bytes.
-    assert (
-        engaged_simulation_policy({"DEEPREASON_SIMULATION_RUNNER": "declarative"})
-        == policy
-    )
-    toolchain = engaged_simulation_toolchain({})
-    assert toolchain.runner == "local"
-    assert toolchain.id == PUBLIC_SIMULATION_TOOLCHAIN_ID
-
-
-def test_engaged_preset_contained_opt_in_switches_subject():
-    environ = {"DEEPREASON_SIMULATION_RUNNER": "contained"}
-    policy = engaged_simulation_policy(environ)
     assert policy.runner_profile == "simulation.container.v1"
     assert policy.backend_identity == "simulation-python-contained"
     assert policy.python_toolchain_identity == PUBLIC_CONTAINED_TOOLCHAIN_ID
-    assert policy.digest != engaged_simulation_policy({}).digest
-    toolchain = engaged_simulation_toolchain(environ)
+    assert (
+        engaged_simulation_policy({"DEEPREASON_SIMULATION_RUNNER": "contained"})
+        == policy
+    )
+    toolchain = engaged_simulation_toolchain({})
     assert toolchain.runner == "container"
     assert toolchain.id == PUBLIC_CONTAINED_TOOLCHAIN_ID
+
+
+def test_engaged_preset_declarative_choice_switches_subject():
+    """The declarative profile survives as a NAMED choice, not a deletion.
+
+    It is the right configuration for a host that cannot create namespaces and
+    for a run that wants numeric models rather than programs. Naming it is a
+    different compiled policy, hence a different qualification subject —
+    exactly as the contained opt-in used to be, with the roles swapped.
+    """
+
+    environ = {"DEEPREASON_SIMULATION_RUNNER": "declarative"}
+    policy = engaged_simulation_policy(environ)
+    assert policy.runner_profile == "simulation.declarative.v1"
+    assert policy.backend_identity == "simulation-python"
+    assert policy.python_toolchain_identity == PUBLIC_SIMULATION_TOOLCHAIN_ID
+    assert policy.digest != engaged_simulation_policy({}).digest
+    toolchain = engaged_simulation_toolchain(environ)
+    assert toolchain.runner == "local"
+    assert toolchain.id == PUBLIC_SIMULATION_TOOLCHAIN_ID
     assert Path(toolchain.executable) == Path(sys.executable).resolve()
-    with pytest.raises(ValueError, match="declarative.*contained|contained.*declarative"):
-        engaged_simulation_policy({"DEEPREASON_SIMULATION_RUNNER": "docker"})
+
+
+def test_an_unrecognised_runner_no_longer_refuses_at_compile():
+    """It used to raise ValueError. That is a compile-time refusal of an
+    otherwise-parseable configuration, which the all-configurations law
+    abolished (operator, 2026-08-12: "All configurations should be allowed").
+    It now resolves to the default and is DISCLOSED — see
+    `tests/test_simulation_runner_default.py` for the notice itself."""
+
+    policy = engaged_simulation_policy({"DEEPREASON_SIMULATION_RUNNER": "docker"})
+    assert policy == engaged_simulation_policy({})
 
 
 def _contained_component_run(tmp_path, **policy_updates):

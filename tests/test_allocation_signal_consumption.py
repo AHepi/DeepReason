@@ -434,8 +434,24 @@ def test_the_shipped_qualification_subject_digest_does_not_move():
         d47cb2bf27021474aa17933bc3dcfeeb5dfb1c23b0cfe49452941aace39088dc  before
         f3bb65623852cf7c5387ba4ef745dc4ebeadb62ca3493416fecfb475c6d80f9e  after
 
+    It moved a SECOND time, deliberately, on 2026-08-28 (execution-safety
+    tranche): the operator asked whether model-authored code execution was safe
+    to switch on and authorized the switch on a safety verdict ("If so switch
+    both on"). The default simulation runner is now the CONTAINED one, so the
+    compiled manifest binds `python@deepreason-public-contained.v1` and the
+    contained envelope's bounds, and every subject built from the engaged
+    preset is a different subject.
+
+        f3bb65623852cf7c5387ba4ef745dc4ebeadb62ca3493416fecfb475c6d80f9e  before
+        83454b08365d695de25e9705892b19eaf14af472a9cd6286aff4f8bf155f8874  after
+
+    Priced before the code, not discovered here: that tranche's REQUEST.md C6
+    and its DELIVERY.md both state the ~14-minute requalification per home as
+    the cost of the default.
+
     The two structural assertions are unchanged and are what this test is
-    actually for; only the constant moved, and it moved for a recorded reason.
+    actually for; only the constant moved, and both times it moved for a
+    recorded reason.
     """
     from deepreason.config import Config
     from deepreason.preparation import qualification_subject_manifest
@@ -446,7 +462,7 @@ def test_the_shipped_qualification_subject_digest_does_not_move():
     manifest = qualification_subject_manifest(profile)
     assert manifest.compile_notices is None
     assert qualification_subject_digest(manifest, profile) == (
-        "f3bb65623852cf7c5387ba4ef745dc4ebeadb62ca3493416fecfb475c6d80f9e"
+        "83454b08365d695de25e9705892b19eaf14af472a9cd6286aff4f8bf155f8874"
     )
     # The three F3 Config knobs are dropped from the versioned source echo, so
     # THEY moved nothing: the digest above is the price of the research
