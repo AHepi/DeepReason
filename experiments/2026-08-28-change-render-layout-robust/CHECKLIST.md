@@ -1,9 +1,9 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 1 next.
+State: step 2 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
-- [ ] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
+- [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
       registered policies, `resolve_layout_policy`, `register_layout_policy`,
       envelope validators, typed unknown-id refusal.
       DONE WHEN: A1's four assertions pass in a new
