@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 8 next.
+State: step 9 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -33,7 +33,7 @@ Spec: SPEC.md. Request: REQUEST.md.
       DONE WHEN: all three limbs pass and limb 1 is RED against a consumer
       patched to ignore its `layout` argument.
 
-- [ ] 8. Map — `CON-packs-and-token-economy.md` gains the new rules and their
+- [x] 8. Map — `CON-packs-and-token-economy.md` gains the new rules and their
       executable checks; new `docs/map/INV-render-layout.md`; `INDEX.md`
       routes to it.
       DONE WHEN: `python tools/docs_verify.py` full run shows no delta beyond

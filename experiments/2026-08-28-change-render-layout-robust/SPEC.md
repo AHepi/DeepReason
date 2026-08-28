@@ -150,6 +150,36 @@ the directive arrives IN FULL and that the pack ends with the question. The
 three assertions carrying the actual claim — criteria present, output-contract
 present, optional memory absent, length above the budget — are unchanged.
 
+**TWO BUDGET RECALIBRATIONS — added 2026-08-28 during execution, recorded
+before the fixtures were touched, and the reason they exist is worth more
+than the fixtures are.** The question restatement makes every conjecturer
+prompt LARGER, and two tests are calibrated to prompt SIZE rather than to
+behaviour:
+
+- `tests/test_chaos_invariants.py::test_budget_exhaustion_mid_retry_still_reconciles`
+  states its own sizing in a comment: "the garbage attempts reserve
+  ~1383/665/651 ... so 1400 admits attempts 1-2 and rejects the third
+  reservation mid-retry". MEASURED after the change, the first reserve is
+  **1418**, not 1383 — the restatement costs 35 tokens on that fixture's tiny
+  problem — so 1400 now rejects the FIRST reservation and the scenario never
+  starts. The admissible window is `[1418, 1426]`: at or above 1418 the first
+  reserve fits, and below 1427 the third (776 + 651) still does not. 1420 is
+  taken, and the comment's numbers are corrected to the measured ones.
+- `tests/test_workflow_shadow_c0.py::test_mid_retry_budget_stop_is_not_reported_as_repair_exhaustion`
+  is the same shape at 1150. Its window after the change is `[1190, 1211]`,
+  measured by sweep; 1200 is taken.
+
+**Neither claim weakens, and the distinction matters.** Both tests assert a
+SHAPE — a budget stop mid-retry is reported as a budget stop and not as repair
+exhaustion, and the meter reconciles with the log exactly at the death. The
+budget number is the calibration that puts the run in that scenario, not the
+claim being made. A budget left at the old value would silently test a
+DIFFERENT scenario (nothing admitted at all), which is how these fixtures
+would rot rather than fail.
+
+**This is also a finding in its own right and is carried into DELIVERY.md: the
+layout change costs tokens, and the cost is measurable.**
+
 A third scan found `tests/test_pack_prefix.py::test_long_critic_target_arrives_whole_rather_than_excerpted`
 also asserting an end-of-pack sentence. That one needed NO fixture change: the
 critic's restatement was written to close with the seat's own directive
