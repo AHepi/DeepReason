@@ -1,6 +1,6 @@
 # Checklist for: make the critic's byte-checked citation channel reachable, and stop it latching shut
 
-State: next=6 blockers=none
+State: next=10 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -53,7 +53,7 @@ written, and this change stays on the rules side of it.
       `python3 tools/diff_budget.py` (or the equivalent line count) is within
       the SPEC.md budget.
 
-- [ ] 6. (S3) Declare `premise-answer:` in `src/deepreason/signals.py`
+- [x] 6. (S3) Declare `premise-answer:` in `src/deepreason/signals.py`
       `_DECLARED_PREFIXES` — producer-agnostic semantics saying what one
       occurrence means, what it is NOT evidence of, `unit="event"`,
       `staleness="permanent"`, no `unspecified` (so `MIGRATION_DEBT` does not
@@ -64,7 +64,7 @@ written, and this change stays on the rules side of it.
       `python -c "from deepreason.signals import is_known, describe; assert is_known('premise-answer:DECLINED'); print(describe('premise-answer:DECLINED'))"`
       prints the declared semantics.
 
-- [ ] 7. (S2) Emit the disposition in `src/deepreason/rules/crit.py`
+- [x] 7. (S2) Emit the disposition in `src/deepreason/rules/crit.py`
       `_file_attribution`: invitation lookup FIRST; uninvited returns None and
       records nothing; invited records exactly one
       `premise-answer:{DECLINED|UNCITED|CITED}` Measure with
@@ -72,7 +72,7 @@ written, and this change stays on the rules side of it.
       done-when: `python -m pytest tests/test_premise_channel_loop.py tests/test_premise_channel.py tests/test_p4_citable_evidence.py -q`
       -> 0 failed (step 1's loop tests now GREEN).
 
-- [ ] 8. (S2, S3, S5) Move `docs/map/CON-criticism-source.md` (the citation trap
+- [x] 8. (S2, S3, S5) Move `docs/map/CON-criticism-source.md` (the citation trap
       at line 137 gains the disposition receipt) and
       `docs/map/SEAM-scheduler-x-rules.md` line 58 (the premise-layer row states
       the ladder) in the SAME change, each with a `check:` that would fail on a
@@ -80,7 +80,7 @@ written, and this change stays on the rules side of it.
       done-when: both new `check:` commands exit 0 by hand, AND
       `python tools/docs_verify.py --fast` reports no NEW failure over baseline.
 
-- [ ] 9. (S2, S3, S5) [COMMIT] Commit the receipt + its declaration + its map
+- [x] 9. (S2, S3, S5) [COMMIT] Commit the receipt + its declaration + its map
       moves together.
       done-when: `git show --stat HEAD` lists `src/deepreason/rules/crit.py`,
       `src/deepreason/signals.py`, `docs/map/CON-criticism-source.md` and

@@ -1414,15 +1414,40 @@ def _file_attribution(
     file work the producer never offered. Registers no problem and moves no
     status (H1) -- the rent battery adjudicates the premise afterwards, on the
     ordinary path, and only the derived predicate marks anything.
+
+    Every INVITED dispatch leaves a typed disposition, which is why the
+    invitation is resolved before the premise text rather than after. The old
+    order returned on an empty premise without ever asking whether an
+    invitation stood, so a seat that was asked and said nothing recorded
+    exactly what a seat that was never asked recorded -- nothing. Across the
+    four committed technique roots that made 93 never-asked dispatches
+    indistinguishable from 4 asked-and-silent ones
+    (`experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md` section F-B).
+    Silence still means NEVER ASKED, and now only that.
+
+    The disposition is derived from the same `_premise_invited_problem` lookup
+    the filing gate uses, not from the invitation the PACK carried: two
+    derivations of one fact can disagree, and the record would then hold two
+    answers to one question.
     """
     from deepreason.premises import file_premise, file_premise_citations
 
-    text = (premise_text or "").strip()
-    if not text:
-        return None
     problem_id = _premise_invited_problem(harness, target_id)
     if problem_id is None:
         return None
+    text = (premise_text or "").strip()
+    if not text:
+        harness.record_measure(
+            inputs=["premise-answer:DECLINED", problem_id, target_id]
+        )
+        return None
+    harness.record_measure(
+        inputs=[
+            "premise-answer:CITED" if premise_evidence else "premise-answer:UNCITED",
+            problem_id,
+            target_id,
+        ]
+    )
     provenance = Provenance(role="critic", school=critic_school_id)
     checks = _check_premise_citations(
         harness, problem_id, premise_evidence or (), llm_call

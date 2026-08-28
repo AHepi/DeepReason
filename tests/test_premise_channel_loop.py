@@ -375,11 +375,18 @@ def test_a_marked_problem_yields_to_unmarked_work(tmp_path, liveness):
 
 # --- the ladder, and the disposition receipt (P11) --------------------------
 
+# Enough distinct rounds for three cycles: the scheduler draws more than one
+# conjecturer payload per cycle, and a MockEndpoint that runs dry is a test
+# failure with nothing to say about the channel.
 _LATE_ROUNDS = (
     ("the colour is red", "it is loud", "it is shrill"),
     ("the colour is grey", "it is piercing", "it is urgent"),
     ("the colour is blue", "it wails", "it rises"),
     ("the colour is amber", "it warns", "it repeats"),
+    ("the colour is teal", "it blares", "it echoes"),
+    ("the colour is white", "it screams", "it fades"),
+    ("the colour is green", "it pulses", "it drones"),
+    ("the colour is black", "it howls", "it throbs"),
 )
 
 
@@ -458,13 +465,18 @@ def test_a_premise_filed_without_citations_is_typed_as_uncited(tmp_path):
     """The third of the four cases the record could not separate: a premise
     WAS filed, and nothing was quoted for it. `_check_premise_citations`
     records nothing when `refs` is empty, so this read as zero too."""
-    harness, scheduler = _late_refutation_run(
-        tmp_path,
-        [
-            json.dumps({"attack": False, "case": ""}),
-            json.dumps({"attack": False, "case": "", "premise": _PREMISE}),
-        ],
-    )
+    calls: list[int] = []
+
+    def critic(prompt: str) -> str:
+        # A one-parameter callable: MockEndpoint passes its knobs as a SECOND
+        # positional argument to anything whose co_argcount is 2, so a default
+        # argument used as a counter silently becomes the knobs dict.
+        calls.append(1)
+        if len(calls) == 2:
+            return json.dumps({"attack": False, "case": "", "premise": _PREMISE})
+        return json.dumps({"attack": False, "case": ""})
+
+    harness, scheduler = _late_refutation_run(tmp_path, critic)
     scheduler.step()
     scheduler.step()
 

@@ -823,6 +823,27 @@ _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
         staleness="permanent",
     ),
     SignalDeclaration(
+        name="premise-answer:",
+        unit="event",
+        semantics="how one critic dispatch ANSWERED a standing premise "
+                  "invitation (suffix = the typed disposition -- DECLINED, "
+                  "UNCITED or CITED; inputs: [signal, problem id, target id]). "
+                  "Emitted only where an invitation actually stood, so its "
+                  "ABSENCE means the dispatch was never asked, and its presence "
+                  "means it was. That difference is the whole point: before "
+                  "this signal, 'asked and said nothing' and 'never asked' both "
+                  "recorded zero, and 93 of 98 dispatches in the committed "
+                  "record were the second while looking like the first. It is "
+                  "evidence about the DISPATCH and nothing else: not evidence "
+                  "that the problem has or lacks a presupposition, not evidence "
+                  "about the quality of any premise filed, and never a penalty "
+                  "-- declining an invitation costs a critic nothing (C5), so "
+                  "no label, rank, warrant or admission decision may read it. "
+                  "CITED says an array was submitted, never that it verified; "
+                  "the byte-check's own outcome is premise-citation:",
+        staleness="permanent",
+    ),
+    SignalDeclaration(
         name="premise-citation:",
         unit="event",
         semantics="one deterministic check of a citation a PREMISE "
