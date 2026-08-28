@@ -1,5 +1,118 @@
 # SAFETY — is it safe to switch model-authored code execution on?
 
+## VERDICT, 2026-08-28 (re-assessment after the fix): **SAFE**
+
+All five containment properties are now code-enforced and demonstrated. The
+tranche's R3 gate therefore passes on its SAFE branch, and the operator's
+standing "If so switch both on" fires (R8).
+
+This section supersedes the 2026-08-27 NOT PROVEN verdict below, which is kept
+in full: it is the record of what was actually true before the fix, and the
+before/after pair is the evidence. Nothing in it is edited.
+
+| Property | 2026-08-27 | 2026-08-28 | What enforces it now |
+|---|---|---|---|
+| (a) no network access | ENFORCED AND PROVEN | **ENFORCED AND PROVEN** | OS network namespace. Contained runner fails CLOSED without it; the code-testing channel now runs behind the SAME probe (`sandbox_os`) where it previously had no OS boundary at all |
+| (b) bounded wall time | ENFORCED AND PROVEN | **ENFORCED AND PROVEN** | `RLIMIT_CPU` + watchdog + process-group kill; `oracle_sandbox` limits now fail CLOSED instead of swallowing every `setrlimit` failure |
+| (c) bounded memory | ENFORCED AND PROVEN | **ENFORCED AND PROVEN** | `RLIMIT_AS`, same fail-closed inversion |
+| (d) file access confined | **ABSENT** | **ENFORCED AND PROVEN** | the attribute boundary (no filesystem primitive is reachable at all), plus ephemeral scratch `cwd` and `RLIMIT_FSIZE` |
+| (e) no privilege beyond the harness | **ABSENT** | **ENFORCED AND PROVEN** | the attribute boundary (no route to `os`/`sys`/`subprocess`), plus `RLIMIT_NPROC`, `RLIMIT_NOFILE`, `setsid`, the scrubbed environment, and the network namespace bounding anything that did get out |
+
+### The evidence, from the same unchanged script
+
+`proof/containment_probe.py` run against both trees. Its own output files:
+
+```
+proof/containment_probe_BEFORE.out          proof/containment_probe_AFTER.out
+  E1  file written OUTSIDE: True              E1  file written OUTSIDE: False
+      verdict=pass                                verdict=fail, ".f_globals" refused
+  E2  os.system('true') -> 0                  E2  refused at parse
+      verdict=pass                                verdict=fail
+  E3  'NETWORK_REACHED'                       E3  marker written: False
+      exec-oracle verdict: pass                   exec-oracle verdict: fail
+```
+
+```
+$ ./experiments/2026-08-27-change-execution-safety/proof/mutation_proof.sh
+=== RED: the historical underscore-only rule ===
+8 failed, 8 passed
+=== GREEN: the boundary restored ===
+17 passed
+```
+
+```
+$ python -m pytest tests/test_sandbox_guard.py tests/test_contained_simulation_runner.py -q
+35 passed in 2.72s
+
+$ python -m pytest tests/ -q -n 4
+4364 passed, 6 skipped in 875.84s (0:14:35)
+```
+
+### Why (d) and (e) count as ENFORCED now, stated precisely
+
+They rest on the LANGUAGE boundary — there is still no mount namespace and no
+syscall filter, so if model code obtained `open` or `os` it would reach the
+filesystem at harness privilege. What changed is that obtaining them is no
+longer possible, and that this is checkable rather than hoped for:
+
+- the escape is closed at all five call sites, each with a regression test
+  shown RED on the unfixed tree;
+- the rejected set is CLOSED, and closure is RE-DERIVED from the live
+  interpreter rather than asserted — the test walks `dir()` of every
+  scope-bearing object type and pins the residue to eight names, so a future
+  CPython that adds an introspection attribute under a new prefix goes red;
+- one definition serves all five consumers, with an architecture test that
+  fails if any consumer reimplements it locally. Five private copies of one
+  rule is how one hole became five.
+
+### The argument that settles the operator's actual question
+
+Switching on `sandboxed_python_v1` adds **no new class of risk**, and this is
+the load-bearing point rather than the property table. The code-testing
+channel has been executing model-authored Python on every run for as long as
+it has existed, under the SAME language boundary and — until this fix — with
+strictly WEAKER OS containment (no network namespace, fail-open resource
+limits). Both are now hardened, and the road being switched on is the
+better-contained of the two: the contained runner fails CLOSED without a
+network namespace, where the code-testing channel degrades.
+
+So the question "is it safe to switch on" resolves against a baseline that was
+already running, not against a hypothetical. Turning it on makes the harness's
+execution surface more uniform, not larger.
+
+### Residue — what this verdict does NOT establish
+
+- **Not that no other escape exists.** Closure is proved over CPython's
+  introspection surface, which is what the demonstrated escape used. It is not
+  a proof that the language boundary is unescapable in general; sandboxing
+  CPython in-process is hard, and this tranche is the evidence for that rather
+  than against it. The mitigation is layering, and the layering is uneven —
+  see the next point.
+- **(d) and (e) have ONE layer each.** (a), (b) and (c) each have an OS
+  mechanism under them. A mount namespace for (d) and a seccomp syscall filter
+  denying `execve`/`fork`/`clone` for (e) would give those two the same depth.
+  `verification/_sandbox.py` already contains a working seccomp helper that no
+  execution backend calls. Parked as P9 — recommended, and NOT a blocker: it
+  would harden a boundary that is now demonstrably holding, on a channel whose
+  weaker twin has been running all along.
+- **Nothing about hosts without user namespaces.** There the contained runner
+  refuses to execute (correct), and the code-testing channel degrades to the
+  language boundary alone — visibly, via
+  `sandbox_os.network_denial_available()`, but really.
+- **No live run has exercised the switched-on path.** R5's proof is offline.
+  Capability-channel use is stochastic across identical runs, so the offline
+  regression is the proof and a live attempt would be corroboration.
+
+"Accepted does not mean true." What is different from 2026-08-27 is not
+confidence: it is that the specific thing that was false is now checked by a
+test that fails when it stops being true.
+
+---
+
+# SAFETY — is it safe to switch model-authored code execution on?
+
+> **Superseded 2026-08-28 by the re-assessment above.** Kept verbatim as the record of the pre-fix state.
+
 **Verdict: NOT PROVEN.** Three of the five containment properties hold and
 are demonstrated. Two do not hold, and they do not hold by working exploit
 rather than by missing paperwork.

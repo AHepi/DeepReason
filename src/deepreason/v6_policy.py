@@ -311,16 +311,109 @@ def _channel_enabled(channel_id: str, config) -> bool:
     return channels.enabled(channel_id, Config() if config is None else config)
 
 
-def _contained_runner_opted(environ=None) -> bool:
+# The two runner profiles a configuration may name. The setting names WHICH
+# runner, never WHETHER simulation runs -- exactly as
+# DEEPREASON_RESEARCH_ALLOWLIST names which hosts and not whether research
+# runs. The channel decides on/off; this decides shape.
+SIMULATION_RUNNERS: tuple[str, ...] = ("contained", "declarative")
+
+# Unset means the CONTAINED runner, so model-authored `sandboxed_python_v1`
+# executes by default (operator, 2026-08-27: "If so switch both on", fired by
+# the SAFE verdict at
+# `experiments/2026-08-27-change-execution-safety/SAFETY.md`).
+#
+# It used to mean `declarative`, which refused every sandboxed_python_v1
+# proposal outright. A channel that carries model-authored code only when
+# someone remembers an environment variable is, for every run nobody
+# configured, a channel that does not carry it -- and four live epochs were
+# read as model reluctance before the record said otherwise (commit
+# 74d9f71ca). The declarative profile remains a configuration choice, not a
+# deleted one.
+DEFAULT_SIMULATION_RUNNER = "contained"
+
+
+def _simulation_runner_choice(environ=None) -> str:
+    """Return the named runner profile, defaulting to the contained one.
+
+    NEVER raises. An unrecognised value used to raise ValueError, which is a
+    compile-time refusal of an otherwise-parseable configuration -- the shape
+    the all-configurations law abolished (operator, 2026-08-12: "All
+    configurations should be allowed"). It now resolves to the default and is
+    DISCLOSED by :func:`simulation_runner_notices`, because a typo must not
+    stop a run and must not pass silently either.
+    """
+
     env = os.environ if environ is None else environ
     runner = str(env.get("DEEPREASON_SIMULATION_RUNNER", "")).strip().lower()
-    if runner in {"", "declarative"}:
-        return False
-    if runner != "contained":
-        raise ValueError(
-            "DEEPREASON_SIMULATION_RUNNER must be 'declarative' or 'contained'"
+    if runner not in SIMULATION_RUNNERS:
+        return DEFAULT_SIMULATION_RUNNER
+    return runner
+
+
+def _contained_runner_opted(environ=None) -> bool:
+    return _simulation_runner_choice(environ) == "contained"
+
+
+def simulation_runner_notices(environ=None, *, config=None) -> tuple:
+    """Typed disclosures about the simulation runner this configuration names.
+
+    Disclose, never die. Two things can be true of a configuration that still
+    compiles and still runs, and neither may pass in silence:
+
+    ``SIMULATION_RUNNER_UNKNOWN``
+        the setting names a runner that does not exist, so the default is used
+
+    ``SIMULATION_RUNNER_UNAVAILABLE``
+        the contained runner is named, but this host cannot create the network
+        namespace it requires, so every execution will refuse -- typed, at the
+        point of use, per the all-configurations law. The channel is ON and the
+        ROAD is severed, which is precisely the failure
+        ``DR-INV-evidence-channels``'s first Trap names, so it is reported
+        rather than left for a reader to infer from an empty result.
+
+    Imported at call time like ``channels.unknown_channel_notices``, so this
+    module stays importable without the manifest compiler.
+    """
+
+    from deepreason.run_manifest import CompileNoticeV1
+
+    env = os.environ if environ is None else environ
+    raw = str(env.get("DEEPREASON_SIMULATION_RUNNER", "")).strip().lower()
+    notices = []
+    if raw and raw not in SIMULATION_RUNNERS:
+        notices.append(
+            CompileNoticeV1(
+                code="SIMULATION_RUNNER_UNKNOWN",
+                message=(
+                    f"DEEPREASON_SIMULATION_RUNNER names no runner {raw!r}; "
+                    f"using {DEFAULT_SIMULATION_RUNNER!r}"
+                ),
+                pointer="/DEEPREASON_SIMULATION_RUNNER",
+                resolution="remove it, or name one of: "
+                + ", ".join(sorted(SIMULATION_RUNNERS)),
+            )
         )
-    return True
+    if _channel_enabled("simulation", config) and _contained_runner_opted(environ):
+        from deepreason.sandbox_os import network_denial_available
+
+        if not network_denial_available():
+            notices.append(
+                CompileNoticeV1(
+                    code="SIMULATION_RUNNER_UNAVAILABLE",
+                    message=(
+                        "the contained simulation runner requires an unshared "
+                        "network namespace, which this host refuses; simulation "
+                        "executions will refuse typed at the point of use"
+                    ),
+                    pointer="/inquiry_capability_policy/simulation/runner_profile",
+                    resolution=(
+                        "run on a host permitting user namespaces, or set "
+                        "DEEPREASON_SIMULATION_RUNNER=declarative to compile the "
+                        "declarative-numeric runner instead"
+                    ),
+                )
+            )
+    return tuple(notices)
 
 
 def engaged_simulation_policy(
@@ -334,21 +427,36 @@ def engaged_simulation_policy(
     the all-configurations law. ``config=None`` means the default
     configuration, so every existing caller keeps its exact behaviour.
 
-    Default (``DEEPREASON_SIMULATION_RUNNER`` unset or ``declarative``): only
-    the trusted declarative-numeric compiler path is reachable — the runner
-    profile is ``simulation.declarative.v1`` and the controller refuses
-    ``sandboxed_python_v1`` proposals outright, so no model-authored Python
-    ever reaches the local subprocess backend.  The returned policy is
-    byte-identical to the historical preset, so existing qualification
-    subjects are untouched.
+    Default (``DEEPREASON_SIMULATION_RUNNER`` unset or ``contained``): the
+    runner profile is ``simulation.container.v1`` and model-authored
+    ``sandboxed_python_v1`` programs execute inside the contained subprocess
+    runner — scratch workdir, scrubbed environment, hard rlimits, unshared
+    network namespace, and a fail-closed refusal when containment is
+    unavailable.
 
-    Operator-opted (``DEEPREASON_SIMULATION_RUNNER=contained``): the runner
-    profile becomes ``simulation.container.v1`` and model-authored
-    ``sandboxed_python_v1`` programs run inside the contained subprocess
-    runner (scratch workdir, scrubbed environment, hard rlimits, unshared
-    network namespace, fail-closed refusal when containment is unavailable).
-    The changed policy changes the manifest — a different qualification
-    subject, exactly like a changed research allowlist.
+    This DEFAULT CHANGED on 2026-08-28. It was ``declarative``, under which the
+    controller refused every ``sandboxed_python_v1`` proposal outright, so no
+    model-authored Python ran unless someone set an environment variable — and
+    for four live epochs nobody had (commit ``74d9f71ca``). The operator
+    authorized the switch conditional on a safety verdict, and the verdict is
+    at ``experiments/2026-08-27-change-execution-safety/SAFETY.md``: SAFE, after
+    the attribute-boundary escape that made it NOT PROVEN was closed.
+
+    Named alternative (``DEEPREASON_SIMULATION_RUNNER=declarative``): the
+    profile is ``simulation.declarative.v1``, where only the trusted
+    declarative-numeric compiler path is reachable and no model-authored Python
+    executes at all. Kept as a configuration choice, not deleted: it is the
+    right shape for a host that cannot create namespaces, and it is what a run
+    should name when it wants numeric models rather than programs.
+
+    Either way the toolchain PAIRS with the profile —
+    ``engaged_simulation_toolchain`` reads the same choice — so a configuration
+    never carries a toolchain its runner cannot dispatch to.
+
+    The changed policy changes the manifest, hence the qualification behavior
+    subject: the first run after this default flips pays a fresh qualification
+    battery, exactly like a changed research allowlist. That is the price of
+    the default, priced here rather than discovered later.
     """
 
     if not _channel_enabled("simulation", config):

@@ -1,17 +1,39 @@
-=== RED: the historical underscore-only rule ===
-
+########################################################################
+# M1: the attribute boundary reverted to the historical underscore rule
+########################################################################
+--- RED expected ---
 tests/test_sandbox_guard.py:176: AssertionError
 =========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_attribute_violation_reports_the_first_offending_access
+FAILED tests/test_sandbox_guard.py::test_the_escape_chain_is_rejected_attribute_by_attribute
+FAILED tests/test_sandbox_guard.py::test_the_brokered_worker_inherits_the_boundary_by_derivation
+FAILED tests/test_sandbox_guard.py::test_declarative_simulation_worker_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_contained_runner_refuses_the_frame_walk
+FAILED tests/test_sandbox_guard.py::test_the_prefix_set_covers_every_public_introspection_attribute
 FAILED tests/test_sandbox_guard.py::test_predicate_eval_refuses_the_frame_walk
 FAILED tests/test_sandbox_guard.py::test_code_testing_channel_refuses_the_frame_walk
-FAILED tests/test_sandbox_guard.py::test_declarative_simulation_worker_refuses_the_frame_walk
-FAILED tests/test_sandbox_guard.py::test_the_escape_chain_is_rejected_attribute_by_attribute
-FAILED tests/test_sandbox_guard.py::test_the_prefix_set_covers_every_public_introspection_attribute
-FAILED tests/test_sandbox_guard.py::test_attribute_violation_reports_the_first_offending_access
-FAILED tests/test_sandbox_guard.py::test_contained_runner_refuses_the_frame_walk
 FAILED tests/test_sandbox_guard.py::test_names_are_judged_by_the_underscore_rule_only
-8 failed, 8 passed in 0.95s
+9 failed, 11 passed in 1.29s
+--- GREEN restored ---
+....................                                                     [100%]
+20 passed in 1.17s
 
-=== GREEN: the boundary restored ===
-................                                                         [100%]
-16 passed in 0.87s
+########################################################################
+# M2: the simulation runner default reverted to 'declarative'
+########################################################################
+--- RED expected ---
+E         + simulation.declarative.v1
+E         ?            ++ ^^^^  ^)
+
+tests/test_simulation_runner_default.py:138: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_simulation_runner_default.py::test_model_authored_python_is_the_default_with_no_environment_at_all
+FAILED tests/test_simulation_runner_default.py::test_a_sandboxed_python_proposal_executes_on_the_default_configuration
+FAILED tests/test_simulation_runner_default.py::test_an_unknown_runner_compiles_and_is_disclosed_never_refused
+FAILED tests/test_simulation_runner_default.py::test_the_default_policy_admits_dispatches_and_executes_end_to_end
+FAILED tests/test_simulation_runner_default.py::test_the_toolchain_always_pairs_with_the_runner_profile
+FAILED tests/test_simulation_runner_default.py::test_an_unequipped_host_compiles_and_discloses_the_severed_road
+6 failed, 3 passed in 0.23s
+--- GREEN restored ---
+.........                                                                [100%]
+9 passed in 0.81s
