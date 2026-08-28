@@ -1,0 +1,100 @@
+.....FFF.                                                                [100%]
+=================================== FAILURES ===================================
+__ test_a_carried_forward_artifact_is_its_claim_not_a_cut_through_its_middle ___
+
+harness = <deepreason.harness.Harness object at 0x7faaf8ee8ad0>
+
+    def test_a_carried_forward_artifact_is_its_claim_not_a_cut_through_its_middle(
+        harness,
+    ):
+        """Regression (census 2026-08-28): packs.py::_head took the first 160
+        characters of a serialized envelope -- a cut through the middle of a JSON
+        object, which is neither the verbatim text nor a distilled summary."""
+        problem = _problem(harness)
+        art = _accepted(harness, ENVELOPE)
+    
+        robust = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=ROBUST,
+        )
+        legacy = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=LEGACY,
+        )
+    
+        # With one accepted artifact and live_verbatim_n=2 it renders whole and
+        # late; force it into the distilled section by asking for none verbatim.
+        distilling = ROBUST.model_copy(update={"live_verbatim_n": 0})
+        distilled = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=distilling,
+        )
+        entry = [
+            line for line in distilled.splitlines()
+            if line.startswith(f"- {art.id}:")
+        ][0]
+        assert "Nocturnal urban warmth is stored daytime heat" in entry
+        assert '"mechanism"' not in entry
+>       assert entry.endswith("[clipped; request this alias for the whole text]")
+E       assert False
+E        +  where False = <built-in method endswith of str object at 0x7faaf8d0e9d0>('[clipped; request this alias for the whole text]')
+E        +    where <built-in method endswith of str object at 0x7faaf8d0e9d0> = '- 3d6f9067980cb291721ee1b86468317e9fe31c56d18956008252544ba5cfb095: {"analogy": null, "claim": "Nocturnal urban warmth is stored daytime heat released after sunset from surfaces with high thermal admittance, and the single best '.endswith
+
+tests/test_render_layout_rules.py:238: AssertionError
+__________________ test_live_neighbours_render_whole_and_late __________________
+
+harness = <deepreason.harness.Harness object at 0x7faaf8ee73d0>
+
+    def test_live_neighbours_render_whole_and_late(harness):
+        problem = _problem(harness)
+        live = _accepted(harness, ENVELOPE)
+    
+        pack = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=6000, layout=ROBUST,
+        )
+        headers = _headers(pack)
+>       assert "live-neighbourhood" in headers
+E       AssertionError: assert 'live-neighbourhood' in ['problem', 'criteria', 'neighbourhood', 'output-contract', 'question']
+
+tests/test_render_layout_rules.py:263: AssertionError
+_ test_superseded_conjectures_are_omitted_by_default_and_renderable_on_request _
+
+harness = <deepreason.harness.Harness object at 0x7faaf8edcd90>
+
+    def test_superseded_conjectures_are_omitted_by_default_and_renderable_on_request(
+        harness,
+    ):
+        """Omission is one of the two options the research note's own table gives
+        for this row, and it is what this tree ships. The knob exists so the
+        question can be settled by a run rather than by argument."""
+        from deepreason.ontology import Status
+        from tests.conftest import attack
+    
+        problem = _problem(harness)
+        dead = _art(harness, '{"claim": "the tide is the moon alone"}')
+        attack(harness, dead.id, "moon-only")
+        assert harness.state.status[dead.id] is Status.REFUTED
+    
+        default = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=ROBUST,
+        )
+        assert "superseded-conjectures" not in _headers(default)
+        assert dead.id not in default
+    
+        asked = ROBUST.model_copy(update={"superseded_summary_n": 3})
+        carried = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=asked,
+        )
+>       assert "superseded-conjectures" in _headers(carried)
+E       assert 'superseded-conjectures' in ['problem', 'criteria', 'neighbourhood', 'output-contract', 'question']
+E        +  where ['problem', 'criteria', 'neighbourhood', 'output-contract', 'question'] = _headers("## problem\nPROBLEM p-layout\nWhy does the air in a large city stay several degrees warmer than the surrounding count...nWhy does the air in a large city stay several degrees warmer than the surrounding countryside on a clear, calm night?")
+
+tests/test_render_layout_rules.py:305: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_rules.py::test_a_carried_forward_artifact_is_its_claim_not_a_cut_through_its_middle
+FAILED tests/test_render_layout_rules.py::test_live_neighbours_render_whole_and_late
+FAILED tests/test_render_layout_rules.py::test_superseded_conjectures_are_omitted_by_default_and_renderable_on_request
+3 failed, 6 passed in 0.24s

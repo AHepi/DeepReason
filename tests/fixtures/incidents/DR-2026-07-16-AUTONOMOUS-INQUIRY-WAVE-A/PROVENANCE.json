@@ -8,8 +8,25 @@
   "generated_root_sha256": {
     "A1": "dd0f5df44d86d4220b2b08af1db999a093db44284de6989e87b15d6d2b661dd6",
     "A2": "b6c8de91f91a5a0cf191729bce5f54c741963c99ec23bf4e3a0044adfbe23833",
-    "A3": "31aebf8cea4e233aa608175a63fbe738ddbc977185990895685b8c1a35d359a2"
+    "A3": "edaf87133be56dd4864bef029ca50195f512897540aae5b43e5249ac3618d779"
   },
+  "generated_root_sha256_history": [
+    {
+      "after": "edaf87133be56dd4864bef029ca50195f512897540aae5b43e5249ac3618d779",
+      "before": "31aebf8cea4e233aa608175a63fbe738ddbc977185990895685b8c1a35d359a2",
+      "date": "2026-08-28",
+      "fixture_id": "A3",
+      "moved_files": [
+        "blobs/<rendered conjecturer prompt>",
+        "objects/workflow-proposal-receipt/<1>",
+        "objects/workflow-transition-decision/<3>",
+        "log.jsonl",
+        "workflow-checkpoint.json"
+      ],
+      "reason": "Question-last layout (R2a): the conjecturer prompt now restates the problem in a final `## question` section, so the rendered-prompt blob and the six content-addressed workflow records derived from it carry new ids. 7 of A3's 23 files moved; A1 and A2 are byte-identical.",
+      "tranche": "experiments/2026-08-28-change-render-layout-robust"
+    }
+  ],
   "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
   "original_archive": {
     "available_to_fixture_builder": false,

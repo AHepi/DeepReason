@@ -1,0 +1,44 @@
+=== render-layout.legacy-v0
+                     chars: 3768
+                  sections: 4
+              instructions: 7
+          question_section: problem
+      after_question_chars: 3023
+                     order: problem -> criteria -> neighbourhood -> output-contract
+
+=== render-layout.v1
+                     chars: 4817
+                  sections: 6
+              instructions: 11
+          question_section: question
+      after_question_chars: 0
+                     order: problem -> criteria -> neighbourhood -> live-neighbourhood -> output-contract -> question
+
+after_question_chars: 3023 -> 0
+chars:                3768 -> 4817 (+1049)
+instructions:         7 -> 11 (ceiling 40)
+
+========================================================================
+THE RENDERED PACK, AFTER (render-layout.v1), tail from the neighbourhood on:
+========================================================================
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural) — each entry is its CLAIM, distilled; request an alias through context_request to read that artifact whole:
+- b2b7a48c86e4a465d7d19d0b931fe4bbbfa7477d4b0b2eab26901d3c9c9726a6: nu: verdict of frontier-above-floor@v1 on cca556597c931ca3ce92248b53d7bf2d8b5559f1fbfef27e54ac1d37827243b8 is sound and relevant
+- f4525a281264646e5b7ef4179c21d3de7b5ffd196e7d22541caaa9f30f989558: critic: frontier-above-floor@v1 failed on cca556597c93
+- 0617bcaf7bf8cf2fadefdf20a3e4732a11088afd8c46ebc66c91d432abe11a0e: nu: verdict of frontier-wellformed@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant
+- bd66f8f55726bab3ecc96a939286daabdf33b01fed8840a1643b37597804480d: critic: frontier-wellformed@v1 failed on 2edeaa42b5ef
+- c67767aa37ab8c9d2a3ae4cb079f0637f5afb90ba27ba90709aa13e56396fe4b: nu: verdict of frontier-claim-honest@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant
+- edfb53d9321ebbc461e3e8515e67c816df1935e4a23d7e328ea82f0ad8eeb25b: critic: frontier-claim-honest@v1 failed on 2edeaa42b5ef
+
+## live-neighbourhood
+LIVE NEIGHBOURHOOD (accepted and still standing — shown whole because these are the ones to build on or beat):
+- d6d9085c885a5360ca28dfaf6619bac8c15667093e9c7d6b466eb7497751d90b: nu: verdict of frontier-above-floor@v1 on 2edeaa42b5efc0b4e9bbb0db5b82be67fa3703dcb27f428d496c07f97a0131ed is sound and relevant
+- 25dc1295fc985b15c04b93b7b9dee1c387178a312ad1452876746c644a779981: critic: frontier-above-floor@v1 failed on 2edeaa42b5ef
+
+## output-contract
+DIRECTIVE: return exactly 6 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.
+
+## question
+QUESTION (restated last, so nothing load-bearing follows it)
+PROBLEM question-64b724c4118320989925d111501a8e41
+Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; every candidate must state its coordinates and claimed score, and survives only if the checker confirms it. Score = the smallest area among all 286 triangles formed by triples of your 13 points; every point must lie in [0,1]x[0,1] and all 13 points must be distinct. State the construction in exactly this form, one point per line: a line "POINT x y" for each of the 13 points, with x and y written as decimals with at most 6 decimal places, then a final line "CLAIM v" giving your claimed minimum triangle area as a decimal. A claim the checker cannot confirm is refuted.

@@ -1,5 +1,5 @@
 <!-- DR-CON-packs-and-token-economy -->
-Verified-at: 7e1ab8a54
+Verified-at: 5f7e413d6
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/packs.py, src/deepreason/packs/allocate.py, src/deepreason/packs/ir.py, src/deepreason/llm/budget.py, src/deepreason/llm/profiles.py, src/deepreason/llm/adapter.py, src/deepreason/rules/crit.py
 Seams: 
@@ -35,12 +35,15 @@ section mandatory.
 | Head/tail compression of one section | `src/deepreason/packs/allocate.py` | `_bounded_view` |
 | Per-section accounting, overflow | `src/deepreason/packs/allocate.py` | `AllocationResult.accounting`, `mandatory_overflow` |
 | Section construction (pins `max_tokens` to the source, so a section never renders more than it has) | `src/deepreason/llm/packs.py` | `_pack_section` |
-| Conjecture pack (15 section slots) | `src/deepreason/llm/packs.py` | `render_conj_pack` |
-| Single-target criticism pack (10 section slots) | `src/deepreason/llm/packs.py` | `render_crit_pack` |
+| Conjecture pack (20 section slots + the question) | `src/deepreason/llm/packs.py` | `render_conj_pack` |
+| Single-target criticism pack (13 section slots + the question) | `src/deepreason/llm/packs.py` | `render_crit_pack` |
 | Batch criticism pack — NOT on the IR | `src/deepreason/llm/packs.py` | `render_batch_crit_pack`, `_clip` |
 | Auxiliary packs — NOT on the IR | `src/deepreason/llm/packs.py` | `render_experiment_pack`, `render_property_pack`, `render_cx_retry_pack` |
 | "Already budgeted, do not re-clip" marker | `src/deepreason/llm/packs.py` | `AllocatedPack` |
 | Section-size constants | `src/deepreason/llm/packs.py` | `NEIGHBOURHOOD_N`, `ATTACKERS_N`, `FOUNDATION_CHARS` |
+| Where a rendered prompt puts what it carries | `src/deepreason/llm/layout.py` | `RenderLayoutPolicyV1` — see `DR-INV-render-layout` |
+| The question, restated last | `src/deepreason/llm/packs.py` | `_question_section`, `_QUESTION_PRIORITY` |
+| A carried-forward artifact's distilled form | `src/deepreason/llm/packs.py` | `_distilled`, `_claim_of` |
 | The frame slice's two halves, and their caps | `src/deepreason/calculus/render.py` | `render_frame_slice_context` (digest), `render_frame_crisis_context` (wounds + departures), `FRAME_SLICE_ATTACKERS_N`, `FRAME_SLICE_DEPARTURES_N`, `ARTICULATION_DIGEST_CHARS` |
 | Where those two caps come FROM, since Rung 8 | `src/deepreason/calculus/render.py` | `_budgets` — the recorded `capture14-hysteresis.v1` policy's authorised widths, falling back to `Config.FRAME_SLICE_ATTACKERS` / `FRAME_SLICE_DEPARTURES`, whose defaults ARE the two module constants |
 | Sections whose absence is disclosed rather than silent | `src/deepreason/llm/packs.py` | `DISCLOSED_ON_DROP`, `_allocate_sections` |
@@ -77,7 +80,7 @@ tie-break is load-bearing in `render_crit_pack`: `target` and
 `target-support-chain` both sit at priority 4, and the chain follows the
 content it supports only because `"target" < "target-support-chain"`.
 `check: grep -qF 'sorted(ir.sections, key=lambda section: (section.priority, section.id))' src/deepreason/packs/allocate.py`
-`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==18 and len(r)==13;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4;assert j['criteria']==j['open-criticisms']==2 and j['mandatory-interface']==3"`
+`check: python -c "import ast,pathlib;T=ast.parse(pathlib.Path('src/deepreason/llm/packs.py').read_text());F={n.name:n for n in T.body if isinstance(n,ast.FunctionDef)};S=lambda k:{ast.literal_eval(c.args[0]):c.args[2].value for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_pack_section'};Q=lambda k:sum(1 for c in ast.walk(F[k]) if isinstance(c,ast.Call) and getattr(c.func,'id','')=='_question_section');j=S('render_conj_pack');r=S('render_crit_pack');assert len(j)==20 and len(r)==13;assert Q('render_conj_pack')==1 and Q('render_crit_pack')==1;assert r['target']==r['target-support-chain']==4;assert j['frame-slice']==r['frame-slice']==j['frame-crisis']==r['frame-crisis']==4;assert j['criteria']==j['open-criticisms']==2 and j['mandatory-interface']==3;assert j['live-neighbourhood']==j['output-contract']==12 and j['superseded-conjectures']==j['neighbourhood']==8"`
 
 **The tie-break is load-bearing a second time, and this one carries meaning
 rather than presentation.** `open-criticisms` sits at priority 2 WITH
@@ -127,8 +130,11 @@ always-present "withheld: none" line is the empty slot
 `docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md` measured as worse than a populated
 one.
 
-The notice sorts LAST (`_WITHHELD_PRIORITY = 99`), and that is a caching
-decision rather than an emphasis one. Allocation order is `(priority, id)`, so
+The notice sorts after every CONTEXT section (`_WITHHELD_PRIORITY = 99`), and
+that is a caching decision rather than an emphasis one. Since 2026-08-28 one
+section sorts after it — the question restatement at `_QUESTION_PRIORITY =
+100` — which changes nothing the notice was doing, because the claim below is
+that it must not LEAD. Allocation order is `(priority, id)`, so
 at priority 1 — where it was first written — `"context-withheld"` sorts ahead of
 `"problem"` and `"problem-context"`, and a per-call volatile section leading
 every pack invalidates exactly the cacheable prefix the ordering rule above
@@ -273,6 +279,52 @@ tokens and raises when fewer than 256 remain. No test covers this path; the
 check below is structural only.
 `check: grep -qF 'critic school conditioning leaves insufficient bounded pack budget' src/deepreason/rules/crit.py`
 
+**Nothing load-bearing is rendered after the question.** Both IR renderers
+close with a mandatory, exact `question` section at `_QUESTION_PRIORITY = 100`,
+above every other priority, so `(priority, id)` ordering puts it last and there
+is no separate ordering pass to get wrong. The restatement carries no new
+content — the same bytes as the pack's own priority-1 section, plus the target
+id for the critic. `DR-INV-render-layout` owns the decision and the policy that
+gates it; the census that motivated it measured up to 16 091 characters
+rendered after the conjecturer's problem statement across 585 real dispatched
+prompts.
+`check: python -m pytest tests/test_render_layout_rules.py -q`
+`check: python -c "
+from deepreason.llm.packs import _QUESTION_PRIORITY, _WITHHELD_PRIORITY
+assert _QUESTION_PRIORITY > _WITHHELD_PRIORITY
+"`
+
+**A carried-forward artifact is its CLAIM, not the first 160 bytes of its
+envelope.** `_distilled` reads the `claim` field where one parses and falls
+back to the prefix head where none does, so an artifact with no claim keeps its
+entry. Where the width bites, the entry says so and names the retrieval route —
+`context_request`, which `llm/wire.py` has served all along and which no pack
+mentioned. This is the NO SILENT CAPS rule above, applied to the one section
+that lacked it.
+`check: python -m pytest tests/test_render_layout_rules.py -k "claim or retriev or live_neighbours" -q`
+
+**The most recent accepted artifacts render WHOLE and LATE**, in
+`live-neighbourhood` at priority 12 beside `output-contract` and before the
+question. Few by design: a late slot amplifies whatever occupies it,
+distractors included. Droppable AND compressible, as the NEGATIVE rule above
+requires of every droppable section, so budget pressure degrades it to the
+distilled list rather than overshooting the target.
+
+**Superseded artifacts stay omitted**, and `superseded_summary_n` ships at 0.
+Rendering refuted work back to the seat whose job is to leave it is an
+epistemic change, not a layout one.
+`check: python -c "
+from deepreason.llm.layout import ROBUST_LAYOUT_POLICY as r
+assert r.superseded_summary_n == 0
+"`
+
+**A label and the body it labels are ONE block in the compact head.** The
+U-shape re-instantiates inside every delimiter-bounded interval, so a bare
+`INPUT:` buys a boundary for six characters. The pack's own `## id` headers are
+NOT merged and must not be: a dropped section leaves no header, so the header's
+presence is the only signal that a section survived allocation.
+`check: python -m pytest tests/test_render_layout_rules.py -k block -q`
+
 ## Where to change what
 
 | To change... | Edit | Test |
@@ -326,6 +378,16 @@ either width, so a reader can still tell a quiet frame from a truncated one.
   R3/S3) by making the section mandatory instead. The helper survives, now
   uncalled; a call site returning would reopen the defect.
 `check: test "$(grep -cF '_document_excerpt' src/deepreason/llm/packs.py)" = 1`
+- **A pack-layout change moves every budget-calibrated fixture.** The question
+  restatement added 35 tokens to `tests/test_chaos_invariants.py`'s tiny
+  fixture prompt, which pushed its first reservation from 1383 to 1418 and
+  past a budget of 1400 — so the test that asserts a mid-retry budget death
+  stopped reaching the death at all, and failed with nothing admitted rather
+  than with a wrong verdict. Two fixtures were recalibrated (chaos 1400 ->
+  1420, shadow-c0 1150 -> 1200), both with their measured admissible windows
+  written into the comment so the next reader recalibrates by measurement
+  rather than by bisection. Any future layout change owes the same sweep.
+`check: grep -q "reserve 1418/665/651" tests/test_chaos_invariants.py && grep -q "TokenMeter(budget=1420)" tests/test_chaos_invariants.py && python -m pytest tests/test_chaos_invariants.py::test_budget_exhaustion_mid_retry_still_reconciles tests/test_workflow_shadow_c0.py::test_mid_retry_budget_stop_is_not_reported_as_repair_exhaustion -q`
 - **Three different token units, none interchangeable.** Allocation counts
   chars/4, the meter reserves at chars/3, the envelope uses UTF-8 bytes. Only
   the last is a genuine upper bound. Reasoning about "the budget" without

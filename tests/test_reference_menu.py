@@ -1106,6 +1106,13 @@ def test_a_pre_v6_conjecture_pack_carries_no_v6_menu():
     epistemic metric it records stayed identical. The token cost was the
     only visible symptom of a menu naming a field the seat cannot fill.
     The fixture was NOT updated: gating the menus restored it exactly.
+
+    784.5 was that metric's pinned value at the time. It is now 825.0: the
+    render-layout tranche (2026-08-28) re-pinned it as a disclosed cost, with
+    every added prompt character accounted for. The lesson here is unchanged
+    and is the reason that re-pin had to be argued from the prompt bytes — a
+    token rise with the epistemic metrics identical is exactly what a defect
+    of this class looks like.
     """
 
     import ast

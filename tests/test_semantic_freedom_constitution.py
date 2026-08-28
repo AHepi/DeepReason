@@ -447,6 +447,39 @@ def test_schools_may_share_one_frozen_model_route(offline_semantic_baseline):
 def test_offline_semantic_freedom_baseline_is_measurable(
     offline_semantic_baseline,
 ):
+    """Seven characterization metrics against a committed offline-mock baseline.
+
+    ``tokens_per_admitted_useful_candidate`` moved ONCE, deliberately, on
+    2026-08-28 (render-layout tranche,
+    ``experiments/2026-08-28-change-render-layout-robust``):
+
+        784.5  before
+        825.0  after     (+40.5, +5.2%)
+
+    This is the DISCLOSED COST of that tranche, priced in its DELIVERY.md
+    rather than absorbed here.  R2a appends a restated ``## question`` section
+    to each conjecturer prompt so nothing load-bearing follows the question;
+    R2c renames ``neighbourhood`` to ``live-neighbourhood`` with a longer
+    header.  Those two sections are the whole delta: +327 rendered characters
+    across the fixture's three attempts = +81 tokens, and the repair prompt is
+    byte-identical because the repair path renders no question section.
+
+    Read this next, before ever re-pinning it again: the SAME metric caught a
+    REAL defect with the SAME signature -- a token rise with every epistemic
+    metric identical (784.5 -> 875.0, a reference menu naming a field the seat
+    could not fill; ``tests/test_reference_menu.py::
+    test_a_pre_v6_conjecture_pack_carries_no_v6_menu``).  That one was NOT
+    re-pinned; the bug was fixed and the number came back on its own.  A move
+    in this metric is therefore never self-justifying.  This move was
+    distinguished from the PROMPT BYTES rather than from the number: every
+    added character is accounted for in that tranche's
+    ``proof/semantic_freedom_token_delta.txt``, with the before/after prompts
+    committed beside it, and no new menu, handle, unfillable field or standing
+    instruction appears in the diff.
+
+    The other six metrics -- and what this test is actually for, that the
+    baseline is measurable at all and reads no status -- are unchanged.
+    """
     harness, commitment, artifacts, calls = offline_semantic_baseline
     statuses_before = dict(harness.state.status)
     verdicts = [

@@ -31,6 +31,10 @@ from deepreason.llm.packs import aliases_for_values
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import wire_contract_for
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.llm.layout import (
+    RenderLayoutPolicyV1,
+    resolve_layout_policy,
+)
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
 from deepreason.rules.warrants import (
@@ -404,8 +408,42 @@ def _advisory_trial_result(
     return observation
 
 
+def argument_trial_judge_pack(
+    *,
+    target_text: str,
+    case_text: str,
+    defence: str,
+    layout: RenderLayoutPolicyV1 | None = None,
+) -> str:
+    """The argument trial's judge pack.
+
+    Named rather than inline because it is a rendered prompt whose ARRANGEMENT
+    is a policy decision (DR-INV-render-layout), and an inline join cannot be
+    rendered under two policies and compared.
+    """
+
+    layout = layout or resolve_layout_policy()
+    target = [f"TARGET:\n{target_text}", ""]
+    question = [
+        "QUESTION: does the case establish a decisive fault in the target? "
+        "verdict=fail iff it does.",
+        "",
+    ]
+    exchange = [
+        "THE CASE FOR FAIL:", case_text, "", "THE DEFENCE:", defence, "",
+    ]
+    ruling = ["Rule on the exchange; decisive_point MUST quote a span of it."]
+    if layout.question_last:
+        # The census measured the judge as the largest violator of the one
+        # negative the research note calls robust: up to 7503 characters of
+        # case and defence rendered AFTER the question that asks about them.
+        return "\n".join([*target, *exchange, *question, *ruling])
+    return "\n".join([*target, *question, *exchange, *ruling])
+
+
 def _judge_pack(harness, config, body, target_text, case, answer,
-                standard_id, anchor_text=None, swapped=False) -> str:
+                standard_id, anchor_text=None, swapped=False,
+                layout: RenderLayoutPolicyV1 | None = None) -> str:
     lines = [f"STANDARD {body['spec']} (mode: {body['mode']}):", body["rubric"], ""]
     precedents = precedent_slice(harness, standard_id, config.PRECEDENT_K)
     if precedents:
@@ -415,15 +453,20 @@ def _judge_pack(harness, config, body, target_text, case, answer,
     if body["mode"] == "anchored" and anchor_text is not None:
         first = ("KNOWN-BAD ANCHOR", anchor_text) if swapped else ("CANDIDATE", target_text)
         second = ("CANDIDATE", target_text) if swapped else ("KNOWN-BAD ANCHOR", anchor_text)
-        lines += [f"{first[0]}:\n{first[1]}", "", f"{second[0]}:\n{second[1]}", "",
-                  "QUESTION: does the CANDIDATE beat the anchor on the standard's "
-                  "criteria? verdict=pass iff it does."]
+        subject = [f"{first[0]}:\n{first[1]}", "", f"{second[0]}:\n{second[1]}", ""]
+        question = ["QUESTION: does the CANDIDATE beat the anchor on the "
+                    "standard's criteria? verdict=pass iff it does."]
     else:
-        lines += [f"TARGET:\n{target_text}", "",
-                  "QUESTION: does the case establish that the target violates the "
-                  "cited clause? verdict=fail iff it does."]
-    lines += ["", "THE CASE FOR FAIL:", case, "", "THE DEFENCE:", answer, "",
-              "Rule on the exchange; decisive_point MUST quote a span of it."]
+        subject = [f"TARGET:\n{target_text}", ""]
+        question = ["QUESTION: does the case establish that the target violates "
+                    "the cited clause? verdict=fail iff it does."]
+    exchange = ["", "THE CASE FOR FAIL:", case, "", "THE DEFENCE:", answer, ""]
+    ruling = ["Rule on the exchange; decisive_point MUST quote a span of it."]
+    layout = layout or resolve_layout_policy()
+    if layout.question_last:
+        lines += [*subject, *exchange, *question, *ruling]
+    else:
+        lines += [*subject, *question, *exchange, *ruling]
     return "\n".join(lines)
 
 
@@ -964,13 +1007,9 @@ def _argument_trial_steps(
         calls.append(call)
 
     # 2. The judge ensemble rules on the exchange.
-    pack = "\n".join([
-        f"TARGET:\n{target_text}", "",
-        "QUESTION: does the case establish a decisive fault in the target? "
-        "verdict=fail iff it does.",
-        "", "THE CASE FOR FAIL:", case_text, "", "THE DEFENCE:", defence.answer,
-        "", "Rule on the exchange; decisive_point MUST quote a span of it.",
-    ])
+    pack = argument_trial_judge_pack(
+        target_text=target_text, case_text=case_text, defence=defence.answer
+    )
     judge_aliases = aliases_for_values([case_text, defence.answer], prefix="K")
     ruling, judge_calls, judge_rulings = _judge_all(
         harness, adapter, pack, diagnostics, target_id, calls, judge_aliases,

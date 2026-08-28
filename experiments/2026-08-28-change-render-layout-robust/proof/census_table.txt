@@ -1,0 +1,17 @@
+3308 sha-verified dispatched prompts across 59 committed roots; 2836 are first turns (attempt 0) and only those are tabled -- repair turns measure the repair protocol, not the layout.
+
+seat (role/contract)                             n      instr    blocks  medblk  small  afterQ chars   schema
+-------------------------------------------------------------------------------------------------------------
+argumentative_critic/batch-critic.v2          1286    7-24      7-13        452      4           0-0        5
+argumentative_critic/config-referee.v1           6    9-9       4-4         662      0 no question section        8
+argumentative_critic/critic.atomic-target.v1    34    8-12     10-14        215      6     1285-4342       10
+conjecturer/conjecturer.atomic-candidate.v1    390    5-22      8-14        123      5     1447-4519       38
+conjecturer/conjecturer.turn.v6                585    9-28      6-15        417      4    1214-16091      154
+conjecturer/conjecturer.turn.v7                  4    8-8       7-7         319      4      914-1604      126
+defender/defender.direct.v1                    122    4-12      4-4         424      2 no question section        3
+judge/judgeruling.direct.v1                    342    6-25      7-21        529      3     1253-7503        4
+summarizer/bridge.ledger-batch.v1               11   12-12      5-5          55      4 no question section       54
+summarizer/bridge.ledger.v3                     12   16-19      7-9         699      3 no question section       57
+thesis/bridge.composition-batch.v1               4    7-8       7-7          49      6 no question section       30
+thesis/bridge.composition.v2                    10    8-9       4-7        1834      0 no question section       30
+variator/variator.direct.v1                     30    7-16      4-10        529      2           0-0        5

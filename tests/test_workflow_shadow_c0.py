@@ -1239,22 +1239,27 @@ def test_unrepresentable_legacy_problem_ref_cannot_escape_observer(tmp_path):
 
 def test_mid_retry_budget_stop_is_not_reported_as_repair_exhaustion(tmp_path):
     invalid_response = "{this-is-not-valid-json"
-    # Reserve-settle sizing: the garbage attempts reserve 1132/410/395 and
-    # settle to running totals 661/781, so 1150 admits attempts 1-2 and
-    # rejects the third reservation mid-retry.
+    # Reserve-settle sizing: the garbage attempts reserve and settle so that
+    # 1200 admits attempts 1-2 and rejects the third reservation mid-retry.
+    # Measured window: [1190, 1211]. It was [1150, ~1180] until 2026-08-28,
+    # when the question restatement made the conjecturer prompt larger
+    # (experiments/2026-08-28-change-render-layout-robust/SPEC.md S2). The
+    # budget is the calibration that puts the run in the scenario; the claim
+    # is that the stop is reported as a BUDGET stop and not as repair
+    # exhaustion.
     legacy = _run(
         tmp_path / "legacy-mid-retry-budget-stop",
         "legacy",
         response=invalid_response,
         retry_max=2,
-        meter_budget=1150,
+        meter_budget=1200,
     )
     shadow = _run(
         tmp_path / "shadow-mid-retry-budget-stop",
         "shadow",
         response=invalid_response,
         retry_max=2,
-        meter_budget=1150,
+        meter_budget=1200,
     )
 
     observations = shadow.scheduler.workflow_shadow_observations

@@ -1,0 +1,77 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_______________ test_the_conjecturer_pack_ends_with_the_question _______________
+
+harness = <deepreason.harness.Harness object at 0x7f2925fd6710>
+
+    def test_the_conjecturer_pack_ends_with_the_question(harness):
+        problem = _problem(harness)
+        _art(harness, "an accepted neighbour with some content to carry forward")
+    
+        robust = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=ROBUST,
+        )
+        legacy = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=2500, layout=LEGACY,
+        )
+    
+>       assert _headers(robust)[-1] == "question"
+E       AssertionError: assert 'output-contract' == 'question'
+E         
+E         - question
+E         + output-contract
+
+tests/test_render_layout_rules.py:87: AssertionError
+_______ test_the_critic_pack_ends_with_the_question_and_names_its_target _______
+
+harness = <deepreason.harness.Harness object at 0x7f2925fd66d0>
+
+    def test_the_critic_pack_ends_with_the_question_and_names_its_target(harness):
+        _problem(harness)
+        target = _art(harness, "the nocturnal gap is driven by stored heat release")
+    
+        robust = render_crit_pack(
+            target.id, harness.state, harness.commitments, harness.blobs,
+            token_budget=2500, layout=ROBUST,
+        )
+        legacy = render_crit_pack(
+            target.id, harness.state, harness.commitments, harness.blobs,
+            token_budget=2500, layout=LEGACY,
+        )
+    
+>       assert _headers(robust)[-1] == "question"
+E       AssertionError: assert 'output-contract' == 'question'
+E         
+E         - question
+E         + output-contract
+
+tests/test_render_layout_rules.py:109: AssertionError
+______ test_the_question_survives_a_budget_that_drops_everything_optional ______
+
+harness = <deepreason.harness.Harness object at 0x7f2925fda550>
+
+    def test_the_question_survives_a_budget_that_drops_everything_optional(harness):
+        """Mandatory and exact, for the reason `target` and `open-criticisms` are:
+        a droppable restatement would let budget pressure silently restore the
+        arrangement the section exists to abolish."""
+        problem = _problem(harness)
+        _art(harness, "x" * 4000)
+    
+        pack = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=2, token_budget=1, layout=ROBUST,
+        )
+>       assert _headers(pack)[-1] == "question"
+E       AssertionError: assert 'output-contract' == 'question'
+E         
+E         - question
+E         + output-contract
+
+tests/test_render_layout_rules.py:128: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_rules.py::test_the_conjecturer_pack_ends_with_the_question
+FAILED tests/test_render_layout_rules.py::test_the_critic_pack_ends_with_the_question_and_names_its_target
+FAILED tests/test_render_layout_rules.py::test_the_question_survives_a_budget_that_drops_everything_optional
+3 failed in 0.10s
