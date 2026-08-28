@@ -404,3 +404,36 @@ paired: `engaged_simulation_toolchain` reads the same runner choice the policy
 does, and the declarative runner genuinely uses that local toolchain. The
 defect was only the mode-to-profile refusal. The sharper-sounding version
 would have sent the next reader to fix a pairing that was never broken.
+
+
+## docs_verify, 2026-08-28
+
+```
+$ python tools/docs_verify.py
+docs_verify [full]: 68 documents, 1131 checks, 4 workers
+  FAIL CON-run-identity.md:200 / :202 / :204   (shallow-clone git history)
+  FAIL INV-frozen-surfaces.md:181              (pre-existing, parked P7)
+  FAIL SEAM-evaluation-x-ontology.md:184       (MINE — fixed, see below)
+docs_verify: 5 failed
+```
+
+Three are the known shallow-clone failures; one is the pre-existing falsified
+census parked as P7 (a root committed 2026-08-26 carries a
+`transport_failure` attempt the 2026-08-25 frozen-surface grant's census says
+does not exist).
+
+**The fifth was mine, and it is the map doing its job.**
+`SEAM-evaluation-x-ontology.md` pins the EXACT set of `deepreason.*` imports
+in `oracle_sandbox.py`, defending the claim "the ontology never crosses the
+sandbox boundary". Adding `deepreason.sandbox_os` broke the enumeration. The
+claim itself still holds — that module is a subprocess-prefix probe carrying
+no ontology — so the fix was to admit the new member AND pin why it is
+admissible: the check now additionally asserts that `sandbox_os` imports
+nothing from `deepreason` at all, making the boundary claim TRANSITIVE rather
+than one-hop. Widening an enumeration without pinning why the new member is
+admissible turns a check into a formality, which is the failure mode
+`docs_verify --audit` exists to refuse.
+
+`Verified-at:` was NOT advanced on any map document this tranche touched.
+Every check ADDED runs and passes; the documents' full check sets were not
+re-derived, and a stale stamp is honest where a false one is not.

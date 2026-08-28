@@ -174,14 +174,22 @@ but can never flip `pass` to `fail`, and `Warrant.verdict`, which is only ever
 `check: python -c "import ast,pathlib; BAD={'time','random','datetime','secrets','uuid','importlib'}; hits=[(f,n.lineno,ast.unparse(n)) for f in ('src/deepreason/programs.py','src/deepreason/oracle.py') for n in ast.walk(ast.parse(pathlib.Path(f).read_text())) if (isinstance(n,ast.Import) and any(a.name.split('.')[0] in BAD for a in n.names)) or (isinstance(n,ast.ImportFrom) and (n.module or '').split('.')[0] in BAD) or (isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='__import__')]; assert hits==[], hits" && grep -q "timeout=cpu_seconds + WALL_GRACE_SECONDS" src/deepreason/oracle_sandbox.py && python -c "from deepreason.oracle import _sandbox_abort_verdict, OVERRUN; from deepreason.oracle_sandbox import SandboxAborted; v,d=_sandbox_abort_verdict(SandboxAborted('watchdog')); assert (v, sorted(d))==(OVERRUN, ['error','sandbox_abort'])"`
 
 **The ontology never crosses the sandbox boundary.** `oracle_sandbox.py` imports
-`deepreason.canonical` and (worker-side, function-locally) `deepreason.oracle`, and
-nothing else from the package — no `Artifact`, no `Commitment`, no `Budget`.
-Untrusted code receives canonical JSON and returns canonical JSON; it cannot be
-handed a record, so it cannot mutate one, mis-address one, or learn who authored
-the content it is running. `PYTHONHASHSEED=0` in the worker environment is the
-other half: without it, set and dict iteration order in untrusted source would make
-the verdict a function of the process.
-`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/oracle_sandbox.py').read_text()); mods={n.module for n in ast.walk(t) if isinstance(n,ast.ImportFrom) and n.module}|{a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names}; assert {m for m in mods if m.startswith('deepreason')}=={'deepreason.canonical','deepreason.oracle'}, sorted(mods)" && grep -q 'PYTHONHASHSEED": "0"' src/deepreason/oracle_sandbox.py && grep -q "This module has no epistemic policy" src/deepreason/oracle_sandbox.py && grep -q "from deepreason.oracle import _LOCAL_OPERATIONS" src/deepreason/oracle_sandbox.py`
+`deepreason.canonical`, `deepreason.sandbox_os`, and (worker-side, function-locally)
+`deepreason.oracle`, and nothing else from the package — no `Artifact`, no
+`Commitment`, no `Budget`. Untrusted code receives canonical JSON and returns
+canonical JSON; it cannot be handed a record, so it cannot mutate one, mis-address
+one, or learn who authored the content it is running. `PYTHONHASHSEED=0` in the
+worker environment is the other half: without it, set and dict iteration order in
+untrusted source would make the verdict a function of the process.
+
+`deepreason.sandbox_os` joined the list on 2026-08-28 (execution-safety tranche)
+and it does not weaken the claim: it holds the network-namespace probe this
+worker is now launched behind, and imports nothing from `deepreason` at all. The
+check asserts that TRANSITIVELY rather than trusting the one-hop list, because an
+admitted module that later grew an ontology import is exactly how a boundary
+stated in prose stops being true. Widening an enumeration without pinning why the
+new member is admissible turns a check into a formality.
+`check: python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/oracle_sandbox.py').read_text()); mods={n.module for n in ast.walk(t) if isinstance(n,ast.ImportFrom) and n.module}|{a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names}; assert {m for m in mods if m.startswith('deepreason')}=={'deepreason.canonical','deepreason.oracle','deepreason.sandbox_os'}, sorted(mods)" && python -c "import ast,pathlib; t=ast.parse(pathlib.Path('src/deepreason/sandbox_os.py').read_text()); mods={n.module for n in ast.walk(t) if isinstance(n,ast.ImportFrom) and n.module}|{a.name for n in ast.walk(t) if isinstance(n,ast.Import) for a in n.names}; assert not {m for m in mods if m.startswith('deepreason')}, sorted(mods)" && grep -q 'PYTHONHASHSEED": "0"' src/deepreason/oracle_sandbox.py && grep -q "This module has no epistemic policy" src/deepreason/oracle_sandbox.py && grep -q "from deepreason.oracle import _LOCAL_OPERATIONS" src/deepreason/oracle_sandbox.py`
 
 **`ontology.Verdict` is not the verdict vocabulary, and evaluation would not be
 improved by making it so.** `programs.py` and `oracle.py` each define
