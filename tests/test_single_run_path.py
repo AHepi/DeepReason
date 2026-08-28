@@ -343,23 +343,55 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     committed = json.loads(
         (GROUNDED_ROOT / MANIFEST_NAME).read_text(encoding="utf-8")
     )
-    # Field by field, EXCEPT the one field a default legitimately moved. F3
-    # (2026-08-26) turned research on by default, so a recompile of the same
-    # config now carries an enabled research policy the August run did not
-    # have. That delta is asserted below rather than waived -- excluding a
-    # field without pinning what changed inside it is how a second, unnoticed
-    # drift would ride along.
-    moved = "inquiry_capability_policy"
+    # Field by field, EXCEPT the fields a default legitimately moved. Each
+    # delta is asserted below rather than waived -- excluding a field without
+    # pinning what changed inside it is how a second, unnoticed drift would
+    # ride along.
+    #
+    # F3 (2026-08-26) turned research on by default, so a recompile of the same
+    # config carries an enabled research policy the August run did not have.
+    #
+    # The execution-safety tranche (2026-08-28) made the CONTAINED runner the
+    # default, on the operator's "If so switch both on" and a SAFE containment
+    # verdict, so the same recompile now binds the contained toolchain and the
+    # contained simulation envelope. Old roots owe the future nothing (operator
+    # law, 2026-08-14): a committed manifest ceasing to match a fresh compile is
+    # this law in action, not a regression.
+    moved = {"inquiry_capability_policy", "toolchains"}
     assert _without_evidence(compiled).keys() == _without_evidence(committed).keys()
     assert {
-        k: v for k, v in _without_evidence(compiled).items() if k != moved
-    } == {k: v for k, v in _without_evidence(committed).items() if k != moved}
-    # Inside the moved field, research and only research differs, and it
-    # differs in exactly the direction the operator asked for.
-    compiled_caps = dict(compiled[moved])
-    committed_caps = dict(committed[moved])
+        k: v for k, v in _without_evidence(compiled).items() if k not in moved
+    } == {k: v for k, v in _without_evidence(committed).items() if k not in moved}
+
+    # The toolchain moved from the local runner to the contained one, and
+    # NOTHING ELSE about the entry moved -- same interpreter, same no-network
+    # pin. Asserted by popping the two fields that had to change and comparing
+    # the remainder.
+    (compiled_toolchain,) = compiled["toolchains"]
+    (committed_toolchain,) = committed["toolchains"]
+    compiled_toolchain = dict(compiled_toolchain)
+    committed_toolchain = dict(committed_toolchain)
+    assert compiled_toolchain.pop("id") == "python@deepreason-public-contained.v1"
+    assert committed_toolchain.pop("id") == "python@deepreason-public-local.v1"
+    assert compiled_toolchain.pop("runner") == "container"
+    assert committed_toolchain.pop("runner") == "local"
+    assert compiled_toolchain == committed_toolchain
+    assert compiled_toolchain["network"] is False
+
+    # Inside the capability policy, research and simulation differ and nothing
+    # else does, each in exactly the direction the operator asked for.
+    compiled_caps = dict(compiled["inquiry_capability_policy"])
+    committed_caps = dict(committed["inquiry_capability_policy"])
     assert compiled_caps.pop("research")["enabled"] is True
     assert committed_caps.pop("research")["enabled"] is False
+    compiled_simulation = compiled_caps.pop("simulation")
+    committed_simulation = committed_caps.pop("simulation")
+    assert compiled_simulation["runner_profile"] == "simulation.container.v1"
+    assert committed_simulation["runner_profile"] == "simulation.declarative.v1"
+    # Both remain ON and both remain finite: the switch changed the runner, not
+    # whether simulation runs or whether its authority is bounded.
+    assert compiled_simulation["enabled"] is committed_simulation["enabled"] is True
+    assert 0 < compiled_simulation["maximum_simulation_executions"] < 1_000
     assert compiled_caps == committed_caps
     # The evidence half is identity too, so it is asserted, not waived:
     # it must address the dossier this compile actually admitted.

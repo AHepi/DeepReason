@@ -33,16 +33,28 @@ run, with no switch anywhere. What is off is row 2: the `sandboxed_python_v1`
 simulation runner. Both descriptions in the operator's message land on real
 things; they land on different rows.
 
-**F2 — The "everything on" mismatch is real and is exactly as commit
-`74d9f71ca` recorded it.** `engaged_simulation_policy` returns
-`runner_profile="simulation.declarative.v1"` while binding
-`python_toolchain_identity=PUBLIC_SIMULATION_TOOLCHAIN_ID`
-(`v6_policy.py:292, 378-382`) — a Python toolchain the declarative profile
-can never dispatch to. `capabilities/simulation.py:581-587` computes
-`expected_profile` from the proposal's mode and denies with terminal reason
-`runner_profile_mismatch` when they differ. A `sandboxed_python_v1` proposal
-therefore can never be admitted under the default policy. Each half is
-correct on its own; together they advertise a channel that is closed.
+**F2 — A `sandboxed_python_v1` proposal could never be admitted under the
+default policy.** `capabilities/simulation.py:581-587` computed an
+`expected_profile` from the proposal's mode and denied with terminal reason
+`runner_profile_mismatch` when it differed from the policy's. The default
+policy's profile was `simulation.declarative.v1`, and for
+`sandboxed_python_v1` the expected profile is `simulation.container.v1`, so
+those could never agree. Model-authored Python was unreachable on any run
+nobody had configured — which is what commit `74d9f71ca` recorded live.
+
+> **CORRECTED 2026-08-28.** This finding first read, following commit
+> `74d9f71ca`'s own framing, that the default "binds a Python toolchain the
+> declarative profile can never dispatch to". That is wrong, and the
+> correction matters because it changes what the defect was. The two ALWAYS
+> paired: `engaged_simulation_toolchain` (`v6_policy.py:572-577`) reads the
+> same runner choice the policy does, so the declarative branch binds the
+> LOCAL toolchain and the contained branch binds the CONTAINED one. The
+> declarative runner genuinely uses `python@deepreason-public-local.v1` — it
+> compiles its JSON document to Python and executes it. There was no
+> toolchain mismatch. The defect was only, and entirely, the mode-to-profile
+> refusal above. Stated plainly rather than left standing because the
+> sharper-sounding version would have sent the next reader to fix a pairing
+> that was never broken.
 
 **F3 — `DR-INV-evidence-channels` is accurate and was never the problem.**
 The simulation CHANNEL is on by default and always has been since 2026-08-26.

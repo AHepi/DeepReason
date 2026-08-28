@@ -388,3 +388,115 @@ GATE: python tools/docs_verify.py — this check green, and the three known
 shallow-clone CON-run-identity.md failures unchanged. --audit must not
 refuse whatever check replaces it.
 ```
+
+---
+
+## P8 — LOW: model-authored simulations cannot define classes
+
+**What.** `class` statements have never worked inside the simulation sandboxes:
+the builtin whitelist has no `__build_class__`, so a class definition raises
+`NameError: __build_class__ not found`. Verified identical against the pre-fix
+tree, so it is a standing expressive limit and NOT a cost of the 2026-08-27
+boundary fix — recorded here because a future reader who hits it will otherwise
+attribute it to that fix. It constrains what a model can express: anything
+stateful must be written with closures and dicts.
+
+**Prompt:**
+
+```
+TARGET REPOSITORY: AHepi/DeepReason.
+
+Route through dr-change-orchestrator. One tranche, one goal: decide, on
+evidence, whether model-authored simulations should be able to define
+classes — and implement the decision either way.
+
+THE FACT, already measured — cite, do not re-derive:
+experiments/2026-08-27-change-execution-safety/PARKED.md P8 and the docstring
+of tests/test_sandbox_guard.py::test_ordinary_sandboxed_python_still_runs_and
+_still_passes. `class` raises NameError inside both simulation sandboxes
+because __build_class__ is not in the builtin whitelist. This predates and is
+unaffected by the attribute-boundary fix.
+
+THE QUESTION, and it is a real fork rather than an obvious yes:
+(a) ALLOW it — add __build_class__ to the whitelist. Then check what a class
+    body reaches that a function body does not. The attribute boundary
+    (deepreason.sandbox_guard) rejects CPython's introspection prefixes
+    including `mro`, so the obvious escape is closed, but a class statement
+    creates a TYPE, and types are the root of the __subclasses__ graph. Probe
+    it the way the execution-safety tranche probed the frame walk — with a
+    working exploit attempt, not by reading the code — before deciding.
+(b) KEEP the limit and DOCUMENT it where a model can see it. If the wire
+    contract's field description for model_source said "no class statements",
+    a model would stop spending tokens on programs that cannot load.
+
+Prefer (b) unless (a)'s probe comes back clean, and say so in SPEC.md either
+way. Cheap and safe beats expressive here: nothing in the recorded simulation
+proposals needed a class.
+
+GATE: pytest tests/ -q -n 4, 0 failed. If (a), the probe script joins
+experiments/.../proof/ and a regression test pins whatever it found.
+```
+
+---
+
+## P9 — MEDIUM: two containment properties still rest on ONE layer each
+
+**What.** After the 2026-08-28 fix, properties (a) no network, (b) bounded wall
+time and (c) bounded memory each have an OS mechanism under them. Properties
+(d) file confinement and (e) no privilege beyond the harness rest on the
+LANGUAGE boundary alone — there is still no mount namespace and no syscall
+filter, so if model code ever obtained `open` or `os` it would reach the
+filesystem at harness privilege. The boundary is now closed and its closure is
+re-derived by test, so this is depth rather than a hole. Recommended, and
+explicitly NOT a blocker on the switch-on: SAFETY.md's 2026-08-28 verdict is
+SAFE with this stated as residue.
+
+**Prompt:**
+
+```
+TARGET REPOSITORY: AHepi/DeepReason.
+
+Route through dr-change-orchestrator. One tranche, one goal: give containment
+properties (d) file confinement and (e) no privilege beyond the harness an OS
+mechanism, so no property of the execution sandbox rests on a single layer.
+
+WHY THIS IS WORTH DOING even though nothing is currently broken: this
+repository has already paid once for a property with one layer. The
+2026-08-27 escape defeated the language boundary at all five call sites, and
+the ONLY property that survived was the one that never depended on it — the
+network namespace held with arbitrary os.system in hand. That is the argument,
+and it is measured rather than hypothetical:
+experiments/2026-08-27-change-execution-safety/SAFETY.md, the (a) section.
+
+WHAT TO BUILD:
+G3 first, because it is smaller and the machinery exists. Apply a seccomp
+    filter denying execve, execveat, fork, vfork and clone in the contained
+    simulation worker, which needs no subprocesses. verification/_sandbox.py
+    already implements exactly this shape for network syscalls and no
+    execution backend calls it. That makes (e) an OS guarantee.
+G2 second, and scope it honestly. A mount namespace with a real root is the
+    textbook answer for (d) and it is NOT cheap: the worker needs its
+    interpreter and stdlib inside the jail, so it means bind-mounts and a
+    pivot_root, and a fragile one breaks every run on hosts that were fine.
+    Consider the cheaper honest alternative first: keep cwd + RLIMIT_FSIZE and
+    STOP reporting "filesystem": "ephemeral scratch workdir" from
+    resource_limits(), which claims a confinement that does not exist. A
+    truthful weaker string beats a false stronger one.
+
+PROOF OBLIGATION: a differential per property, in the shape of
+proof/network_namespace_differential.sh — run the probe inside and outside the
+containment and show the results differ. SAFETY.md G5 records that
+self-reported strings are how the original escape survived a full committed
+containment proof, so no new property may be pinned by one.
+
+FROZEN SURFACES: verification/ is surface 3 and this touches it. The operator
+granted frozen-surface contact on 2026-08-27 conditional on documentation
+("Frozen surface changes are permitted as long as you document what is
+affected"); treat that as the standing form and write the disposition in
+FIX.md before implementing, the way
+experiments/2026-08-27-change-execution-safety/FIX.md does.
+
+GATE: pytest tests/ -q -n 4, 0 failed — and the positive tests matter as much
+as the negative ones here. A syscall filter that breaks legitimate simulations
+is a worse outcome than the depth it buys.
+```
