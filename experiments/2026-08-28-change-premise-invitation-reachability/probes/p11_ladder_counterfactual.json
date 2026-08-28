@@ -1,0 +1,709 @@
+[
+  {
+    "citable_legend_chars": null,
+    "critic_dispatches": 29,
+    "dispatches_with_an_open_problem_new": 0,
+    "dispatches_with_an_open_problem_old": 0,
+    "invitation_paragraph_chars": null,
+    "invited_prompt_chars": [],
+    "median_uninvited_prompt_chars": 3946,
+    "per_dispatch": [
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 111,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 146,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 153,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 174,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 181,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 202,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 209,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 305,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 312,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 317,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 324,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 329,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 336,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 341,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 348,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 355,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 397,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 404,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 409,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 414,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 421,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 426,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 433,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 498,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 503,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 510,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 517,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 524,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 531,
+        "shown_invitation": false
+      }
+    ],
+    "root": "failed-epoch0-run-19c2ff747b7e72c1ff1ba262aee2de360caf32696d2e1e8287247683fef74389",
+    "shown_invitation": 0
+  },
+  {
+    "citable_legend_chars": null,
+    "critic_dispatches": 15,
+    "dispatches_with_an_open_problem_new": 0,
+    "dispatches_with_an_open_problem_old": 0,
+    "invitation_paragraph_chars": null,
+    "invited_prompt_chars": [],
+    "median_uninvited_prompt_chars": 5780,
+    "per_dispatch": [
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 123,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 158,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 165,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 186,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 193,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 209,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 216,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 308,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 315,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 322,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 329,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 336,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 343,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 350,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 357,
+        "shown_invitation": false
+      }
+    ],
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "shown_invitation": 0
+  },
+  {
+    "citable_legend_chars": 4157,
+    "critic_dispatches": 10,
+    "dispatches_with_an_open_problem_new": 9,
+    "dispatches_with_an_open_problem_old": 9,
+    "invitation_paragraph_chars": 589,
+    "invited_prompt_chars": [
+      11805,
+      11805,
+      11805
+    ],
+    "median_uninvited_prompt_chars": 3796,
+    "per_dispatch": [
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 115,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 167,
+        "shown_invitation": true
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 204,
+        "shown_invitation": true
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 300,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 307,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 314,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 319,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 326,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 333,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 340,
+        "shown_invitation": true
+      }
+    ],
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c",
+    "shown_invitation": 3
+  },
+  {
+    "citable_legend_chars": 3550,
+    "critic_dispatches": 44,
+    "dispatches_with_an_open_problem_new": 10,
+    "dispatches_with_an_open_problem_old": 2,
+    "invitation_paragraph_chars": 589,
+    "invited_prompt_chars": [
+      11805,
+      11805
+    ],
+    "median_uninvited_prompt_chars": 3498,
+    "per_dispatch": [
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 141,
+        "shown_invitation": true
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "seq": 180,
+        "shown_invitation": true
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 221,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 226,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 231,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 237,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 246,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 251,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 256,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 262,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 267,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 272,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 369,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 374,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 381,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 388,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 393,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 398,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 404,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 413,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 420,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 427,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 434,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 439,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 444,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 450,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 491,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 498,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 505,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 510,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 562,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 567,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 574,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 615,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 620,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [],
+        "problems_open_old": [],
+        "seq": 625,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 695,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 700,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 705,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 747,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 754,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 801,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 808,
+        "shown_invitation": false
+      },
+      {
+        "problems_open_new": [
+          "question-9e8800977c3e1deaf5b034b93db38959"
+        ],
+        "problems_open_old": [],
+        "seq": 813,
+        "shown_invitation": false
+      }
+    ],
+    "root": "run",
+    "shown_invitation": 2
+  }
+]
