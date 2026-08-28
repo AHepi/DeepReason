@@ -276,6 +276,31 @@ The tests that catch you, cheapest first:
 
 ## Traps
 
+- **The repair `mode` vocabulary is ONE type, imported — writing it twice
+  killed a run at cycle 2. FIXED (repair-vocabulary tranche, 2026-08-28).**
+  `workflow/repair_transaction.py` is the only writer of a
+  `repair.semantic-task.v1` payload's `mode`, and it copies
+  `V6RepairTurn.mode` verbatim. That field's `Literal` is therefore the
+  vocabulary, and the authority that reads it back
+  (`workflow/nonconjecture_recovery.py::_repair_authority`) had a SECOND,
+  hand-typed set: `{"patch", "full"}`. They intersected in `patch` alone.
+  `full` was emitted nowhere in `src/`; `whole_object_syntax` — what the
+  session emits whenever a response cannot be parsed at all, so no baseline
+  exists to patch — was accepted nowhere. Technique
+  run-456885c569c0f4f7 lost epoch 5 at cycle 2 to
+  `NonConjectureRecoveryAuthorityError("repair mode is invalid")`, and it was
+  not stochastic: 36 of the 56 repair payloads across three committed roots
+  carry the rejected value. The vocabulary now lives once in `llm/repair.py`
+  (`V6RepairMode`, with `V6_REPAIR_TASK_MODES` DERIVED by `get_args(...)`
+  minus the non-repair `initial`, and `V6_WHOLE_OBJECT_REPAIR_MODES` for the
+  modes whose response IS the replacement object), and the reader imports
+  both. Adding a mode to the `Literal` now reaches the authority; adding one
+  to the authority alone is impossible, because there is no set there to add
+  to. Census: `experiments/2026-08-28-audit-run-problems/probes/
+  q5_repair_payloads.json`; the tranche is
+  `experiments/2026-08-28-defect-repair-vocabulary/`.
+`check: python -c "import inspect; from typing import get_args, get_type_hints; from deepreason.llm.repair import V6RepairTurn, V6_REPAIR_TASK_MODES, V6_WHOLE_OBJECT_REPAIR_MODES; from deepreason.workflow import nonconjecture_recovery as N; assert set(get_args(get_type_hints(V6RepairTurn)['mode'])) == V6_REPAIR_TASK_MODES | {'initial'}; assert V6_REPAIR_TASK_MODES == {'whole_object_syntax', 'patch'}; src=inspect.getsource(N._repair_authority); assert 'V6_REPAIR_TASK_MODES' in src and 'V6_WHOLE_OBJECT_REPAIR_MODES' in src; q=chr(34); assert q+'full'+q not in inspect.getsource(N)" && grep -q '"mode": turn.mode,' src/deepreason/workflow/repair_transaction.py && python -m pytest tests/test_v6_repair_mode_vocabulary.py -q`
+
 - **The two record types spell "no raw blob" differently, and only one reader
   translated.** `LLMCall.raw_ref` is a plain `str` whose absence is `""`;
   `ProviderAttemptV1.raw_ref` is `str | None` whose absence is `None`.

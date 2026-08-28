@@ -1018,6 +1018,16 @@ def _schema_value(schema: dict, root: dict, *, field: str = "value"):
     return "deterministic fixture value"
 
 
+class RawResponse(str):
+    """A completion body the loopback serves VERBATIM, without JSON encoding.
+
+    Everything else this fixture returns is encoded, and no value `json.dumps`
+    can emit is invalid JSON -- so a caller that needs to drive the "response
+    could not be parsed at all" path (the sole route to a
+    `whole_object_syntax` repair) has no way to express it otherwise.
+    """
+
+
 def response_for_schema(schema: dict, prompt: str) -> dict:
     """Return one semantically conservative value for an advertised schema."""
 
@@ -1213,7 +1223,11 @@ def _provider_server(state: ProviderState):
                     raise ValueError("loopback fixture accepts text requests only")
                 schema = _schema_from_request(body, prompt)
                 response = response_for_schema(schema, prompt)
-                content = json.dumps(response, sort_keys=True, separators=(",", ":"))
+                content = (
+                    str(response)
+                    if isinstance(response, RawResponse)
+                    else json.dumps(response, sort_keys=True, separators=(",", ":"))
+                )
                 state.record(
                     prompt=prompt,
                     model=str(body.get("model")),

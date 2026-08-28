@@ -68,8 +68,10 @@ was written and read back": the tranche measured a soak reporting
 `covered` / `repairs: 1` whose root contained exactly one
 `repair.semantic-task.v1` preparation in the harmless mode, and zero in the
 mode that kills runs. This tranche added `repair_payloads` and `repair_modes`,
-read from the preparations, so D1's verdict can no longer rest on an attempt
-index alone.
+read from the preparations, and moved D1's `partial` predicate onto
+`repair_payloads == 0`, so D1's verdict can no longer rest on an attempt
+index alone. D1 is therefore CLOSED; what follows is the same question asked
+of the other three.
 
 The parked question is whether the OTHER three seams (D2 route-lease, D3
 budget-auth, D4 reservation-bound) decide `covered` on proxies of the same

@@ -701,9 +701,29 @@ def _attempt_facts(root: Path) -> dict:
                 roles.add(str(lease["role"]))
             if data.get("contract_id"):
                 contracts.add(str(data["contract_id"]))
+    # `repairs` above counts provider attempts past index 0, which is NOT the
+    # same fact as a repair task having been written and read back.  The modes
+    # below are read from the repair preparations themselves, so a D1 verdict
+    # cannot claim the repair ladder was walked on the strength of an attempt
+    # index alone.
+    modes: list[str] = []
+    preparations = root / "objects" / "workflow-work-preparation-v1"
+    if preparations.is_dir():
+        for path in sorted(preparations.glob("*.json")):
+            try:
+                payload = json.loads(path.read_text())["data"]["task_payload_value"]
+            except (OSError, KeyError, TypeError, json.JSONDecodeError):
+                continue
+            if (
+                isinstance(payload, dict)
+                and payload.get("schema") == "repair.semantic-task.v1"
+            ):
+                modes.append(str(payload.get("mode")))
     return {
         "attempts": attempts,
         "repairs": repairs,
+        "repair_payloads": len(modes),
+        "repair_modes": sorted(set(modes)),
         "attempts_without_complete_lease": leaseless,
         "distinct_contracts": sorted(contracts),
         "distinct_roles": sorted(roles),
@@ -740,6 +760,8 @@ def assess_seams(root: Path, status: dict, driven: dict) -> list[dict]:
         detail: dict = {"reached_by": reached}
         if seam.id == "D1-seat-contract":
             detail["repairs"] = facts["repairs"]
+            detail["repair_payloads"] = facts["repair_payloads"]
+            detail["repair_modes"] = facts["repair_modes"]
             detail["distinct_contracts"] = facts["distinct_contracts"]
         if seam.id == "D2-route-lease":
             detail["attempts"] = facts["attempts"]
@@ -760,12 +782,16 @@ def assess_seams(root: Path, status: dict, driven: dict) -> list[dict]:
                 + ", ".join(seam.reached_by)
                 + " was written -- this run never reached the seam"
             )
-        elif seam.id == "D1-seat-contract" and facts["repairs"] == 0:
+        elif seam.id == "D1-seat-contract" and facts["repair_payloads"] == 0:
+            # Judged on repair PAYLOADS, not on `repairs`: an attempt past
+            # index 0 is not proof that a repair task was written and read.
             disposition = "partial"
             reason = (
-                "seat contracts exercised, but zero repair attempts: the "
-                "deterministic stub always returns a schema-valid response, "
-                "so attempt_index never advances past 0 offline"
+                "seat contracts exercised, but zero repair tasks recorded: an "
+                "un-induced stub always returns a schema-valid response, so "
+                "no repair is ever requested. Re-run with --induce-repairs N "
+                "(and --induce-repair-kind unparseable, or alternate, to "
+                "reach whole_object_syntax as well as patch)"
             )
         elif seam.id == "D2-route-lease" and facts["attempts_without_complete_lease"]:
             disposition = "failed"
@@ -894,7 +920,16 @@ def assess_run(
 # --------------------------------------------------------------------------
 
 
-def install_repair_inducer(limit: int) -> dict[str, int]:
+# What an induced first response looks like, and therefore WHICH repair mode
+# the session can take against it.  This is not a style choice: a parseable
+# response leaves a JSON baseline, so the repair turn is `patch`; only an
+# UNPARSEABLE one leaves no baseline, and that is the sole route to
+# `whole_object_syntax` -- the mode that killed technique run-456885c569c0f4f7
+# at cycle 2 and that no offline instrument could reach before.
+INDUCTION_KINDS = ("invalid", "unparseable", "alternate")
+
+
+def install_repair_inducer(limit: int, *, kind: str = "invalid") -> dict[str, str]:
     """Make the stub answer the FIRST request per wire schema unusably once.
 
     D1's recorded death is route-seat capability exhaustion, and a seat only
@@ -903,23 +938,38 @@ def install_repair_inducer(limit: int) -> dict[str, int]:
     repair ladder -- and everything downstream of it -- is invisible to an
     otherwise faithful soak.  Rather than mint a second fixture, this wraps
     ``wheel_operational_smoke.response_for_schema`` in place: the first
-    response for each distinct wire schema title is replaced with a
-    well-formed JSON object that satisfies no closed schema, which is exactly
-    what the adapter's validator rejects into a repair prompt.  Every later
+    response for each distinct wire schema title is replaced, and every later
     response for that title is the smoke's own value, so the run proceeds.
 
+    ``kind`` selects what the replacement is, which selects the repair MODE
+    the run then takes: ``invalid`` is well-formed JSON satisfying no closed
+    schema (-> `patch`), ``unparseable`` is not JSON at all (->
+    `whole_object_syntax`), ``alternate`` walks the two so one soak drives
+    both.  Returns the induced titles mapped to the kind each received.
+
     Bounded by ``limit`` distinct titles so induction cannot become an
-    unbounded fault injector: the point is to REACH the repair path once, not
-    to starve the run.
+    unbounded fault injector: the point is to REACH the repair path, not to
+    starve the run.
     """
 
-    induced: dict[str, int] = {}
+    if kind not in INDUCTION_KINDS:
+        raise ValueError(f"unknown induction kind {kind!r}")
+    induced: dict[str, str] = {}
     original = _smoke.response_for_schema
 
-    def wrapper(schema: dict, prompt: str) -> dict:
+    def wrapper(schema: dict, prompt: str):
         title = str(schema.get("title") or "<untitled>")
         if title not in induced and len(induced) < limit:
-            induced[title] = 1
+            chosen = kind
+            if kind == "alternate":
+                chosen = "unparseable" if len(induced) % 2 == 0 else "invalid"
+            induced[title] = chosen
+            if chosen == "unparseable":
+                # RawResponse is served without JSON encoding, so the adapter
+                # has nothing to parse and no pointer can be authorized
+                # against a baseline that does not exist. A plain str would be
+                # encoded into a quoted JSON string, which parses.
+                return _smoke.RawResponse("I cannot answer that as JSON. {{{")
             # Well-formed JSON, no property any closed wire schema declares.
             return {"soak_induced_repair": title}
         return original(schema, prompt)
@@ -1040,6 +1090,17 @@ def main(argv: list[str] | None = None) -> int:
             "(0 = faithful drive, the default)"
         ),
     )
+    parser.add_argument(
+        "--induce-repair-kind",
+        choices=INDUCTION_KINDS,
+        default="invalid",
+        help=(
+            "what the induced response is, and so which repair MODE the run "
+            "takes: invalid = parseable but schema-invalid (-> patch, the "
+            "default and the pre-existing behaviour); unparseable = not JSON "
+            "(-> whole_object_syntax); alternate = both"
+        ),
+    )
     args = parser.parse_args(argv)
 
     if args.list_cases:
@@ -1081,12 +1142,13 @@ def main(argv: list[str] | None = None) -> int:
           f"(reused from wheel_operational_smoke)")
     print(f"[soak] working directory {workdir}")
 
-    induced: dict[str, int] = {}
+    induced: dict[str, str] = {}
 
     report: dict = {
         "cycles": cycles,
         "token_budget": token_budget,
         "induce_repairs": args.induce_repairs,
+        "induce_repair_kind": args.induce_repair_kind,
     }
     try:
         report["case"] = build_root(case, root, port=port)
@@ -1110,9 +1172,11 @@ def main(argv: list[str] | None = None) -> int:
         # candidate wires, and the run's own `conjecturer.turn.v6` never
         # induced) and would corrupt the very report the launch depends on.
         if args.induce_repairs:
-            induced = install_repair_inducer(args.induce_repairs)
-            print(f"[soak] repair induction ON for the first "
-                  f"{args.induce_repairs} wire schema(s) of the RUN")
+            induced = install_repair_inducer(
+                args.induce_repairs, kind=args.induce_repair_kind
+            )
+            print(f"[soak] repair induction ON ({args.induce_repair_kind}) for "
+                  f"the first {args.induce_repairs} wire schema(s) of the RUN")
 
         print(f"[soak] driving {cycles} cycles …")
         report["drive"] = drive(root, cycles=cycles, token_budget=token_budget)
@@ -1125,7 +1189,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         report["seams"] = assess_seams(root, report["status"], report["drive"])
         report["provider_calls"] = state.total_calls
-        report["induced_schemas"] = sorted(induced)
+        report["induced_schemas"] = dict(sorted(induced.items()))
     finally:
         server.shutdown()
         server.server_close()

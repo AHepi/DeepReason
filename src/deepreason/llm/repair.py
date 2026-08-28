@@ -12,7 +12,7 @@ import json
 import re
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any, Literal
+from typing import Any, Literal, get_args
 
 from pydantic import (
     BaseModel,
@@ -1495,6 +1495,31 @@ def subtree_repair_prompt(
     )
 
 
+# The repair `mode` vocabulary, declared ONCE. `V6RepairTurn.mode` is copied
+# verbatim into the `repair.semantic-task.v1` payload by its single writer and
+# read back by a single authority, `_repair_authority`, which imports the names
+# below rather than restating them: a second, independently typed set once
+# admitted a mode nothing emits and rejected the commonest one there is,
+# killing technique run-456885c569c0f4f7 at cycle 2 over work already paid for.
+# Deriving the sets from the Literal is what makes a mode added here reach
+# every consumer.
+V6RepairMode = Literal["initial", "whole_object_syntax", "patch"]
+
+# The initial call is not a repair, so it is the one mode that never reaches a
+# repair payload; every other mode can.
+V6_REPAIR_INITIAL_MODE = "initial"
+V6_REPAIR_TASK_MODES: frozenset[str] = frozenset(get_args(V6RepairMode)) - {
+    V6_REPAIR_INITIAL_MODE
+}
+
+# Modes whose response IS the whole replacement object rather than a patch
+# against a parsed baseline: there is no baseline to patch, so no pointer can
+# be authorized and the raw value is the candidate.
+V6_WHOLE_OBJECT_REPAIR_MODES: frozenset[str] = frozenset(
+    {V6_REPAIR_INITIAL_MODE, "whole_object_syntax"}
+)
+
+
 @dataclass(frozen=True)
 class V6RepairTurn:
     """One initial, syntax-retry, or patch-only v6 provider request."""
@@ -1502,7 +1527,7 @@ class V6RepairTurn:
     attempt: int
     request: str
     response_schema: dict[str, Any]
-    mode: Literal["initial", "whole_object_syntax", "patch"]
+    mode: V6RepairMode
     diagnostic_envelope: RepairDiagnosticEnvelopeV2 | None = None
     authorized_pointers: tuple[str, ...] = ()
     repair_scope: str = ""
@@ -1617,7 +1642,7 @@ class V6PatchRepairSession:
         """Parse a response and apply a patch without accepting it semantically."""
 
         self._pending_candidate = _MISSING
-        if turn.mode in {"initial", "whole_object_syntax"}:
+        if turn.mode in V6_WHOLE_OBJECT_REPAIR_MODES:
             parsed = parse_one_json_value(raw)
             self.invalid_text = parsed.text
             self._pending_candidate = parsed.value
@@ -1658,7 +1683,7 @@ class V6PatchRepairSession:
                 separators=(",", ":"),
                 ensure_ascii=False,
             )
-        elif turn.mode in {"initial", "whole_object_syntax"}:
+        elif turn.mode in V6_WHOLE_OBJECT_REPAIR_MODES:
             try:
                 parsed = parse_one_json_value(raw)
             except ValueError:

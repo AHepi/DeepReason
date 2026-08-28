@@ -21,6 +21,7 @@ one leaves a baseline and produces ``patch`` with a canonical pointer list.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -31,9 +32,13 @@ from deepreason.llm.packs import aliases_for_pack
 from deepreason.llm.repair import V6RepairTurn
 from deepreason.llm.wire import AtomicConjectureWireContractV1
 from deepreason.run_manifest import load_run_manifest
+from deepreason.workflow import nonconjecture_recovery
 from deepreason.workflow.atomic_recovery import recover_atomic_child_output
+from deepreason.workflow.nonconjecture_recovery import (
+    NonConjectureRecoveryAuthorityError,
+    _repair_authority,
+)
 from deepreason.workflow.transaction_service import InquiryTransactionService
-
 from tests.test_v6_engaged_repair_verification import _engaged_root
 
 REPAIRED_SLOT = 5
@@ -171,3 +176,86 @@ def test_no_mode_name_survives_that_nothing_emits():
     assert "V6_REPAIR_TASK_MODES" in inspect.getsource(
         nonconjecture_recovery._repair_authority
     )
+
+
+def _authority_over(root: Path, slot: int, monkeypatch, **payload_overrides):
+    """Call the repair authority over a REAL recorded repair, one field changed.
+
+    The payload is digest-bound to its preparation's ``trigger_ref``, so no
+    writer can produce a mismatched one and no committed record contains one:
+    the only way to reach the checks that come after that binding is to
+    neutralize it. ``_trigger`` is therefore stubbed for this call and nothing
+    else — every other input is the durable object the fixture recorded.
+    """
+
+    harness = Harness(root)
+    child, _ = _child_and_repair(harness, slot)
+
+    def payload_of(item):
+        value = item.preparation.task_payload_value
+        return value if hasattr(value, "get") else {}
+
+    repair = next(
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if payload_of(item).get("schema") == "repair.semantic-task.v1"
+        and payload_of(item).get("parent_work_id") == child.preparation.id
+    )
+    provider = repair.provider_attempts[repair.preparation.attempt_index]
+    raw_value = json.loads(harness.blobs.get(provider.raw_ref).decode("utf-8"))
+    monkeypatch.setattr(nonconjecture_recovery, "_trigger", lambda *a, **k: None)
+    return _repair_authority(
+        harness,
+        repair,
+        repair.preparation,
+        {**payload_of(repair), **payload_overrides},
+        raw_value,
+    )
+
+
+def test_a_whole_object_repair_claiming_pointers_is_refused(
+    whole_object_root, monkeypatch
+):
+    """Mode and pointer shape must agree, or a raw value stands where a patch is owed."""
+
+    with pytest.raises(NonConjectureRecoveryAuthorityError) as error:
+        _authority_over(
+            whole_object_root,
+            REPAIRED_SLOT,
+            monkeypatch,
+            authorized_pointers=["/candidate/typicality"],
+        )
+    assert str(error.value) == "repair pointers do not match the repair mode"
+
+
+def test_a_patch_repair_claiming_no_pointers_is_refused(patch_root, monkeypatch):
+    """The other direction: a patch authorizes at least one pointer or it is not one."""
+
+    with pytest.raises(NonConjectureRecoveryAuthorityError) as error:
+        _authority_over(patch_root, REPAIRED_SLOT, monkeypatch, authorized_pointers=[])
+    assert str(error.value) == "repair pointers do not match the repair mode"
+
+
+def test_the_writer_cannot_produce_a_disagreeing_payload(
+    whole_object_root, patch_root
+):
+    """The check above guards a WRITER guarantee, so pin the guarantee too.
+
+    A patch turn takes its pointers from ``RepairDiagnosticEnvelopeV2``, whose
+    ``authorized_pointers`` is ``min_length=1``; a whole-object turn is built
+    with none. Both recorded roots are read rather than reasoned about.
+    """
+
+    for root in (whole_object_root, patch_root):
+        harness = Harness(root)
+        payloads = [
+            value
+            for item in harness.workflow_state.transaction_work.values()
+            for value in [item.preparation.task_payload_value]
+            if hasattr(value, "get")
+            and value.get("schema") == "repair.semantic-task.v1"
+        ]
+        assert payloads
+        for payload in payloads:
+            whole_object = payload["mode"] == "whole_object_syntax"
+            assert bool(payload["authorized_pointers"]) is not whole_object
