@@ -28,3 +28,16 @@ Limitations are deliberately explicit:
 The descriptor hashes and generated-root hashes are frozen in
 `PROVENANCE.json`. Any intentional fixture change therefore requires an
 explicit provenance update.
+
+## Recorded pin moves
+
+`generated_root_sha256` has moved once since it was frozen, and every move is
+recorded in `PROVENANCE.json` under `generated_root_sha256_history` with its
+before, its after, and its reason:
+
+- **2026-08-28, A3 only** — the render-layout tranche
+  (`experiments/2026-08-28-change-render-layout-robust`, R2a) makes a
+  conjecturer prompt restate the question last. The prompt blob and the six
+  workflow records content-addressed from it therefore carry new ids: 7 of
+  A3's 23 files moved. A1 and A2 were byte-identical across the change, and no
+  committed run root changed verdict.

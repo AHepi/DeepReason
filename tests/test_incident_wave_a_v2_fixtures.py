@@ -445,6 +445,34 @@ def test_incident_descriptors_are_honest_and_source_linked():
 def test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic(
     tmp_path, _below_public_admission
 ):
+    """The derived roots rebuild byte-identically, twice, from frozen descriptors.
+
+    The A3 pin moved ONCE, deliberately, on 2026-08-28 (render-layout tranche,
+    ``experiments/2026-08-28-change-render-layout-robust``): R2a puts the
+    question last, so a conjecturer prompt now ends with a restated ``##
+    question`` section.  The rendered prompt is stored as a blob and six
+    workflow records are content-addressed from it, so their ids move with it.
+
+        31aebf8cea4e233aa608175a63fbe738ddbc977185990895685b8c1a35d359a2  before
+        edaf87133be56dd4864bef029ca50195f512897540aae5b43e5249ac3618d779  after
+
+    Measured rather than assumed: 7 of A3's 23 files moved — the prompt blob,
+    one proposal receipt, three transition decisions, ``log.jsonl`` and
+    ``workflow-checkpoint.json``.  A1 and A2 are byte-identical (12 files each,
+    zero moved), because neither renders a conjecturer prompt.  The before/after
+    file census is committed at that tranche's ``proof/wave_a_generated_*.json``
+    and the move is recorded again in ``PROVENANCE.json``'s
+    ``generated_root_sha256_history``.
+
+    These are DERIVED reconstructions, not original run roots (see
+    ``PROVENANCE.json``: ``original_root_bytes_included`` is false).  No
+    committed run root changed verdict under that tranche; ``verify_root``
+    re-derived over six committed roots before and after is byte-identical.
+
+    What this test is actually for — determinism, and agreement with the frozen
+    descriptors — is unchanged; only the A3 constant moved, and it moved for a
+    recorded reason.
+    """
     provenance = _read_json(FIXTURE_DIR / "PROVENANCE.json")
     for fixture_id in FIXTURE_IDS:
         descriptor_path = FIXTURE_DIR / f"{fixture_id}.json"

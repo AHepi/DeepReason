@@ -4,11 +4,23 @@
     "candidate_family_count": 2,
     "executable_test_yield": 1.0,
     "repair_rate": 0.5,
-    "tokens_per_admitted_useful_candidate": 784.5,
+    "tokens_per_admitted_useful_candidate": 825.0,
     "unique_candidate_bodies": 2,
     "valid_first_attempt_rate": 0.5,
     "verifier_backed_success_rate": 1.0
   },
+  "metrics_history": [
+    {
+      "after": 825.0,
+      "before": 784.5,
+      "date": "2026-08-28",
+      "delta_pct": 5.2,
+      "distinguished_from": "The same metric caught a real defect once (784.5 -> 875.0, tests/test_reference_menu.py::test_a_pre_v6_conjecture_pack_carries_no_v6_menu) where the fixture was NOT re-pinned because the bug was fixed instead. This move is distinguished from the prompt bytes, not the number: proof/semantic_freedom_token_delta.txt accounts for every added character.",
+      "metric": "tokens_per_admitted_useful_candidate",
+      "reason": "DISCLOSED COST of the render-layout change, not a defect. R2a appends a restated `## question` section to each conjecturer prompt and R2c renames `neighbourhood` to `live-neighbourhood` with a longer header. Those two sections are the WHOLE delta: +327 rendered characters = +81 tokens across the fixture's three attempts, with the repair prompt byte-identical. The six epistemic metrics beside it are unchanged, so seat behaviour is unchanged and only the rendering grew.",
+      "tranche": "experiments/2026-08-28-change-render-layout-robust"
+    }
+  ],
   "note": "Characterization diagnostics only; never an admission, status, routing, stop, or adjudication input.",
   "schema": "deepreason.semantic-freedom-baseline.v1",
   "status_input": false

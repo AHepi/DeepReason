@@ -1,6 +1,8 @@
 # CHECKLIST — one step, one done-criterion
 
-State: STOPPED at step 10 — C3 stop line, two committed pins moved. Awaiting the operator.
+State: COMPLETE. Step 10 closed 2026-08-28 after the monitor's ruling on the
+C3 stop discharged the tripwire for exactly the two named pins (recorded in
+DELIVERY.md). VALIDATION.md: PASS. Full gate 4403 passed, 0 failed.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -44,8 +46,16 @@ Spec: SPEC.md. Request: REQUEST.md.
       task-frame-only seats).
       DONE WHEN: PARKED.md committed with one fenced, paste-ready prompt.
 
-- [ ] 10. S9 — the proof set: blast_radius verdict, verify_root before/after,
+- [x] 10. S9 — the proof set: blast_radius verdict, verify_root before/after,
       qualification subject digest before/after, census before/after, full
       gate.
       DONE WHEN: every artifact is under `proof/` and VALIDATION.md can cite
       it.
+
+- [x] 11. The C3 stop, ruled and discharged (added 2026-08-28, after the stop).
+      Re-pin both moved pins with before/after and a reason AT THE PIN SITE;
+      state the semantic-freedom move as a disclosed cost in DELIVERY.md;
+      full gate 0 failed.
+      DONE WHEN: both pinned tests pass against re-pinned values whose reason
+      is recorded at the pin site, `proof/semantic_freedom_token_delta.txt`
+      accounts for every added prompt character, and the full gate is 0 failed.

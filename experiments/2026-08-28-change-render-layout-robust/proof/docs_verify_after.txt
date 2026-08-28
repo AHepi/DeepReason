@@ -1,3 +1,7 @@
+docs_verify, re-run AFTER the two re-pins (2026-08-28)
+======================================================
+
+$ python tools/docs_verify.py
 docs_verify [full]: 69 documents, 1139 checks, 4 workers
   FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
       -> 
@@ -10,3 +14,9 @@ docs_verify [full]: 69 documents, 1139 checks, 4 workers
 docs_verify: 4 failed
 
 [exited with code 0]
+
+Delta against C5's known baseline: ZERO.
+Three shallow-clone git-history failures (CON-run-identity.md:200/:202/:204)
+and one pre-existing falsified census (INV-frozen-surfaces.md:181, parked).
+No map document was touched by the re-pin commit; this run confirms the
+re-pins introduced no new falsified claim.

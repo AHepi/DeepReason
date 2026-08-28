@@ -1,19 +1,53 @@
-# VALIDATION — verdict: **STOPPED at C3**, with everything else PASS
+# VALIDATION — verdict: **PASS**
 
 Date: 2026-08-28. Spec: SPEC.md. Request: REQUEST.md.
 
 ## Verdict
 
-Every acceptance check in SPEC.md passes. The full gate is **4401 passed,
-2 failed**, and both failures are the SAME thing: a committed pinned value
-that moved because the rendered prompt got bigger. C3 makes that a hard stop:
+Every acceptance check in SPEC.md passes and the full gate is **4403 passed,
+6 skipped, 0 failed** (`proof/full_gate.txt`).
+
+This verdict was reached in two passes, and the first one is kept in full
+because a stop that is edited out of the record did not happen.
+
+**Pass 1 — STOPPED at C3.** The gate was 4401 passed, 2 failed, and both
+failures were the same thing: a committed pinned value that moved because the
+rendered prompt got bigger. C3 makes that a hard stop:
 
 > "if any change turns out to move a qualification subject digest **or any
 > committed digest pin**, STOP and report to the operator before proceeding.
 > No exception is pre-granted in this tranche."
 
-So the tranche stops here. Nothing has been re-pinned, and DELIVERY.md is not
-written.
+Nothing was re-pinned. The tranche stopped and reported, with the proof set
+below already assembled so the stop could be ruled on rather than debated.
+
+**Pass 2 — the monitor ruled, and the tranche proceeded under three
+conditions.** The ruling is recorded verbatim in DELIVERY.md and is the ONLY
+authority for the two re-pins:
+
+> Proceed. The two moved pins are ordinary committed test fixtures tracking
+> the intended layout change; your own proof set shows frozen-surface verdict
+> CLEAR, qualification digests unmoved, and no committed run root changing
+> verdict. The tripwire did its job and is discharged for EXACTLY these two
+> pins and no others — if any further pin or any frozen surface moves, STOP
+> again.
+
+| Condition | Discharged |
+|---|---|
+| 1. Re-pin both with before/after and a one-line reason AT THE PIN SITE, to the execution-safety tranche's standard | `PROVENANCE.json` `generated_root_sha256_history` + the fixture README + the test docstring; `semantic_freedom_baseline_v1.json` `metrics_history` + the test docstring |
+| 2. The semantic-freedom move re-pinned as a DISCLOSED COST, stated as such in DELIVERY.md | DELIVERY.md §"The cost, disclosed rather than absorbed" |
+| 3. Full gate after re-pin: 0 failed, pasted | `proof/full_gate.txt`, pasted below |
+
+The tripwire remains ARMED. It was discharged for two named pins. No third
+pin moved and no frozen surface was touched.
+
+```
+$ python -m pytest tests/ -q -n 4
+4403 passed, 6 skipped in 1152.19s (0:19:12)
+```
+
+C5's baseline for comparison: main `29e33f702` was 4374 passed, 0 failed.
+This tree adds 29 tests and fails none.
 
 ## What is NOT at issue
 
@@ -32,7 +66,7 @@ written.
   four are exactly C5's known baseline. `--audit`: 0 findings
   (`proof/docs_verify_after.txt`, `proof/docs_verify_audit.txt`).
 
-## The two pins that moved, measured rather than described
+## The two pins that moved, measured rather than described — and re-pinned
 
 Both are downstream of ONE fact: the question restatement makes a conjecturer
 prompt larger. Measured on the census root, 3768 → 4817 characters, +27.8%
@@ -68,6 +102,16 @@ provenance says "minimized derived reconstruction ... This is not an original
 Wave A run root". No committed run root is involved, and none changed verdict.
 But the pin is committed, and C3 draws no distinction.
 
+**Disposition (monitor ruling, condition 1): RE-PINNED to
+`edaf8713...`**, with the before/after and the reason recorded at three pin
+sites — a `generated_root_sha256_history` entry in `PROVENANCE.json`, the
+docstring of the test that reads it, and a "Recorded pin moves" section in the
+fixture directory's `README.md`, which is the document that states the freeze
+rule ("Any intentional fixture change therefore requires an explicit provenance
+update"). The test's structural claims — determinism across two builds, and
+agreement with the frozen descriptors — are untouched; only the A3 constant
+moved.
+
 ### Pin 2 — `tests/fixtures/.../semantic_freedom_baseline_v1.json`
 
 `tests/test_semantic_freedom_constitution.py::test_offline_semantic_freedom_baseline_is_measurable`
@@ -78,9 +122,39 @@ One moved:
                                           825.0  (now)
 
 That is a 5.2% rise in tokens per useful candidate, on the deterministic
-offline mock. It is the token cost of the layout change showing up in the one
-committed instrument that measures token cost — which is the instrument doing
-its job, not a defect.
+offline mock.
+
+**At the stop this was CALLED the token cost of the layout change. That was an
+inference from the number, and the number does not support it** — this same
+metric caught a REAL defect once with the identical signature (784.5 → 875.0,
+every epistemic metric unchanged; a reference menu naming a field the seat
+could not fill, `tests/test_reference_menu.py::
+test_a_pre_v6_conjecture_pack_carries_no_v6_menu`). That one was NOT re-pinned:
+the bug was fixed and the number came back on its own.
+
+**Disposition (monitor ruling, conditions 1 and 2): RE-PINNED to 825.0, and
+argued from the PROMPT BYTES rather than from the number.** The fixture's calls
+were re-run on this tree and on the branch base `29e33f702`, dumping every
+attempt prompt from `attempt_trace` — the call's own `prompt_ref` points at the
+LAST attempt, so reading only that hides the conjecturer prompt on any repaired
+call:
+
+    attempt 0_0 (conjecture, school-alpha)   2715 ->  2856 chars   +141
+    attempt 0_1 (repair)                      445 ->   445 chars      0  IDENTICAL
+    attempt 1_0 (conjecture, school-beta)    2920 ->  3106 chars   +186
+                                                        total     +327 chars
+                                                                  = +81 tokens
+    327 / 81 = 4.04 chars per token, the estimator's ratio on both trees.
+
+Every one of those 327 characters is in two sections the requirements name: the
+`## question` restatement (R2a) on both conjecture attempts, and the
+`neighbourhood` → `live-neighbourhood` header (R2c) on the second. No new menu,
+no new handle, no unfillable field, no added standing instruction; and the
+repair prompt — where an over-eager menu would also have appeared — is
+byte-identical. Full accounting: `proof/semantic_freedom_token_delta.txt`, with
+the before/after prompts committed beside it. Recorded at the pin site in
+`metrics_history` and in the test docstring, including the warning that a future
+move must be argued the same way. Stated as a disclosed cost in DELIVERY.md.
 
 ## Acceptance checks, one by one
 
@@ -94,7 +168,7 @@ its job, not a defect.
 | A6 instruction ceiling guard | R2b | PASS | `proof/s6_red.txt` (62 counted) → `proof/s6_green.txt` |
 | S7 architecture test, three limbs | R2e | PASS | `proof/s7_red.txt` (one literal turns limbs 1 AND 2 red) → `proof/s7_green.txt` |
 | Map moves with the code | R4 | PASS on content, DEVIATION on timing (below) | `proof/docs_verify_after.txt` |
-| Full gate 0 failed | C6 | **FAIL — 2, both pins above** | `proof/full_gate.txt` |
+| Full gate 0 failed | C6 | **PASS** — 4403 passed, 6 skipped, 0 failed, after the two ruled re-pins | `proof/full_gate.txt` |
 
 ## Process deviations, recorded rather than glossed
 
