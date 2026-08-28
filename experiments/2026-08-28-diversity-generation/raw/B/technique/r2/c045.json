@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Counterexample-guided inductive synthesis over program sketches\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.185
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-30",
+    "object": "chat.completion",
+    "created": 1787931668,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Counterexample-guided inductive synthesis over program sketches converges fastest when the sketch grammar is restricted by a lightweight type-and-effect analysis of the abstract specification, pruning branches that violate the spec's obligations before synthesis begins. The conjecture is that this pre-filtering reduces the search space exponentially in specification depth while preserving completeness, because every program violating the spec's effects can be eliminated without ever generating a candidate. Thus the best technique is not to treat sketches as syntax-only templates, but to bind their holes to spec-derived effect contracts that the CEGIS loop merely instantiates, not discovers.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 126,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

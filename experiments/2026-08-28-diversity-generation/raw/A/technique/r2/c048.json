@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.051
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-605",
+    "object": "chat.completion",
+    "created": 1787931588,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for deriving executable code from an abstract specification is refinement calculus combined with automated, machine-checked proof obligations at every transformation step. This guarantees the implementation provably holds its commitments by construction, rather than relying on post-hoc verification or probabilistic generation. In contrast, approaches like test-driven development or LLM-based synthesis lack the logical completeness to guarantee adherence to the specification across all possible inputs and states.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 95,
+      "total_tokens": 193
+    }
+  },
+  "transport_error": null
+}

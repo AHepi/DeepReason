@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Neural translation with differential testing against the spec\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.936
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-416",
+    "object": "chat.completion",
+    "created": 1787931628,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Training a neural translator with differential testing feedback is most effective when the specification is operationalized as a property-based generator rather than a fixed oracle, forcing the model to synthesize code that generalizes across the spec's entire input space. The conjecture claims that this generator-driven approach produces code with measurably fewer post-hoc verification failures than training against static test suites, because the neural model learns to map abstract constraints to concrete implementations that satisfy the underlying relational invariant. Furthermore, the technique's commitment-holding ability degrades gracefully with spec complexity, but collapses entirely if the generator's distribution does not cover adversarial boundary cases.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 133,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

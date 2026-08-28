@@ -444,3 +444,51 @@ by moving τ, changing the metric, or adding arms.
   follow-on (wiring the winning generation shape in as configuration, per
   the modularity law, plus the in-harness survival-under-criticism leg).
   **Parked, not built.**
+
+---
+
+## Appendix A — 2026-08-28: repetitions extended from 3 to 9
+
+**Appended, not edited in place**, per this file's own preamble. Registered
+BEFORE any metric was computed: the git history is the proof — this appendix
+is committed while `metrics.json` does not yet exist, and `analyse.py` had
+never been run at the time of the commit that introduces it. `driver.log`
+records the 36 registered cells finishing at 2026-08-28T15:46:30Z with
+369,746 tokens spent; nothing in `raw/` had been read.
+
+**Authority.** Operator, 2026-08-28, verbatim:
+
+> "Tokens are cheap. use as many as you need"
+
+**What changes, and only this.** §5's `Repetitions: 3` becomes
+**Repetitions: 9** (reps 4–9 are added; reps 1–3 stand unchanged and are
+re-used, not re-run). Cells become 4 arms × 3 questions × 9 reps = **108**.
+
+**What does NOT change.** Everything else is untouched, and this is the
+point of appending rather than editing:
+
+- §7's four hypotheses, their SUPPORTED/REFUTED rules, and the 3-cluster
+  effect-size floor are IDENTICAL. Only the number of repetitions the
+  per-question mean is taken over increases.
+- §6's metrics, τ\* = 0.7454, the τ grid, the M3 codes, the no-top-up rule,
+  and the binding rule on probability values are IDENTICAL.
+- §4's sampling configuration and §3's question bytes are IDENTICAL.
+- §10's null-result condition is IDENTICAL.
+
+**Why.** §7 registered a limit honestly — "three repetitions per cell cannot
+support inferential statistics, and none is claimed". The operator's message
+removes the constraint that made that limit necessary. Nine repetitions per
+cell is still not a licence to run inferential tests that were not
+registered, and none is added; what it buys is that a stated difference can
+be read against nine samples of its own noise instead of three.
+
+**Envelope.** The registered ceiling of 1,440,000 tokens (§5) is
+UNCHANGED. Measured spend at 3 reps was 369,746 tokens, so 9 reps projects
+to ≈1,109,000 — inside the ceiling already registered. No new envelope is
+requested and none is granted here.
+
+**Honest note on ordering.** Extending repetitions after seeing results
+would be a design change bought with knowledge of the answer. That is why
+this is registered blind, and why the ordering claim above is stated as
+something a reader can check in the commit graph rather than something they
+must take on trust.

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: learning deterministic programs from input-output examples under semantic constraints using neurosymbolic search\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.352
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-77",
+    "object": "chat.completion",
+    "created": 1787931407,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Encoding semantic constraints as differentiable penalties in the search process causes neurosymbolic systems to converge on deterministic programs that are verifiable by construction, rather than merely fitting training examples. Specifically, gradient-guided search over a structured program space—where constraint violations produce continuous gradients—will discover programs that provably satisfy specifications far more reliably than post-hoc filtering of generated candidates. The key prediction is that the constraint-gradient signal prunes the search space toward the semantically valid region so aggressively that the resulting program's correctness generalizes exactly to unseen inputs, not just probably.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 121,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

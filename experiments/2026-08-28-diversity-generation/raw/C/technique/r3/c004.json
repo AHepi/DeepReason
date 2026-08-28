@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.971
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-115",
+    "object": "chat.completion",
+    "created": 1787931944,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively apply correctness-preserving refinement steps from the abstract specification to concrete code, where each step is machine-verified. This guarantees the result holds its commitments because the transformation itself is the proof.\", \"probability\": 0.07}, {\"conjecture\": \"Large language models can reliably translate abstract specifications to executable code that holds its commitments if and only if the specification is accompanied by an executable test suite that is auto-generated from the spec and the model's output is iteratively repaired until all tests pass.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to compile the abstract specification directly into an executable formal model (e.g., a state machine in TLA+ or Alloy), verify desired properties against that model via model checking, and then auto-generate code from the verified model—eliminating the specification-to-code gap entirely.\", \"probability\": 0.08}, {\"conjecture\": \"Dependent type theory (e.g., in Agda or Idris) is the best technique: the abstract specification is embedded as a type, and the code is a inhabitant of that type. The type checker guarantees the code holds its commitments, making the specification and the verification one and the same act.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to treat the abstract specification as a runtime oracle: generate code that is mostly-correct using any method, but wrap every critical operation in runtime assertions derived from the spec, violating fast on any deviation. This trades full static verification for practical robustness and is superior in real-world systems.\", \"probability\": 0.04}, {\"conjecture\": \"The optimal approach is to synthesize code via constraint solving: encode the abstract specification as a logical formula and use an SMT solver to synthesize a program that satisfies the formula. This guarantees the result holds its commitments because the solver only returns models that satisfy the constraints.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to use a programming-by-contract system where the abstract specification becomes executable pre/post-conditions and invariants, combined with random property-based testing at runtime and compile-time. The code holds its commitments probabilistically, with the test harness acting as an adversarial verifier.\", \"probability\": 0.05}, {\"conjecture\": \"Abstract interpretation is the best technique: use a sound abstract interpreter to compute a fixpoint approximation of the specification, then generate code that concretizes that approximation. The soundness of the abstract domain guarantees the code respects the spec's commitments.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to combine neural code generation with formal verification in a loop: an LLM proposes code from the spec, an automated theorem prover (e.g., via Hoare logic) checks it, and counterexamples are fed back to the LLM. This leverages the LLM's pattern-matching while using the prover as a guarantee of commitment-holding.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is constructive logic programming: write the specification as a set of logical clauses in a language like Prolog or Mercury, where execution is resolution. The code holds its commitments because the code *is* the specification, and execution is a proof search.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 710,
+      "total_tokens": 881
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Constrained decoding from large language models grounded by runtime monitors\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.745
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-523",
+    "object": "chat.completion",
+    "created": 1787931641,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Constrained decoding grounded by runtime monitors can guarantee specification adherence if the monitor projects execution traces onto a symbolic abstraction layer that feeds back as hard token-level constraints, rather than post-hoc rejection. Specifically, if the LLM is forced to decode only tokens that keep the partially generated program within a forward-closed set of abstract states—computed incrementally via a lightweight symbolic executor running synchronously with decoding—then the resulting code will provably satisfy the specification. The conjecture is that this synchronous abstraction-loop decoding eliminates the semantic gap between natural language specifications and executable code by making specification violations ungenerable.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 128,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

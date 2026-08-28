@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: learning deterministic programs from input-output examples under semantic constraints using neurosymbolic search\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.147
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-821",
+    "object": "chat.completion",
+    "created": 1787931404,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A neural guide can synthesize provably-correct deterministic programs from input-output examples by learning to bias combinatorial search toward programs whose abstract syntax trees form a convex hull in a continuous semantic embedding space. Under this architecture, the distance between a candidate program's execution trace embedding and the specification's semantic centroid acts as an admissible heuristic for symbolic search, guaranteeing that the final extracted program satisfies the semantic constraints. This convergence will fail if the execution traces lack a linearly separable structure in the embedding space, making the trace geometry a precise predictor of neurosymbolic search tractability.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 126,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

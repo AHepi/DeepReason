@@ -183,5 +183,342 @@
     "directions": null,
     "calls": 60,
     "wall_s": 71.5
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 19120,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "lattice-perturbation search around scaled grid points",
+      "algebraic-number-theoretic construction using cubic field coordinates",
+      "semidefinite-programming relaxation of pairwise area constraints",
+      "greedy maximal-packing via simulated annealing on area minima",
+      "symmetry-forced configuration from finite reflection or rotation groups",
+      "combinatorial hypergraph-turan lower-bound argument proving optimality"
+    ],
+    "calls": 61,
+    "wall_s": 109.0
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 5519,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 19.7
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 6829,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "lattice-perturbation search from optimal 13-point packing configurations",
+      "computational nonlinear optimization with area-minimax objective via second-order cone programming",
+      "algebraic construction using projective plane arcs over finite fields mapped to the unit square",
+      "explicit coordinate ansatz forced by symmetry group orbits under the dihedral group of the square",
+      "probabilistic lower-bound argument certifying a randomly sampled near-uniform configuration's worst-triangle area",
+      "exhaustive enumeration over a discretized grid with branch-and-bound pruning of provably suboptimal point placements"
+    ],
+    "calls": 7,
+    "wall_s": 24.0
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 15928,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 63.2
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 19745,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturbed lattice with explicit coordinates and area proof",
+      "algebraic-number field construction from elliptic curve packings",
+      "continuous-optimization basin-hopping over the 26-dim configuration space",
+      "probabilistic existence via measure concentration and random perturbation",
+      "combinatorial blocking-set design in finite affine planes lifted to reals",
+      "upper-bound certificate via LP dual on a triangulation of the point set"
+    ],
+    "calls": 61,
+    "wall_s": 123.2
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 4864,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 14.0
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 6728,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "constructive coordinate listing with exact minimum-area verification",
+      "probabilistic simulated-annealing search with floating-point optimization report",
+      "group-theoretic symmetry construction from finite reflection or affine groups",
+      "proof-based upper bound certificate via LP or semidefinite relaxation duality",
+      "algebraic-geometric analysis using blowups and degeneration at threshold area",
+      "error-mode taxonomy: boundary clustering, interior lattice alignment, and symmetry-induced coincidences"
+    ],
+    "calls": 7,
+    "wall_s": 27.0
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 16079,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 70.7
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 18146,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturbed regular 13-gon inscribed in the square boundary",
+      "integer lattice grid with optimized spacing and offset",
+      "affine image of a projective configuration avoiding collinearity",
+      "two concentric rotated sub-clusters with area gap tuning",
+      "heuristic simulated annealing over point coordinates with area penalty",
+      "algebraic optimization certifying area lower bounds via semidefinite relaxation"
+    ],
+    "calls": 61,
+    "wall_s": 111.3
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 5095,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 17.3
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 6516,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Integer lattice grid with optimized affine rescaling into unit square",
+      "Heilbronn-type greedy point insertion with local repulsion constraints",
+      "Algebraic number field constructions using roots of unity or quadratic irrationals",
+      "Simulated annealing over continuous coordinates with minimum-area penalty",
+      "Finite projective plane PG(2,3) embedded via rational coordinate parametrization",
+      "Exhaustive branch-and-bound over discretized grid with interval arithmetic pruning"
+    ],
+    "calls": 7,
+    "wall_s": 29.2
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 1,
+    "tokens": 12331,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 78.4
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 1,
+    "tokens": 14457,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "synthesizing code from refinement types with proof-carrying translation",
+      "extracting executable programs from constructive proof terms in dependent type theory",
+      "iterative repair against runtime property-based test suites using LLMs",
+      "automated refinement of formal models into code via refinement calculus stepwise transformations",
+      "learning deterministic programs from input-output examples under semantic constraints using neurosymbolic search",
+      "compiling abstract state-machine specifications to verified bytecode through model-driven architecture"
+    ],
+    "calls": 61,
+    "wall_s": 93.7
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 1,
+    "tokens": 5277,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 21.5
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 1,
+    "tokens": 5283,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Synthesis via constructive type theory proofs",
+      "Property-based test generation from contracts",
+      "Model distillation through differentiable specification interpretation",
+      "Runtime enforcement via runtime verification monitors",
+      "Refinement calculus stepwise program derivation",
+      "Abstract interpretation static verification of generated code"
+    ],
+    "calls": 7,
+    "wall_s": 64.3
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 2,
+    "tokens": 12109,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 86.7
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 2,
+    "tokens": 14200,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Proof-carrying synthesis from refinement types",
+      "Neural translation with differential testing against the spec",
+      "Constrained decoding from large language models grounded by runtime monitors",
+      "Model-driven engineering with automated invariant generation",
+      "Counterexample-guided inductive synthesis over program sketches",
+      "Type-theoretic extraction from constructive proofs in dependent type theory"
+    ],
+    "calls": 61,
+    "wall_s": 83.0
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 2,
+    "tokens": 4968,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 27.5
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 2,
+    "tokens": 5548,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "proof-carrying code with extracted refinements from constructive logic",
+      "property-based test generation guided by runtime contract monitors",
+      "AI-assisted synthesis conditioned on formal verification side-conditions",
+      "type-directed program synthesis from refinement types and polymorphic constraints",
+      "model-based derivation via constructive model theory with mechanized proofs",
+      "denotational semantics compilation with algebraic effects and executable interpreters"
+    ],
+    "calls": 7,
+    "wall_s": 26.3
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 3,
+    "tokens": 11994,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 92.4
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 3,
+    "tokens": 14146,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Extraction via proof-carrying synthesis from refinement calculus",
+      "Type-theoretic compilation with dependent contract witnesses",
+      "Denotational-semantic compilation with verified Galois connections",
+      "Model-theoretic property-based testing with shrinking witnesses",
+      "Neural program synthesis constrained by formal specification embeddings",
+      "Algebraic effect handler derivation from monadic specification laws"
+    ],
+    "calls": 61,
+    "wall_s": 101.2
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 3,
+    "tokens": 5447,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 31.1
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 3,
+    "tokens": 5259,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "extract code by constructive proof in a dependent type theory",
+      "synthesize via refinement types and SMT constraint solving",
+      "learn neural policies guided by formal verifier feedback",
+      "derive programs from coalgebraic specifications of state behavior",
+      "compile declarative constraint nets into deterministic concurrent processes",
+      "induce code by algebraic property-based test case shrinking"
+    ],
+    "calls": 7,
+    "wall_s": 25.7
   }
 ]

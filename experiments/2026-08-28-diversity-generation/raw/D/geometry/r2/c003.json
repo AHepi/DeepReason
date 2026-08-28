@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; the score is the smallest area among all 286 triangles formed by triples of your 13 points, every point must lie in [0,1]x[0,1] and all 13 points must be distinct.\n\nStay within this direction: proof-based upper bound certificate via LP or semidefinite relaxation duality\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.761
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-864",
+    "object": "chat.completion",
+    "created": 1787931027,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"A semidefinite programming relaxation in the degree-4 moment space of the point set, with dual certificate encoding the squared area polynomial as a sum-of-squares modulo the unit-square constraints, proves the optimal minimum triangle area among all 286 triples is exactly 1/12, achieved by the grid {(i/3,j/3) : i,j in {0,1,2,3}} minus three collinear points.\", \"probability\": 0.08}, {\"conjecture\": \"The LP relaxation over pairwise and triplewise area variables, with constraints that every 7-point subset must contain a triangle of area at most c, yields a dual certificate proving the upper bound min_area <= 0.089 for 13 points, tight against a near-optimal configuration.\", \"probability\": 0.07}, {\"conjecture\": \"A sum-of-squares SDP relaxation at degree 6 certifies that no 13-point configuration in [0,1]^2 achieves minimum triangle area exceeding 1/14, with the dual witness constructed from the identity sum over all 286 triples of (Area(ijk) - t)^2 subject to the unit box constraints.\", \"probability\": 0.06}, {\"conjecture\": \"The LP dual over ordered triple area upper bounds, strengthened with the constraint that every line partitions the point set forcing small triangles on the majority side, proves min_area <= 0.072, matching a construction of 13 points on a perturbed 4x4 subgrid.\", \"probability\": 0.05}, {\"conjecture\": \"An SDP relaxation using Gram matrix representations of the 13 points with area as a determinant polynomial, dual-certified by a linear combination of 3x3 minor constraints, establishes the exact optimum as 1/15.\", \"probability\": 0.08}, {\"conjecture\": \"The copositive programming relaxation over the 286-dimensional area vector, dual to a completely positive certificate, proves the upper bound min_area <= 0.095 and is achieved by placing points at vertices and edge midpoints of the unit square plus five interior lattice points.\", \"probability\": 0.04}, {\"conjecture\": \"A Lasserre-hierarchy SDP at level 2 on the polynomial system Area(ijk) >= t for all 286 triples with box constraints [0,1]^2 has infeasibility certified at t > 1/11, proving the optimum is exactly 1/11.\", \"probability\": 0.07}, {\"conjecture\": \"The LP over all 286 triangle area variables with Rank-1 projection constraints from each point's coordinate pair, dual-certified by assigning nonnegative weights to triples such that every point-coordinate constraint is saturated, proves min_area <= 0.083.\", \"probability\": 0.06}, {\"conjecture\": \"A semidefinite relaxation on the 26x26 pairwise distance Gram matrix, with the Cayley-Menger determinant expressing each triangle area as a linear function of the Gram entries, yields a dual certificate proving the maximum minimum area is exactly 1/13.\", \"probability\": 0.05}, {\"conjecture\": \"The combination of an LP upper bound from 4-point subset constraints (every 4 points contain a triangle of area <= c) with an SDP certifying the LP tightness via a feasible primal configuration on a 4x4 grid minus 3 points proves the optimum is exactly 1/12.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 232,
+      "completion_tokens": 744,
+      "total_tokens": 976
+    }
+  },
+  "transport_error": null
+}

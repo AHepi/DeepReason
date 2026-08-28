@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.944
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-719",
+    "object": "chat.completion",
+    "created": 1787931314,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is refinement via constructive type theory, where each refinement step produces a machine-checked proof that the implementation satisfies the specification. Concretely, one should work in a system like F* or Agda, encode the specification as a dependent type, and derive the program as an inhabitant of that type—so that the code literally cannot typecheck unless it fulfills the spec. This conjecture is falsifiable: if an alternative methodology (e.g., test-driven generation, LLM-based synthesis with post-hoc verification) achieves lower defect rates on a benchmark of formal specifications with comparable human effort, refinement is not the best technique.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 151,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

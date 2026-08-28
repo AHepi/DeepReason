@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic extraction from constructive proofs in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.391
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-515",
+    "object": "chat.completion",
+    "created": 1787931676,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique is to extract code directly from the computational content of a fully elaborated proof term in a dependent type theory with quotient types, where the specification's abstract relations are eliminated via constructive quotients rather than axiomatized. This forces the extracted term to inhabit the precise computational type corresponding to the specification, making the commitments hold definitionally. Any remaining gap between the extracted term and practical efficiency is then closed by semantics-preserving rewrite rules justified by the proof's lemmas, not by abandoning the extracted term.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 115,
+      "total_tokens": 235
+    }
+  },
+  "transport_error": null
+}

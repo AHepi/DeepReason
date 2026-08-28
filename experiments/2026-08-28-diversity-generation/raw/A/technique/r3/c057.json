@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.587
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-944",
+    "object": "chat.completion",
+    "created": 1787931830,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique for turning an abstract specification into executable code that holds its commitments is bidirectional refinement via proof-carrying synthesis, where the specification is simultaneously compiled to executable code and an accompanying machine-checkable proof of conformance. Under this approach, the translation is not merely generative but deductive: the code and the proof are co-constructed such that the code is only accepted if its behavior is formally entailed by the abstract specification. This collapses the gap between intent and execution by making the verification artifact the primary output of compilation, rather than an after-the-fact audit.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 125,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

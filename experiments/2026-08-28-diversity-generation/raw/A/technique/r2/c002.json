@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.416
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-173",
+    "object": "chat.completion",
+    "created": 1787931519,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to compile the abstract specification directly into a formal proof artifact in a constructive logic, then extract executable code from the proven-correct proof term. This collapses the gap between specification and implementation because the extracted code is, by the Curry-Howard correspondence, literally the computational content of the proof that the specification is satisfiable. The result holds its commitments because any deviation from the specification would constitute an inconsistency in the proof itself, which the type checker rejects.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 101,
+      "total_tokens": 199
+    }
+  },
+  "transport_error": null
+}

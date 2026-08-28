@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.64
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-181",
+    "object": "chat.completion",
+    "created": 1787931323,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to compile the abstract specification into a dependent type theory where every spec clause becomes a type-level obligation, then solve for the implementation via proof-search over a library of typed program fragments. The resulting code holds its commitments because it is, by construction, a inhabitant of the specification's type — if it type-checks, it meets the spec. This outperforms testing and post-hoc verification because it makes the gap between spec and code syntactically impossible to express.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 107,
+      "total_tokens": 205
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,8 @@
+[
+  "extract code by constructive proof in a dependent type theory",
+  "synthesize via refinement types and SMT constraint solving",
+  "learn neural policies guided by formal verifier feedback",
+  "derive programs from coalgebraic specifications of state behavior",
+  "compile declarative constraint nets into deterministic concurrent processes",
+  "induce code by algebraic property-based test case shrinking"
+]

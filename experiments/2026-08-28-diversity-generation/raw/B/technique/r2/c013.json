@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Neural translation with differential testing against the spec\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.808
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-105",
+    "object": "chat.completion",
+    "created": 1787931622,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A neural translator trained to emit families of programs parameterized by symbolic inputs will produce implementations that hold their commitments against a specification when differential testing is performed on the concrete instances against the symbolic interpreter of the spec itself. The key mechanism is that the translator conditions on counterexamples from the differential tester during decoding, creating a feedback loop where every generated program must pass the spec's operational semantics before acceptance. This forces the network to internalize the spec's logical structure rather than statistically mimicking syntax.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 105,
+      "total_tokens": 221
+    }
+  },
+  "transport_error": null
+}

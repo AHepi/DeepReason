@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.199
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-629",
+    "object": "chat.completion",
+    "created": 1787931443,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement types paired with SMT-based type checking (e.g., F* or Liquid Haskell), where the abstract specification is encoded as types and the compiler proves the code conforms. This guarantees commitments hold by making verification a compile-time requirement. It outperforms post-hoc testing and model checking because violations are impossible by construction.\", \"probability\": 0.09}, {\"conjecture\": \"The best technique is constructive dependent type theory (e.g., Agda, Idris), where the specification is a type and the executable code is a proof term inhabiting that type. This ensures commitments hold because the code is literally the proof. It surpasses other approaches by unifying specification and verification into a single programming act.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is denotational design via algebraic effects and handlers, where the specification is a mathematical denotation and the code is an interpreter for a defined effect signature. Commitments hold because the semantics are compositional and algebraic. This beats alternatives by separating what is computed from how, enabling formal reasoning at the denotational level.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is Hoare-logic-based deductive verification (e.g., Dafny, Why3), where preconditions, postconditions, and invariants annotate code and are discharged by automated provers. Commitments hold via machine-checked proofs of correctness. It dominates because it integrates seamlessly with imperative code while providing strong automated proof support.\", \"probability\": 0.075}, {\"conjecture\": \"The best technique is property-based testing with shrinking (e.g., QuickCheck, Hypothesis) combined with runtime contract enforcement. Commitments hold probabilistically and empirically, validated by edge-case discovery. It is the best approach because it scales to real-world complexity where exhaustive proof is infeasible, and shrinking provides actionable debugging.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is stepwise refinement from a formal specification via correctness-preserving transformations (e.g., B-Method, Event-B). The specification is refined through provably correct steps until executable code is generated. It is superior because each refinement step is independently verifiable, ensuring the code's commitments trace directly to the specification.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is model-driven engineering with formally verified code generation (e.g., SCADE, SPARK). The specification is a synchronous model, and code is auto-generated with proven equivalence to the model. Commitments hold because the generation tool is certified and the model is formally analyzed. It excels in safety-critical contexts by eliminating the specification-to-code translation gap.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is symbolic execution and constraint solving (e.g., K Framework, Z3) where the specification defines operational semantics and the code is verified against these semantics via path exploration. Commitments hold because all execution paths are exhaustively checked. It is best because it bridges formal semantics and practical execution, enabling verification of real code.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is a monadic interpreter architecture where the specification is a deep embedding and the code is an interpreter over a constrained monad stack. Commitments hold because the monad stack enforces invariants (e.g., state, non-determinism) and the deep embedding allows meta-level reasoning. It outperforms by making the specification executable by definition while preserving formal properties.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is abstract interpretation (e.g., Astrée) where the code is statically analyzed against an abstract domain derived from the specification. Commitments hold because the analysis soundly over-approximates all behaviors, proving safety properties. It is best because it handles industrial-scale codebases automatically, unlike interactive proof systems.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 838,
+      "total_tokens": 1009
+    }
+  },
+  "transport_error": null
+}

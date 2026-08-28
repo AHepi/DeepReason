@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: type-directed program synthesis from refinement types and polymorphic constraints\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.944
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-206",
+    "object": "chat.completion",
+    "created": 1787931729,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Synthesis from refinement types is dominated by a single bottleneck: the solver must guess the shape of recursive calls before checking refinements. A bidirectional synthesis algorithm that uses refinement types to prune recursion-scheme skeletons before guessing any function body will outperform unguided bottom-up search by at least an order of magnitude on standard benchmarks.\", \"probability\": 0.085}, {\"conjecture\": \"Polymorphic constraint solving during synthesis should be decomposed into a two-phase fixpoint: first synthesize a well-typed skeleton ignoring refinements, then solve refinement constraints by local patching. Global constraint solving across the entire program is provably less efficient and produces fewer correct completions than this two-phase approach.\", \"probability\": 0.072}, {\"conjecture\": \"The key to scaling refinement-type synthesis to real-world specs is treating polymorphic type variables as search-space dividers: each instantiation of a type variable partitions the refinement constraint into independent subproblems. Exploiting this partition explicitly yields a synthesis algorithm whose complexity is exponential in the max polymorphic depth, not in total constraint size.\", \"probability\": 0.068}, {\"conjecture\": \"Counterexample-guided refinement synthesis—where a failed refinement check produces a concrete counterexample that becomes a new refinement constraint—converges in finite iterations for all specs expressible in the decidable fragment of refinement logic, but diverges on specs requiring higher-order refinements.\", \"probability\": 0.061}, {\"conjecture\": \"Abstract specifications with refinement types admit a canonical normal form in which all polymorphic constraints are pushed to the leaves of the type. Synthesis from this normal form is linear in the size of the type, whereas synthesis from the un-normalized form can require exponential backtracking.\", \"probability\": 0.055}, {\"conjecture\": \"The correct way to handle polymorphism in refinement-type synthesis is to synthesize the most general solution first and specialize later. Attempting to instantiate polymorphic variables during synthesis, rather than after, introduces irreducible nondeterminism that makes the problem NP-hard even when the underlying refinement logic is decidable in polynomial time.\", \"probability\": 0.058}, {\"conjecture\": \"Refinement types containing intersection and union types encode a natural program lattice. Synthesis should proceed by lattice traversal: synthesize the meet (intersection) of all refinements, then weaken by union only when the meet has no inhabitant. This lattice-directed approach dominates random or bottom-up enumeration.\", \"probability\": 0.049}, {\"conjecture\": \"Horn-clause encodings of refinement-type synthesis constraints are dominated by E-matching in practice. Replacing SMT-based Horn solving with a dedicated abstract-interpretation-based solver that exploits the syntactic structure of the spec will reduce synthesis time by a multiplicative factor proportional to the number of distinct refinement variables.\", \"probability\": 0.045}, {\"conjecture\": \"The single most effective technique for ensuring synthesized code holds its commitments is to compile refinement types into dependent pattern-matching obligations. Each branch of the synthesized program is required to discharge its refinement locally, and cross-branch consistency is enforced by a single global Horn constraint. This decomposition eliminates the need for global SMT checks in 90% of synthesized functions.\", \"probability\": 0.038}, {\"conjecture\": \"Type-directed synthesis from refinement types will fail to scale to real-world abstract specifications unless it exploits liquid types—refinements over uninterpreted predicates—as an intermediate representation. Direct synthesis from fully concrete refinements is exponentially slower than synthesis from liquid types followed by predicate inference.\", \"probability\": 0.042}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 764,
+      "total_tokens": 950
+    }
+  },
+  "transport_error": null
+}

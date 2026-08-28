@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extracting executable programs from constructive proof terms in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.349
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-253",
+    "object": "chat.completion",
+    "created": 1787931366,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extracting code from *unreduced* proof terms in dependent type theory yields more robustly correct programs than extracting from normalized or eta-expanded terms, because normalization destroys the computational intent encoded in the proof's structure. The proof's chosen proof tactics implicitly specify an algorithm—normalization collapses distinct algorithms into extensionally equal but intensionally different programs, discarding the efficient one. Therefore, a non-normalizing extraction that preserves the proof term's spine will produce programs that satisfy their specifications while retaining the computational complexity intended by the proof's construction.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 117,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

@@ -14,3 +14,27 @@
 2026-08-28T15:22:30Z cell C/decay/r3: 6 calls, 5540 tokens, 25.7s
 2026-08-28T15:22:58Z cell D/decay/r3: 7 calls, 5956 tokens, 28.1s
 2026-08-28T15:24:10Z cell A/geometry/r1: 60 calls, 15991 tokens, 71.5s
+2026-08-28T15:25:59Z cell B/geometry/r1: 61 calls, 19120 tokens, 109.0s
+2026-08-28T15:26:18Z cell C/geometry/r1: 6 calls, 5519 tokens, 19.7s
+2026-08-28T15:26:42Z cell D/geometry/r1: 7 calls, 6829 tokens, 24.0s
+2026-08-28T15:27:45Z cell A/geometry/r2: 60 calls, 15928 tokens, 63.2s
+2026-08-28T15:29:49Z cell B/geometry/r2: 61 calls, 19745 tokens, 123.2s
+2026-08-28T15:30:03Z cell C/geometry/r2: 6 calls, 4864 tokens, 14.0s
+2026-08-28T15:30:30Z cell D/geometry/r2: 7 calls, 6728 tokens, 27.0s
+2026-08-28T15:31:40Z cell A/geometry/r3: 60 calls, 16079 tokens, 70.7s
+2026-08-28T15:33:32Z cell B/geometry/r3: 61 calls, 18146 tokens, 111.3s
+2026-08-28T15:33:49Z cell C/geometry/r3: 6 calls, 5095 tokens, 17.3s
+2026-08-28T15:34:18Z cell D/geometry/r3: 7 calls, 6516 tokens, 29.2s
+2026-08-28T15:35:37Z cell A/technique/r1: 60 calls, 12331 tokens, 78.4s
+2026-08-28T15:37:10Z cell B/technique/r1: 61 calls, 14457 tokens, 93.7s
+2026-08-28T15:37:32Z cell C/technique/r1: 6 calls, 5277 tokens, 21.5s
+2026-08-28T15:38:36Z cell D/technique/r1: 7 calls, 5283 tokens, 64.3s
+2026-08-28T15:40:03Z cell A/technique/r2: 60 calls, 12109 tokens, 86.7s
+2026-08-28T15:41:26Z cell B/technique/r2: 61 calls, 14200 tokens, 83.0s
+2026-08-28T15:41:53Z cell C/technique/r2: 6 calls, 4968 tokens, 27.5s
+2026-08-28T15:42:20Z cell D/technique/r2: 7 calls, 5548 tokens, 26.3s
+2026-08-28T15:43:52Z cell A/technique/r3: 60 calls, 11994 tokens, 92.4s
+2026-08-28T15:45:33Z cell B/technique/r3: 61 calls, 14146 tokens, 101.2s
+2026-08-28T15:46:04Z cell C/technique/r3: 6 calls, 5447 tokens, 31.1s
+2026-08-28T15:46:30Z cell D/technique/r3: 7 calls, 5259 tokens, 25.7s
+2026-08-28T15:46:30Z === driver done; 36 cells, 369746 tokens total ===

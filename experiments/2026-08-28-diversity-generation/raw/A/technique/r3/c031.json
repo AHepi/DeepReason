@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.148
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-319",
+    "object": "chat.completion",
+    "created": 1787931774,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile abstract specifications into executable code by generating, rather than writing, the implementation through a bidirectional type-theoretic correspondence where the specification is a dependent type and the code is the proof term. Under this approach, the result holds its commitments by construction because the compiler's termination checker and type-checker together enforce a computational bijection between the specification's logical entailments and the program's operational semantics. The generated proof term is the only artifact that can pass both the logical consistency check and the execution test, making it structurally impossible to produce code that violates the spec.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 128,
+      "total_tokens": 226
+    }
+  },
+  "transport_error": null
+}

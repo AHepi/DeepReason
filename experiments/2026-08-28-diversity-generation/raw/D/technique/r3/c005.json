@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: induce code by algebraic property-based test case shrinking\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.659
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-34",
+    "object": "chat.completion",
+    "created": 1787931978,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal strategy is to start with a deliberately over-general implementation that passes all property-based tests, then use algebraic shrinking on failing counterexamples to iteratively refine the code toward the minimal model that satisfies the specification's equational laws.\", \"probability\": 0.085}, {\"conjecture\": \"Code induced purely by algebraic shrinking will converge to the correct implementation faster than search-based program synthesis because each shrinking step eliminates a contiguous region of the program space that violates the specification's commutativity or associativity axioms.\", \"probability\": 0.062}, {\"conjecture\": \"The binding constraint on property-based shrinking is that it only works when the abstract specification is expressed entirely as algebraic equations; specifications involving inequalities or temporal ordering will cause shrinking to diverge or loop indefinitely.\", \"probability\": 0.071}, {\"conjecture\": \"Shrinking should operate not on raw input values but on the algebraic normal form of the counterexample's derivation tree, ensuring that each shrink corresponds to a valid reduction in the free term algebra defined by the specification's signature.\", \"probability\": 0.058}, {\"conjecture\": \"The induced code provably holds its commitments if and only if the shrinking process terminates at a fixed point where every algebraic identity in the specification is a rewrite rule that fires exactly zero times on the final code's execution traces.\", \"probability\": 0.067}, {\"conjecture\": \"Counterexample shrinking in property-based testing functions as implicit equational reasoning: each shrunk counterexample corresponds to a minimal proof obligation failure, and the patch generated from it is equivalent to adding that obligation as a rewrite rule to the code generator's search heuristics.\", \"probability\": 0.054}, {\"conjecture\": \"The most effective technique is to run property-based tests against a reference implementation built from the specification's free algebra, then use the shrunk counterexamples to train a decision-tree model that maps specification clauses to code branches, yielding an implementation that is correct by construction of the tree.\", \"probability\": 0.049}, {\"conjecture\": \"Algebraic shrinking induces correct code only when the property-based test generator is itself constrained to produce only well-typed terms of the initial algebra; unconstrained generators produce counterexamples whose shrinks suggest patches that violate the specification's sort system.\", \"probability\": 0.063}, {\"conjecture\": \"Code induced by shrinking will hold its commitments if the shrinking relation is a confluent reduction system, because confluence guarantees that the minimal counterexample is unique and therefore the patch applied to the code is deterministic rather than dependent on the order of test execution.\", \"probability\": 0.057}, {\"conjecture\": \"The practical bottleneck is that algebraic property-based shrinking requires the specification to define a monoidal structure on the program's state space; without a monoid, there is no canonical way to decompose a failing test case into independently shrinkable sub-problems that correspond to independently patchable code regions.\", \"probability\": 0.046}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 643,
+      "total_tokens": 828
+    }
+  },
+  "transport_error": null
+}

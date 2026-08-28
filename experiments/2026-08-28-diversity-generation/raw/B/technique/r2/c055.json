@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic extraction from constructive proofs in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.973
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-135",
+    "object": "chat.completion",
+    "created": 1787931672,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to extract code from the computational content of a proof term in a decidable fragment of dependent type theory, where the specification is internalized as a Σ-type pairing the program with its correctness proof, and the erasure function is itself proven type-preserving. This guarantees the extracted executable holds its commitments because the program and its specification are the same artifact — there is no translation gap between what is verified and what runs.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 95,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

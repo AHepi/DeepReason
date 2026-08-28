@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: learning deterministic programs from input-output examples under semantic constraints using neurosymbolic search\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.317
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-690",
+    "object": "chat.completion",
+    "created": 1787931408,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Imposing continuous semantic-latent distance penalties on a neural program generator's output embeddings—measured against the latent encodings of the specification's semantic constraints—causes standard autoregressive decoding to reliably produce deterministic programs that satisfy those constraints, without requiring an external symbolic solver. The neural model learns to internalize the constraint structure as a manifold in latent space, such that standard greedy decoding stays on the constraint-satisfying submanifold. This conjecture is falsifiable by testing whether generated programs violate constraints at a rate no lower than a baseline generator without the latent distance penalties.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 128,
+      "total_tokens": 251
+    }
+  },
+  "transport_error": null
+}
