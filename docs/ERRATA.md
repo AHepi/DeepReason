@@ -1640,3 +1640,51 @@ the 260 violations and the byte-identical crash; RESULTS.md for the before/after
 table), `experiments/2026-08-27-pc2b-symmetric-reasoning/BLOCKER.md` at
 `ee0563cf1` for the independent first sighting, and
 `docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` §3.2 item 1 for the claim.
+
+## E57 — the audit named the wrong statement as the cause of the citation channel's silence
+
+**Corrects:** `experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md` §F-B
+("Attempted and rejected, or never attempted?") and the P11 prompt in that
+tranche's `PARKED.md` §(2), both of which locate the record's blindness at
+`rules/crit.py::_check_premise_citations` — "returns `()` without a Measure
+when `premise_evidence` is empty, so the record cannot distinguish 'the seat
+was invited and declined' from 'the seat was never invited'".
+
+**Number minted from the tail at `2a5e984c8`.** Two parallel windows were open
+when this landed (a render-layout tranche and a manifest tranche); if a merge
+finds E57 already taken, renumber THIS entry, not theirs.
+
+The mechanism is real and the conclusion is right. The attribution is wrong for
+the majority of the cases it is used to explain. `_check_premise_citations` is
+called only from `_file_attribution`, and `_file_attribution` returned on an
+empty premise TEXT before it ever resolved the invitation — so on a dispatch
+where the seat filed no premise at all, the citation checker was never reached,
+and its empty-refs behaviour explains nothing about that dispatch's silence.
+
+The count that follows from the correction: not two indistinguishable cases but
+**four**, and the checker's empty-refs path accounts for exactly ONE of them.
+Across the same four committed roots the audit read —
+
+| case | dispatches | the named mechanism explains it? |
+|---|---|---|
+| never invited | 93 | no — `_file_attribution` returns on the invitation lookup |
+| invited, no premise text | 4 | no — returns before the checker |
+| invited, premise filed, nothing cited | 1 | **yes** |
+| invited, premise filed, citations submitted | 0 | n/a |
+
+Why it matters beyond bookkeeping: a reader taking the audit's sentence at face
+value would fix `_check_premise_citations` and change nothing for 97 of the 98
+dispatches. The fix that works is in `_file_attribution`, and it is an ORDERING
+fix — resolve the invitation before the premise text — not a recording fix.
+That is what shipped, and `docs/map/CON-criticism-source.md` now carries an AST
+check pinning the statement order, because the order is the whole content of it.
+
+The audit's own verdict is untouched: the channel was structurally closed on 93
+of 98 dispatches, and nothing was ever attempted and rejected.
+
+Evidence: `experiments/2026-08-28-change-premise-invitation-reachability/`
+(ANSWERS.md §(2) for the four-case table; `proof/s4_red.txt` for the tests that
+were red against the tree the audit described), and
+`experiments/2026-08-28-audit-run-problems/probes/q1_invited_replies.json` for
+the 4-and-1 split, which the audit itself recorded and did not carry into its
+sentence about the mechanism.
