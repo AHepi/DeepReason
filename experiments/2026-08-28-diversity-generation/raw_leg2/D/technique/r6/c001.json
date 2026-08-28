@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative refinement against runtime property-based test oracles\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.164
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-468",
+    "object": "chat.completion",
+    "created": 1787942712,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The optimal refinement strategy is to generate property tests first, then fix the implementation by gradient descent on a smooth surrogate of the test failure rate, rather than treating tests as binary accept/reject signals.\", \"probability\": 0.07}, {\"conjecture\": \"The most robust technique is iterative narrowing of the specification itself: each failed property test produces a counterexample that should be fed back as a new specification clause, not merely patched in the implementation.\", \"probability\": 0.08}, {\"conjecture\": \"The decisive factor is the shrinking strategy: the oracle's value depends entirely on the ability to shrink failing inputs to their minimal causal core, and without aggressive shrinking, iteration converges to brittle overfit patches.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique uses a bi-level oracle: a property test for behavioral conformance and an invariant test for structural properties of the code itself (complexity, allocation, termination), iterating only when both pass.\", \"probability\": 0.05}, {\"conjecture\": \"The crucial insight is that the oracle must be stronger than the implementation: it should be generated from the specification by a mechanically simpler process (e.g., direct interpretation of the spec) so that bugs in the oracle are less likely than bugs in the code.\", \"probability\": 0.09}, {\"conjecture\": \"The winning approach is to make the property test oracle itself the primary artifact and generate code by symbolic execution of the oracle, eliminating the iterative loop entirely when it succeeds.\", \"probability\": 0.04}, {\"conjecture\": \"The key is to constrain the hypothesis class before iteration: the implementation language should be restricted to total functions with bounded recursion, so that property-based testing can achieve exhaustive coverage rather than probabilistic coverage.\", \"probability\": 0.05}, {\"conjecture\": \"The decisive technique is to iterate on the distribution of test inputs, not just the implementation: each cycle should adversarially adapt the input generator toward the current implementation's failure modes, creating an arms race that forces robustness.\", \"probability\": 0.08}, {\"conjecture\": \"The optimal method treats refinement as a program synthesis problem where each failed property test adds a constraint to a growing logical formula, and the next implementation is the minimal model satisfying all accumulated constraints.\", \"probability\": 0.07}, {\"conjecture\": \"The best results come from maintaining multiple competing implementations and using the property oracle to eliminate candidates rather than refining a single one, because single-lineage refinement gets stuck in local minima that ensemble elimination avoids.\", \"probability\": 0.06}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 553,
+      "total_tokens": 737
+    }
+  },
+  "transport_error": null
+}

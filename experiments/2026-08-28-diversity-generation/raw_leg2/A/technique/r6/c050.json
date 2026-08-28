@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.642
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-918",
+    "object": "chat.completion",
+    "created": 1787942553,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is specification refinement via stepwise logical decomposition, where each refinement step is mechanically verified against the original specification using a proof assistant like Lean or Coq. This approach forces the developer to produce a machine-checkable proof that the implementation satisfies the specification at every stage of development, rather than relying on after-the-fact testing or manual review. The resulting executable is therefore correct-by-construction with mathematical certainty, limited only by the fidelity of the original abstract specification to real-world intent.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 119,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

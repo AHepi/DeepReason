@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesizing code from refinement-type-annotated proof obligations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.21
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-300",
+    "object": "chat.completion",
+    "created": 1787942067,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Synthesizing code directly from refinement-type-annotated proof obligations via bidirectional type-directed reconstruction—where each obligation's refinement predicate determines a synthesis constraint solved by SMT-backed enumerative search—produces code that holds its commitments with strictly fewer defects than LLM-based generation, provided the refinement types are decidable and the synthesis horizon is bounded by proof obligation depth.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 86,
+      "total_tokens": 205
+    }
+  },
+  "transport_error": null
+}

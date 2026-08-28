@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.355
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-903",
+    "object": "chat.completion",
+    "created": 1787941147,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code is to compile the specification into an intermediate refinement calculus where each proof obligation generates an adversarial test oracle before any implementation code is emitted. This forces the implementation to be constructed by discharging those oracles, making the code a byproduct of proven obligation satisfaction rather than a hand-written artifact. Under this approach, a specification commitment holds in the executable result if and only if its corresponding oracle is satisfiable and discharged, collapsing the gap between intent and execution into a single verification step.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 116,
+      "total_tokens": 214
+    }
+  },
+  "transport_error": null
+}

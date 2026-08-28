@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.707
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-275",
+    "object": "chat.completion",
+    "created": 1787942528,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to compile an abstract specification into a dependent type theory kernel that produces an extraction target, then treat the specification itself as the runtime contract through a computational reflection layer—making the code and its verification the same artifact. The resulting executable is not a separate artifact verified against the spec, but the spec's canonical computational realization, meaning it holds its commitments by construction. Any deviation between behavior and specification becomes a type error at compile time, not a runtime failure.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 102,
+      "total_tokens": 200
+    }
+  },
+  "transport_error": null
+}

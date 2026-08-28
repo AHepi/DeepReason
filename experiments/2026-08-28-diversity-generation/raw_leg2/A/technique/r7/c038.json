@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.27
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-777",
+    "object": "chat.completion",
+    "created": 1787942841,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most effective technique is to compile an abstract specification into executable code by way of a proof-carrying translation, where each refinement step emits both the implementation and a machine-checkable certificate that the code refines the specification. This forces every commitment in the specification to be discharged by formal proof rather than informal reasoning, making violations unrepresentable in the output. The approach is falsifiable: a specification-implementation pair either type-checks under the proof system or it does not, with no gray zone for \\\"mostly correct\\\" derivations.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 116,
+      "total_tokens": 214
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: causal inversion of operational traces from oracle demonstrations\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.382
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-668",
+    "object": "chat.completion",
+    "created": 1787941634,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The most reliable technique is to extract causal dependencies from execution traces of oracle demonstrations, then invert them to synthesize code. This guarantees the generated code's operational behavior matches the specification's commitments by construction rather than by testing.\", \"probability\": 0.08}, {\"conjecture\": \"Abstract specifications are best compiled by recording oracle traces across boundary conditions, learning a structural causal model of state transitions, and inverting that model into a deterministic program. The resulting code provably holds its commitments because every causal dependency in the specification is preserved as an explicit computation path.\", \"probability\": 0.07}, {\"conjecture\": \"The optimal approach is to use oracle demonstrations to generate a lattice of causal state snapshots, then synthesize code by inverting the lattice's transition topology into control flow. This ensures the executable holds its commitments by embedding the causal structure of the specification directly into the program's operational semantics.\", \"probability\": 0.06}, {\"conjecture\": \"Conjecture: code that reliably satisfies abstract specifications can be synthesized by perturbing oracle demonstration traces to identify causal breakpoints, then inverting those breakpoints into guard conditions. The generated program holds its commitments because every specification invariant corresponds to an empirically discovered causal boundary in the trace data.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to decompose oracle traces into minimal causal episodes and invert each episode into a pure function, composing them via dataflow dependencies extracted from the trace. This yields executable code that holds its commitments because the composition order is causally forced by the oracle's own operational history.\", \"probability\": 0.05}, {\"conjecture\": \"Abstract specifications become trustworthy code when oracle demonstrations are mined for counterfactual causal structure — what would have changed if an input differed — and that structure is inverted into program logic. The resulting code holds commitments because it encodes the exact causal sensitivities the oracle exhibits, not merely its observable outputs.\", \"probability\": 0.04}, {\"conjecture\": \"The superior method is to learn a causal graph from oracle trace perturbations, then invert the graph into a program whose variable dependencies mirror the oracle's causal topology exactly. Code generated this way holds its commitments because violating them would require breaking a causal edge that the synthesis step has made structurally impossible.\", \"probability\": 0.04}, {\"conjecture\": \"One should extract the minimal causal kernel from oracle traces — the smallest set of state transitions sufficient to reproduce all observed outputs — and invert that kernel into executable code. The resulting program holds its commitments because any behavior outside the specification would require causal transitions absent from the kernel.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique treats oracle demonstrations as a causal chain and inverts the chain into a program where each operation's preconditions are derived from the trace's causal predecessors. This guarantees commitment-holding because the program's execution order is causally locked to the oracle's demonstrated operational history.\", \"probability\": 0.03}, {\"conjecture\": \"Abstract specifications are best realized by learning a structural causal model from oracle traces under active interventions, then inverting the learned interventional distribution into source code. The generated code holds its commitments because its semantics are causally grounded in the oracle's response to the same interventions the specification demands.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 698,
+      "total_tokens": 881
+    }
+  },
+  "transport_error": null
+}

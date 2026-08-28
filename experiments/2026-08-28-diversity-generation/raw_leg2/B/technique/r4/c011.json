@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: training neural models on execution-trace traces with runtime invariant monitors\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.479
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-93",
+    "object": "chat.completion",
+    "created": 1787942073,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Training a neural code model on execution traces that are actively filtered by runtime invariant monitors — discarding any trace that violates its specification mid-execution — yields models whose generated code upholds its formal commitments significantly better than models trained on traces from code that merely passes post-hoc test suites. The monitor acts as a dense per-step reward signal during trace collection, shaping the model's internal representation toward invariant-preserving computation paths rather than merely correct final outputs. This effect will be most pronounced on specifications with deep operational invariants (e.g., pointer aliasing rules, transactional atomicity) where surface-level output matching is insufficient.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 133,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

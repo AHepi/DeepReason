@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolve code populations against formal contract fitness landscapes\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.416
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-962",
+    "object": "chat.completion",
+    "created": 1787943226,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Executable code that provably satisfies its abstract specification emerges most reliably when a population of program variants is evolved against a fitness landscape defined by the specification's formal contracts, with mutation operators restricted to semantics-preserving transformations validated against incremental proof obligations. Under this regime, the contract-violation distance—not mere test-case coverage—serves as the primary selection pressure, causing the population to converge toward individuals whose behavioral commitments are verifiable by construction. The resulting code holds its commitments because every surviving lineage has been continuously filtered by mechanized contract checking, not merely optimized toward passing examples.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 121,
+      "total_tokens": 237
+    }
+  },
+  "transport_error": null
+}

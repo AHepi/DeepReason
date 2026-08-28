@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 29.46
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-194",
+    "object": "chat.completion",
+    "created": 1787942186,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus with mechanized proof: the abstract specification and the implementation are linked by a chain of stepwise refinements, each verified by an automated or interactive theorem prover. This guarantees the result holds its commitments because the executable code is extracted directly from the proven refinement chain, leaving no gap between specification and binary.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The optimal technique is to use a dependently typed language (e.g., Agda, Idris, or Lean) where the implementation is a constructive proof of the specification. By writing the code as a type-level inhabitant of the specification's propositions, the result necessarily holds its commitments because the compiler rejects any implementation that fails to construct the required evidence.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The optimal technique is generative programming with formal verification: the abstract specification is used to synthesize code via an SMT-backed solver that searches for a program satisfying the spec, then proves the synthesized program meets the spec. This holds its commitments because the verifier checks the final artifact against the spec, not just the generator.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The optimal technique is property-based test generation with shrinking, iterated until the test suite provably covers the abstract specification's input domain partitions. The result holds its commitments because the specification is operationalized as a testable oracle, and the shrinking process eliminates boundary-failure classes that would otherwise violate the spec.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The optimal technique is to use a refinement type system (e.g., Liquid Haskell, F*) that attaches logical predicates to types, allowing the abstract specification to be embedded directly in the type signatures. The result holds its commitments because the type checker statically verifies that every function's implementation satisfies its refinement predicates.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The optimal technique is abstract interpretation with certified termination: the abstract specification is encoded as a semantic lattice, and the code is statically analyzed for conformance. The result holds its commitments because the analysis computes a sound over-approximation of the program's behavior, guaranteeing no execution path violates the spec.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The optimal technique is design-by-contract runtime assertion checking combined with a formally verified compiler backend. The result holds its commitments because the assertions enforce the specification at every call boundary during execution, and the verified compiler guarantees the assertions themselves are faithfully compiled.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"The optimal technique is symbolic execution with path constraint solving: the abstract specification is encoded as path predicates, and the symbolic executor explores all execution paths to verify each path satisfies the spec. The result holds its commitments because the solver proves no reachable path state violates the specification.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The optimal technique is algebraic specification with executable algebraic semantics: the abstract specification is written as an algebraic theory (equations and sorts), and the code is generated as a free algebra over that theory. The result holds its commitments because the equations act as rewrite rules that the runtime uses to reduce any expression to a canonical, spec-conforming normal form.\",\n      \"probability\": 0.035\n    },\n    {\n      \"conjecture\": \"The optimal technique is monitored execution with online specification mining: the abstract specification is converted into runtime monitors that check the spec at every state transition, and the code is evolved using feedback from monitor violations. The result holds its commitments because any violation halts execution, ensuring the system never produces an output that breaks the spec during operation.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 843,
+      "total_tokens": 1014
+    }
+  },
+  "transport_error": null
+}

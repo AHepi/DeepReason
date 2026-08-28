@@ -1,0 +1,8 @@
+[
+  "extraction via refinement type reconstruction from logic-enriched specifications",
+  "synthesis via counterexample-guided inductive program learning",
+  "compilation by denotational semantics preserving step-indexed logical relations",
+  "transformation via algebraic effect-cohandler reification from monadic specs",
+  "generation by constructive proof term extraction from intuitionistic type theory",
+  "validation through runtime contract monitoring with blame assignment and patch induction"
+]

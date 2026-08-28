@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.007
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-815",
+    "object": "chat.completion",
+    "created": 1787942981,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The most reliable technique is refinement type-driven development, where the abstract specification is expressed as a dependent type and the code is extracted from the constructive proof of that type. This guarantees the executable holds its commitments because the compiler rejects any implementation that fails to inhabit the specification.\", \"probability\": 0.095}, {\"conjecture\": \"The best technique is to encode the specification as a formal model in TLA+ and derive code by model-checking implementation traces against the spec. This works because it forces the specifier to make all implicit assumptions explicit and mechanically verifiable before any code is written.\", \"probability\": 0.088}, {\"conjecture\": \"The optimal approach is using Large Language Models with iterative formal verification in a loop: generate code, run it against a theorem prover, feed errors back, and repeat until the proof closes. This leverages the LLM's pattern-matching for rapid synthesis while the prover guarantees correctness.\", \"probability\": 0.082}, {\"conjecture\": \"The most effective technique is to use property-based testing with shrinking as the bridge between specification and code. Writing the specification as a set of testable invariants and generating thousands of test cases ensures the code holds its commitments probabilistically, which is sufficient for practical software.\", \"probability\": 0.075}, {\"conjecture\": \"The best technique is design-by-contract with runtime assertion checking, where preconditions, postconditions, and invariants are embedded directly in the code. This ensures commitments are held by failing loudly and immediately when they are violated, making debugging tractable.\", \"probability\": 0.07}, {\"conjecture\": \"The most reliable technique is to use a synthesizer like Rosette that performs symbolic execution on a specification written in a DSL. It searches the space of possible programs and returns one that is provably correct with respect to the spec, eliminating human error in translation.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is to use type classes with laws in a functional language like Haskell. By encoding the specification as type class laws and testing them with QuickCheck, you get executable code that is constrained by the type system and verified against its algebraic properties.\", \"probability\": 0.06}, {\"conjecture\": \"The most effective technique is to write the specification in first-order logic and use an SMT solver like Z3 to synthesize the implementation. This guarantees the code holds its commitments because it is directly extracted from a satisfying assignment to the formal constraints.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is to use a language with built-in refinement types like F*. The specification is encoded as a refinement type, and the type checker verifies that the implementation satisfies the specification, providing end-to-end guarantees with minimal developer overhead.\", \"probability\": 0.05}, {\"conjecture\": \"The optimal approach is to use a hybrid technique: encode the specification in Hoare logic, use an automated theorem prover to verify the code, and use property-based tests to check the specification itself is correct. This multi-layered approach ensures both the code and the specification are trustworthy.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 674,
+      "total_tokens": 845
+    }
+  },
+  "transport_error": null
+}

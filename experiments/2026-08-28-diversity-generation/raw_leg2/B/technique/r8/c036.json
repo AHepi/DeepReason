@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolve code populations against formal contract fitness landscapes\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.815
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-580",
+    "object": "chat.completion",
+    "created": 1787943220,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most effective technique is to evolve a population of programs where mutation operators are contract-aware — they insert, swap, and recombine code fragments specifically mined from the formal contract's logical structure, rather than mutating arbitrarily. Under this regime, the population converges on contract-satisfying code faster and with higher semantic diversity than standard genetic programming precisely because the mutation space is biased toward expressions that appear in the proof obligations themselves. The conjecture is falsifiable: if contract-aware mutation provides no convergence advantage over uniform random mutation on benchmark suites where contract size and code size are controlled, the hypothesis fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 127,
+      "total_tokens": 243
+    }
+  },
+  "transport_error": null
+}

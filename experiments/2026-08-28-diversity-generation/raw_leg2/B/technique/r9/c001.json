@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis via dependent type theory with proofs-as-programs extraction\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.195
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-600",
+    "object": "chat.completion",
+    "created": 1787943474,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique for extracting commitment-preserving code from an abstract specification is to formulate the specification as a dependently typed quotient inductive-inductive type, where the abstract relations are encoded as higher constructors and the computational realization is given by a universe-polymorphic eliminator. This forces the extracted program to carry a proof term witnessing behavioral congruence with the abstract relations, and the resulting extracted code holds its commitments precisely when the eliminator's computation rules reduce the proof terms to canonical forms under the univalence axiom.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 111,
+      "total_tokens": 230
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.37
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-727",
+    "object": "chat.completion",
+    "created": 1787942523,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to compile the abstract specification into a dependent type theory whose computational content is extracted directly as executable code, ensuring that the commitments are enforced by the type system. This approach transforms the specification into a series of type-theoretic propositions, where the proof of these propositions yields the program. By making the commitments part of the type signature, any deviation from the specification results in a type error, not a runtime failure.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 94,
+      "total_tokens": 192
+    }
+  },
+  "transport_error": null
+}

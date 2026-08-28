@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive type theory extraction from intuitionistic proofs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.775
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-603",
+    "object": "chat.completion",
+    "created": 1787941381,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Specifications with proof obligations carrying computational content (via extractable witnesses) yield more reliable extracted code than those whose proofs are purely propositional, because the extractor is forced to generate the algorithm rather than trust a postulated existence.\", \"probability\": 0.08}, {\"conjecture\": \"Extracted code holds its commitments more reliably when the specification is written in a stratified type theory with universe levels enforcing that no proof term smuggles in non-computational axioms, since any axiom injection silently breaks the extraction's soundness guarantee.\", \"probability\": 0.07}, {\"conjecture\": \"The primary cause of extracted code failing to hold its commitments is not the extraction mechanism itself but the gap between the specification's intended meaning and the formalized logical formula, making specification validation the binding constraint on reliability.\", \"probability\": 0.06}, {\"conjecture\": \"Using proof terms that explicitly carry their own elimination rules as first-class data—rather than relying on definitional equality in the kernel—produces extracted code with fewer optimization-induced semantic mismatches, because the extractor operates on explicit structure instead of trusting the conversion check.\", \"probability\": 0.05}, {\"conjecture\": \"Extraction from proofs that use classical axioms (e.g., excluded middle, choice) can never produce code that reliably holds its commitments, even when the axioms are marked non-computational, because the classical reasoning introduces case-splits that no computational realization can satisfy at the points where the axiom was invoked.\", \"probability\": 0.09}, {\"conjecture\": \"The best technique is to structure the proof as a sequence of refine steps where each intermediate goal's type is itself an executable specification, so that extraction composes these refinements into code whose correctness depends only on local type-checking rather than global proof coherence.\", \"probability\": 0.04}, {\"conjecture\": \"Extracted code reliability is dominated by the treatment of coinductive data: specifications using corecursive proof terms with guarded destructors yield code that holds its commitments, while any use of weak bisimulation as a proof technique produces extracted code whose observational equivalence is not guaranteed by the extraction.\", \"probability\": 0.03}, {\"conjecture\": \"The reliability of extracted code is a monotone decreasing function of the number of opaque proof steps (tactics that close goals without producing inspectable terms), because each opaque step is a point where the extractor's output is unverified against the proof's actual structure.\", \"probability\": 0.06}, {\"conjecture\": \"Specifications formalized in a cubical type theory with univalence as a computational principle yield extracted code that holds its commitments across representation changes automatically, whereas setoid-based approaches in intensional type theory produce code locked to one representation and fragile under refactoring.\", \"probability\": 0.02}, {\"conjecture\": \"The optimal extraction strategy is not erasure of proofs but compilation of proof terms to runtime assertions, accepting the performance cost in exchange for the property that any specification violation at runtime is caught rather than silently propagated by optimized extracted code.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 652,
+      "total_tokens": 835
+    }
+  },
+  "transport_error": null
+}

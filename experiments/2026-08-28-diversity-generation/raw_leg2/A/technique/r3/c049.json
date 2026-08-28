@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.495
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-133",
+    "object": "chat.completion",
+    "created": 1787941726,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is a constraint-preserving compilation pipeline that treats every clause of an abstract specification as a formal logical obligation, lowering it through refinement calculus into executable code while maintaining a proof artifact of obligation discharge at every refinement step. Code that holds its commitments is not produced by post-hoc testing but by constructing the program and its correctness proof as co-dependent artifacts, so that no semantic gap exists between the abstract specification and the final executable. This approach is falsifiable: if a measurable proportion of obligations can be discharged automatically and the resulting code provably satisfies them, the technique succeeds; if the proof overhead exceeds practical limits or residual gaps remain, it fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 139,
+      "total_tokens": 237
+    }
+  },
+  "transport_error": null
+}

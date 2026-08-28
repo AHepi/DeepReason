@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.832
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-75",
+    "object": "chat.completion",
+    "created": 1787942715,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is specification degeneration: mechanically expand the abstract specification into an exhaustive finite test suite by boundary-case enumeration, then synthesize code via property-based test-driven generation that treats each test as a hard constraint. The resulting code holds its commitments because any implementation passing the full generated suite is provably equivalent to the specification on all enumerated inputs, with coverage gaps surfaced as explicit, additional generated tests rather than silent failures. This outperforms deductive theorem proving for practical reliability because it converts the verification problem into a falsification loop that terminates when the test suite becomes a fixpoint under mutation testing.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 128,
+      "total_tokens": 226
+    }
+  },
+  "transport_error": null
+}

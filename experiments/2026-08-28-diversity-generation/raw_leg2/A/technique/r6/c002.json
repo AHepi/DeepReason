@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.707
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-878",
+    "object": "chat.completion",
+    "created": 1787942457,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Specifications must be compiled into code by way of a dependency type system, where the spec itself is the dependent parameter and the generated code is a proof term of inhabitation. Verification therefore shifts from post-hoc testing to type-checking the proof term, with behavioral commitments enforced by refinement types embedded in the dependency chain. Any code that fails to hold its commitments simply fails to type-check and cannot be emitted.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 89,
+      "total_tokens": 187
+    }
+  },
+  "transport_error": null
+}

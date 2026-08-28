@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.403
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-176",
+    "object": "chat.completion",
+    "created": 1787941748,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Refinement calculus with mechanized proof of stepwise correctness preservation\", \"Large-language-model code generation validated by runtime property-based testing\", \"Denotational semantics extraction where specs compile directly to executable interpreters\", \"Iterative genetic programming against a formal fitness function encoding contract obligations\", \"Constructive type theory where the specification is the type and code is the inhabitant\", \"Synthesis from temporal-logic constraints via game-theoretic solver against adversarial environment\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 145,
+      "completion_tokens": 98,
+      "total_tokens": 243
+    }
+  },
+  "transport_error": null
+}

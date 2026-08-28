@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.327
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-677",
+    "object": "chat.completion",
+    "created": 1787942671,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is to compile an abstract specification directly into a formal verification kernel using dependent type theory, such as Lean or Agda, ensuring the executable code holds its commitments by mathematical necessity.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is refinement calculus: iteratively refine the abstract specification into an implementation through mathematically verified stepwise transformations, guaranteeing each code artifact preserves the exact semantics of its parent.\", \"probability\": 0.08}, {\"conjecture\": \"The most effective technique is test-driven specification instantiation: automatically generating millions of property-based tests directly from the abstract specification's invariants, forcing the executable code to provably satisfy its commitments via exhaustive bounded verification.\", \"probability\": 0.09}, {\"conjecture\": \"The best technique is to train a large language model exclusively on verified spec-to-code pairs within a specific domain, enabling it to translate abstract specifications into executable code that is then automatically verified against the spec by an external SMT solver.\", \"probability\": 0.09}, {\"conjecture\": \"The optimal technique is to construct an abstract specification as a set of communicating state machines and use synchronous reactive programming to compile them into deterministic, schedulable code that holds its temporal commitments by construction.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is monadic interpretation: encode the abstract specification as a domain-specific language within a strongly-typed host language, and write interpreters that execute the specification while enforcing its commitments as runtime invariants.\", \"probability\": 0.06}, {\"conjecture\": \"The most effective technique is to use Hoare logic to derive the weakest preconditions for the abstract specification, then synthesize executable code by solving for the program that satisfies those preconditions using an automated theorem prover.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is to build the codebase as a set of pure functions derived via equational reasoning from the abstract specification, where the specification itself serves as the executable code in a functional language like Haskell.\", \"probability\": 0.06}, {\"conjecture\": \"The optimal technique is to use model-driven engineering with an executable UML profile, where the abstract specification is an executable model that is directly translated to code, preserving its commitments through a formally verified compiler.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to use a hybrid approach where an LLM generates candidate code from the specification, and a formal verification system filters the candidates, iteratively prompting the LLM until a candidate is mathematically proven to hold its commitments.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 561,
+      "total_tokens": 732
+    }
+  },
+  "transport_error": null
+}

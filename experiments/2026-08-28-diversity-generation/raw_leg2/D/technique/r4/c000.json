@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction by constructive proof in dependent type theory, where the program IS the proof term\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.316
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-290",
+    "object": "chat.completion",
+    "created": 1787942206,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal extraction technique is to compile specifications written in a refinement calculus directly into Agda's proof terms, where each refinement step corresponds to a specific eliminator, because this eliminates the semantic gap between specification and implementation by making every transformation rule a type-level computation.\", \"probability\": 0.085}, {\"conjecture\": \"Specifications should be written as Hedberg's theorem-style axioms in HoTT, and the executable code extracted by invoking univalence on the resulting proof terms, because this forces the specification to be inherently computational rather than descriptive.\", \"probability\": 0.062}, {\"conjecture\": \"The best approach is to never write a separate specification at all, but instead use tactics in Lean 4 to construct proof terms where the tactic script itself IS the abstract specification, and the residual proof term is the extracted program.\", \"probability\": 0.078}, {\"conjecture\": \"Dependent pattern matching with elaborator reflection (as in Agda) is strictly more effective than pure tactic-based proof for extraction, because it allows the specification to be expressed as a type-level function that the compiler partially evaluates into the proof term.\", \"probability\": 0.041}, {\"conjecture\": \"The key technique is to express abstract specifications as coinductive types in Coq and extract lazy Haskell programs from productive coinductive proofs, because this ensures the resulting executable code holds its commitments even for infinite behaviors.\", \"probability\": 0.069}, {\"conjecture\": \"Specifications must be encoded as quotient inductive types (QITs) so that observational equivalences are built into the specification itself; extraction then yields programs that are correct by construction because the proof term respects the quotient automatically.\", \"probability\": 0.033}, {\"conjecture\": \"The most reliable extraction comes from proof terms constructed via small-step reflection: the specification is a predicate transformer, and the proof is built by composing small-step refinement lemmas, each of which extracts to a single program construct, making the extraction verifiably compositional.\", \"probability\": 0.057}, {\"conjecture\": \"Abstract specifications are best turned into executable code by representing them as modal types in a dependent type theory with a modality monad, where the modality marks abstract reasoning; extraction is simply modal elimination, stripping the abstract layer to reveal the computational term.\", \"probability\": 0.024}, {\"conjecture\": \"The right approach is to use the proof irrelevance principle to separate the computational content from the abstract specification: write the specification as a Sigma type where the witness is the program and the proof is irrelevant, then extract the witness via projection, guaranteeing the program holds its commitments because the proof is checked but not executed.\", \"probability\": 0.073}, {\"conjecture\": \"Lightweight verification via proof terms in Idris 2 with quantitative type theory is superior to heavyweight Coq/Agda extraction, because QTT's linearity annotations let the specification express resource usage, and the extracted proof term is guaranteed to respect those resource bounds at runtime.\", \"probability\": 0.049}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 654,
+      "total_tokens": 845
+    }
+  },
+  "transport_error": null
+}

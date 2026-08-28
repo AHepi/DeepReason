@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Constructive type theory where the specification is the type and code is the inhabitant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.874
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-21",
+    "object": "chat.completion",
+    "created": 1787941828,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is proof-by-reflection: encode the abstract specification as a deep embedding whose interpreter is verified once against the semantic type, then synthesize inhabitants by reflecting concrete candidate code into the deep embedding and reducing adherence to a decidable syntactic check. This shifts the per-program proof burden onto a single trusted interpreter, making commitment-holding scale without per-instance tactic proofs. The conjecture predicts that for any specification class closed under the reflection grammar, an inhabitant exists iff the reflected check passes, yielding a sound and complete synthesis pathway.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 116,
+      "total_tokens": 240
+    }
+  },
+  "transport_error": null
+}

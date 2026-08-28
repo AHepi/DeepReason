@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis conditioned on formal specifications and semantic equivalence checking\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.006
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-373",
+    "object": "chat.completion",
+    "created": 1787943514,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Conditioning neural program synthesis on a specification's deductive closure—generated via lightweight theorem proving—yields executable programs that reliably hold their commitments better than conditioning on the raw specification alone. The deductive closure forces the synthesis model to confront all logical consequences of the spec, making the target program distribution sharper and easier to search. If a decoder guided by semantic equivalence checking is trained exclusively on closed-spec inputs, it will produce semantically correct programs at a strictly higher rate than the same architecture trained on raw specs, with the gap widening as specification complexity increases.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 119,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

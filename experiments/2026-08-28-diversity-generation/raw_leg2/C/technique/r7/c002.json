@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.167
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-581",
+    "object": "chat.completion",
+    "created": 1787942991,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively apply provably-correct refinement laws to a formal specification until it becomes executable code. This guarantees the result holds its commitments by construction.\", \"probability\": 0.07}, {\"conjecture\": \"Translation is best done by large language models fine-tuned on refinement-type pairs, followed by automated proof verification of the generated code against the specification in a proof assistant.\", \"probability\": 0.06}, {\"conjecture\": \"The best approach is to treat the abstract specification as a set of runtime-assertable contracts and generate executable code via property-based generative testing, where code is only accepted if it survives millions of random test cases derived from the spec.\", \"probability\": 0.05}, {\"conjecture\": \"The optimal technique is to make the specification itself executable by writing it in a pure functional language with dependent types, such as Agda or Idris, then compiling it directly. Commitments are held by the type system.\", \"probability\": 0.04}, {\"conjecture\": \"Abstract specifications should be translated to executable code by synthesizing a finite state machine that satisfies the temporal logic properties of the spec, using reactive synthesis techniques. This provides a model-checking guarantee of compliance.\", \"probability\": 0.03}, {\"conjecture\": \"The best method is to write the specification in first-order logic and use a constrained solver (SMT) to synthesize the code directly from the satisfiability modulo theories formulation of the specification.\", \"probability\": 0.02}, {\"conjecture\": \"The optimal approach is a dual-track system: generate code using an LLM for rapid prototyping, while simultaneously using a symbolic interpreter to trace execution paths and verify they adhere to the abstract spec's formal semantics.\", \"probability\": 0.02}, {\"conjecture\": \"The best technique is to use an interactive theorem prover where a human developer writes the executable code and simultaneously constructs a machine-checked proof that the code refines the abstract specification.\", \"probability\": 0.04}, {\"conjecture\": \"Abstract specifications should be compiled to constraint logic programs (e.g., Prolog or Datalog). The declarative nature of these languages means the executable code is a direct, faithful encoding of the abstract logical specification.\", \"probability\": 0.01}, {\"conjecture\": \"The most reliable technique is to avoid generating code from the spec entirely; instead, build a domain-specific language (DSL) where the abstract specification *is* the program, and the interpreter is the only verified artifact needed.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 547,
+      "total_tokens": 718
+    }
+  },
+  "transport_error": null
+}

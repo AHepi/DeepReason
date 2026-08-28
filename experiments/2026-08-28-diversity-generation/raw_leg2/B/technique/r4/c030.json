@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: deriving implementations by extraction from mechanically-verified constructive proofs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.566
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-789",
+    "object": "chat.completion",
+    "created": 1787942096,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extraction reliably yields commitment-preserving code if and only if the abstract specification is expressed as a fully computational dependent type and the proof term is restricted to a strictness-preserving fragment that excludes non-constructive tactics, axiom calls, and quotient eliminations. Under these constraints, the erasure phase becomes semantics-preserving by construction, so the extracted executable's observable behavior is theorem-equivalent to the specification's stated commitments without requiring separate post-extraction verification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 100,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

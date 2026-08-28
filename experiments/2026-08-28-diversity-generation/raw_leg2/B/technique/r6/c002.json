@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive type theory with proof-carrying extraction\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.057
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-666",
+    "object": "chat.completion",
+    "created": 1787942579,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The binding problem in specification-to-code translation is solved by a bidirectional elaboration procedure: partial programs are constructed by a tactic-driven search that simultaneously builds the proof term in a quotient inductive-inductive type, where the computational part is definitionally extracted and the propositional residue is discharged by reflection into a separate proof object. The extracted term holds its commitments because the extraction preserves definitional equality with the specification's computational content, while the residual proof object carries the obligations that cannot be witnessed constructively. This makes the specification-to-code gap a single unified artifact: the program and its correctness certificate are the same term modulo a decidable erasure relation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 138,
+      "total_tokens": 255
+    }
+  },
+  "transport_error": null
+}

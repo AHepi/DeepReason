@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesize from machine-checked constructive type theory proofs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.397
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-154",
+    "object": "chat.completion",
+    "created": 1787943143,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extracting executable code directly from machine-checked constructive type theory proofs yields software that holds its commitments more reliably than any post-hoc verification approach, because the computational content of the proof term is the program itself. The decisive technique is not merely extraction, but structuring specifications around strong dependent eliminations—proofs by inversion on indexed families—so that any extracted function is forced by the type theory to handle exactly the representable inputs with no unreachable branches or partiality. The remaining gap to full correctness closes by proving that the indexed family itself constitutes an adequate model of the original abstract specification, leaving no semantic distance between the theorem and the code.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 136,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

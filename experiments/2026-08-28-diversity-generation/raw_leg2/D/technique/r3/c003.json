@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural code generation conditioned on formal verification feedback loops\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.316
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-433",
+    "object": "chat.completion",
+    "created": 1787941890,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is a neuro-symbolic loop where a transformer generates code from a formal spec, a solver extracts and discharges verification conditions, and failed proofs are fed back as counterexample-guided token-level edits — converging because the model learns to internalize solver tactics as latent reasoning steps.\", \"probability\": 0.087}, {\"conjecture\": \"Training a code model with reinforcement learning where the reward is a binary verification signal from an SMT solver produces code that holds its commitments more reliably than supervised learning on verified examples, because the model learns to generate solver-compatible proof obligations rather than mimicking syntactic patterns.\", \"probability\": 0.072}, {\"conjecture\": \"The best approach is to condition code generation on an intermediate refinement calculus: the neural model generates a chain of progressively more concrete specifications, each verified against the previous, so that the final executable is correct by construction rather than verified post-hoc.\", \"probability\": 0.065}, {\"conjecture\":\": Counterexample-driven fine-tuning — where the model is repeatedly retrained on generated programs that fail verification, with the counterexamples as negative targets and patched versions as positive targets — yields higher commitment-holding rates than any inference-time search, because it reshapes the prior rather than relying on runtime effort.\", \"probability\": 0.058}, {\"conjecture\": \"The key technique is to decompose the spec into independent verification fragments and generate code for each fragment separately, using a verifier to gate each fragment before composition, because end-to-end verification of monolithic neural outputs fails due to solver timeouts and spec complexity.\", \"probability\": 0.051}, {\"conjecture\": \"Generating code and proofs simultaneously in an interleaved single-pass — where each code statement is paired with its justification — outperforms generate-then-verify loops because the model cannot produce code without also constructing the argument for its correctness, forcing internal consistency.\", \"probability\": 0.046}, {\"conjecture\": \"The most effective method is to use a formal verifier as a differentiable signal: approximate the verifier's pass/fail with a learned proxy that is smooth enough for gradient-based guidance during decoding, then verify with the real solver post-hoc, combining fast search with sound guarantees.\", \"probability\": 0.043}, {\"conjecture\": \"Spec-to-code translation works best when the model is conditioned on the spec's logical structure (preconditions, postconditions, invariants) as typed positions, generating code that explicitly references each contract element, rather than treating the spec as flat text — because structural conditioning prevents the model from ignoring clauses.\", \"probability\": 0.039}, {\"conjecture\": \"Iterative repair with a critic model trained to predict verifier failure locations — rather than using the verifier itself for feedback — is the best technique because the critic provides gradient-like directional guidance (which lines, which obligations) while the solver only provides a binary signal, making the loop converge faster.\", \"probability\": 0.034}, {\"conjecture\": \"The winning technique is to constrain the neural model's output grammar to a subset of the language that is decidable for verification by construction — e.g., only generate code in a Hoare-logic-annotated subset — trading expressiveness for guaranteed verifiability, because the bottleneck is not generation quality but verifier coverage.\", \"probability\": 0.028}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 710,
+      "total_tokens": 894
+    }
+  },
+  "transport_error": null
+}

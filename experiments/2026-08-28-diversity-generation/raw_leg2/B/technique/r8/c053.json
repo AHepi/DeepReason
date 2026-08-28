@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: distill behavior from large pretrained code corpora constrained by spec embeddings\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.997
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-845",
+    "object": "chat.completion",
+    "created": 1787943242,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Mapping a formal specification to a vector via a spec-encoder, then retrieving structurally analogous implementations from a pretrained code corpus, yields higher behavioral adherence than generating code from scratch—because retrieval constrains the output distribution to solution regions previously validated by compilation and test co-occurrence. Specifically, using a contrastive spec embedding to perform dense retrieval over abstract syntax trees of function bodies, followed by grammar-constrained synthesis to mutate the retrieved skeleton into compliance, will produce executables that satisfy the spec's invariants at a rate exceeding 70% for specifications whose embedding neighborhood contains implementations solving structurally isomorphic problems.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 130,
+      "total_tokens": 250
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.748
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-375",
+    "object": "chat.completion",
+    "created": 1787941980,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification into an executable, refinement-typed term via constructive type theory, where every commitment becomes a theorem the code must prove at compile time. This outperforms test-generation and LLM-based synthesis because it eliminates the semantic gap between spec and code by making the spec's logic the code's type system. The conjecture is falsifiable: a head-to-head benchmark against property-based testing and neural code generation on a corpus of non-trivial specifications will show a strictly lower rate of commitment violations on the first executable artifact that type-checks.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 125,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

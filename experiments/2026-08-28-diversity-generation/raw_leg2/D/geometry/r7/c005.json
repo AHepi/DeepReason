@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; the score is the smallest area among all 286 triangles formed by triples of your 13 points, every point must lie in [0,1]x[0,1] and all 13 points must be distinct.\n\nStay within this direction: exhaustive branch-and-bound over discretized square with interval arithmetic bounds\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.801
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-915",
+    "object": "chat.completion",
+    "created": 1787940602,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Branch-and-bound over a 256×256 grid with interval arithmetic for triangle areas proves that the optimal min-triangle-area for 13 points in the unit square is exactly 1/144, achieved by placing points at (i/12, 0) and (0, i/12) for i=0..12 in a specific L-shaped pattern.\", \"probability\": 0.08}, {\"conjecture\": \"Using a 512×512 discretization with interval-arithmetic branch-and-bound, the optimal configuration places 4 points at the corners, 4 at edge midpoints, and 5 in a centered cross pattern, yielding a minimum triangle area of exactly 1/108.\", \"probability\": 0.07}, {\"conjecture\": \"Exhaustive B&B with interval arithmetic on a 1024×1024 grid certifies that the maximum minimum triangle area equals sqrt(3)/72, achieved by embedding a triangular lattice fragment with 13 points at spacing 1/6.\", \"probability\": 0.06}, {\"conjecture\": \"Interval-arithmetic branch-and-bound on a 128×128 grid shows the optimal value is 1/120, with the configuration being three rows of points at y=0, y=1/2, y=1 with 5, 3, 5 points respectively at equally spaced x-positions.\", \"probability\": 0.08}, {\"conjecture\": \"A 2048×2048 grid B&B search with interval arithmetic proves no configuration of 13 points achieves minimum triangle area exceeding 1/96, and this bound is tight via a configuration with points on two parallel diagonals.\", \"probability\": 0.05}, {\"conjecture\": \"Branch-and-bound over a 64×64 discretization with interval triangle-area bounds certifies optimal min-area = 1/132, achieved by 13 points on the boundary of the square at positions dividing the perimeter into 12 equal arc-length segments plus the starting point.\", \"probability\": 0.09}, {\"conjecture\": \"Interval arithmetic B&B on a 256×256 grid reveals the optimal configuration is a perturbed 3×3 grid of 9 points plus 4 additional points at (1/6,1/6), (5/6,1/6), (1/6,5/6), (5/6,5/6), giving minimum triangle area exactly 1/162.\", \"probability\": 0.04}, {\"conjecture\": \"Exhaustive branch-and-bound with interval arithmetic on a 512×512 grid proves the answer is 1/126, with the optimal 13-point configuration forming a regular hexagonal lattice patch of side length 1/6 rotated 30 degrees within the square.\", \"probability\": 0.06}, {\"conjecture\": \"Using interval arithmetic on a 128×128 grid, B&B certifies that the maximum minimum triangle area for 13 points is 1/150, achieved by placing points at all 13 positions of a centered {0, 1/4, 1/2, 3/4, 1} × {0, 1/4, 1/2, 3/4, 1} sublattice excluding corners.\", \"probability\": 0.07}, {\"conjecture\": \"Branch-and-bound over a 1024×1024 discretized square with interval arithmetic bounds on all 286 triangle areas proves the optimal minimum triangle area is exactly 1/114, attained by a configuration with 6 points on the bottom edge and 7 points on the top edge at unequally spaced positions determined by the search.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 230,
+      "completion_tokens": 783,
+      "total_tokens": 1013
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.927
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-878",
+    "object": "chat.completion",
+    "created": 1787941920,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for transforming an abstract specification into executable code is proof-carrying synthesis, where the synthesizer emits both the program and a machine-checkable proof that the program refines the specification. This guarantees commitments are upheld by construction, as the proof is independently verifiable and independent of the trustworthiness of the synthesis process itself. Unlike test-based or heuristic approaches, this method ensures that the resulting executable holds its commitments with mathematical certainty, limited only by the soundness of the underlying proof assistant.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 110,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

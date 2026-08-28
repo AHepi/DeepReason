@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.554
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-515",
+    "object": "chat.completion",
+    "created": 1787943576,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Property-based test generation from specification invariants\", \"Dependently typed proof-carrying code via constructive type theory\", \"Model-aided refinement: formal stepwise derivation from abstract Z/B-notation to executable form\", \"Constraint-solver-based program synthesis from input-output examples and partial specifications\", \"Runtime contract monitoring via executable assertions compiled from temporal logic specifications\", \"Neural specification-to-code translation with adversarial formal-verification-based reward shaping\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 145,
+      "completion_tokens": 96,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

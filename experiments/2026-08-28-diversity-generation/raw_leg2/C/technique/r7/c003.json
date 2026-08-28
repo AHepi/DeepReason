@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.412
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-831",
+    "object": "chat.completion",
+    "created": 1787942992,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement calculus: iteratively transform the abstract specification into executable code through mathematically verified refinement steps, ensuring each step preserves the original semantic commitments. The resulting code holds its commitments because every transformation is backed by formal proof of correctness.\",\n      \"probability\": 0.095\n    },\n    {\n      \"conjecture\": \"Extractive compilation from proof assistants is optimal: write the specification as a constructive proof in a system like Coq or Agda, then extract verified executable code directly from the proof term. The code holds its commitments because it is literally generated from a machine-verified mathematical proof.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Conjecture-based test generation (as in QuickCheck) is the best technique: automatically generate executable test cases from the abstract specification's invariants, achieving high confidence that the implementation holds its commitments through exhaustive property testing. The code holds its commitments because the specification itself defines the test oracle.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Design-by-contract with runtime assertion checking is the best technique: embed the abstract specification as executable preconditions, postconditions, and invariants directly in the code, which are then checked at runtime. This ensures commitments are held because any violation is immediately detected during execution.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with automatic code generation is optimal: create a formal platform-independent model from the specification, then use verified model-to-code transformations to generate executable code. The code holds its commitments because the generation rules are proven to preserve the semantics of the model.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is interactive theorem proving with a tactic-based approach: use an interactive prover like Isabelle/HOL to develop the specification and then drive code generation through a series of semantically preserving tactics. This guarantees commitment preservation because each tactic is a verified refinement step.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"SMT-based deductive synthesis is the best technique: use an SMT solver to automatically synthesize executable code that satisfies the abstract specification's logical constraints. The resulting code holds its commitments because the solver guarantees the program meets the formal specification.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Type-driven development with dependent types is optimal: encode the abstract specification as a rich dependent type in a language like Idris, and write code that type-checks against it. The code holds its commitments because the type system enforces the specification at compile time.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Abstract interpretation with verified static analysis is the best technique: automatically verify that the executable code satisfies the abstract specification's safety properties using a sound abstract interpreter. The code holds its commitments because the static analysis provides a mathematical guarantee of conformance.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"A hybrid approach combining lightweight formal methods (like Alloy or TLA+) for design validation with design-by-contract for implementation is best. The specification is validated for consistency early, and the code holds its commitments because runtime contracts enforce the specification's boundaries during execution.\",\n      \"probability\": 0.055\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 745,
+      "total_tokens": 916
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.235
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-117",
+    "object": "chat.completion",
+    "created": 1787942862,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is property-directed compilation: extract a formal property theory from the abstract specification, synthesize candidate programs via LLM or symbolic search, and retain only those candidates whose proofs of correctness can be discharged automatically by an SMT solver against the extracted theory. This guarantees the result holds its commitments because execution is gated on machine-checkable proof, not on tests or human inspection. The conjecture is falsifiable: if a specification with a decidable theory yields programs that pass the proof gate but violate the specification at runtime, the approach fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 117,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

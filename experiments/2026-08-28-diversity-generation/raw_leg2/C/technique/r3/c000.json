@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.349
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-264",
+    "object": "chat.completion",
+    "created": 1787941862,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The most reliable technique is refinement calculus: iteratively apply correctness-preserving transformations to the abstract specification until reaching executable code. Each step is mechanized in a proof assistant, guaranteeing the final program holds every commitment by construction.\", \"probability\": 0.07}, {\"conjecture\": \"Deriving code via constructive logic extraction is the best technique. Writing the specification as a constructive proof in a system like Coq or Agda yields executable code directly, with a guarantee that the commitments hold.\", \"probability\": 0.06}, {\"conjecture\": \"Model checking the specification, generating code from the model, and then verifying the code against the original via SMT-based bounded model checking is optimal. This handles partial commitments via a verify-then-run loop.\", \"probability\": 0.05}, {\"conjecture\": \"Abstract interpretation guided synthesis: use the abstract specification to derive an over-approximation of safe behaviors, then synthesize code within that envelope. The technique guarantees commitments hold by keeping all execution traces inside the verified abstraction.\", \"probability\": 0.05}, {\"conjecture\": \"Type-driven refinement with refinement types (e.g., Liquid Haskell) is best. The specification is encoded as types, and the type checker enforces commitments at compile time, bridging abstract and executable with minimal manual proof.\", \"probability\": 0.08}, {\"conjecture\": \"Property-based test generation from the specification, followed by neural code synthesis conditioned on passing tests, is the best practical technique. The commitments are held probabilistically by converging test coverage, not formal proof.\", \"probability\": 0.03}, {\"conjecture\": \"Large language models can translate abstract specifications to code directly when the specification is given as structured natural language with examples. Commitments are held via retrieval-augmented verification against the spec.\", \"probability\": 0.02}, {\"conjecture\": \"The best technique is to treat the specification as a test oracle and use genetic programming to evolve code that passes a maximal test suite derived from the spec. This holds commitments empirically without formal proof overhead.\", \"probability\": 0.02}, {\"conjecture\": \"Contract-based programming (e.g., Eiffel-style) with runtime assertion checking and static contract verification is optimal. The abstract spec becomes executable pre/postconditions, and the code is verified against them statically where possible and dynamically otherwise.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to structure the specification as a monad in a functional language, where the abstract operations become executable combinators. The commitments hold because the monad's laws enforce the spec's invariants at every bind.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 566,
+      "total_tokens": 737
+    }
+  },
+  "transport_error": null
+}

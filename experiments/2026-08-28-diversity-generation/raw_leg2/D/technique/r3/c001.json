@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis via observational equivalence against a property oracle\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.803
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-854",
+    "object": "chat.completion",
+    "created": 1787941904,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Synthesis by observational equivalence against a property oracle succeeds most reliably when the oracle is itself decomposed into a lattice of monotone sub-checkers, each governing a single observational facet, rather than a monolithic predicate. The synthesizer then searches for programs that ascend the lattice level-by-level, pruning candidates at the cheapest falsifiable layer. This stratification reduces the effective search depth from exponential in specification complexity to linear in the number of facets.\", \"probability\": 0.085}, {\"conjecture\": \"The dominant failure mode in property-oracle synthesis is not under-specification but oracle bias: the oracle's test distribution implicitly commits to an implementation strategy the synthesizer overfits. Counterfactual oracle diversification — generating multiple oracles that are observationally equivalent under the spec but adversarial in their internal sampling distributions — is necessary and sufficient to force the synthesizer to produce programs that generalize beyond the oracle's implicit bias.\", \"probability\": 0.079}, {\"conjecture\": \"Observational equivalence is fundamentally too weak to enforce structural commitments like time complexity or memory bounds. The best technique is therefore a two-phase oracle: a semantic phase using observational equivalence for correctness, and a syntactic phase that restricts the synthesizer's grammar to programs that are structurally incapable of violating resource commitments. Pure observational equivalence alone will never produce resource-bounded code from a spec that mentions complexity.\", \"probability\": 0.072}, {\"conjecture\": \"The hardest problem in synthesis-via-equivalence is that most candidate programs are observationally inequivalent to the spec on inputs the oracle never tests. The resolution is to make the oracle itself a counterexample-guided inductive synthesizer: every candidate that passes the oracle is run against an adversarial solver that attempts to construct a distinguishing input, and the oracle is updated with the result. This CEGIS-in-the-oracle loop converges exactly when the spec is realizable by a program in the search space.\", \"probability\": 0.068}, {\"conjecture\": \"Abstract specifications contain commitments that are not observational at all — they are intensional, concerning program structure, compositionality, or maintainability. No oracle over input-output behavior can enforce these. The correct technique is to pair the observational oracle with a type-theoretic oracle that checks proofs of intensional properties in a lightweight dependent type system, and the synthesizer must produce both a program and a proof term.\", \"probability\": 0.063}, {\"conjecture\": \"The scalability bottleneck in property-oracle synthesis is the cost of evaluating the oracle per candidate. The best technique is to train a fast surrogate model that approximates the oracle's verdict, use it to filter millions of candidates cheaply, and only invoke the true oracle on candidates the surrogate accepts. This works if and only if the surrogate has a provable false-negative rate of zero, which is achievable by making the surrogate a conservative over-approximator of the oracle's rejection region.\", \"probability\": 0.058}, {\"conjecture\": \"A specification holds its commitments precisely when the synthesized program is in the observational equivalence class of the spec and that class is a singleton under the oracle's distinguishing power. The technique is to first compute the oracle's distinguishing power — the set of input pairs it can tell apart — and then synthesize a program that is equivalent to the spec on all distinguishable inputs. If the equivalence class is non-singleton, the spec is under-determined and no technique can guarantee commitment-holding without additional constraints.\", \"probability\": 0.054}, {\"conjecture\": \"The most effective technique is to restrict the synthesizer's search space to programs that are themselves oracles: i.e., the generated code is a composition of property-checking fragments. This ensures that the program's behavior is observationally equivalent to the spec by construction, because every computation step is a check the oracle could have performed. The synthesis problem reduces to finding the minimal composition of oracle fragments that covers the spec's input domain.\", \"probability\": 0.049}, {\"conjecture\": \"Property-oracle synthesis fails on specs with rich algebraic structure because the oracle samples inputs too sparsely relative to the symmetry group of the spec. The best technique is to first infer the spec's symmetry group from its algebraic properties, then restrict the oracle to sample only canonical representatives of each orbit. This reduces the oracle's work by the size of the symmetry group while preserving observational completeness, making synthesis tractable for specs with large automorphism groups.\", \"probability\": 0.044}, {\"conjecture\": \"The fundamental issue is that observational equivalence checks behavior but commitments are about robustness under perturbation. The technique is to synthesize against a smoothed oracle: for each test input, the oracle evaluates the candidate not just at the input but on an epsilon-ball around it, and requires observational equivalence across the entire ball. Programs that pass the smoothed oracle are guaranteed to be locally observationally equivalent to the spec, which is the correct notion of holding commitments for numerical and approximate specifications.\", \"probability\": 0.039}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 1060,
+      "total_tokens": 1243
+    }
+  },
+  "transport_error": null
+}

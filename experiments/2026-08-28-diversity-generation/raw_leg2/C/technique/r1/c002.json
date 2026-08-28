@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.824
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-590",
+    "object": "chat.completion",
+    "created": 1787941341,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement typing: encode the abstract specification as types so that any well-typed program is guaranteed to hold its commitments.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is property-based test generation: derive executable code by search over a grammar, guided by a fitness function that maximizes specification coverage and property satisfaction.\", \"probability\": 0.072}, {\"conjecture\": \"The best technique is large language model translation followed by automated verification: use a model to generate code, then prove equivalence to the formal specification via an SMT solver.\", \"probability\": 0.068}, {\"conjecture\": \"The best technique is proof-carrying code generation: synthesize code alongside a machine-checkable proof that it refines the abstract specification.\", \"probability\": 0.061}, {\"conjecture\": \"The best technique is denotational design: implement the specification as a mathematical function, then derive an efficient executable program by semantics-preserving transformations.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is model-driven development with formal round-trip engineering: maintain the abstract specification as the single source of truth and generate code so that any deviation is statically detected as a model violation.\", \"probability\": 0.049}, {\"conjecture\": \"The best technique is program synthesis by constructive type theory: treat the specification as a theorem and extract a certified program from its intuitionistic proof.\", \"probability\": 0.044}, {\"conjecture\": \"The best technique is runtime verification with enforcement: generate code that monitors every execution against the specification and aborts any run that would violate a commitment.\", \"probability\": 0.038}, {\"conjecture\": \"The best technique is contract-driven design with runtime assertion checking: encode each commitment as a precondition, postcondition, or invariant and let the runtime enforce them during execution.\", \"probability\": 0.033}, {\"conjecture\": \"The best technique is correct-by-construction stepwise refinement: start from the abstract specification and apply mathematically proven refinement laws to reach executable code, with each step preserving all commitments.\", \"probability\": 0.027}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 470,
+      "total_tokens": 641
+    }
+  },
+  "transport_error": null
+}

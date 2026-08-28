@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive type theory with computational extractions from proofs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.395
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-820",
+    "object": "chat.completion",
+    "created": 1787942709,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is to encode the abstract specification as a dependent type whose inhabitants are exactly the programs satisfying it, then extract code via realizability — but this only works if the specification is written in a stratified fragment that prevents size loops between proof and program terms.\",probability\": 0.07}, {\"conjecture\": \"Specifications written as negative translations into intuitionistic logic yield extracted programs that are correct-by-construction with lower complexity overhead than direct positive encodings, because the double-negation translation automatically enforces a call-by-value discipline on the extracted code.\",probability\": 0.06}, {\"conjecture\": \"The best approach is to use refinement types layered over a computational core type theory: the specification lives in the refinement layer, proofs eliminate refinements into computational terms, and extraction erases refinements to produce code that holds its commitments because every refinement was discharged constructively.\",probability\": 0.08}, {\"conjecture\": \"Proof-carrying code generated from constructive proofs of specification conformance is the only technique that produces commitments that persist under composition, because the extracted artifact carries the witness that can be independently re-verified without trusting the extractor.\",probability\": 0.05}, {\"conjecture\": \"Quotient types in the specification phase, combined with setoid-preserving extraction, produce code that holds its commitments better than opaque equality, because the extracted code must carry computational content for the quotient's representatives rather than silently relying on extensional reasoning that has no algorithmic realization.\",probability\": 0.04}, {\"conjecture\": \"The critical factor is not the proof system but the discipline of keeping the specification in a logic whose computational content is already the target language's evaluation strategy — extracting from proofs in a call-by-push-value type theory directly yields code whose operational semantics match the specification's constructive content without a translation phase that could introduce gaps.\",probability\": 0.09}, {\"conjecture\": \"Abstract specifications should be encoded as higher inductive types where the path constructors encode the commitments; extraction then produces code plus certificates, and the code holds its commitments precisely when the HIT's higher paths have computational content rather than being mere propositional equalities.\",probability\": 0.03}, {\"conjecture\": \"The best technique is to decompose the specification into a chain of constructive refinement steps, each discharged by a proof term, such that extraction composes — the result holds its commitments if and only if each refinement step's proof term is syntax-directed, because non-syntax-directed proof tactics produce extracted code with control flow that does not correspond to any reasoning the verifier checked.\",probability\": 0.08}, {\"conjecture\": \"Specifications encoded as coalgebraic types in a constructive type theory yield extracted programs that hold their commitments for reactive and infinite systems, where inductive encodings fail — the extraction produces productive corecursive code because constructive proofs of bisimulation necessarily carry the guard-satisfying computational content.\",probability\": 0.06}, {\"conjecture\": \"The extraction function itself must be proven correct in the same type theory it extracts from — a bootstrapped extractor whose soundness theorem has computational content — otherwise the gap between proof and program is bridged by an unverified tool, and the resulting code does not hold its commitments any more than a compiler's promises.\",probability\": 0.07}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 692,
+      "total_tokens": 876
+    }
+  },
+  "transport_error": null
+}

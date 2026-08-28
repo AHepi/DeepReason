@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.597
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-626",
+    "object": "chat.completion",
+    "created": 1787941202,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning specifications into executable code that preserves commitments is refinement-typed compilation, where the abstract specification is expressed in a decidable refinement type system and the code generator is itself a proof-producing tactic. The executable is then guaranteed correct only if the generated refinement proofs type-check under the original specification. This is falsifiable: any system that can generate an executable plus a discharged proof for a known-correct specification, or that produces an executable violating a stated postcondition despite passing type-checking, would refute it.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 113,
+      "total_tokens": 211
+    }
+  },
+  "transport_error": null
+}

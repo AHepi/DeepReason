@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesizing code from refinement-type-annotated proof obligations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.807
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-718",
+    "object": "chat.completion",
+    "created": 1787942071,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for synthesizing code from refinement-type-annotated proof obligations is to compile each proof obligation into a linear Horn clause system over the refinement predicates, then solve via counterexample-guided synthesis of ghost functions that fill each obligation's logical gaps—yielding code where every commitment is discharged by construction. The approach fails closed: any unsolvable Horn clause blocks synthesis rather than emitting unverified code.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 90,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

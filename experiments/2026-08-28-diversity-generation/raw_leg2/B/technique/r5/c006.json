@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction via proof-carrying synthesis from dependent types\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.222
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-768",
+    "object": "chat.completion",
+    "created": 1787942312,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Synthesis via type-class prolog over dependent type classes—where each instance carries a proof term—outperforms refinement-type-based synthesis for extracting executable code from abstract specifications, because the proof terms directly constrain the search space to only those programs that constructively realize their commitments. Specifically, this approach guarantees that the synthesized code's extracted obligations are discharged by the type-class instances themselves, eliminating the need for a separate verification pass. The conjecture is falsifiable by comparing, on a fixed benchmark suite, the rate of extracted programs that pass a downstream verifier between the two methods.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 123,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction by formal proof-reconstruction from constructive type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.685
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-498",
+    "object": "chat.completion",
+    "created": 1787942881,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extraction-by-proof-reconstruction yields obligation-faithful code if and only if the abstract specification is encoded as a dependent record of constructive proofs over an effect-indexed monad, and the extracted term is the record's computational component normalized under a stratified reduction relation that preserves proof-irrelevance across effect strata.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 74,
+      "total_tokens": 192
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.864
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-984",
+    "object": "chat.completion",
+    "created": 1787943106,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is to derive the implementation through constructve synthesis guided by a correctness calculus, where each refinement step from specification to code produces a machine-checkable proof that the step preserves all specified properties. Unlike test-driven or post-hoc verification approaches, this forces every commitment to be discharged at the moment of implementation, making it impossible to produce code that violates the specification without the derivation itself being incomplete. The technique is falsifiable: if a valid specification exists for which constructive synthesis cannot produce both executable code and a complete proof chain, or if the resulting code can be shown to violate a specified property, the approach fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 145,
+      "total_tokens": 243
+    }
+  },
+  "transport_error": null
+}

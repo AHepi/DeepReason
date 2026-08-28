@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis constrained by property-based test oracles\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.236
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-946",
+    "object": "chat.completion",
+    "created": 1787942890,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Neural program synthesis guided by a tournament selection oracle produces specification-faithful code with higher probability than monolithic generation. Specifically, a generative model must propose a diverse population of candidate implementations, which are continuously filtered by property-based tests whose input spaces are adaptively co-evolved by a discriminator network to target specification edge cases. The surviving candidates are recombined via a graph neural network that operates on their abstract syntax trees, yielding a final program that satisfies the property-based test suite orders of magnitude more reliably than single-pass generation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 115,
+      "total_tokens": 233
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction of executable semantics from dependent-type proofs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.422
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-888",
+    "object": "chat.completion",
+    "created": 1787941901,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Proof-by-evaluation in dependent type theory yields more correct extracted code than proof-by-rewriting, because rewriting-based proofs leave residual coercions that compilers fail to erase, whereas evaluation-based proofs normalize the term into a computational form the extractor can directly translate.\", \"probability\": 0.085}, {\"conjecture\": \"Extracting code from the proof term's computational spine (erasing propositions but preserving the transport/coercion structure as runtime checks) produces code that holds its commitments more reliably than global-erasure strategies, because the latter silently drop runtime invariants that the external environment may violate.\", \"probability\": 0.075}, {\"conjecture\": \"Specifying abstract requirements as induction-recursion schemas rather than plain inductive families produces extracted code with exponentially fewer invariant-recheck sites, because the dependency between the type and its eliminators is already baked into the extracted recursion structure.\", \"probability\": 0.045}, {\"conjecture\": \"Adding a 'no axiom K' and 'univalence' constraint on the source proof theory is necessary for reliable code extraction, because proofs relying on UIP produce extracted code with identity coercions that are observationally but not intensionally correct, causing commitment violations under extensional equality tests.\", \"probability\": 0.06}, {\"conjecture\": \"The optimal extraction target language is not simply-typed lambda calculus but a dependent fragment of the target language with erased proofs, because attempting to encode dependent eliminators into simply-typed pattern matching introduces shadowing bugs in 15-30% of nontrivial cases.\", \"probability\": 0.07}, {\"conjecture\": \"Proof irrelevance for propositions, combined with relevance annotations for the computational fragment, is both necessary and sufficient for commitment-preserving extraction; full proof relevance over-generates dead code that obscures commitment violations, while full proof irrelevance under-generates necessary runtime checks.\", \"probability\": 0.055}, {\"conjecture\": \"Quotient types in the specification must be replaced by setoids before extraction, because quotient-type eliminators compile to non-terminating choice functions in standard extraction pipelines; setoid-based proofs extract to explicit representative-selection code that is slower but provably terminates.\", \"probability\": 0.05}, {\"conjecture\": \"The single highest-impact technique is making the specification itself a decision procedure (i.e., the proof is by reflection), because reflective proofs extract to a verified checker whose correctness is a one-line proof rather than a distributed property across a large proof script.\", \"probability\": 0.08}, {\"conjecture\": \"Sized types in the proof theory are the critical ingredient for commitment preservation, because without them the extractor cannot distinguish structurally decreasing recursion (safe to compile as loops) from general recursion (requires fuel or coinduction), and misclassification leads to either nontermination or spurious partiality.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is to extract not the proof term but the proof's proof-relevant computational content annotated with a separately verified refinement type, because the proof term alone conflates justification and computation, and separating them lets the extractor optimize computation while preserving the refinement as a runtime contract.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 681,
+      "total_tokens": 864
+    }
+  },
+  "transport_error": null
+}

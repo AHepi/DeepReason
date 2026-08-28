@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.303
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-785",
+    "object": "chat.completion",
+    "created": 1787941935,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to compile the abstract specification into a constraint system whose models are executable programs, then search for the minimal program that provably entails the specification via decidable refinement. This outperforms direct code synthesis because it forces the specification and implementation to share a single semantic substrate, making verification a property of the search rather than a post-hoc check. The approach is falsifiable: if no known class of specifications yields implementations that hold their commitments under this method better than under LLM-based generation or manual translation, the conjecture is wrong.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 118,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

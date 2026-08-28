@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.084
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-913",
+    "object": "chat.completion",
+    "created": 1787941187,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code is to compile it into a computational graph via constructive type theory, where every specification invariant becomes a type constraint and every implementation step is a proof-carrying compilation. This enforces commitments by making the runtime reject any execution path where the computational graph's type signatures do not perfectly match the abstract specification's logical theorems. The resulting executable is therefore mathematically bound to its specification, as a single type mismatch eliminates the program's ability to run.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 111,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

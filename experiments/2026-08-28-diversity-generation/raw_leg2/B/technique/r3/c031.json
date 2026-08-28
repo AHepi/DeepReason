@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Iterative genetic programming against a formal fitness function encoding contract obligations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.361
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-122",
+    "object": "chat.completion",
+    "created": 1787941786,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Genetic programming will converge on programs satisfying formal contract obligations only when the fitness function enforces compositional contract checking, where each candidate program is evaluated not merely by aggregate pass/fail but by the degree to which it preserves the weakest-precondition predicate of each operation across all call sites. Under this regime, mutations that repair a contract violation in one sub-expression will be preferentially retained only if they do not break the precondition entailment chain elsewhere, making contract preservation the primary selection pressure rather than test-case coverage. The conjecture predicts that without compositional weakest-precondition fitness, genetic programming will produce programs that pass isolated contract tests but fail under composition.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 138,
+      "total_tokens": 258
+    }
+  },
+  "transport_error": null
+}

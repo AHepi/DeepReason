@@ -1,0 +1,8 @@
+[
+  "lattice-perturbation search over affine-stretched grid bases",
+  "contact-graph packing via nonlinear optimization with area constraints",
+  "algebraic number field construction yielding guaranteed minimum-area certificates",
+  "heuristic metaheuristic search (simulated annealing / evolutionary) on continuous coordinates",
+  "regular polygon / concentric ring symmetric templates with analytic minimization",
+  "exhaustive branch-and-bound over discretized square with interval arithmetic bounds"
+]

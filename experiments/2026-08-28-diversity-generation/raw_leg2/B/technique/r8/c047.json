@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: refine abstract state machines via certified stepwise simulation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.384
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-276",
+    "object": "chat.completion",
+    "created": 1787943234,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given an abstract specification expressed as an abstract state machine (ASM), the most reliable technique for generating executable code that provably holds its commitments is to synthesize a sequence of progressively more concrete ASMs, where each refinement is accompanied by a machine-checkable simulation proof demonstrating that every step of the refined machine is faithfully represented by a step of the more abstract one, with the final concrete machine being directly executable code.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 90,
+      "total_tokens": 207
+    }
+  },
+  "transport_error": null
+}

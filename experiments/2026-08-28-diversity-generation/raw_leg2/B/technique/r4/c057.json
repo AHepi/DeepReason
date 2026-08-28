@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolving populations of executables against adversarial property-based test oracles\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.672
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-607",
+    "object": "chat.completion",
+    "created": 1787942153,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Evolving populations of executables against adversarial property-based test oracles achieves specification fidelity when the oracle population co-evolves to maximize counterexample discovery rate while the executable population selects for minimal spec-conformance distance, not raw pass rate. Under this asymmetric co-evolutionary pressure, fixation on any executable that violates the abstract specification becomes impossible because the adversarial oracle lineage is specifically rewarded for exposing precisely that class of violation. The resulting equilibria are executables whose conformance is robust against adversarial input synthesis, not merely statistically likely to pass.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 118,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.846
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-231",
+    "object": "chat.completion",
+    "created": 1787942672,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is to compile the abstract specification directly into a target language via a certified synthesizer, using a type system expressive enough to encode the specification's commitments as types, such that any term inhabiting the type is guaranteed to hold.\", \"probability\": 0.085}, {\"conjecture\": \"Translating the specification into a constructive logic proof and then extracting code via the Curry-Howard correspondence is strictly superior to any technique that generates code first and verifies after.\", \"probability\": 0.075}, {\"conjecture\": \"The best approach is to use a Large Language Model to generate candidate implementations, followed by an automated theorem prover to verify adherence to the abstract specification, iterating until the prover confirms all commitments hold.\", \"probability\": 0.065}, {\"conjecture\": \"Property-based testing with shrinking, applied iteratively during the translation from specification to code, is more effective than formal verification for ensuring commitments hold, because it grounds the abstract spec in concrete counterexamples that humans can debug.\", \"probability\": 0.05}, {\"conjecture\": \"The only reliable technique is to treat the specification itself as an executable model, simulate it against a wide distribution of inputs, and then use differential testing to ensure the generated code matches the model's behavior across all tested cases.\", \"probability\": 0.055}, {\"conjecture\": \"Refinement calculus—where the specification is transformed into code through a series of provably behavior-preserving refinement steps—is the single best technique because it makes the translation itself a proof.\", \"probability\": 0.06}, {\"conjecture\": \"The most effective technique is to express the specification in a constraint logic programming language and use an SMT solver to synthesize code that is correct-by-construction with respect to those constraints.\", \"probability\": 0.05}, {\"conjecture\": \"No single technique dominates; the best approach is a multi-modal pipeline that uses LLMs for initial translation, static analysis for type-level commitments, and property-based tests for behavioral commitments, with human review at each stage.\", \"probability\": 0.09}, {\"conjecture\": \"The best technique is to structure the specification as a set of concurrent actors with formally specified message-passing protocols, then synthesize code from the protocol definitions, ensuring commitments hold via session type checking.\", \"probability\": 0.035}, {\"conjecture\": \"Iterative self-refinement, where an LLM generates code, writes tests from the spec, runs them, and regenerates until tests pass, is empirically the most effective technique in practice because it bootstraps verification from the spec itself.\", \"probability\": 0.07}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 565,
+      "total_tokens": 736
+    }
+  },
+  "transport_error": null
+}

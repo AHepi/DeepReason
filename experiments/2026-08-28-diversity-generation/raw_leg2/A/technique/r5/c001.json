@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.585
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-689",
+    "object": "chat.completion",
+    "created": 1787942222,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for transforming an abstract specification into executable code that honors its commitments is specification-level compilation via dependently typed languages. By requiring that the code itself constitutes a constructive proof of the specification, the compiler mathematically guarantees the absence of execution paths that violate the initial abstract constraints. This forces the developer to resolve all logical ambiguities at the type level before runtime, making the executable output a direct, mechanically verified artifact of the specification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 97,
+      "total_tokens": 195
+    }
+  },
+  "transport_error": null
+}

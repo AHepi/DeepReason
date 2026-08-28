@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.047
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-484",
+    "object": "chat.completion",
+    "created": 1787941207,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is refinement type extraction via constructive synthesis: treat the specification as a program in a total, dependent type theory, and derive the implementation as a beta-reduced inhabitant of the specification type, checked by a proof assistant. The resulting code holds its commitments because the extraction preserves proofs as computation, making the gap between specification and implementation a syntactic identity rather than a semantic argument. This outperforms test-based or model-checked approaches because it eliminates the translation step entirely—the specification is the program, and the compiler is the proof checker.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 130,
+      "total_tokens": 228
+    }
+  },
+  "transport_error": null
+}

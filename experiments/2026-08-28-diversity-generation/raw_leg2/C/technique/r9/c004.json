@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.02
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-995",
+    "object": "chat.completion",
+    "created": 1787943556,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively apply proven correctness-preserving refinement rules to the abstract specification until reaching executable code, guaranteeing the code holds its commitments by construction.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is to extract executable code directly from a constructive proof of the specification's satisfiability using a proof assistant, ensuring the extracted code holds its commitments because it is computationally equivalent to the proof term.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is to make the specification itself an executable program, using declarative languages where abstract logical constraints are directly evaluated or searched over, eliminating the semantic gap entirely.\", \"probability\": 0.075}, {\"conjecture\": \"The best technique is contract-driven development: encode the abstract specification as runtime assertions and invariants, then write code that passes those tests, leveraging a solver or fuzzer to search for implementations that satisfy the contracts.\", \"probability\": 0.07}, {\"conjecture\": \"The optimal technique is to use a large language model to translate the abstract specification into code, but ground it by generating both code and formal proofs of specification compliance simultaneously, using the proof system as a strict filter for valid outputs.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is to synthesize code via a solver that treats the abstract specification as a constraint satisfaction problem, guaranteeing the resulting executable holds its commitments by algorithmically exploring the space of possible programs.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to build a domain-specific language (DSL) where the abstract specification and the executable code are the same text, but interpreted in different modes, ensuring commitments hold by eliminating the translation step.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to use abstract interpretation to automatically derive a concrete implementation from the abstract specification by iteratively concretizing the abstract semantics until the result is executable.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is model-driven engineering: transform the abstract specification into executable code through a series of automated, mathematically verified model-to-model transformations, culminating in a final model-to-code step.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to use type-driven development with dependent types, encoding the abstract specification as a type signature and writing code until the type checker confirms the program satisfies that type, ensuring commitments hold via the Curry-Howard correspondence.\", \"probability\": 0.035}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 547,
+      "total_tokens": 718
+    }
+  },
+  "transport_error": null
+}

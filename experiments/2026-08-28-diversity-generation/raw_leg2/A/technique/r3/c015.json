@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.667
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-172",
+    "object": "chat.completion",
+    "created": 1787941674,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is specification compilation via computational proof extraction, where the specification is written in a constructive type theory and the compiler emits code alongside a machine-checkable proof that the code refines the specification. This outperforms test generation or LLM-based synthesis because it eliminates the semantic gap between intent and implementation by construction, rather than attempting to verify the gap post hoc. The conjecture is falsifiable: if systems built this way fail to achieve higher assurance at comparable cost than test-heavy or AI-assisted workflows on benchmark suites like SMT-COMP or Crux, the approach is inferior.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 140,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

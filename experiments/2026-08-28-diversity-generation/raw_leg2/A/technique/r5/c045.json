@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.816
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-726",
+    "object": "chat.completion",
+    "created": 1787942285,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is property-driven synthesis: compile the abstract specification into a set of formal logical properties, then use a constraint solver to synthesize code that is provably consistent with those properties by construction. Rather than generating code and then checking it, the solver searches the space of programs whose formal semantics entail the specification, making the output a mathematical consequence of the constraints. The result holds its commitments because the code is not an interpretation of the spec but a direct instantiation of its logical closure, eliminating the gap between intent and execution.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 114,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

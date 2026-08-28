@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis constrained by property-based test oracles\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.048
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-302",
+    "object": "chat.completion",
+    "created": 1787942911,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Neural program synthesis guided by property-based testing will produce specifications that hold their commitments most reliably when the oracle is co-evolved with the synthesized program via adversarial generation—that is, the property-based test oracle is itself a learned program that actively searches for counterexamples the current synthesis fails. This adversarial co-evolution of test generator and program synthesizer outperforms fixed-oracle approaches because it automatically tightens the specification wherever the synthesizer is weakest, concentrating search pressure on the exact edge cases the program gets wrong. The approach is falsifiable by comparing adherence to held-out formal specifications across co-evolved versus fixed property-based oracles.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 136,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

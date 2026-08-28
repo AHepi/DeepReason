@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: large-model constrained decoding on a verified step-correctness reward model\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.487
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-354",
+    "object": "chat.completion",
+    "created": 1787942340,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Constrained decoding via step-level reward model guidance produces verifiably correct code from specifications only when the reward model is trained on proof-theoretic step derivations rather than execution traces; this training forces the model to predict whether each intermediate proof obligation is discharged, grounding the reward in formal semantics rather than test-passing heuristics. Under this regime, the step-correctness reward model becomes a continuous proxy for a proof checker, enabling the decoder to enforce that each generated refinement step preserves the specification's logical commitments. The conjecture predicts a sharp threshold: below a critical reward-model accuracy on held-out proof obligations, constrained decoding yields no improvement over unconstrained generation, but above it, specification adherence scales near-linearly with reward-model precision.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 157,
+      "total_tokens": 278
+    }
+  },
+  "transport_error": null
+}

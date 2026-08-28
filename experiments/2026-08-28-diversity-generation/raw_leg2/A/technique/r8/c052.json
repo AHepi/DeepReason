@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 17.12
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-958",
+    "object": "chat.completion",
+    "created": 1787943114,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification directly into a refinement proof obligation that generates both the implementation and its correctness certificate simultaneously, eliminating the semantic gap between spec and code. This outperforms post-hoc verification or test-driven derivation because it makes non-conformance syntactically impossible: the compiler rejects any implementation whose refinement steps do not discharge the proof obligations. The conjecture is falsifiable by measuring defect rates across systems built this way versus those built with test-driven development or post-hoc formal verification—if the refinement-compiled systems do not show strictly fewer specification-conformance defects at statistically significant margins, the conjecture is false.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 136,
+      "total_tokens": 234
+    }
+  },
+  "transport_error": null
+}

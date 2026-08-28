@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: property-based generative testing with shrinking for specification conformance\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.568
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-113",
+    "object": "chat.completion",
+    "created": 1787943502,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal shrinking strategy for specification-conformance testing is not to shrink toward minimal failing cases, but to shrink toward the specification's definitional boundary — the exact input where the property transitions from satisfied to violated. This is achieved by annotating generators with a distance metric derived from the specification's logical structure, so that shrinking moves along the semantic gradient of the spec rather than the syntactic gradient of the value. Under this approach, the resulting counterexamples pin down the precise violated clause with O(1) ambiguity, making the failure directly actionable for code generation without human interpretation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 122,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.511
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-439",
+    "object": "chat.completion",
+    "created": 1787942751,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for generating code that honors its specification is to compile the specification into an SMT-based refinement type system, then synthesize code via constraint-guided search against those types. This forces the abstract commitments to become machine-checked proof obligations at the boundary of every function, eliminating the gap between intent and execution. Any code that satisfies the types is guaranteed to hold the original specification's commitments, or synthesis fails — making the method self-falsifying when it cannot succeed.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 104,
+      "total_tokens": 202
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.848
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-610",
+    "object": "chat.completion",
+    "created": 1787941417,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code is constructive extraction via dependent type theory: the specification is written as a theorem in a proof assistant, the implementation is the proof term, and extraction produces verified code. This guarantees the code holds its commitments because the compiler rejects any implementation that does not constructively demonstrate satisfaction of the specification. The conjecture is that this approach outperforms all post-hoc verification methods (testing, model checking, static analysis) in commitment-retention for specifications of sufficient complexity, because it makes the gap between specification and implementation a type error rather than a discovered defect.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 130,
+      "total_tokens": 228
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 31.876
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-731",
+    "object": "chat.completion",
+    "created": 1787942685,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement type programming: encode the abstract specification directly as dependent types in the implementation language, forcing the type checker to prove the commitments. Code that compiles is code that holds its commitments by construction.\", \"probability\": 0.085}, {\"conjecture\": \"Spec-to-test-to-code synthesis via large language models, constrained by a formal verifier, outperforms all other techniques. The specification is automatically translated into a property-based test suite, and code is generated and iteratively repaired until it passes formal verification against the properties.\", \"probability\": 0.092}, {\"conjecture\": \"The optimal technique is constructive extraction from proof assistants: write the specification as a theorem in Coq or Lean, write a constructive proof that the spec is satisfiable, and extract executable code directly from the proof. The extracted code holds its commitments because it is isomorphic to the verified proof term.\", \"probability\": 0.078}, {\"conjecture\": \"The best technique is design-by-contract runtime assertion checking combined with mutation testing. The abstract specification is translated into executable pre/post-conditions, and the code is evolved via genetic algorithms until no mutant can violate the contracts.\", \"probability\": 0.065}, {\"conjecture\": \"Abstract interpretation guided code generation is the best technique. The specification is encoded as an abstract domain, and code is synthesized by exploring the lattice of program states until a concrete implementation is found whose abstract interpretation implies the specification holds.\", \"probability\": 0.058}, {\"conjecture\": \"The best technique is reactive synthesis from temporal logic. Encode the specification as an LTL formula, synthesize a winning strategy for the system in a game against the environment, and compile the strategy's transition function into source code. The result holds its commitments because it is a dominant strategy in the specification game.\", \"probability\": 0.072}, {\"conjecture\":\": \"Model-driven engineering with automatic code generation from formalized Statecharts is the best technique. The abstract specification is fully elaborated as a deterministic hierarchical state machine, and code is mechanically generated from it. Commitments hold because the code is a faithful projection of a deterministic, complete, and consistent state model.\", \"probability\": 0.061}, {\"conjecture\": \"Synthesis from input-output examples augmented with natural language specifications, resolved via symbolic execution, is the best technique. The abstract spec is concretized into a diverse set of input-output pairs, and the implementation is synthesized as the simplest program consistent with both the examples and the spec's symbolic constraints.\", \"probability\": 0.069}, {\"conjecture\": \"The best technique is to use a probabilistic programming language where the specification defines a posterior over correct programs. Inference is performed over program space, and the maximum a posteriori program is selected. The commitments hold with high probability as defined by the specification's likelihood function.\", \"probability\": 0.054}, {\"conjecture\":\": \"Typeclass-driven synthesis is the best technique. The specification is broken down into a search for inhabitants of a set of typeclasses representing the required commitments. The compiler uses term-level search to find an executable implementation that satisfies the typeclass constraints, guaranteeing the commitments hold.\", \"probability\": 0.063}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 688,
+      "total_tokens": 859
+    }
+  },
+  "transport_error": null
+}

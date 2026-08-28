@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative repair against property-based test shrinkages\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.5
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-200",
+    "object": "chat.completion",
+    "created": 1787942334,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal repair unit is the minimal shrinkage of a failing property-based test, not the original failing case: mutating code to pass the shrunk case while preserving all previously-passing tests will generalize to unseen inputs more reliably than repairing against arbitrary failures. This holds because shrunk cases isolate the causal defect boundary, so the repair is forced to address the actual invariant violation rather than overfitting to a noisy symptom. The effect strengthens as the property-based test suite's shrinking depth increases, approaching convergence when shrunk cases reach local minima with respect to the property's ordering.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 123,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}
