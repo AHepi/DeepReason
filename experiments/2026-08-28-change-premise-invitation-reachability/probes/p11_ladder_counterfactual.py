@@ -30,6 +30,7 @@ sys.path.insert(0, "src")
 from deepreason.harness import Harness  # noqa: E402
 from deepreason.premises import (  # noqa: E402
     PREMISE_INVITE_AFTER,
+    premise_work_invited,
     standing_attributions,
 )
 from deepreason.ontology import Status  # noqa: E402
@@ -39,7 +40,14 @@ CITABLE = "CITABLE EVIDENCE BLOCKS"
 
 
 def _gates(harness) -> dict:
-    """Per problem: (refuted count, standing attributions, old gate, new gate)."""
+    """Per problem: refuted count, standing attributions, and three verdicts.
+
+    `old` and `new` are re-derived here so the probe reads the same on either
+    side of the change. `shipped` calls `premise_work_invited` itself, so a run
+    of this probe against the CHANGED tree proves the shipped rule and this
+    file's `new` column are the same rule -- rather than the probe asserting
+    a formula the code might not implement.
+    """
     refuted = Counter()
     for aid, pid in harness.state.addr:
         if harness.state.status.get(aid) == Status.REFUTED:
@@ -53,6 +61,7 @@ def _gates(harness) -> dict:
             "standing": s,
             "old": s == 0 and r >= PREMISE_INVITE_AFTER,
             "new": r >= PREMISE_INVITE_AFTER * (s + 1),
+            "shipped": premise_work_invited(harness, pid),
         }
     return out
 
@@ -81,6 +90,9 @@ def report(root: pathlib.Path) -> dict:
         gates = _gates(Harness.at(root, row["seq"]))
         row["problems_open_old"] = sorted(p for p, g in gates.items() if g["old"])
         row["problems_open_new"] = sorted(p for p, g in gates.items() if g["new"])
+        row["problems_open_shipped"] = sorted(
+            p for p, g in gates.items() if g["shipped"]
+        )
 
     # The legend's own price, from the bytes of the first invited prompt.
     legend_chars = invitation_chars = None
@@ -101,12 +113,18 @@ def report(root: pathlib.Path) -> dict:
 
     open_old = sum(1 for d in dispatches if d["problems_open_old"])
     open_new = sum(1 for d in dispatches if d["problems_open_new"])
+    open_shipped = sum(1 for d in dispatches if d["problems_open_shipped"])
     return {
         "root": root.name,
         "critic_dispatches": len(dispatches),
         "shown_invitation": sum(1 for d in dispatches if d["shown_invitation"]),
         "dispatches_with_an_open_problem_old": open_old,
         "dispatches_with_an_open_problem_new": open_new,
+        "dispatches_with_an_open_problem_shipped": open_shipped,
+        "shipped_agrees_with_new": open_shipped == open_new
+        and all(
+            d["problems_open_shipped"] == d["problems_open_new"] for d in dispatches
+        ),
         "invitation_paragraph_chars": invitation_chars,
         "citable_legend_chars": legend_chars,
         "median_uninvited_prompt_chars": (

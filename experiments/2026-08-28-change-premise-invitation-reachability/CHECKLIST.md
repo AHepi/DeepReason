@@ -1,6 +1,6 @@
 # Checklist for: make the critic's byte-checked citation channel reachable, and stop it latching shut
 
-State: next=10 blockers=none
+State: next=15 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -86,30 +86,30 @@ written, and this change stays on the rules side of it.
       `src/deepreason/signals.py`, `docs/map/CON-criticism-source.md` and
       `docs/map/SEAM-scheduler-x-rules.md` in one commit.
 
-- [ ] 10. (S4) Prove the regression GREEN and record the mutation pair.
+- [x] 10. (S4) Prove the regression GREEN and record the mutation pair.
       done-when: `proof/s4_green.txt` holds the same pytest invocation as
       `proof/s4_red.txt`, now passing, and both files are tracked.
 
-- [ ] 11. (S1, M1) Re-run the counterfactual probe against the CHANGED tree, so
+- [x] 11. (S1, M1) Re-run the counterfactual probe against the CHANGED tree, so
       the ladder's measured effect is re-derived by the shipped code rather than
       by a hand-written formula inside the probe.
       done-when: `probes/p11_ladder_counterfactual_shipped.json` shows
       `dispatches_with_an_open_problem_new` computed by the shipped
       `premise_work_invited` and matching SPEC.md's M1 table (epoch 6: 10).
 
-- [ ] 12. (S6) Write `ANSWERS.md`: the three answers at full length, in the
+- [x] 12. (S6) Write `ANSWERS.md`: the three answers at full length, in the
       brief's order, each with its measurements pasted, plus the R7 note.
       done-when: `grep -c "^## " ANSWERS.md` >= 3 and each of the three headings
       is present verbatim.
 
-- [ ] 13. (S8) Write `PARKED.md`: the planted-presupposition probe (R8, unstarted
+- [x] 13. (S8) Write `PARKED.md`: the planted-presupposition probe (R8, unstarted
       by instruction), the batch-unanimity narrowing (M6), and the
       `PREMISE_INVITE_AFTER`-as-configuration tension (A4) — each as a
       ready-to-send prompt with route, one-goal statement, evidence pointers and
       end state.
       done-when: `grep -c "Ready-to-send prompt" PARKED.md` == 3.
 
-- [ ] 14. (S6, S8) [COMMIT] Commit the artifacts.
+- [x] 14. (S6, S8) [COMMIT] Commit the artifacts.
       done-when: `git status --porcelain` shows no untracked file under the
       tranche directory.
 
