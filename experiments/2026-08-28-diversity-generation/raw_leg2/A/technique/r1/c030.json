@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.441
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-57",
+    "object": "chat.completion",
+    "created": 1787941186,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for deriving executable code from an abstract specification is bidirectional typechecking integrated with refinement types and property-based test generation. In this approach, the compiler simultaneously checks the code against the specification top-down (ensuring all commitments are met) and bottom-up (inferring precise types from the implementation), while automatically generating test cases to falsify any gaps between the two. This forces the specification and implementation to converge on a single, verifiable semantics, rather than treating them as independent artifacts that can silently drift apart.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 113,
+      "total_tokens": 211
+    }
+  },
+  "transport_error": null
+}

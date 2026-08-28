@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: expanding manifold of configuration interactions creating combinatorial test intractability\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.051
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-232",
+    "object": "chat.completion",
+    "created": 1787932154,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate configuration parameters faster than they are retired, causing the effective test space to grow combinatorially while each change only validates the linear slice of configurations touched by that change. Every locally correct modification therefore ships against an exponentially shrinking fraction of actually-tested configuration combinations, until the system reaches a phase transition where most changes induce at least one untested interaction failure. The system becomes harder to change not because any single change is wrong, but because the ratio of validated configuration space to total configuration space collapses asymptotically toward zero.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 114,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

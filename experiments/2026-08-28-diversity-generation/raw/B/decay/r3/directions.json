@@ -1,0 +1,8 @@
+[
+  "Information-theoretic coupling: each correct change narrows the entropy of the system's future state-space toward implicit architectural invariants",
+  "Cyclomatic complexity decay: integration of locally-correct changes asymptotically increases the graph diameter of the program's control-flow dependencies",
+  "Epistemic model erosion: the system drifts from the development team's mental model as undocumented micro-decisions accumulate below the threshold of code review",
+  "Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant",
+  "Phase-transition to self-organized criticality: the dependency network migrates to a critical state where perturbations of equivalent size trigger arbitrarily large cascades",
+  "Algorithmic undecidability of refactoring scope: determining the minimal safe change-set asymptotically approaches the Halting Problem as cross-module invariants scale"
+]

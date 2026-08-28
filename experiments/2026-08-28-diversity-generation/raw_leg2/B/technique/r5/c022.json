@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: large-model constrained decoding on a verified step-correctness reward model\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.93
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-995",
+    "object": "chat.completion",
+    "created": 1787942333,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A step-correctness reward model trained on proof-state transitions from type-theoretic proof assistants can serve as the discriminator for constrained decoding, restricting the language model at each generation step to tokens that maintain semantic progress toward the specification. Under this approach, the executable code is extracted only from a fully-verified proof object, making the result hold its commitments by construction rather than by post-hoc testing. The key claim is that decomposing specification satisfaction into locally-checkable proof steps yields a denser and more reliable training signal than end-to-end reward models, enabling constrained decoding to produce verified code at inference time without search.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 132,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

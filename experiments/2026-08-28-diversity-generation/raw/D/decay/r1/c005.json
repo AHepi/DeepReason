@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ecological competition model where design patterns occupy overlapping niches and resist displacement\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.884
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-121",
+    "object": "chat.completion",
+    "created": 1787930074,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Design patterns are competing species: each locally beneficial pattern fills an architectural niche, but once established, it creates micro-habitats for dependent patterns, forming a mature ecosystem that aggressively rejects foreign pattern introductions even when they offer marginal improvements.\", \"probability\": 0.085}, {\"conjecture\": \"The difficulty of changing long-running software is proportional to the 'niche saturation' of its design patterns—once overlapping patterns fill all available architectural niches, any new change must compete against an established ecosystem rather than fit into empty space, requiring disproportionate energy to displace incumbents.\", \"probability\": 0.072}, {\"conjecture\": \"Design patterns exhibit ecological character displacement: initially similar patterns diverge in their assumptions and conventions to minimize competition, creating specialized micro-niches that lock in specific change pathways and make alternative approaches incompatible with the evolved ecosystem.\", \"probability\": 0.068}, {\"conjecture\": \"Software rot is an ecological succession phenomenon: early 'pioneer' patterns are fast-growing but fragile, while late-stage 'climax' patterns are deeply entrenched and resist displacement not through individual superiority but through dense interspecific pattern-mutualism that makes isolated replacement futile.\", \"probability\": 0.079}, {\"conjecture\": \"Long-running systems accumulate 'pattern keystone species'—a few design patterns disproportionately support the structure of many components; their displacement triggers cascading extinctions of dependent code, making even technically superior replacements ecologically catastrophic without simultaneous ecosystem-wide migration.\", \"probability\": 0.064}, {\"conjecture\": \"Test suites act as the 'environmental selection pressure' that固化 existing design patterns: by encoding assumptions of current patterns, tests raise the fitness cost of any displacement, causing patterns to become locked into local fitness peaks that are increasingly costly to escape.\", \"probability\": 0.058}, {\"conjecture\": \"The 'stability paradox' arises because each individually-validated change reinforces the competitive advantage of incumbent patterns through positive density dependence; patterns with higher adoption become easier to extend and harder to replace, creating monopolies of architectural convention that no single change can disrupt.\", \"probability\": 0.061}, {\"conjecture\": \"Software ecosystems experience 'competitive exclusion' of design patterns: functionally equivalent patterns cannot coexist, so the first pattern to colonize a niche excludes alternatives, and subsequent changes must conform to the incumbent rather than risk ecological disruption, creating path-dependent rigidity.\", \"probability\": 0.055}, {\"conjecture\": \"Refactoring difficulty scales with 'pattern phylogenetic diversity': long-running systems accumulate evolutionarily distinct pattern lineages whose deep historical constraints are invisible in any single change but collectively form an irreducible web of competitive exclusions and mutual dependencies that resist all systemic transformation.\", \"probability\": 0.047}, {\"conjecture\": \"Every locally-correct change that extends an existing pattern strengthens that pattern's 'ecological incumbency advantage' by increasing the surrounding dependency web; the system becomes harder to change not because any single change is wrong, but because each change deepens the competitive moat of established patterns against architectural alternatives.\", \"probability\": 0.082}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 665,
+      "total_tokens": 858
+    }
+  },
+  "transport_error": null
+}

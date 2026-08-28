@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Refinement calculus with mechanized proof of stepwise correctness preservation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.197
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-824",
+    "object": "chat.completion",
+    "created": 1787941755,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to structure the refinement as a fixed library of composable, machine-verified tactic combinators—rather than user-authored proof scripts—such that each combinator is proven once to produce only context-safe refinement steps. Under this scheme, any abstract specification refined to code via these combinators is guaranteed to hold its commitments without requiring per-step human proof effort, reducing the verification burden to checking the combinator interface while making the refinement process fully deterministic and replayable.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 103,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

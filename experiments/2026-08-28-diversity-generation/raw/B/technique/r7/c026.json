@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Large language model decoding constrained by runtime proof witnesses\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.768
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-17",
+    "object": "chat.completion",
+    "created": 1787935165,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Large language model decoding guided by runtime proof witnesses can guarantee that generated code satisfies its abstract specification without requiring the model itself to be sound — provided the decoder treats proof witnesses as first-class generation tokens and rejects any token sequence whose witness fails typechecking at inference time. The resulting constraint-satisfaction problem is decidable for dependent-type specifications whose proof search depth is bounded, making the technique complete for a practically useful fragment of specifications. Under this scheme, the language model serves only as a heuristic witness proposer, and the guarantee of commitment-holding flows entirely from the runtime proof checker, not from the model's distribution.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 133,
+      "total_tokens": 250
+    }
+  },
+  "transport_error": null
+}

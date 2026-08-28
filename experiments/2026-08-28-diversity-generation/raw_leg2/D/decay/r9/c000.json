@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulation of implicit invariants invisible to the type system\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.302
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-760",
+    "object": "chat.completion",
+    "created": 1787938414,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Every locally correct change adds at least one implicit invariant relating two previously independent modules, and the rate of new invariants scales with current module count, making the system's hidden coupling grow quadratically rather than linearly over time.\", \"probability\": 0.08}, {\"conjecture\": \"Tests encode implicit invariants as executable assertions but never as explicit specifications, so each test suite expansion makes the true invariant set larger while making it harder to distinguish which invariants are intentional design versus accidental implementation artifacts.\", \"probability\": 0.07}, {\"conjecture\": \"Code review catches violations of explicit invariants but systematically misses the creation of new implicit ones, because reviewers evaluate changes against the type system and visible contracts, not against the exponentially growing space of unencoded behavioral assumptions.\", \"probability\": 0.09}, {\"conjecture\": \"Type signatures define compositional invariants but temporal invariants—assumptions about operation ordering, rate, and concurrency—accumulate exclusively outside the type system, and these temporal invariants compound multiplicatively across module boundaries.\", \"probability\": 0.06}, {\"conjecture\": \"Refactoring that preserves all explicit types and tests still silently destroys implicit invariants, and each such refactoring event causes downstream modules to develop compensating implicit assumptions, producing a ratchet where hidden coupling increases even when visible coupling decreases.\", \"probability\": 0.05}, {\"conjecture\": \"The probability that a proposed change violates an implicit invariant grows as O(n^2) where n is the number of modules, because implicit invariants form between every pair of modules that have ever shared a developer, a bug, or a deployment, not merely between modules with direct code dependencies.\", \"probability\": 0.04}, {\"conjecture\": \"Implicit invariants persist through reimplementation because developers reconstruct them from behavior (tests, logs) rather than specification, and behavior-preserving reconstruction always overfits to accidental invariants, guaranteeing that each reimplementation carries forward strictly more hidden constraints than the prior version.\", \"probability\": 0.03}, {\"conjecture\": \"Monads and effect types can encode specific categories of implicit invariants, but the majority of accumulated implicit invariants are resource-lifetime and partial-order constraints that are provably inexpressible in any compositional type system, making their growth fundamentally unaddressable by type-level abstraction.\", \"probability\": 0.02}, {\"conjecture\": \"Implicit invariant density (hidden constraints per line of code) increases over time because developers add behavior to existing functions rather than creating new ones, and each addition constrains the function's future callers in ways invisible to the call-site type context.\", \"probability\": 0.08}, {\"conjecture\": \"The half-life of an implicit invariant exceeds the tenure of the developers who created it, so at any given time the majority of active implicit invariants have no living author, making their discovery require archaeology rather than reasoning and ensuring that change cost grows monotonically regardless of team skill.\", \"probability\": 0.07}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 637,
+      "total_tokens": 827
+    }
+  },
+  "transport_error": null
+}

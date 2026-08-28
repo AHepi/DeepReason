@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.591
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-416",
+    "object": "chat.completion",
+    "created": 1787936345,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become rigid not because code decays, but because identifier names act as stable attractors around which implicit, unverified invariants accrete: each locally correct change narrows the set of future inputs under which the named contract still holds, without updating the name or the type to reflect this narrowed domain. The name becomes a lie that the type system cannot detect, because the obligation is semantic, not structural. Change difficulty grows in proportion to the gap between the stated contract and the true, context-dependent invariant set that every caller has silently come to depend on.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 131,
+      "completion_tokens": 122,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

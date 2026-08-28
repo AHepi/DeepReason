@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis by type-theoretic proof-search over dependent linear logical specifications\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.594
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-937",
+    "object": "chat.completion",
+    "created": 1787935236,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Synthesis by type-theoretic proof-search over dependent linear logical specifications is most effective when the abstract specification encodes resource consumption protocols as linear dependent types, because this forces proof-search to generate code that respects allocation and deallocation commitments without external verification.\", \"probability\": 0.09}, {\"conjecture\": \"The key bottleneck in synthesis by type-theoretic proof-search over dependent linear logical specifications is the interaction between dependent unification and linearity checking; resolving this via a bidirectional refinement algorithm that treats linear resources as indices yields dramatically smaller search spaces than naive proof-search.\", \"probability\": 0.08}, {\"conjecture\": \"Synthesis by type-theoretic proof-search over dependent linear logical specifications produces code that holds its commitments if and only if the specification language supports irrelevance annotations, because non-computational dependencies must be erased to prevent resource-accounting corruption during proof-search.\", \"probability\": 0.07}, {\"conjecture\": \"The optimal technique for synthesis by type-theoretic proof-search over dependent linear logical specifications is to perform proof-search in continuation-passing style, because CPS makes linearity constraints manifest as structural rules on continuations, enabling standard dependent type unification to handle resource flow automatically.\", \"probability\": 0.06}, {\"conjecture\": \"Synthesis by type-theoretic proof-search over dependent linear logical specifications fails to scale beyond small programs unless the specification includes explicit proof terms for side conditions, because purely type-driven search cannot discover the mathematical lemmas needed to discharge dependent constraints in realistic specifications.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique within synthesis by type-theoretic proof-search over dependent linear logical specifications is to use ordered linear logic rather than unordered linear logic as the substrate, because ordered hypotheses encode temporal and stack-like commitments that match the control-flow structure of executable code more precisely.\", \"probability\": 0.05}, {\"conjecture\": \"Synthesis by type-theoretic proof-search over dependent linear logical specifications is dominated by the choice of how to handle branching in proof-search; a technique that defers linear resource splitting until after dependent unification succeeds on a branch produces exponentially fewer partial proofs than eager splitting.\", \"probability\": 0.075}, {\"conjecture\": \"The effectiveness of synthesis by type-theoretic proof-search over dependent linear logical specifications depends critically on whether the specification language admits a canonical forms property for linear dependent types; without it, proof-search cannot prune observationally equivalent partial programs and explores redundant branches.\", \"probability\": 0.065}, {\"conjecture\": \"Within synthesis by type-theoretic proof-search over dependent linear logical specifications, the result actually holds its commitments precisely when the proof-search procedure enforces a strict phase distinction between affine and relevant fragments, because commitments that are must-produce (relevant) and may-produce (affine) require different proof-search strategies to synthesize correctly.\", \"probability\": 0.045}, {\"conjecture\": \"Synthesis by type-theoretic proof-search over dependent linear logical specifications is most effective when the dependent types quantify over proof-relevant propositions rather than proof-irrelevant ones, because proof-relevance forces the synthesized code to carry explicit evidence of commitment satisfaction, making violations detectable at compile time rather than runtime.\", \"probability\": 0.055}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 699,
+      "total_tokens": 887
+    }
+  },
+  "transport_error": null
+}

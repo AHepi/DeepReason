@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Misaligned local-global optimization gradients across dependency boundaries\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.274
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-119",
+    "object": "chat.completion",
+    "created": 1787937451,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Each locally optimal API change optimizes for the immediate caller's needs, but the cumulative effect is a global interface that is overfitted to historical use cases, making it increasingly expensive to adapt to new ones. The system calcifies not because any single change was wrong, but because local optimization at the interface boundary is structurally antagonistic to global flexibility.\", \"probability\": 0.09}, {\"conjecture\": \"Test suites encode local dependencies on specific implementation behaviors as invariants. As the system evolves, the test suite becomes a landscape of local minima that penalizes any global architectural refactoring, even if the refactoring is globally correct. The system becomes trapped because any globally beneficial change triggers a cascade of locally failing tests that must be individually satisfied.\", \"probability\": 0.08}, {\"conjecture\": \"Modules optimized in isolation develop internal representations and assumptions that are locally efficient but globally inconsistent. Each module's local optimization gradient pulls its internal model away from the shared global model, increasing the translation cost at every boundary. Over time, the impedance mismatch between locally optimized modules makes cross-cutting changes require exponentially more coordination.\", \"probability\": 0.07}, {\"conjecture\": \"Every time a dependency boundary is crossed, the local optimization gradient favors adding a new parameter or flag to avoid touching the consumer. This locally correct strategy accumulates globally as combinatorial interface complexity, where the configuration space grows far faster than any consumer's ability to reason about it. The system becomes hard to change because the cost of navigating the configuration space exceeds the cost of the change itself.\", \"probability\": 0.09}, {\"conjecture\": \"When a shared dependency is modified, the local optimization gradient for the dependency owner favors backward compatibility to avoid breaking consumers, while the local gradient for each consumer favors migrating to the new interface. This creates a Nash equilibrium where the dependency accumulates deprecated paths and the consumers never migrate, increasing global entropy with every change.\", \"probability\": 0.06}, {\"conjecture\": \"Developers optimizing a single module's performance make locally correct assumptions about the distribution of inputs from upstream modules. These assumptions, when baked into the code, create a hidden global coupling where a change to an upstream module's behavior—even if locally correct—silently violates the performance invariants of downstream modules. The system resists change because the cost of discovering these implicit invariants grows with the number of locally optimized modules.\", \"probability\": 0.05}, {\"conjecture\": \"The local optimization gradient for individual error handling is to catch errors at the point of failure and add a specific recovery path. Globally, this fragments the error handling logic across the entire dependency graph, making it impossible to reason about system-wide failure modes. The system becomes harder to change because any modification to one module's error handling creates unpredictable global changes in failure behavior across all dependent modules.\", \"probability\": 0.07}, {\"conjecture\": \"When a new feature is added, the locally optimal strategy is to reuse the closest existing data model and extend it, rather than creating a new model. This local gradient, applied repeatedly, causes data structures to accrete fields that serve unrelated purposes across different dependency boundaries. The global result is that any change to the data model risks unintended consequences in distant modules, creating a system where the cost of changing the data model grows superlinearly with its size.\", \"probability\": 0.08}, {\"conjecture\": \"Each change to a module is locally optimized by the developer with the most context about that module. This creates a local optimization gradient where the module's design becomes increasingly idiomatic to its current maintainer and less legible to others. Over time, the global system becomes a patchwork of local design idioms, and the cost of any cross-cutting change is dominated by the cost of translating between these local dialects.\", \"probability\": 0.04}, {\"conjecture\": \"The local optimization gradient for a team owning a service is to minimize the coupling to other teams' release cycles by adding caching, buffering, or eventual consistency at the dependency boundary. This locally reduces coordination cost but globally increases the staleness and inconsistency of the system state. The system becomes harder to change because any change to a core service must now account for the time-delayed propagation of its effects through a lattice of locally-optimized buffers.\", \"probability\": 0.06}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 911,
+      "total_tokens": 1099
+    }
+  },
+  "transport_error": null
+}

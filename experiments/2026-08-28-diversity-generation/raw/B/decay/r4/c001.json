@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic Kolmogorov complexity growth exceeding linear marginal encoding cost\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.965
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-218",
+    "object": "chat.completion",
+    "created": 1787932136,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The Kolmogorov complexity of a software system's total state space grows superlinearly because each locally correct change adds new constraints to the minimal program describing valid configurations. Once the marginal encoding cost of preserving backward compatibility and invariant coherence exceeds the information added by any new feature, the system has exceeded its description-theoretic carrying capacity and becomes irreversibly resistant to further modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 128,
+      "completion_tokens": 85,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

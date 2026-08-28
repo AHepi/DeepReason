@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.77
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-608",
+    "object": "chat.completion",
+    "created": 1787935283,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The optimal technique is bidirectional refinement: compiling the abstract specification to a concrete implementation while simultaneously synthesizing verification conditions upward, such that every implementation step generates machine-checkable proof obligations that map directly back to the specification's commitments. This tight coupling prevents the semantic drift that causes generated code to violate its abstract contract, because an implementation is only accepted if the synthesis step proves it refines the specification. The approach predicts that bidirectional refinement will outperform generate-then-verify pipelines on specification fidelity by at least an order of magnitude, as measured by the rate of contract violations in property-based testing of the resulting executable code.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 136,
+      "total_tokens": 234
+    }
+  },
+  "transport_error": null
+}

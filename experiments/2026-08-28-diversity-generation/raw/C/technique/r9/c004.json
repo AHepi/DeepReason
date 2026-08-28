@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.404
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-938",
+    "object": "chat.completion",
+    "created": 1787935586,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement through constructive type theory: write the spec as a dependent type, extract code via proof, and the result holds commitments by construction because the type checker verifies the extraction.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Property-based test generation with shrinking is the best technique: generate executable code from the spec by treating it as an oracle, fuzz the implementation against it, and shrink failures until the implementation matches the spec's observable behavior.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The best technique is model-driven code generation from a formal automaton specification, where the automaton's transitions are compiled directly to executable state handlers, preserving commitments because the compiler is proven correct.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Large language models fine-tuned on spec-to-code pairs, constrained by a runtime contract checker that rejects outputs violating the spec, will outperform all traditional methods for turning abstract specifications into executable code that holds its commitments.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The best technique is design-by-contract with runtime invariant checking: embed the specification's preconditions, postconditions, and invariants directly as executable assertions, so violations are caught immediately and the code is forced to hold its commitments at runtime.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Reactive synthesis from linear temporal logic specifications is the best technique: given an LTL spec, synthesize an executable controller via game-solving against the environment, guaranteeing the result holds its commitments by construction of the winning strategy.\",\n      \"probability\": 0.054\n    },\n    {\n      \"conjecture\": \"The best technique is iterative refinement via theorem proving: encode the spec as a Hoare-logic triple, manually write code, and use an SMT-backed prover to discharge verification conditions, repeating until all commitments are proven.\",\n      \"probability\": 0.082\n    },\n    {\n      \"conjecture\": \"Abstract interpretation is the best technique: compute a sound over-approximation of the spec's semantics, generate code from the abstract domain elements, and the result holds commitments because the approximation conservatively preserves all spec behaviors.\",\n      \"probability\": 0.043\n    },\n    {\n      \"conjecture\": \"The best technique is typeclass-driven elaboration: encode the specification as a set of typeclass laws, implement instances via generic derivation, and the typeclass machinery ensures the executable code satisfies the laws through parametricity.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"The best technique is denotational design with executable semantics: define the spec as a mathematical function in a total language, then refine it to a partial implementation using equational reasoning, where each refinement step is validated by testing against the denotational reference.\",\n      \"probability\": 0.063\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 662,
+      "total_tokens": 833
+    }
+  },
+  "transport_error": null
+}

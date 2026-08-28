@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: accumulation of dead code paths that obscure the system's reachable behavioral envelope\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.019
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-821",
+    "object": "chat.completion",
+    "created": 1787933032,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"As systems evolve, the set of reachable behavioral envelope shrinks relative to total code because refactorings gate new paths behind feature flags, migration shims, and backward-compatibility layers that later become unreachable but are never deleted. Each such path was individually reviewed and tested, so it persists as a plausible execution route in developers' mental models, inflating the perceived behavioral space and forcing future changes to reason about paths that can no longer fire. The system becomes harder to change not because live behavior grows complex, but because the ratio of reasoning-required surface to actually-reachable surface diverges over time, and no existing tooling surfaces this divergence at change time.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 142,
+      "total_tokens": 267
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,8 @@
+[
+  "extraction by constructive proof in dependent type theory, where the program IS the proof term",
+  "bi-simulation refinement: derive code via stepwise abstraction of a reference implementation under observational equivalence",
+  "neural compilation from formal specs by training on paired (spec, executable) corpora and verifying against a held-out specification suite",
+  "constraint-synthesized code: treat the spec as a logical formula and use SMT-based syntax-guided synthesis to find satisfying programs",
+  "denotational-semantic compilation: map abstract spec constructs to concrete language denotations, guaranteeing commitment-preservation by categorical adjunctions",
+  "model-driven transformation via verified graph-rewriting rules over a meta-model with provable invariant preservation"
+]

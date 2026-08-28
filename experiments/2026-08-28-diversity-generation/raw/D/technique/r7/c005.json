@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive logic program extraction from intuitionistic proofs of behavioral theorems\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.756
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-877",
+    "object": "chat.completion",
+    "created": 1787935247,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The primary source of unfaithfulness in extracted logic programs is not the extraction mechanism itself but the semantic gap between the behavioral theorem's modality and the operational semantics of the target language; specifically, extracting from a theorem proven in a classical metatheory yields programs that violate constructive commitments, while extracting from an intuitionistic proof of the same theorem preserves them.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The optimal method for extracting logic programs from intuitionistic proofs is to formulate the behavioral specification as a realizability relation in a refinement type system, where the extracted program is guaranteed to satisfy its commitments by the type-theoretic proof, bypassing the need for post-hoc verification.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Programs extracted from proofs of behavioral theorems in intuitionistic linear logic will exhibit provably lower resource consumption than those extracted from intuitionistic logic alone, because the linear constraints on proof steps directly map to resource management in the extracted code.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"The key to ensuring extracted logic programs hold their commitments lies in using a dependently typed lambda calculus as the proof language, where the behavioral theorem is a type, and extraction is a mere erasure of proof terms, making the commitment-holding a trivial consequence of type safety.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"A significant cause of commitment violation in extracted programs is the presence of non-computational axioms (like extensionality) in the intuitionistic proof; the resulting program contains uninterpreted constants that behave arbitrarily at runtime, and therefore any proof using such axioms must be considered non-extractable without a constructive substitute.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"For logic programs with complex behavioral commitments (e.g., termination, completeness), the most reliable extraction technique is to structure the proof as a Coq/Agda proof script using specialized tactics that generate proof terms with predictable computational content, rather than relying on general-purpose automation which can produce opaque or computationally inefficient terms.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"There exists a fundamental trade-off between the expressiveness of the specification logic and the feasibility of extracting an executable program: more expressive logics (like higher-order intuitionistic logic) allow for more natural behavioral theorems but produce extracted programs with unmanageable higher-order computations, while restricting to a first-order fragment ensures extractability at the cost of convoluted proofs.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The most robust technique is to perform proof transformation *before* extraction: translate the intuitionistic proof of the behavioral theorem into a focused proof, and then extract the program from the focused proof. The focusing discipline directly corresponds to the program's evaluation strategy, providing an a priori guarantee of its operational behavior and commitment-holding.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The best technique is not direct extraction but a two-stage process: first, extract a high-level, obviously-correct but inefficient program from the proof; second, apply a suite of semantics-preserving, proof-carrying transformations to refine the extracted program into an efficient executable. The commitment is held by the initial extraction and preserved by the verified transformations.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"The reliability of extracted logic programs is directly correlated with the degree to which the behavioral theorem's statement is 'algorithmic'—that is, the theorem is structured as an inductive definition or a recursive function. Proofs of such theorems extract to programs whose structure mirrors the theorem, making their commitment-holding structurally evident and resistant to optimization errors.\",\n      \"probability\": 0.073\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 861,
+      "total_tokens": 1049
+    }
+  },
+  "transport_error": null
+}

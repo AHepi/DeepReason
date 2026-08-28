@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.452
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-756",
+    "object": "chat.completion",
+    "created": 1787932472,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not because changes accumulate errors, but because each correct change implicitly encodes assumptions about the system's current configuration of assumptions—creating a second-order dependency graph where the cost of a new change is proportional to the number of latent assumptions it must preserve without violating. This graph grows superlinearly because each new assumption becomes a constraint that future changes must either satisfy or explicitly renegotiate, and renegotiation cost itself grows with the number of dependent assumptions, producing the observed combinatorial slowdown even when no single change is wrong.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 119,
+      "total_tokens": 221
+    }
+  },
+  "transport_error": null
+}

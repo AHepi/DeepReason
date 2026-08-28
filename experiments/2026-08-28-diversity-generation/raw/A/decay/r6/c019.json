@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.79
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-537",
+    "object": "chat.completion",
+    "created": 1787932482,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade because each locally-correct change inadvertently increases the dimensionality of the system's implicit state space, causing the cost of validation to grow exponentially rather than linearly. Therefore, a point is reached where comprehensive verification of any new change exceeds practical resource limits, forcing engineers to rely on incomplete testing that permits latent defects to accumulate. This renders the system structurally irreversible, not because the code is poorly written, but because the computational complexity of safely proving a change's correctness eventually exceeds the capacity of the organization executing it.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 119,
+      "total_tokens": 221
+    }
+  },
+  "transport_error": null
+}

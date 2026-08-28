@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.658
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-986",
+    "object": "chat.completion",
+    "created": 1787933064,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems accumulate irreducible structural complexity because each locally correct change optimizes for immediate constraints rather than global topology, creating a random walk through design space that drifts away from any coherent architecture.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems is dominated by the growth of implicit assumptions: each change encodes assumptions about prior behavior that are never documented, so future changes must reverse-engineer an exponentially growing set of hidden contracts.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because testing and review processes localise correctness at the function or feature level, systematically failing to detect the accumulation of cross-module coupling that makes changes have unpredictable blast radii.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every change to a software system narrows its future option space by committing to specific abstractions, data formats, or behavioral contracts; the compound effect of many locally optimal commitments is a system where most conceivable changes require renegotiating multiple past commitments simultaneously.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because knowledge of the system's design decays from explicit to tacit form as original developers leave, and the documentation that remains describes what the system does but not why it does it that way, forcing every change to reconstruct lost rationale.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The core issue is that each change adds behavioral surface area without removing any, so the number of states the system can occupy grows super-linearly while the test suite only covers a vanishing fraction, making the probability of unintended interactions per change approach certainty over time.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because backward compatibility constraints accumulate: each change that ships becomes a de facto contract that future changes must not violate, so the set of permissible modifications shrinks monotonically while the set of constraints grows monotonically.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is a thermodynamic inevitability: each locally correct change increases the system's entropy by introducing ad hoc connections between components, and there is no local pressure to reduce entropy, so the system drifts toward maximum coupling where no component can be understood in isolation.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because the feedback loop between design decisions and their consequences lengthens over time: early changes have immediate visible effects, but as the system grows, the consequences of a change propagate through layers of indirection that delay and obscure feedback, making learning from each change increasingly difficult.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The problem is that review and testing enforce syntactic and behavioral correctness but not economic correctness: they prevent changes from breaking the system, but they do not prevent changes from being expensive to make, so the system accumulates changes that were individually cheap to implement but collectively create a structure where every new change is expensive.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 720,
+      "total_tokens": 895
+    }
+  },
+  "transport_error": null
+}

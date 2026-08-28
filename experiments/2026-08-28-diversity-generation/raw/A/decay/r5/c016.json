@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.82
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-392",
+    "object": "chat.completion",
+    "created": 1787932305,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The accumulation of individually correct changes causes implicit coupling to grow faster than explicit interfaces, because each local optimization encodes assumptions about the current global state. Once the density of these invisible, cross-cutting dependencies exceeds the cognitive bandwidth of any single reviewer, a change that is locally correct becomes globally destabilizing, and the cost of safely exploring alternatives rises faster than the cost of incremental extension.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 88,
+      "total_tokens": 190
+    }
+  },
+  "transport_error": null
+}

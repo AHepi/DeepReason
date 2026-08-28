@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.941
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-326",
+    "object": "chat.completion",
+    "created": 1787937436,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems degrade because each locally correct change introduces implicit coupling between modules that is invisible at the time of the change. These hidden dependencies accumulate as a dark graph of constraints that eventually makes any desired change require unintended ripple modifications.\", \"probability\": 0.07}, {\"conjecture\": \"Every change optimizes for local fitness given the current environment, but the fitness landscape itself shifts as the system grows. This produces a phenomenon analogous to convergent local optima: each step was uphill, yet the system finds itself trapped in an architecture that is globally suboptimal for any new requirement.\", \"probability\": 0.06}, {\"conjecture\": \"The difficulty of change scales with the number of implicit invariants that must be preserved across the codebase. Locally correct changes rarely document or even surface these invariants, so each change silently increases the invariant burden, making future changes progressively riskier and harder to reason about.\", \"probability\": 0.09}, {\"conjecture\": \"As a system evolves, the conceptual model that developers hold diverges from the actual implemented model due to incremental, locally sensible patches. The growing gap between the mental model and the code model means every future change requires expensive archaeological reconstruction of intent before modification can begin.\", \"probability\": 0.05}, {\"conjecture\": \"Software changeability degrades because each locally correct change slightly shifts the probability distribution of future likely changes. Over time, the system's architecture becomes optimized for a trajectory that no longer matches the current distribution of needs, analogous to overfitting a model to a training distribution that has drifted.\", \"probability\": 0.04}, {\"conjecture\": \"The combinatorial space of possible system states grows exponentially with each change, but the test suite only covers the states encountered along the actual evolutionary path. This means the ratio of tested to possible states shrinks over time, so each change has a higher chance of triggering an untested interaction, making change feel harder even though each step was verified.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally correct change adds at least one assumption about the environment or calling context. These assumptions are individually benign but collectively form a constraint lattice that hardens the system against modification, analogous to how a crystal grows more rigid as more bonds form.\", \"probability\": 0.07}, {\"conjecture\": \"The real cost of a change is proportional to the entropy of the decision history that led to the current state. Each locally correct change adds entropy because it encodes a local decision without global context, so the cost of reconstructing enough context to safely make the next change grows monotonically.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate defensive code paths added to handle edge cases discovered incrementally. These paths are individually correct but collectively create a thicket of special cases that any new change must navigate, making the system progressively harder to modify even though no single addition was wrong.\", \"probability\": 0.05}, {\"conjecture\": \"Software hardens because each change is made relative to the current structure, creating a path-dependent architecture where early small decisions constrain later large ones. This is analogous to canalization in evolutionary developmental biology: once a pathway is established, all future changes must work around it, making the system progressively less plastic.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 700,
+      "total_tokens": 875
+    }
+  },
+  "transport_error": null
+}

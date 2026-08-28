@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Proof-carrying synthesis from refinement types\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.436
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-915",
+    "object": "chat.completion",
+    "created": 1787931611,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Proof-carrying synthesis from refinement types is maximally effective when the refinement type language is restricted to a decidable fragment of separation logic, enabling the synthesizer to emit code interleaved with machine-checkable proof witnesses that establish spatial and value invariants simultaneously. Under this restriction, the synthesizer can discharge all refinement obligations via an SMT oracle, producing artifacts whose verification cost is linear in code size rather than proof-search depth. The key claim is that no extension to undecidable refinement logics yields a higher empirical commitment-retention rate, because the synthesizer's ability to close proof obligations degrades faster than the added expressivity improves specification fidelity.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 143,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

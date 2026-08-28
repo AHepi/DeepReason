@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 32.612
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-378",
+    "object": "chat.completion",
+    "created": 1787932623,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture undergoes a diffusive random walk in design space where each locally correct change introduces constraint friction. The accumulation of these local constraints creates a high-dimensional local optimum that is increasingly costly to escape, even though no single change caused the entrapment.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every change adds implicit invariants that are never documented because they were too obvious to the reviewer at the time. Over years, the gap between the true invariant set and the formally specified invariant set grows multiplicatively, making every new change risk violating an invisible constraint.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Codebases accumulate what we might call 'epistemic debt': the ratio of code that no living developer has held in working memory grows exponentially. Beyond a threshold (~5x the team's collective active memory), changes require archaeology rather than reasoning, and this cost compounds because archaeological work itself produces no reusable understanding.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Test suites act as a ratchet that preserves current behavior but never tests for desired future flexibility. Each change optimizes test coverage for the current interface, inadvertently encoding implementation details as test assertions. The test suite becomes a fossilized specification that resists all structural change even when behavior could be preserved.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The problem is a combinatorial explosion of valid change sequences. Early in a system's life, most modifications are independent. As dependencies accumulate following a power law, the fraction of changes requiring coordinated updates to k modules grows as O(n^k), making the marginal cost of each change superlinear in system size.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Code review optimizes for local correctness under the reviewer's mental model, which is necessarily a lossy compression of the system. Each approved change is correct relative to this compression but may violate invariants present only in the full system. These compression-gap violations accumulate as latent defects that constrain future changes in ways nobody can trace.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Long-running systems undergo progressive coupling decay: modules that were originally designed to be independent develop ad-hoc integrations for short-term needs. Each integration is locally justified, but the resulting coupling network transitions from a tree to a densely connected graph, and the cost of any change becomes proportional to the graph's cyclomatic complexity rather than the module's local complexity.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software aging is fundamentally an information-theoretic phenomenon. Each change reduces the mutual information between the system's structure and its problem domain by a small amount, because changes are driven by immediate requirements rather than domain structure. After N changes, the system-to-domain mutual information drops below the threshold needed for efficient modification, and reasoning about changes requires reverse-engineering the domain from the distorted code.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Every bug fix, being locally correct, adds a special case to handle a previously unconsidered input. The accumulation of special cases creates a de facto state machine whose transition graph is never explicitly represented. Changes become harder because developers must mentally simulate this implicit state machine, and its state space grows combinatorially with each special case added.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The difficulty increase is governed by a conservation law: every change either reduces structural complexity (rare, requires global insight) or redistributes it to the interfaces. Since most changes are local, complexity is conserved but migrates to interfaces. Over time, the interface complexity exceeds the implementation complexity, and every change must navigate an interface graph whose density grows monotonically.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 855,
+      "total_tokens": 1030
+    }
+  },
+  "transport_error": null
+}

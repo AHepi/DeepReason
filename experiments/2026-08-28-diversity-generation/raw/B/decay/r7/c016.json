@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint satisfaction problem hardness from accumulated cross-module invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.748
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-383",
+    "object": "chat.completion",
+    "created": 1787932768,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change because each locally correct modification adds a cross-module invariant, causing the system's dependency graph to converge toward a random k-SAT-like structure where the density of constraints crosses the satisfiability threshold. Beyond this threshold, finding any valid change requires satisfying a globally coupled constraint set, so locally rational edits increasingly produce unsatisfiable conflicts—making the cost of the next valid change scale exponentially with the number of accumulated invariants rather than with the size of the intended modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 108,
+      "total_tokens": 230
+    }
+  },
+  "transport_error": null
+}

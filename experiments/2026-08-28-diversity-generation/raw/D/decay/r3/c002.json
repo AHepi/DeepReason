@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Control-theoretic gain margin decay in coupled feedback loops\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.978
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-848",
+    "object": "chat.completion",
+    "created": 1787930564,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change slightly increases coupling between modules, reducing the open-loop gain margin of the system's feedback loops. Eventually the margin drops below zero, meaning disturbances from changes no longer decay but amplify—making every change feel like it ripples unpredictably through the system.\", \"probability\": 0.09}, {\"conjecture\": \"The phase margin of inter-module feedback loops degrades monotonically with each integration, because each correct change adds a small delay or indirection. Once phase margin is sufficiently eroded, the system enters oscillatory regimes where changes cause transient instability before settling, increasing perceived difficulty.\", \"probability\": 0.08}, {\"conjecture\": \"Software maintainability is governed by the product of gain margin and phase margin across all coupled feedback paths. Each locally correct change consumes a small fraction of one margin without restoring the other, so difficulty grows superlinearly once the product falls below a critical threshold, even though no single change caused the crossing.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems accumulate hidden feedback loops through shared state, caches, and implicit dependencies. Each correct change adds one such loop with small but positive gain, and the system becomes harder to change when the loop count exceeds the threshold at which the aggregate Nyquist plot encircles -1, indicating loss of closed-loop stability.\", \"probability\": 0.06}, {\"conjecture\": \"The difficulty of changing a long-running system follows the decay of its maximum achievable gain margin, which shrinks as O(1/n) where n is the number of coupled feedback paths added over time. This explains why difficulty grows gradually then suddenly—once the margin falls below the minimum needed to absorb any change's disturbance.\", \"probability\": 0.05}, {\"conjecture\": \"Each locally correct change optimizes a local feedback loop's gain, which globally reduces the system's overall gain margin by tightening coupling. The system becomes harder to change because there is no remaining gain headroom—any change that was safe when the margin was large now risks instability because the margin has been consumed by prior optimizations.\", \"probability\": 0.085}, {\"conjecture\": \"Software entropy is not random accumulation but deterministic gain margin decay: each tested change shifts the Bode plot of the system's transfer function upward by a small amount, reducing the distance from the critical gain. The system resists change not because of complexity per se but because the control system has lost its ability to dampen disturbances.\", \"probability\": 0.04}, {\"conjecture\": \"The root cause is that individual changes are designed against the current closed-loop transfer function but do not account for how they alter the open-loop characteristics. Over time, the open-loop gain creeps upward while the designers' mental model still reflects the original lower-gain system, creating a widening gap between assumed and actual gain margin that manifests as surprise and difficulty.\", \"probability\": 0.065}, {\"conjecture\": \"Long-running systems become harder to change because each correct change adds a pole to the system's transfer function, increasing its order. Higher-order systems with coupled feedback have intrinsically lower gain margins, so difficulty is a direct function of system order rather than of any specific coupling pattern.\", \"probability\": 0.03}, {\"conjecture\": \"The system's feedback loops have a natural gain margin that is consumed by two processes: feature additions that add forward-path gain, and refactorings that add feedback-path gain. Because both processes are driven by local optimization, neither has incentive to preserve global gain margin, so it decays as a commons tragedy—each actor rationally consuming the shared resource of controllability.\", \"probability\": 0.055}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 774,
+      "total_tokens": 964
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.2
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-702",
+    "object": "chat.completion",
+    "created": 1787937488,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change optimizes the code for its immediate intent while consuming the design's finite slack—its capacity for absorbing future variation. This produces a hidden coupling tax where adjacent components implicitly rely on the specific structure left behind, making subsequent changes increasingly expensive because they must satisfy an unbounded set of silent constraints rather than the documented ones. The system becomes rigid not because of any single bad decision, but because the accumulated opportunity cost of past local optima forecloses the global design space available to future changes.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 110,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

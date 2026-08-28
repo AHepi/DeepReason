@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.613
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-425",
+    "object": "chat.completion",
+    "created": 1787932471,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade via a process of implicit constraint accumulation: every locally correct change subtly narrows the space of future valid changes by adding hidden assumptions to the environment, yet these constraints are never made explicit because each change is validated against existing behavior rather than against a complete specification of intended behavior. The system's entropy is therefore not in the code itself, but in the growing mismatch between the actual behavioral contract and any representation that developers hold in their heads, making every subsequent change require exponentially more reverse-engineering to ensure local correctness.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 117,
+      "total_tokens": 219
+    }
+  },
+  "transport_error": null
+}

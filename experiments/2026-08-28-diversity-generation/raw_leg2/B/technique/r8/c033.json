@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolve code populations against formal contract fitness landscapes\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.254
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-978",
+    "object": "chat.completion",
+    "created": 1787943214,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Code populations evolved against formal contract fitness landscapes will reliably satisfy their specifications only when the fitness function applies contract-guided mutation operators that bias changes toward boundary-adjacent execution paths, rather than rewarding raw pass-rates. Under such boundary-biased evolution, the resulting code will exhibit a measurable decrease in specification violations that scales inversely with the distance between mutated code regions and the contract predicates they must satisfy. This predicts that standard genetic-programming fitness, which treats contracts as uniform pass-fail filters, will systematically fail to produce commitment-preserving code on specifications with disjunctive or non-convex obligation spaces.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 132,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

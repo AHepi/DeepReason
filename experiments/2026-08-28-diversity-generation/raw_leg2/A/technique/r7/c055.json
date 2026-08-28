@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.409
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-408",
+    "object": "chat.completion",
+    "created": 1787942855,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification directly into a proof-carrying bytecode via dependent type theory, where every commitment becomes a theorem the compiler must discharge before emitting any executable. The artifact is guaranteed correct only if the compiler's output includes machine-checkable evidence that each theorem holds, making verification automatic and inseparable from execution. Any runtime behavior deviating from the specification then reduces to a contradiction in the proof certifying that exact bytecode.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 98,
+      "total_tokens": 196
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Spectral graph shift of the dependency network's largest eigenvalue as API surfaces accrete\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.299
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-94",
+    "object": "chat.completion",
+    "created": 1787932464,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally correct API addition increases the spectral radius of the dependency graph, and the time to perform the next safe change scales with the gap between the largest and second-largest eigenvalue; this spectral gap measures how many modules can be simultaneously perturbed, so as it widens, every change requires reconciling a larger fraction of the system.\",\n      \"probability\": 0.095\n    },\n    {\n      \"conjecture\": \"The eigenvector centrality of API boundary nodes grows monotonically with accretion, and changes to any node whose centrality exceeds a system-specific threshold require quadratic re-validation because that node's spectral weight dominates the dependency network's largest eigenvalue.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because API accretion pushes the dependency graph's spectral radius past a percolation threshold, after which the largest eigenvalue's associated eigenvector covers a giant connected component that propagates local changes globally.\",\n      \"probability\": 0.092\n    },\n    {\n      \"conjecture\": \"The difficulty of changing a long-running system is directly proportional to the rate of growth of the dependency network's largest eigenvalue; each API addition, even if individually correct, contributes a positive-semidefinite perturbation that shifts the spectral radius upward, and the marginal cost of a change equals the derivative of that shift.\",\n      \"probability\": 0.081\n    },\n    {\n      \"conjecture\": \"As APIs accrete, the dependency graph's largest eigenvalue approaches the spectral radius of a complete graph of the same size; the ratio of the observed spectral radius to this maximum quantifies the irreducible coordination cost of any change, making every modification harder even when no single change introduced a defect.\",\n      \"probability\": 0.076\n    },\n    {\n      \"conjecture\": \"API accretion causes the dependency graph's spectral radius to drift upward, and once it exceeds the square root of the average degree, the system enters a regime where the largest eigenvalue's eigenvector has non-negligible weight on a majority of nodes, forcing every change to re-establish invariants across the entire support of that eigenvector.\",\n      \"probability\": 0.084\n    },\n    {\n      \"conjecture\": \"The largest eigenvalue of the dependency adjacency matrix is a sufficient statistic for change difficulty: systems with identical degree distributions but higher spectral radius are harder to modify because the principal eigenvector concentrates on API hub nodes whose accretion creates implicit coupling that no local test can detect.\",\n      \"probability\": 0.071\n    },\n    {\n      \"conjecture\": \"Each reviewed and tested API addition performs a rank-one perturbation to the dependency graph's adjacency matrix; over time these perturbations align in direction, causing the largest eigenvalue to grow super-linearly while the spectral gap shrinks, trapping the system in a regime where any change resonates across the entire dependency network.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The increase in change difficulty over a system's lifetime is predicted by the cumulative spectral shift of the dependency graph's largest eigenvalue relative to its initial value; when this ratio exceeds 1.5, the system has crossed a phase boundary where the cost of validating any change exceeds the cost of the change itself.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because API surface accretion incrementally shifts the dependency graph's largest eigenvalue, and this shift is irreversible under normal maintenance: removing an API rarely restores the original spectral radius because downstream consumers have already reorganized around the perturbed topology.\",\n      \"probability\": 0.087\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 196,
+      "completion_tokens": 821,
+      "total_tokens": 1017
+    }
+  },
+  "transport_error": null
+}

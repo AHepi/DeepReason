@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Phase-transition to self-organized criticality: the dependency network migrates to a critical state where perturbations of equivalent size trigger arbitrarily large cascades\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.474
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-98",
+    "object": "chat.completion",
+    "created": 1787930511,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change optimizes dependency edges for immediate coupling efficiency, driving the dependency network toward a self-organized critical state where the distribution of cascade sizes follows a power law. Below a critical edge-density threshold, perturbations of equivalent size trigger bounded local failures; above it, the same-sized change triggers arbitrarily large cascades because the network has exhausted its slack. The phase transition is invisible to per-change review because it is an emergent topological property, not a property of any individual modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 142,
+      "completion_tokens": 108,
+      "total_tokens": 250
+    }
+  },
+  "transport_error": null
+}

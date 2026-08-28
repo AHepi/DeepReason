@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain language and architectural vocabulary creating irreversible translation layers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.51
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-474",
+    "object": "chat.completion",
+    "created": 1787932213,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change forces a minor reconciliation between the evolving domain language and the ossified architectural vocabulary, and these reconculations accumulate as translation layers that become load-bearing. Because no single translation step is wrong enough to reject at review, the system undergoes semantic drift where the domain language and architectural vocabulary diverge irreversibly, making every future change require an exponential increase in translation effort rather than a linear one. The translation layers become the system's de facto specification, meaning any attempt to collapse them invalidates assumptions that downstream changes have silently depended on for years.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 120,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

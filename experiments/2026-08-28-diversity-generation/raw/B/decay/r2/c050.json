@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ecological entrenchment: a system's components co-adapt into a fragile mutualism where any single change breaks local fitness, requiring simultaneous multi-component mutation to remain viable\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.313
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-448",
+    "object": "chat.completion",
+    "created": 1787930279,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems undergo ecological entrenchment wherein components co-adapt to each other's specific interfaces, assumptions, and behaviors until they form a mutualism as rigid as any monolith. Each locally correct, individually tested change perturbs this co-adapted network, breaking the implicit fitness landscape that made components mutually viable. The system reaches a state where any single-component mutation is selected against by the surrounding ecosystem, requiring simultaneous, coordinated multi-component mutations to cross the resulting fitness valley—and such coordinated mutations are exponentially less likely to pass review or testing gates designed for incremental change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 146,
+      "completion_tokens": 124,
+      "total_tokens": 270
+    }
+  },
+  "transport_error": null
+}

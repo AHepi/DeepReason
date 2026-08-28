@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: submodular deficit of test coverage\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.442
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-977",
+    "object": "chat.completion",
+    "created": 1787936867,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The marginal test coverage contributed by each new change is submodularly diminishing relative to the system's existing behavior space, creating an expanding deficit between what tests verify and what the system actually does. Because each locally correct change adds interactions that compound faster than tests can bound them, the ratio of unverified behavioral surface to verified surface grows monotonically. This submodular deficit means the expected cost of safely reaching any new target state increases superlinearly with system age, independent of code quality or technical debt. The system becomes harder to change not because the code degrades, but because the test suite's marginal information gain per change asymptotically approaches zero.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 140,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.228
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-683",
+    "object": "chat.completion",
+    "created": 1787932239,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software degrades because each locally correct change optimizes for immediate constraints while permanently constraining the future option space. The system's entropy increases because local optimizations accumulate without a global mechanism to prune them, turning the codebase into a local minimum that no individual change could have avoided.\", \"probability\": 0.08}, {\"conjecture\": \"The coupling between modules grows as a sublinear function of the number of changes, because each change creates at least one new implicit dependency to avoid rewriting existing interfaces. Over a decade, this web of implicit dependencies becomes a load-bearing structure that makes every change require the comprehension of the entire web.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems accumulate domain knowledge in the code itself, but this knowledge becomes increasingly implicit and fragmented across modules. The difficulty of change grows exponentially because the developer must reconstruct this fragmented mental model before making a locally correct modification.\", \"probability\": 0.09}, {\"conjecture\": \"Every tested change optimizes the code's behavior for the specific test cases written at that time, creating a highly fitted surface to historical requirements. The system becomes harder to change because new requirements fall in the gaps between these fitted surfaces, requiring disproportionate effort to bridge.\", \"probability\": 0.06}, {\"conjecture\": \"The interfaces in a long-running system ossify because changing an interface requires coordinating updates across all consumers, which is riskier than working around the interface. This risk asymmetry causes the system to accumulate workarounds, and the weight of these workarounds is what makes future changes difficult.\", \"probability\": 0.08}, {\"conjecture\": \"Each locally correct change adds at least one special case to handle a specific context. The accumulation of special cases creates a combinatorial explosion of possible execution paths, and the difficulty of making a safe change grows with the number of paths that must be verified, which increases monotonically.\", \"probability\": 0.07}, {\"conjecture\": \"Software systems become harder to change because the ratio of 'structural' code (coordination, adaptation, backward compatibility) to 'functional' code increases over time. The structural code doesn't deliver value but must be maintained and understood, creating a drag that compounds with every change.\", \"probability\": 0.05}, {\"conjecture\": \"The system's architecture degrades because the original architectural constraints are not encoded in a way that is enforceable by tests or compilers. Each locally correct change violates the architecture slightly, and the accumulation of these violations destroys the separation of concerns that made the system changeable.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems become harder to change because the feedback loop between cause and effect stretches over time. Early changes have immediate, visible consequences, but as the system grows, the consequences of a change manifest only in distant modules or future scenarios, making it impossible for local review to catch systemic problems.\", \"probability\": 0.06}, {\"conjecture\": \"Every change that passes review and testing is certified as correct relative to the current state, but the definition of correctness is a moving target. The system becomes harder to change because the accumulated weight of outdated correctness criteria conflicts with current requirements, and resolving this conflict requires rewriting parts of the system that tests deem 'correct'.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 698,
+      "total_tokens": 873
+    }
+  },
+  "transport_error": null
+}

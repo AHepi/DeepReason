@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.34
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-397",
+    "object": "chat.completion",
+    "created": 1787932428,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software rot is driven by the accumulation of implicit assumptions. Each locally correct change encodes assumptions about the environment that are never explicitly represented in the code, so future developers must reverse-engineer an ever-growing set of hidden invariants to make safe modifications.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The difficulty arises from combinatorial explosion of the state space. Because tests only sample a vanishing fraction of possible execution paths, each change leaves behind an exponentially growing set of untested edge cases, making the probability of a regression asymptotically approach certainty.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The primary mechanism is architectural drift: locally optimal changes gradually erode the system's topological separation of concerns. The system becomes a random graph rather than a structured hierarchy, increasing the average path length between any two components that must be coordinated for a change.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Cognitive load is the binding constraint. The human working memory capacity for holding a system's causal model is roughly constant, but each change adds entities and relationships to the model. Beyond a critical threshold, developers can no longer predict the global consequences of a local edit.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The phenomenon is fundamentally an information-theoretic loss. Each refactoring or change destroys entropy by deleting or merging code paths, irreversibly reducing the design space's redundancy. This loss of design degrees of freedom means future changes must work around increasingly rigid historical artifacts.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Technical debt accumulates because organizations systematically underprice future optionality. Code review optimizes for immediate correctness under current requirements, treating the destruction of unused flexibility as a zero-cost externality, causing the system's adaptive capacity to decay as a sunk cost.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Difficulty scales with the divergence between the problem domain and the solution domain. Code evolves to match one specific operational context, hardcoding its assumptions. When the context shifts, the code must be translated across an expanding semantic gap, increasing friction over time.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"The root cause is the proliferation of non-local coupling. Locally correct changes create hidden dependencies between distant modules via shared state, event ordering, or temporal assumptions. The system's effective modularity degrades, increasing the blast radius of any modification.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Software aging is a thermodynamic process of increasing structural disorder. Each change adds lines of code without removing equivalent complexity, violating conservation of complexity. The system accumulates 'heat' in the form of dead code, backward compatibility layers, and redundant logic, increasing the energy required for any state transition.\",\n      \"probability\": 0.035\n    },\n    {\n      \"conjecture\": \"The increasing friction is an artifact of survival bias in the codebase. Easy changes are made quickly and forgotten. The changes that remain in the system's memory are the ones that were difficult, fought over, and patched repeatedly. The system appears to get harder to change because we only measure the tail of the distribution.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 747,
+      "total_tokens": 922
+    }
+  },
+  "transport_error": null
+}

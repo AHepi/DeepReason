@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: shifting implicit invariants that testing never encodes but changes silently violate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.877
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-222",
+    "object": "chat.completion",
+    "created": 1787933042,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not because explicit invariants break, but because each locally-correct change preserves the letter of tested invariants while silently shifting an untested environmental assumption—call it a phantom invariant—that earlier code incidentally relied on. Tests encode what the system must do, never the full set of things it must not stop doing by accident, so each change narrows the implicit contract without triggering any alarm. The system becomes harder to change because the real specification has drifted into an invisible dependency graph between components that no artifact describes.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 118,
+      "total_tokens": 243
+    }
+  },
+  "transport_error": null
+}

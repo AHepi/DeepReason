@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.807
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-561",
+    "object": "chat.completion",
+    "created": 1787937525,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate implicit invariants—unstated relationships between components that no individual change violates, but that progressively constrain the space of future valid modifications. Each locally correct change adds a new assumption that downstream code silently depends on, creating a hidden coupling graph that is never documented but increasingly dictates what changes are safe. The system becomes harder to change not because any single decision was wrong, but because the intersection of all past decisions forms a constraint satisfaction problem that becomes computationally intractable for developers to reason about, even though every constraint was individually justified.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 118,
+      "total_tokens": 220
+    }
+  },
+  "transport_error": null
+}

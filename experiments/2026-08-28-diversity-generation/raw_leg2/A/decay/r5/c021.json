@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.941
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-511",
+    "object": "chat.completion",
+    "created": 1787937279,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems become harder to change because locally correct modifications systematically accumulate hidden cross-module constraints—implicit invariants that no single change violates but that collectively narrow the space of future valid modifications. Because these constraints are never explicitly represented in the code or tests, they form an invisible coupling graph that grows quadratically with the number of features. The system's entropy therefore increases not through bad engineering, but through the unavoidable byproduct of making locally optimal decisions without global knowledge of the emergent constraint network.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 105,
+      "total_tokens": 207
+    }
+  },
+  "transport_error": null
+}

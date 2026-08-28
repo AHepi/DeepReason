@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.566
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-321",
+    "object": "chat.completion",
+    "created": 1787941486,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Specifications become reliably executable only when translated through a bidirectional refinement loop: each abstract clause generates both an implementation and a falsification oracle, and the specification is considered bound only when the implementation passes its oracle across all model-theoretic instances of the preconditions. The oracle—not the implementation—is the primary artifact, because it forces the specification's commitments to be explicit, testable, and invariant under behavioral decomposition. This inverts the usual workflow where tests are derived from code; instead, code is derived from adversarial witnesses that the specification itself implies must exist.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 120,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

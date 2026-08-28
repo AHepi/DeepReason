@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Saturation of working memory capacity relative to dependency graph depth\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.139
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-704",
+    "object": "chat.completion",
+    "created": 1787936449,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The experienced difficulty of modifying a software system scales with the depth of its dependency graph multiplied by the number of unique nodes, directly reflecting the working memory slots required to simulate the transitive impact of a single change. When this product exceeds the developer's working memory capacity, the system transitions from tractable to effectively unmaintainable, regardless of code quality.\", \"probability\": 0.09}, {\"conjecture\": \"Software architectures with dependency graph depths exceeding seven layers become categorically resistant to modification because humans cannot hold the full propagation chain in working memory. This forces developers to rely on incomplete local mental models, causing every attempted change to introduce unforeseen side effects that require further patches.\", \"probability\": 0.085}, {\"conjecture\": \"Long-running systems degrade not through code rot, but through the progressive saturation of a shared cognitive buffer; as the dependency graph deepens over time, the working memory required to trace a change exceeds human capacity, making the system functionally unchangeable.\", \"probability\": 0.08}, {\"conjecture\": \"The transition from easy to hard maintenance in a codebase occurs abruptly once the dependency graph depth exceeds the chunking limit of working memory, estimated at four plus or minus one deeply nested components. Past this threshold, developers lose the ability to hold the context of an entire dependency chain, causing a non-linear spike in modification errors.\", \"probability\": 0.075}, {\"conjecture\": \"The entropy of a software system increases monotonically with the expansion of its dependency graph's depth, directly mapping to the information-theoretic load on a developer's working memory. A system becomes harder to change precisely when the working memory capacity required to resolve the dependencies of a target node falls below the Shannon entropy of that node's subgraph.\", \"probability\": 0.07}, {\"conjecture\": \"A long-running system becomes harder to change because the depth of its dependency graph forces a developer's working memory to operate past its natural decay rate. If the time required to traverse the dependency chain mentally exceeds the retention limit of working memory, the initial context of the change is lost before the impact is fully assessed.\", \"probability\": 0.065}, {\"conjecture\": \"Maintenance difficulty arises because deep dependency graphs require developers to hold multiple intermediate abstract states in working memory while tracing a change's impact. The system becomes unmaintainable when the graph depth demands simultaneous retention of more intermediate states than working memory can actively manipulate.\", \"probability\": 0.06}, {\"conjecture\": \"As software ages, its dependency graph depth increases, pushing the cognitive load of impact analysis beyond the capacity of visuospatial working memory. Developers can no longer visually map the propagation of a change through the system, forcing them to rely on incomplete, local textual cues rather than a coherent global structure.\", \"probability\": 0.055}, {\"conjecture\": \"The review and testing of individual changes in a long-running system are locally correct but globally insufficient because they fail to account for working memory saturation during impact analysis. The system degrades because the dependency graph depth eventually makes it impossible for any single reviewer to hold the full transitive closure of a change in their working memory.\", \"probability\": 0.05}, {\"conjecture\": \"The observed brittleness of old software is governed by the ratio of dependency graph depth to the developer's working memory capacity. Modification difficulty increases exponentially once this ratio exceeds 1.0, as the developer must repeatedly reload context from external tools, causing attention residue and catastrophic loss of the original change intent.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 753,
+      "total_tokens": 943
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.312
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-9",
+    "object": "chat.completion",
+    "created": 1787934818,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is to compile the abstract specification into a refinement calculus expression, then discharge each refinement step with an automated theorem prover before extracting code, because this forces every logical gap to surface as a proof obligation rather than a runtime defect. Specifications refined this way yield code whose commitments are mathematically entailed, not merely tested. Any approach that separates the specification-to-code step from the proof step will leak unverified assumptions into the executable.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 102,
+      "total_tokens": 200
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Implicit invariants accumulate in unmodeled gaps between modules\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.252
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-942",
+    "object": "chat.completion",
+    "created": 1787937011,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change adds at least one implicit invariant linking modules through unmodeled behavioral dimensions—timing, ordering, resource ownership, or data lifecycle—that no interface contract explicitly represents. These invariants form a hidden dependency graph whose edges are invisible to both type systems and reviewers, so the probability that a new change violates an accumulated invariant grows superlinearly with the count of prior changes. The system becomes harder to change not because any single invariant is complex, but because the unmodeled invariant graph eventually exceeds the cognitive capacity of any maintainer to reconstruct before acting.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 121,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

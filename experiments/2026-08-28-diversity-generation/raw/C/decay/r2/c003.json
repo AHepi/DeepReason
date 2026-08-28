@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.007
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-518",
+    "object": "chat.completion",
+    "created": 1787930316,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate convenience, accumulating implicit constraints that future changes must satisfy. The system's architecture becomes a local minimum trap that is impossible to escape without a globally incorrect, high-risk refactor.\", \"probability\": 0.09}, {\"conjecture\": \"Software systems encode a growing body of unstated business assumptions that are never explicitly documented. Changes become harder because each modification risks violating a forgotten invariant, and the cost of discovering these invariants grows with system age.\", \"probability\": 0.08}, {\"conjecture\": \"Code review and testing enforce local consistency but systematically filter out changes that would simplify the overall system. This creates a ratchet where complexity can only increase, because removing it requires simultaneous coordinated changes that no single locally correct PR can justify.\", \"probability\": 0.07}, {\"conjecture\": \"The coupling between modules grows as a thermodynamic inevitability. Each integration point that is added for a valid local reason creates a new pathway for implicit dependency, and the number of these pathways grows combinatorially, making every future change touch more of the system.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate a thick crust of exception handling for edge cases discovered in production. Each handler is locally correct but collectively they form a set of load-bearing special cases that nobody dares remove, and every new change must navigate all of them.\", \"probability\": 0.07}, {\"conjecture\": \"The social knowledge graph of the engineering team degrades faster than the code itself. As original maintainers leave, the system's behavior increasingly depends on tacit knowledge that no surviving documentation or test captures, making changes riskier because nobody knows what is safe to modify.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct change introduces new code paths, and tests lock those paths in place. Over time the test suite becomes a fossil record of past decisions, and the cost of changing any path includes rewriting tests that encode assumptions that are no longer relevant but still enforced.\", \"probability\": 0.05}, {\"conjecture\": \"Software systems are subject to a form of informational entropy. Each correct change adds states the system can be in, and the space of possible behaviors grows faster than the ability of tests or documentation to constrain it. The probability that a new change interacts with an untested state therefore increases monotonically.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty of change is dominated by the number of implicit invariants the system has accumulated, not by code size. Each locally correct change introduces at least one new implicit invariant that future developers must reverse-engineer before they can safely modify the affected code.\", \"probability\": 0.04}, {\"conjecture\": \"As a system ages, the cost of a change is increasingly determined by the need to preserve compatibility with downstream consumers whose own assumptions are invisible to the team making the change. The system becomes harder to modify because its effective boundary has grown beyond what any single team can inspect or reason about.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 648,
+      "total_tokens": 823
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.956
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-645",
+    "object": "chat.completion",
+    "created": 1787938390,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy increases because each locally correct change optimizes for immediate constraints rather than global structure, and the cost of refactoring is always paid by the current change while the benefit is distributed across unknown future changes. This creates a systematic under-investment in structural maintenance that compounds over time.\", \"probability\": 0.085}, {\"conjecture\": \"The difficulty increases because each change adds implicit constraints on future changes that are invisible at the time of the change. These constraints form a dependency graph whose complexity grows superlinearly with the number of nodes, making the impact of any new change increasingly hard to predict.\", \"probability\": 0.078}, {\"conjecture\": \"Long-running systems accumulate configuration flags, API backwards-compatibility shims, and conditional branches that are each individually justified but collectively create a combinatorial state space. The system becomes harder to change not because any single path is wrong, but because the number of paths that must be considered grows factorially.\", \"probability\": 0.072}, {\"conjecture\": \"Knowledge of why the system is structured a certain way decays faster than the code itself. Each change was correct given the knowledge at the time, but subsequent maintainers lack the context to know which parts of the structure are load-bearing, making every change riskier.\", \"probability\": 0.069}, {\"conjecture\": \"Each locally correct change adds a test that encodes a specific expected behavior. Over time, these tests become a rigid specification that prevents beneficial restructuring because the cost of updating tests for any non-trivial change exceeds the cost of working around the existing structure.\", \"probability\": 0.064}, {\"conjecture\": \"The system's domain model drifts from the real-world domain it models because each change is validated against the current code rather than the current domain. This accumulated drift means each new change requires reconciling an increasingly outdated internal model with external reality, raising the cost of each change.\", \"probability\": 0.058}, {\"conjecture\": \"Every change to a long-running system is reviewed against the existing code, creating anchoring bias toward incremental modification. Over time, the system's architecture becomes a local optimum that is increasingly distant from the global optimum, and the cost of escaping the local optimum grows with the distance.\", \"probability\": 0.053}, {\"conjecture\": \"The system accumulates integration points with external systems, each added correctly at the time. These integration points act as constraints that reduce the system's degrees of freedom for structural change, and the rate of constraint accumulation is proportional to system age, making change cost grow monotonically.\", \"probability\": 0.048}, {\"conjecture\": \"Every change is tested against a finite set of scenarios, but the system operates in an effectively infinite behavior space. Each change reduces the fraction of untested behavior space that can be safely modified, so the expected cost of any change increases as the safe-to-modify space shrinks.\", \"probability\": 0.043}, {\"conjecture\": \"Long-running systems become harder to change because the coordination cost of change grows with organizational size and system age. Each change was locally correct, but the social process required to approve changes adds overhead that grows as more stakeholders, conventions, and risk assessments accumulate around the system.\", \"probability\": 0.039}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 700,
+      "total_tokens": 875
+    }
+  },
+  "transport_error": null
+}

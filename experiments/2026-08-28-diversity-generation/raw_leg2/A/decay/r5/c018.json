@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.035
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-857",
+    "object": "chat.completion",
+    "created": 1787937284,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become harder to change because each locally correct modification adds a constraint on future behavior, creating a growing graph of implicit invariants that no individual developer can see. Every well-tested change inadvertently narrows the space of valid future modifications by adding dependencies to the invariant set, even when it introduces no code duplication or obvious design flaws. Thus, system rigidity is not a sign of poor engineering but an unavoidable thermodynamic-like accumulation of hidden behavioral constraints.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 99,
+      "total_tokens": 201
+    }
+  },
+  "transport_error": null
+}

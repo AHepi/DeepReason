@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.408
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-469",
+    "object": "chat.completion",
+    "created": 1787934745,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement through contract-checked traces: generate candidate implementations, then filter by executing a symbolic trace checker that verifies each runtime path satisfies the pre/post-conditions of the abstract spec. This dominates pure LLM generation because it grounds the model's output in a mechanistic commitment check rather than stylistic similarity to correct code.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Dependently-typed refinement (e.g., F*, Lean, Agda) is the only technique that reliably turns abstract specifications into code holding its commitments, because the specification IS the type, and the code only type-checks when it provably implements the spec. Any approach lacking a proof-carrying correspondence will leak commitments under adversarial distribution shift.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Test-driven generation via property-based testing with shrinking is the best practical technique: the abstract spec is operationalized as a property oracle, candidate code is generated, and counterexamples are fed back into the generator until no shrink can break the commitment. This works because it closes the loop between specification and execution without requiring full formal verification infrastructure.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Neuro-symbolic program synthesis—where an LLM proposes code structure but a symbolic solver fills in holes against SMT-encodable spec constraints—outperforms either pure neural generation or pure synthesis. The neural component handles the combinatorial explosion of program structure while the solver guarantees commitment-holding on the filled components.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The best technique is iterative refinement against a runtime monitor: deploy code with executable assertions derived from the spec, observe violations in execution, and regenerate. This is superior to upfront verification because abstract specs are themselves often wrong, and runtime feedback calibrates both the spec and the code simultaneously.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Model-based engineering with automatic code generation from formal state-machine specifications (e.g., Simulink, Statecharts, or TLA+ with code extraction) is the best technique. The determinism of the transformation from state machine to code means the commitments are structurally preserved, and the abstraction gap is managed by the semantics of the modeling language rather than by the vagaries of a code generator.\",\n      \"probability\": 0.048\n    },\n    {\n      \"conjecture\": \"The best technique is to avoid the spec-to-code gap entirely by making the specification executable—domain-specific languages where the spec runs as the program (e.g., SQL, Datalog, synchronous dataflow languages). The commitments hold because there is no translation step; the abstract description IS the execution semantics.\",\n      \"probability\": 0.044\n    },\n    {\n      \"conjecture\": \"Constrained decoding from a language model, where the grammar of the output is restricted to a refinement calculus and each inference step must pass a local proof obligation checker, is the best technique. This embeds commitment-checking into the generation process itself rather than post-hoc, making it impossible to produce code that violates the spec at the level of each refinement step.\",\n      \"probability\": 0.039\n    },\n    {\n      \"conjecture\": \"The best technique is compositional verification with abstract interpretation: the spec defines an abstract domain, the code is analyzed against that domain, and generation proceeds bottom-up from verified components. This scales where full proof fails because abstract interpretation is decidable for many useful domains, giving a practical commitment guarantee without the cost of Hoare-logic proofs.\",\n      \"probability\": 0.035\n    },\n    {\n      \"conjecture\": \"Specification mining followed by differential testing against reference implementations is the best technique: rather than trying to directly formalize commitments, generate multiple independent implementations from the spec and cross-check them against each other and any available reference behaviors. The commitments that hold are those surviving cross-validation, making this a robust empirical approach where formal methods are impractical.\",\n      \"probability\": 0.031\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 894,
+      "total_tokens": 1065
+    }
+  },
+  "transport_error": null
+}

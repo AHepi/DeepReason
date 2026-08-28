@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy growth in dependency graphs under locally greedy edits\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 16.797
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-548",
+    "object": "chat.completion",
+    "created": 1787938166,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally optimal edit to a dependency graph selects the lowest-cost connection among available options, but low-cost connections correlate with high betweenness centrality. Over repeated edits, this systematically concentrates dependencies on a small set of hub modules, whose eventual in-degree makes them synchronization bottlenecks. The difficulty of change grows superlinearly with hub betweenness because any modification to a hub risks cascading invalidation across all dependents, so the system hardens not from bad decisions but from the aggregate of individually cheapest ones.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"In a dependency graph, each locally greedy edit prefers reusing an existing module over creating a new one because reuse has lower immediate coordination cost. But this preference causes module fan-in to grow monotonically while the module's internal cohesion degrades, since each new dependent imposes a slightly different implicit interface contract. After N edits, the module supports N incompatible implicit contracts simultaneously, making any change to the module a multi-party coordination problem that did not exist when it was created.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Locally greedy edits minimize the number of dependencies added per edit, which is equivalent to a greedy set-cover heuristic over the transitive dependency closure. Greedy set-cover is known to produce solutions within a logarithmic factor of optimal but no better, so the accumulated dependency closure grows as O(k log n) where k is the minimum possible closure. The system becomes harder to change because the transitive closure that must be validated per edit grows logarithmically faster than the minimum necessary, creating an asymptotic validation burden gap.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"When a developer makes a change, they optimize over the dependency subgraph they can hold in working memory, typically 5-7 modules. Each such local edit is globally rational only if the subgraph is a representative sample of the full graph, but as the graph grows, local subgraphs become increasingly unrepresentative. The probability that a locally optimal edit is also globally optimal decays as O(1/n) where n is graph size, because the fraction of relevant constraints visible in any fixed-size neighborhood shrinks. The system hardens because the fraction of edits that are globally suboptimal grows toward 1.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each locally correct edit adds dependencies but almost never removes them, because removal requires proving no downstream consumer relies on the removed edge—a proof cost that exceeds the local edit budget. This creates a one-way ratchet where the dependency graph's edge count grows monotonically even as functionality stays constant. The system becomes harder to change because the expected number of edges that must be validated per edit grows monotonically, and the cost of finding a valid edit is polynomial in current edge count.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Locally greedy edits form implicit transitive dependencies (A→B→C) that are invisible at the edit site (A only sees B). Each edit is locally valid, but the number of implicit transitive paths grows as O(d^k) where d is average degree and k is path length. Over time, k grows because new modules are added at the leaves, so the number of implicit constraints per edit grows exponentially in path length. The system becomes hard to change because each edit triggers an exponentially growing set of implicit transitive validations that are invisible to the edit's local scope.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"In a growing dependency graph, the probability that two modules share a common ancestor dependency grows as the graph densifies. Each locally greedy edit that reuses an existing module increases the chance that two previously independent subsystems now share a transitive dependency. The fraction of module pairs that share at least one transitive dependency grows toward 1, creating an implicit coupling structure where changes to any shared ancestor risk affecting both subsystems. The system becomes hard to change because the expected number of subsystems affected by an ancestor edit grows with the transitive fan-out of shared dependencies.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"A dependency graph has a critical constraint density: the ratio of actual dependency edges to the minimum edges needed to satisfy all functional requirements. Locally greedy edits each add near-minimal edges, but the cumulative redundancy grows because different edits independently rediscover similar dependency paths. The constraint density grows as O(sqrt(n)) where n is the number of edits, because the probability of rediscovering an existing path scales with graph density. The system becomes hard to change because redundant constraints must all be satisfied simultaneously, and the expected number of redundant constraints per module grows without bound.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"A dependency graph has a phase transition in change difficulty at a critical average degree d_c ≈ e (Euler's number). Below d_c, most modules can be changed by touching O(1) neighbors; above d_c, the expected change radius jumps to O(log n) because the graph becomes locally tree-like with long-range dependencies. Locally greedy edits each push average degree upward because adding a dependency is cheaper than refactoring to reduce degree. The system becomes hard to change not gradually but in a discontinuous transition once average degree crosses d_c, after which every change requires coordinating a logarithmically growing neighborhood.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each locally greedy edit optimizes for minimal disruption to the current dependency neighborhood, which means it prefers to extend existing modules over creating new ones with cleaner interfaces. This preference causes interface bloat: each module's effective interface grows as O(n) where n is the number of times it is reused, because each reuse adds an implicit assumption to the interface. The system becomes hard to change because the expected number of implicit interface assumptions violated by any edit grows linearly with reuse count, and all violations must be resolved before the edit can be committed.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 1309,
+      "total_tokens": 1498
+    }
+  },
+  "transport_error": null
+}

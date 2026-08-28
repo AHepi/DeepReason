@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Refinement calculus with mechanized proof of stepwise correctness preservation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.232
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-926",
+    "object": "chat.completion",
+    "created": 1787941760,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A refinement calculus that emits SMT-dischargeable verification conditions at each step—rather than postponing all proof to the final artifact—achieves higher end-to-end correctness rates than batch verification, because errors are localized to the specific refinement rule that introduced them. Under this approach, each refinement step produces a lemma whose shape is constrained to fall within a decidable SMT fragment, making the synthesis loop self-correcting before compound errors accumulate. The conjecture predicts that stepwise mechanized discharge reduces the final proof's open-goal count by at least an order of magnitude compared to post-hoc verification of equivalent refinement chains.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 133,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

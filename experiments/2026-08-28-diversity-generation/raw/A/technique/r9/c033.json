@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.727
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-239",
+    "object": "chat.completion",
+    "created": 1787935481,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is a two-phase generate-and-certify loop: a deductive engine statically derives a proof that the program's I/O behavior refines the specification's pre/postconditions over all reachable states, then an adversarial fuzzer attempts to violate those same commitments through runtime execution, with the program accepted only if both the proof closes and fuzzing fails. This combination succeeds because deductive proof eliminates the deep logical errors that fuzzing misses, while adversarial fuzzing catches the specification-reality mismatches (e.g., environment assumptions, arithmetic overflows) that deductive engines systematically overlook. On its own, neither technique achieves high commitment fidelity, but their composition creates a certification barrier that is exponentially harder to pass spuriously than either method alone.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 158,
+      "total_tokens": 256
+    }
+  },
+  "transport_error": null
+}

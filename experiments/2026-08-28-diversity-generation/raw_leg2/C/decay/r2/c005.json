@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.875
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-190",
+    "object": "chat.completion",
+    "created": 1787936632,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software architecture drifts because each locally correct change optimizes for immediate constraints, creating a random walk through design space. The distance from the original architectural attractor grows monotonically, and the cost of returning to any coherent global design increases faster than the system's capacity to refactor, because coordination costs scale with the square of the system's surface area.\", \"probability\": 0.085}, {\"conjecture\": \"Testing complexity grows because each change adds at least one new execution path, making the test suite's growth superlinear relative to the codebase. The marginal cost of ensuring non-regression in a change eventually exceeds the cost of implementing the change itself, because verifying that a modification doesn't break existing paths requires checking against an exponentially expanding interaction graph.\", \"probability\": 0.072}, {\"conjecture\": \"Code is read more than it is written, and readability degrades because each contributor optimizes for their own cognitive chunking patterns. This creates a 'Babel effect' where the cognitive cost of parsing a module exceeds the cost of rewriting it, once the number of distinct authoring styles interacting in the same file surpasses a threshold of roughly five.\", \"probability\": 0.064}, {\"conjecture\": \"Implicit dependencies accumulate because developers optimize for local correctness without global visibility, creating a hidden coupling graph. The cost of a change is proportional to the number of implicit dependencies it touches, and this number grows faster than the explicit dependency count because the former is invisible to local analysis tools and therefore unmanaged.\", \"probability\": 0.078}, {\"conjecture\": \"Domain knowledge fragments across the codebase as features are added, with each change encoding a slightly different mental model of the business domain. The cost of change rises because developers must reconcile an increasing number of subtly inconsistent domain models embedded in the code, and this reconciliation cost is O(n) in the number of distinct embedded models.\", \"probability\": 0.061}, {\"conjecture\": \"Every change introduces at least one implicit invariant—a constraint that the current code happens to satisfy but was never explicitly enforced. Future changes must preserve these invariants, and since they are invisible, developers discover them only by violating them, making the cost of change proportional to the number of accumulated implicit invariants, which grows linearly with system age.\", \"probability\": 0.092}, {\"conjecture\": \"Abstractions leak at a constant rate per usage, and each change adds usages. The system becomes harder to change because the ratio of leaky abstractions to solid abstractions increases monotonically, and each leaky abstraction adds a constant cost to every change that touches it, creating a linear drag on modification speed that compounds over time.\", \"probability\": 0.069}, {\"conjecture\": \"The codebase's fitness landscape becomes increasingly rugged as each change adds local optima. The system gets trapped because any small change degrades fitness, and the nearest global improvement requires a valley crossing whose cost is proportional to the depth of the local optimum, which increases with the number of changes made.\", \"probability\": 0.055}, {\"conjecture\": \"Technical debt accumulates not as a metaphor but as a measurable quantity: the difference between the current implementation and the optimal implementation for the current requirements. This gap grows because each change is optimized for the change itself, not for reducing the gap, and the cost of future changes is proportional to the gap squared because of compounding interaction effects.\", \"probability\": 0.075}, {\"conjecture\": \"Code entropy increases because each change converts a small amount of explicit structure into implicit convention. The rate of entropy increase is proportional to the codebase size, and the cost of change is exponential in entropy because high-entropy code requires reconstructing lost structure before modifying it, a cost that low-entropy code doesn't bear.\", \"probability\": 0.088}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 812,
+      "total_tokens": 987
+    }
+  },
+  "transport_error": null
+}

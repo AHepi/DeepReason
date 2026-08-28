@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift and vocabulary drift across human–AI–human knowledge transfer\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.911
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-969",
+    "object": "chat.completion",
+    "created": 1787932409,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems decay because each reviewed change silently shifts the operational vocabulary shared between developers, documentation, and AI assistants, causing the system's de facto semantics to drift from its recorded intent without triggering any local failure. This vocabulary drift accumulates because human reviewers, automated tests, and AI code assistants each validate changes against their own current semantic context rather than the original design lexicon, making the system progressively harder to change as no participant retains a coherent, shared understanding of what the code's terms actually mean.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 108,
+      "total_tokens": 233
+    }
+  },
+  "transport_error": null
+}

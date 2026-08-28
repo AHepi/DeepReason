@@ -1,0 +1,8 @@
+[
+  "Extraction of executable contracts via dependent type theory and proof-carrying code",
+  "Synthesis of programs from input-output examples constrained by formal temporal logic specifications",
+  "Refinement of abstract state machines into executable code via stepwise correctness-preserving transformations",
+  "Compilation of declarative constraint specifications into satisfiability modulo theories (SMT) solver calls",
+  "Large language model code generation with runtime assertion monitoring and counterexample-guided feedback",
+  "Derivation of executable code from algebraic specifications via equational reasoning and term rewriting"
+]

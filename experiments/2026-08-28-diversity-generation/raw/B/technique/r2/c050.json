@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic extraction from constructive proofs in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.01
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-350",
+    "object": "chat.completion",
+    "created": 1787931676,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A specification-to-code pipeline based on dependent type theory will produce verified software with a negligible formalization overhead relative to total development effort when the abstract specification is structured as a constructive proof in a Homotopy Type Theory (HoTT) framework, using higher inductive types to model computational effects and quotient types to handle observational equivalences. Under this approach, the extraction mechanism will yield code that is not only type-safe but also operationally optimal, as the constructive content of the proof directly corresponds to the minimal computational trace required to satisfy the specification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 116,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

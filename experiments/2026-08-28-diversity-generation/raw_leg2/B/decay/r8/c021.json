@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Design intent is destroyed bit-by-bit by locally-Bayesian patches that never update the prior\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.134
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-81",
+    "object": "chat.completion",
+    "created": 1787938040,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A long-running software system degrades into an incoherent state because each locally-Bayesian patch updates the codebase's posterior behavior while implicitly preserving an outdated global design prior. This creates a growing KL-divergence between the system's emergent structure and the original design intent, making the system mathematically harder to change because new patches must be computed against an uninformative, fragmented prior. The software becomes rigid not because of technical debt, but because the original high-information design prior has been asymptotically erased by a sequence of strictly local optimizations that never propagated their likelihoods back to the global architecture.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 132,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

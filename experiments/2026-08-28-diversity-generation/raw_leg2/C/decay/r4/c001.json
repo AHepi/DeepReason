@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.718
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-366",
+    "object": "chat.completion",
+    "created": 1787937185,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally-correct change optimizes for immediate constraints, leaving behind residual assumptions that future changes must accommodate. The system's fitness landscape accumulates local optima, making any globally superior change require simultaneous coordination across modules that no single change can justify.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Tests encode current behavior as a fixed specification, so every passing test suite narrows the space of permissible future changes. The more comprehensive the tests, the more they function as a constraint network that makes beneficial structural changes indistinguishable from regressions.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Code review enforces consistency with local conventions, which compounds into implicit architectural dependencies. Modules become coupled not through direct calls but through shared assumptions that reviewers enforce without recognizing as architectural decisions.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Every change adds a branch in the possible execution paths, and the cost of verifying a new change grows with the number of existing branches it might interact with. This is combinatorial growth in the verification surface, not linear growth in code size.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The architectural decisions that matter most are the ones that were never written down because they were obvious to the original authors. Each generation of developers reconstructs these decisions incorrectly, and changes are built on progressively more distorted understandings of the original design intent.\",\n      \"probability\": 0.081\n    },\n    {\n      \"conjecture\": \"Domain complexity grows faster than code can express it, so each change captures a smaller fraction of the relevant domain logic. The gap between what the system does and what the domain requires becomes filled with implicit workarounds that are invisible until a change disrupts them.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Every change that resolves a tension between competing requirements does so by choosing a point on a trade-off curve. Over time, the system accumulates conflicting points along the same trade-off curves, and any change that resolves the conflict must reverse prior decisions that were individually correct.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Dependencies form a directed acyclic graph that becomes progressively more saturated. The probability that a new change requires modifying an edge rather than adding a node increases with graph density, and edge modifications propagate costs to all downstream nodes.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Naming choices made early in the system's life constrain the conceptual space available to future changes. When domain understanding shifts, the cost of renaming propagates across all call sites, so developers work around stale abstractions rather than renaming, and the abstraction layer rots.\",\n      \"probability\": 0.062\n    },\n    {\n      \"conjecture\": \"The system's state space grows with each change, but the operators available to reason about that state space remain fixed. Eventually the gap between the system's actual complexity and the expressiveness of available abstractions makes every change feel like working with the wrong tools.\",\n      \"probability\": 0.071\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 707,
+      "total_tokens": 882
+    }
+  },
+  "transport_error": null
+}

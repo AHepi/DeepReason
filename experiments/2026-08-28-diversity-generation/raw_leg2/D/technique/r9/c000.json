@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Property-based test generation from specification invariants\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 27.119
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-292",
+    "object": "chat.completion",
+    "created": 1787943603,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Specifications should be compiled into a converging sequence of property-based tests where each test is derived by applying a single specification-preserving transformation to the previous one, rather than generating tests independently. This sequential dependency forces the test suite to encode the specification's logical structure as a chain, making any implementation that passes the full chain necessarily conform to the abstract invariants.\", \"probability\": 0.085}, {\"conjecture\": \"The optimal technique is to generate property-based tests exclusively from the counterexamples produced by a bounded model checker against the specification, such that each test case is a concrete trace that distinguishes the spec from its nearest incorrect neighbor. This guarantees the test suite has maximal discriminating power against the class of implementations that are locally similar to the correct one.\", \"probability\": 0.072}, {\"conjecture\": \"Property-based test generators should shrink not toward minimal failing cases but toward the minimal algebraic witness that violates a specified equational law, producing a diagnostic artifact that directly maps to the location in the code where the invariant breaks. This shifts the value of testing from validation to automatic fault localization.\", \"probability\": 0.068}, {\"conjecture\": \"The correct approach is to treat specification invariants as refinement types and use a property-based tester to generate only inputs that are well-typed under the spec, eliminating the need for runtime invariant checking. The type system becomes the test oracle, and the generator becomes a sampling procedure over the inhabitant space of the refinement types.\", \"probability\": 0.079}, {\"conjecture\": \"Specifications should be translated into property-based tests by first computing the weakest preconditions of each invariant under all operations in the spec, then generating tests that exercise boundary conditions of those preconditions. This ensures the test suite targets the exact decision boundaries where an implementation could silently violate an invariant while appearing correct on typical inputs.\", \"probability\": 0.063}, {\"conjecture\": \"The most effective technique is to derive property-based tests by mutating the specification to produce a pool of incorrect specs, then generating test cases that distinguish the true spec from each mutant. This mutation-driven approach guarantees the test suite achieves specification coverage rather than merely code coverage.\", \"probability\": 0.057}, {\"conjecture\": \"Property-based generators should be parameterized by the specification's algebraic structure (monoid, lattice, etc.) and sample from the free algebra on the generators, ensuring that every generated test case is a canonical representative of its equivalence class under the spec's laws. This eliminates redundant tests and guarantees each test exercises a semantically distinct aspect of the invariant.\", \"probability\": 0.074}, {\"conjecture\": \"The optimal technique is to generate property-based tests as stateful transition systems where the transitions are derived from the spec's operation preconditions and postconditions, and the test oracle checks that every reachable state satisfies the invariants. The generator should prioritize state-space coverage by using the invariants as a heuristic to guide exploration toward boundary states.\", \"probability\": 0.082}, {\"conjecture\": \"Specifications should be encoded as decision procedures in an SMT solver, and property-based tests should be generated by sampling from the satisfying assignments of the negated specification. Each test case is thus a guaranteed counterexample to an incorrect implementation, and the test suite is complete with respect to the decidable fragment of the spec.\", \"probability\": 0.061}, {\"conjecture\": \"The correct approach is to interleave property-based test generation with concolic execution: run the implementation on random inputs, collect the path constraints, and use the specification to solve for inputs that force the implementation into a state where the invariant is on the verge of violation. This combines the coverage of symbolic methods with the scalability of random testing.\", \"probability\": 0.069}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 796,
+      "total_tokens": 979
+    }
+  },
+  "transport_error": null
+}

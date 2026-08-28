@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.004
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-875",
+    "object": "chat.completion",
+    "created": 1787931580,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification into a dependent type whose inhabitants are exactly the implementations that satisfy it, then synthesize code via proof-search inhabitance. Under this approach, the specification literally becomes the type, and any term that type-checks is guaranteed to hold the specification's commitments by construction. Conjecture: this is strictly more reliable than test-based or model-checked generation because it eliminates the extraction gap entirely — the proof object IS the executable code.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 103,
+      "total_tokens": 201
+    }
+  },
+  "transport_error": null
+}

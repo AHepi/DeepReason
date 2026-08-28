@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.266
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-305",
+    "object": "chat.completion",
+    "created": 1787932910,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally-correct change implicitly raises the system's effective specification surface—the set of cross-cutting behavioral constraints that future changes must satisfy to remain correct. Because tests and reviews validate against current requirements rather than this hidden constraint set, each change passes while silently expanding the unobserved specification, so later developers face an ever-growing body of tacit invariants they cannot see and will inevitably violate. Thus brittleness accumulates not from defect propagation but from monotonic growth of invisible coupling that no individual change is responsible for and no local validation can detect.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 122,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

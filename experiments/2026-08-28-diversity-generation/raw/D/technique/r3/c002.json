@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: learn neural policies guided by formal verifier feedback\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.825
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-176",
+    "object": "chat.completion",
+    "created": 1787931978,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Neural policies trained with verifier feedback produce provably correct code from formal specifications only when the feedback signal includes counterexample witnesses rather than mere pass/fail labels; without counterexamples, the policy overfits to verifier heuristics and fails to generalize beyond the training distribution.\", \"probability\": 0.08}, {\"conjecture\": \"The most effective neural policy for specification-to-code synthesis treats the formal verifier as a differentiable layer by approximating its satisfaction gradient through counterexample interpolation, enabling end-to-end policy optimization rather than relying on sparse reward signals.\", \"probability\": 0.07}, {\"conjecture\": \"Speculative decoding guided by a learned verifier-utility model outperforms standard reinforcement learning from verifier feedback by a factor of 5x in sample efficiency, because it concentrates exploration on proof-state regions where the verifier has historically found violations.\", \"probability\": 0.06}, {\"conjecture\": \"Neural code synthesis policies converge to provably correct outputs from abstract specifications if and only if they are trained on a curriculum ordered by specification-theoretic Kolmogorov complexity, starting with low-complexity specs and progressively increasing; random ordering causes the policy to plateau at 60% satisfaction.\", \"probability\": 0.05}, {\"conjecture\": \"The optimal neural policy architecture for verifier-guided code synthesis is a graph neural network over the abstract syntax tree of the specification, not a transformer over linearized text, because the structural correspondence between spec connectives and program constructs is the dominant signal and is obscured by tokenization.\", \"probability\": 0.06}, {\"conjecture\": \"Bootstrapping from a weak verifier to a strong one produces more robust neural policies than training directly on a strong verifier, because the weak verifier provides denser intermediate reward signals that prevent the policy from collapsing to trivial solutions that exploit soundness gaps in the strong verifier.\", \"probability\": 0.04}, {\"conjecture\": \"Neural policies trained with formal verifier feedback generalize to novel specifications only when the verifier is augmented to produce repair suggestions rather than binary verdicts; the repair suggestions provide a causal signal that aligns the policy's exploration with the specification's logical structure.\", \"probability\": 0.07}, {\"conjecture\": \"Multi-turn interaction with a formal verifier, where the policy iteratively refines code based on failed proof obligations, converges to provably correct code with 3x fewer verifier invocations than single-shot generation followed by repair, because the policy learns to anticipate and preempt verifier failures.\", \"probability\": 0.05}, {\"conjecture\": \"A neural policy that decomposes the specification into intermediate lemmas and generates code satisfying each lemma separately outperforms policies that attempt direct spec-to-code synthesis by an order of magnitude on specifications with more than 5 conjuncts, because the decomposition reduces the effective search depth.\", \"probability\": 0.08}, {\"conjecture\": \"The strongest predictor of whether a verifier-guided neural policy will produce code satisfying a held-out specification is not training set size or model capacity, but the diversity of counterexample shapes encountered during training; policies trained on homogeneous counterexample distributions fail to generalize even with 10x more data.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 676,
+      "total_tokens": 859
+    }
+  },
+  "transport_error": null
+}

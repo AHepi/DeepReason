@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.463
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-214",
+    "object": "chat.completion",
+    "created": 1787935219,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus with constructive extracts: each refinement step from abstract specification to implementation is machine-checked, and the proof term literally *is* the executable program. This guarantees commitment-preservation because the code cannot diverge from the spec without breaking the proof.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Property-based test generation from the abstract specification, followed by neural code synthesis constrained by a runtime assertion checker, outperforms formal methods for real-world commitment-holding because it catches the specification-code gap empirically where proofs are too expensive to complete.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The best technique is to compile the abstract specification directly into a constrained execution environment (e.g., a synthesizer over a DSL) where the specification *is* the program — no translation step means no commitment drift. Translation to general-purpose code is inherently lossy.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Iterative refinement via LLM-generated code with automated formal verification feedback loops is the best technique: the LLM proposes code, a verifier checks it against the spec, and failures are fed back. This scales where manual refinement cannot and holds commitments through machine-checked convergence.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Abstract interpretation guided code generation is optimal: the specification defines an abstract semantics, and the generator produces concrete code that is verified to be a sound concretization. The technique holds commitments because soundness of the abstraction is proven before any code runs.\",\n      \"probability\": 0.054\n    },\n    {\n      \"conjecture\": \"The best approach is type-driven development with dependent types: the abstract specification is encoded as a dependent type, and the program is constructed as an inhabitant of that type. Commitments hold by construction because the type checker rejects any code that fails to satisfy the specification.\",\n      \"probability\": 0.081\n    },\n    {\n      \"conjecture\": \"Contract-based code generation with runtime enforcement is the best practical technique: the specification becomes executable pre/post-conditions and invariants that wrap generated code, and violations are caught at runtime. It holds commitments imperfectly but at scale where full verification is infeasible.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with traceable transformation chains is best: each transformation from specification to code is formally defined and traceable, so commitment violations can be localized to specific transformation steps. The traceability is what makes commitments auditable and repairable.\",\n      \"probability\": 0.047\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the specification as an oracle and use program synthesis (CEGIS-style counterexample-guided inductive synthesis) to generate code that provably satisfies the spec across all inputs. The synthesis loop guarantees commitments by construction over the entire input domain.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Specification-monadic code generation is optimal: the abstract specification is embedded as a monadic interface, and generated code is written against that interface. The monad's semantics enforce the specification's commitments at compile time, making violation unrepresentable in the generated code.\",\n      \"probability\": 0.041\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 739,
+      "total_tokens": 910
+    }
+  },
+  "transport_error": null
+}

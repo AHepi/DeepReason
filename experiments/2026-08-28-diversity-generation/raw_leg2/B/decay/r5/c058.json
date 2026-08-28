@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.947
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-646",
+    "object": "chat.completion",
+    "created": 1787937409,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change adds at least one state to the system's effective automaton, and the average shortest input sequence reaching any given state grows as the square root of the number of states. Thus the cost of exercising any specific execution path grows superlinearly, making it impractical to verify interactions between distant states. The system becomes harder to change not because individual paths are broken, but because no feasible test suite can cover enough of the now-exponentially-longer paths to catch new regressions.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 133,
+      "completion_tokens": 108,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

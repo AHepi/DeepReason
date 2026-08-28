@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.591
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-721",
+    "object": "chat.completion",
+    "created": 1787943270,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is to encode the abstract specification as dependent types in a proof assistant like Agda or Lean, so that any well-typed program is automatically correct by construction and its commitments are mechanically verified.\", \"probability\": 0.09}, {\"conjecture\": \"The best technique is to iteratively co-evolve the specification and implementation via property-based testing: the specification is expressed as executable invariants and generators, and the implementation is validated against millions of generated cases, surfacing edge cases that refine both.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is to use refinement types with SMT-based checking, annotating each function with its full contract and letting automated solvers discharge verification conditions without manual proof effort.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is to compile a formal specification language directly to code, treating the specification itself as the primary artifact and generating implementations in multiple target languages, ensuring commitments hold by construction of the compiler.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is model-driven design with automatic code generation from a formal model that has been exhaustively model-checked against temporal logic properties, where generated code is certified to conform to the model.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to train a large language model on the specification, generate candidate implementations, then use an automated theorem prover to verify each candidate against the specification, iterating until proof succeeds.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to structure the specification as a set of executable test oracles derived from abstract requirements, then use genetic programming or search-based optimization to synthesize implementations that pass all oracles, with coverage-guided feedback.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to write the specification as algebraic laws in a language like Maude, execute it directly as a rewrite system, and use the resulting rewrite theory as the production implementation, eliminating the spec-to-code gap entirely.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique is design-by-contract with runtime assertion checking and symbolic execution: each function carries pre/post-conditions that are checked at runtime, while symbolic execution statically verifies critical paths and generates counterexamples for violations.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to express the specification as a set of concurrent communicating state machines, verify their composition via model checking, then synthesize code using established frameworks like BIP or P, where the synthesis preserves verified properties by construction.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 565,
+      "total_tokens": 736
+    }
+  },
+  "transport_error": null
+}

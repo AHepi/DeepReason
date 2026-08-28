@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.075
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-475",
+    "object": "chat.completion",
+    "created": 1787932244,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"directions\": [\"Hidden coupling accumulation via implicit shared invariants\", \"Architecture as thermodynamic entropy over the state space of viable modifications\", \"Cognitive load scaling limit where maintainer working memory exceeds system causal depth\", \"Constraint satisfaction deadlock from overlapping non-composable backwards-compatibility guarantees\", \"Search cost super-linear growth in the dependency graph for safe edit boundaries\", \"Domain shift drift where code's implicit ontology progressively misaligns with the evolved operational environment\"]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 149,
+      "completion_tokens": 97,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: shifting implicit invariants that testing never encodes but changes silently violate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.092
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-69",
+    "object": "chat.completion",
+    "created": 1787933046,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software decays not through the changes that are made, but through the silent obsolescence of assumptions that no longer have any code that exercises them. Each correct modification prunes some execution paths, leaving behind 'orphan invariants' — constraints that were once enforced by now-deleted code but are still trusted by distant components. Tests pass because they assert what the code does, never what the code used to guarantee, so the system accumulates phantom dependencies on guarantees that no living code provides. The eventual failure appears localized but is actually the delayed collapse of a load-bearing assumption whose supporting wall was demolished years earlier, in a change everyone approved.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 143,
+      "total_tokens": 268
+    }
+  },
+  "transport_error": null
+}

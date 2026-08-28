@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic extraction from constructive proofs in dependent languages\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.393
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-44",
+    "object": "chat.completion",
+    "created": 1787942440,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The best technique is proof-by-evaluation: write the dependent type to include a computable correctness predicate, then let the kernel's normalizer extract the witness. This outperforms tactics-based extraction because the extracted term is normal-form-by-construction, eliminating residual reduction obligations. The specification's abstract commitments become literal computational redexes that the type checker evaluates.\", \"probability\": 0.087}, {\"conjecture\": \"Specifications should be written as refinement types over a deep embedding of the target language, with extraction producing a term and a proof that it satisfies the refinement. This two-stage approach decouples the abstract logic from concrete syntax, enabling verification reuse across target languages. The extracted code holds its commitments because the proof is checked against a faithful operational semantics of the target.\", \"probability\": 0.083}, {\"conjecture\": \"The optimal approach is to avoid manual proof entirely: the specification is a dependent type, and the code is the inhabitant found by a complete search over refinement trees. If the search succeeds, the code is correct by construction; if it fails, the specification has no realization. This is superior because it eliminates the gap between proof and program—they are the same object.\", \"probability\": 0.079}, {\"conjecture\": \"Abstract specifications yield the most reliable executable code when encoded as Quotient Inductive-Inductive Types (QIITs) where the constructors are the computational steps and the equality is the specification. Extraction is normalization-by-evaluation. The result holds commitments because executing the code is literally performing the proof's cut elimination, so runtime behavior and verified behavior coincide operationally.\", \"probability\": 0.074}, {\"conjecture\": \"Use the Abstract Interpretation cubical type: the specification is a dependent record of preconditions, postconditions, and a Galois connection to a computable abstract domain. Extraction yields the abstract interpreter; the concrete program is a refinement that the proof guarantees under-approximates the abstract one. This preserves commitments because the abstract domain's structure is itself type-checked.\", \"probability\": 0.071}, {\"conjecture\": \"The best technique is to write the specification as a Higher Inductive Type where points are states and paths are verified transitions. Extraction produces a program that, when run, constructs an element of the HIT. Commitments hold because non-termination or incorrect behavior would fail to construct the required path, making the runtime itself a proof checker.\", \"probability\": 0.068}, {\"conjecture\": \"The dominant technique should be two-level type theory: the specification lives in a strict universe with proof irrelevance, and extraction is the coercion to a relevant universe. This is best because it allows the proof to use non-computational axioms (like function extensionality) freely, while the extracted code is guaranteed computational. Commitments hold because the coercion is validated by a universe-polymorphic eliminator.\", \"probability\": 0.066}, {\"conjecture\": \"Specifications should be encoded as Monadic Dependent Types, where the monad tracks effects and the dependency tracks data-flow. Extraction is the monad's bind sequence. This outperforms pure approaches because it directly models IO and state, and the extracted code's commitments hold by the monad's algebraic laws, which are themselves type-checked proofs.\", \"probability\": 0.063}, {\"conjecture\": \"The optimal extraction technique is to use a modal type theory with a 'code' modality. The specification is proved in the base logic, and extraction is the application of the modality's eliminator. The resulting code holds its commitments because the modality's adjunction guarantees that the extracted term's computational content is exactly the proof's constructive content, with no extraneous terms.\", \"probability\": 0.059}, {\"conjecture\": \"Use dependent game semantics as the specification language. The type is a game, the proof is a winning strategy, and extraction is compiling the strategy to a concrete program. Commitments hold because the game's winning condition is defined type-theoretically, and the compilation preserves the strategy's interaction structure. This subsumes other approaches because games can model any computational effect.\", \"probability\": 0.055}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 886,
+      "total_tokens": 1072
+    }
+  },
+  "transport_error": null
+}

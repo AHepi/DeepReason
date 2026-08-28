@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.296
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-475",
+    "object": "chat.completion",
+    "created": 1787930303,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, and the accumulation of these local optima creates a globally suboptimal configuration space that resists further optimization.\", \"probability\": 0.08}, {\"conjecture\": \"Test suites encode the current behavior as invariant, meaning any change that improves the architecture but alters behavior must also update the tests, creating a high-friction barrier to structural change.\", \"probability\": 0.07}, {\"conjecture\": \"The space of valid changes is a high-dimensional manifold, and each accepted change adds a constraint that reduces the manifold's volume, making it statistically harder to find any valid path to a desired new state.\", \"probability\": 0.06}, {\"conjecture\": \"Code reviews enforce consistency with existing patterns, causing the system to converge on a local design optimum that becomes increasingly expensive to escape as the codebase grows around it.\", \"probability\": 0.05}, {\"conjecture\": \"Every change adds implicit assumptions about the environment, and the number of assumption-laden interfaces grows quadratically with code size, creating an entanglement web where touching any node risks violating unstated contracts elsewhere.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems accumulate hidden state in caches, configuration files, and databases, and this externalized state couples to the code in ways that are invisible to the type system and untestable in unit tests, making changes risky.\", \"probability\": 0.04}, {\"conjecture\": \"The difficulty is fundamentally an information-theoretic problem: the system's entropy increases over time as dependencies accumulate, and the cost of a change is proportional to the amount of information a developer must hold in working memory to verify its safety.\", \"probability\": 0.08}, {\"conjecture\": \"Software systems exhibit path dependence: early design decisions constrain later ones, and because each change was locally rational, the system follows a trajectory into a niche of the design space that is increasingly distant from any alternative architecture.\", \"probability\": 0.07}, {\"conjecture\": \"Changes accumulate technical debt not through poor quality but through the accumulation of special cases, each of which was individually justified, creating a combinatorial explosion of edge cases that any new change must respect.\", \"probability\": 0.06}, {\"conjecture\": \"The system's behavior is an emergent property of component interactions, and as the number of components grows linearly, the number of interaction paths grows combinatorially, so the cost of verifying that a change doesn't break an interaction grows faster than the cost of making the change.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 554,
+      "total_tokens": 729
+    }
+  },
+  "transport_error": null
+}

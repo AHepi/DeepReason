@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: dependency coupling drift measured by eigenvector centrality in static call graphs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.029
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-318",
+    "object": "chat.completion",
+    "created": 1787936548,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"In a static call graph, the eigenvector centrality of the most central nodes increases monotonically over a sequence of locally-correct, individually-tested changes, because each new feature reuses high-centrality modules to minimize immediate implementation risk. This creates a positive feedback loop: highly central nodes accumulate dependencies faster than peripheral nodes, making them disproportionately expensive to modify. The result is that the system's changeability is governed not by total dependency count but by the growing eigenvector centrality gap between core and periphery, which no individual change control can detect or prevent.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 128,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

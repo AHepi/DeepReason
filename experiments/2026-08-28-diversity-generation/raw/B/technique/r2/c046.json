@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Counterexample-guided inductive synthesis over program sketches\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.329
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-195",
+    "object": "chat.completion",
+    "created": 1787931665,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Counterexample-guided inductive synthesis becomes verification-complete when the program sketch is decomposed into a lattice of abstractions where each counterexample triggers a minimal refinement of exactly one lattice element, rather than refining the global sketch. This localizes the inductive generalization to the specific abstraction layer that failed, preventing the synthesizer from overfitting patches to individual counterexamples. The resulting fixed point is guaranteed to satisfy the specification because every abstract interpretation of the sketch is individually proven safe before composition.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 106,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

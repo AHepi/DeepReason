@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 29.147
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-608",
+    "object": "chat.completion",
+    "created": 1787932840,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change introduces implicit assumptions about the behavior of surrounding code. Over time, these assumptions form a dense, invisible dependency network that is not captured by any type system or test suite, making the blast radius of any new change computationally intractable to predict.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software entropy increases because local optimizations greedily reduce immediate complexity at the cost of global architectural symmetry. The system progressively loses its structural invariants, meaning future developers must reason about a growing number of special cases rather than a single generalized abstraction.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Regression tests accumulate as a historical record of past bugs rather than a specification of intended behavior. This creates an ever-growing, over-constrained system where every new change must satisfy an arbitrary and increasingly contradictory set of legacy constraints, paralyzing further evolution.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The maintainers' mental model of the system degrades via intergenerational knowledge loss. Even if the code remains clean, the original design intent is lost, causing subsequent changes to be defensively layered on top of the existing code rather than integrated into its original conceptual framework.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because API boundaries ossify. Even internal interfaces effectively become public APIs as the codebase grows, forcing every change to maintain backward compatibility with unknown consumers, thereby freezing the underlying implementation.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each correctly implemented change slightly shifts the system's center of mass away from its original domain model. Eventually, the codebase models a historical accumulation of business decisions rather than the actual business domain, requiring developers to translate current requirements into an archaic ontology.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Testing and review optimize for local correctness but fail to penalize increases in cyclomatic complexity. Thus, the system undergoes a random walk towards maximum complexity, where the probability of a change causing an unintended side effect approaches 1.0.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The effort required to verify a change scales super-linearly with the size of the codebase due to the combinatorial explosion of execution paths. The system becomes harder to change not because the code is structurally worse, but because the cost of achieving sufficient confidence in a change eventually exceeds the value of making it.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Good engineering practices encourage isolating new features from existing logic to avoid regressions. This causes the system to accrete parallel, slightly-duplicated subsystems rather than refactoring the core, leading to a fragmented architecture where changes must be replicated across multiple silos.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Software systems undergo a form of artificial selection where changes that survive deployment are those that minimize immediate disruption. This selects for conservatism and workaround-heavy implementations, gradually replacing elegant, adaptable architectures with highly coupled, fragile patches.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 717,
+      "total_tokens": 892
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Large language model code generation with runtime assertion monitoring and counterexample-guided feedback\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.215
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-86",
+    "object": "chat.completion",
+    "created": 1787943021,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is a generate-assert-test-refine loop where the LLM emits both code and executable assertions derived from the spec, a lightweight property-based tester fuzzes the assertions, and counterexamples are fed back as natural language prompts for targeted regeneration. This works because the LLM acts as an assertion amplifier—cheaply producing test oracles from informal specs that formal methods cannot—while the runtime monitoring grounds correctness in concrete failures rather than abstract reasoning.\", \"probability\": 0.09}, {\"conjecture\": \"Counterexample-guided feedback only improves commitment-holding when the counterexamples are minimized and localized to the specific failing assertion; feeding raw stack traces or full failing inputs back to the LLM yields no measurable improvement over naive regeneration.\", \"probability\": 0.08}, {\"conjecture\": \"The decisive factor is not the feedback loop but the assertion density: generating code from a spec yields commitments that hold at runtime if and only if the LLM produces at least one assertion per branch in the specification's decision tree, verified by asserting branch coverage during generation rather than after.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to have the LLM translate the abstract spec into a temporal logic formula, use an LTL-to-assertion compiler to produce runtime monitors, and then use LLM-generated candidate implementations that are filtered by monitor violations—counterexamples from the monitor are translated back into spec-language prompts. This outperforms direct code generation because the temporal logic intermediate representation eliminates semantic drift between spec and assertions.\", \"probability\": 0.07}, {\"conjecture\": \"Runtime assertion monitoring with counterexample feedback produces a false sense of correctness: it converges on code that passes the observed assertions but systematically misses spec commitments that the LLM failed to encode as assertions. The technique only holds commitments when paired with a second LLM that adversarially audits the assertion set for spec coverage before any code is generated.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is constrained decoding: the LLM generates code token-by-token with an inline runtime monitor that blocks any token sequence producing an assertion violation at the current partial parse, so counterexamples never materialize and feedback is unnecessary. This is feasible because most spec-relevant assertions can be evaluated on partial ASTs.\", \"probability\": 0.04}, {\"conjecture\": \"Counterexample-guided feedback is most effective when the LLM is prompted to generate counterexamples to its own code before any external testing, creating a self-adversarial loop. The external runtime monitor then only verifies whether the LLM's self-identified counterexamples are real, and the feedback is whether the LLM correctly predicted its own failures rather than the failures themselves.\", \"probability\": 0.03}, {\"conjecture\": \"The technique that best holds commitments is to generate a probabilistic program from the spec, use it to sample likely counterexamples, and feed those to the LLM. This outperforms uniform property-based testing because the generative model of failure is spec-aligned rather than coverage-aligned.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to use the LLM to generate not code but a refinement-type signature from the spec, then use a type-guided synthesizer to produce code, with the LLM only invoked again when the synthesizer reports a type error as a counterexample. The LLM's role is purely to mediate between informal specs and refinement types; it never generates executable code directly.\", \"probability\": 0.02}, {\"conjecture\": \"Commitment-holding is maximized by generating code in a language with first-class contracts (e.g., Eiffel or Racket with contracts) rather than injecting assertions into permissive languages, because the contract system's blame assignment directly produces the structured counterexample feedback the LLM needs. The language choice matters more than the feedback loop design.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 827,
+      "total_tokens": 1017
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated constraint load measured via Kolmogorov complexity of minimal test suites\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.806
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-197",
+    "object": "chat.completion",
+    "created": 1787937823,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The Kolmogorov complexity of the minimal test suite that fully specifies a software system's behavioral contract grows superadditively with the number of accepted changes, because each locally correct modification introduces implicit cross-state constraints that cannot be compressed from existing test cases. This growth in incompressible constraint load is what makes future changes progressively harder: the developer must satisfy an expanding set of interdependent conditions whose minimal description exceeds working memory capacity, regardless of code readability. The hypothesis predicts that systems become measurably 'change-resistant' precisely when the ratio of minimal-test Kolmogorov complexity to source-code Kolmogorov complexity exceeds a critical threshold, not when code complexity alone rises.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 128,
+      "completion_tokens": 147,
+      "total_tokens": 275
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Synthesis via constructive type theory proofs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 42.933
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-747",
+    "object": "chat.completion",
+    "created": 1787931506,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Specifications that are fully constructive—every existentially quantified variable is accompanied by a witness-producing function—synthesize to correct-by-construction code with zero post-hoc verification failures, whereas specifications leaving any existence un-constructive always fail synthesis. The decisive factor is whether the proof term fully inhabits the specification type with no axioms or holes.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Extracting code directly from the computational content of a proof's elimination rules yields executables that satisfy the specification by construction, but only when the target language preserves the strict positivity and universe-level constraints of the source type theory; relaxing these constraints to accommodate practical language features breaks the correctness guarantee.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The minimal sufficient specification form for reliable synthesis is a dependent record type whose fields are the program, the proof of partial correctness, and the proof of termination. Specifications lacking any of these three fields cannot guarantee that synthesized code holds its commitments, regardless of the sophistication of the synthesis procedure.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Synthesis success rate is determined by the ratio of non-computational to computational proof steps. Specifications whose proofs can be completed using only computational rules (beta, delta, iota) achieve near-perfect synthesis, while those requiring non-computational axioms or classical reasoning degrade proportionally to the fraction of non-computational steps.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The most effective technique is to formulate the specification as a Martin-Löf identity type between the desired input-output relation and a constructively defined function graph, then synthesize by proving the identity type's inhabitant. This works because identity type elimination forces the construction of a computational witness that is definitionally equal to the specification.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Synthesis via quotient inductive types—where the specification is an inductive type quotiented by an equivalence relation capturing the program's behavioral contract—produces correct code only when the synthesis procedure constructs a setoid-preserving function. Quotient types without explicit setoid structure yield programs that satisfy the specification up to propositional equality but fail observational equivalence.\",\n      \"probability\": 0.048\n    },\n    {\n      \"conjecture\": \"The critical bottleneck in proof-based synthesis is not proof search complexity but the alignment between the specification's inductive structure and the recursion structure of the target program. Specifications whose induction principle matches the intended recursion scheme synthesize reliably; any mismatch requires auxiliary lemmas whose difficulty grows quadratically with the structural distance.\",\n      \"probability\": 0.044\n    },\n    {\n      \"conjecture\": \"Dependent pattern matching with dependent elimination is the single most effective proof technique for synthesis because it simultaneously constrains the program structure and generates the correctness proof as a byproduct. Synthesis procedures that do not use dependent pattern matching require separate proof construction after program generation, which fails to hold commitments in practice because the program and proof diverge.\",\n      \"probability\": 0.039\n    },\n    {\n      \"conjecture\": \"For any specification expressible in the Calculus of Inductive Constructions, there exists a canonical proof term whose extracted program is optimal in the sense that it contains no computationally irrelevant subterms. Synthesis procedures that find non-canonical proof terms produce programs with dead code or redundant computations that, while correct, fail to hold efficiency commitments.\",\n      \"probability\": 0.035\n    },\n    {\n      \"conjecture\": \"The reliability of synthesis from constructive proofs is monotonically related to the degree to which the specification is formulated as a negative translation ( Gödel-Gentzen style) of a classical specification. Specifications written directly in constructive logic without classical antecedents are easier to prove but harder to synthesize from, because they lack the falsification structure that drives program construction.\",\n      \"probability\": 0.028\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 182,
+      "completion_tokens": 876,
+      "total_tokens": 1058
+    }
+  },
+  "transport_error": null
+}

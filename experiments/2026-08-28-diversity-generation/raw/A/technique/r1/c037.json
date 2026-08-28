@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.502
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-612",
+    "object": "chat.completion",
+    "created": 1787931304,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code is refinement via property-preserving bijections, where each refinement step is mechanically verified to preserve the semantic commitments of the specification. Instead of generating code directly, the specification is refined through a series of calculational steps—each producing an intermediate artifact whose behavior is provably indistinguishable from its predecessor. This transforms the specification-to-code pipeline into a chain of isomorphic transformations, ensuring that the executable result holds its commitments by construction rather than by post-hoc testing.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 117,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

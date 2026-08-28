@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.91
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-43",
+    "object": "chat.completion",
+    "created": 1787935080,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The optimal technique is to compile abstract specifications into code by treating each commitment as a ghost contract embedded directly into the runtime's memory safety layer. This means translating abstract invariants into ownership-type and borrow-checking constraints enforced at compile time, rather than emitting runtime assertions. Code only executes if it provably cannot violate the abstract specification's commitments, collapsing the specification-to-code gap into a single verifiable compilation step.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 94,
+      "total_tokens": 192
+    }
+  },
+  "transport_error": null
+}

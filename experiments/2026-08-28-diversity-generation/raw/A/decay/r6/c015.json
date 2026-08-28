@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.27
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-810",
+    "object": "chat.completion",
+    "created": 1787932477,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems decay not through individual defects, but because each locally-correct change is a biased sample of a high-dimensional design space—preserving the short-term paths developers can see while pruning the alternatives they cannot. Over thousands of commits, this asymmetric sampling collapses the system's design into a fragile local optimum where the remaining accessible mutations are disproportionately those that add epicyclic complexity atop existing constraints, rather than traversing to simpler architectures that would require coordinated, multi-point changes no single review or test cycle can authorize.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 117,
+      "total_tokens": 219
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic erosion of original design intent via developer turnover and undocumented tacit knowledge\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 36.7
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-24",
+    "object": "chat.completion",
+    "created": 1787933126,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change embeds tacit assumptions about the system's invariant structure that are never written down. Developer turnover causes the next maintainer to violate these unstated invariants not because the change is wrong, but because the knowledge that made it correct has departed with the people who held it.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Design intent is a latent variable in the heads of the original architects, and every accepted change is validated against that latent variable through code review. As turnover removes reviewers who carry the latent variable, review converges on local syntactic correctness while design coherence drifts stochastically and irreversibly.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"A long-running codebase accumulates an epistemic debt: the ratio of tacit knowledge required to safely modify the system to the documented knowledge available grows monotonically with each change. This debt is invisible to any single change because each change preserves the tacit knowledge of its author, but compounds across changes as authors leave.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The original design contains a network of constraints where each constraint is enforced by a person who understands why it exists. Developer turnover severs the link between constraint and rationale, so subsequent modifications relax constraints that were load-bearing, not because anyone chose to, but because nobody knows which constraints are load-bearing anymore.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Code review is a knowledge transfer protocol whose bandwidth is bounded by the overlap between the reviewer's and author's tacit mental models. As turnover reduces that overlap, review increasingly validates changes against the code's surface behavior rather than its design intent, causing each accepted change to encode a slightly wrong model of the system.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The difficulty of changing a system is proportional to the fraction of design rationale held only by people no longer present. Each locally correct change is safe only relative to the full rationale, so as the surviving fraction of rationale shrinks, the probability that any given change violates an unheld constraint rises toward one.\",\n      \"probability\": 0.049\n    },\n    {\n      \"conjecture\": \"Design intent is not a document but a shared perceptual frame that lets a team see which changes are structurally relevant. Turnover destroys the frame while preserving the artifacts, so later developers see the code as a collection of local mechanisms rather than a coherent structure, and every change they make is locally coherent but globally incoherent.\",\n      \"probability\": 0.044\n    },\n    {\n      \"conjecture\": \"Every codebase has an implicit dependency graph between design decisions, and each decision node is owned by the person who made it. When that person leaves, the node becomes an orphan: still present in the graph, but with no one who knows its incoming edges. Changes that touch orphaned nodes are made without knowledge of what depends on them, and each such change increases the orphaned fraction.\",\n      \"probability\": 0.038\n    },\n    {\n      \"conjecture\": \"Tacit knowledge in a software team is maintained through a critical mass of overlapping mental models among active developers. Turnover reduces that mass below the threshold where informal correction can occur, after which each change that would previously have been caught as design-incoherent is instead accepted as locally correct, and the system's changeability degrades discontinuously.\",\n      \"probability\": 0.032\n    },\n    {\n      \"conjecture\": \"The original design intent functions as an implicit type system over permissible changes, enforced socially by the people who internalized it. Developer turnover converts the type system from checked to unchecked: no mechanism rejects structurally invalid changes, so the codebase accumulates type errors that manifest as increased coupling and resistance to further modification.\",\n      \"probability\": 0.027\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 195,
+      "completion_tokens": 864,
+      "total_tokens": 1059
+    }
+  },
+  "transport_error": null
+}

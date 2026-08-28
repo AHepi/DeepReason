@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.439
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-104",
+    "object": "chat.completion",
+    "created": 1787931952,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively transform a formal specification into an implementation through correctness-preserving refinement steps. This guarantees the result holds its commitments by construction.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is to compile an abstract specification directly into code via a verified, certifying compiler that emits both the executable and a machine-checkable proof of conformance. The result holds its commitments because the proof is independently checkable.\", \"probability\": 0.072}, {\"conjecture\": \"The most reliable technique is specification-guided fuzzing: generate executable code via any method, then use the abstract specification as a runtime oracle to fuzz-test the implementation until coverage is exhaustive. Commitments hold probabilistically, and with enough fuzzing time, the probability of violation becomes negligible.\", \"probability\": 0.064}, {\"conjecture\": \"The best approach is to embed the abstract specification directly into the executable as runtime assertions and contracts. The code holds its commitments because every specification clause is continuously checked at runtime, making violations impossible to hide.\", \"probability\": 0.058}, {\"conjecture\": \"The best technique is to train a large language model on paired specification-and-implementation data, then use the abstract specification as a prompt. The result holds its commitments because the model learns the distribution of correct mappings from spec to code.\", \"probability\": 0.051}, {\"conjecture\": \"The optimal technique is to treat the abstract specification as a test oracle and use genetic programming to evolve candidate implementations until one passes all generated tests. Commitments hold because the evolutionary pressure directly selects for spec conformance.\", \"probability\": 0.044}, {\"conjecture\": \"The best technique is to translate the abstract specification into a dependently typed language like Agda or Idris, where the type system is expressive enough to encode the full specification. The result holds its commitments because type-checking proves conformance.\", \"probability\": 0.038}, {\"conjecture\": \"The best technique is to generate a concrete implementation from the specification, then use bounded model checking to exhaustively verify all execution paths up to a bound. The result holds its commitments for all inputs within that bound, and unbounded behavior is mitigated by choosing a bound larger than any realistic execution depth.\", \"probability\": 0.032}, {\"conjecture\": \"The best technique is to iteratively generate candidate code via an LLM, verify it against the spec using an automated theorem prover, and feed counterexamples back to the LLM. The result holds its commitments when the prover finds no more proofs of violation.\", \"probability\": 0.027}, {\"conjecture\": \"The best technique is to synthesize the implementation directly from the specification using constraint-based program synthesis. The result holds its commitments because the synthesis algorithm only emits programs that are provably equivalent to the specification.\", \"probability\": 0.022}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 622,
+      "total_tokens": 793
+    }
+  },
+  "transport_error": null
+}

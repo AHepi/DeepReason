@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.122
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-14",
+    "object": "chat.completion",
+    "created": 1787936889,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate implicit invariants—unstated assumptions about behavior that no single module owns and no test checks. Each change adds new invariants while preserving old ones, so the set of constraints any modification must satisfy grows monotonically even though none are written down anywhere.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally correct change slightly increases the coupling between modules, because fixing a problem in one place often requires a compensating adjustment elsewhere. These compensatory links are individually invisible but collectively form a dense network where touching any node ripples through the system in unpredictable ways.\", \"probability\": 0.07}, {\"conjecture\": \"Tests encode the system's current behavior, not its intended design. As the system evolves, tests accumulate around accidental behaviors, making it impossible to change the implementation without breaking tests that have become load-bearing for users, even when the change would improve the design.\", \"probability\": 0.06}, {\"conjecture\": \"Each change to a long-running system is made by someone with less context than the person who made the previous change. Knowledge decays faster than code, so the fraction of the system that nobody fully understands grows over time, and changes are made against an increasingly opaque backdrop.\", \"probability\": 0.06}, {\"conjecture\": \"Software architecture is a path-dependent process where early decisions constrain later ones in ways that compound. Each change is locally optimal given the current structure, but the current structure is the product of all prior local optima, so the system drifts into a region of the design space where good changes become increasingly scarce.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems accumulate error-handling and edge-case code that was added to fix specific failures. This code is never removed because nobody knows if the original failure can recur, so it piles up as a kind of sediment that future changes must navigate around, increasing the effective complexity of every modification.\", \"probability\": 0.05}, {\"conjecture\": \"The abstraction boundaries in a software system erode under pressure. When a deadline approaches, developers reach across boundaries to fix problems directly, and these boundary crossings are never repaired afterward. Over time, the system loses the modularity that once made changes easy to localize.\", \"probability\": 0.05}, {\"conjecture\": \"The cost of a change is proportional to the number of other changes made since the last time someone fully understood the system. Because full understanding is rarely achieved, the cost grows roughly linearly with total changes, and what feels like increasing difficulty is actually accumulated distance from the last moment of clarity.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems become harder to change because each change is optimized for the immediate problem and against the full cost of future changes. This is a time-inconsistency problem: developers rationally discount future costs, so they underinvest in maintaining changeability, and the system gradually locks in.\", \"probability\": 0.04}, {\"conjecture\": \"Software changes are made under uncertainty about which parts of the system matter. Each change adds behavior that might later become load-bearing, but you cannot tell at the time. The system becomes harder to change because the probability that any given modification will disrupt something someone now depends on increases with the number of prior modifications.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 703,
+      "total_tokens": 878
+    }
+  },
+  "transport_error": null
+}

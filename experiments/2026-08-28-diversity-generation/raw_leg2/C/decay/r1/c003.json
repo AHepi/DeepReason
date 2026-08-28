@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.773
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-541",
+    "object": "chat.completion",
+    "created": 1787936400,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change optimizes the system's structure for the current set of requirements. As requirements drift, the accumulated optimizations become anti-optimizations, increasing the friction of future changes.\", \"probability\": 0.07}, {\"conjecture\": \"Reviewers cannot verify absence of hidden coupling, so each approved change introduces implicit links between modules. These links accumulate undetected until they manifest as unexpected breakage during later changes.\", \"probability\": 0.06}, {\"conjecture\": \"Test suites encode past assumptions. Each locally correct change adds tests that constrain future behavior. Over time, the test suite becomes a cage that makes desirable changes appear incorrect.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems accumulate conditionals for edge cases that no longer occur. Each was locally justified, but the system becomes harder to change because every change must navigate dead but un-removable branches.\", \"probability\": 0.08}, {\"conjecture\": \"Knowledge of why the system is structured a certain way decays faster than the structure itself. The system becomes harder to change because developers lose the ability to distinguish load-bearing design from accidental complexity.\", \"probability\": 0.09}, {\"conjecture\": \"Each change is reviewed against the current system, not against future needs. This creates a ratchet: complexity is added when needed but rarely removed when the need passes, monotonically increasing change cost.\", \"probability\": 0.07}, {\"conjecture\": \"Modules become harder to change because each locally correct change adds interfaces, configuration options, and special cases to avoid breaking existing callers. The API surface grows to accommodate all past uses, making future changes expensive.\", \"probability\": 0.06}, {\"conjecture\": \"Every change that is locally correct but not globally optimal shifts the system's architecture toward a local optimum. The distance to the global optimum increases with each change, making large improvements progressively more expensive.\", \"probability\": 0.04}, {\"conjecture\": \"The system's behavior depends on implicit invariants that are never written down. Each locally correct change preserves existing invariants but adds new ones. The growing invariant set makes every future change riskier and slower to verify.\", \"probability\": 0.05}, {\"conjecture\": \"Reviewers approve changes that match familiar patterns. Over time, the system accumulates duplicated, near-duplicate, and divergent implementations of the same concept. Changes become harder because any modification must find and update all variants.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 533,
+      "total_tokens": 708
+    }
+  },
+  "transport_error": null
+}

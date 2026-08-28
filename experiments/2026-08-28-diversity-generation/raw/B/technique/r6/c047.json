@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: specification mining through large language model hallucination filtering\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.109
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-473",
+    "object": "chat.completion",
+    "created": 1787934989,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Large language models can be treated as noisy specification oracles rather than code generators: by prompting an LLM to produce many candidate formal postconditions for a function from its natural-language description, then filtering those candidates via differential testing against a small set of generated input-output examples, we obtain a coherent set of verifiable commitments. Code generation then proceeds against the filtered specification using a traditional solver or synthesizer, guaranteeing the output satisfies the recovered postconditions. The central claim is that hallucinated postconditions which survive differential filtering are substantially more likely to be semantically faithful to the original intent than unfiltered LLM outputs, and that synthesizing against them yields code that holds its commitments more reliably than direct LLM code generation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 152,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.479
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-573",
+    "object": "chat.completion",
+    "created": 1787941174,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is bidirectional refinement via proof-producing property-based testing: the specification and implementation co-evolve by treating the spec as an oracle that generates shrinking counterexamples whenever the code violates it, with each fix to the code tightened by a machine-checked proof that the counterexample class is eliminated. This outperforms any one-directional pipeline (spec → code, or spec → proof → code) because the shrinking counterexamples expose exactly those edge cases where the abstraction under-specifies, forcing the spec itself to become constructive. The result holds its commitments because every accepted implementation is, by construction, a fixed point of the spec's own generated test distribution plus a proof certificate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 143,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

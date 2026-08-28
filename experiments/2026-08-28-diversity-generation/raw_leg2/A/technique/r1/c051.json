@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.66
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-151",
+    "object": "chat.completion",
+    "created": 1787941226,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for generating code that upholds its abstract specification is automated proof-search over a dependently typed core, where the specification is encoded as a type and the code is synthesized as an inhabitant of that type. This forces adherence to the specification as a mathematical necessity, rather than relying on post-hoc testing or probabilistic reasoning. The resulting executable is correct-by-construction, limited only by the fidelity of the original type-theoretic encoding of the problem domain.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 104,
+      "total_tokens": 202
+    }
+  },
+  "transport_error": null
+}

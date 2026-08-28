@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 40.604
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-527",
+    "object": "chat.completion",
+    "created": 1787937214,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy increases because each locally correct change optimizes for immediate constraints rather than global system topology. The system's state space fragments as independent decisions accumulate, making it exponentially harder to reason about the effects of any new change.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems become rigid because dependencies form a directed graph that densifies over time. Each change adds edges to this graph until the system reaches a state where most modifications require touching an unbounded number of nodes to maintain consistency.\", \"probability\": 0.07}, {\"conjecture\": \"The knowledge graph representing a system's design intent and its actual implementation diverges over time. Locally correct changes are made without updating this global graph, increasing the semantic distance between the two and making every new change require costly reconciliation.\", \"probability\": 0.06}, {\"conjecture\": \"Every change introduces hidden assumptions about the system's current state. These assumptions compound, creating a large, implicit state machine that developers must mentally simulate to make safe changes, increasing cognitive load and error rates over time.\", \"probability\": 0.09}, {\"conjecture\": \"The system's configuration space expands orthogonally with each change, creating an exponentially growing number of untested states. The system becomes harder to change because the probability of a new change triggering an untested, failure-prone state increases with the size of the configuration space.\", \"probability\": 0.05}, {\"conjecture\": \"Software systems become harder to change because each change adds a layer of historical context. The system's behavior becomes an emergent property of this accumulated history, not just its current code, making the impact of new changes unpredictable without understanding the full sequence of past decisions.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems become resistant to change because each modification adds invariants. These invariants form an interdependent network that becomes increasingly brittle. The cost of a change is proportional to the number of invariants it might violate, which grows over time.\", \"probability\": 0.08}, {\"conjecture\": \"The system's code, designed for one set of requirements, accrues 'conceptual debt' as it's adapted for new ones. The cost of change increases as developers must navigate this debt, reconciling the system's original design with its current purpose, a cost not captured by local correctness.\", \"probability\": 0.07}, {\"conjecture\": \"Every change to a long-running system is a local optimization that moves it further from a globally optimal design. The system's fitness landscape becomes rugged, and the probability that a new change will be a local optimum that degrades global fitness increases with the number of past changes.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems develop a 'deep structure' of implicit, non-local couplings that are not represented in the code itself. These couplings, formed by shared history and developer mental models, make the system appear simple but behave complexly, increasing the risk of unexpected side effects from any change.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 650,
+      "total_tokens": 825
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: irreducible architectural decisions as path-dependent constraints on future state transitions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.306
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-756",
+    "object": "chat.completion",
+    "created": 1787933011,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct software change constitutes a transition in a state space whose topology is shaped by past architectural decisions, and these decisions function as irreversible constraints that eliminate entire neighborhoods of future reachable states. The set of viable next-states contracts monotonically with each transition because architectural choices create coupling topologies that cannot be reversed without simultaneous coordinated changes across all coupled components—moves that are individually irrational under local optimization. Thus software aging is not accumulation of defects but path-dependent contraction of the reachable state manifold: the system becomes harder to change not because any single change is wrong, but because the intersection of all prior architectural commitments leaves only a vanishing set of transition options that satisfy all existing constraints simultaneously.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 144,
+      "total_tokens": 268
+    }
+  },
+  "transport_error": null
+}

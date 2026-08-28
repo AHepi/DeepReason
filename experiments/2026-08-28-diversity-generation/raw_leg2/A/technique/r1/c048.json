@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.787
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-342",
+    "object": "chat.completion",
+    "created": 1787941233,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique for turning an abstract specification into executable code is to compile it through a chain of mechanical, semantics-preserving transformations—each step generating machine-checkable proof obligations—rather than attempting direct translation. Concretely, this means encoding the specification in a dependently typed language where the type-theoretic obligations enforced at each refinement step are precisely the semantic commitments of the specification. The resulting executable is then correct-by-construction because its type signatures constitute a complete proof that the implementation refines the original abstract specification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 112,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

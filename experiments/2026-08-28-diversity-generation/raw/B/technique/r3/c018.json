@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic compilation with dependent contract witnesses\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.545
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-509",
+    "object": "chat.completion",
+    "created": 1787931873,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is a type-theoretic compilation pipeline that translates an abstract specification into dependent Π- and Σ-types, emitting each proof obligation as a compile-time witness that must be discharged. This guarantees the executable code holds its commitments by making their violation a type error, statically binding the runtime behavior to the abstract specification. The resulting binary is therefore correct-by-construction relative to its spec, limited only by the trust boundary of the proof checker.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 98,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

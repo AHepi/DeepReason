@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Graph-theoretic distance decay between frequently co-modified dependency clusters\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.499
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-992",
+    "object": "chat.completion",
+    "created": 1787932673,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The graph-theoretic distance between dependency clusters that are frequently co-modified decays toward zero over time, forming dense cliques that trap unrelated changes and force developers to touch unrelated modules, increasing the cognitive cost of every subsequent modification.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"As systems evolve, the shortest-path distance between any two frequently co-modified clusters converges to 1 or 2, meaning the dependency graph loses its hierarchical structure and becomes a flat mesh where local changes propagate globally.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Long-running systems exhibit an inverse relationship between cluster modularity and co-modification frequency: the more often two clusters are changed together, the faster the graph distance between them decays, eventually merging them into a single de-facto cluster with no clean seam.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The rate of graph-distance decay between co-modified clusters is proportional to the logarithm of the number of intermediate dependencies, meaning systems with initially deep dependency chains collapse faster than those with shallow ones, because each co-modification creates shortcut edges that bypass intermediaries.\",\n      \"probability\": 0.054\n    },\n    {\n      \"conjecture\": \"Once the graph distance between two co-modified dependency clusters drops below a critical threshold (approximately 3 edges), the probability that the next change will require modifications to both clusters simultaneously exceeds 0.5, creating a self-reinforcing feedback loop that accelerates further distance decay.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Each locally correct, reviewed, tested change that co-modifies two clusters adds at least one edge to the dependency graph, and the accumulated edges cause the average graph distance between all cluster pairs to decay monotonically, reducing the system's ability to localize future changes.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The graph-distance decay between co-modified clusters follows a power law with respect to system age, such that the marginal increase in change difficulty accelerates over time rather than growing linearly, because each new edge has a higher probability of connecting previously distant clusters.\",\n      \"probability\": 0.047\n    },\n    {\n      \"conjecture\": \"Clusters that are never directly co-modified still experience graph-distance decay indirectly, because co-modifications among intermediate clusters create new edges that shorten paths between all cluster pairs, meaning the system's modularity erodes even in regions where no direct changes occur.\",\n      \"probability\": 0.039\n    },\n    {\n      \"conjecture\": \"The decay in graph-theoretic distance between co-modified clusters is irreversible under normal development practices: removing edges (e.g., deleting dead code) is orders of magnitude rarer than adding them, so the graph undergoes a biased random walk that monotonically decreases inter-cluster distances.\",\n      \"probability\": 0.066\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the graph-distance decay between co-modified clusters destroys the contract boundaries between them: once distance drops below 2, the clusters share direct dependencies and can no longer be reasoned about independently, making every change a global reasoning task.\",\n      \"probability\": 0.058\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 739,
+      "total_tokens": 931
+    }
+  },
+  "transport_error": null
+}

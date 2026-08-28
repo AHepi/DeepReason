@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.301
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-748",
+    "object": "chat.completion",
+    "created": 1787934848,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is to compile the specification into refinement types plus a set of equational laws, then synthesize code via type-directed search constrained by those laws—because doing so makes every commitment a proof obligation. If the type system rejects a candidate program, it is not merely a warning; it is a hard refutation of a broken commitment. The synthesis step is thus a search over implementations that inhabit the refined types and discharge the laws, yielding code that is correct-by-construction rather than correct-by-testing.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 115,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

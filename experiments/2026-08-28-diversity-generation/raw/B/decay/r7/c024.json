@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic opacity of emergent execution paths under causal erasure\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.797
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-544",
+    "object": "chat.completion",
+    "created": 1787932772,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become harder to change because their behavioral guarantees are produced by emergent execution paths whose causal history is erased at every commit boundary. Each change is locally correct against an explicitly tracked causal subgraph, but it implicitly perturbs an untracked supergraph of runtime interactions that are only observable transiently and never recorded. As the system runs, stable behavior comes to depend on equilibria among these erased paths, so any new change targets a system whose actual causal structure is epistemically opaque to all maintainers.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 112,
+      "total_tokens": 237
+    }
+  },
+  "transport_error": null
+}

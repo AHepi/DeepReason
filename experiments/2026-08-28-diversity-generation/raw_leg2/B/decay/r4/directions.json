@@ -1,0 +1,8 @@
+[
+  "Implicit invariants accumulate in unmodeled gaps between modules",
+  "Dependency entropy monotonically increases under locally rational edits",
+  "Test suites overfit to historical implementations, masking valid refactorings",
+  "Cognitive load grows with the semantic distance between domain and code",
+  "Change amplification emerges from coupled state spaces lacking algebraic decomposition",
+  "Technical debt compounds via delayed feedback loops in the deployment pipeline"
+]

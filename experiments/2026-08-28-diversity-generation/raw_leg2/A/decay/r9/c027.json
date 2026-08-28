@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.038
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-998",
+    "object": "chat.completion",
+    "created": 1787938229,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade not through the accumulation of bad changes, but through the silent loss of executable specifications: each locally correct modification optimizes for immediate constraints without updating encoded invariants, causing the system's implicit contract to drift from its implementation. Because tests only validate the current execution path rather than the full behavioral space, this drift is invisible until a future change assumes the original, now-falsified specification. The system thus becomes rigid not because its structure is wrong, but because no reliable map remains to predict the blast radius of the next edit.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 116,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

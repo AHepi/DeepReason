@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.579
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-273",
+    "object": "chat.completion",
+    "created": 1787938143,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes the system's structure for current requirements, creating a path-dependent architecture where the cost of any future change is proportional to how much it contradicts the accumulated design decisions of the past, not the complexity of the change itself.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Testing and code review enforce local correctness but are structurally blind to latent assumptions: every change encodes implicit invariants about the environment, and these invariants accumulate across the codebase until any new change must reverse-engineer and satisfy all of them simultaneously.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The system's maintainability degrades because each change adds a small amount of coupling between modules, and this coupling is never removed because decoupling has no immediate business value, so the system's change cost grows as the integral of all past changes rather than as a function of current complexity.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Locally correct changes gradually shift the system's tacit knowledge boundary: the knowledge required to safely make a change moves from being encoded in the code itself to being held in the heads of experienced developers, so the system becomes harder to change as the ratio of tacit-to-explicit knowledge increases.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The problem is a dimensionality trap: each correct change adds a new requirement dimension to the system, and future changes must satisfy all previous dimensions simultaneously, so the cost of changes grows combinatorially with the number of past changes even when each individual change is trivial.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each reviewed, tested change adds an abstraction boundary that future changes must respect, and the number of boundaries any change crosses grows over time, creating an O(n) communication cost per change where n is the number of abstraction layers the change touches.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Every locally correct change is selected for immediate fitness but carries a hidden entropy cost in the form of design decision residue, and this residue accumulates because no mechanism exists to select against future rigidity, so the system undergoes irreversible entropy accumulation analogous to the second law of thermodynamics.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The difficulty arises because each correct change creates a precedent: it establishes a pattern that subsequent changes are expected to follow, and the accumulated weight of precedents eventually constrains the solution space so tightly that any new change requires either violating a precedent or incurring disproportionate cost to honor all of them.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because each locally optimal change encodes a specific model of the problem domain, and as requirements evolve, the accumulated models diverge from the real domain, so the cost of any change includes the hidden cost of reconciling the system's accumulated wrong models with reality.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each tested change implicitly narrows the test suite's coverage of the change space: tests validate specific behaviors, so each change makes the system safer against known risks but more fragile against unknown ones, and the growing set of untested interactions makes every new change riskier.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 774,
+      "total_tokens": 949
+    }
+  },
+  "transport_error": null
+}

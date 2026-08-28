@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.64
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-592",
+    "object": "chat.completion",
+    "created": 1787930545,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate constraints, causing the system's architecture to drift towards a local minimum that is structurally far from any globally optimal configuration. Escaping this minimum requires increasingly large, coordinated refactors to traverse the valleys of the design landscape.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The accumulation of implicit dependencies creates an unobserved constraint graph that grows stochastically with each change. The difficulty of modification increases logarithmically with the size of this hidden graph because developers must discover and traverse non-obvious edges to ensure local correctness.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every correct change adds a new constraint to the system by hardening assumptions about how existing components behave. The cost of future changes grows linearly with the density of these ossified assumptions because each new feature must navigate a strictly smaller viable design space.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Software architecture is a thermodynamic system where every local change minimizes immediate energy but increases global entropy. The system becomes harder to change because extracting useful work from a high-entropy codebase requires exponentially more effort to isolate the relevant signal from the noise.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"As a system evolves, its abstraction layers leak implementation details faster than they are repaired, causing a buildup of non-local coupling. Modification difficulty scales with the surface area of these leaks, as developers must simultaneously patch the abstraction and its concrete manifestations across the system.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems develop a highly non-linear sensitivity to perturbations, analogous to criticality in physical systems. Small changes become difficult because the probability of triggering a cascading failure in distant, coupled modules grows exponentially with the system's historical throughput of successful patches.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The system's architecture fragments into an unmanaged patchwork of local sub-languages and micro-conventions. The cognitive cost of a change grows combinatorially because developers must context-switch between and reconcile these heterogeneous dialects to make a globally correct modification.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Because every change is locally correct, the system accumulates a high density of viable but mutually incompatible local structures. The cost of change scales with the friction of forcing these independent structures to cooperate, requiring exponential integration effort as the count of local structures increases.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The graph of valid execution paths in a long-running system grows exponentially over time, but the test suite only samples a shrinking percentage of these paths. Changes become harder because the probability of an untested execution path regressing approaches certainty, requiring manual exhaustiveness to ensure safety.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Changes optimize for current developer convenience, heavily favoring the extension of existing interfaces over their simplification. The ratio of interface surface area to internal utility increases asymptotically, meaning future changes must route through a massive, inflexible API layer that adds constant overhead to every modification.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 728,
+      "total_tokens": 903
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cognitive load limits bound the maximum maintainable call-graph span\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.956
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-508",
+    "object": "chat.completion",
+    "created": 1787938424,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"A system becomes unmaintainable when its call-graph span exceeds the number of modules a single developer can simultaneously hold in working memory (~7±2), because no individual can verify the downstream consequences of a local change.\", \"probability\": 0.08}, {\"conjecture\": \"The hardness of changing a system grows superlinearly with call-graph diameter because the cognitive cost of validating a change requires tracing every path from the modified node to all reachable leaves.\", \"probability\": 0.07}, {\"conjecture\": \"Software entropy is governed by a critical threshold: once the call-graph span exceeds the cognitive chunk limit, defect injection rates jump discontinuously because developers switch from reasoning to guessing.\", \"probability\": 0.06}, {\"conjecture\": \"Microservices delay but do not prevent decay because the total distributed call-graph span still grows until it exceeds the cognitive capacity of any single team's working memory.\", \"probability\": 0.05}, {\"conjecture\": \"Code is maintainable only if the longest dependency path from any entry point fits within Miller's 7±2 limit; beyond that, the probability that a reviewer can mentally simulate all execution paths drops below chance.\", \"probability\": 0.04}, {\"conjecture\": \"Technical debt accumulates at a rate proportional to the gap between actual call-graph span and the cognitive span limit, because each unbounded path forces a developer to rely on incomplete mental models.\", \"probability\": 0.03}, {\"conjecture\": \"Refactoring effectiveness has a hard ceiling: reducing local cyclomatic complexity cannot restore maintainability if the global call-graph span still exceeds human working-memory capacity.\", \"probability\": 0.02}, {\"conjecture\": \"The 'big ball of mud' pattern is an inevitable equilibrium state for any system whose call-graph span exceeds the cognitive chunk limit, because developers can no longer reason about boundaries and stop trying to enforce them.\", \"probability\": 0.02}, {\"conjecture\": \"Test suites substitute for cognitive capacity but degrade in coverage proportionally to the ratio of call-graph span to working-memory limit, because test authors can only model paths they can mentally trace.\", \"probability\": 0.01}, {\"conjecture\": \"The observed difficulty curve of long-running systems is driven by call-graph fan-out at depth, not depth alone; the product of branching factor and path length must stay below a cognitive threshold or the system crosses into an irreversibly opaque state.\", \"probability\": 0.01}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 523,
+      "total_tokens": 713
+    }
+  },
+  "transport_error": null
+}

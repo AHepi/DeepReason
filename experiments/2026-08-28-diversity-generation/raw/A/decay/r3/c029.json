@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.613
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-841",
+    "object": "chat.completion",
+    "created": 1787930387,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems decay not through incorrect changes, but through the accumulation of missing possibilities: each locally correct decision prunes the space of future architectures by leaving implicit assumptions that no test or review captures. The system becomes harder to change because the visible code is merely the terminal node of a vast, undocumented tree of discarded alternatives whose roots still constrain the surviving logic. Thus, rigidity emerges from the invisible weight of what was never built.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 94,
+      "total_tokens": 196
+    }
+  },
+  "transport_error": null
+}

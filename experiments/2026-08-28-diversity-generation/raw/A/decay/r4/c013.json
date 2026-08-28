@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.914
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-867",
+    "object": "chat.completion",
+    "created": 1787932058,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become harder to change because each locally correct modification implicitly constrains the space of *future* modifications by adding hidden coupling between distant modules. These constraints are never documented because no single developer or reviewer can perceive the transitive dependency surface created by the interaction of dozens of individually sensible decisions. The growing difficulty is therefore a thermodynamic accumulation of unobserved architectural constraints, not a failure of individual change quality.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 91,
+      "total_tokens": 193
+    }
+  },
+  "transport_error": null
+}

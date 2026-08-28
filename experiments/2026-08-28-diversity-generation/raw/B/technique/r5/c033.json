@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: dependent type theory with total functions and extraction\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.378
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-657",
+    "object": "chat.completion",
+    "created": 1787934695,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A specification can be compiled to correct-by-construction executable code by representing every abstract commitment as a dependent type whose indices encode the proof obligations, then extracting the computational content via a realizability-preserving erasure that strips proofs but retains the dependent indices as runtime assertions. The extracted code holds its commitments precisely when the erasure is type-preserving under the stratified fragmentation of the calculus, guaranteeing that every total function denoted by the specification realizes a witness of its own type-indexed contract.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 107,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

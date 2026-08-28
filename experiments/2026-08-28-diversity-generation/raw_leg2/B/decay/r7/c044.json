@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ossification of execution paths through reinforcement of high-traffic runtime trajectories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.888
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-172",
+    "object": "chat.completion",
+    "created": 1787937867,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In long-running software systems, execution paths that handle high traffic volumes become disproportionately reinforced through repeated runtime traversal, creating emergent behavioral contracts that are invisible in static code analysis. As these hot trajectories accumulate implicit dependencies on timing, caching effects, and state ordering, any change that locally appears correct will violate these ossified runtime invariants, making the system progressively harder to modify without triggering failures in untested but heavily-trafficked paths.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 94,
+      "total_tokens": 220
+    }
+  },
+  "transport_error": null
+}

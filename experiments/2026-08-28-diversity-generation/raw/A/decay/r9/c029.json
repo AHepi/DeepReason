@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.466
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-569",
+    "object": "chat.completion",
+    "created": 1787933172,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate what I call \\\"implicit coupling debt\\\"—unstated dependencies between modules that are never represented in code, tests, or architecture diagrams, but are created every time a developer relies on an incidental property of another component's behavior. Each locally correct change permutes the set of these latent invariants, so the space of safe modifications shrinks combinatorially while the cost of verifying any new change grows with the total number of prior changes, not with the visible complexity of the code. The system becomes harder to change because the true dependency graph diverges further from the documented one with every commit, until the only safe operations are those that reproduce previously observed inputs and outputs exactly.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 149,
+      "total_tokens": 251
+    }
+  },
+  "transport_error": null
+}

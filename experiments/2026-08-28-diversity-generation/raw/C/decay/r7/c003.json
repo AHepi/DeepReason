@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 16.459
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-169",
+    "object": "chat.completion",
+    "created": 1787932827,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The Shannon entropy of the dependency graph continually increases because locally optimal changes minimize immediate integration cost by adding new edges rather than refactoring existing paths. This monotonically increases the average coupling between modules, raising the expected blast radius of any future change and thus the cognitive cost of verifying its safety.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate functional requirements while ignoring the system's latent design invariants. Over time, the accumulated divergence between the implemented architecture and the implicit conceptual model creates a semantic debt where the cost of change is dominated by the effort required to discover which undocumented invariants will be violated.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Test suites act as an evolutionary ratchet that encodes specific implementation details rather than abstract behavioral contracts. As tests accumulate, they constrain the space of permissible refactorings to those that preserve exact internal states, progressively freezing the implementation and making architectural improvements prohibitively expensive to verify.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software systems undergo a process analogous to thermodynamic entropy increase: each reviewed change dissipates contextual knowledge that was present in the original design but is not captured in the code or documentation. This lost information is irrecoverable without disproportionate effort, meaning future maintainers must operate under increasing uncertainty about the system's intended behavior.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The difficulty of change grows in proportion to the number of distinct stakeholder intents encoded in the system, which increases monotonically as new features are added. Because each change is validated only against the currently active stakeholder group, prior intents become orphaned constraints that silently resist modifications, creating a combinatorial explosion of hidden compatibility requirements.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each locally correct patch introduces incidental dependencies that are never pruned, causing the dependency graph to undergo percolation. Once the edge density crosses a critical threshold, the system enters a single connected component where no module can be modified in isolation, making the cost of every change scale with total system size.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Code review processes inherently optimize for the minimization of local defect risk, which biases changes toward conservative, additive modifications rather than structural simplifications. This creates an anti-refactoring ratchet where the expected size and complexity of any change grows monotonically, as developers must navigate an increasingly convoluted context to ensure their addition is locally correct.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Maintainers possess a finite capacity for mental modeling, and each change introduces a bounded amount of irreducible complexity that must be held in working memory to safely modify the system. Once the total system complexity exceeds the maximum capacity of any individual maintainer, the cost of change becomes dominated by the overhead of distributed cognition—the effort required to reconstruct a coherent mental model across a team.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The system's state space grows super-linearly with each change, while the test suite's coverage of that state space grows at best linearly. This causes the probability of encountering an untested, failure-inducing state during any modification to increase over time, manifesting as a higher perceived difficulty of change driven by the escalating risk of regressions.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every change introduces a small amount of semantic drift—the gap between the names of abstractions and their actual evolved behavior. This drift accumulates because reviews check functional correctness but not lexical-semantic alignment, eventually rendering the codebase's vocabulary systematically misleading and forcing developers to reverse-engineer true behavior rather than rely on named abstractions.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 864,
+      "total_tokens": 1039
+    }
+  },
+  "transport_error": null
+}

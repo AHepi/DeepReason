@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic accretion: each locally rational change monotonically increases Shannon entropy of the configuration space, bounding navigability\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.766
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-6",
+    "object": "chat.completion",
+    "created": 1787938295,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally rational change to a software system encodes a new conditional dependency between components, monotonically increasing the Shannon entropy of the system's effective configuration space by expanding the set of reachable but unintended states. This entropy growth is irreversible without external information: even when every individual change is reviewed and tested, the joint probability mass diffuses across a state space whose dimensionality grows faster than documentation can constrain it. Consequently, navigability—defined as the mutual information between a maintainer's intent and the minimal path through configuration space—declines monotonically, because the entropy accreted by thousands of locally correct decisions eventually exceeds any developer's channel capacity to reconstruct the system's constraint graph.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 138,
+      "completion_tokens": 146,
+      "total_tokens": 284
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.988
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-718",
+    "object": "chat.completion",
+    "created": 1787931943,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement types with proof terms: encode the abstract specification as a dependent type, and the executable code as a term inhabiting that type. The commitment is held by construction, not by after-the-fact testing.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is denotational design: assign the specification a mathematical denotation (e.g., a Galois connection between concrete and abstract states) and implement the program as a concrete approximation that provably refines the abstract semantics. Refinement is the only bridge that preserves commitments.\", \"probability\": 0.075}, {\"conjecture\": \"The best technique is property-based generative testing with shrinking, where the specification is expressed as a set of executable properties and the test framework automatically searches for counterexamples. The commitments hold probabilistically, and this is sufficient because deterministic proof does not scale to real software.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is model-based synthesis: provide the abstract specification as a logical formula and use an SMT-backed synthesizer to generate code that is correct by construction. The synthesizer's proof obligation discharge is what holds the commitment.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is constructive type theory with extraction: write the specification as a theorem in a proof assistant, prove it constructively, and extract executable code from the proof term. The extracted code holds its commitments because the proof term is computational.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is contract-based design with runtime assertion checking: specify preconditions, postconditions, and invariants in the implementation language itself, and enforce them at runtime. The commitments are held by the runtime monitor, which fails loudly on violation.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is algebraic specification and equational reasoning: define the abstract specification as an algebraic theory (signatures + equations), implement concrete algebras, and verify correctness by checking that the implementation satisfies the equational laws. The equations are the commitments, and algebraic structure makes verification tractable.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is bisimulation-based refinement: model the abstract specification as a labeled transition system, model the implementation as another, and prove a bisimulation relation between them. The commitments are preserved because bisimulation guarantees behavioral equivalence.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is large language model code generation followed by automated verification against the formal specification: the LLM generates candidate implementations, and a separate verifier checks each against the spec, iterating until one passes. The separation of generation and verification is what holds the commitments.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is monotonic data refinement with simulation relations: express the specification as an abstract state machine, implement a concrete state machine, and prove a forward simulation from concrete to abstract. The simulation relation is the invariant that carries commitments across the refinement step.\", \"probability\": 0.035}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 660,
+      "total_tokens": 831
+    }
+  },
+  "transport_error": null
+}

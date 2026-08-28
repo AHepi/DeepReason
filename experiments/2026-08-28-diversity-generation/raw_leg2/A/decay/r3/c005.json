@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.75
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-206",
+    "object": "chat.completion",
+    "created": 1787936661,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The accumulation of locally correct changes creates an irreducible web of implicit, cross-cutting invariants that exist only in the execution state, not in the code. Because these invariants are never explicitly represented, tests and reviews validate only local behavior, leaving each new change to unknowingly satisfy an ever-growing space of invisible global constraints. The system becomes harder to change not because the code is complex, but because the ratio of implicit, unexpressed constraints to explicit code continuously increases.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 104,
+      "total_tokens": 206
+    }
+  },
+  "transport_error": null
+}

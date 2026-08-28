@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.894
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-546",
+    "object": "chat.completion",
+    "created": 1787933279,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software rot is fundamentally a thermodynamic process: each locally-correct change increases the system's overall entropy by creating constraints that narrow the space of future valid modifications. Because developers optimize locally to minimize immediate effort, they inevitably select high-coupling solutions that structurally trap the system, making global reorganization exponentially harder over time regardless of review quality.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The degradation is driven by information loss: as the original developers leave, tacit knowledge about why structural boundaries exist is not fully captured in code or documentation. Subsequent developers make locally correct changes that inadvertently violate these unwritten invariants, accumulating architectural debt that makes the system increasingly fragile and resistant to further change.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each change optimizes for immediate local correctness while ignoring the global coupling cost, systematically increasing the ratio of dependencies to isolated modules. This creates an asymptotic approach to maximum entropy in the dependency graph, where the cost of safely predicting the side effects of any new change grows combinatorially.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The phenomenon is a selection bias artifact: in any sufficiently large codebase, the easiest changes to make, review, and test are those that add special-case branching logic rather than those that refactor the core abstraction. Over thousands of iterations, this survivorship bias naturally starves the core abstractions of updates while bloating the periphery, calcifying the architecture.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Test suites themselves are the primary cause of ossification. As a system ages, its test suite grows to enforce specific implementation behaviors rather than abstract requirements, creating a rigid behavioral cage. Any structural improvement that alters the implementation, even if functionally superior, becomes too expensive to verify because it requires rewriting thousands of coupled tests.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Architectural degradation is a consequence of misaligned finite horizons: human reviewers and automated tests can only validate changes against known past requirements and immediate future needs. Thus, changes are approved based on a truncated view of the system's state space, slowly accumulating local optimizations that are globally suboptimal across a timescale no single stakeholder can perceive.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Systems become harder to change because of implicit state accumulation. Each locally correct feature adds hidden state variables that interact with existing ones in ways that are computationally tractable to execute but intractable to fully model mentally. The difficulty of change grows proportionally to the number of possible state transitions, which expands combinatorially with every added feature.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is an instance of the exploring-exploitation dilemma where long-running projects become trapped in an exploitation phase. Early architectural decisions form a local optimum, and because the cost of exploring the design space (large-scale refactoring) is immediately prohibitive compared to local patches, the system becomes increasingly stranded in a suboptimal basin of attraction.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Codebases degrade like ecosystems undergoing succession: early successional 'pioneer' code is fast-growing and adaptable, but as it matures, it forms a dense canopy of dependencies that prevents the growth of new, structurally distinct ' climax' architectures. The system stabilizes by eliminating the very niches required for radical architectural adaptation, locking in the original structural paradigm.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The ossification is a mathematical inevitability of requirement drift in a fixed ontology. The original system encodes a specific model of the world, and every subsequent change patches this model to accommodate new realities. Because the foundational ontology remains static, the complexity of the translation layer between the real world and the codebase grows linearly with every change, eventually outweighing the core logic.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 904,
+      "total_tokens": 1079
+    }
+  },
+  "transport_error": null
+}

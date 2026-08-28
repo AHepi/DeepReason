@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain language and architectural vocabulary creating irreversible translation layers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.622
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-428",
+    "object": "chat.completion",
+    "created": 1787932194,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-correct change forces a micro-translation between the system's architectural vocabulary (interfaces, schemas, module names) and the evolving domain language, and these translations accrete into an irreversible sediment layer because later changes bind to the translation terms rather than re-deriving from domain semantics. The growing impedance mismatch makes every new change require updating both the domain model and the accumulated translation layer, so the cost of change grows with the translation surface area rather than with the logical complexity of the new feature. This layer can never be cleanly removed because downstream dependencies have already anchored themselves to the intermediate vocabulary, making the drift structurally irreversible.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 134,
+      "total_tokens": 258
+    }
+  },
+  "transport_error": null
+}

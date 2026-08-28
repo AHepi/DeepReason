@@ -1,0 +1,54 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": null,
+      "elapsed_s": 22.527
+    },
+    {
+      "attempt": 2,
+      "http_status": 200,
+      "elapsed_s": 11.373
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-416",
+    "object": "chat.completion",
+    "created": 1787935046,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement through constructive type theory, where each refinement step produces a machine-checked proof that the implementation satisfies the specification. This guarantees commitments are held by mathematical construction, not testing.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Neurosymbolic synthesis—where a large language model generates candidate code and a constraint solver verifies it against the formal specification—will outperform purely deductive or purely neural approaches. The LLM handles the search space; the solver enforces commitments.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is property-based test generation directly from the abstract specification, treated as an oracle, iterated until convergence. This is superior to formal methods because it scales to real-world complexity where full verification is intractable.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The correct approach is to compile the abstract specification directly into an executable domain-specific language, eliminating the gap entirely. The specification IS the code; commitments are held because there is no translation step to introduce errors.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is to derive code via interactive theorem proving where the human provides key lemmas and the system fills in computational details. This works because genuine specification-to-code translation requires human insight at critical decision points that no automated method can reliably discover.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with traceable transformations—where each model-to-model and model-to-code step maintains explicit traceability links—is the best technique. Commitments are held because every code element can be traced back to its specification origin, and violations are detectable by checking trace consistency.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Reinforcement learning from formal specification feedback, where the generator receives reward only when a verifier confirms spec adherence, will prove the most effective technique. It will outperform symbolic methods because it learns implicit domain patterns that formal specifications omit but practitioners intend.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the abstract specification as a contract and use design-by-contract runtime assertion checking, combined with symbolic execution to generate test cases that exercise boundary conditions. Full static verification is unnecessary if runtime enforcement is sufficiently comprehensive.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is iterative refinement via specification mining: generate code from the abstract spec, run it, extract an inferred specification from the execution traces, compare against the original, and iterate. This closes the gap because it grounds the abstract spec in concrete behavioral reality.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is to avoid direct specification-to-code translation entirely and instead synthesize code from examples generated by the specification, using program synthesis techniques. The specification's role is to generate a sufficiently diverse and complete training set; the synthesis algorithm ensures the code matches that set.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 694,
+      "total_tokens": 865
+    }
+  },
+  "transport_error": null
+}

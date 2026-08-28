@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Coupling entropy from dependency graph growth\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 27.53
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-617",
+    "object": "chat.completion",
+    "created": 1787932876,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems degrade not because changes introduce defects, but because each correct change adds edges to the dependency graph that can never be removed, since removing an edge requires proving no downstream consumer relies on it—a proof that grows costlier as the graph grows. Thus the dependency graph undergoes ratchet-like monotonic growth, and the system's changeability declines as a direct function of its edge count.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The dominant contributor to coupling entropy is the accumulation of call-site dependencies: each time a function is reused from a new location, the cost of modifying that function's signature or behavior scales with the number of call sites, making high-centrality nodes effectively immutable long before their logic becomes obsolete.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the dependency graph gradually loses modularity: initially clustered subgraphs accumulate cross-module edges at a rate proportional to system size, until the graph's conductance crosses a threshold where any change has non-local blast radius, making local correctness insufficient for global correctness.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every locally correct change optimizes for immediate task convenience, adding whatever dependency edge minimizes local effort. Over thousands of changes this produces a graph optimized for neither cohesion nor performance but for incremental convenience—a structure that is globally pathological because no individual change was incentivized to maintain global graph properties.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"As the dependency graph grows, the number of implicit assumptions (invariants about ordering, state, side effects) propagating along edges grows combinatorially, and each new edge potentially violates an invariant established by an older edge. The system becomes harder to change because verifying consistency requires checking an exponentially growing set of edge-mediated invariant interactions that no test suite covers.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The dependency graph of a long-lived system evolves toward a scale-free topology where a few nodes accumulate disproportionate degree, and these hub nodes become change bottlenecks whose modification risk scales superlinearly with their degree. The system ossifies because its critical paths route through hubs that no one can safely modify.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Dependency graph growth causes information loss about edge rationale: the reason each edge was added is known at creation but not preserved, so later maintainers must treat all edges as load-bearing. The cost of a change scales with the number of edges that must be investigated, each requiring reconstruction of forgotten intent, creating an investigative tax that grows monotonically with graph size.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Because each individual change is small and correct, no change triggers refactoring of the dependency graph, so the graph retains edges that were justified by now-obsolete requirements. The accumulation of dead-but-undeletable dependencies creates phantom coupling—maintainers reason about constraints that no longer serve a purpose but cannot be safely removed without proving their deadness.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Coupling entropy increases because dependency graphs in practice are not just static call graphs but carry directional temporal assumptions: module A depends on B's behavior at time T, and when B evolves, A's assumption silently breaks. The graph grows in edges over time, and each edge carries a temporal contract that is never re-validated, so the probability of contract violation across the graph approaches certainty.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems arises from the divergence between the logical dependency graph (what the code says it depends on) and the semantic dependency graph (what runtime behavior actually depends on). Each correct change adds edges to both graphs, but only the logical graph is visible to tooling, so maintainers reason about an incomplete graph and are blindsided by untracked semantic coupling that grows in the gap.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 895,
+      "total_tokens": 1081
+    }
+  },
+  "transport_error": null
+}

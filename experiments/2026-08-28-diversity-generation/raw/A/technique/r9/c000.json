@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.907
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-714",
+    "object": "chat.completion",
+    "created": 1787935456,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is to compile the abstract specification directly into a refinement proof obligation alongside the code, treating the spec as an executable oracle that is mechanically checked against the implementation via property-based testing and theorem proving at every commit. The specification is not translated into code; rather, the code is generated or written to satisfy a machine-checkable refinement relation, making the spec the source of truth rather than a disposable artifact. This approach makes deviation from the specification a build failure, not a code-review opinion.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 112,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

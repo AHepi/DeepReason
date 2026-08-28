@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.696
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-662",
+    "object": "chat.completion",
+    "created": 1787937720,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through accumulated errors, but through the systematic elimination of unused design degrees of freedom—each locally correct change permanently constrains the state space of future changes by consuming slack in interfaces, data formats, and implicit invariants. The system's entropy is not in its code but in the growing web of irreversible commitments that make previously valid modifications now invalid. Because these constraints are emergent and distributed, no individual change can be evaluated against the global optionality it destroys, so local review cannot detect the gradual loss of evolvability.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 117,
+      "total_tokens": 219
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantically irreversible refactorings creating latent invariant entanglement\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.923
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-354",
+    "object": "chat.completion",
+    "created": 1787937450,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally-correct refactoring that renames a concept or shifts a boundary destroys the original semantic mapping that external documentation, comments, and developer intuition relied on. The new mapping is only valid for the current state, meaning the refactoring is semantically irreversible without a full archaeological record. These accumulated broken mappings create latent invariant entanglement, as any future change must navigate not just current code but the ghost of the original concept boundaries.\", \"probability\": 0.082}, {\"conjecture\": \"Refactorings that merge duplicate code paths are semantically irreversible because they implicitly union the invariants of the previously separate paths. The entanglement arises because the merged code must now silently maintain the invariants of all original call sites, and removing it later becomes impossible without knowing which specific invariant subset each caller depends on.\", \"probability\": 0.068}, {\"conjecture\": \"When a refactoring extracts a module, it creates a semantic contract between the new module and its origin that is invisible at the interface level. The extraction is irreversible because the new module's correctness becomes silently entangled with the latent assumption that the parent context will never call it in ways the parent's own internal state would have previously prevented.\", \"probability\": 0.075}, {\"conjecture\": \"Refactorings that introduce a generalization (e.g., parameterizing a hardcoded value) are semantically irreversible because they encode the implicit invariant that all future callers must conform to the behavioral space of the original hardcoded use case. This creates latent entanglement by making the code appear flexible while actually binding all future variations to the latent constraints of the original specific implementation.\", \"probability\": 0.091}, {\"conjecture\": \"Every time a refactoring shifts responsibility from one object to another to fix a local issue, it leaves behind a latent invariant in the original object that it is no longer responsible for that behavior, but its state still reflects it. The refactoring is irreversible because that latent invariant is not expressed in code, creating an entanglement where modifying the original object's state can silently break the behavior that was moved away.\", \"probability\": 0.063}, {\"conjecture\": \"Conservative refactorings that preserve backward-compatible wrappers around a changed core create semantically irreversible entanglement. The wrappers hardcode the assumption that the old API's behavior was the correct one, meaning the system can never be fully simplified without violating the latent invariant that the wrapper's specific translation logic must be preserved.\", \"probability\": 0.057}, {\"conjecture\": \"Refactorings that move data closer to the logic that uses it are semantically irreversible because they destroy the implicit invariant that the data was once globally consistent. The entanglement manifests when future changes require cross-cutting consistency; the system cannot be restored to a consistent state without re-introducing the global data, which is now blocked by the local invariants the refactoring created.\", \"probability\": 0.089}, {\"conjecture\": \"When a refactoring eliminates a dead code path, it silently removes the invariant that the system tolerated that path's execution. The irreversibility stems from the fact that future changes might re-introduce conditions that would have triggered the dead path, but the system's latent invariants are now entangled with the assumption that such conditions can never occur, causing unpredictable failures.\", \"probability\": 0.054}, {\"conjecture\": \"Changing a data structure during a refactoring to optimize for current access patterns creates a semantically irreversible invariant binding the structure to those patterns. The entanglement occurs because the new structure's shape implicitly dictates future algorithmic choices, making it impossible to revert to a general-purpose structure without first untangling the performance invariants now woven into the calling code.\", \"probability\": 0.078}, {\"conjecture\": \"Refactorings that break a circular dependency do so by introducing an intermediate state or event, which is a semantically irreversible step because it imposes a temporal ordering invariant. This latent entanglement means the system can never return to a state where the original components are allowed to interact synchronously, as the new intermediate layer's existence forbids it.\", \"probability\": 0.072}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 878,
+      "total_tokens": 1068
+    }
+  },
+  "transport_error": null
+}

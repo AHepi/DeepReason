@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Metric-space contraction of behavioral preservation predicates\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.152
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-42",
+    "object": "chat.completion",
+    "created": 1787932542,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Let a software system's behavior be represented in a metric space of observable input-output traces, with each correctness constraint acting as a predicate defining a preserved subspace. Every locally-correct change contracts this preserved subspace by intersecting it with new boundary conditions, so the volume of permissible modifications shrinks geometrically even as the volume of tested traces grows linearly. The rate of contraction is proportional to the specificity of each change's test suite, meaning more rigorous testing accelerates entanglement by carving narrower constraints into the behavioral manifold. Consequently, system modifiability decays as a function of cumulative predicate specificity, not code size or complexity, predicting that rework cost scales exponentially with the integral of test precision over change history.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 153,
+      "total_tokens": 272
+    }
+  },
+  "transport_error": null
+}

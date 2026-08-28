@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.241
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-558",
+    "object": "chat.completion",
+    "created": 1787936619,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems degrade not because of code rot but because each locally correct change narrows the space of future valid implementations. Every test added constrains the system, increasing the cost of finding non-breaking modifications until the system becomes frozen.\", \"probability\": 0.04}, {\"conjecture\": \"Changes accumulate implicit coupling between modules that no single reviewer can observe. Over time, this invisible dependency network reaches a critical density where most proposed changes trigger non-local failures, making the system practically unmodifiable.\", \"probability\": 0.07}, {\"conjecture\": \"The growing difficulty of modifying a system is caused by the monotonic accumulation of dead code paths. Because deletion is riskier than addition, each change leaves behind obsolete logic, expanding the cognitive search space required to understand the system.\", \"probability\": 0.06}, {\"conjecture\": \"Maintainability degrades because each change optimizes for local comprehensibility by introducing abstractions. These layers accumulate over time, obscuring the underlying data flow and increasing the distance between a change's intent and its implementation.\", \"probability\": 0.08}, {\"conjecture\": \"Systems become harder to change because the mental model required to operate on them grows faster than the code itself. Each modification adds a historical branch to the system's state space, and developers must trace these branching paths to predict side effects.\", \"probability\": 0.03}, {\"conjecture\": \"Technical debt accrues interest through the misalignment of team turnover. As original developers leave, the tacit knowledge of why specific non-obvious choices were made is lost, leaving a codebase that is syntactically clear but semantically opaque.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty stems from an architectural drift where local optimizations slowly violate the system's initial global invariants. The system reaches a state where the original design constraints are no longer valid, but no single point exists to reset the architecture.\", \"probability\": 0.02}, {\"conjecture\": \"Testing and review enforce local correctness but fail to prevent the accumulation of edge-case handling. The system becomes a patchwork of special cases, increasing the non-linear complexity of verifying any new feature against the growing set of exceptions.\", \"probability\": 0.09}, {\"conjecture\": \"Each reviewed and tested change adds to the system's state space, and the difficulty of modification grows logarithmically with the size of this space. This is an information-theoretic limit where the cost of locating the relevant context for a change exceeds the cost of implementing it.\", \"probability\": 0.01}, {\"conjecture\": \"Maintainability degrades because the documentation and code comments, meant to aid future changes, become increasingly decoupled from the actual code behavior. This creates a conflicting signal where developers must expend effort verifying both the code and the documentation before making a change.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 610,
+      "total_tokens": 785
+    }
+  },
+  "transport_error": null
+}

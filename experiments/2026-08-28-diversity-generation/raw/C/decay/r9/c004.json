@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.938
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-705",
+    "object": "chat.completion",
+    "created": 1787933287,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change introduces implicit, undocumented constraints on future changes. Over time, the space of permissible modifications shrinks as the growing web of hidden assumptions makes safe edits require exponentially more reverse-engineering effort.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The testing effort required to validate a change grows as a power law with the number of modules, because each new feature creates non-linear interaction surfaces. Thus, the marginal cost of verification outpaces developer productivity, making changes feel harder even if the code itself isn't structurally worse.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software degrades because developers optimize for local implementation effort rather than global architectural alignment. Each locally optimal shortcut slightly increases the system's entropy, and the cumulative deviation from a coherent architecture creates structural friction that compounds multiplicatively.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every change leaves a thin layer of organizational knowledge—context about why a decision was made—that is never recorded. As turnover occurs, this tacit knowledge decays, and the cost of a change grows linearly with the amount of lost context that must be reconstructed to act safely.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Technical debt behaves like gravitational accretion: developers route new work around hard-to-understand areas rather than refactoring them. These avoided zones grow over time, forcing all new changes into increasingly narrow, contorted pathways, which makes every subsequent change require more indirect logic.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty arises from the monotonic accumulation of backwards-compatibility constraints. Every shipped change implicitly becomes an API that some downstream component or user depends on, meaning the number of constraints on any future change grows linearly with the system's history, strictly reducing the dimensionality of safe modifications.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Systems become harder to change because their call graphs evolve toward a scale-free topology where a few modules become highly connected hubs. As the system ages, any new change has a high probability of touching a hub, forcing developers to reason about an unmanageably large blast radius.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The phenomenon is fundamentally a thermodynamic cost of information processing: maintaining a coherent mental model of a system requires energy proportional to its state space. As the system grows, the cognitive cost to safely propose a change exceeds human working memory capacity, making the system effectively unchangeable without decomposing it.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The root cause is the non-ergodicity of software evolution: early changes constrain the probability space of later changes, meaning the system cannot freely explore the design space. Over time, the system becomes trapped in a local optimum where any single step toward a better design temporarily violates local correctness, preventing escape.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Software aging is driven by the proliferation of edge cases. Each correct change handles the immediate scenario but creates new boundary conditions for future changes. The cost of change grows proportionally to the total number of historical edge cases that must be respected, overwhelming any local testing strategy.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 748,
+      "total_tokens": 923
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.043
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-891",
+    "object": "chat.completion",
+    "created": 1787941454,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is refinement-driven extraction: mechanically derive code step-by-step from the specification using correctness-preserving refinement steps, where each transformation is discharged by an automated theorem prover. This guarantees the executable holds its commitments because every operational detail is linked to the abstract specification by a machine-checked proof obligation, eliminating the gap between intent and implementation. The approach fails if the prover cannot automate enough of the routine refinement steps, making it practically useless for large specifications.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 101,
+      "total_tokens": 199
+    }
+  },
+  "transport_error": null
+}

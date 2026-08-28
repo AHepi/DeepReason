@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.595
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-402",
+    "object": "chat.completion",
+    "created": 1787943555,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is to compile the abstract specification directly into a dependent type theory, treating propositions as types, such that the resulting code is executable by construction and its commitments are proven as theorems.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is to train a domain-specific large language model on a corpus of specification-code pairs, using the abstract spec as a prompt and relying on the model to infer the most likely correct implementation.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is model-based test generation: derive a reference implementation from the specification, generate property-based tests from the reference, and use those tests to drive the development of the actual code.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is refinement calculus: stepwise transform the abstract specification into code through a series of correctness-preserving refinements, where each step is mechanically verified.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is to structure the specification as a synchronous dataflow model (e.g., using Lustre or Scade), which can be compiled directly to deterministic, verifiable code suitable for safety-critical systems.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique is to encode the specification as an SMT problem and use an SMT solver to synthesize code that satisfies the constraints, treating code generation as constraint satisfaction.\", \"probability\": 0.035}, {\"conjecture\": \"The best technique is the actor model: decompose the specification into independently verifiable concurrent actors communicating via typed messages, where the type system enforces protocol commitments.\", \"probability\": 0.02}, {\"conjecture\": \"The best technique is design-by-contract with runtime assertion checking: annotate the code with preconditions, postconditions, and invariants derived from the specification, and rely on runtime monitoring to catch violations.\", \"probability\": 0.025}, {\"conjecture\": \"The best technique is to express the specification as a grammar and use parser combinators to directly construct the code, treating the abstract specification as a language to be parsed and interpreted.\", \"probability\": 0.01}, {\"conjecture\": \"The best technique is to treat the specification as a set of Horn clauses and use a logic programming language like Prolog or Datalog to execute the specification directly, with the code's commitments holding by construction.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 526,
+      "total_tokens": 697
+    }
+  },
+  "transport_error": null
+}

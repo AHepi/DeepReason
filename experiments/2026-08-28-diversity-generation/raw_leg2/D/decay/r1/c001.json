@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulation of implicit invariants outside the type system and test surface\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.557
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-581",
+    "object": "chat.completion",
+    "created": 1787936433,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change encodes a new invariant that the type system cannot express, creating an ever-growing web of implicit, cross-module invariants that developers must manually discover before safe modification.\", \"probability\": 0.09}, {\"conjecture\": \"The half-life of safe modifications is determined by the ratio of implicit invariants to explicit type constraints; as this ratio grows, the probability of a locally correct change violating a hidden invariant approaches certainty.\", \"probability\": 0.07}, {\"conjecture\": \"Test suites and type systems capture point-in-time requirements, but each passing change introduces latent invariants about execution order, resource lifecycle, and state transitions that neither surface can ever encode, making future changes progressively riskier.\", \"probability\": 0.08}, {\"conjecture\": \"Implicit invariants accumulate in direct proportion to the number of code paths that are never exercised by the test suite, creating a shadow system of constraints that grows undetected until a change collides with one.\", \"probability\": 0.04}, {\"conjecture\": \"The rate at which a system becomes harder to change is proportional to the number of implicit invariants per unit of code, not lines of code itself, explaining why two systems of identical size can have vastly different modification costs.\", \"probability\": 0.06}, {\"conjecture\": \"Every reviewed and tested change that passes without updating the type system sends a false signal that no new invariants were introduced, causing the gap between perceived and actual change cost to widen monotonically over the system's lifetime.\", \"probability\": 0.05}, {\"conjecture\": \"Implicit invariants compound because developers optimize local changes for the current test surface, inadvertently encoding assumptions about caller behavior, timing, and data shape that become load-bearing but invisible to future reviewers.\", \"probability\": 0.03}, {\"conjecture\": \"Long-running systems become harder to change because implicit invariants migrate from individual functions into emergent system-wide properties—like acceptable latency envelopes or failure mode combinations—that no single test or type can capture.\", \"probability\": 0.02}, {\"conjecture\": \"The difficulty of changing a long-running system scales with the number of implicit invariants that have become load-bearing through evolutionary pressure: changes that happened to respect these invariants survived, making the invariants appear essential even though they were never specified.\", \"probability\": 0.01}, {\"conjecture\": \"Code review and testing act as filters that catch invariant violations but also legitimize the introduction of new implicit invariants, creating an asymmetric ratchet where each change can add hidden constraints but never removes them, since removal would require discovering constraints that were never written down.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 569,
+      "total_tokens": 761
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.661
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-790",
+    "object": "chat.completion",
+    "created": 1787935098,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to treat the specification itself as an executable artifact via refinement types and contracts that compose, so that the code generator never produces a candidate unless it satisfies a proof obligation discharged at compile time. Under this approach, the specification's logical structure is preserved as runtime invariants that survive optimization and refactoring, making commitments enforceable rather than aspirational. The conjecture is falsifiable: any generated program that passes static contract discharge yet violates its specification at runtime would refute the claim.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 106,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

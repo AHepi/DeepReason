@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.528
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-606",
+    "object": "chat.completion",
+    "created": 1787935413,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The most reliable technique is refinement via interactive theorem proving, where each step from abstract specification to executable code is a formally verified refinement step preserving semantic equivalence, with the code extracted directly from the constructive proof.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Property-based test generation from the abstract specification, used as an oracle against candidate implementations, produces code that holds its commitments more reliably than formal methods for systems under ~10K LOC, because the specification-to-test pipeline catches specification-implementation mismatches that refinement alone misses.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The optimal approach is to make the specification itself executable by writing it as a pure functional program in a total language, then deriving the efficient implementation through equivalence-preserving transformations that are checked by an SMT solver at each step.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Conjecture synthesis from the specification, where a solver generates loop invariants and pre/postconditions and then synthesizes code provably satisfying them, outperforms manual refinement because it eliminates the human error in the refinement chain.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The best technique is type-driven development in a dependently typed language where the specification is encoded as a type and the program is a proof of inhabitation of that type, making commitment-holding a side effect of compilation.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Model-based engineering with automated traceability—where every specification clause is linked to code elements via generated assertions that run in CI—is the best technique because it makes specification drift immediately visible and locally repairable, unlike heavyweight formal methods that are abandoned in practice.\",\n      \"probability\": 0.042\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the specification as a contract in a design-by-contract system and use runtime verification with continuous monitoring, because partial specifications are the norm in real systems and runtime checking of commitments is more practical than full formal verification.\",\n      \"probability\": 0.038\n    },\n    {\n      \"conjecture\": \"Large language models fine-tuned on specification-to-code pairs, constrained by a type system and verified by an SMT-based checker, will produce commitment-holding code more cost-effectively than any manual technique for specifications expressible in first-order logic.\",\n      \"probability\": 0.029\n    },\n    {\n      \"conjecture\": \"The best technique is stepwise refinement in the B-method or Event-B, where the abstract machine is refined through proven correctness-preserving steps down to implementable code, because this is the only approach with a decades-long track record of producing verified systems deployed in safety-critical domains.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"There is no single best technique; the optimal approach is to match the formalism's expressive power to the specification's domain—using refinement types for data invariants, temporal logic for reactive behavior, and Hoare logic for sequential algorithms—then compose the verified fragments.\",\n      \"probability\": 0.047\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 707,
+      "total_tokens": 878
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.656
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-274",
+    "object": "chat.completion",
+    "created": 1787932439,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for local cognitive ease, slowly fragmenting the system's global conceptual integrity until no single mental model can explain the whole, making the cost of understanding a change site grow super-linearly with system history.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The set of implicit, untested invariants grows monotonically with each change because tests only encode explicit assertions, so the probability that a new change violates a latent invariant increases as the untested invariant surface area expands.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Well-tested changes accumulate because tests pin current behavior, including incidental properties, so every future change that touches those properties must update an expanding web of tests, making modification cost proportional to accumulated test mass rather than code complexity.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every reviewed change is optimized for the change author's current context, but since context is not transferred with the code, later developers face a reconstruction problem whose cost grows with the number of distinct contexts embedded in the codebase.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade because each locally correct fix addresses a symptom rather than the root cause, pushing complexity to the system boundary; the boundary grows until the cost of coordinating changes across it exceeds the cost of the change itself.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Dependencies accumulate through individually safe additions but never get removed because removal has no local reward, so the transitive dependency graph grows monotonically until any change risks triggering a conflict in an unrelated part of the graph.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each correct change adds a new assumption about how the system is used, and these assumptions are embedded in control flow rather than types; the assumption density per branch eventually exceeds what a developer can hold in working memory, making every change a gamble.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The system's state space grows combinatorially with each added feature, but tests only sample that space linearly, so the ratio of tested to possible states declines over time, making regressions statistically inevitable even as test coverage metrics improve.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Code review optimizes each change for readability at the time of review, but readability is relative to the surrounding code, so as the surrounding code drifts, previously reviewed changes become opaque, and the system's average comprehension cost increases even though no single change introduced opacity.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each correct change is made under a different business context, and these contexts are never reconciled, so the codebase becomes a palimpsest of partially contradictory domain models where any change conflicts with at least one embedded model.\",\n      \"probability\": 0.09\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 677,
+      "total_tokens": 852
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Algorithmic information distance between successive code states growing monotonically\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.826
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-344",
+    "object": "chat.completion",
+    "created": 1787937927,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Under any sequence of locally-optimized edits to a codebase, the algorithmic information distance between successive committed states grows monotonically because each edit must encode both the new feature and the accumulated implicit context of prior edits, forcing each diff to reference more historical state than the last.\", \"probability\": 0.08}, {\"conjecture\": \"The Kolmogorov complexity of the diff between version n and version n+1 is superadditive: K(v_{n+1} | v_n) grows monotonically because each locally-correct change adds constraints that future changes must satisfy, increasing the minimum description length of any subsequent valid patch.\", \"probability\": 0.07}, {\"conjecture\": \"If one defines rigidity as the algorithmic information distance a developer must traverse to move from state v_n to a state satisfying a new requirement, this distance grows monotonically because each accepted edit increases the mutual algorithmic information between the code and all its past states, making the codebase statistically increasingly improbable under any simple prior.\", \"probability\": 0.06}, {\"conjecture\": \"Each locally-correct change is selected to minimize immediate algorithmic information distance from the prior state, but this greedy strategy causes the global trajectory through code-state space to follow a path where successive inter-state distances grow because the system accumulates irreducible historical dependencies that cannot be compressed.\", \"probability\": 0.05}, {\"conjecture\": \"The monotonic growth of algorithmic information distance between successive code states is driven by the fact that each review-approved change adds a constraint to the set of admissible future states, shrinking that set in a way that increases the minimum Kolmogorov complexity of the transformation required to reach any newly desirable state.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems become harder to change because the algorithmic information distance between successive versions grows monotonically as a thermodynamic inevitability: each tested, locally-correct edit adds logical irreversibility to the codebase, and the Kolmogorov complexity of rolling back or branching from the current state increases with every accepted change.\", \"probability\": 0.04}, {\"conjecture\": \"The algorithmic information distance between successive code states grows monotonically because each locally-correct modification increases the algorithmic mutual information between the codebase and its test suite, so every subsequent change must simultaneously satisfy a strictly denser constraint surface, requiring a more complex patch.\", \"probability\": 0.03}, {\"conjecture\": \"Under repeated locally-optimized edits, the algorithmic information distance between successive states grows monotonically because the codebase undergoes progressive specialization: each change fits the current state more tightly to its usage context, reducing the entropy of acceptable next states and increasing the description length of any valid transition.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty of changing a long-running system is proportional to the cumulative algorithmic information distance traversed through state space, and this distance grows monotonically per step because each accepted change, being locally correct, is a minimal-length patch that leaves behind residual coupling to prior decisions, making every subsequent patch require strictly more information to specify.\", \"probability\": 0.06}, {\"conjecture\": \"If one models each code change as a program that transforms state v_n into v_{n+1}, then the length of the shortest such program grows monotonically because each prior transformation leaves algorithmically incompressible traces in the code, forcing every new transformation program to encode increasingly more historical context to remain locally correct.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 757,
+      "total_tokens": 948
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.634
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-707",
+    "object": "chat.completion",
+    "created": 1787932445,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Catastrophic interference in neural network function approximators trained on evolving reward signals\", \"Information-theoretic lock-in: Shannon entropy of the effective input domain contracts as edge cases are patched\", \"Semantic drift between domain ontology versions measured by category-theoretic functorial maps\", \"Thermodynamic-style entropic growth of structural configuration space under irreversible local patching\", \"Cyclomatic complexity inflation driven by gradual accumulation of conditional branches for deprecated states\", \"Spectral graph shift of the dependency network's largest eigenvalue as API surfaces accrete\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 149,
+      "completion_tokens": 116,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

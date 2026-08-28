@@ -1,0 +1,8 @@
+[
+  "Lattice-perturbation: take a 3x4 or 4x3 grid and locally jitter to break collinear triples",
+  "Heilbronn-theory extremal: invoke known upper/lower bounds and construct matching near-optimal algebraic point sets",
+  "Combinatorial-geometric: design via repeated affine-regular hexagons and strip arguments controlling all collinearity widths",
+  "Numerical-optimization: nonlinear or semidefinite program maximizing the min-area via determinant constraints, report best-found config",
+  "Graph-Ramsey / hypergraph coloring: enforce large empty triangles by anti-collinearity colorings on a dense carrier set",
+  "Projective-dual: duality to line arrangements and use oriented-matroid realizability to bound minimum cell areas"
+]

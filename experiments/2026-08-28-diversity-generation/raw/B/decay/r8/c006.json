@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic growth of hidden coupling entropy across module boundaries\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.686
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-685",
+    "object": "chat.completion",
+    "created": 1787932966,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally correct, tested modification to a module increases the entropy of the module's unobserved output space for its dependents, meaning each change decreases the probability that a future change at a boundary remains a no-op. This accumulation of hidden coupling entropy follows Shannon's channel capacity theorem: once the implicit interaction bandwidth between modules exceeds the observable interface bandwidth, communication across the boundary degrades and changes propagate unpredictably. Thus, architectural decay is not caused by poor engineering but is an information-theoretic inevitability of bounded interfaces processing unbounded internal state transitions.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 124,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

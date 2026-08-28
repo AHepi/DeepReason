@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.893
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-522",
+    "object": "chat.completion",
+    "created": 1787934405,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is refinement-aware program synthesis, where the abstract specification is compiled into an intermediate refinement calculus (e.g., refinement types or Hoare logic) and the synthesizer is constrained to produce code that preserves each refinement obligation through discharge at every step. This guarantees the executable result holds its commitments because the synthesis process itself is a constructive proof of correctness, making any generated code that fails verification unsynthesizable by construction. Consequently, the gap between specification and execution is eliminated not by post-hoc testing, but by making the specification the generative engine of the code itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 124,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

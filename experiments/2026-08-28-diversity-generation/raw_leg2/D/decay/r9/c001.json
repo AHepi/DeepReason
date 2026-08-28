@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy of dependency graph topology monotonically increases\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.34
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-846",
+    "object": "chat.completion",
+    "created": 1787938424,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Every locally correct change adds edges to the dependency graph but almost never removes them, because removing dependencies requires coordinated multi-module refactoring that no single change justifies. Therefore the edge count monotonically increases, and the probability that any new change intersects an existing dependency rises with edge density.\", \"probability\": 0.08}, {\"conjecture\": \"The number of cyclic paths in the dependency graph grows superlinearly with system size because each new module has k possible connection points, and the probability of closing at least one cycle scales with the product of existing reachable nodes. This makes the graph's strongly connected components grow irreversibly, since cycle-breaking requires simultaneous changes to all edges in the cycle.\", \"probability\": 0.07}, {\"conjecture\": \"Reviewers approve changes based on local dependency correctness, but the global transitive closure of dependencies is never visible at review time. Each approved change extends the transitive closure by a small random amount, and this closure grows monotonically because no review process has the information or incentive to shrink it.\", \"probability\": 0.06}, {\"conjecture\": \"The fan-in of high-level modules increases monotonically because new features are cheaper to build on established abstractions than on new ones, creating a rich-get-richer effect. Once a module has high fan-in, every change to it risks breaking a larger surface, and the system cannot shed fan-in without migrating all dependents simultaneously.\", \"probability\": 0.05}, {\"conjecture\": \"Dependency graph entropy, measured as Shannon entropy over the degree distribution, increases monotonically because each change adds edges with probability proportional to existing degree (preferential attachment), driving the graph toward a scale-free state. The increasing variance in degree means a growing fraction of changes touch hub modules whose modification requires cascading review of their dependents.\", \"probability\": 0.07}, {\"conjecture\": \"The diameter of the dependency graph's largest weakly connected component increases monotonically because new modules attach to the periphery rather than the core, extending longest paths. As diameter grows, the fraction of the system potentially affected by any change grows, and no single change has scope to reduce diameter since that requires rewiring the entire periphery.\", \"probability\": 0.04}, {\"conjecture\": \"Test suites encode the current dependency topology as fixtures and mocks, so any change that would reduce dependencies also invalidates tests. This creates an anti-refactoring ratchet: dependencies can only be added in a way that tests encode, and removal is blocked by test fragility, making the topology's entropy increase monotonically.\", \"probability\": 0.06}, {\"conjecture\": \"The ratio of inter-module dependencies to intra-module dependencies increases monotonically because each locally correct change prefers reusing existing modules over extending the current module. This shifts coupling from the可控 intra-module level to the hard-to-change inter-module level, and the shift is irreversible without coordinated multi-module refactoring.\", \"probability\": 0.05}, {\"conjecture\": \"The dependency graph accumulates 'dead edges'—dependencies that are imported but never used at runtime—because static analysis cannot prove an edge is dead without whole-program analysis. Dead edges accumulate monotonically since no change has the information to remove them, and they inflate the perceived coupling that governs review scope.\", \"probability\": 0.08}, {\"conjecture\": \"The average path length between any two modules in the dependency graph decreases monotonically as edges accumulate, which paradoxically increases change difficulty because it raises the probability that two arbitrary changes share a common ancestor dependency. Shorter paths mean more of the graph is reachable from any change point, increasing blast radius monotonically.\", \"probability\": 0.05}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 786,
+      "total_tokens": 975
+    }
+  },
+  "transport_error": null
+}

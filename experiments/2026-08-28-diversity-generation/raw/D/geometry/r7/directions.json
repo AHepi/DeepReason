@@ -1,0 +1,8 @@
+[
+  "perturb a regular 12-point boundary lattice plus centroid",
+  "coordinate-wise nonlinear stretch of triangular grid remapped to square",
+  "simulated annealing on area-of-smallest-triangle objective with continuous coordinates",
+  "algebraic number field construction forcing all triangle areas to share a common lower bound",
+  "greedy farthest-point insertion in area-of-triangle metric rather than Euclidean distance",
+  "exhaustive branch-and-bound over discretized grid with interval arithmetic lower bounds"
+]

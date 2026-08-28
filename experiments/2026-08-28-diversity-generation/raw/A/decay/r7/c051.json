@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.508
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-298",
+    "object": "chat.completion",
+    "created": 1787932731,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally correct change inadvertently reduces the system's accessible state space of safe future modifications by creating implicit behavioral constraints that are never documented but are depended upon by downstream consumers. This 'constraint accretion' is invisible to standard code review and testing because those processes validate the current change against existing expectations, not the change's impact on future optionality. Consequently, the system's rigidity is an emergent property of the accumulation of thousands of individually safe local optimizations, not a failure of engineering discipline, making degradation inevitable under any process that evaluates changes locally rather than globally across time.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 127,
+      "total_tokens": 229
+    }
+  },
+  "transport_error": null
+}

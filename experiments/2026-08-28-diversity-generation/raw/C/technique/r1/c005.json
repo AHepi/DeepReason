@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.104
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-214",
+    "object": "chat.completion",
+    "created": 1787931439,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement calculus: stepwise transformation of a formal specification into executable code via provably semantics-preserving refinements, ensuring the result holds its commitments by construction.\", \"probability\": 0.09}, {\"conjecture\": \"The optimal technique is compiling abstract specifications directly to deterministic finite automata or state machines, where commitments are structurally guaranteed because no unreachable or non-conforming state can be generated.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is constructive type theory with dependent types (e.g., Agda, Idris), where the specification is encoded as a type and the program is a proof term inhabiting that type, making commitments literally unprovable if violated.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is generative AI constrained by a formal verifier: a neural model proposes code candidates from the specification, and a model checker or SMT-based verifier rejects any that fail to satisfy the abstract commitments, iterating until convergence.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is synthesis from contract templates: treating the abstract specification as a set of pre/post-conditions and using syntax-guided synthesis (SyGuS) to enumerate programs meeting those contracts, ensuring commitments hold by exhaustive search over the program space.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is denotational design as practiced in the Conal Elliott tradition: specifying the problem as a mathematical semantic function and compiling through a chain of clearly defined, type-preserving semantic transformations down to an executable substrate.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is algebraic specification with initial algebra semantics: define the specification as a set of equational laws over an algebraic signature, then derive an executable instance as the initial model, which is guaranteed to satisfy all laws by construction.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is monad transformer stacks encoding effect specifications: each commitment (nondeterminism, state, exceptions) is a monad layer with laws, and the executable code is built by interpreting the stack, with commitments enforced by the monad laws at each layer.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is abstract interpretation-driven compilation: the specification defines an abstract semantics, and the compiler uses abstract interpretation to over-approximate all possible concrete executions, generating code that provably stays within the sound abstraction.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is design-by-contract with runtime invariant checking auto-generated from the specification, where violations are treated as unrecoverable failures, creating a tight feedback loop that forces the code to hold its commitments under all real execution conditions.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 599,
+      "total_tokens": 770
+    }
+  },
+  "transport_error": null
+}

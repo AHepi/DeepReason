@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain language and architectural vocabulary creating irreversible translation layers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.662
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-952",
+    "object": "chat.completion",
+    "created": 1787932199,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become rigid because every mapping between domain terms and architectural constructs creates a translation layer that survives even after the original domain meaning changes. Each reviewed, tested change fixes a specific translation at a point in time, but as domain language evolves on one side and architectural vocabulary accumulates path dependencies on the other, the translation layer becomes the only bridge between two drifting vocabularies. Once enough translations are embedded in tested code, modifying them requires simultaneously renegotiating both the domain meaning and the architectural contract, making the translation layer effectively irreversible and progressively ossifying the system.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 121,
+      "total_tokens": 245
+    }
+  },
+  "transport_error": null
+}

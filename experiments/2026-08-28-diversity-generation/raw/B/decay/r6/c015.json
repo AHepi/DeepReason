@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Metric-space contraction of behavioral preservation predicates\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.669
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-713",
+    "object": "chat.completion",
+    "created": 1787932534,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally-correct, behavior-preserving change contracts the metric space of future behavior-preservation predicates: the set of tests, invariants, and contracts that a subsequent change must satisfy grows monotonically, while the volume of the manifold of valid modifications shrinks. Consequently, edit distance between the current system and any target behavior grows superlinearly with the number of prior changes, because each new predicate intersects the feasible region and increases the dimensional rigidity of the codebase. This contraction is an intrinsic topological property of incremental constraint accumulation, not a artifact of poor engineering, and it predicts that maintainability decays exponentially with change count even under perfect testing and review.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 142,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

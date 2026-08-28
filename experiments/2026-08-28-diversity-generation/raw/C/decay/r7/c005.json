@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.3
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-806",
+    "object": "chat.completion",
+    "created": 1787932825,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software decay is driven by the divergence between the system's implicit, undocumented conceptual model and the developers' evolving mental models. Each locally correct change slightly shifts the system's actual behavior away from its original design intent, accumulating hidden technical debt that makes future changes harder to reason about.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The difficulty arises from the combinatorial explosion of untested interaction states. Each new feature adds states that are individually tested but whose pairwise and higher-order combinations are not, creating an exponentially growing space of latent bugs that developers must mentally navigate to make safe changes.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each locally correct change optimizes for immediate convenience, adding a new abstraction or indirection layer. This 'accidental complexity' accumulates faster than it is removed, progressively obscuring the underlying domain logic and increasing the cognitive load of any modification.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The root cause is the loss of contextual integrity: every change is reviewed and tested against current requirements, but no change is evaluated against the original system constraints or use cases that are no longer explicitly represented in code. The system drifts away from its foundational assumptions, which are no longer testable or visible, making changes increasingly likely to violate unstated invariants.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change due to the monotonic accumulation of dependencies. Each locally correct change introduces new couplings between modules to satisfy immediate needs. These couplings are rarely removed because removal has no immediate business value, resulting in a progressively denser dependency graph that resists modification.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The phenomenon is a form of organizational memory loss. As original developers leave, the tacit knowledge of why certain approaches were taken departs with them. Each subsequent locally correct change is made with slightly less understanding of the system's historical constraints, progressively degrading the architectural coherence.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Systems become harder to change because testing coverage is inherently retrospective, validating past changes rather than future flexibility. Each change is verified against existing tests, but the tests themselves become a constraint, encoding current behavior as required behavior. This makes it progressively harder to make changes that would alter the system's structure without breaking tests that have become de facto specifications.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is driven by semantic entropy: each locally correct change introduces slight variations in naming, patterns, and conventions. Over time, the codebase becomes a patchwork of slightly different approaches to the same problem, requiring developers to understand and reconcile multiple paradigms simultaneously when making changes.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to modify because of feedback loop elongation. As the system grows, the time and effort required to build, test, and deploy changes increases. This makes exploration and iterative refinement prohibitively expensive, forcing developers to make larger, riskier changes with less empirical validation, which in turn makes future changes harder.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The difficulty stems from the accumulation of 'dead but coupled' code: features that are no longer used are rarely removed, but their underlying abstractions and dependencies remain, entangled with live code. This creates an illusion of complexity that developers must navigate, making every change require understanding of functionality that is no longer relevant but structurally intertwined.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 826,
+      "total_tokens": 1001
+    }
+  },
+  "transport_error": null
+}

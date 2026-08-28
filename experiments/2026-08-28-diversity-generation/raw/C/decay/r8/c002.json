@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 35.519
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-788",
+    "object": "chat.completion",
+    "created": 1787933085,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture acts as a thermodynamic system where each locally correct change freezes the system into a slightly lower entropy state, reducing the phase space of future compatible modifications. The difficulty of change grows as the system approaches a frozen, disordered ground state (a spin glass) where nearly all local perturbations violate global constraints.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Every locally correct change implicitly encodes assumptions about the environment, creating a shadow state machine of latent invariants that are never explicitly documented. The cost of subsequent changes grows polynomially with the number of prior changes, as developers must reconstruct this growing shadow state to guarantee local correctness.\",\n      \"probability\": 0.092\n    },\n    {\n      \"conjecture\": \"Software evolution is subject to competitive exclusion: locally optimal design patterns outcompete globally optimal architectures in the short term, driving the system into structural monocultures. These monocultures become fragile to environmental shifts, requiring exponentially increasing effort to adapt to new requirements.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"The problem is an information-theoretic bottleneck: the system's state space grows faster than the bandwidth of communication (tests, documentation, reviews) used to verify changes. Eventually, the Kolmogorov complexity of safely verifying a new change exceeds the cognitive capacity of the team, making all changes effectively high-risk.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"Long-running systems develop an epigenetic layer of configuration, deployment scripts, and runtime metadata that evolves semi-independently of the source code. Changes become difficult because the epigenetic layer enforces rigid behavioral contracts that are invisible to standard code analysis and tests.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Software complexity increases according to a power law because every new feature creates non-linear interactions with existing features, forming a dense graph of implicit coupling. The marginal cost of change scales with the number of edges in this coupling graph, growing as O(n^2) relative to the number of implemented features.\",\n      \"probability\": 0.094\n    },\n    {\n      \"conjecture\": \"Codebases accumulate a 'technical debt antibody' effect: developers add defensive checks and abstraction layers to prevent the recurrence of specific bugs. Over time, these localized defenses create a calcified hyper-sensitive immune system that rejects any change not explicitly anticipated by the existing defenses.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The difficulty arises from an adaptive landscape that becomes increasingly rugged under Newtonian optimization (local fixes). Each locally optimal change carves deeper local minima in the fitness landscape, requiring progressively larger, non-local jumps (rewrites) to reach adjacent states that satisfy new requirements.\",\n      \"probability\": 0.081\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because they transition from a fluid state governed by explicit logic to a solid state governed by emergent, self-reinforcing feedback loops between modules. These emergent loops are not visible in any single module's code or tests, making the system's macro-behavior rigid and unamenable to local perturbation.\",\n      \"probability\": 0.076\n    },\n    {\n      \"conjecture\": \"Long-running systems converge on a state of self-organized criticality where the interdependencies between components form a near-critical sandpile. Every locally correct change increases the probability of triggering a cascading failure across the dependency network, forcing developers to spend increasing effort stabilizing the pile rather than adding value.\",\n      \"probability\": 0.083\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 806,
+      "total_tokens": 981
+    }
+  },
+  "transport_error": null
+}

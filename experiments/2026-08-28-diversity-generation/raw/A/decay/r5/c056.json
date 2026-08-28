@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.944
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-924",
+    "object": "chat.completion",
+    "created": 1787932336,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade because each locally correct change optimizes for immediate constraints while permanently pruning away unused generality, causing the system's total state space to converge toward a narrow, brittle manifold. This creates a form of algorithmic complexity debt: the system's accidental complexity grows logarithmically with each modification, not because the code gets larger, but because the surviving configuration of historical optimizations becomes increasingly irreducible without simultaneously reversing multiple past decisions. Thus, the system becomes harder to change because any new modification must satisfy an exponentially growing set of implicit, path-dependent constraints that were never explicitly designed but emerged as the intersection of all prior locally-correct choices.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 142,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

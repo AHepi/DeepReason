@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.701
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-953",
+    "object": "chat.completion",
+    "created": 1787930003,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change implicitly encodes the current environment's tacit assumptions into the system's structure, creating a distributed coupling between the code and an unrecorded context that no individual reviewer can see. As this tacit layer accumulates, the cost of a change is dominated not by the code being modified, but by the growing surface area of invisible dependencies that must be reverse-engineered before a safe modification is even possible. Thus, software entropy is not the sum of individual defects, but the combinatorial growth of unverifiable, unstated contracts between components that were never explicitly designed to interact.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 128,
+      "total_tokens": 230
+    }
+  },
+  "transport_error": null
+}

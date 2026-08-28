@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: sociotechnical decay via knowledge attrition\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.782
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-823",
+    "object": "chat.completion",
+    "created": 1787936834,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally correct change implicitly encodes undocumented assumptions about the system's prior state—assumptions that are held only by the engineers present at the time. As staff turnover removes those engineers, the system's dependency on this tacit knowledge becomes invisible, and subsequent changes that are individually correct against documented requirements silently violate the undocumented constraints. The software becomes harder to change not because the code degraded, but because the organization lost the contextual knowledge required to safely interact with the code's true, unwritten specification.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 112,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

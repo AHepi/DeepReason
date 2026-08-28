@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.726
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-242",
+    "object": "chat.completion",
+    "created": 1787936459,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate a hidden dependency debt wherein each locally correct change implicitly constrains the space of future changes by entangling previously independent modules through shared assumptions, data formats, and emergent invariants. This entanglement is invisible to individual reviews because no single change introduces it; rather, it arises from the combinatorial interaction of thousands of correct decisions, each of which locally reduced optionality without triggering any test failure. The system's entropy therefore increases in the change-space topology even as the codebase remains functionally correct, making future modifications progressively more expensive as developers must navigate an ever-growing web of implicit, untested coupling.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 134,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,8 @@
+[
+  "Goodhart decay: metrics selected for local correctness optimize away the unmeasured affordances future changes depend on",
+  "Self-organized criticality: verified incremental edits accumulate structural correlations that push the system toward a percolation threshold of cascading faults",
+  "Entropy of the implicit contract space: each verified change adds hidden invariants, shrinking the lattice of future viable edits faster than code grows",
+  "Epistemic opacity: the system's behavior becomes computationally irreducible from its source text, making local proof of correctness irrelevant to global changeability",
+  "Ecosystem lock-in: co-evolution with external dependencies creates an entangled network whose joint state space eventually permits no independent local moves",
+  "Affordance network collapse: repeated optimization of existing interfaces eliminates nearby alternatives, stranding the system in a deep basin of the design landscape"
+]

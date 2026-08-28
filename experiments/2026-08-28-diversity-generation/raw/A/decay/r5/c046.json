@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.135
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-959",
+    "object": "chat.completion",
+    "created": 1787932323,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade not because of code rot, but because every locally-correct change encodes a tacit assumption about the system's acceptable state space, and these assumptions accumulate as implicit, untested invariants that progressively constrain future modifications. The system becomes harder to change because the gap between its formal specification (tests, types) and its true behavioral contract grows monotonically, leaving developers to reverse-engineer constraints that were never documented but are nonetheless enforced by the interdependency network.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 110,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

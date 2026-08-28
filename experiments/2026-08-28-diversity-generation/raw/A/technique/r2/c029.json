@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.305
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-859",
+    "object": "chat.completion",
+    "created": 1787931552,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is refinement types paired with SMT-based synthesis: constrain the program's types to embed the specification's logical commitments, then let the synthesizer search for inhabitants of those types. This guarantees that the generated executable code satisfies the specification by construction, because any term that type-checks is a proof of the specification. The approach fails precisely when the specification's logic exceeds the SMT solver's decision procedure, making the boundary between verifiable and unverifiable commitments explicit and actionable.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 105,
+      "total_tokens": 203
+    }
+  },
+  "transport_error": null
+}

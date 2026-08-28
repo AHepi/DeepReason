@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.081
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-146",
+    "object": "chat.completion",
+    "created": 1787932934,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade not through individual defects, but through the gradual accumulation of implicit cross-module invariants—unstated dependencies that form as developers observe and rely on emergent system behavior. Each locally correct change unknowingly increases the graph of hidden assumptions, making future modifications increasingly likely to violate an invariant that was never documented, tested, or even consciously recognized. The system becomes harder to change because its true complexity lies in the invisible coupling between components, not in the code itself, and this shadow architecture grows monotonically with every modification that succeeds without explicitly encoding the constraints it relied upon.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 130,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

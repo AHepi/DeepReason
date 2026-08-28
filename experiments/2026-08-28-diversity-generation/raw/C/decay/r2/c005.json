@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.612
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-822",
+    "object": "chat.completion",
+    "created": 1787930314,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate ease, creating an accumulation of implicit dependencies. These dependencies form a hidden coupling network, meaning future changes must satisfy an increasingly large set of undocumented constraints to remain locally correct.\", \"probability\": 0.07}, {\"conjecture\": \"Tests and reviews enforce correctness relative to current requirements, but they cannot enforce preservation of evolvability. Therefore, every accepted change slightly increases the system's specificity, reducing its entropy of possible future designs until modifications require rewriting large, over-fit portions of the codebase.\", \"probability\": 0.05}, {\"conjecture\": \"The definition of 'locally correct' expands with system scale, requiring changes to maintain compatibility with a growing set of past decisions. This forces new changes to work around historical constraints rather than implementing the optimal current design, creating an asymptotic increase in modification cost.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems accumulate accidental complexity through individually justified deviations from architectural rules. The cost of change rises because the probability of a new change conflicting with at least one past deviation follows a combinatorial explosion as the codebase grows.\", \"probability\": 0.04}, {\"conjecture\": \"Software changes are made under bounded rationality, meaning developers choose the easiest local implementation to pass review. Over time, this builds a technical debt landscape where the cognitive load required to understand all previous local optimizations exceeds the capacity needed to safely implement new changes.\", \"probability\": 0.08}, {\"conjecture\": \"Review and testing processes act as stabilizing selection, preserving existing structures while allowing local adaptations. This causes the system to evolve into a local optimum in the fitness landscape, where any further change requires a massive, coordinated leap to a new architectural paradigm to improve evolvability.\", \"probability\": 0.06}, {\"conjecture\": \"Because each change is verified locally, developers lack the global context to refactor the underlying abstractions. This causes abstractions to erode over time; they are stretched to cover edge cases they were not designed for, making them simultaneously rigid and brittle to future modifications.\", \"probability\": 0.03}, {\"conjecture\": \"Every locally correct change introduces implicit invariants that are not captured by the type system or tests. The difficulty of change grows exponentially because the cost of verifying a new change is safe scales with the number of these undocumented invariants it might violate.\", \"probability\": 0.02}, {\"conjecture\": \"Codebases become harder to change because each passing test encodes a specific historical expectation, effectively freezing a small part of the system's behavior. As these frozen constraints accumulate, any new feature must navigate a dense labyrinth of rigid legacy expectations, making change disproportionately expensive.\", \"probability\": 0.01}, {\"conjecture\": \"The process of localized testing and review inherently filters out systemic refactoring. It selects for changes that are safe in the short term, causing the codebase to drift into a tangled state where the structural cost of integrating any new feature grows linearly with the total number of previously accepted features.\", \"probability\": 0.09}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 650,
+      "total_tokens": 825
+    }
+  },
+  "transport_error": null
+}

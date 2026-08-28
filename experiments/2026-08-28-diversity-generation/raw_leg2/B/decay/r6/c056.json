@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic sunk-cost and institutional memory encoding in codebase topologies\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.357
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-61",
+    "object": "chat.completion",
+    "created": 1787937630,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-correct, reviewed change overwrites an initially speculative code path into a verified structural commitment, encoding institutional memory into the codebase topology by collapsing alternative design possibilities into concrete dependencies. This accumulated epistemic sunk-cost makes future changes harder not because of technical debt, but because every modification must now pay the recurring cost of re-validating the now-forgotten historical reasons for the existing structure against the new change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 92,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.879
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-464",
+    "object": "chat.completion",
+    "created": 1787935130,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The dominant technique is bidirectional refinement via dependent types with integrated SMT-based proof automation. Instead of writing code and then verifying it post hoc, the developer alternates between refining abstract propositions into concrete implementations and pushing concrete code back up into abstract proofs, with the SMT solver discharging routine proof obligations automatically. This collapses the specification-implementation gap by making every execution a proof witness and every proof a runnable program, eliminating the class of bugs where executable behavior silently diverges from stated commitments.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 110,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

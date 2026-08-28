@@ -1,0 +1,8 @@
+[
+  "perturb a known optimal packing of 13 disks to maximize minimal triangular gap",
+  "lift a finite projective plane configuration into the square via affine map",
+  "derive exact lower bounds from oriented matroid realizability constraints",
+  "use tropical geometry to parametrize area-degenerate triple arrangements",
+  "simulate annealing with exact-rational area scoring under simplex constraints",
+  "reduce to a min-max semialgebraic optimization and certify via sum-of-squares"
+]

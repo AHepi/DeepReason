@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architectural knowledge becomes progressively tacit and undocumented, increasing the cognitive entropy required to reconstruct safe-change boundaries from code alone\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.199
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-632",
+    "object": "chat.completion",
+    "created": 1787930042,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change subtly increases the system's architectural coupling entropy—the undocumented dependencies between components that are invisible at the code level but constrain future modifications. Because reviews and tests validate local behavior, not global architectural invariants, they systematically fail to detect when a change crosses a tacit boundary, causing the safe-change surface to fragment faster than documentation can track it. The result is that the cognitive cost of reconstructing these boundaries from code alone grows superlinearly with the number of changes, since each change adds new implicit constraints that must be reverse-engineered before any subsequent modification can be deemed safe.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 126,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

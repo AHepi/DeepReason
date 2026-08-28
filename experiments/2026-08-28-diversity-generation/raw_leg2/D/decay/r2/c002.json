@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Causal representational drift between domain state and codebase ontology\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.212
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-581",
+    "object": "chat.completion",
+    "created": 1787936648,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Long-running systems accumulate 'ontological fossil layers' where domain entities that have been split, merged, or redefined in the business leave behind code structures that cannot be safely removed because their boundaries no longer map to current domain concepts, making every new change require interaction with multiple incompatible entity definitions.\", \"probability\": 0.09}, {\"conjecture\": \"Each locally correct change optimizes the codebase's ontology for the domain state at that moment, but because domain evolution is continuous and code commits are discrete, the codebase's representational schema is always a lagging interpolation of past domain states, and the gap between current domain reality and the code's best-fit historical ontology grows monotonically.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty of change grows because domain concepts evolve by branching and specializing while code structures evolve by extension and wrapping, creating a systematic representational asymmetry where one domain concept maps to multiple overlapping code entities or multiple domain concepts map to one overloaded code entity, increasing ambiguity with each change.\", \"probability\": 0.07}, {\"conjecture\": \"Every locally correct change that introduces a new abstraction or entity boundary in code creates a 'representational commitment' that persists in the codebase's ontology even after the domain reason for that boundary disappears, causing the code to accumulate structural constraints that have no current domain analogue and that must be navigated around in all future changes.\", \"probability\": 0.08}, {\"conjecture\": \"The codebase ontology and domain state undergo coupled but desynchronized evolution where each acts as a forcing function on the other, and because the codebase cannot perfectly represent intermediate domain states (only committed snapshots), the representational drift accumulates as 'phase lag' that makes the mapping between domain concepts and code structures increasingly many-to-many and ambiguous.\", \"probability\": 0.06}, {\"conjecture\": \"As the system evolves, individual changes introduce 'semantic seams' where a single domain concept has been represented differently in different parts of the codebase at different times, and the cost of any new change is dominated by the need to reconcile these divergent representations rather than implement the domain logic itself.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems become harder to change because of 'representational impedance accumulation': each locally correct change implicitly assumes a particular decomposition of the domain, and as the domain shifts, successive changes assume incompatible decompositions, creating a codebase where no single ontological model of the domain is consistently honored.\", \"probability\": 0.07}, {\"conjecture\": \"The codebase's ontology fragments because domain concept boundaries drift faster than code entity boundaries can be refactored, causing each code entity to accumulate references to multiple generations of domain meaning, and the cost of change is proportional to the number of semantic generations any touched entity has accumulated.\", \"probability\": 0.04}, {\"conjecture\": \"Every locally correct change that maps a domain concept to a code structure creates a 'representational lock-in' where the chosen granularity, naming, and boundary of the code entity constrains how future domain changes can be expressed, and over time the codebase's ontology becomes a compromise that represents no actual domain state well, just a union of constraints from all past states.\", \"probability\": 0.06}, {\"conjecture\": \"The system becomes harder to change because each locally correct change either extends or narrows the scope of an existing code entity to accommodate a domain shift, and these incremental scope adjustments accumulate as 'ontological blur' where every code entity's representational scope has been stretched across multiple domain states until none has a clear referent.\", \"probability\": 0.05}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 772,
+      "total_tokens": 963
+    }
+  },
+  "transport_error": null
+}

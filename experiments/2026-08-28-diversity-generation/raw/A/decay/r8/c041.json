@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.724
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-66",
+    "object": "chat.completion",
+    "created": 1787932941,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct change increases the system's state space by carving out a new exception to prior assumptions, causing the number of implicit invariants the next change must satisfy to grow combinatorially rather than linearly. The accumulating constraint surface is invisible at the level of individual diffs and tests because each change only verifies local containment, not the shrinking volume of remaining safe state transitions. Therefore, architectural difficulty is an entropic property of the version-control history itself, governed by the number of surviving branch-specific assumptions rather than by any measurable quality of the current code.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 123,
+      "total_tokens": 225
+    }
+  },
+  "transport_error": null
+}

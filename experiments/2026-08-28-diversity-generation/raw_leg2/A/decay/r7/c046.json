@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.478
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-679",
+    "object": "chat.completion",
+    "created": 1787937773,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally-correct change implicitly assumes a set of invariants from its surrounding context, so the system's true coupling isn't found in its code, but in the union of all untested assumptions each change was validated against. As this union grows, the shared assumption space expands far faster than the executable code, meaning any new change is increasingly likely to violate a latent invariant that no existing test checks for because no single change introduced it. The system becomes harder to change not because its structure is decaying, but because the implicit contract space has become too vast for any local reasoning to safely navigate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 127,
+      "total_tokens": 229
+    }
+  },
+  "transport_error": null
+}

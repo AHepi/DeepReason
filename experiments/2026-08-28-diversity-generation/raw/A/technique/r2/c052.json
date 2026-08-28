@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.764
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-244",
+    "object": "chat.completion",
+    "created": 1787931584,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification directly into a proof-carrying executable via refinement types and dependent type theory, where the compiler emits machine-verifiable certificates that each operation preserves the specification's invariants. This shifts the burden from testing to mathematical guarantee: the code holds its commitments because it is physically impossible to emit a binary that lacks a constructive proof of conformance. Any specification admitting such a compilation is therefore guaranteed to produce faithful executables, while those that do not are formally undecidable and should be rejected at the design stage.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 119,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

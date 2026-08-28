@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.567
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-788",
+    "object": "chat.completion",
+    "created": 1787937899,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems degrade because each locally correct change adds implicit constraints to the system's state space. Over time, the set of feasible future changes shrinks as the intersection of all prior constraints becomes prohibitively narrow, even though no single change caused the bottleneck.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Each change to a system encodes a hypothesis about what the system needs to do, but hypotheses are never retired—only layered. The system becomes harder to change because modifications must now satisfy the union of all historical hypotheses, most of which are no longer relevant but whose code remains load-bearing for current behavior.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Testing validates that a change preserves existing behavior, but this inverts the incentive structure: making changes that are easy to test becomes more important than making changes that are easy to evolve. Systems ossify because test suites penalize structurally superior changes that would alter many behavioral signatures, even when those changes are architecturally necessary.\",\n      \"probability\": 0.092\n    },\n    {\n      \"conjecture\": \"Code review optimizes for local legibility—can the reviewer understand this diff?—but local legibility accumulates into global opacity. Each change is understandable in isolation, but the system as a whole becomes unreasonably difficult to reason about because no single change was evaluated against the global cognitive load it would impose.\",\n      \"probability\": 0.071\n    },\n    {\n      \"conjecture\": \"Every change introduces hidden coupling between modules through shared assumptions about data format, timing, or failure modes. These couplings are invisible to tests because tests share the same assumptions, so the system becomes a rigid web where modifying one component silently breaks distant components that relied on the same implicit invariants.\",\n      \"probability\": 0.089\n    },\n    {\n      \"conjecture\": \"Software rot is a thermodynamic inevitability: each change increases the system's Kolmogorov complexity relative to any fixed specification language. The gap between what the system does and the shortest description of what it does grows monotonically, making both understanding and modification progressively more expensive regardless of engineering quality.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Domain knowledge evaporates from the team faster than it accumulates in the codebase. Each change is locally correct because the developer who made it held the necessary context, but that context is never fully encoded in the code. Over time, the fraction of system behavior that depends on absent human knowledge grows until no one can safely modify the system.\",\n      \"probability\": 0.082\n    },\n    {\n      \"conjecture\": \"Abstractions leak at a constant rate per usage, and each change introduces new usages. The system becomes harder to change because the cumulative leak rate exceeds the team's capacity to patch abstractions, so developers must work around the abstractions rather than through them, adding bypass logic that further degrades the abstraction boundary.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"Each locally correct change optimizes for the current change's cost, creating a greedy algorithm over the design space. Greedy algorithms on rugged landscapes converge to local optima, so the system progressively loses the ability to reach globally superior designs without a step that is locally worse—exactly what review and testing are designed to prevent.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Software systems accumulate accidental complexity because developers distinguish it from essential complexity and defer addressing it. But accidental complexity compounds: today's accidental complexity becomes tomorrow's essential complexity because new changes build on it. The deferral strategy is locally rational but globally catastrophic because the cleanup cost grows superlinearly with each deferred cleanup.\",\n      \"probability\": 0.068\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 839,
+      "total_tokens": 1014
+    }
+  },
+  "transport_error": null
+}

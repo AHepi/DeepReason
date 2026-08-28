@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Path-dependence and lock-in via irreversible architectural commitments\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.292
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-159",
+    "object": "chat.completion",
+    "created": 1787932392,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems accumulate 'architectural keystone commitments'—specific interface contracts or data schemas that become irreversible because the cost of auditing all dependent consumers exceeds the cost of working around the constraint. Each locally rational workaround creates new dependencies on the original commitment, progressively expanding the set of changes that are technically possible but economically infeasible, trapping the system in an increasingly narrow cone of evolvable states.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 92,
+      "total_tokens": 214
+    }
+  },
+  "transport_error": null
+}

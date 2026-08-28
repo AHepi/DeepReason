@@ -1,0 +1,8 @@
+[
+  "synthesizing code from refinement-type-annotated proof obligations",
+  "training neural models on execution-trace traces with runtime invariant monitors",
+  "constructing programs via constraint-solver satisfaction of algebraic contracts",
+  "deriving implementations by extraction from mechanically-verified constructive proofs",
+  "runtime-enforced behavior shaping via monitor-actor reflection loops",
+  "evolving populations of executables against adversarial property-based test oracles"
+]

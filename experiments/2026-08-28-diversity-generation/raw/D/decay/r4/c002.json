@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cognitive load scaling limit where maintainer working memory exceeds system causal depth\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.215
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-544",
+    "object": "chat.completion",
+    "created": 1787932255,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Long-running systems become harder to change because the causal depth of interactions exceeds the ~4-7 chunk limit of maintainer working memory, forcing maintainers to hold more simultaneous dependencies than they can mentally rehearse. Each locally correct change adds one more edge to a dependency graph that has already crossed the cognitive threshold where no single human can trace all paths from cause to effect.\", \"probability\": 0.075}, {\"conjecture\": \"The degradation is driven by a phase transition: once the system's causal depth exceeds working memory capacity, maintainers shift from reasoning about actual behavior to reasoning about local patterns and conventions. Changes remain locally correct but become globally incoherent because no one can hold enough of the causal chain to predict side effects.\", \"probability\": 0.068}, {\"conjecture\": \"Entropy in the mapping between code structure and causal structure accumulates until the two diverge beyond what working memory can reconcile. Maintainers can read the code but cannot reconstruct the causal graph it implies, so every change is a guess about interactions they cannot fully hold in mind.\", \"probability\": 0.072}, {\"conjecture\": \"The system's causal depth grows monotonically with each change, but maintainer working memory is a fixed biological constraint. Difficulty scales linearly with causal depth below the memory threshold and superlinearly above it, because exceeding the threshold forces maintainers into expensive external simulation (reading logs, running tests) to substitute for the mental simulation they can no longer perform.\", \"probability\": 0.061}, {\"conjecture\": \"Locally correct changes accumulate implicit causal links that are never encoded in any artifact a maintainer can scan quickly. The system's true causal depth is invisible at the level of individual modules, so each change looks safe but increases the hidden depth that will eventually exceed what any maintainer can hold and reason about simultaneously.\", \"probability\": 0.059}, {\"conjecture\": \"Technical debt is better understood as the gap between the system's actual causal depth and the causal depth a maintainer can hold in working memory. This gap grows because every change adds causal depth but no change expands working memory, so the system crosses into a regime where maintainers must rely on luck and iteration rather than understanding.\", \"probability\": 0.064}, {\"conjecture\": \"The problem is not code complexity per se but the collapse of chunking. Early in a system's life, maintainers form stable mental chunks that compress causal chains into reusable units. As changes accumulate, those chunks become invalid faster than new ones can be formed, until the maintainer's working memory is overwhelmed by unchunked causal fragments too numerous to hold.\", \"probability\": 0.057}, {\"conjecture\": \"Each reviewed and tested change optimizes locally and shifts causal depth upward, but the review process only checks what reviewers can hold in mind, which is bounded by working memory. The process therefore passes changes that increase causal depth beyond the very cognitive limit that the review process depends on, creating a self-undermining feedback loop.\", \"probability\": 0.053}, {\"conjecture\": \"Long-running systems become harder to change because causal depth compounds nonlinearly: each new interaction can reference any prior interaction, so the number of causal paths a maintainer must trace grows combinatorially while working memory stays constant. The system becomes harder to change not because any single path is complex but because the number of paths exceeds what can be mentally indexed.\", \"probability\": 0.048}, {\"conjecture\": \"The difficulty increase is governed by a conservation law: maintaining local correctness requires encoding causal context in tests, comments, and types, but these artifacts themselves add to the total information a maintainer must process. The system eventually saturates maintainer working memory regardless of how well the causal depth is externally documented, because the documentation becomes part of the cognitive load.\", \"probability\": 0.043}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 818,
+      "total_tokens": 1010
+    }
+  },
+  "transport_error": null
+}

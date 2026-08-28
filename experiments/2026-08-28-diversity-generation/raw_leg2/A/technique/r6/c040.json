@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.977
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-954",
+    "object": "chat.completion",
+    "created": 1787942544,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to compile the abstract specification into a dependent type theory whose computational interpretation is extraction-by-construction, then discharge all proof obligations through a counterexample-guided inductive synthesis loop that conjoins specification fragments with candidate programs. The resulting term is executable code that holds its commitments precisely because every reduction step is a cut-elimination in the proof. If a counterexample is found, it maps to a missing case-split that the synthesizer must add, making the procedure monotone toward correctness.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 110,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

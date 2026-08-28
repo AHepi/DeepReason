@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic bit rot of unexercised execution paths\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.707
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-727",
+    "object": "chat.completion",
+    "created": 1787930575,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software entropy increases because each locally correct change optimizes for current requirements, systematically over-fitting the system to a shrinking region of the state space and permanently destroying mutual information with unexercised paths.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Unexercised execution paths lose semantic coherence not because code physically degrades, but because the shared tacit knowledge encoding their purpose decays in the team's collective memory, reducing the channel capacity needed to safely modify them.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The probability of a safe modification to any code region is proportional to the recent execution frequency of paths through it; paths with zero or low recent execution accumulate latent state dependencies that are invisible to current tests, creating an information deficit about their true constraints.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each integration of a locally correct change adds assumptions to the codebase that are never explicitly recorded, so the entropy of the system's implicit constraint surface grows monotonically while the information available to developers about those constraints remains constant or shrinks.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Test suites provide information only about exercised paths, so as the system grows, the fraction of the execution state space covered by tests asymptotically approaches zero, meaning an increasing majority of possible changes introduce undetectable violations of dormant invariants.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Refactoring difficulty scales with the depth of the call graph, because the mutual information between a module's interface and its distant callers degrades over time as intermediate layers evolve independently, making the true blast radius of any change uncomputable from local information.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate dead code and dormant branches that act as a noisy channel: the presence of these paths increases the Kolmogorov complexity of reasoning about any change, even though the dormant paths themselves are never triggered, because developers cannot distinguish truly dead code from merely unexercised but load-bearing code.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Configuration spaces in long-running systems grow combinatorially while the information encoded in version control and documentation grows linearly, so the probability that a developer can identify the exact configuration context relevant to a given change decreases exponentially with system age.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Every locally correct change that passes review implicitly narrows the system's behavioral contract without recording this narrowing, so the number of hidden invariants grows superlinearly while the information available to detect them via tests or documentation grows sublinearly, creating a divergent information gap.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The rate of change difficulty increase is governed by the rate at which execution paths become unexercised due to shifting usage patterns; once a path stops being exercised, the information about its operating assumptions decays exponentially with a half-life determined by team turnover and documentation quality.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 711,
+      "total_tokens": 903
+    }
+  },
+  "transport_error": null
+}

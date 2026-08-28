@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Test suite overfitting to historical execution paths\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.213
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-73",
+    "object": "chat.completion",
+    "created": 1787938175,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Regression tests encode a system's execution paths as an implicit specification. As the system evolves, each new test pins behavior that was merely accidental in a prior implementation, causing the test suite to progressively overconstrain the design space and make architecturally distinct changes impossible to pass.\", \"probability\": 0.085}, {\"conjecture\": \"Test suites accumulate assertions about specific state trajectories rather than final invariants. Over time, these trajectory-assertions form a combinatorial cage where any structural refactor, even if functionally equivalent, alters the path and breaks tests, forcing developers to preserve historical execution shapes.\", \"probability\": 0.072}, {\"conjecture\": \"Every test that mocks a historical module boundary permanently ossifies that interface. The accumulation of deep mocks across a test suite creates a coordination lock-in: changing the boundaries requires updating thousands of tests, so the cost of architectural change scales with test count rather than system complexity.\", \"probability\": 0.064}, {\"conjecture\": \"Tests written after a bug fix validate the specific historical failure mode, not the general invariant. This overfits the test suite to past defects, meaning future refactors must reproduce the exact bug-handling logic to pass, even when a new architecture would prevent the bug class entirely.\", \"probability\": 0.058}, {\"conjecture\": \"Integration tests capture the exact interaction topology of the system at the time they were written. As this topology evolves, layered integration tests create a many-to-many coupling where a single architectural change triggers failures across hundreds of tests, making systemic refactoring economically infeasible.\", \"probability\": 0.051}, {\"conjecture\": \"Developers write tests that assert on the most observable, concrete outputs—often side-effects, logs, or specific exception messages. These brittle assertions overfit to the current implementation's epiphenomena, so any change to the implementation, no matter how locally correct, causes cascading test failures unrelated to core logic.\", \"probability\": 0.047}, {\"conjecture\": \"A test suite is a bias-variance tradeoff in software. High coverage means low variance against historical execution paths but high bias against novel architectures. The system becomes harder to change because the test suite is overfit to the manifold of past solutions and rejects all points off that manifold.\", \"probability\": 0.043}, {\"conjecture\": \"As a system ages, tests become the de facto specification, but they are a bottom-up specification composed of millions of specific input-output pairs. Unlike a top-down specification, this bottom-up version cannot be easily modified to accommodate new requirements; any architectural change requires an exponential rewrite of the test oracle.\", \"probability\": 0.039}, {\"conjecture\": \"Test suites suffer from coverage monotonicity: tests are added to lock in behavior but rarely removed when that behavior becomes obsolete. This creates a growing 'test debt' where the suite enforces a union of all past architectural states, and any new change must be compatible with this entire historical superposition.\", \"probability\": 0.035}, {\"conjecture\": \"The test suite becomes a second copy of the program's control flow graph, but one that is resistant to refactoring tools. While the main codebase can be restructured automatically, the test suite must be manually updated, and this manual cost grows super-linearly with the divergence between the old and new architecture.\", \"probability\": 0.029}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 728,
+      "total_tokens": 916
+    }
+  },
+  "transport_error": null
+}

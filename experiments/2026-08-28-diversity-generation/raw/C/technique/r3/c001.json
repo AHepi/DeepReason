@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.451
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-382",
+    "object": "chat.completion",
+    "created": 1787931953,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement types with SMT-based type checking, where the abstract specification is written as refinement predicates directly in the code and the type checker statically proves conformance. This holds commitments because every execution path must satisfy the refinement constraints or the program fails to compile.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is generative testing derived from specification invariants, where the specification is encoded as property-based tests and the code is continuously fuzzed against them. This holds commitments because random input generation exposes invariant violations that would escape manual testing.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is denotational design, where the specification is written as a pure mathematical function and the implementation is a refinement of that function proved equivalent via equational reasoning. This holds commitments because the mathematical semantics are preserved by construction.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is contract-driven development with runtime assertion checking, where preconditions, postconditions, and invariants are extracted from the specification and checked at every function boundary during execution. This holds commitments because any specification violation is caught immediately at runtime rather than producing silent corruption.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is model-based testing where the abstract specification serves as an oracle, generating test cases and checking that the implementation's output matches the specification's predicted output. This holds commitments because the specification itself mechanically validates the implementation's behavior across generated inputs.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is constructive type theory with dependently typed languages like Agda or Idris, where the specification is expressed as a type and the program is a proof term inhabiting that type. This holds commitments because the type checker mechanizes the proof that the code satisfies the specification.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is refinement calculus, where the abstract specification is transformed into executable code through a chain of correctness-preserving refinements, each step verified by a theorem prover. This holds commitments because each refinement step is individually proved to preserve the specification's semantics.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is specification mining with LLMs, where the abstract specification is used as a prompt to generate code, and the specification is then re-extracted from the generated code and compared to the original. This holds commitments because round-tripping the specification through generation and re-extraction catches semantic mismatches.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique is algebraic specification with executable semantics, where the specification is written as equational laws and the implementation is checked to satisfy those laws via automated testing. This holds commitments because the equational laws are directly testable as program properties.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is stepwise refinement with Hoare logic, where each implementation step is annotated with preconditions and postconditions and verified by an automated theorem prover like Dafny or Frama-C. This holds commitments because the Hoare triples are mechanically discharged at each refinement step.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 676,
+      "total_tokens": 847
+    }
+  },
+  "transport_error": null
+}

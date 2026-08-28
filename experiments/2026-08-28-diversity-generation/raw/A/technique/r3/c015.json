@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.249
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-357",
+    "object": "chat.completion",
+    "created": 1787931757,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique for turning an abstract specification into executable code is refinement types with automated theorem proving, where the type system continuously verifies that every code construct is a logical consequence of the specification. This outperforms test-based and model-based approaches because it makes the specification-machine itself the compiler's semantic gatekeeper, rejecting any implementation that cannot be proven to hold the spec's commitments. If this conjecture holds, the resulting executable will hold its commitments by construction, making post-hoc verification redundant.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 106,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

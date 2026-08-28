@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.01
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-715",
+    "object": "chat.completion",
+    "created": 1787934598,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is to compile the specification into an intermediate formalism whose type system is governed by dependent types, then extract code by erasure—guaranteeing that any extracted executable satisfies its original commitments by construction. The semantic gap between abstract specification and executable code is closed not by testing or post-hoc verification, but by making the specification itself the well-typed program from which the executable is a projection. This shifts the burden from proving code correct after the fact to ensuring correctness through the soundness of the extraction relation.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 119,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topology of dependency graph drifting toward forbidden minors\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.513
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-496",
+    "object": "chat.completion",
+    "created": 1787937929,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally correct change that resolves an immediate dependency constraint acts as a graph contraction, merging previously independent subgraphs. Over thousands of changes, the dependency graph undergoes a topological phase transition: it crosses the threshold where every remaining subgraph contains K5 or K3,3 as a minor, making the system structurally rigid because any further modification requires simultaneously rewriting a non-planar subgraph that no individual change can justify.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Test coverage enforces a shadow dependency graph of assertion paths. Over time, this shadow graph drifts toward containing forbidden minors that the code graph itself avoids, so every change requires disproving non-planarity of test coupling before code can be modified.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The rate of architectural ossification is governed by a graph invariant analogous to graph genus. Each locally correct change adds one edge crossing to the dependency surface. Once the genus exceeds the team's cognitive budget for mental visualization, changes become disproportionately expensive because no developer can find an embedding of the modified subgraph on a surface they can reason about.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Well-tested codebases accumulate transitive test dependencies that form a shadow graph of higher genus than the code dependency graph itself. The system becomes hard to change not because code dependencies are tangled, but because the test dependency graph has drifted into containing forbidden minors of a surface the team can no longer reason about, making every change require rewriting tests in ways that break invariant preservation.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The rigidity emerges because each locally correct change preferentially connects the two highest-degree nodes it touches, following a preferential attachment process on the dependency graph. This drives the graph toward a topology where every spanning tree contains multiple K3,3 subdivisions, so any attempt to remove an edge creates a cascade of broken invariants along multiple non-planar paths simultaneously.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Code review acts as a graph homomorphism preservation mechanism: it ensures each change is locally valid but never checks whether the global graph is approaching forbidden minor containment. The system becomes hard to change because review systematically filters out changes that would break minor-monotone properties while allowing all changes that increase minor density, creating a one-way ratchet toward K5/K3,3 saturation.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate dependency cycles that are individually harmless but collectively drive the graph past the threshold where every biconnected component contains a K3,3 minor. Once this threshold is crossed, the graph has zero tree-width slack, so any modification requires decomposing a non-planar biconnected component that no local change can justify.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Refactoring is a graph edge-deletion process, but each deletion has a probability p of adding compensating edges elsewhere. When p exceeds the critical threshold for maintaining planarity, the graph undergoes an irreversible topological transition: the expected number of K5 minors per module exceeds one, and the cost of any change becomes superlinear in the number of modules touched because each change must preserve an increasingly dense minor structure.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The dependency graph of a long-lived system undergoes minor-closed drift: each locally correct change preserves all existing minor relationships while adding new edges that increase the graph's Hadwiger number. The system becomes hard to change when the Hadwiger number exceeds the organization's coordination capacity, because any change that would reduce it requires deleting edges that no individual review can justify removing.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software entropy is a graph-theoretic quantity: the dependency graph of a long-running system drifts toward the Robertson-Seymour boundary, where every minor-closed property the system needs to maintain (planarity, bounded genus, bounded tree-width) is simultaneously violated. The system becomes hard to change because no finite set of local changes can reduce the graph below this boundary once crossed.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 940,
+      "total_tokens": 1128
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Thermodynamic irreversibility of edit histories\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.777
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-390",
+    "object": "chat.completion",
+    "created": 1787933311,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every code edit increases the system's structural entropy by creating new dependencies without removing old ones, making the edit history a thermodynamically irreversible process where the 'work' required to reverse a change grows monotonically with the number of subsequent edits that have entangled with it.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software maintenance difficulty is governed by a Landauer-like principle: the minimum cognitive 'work' required to safely modify a system is proportional to the number of distinct dependency paths that would need to be 'erased' or rerouted, and this cost grows because each accepted edit locks in historical constraints that cannot be erased without paying the full cost of their re-derivation.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The irreversibility arises because each locally-correct edit acts as a Maxwell's demon that locally reduces uncertainty (fixing a bug, adding a feature) while pumping entropy into the global coupling structure, so the system's capacity for reversible change degrades exactly as heat dissipation degrades a physical engine's efficiency.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running codebases obey a computational analogue of the second law: the number of reachable valid configurations from the current state shrinks over time because each edit narrows the constraint surface, making the forward direction of edit history thermodynamically favored and the reverse direction exponentially suppressed.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The growing difficulty of change is a direct manifestation of entropy production in the dependency graph: each edit adds edges faster than it removes them, and the graph's configurational entropy converges toward a maximum-entropy 'dead state' where no edit can be made without disturbing a number of neighbors that exceeds the team's coordination capacity.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Code edit histories are thermodynamically irreversible because each accepted change destroys information about the set of alternatives that were not chosen, and this lost information is exactly what would be needed to safely undo or re-route around the change later—so the cost of change grows as accumulated information loss.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The system's resistance to change follows a free energy landscape where each edit deepens the local minimum it was designed to satisfy, so the 'activation energy' required to move the system to any new configuration grows monotonically because subsequent edits build upon the stabilized regions rather than exploring alternatives.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each reviewed-and-tested edit is a quasi-static compression of the system's behavioral possibility space into a narrower working region, and this compression is irreversible because the decompression (undoing the constraints) requires knowledge of the full original possibility space that was discarded at each step—a quantity that grows as the log of the number of edits.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Software systems exhibit arrow-of-time behavior because edits are applied in a low-to-high coupling direction: early edits can assume few constraints, but each accepted edit adds a constraint that all future edits must respect, creating a ratchet where the 'temperature' of feasible changes drops with each commit until the system freezes.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The irreversibility is measurable: the Kolmogorov complexity of the minimal test suite needed to verify safe change grows monotonically with edit history length, because each edit adds a non-redundant constraint that must be checked, and the cost of verifying any new change is proportional to the total accumulated constraint set—making the system thermodynamically expensive to perturb.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 841,
+      "total_tokens": 1028
+    }
+  },
+  "transport_error": null
+}

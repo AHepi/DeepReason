@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extract code by constructive proof in a dependent type theory\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.561
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-238",
+    "object": "chat.completion",
+    "created": 1787931988,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The binding constraint on extraction-by-constructive-proof is not the proof assistant's kernel but the elaborator's capacity to refine abstract specifications into computational data structures without injecting non-computational axioms, so the technique's reliability is almost entirely a function of elaborator design.\", \"probability\": 0.07}, {\"conjecture\": \"Extracted code holds its commitments only if the type theory enforces strict positivity and universe consistency at the level of compiled extract, not merely at the level of proof-checking; any relaxation in the extraction pipeline is a soundness bug.\", \"probability\": 0.06}, {\"conjecture\": \"The optimal technique is to maintain the specification as a dependent record of proof terms indexed by an abstract interface, then extract by record projection—eliminating the need for a separate extraction algorithm entirely.\", \"probability\": 0.05}, {\"conjecture\": \"Specifications written as general-recursive predicates will always produce non-terminating extracted code unless the proof itself carries a termination metric, so the only scalable technique is to make termination evidence an explicit parameter of the specification type.\", \"probability\": 0.08}, {\"conjecture\": \"Code extracted from constructive proofs in a Martin-Löf type theory without axioms will hold its commitments, but only for a specific notion of commitment: observational equivalence under total inputs. Partial correctness requires a fundamentally different type-theoretic treatment.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to eliminate the extraction step entirely: program directly in the type theory using quotient types and higher inductive types, treating the compiled program as the proof object itself rather than a derivative artifact.\", \"probability\": 0.09}, {\"conjecture\": \"Abstract specifications become reliably executable only when every abstract function symbol in the specification is replaced by a constructive witness before extraction; any symbol remaining abstract at extraction time is a locus of failure.\", \"probability\": 0.03}, {\"conjecture\": \"The central problem is that classical reasoning principles are admissible but not computational; the best technique is to work in a type theory where classical axioms are internally represented as non-computational effects, so that any code extracted from a proof using them is explicitly marked as partial.\", \"probability\": 0.07}, {\"conjecture\": \"Extracted code from constructive proofs will fail to hold its commitments whenever the specification uses extensional equality, because extraction erases equality proofs and the resulting code operates on intensional structure; the technique only works for specifications written in intensional type theory from the outset.\", \"probability\": 0.06}, {\"conjecture\": \"The technique that produces code holding its commitments is to structure specifications as refinement types over a computational monad, so that extraction is literally the identity function and the proof's computational content is the program.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 601,
+      "total_tokens": 786
+    }
+  },
+  "transport_error": null
+}

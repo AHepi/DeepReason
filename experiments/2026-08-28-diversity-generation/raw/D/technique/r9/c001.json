@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constraint-driven synthesis from refinement types and SMT solving\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.771
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-848",
+    "object": "chat.completion",
+    "created": 1787935614,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Type-directed template synthesis (à la Myth/Oz) augmented with SMT-based pre/postcondition propagation dominates inductive synthesis from input-output examples for generating code that provably satisfies refinement type specifications. The search space reduction from bidirectional type checking yields a 10x reduction in synthesized program size capacity over example-driven approaches.\", \"probability\": 0.095}, {\"conjecture\": \"Interleaving SMT-based validity checking with incremental component enumeration—rather than validating after full program construction—produces exponential search pruning. Programs up to 15 nodes become synthesizable when constraint propagation occurs at each node, versus 7 nodes for post-hoc validation.\", \"probability\": 0.088}, {\"conjecture\": \"Encoding synthesis as a single monolithic SMT problem (unrolling the syntax tree into SMT constraints) fails to scale past 10 program nodes. Decomposing into type-checking sub-problems with lazy SMT instantiation is necessary for tractable synthesis at 20+ nodes.\", \"probability\": 0.072}, {\"conjecture\": \"Counterexample-guided inductive synthesis (CEGIS) with refinement types as the oracle outperforms pure-deductive synthesis when specifications contain existential quantifiers. The inductive loop learns shape constraints from counterexamples that SMT alone cannot infer within reasonable resource bounds.\", \"probability\": 0.081}, {\"conjecture\": \"Neural network guidance for component selection, trained on type-directed synthesis traces, reduces the branching factor of SMT-based synthesis by 5x on average. The neural prior must be calibrated—overconfident priors cause the solver to miss valid programs in underexplored branches.\", \"probability\": 0.069}, {\"conjecture\": \"Stochastic local search over program sketches, guided by SMT-based feasibility checking of partial assignments, outperforms complete enumeration for synthesis problems with large library spaces. The key insight is that SMT feasibility acts as a cheap filter before committing to full constraint solving.\", \"probability\": 0.064}, {\"conjecture\": \"Speculative synthesis—generating multiple candidate programs in parallel with relaxed type constraints, then verifying with full SMT—is faster than sequential constraint-driven search when the specification under-constrains the solution space. Parallelism factor of 8 yields 4x throughput on benchmarks with non-unique solutions.\", \"probability\": 0.058}, {\"conjecture\": \"Abstract interpretation with intervals and polyhedra, run as a pre-pass to SMT solving, eliminates infeasible branches early and reduces total SMT calls by 60%. The abstract domain must be precise enough to capture array indexing relationships, or the filtering is too coarse to help.\", \"probability\": 0.061}, {\"conjecture\": \"Incremental SMT solving with assertion stack push/pop, where each synthesis decision adds constraints incrementally rather than rebuilding the solver state, is essential for performance. Non-incremental approaches are 20x slower on synthesis problems requiring backtracking.\", \"probability\": 0.077}, {\"conjecture\": \"Equivalence-based pruning—checking partial programs for semantic equivalence with already-rejected candidates via SMT—eliminates redundant exploration. This matters most when the component library contains semantically overlapping functions (e.g., multiple fold implementations).\", \"probability\": 0.053}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 701,
+      "total_tokens": 886
+    }
+  },
+  "transport_error": null
+}

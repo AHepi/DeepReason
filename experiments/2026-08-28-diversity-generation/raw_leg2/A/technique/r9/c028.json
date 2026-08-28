@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.782
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-524",
+    "object": "chat.completion",
+    "created": 1787943410,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is property-based test generation directly from the specification's logical structure, combined with a compiler that rejects implementations failing the generated tests. The specification must be expressed as a set of formal invariants and pre/post-conditions, from which the system auto-generates thousands of test cases targeting boundary conditions and logical implications. This conjecture claims that executable correctness emerges not from manual implementation followed by testing, but from treating the specification as the primary test oracle and making implementation a search problem constrained by that oracle.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 127,
+      "total_tokens": 225
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.17
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-493",
+    "object": "chat.completion",
+    "created": 1787931531,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique for turning an abstract specification into executable code is to compile the specification into an intermediate representation paired with an SMT solver that generates both the code and the machine-checkable proof of its commitments simultaneously. In this approach, any downstream modification or optimization to the code must preserve the proof obligation or be rejected at the intermediate-representation level. This conjecture predicts that systems built this way will achieve a near-zero defect rate for commitment violations, outperforming traditional test-and-verify pipelines by orders of magnitude.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 111,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

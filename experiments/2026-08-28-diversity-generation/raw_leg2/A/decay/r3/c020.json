@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.383
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-848",
+    "object": "chat.completion",
+    "created": 1787936718,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The number of valid future changes to a system scales with the product of its assumptions, so each locally correct modification implicitly constrains a high-dimensional space of possible next modifications. Over time, the intersecting constraints from past changes cause the set of viable next steps to collapse toward an empty set, not because of code rot, but because the system's assumption-graph becomes over-determined. Software entropy is therefore the geometric consequence of locally optimal decisions accumulating in a shared dependency space.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 102,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

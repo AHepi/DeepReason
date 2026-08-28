@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.853
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-977",
+    "object": "chat.completion",
+    "created": 1787930124,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through accumulated errors, but through the progressive loss of change-affordances: each locally correct modification consumes a finite resource of structural optionality (e.g., unused extension points, decoupled boundaries, semantic slack in naming). Like thermodynamic entropy, this loss is irreversible by construction—any single change that preserves all existing affordances would be strictly suboptimal compared to one that leverages them. Therefore, a perfectly governed change process is paradoxically the fastest path to a frozen system, because local optimization systematically destroys the global capacity for future adaptation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 123,
+      "total_tokens": 225
+    }
+  },
+  "transport_error": null
+}

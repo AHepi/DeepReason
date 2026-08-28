@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedization depleting locally accessible neutral mutations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.926
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-266",
+    "object": "chat.completion",
+    "created": 1787932178,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct, validated change in a long-running software system does not merely move the system across the fitness landscape, but reshapes the landscape itself, progressively ruggedizing the local terrain. This ruggedization steadily depletes the density of locally accessible neutral mutations—changes that pass all existing tests without degrading fitness—until the neutral network becomes too sparse to traverse. The system appears harder to change not because of accumulated technical debt per se, but because the volume of safe, non-deleterious modifications neighboring the current configuration has fallen below the threshold required for continued adaptive exploration.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 124,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

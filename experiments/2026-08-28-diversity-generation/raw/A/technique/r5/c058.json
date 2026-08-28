@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.695
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-578",
+    "object": "chat.completion",
+    "created": 1787934636,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most effective technique is to compile the specification directly into refinement types embedded in the host language, then extract code via type-driven synthesis—rather than generating code and trying to verify it after the fact. The specification's logical commitments become static type obligations that the synthesizer must discharge at construction time, making conformance a structural property of the generated artifact rather than a post-hoc check. Under this approach, post-generation verification failures become impossible by construction, because any code that type-checks already constitutes a proof of the specification's commitments.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 119,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 34.493
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-168",
+    "object": "chat.completion",
+    "created": 1787937667,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change increases the density of implicit constraints between modules, raising the probability that the next valid change violates an undocumented invariant, thus increasing the expected cost of the next change.\", \"probability\": 0.085}, {\"conjecture\": \"Software systems accrue technical debt because each correct change optimizes for local readability, but the global conceptual model degrades as multiple developers successively overwrite each other's intended abstractions.\", \"probability\": 0.072}, {\"conjecture\": \"The entropy of the dependency graph strictly increases with every locally correct modification, causing the system to approach a maximally coupled state where no change is isolated, making every future change system-wide.\", \"probability\": 0.068}, {\"conjecture\": \"Long-running systems become harder to change because test suites optimize for regression coverage of past behavior rather than specification of intended behavior, meaning tests increasingly constrain permissible changes without clarifying what should be permissible.\", \"probability\": 0.079}, {\"conjecture\": \"Every correct change adds a new execution path without removing old ones, causing the state space to grow exponentially; the cost of verifying a new change is correct grows proportionally with the state space, independent of code size.\", \"probability\": 0.063}, {\"conjecture\": \"Each locally correct change solves an immediate problem by specializing the code to current requirements; over time, the code becomes an overfit model of past requirements, and every new change requires de-specializing prior changes before adding new logic.\", \"probability\": 0.057}, {\"conjecture\": \"The number of domain concepts embedded in the code grows faster than the vocabulary used to name them, so identifiers become overloaded; the cost of change grows because developers must disambiguate which meaning of an identifier is relevant before modifying it.\", \"probability\": 0.051}, {\"conjecture\": \"Code review and testing enforce correctness relative to the current system, but no mechanism enforces that the change preserves the system's evolvability; therefore, evolvability is a public good that is rationally degraded by every individually correct change.\", \"probability\": 0.082}, {\"conjecture\": \"As a system ages, the set of environments and configurations it must support grows monotonically because removing support is locally risky, so every change must satisfy an expanding set of constraints, and the cost of change grows with the support surface area.\", \"probability\": 0.061}, {\"conjecture\": \"The conceptual model held by developers degrades relative to the code's actual behavior because each change updates the code but only partially updates documentation and mental models; the gap between model and code grows, and change cost scales with this gap.\", \"probability\": 0.074}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 579,
+      "total_tokens": 754
+    }
+  },
+  "transport_error": null
+}

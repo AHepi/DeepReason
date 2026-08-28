@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ecological entrenchment: a system's components co-adapt into a fragile mutualism where any single change breaks local fitness, requiring simultaneous multi-component mutation to remain viable\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.318
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-350",
+    "object": "chat.completion",
+    "created": 1787930292,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems undergo ecological entrenchment wherein components co-adapt through shared assumptions, implicit contracts, and compensatory logic, forming a mutualism where each component's local fitness depends on the others' current behavior. Because every individually reviewed change preserves this mutualism, the system accumulates coupling until single-component mutations become locally deleterious—any viable change requires simultaneous, coordinated mutations across multiple co-adapted components to maintain fitness. Test coverage and code review, by verifying local correctness against the entrenched ecology, actively select against mutations that would disrupt the mutualism, thereby deepening the entrenchment rather than detecting it.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 146,
+      "completion_tokens": 134,
+      "total_tokens": 280
+    }
+  },
+  "transport_error": null
+}

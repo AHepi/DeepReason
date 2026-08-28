@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.534
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-163",
+    "object": "chat.completion",
+    "created": 1787932697,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems decay because each locally correct change optimizes for immediate fitness while implicitly raising the energy barrier of the configuration landscape around it, creating a ratchet where the space of reachable future architectures monotonically shrinks. The system becomes trapped in a local optimum isolated by a deepening well of accumulated implicit dependencies, making any globally corrective change require a temporarily non-functional intermediate state that no locally rational review process would ever approve.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 96,
+      "total_tokens": 198
+    }
+  },
+  "transport_error": null
+}

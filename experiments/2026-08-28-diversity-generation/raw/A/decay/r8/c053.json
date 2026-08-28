@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.454
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-632",
+    "object": "chat.completion",
+    "created": 1787932945,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not because individual changes are wrong, but because each locally-correct modification implicitly encodes assumptions about the system's current configuration, and these assumptions become invisible dependencies that accumulate faster than documentation or tests can capture them. The cost of change grows as the square of the number of latent assumption-couplings, because verifying a new change requires checking it against an ever-growing set of unstated invariants that no single engineer holds in mind. This makes the system's true complexity non-additive: the difficulty of understanding the whole exceeds the sum of the difficulty of understanding each part.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 130,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

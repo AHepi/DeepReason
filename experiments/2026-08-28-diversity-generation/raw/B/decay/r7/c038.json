@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Type-theoretic anti-unification cost and refactor lattice depth\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.161
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-123",
+    "object": "chat.completion",
+    "created": 1787932784,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems harden because each locally correct change increases the depth of the refactor lattice—the poset of type-compatible restructurings—so that any future modification requires anti-unifying across a growing set of divergent type signatures, and the computational cost of finding a common type-theoretic generalization grows super-polynomially in lattice depth. What feels like architectural ossification is thus the anti-unification cost exceeding the developer's search budget: the system is not locally broken, but the least-general generalization required to safely refactor across accumulated type-level constraints has become computationally intractable to discover.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 130,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

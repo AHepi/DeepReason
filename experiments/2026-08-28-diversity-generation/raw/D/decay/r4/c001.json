@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architecture as thermodynamic entropy over the state space of viable modifications\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.489
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-198",
+    "object": "chat.completion",
+    "created": 1787932266,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change constrains the future state space of viable modifications by adding implicit invariants. The system's entropy—measured as the logarithm of accessible future configurations—decreases monotonically with each accepted change, making subsequent modifications exponentially harder to locate in the shrinking viable subspace.\", \"probability\": 0.09}, {\"conjecture\": \"Software architecture obeys a thermodynamic analog where each reviewed change dissipates design information into the codebase as hidden coupling. This entropy is a one-way ratchet: reversing it requires work proportional to the number of prior changes, which exceeds the cost of any single modification that created it.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty of modifying a long-running system grows with the gap between its actual entropy (all possible code changes that compile and pass tests) and its perceived entropy (changes developers believe are viable). This gap widens over time because reviews and tests validate local correctness, not global state-space reachability, causing developers to increasingly misjudge the viable modification boundary.\", \"probability\": 0.07}, {\"conjecture\": \"Each accepted change acts as a thermodynamic constraint that collapses the viable modification space into a lower-dimensional manifold. The rate of dimensionality reduction is proportional to the number of implicit assumptions the change introduces, and after enough collapses, most desired modifications lie outside the manifold entirely.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate thermodynamic entropy because every locally correct change must satisfy existing hidden invariants to be accepted, and each acceptance encodes those invariants more deeply. The work required to identify the surviving viable modification set grows exponentially with the number of accepted changes, since each change adds invariants that compound multiplicatively rather than additively.\", \"probability\": 0.08}, {\"conjecture\": \"The viable modification space of a software system follows a thermodynamic distribution where low-energy changes (small, local, reviewable) are exponentially more likely to be accepted than high-energy changes (large, cross-cutting). Over time, the system anneals into a local energy minimum that is increasingly distant from any structurally different configuration, making meaningful architectural changes require energy inputs that no incremental review process can provide.\", \"probability\": 0.05}, {\"conjecture\": \"Every locally correct change increases the system's coupling entropy by encoding decisions that future changes must respect. The probability that a new modification is viable decays as the product of per-invariant compatibility probabilities, so after N changes the viable space shrinks geometrically even though each individual change only slightly reduced it.\", \"probability\": 0.09}, {\"conjecture\": \"Architecture is the macrostate of a software system, and each accepted change is a microstate transition that is individually reversible but collectively produces entropy. The system becomes harder to change because the macrostate drifts away from the high-entropy region of the modification state space, and returning requires coordinated simultaneous changes that incremental review processes cannot authorize.\", \"probability\": 0.04}, {\"conjecture\": \"The hardness of modifying a long-running system is proportional to the Boltzmann entropy of its viable modification space, which decreases as the system accumulates tested invariants. Each review and test cycle adds a constraint that reduces the count of accessible future states, and the exponential growth in constraint count produces a logarithmic growth in modification difficulty.\", \"probability\": 0.07}, {\"conjecture\": \"A long-running software system is a thermodynamic system whose viable modification space cools over time as each accepted change removes degrees of freedom. The cooling rate is determined by the ratio of explicit to implicit constraints created per change, and since reviews enforce explicit constraints while implicit ones accumulate unnoticed, the system freezes faster than developers perceive, creating a growing gap between apparent and actual modifiability.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 802,
+      "total_tokens": 993
+    }
+  },
+  "transport_error": null
+}

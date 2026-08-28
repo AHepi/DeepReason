@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Hidden Markov coupling between change sequences and latent developer mental models\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.081
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-772",
+    "object": "chat.completion",
+    "created": 1787937939,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change updates the code's observable state but leaves the developer's latent mental model only partially synchronized, creating a hidden Markov drift where the emission probabilities (code changes) increasingly diverge from the true latent state (shared understanding), making future changes require exponentially more effort to reconstruct the latent state.\", \"probability\": 0.09}, {\"conjecture\": \"The transition matrix of the latent mental model is never stationary across development episodes because each change silently shifts the developer's priors, so even when code remains readable, the hidden coupling between change sequences and mental models accumulates transition-probability error that manifests as architectural drag.\", \"probability\": 0.08}, {\"conjecture\": \"Code changes are emissions from a developer's latent mental model, but because each emission only partially reveals the model's state, successive developers infer the latent state from a lossy observation sequence; the accumulated inference error grows monotonically, making each new change increasingly likely to be based on a wrong latent-state estimate.\", \"probability\": 0.07}, {\"conjecture\": \"The latent mental model has higher dimensionality than the observable code, so every change projects a high-dimensional latent state onto a lower-dimensional code emission; this projection is lossy, and the unrecoverable latent dimensions accumulate as invisible coupling that future developers must reconstruct from increasingly ambiguous emission sequences.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems become harder to change because the latent mental model's transition probabilities become increasingly peaked over time—early changes explore broadly, but each locally correct change narrows the latent state distribution, creating a hidden rigidity where the system can only accept changes consistent with the dominant latent mode.\", \"probability\": 0.05}, {\"conjecture\": \"Each reviewed and tested change is locally optimal given the developer's current latent mental model, but because the model is hidden and never directly communicated, the change encodes implicit assumptions that form an unobserved Markov chain; over time, the chain's stationary distribution diverges from any single developer's latent state, making changes that require coordination across multiple latent states infeasible.\", \"probability\": 0.04}, {\"conjecture\": \"The coupling between change sequences and latent developer models creates a hidden observation lag: the mental model that produced change N is only partially observable from change N+1, so the effective information available to the developer at step N+K decays as a function of K, creating a horizon beyond which changes require full latent-state reconstruction.\", \"probability\": 0.03}, {\"conjecture\": \"Because each locally correct change is an emission that satisfies tests but does not expose the developer's full latent model, the codebase becomes a mixture of latent states from different developers at different times; the mixture is invisible to review and tests because each emission was individually valid, but the latent-state inconsistency makes coherent future changes require identifying and reconciling the mixture components.\", \"probability\": 0.02}, {\"conjecture\": \"The hidden Markov coupling creates a temporal credit assignment problem: when a change becomes difficult, the cause is not the most recent change but the accumulated divergence between the latent mental model transition chain and the code emission chain, yet developers attribute difficulty to the local change rather than the latent drift, leading to changes that further widen the divergence.\", \"probability\": 0.01}, {\"conjecture\": \"Latent developer mental models have finite memory, but the code emission sequence is unbounded, so beyond a critical system age the emission history exceeds any developer's latent-state memory window; at that point, changes must be made with a latent model that is necessarily a truncated approximation, and the approximation error compounds with each subsequent change because the transition probabilities were estimated from an incomplete observation window.\", \"probability\": 0.005}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 790,
+      "total_tokens": 981
+    }
+  },
+  "transport_error": null
+}

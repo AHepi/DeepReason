@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.062
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-832",
+    "object": "chat.completion",
+    "created": 1787937802,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Accumulated constraint load measured via Kolmogorov complexity of minimal test suites\", \"Sporadic coupling through shared implicit invariants invisible to static analysis\", \"Entropy rise in the call graph's transition matrix under Markov analysis\", \"Ontological drift between domain abstractions and stabilized code contracts\", \"Ossification of execution paths through reinforcement of high-traffic runtime trajectories\", \"Shifting burden of latent state space complexity exceeding bounded rationality limits\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 149,
+      "completion_tokens": 98,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

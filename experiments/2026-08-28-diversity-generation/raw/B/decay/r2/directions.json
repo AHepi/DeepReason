@@ -1,0 +1,8 @@
+[
+  "Information thermodynamics: each correct change injects entropy into the dependency graph, making future reachable states diffuse irreversibly",
+  "Game-theoretic review decay: local code reviews optimize for immediate reviewer approval, systematically sacrificing long-term architectural option value",
+  "Causal confounding in test suites: tests encode observed correlations rather than invariants, so they validate past contexts but fail to constrain unseen future interactions",
+  "Topological knot formation: dependency links between modules are locally tree-like but globally form non-contractible loops that cannot be untangled by local operations",
+  "Linguistic semantic drift: APIs accumulate de facto meanings via usage patterns that diverge from their declared types, making type-checking a decreasingly tight bound on behavioral correctness",
+  "Ecological entrenchment: a system's components co-adapt into a fragile mutualism where any single change breaks local fitness, requiring simultaneous multi-component mutation to remain viable"
+]

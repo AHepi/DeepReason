@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Network percolation threshold in the dependency graph\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.277
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-829",
+    "object": "chat.completion",
+    "created": 1787933299,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The rigidity of long-running software emerges when the dependency graph's giant strongly connected component (GSCC) exceeds the percolation threshold, after which most modules are reachable from most other modules, making it structurally impossible to change a module without risking a cascade of required updates.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Maintainability degrades discontinuously when the density of inter-module dependencies crosses the bond percolation threshold of the software's dependency graph, causing the average blast radius of a single change to jump from logarithmic to linear in system size.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The transition from easy to hard modifications in aging software coincides with the emergence of a percolating cluster of cyclic dependencies, where the fraction of modules involved in cycles surpasses the critical percolation threshold p_c, creating a self-reinforcing rigidity.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software aging is governed by directed percolation in the dependency graph; changes become difficult precisely when the probability that a modification propagates through a directed dependency exceeds the directed percolation threshold, creating an infinite cluster of affected modules.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of modifying long-running systems stems from the dependency graph evolving toward a scale-free topology where the percolation threshold approaches zero, meaning even the most peripheral changes can percolate across the entire system.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Even when individual code changes are correct, the system becomes harder to modify because incremental dependency additions push the reverse-dependency graph past its percolation threshold, meaning any proposed change will have downstream impacts on a giant connected cluster of consumers.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running software arises because the dependency graph undergoes a k-core percolation transition; once the system's core k-shell exceeds the threshold for k-core percolation, a densely interconnected core forms that is mutually reinforcing and resistant to any local modification.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Long-running systems become rigid because the dependency graph crosses the percolation threshold for bootstrap percolation, where a change to a module requires updates to its neighbors, which in turn require updates to their neighbors, and the graph density sustains this cascade indefinitely.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The structural freezing of aging software occurs when the dependency graph's transitive closure density crosses the percolation threshold, meaning the effective dependency graph (after computing reachability) becomes a single percolating cluster where every node is effectively dependent on every other node.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software maintainability collapses when the dependency graph crosses a site percolation threshold in its 'change affinity' (probability that a module needs modification when a dependency changes), creating a giant cluster of co-changing modules that must be updated simultaneously.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 714,
+      "total_tokens": 902
+    }
+  },
+  "transport_error": null
+}

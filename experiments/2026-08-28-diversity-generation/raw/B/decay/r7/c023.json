@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic opacity of emergent execution paths under causal erasure\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.316
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-740",
+    "object": "chat.completion",
+    "created": 1787932766,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct modification to a long-running system erases the causal history of why that change was needed, replacing a understood problem with an opaque solution that becomes context for future changes. Over thousands of commits, the executable system's emergent runtime paths depend on interactions among components whose original design rationales have been causally erased, making it impossible to predict whether a new change will trigger a previously-essential invariant that was never documented because it was never explicit. The system becomes hard to change not because any single change was wrong, but because the epistemic substrate required to reason about execution has been systematically destroyed by the very process of incremental improvement.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 141,
+      "total_tokens": 266
+    }
+  },
+  "transport_error": null
+}

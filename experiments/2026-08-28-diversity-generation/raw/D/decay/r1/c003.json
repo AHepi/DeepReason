@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic decay of executable specification alignment with runtime behavior\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.497
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-753",
+    "object": "chat.completion",
+    "created": 1787930080,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change increases the conditional entropy of the runtime state space relative to the executable specification, meaning the specification loses bits of predictive power per accepted modification. The system becomes harder to change because the information gap between what the code says and what the system does grows monotonically, requiring developers to reconstruct lost bits of implicit knowledge before safely editing.\", \"probability\": 0.09}, {\"conjecture\": \"The mutual information between the specification's static control flow graph and the actual execution trace distribution decays at a rate proportional to the number of accepted changes. This decay occurs because each tested, locally correct change introduces latent state dependencies that are invisible in the specification but exploited by the runtime, reducing the bits of shared information.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems accumulate an invisible dependency graph between runtime state variables that is never explicitly represented in the executable specification. The Kolmogorov complexity of the minimal program mapping the specification to the actual runtime behavior grows linearly with the number of changes, creating an irreducible information deficit that developers must manually bridge.\", \"probability\": 0.07}, {\"conjecture\": \"Every locally correct change adds at least one bit of unspecified behavioral constraint to the runtime—some implicit invariant, ordering dependency, or environmental assumption. Over time, the executable specification describes a strict superset of permitted behaviors, and the probability that a new change violates one of these unrecorded constraints approaches one as the cumulative bits of implicit constraint exceed the developer's working memory capacity.\", \"probability\": 0.09}, {\"conjecture\": \"The semantic distance between the specification's declared types and the actual value distributions observed at runtime diverges because each locally correct change subtly narrows the runtime domain without updating type annotations. This creates an information-theoretic gap where the specification's type system carries fewer bits of information about actual runtime values, and changes become harder because the compiler or type checker can no longer detect violations of the accumulated implicit constraints.\", \"probability\": 0.06}, {\"conjecture\": \"Testing validates a change against a finite set of execution traces, but each accepted change constrains the infinite complement of untested traces in ways never recorded in the specification. The specification's alignment with runtime behavior decays because the information content of the test suite is finite while the behavioral constraint space added per change is unbounded, creating an ever-growing set of untested-but-real invariants.\", \"probability\": 0.08}, {\"conjecture\": \"The specification's modularity boundaries and the runtime's actual information flow boundaries drift apart as each locally correct change routes data through the path of least resistance rather than through declared interfaces. The mutual information between module boundaries in the code and causal influence boundaries at runtime decreases monotonically, so developers can no longer use the specification's structure to predict the blast radius of a change.\", \"probability\": 0.07}, {\"conjecture\": \"Each reviewed change passes because it preserves the invariants explicitly checked, but it simultaneously erodes the information-theoretic margin between the specification's behavioral contract and the runtime's actual operating regime. The system becomes harder to change because the specification-to-runtime channel capacity shrinks with each change—the specification carries fewer bits of accurate behavioral description per line of code—until the developer must supply the missing bits manually.\", \"probability\": 0.05}, {\"conjecture\": \"The runtime's effective state space is a growing function of accepted changes because each change adds latent configuration, cached state, or environmental coupling. The executable specification describes a fixed-dimension state space, so the information deficit between the specification's dimensionality and the runtime's effective dimensionality grows, and developers must discover the extra dimensions empirically.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct change is accepted because it preserves the information in the tested execution paths, but it adds noise to the mapping from specification to runtime along untested paths. The signal-to-noise ratio of the specification-as-channel-for-runtime-behavior degrades with each change, and below a critical SNR the specification no longer reduces uncertainty about the consequences of a new edit, forcing developers into expensive empirical discovery.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 874,
+      "total_tokens": 1065
+    }
+  },
+  "transport_error": null
+}

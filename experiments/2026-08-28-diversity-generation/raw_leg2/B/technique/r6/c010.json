@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: property-based test generation as runtime invariant enforcement\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.606
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-773",
+    "object": "chat.completion",
+    "created": 1787942583,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"A specification can be reliably operationalized by treating each invariant as a property-based generator that actively constructs the execution trace, not merely validates it post-hoc. Under this model, the code path is induced by the generator's constraint-solving at each step, so any successfully generated trace is correct by construction and needs no separate proof. The residual engineering challenge reduces to ensuring the generator's search strategy covers the semantically interesting regions of the specification's state space.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 102,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

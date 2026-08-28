@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Test suites act as adaptive organisms that progressively overfit to past implementation specifics, calcifying the interface between behavioral specification and accidental structure\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.832
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-24",
+    "object": "chat.completion",
+    "created": 1787930033,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Test suites evolve under selection pressure to maximize coverage of past implementation paths, not to encode behavioral invariants—causing them to silently accumulate assertions that bind to accidental structure rather than essential specification. Each locally correct change adds such bindings because tests that exercise new code paths are cheaper to write than tests that abstract over them, so the suite progressively overfits to implementation history. The result is an adaptive lock-in: the test suite becomes a fossil record of past implementations that flags any architectural restructuring as regressions, even when external behavior is preserved.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 137,
+      "completion_tokens": 115,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

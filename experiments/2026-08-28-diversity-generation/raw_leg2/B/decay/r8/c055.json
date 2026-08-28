@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Causal coupling between distant modules emerges via shared hidden variables invisible to static analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.489
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-854",
+    "object": "chat.completion",
+    "created": 1787938087,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate latent operational state—unlogged cache temperatures, stale connection pool demographics, and drift in background job queues—that acts as a shared hidden variable coupling modules with no static dependency between them. When a developer modifies one module, locally correct tests pass because the hidden variable remains within its tolerated range, but the change alters the variable's evolution in a way that eventually violates an implicit invariant in a distant, statically unrelated module. Thus the system becomes harder to change not because of visible coupling, but because each module has silently optimized around the same hidden field's historical behavior, and any perturbation cascades through that invisible shared state rather than through the code's explicit dependency graph.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 144,
+      "total_tokens": 271
+    }
+  },
+  "transport_error": null
+}

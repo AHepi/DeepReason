@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.938
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-413",
+    "object": "chat.completion",
+    "created": 1787937424,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The primary cause is the unobserved accumulation of implicit, untested cross-module invariants. Each locally correct change slightly expands the set of unstated assumptions other modules silently depend on, increasing the risk that any future modification will invisibly violate a non-encoded contract.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Software entropy is dominated by dependency graph rigidity rather than code complexity. Over time, the ratio of structural couplings to functional logic increases monotonically, meaning the cost of change grows geometrically because the probability of triggering a distant, unintended side effect scales with the density of the dependency network.\",\n      \"probability\": 0.090\n    },\n    {\n      \"conjecture\": \"The degradation is caused by 'knowledge evaporation.' As original developers leave, the tacit, uncodified context behind architectural decisions is lost. Future changes must conservatively navigate this missing context, increasing coordination costs and leading to defensive, over-cautious coding that further obscures the system's true intent.\",\n      \"probability\": 0.080\n    },\n    {\n      \"conjecture\": \"The accumulation of technical debt acts as compound interest on development effort. Short-term, locally correct compromises are never fully repaid, and the interest payments manifest as increased cognitive load and integration friction for all subsequent changes, eventually overwhelming the marginal benefit of new features.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because of 'state space explosion' in execution paths. Every locally correct modification adds new branches to the system's runtime behavior. The cost of verifying a change grows exponentially because the number of possible execution states requiring validation quickly exceeds practical testing limits.\",\n      \"probability\": 0.070\n    },\n    {\n      \"conjecture\": \"The 'Substitution Inversion' principle: over time, the system's value shifts from the code itself to the historical data and external integrations it has accumulated. Changes become harder because the cost of migrating state and maintaining backward compatibility with external consumers vastly exceeds the cost of modifying the internal logic.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Cognitive load increases due to the loss of architectural homogeneity. Every reviewed change introduces slight, locally justified variations in patterns and conventions. The system fragments into a patchwork of micro-paradigms, requiring developers to constantly context-switch and hold multiple conflicting mental models simultaneously to make safe changes.\",\n      \"probability\": 0.060\n    },\n    {\n      \"conjecture\": \"The phenomenon is a 'regulatory capture' effect within the testing and CI pipeline. As the system ages, the test suite grows to encode historical implementation details rather than functional requirements. Changes become harder because the tests actively resist architectural improvement, forcing developers to preserve outdated structures to satisfy brittle assertions.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The difficulty stems from the expansion of the 'blast radius' of changes. As the system scales, the proportion of modifications that can be safely isolated approaches zero. Every change requires coordinating across an increasing number of independent teams, and the communication overhead required to align them grows according to Metcalfe's Law, paralyzing development.\",\n      \"probability\": 0.050\n    },\n    {\n      \"conjecture\": \"Software degradation is an ecological problem: the system accumulates 'dead code' and unused features that cannot be safely removed because their absence of use cannot be proven. This dead biomass increases the size of the search space developers must understand, leading to a constant drag on comprehension that slows down every change.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 805,
+      "total_tokens": 980
+    }
+  },
+  "transport_error": null
+}

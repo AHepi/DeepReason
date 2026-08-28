@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Large language model code generation with differential testing oracles\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.593
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-664",
+    "object": "chat.completion",
+    "created": 1787935059,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Differential testing oracles are most effective when the oracle is a deliberately simplified, independently generated LLM implementation rather than a human-written reference, because the simplification makes disagreements root-causeable while still catching semantic drift in the target generator.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The optimal number of differential testing oracles for a single abstract specification follows a square-root law relative to specification ambiguity measured in distinct behavioral clauses, after which marginal defect detection drops below 5% per additional oracle.\",\n      \"probability\": 0.032\n    },\n    {\n      \"conjecture\": \"Differential testing fails to catch commitment violations when all oracle implementations share the same misreading of an ambiguous specification clause; injecting one oracle that deliberately maximizes divergence on each ambiguity resolves this, making specification-ambiguity the primary defect class rather than implementation bugs.\",\n      \"probability\": 0.071\n    },\n    {\n      \"conjecture\": \"An LLM that generates both the implementation and its differential oracle will produce correlated false agreements at least 40% of the time for specifications with implicit preconditions, unless the oracle is generated under a prompt that explicitly negates each identified precondition.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"The most reliable commitment-holding technique is a closed loop where the LLM generates N diverse implementations, differential testing identifies the largest agreement cluster, and the specification is automatically refined to exclude behaviors where implementations diverge—yielding an implementation that holds its commitments by construction because the commitments were narrowed to only the consensus.\",\n      \"probability\": 0.067\n    },\n    {\n      \"conjecture\": \"Differential testing oracles built from property-based test generators outperform those built from example-based tests by a factor of 3x in detected commitment violations, but only when the LLM is used to generate the generator rather than the test cases themselves.\",\n      \"probability\": 0.041\n    },\n    {\n      \"conjecture\": \"For abstract specifications with partial order semantics (e.g., eventual consistency, best-effort delivery), differential testing oracles must be constructed as lattice comparators rather than equality checks; using equality oracles produces false defect rates exceeding 60% and masks real commitment violations.\",\n      \"probability\": 0.039\n    },\n    {\n      \"conjecture\": \"The best technique is to use the LLM to generate a differential testing oracle in the form of an executable state machine, where states correspond to specification commitments and transitions correspond to operations; implementations that fail differential testing against this oracle have 90% fewer post-deployment commitment violations than those tested against function-level oracles.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Differential testing against oracles generated at different temperature settings catches distinct defect classes: low-temperature oracles catch logic errors while high-temperature oracles catch edge-case commitment violations, and combining both in a 1:3 ratio is optimal when specification complexity exceeds 200 tokens.\",\n      \"probability\": 0.047\n    },\n    {\n      \"conjecture\": \"The practice of generating a differential oracle and implementation in a single LLM call produces oracles that are subverted to match implementation bugs 70% of the time; forcing oracle generation in a separate call with no implementation context reduces correlated false agreements to under 15% and is the single highest-impact intervention.\",\n      \"probability\": 0.074\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 760,
+      "total_tokens": 945
+    }
+  },
+  "transport_error": null
+}

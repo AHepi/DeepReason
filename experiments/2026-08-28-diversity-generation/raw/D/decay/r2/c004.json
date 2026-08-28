@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ecosystem lock-in: co-evolution with external dependencies creates an entangled network whose joint state space eventually permits no independent local moves\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.642
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-993",
+    "object": "chat.completion",
+    "created": 1787930344,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems become immutable not through internal decay but because each external dependency freezes a slice of the system's interface. After enough dependencies lock on, the product of all compatible version ranges across the dependency graph narrows to a single point, making every local change globally breaking.\", \"probability\": 0.085}, {\"conjecture\": \"The more a system is adopted by external consumers, the more its internal structure is constrained by de facto contracts. Co-evolution with dependents means that even renaming a private function can violate an implicit coupling, so the system's changeable surface area shrinks to zero as its ecosystem grows.\", \"probability\": 0.072}, {\"conjecture\": \"Long-running systems ossify because the test suite co-evolves with the implementation and external libraries, encoding their quirks as expected behavior. The joint state space of system, tests, and dependencies becomes a single rigid object where no component can move independently without fracturing the others.\", \"probability\": 0.068}, {\"conjecture\": \"Each integration with an external service locks in assumptions about that service's behavior, data formats, and failure modes. Over time the system becomes a lossless record of every dependency's historical API surface, and changing any integration requires simultaneously updating the fossilized assumptions of all others.\", \"probability\": 0.059}, {\"conjecture\": \"As a system and its dependencies co-evolve, they converge on shared data schemas that cross boundaries. The schema becomes a joint constraint: no party can evolve its representation independently because all other parties have encoded the current shape, making the schema a global lock with no owner.\", \"probability\": 0.064}, {\"conjecture\": \"Build tooling and dependency managers create path dependence by caching resolution states. After years of co-evolution the installed transitive closure represents one of exponentially few stable configurations, and any upgrade attempt cascades into dependency hell because the network has no slack.\", \"probability\": 0.041}, {\"conjecture\": \"Long-running systems accumulate shim layers for each dependency version they have supported, and these shims become load-bearing for downstream consumers. The system cannot change because removing any shim breaks an external dependent that evolved to rely on it.\", \"probability\": 0.053}, {\"conjecture\": \"External dependencies impose implicit invariants on timing, ordering, and error semantics that the system optimizes around. These invariants become structurally embedded in the system's control flow, so any change that perturbs the dependency interaction pattern breaks invariants that no local test can detect.\", \"probability\": 0.061}, {\"conjecture\": \"A long-running system and its dependencies undergo mutual regression: each side patches around the other's bugs until the patches form a closed loop of compensating errors. The joint system reaches a stable but rigid equilibrium where removing any patch collapses the compensatory chain.\", \"probability\": 0.047}, {\"conjecture\": \"The difficulty of changing a long-running system scales with the number of external consumers whose own evolution has been constrained by it. The system becomes a keystone in an entangled network, and the cost of a local change is the cost of coordinated migration across all dependents, which grows superlinearly until it exceeds any feasible budget.\", \"probability\": 0.055}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 205,
+      "completion_tokens": 694,
+      "total_tokens": 899
+    }
+  },
+  "transport_error": null
+}

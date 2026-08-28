@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.94
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-966",
+    "object": "chat.completion",
+    "created": 1787938132,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The constraint graph of a system's implicit assumptions expands faster than its documented interfaces. Each change is locally correct because it satisfies visible constraints, but it silently tightens coupling between distant modules, making future changes require increasingly expensive constraint-satisfaction searches to remain safe.\", \"probability\": 0.087}, {\"conjecture\": \"Software systems accumulate organizational knowledge in their structure, and the turnover of developers causes progressive loss of this tacit knowledge. What appears as increasing technical difficulty is actually the cost of rediscovering why non-obvious decisions were made, as each generation re-derives constraints that were previously known.\", \"probability\": 0.079}, {\"conjecture\": \"Each change optimizes for local simplicity given current information, but this creates a Pareto frontier of design trade-offs that becomes increasingly rugged. The system becomes harder to change because any new requirement requires traversing an optimization landscape with more local minima, where small changes cannot improve the global design.\", \"probability\": 0.065}, {\"conjecture\": \"Long-running systems develop defensive complexity—code that guards against edge cases discovered through past failures. This defensive code makes changes harder because every modification must be checked against an growing set of historical incident-driven constraints that are invisible in the current requirements but embedded in the code.\", \"probability\": 0.072}, {\"conjecture\": \"The number of valid execution paths grows exponentially with system size, but testing only samples a polynomial subset. Each change is verified against known paths, but the fraction of covered state space shrinks, so the probability that a change violates an untested path increases, making the expected cost of safe changes grow superlinearly.\", \"probability\": 0.061}, {\"conjecture\": \"Software complexity is governed by a law analogous to entropy: each locally correct change increases the total number of states the system can reach. The difficulty of change grows because the effort to verify that a modification doesn't enable a harmful state scales with the state space, which expands monotonically with every change.\", \"probability\": 0.068}, {\"conjecture\": \"System changes accumulate under a sequential decision process where each choice narrows future options, and the value of preserved flexibility is only realized later. Locally correct changes are myopic under this model, and the increasing difficulty reflects the exercise of previously free options that were never priced into individual change decisions.\", \"probability\": 0.055}, {\"conjecture\": \"What we measure as increasing change difficulty is actually the system migrating toward a region of the design space demanded by accumulated requirements, but increasingly distant from the region where standard tools and patterns apply. Each change is correct, but the system drifts away from the leverage provided by familiar abstractions.\", \"probability\": 0.049}, {\"conjecture\": \"Changes introduce new abstractions to manage local complexity, but abstractions leak. The accumulation of leaky abstractions means future changes must understand both the abstraction and what lies beneath, creating a cognitive load that grows with the number of abstraction layers, each added one at a time and justified locally.\", \"probability\": 0.074}, {\"conjecture\": \"Long-running systems accumulate load-bearing tests that encode implementation details rather than specifications. These tests pass under correct changes but fail under refactors, so the system becomes harder to change because the test suite increasingly constrains the implementation to its current form rather than its required behavior.\", \"probability\": 0.063}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 727,
+      "total_tokens": 902
+    }
+  },
+  "transport_error": null
+}

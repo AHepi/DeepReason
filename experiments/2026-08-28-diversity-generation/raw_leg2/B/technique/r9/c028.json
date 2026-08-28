@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: property-based generative testing with shrinking for specification conformance\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.261
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-892",
+    "object": "chat.completion",
+    "created": 1787943505,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Shrinking effectiveness is the dominant factor in specification conformance: a generative tester that produces minimal counterexamples via dependency-aware shrinking will catch conformance violations an order of magnitude more reliably than one with stronger generation but weaker shrinking. Specifically, a shrinker that traces value provenance through the specification's logical structure can reduce failing cases to the exact sub-clause violated, making the resulting code hold its commitments because the developer is shown precisely which commitment broke. The conjecture is falsifiable: measure conformance-bug detection rates across projects using provenance-traced shrinking versus random shrinking while holding generation strategy fixed, and the former should outperform by a statistically significant margin.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 146,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

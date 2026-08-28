@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis conditioned on formal type-theoretic signatures\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.585
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-55",
+    "object": "chat.completion",
+    "created": 1787941370,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Synthesis accuracy is maximized when the neural model is trained to emit refinement-typed intermediate representations (e.g., LiquidHaskell) rather than raw source code, because the type checker acts as a dense reward signal during decoding and filters out semantically invalid candidates before execution.\", \"probability\": 0.085}, {\"conjecture\": \"Conditioning the generator on the *proof obligations* extracted from the type signature (e.g., dependent type elimination motives) yields higher correctness rates than conditioning on the signature alone, because the obligations provide an explicit roadmap of the logical steps the code must take.\", \"probability\": 0.072}, {\"conjecture\": \"A curriculum sorted by the ratio of constructive to proof-level complexity in the dependent type signature produces more robust generalization than sorting by program size or type length alone.\", \"probability\": 0.061}, {\"conjecture\": \"Using the type-checker as a rejection sampler during decoding, where failed checks trigger a corrective prompt rather than a full resample, is strictly more sample-efficient than single-shot generation followed by post-hoc filtering.\", \"probability\": 0.058}, {\"conjecture\": \"Encoding the type signature as a graph of type constructors and dependencies outperforms sequence-based encoding for polymorphic and higher-rank types, but underperforms for monomorphic, first-order signatures where linear ordering preserves more locality.\", \"probability\": 0.049}, {\"conjecture\": \"Pre-training the synthesis model on type-preserving program transformations (e.g., beta-reduction, lambda lifting) rather than next-token prediction of raw code produces representations that require significantly fewer type-checker interactions to find a valid program.\", \"probability\": 0.043}, {\"conjecture\": \"For specifications involving effects (e.g., IO, State), conditioning the model on the monadic type’s algebraic laws as auxiliary context is necessary and sufficient to prevent the model from conflating effect ordering, whereas signatures without these laws yield ordering violations in over 50% of cases.\", \"probability\": 0.037}, {\"conjecture\": \"Neural synthesis conditioned on formal signatures will find that transformer architectures plateau on signatures with a dependent-type parameter depth greater than 2, while neuro-symbolic Monte Carlo Tree Search over the type-theoretic search space continues to scale linearly with compute.\", \"probability\": 0.031}, {\"conjecture\": \"The model’s ability to synthesize code satisfying a type signature is bottlenecked not by architectural capacity but by the entropy of valid implementations consistent with the signature; adding behavioral test cases as conditioning context reduces this entropy and improves success rates more than scaling parameters by 10x.\", \"probability\": 0.026}, {\"conjecture\": \"Augmenting the training distribution with synthetically generated type signatures and their corresponding inhabitants (via exhaustive search over small types) generalizes to real-world library signatures better than training on existing human-written code alone, provided the synthetic types exhibit the same dependency graph depth distribution.\", \"probability\": 0.022}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 640,
+      "total_tokens": 826
+    }
+  },
+  "transport_error": null
+}

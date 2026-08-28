@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.662
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-626",
+    "object": "chat.completion",
+    "created": 1787941443,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for deriving faithful code from a specification is refinement typing combined with property-based testing, where the specification is encoded as a decidable refinement type and the implementation is generated via type-directed synthesis. The synthesizer searches the space of terms inhabiting the refinement type, guaranteeing the code satisfies the specification by construction. Any residual non-decidable properties are then verified by adversarial property-based testing that attempts to falsify the remaining proof obligations, closing the gap between the abstract spec and the executable artifact.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 111,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

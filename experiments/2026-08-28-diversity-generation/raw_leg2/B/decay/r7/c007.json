@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated constraint load measured via Kolmogorov complexity of minimal test suites\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.144
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-921",
+    "object": "chat.completion",
+    "created": 1787937815,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The difficulty of changing a long-running software system scales with the growth in the Kolmogorov complexity of its minimal passing test suite, because each locally correct change adds constraints that cannot be removed without invalidating previously accumulated tests. Thus, the system becomes harder to change because the shortest description of all constraints it must satisfy grows monotonically, making the space of valid modifications increasingly narrow and computationally expensive to navigate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 128,
+      "completion_tokens": 92,
+      "total_tokens": 220
+    }
+  },
+  "transport_error": null
+}

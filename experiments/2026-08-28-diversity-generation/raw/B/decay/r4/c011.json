@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-locking of design assumptions into a shared implicit ontology between code and developers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.94
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-355",
+    "object": "chat.completion",
+    "created": 1787932151,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change is a commit that is also a vote in a continuous, implicit ontology election: what \\\"the customer\\\" is, what \\\"failure\\\" means, what \\\"event\\\" is. The system's design assumptions and the developers' mental models drift into a lockstep that neither side can see. The cost of change rises not because the code gets worse but because the cost of dissenting with this accumulated ontology grows superlinearly with its entrenchment.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 101,
+      "total_tokens": 228
+    }
+  },
+  "transport_error": null
+}

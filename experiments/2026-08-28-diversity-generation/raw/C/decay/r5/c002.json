@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.898
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-993",
+    "object": "chat.completion",
+    "created": 1787932426,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems accumulate implicit, undocumented cross-module invariants over time. Each correct change introduces new constraints that are locally invisible but globally binding, making future changes require exponentially more hidden context to satisfy.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every API or interface, once deployed, accumulates users whose own code depends on its exact behavior. The cost of change grows linearly with the number of dependent consumers, creating an expanding inertia field that is independent of internal code quality.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Codebases ossify because the ratio of understanding-required to understanding-available shrinks. Original authors leave, taking mental models with them, while the code's behavioral surface area grows, making each change require reconstructing knowledge that no longer exists in the organization.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Software architecture decays because each locally optimal fix is chosen over a globally optimal refactor, and the cumulative effect of these choices constitutes a random walk away from any coherent design. Recovery cost grows with the square of the architectural distance from the original design.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because test suites become the primary specification of behavior. As tests accumulate to lock in current behavior, they prevent changes that would improve the system, turning the safety net into a cage.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Changes become harder because dependency networks densify over time. Each new feature or fix adds edges to the call graph, and the cost of safely changing a node grows combinatorially with its graph-theoretic centrality.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The difficulty of change grows because each correct fix introduces latent entanglement: two modules that were previously independent become coupled through a shared side effect, shared state, or shared assumption. These entanglements are invisible at commit time and only manifest when a future change disturbs the coupling.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because of state space explosion. Each feature adds dimensions to the system's possible runtime states, and verifying that a change is safe requires reasoning about a state space that grows exponentially, eventually exceeding any team's verification capacity.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Long-running systems ossify because the cost of understanding existing code grows superlinearly with code size, while the cost of writing new code stays roughly constant. Eventually, developers route around existing code rather than modify it, leading to duplication that further increases system size and understanding cost in a feedback loop.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because of semantic drift: the meaning of identifiers, abstractions, and interfaces slowly diverges from their names and documentation as correct changes are layered on top. The gap between what the code says it does and what it actually does grows monotonically, making every change require archaeology rather than reading.\",\n      \"probability\": 0.072\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 721,
+      "total_tokens": 896
+    }
+  },
+  "transport_error": null
+}

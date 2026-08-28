@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.971
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-671",
+    "object": "chat.completion",
+    "created": 1787935253,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique is to compile the abstract specification into a refinement calculus skeleton, then employ stochastic formal synthesis to fill proof obligations and code placeholders simultaneously, guided by a type-theoretic cost model. This guarantees the executable artifact holds its commitments because every generated code fragment is accompanied by a machine-checked refinement proof tying its semantics back to the original specification. Any synthesis failure constitutes a counterexample proving no implementation exists within the chosen refinement strategy.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 98,
+      "total_tokens": 196
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative refinement against a runtime property oracle\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.003
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-942",
+    "object": "chat.completion",
+    "created": 1787934905,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal refinement strategy is to generate a population of candidate implementations, execute each against a deterministic property oracle derived from the specification, and recombine only those candidates that survive a strictly increasing sequence of oracle checks—where each stage adds one conjunct of the specification as an additional falsification target. This works because incremental selection pressure on partial commitments prevents the population from drifting into regions of the program space that satisfy early properties but structurally obstruct later ones, which flat random search or single-candidate hill-climbing cannot avoid. The conjecture is falsified if there exists a specification class for which no ordering of conjuncts yields a monotone survivability gradient—meaning every ordering produces a combinatorial dead end where intermediate-stage survivors are uniformly incompatible with remaining properties.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 161,
+      "total_tokens": 276
+    }
+  },
+  "transport_error": null
+}

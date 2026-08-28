@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Extracting programs via constructive proof witnesses in dependent type theory\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.221
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-731",
+    "object": "chat.completion",
+    "created": 1787934756,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Proof-by-execution is the dominant extraction method: the optimal technique is to state the specification as the theorem \\\"∃ p. Spec(p)\\\" and extract the program directly as the computational content of the constructive proof, bypassing any intermediate IR or compiler.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The critical barrier is the consistency of meta-level axioms (like function extensionality or univalence) with the extracted language; the best technique is strictly constructive univalent type theory with no axioms, sacrificing proof convenience to guarantee the extracted code is pure.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is refinement type proofs where the specification is a subtype and the program is a term of that type, allowing step-wise refinement from abstract spec to concrete code without a separate extraction phase.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The central problem is efficiency: extracted code from dependent type theory is naively unoptimized. The best technique is to integrate supercompilation or partial evaluation into the extraction phase to eliminate proof-level type-checking overhead.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The key is bridging the gap between high-level constructive proofs and low-level system capabilities. The best technique is to define the specification in a layered monad stack within the type theory, capturing effects (IO, state) safely, and extracting to a target language with a corresponding monad library.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The extraction process is itself error-prone. The best technique is to verify the compiler/extraction algorithm itself within the same dependent type theory, proving that the target language semantics soundly interprets the source proof theory.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is not full program extraction but proof-carrying code generation: extract a skeleton and attach the dependent type theory proof as a certificate to be checked by a trusted target-language verifier.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to use quotient types to define the abstract specification and extract programs as representatives, using the constructive proof to generate the witness function and the proof of the quotient laws to ensure modular correctness.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is to separate propositions (Prop) from computational types (Set/Type) strictly, using irrelevant proofs for Prop to enable aggressive erasure during extraction, ensuring the resulting code is both correct and efficient by construction.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is to use dependent induction-recursion to define the specification and program simultaneously, where the program is a function defined by recursion over the proof of the specification.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 658,
+      "total_tokens": 844
+    }
+  },
+  "transport_error": null
+}

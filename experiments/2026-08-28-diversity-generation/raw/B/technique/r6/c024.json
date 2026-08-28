@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative refinement against a runtime property oracle\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.492
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-318",
+    "object": "chat.completion",
+    "created": 1787934914,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given an abstract specification, the optimal refinement strategy is to maintain a population of candidate programs where fitness is measured solely by the fraction of generated property-oracle tests each candidate satisfies, with each generation produced by stochastic mutation guided by counterexample spectra from the prior generation. This evolutionary approach will provably converge to a program satisfying all reachable oracle properties faster than deterministic proof-search refinement, because the search space of valid implementations is too discontinuous for gradient-based or stepwise-correction methods to traverse without getting trapped in local property-satisfaction optima. The key falsifiable prediction: on specifications with dense, interacting constraints, population-based refinement against the oracle will find valid implementations where counterexample-guided inductive synthesis fails, and the performance gap will scale with the constraint interaction density.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 161,
+      "total_tokens": 276
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Decay of causal executable knowledge graphs under non-monotonic change\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.598
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-385",
+    "object": "chat.completion",
+    "created": 1787937460,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"As a codebase evolves, the implicit causal graph—how runtime behavior depends on specific code locations, execution states, and external conditions—accumulates dead edges faster than dead nodes. Developers prune code paths (nodes) but cannot prune the causal dependencies (edges) those paths created, because those dependencies are now implicit in other components. The graph becomes an increasingly tangled web where local changes propagate through invisible edges, making modification progressively riskier and harder.\", \"probability\": 0.085}, {\"conjecture\": \"Each non-monotonic change (adding, modifying, or removing functionality) invalidates a local subgraph of the causal knowledge graph but does not update the graph's global topology. Over time, the graph becomes a patchwork of inconsistent causal models. Developers reason about changes using a model that is locally correct but globally inconsistent, leading to unexpected side effects and increasing the cost of change.\", \"probability\": 0.072}, {\"conjecture\": \"The causal knowledge graph decays not by losing information but by becoming increasingly unqueryable. Each change adds nodes and edges without a corresponding increase in the system's ability to traverse or validate them. The graph's structural entropy increases until the cost of finding a causally valid path for a new change exceeds the cost of a workaround, at which point the system is effectively unchangeable.\", \"probability\": 0.068}, {\"conjecture\": \"Refactoring and dependency injection improve local modularity but fragment the global causal graph into decoupled subgraphs. The causal links between these subgraphs become implicit and undocumented, existing only in the execution environment or the developer's head. The system becomes harder to change because the cost of re-establishing causal links between decoupled components grows superlinearly with the number of components.\", \"probability\": 0.061}, {\"conjecture\": \"The causal executable knowledge graph is maintained by the execution path. Non-monotonic changes create abandoned paths that are never pruned from the developer's mental model because they are never re-executed. These 'ghost paths' create a phantom causal graph that interferes with reasoning about live paths. The cost of change increases with the spectral radius of this phantom graph, as developers must spend more time distinguishing live from dead causal links.\", \"probability\": 0.055}, {\"conjecture\": \"The system's changeability is a function of the alignment between its declarative causal model (code, types, interfaces) and its imperative causal model (runtime execution, side effects). Non-monotonic changes often update the declarative model but leave the imperative model's causal links intact (e.g., through reflection, monkey-patching, or dynamic dispatch). The divergence between these two models grows over time, and the cost of change is proportional to this divergence, as developers must reason about both models simultaneously.\", \"probability\": 0.049}, {\"conjecture\": \"The causal graph has a carrying capacity for non-monotonic change. Each change increases the graph's information density. Once a critical threshold is crossed, the graph becomes critically connected, meaning any single node change has a non-negligible probability of causing a cascade of unintended behavioral shifts. The system becomes harder to change because the probability of a safe local change drops below the threshold of acceptable risk, forcing developers to make larger, riskier changes to ensure stability.\", \"probability\": 0.043}, {\"conjecture\": \"Long-running systems accumulate a 'shadow causal graph' consisting of the undocumented assumptions, invariants, and expected behaviors that are not captured in the code itself but are critical for its correct operation. Non-monotonic changes erode the alignment between the explicit code graph and this shadow graph. The system becomes harder to change because the cost of inferring the shadow graph's current state grows linearly with its history, making every change a process of archaeological reconstruction.\", \"probability\": 0.038}, {\"conjecture\": \"The hardness of change is driven by the decay of causal *counterfactuals*. Initially, developers can easily reason about 'what would happen if we changed X.' Non-monotonic changes accumulate, creating complex interactions that make these counterfactuals intractable. The system becomes harder to change when the cost of evaluating a counterfactual exceeds the cost of implementing the change itself, forcing developers to rely on empirical testing rather than causal reasoning, which is slower and less complete.\", \"probability\": 0.033}, {\"conjecture\": \"Software maintainability degrades because the causal graph undergoes a 'phase transition' from a modular, tree-like structure to a complex, network-like structure with small-world properties. This transition is driven by non-monotonic changes that create shortcuts between distant parts of the graph (e.g., via global state, shared services, or broad APIs). In the small-world phase, local changes have global reach, making the cost of predicting a change's impact scale with the size of the entire system, not just the module being changed.\", \"probability\": 0.027}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 1051,
+      "total_tokens": 1242
+    }
+  },
+  "transport_error": null
+}

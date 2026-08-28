@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constrained neural program synthesis from input-output examples\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.793
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-78",
+    "object": "chat.completion",
+    "created": 1787934903,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Constrained neural program synthesis from input-output examples yields committed-correct code only when the synthesis model is trained to generate programs in a formally constrained output space—such as a context-free grammar augmented with refinement-type signatures—and is guided during decoding by a type-driven, property-based counterexample oracle. Under this regime, the network proposes candidate programs that are syntactically and type-correct by construction, while the oracle actively searches for distinguishing inputs that violate the abstract specification, rejecting any candidate that fails. The conjecture is that this tight feedback loop collapses the semantic gap between example-driven generalization and specification adherence, because the constraints prune the hypothesis space to programs that can only satisfy the examples by satisfying the spec.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 153,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topological rigidification of the dependency graph past a phase-transition threshold\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.773
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-382",
+    "object": "chat.completion",
+    "created": 1787936658,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software dependency graphs undergo a percolation-like phase transition: once edge density exceeds a critical threshold (~1/k for k-regular dependencies), a giant strongly-connected component nucleates. Below this threshold, changes remain locally contained; above it, nearly every modification propagates through the giant SCC, making the system effectively rigid regardless of individual change quality.\", \"probability\": 0.09}, {\"conjecture\": \"The rigidity of a long-running system is governed by the emergence of a topological 'core' in its dependency graph—a k-core of depth ≥3 that accumulates as maintainers add dependencies to avoid duplication. Once this core contains >20% of modules, no module can be removed or refactored without cascading failures through the core's mutual dependencies, even if each addition was locally justified.\", \"probability\": 0.08}, {\"conjecture\": \"Each locally-correct change optimizes for immediate coupling reduction, but the aggregate effect drives the dependency graph's assortativity coefficient positive. Past a threshold where high-degree modules preferentially connect to other high-degree modules, the system enters a rigidified state where local correctness cannot prevent global change amplification.\", \"probability\": 0.07}, {\"conjecture\": \"The phase transition occurs when the dependency graph's cyclomatic complexity per module exceeds a threshold proportional to log(n). Below this, the graph has enough tree-like structure for changes to dampen; above it, exponential propagation paths make every change non-local, and no amount of testing on individual changes can recover the lost malleability.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate 'latent dependencies'—modules that are technically decoupled but semantically coupled through shared invariants. When the density of these latent edges crosses the percolation threshold, the effective dependency graph (including latent edges) jumps from fragmented to connected, and rigidity emerges abruptly as a topological consequence rather than a gradual decline.\", \"probability\": 0.07}, {\"conjecture\": \"The dependency graph of a mature system exhibits small-world topology with clustering coefficient >0.3 and average path length <log(n). This structure, built incrementally by locally optimal changes, creates a phase transition: below the small-world threshold, changes are tractable; above it, the combination of high clustering and short paths means every change ripples across clusters instantly.\", \"probability\": 0.05}, {\"conjecture\": \"Software rigidity emerges when the dependency graph's spectral radius (largest eigenvalue of the adjacency matrix) exceeds 1. Below this threshold, perturbations decay; above it, they amplify. Each locally correct change that adds even one dependency can push the spectral radius past 1, after which the system becomes structurally resistant to modification regardless of code quality or test coverage.\", \"probability\": 0.08}, {\"conjecture\": \"The phase transition in changeability is driven by the dependency graph transitioning from a tree-like structure to one with high girth violations. When the number of cycles exceeds O(n), the graph develops topological constraints where no module can be modified in isolation—each cycle represents a constraint, and the constraint satisfaction problem becomes NP-hard past the threshold.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems undergo topological rigidification when the betweenness centrality of the median module exceeds a critical fraction of total paths. Once >50% of dependency paths route through a small set of hub modules, those hubs become effectively immutable—any change to them propagates to the majority of the system, and any change elsewhere must pass through them, creating a structural bottleneck that individual change quality cannot dissolve.\", \"probability\": 0.06}, {\"conjecture\": \"The dependency graph of a long-lived system self-organizes toward a scale-free degree distribution as maintainers preferentially attach new modules to well-established ones. Once the power-law exponent drops below 2.5, the system crosses a percolation threshold where targeted changes to hub modules become catastrophically expensive, and the graph becomes topologically locked even though every individual attachment decision was locally rational.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 868,
+      "total_tokens": 1060
+    }
+  },
+  "transport_error": null
+}

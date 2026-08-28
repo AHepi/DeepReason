@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: proof-carrying code with extracted refinements from constructive logic\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.843
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-101",
+    "object": "chat.completion",
+    "created": 1787931735,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Proof-carrying code where refinements are extracted from constructive proofs via a computational gluing construction will outperform approaches based on separate refinement checking, because the gluing construction makes the executable code a direct projection of the proof term rather than a post-hoc verified artifact.\", \"probability\": 0.07}, {\"conjecture\": \"The most reliable technique is to extract refinements from a constructive logic specification using a two-level system: a deep embedding of the specification logic for proof, and a shallow embedding for extraction, with a semantic relation proving their equivalence. This avoids the well-known soundness gaps in single-level extraction.\", \"probability\": 0.06}, {\"conjecture\": \"Executable code that holds its commitments results from treating the constructive proof's cut-elimination as the primary compilation step, where refinements are not extracted but are the irreducible normal forms of the proof terms themselves.\", \"probability\": 0.08}, {\"conjecture\": \"Proof-carrying code with extracted refinements fails to scale not because of proof size, but because refinement extraction loses the computational content of non-constructive lemmas; the solution is partial constructive reflection, where only the constructive fragment is extracted and the classical fragment is carried as a runtime assertion.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to use a refinement type system where the refinements are themselves constructive proof terms, extracted not from a separate specification logic but from the type-theoretic elaboration of the program itself, making the specification and the code different views of the same term.\", \"probability\": 0.07}, {\"conjecture\": \"Extracting refinements from constructive proofs yields code that holds its commitments only if the extraction target is a dependently typed intermediate representation, because only dependent types preserve the erasure boundaries that prevent refinement obligations from becoming runtime checks.\", \"probability\": 0.04}, {\"conjecture\": \"The dominant factor in whether proof-carrying code holds its commitments is not the proof system but the extraction relation's treatment of axiomatized constants; any extraction that treats axioms as opaque runtime stubs will produce code that violates its specification under composition.\", \"probability\": 0.06}, {\"conjecture\": \"Constructive logic specifications compiled via proof-carrying code will produce more reliable executables than refinement type checking alone, because the proof term encodes the reason the refinement holds, and this reason can be re-checked under composition rather than merely inherited.\", \"probability\": 0.05}, {\"conjecture\": \"The optimal approach is to extract refinements from constructive proofs in a way that preserves proof irrelevance at the refinement level but computational relevance at the extracted code level, achieved by using a universe-polymorphic system where propositions and programs inhabit different universes but share an extraction function.\", \"probability\": 0.03}, {\"conjecture\": \"Proof-carrying code with refinements extracted from constructive logic will only hold its commitments if the extraction function is itself verified within the same constructive logic, because otherwise the extraction step introduces an unverified gap between the proof and the executable.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 658,
+      "total_tokens": 845
+    }
+  },
+  "transport_error": null
+}

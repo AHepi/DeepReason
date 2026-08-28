@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architectural phase locking: independent design constraints eventually satisfy the conditions for a percolation threshold, freezing the dependency graph into a single rigid cluster\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.502
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-399",
+    "object": "chat.completion",
+    "created": 1787938298,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As independent design constraints accumulate in a dependency graph, their interdependencies cross a percolation threshold, transforming locally-modifiable nodes into a single rigid cluster where any change requires coordinating across the entire system. This architectural phase lock emerges not from individual design failures but from the combinatorial density of cross-cutting constraints reaching a critical connectivity fraction, making the system's modification cost scale with total graph size rather than local change scope. The freeze is therefore a topological phase transition in the constraint network, not a gradual degradation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 140,
+      "completion_tokens": 112,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

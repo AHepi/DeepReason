@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.974
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-718",
+    "object": "chat.completion",
+    "created": 1787936756,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The observed rigidity stems from implicit coupling accumulating faster than explicit coupling, because tests verify local behavior rather than global invariants. Each locally-correct change optimizes for current requirements while silently constraining future option spaces, a form of architectural technical debt that is invisible to standard review processes. This transforms the system into a constraint satisfaction problem where the set of feasible changes shrinks monotonically, even though every individual modification was locally optimal.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 95,
+      "total_tokens": 197
+    }
+  },
+  "transport_error": null
+}

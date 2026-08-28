@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.494
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-779",
+    "object": "chat.completion",
+    "created": 1787931452,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement types plus SMT-based synthesis: encode the abstract spec as dependent type contracts, then use a counterexample-guided inductive synthesizer to emit code that is guaranteed type-correct, making the spec literally the type and the proof coextensive.\", \"probability\": 0.085}, {\"conjecture\": \"Extracting code from machine-checked constructive proofs (e.g., Coq/Agda) is the best technique because it yields a program that holds its commitments by construction; the executable is a byproduct of the proof that the spec is satisfiable.\", \"probability\": 0.08}, {\"conjecture\": \"Conjecture synthesis—where the system generates candidate programs and tests them against a denotational spec via randomized property-based testing with shrinking—outperforms proof-based methods because it scales to real-world code where full specs are unprovable.\", \"probability\": 0.075}, {\"conjecture\": \"The best approach is LLM-based code generation followed by automated formal verification of the output against the spec, leveraging the model's distributional knowledge for speed and a proof checker for guarantees, with iterative repair when verification fails.\", \"probability\": 0.07}, {\"conjecture\": \"Model-driven architecture with executable UML and action languages is optimal: the abstract spec is a state machine model that is directly simulated and then code-generated, ensuring the executable's commitments are held by construction of the generation.\", \"probability\": 0.065}, {\"conjecture\": \"The dominant technique is type-driven development in a language like Idris: write the abstract spec as a dependent type, then interactively refine holes until the type is inhabited, guaranteeing the resulting code holds its commitments.\", \"probability\": 0.06}, {\"conjecture\": \"SMT-based program synthesis from sketching constraints is the best method: the developer provides a structural sketch and the spec as logical constraints, and the solver fills in holes to satisfy the spec, guaranteeing correctness.\", \"probability\": 0.055}, {\"conjecture\": \"Reactive synthesis from temporal logic specifications (e.g., LTL or GR(1)) is optimal for turning abstract behavioral specs into executable controllers, because it guarantees the result holds its commitments by synthesizing a winning strategy in a game.\", \"probability\": 0.05}, {\"conjecture\": \"Design-by-contract with runtime assertion checking is the best practical technique: the spec is encoded as preconditions, postconditions, and invariants that are checked at runtime, ensuring the executable holds its commitments via continuous monitoring and test-time validation.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is domain-specific language (DSL) embedding where the abstract spec is written in a restricted DSL that has a verified compiler to a target language, ensuring the executable holds its commitments because the compiler is a trusted, formally verified artifact.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 620,
+      "total_tokens": 791
+    }
+  },
+  "transport_error": null
+}

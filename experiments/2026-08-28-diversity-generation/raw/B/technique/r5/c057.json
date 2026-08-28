@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constraint-based program sketching with SMT-encoded specification conformance\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.374
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-413",
+    "object": "chat.completion",
+    "created": 1787934722,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Encoding specification conformance as decidable SMT constraints over a sketch grammar with bounded recursion depth yields synthesized programs that are guaranteed sound relative to the specification, provided the SMT solver returns sat with a model. The practical bottleneck is not solver capacity but the expressiveness gap between undecidable specification logics and the decidable fragments SMT handles, so the critical technique is a systematic translation that over-approximates specification semantics into quantifier-free constrained Horn clauses. Under this regime, any synthesized sketch filling that returns sat is by construction observationally equivalent to the specification on all inputs within the bound, making conformance a theorem of the synthesis process rather than a post-hoc verification burden.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 145,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

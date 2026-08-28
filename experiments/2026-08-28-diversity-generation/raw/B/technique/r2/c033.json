@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Model-driven engineering with automated invariant generation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.407
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-766",
+    "object": "chat.completion",
+    "created": 1787931655,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Automated invariant generation produces commitments-holding code from abstract specifications when the generator uses a bidirectional refinement strategy: it derives candidate invariants by abstracting counterexamples from failed concrete executions, then prunes them by checking realizability against the abstract specification's logical theory. This outperforms purely forward (deduction from spec) or purely backward (induction from tests) invariant generation because it closes the gap between the semantic intent of the specification and the operational constraints of the target code, ensuring the synthesized invariants are both expressive enough to discharge proof obligations and weak enough to remain satisfiable.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 126,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift and vocabulary drift across human–AI–human knowledge transfer\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.934
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-996",
+    "object": "chat.completion",
+    "created": 1787932409,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software degrades because each human–AI–human interaction cycle introduces a small, individually-undetectable shift in the operational meaning of domain vocabulary—AI models paraphrase concepts, humans accept plausible rewordings, and the resulting code reflects a slightly different ontology than the original. Over hundreds of changes, this semantic drift accumulates so that the codebase's implicit vocabulary no longer maps to any single coherent mental model, making every new change require reconciliation across multiple incompatible semantic layers that no individual change introduced or could have prevented.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 119,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

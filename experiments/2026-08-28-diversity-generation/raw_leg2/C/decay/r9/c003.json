@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.672
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-370",
+    "object": "chat.completion",
+    "created": 1787938399,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy is driven by the accumulation of implicit invariants: each correct change encodes assumptions about undocumented system behavior, making future changes that violate those assumptions appear locally correct but globally destructive.\", \"probability\": 0.085}, {\"conjecture\": \"Every tested change optimizes for local fitness, but the global cost function is non-additive, so the system drifts toward a local optimum in design space that is far from any architecture permitting easy further evolution.\", \"probability\": 0.072}, {\"conjecture\": \"Review and testing enforce consistency with specifications, but specifications decay faster than code because they are never executed, so the gap between what the system does and what reviewers believe it does grows monotonically.\", \"probability\": 0.064}, {\"conjecture\": \"Locally correct changes accumulate hidden coupling through shared mutable state, test fixtures, and API contracts that are never explicitly represented, so the true dependency graph grows denser while the visible dependency graph stays static.\", \"probability\": 0.081}, {\"conjecture\": \"The difficulty is a fundamental information-theoretic consequence of growing codebases: the number of potentially affected behaviors grows combinatorially, but testing samples only polynomially, so the probability of untested interaction effects increases with system size regardless of change quality.\", \"probability\": 0.078}, {\"conjecture\": \"Each change is reviewed against the current state, not against all future states, so there is no mechanism for preserving option value in the design space, and the system progressively forecloses architectural alternatives that would have enabled cheaper future changes.\", \"probability\": 0.069}, {\"conjecture\": \"Cognitive load grows superlinearly with codebase size because understanding any change requires holding an increasing number of context-dependent exceptions in working memory, so reviewers eventually rely on heuristics that permit locally correct but globally degrading changes.\", \"probability\": 0.058}, {\"conjecture\": \"Test suites become part of the resistance to change because they encode specific implementation behaviors, not just specifications, so every change must satisfy an expanding set of brittle assertions that constrain future designs far more than the original architecture did.\", \"probability\": 0.075}, {\"conjecture\": \"The system's behavior is determined by the intersection of all changes, not their union, so each new change constrains the space of compatible future changes quadratically, meaning the cost of the Nth change grows as a function of all prior N-1 changes even if each was individually optimal.\", \"probability\": 0.067}, {\"conjecture\": \"Long-running systems become harder to change because each correct change accumulates technical debt in the form of deferred generality: solving the immediate problem without abstracting it is always locally cheaper, so the system progressively loses its capacity for abstraction until all changes require working at the lowest semantic level.\", \"probability\": 0.062}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 612,
+      "total_tokens": 787
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic entropy of API contracts\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.7
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-575",
+    "object": "chat.completion",
+    "created": 1787936805,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally-correct change to an API contract increases the mutual information between that API and its existing call sites, ratcheting the coupling entropy to a higher floor that cannot be reduced without simultaneously changing callers. This accumulated mutual information is the true source of rigidity: the expected surprisal of any new change grows with the total coupling entropy, so the cost of a mutation scales with the size of the coupled surface, not with the size of the mutation itself. Thus, software brittleness is an unavoidable consequence of the second law applied to API contract semantics.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 125,
+      "total_tokens": 245
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 41.572
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-242",
+    "object": "chat.completion",
+    "created": 1787937215,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software architectures decay because each locally correct change optimizes for immediate constraints, creating an accumulation of implicit assumptions that are individually invisible but collectively restrict the design space. The system becomes harder to change not because of code complexity, but because the set of unexpressed invariants grows until any non-trivial modification violates an unknown constraint.\", \"probability\": 0.09}, {\"conjecture\": \"Every change to a system narrows its future trajectory by adding constraints, analogous to entropy in physical systems. The difficulty of change grows because the number of paths that satisfy all accumulated constraints shrinks exponentially, making the system increasingly rigid even though each constraint was individually justified.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems become harder to change because each modification adds implicit coupling between components that is never documented or tested. These hidden dependencies form a graph that grows denser over time, and the probability of triggering an unexpected interaction rises superlinearly with each new edge.\", \"probability\": 0.07}, {\"conjecture\": \"The problem is epistemic, not technical: each developer who touches the system holds a partial mental model, and turnover means the system's true behavioral contract is distributed across many minds, none of which is complete. The difficulty of change grows as the fraction of the system understood by any single contributor decreases, until no one can confidently predict the consequences of a modification.\", \"probability\": 0.06}, {\"conjecture\": \"Software systems accumulate accidental complexity because each change is made under time pressure, and developers optimize for local minimization of effort rather than global simplification. The system degrades because the cost of doing the clean thing is always higher than the cost of the expedient thing, and there is no selection pressure favoring long-term simplicity.\", \"probability\": 0.05}, {\"conjecture\": \"Changes become harder because every modification to a long-running system must preserve backward compatibility with an increasingly large set of consumers, integrations, and data formats. The difficulty is not in writing new code but in the growing impossibility of deprecating anything, which means the system can only accrete, never simplify.\", \"probability\": 0.04}, {\"conjecture\": \"The difficulty arises because testing captures only a sparse sample of the system's behavioral space. Each change is verified against existing tests, but tests encode only the cases someone anticipated, so the gap between tested behavior and actual behavior grows. Changing the system becomes harder because the untested portion, where unknown bugs live, expands with every modification.\", \"probability\": 0.03}, {\"conjecture\": \"Long-running systems become harder to change because the cost of understanding the existing codebase before making a modification grows faster than the cost of writing the modification itself. Each change adds code that must be read before it can be changed, and the reading cost compounds because understanding any part requires understanding its dependencies, creating a superlinear cognitive burden.\", \"probability\": 0.02}, {\"conjecture\": \"Software systems become harder to change because each change optimizes for the current requirements, creating a fitness landscape that becomes increasingly rugged. The system converges on a local optimum that is efficient for present conditions but fragile to new requirements, and the cost of escaping the local optimum grows with the depth of specialization.\", \"probability\": 0.02}, {\"conjecture\": \"The growing difficulty of change is driven by the accumulation of workarounds for bugs, edge cases, and integration issues that were never properly resolved. Each workaround adds a branch to the code that future changes must navigate around, and the interaction between workarounds creates a combinatorial explosion of states that must be preserved.\", \"probability\": 0.01}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 771,
+      "total_tokens": 946
+    }
+  },
+  "transport_error": null
+}

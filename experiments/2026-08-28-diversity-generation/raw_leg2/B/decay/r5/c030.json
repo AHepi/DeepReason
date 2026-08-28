@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic opacity from drift in implicit, un-enforced domain assumptions across maintainer generations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.94
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-458",
+    "object": "chat.completion",
+    "created": 1787937365,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade in maintainability because each generation of maintainers reconstructs the system's implicit domain semantics from source code, tests, and partial documentation, forming a private mental model that is locally consistent but divergent from both the original design intent and other maintainers' models. Because these mental models are never fully articulated or enforced by the code itself, changes deemed locally correct are silently predicated on slightly different domain assumptions. Over N generations, this produces an epistemically opaque system where no single maintainer holds a coherent model of the full domain constraint space, and each change further entrenches contradictions that are invisible because they live in the gap between what the code enforces and what each maintainer believes it enforces.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 154,
+      "total_tokens": 284
+    }
+  },
+  "transport_error": null
+}

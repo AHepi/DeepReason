@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.896
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-155",
+    "object": "chat.completion",
+    "created": 1787930370,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade primarily through the silent accumulation of implicit cross-module dependencies—shared assumptions about behavior, timing, or data shape—that no individual change introduces but each change leaves behind. These coupling shadows form a hidden interface contract that is invisible to static analysis and untested by existing suites because the dependencies were never explicitly declared. The system becomes harder to change not because any single modification is wrong, but because the cost of verifying safety grows superlinearly with the number of undeclared assumptions the change might violate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 108,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

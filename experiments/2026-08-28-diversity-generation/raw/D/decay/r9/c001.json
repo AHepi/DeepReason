@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic growth of coupling entropy\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.833
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-294",
+    "object": "chat.completion",
+    "created": 1787933310,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change increases the total Shannon entropy of the system's state space because it introduces new execution paths without eliminating old ones. The difficulty of change grows proportionally to this entropy, as any new modification must be validated against an exponentially expanding set of reachable states.\", \"probability\": 0.09}, {\"conjecture\": \"The mutual information between any given module and the rest of the system monotonically increases with each locally correct change. When the mutual information exceeds the working memory capacity of a developer, the cost of safely modifying that module becomes information-theoretically prohibitive.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems accumulate irreducible coupling entropy because local optimizations decrease the conditional entropy of specific component pairs while strictly increasing the joint entropy of the global system. This creates an entropic trap where local changes become increasingly easy, but global modifications become asymptotically impossible.\", \"probability\": 0.07}, {\"conjecture\": \"Software aging is governed by Landauer's principle applied to design decisions: each reviewed change erases uncertainty about a local implementation, dissipating 'heat' as global coupling entropy. The system becomes harder to change because the thermodynamic cost of dissolving the accumulated dependencies grows linearly with the number of past decisions.\", \"probability\": 0.06}, {\"conjecture\": \"The Kolmogorov complexity of the system's dependency graph increases sub-linearly with each change, but the algorithmic information required to safely modify the system grows super-linearly. This divergence occurs because local changes optimize for minimal local complexity, inadvertently maximizing the global description length required to reason about side effects.\", \"probability\": 0.05}, {\"conjecture\": \"Every locally correct, tested change reduces the entropy of the system's immediate execution behavior but strictly increases the entropy of its long-term evolutionary trajectory. Over time, the probability that any new change triggers an unintended emergent behavior approaches 1 as the evolutionary entropy reaches maximum.\", \"probability\": 0.08}, {\"conjecture\": \"Code review and testing act as lossy compression algorithms on the system's design space, filtering out local errors while inadvertently encoding global coupling. The accumulated coupling entropy is the Kullback-Leibler divergence between the developers' local mental models and the system's true state distribution, making change difficulty proportional to this divergence.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems exhibit entropic gravity: as the total information shared between components grows, the 'probability mass' of the dependency graph collapses into a highly coupled attractor state. Escaping this attractor to make a structural change requires an amount of information that grows exponentially with the system's lifetime.\", \"probability\": 0.05}, {\"conjecture\": \"The rate of increase in system modification difficulty is directly proportional to the Shannon entropy of the call graph's degree distribution. Each locally optimal change flattens the distribution of dependencies, moving the system toward maximum entropy, which minimizes local surprise but maximizes the global uncertainty of change impact.\", \"probability\": 0.07}, {\"conjecture\": \"A system's resistance to change scales with the total number of bits of implicit context shared between its modules. Each locally correct change fails to delete this implicit context, causing the system's coupling entropy to undergo a phase transition from a disordered, easily modifiable state to a rigidly ordered, frozen state.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 717,
+      "total_tokens": 904
+    }
+  },
+  "transport_error": null
+}

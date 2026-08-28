@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis via dependent type theory with proofs-as-programs extraction\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.552
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-625",
+    "object": "chat.completion",
+    "created": 1787943472,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Partial proofs in dependent type theory can serve as structured scaffolding for synthesis: given a specification as a dependent type and a partial proof term with typed holes, a constrained search over proof-relevant refinements yields extracted programs that hold their commitments by construction. The key claim is that hole contexts in dependent proofs carry enough computational information (eliminator paths, universe levels, motive shapes) to make the synthesis search tractable and the extracted code correct without post-hoc verification. Empirically, this should outperform whole-program synthesis from specs by a margin that grows superlinearly in specification depth.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 126,
+      "total_tokens": 245
+    }
+  },
+  "transport_error": null
+}

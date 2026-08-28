@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.328
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-687",
+    "object": "chat.completion",
+    "created": 1787933154,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change consumes a finite pool of implicit architectural alternatives—unexercised extension points and viable design trajectories—so the system's entropy increases as a combinatorial consequence, not as an accumulation of defects. The growing difficulty of change is the shadow cost of this expended optionality: engineers are not fighting accumulated bugs, but the narrowing combinatorial space of remaining safe modifications. This predicts that system rigidity correlates with the total count of historical changes, not with the presence of code smells, and that 'clean' codebases with extensive commit histories will degrade at the same rate as 'messy' ones.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 137,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

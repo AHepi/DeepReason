@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.284
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-541",
+    "object": "chat.completion",
+    "created": 1787937788,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate an implicit lattice of undocumented cross-module invariants that are not captured by any individual test, type signature, or specification. Each locally correct change tightens this lattice by adding another constraint that future changes must not violate, causing the graph of hidden dependencies to grow superlinearly. The system becomes harder to change not because any single component degrades, but because the cognitive burden of preserving an exponentially growing space of invisible invariants eventually exceeds any reviewer's capacity to reason about the consequences of a modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 110,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

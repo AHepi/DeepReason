@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architectural knowledge becomes progressively tacit and undocumented, increasing the cognitive entropy required to reconstruct safe-change boundaries from code alone\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.166
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-323",
+    "object": "chat.completion",
+    "created": 1787930042,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct, review-approved change implicitly prunes the set of architecturally safe modifications without updating the documentation of that set, causing the externally visible contract to diverge from the code's actual invariant structure. Because reviewers rely on tacit knowledge of these shrinking boundaries—knowledge never encoded in the code itself—the cost of reconstructing safe-change envelopes from source alone grows monotonically with commit count, eventually exceeding the cognitive capacity of any individual engineer to hold the full invariant graph in working memory.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 111,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

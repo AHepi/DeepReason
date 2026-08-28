@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.154
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-128",
+    "object": "chat.completion",
+    "created": 1787937409,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct, reviewed change to a long-running system adds at least one state and transition to the system's effective control automaton, monotonically increasing the graph diameter. Consequently, the shortest input sequence needed to drive the system into any specific execution path grows as O(log |V|) at minimum, meaning the cost of reproducing any particular behavior for testing or verification rises faster than linearly with the number of accepted changes. This creates an asymptotic verification gap: the test suite length required to maintain path coverage grows superlinearly while developer effort remains constant per change, causing the marginal cost of safe modification to diverge from the actual risk surface.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 133,
+      "completion_tokens": 140,
+      "total_tokens": 273
+    }
+  },
+  "transport_error": null
+}

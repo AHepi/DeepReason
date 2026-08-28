@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Goodhart decay: metrics selected for local correctness optimize away the unmeasured affordances future changes depend on\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.768
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-441",
+    "object": "chat.completion",
+    "created": 1787930345,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Test suites are anti-regression constraints, not affordance preservers. Every test that locks in a specific output or internal structure optimizes for measurable local correctness while silently eliminating the unmeasured design freedom that future changes require, so accumulated test coverage monotonically reduces the space of feasible modifications.\", \"probability\": 0.09}, {\"conjecture\": \"Code review criteria encode Goodhart decay: reviewers approve changes that are locally correct and match existing patterns, which gradually optimizes the codebase toward measurable consistency at the expense of unmeasured structural optionality, until the system can only accept changes that conform to accumulated conventions even when those conventions block needed evolution.\", \"probability\": 0.08}, {\"conjecture\": \"Metrics like cyclomatic complexity, coupling, and cohesion optimize local measurable properties while destroying unmeasured affordances: a function that scores well on all metrics may have eliminated the ambiguous boundary that future changes would have exploited, so metric-driven refactoring systematically removes the slack future changes need.\", \"probability\": 0.07}, {\"conjecture\": \"Type systems and static analyzers enforce local invariants that accumulate into global rigidity: each individually correct type constraint eliminates one unmeasured degree of freedom, and after thousands of constraints the system has no remaining degrees of freedom to exercise during modification, even though every constraint was locally justified.\", \"probability\": 0.06}, {\"conjecture\": \"Performance benchmarks cause Goodhart decay by optimizing measurable speed at the cost of unmeasured malleability: each optimization that improves benchmark numbers may hard-code assumptions about data shapes or call patterns that future changes would need to vary, so benchmark-driven development trades long-term changeability for measurable performance.\", \"probability\": 0.07}, {\"conjecture\": \"API stability metrics optimize for the measurable absence of breaking changes while sacrificing the unmeasured affordance of restructuring: once backward compatibility becomes a tracked metric, every change is locally correct for existing clients but globally eliminates the possibility of architectural correction, accumulating technical debt that cannot be repaid without violating the metric.\", \"probability\": 0.05}, {\"conjecture\": \"Code coverage metrics cause Goodhart decay by optimizing the measurable fraction of executed paths while eliminating unmeasured structural ambiguity: high coverage pressure pushes developers to simplify code into easily-testable forms that remove the indirection and partial abstraction future changes depend on, so coverage optimization systematically destroys evolvability.\", \"probability\": 0.06}, {\"conjecture\": \"Issue tracking and definition-of-done checklists optimize for measurable completeness of each change while leaving unmeasured the impact on future modification cost: each completed issue closes a local problem but may permanently remove an undocumented affordance that a future change would have leveraged, so process rigor accelerates ossification.\", \"probability\": 0.05}, {\"conjecture\": \"Continuous integration pipelines optimize for the measurable signal that each change passes all checks, which incentivizes developers to make changes that are locally verifiable by existing tests rather than changes that preserve unmeasured design affordances, so CI discipline selects against the structural ambiguity that future changes require.\", \"probability\": 0.08}, {\"conjecture\": \"Documentation metrics optimize for measurable coverage of interfaces and behaviors while leaving unmeasured the tacit design rationale that future changes depend on: each documented interface becomes a constraint to maintain, while the unmeasured reasoning about why alternatives were rejected disappears, so documentation discipline converts past decisions into rigid specifications that block future changes.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 200,
+      "completion_tokens": 730,
+      "total_tokens": 930
+    }
+  },
+  "transport_error": null
+}

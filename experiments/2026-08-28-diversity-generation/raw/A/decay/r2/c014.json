@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 16.703
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-423",
+    "object": "chat.completion",
+    "created": 1787930101,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems decay not through the accumulation of bad code, but through the silent accumulation of implicit invariants: unstated dependencies between distant components that were accidentally true at time T and became load-bearing by time T+1. Each locally correct change preserves the explicit contract but risks violating an implicit one, so the safe change set shrinks monotonically as the graph of hidden couplings grows. The system becomes harder to change because the true specification has drifted further from the documented one, and no test suite can validate constraints that were never named.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 117,
+      "total_tokens": 219
+    }
+  },
+  "transport_error": null
+}

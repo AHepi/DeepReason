@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.632
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-647",
+    "object": "chat.completion",
+    "created": 1787935453,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is refinement-aware adversarial co-evolution, where a generator emits implementation candidates and a verifier extracts proof obligations directly from the abstract specification, with both networks trained jointly so the generator is forced to produce code for which the verifier can construct a correctness proof. This architecture eliminates the semantic gap because the generator's gradient signal is shaped by formal proof-state construction, not mere input-output agreement. The conjecture predicts that this method achieves >90% proof-closure rate on specifications with quantifier alternations up to depth 3, while transformer-based code generation from natural language will plateau below 30% on the same benchmark regardless of model scale.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 138,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

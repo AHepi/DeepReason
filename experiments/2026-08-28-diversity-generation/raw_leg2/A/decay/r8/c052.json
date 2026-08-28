@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.463
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-193",
+    "object": "chat.completion",
+    "created": 1787938000,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems become harder to change over time because of an accumulating *latent constraint graph*: every locally correct change implicitly assumes the stability of certain upstream contracts, but these assumptions are never explicitly declared. The system's true coupling is therefore the union of all undeclared assumptions, which grows monotonically with each change. This makes the system progressively more fragile because any modification risks violating an unstated dependency that no test covers, forcing developers to do increasingly costly manual analysis to ensure safety.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 107,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Statistical-mechanics of dependency network phase transitions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.701
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-591",
+    "object": "chat.completion",
+    "created": 1787932398,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems undergo a percolation phase transition in their dependency network when the density of inter-module edges exceeds a critical threshold p_c, causing locally correct changes to trigger cascading propagation paths that lock the system into a rigid configuration. Below p_c, modifications remain localized because dependency chains are subcritical; above p_c, the giant connected component ensures that any modification propagates through a positive fraction of the network, making every change effectively a system-wide change. This transition is irreversible under normal development practices because each locally rational, tested commit adds edges that monotonically drive the system toward and past p_c, explaining why architectural degradation is observed even when no individual change was wrong.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 145,
+      "total_tokens": 267
+    }
+  },
+  "transport_error": null
+}

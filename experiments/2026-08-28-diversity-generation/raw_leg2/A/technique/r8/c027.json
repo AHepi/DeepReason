@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.8
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-520",
+    "object": "chat.completion",
+    "created": 1787943062,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to compile the abstract specification into a test oracle that generates discriminating inputs via property-based testing, then use the passing test set as a direct fitness function for program synthesis — ensuring the result holds its commitments because it was selected from the space of programs that survive the oracle's adversarial checks. This surpasses formal verification alone because the oracle acts as an executable bridge between abstract intent and concrete behavior, catching specification gaps that pure deductive methods miss.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 101,
+      "total_tokens": 199
+    }
+  },
+  "transport_error": null
+}

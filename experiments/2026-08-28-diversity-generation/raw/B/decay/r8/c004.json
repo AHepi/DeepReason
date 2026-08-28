@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic growth of hidden coupling entropy across module boundaries\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 17.474
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-567",
+    "object": "chat.completion",
+    "created": 1787932977,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct change forces an information-theoretic selection among an exponentially growing set of latent cross-module state combinations, causing unavoidable Shannon entropy leakage across API boundaries. This leakage accumulates as hidden coupling entropy because it cannot be eliminated by any local refactor—it represents the mutual information between modules that was never explicitly represented in any interface. The system's maintainability degrades in direct proportion to this trapped entropy, as any subsequent change must discover and preserve an expanding space of unstated invariants, predicting that complexity growth follows the cumulative mutual information across module boundaries rather than lines of code or dependency count.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 131,
+      "total_tokens": 255
+    }
+  },
+  "transport_error": null
+}

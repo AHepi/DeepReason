@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topological lock-in via circular waits in mutable state graphs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.718
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-115",
+    "object": "chat.completion",
+    "created": 1787930574,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Every locally correct change that touches shared mutable state creates a new path in the dependency graph; once a cycle forms between two state clusters, all downstream changes must respect both clusters' invariants simultaneously, and the set of such constraints grows superlinearly with the number of state nodes.\", \"probability\": 0.09}, {\"conjecture\": \"The difficulty of modifying a long-running system is proportional to the number of strongly connected components in its mutable-state reference graph, because each SCC encodes a circular wait that no single local change can break without coordinated updates across the entire SCC.\", \"probability\": 0.08}, {\"conjecture\": \"Mutations to long-lived state accumulate temporal coupling edges; the resulting graph's cyclomatic complexity directly bounds the minimum number of simultaneous modifications required to safely enact any new feature touching that region.\", \"probability\": 0.07}, {\"conjecture\": \"The apparent 'technical debt' in aging systems is precisely the count of minimal feedback loops in the state-mutation graph: each loop represents a circular wait that converts what should be a single edit into a multi-site atomic transaction.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems become rigid because each reviewed change optimizes locally by reusing nearby state, gradually increasing edge density in the state graph until the graph reaches a phase transition where most node pairs lie on shared cycles, making isolated changes impossible.\", \"probability\": 0.085}, {\"conjecture\": \"The cost of a change is governed by the size of the smallest feedback vertex set in the subgraph of mutable state it touches; systems harden when repeated local edits grow these sets until no single developer can hold the required coordination set in working memory.\", \"probability\": 0.05}, {\"conjecture\": \"Circular waits in the state graph act as topological attractors: once formed, subsequent locally-correct changes preferentially route through them because they offer the shortest mutation paths, reinforcing the cycle's invariants and making it progressively harder to refactor away.\", \"probability\": 0.075}, {\"conjecture\": \"Each tested, reviewed change that touches k mutable objects creates O(k^2) potential dependency edges; over time the graph transitions from tree-like to expander-like, and in expander graphs every pair of state nodes is connected by short cycles, forcing every change to respect a global invariant set.\", \"probability\": 0.065}, {\"conjecture\": \"The immutability of historical state writes creates a directed graph where past mutations constrain future ones; circular waits emerge when two state objects each reference the other's historical values, and these cycles lock the order of all future modifications touching either object.\", \"probability\": 0.04}, {\"conjecture\": \"Systems degrade not because of code complexity but because the mutable-state graph's chromatic number rises over time: each circular wait forces a new 'color' (coordination protocol), and once the chromatic number exceeds the team's coordination bandwidth, changes become effectively impossible.\", \"probability\": 0.055}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 644,
+      "total_tokens": 834
+    }
+  },
+  "transport_error": null
+}

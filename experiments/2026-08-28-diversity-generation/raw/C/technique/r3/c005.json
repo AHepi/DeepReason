@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.39
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-138",
+    "object": "chat.completion",
+    "created": 1787931946,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The best technique is refinement calculus: each specification-to-code step applies a correctness-preserving refinement law, so the final program is correct by construction with no separate verification needed. This outperforms test-first and post-hoc verification because the gap between abstract and concrete never opens. The commitments hold because every transformation is provably implication-preserving.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is to encode the abstract specification as property-based tests and drive implementation via shrinking-driven development, where counterexamples from random testing force the code toward specification conformance. The commitments hold probabilistically over the input distribution, and the technique succeeds because it converts the abstract spec into concrete, falsifiable execution checks early.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is to compile the specification directly into a solver-backed runtime that checks every operation against the spec at execution time, eliminating the translation gap entirely. This outperforms generating free-standing code because the specification remains the authority and the code is merely an optimized path that the runtime can override or reject. Commitments hold because the spec is never translated away.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is type-driven development with dependent types: the specification becomes the type, and writing code that type-checks is writing code that satisfies the spec. This dominates other approaches because the proof of correctness is inseparable from the act of programming. The commitments hold because the type system enforces them at compile time.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is to use a large language model to generate candidate implementations, then automatically verify each against the specification using an SMT-backed equivalence checker, iterating until verification passes. This outperforms manual refinement because it separates the creative search for code from the mechanical proof of correctness, and commitments hold because the verifier is the gatekeeper.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to synthesize code directly from the specification using constraint solving over input-output examples extracted from the spec's logical structure. This outperforms hand-writing code because the synthesizer searches a program space provably restricted to candidates matching the spec's semantics. Commitments hold because the synthesis process itself is a constructive proof.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to write the specification in executable form as a slow, obviously-correct reference implementation, then use differential testing to drive the optimized implementation toward behavioral equivalence with it. The commitments hold because the reference implementation IS the specification made executable, and the optimized version is validated against it continuously.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to use AI-assisted formal proof assistants where the specification is a theorem and the code is an artifact extracted from the proof. This works because the AI handles the tedious proof-search while the assistant guarantees soundness. Commitments hold because the code is literally a byproduct of a machine-checked proof.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to interleave specification and implementation as a single artifact using design-by-contract with runtime assertion checking, where the spec annotations are never removed in production. This outperforms separate verification because the spec travels with the code and is checked at every boundary. Commitments hold because violations are caught at runtime with the full context of the abstract requirement.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique is to never turn the specification into code at all — instead, interpret the specification directly at runtime using a domain-specific language where the specification grammar is the execution grammar. This eliminates the translation problem entirely. Commitments hold because there is no second artifact that can diverge from the first.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 800,
+      "total_tokens": 971
+    }
+  },
+  "transport_error": null
+}

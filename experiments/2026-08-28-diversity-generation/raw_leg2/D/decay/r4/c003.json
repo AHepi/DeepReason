@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedness from incremental constraint stacking\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.61
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-907",
+    "object": "chat.completion",
+    "created": 1787937237,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate fitness on the current landscape, but the accumulated effect is that the landscape itself becomes increasingly rugged. The system is hill-climbing itself into a local optimum from which any large change causes a fitness drop, making further improvement require crossing widening fitness valleys.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Testing and review constrain each change to preserve existing constraints, meaning every accepted change is a move that cannot reduce current fitness. This creates a ratchet where the accessible neighborhood shrinks over time because the set of non-degrading moves contracts as constraints stack, trapping the system on a mesa.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Locally correct changes each add implicit couplings between modules that are invisible at the change-review boundary but collectively flatten the gradient toward better designs. The system loses the ability to move toward higher-fitness architectures because the constraint density makes every direction appear as a fitness descent, even when a distant peak exists.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The probability that a randomly selected change preserves all existing constraints decreases multiplicatively with the number of stacked constraints. This means the fraction of the move space that passes review shrinks exponentially, and the system becomes frozen not because good changes do not exist but because they become statistically unreachable through local search.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each reviewed change is selected to be locally optimal, meaning it sits on the steepest available gradient. Over time the system occupies increasingly narrow ridges in the fitness landscape where most moves are sideways or downhill, and the cost of evaluating moves grows because the ridge structure requires checking more constraint interactions.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Incremental constraint stacking creates a fitness landscape where the correlation length between neighboring configurations decreases over time. The system's current state becomes an isolated peak with no connected path of improvements leading to higher peaks, so every beneficial refactor must first pass through a long stretch of constraint violations.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Review and testing enforce that each change satisfies existing constraints, which means the system can only move along contour lines of the constraint surface. As constraints stack, the contour lines become increasingly tortuous and disconnected, so the reachable region from the current position fragments into small islands separated by infeasible zones.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The system's modularity evolves to match the constraint structure of past changes, not future ones. This creates a landscape where the local gradients point toward deeper entrenchment of current modular boundaries, and crossing those boundaries to reach a different decomposition requires simultaneous satisfaction of constraints that were never designed to hold together.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Constraint stacking causes the fitness landscape to develop an increasing number of local optima per unit volume of configuration space. Each locally correct change fills in a potential pathway, and the system becomes harder to change because the density of traps grows until almost every exploratory step lands on a constraint violation that review would reject.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The ruggedness increase is driven by an asymmetry between constraint creation and constraint removal: reviews ensure new constraints are added only when locally beneficial, but there is no mechanism that removes constraints when they become globally maladaptive. The landscape thus accumulates barriers monotonically, and the barrier height between the current state and any superior basin grows linearly with system age.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 812,
+      "total_tokens": 999
+    }
+  },
+  "transport_error": null
+}

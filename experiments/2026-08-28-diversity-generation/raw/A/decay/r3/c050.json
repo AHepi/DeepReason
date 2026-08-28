@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.171
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-485",
+    "object": "chat.completion",
+    "created": 1787930420,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems calcify because each locally correct change implicitly encodes assumptions about the environment, but the system never records the boundary between \\\"what the change intentionally relies on\\\" and \\\"what it merely happens to ignore.\\\" As the environment drifts, later changes must reverse-engineer this boundary with no artifact to consult, so the cost of determining safe modifications grows superlinearly with the number of prior changes. The system becomes harder to change not because of any single error, but because each correct edit adds one more undocumented coupling that future developers must rediscover from scratch.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 121,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

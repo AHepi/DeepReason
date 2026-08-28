@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedization reducing marginal value of local refactoring\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.117
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-774",
+    "object": "chat.completion",
+    "created": 1787936604,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a software system evolves, each locally-correct change deforms its fitness landscape by creating couplings that increase the slope of adjacent design peaks, effectively converting traversable neutral ridges into isolating fitness valleys. Consequently, the marginal value of any local refactoring approaches zero because the basin of attraction surrounding the system's current configuration steepens faster than the refactoring can traverse it. The system becomes locked into a suboptimal peak not because no improvements exist, but because the landscape has ruggedized such that every path to a higher peak now requires a temporary, unacceptable drop in fitness.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 125,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

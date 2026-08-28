@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: entropic growth of dependency coupling measured by graph-theoretic rigidity\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.859
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-118",
+    "object": "chat.completion",
+    "created": 1787933099,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The Laman bound on graph rigidity predicts that a software dependency graph becomes structurally locked when the number of edges reaches 2n-3, establishing a mathematical limit for refactorability prior to total architectural ossification.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"If a software dependency graph is generically rigid, any single-node modification forces a cascading recomputation across its rigid subgraph, explaining why local changes require disproportionate testing effort.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Even when individual code changes are correct, the probability of introducing a latent incompatibility scales with the global k-core number of the dependency graph, implying high-k-core systems accumulate regressions non-linearly.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The eigenvector centrality of a modified node in a dependency graph mathematically determines the blast radius of a change, causing locally reviewed modifications to break distant modules if the node's centrality crosses a critical threshold.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems inevitably form nested rigid components in their dependency graphs because locally optimal changes maximize transitive dependencies, trapping the architecture in a Gibbs-like state where refactorings require globally synchronized updates.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software architectures decay because the algorithmic probability of a new feature requiring a link between two existing rigid clusters scales with the product of their node counts, deterministically increasing inter-cluster coupling until the graph forms a single rigid body.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The rigidity matroid of a software dependency graph dictates that once a subgraph becomes minimally rigid (isostatic), any subsequent edge additions to satisfy local requirements over-constrain the system, forcing future changes to violate global constraints to maintain local correctness.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The difficulty of modifying a long-running system is directly proportional to the spectral gap of the Laplacian matrix of its dependency graph; as the gap shrinks due to entropic edge accumulation, information propagates instantly across the network, making isolated changes impossible.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Peierls-Nabarro barriers apply to structural modifications in software graphs, meaning that moving a dependency edge across a locally rigid topological defect requires overcoming an energy barrier that grows logarithmically with the size of the surrounding rigid cluster.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The entropic drive toward dependency coupling is an isoperimetric phenomenon; as a system grows, the surface area of inter-module dependencies scales as N^(d-1) for an underlying dimension d, and beyond a critical volume, rigidifying cross-links become thermodynamically favored over internal refactoring.\",\n      \"probability\": 0.005\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 670,
+      "total_tokens": 863
+    }
+  },
+  "transport_error": null
+}

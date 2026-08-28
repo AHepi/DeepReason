@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.382
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-535",
+    "object": "chat.completion",
+    "created": 1787934730,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively apply correctness-preserving transformations to a formal specification until it becomes executable code, guaranteeing the result holds its commitments by construction.\", \"probability\": 0.08}, {\"conjecture\": \"Derive code by synthesizing it directly from SMT-compatible contracts using counterexample-guided inductive synthesis (CEGIS), where the specification is the oracle; this outperforms manual derivation because it mechanically closes the gap between abstract intent and concrete implementation.\", \"probability\": 0.07}, {\"conjecture\": \"Write the specification as an executable property-based test suite, then use genetic programming to evolve code populations until they pass all tests, yielding code that empirically holds its commitments.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is to train a large language model on paired specification-code corpora, then use it to generate code from the abstract specification, followed by automated verification of the output against the spec.\", \"probability\": 0.09}, {\"conjecture\": \"Use dependent type theory as the specification language, then extract executable code via type erasure; the resulting code holds its commitments because the type checker statically guarantees all specified invariants.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is AI-assisted refinement: use a large language model to propose refinement steps, then use an automated theorem prover to verify each step preserves correctness, combining the flexibility of AI with the rigor of formal methods.\", \"probability\": 0.09}, {\"conjecture\": \"Translate the abstract specification into a pure functional program that is, by construction, an executable model of the spec; then treat this model as an oracle and use differential testing to iteratively optimize an imperative implementation against it.\", \"probability\": 0.06}, {\"conjecture\": \"The best approach is to use a correct-by-construction DSL: embed the specification language as a domain-specific language within a host language, where every program written in the DSL is automatically compiled to code satisfying the spec.\", \"probability\": 0.05}, {\"conjecture\": \"The most reliable technique is interactive theorem proving: use a system like Coq or Isabelle to manually derive code from specifications through a chain of formally verified refinement steps, accepting the high human cost as necessary for guaranteeing commitments.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is to use a compiler that performs synthesis-by-unification: given a specification in a relational/logic programming language, the compiler uses constraint solving to find executable programs that satisfy the relational spec.\", \"probability\": 0.04}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 558,
+      "total_tokens": 729
+    }
+  },
+  "transport_error": null
+}

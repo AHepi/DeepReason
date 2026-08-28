@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.014
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-437",
+    "object": "chat.completion",
+    "created": 1787933284,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture decays because each locally correct change exploits the current structural assumptions, subtly narrowing the space of future compatible changes until the system reaches a state where any modification requires disproportionate effort.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The difficulty arises from information hiding accumulating hidden dependencies over time, as each correct change subtly increases coupling between modules through indirect effects, making the true cost of changes invisible until attempted.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because testing regimes optimize for local correctness, creating an implicit fitness landscape that rewards changes which add complexity within existing patterns and punishes structural simplification.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The degradation occurs because code reviews enforce consistency with existing patterns rather than architectural coherence, causing each change to extend accidental patterns long after they've become obsolete, creating an accretion of dead design decisions.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Systems become harder to modify because each correct change adds implicit state transitions to the system's effective state machine, causing the complexity of reasoning about behavior to grow combinatorially even when code size grows linearly.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The increasing difficulty stems from the divergence between the system's implementation and its mental models, where each locally correct change introduces small deviations from any coherent design intent, making the system progressively harder to reason about.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running software becomes harder to change because dependencies accumulate through what appears to be correct feature addition, with each change creating new implicit relationships between components that are never documented because they weren't intentionally designed.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The problem is that each reviewed, tested change optimizes for local simplicity while globally increasing the system's conceptual entropy, as developers consistently choose to add special cases rather than refactor abstractions, gradually converting a structured system into a combinatorial patchwork.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Systems degrade because every correct change is made under incomplete knowledge of future requirements, causing decisions that are locally optimal for current needs to become constraints that block structurally different solutions later, with these frozen decisions accumulating over time.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change results from the gradual loss of deletion pressure, where each correct addition is preserved by testing and review processes that validate its function but never question whether the problem it solves still exists, causing the system to accumulate dead complexity.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 622,
+      "total_tokens": 797
+    }
+  },
+  "transport_error": null
+}

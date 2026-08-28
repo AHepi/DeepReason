@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.762
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-634",
+    "object": "chat.completion",
+    "created": 1787932241,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The primary driver of increasing change cost is the combinatorial growth of implicit interactions between modules. Each correct change adds a new constraint that future changes must satisfy, causing the cognitive search space for safe modifications to expand exponentially regardless of code clarity.\", \"probability\": 0.085}, {\"conjecture\": \"Entropy increases because tests encode historical invariants rather than future flexibility. A suite of high-coverage tests acts as a rigid scaffold that makes locally correct changes increasingly difficult to integrate without breaking brittle, specific assertions about past behavior.\", \"probability\": 0.078}, {\"conjecture\": \"Software systems decay because institutional knowledge about the *why* of design decisions decays faster than the code itself. Subsequent developers make locally optimal choices based on incomplete context, slowly violating the original architectural intent and creating a fragmented system.\", \"probability\": 0.072}, {\"conjecture\": \"Requirements inevitably drift from the original domain model, forcing developers to map new concepts onto old data structures. This causes an accumulation of impedance mismatches and translation layers, where each change requires more work to bridge the gap between the mental model and the code.\", \"probability\": 0.068}, {\"conjecture\": \"Code becomes harder to change because the number of dependencies, both incoming and outgoing, grows asymptotically. This dependency network creates a gravitational pull that makes it easier to patch existing structures than to replace them, leading to an accumulation of technical debt.\", \"probability\": 0.065}, {\"conjecture\": \"Long-running systems become dominated by edge-case handling for legacy data or behaviors that can never be safely removed. This creates an 'error-handling tax' where every new feature must navigate a minefield of historical exceptions, increasing the cost of routine changes.\", \"probability\": 0.062}, {\"conjecture\": \"The architecture degrades through a thousand minor boundary violations. Each individual transgression seems negligible and is locally correct, but the cumulative effect is the dissolution of module boundaries, turning a system of interchangeable parts into a monolithic block.\", \"probability\": 0.058}, {\"conjecture\": \"The cost of change increases because the abstraction layers initially designed to manage complexity become sources of complexity themselves over time. As abstractions leak and are overloaded with new responsibilities, developers must understand not only the code but the evolving, undocumented history of the abstractions.\", \"probability\": 0.055}, {\"conjecture\": \"Systems become harder to change due to the buildup of non-functional regressions in performance and resource usage. Developers avoid necessary refactoring because of the high risk and cost of re-establishing benchmark performance, leaving the system in a sub-optimal, rigid state.\", \"probability\": 0.048}, {\"conjecture\": \"The 'locality of correctness' is an illusion; each change optimizes for a specific stakeholder's immediate need while suboptimizing the global system. Over time, this creates a tangled web of competing local optima, where moving in any direction to improve the system violates a previously established local constraint.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 650,
+      "total_tokens": 825
+    }
+  },
+  "transport_error": null
+}

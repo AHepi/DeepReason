@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity accumulation outpaces test surface coverage at a measurable rate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.164
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-341",
+    "object": "chat.completion",
+    "created": 1787933215,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In any long-lived software system, cyclomatic complexity grows as a function of the number of distinct execution paths introduced per change, while the test surface grows only as a function of the union of paths explicitly exercised, such that the ratio of untested complexity to tested complexity increases monotonically over time. This divergence occurs because each locally correct change adds conditional branches that interact with existing paths combinatorially, but tests are written to validate the specific change's behavior rather than the full cross-product of interactions, causing the untested interaction surface to expand at a rate proportional to the product of accumulated branches and new branches.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 130,
+      "total_tokens": 255
+    }
+  },
+  "transport_error": null
+}

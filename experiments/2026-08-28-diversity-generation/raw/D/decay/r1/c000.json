@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Hidden Markov chain of architectural states with absorbing entropy wells\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.205
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-374",
+    "object": "chat.completion",
+    "created": 1787930078,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change acts as a transition in a hidden Markov chain over architectural states, and absorbing entropy wells emerge because high-entropy configurations have more incoming transitions than low-entropy ones, making them statistically inescapable.\", \"probability\": 0.09}, {\"conjecture\": \"The transition probability matrix of architectural states is approximately row-stochastic with a stationary distribution concentrated on high-entropy designs, so every reviewed change drifts the system toward entropy wells that are absorbing because the probability of transitioning out decreases exponentially with entropy.\", \"probability\": 0.08}, {\"conjecture\": \"Architectural states form a hidden Markov chain where the emission probability of passing code review is maximized near entropy wells, creating a selection bias that makes high-entropy states absorbing under the policy of only accepting locally correct changes.\", \"probability\": 0.07}, {\"conjecture\": \"The number of distinct code paths required to keep a change locally correct grows with the entropy of the current architectural state, so transitions out of high-entropy states have vanishing probability, making them absorbing wells in the Markov chain.\", \"probability\": 0.06}, {\"conjecture\": \"Test suites define the emission matrix of a hidden Markov chain over architectures, and absorbing entropy wells form because high-entropy states emit passing tests from more code paths than low-entropy states, making the chain's stationary distribution dominated by high-entropy architectures.\", \"probability\": 0.07}, {\"conjecture\": \"The transition kernel of architectural change is irreducible only among low-entropy states; once a change pushes the system past a critical entropy threshold, the kernel becomes reducible and the high-entropy class becomes an absorbing set with no transitions back.\", \"probability\": 0.05}, {\"conjecture\": \"Code review acts as a Metropolis-Hastings acceptance rule on architectural states where the proposal distribution favors incremental modifications, and absorbing entropy wells arise because the acceptance probability for entropy-reducing moves decays superlinearly with current entropy.\", \"probability\": 0.06}, {\"conjecture\": \"Each architectural state has a hidden coupling degree that increases monotonically under locally correct changes, and once coupling exceeds a threshold the Markov chain enters an absorbing class because every possible change preserves or increases coupling.\", \"probability\": 0.08}, {\"conjecture\": \"The hidden Markov chain has a spectral gap between its top two eigenvalues that shrinks as the system enters high-entropy states, so mixing time explodes and the system becomes practically stuck in entropy wells even though escape is theoretically possible.\", \"probability\": 0.04}, {\"conjecture\": \"Absorbing entropy wells form because the transition matrix is approximately lower-triangular when states are ordered by entropy: locally correct changes can increment entropy with high probability but can only decrement it through coordinated multi-component changes that have near-zero probability under incremental review.\", \"probability\": 0.09}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 617,
+      "total_tokens": 807
+    }
+  },
+  "transport_error": null
+}

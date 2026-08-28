@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.155
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-275",
+    "object": "chat.completion",
+    "created": 1787932231,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate implicit invariants—unstated assumptions about how the code behaves that are not encoded in the type system or tests. Each locally correct change preserves the invariants it knows about, but the space of unknown invariants grows monotonically, so every new change risks violating an invariant that no reviewer or test can check because it is not represented anywhere.\", \"probability\": 0.09}, {\"conjecture\": \"The number of possible execution paths through a system grows combinatorially with each new feature, but testing and review always sample a linear subset. Over time, the fraction of actual behavior that is ever exercised by tests shrinks toward zero, so changes are validated against an increasingly unrepresentative sample of the system's real behavior space.\", \"probability\": 0.08}, {\"conjecture\": \"Each locally correct change optimizes for local readability and correctness, but the global structure of the code drifts toward a random walk of incremental decisions. The system becomes harder to change because no coherent mental model of the whole remains—every change requires reconstructing understanding that was never written down because it only existed transiently in the heads of past developers.\", \"probability\": 0.07}, {\"conjecture\": \"Dependencies form a directed graph that becomes progressively more connected over time because locally correct changes take the shortest path to implementation, which is usually adding a dependency rather than refactoring to remove one. The graph eventually crosses a percolation threshold beyond which no subset can be changed without triggering cascading effects through the entire graph.\", \"probability\": 0.07}, {\"conjecture\": \"The system accumulates code paths that exist only to preserve backward compatibility with earlier versions of itself—internal contracts, data format migrations, feature flags never removed. This sedimentary layer of compatibility code has no tests that would fail if it were removed, so it can never be safely deleted, yet it must be navigated around in every future change.\", \"probability\": 0.06}, {\"conjecture\": \"Knowledge of why the code is the way it is decays independently of the code itself. Each change is locally correct but does not preserve the rationale for prior decisions. The system becomes harder to change because the ratio of mechanism to explanation grows—the code tells you what happens but the why is progressively lost, and every change requires understanding the why of surrounding code.\", \"probability\": 0.08}, {\"conjecture\": \"Domain complexity that was originally external to the system gets progressively absorbed into the system through incremental feature additions. Each addition is locally correct, but the system gradually becomes a model of the full domain rather than a tool within it, and changing a model is categorically harder than changing a tool because every part constrains every other part through domain logic rather than through implementation logic.\", \"probability\": 0.05}, {\"conjecture\": \"Every change introduces subtle performance coupling—caching assumptions, timing dependencies, ordering effects—that is invisible at the level of correctness tests. These couplings accumulate until the system has a de facto performance contract that is never articulated but violated by changes that are correct in every other dimension, making changes feel impossible even though no logical error is present.\", \"probability\": 0.06}, {\"conjecture\": \"The system's abstraction boundaries, originally designed to isolate concerns, are repeatedly violated by locally optimal changes that reach across boundaries to avoid duplication or meet a deadline. Each violation is small and justifiable, but the cumulative effect is that the abstractions no longer partition the system—they are mere suggestions—and every change must reason about the full system rather than a bounded component.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems converge toward a state where the cost of a change is dominated not by implementation or verification but by coordination—the number of people, teams, or systems that must be consulted or updated. Each locally correct change slightly increases the coordination surface area, and the difficulty grows superlinearly because coordination costs are combinatorial in the number of stakeholders.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 837,
+      "total_tokens": 1012
+    }
+  },
+  "transport_error": null
+}

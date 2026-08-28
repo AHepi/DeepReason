@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Denotational-semantics-guided neural code generation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.063
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-259",
+    "object": "chat.completion",
+    "created": 1787941301,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"If a language model is trained to predict denotational semantic embeddings (from a fixed compositional interpreter) rather than surface tokens, then decoding the generated code through a denotational-consistency reranker will produce programs that satisfy their abstract specifications more reliably than syntax-only decoders. The semantic embedding space acts as a continuous proof object: candidates whose denotations cluster near the specification's denotation are admitted, while those that diverge are filtered. This works because the interpreter enforces compositionality, so the model cannot exploit lexical shortcuts that satisfy the spec text but violate the computational contract.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 126,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

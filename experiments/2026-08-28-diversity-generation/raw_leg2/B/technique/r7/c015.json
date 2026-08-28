@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis constrained by property-based test oracles\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.057
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-86",
+    "object": "chat.completion",
+    "created": 1787942897,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Neural program synthesis will produce verified-correct code only when the property-based test oracle is embedded as a differentiable constraint during the decoding process itself, not applied as a post-hoc filter. Specifically, a transformer decoder can be trained to minimize the cross-entropy loss plus a penalty term derived from the execution trace of the partial program against the oracle, allowing the model to actively avoid generating branches that violate the specified invariants. This tight integration causes the network to internalize the semantics of the properties, yielding programs that pass exponentially more random tests than models that rely on rejection sampling.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 129,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

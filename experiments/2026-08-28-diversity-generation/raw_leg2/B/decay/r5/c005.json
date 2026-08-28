@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic growth in Kolmogorov complexity of minimum-viable patches\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.362
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-19",
+    "object": "chat.completion",
+    "created": 1787937337,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The Kolmogorov complexity of the minimum-viable patch required to implement a fixed-feature delta grows monotonically with the cumulative entropy of prior commit history. This happens because each locally correct change leaves latent implementation residues that constrain future patches, causing the shortest program that navigates them to encode increasing amounts of system-specific historical context rather than reusable abstractions.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 129,
+      "completion_tokens": 84,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

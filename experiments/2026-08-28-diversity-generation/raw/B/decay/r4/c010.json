@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-locking of design assumptions into a shared implicit ontology between code and developers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.609
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-151",
+    "object": "chat.completion",
+    "created": 1787932146,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change creates a shared implicit ontology between code and developers by phase-locking design assumptions—unstated causal models of how the system works—that become increasingly coupled across both human memory and code structure. Because these phase-locked assumptions are implicit, every new change must silently reproduce the exact ontology phase of its surrounding context or risk desynchronization, and the cost of re-deriving that phase grows superlinearly with the number of historical locks. The system becomes harder to change not because the code is tangled, but because the developer must reconstruct an increasingly high-dimensional phase space of invisible design commitments before making any safe modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 133,
+      "total_tokens": 260
+    }
+  },
+  "transport_error": null
+}

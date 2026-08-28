@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.09
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-194",
+    "object": "chat.completion",
+    "created": 1787943564,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: repeatedly apply formal refinement rules (strengthening preconditions, adding nondeterminism-resolving assignments) to transform the abstract specification into an implementation, because this preserves correctness by construction at each step.\", \"probability\": 0.085}, {\"conjecture\": \"The best technique is test-driven development (TDD) guided by specification-derived properties: generate executable tests directly from the abstract specification's invariants and use them to drive code, because empirical feedback is the most reliable mechanism for ensuring commitments hold.\", \"probability\": 0.075}, {\"conjecture\": \"The best technique is constructive type theory (e.g., Agda or Coq): write the specification as a dependent type and extract executable code from the proof that the type is inhabited, because the type-checker enforces the specification's commitments.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is model-driven architecture (MDA): define the specification as a platform-independent model, apply transformations to produce platform-specific code, and rely on verified transformations to hold commitments.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is denotational design: express the specification as a mathematical function (denotation) and implement it by composing known denotations, because reasoning about the composed denotations directly proves the implementation satisfies the specification.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is algebraic specification and structural operational semantics (SOS): specify abstractly as an algebra and implement as a transition system, proving bisimulation between the two to ensure commitments hold.\", \"probability\": 0.03}, {\"conjecture\": \"The best technique is design-by-contract with runtime assertion checking: embed the abstract specification as executable preconditions, postconditions, and invariants, because this directly monitors commitments during execution and provides feedback.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is denotational compilation: compile the abstract specification directly to an intermediate representation using semantics-preserving transformations, because this bypasses human-written code and its associated errors.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is large-language-model (LLM) generation with property-based testing verification: use the abstract specification as a prompt for an LLM to generate code, then verify the result using property-based tests derived from the specification.\", \"probability\": 0.025}, {\"conjecture\": \"There is no single best technique; the optimal approach depends on the specification's formalism, the target environment, and the available tools, because the problem of turning specifications into code is context-dependent.\", \"probability\": 0.09}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 576,
+      "total_tokens": 747
+    }
+  },
+  "transport_error": null
+}

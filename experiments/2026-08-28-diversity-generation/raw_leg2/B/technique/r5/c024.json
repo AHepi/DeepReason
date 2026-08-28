@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: large-model constrained decoding on a verified step-correctness reward model\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.398
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-167",
+    "object": "chat.completion",
+    "created": 1787942348,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"For a constrained decoder guided by a step-correctness reward model, anchoring the reward model to intermediate proof states from the target verification backend outperforms training it on human-annotated step labels. Specifically, the decoder should sample continuations from a frozen policy that are each executed against the verifier's state delta; the reward model learns to predict the verifier's acceptance signal directly from these deltas, rather than from abstract plausibility. This couples generation to the exact semantics of the target verification tool, eliminating the distribution shift between the reward model's notion of 'correct step' and the verifier's, yielding executable code that satisfies its formal specification at measurably higher rates than decoders trained on proxy rewards.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 151,
+      "total_tokens": 272
+    }
+  },
+  "transport_error": null
+}

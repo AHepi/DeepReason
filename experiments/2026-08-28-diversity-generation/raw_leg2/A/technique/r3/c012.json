@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.187
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-229",
+    "object": "chat.completion",
+    "created": 1787941671,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most effective technique is to compile the abstract specification into a dependent type that doubles as the program's execution entry point, where partial functions are made total by explicitly threading preconditions into the type signature and postconditions into the return type. This collapses the specification-to-code gap by making the program literally an inhabitant of its own correctness theorem, and any failure to hold commitments manifests as a compile-time type error rather than a runtime defect. The approach is falsifiable: for any specification class, a control implementation using standard test-driven development will exhibit strictly more postcondition violations under identical workloads.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 126,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

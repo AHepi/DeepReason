@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Organizational memory decays faster than code, so tacit design rationale becomes unrecoverable, leaving only brittle literal constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.128
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-900",
+    "object": "chat.completion",
+    "created": 1787936386,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change encodes an unstated assumption about the system's original design intent, and because organizational memory decays faster than the code itself, that intent becomes permanently irrecoverable. Subsequent developers can see only the literal constraints the code enforces, not the tacit rationale behind them, so every new change must satisfy an ever-growing set of brittle, unexplained rules. The system ossifies not because the code is wrong, but because the recoverable artifact no longer contains the reason it exists.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 110,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

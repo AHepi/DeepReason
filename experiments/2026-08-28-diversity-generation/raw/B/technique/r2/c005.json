@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Proof-carrying synthesis from refinement types\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.204
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-885",
+    "object": "chat.completion",
+    "created": 1787931617,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Synthesis from refinement types is best achieved by emitting a partial program whose holes are constrained by a dependent type theory encoding, allowing an SMT solver to fill gaps while simultaneously producing a proof certificate that each refinement holds. The resulting code carries a machine-checkable witness of its own correctness, decoupling trust from the synthesis engine itself. This approach dominates pure deductive synthesis because it partitions the problem into structural inference and constraint-based verification, making proof generation an inherent byproduct of hole-filling rather than a separate post-hoc step.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 115,
+      "total_tokens": 231
+    }
+  },
+  "transport_error": null
+}

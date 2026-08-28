@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolve code populations against formal contract fitness landscapes\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.764
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-900",
+    "object": "chat.completion",
+    "created": 1787943204,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most effective technique is to evolve a population of programs against a multi-objective fitness landscape where formal contracts define the selection pressures, with mutation operators restricted to contract-preserving transformations verified by an SMT solver at each generation. This approach outperforms both standard genetic programming and LLM-based code generation because it eliminates the generation-to-generation accumulation of contract violations, ensuring that the surviving code actually holds its commitments rather than merely approximating them. The critical factor is that verification is applied as a birth filter rather than a post-hoc test, making the contract a hard constraint on the evolutionary topology itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 132,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

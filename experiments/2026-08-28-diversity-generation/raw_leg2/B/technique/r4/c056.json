@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolving populations of executables against adversarial property-based test oracles\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.623
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-921",
+    "object": "chat.completion",
+    "created": 1787942157,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Populations of executables evolved against adversarial property-based oracles will reliably converge to specifications-satisfying code if and only if the oracle suite is itself co-evolved to maximize mutation-kill coverage of the current population — fixed oracle suites inevitably permit semantic drift into passing-but-wrong solutions. The co-evolutionary pressure must be asymmetric: oracles are selected for detecting divergences between high-fitness individuals, while executables are selected for passing the oracle suite with minimal computational cost. Under this dynamic, the population's consensus behavior becomes an executable specification that holds its commitments more faithfully than any hand-written oracle, because the oracle itself is continuously sharpened against the very failures it fails to catch.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 153,
+      "total_tokens": 274
+    }
+  },
+  "transport_error": null
+}

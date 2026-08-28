@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.173
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-701",
+    "object": "chat.completion",
+    "created": 1787937435,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture decays because locally correct changes optimize for immediate fitness, causing the system to drift away from its original design constraints in a process mathematically analogous to entropy accumulation in thermodynamic systems.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The total cognitive load required to safely modify a system grows combinatorially with the number of implicit, undocumented dependencies between modules, meaning a perfectly maintained system still becomes harder to change simply by becoming larger.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Long-running systems become rigid because code reviews systematically filter out changes that align with the author's mental model but conflict with the reviewer's mental model, causing the codebase to converge on a fragmented, consensus-based architecture that lacks internal coherence.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Every locally correct change forces subsequent changes to consider the new state space, meaning the cost of validation scales with the history of past modifications rather than the current size of the system, turning the codebase into an archaeological record of past decisions.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running software is primarily a consequence of metric misalignment: local tests verify correctness against current specifications, but specifications themselves drift over time, so the system becomes perfectly optimized for a reality that no longer exists.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because they accumulate accidental complexity that is indistinguishable from essential complexity at the local level; because reviewers cannot tell which complexities are accidental, they enforce them as invariants, permanently cementing them into the architecture.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Codebases ossify because testing and review processes act as evolutionary selection pressures that favor localized, incremental modifications over structural refactoring, systematically eliminating the mutations required to maintain architectural fluidity.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Maintainers treat existing code as a stochastic oracle; because rewriting it risks breaking unknown invariants, developers wrap rather than refactor, leading to an accretion of compatibility layers that exponentially increase the friction of future fundamental changes.\",\n      \"probability\": 0.092\n    },\n    {\n      \"conjecture\": \"Software aging is a measurement artifact: the system does not become harder to change, but the variance of change outcomes increases multiplicatively over time, making the expected value of any modification appear increasingly negative to risk-averse engineering organizations.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because local correctness is evaluated against a moving boundary of external APIs and dependencies; each integration acts as a constraint, and over time the system becomes a rigid web of external contracts that cannot be modified without violating at least one.\",\n      \"probability\": 0.075\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 666,
+      "total_tokens": 841
+    }
+  },
+  "transport_error": null
+}

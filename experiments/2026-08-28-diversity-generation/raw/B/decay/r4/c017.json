@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-locking of design assumptions into a shared implicit ontology between code and developers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.367
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-166",
+    "object": "chat.completion",
+    "created": 1787932158,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become hard to change because code and developers converge on a shared, phase-locked implicit ontology: the names, structures, and boundaries in the code train developers' mental models, which in turn direct all subsequent code modifications, reinforcing the same structures. Once this feedback loop stabilizes, the ontology becomes invisible—it is experienced as natural fact rather than contingent design—so changes that are locally correct but violate the implicit phase-locking are rejected by reviewers, tests, and refactoring instincts alike, even when no explicit rule forbids them.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 117,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

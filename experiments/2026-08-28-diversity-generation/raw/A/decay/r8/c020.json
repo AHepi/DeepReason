@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.759
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-745",
+    "object": "chat.completion",
+    "created": 1787932918,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate a graph of non-local semantic couplings—implicit assumptions held by distant modules about each other's behavior—that are invisible to any single reviewer or test suite because they are never jointly asserted. Each locally correct change alters the behavior surface that some distant module silently depends on, so the system's effective complexity grows not from code volume but from the combinatorial expansion of unexpressed cross-module invariants. The system becomes harder to change because the only reliable record of these invariants is the code itself, and every modification risks silently violating an invariant that no test was ever written to check.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 130,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

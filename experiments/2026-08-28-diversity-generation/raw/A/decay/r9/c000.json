@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.679
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-554",
+    "object": "chat.completion",
+    "created": 1787933145,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The degradation stems from an information-theoretic entropy accumulation: every locally correct change implicitly encodes assumptions about the system's global state without explicitly recording them, causing the space of valid future changes to shrink non-linearly. The system's API boundary becomes a high-dimensional constraint surface where each new feature adds an implicit invariant that future changes must satisfy, yet these invariants are never fully documented because they were invisible to the local review process that approved them. This creates an asymptotic 'change tax' where the cost of verifying a new modification grows exponentially with the number of prior modifications, as each change must be checked against an increasingly large set of undocumented, emergent cross-cutting constraints.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 145,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

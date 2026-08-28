@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.847
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-529",
+    "object": "chat.completion",
+    "created": 1787936968,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems degrade via the accumulation of implicit invariants: each locally correct, tested change encodes a tacit assumption about the execution environment, data shape, or calling context that is never represented in the code or tests. As these invisible dependencies compound, the safe state space for future modifications shrinks to a tiny, unmapped manifold within an exponentially growing configuration space. The system becomes hard to change not because the visible code is complex, but because the invisible web of unexpressed assumptions makes every modification likely to violate a constraint that exists only in the system's operational history.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 125,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

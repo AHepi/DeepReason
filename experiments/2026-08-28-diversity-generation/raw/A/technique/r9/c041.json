@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.701
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-54",
+    "object": "chat.completion",
+    "created": 1787935486,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The optimal technique is to compile the abstract specification into an intermediate artifact that is simultaneously executable and a formal object, such as a dependent type or refinement logic formula, rather than generating source code directly. Code is then synthesized as the unique inhabitant of that object's proof obligations, making the specification and the executable semantically identical. Any deviation between behavior and commitment becomes unprovable, collapsing the gap rather than testing it after the fact.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 99,
+      "total_tokens": 197
+    }
+  },
+  "transport_error": null
+}

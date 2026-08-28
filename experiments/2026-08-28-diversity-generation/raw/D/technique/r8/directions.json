@@ -1,0 +1,8 @@
+[
+  "extraction via refinement calculus with mechanized proof-carrying code",
+  "neural program synthesis conditioned by runtime property-based test oracles",
+  "dependent type-theoretic elaboration where specs are intrinsic types",
+  "denotational-interpreter scaffolding compiled down via partial evaluation",
+  "large-language-model translation constrained by formal verification backends",
+  "synthesis from input-output examples using SMT-backed deductive oracle solving"
+]

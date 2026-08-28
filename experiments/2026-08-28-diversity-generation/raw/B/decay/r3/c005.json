@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic coupling: each correct change narrows the entropy of the system's future state-space toward implicit architectural invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.364
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-784",
+    "object": "chat.completion",
+    "created": 1787930447,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change to a software system does not merely modify code, but emits mutual information between the changed component and the system's implicit architectural invariants, lowering the entropy of the system's future state-space. This accumulated mutual information acts as a hidden constraint: future changes that violate these now-entrenched invariants become increasingly improbable to be correct, even if individually well-formed. Thus, the system becomes harder to change not due to technical debt, but because each past correct change has non-destructively collapsed the universe of admissible future states.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 137,
+      "completion_tokens": 117,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

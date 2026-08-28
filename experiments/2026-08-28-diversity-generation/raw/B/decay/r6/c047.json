@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Type-theoretic proof-carrying debt from local decidable checks\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.999
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-8",
+    "object": "chat.completion",
+    "created": 1787932575,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems accumulate type-theoretic proof-carrying debt because each locally decidable type check (e.g., proving a term inhabits a type) fixes a local proof object that implicitly constrains the global proof of type safety for the entire program. Over successive modifications, these local proofs form a distributed proof witness whose global consistency becomes undecidable from any single local check, so each new change requires ever more contextual proof repair to maintain inhabitation of the system's global type. The perceived difficulty of change is therefore the growing gap between the constant cost of local type checking and the superlinear cost of reconstructing the implicit global proof object that local decidable checks assume but never verify.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 151,
+      "total_tokens": 277
+    }
+  },
+  "transport_error": null
+}

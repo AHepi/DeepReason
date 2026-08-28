@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.429
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-873",
+    "object": "chat.completion",
+    "created": 1787930535,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The accumulations of local optimizations create a globally entangled architecture where each new feature must thread through an increasingly narrow and contradictory set of constraints. Every locally correct change adds a constraint, and the system's ability to accommodate future change degrades combinatorially as constraints collide.\", \"probability\": 0.09}, {\"conjecture\": \"As a system evolves, its modules develop hidden, non-local couplings through shared data formats, timing assumptions, and implicit invariants. These couplings are invisible to local code review and testing, but each new change must respect them, making the system effectively a single monolithic unit despite its modular appearance.\", \"probability\": 0.085}, {\"conjecture\": \"Every locally correct change adds state and branching logic to handle edge cases discovered in production. This creates a state space that grows exponentially with each change, while tests only cover the specific paths encountered so far. The system becomes harder to change because the untested state space grows faster than the tested one.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems become harder to change because the domain knowledge needed to safely modify them grows with each change, but this knowledge is never fully captured in documentation or tests. The system's changeability depends on the ratio of captured knowledge to required knowledge, and this ratio worsens over time as knowledge accumulates faster than it can be externalized.\", \"probability\": 0.075}, {\"conjecture\": \"Each locally correct change optimizes for the immediate problem, creating a fitness landscape where the system is locally optimal but globally stuck in a poor architecture. The system becomes harder to change because escaping a local optimum requires passing through states that are temporarily worse, which local review and testing will reject.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems accumulate multiple overlapping abstractions for the same concept, each introduced to solve a specific local problem. The difficulty of change grows with the number of overlapping abstractions because any new change must decide which abstraction to use, reconcile their differences, or work around all of them simultaneously.\", \"probability\": 0.065}, {\"conjecture\": \"Each correct change adds dependencies between components. Over time, the dependency graph's average path length and clustering increase until most changes require touching a large fraction of the system. The system becomes harder to change because the dependency graph's expansion factor—the number of components affected by a typical change—grows monotonically with each change.\", \"probability\": 0.06}, {\"conjecture\": \"Every change carries a small probability of introducing a subtle incorrect assumption that passes review and tests but constrains future changes. These incorrect assumptions accumulate like technical debt, and the system becomes harder to change because the density of false constraints grows over time, making every new change more likely to conflict with an existing false one.\", \"probability\": 0.055}, {\"conjecture\": \"As a system ages, the original design intent fades and is replaced by an accumulated set of conventions that partially overlap and partially contradict each other. Change becomes harder because the system lacks a consistent internal logic to guide new modifications, forcing developers to reverse-engineer intent from contradictory evidence each time.\", \"probability\": 0.05}, {\"conjecture\": \"Each locally correct change adds a conditional branch to handle a specific scenario, and over time the system's behavior becomes a product of thousands of interacting conditionals. The system becomes harder to change because the interactions between conditionals create emergent behaviors that no single change can predict and no test suite can fully cover.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 751,
+      "total_tokens": 926
+    }
+  },
+  "transport_error": null
+}

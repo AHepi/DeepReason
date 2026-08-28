@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.391
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-115",
+    "object": "chat.completion",
+    "created": 1787938184,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade via implicit coupling: each locally correct change adds hidden dependencies between modules through shared state, emergent execution order, and unspoken invariants. Because tests only assert explicitly specified behavior, they systematically fail to capture these incidental connections. The system's true coupling graph grows denser over time, but remains invisible to both the type system and the test suite, until the cost of safely predicting the blast radius of any change exceeds the cost of the change itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 102,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 33.413
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-854",
+    "object": "chat.completion",
+    "created": 1787937666,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The system's locally correct changes optimize for immediate fitness, but the resulting architecture traces a random walk through design space that moves ever further from any compact, modular representation, making future changes require increasingly many touchpoints.\", \"probability\": 0.08}, {\"conjecture\": \"Each tested change adds constraints that are locally invisible but globally binding; the system's true constraint surface grows monotonically because no change removes constraints, only adds new ones, so the space of permitted future modifications shrinks with every PR.\", \"probability\": 0.07}, {\"conjecture\": \"The implicit domain model encoded in the code drifts further from the explicit domain model in stakeholders' heads, and every locally correct change accelerates this drift by patching symptoms rather than realigning the model, so future changes must bridge an ever-widening conceptual gap.\", \"probability\": 0.09}, {\"conjecture\": \"Each change creates at least one implicit coupling between modules that tests cannot detect because tests only verify behavior, not architectural independence; these couplings accumulate like radioactive half-life, eventually making every change ripple through the whole system.\", \"probability\": 0.06}, {\"conjecture\": \"The codebase's Kolmogorov complexity relative to any single developer's working memory grows monotonically; the system becomes harder to change not because of any structural property but because the minimum cognitive bandwidth required to safely propose a change exceeds any individual's capacity.\", \"probability\": 0.08}, {\"conjecture\": \"Reviewers approve changes based on local correctness and immediate risk, which is a discounting function that systematically underweights future optionality; over time the codebase becomes a Pareto frontier of past local optima with no remaining positive-value moves, a form of technical debt equilibrium.\", \"probability\": 0.05}, {\"conjecture\": \"Dependencies accumulate through a preferential attachment process where new code preferentially builds on the most-connected modules, creating hub structures whose stability becomes load-bearing for the entire system; changing any hub then requires verifying an explosively growing fan-out of dependents.\", \"probability\": 0.07}, {\"conjecture\": \"Every change that passes tests encodes an implicit invariant that the tests verify but do not document; the system's undocumented invariant count grows linearly with changes while developer knowledge of them decays exponentially with turnover, creating a widening gap between what the code enforces and what anyone understands.\", \"probability\": 0.06}, {\"conjecture\": \"The system's state space grows combinatorially with each added feature, but tests only sample this space along the paths exercised by known use cases; untested regions of the state space accumulate latent inconsistencies that make any novel change likely to trigger an emergent bug in a region no test covers.\", \"probability\": 0.08}, {\"conjecture\": \"Changes that are locally correct but architecturally suboptimal survive because they pass reviews, while architecturally corrective refactors are rejected because they touch too many files; this creates a selection pressure that systematically favors local patches over structural repairs, causing the architecture to degrade in a ratchet-like process that cannot reverse.\", \"probability\": 0.09}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 664,
+      "total_tokens": 839
+    }
+  },
+  "transport_error": null
+}

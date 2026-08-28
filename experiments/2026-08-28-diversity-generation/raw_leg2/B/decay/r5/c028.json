@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: topological rigidification of dependency graph reducing the size of the boundary-permitting change manifold\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.533
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-851",
+    "object": "chat.completion",
+    "created": 1787937370,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change that adds dependencies incrementally fills in the null space of the dependency graph's boundary operator, shrinking the manifold of modifications that remain boundary-consistent. Because the boundary-permitting change manifold is topologically constrained by the rank of the existing dependency structure, the set of feasible changes contracts monotonically as edges accumulate, even when no individual edge is globally harmful. This rigidification is structural, not informational: the system becomes hard to change not because knowledge is lost, but because the remaining open pathways for change become topologically disconnected and individually too small to admit new features.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 126,
+      "total_tokens": 256
+    }
+  },
+  "transport_error": null
+}

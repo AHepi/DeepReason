@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.03
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-292",
+    "object": "chat.completion",
+    "created": 1787935210,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Refinement via game semantics is the optimal technique: compile the abstract specification into an interaction protocol (a game), and let the executable code be a strategy machine verified by winning conditions, ensuring the code holds its commitments by construction because it cannot make a move the specification forbids.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the specification as a theorem and the code as a proof term via the Curry-Howard correspondence, producing executable code that holds its commitments because it is literally a constructive proof that the commitments are satisfiable.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Synthesizing code through dependent type theory with specification-as-type is the only technique where commitment-holding is decidable by construction: the code type-checks against the abstract specification, and type-checking IS the verification that commitments hold.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is to use constructive logic with realizability: translate the abstract specification into a constructive proof, then extract the witness as executable code. The code holds its commitments because it is the computational content of a proof of the specification.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is refinement calculus with an automated invariant generator: the abstract specification is concretized through provably-correct refinement steps, and the generated loop invariants are discharged by an SMT solver, making commitment-holding a mechanical consequence of the refinement chain.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is to compile the specification into a model in a decidable logic, use that model to generate tests and oracles simultaneously, and then evolve the code via genetic programming with fitness defined by oracle agreement, producing code that holds its commitments because it survives adversarial pressure from the model's own generated tests.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is monadic refinement: embed the abstract specification as a free monad, write the executable code as an interpreter for that monad, and prove the interpreter correct against the specification using equational reasoning, making commitment-holding a consequence of the interpreter's laws.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is algebraic stepwise refinement: express the specification as an algebraic theory, refine it through a chain of implementation algebras, and verify each step via homomorphism proofs, so the code holds its commitments because it is a faithful homomorphic image of the specification algebra.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is to encode the specification as a temporal logic formula and synthesize the executable code as a reactive system via controller synthesis, where the code holds its commitments because it is a winning strategy guaranteed by the synthesis algorithm.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to translate the abstract specification into a contract system using design-by-contract with runtime checking, then use property-based testing to fuzz the contract boundary until violations converge to zero, producing code that holds its commitments because the contract is both a specification and an executable invariant that is never observed to fail.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 746,
+      "total_tokens": 917
+    }
+  },
+  "transport_error": null
+}

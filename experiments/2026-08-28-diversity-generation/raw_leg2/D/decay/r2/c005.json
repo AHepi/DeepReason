@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic closure of the maintainer community around outdated tacit assumptions\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.107
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-288",
+    "object": "chat.completion",
+    "created": 1787936647,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change is validated against the tacit assumptions of current maintainers, so changes that would be correct under the system's original assumptions are rejected as bugs, causing the codebase to drift toward a narrower and narrower band of accepted behavior.\", \"probability\": 0.08}, {\"conjecture\": \"Maintainer turnover creates an epistemic bottleneck where new members learn the system's constraints by trial-and-error against the review process, internalizing whatever the current community rejects as a set of immutable physical laws rather than historical design choices that could be revisited.\", \"probability\": 0.07}, {\"conjecture\": \"As the maintainer community's tacit model becomes more closed, tests evolve to encode not just correctness but the community's current assumptions, so passing tests increasingly certify compatibility with outdated mental models rather than with any objective system requirement.\", \"probability\": 0.06}, {\"conjecture\": \"The review process functions as an epistemic filter that rejects changes violating tacit assumptions more often than changes violating explicit requirements, because reviewers can articulate and enforce the latter but enforce the former through intuitive 'this looks wrong' objections that are never formalized or challenged.\", \"probability\": 0.05}, {\"conjecture\": \"Tacit assumptions become load-bearing when the documentation referencing them decays, so the maintainer community's shared but unspoken mental model becomes the only specification, and any change that would be correct under a recovered original specification is treated as a regression.\", \"probability\": 0.09}, {\"conjecture\": \"The community's tacit assumptions form a self-reinforcing attractor: each correct-by-current-assumptions change adds code consistent with those assumptions, making future violations look statistically anomalous in code review, even when the original design intent would have welcomed them.\", \"probability\": 0.04}, {\"conjecture\": \"Maintainer communities undergo epistemic closure when the cost of challenging a tacit assumption exceeds the cost of working around it, so over time every assumption that could have been revised is instead worked around, accumulating complexity that encodes the community's ignorance rather than the system's requirements.\", \"probability\": 0.07}, {\"conjecture\": \"Every locally correct change that passes review reinforces the assumptions that approved it, so the review process selects for changes consistent with outdated tacit models and selects against changes that would expose model errors, making the community's blind spots structurally invisible.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems become harder to change because the maintainer community's tacit assumptions achieve closure: members who question foundational assumptions leave or stop contributing, leaving a consensus that treats contingent historical decisions as necessary constraints.\", \"probability\": 0.03}, {\"conjecture\": \"The difficulty of changing long-running systems is proportional to the degree of epistemic closure in the maintainer community, because closed communities treat the absence of evidence for their assumptions as evidence of those assumptions' validity, making every untested belief a constraint that future changes must satisfy.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 643,
+      "total_tokens": 836
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.633
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-499",
+    "object": "chat.completion",
+    "created": 1787941956,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Specifications should be compiled to executable code by first translating them into a network of small, independently-verifiable computational traces — each trace being a chain of state transitions with explicit pre- and post-conditions — and then generating code by synthesis over the space of programs that match all traces, with correctness enforced by compositional verification at each trace boundary rather than at the whole-program level. The key claim is that decomposing the specification-to-code gap into trace-sized verifiable chunks eliminates the scalability bottleneck of monolithic proof-carrying code, because each generated fragment need only satisfy its local trace contract, and global correctness emerges from trace composition rather than from a global proof.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 140,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

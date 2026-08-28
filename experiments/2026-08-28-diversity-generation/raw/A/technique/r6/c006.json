@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.425
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-91",
+    "object": "chat.completion",
+    "created": 1787934792,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for deriving executable code from an abstract specification is to compile the specification into an intermediate refinement calculus whose obligations are discharged by a proof-search engine before any code is emitted. This outperforms both direct synthesis and test-based validation because it forces every implementation step to be witnessed by a machine-checked proof of semantic preservation. The conjecture is falsified if a benchmark of non-trivial specifications yields systems where test-and-patch or LLM-based synthesis achieves equal formal correctness at lower proof burden.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 113,
+      "total_tokens": 211
+    }
+  },
+  "transport_error": null
+}

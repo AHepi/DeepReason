@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: proof-carrying code via dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.67
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-295",
+    "object": "chat.completion",
+    "created": 1787934854,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Specifications should be authored directly as refinement types in a total programming language like Agda or Idris, where every abstract clause becomes a dependent type signature and executable code is extracted via proof erasure. This eliminates the spec-to-code semantic gap because the compiler verifies that extracted code inhabits the specification's type, making commitments hold by construction. The approach is falsifiable: if extracted programs from inhabited types can violate their specifications at runtime, dependent type erasure is unsound.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 107,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

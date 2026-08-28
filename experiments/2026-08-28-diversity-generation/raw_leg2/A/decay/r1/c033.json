@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.652
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-808",
+    "object": "chat.completion",
+    "created": 1787936277,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Although individual changes are locally correct, each one optimizes for current requirements using existing interfaces, thereby irreversibly coupling the system's implicit invariants to the specific assumptions of that moment. Over time, this accumulation of implicit, cross-cutting assumptions creates an entanglement web where no single component can be modified without violating an undocumented dependency elsewhere. The system becomes harder to change not because any single modification was wrong, but because the cost of identifying and renegotiating this exponentially growing set of hidden contracts eventually exceeds the cost of a rewrite.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 115,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

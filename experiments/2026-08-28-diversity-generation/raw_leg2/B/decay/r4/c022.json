@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Test suites overfit to historical implementations, masking valid refactorings\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.639
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-362",
+    "object": "chat.completion",
+    "created": 1787937123,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"As test suites grow alongside an implementation, they encode the system's accidental structure—specific call sequences, private object states, and incidental return formats—as required behavior. A valid refactoring that alters these implementation details while preserving the public contract will fail the tests, creating a false negative signal indistinguishable from a real regression. Consequently, developers abandon correct refactorings because the test suite, having overfit to the historical implementation, provides no mechanism to distinguish between accidental coupling and genuine specification violation.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 109,
+      "total_tokens": 233
+    }
+  },
+  "transport_error": null
+}

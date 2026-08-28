@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.475
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-493",
+    "object": "chat.completion",
+    "created": 1787935411,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus: iteratively apply correctness-preserving refinement steps to transform the abstract specification into an implementation, guaranteeing the final executable code holds its commitments by construction.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The best technique is to have a human write the implementation independently and then use automated theorem proving to verify the code against the specification, because this separates the creative act of implementation from the verification of commitments.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The best technique is to have a large language model generate the implementation and then use property-based testing to validate that the code holds its commitments, because automated testing scales to complex specifications where formal verification is impractical.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The best technique is to use a dependently typed language (e.g., Agda, Idris) to express the specification as a type, ensuring the executable code holds its commitments by the language's type-checking machinery.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The best technique is to use a DSL that directly encodes the specification's domain semantics, generating executable code via a verified compiler, ensuring commitments hold by the correctness of the compiler.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"The best technique is to have a large language model translate the abstract specification into an SMT-based formal specification (e.g., in TLA+ or Z3), then use a solver to synthesize executable code, because this bridges the gap between informal abstractions and formal guarantees.\",\n      \"probability\": 0.051\n    },\n    {\n      \"conjecture\": \"The best technique is to use genetic programming to evolve implementations from the specification, selecting for fitness based on conformance tests, because evolutionary search can discover solutions that hold commitments in spaces where constructive methods fail.\",\n      \"probability\": 0.042\n    },\n    {\n      \"conjecture\": \"The best technique is to use a large language model to translate the abstract specification into a low-level formal intermediate representation (e.g., LLVM IR) and then apply superoptimization to ensure the generated code provably satisfies the specification's commitments.\",\n      \"probability\": 0.038\n    },\n    {\n      \"conjecture\": \"The best technique is to use neuro-symbolic program synthesis: a neural network proposes candidate implementations from the specification, and a symbolic verifier filters them, iterating until a candidate provably satisfies all commitments.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"The best technique is to use a large language model to generate the implementation along with a natural-language proof of correctness, then use a separate LLM to verify the proof, because this leverages the pattern-matching strengths of LLMs for both generation and validation.\",\n      \"probability\": 0.044\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 660,
+      "total_tokens": 831
+    }
+  },
+  "transport_error": null
+}

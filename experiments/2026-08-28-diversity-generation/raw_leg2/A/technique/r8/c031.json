@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.922
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-261",
+    "object": "chat.completion",
+    "created": 1787943066,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is specification-compiled property tests: compile the abstract specification into parametric generators that produce adversarial inputs and executable assertions, then drive a search algorithm that mutates candidate code until all generated tests pass and counterexamples are exhausted within a shrinking budget. This forces the implementation to hold its commitments by making violation directly observable and automatically discovered, rather than relying on post-hoc verification or hand-written tests. The conjecture is falsifiable: if implementations produced this way exhibit specification violations at a rate no lower than those produced by formal synthesis or traditional TDD on a fixed benchmark suite, the technique is refuted.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 133,
+      "total_tokens": 231
+    }
+  },
+  "transport_error": null
+}

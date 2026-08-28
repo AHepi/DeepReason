@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: compile denotational semantics directly to SAT/SMT solver queries\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.742
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-102",
+    "object": "chat.completion",
+    "created": 1787943187,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Compiling denotational semantics to SMT queries produces verified code only when the denotation is translated to a strongly typed dependent SMT encoding (e.g., using inductive predicates for refinement), rather than untyped first-order encodings. Specifically, a denotational spec compiled via a dependent type-preserving translation to CVC5 will yield executables that pass specification commitments at a rate exceeding 90%, whereas monomorphic first-order encodings will violate commitments over 50% of the time due to spurious models. This effect is driven by the dependent encoding preserving the cardinality and well-formedness constraints of the semantic domain that untyped encodings erase.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 141,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

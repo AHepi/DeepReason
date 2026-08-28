@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.517
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-729",
+    "object": "chat.completion",
+    "created": 1787937509,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not because individual changes introduce defects, but because the accumulation of locally validated changes gradually erodes the global invariants that the original architecture relied upon for its evolvability. Each accepted modification subtly shifts the system's implicit coupling structure without updating the documentation, tests, or mental models that describe it, such that the cost of the next change is proportional to the distance between the current true architecture and the team's shared understanding of it. Because this drift is invisible to local review and testing, it compounds monotonically until the system becomes effectively frozen by the mismatch between what the code actually does and what the maintainers believe it can safely do.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 140,
+      "total_tokens": 242
+    }
+  },
+  "transport_error": null
+}

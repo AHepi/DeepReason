@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: causal model inversion from observation traces to structural operational semantics\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.699
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-34",
+    "object": "chat.completion",
+    "created": 1787941598,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Given a trace of input-output observations from an unknown system, the underlying structural operational semantics can be recovered by inverting a causal model fit to the trace: posit a symbolic transition relation, abductively infer the minimal set of causal rules that could produce the observed state changes, and emit these rules as an executable interpreter. The resulting semantics will be observationally equivalent to the original system on the training trace, and the method succeeds when the inferred rules compose correctly on unseen inputs—meaning the causal model captured the actual generative structure rather than a spurious correlation. Failure is detectable and sharp: a single held-out observation that violates the predicted transition relation refutes the inferred semantics entirely.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 149,
+      "total_tokens": 267
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Property-based test generation from refinement calculus\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.084
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-442",
+    "object": "chat.completion",
+    "created": 1787941249,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A refinement calculus whose proof obligations are compiled directly into property-based test generators yields code that provably satisfies its abstract specification — not by exhaustive proof, but because every unproven refinement step becomes a test property that must survive random input shrinkage. The key mechanism is that the refinement's weakest-precondition predicates serve as the test oracle, so a surviving test suite constitutes computational evidence that the concrete implementation refines the abstract specification. Conjecture: any refinement step that cannot be discharged statically but survives 10,000 generated test cases with minimal shrinkage is correct with probability exceeding 0.99 for the input distribution exercised.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 133,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

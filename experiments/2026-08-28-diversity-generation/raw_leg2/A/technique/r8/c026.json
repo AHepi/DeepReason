@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.142
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-290",
+    "object": "chat.completion",
+    "created": 1787943067,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for deriving executable code from an abstract specification is to structure the entire derivation as a sequence of proven-correct refinement steps, where each step's correctness condition is machine-verified by an interactive proof assistant before the next is attempted. This is superior to test-driven or model-based approaches because it forces the semantic gap to close incrementally and verifiably, rather than relying on post-hoc validation that misses untested behaviors. Specifically, the resulting executable will hold its commitments if and only if every refinement step preserves the specification's semantic invariants, making the proof script itself the artifact of trust.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 130,
+      "total_tokens": 228
+    }
+  },
+  "transport_error": null
+}

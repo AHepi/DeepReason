@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 41.469
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-660",
+    "object": "chat.completion",
+    "created": 1787937215,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems degrade not because of errors, but because every locally-correct change adds constraints to the system's state space. Future changes must navigate an ever-growing web of implicit invariants, making the 'valid' region of the state space infinitesimally small and computationally expensive to reason about.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Code review and testing enforce local consistency but actively select against global refactoring. They optimize for the preservation of the current architecture, ensuring that entropy increases at the macro level even as it is minimized at the micro level.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty stems from the non-conservation of abstraction. When new features are added, the original abstraction boundaries are inevitably violated because they cannot predict all future requirements, creating 'leaky abstractions' that accumulate and entangle previously isolated modules.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each change optimizes the system for current requirements, causing a random walk through design space that moves away from any general-purpose optimum. The system becomes increasingly overfitted to its historical change requests, losing its ability to accommodate novel ones.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The system's conceptual model drifts away from the developers' mental models. Locally correct changes are made by individuals who understand only a subset of the system, so they patch over symptoms rather than aligning with the original global design intent, creating a semantic gap between code and intent.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Technical debt accumulates because of a fundamental asymmetry in software: adding functionality is a linear-time operation, but understanding the non-local impact of that addition requires exponential cognitive effort. The cost of knowledge acquisition grows faster than the cost of modification.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The system becomes a palimpsest of past business logics. Each change layers new rules atop obsoleted but unremoved ones, creating a dense semantic crust where the actual behavior is an emergent property of the interaction between historical layers, none of which are individually comprehensible.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Well-tested systems paradoxically become harder to change because the test suite itself crystallizes implementation details. Tests act as an additional coupling mechanism between components, raising the cost of refactoring to the point where developers prefer local patches over structural improvements.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The network of dependencies in the code becomes increasingly assortative and densely connected over time. Locally correct changes preferentially attach to highly-connected nodes, driving the system toward a scale-free topology where modification of any central node threatens global cascading failures.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The system's growth is limited by the throughput of its coordination mechanisms. As the number of interfaces and implicit contracts grows, the communication overhead required to verify the safety of any change approaches the total cognitive capacity of the development team, causing a phase transition to stasis.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 722,
+      "total_tokens": 897
+    }
+  },
+  "transport_error": null
+}

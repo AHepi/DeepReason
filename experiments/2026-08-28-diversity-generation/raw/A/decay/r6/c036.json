@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.325
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-727",
+    "object": "chat.completion",
+    "created": 1787932500,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade through the progressive loss of execution-context locality: each locally correct change leaves behind a thin layer of compatibility assumptions that are individually invisible but collectively decouple the code's structure from its actual runtime data flows. Because reviews and tests validate changes against current behavior rather than future flexibility, they systematically permit architectural accretions that maximize short-term compatibility while minimizing the system's ability to accommodate novel change vectors. The accumulation of these latent execution-context mismatches eventually causes the system's apparent architecture to diverge so completely from its real operational behavior that no individual change, no matter how well-validated, can safely bridge the gap.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 138,
+      "total_tokens": 240
+    }
+  },
+  "transport_error": null
+}

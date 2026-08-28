@@ -1,0 +1,54 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Option value destruction via premature interface stabilization\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": null,
+      "elapsed_s": 1.573
+    },
+    {
+      "attempt": 2,
+      "http_status": 200,
+      "elapsed_s": 25.763
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-432",
+    "object": "chat.completion",
+    "created": 1787938178,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The first concrete usage of an interface triggers a ratchet effect: once any consumer depends on a specific signature, the cost of changing the interface exceeds the cost of working around its limitations, so the interface freezes even when no one has intentionally committed to it. The system accumulates these accidental commitments faster than deliberate redesigns can remove them, because each frozen interface constrains the design space of all future interfaces that interact with it.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Interfaces stabilize at the abstraction level of their first implementation, not at the level of the domain concept they nominally represent. Because early code reveals concrete mechanisms rather than general patterns, the interface encodes accidental properties of the initial solution, and these become load-bearing constraints that survive long after the implementation that justified them is gone.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Testing and code review, by enforcing correctness against current interfaces, increase the switching cost of interface changes and thus accelerate premature stabilization. A change that would simplify the interface is rejected because it breaks tests that encode the old interface's assumptions, even though those tests were validating a design that was never meant to be final.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every interface has an implicit half-life of optionality that decays as a function of the number of consumers, not the quality of the design. Because the rate of consumer attachment is proportional to usefulness rather than readiness, the most useful early interfaces stabilize fastest, regardless of whether they capture the right abstraction, and then propagate their premature commitments into dependent systems.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"When two modules need to communicate, developers expose the minimum interface required for the immediate task, believing they are preserving optionality by keeping the surface small. But a minimal interface is a premature commitment to a specific decomposition of the problem, and this decomposition is harder to revise than a larger but more deliberately abstract interface would have been.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Internal interfaces become effectively permanent once a single team reorganizes around them, because the interface boundary becomes a coordination boundary and changing it requires cross-team negotiation that no one has the authority or incentive to drive. The interface was chosen for technical convenience but ossifies into an organizational constraint that then back-pressures all technical decisions near it.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Interfaces stabilize prematurely because the information needed to design them correctly only becomes available after they have been in production use, but by that point the cost of changing them is dominated by the integration cost across consumers, not by the design cost. The system is always wiser than it was when each interface was formed, but it can never afford to act on that wisdom at the interfaces that matter most.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Documentation and naming, once attached to an interface, create a semantic anchoring effect where the interface's stated purpose constrains future redesigns more than its technical structure does. Developers reject improvements that would require renaming or re-documenting because the perceived cost of updating the conceptual model exceeds the perceived benefit of the better design, so the original framing persists even when everyone knows it is wrong.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Interfaces that are never explicitly designed but emerge from the intersection of multiple independent decisions are the most prone to premature stabilization, because no one owns the interface and therefore no one has the authority to evolve it. Each consumer made a locally reasonable choice, but the composite of those choices forms a de facto contract that no single actor can renegotiate.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The option value of an interface is destroyed not by the first use but by the first workaround, because a workaround is a signal that the interface is wrong, but it is also a mechanism that makes the interface's wrongness tolerable. Once the pain is mitigated, the pressure to fix the interface drops, and both the bad interface and its workaround become permanent infrastructure.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 922,
+      "total_tokens": 1108
+    }
+  },
+  "transport_error": null
+}

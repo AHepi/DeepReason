@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.095
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-593",
+    "object": "chat.completion",
+    "created": 1787932470,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate a load-bearing layer of implicit, cross-component invariants that are never written down because no single change introduces them; each locally-correct modification subtly broadens the set of assumptions future developers must hold, so the effective dimensionality of the system's hidden contract space grows super-linearly. This turns the codebase into a high-dimensional constraint satisfaction problem where the cost of verifying a change safely scales with the total number of surviving implicit invariants, not the size of the change itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 111,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

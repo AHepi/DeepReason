@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architectural phase locking: independent design constraints eventually satisfy the conditions for a percolation threshold, freezing the dependency graph into a single rigid cluster\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.755
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-446",
+    "object": "chat.completion",
+    "created": 1787938303,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change adds a dependency edge to the software graph under a fixed set of architectural design constraints, and once the edge density exceeds the percolation threshold (approximately one edge per node), the dependency graph spontaneously freezes into a single rigid giant cluster. Below this threshold, modifications remain locally contained; above it, any change cascades through the connected component, making the system effectively immutable regardless of code quality. This phase transition is geometric, not a matter of technical debt accumulation, so refactoring individual nodes cannot unfreeze the system—only severing edges to drop below the percolation threshold can.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 140,
+      "completion_tokens": 129,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

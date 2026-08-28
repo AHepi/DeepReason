@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neural program synthesis conditioned on formal specifications and semantic equivalence checking\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.135
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-909",
+    "object": "chat.completion",
+    "created": 1787943522,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Neural program synthesis conditioned on formal specifications will yield provably-correct executable code only when the semantic equivalence checking is integrated directly into the decoding loop as a discriminative filter, rather than applied post hoc. Under this constraint, the generator must produce candidate programs that are aggressively pruned by a lightweight, domain-specific equivalence prover, forcing the model to explore only branches of the search space that satisfy intermediate proof obligations.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 91,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

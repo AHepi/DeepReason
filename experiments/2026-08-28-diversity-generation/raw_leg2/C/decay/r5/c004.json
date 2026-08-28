@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.096
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-860",
+    "object": "chat.completion",
+    "created": 1787937422,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, embedding implicit assumptions about the system's current state. Over time, these assumptions accumulate into a tangled web of non-local dependencies that no individual change could foresee, making every new modification require understanding an ever-larger hidden context.\", \"probability\": 0.08}, {\"conjecture\": \"Tests and code reviews enforce local correctness but cannot enforce alignment with the original architectural intent. The system drifts from its design in a random walk of individually justified decisions until its structure contradicts its purpose, at which point changes require architectural leaps rather than incremental edits.\", \"probability\": 0.07}, {\"conjecture\": \"Every change to a long-running system adds a new constraint on future behavior to avoid breaking existing functionality. The system's possibility space shrinks monotonically with each accepted change, converging toward a state where any non-trivial modification violates some accumulated constraint.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems become harder to change because the knowledge encoding shifts from explicit documentation to implicit operational practice. The system's behavior is eventually maintained by a social process of collective knowledge that no artifact captures, so changing the code without the people breaks invisible invariants.\", \"probability\": 0.05}, {\"conjective\": \"The entropy of the system's interface surface increases with every change because each modification adds without removing. This growth in the public API surface creates a combinatorial explosion of integration states that must be preserved, making every new change exponentially more likely to collide with an existing contract.\", \"probability\": 0.04}, {\"conjecture\": \"Code reviews and tests are backward-looking, validating that a change preserves the past. Difficulty increases because the cost of future changes is a function of accumulated technical debt that no present actor is incentivized to pay, creating a temporal externality that compounds.\", \"probability\": 0.03}, {\"conjecture\": \"The system's state space grows super-linearly with each change, while the mental model of the developers remains bounded. Eventually the gap between the system's actual state space and the developers' model exceeds the threshold for safe modification, making every change a gamble on unmodeled interactions.\", \"probability\": 0.02}, {\"conjecture\": \"Each locally correct change is a hill-climbing step in the design space. The system reaches a local optimum that is increasingly distant from any global optimum, and every attempted improvement requires a temporary descent into worse fitness that no review process is designed to approve.\", \"probability\": 0.015}, {\"conjecture\": \"Long-running systems accumulate organizational dependencies where teams optimize their own components against stable interfaces provided by other teams. These interfaces become frozen because changing them requires coordinated action across organizational boundaries, creating a distributed lock-in effect.\", \"probability\": 0.01}, {\"conjecture\": \"The difficulty increases because every change adds a new execution path to the system, and the cost of verifying correctness grows with the product of existing paths and new paths. Even with perfect tests, the number of tests required to maintain confidence grows faster than the team's capacity to write them.\", \"probability\": 0.005}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 662,
+      "total_tokens": 837
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: infer programs from input-output relational property tests\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.998
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-870",
+    "object": "chat.completion",
+    "created": 1787943153,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given a relational specification as a set of input-output property tests, a program is synthesized by maintaining a population of candidate expressions whose fitness is measured not by pass rate on the properties but by the Shannon entropy of the distribution of passing-and-failing test outcomes across mutation neighborhoods — selecting candidates whose mutation neighborhoods show maximal entropy, because such candidates lie on decision boundaries where every mutation flips a distinct subset of tests, meaning the program's structure is fully constrained by the properties rather than overfitting them. The synthesis terminates when a candidate has zero failing tests AND a mutation neighborhood of maximal entropy, which provably implies that no single mutation can satisfy an additional property without breaking an existing one, indicating the program is a minimal fixed point of the specification rather than an arbitrary solution.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 160,
+      "total_tokens": 276
+    }
+  },
+  "transport_error": null
+}

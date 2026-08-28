@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Bayesian posterior brittleness from sparsely observed production states\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.122
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-911",
+    "object": "chat.completion",
+    "created": 1787930578,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change updates a developer's posterior belief about the system's behavior, but because production states are sparsely observed, these posteriors accumulate over regions of state space that were never actually exercised. The system becomes harder to change because developers must reason through a growing lattice of untested posterior assumptions that any new change could invalidate.\", \"probability\": 0.09}, {\"conjecture\": \"Reviewed and tested changes are validated against observed production states, but the vast majority of possible execution paths remain unobserved. Over time, each change sharpens the posterior over observed states while leaving the posterior over unobserved states increasingly diffuse and entangled, so any new change risks triggering a regime the team has no calibrated model for.\", \"probability\": 0.08}, {\"conjecture\": \"Software architecture is implicitly a Bayesian prior over which production states will occur. Every locally correct change is conditioned on observed states, gradually shifting the implicit prior away from the true production distribution. The system becomes harder to change because the architectural prior and the actual production posterior diverge, making each change's local correctness increasingly uninformative about global safety.\", \"probability\": 0.07}, {\"conjecture\": \"Tests encode a posterior over system behavior conditioned on a sparse sample of production states. As the system grows, the ratio of observed to unobserved states decreases, so each new change's test-based posterior becomes less correlated with the true production posterior. The difficulty of change scales with the square root of the inverse observation density.\", \"probability\": 0.06}, {\"conjecture\": \"Each reviewed change is a Bayesian update that reduces uncertainty about the system's behavior in states the team has observed, but because production states are sparse, this reduction is concentrated on a shrinking fraction of the state space. The remaining uncertainty becomes increasingly correlated across unobserved regions, so any change that touches one unobserved region creates cascading posterior shifts that are impossible to evaluate with existing tests.\", \"probability\": 0.08}, {\"conjecture\": \"Production observability acts as a regularizer on the posterior beliefs developers hold about system behavior. When production states are sparsely observed, each locally correct change adds a sharp but narrow posterior update without regularizing the broader belief space. Over time, the unregularized posterior becomes brittle: small changes propagate through poorly constrained beliefs, producing large and unpredictable behavioral shifts.\", \"probability\": 0.09}, {\"conjecture\": \"The interaction between any two changes is mediated by production states they both depend on, but if those states are sparsely observed, the interaction posterior remains weakly constrained. Over many changes, the number of weakly constrained pairwise interactions grows quadratically while observation coverage grows linearly, so the system's brittleness increases faster than its test suite's ability to detect problems.\", \"probability\": 0.05}, {\"conjecture\": \"Every locally correct change implicitly assumes the observed production states are representative. Because they are sparse, they are not. Each change adds a latent assumption that the posterior over unobserved states will behave like the posterior over observed ones. The accumulation of these latent assumptions is what makes the system hard to change: any new change must satisfy not only current requirements but also the unexpressed assumptions of all prior changes.\", \"probability\": 0.07}, {\"conjecture\": \"A system's changeability depends on the entropy of the posterior distribution over its behavior in production. Sparsely observed production states mean this entropy is high and grows with system complexity. Each locally correct change does not reduce this entropy because it is conditioned on sparse observations, so the posterior remains broad and the system becomes increasingly hard to reason about.\", \"probability\": 0.04}, {\"conjecture\": \"Code reviews and tests are Bayesian evidence, but they are conditioned on a developer-generated hypothesis space that is itself shaped by sparse production observations. Over time, the hypothesis space narrows around observed regimes while the true production state space broadens. The system becomes harder to change because the review and test process literally cannot generate the hypotheses needed to evaluate changes in unobserved regimes.\", \"probability\": 0.06}, {\"conjecture\": \"Production states form a manifold in the system's configuration space, and sparsely observed states mean the manifold is undersampled. Each locally correct change fits a local patch of the manifold but distorts the posterior over the global manifold structure. After enough patches, the posterior becomes a patchwork of locally fitted but globally incoherent beliefs, and any new change must navigate this incoherence.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 951,
+      "total_tokens": 1142
+    }
+  },
+  "transport_error": null
+}

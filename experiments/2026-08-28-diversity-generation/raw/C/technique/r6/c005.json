@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.255
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-781",
+    "object": "chat.completion",
+    "created": 1787935029,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement through proof-carrying code: each layer of abstraction is mechanically refined into a more concrete one, with a machine-checked proof attached that the refinement preserves the specification's semantics. Executable code generated this way provably holds its commitments because the proof artifact is checked at every stage.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Conjecture extraction is the optimal technique: use an LLM to translate the specification into a set of Hoare-logic assertions and loop invariants embedded as runtime checks, then iteratively generate code and mutate it until all checks pass on a fuzzing corpus. The result holds its commitments because violations are caught at runtime, turning the abstract spec into an executable oracle.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is to compile the abstract specification directly into a constraint satisfaction problem (e.g., SAT/SMT), then use a solver to synthesize executable code that is verified by construction against the constraints. This guarantees commitment-holding because the code is a model of the formal constraint system, not a heuristic approximation.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Type-driven development with dependent types is the best technique: the abstract specification is encoded as a dependent type, and the program is written as a proof inhabitant of that type. The code holds its commitments because it literally cannot typecheck unless it satisfies the specification, making correctness a compile-time requirement.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is property-based test generation from the specification, used as a fitness function for genetic programming. Code is evolved until it satisfies the specification's properties across a generated test suite, and commitment-holding is measured by mutation testing coverage of the property space.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with executable UML and action languages is the best technique: the abstract specification is written in a formal modeling language with precise semantics, and code is auto-generated via certified transformations. Commitments hold because the transformation pipeline is itself verified, making the code a faithful projection of the model.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is to use the abstract specification as a runtime contract system: translate spec clauses into preconditions, postconditions, and invariants that are checked at every function boundary during execution. Code holds its commitments because any deviation triggers an immediate contract violation, and the contracts are derived directly from the spec.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Reinforcement learning from formal verification feedback is the best technique: train a code generation model where the reward signal is whether the generated code passes a formal verifier checking it against the abstract specification. This closes the gap between generation and verification, producing code that provably satisfies the spec.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to avoid generating imperative code entirely and instead interpret the abstract specification at runtime using a domain-specific language whose semantics are defined by a formally verified reference interpreter. Commitments hold because the interpreter is the only execution path, and it has been proven correct against the specification semantics.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is round-trip translation: convert the abstract specification into executable code, then use a separate model to reverse-engineer the code back into a specification, and check equivalence between the original and recovered specs. Code holds its commitments when the round-trip converges, proving the code's semantics match the original abstraction.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 821,
+      "total_tokens": 992
+    }
+  },
+  "transport_error": null
+}

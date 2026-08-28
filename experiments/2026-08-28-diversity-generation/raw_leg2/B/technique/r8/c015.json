@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: infer programs from input-output relational property tests\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.966
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-365",
+    "object": "chat.completion",
+    "created": 1787943154,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given a relational specification as a finite set of input-output test pairs, the most commitment-preserving synthesis technique is to infer a minimal deterministic Mealy machine whose transition function is constrained by a typed synthesis oracle, then transpile it to executable code; this structure guarantees that every inferred input-output pair is satisfied by construction while the minimality constraint maximizes the chance of generalizing correctly to unseen inputs.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 87,
+      "total_tokens": 203
+    }
+  },
+  "transport_error": null
+}

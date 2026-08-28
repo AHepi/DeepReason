@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.449
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-623",
+    "object": "chat.completion",
+    "created": 1787942168,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement types plus exhaustive SMT solving: encode every specification invariant as a type, and emit code only when the solver proves total correctness. Any approach relying on testing or LLM generation will have strictly higher defect rates on nontrivial specs.\", \"probability\": 0.07}, {\"conjecture\": \"Neurosymbolic synthesis—where a language model proposes candidate implementations and a symbolic verifier filters them against the spec—will outperform either pure-LLM or pure-formal approaches on real-world specifications, achieving both coverage and scalability where formal methods alone fail to terminate.\", \"probability\": 0.06}, {\"conjecture\": \"The dominant factor is not the generation technique but the specification language itself. Techniques built on declarative, executable specs (e.g., Alloy, TLA+) outperform those built on natural-language or semi-formal specs because they close the semantic gap between intent and verification.\", \"probability\": 0.05}, {\"conjecture\": \"Property-based test generation with shrinking is the most cost-effective technique: it catches specification violations faster and more reliably than formal proof for 90% of real-world code, because the bottleneck is specification quality, not verification completeness.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is a counterexample-guided inductive synthesis (CEGIS) loop using an LLM as the candidate generator and a model checker as the oracle, but only when the spec is decomposed into small, independently verifiable contracts—monolithic specs cause the LLM to fail to converge.\", \"probability\": 0.08}, {\"conjecture\": \"Correctness-by-construction with stepwise refinement from specification to implementation is the only technique that scales to systems where the cost of a single spec violation exceeds $1M; all post-hoc verification methods (testing, fuzzing, model checking of generated code) leave residual risk that is unacceptable at that threshold.\", \"probability\": 0.03}, {\"conjecture\": \"The critical variable is whether the specification is machine-checked before any code is written. Techniques that first validate the spec against a model (e.g., animating TLA+ specs) before generating code will outperform techniques that go directly from spec to code, because most correctness failures stem from spec defects, not implementation defects.\", \"probability\": 0.05}, {\"conjecture\": \"Abstract interpretation-based static analysis, configured with the specification as a custom abstract domain, will prove more real-world properties than any other automated technique because it trades precision for termination guarantees, avoiding the undecidability wall that SMT-based methods hit.\", \"probability\": 0.02}, {\"conjecture\": \"The highest-yield technique is to treat the specification as an oracle and generate code via program synthesis from input-output examples extracted from that oracle, using a type-directed synthesizer. This outperforms direct compilation of specs because it produces code that is executable and testable in standard environments without runtime verification overhead.\", \"probability\": 0.03}, {\"conjecture\": \"No single technique dominates; the correct approach is adaptive—using formal proof for safety-critical subcomponents, property-based testing for business logic, and LLM generation for boilerplate, with the selection driven by a cost-of-failure analysis per specification clause. The conjecture is that automated technique-selection based on spec complexity metrics will match or beat human-selected strategies.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 718,
+      "total_tokens": 889
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift between domain ontology versions measured by category-theoretic functorial maps\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.671
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-699",
+    "object": "chat.completion",
+    "created": 1787932454,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software maintainability decay is dominated by loss of functoriality: as domain ontologies evolve across versions, the functor maps relating version N to N+1 become progressively non-injective on objects, collapsing distinct domain concepts into shared code artifacts and creating latent semantic conflicts.\", \"probability\": 0.09}, {\"conjecture\": \"The difficulty of changing long-running systems correlates with the accumulation of non-natural transformations between ontology versions—changes that preserve individual type signatures but break coherence conditions relating multiple functors, making the composition of past changes non-commutative.\", \"probability\": 0.08}, {\"conjecture\": \"Each locally correct change induces an endofunctor on the domain ontology category. Over time, these endofunctors fail to form a monoid under composition because morphism preservation breaks, creating a 'semantic debt' measurable as the categorical distance between the intended monoid and the actual partial semigroup.\", \"probability\": 0.07}, {\"conjecture\": \"Maintainability degrades because domain ontology versions form a directed category where successive functors are faithful but not full—code preserves entity identity (objects map) but loses behavioral distinctions (morphisms don't map), so the codebase can represent fewer domain relationships per unit of change effort.\", \"probability\": 0.06}, {\"conjecture\": \"The core problem is that refactoring functors between ontology versions are adjoint-preserving but not equivalence-preserving: each change locally optimizes via left/right adjunctions, yet the accumulated loss of categorical equivalence means no global inverse exists to reconstruct prior domain semantics from current code.\", \"probability\": 0.05}, {\"conjecture\": \"Change difficulty grows because ontology version transitions are lax functors rather than strict functors—the coherence 2-morphisms that patch over structural mismatches accumulate as technical debt, and the cost of a new change is proportional to the number of non-trivial laxativity constraints it must satisfy.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems become rigid because the domain ontology category's initial and terminal objects drift apart across versions: each locally correct change moves the code's categorical structure toward a local limit/colimit that diverges from the domain's actual terminal object, so future changes must bridge a growing semantic gap.\", \"probability\": 0.04}, {\"conjecture\": \"The dominant factor is functorial obfuscation: each ontology version change is a functor that preserves code-level type structure but not domain-level morphism structure, so the codebase's category and the domain's category become weakly equivalent but not isomorphic, making every change require reconstructing the lost isomorphism.\", \"probability\": 0.04}, {\"conjecture\": \"Maintainability decay equals the growth of the kernel of the forgetful functor from the codebase category to the domain ontology category—locally correct changes add objects and morphisms to code that map to nothing in the domain, and change cost scales with the size of this semantic null cone.\", \"probability\": 0.03}, {\"conjecture\": \"Systems harden because successive ontology-version functors are contravariant where they should be covariant: each change inverts some domain relationship in code to satisfy a local constraint, and the accumulation of contravariant patches makes the global functor from domain to code non-functorial, requiring exponential reconciliation effort.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 194,
+      "completion_tokens": 716,
+      "total_tokens": 910
+    }
+  },
+  "transport_error": null
+}

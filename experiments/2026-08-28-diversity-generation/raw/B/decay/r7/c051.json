@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Statistical learning model drift in defect-prediction latent spaces\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.316
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-538",
+    "object": "chat.completion",
+    "created": 1787932805,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The latent representation of code features in defect-prediction models undergoes progressive semantic drift as each locally-correct change subtly shifts the distribution of structural patterns, causing the model's decision boundary to become increasingly misaligned with the actual defect surface. This drift compounds because each accepted change, though passing tests, moves the codebase along trajectories in the latent space that the model was never calibrated on, creating an expanding region of epistemic uncertainty where defect predictions become unreliable. Consequently, the system becomes harder to change not because of architectural coupling alone, but because the statistical model guiding quality assurance progressively loses its discriminative power, making every new change appear riskier and harder to validate.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 147,
+      "total_tokens": 270
+    }
+  },
+  "transport_error": null
+}

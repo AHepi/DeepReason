@@ -1,0 +1,8 @@
+[
+  "synthesis via dependent type theory with proofs-as-programs extraction",
+  "refinement types with SMT-discharge of verification conditions",
+  "property-based generative testing with shrinking for specification conformance",
+  "neural program synthesis conditioned on formal specifications and semantic equivalence checking",
+  "correct-by-construction refinement calculus with invariant preservation",
+  "observational specification mining from execution traces with runtime assertion enforcement"
+]

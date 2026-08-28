@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis via counterexample-guided inductive program learning\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.554
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-505",
+    "object": "chat.completion",
+    "created": 1787943298,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The optimal CEGIS loop for specification-heavy synthesis uses counterexamples not merely as negative examples but as structural skeletons: each counterexample induces a minimal failing trace that becomes a partial program template, so convergence scales with specification modularity rather than program size.\", \"probability\": 0.09}, {\"conjecture\": \"CEGIS fails on specifications with non-monotone solution spaces (where adding a disjunct can break previously satisfied examples), and the fix is to constrain the hypothesis class to monotone-extendable program fragments, trading expressiveness for guaranteed convergence.\", \"probability\": 0.08}, {\"conjecture\": \"Counterexample-guided inductive synthesis converges in polynomial time on any specification whose satisfying programs form a lattice under a domain-specific join operation, because each counterexample eliminates a principal ideal of candidates rather than a single point.\", \"probability\": 0.07}, {\"conjecture\": \"The best counterexample to request in CEGIS is the one that maximally splits the current hypothesis class by program structure (not by input-output behavior), which is computable via a structural diversity heuristic rather than random or adversarial sampling.\", \"probability\": 0.06}, {\"conjecture\": \"For high-assurance synthesis, the inductive learner should generate programs in a refinement type system where counterexamples are type-level witnesses, making the loop terminate when the residual type is inhabited by exactly one program.\", \"probability\": 0.05}, {\"conjecture\": \"CEGIS with neural-guided counterexample generation outperforms solver-guided generation when the specification is written in natural language embedded in code comments, because the neural model can propose semantically meaningful boundary inputs that a solver cannot derive from syntactic constraints alone.\", \"probability\": 0.04}, {\"conjecture\": \"The fundamental bottleneck in CEGIS is not counterexample generation but hypothesis pruning: most implementations overgenerate candidates that are behaviorally equivalent, and the solution is to canonicalize hypotheses via a normalization procedure derived from the specification's algebraic laws before querying the oracle.\", \"probability\": 0.03}, {\"conjecture\": \"Counterexample-guided inductive synthesis can never achieve competitive performance on specifications requiring programs with nontrivial loop invariants, because the inductive learner cannot distinguish a missing invariant from an incorrect program structure; the fix is to synthesize invariants and programs in a coupled loop where each counterexample refutes either the program or the invariant candidate.\", \"probability\": 0.02}, {\"conjecture\": \"The most effective representation for the hypothesis class in CEGIS is not a program grammar but a decision tree over abstract program traces, where each internal node is a predicate derived from a past counterexample, enabling logarithmic-time pruning per new example.\", \"probability\": 0.015}, {\"conjecture\": \"Synthesis via CEGIS produces programs that hold their commitments only when the specification is decomposed into a contract hierarchy where each contract is independently synthesizable, and counterexamples are routed to the lowest-level contract they violate; monolithic CEGIS on flat specifications scales only to programs under 50 lines regardless of solver power.\", \"probability\": 0.01}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 668,
+      "total_tokens": 853
+    }
+  },
+  "transport_error": null
+}

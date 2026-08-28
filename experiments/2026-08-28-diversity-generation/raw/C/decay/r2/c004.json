@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.434
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-390",
+    "object": "chat.completion",
+    "created": 1787930305,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, creating an architectural random walk. The system drifts toward high-entropy configurations where the cost of any new change includes the hidden tax of navigating accumulated local optima, a cost invisible to any single review.\", \"probability\": 0.09}, {\"conjecture\": \"Testing and review enforce correctness relative to current behavior, encoding current behavior as a specification. Over time, the system becomes trapped by its own test suite: changes become harder because they require updating a growing, brittle set of assertions that conflate accidental implementation details with intended functionality.\", \"probability\": 0.08}, {\"conjecture\": \"Knowledge of system structure decays in the minds of maintainers faster than it accumulates in the code. Difficulty scales with the square of the distance between the original architect's mental model and the current maintainer's reconstructed model, making every change a partial archaeology exercise.\", \"probability\": 0.07}, {\"conjecture\": \"Each reviewed change introduces implicit invariants—unstated assumptions about how the system behaves that hold true for that change but are never documented. These invariants accumulate in the dependency graph, forming a dark constraint mass where any new change risks violating assumptions it cannot see.\", \"probability\": 0.06}, {\"conjecture\": \"Software systems accumulate cross-cutting concerns (logging, metrics, feature flags, auth checks) like biological organisms accumulate regulatory genes. Each locally correct addition makes the next change harder because it must thread through more orthogonal dimensions, increasing combinatorial complexity faster than linear.\", \"probability\": 0.06}, {\"conjecture\": \"Code review catches local defects but cannot enforce global modularity. Over time, module boundaries erode through pragmatic shortcuts, creating a small-world network where any change has non-local blast radius. The system becomes harder to change because the coupling topology is opaque and dense.\", \"probability\": 0.07}, {\"conjecture\": \"Every change that passes review sets a precedent. Maintainers infer design rules from precedent rather than principle, creating a de facto design language that grows inconsistent. Changes become harder because they require reconciling not just technical constraints but the accumulated weight of conflicting precedents.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems accumulate patches to patches, creating a call stack of historical contingencies. Each layer was correct in isolation, but the composite system has emergent behavior that no single layer accounts for, making change difficulty proportional to the depth of the historical stack.\", \"probability\": 0.05}, {\"conjecture\": \"Testing and review optimize for the avoidance of regressions, not for evolvability. This creates an asymmetric selection pressure: changes that preserve existing structure are favored over changes that restructure, even when restructuring would reduce future complexity. The system becomes harder to change because anti-regression bias creates a ratchet.\", \"probability\": 0.08}, {\"conjecture\": \"Every change is reviewed against the current state, so there is never a mechanism for pruning abstractions that are no longer load-bearing. Dead and near-dead structure accumulates, and since maintainers cannot distinguish live from dead without costly investigation, every change must navigate the full accumulated mass.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 680,
+      "total_tokens": 855
+    }
+  },
+  "transport_error": null
+}

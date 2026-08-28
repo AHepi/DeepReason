@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Reactive invariant monitoring via runtime partial-evaluation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.346
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-896",
+    "object": "chat.completion",
+    "created": 1787941332,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Continuously re-deriving the residual program at each reactive event—by partially evaluating the spec's invariant checks against the current runtime state—produces code whose commitments hold by construction, because the residualized checks become the actual control flow rather than post-hoc assertions. This eliminates the gap between specification and execution: any transition that would violate an invariant is syntactically absent from the residual program at the moment it would be taken. Therefore, the best technique is not to generate code from a spec, but to continuously shrink the spec against live state so that the remaining residual is exactly the safe continuation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 129,
+      "total_tokens": 245
+    }
+  },
+  "transport_error": null
+}

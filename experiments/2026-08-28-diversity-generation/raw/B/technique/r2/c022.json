@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Constrained decoding from large language models grounded by runtime monitors\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.667
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-42",
+    "object": "chat.completion",
+    "created": 1787931637,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given an abstract specification, a large language model can generate provably-conforming code via a tight generate-and-filter loop where each token is constrained by a runtime monitor that symbolically executes the partial program against the spec's logical obligations. This greedy, monitor-guided decoding outperforms post-hoc verification-and-repair because it prevents the model from ever emitting token sequences that violate a specification invariant, eliminating the compounding error of speculative generation. The technique is optimal when the monitor's partial-execution state is injected back into the model's context window at each step, creating a closed-loop grounded search where the model is mathematically barred from producing code that breaks its commitments.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 143,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

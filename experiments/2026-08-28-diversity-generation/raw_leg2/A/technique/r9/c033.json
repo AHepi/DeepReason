@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.442
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-220",
+    "object": "chat.completion",
+    "created": 1787943420,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to compile the abstract specification into a refinement type system embedded directly in the host language, then auto-generate executable code exclusively from inhabitants proven to satisfy those types at compile time. This guarantees commitments hold because any generated artifact is, by construction, a constructive proof of the specification's logical entailments. The approach is falsifiable: if a tool produces an artifact matching the types yet violating a specification commitment at runtime, the technique fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 98,
+      "total_tokens": 196
+    }
+  },
+  "transport_error": null
+}

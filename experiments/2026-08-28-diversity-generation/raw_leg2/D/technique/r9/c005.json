@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Neural specification-to-code translation with adversarial formal-verification-based reward shaping\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.604
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-581",
+    "object": "chat.completion",
+    "created": 1787943601,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Spec-to-code models trained with a curriculum of adversarially strengthening verification conditions—where the verifier progressively attacks deeper semantic properties rather than surface-level type constraints—will produce code satisfying full functional correctness at least 3x more reliably than models trained against fixed verification suites.\", \"probability\": 0.09}, {\"conjecture\": \"Using a frozen adversarial prover as the sole reward signal in RLHF causes mode collapse onto trivially-satisfying implementations; the optimal architecture requires a co-evolving prover-verifier pair where the prover's capacity is deliberately kept one step ahead of the code generator.\", \"probability\": 0.08}, {\"conjecture\": \"Adversarial verification reward shaping fails for specifications involving quantified statements over unbounded domains unless the verifier is augmented with an inductive invariant synthesis module that proposes loop lemmas the generator must simultaneously satisfy.\", \"probability\": 0.07}, {\"conjecture\": \"The most effective adversarial reward is not binary pass/fail from a solver but a continuous shaping signal derived from the solver's proof-search effort: counterexamples that require deeper search to find should yield proportionally larger gradient penalties on the generator.\", \"probability\": 0.06}, {\"conjecture\": \"Spec-to-code translation accuracy under adversarial verification scales logarithmically with the ratio of specification-formalism expressiveness to verifier decision depth, implying that moving from SMT-based to interactive-theorem-prover-based verification yields diminishing returns past a critical expressiveness threshold.\", \"probability\": 0.05}, {\"conjecture\": \"Decomposing the specification into a conjunctive chain and applying adversarial verification rewards at each conjunct independently produces higher commitment-holding code than holistic verification, because localized gradients prevent reward sparsity from the verifier's global pass/fail signal.\", \"probability\": 0.07}, {\"conjecture\": \"Adversarial verification reward shaping produces code that generalizes better to unseen specification perturbations when the adversary generates specification-adjacent counterexamples—semantically valid specs that differ by one clause—rather than adversarial inputs to the generated program.\", \"probability\": 0.04}, {\"conjecture\": \"The verifier in an adversarial spec-to-code loop must be restricted to polynomial-time proof search; unconstrained verifier capacity leads to reward hacking where the generator exploits solver heuristics rather than producing semantically correct code, as measured by cross-verifier consistency dropping below 30%.\", \"probability\": 0.05}, {\"conjecture\": \"Pretraining a code generator on the intermediate proof obligations generated during adversarial verification—rather than on final program text—yields models that require 5x fewer RL fine-tuning steps to reach a fixed commitment-holding threshold on held-out specifications.\", \"probability\": 0.06}, {\"conjecture\": \"Adversarial verification-based reward shaping is fundamentally limited by the specification's decidability class: for specs requiring reasoning beyond Presburger arithmetic, no neural generator-verifier pair will achieve >80% commitment-holding rate without external oracle calls, regardless of model scale.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 651,
+      "total_tokens": 840
+    }
+  },
+  "transport_error": null
+}

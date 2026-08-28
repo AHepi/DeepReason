@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: false-negative integration space expanding combinatorially with change surface area\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.913
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-969",
+    "object": "chat.completion",
+    "created": 1787936901,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software aging occurs because every change creates latent integration states that are locally correct but globally untested; the false-negative integration space grows at least O(2^n) in the number of change surfaces, ensuring untested state combinations accumulate faster than any regression suite can cover them.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The probability that a new change interacts with an untested integration state scales with the product of change surface area and accumulated prior change surface areas, making false-negative integration collisions practically inevitable once cumulative surface area exceeds test budget by a superlinear factor.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each locally correct change adds at least one integration dimension that existing tests do not cover; after n changes the false-negative integration space is a Cartesian product of n orthogonal dimensions, so the fraction of actually-exercised integration states shrinks exponentially regardless of test quality.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each accepted change permanently expands the set of integration states that could silently break; this set grows combinatorially with the number of distinct change surfaces touched, and the false-negative rate of any finite test suite approaches 1 as the space grows.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The core problem is that change surface area and integration surface area are different quantities: a change touching k components creates up to 2^k integration combinations, but tests are written against the change surface (k), not the integration surface (2^k), so false-negative coverage grows exponentially in the gap between the two.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every locally reviewed change implicitly assumes a stable integration context, but each change permanently mutates that context for all future changes; the false-negative integration space is the set of all pairwise and higher-order interactions between past context mutations, which grows as O(n choose 2) or worse with cumulative changes.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software systems age because the false-negative integration space is a monotonic function of change surface area: no change can shrink it, every change expands it, and the combinatorial growth means the probability of a new change landing in an untested integration state approaches certainty within a bounded number of changes.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems is dominated by the false-negative integration space, defined as the set of component-interaction states that no test exercises; this space grows as the power set of change surfaces, so each new change multiplies the false-negative space by a factor proportional to existing surface area.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Locally correct changes are accepted because tests validate the change surface, but the integration false-negative space grows as the product of untested dimensions introduced by each change; after enough changes, the expected number of false-negative integration states touched by any new change exceeds the test suite's capacity to detect them.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Each change has a change surface (components touched) and an integration shadow (all component combinations whose state could be affected); the shadow grows exponentially in the surface, so locally correct changes are accepted while silently expanding a false-negative integration space that eventually makes every new change likely to collide with an untested interaction.\",\n      \"probability\": 0.095\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 791,
+      "total_tokens": 982
+    }
+  },
+  "transport_error": null
+}

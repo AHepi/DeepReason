@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.474
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-771",
+    "object": "chat.completion",
+    "created": 1787931693,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: incrementally transform the abstract specification into code via a chain of correctness-preserving refinements, ensuring each step's commitments hold by construction.\", \"probability\": 0.08}, {\"conjecture\": \"Extracting executable code directly from constructive type theory proofs is the best technique. The proof term serves as both the specification and the program, guaranteeing the code holds its commitments by the Curry-Howard correspondence.\", \"probability\": 0.07}, {\"conjecture\": \"Iterative synthesis via Large Language Models constrained by formal verification is the most effective technique. The LLM proposes code from the abstract spec, and a solver checks it against the spec, using counterexamples to guide the next proposal until all commitments hold.\", \"probability\": 0.06}, {\"conjecture\": \"Model-driven engineering with executable UML is the best approach. The abstract specification is defined as a formal state machine, and code is auto-generated from it, ensuring the implementation holds its commitments by inheriting the model's verified semantics.\", \"probability\": 0.06}, {\"conjecture\": \"Property-based test-driven development is the most effective technique. The abstract specification is encoded as generative tests, and code is evolved until it survives all tests, probabilistically ensuring the commitments hold across the input space.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is to compile an abstract specification into a domain-specific language (DSL) that is computationally universal but restricts expressiveness to safe patterns, ensuring the output code holds its commitments by eliminating unsafe operations.\", \"probability\": 0.04}, {\"conjecture\": \"SMT-based program synthesis is the optimal technique. The abstract specification is encoded as a logical formula, and an SMT solver searches for a program that formally satisfies the formula, guaranteeing the commitments hold.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to translate the abstract specification into a purely functional language with a strong type system like Idris, using dependent types to encode the commitments directly in the types, ensuring code holds its commitments via type-checking.\", \"probability\": 0.03}, {\"conjecture\": \"Design-by-contract programming is the most effective technique. The abstract specification is encoded as preconditions, postconditions, and invariants, and runtime monitors enforce that the executable code holds its commitments.\", \"probability\": 0.03}, {\"conjecture\":\": \"Algebraic specification and structural operational semantics is the best technique. The abstract spec is defined as an algebraic theory, and code is generated as a model of that theory, ensuring commitments hold by satisfying the algebraic laws.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 572,
+      "total_tokens": 743
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic Kolmogorov complexity growth exceeding linear marginal encoding cost\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.462
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-205",
+    "object": "chat.completion",
+    "created": 1787932136,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In any software system undergoing sustained modification, the Kolmogorov complexity of its minimal description grows superlinearly in cumulative change count because each new feature must be encoded against an irreducible background of prior design decisions, making the marginal description length of each subsequent change exceed that of the last. Consequently, the minimum information a developer must hold in working memory to produce a locally correct modification increases without bound, even when every individual change is independently reviewed and tested. This superlinear growth in required contextual encoding—not accumulated defects or technical debt per se—is the fundamental information-theoretic cause of observed structural rigidity in long-lived codebases.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 128,
+      "completion_tokens": 135,
+      "total_tokens": 263
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.613
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-888",
+    "object": "chat.completion",
+    "created": 1787930355,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Individually correct changes accumulate as an implicit dependency graph of unspoken, cross-module assumptions that are never encoded in types or tests. Because these assumed contracts are invisible, every new change must manually satisfy an ever-growing set of undocumented constraints, increasing the cognitive load and risk of modification. The system ossifies not because any single change was wrong, but because the unstated coupling between them grows combinatorially, eventually exceeding the capacity of any reviewer or test suite to verify.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 103,
+      "total_tokens": 205
+    }
+  },
+  "transport_error": null
+}

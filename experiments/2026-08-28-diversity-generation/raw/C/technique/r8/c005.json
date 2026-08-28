@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 16.845
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-222",
+    "object": "chat.completion",
+    "created": 1787935419,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement through constructive type theory, where each refinement step from abstract specification to executable code produces a machine-checked proof that the implementation satisfies the specification, eliminating the commitment gap entirely.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is property-based test generation directly from the abstract specification, where the specification is treated as an oracle and the implementation is validated by generating thousands of test cases that check conformance, achieving high confidence at low cost.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is synthesis from temporal logic specifications using reactive synthesis algorithms, where the abstract specification is expressed in LTL and the synthesizer produces a controller that is correct-by-construction with no verification step needed.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is denotational design with executable specifications, where the abstract specification is written in a denotational language like Dafny that is both executable and verifiable, so the specification itself serves as the reference implementation.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is model-driven engineering with formal transformation rules, where each transformation from PIM to PSM to code is governed by a formally verified rule, preserving semantic commitments at every step.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is contract-based programming with runtime assertion checking, where preconditions, postconditions, and invariants derived from the abstract specification are checked at runtime, catching commitment violations during execution.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is iterative refinement via symbolic execution, where the abstract specification is symbolically executed alongside the implementation and any divergence in path conditions reveals commitment violations.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is algebraic specification with equational reasoning, where the abstract specification defines operations via equational axioms and the implementation is verified by proving it satisfies those axioms using a theorem prover.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is Hoare-logic verification with backward reasoning, where postconditions from the specification are propagated backward through the code to derive required preconditions, and any unmet precondition reveals a commitment failure.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The best technique is simulation-based refinement using bisimulation, where the abstract specification and concrete implementation are placed in a bisimulation relation, and the bisimulation proof guarantees that the implementation preserves all observable behaviors of the specification.\",\n      \"probability\": 0.005\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 618,
+      "total_tokens": 789
+    }
+  },
+  "transport_error": null
+}

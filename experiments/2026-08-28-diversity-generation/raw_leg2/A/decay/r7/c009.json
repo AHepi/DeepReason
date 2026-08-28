@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.092
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-493",
+    "object": "chat.completion",
+    "created": 1787937715,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The entropy of a system's implicit dependency graph grows irreversibly because each locally correct change optimizes for immediate constraints while leaking microscopic coupling—untracked assumptions about call timing, state persistence, or failure modes—into the interstitial spaces between modules. This latent coupling is invisible to tests, which validate explicit contracts, so it accumulates stochastically until the combinatorial explosion of unexpressed constraints makes any novel change ripple unpredictably through the system. The software undergoes a phase transition from a malleable solid to a rigid glass, where the cost of change scales with the surface area of accumulated tacit knowledge rather than the size of the intended modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 142,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

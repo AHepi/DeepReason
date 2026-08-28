@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-space collapse of architectural constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.594
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-730",
+    "object": "chat.completion",
+    "created": 1787936845,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems undergo phase-space collapse: each locally correct, tested change permanently eliminates valid architectural configurations by coupling invariants, such that the system's reachable design space monotonically shrinks. Because individual reviews verify only local fitness and not global option preservation, they systematically fail to detect this irreversible contraction. The system becomes harder to change not because of accumulating bugs or technical debt, but because the combinatorial volume of feasible future states collapses below the threshold needed to accommodate new requirements.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 105,
+      "total_tokens": 223
+    }
+  },
+  "transport_error": null
+}

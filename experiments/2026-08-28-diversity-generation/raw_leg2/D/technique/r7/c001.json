@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Synthesis of programs from input-output examples constrained by formal temporal logic specifications\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.284
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-827",
+    "object": "chat.completion",
+    "created": 1787943010,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal synthesis technique is to compile temporal logic specifications into a game arena where the environment controls inputs and the synthesizer controls outputs, then solve via parity games with examples as winning region annotations. This outperforms pure example-based synthesis because temporal logic eliminates the generalization ambiguity that plagues input-output learning. The resulting controller holds its commitments by construction since every trace satisfies the LTL formula.\", \"probability\": 0.085}, {\"conjecture\": \"Counterexample-guided inductive synthesis constrained by LTL monitoring is the best approach: synthesize from examples, verify against temporal logic via model checking, and use counterexamples as new examples. This converges because each iteration strictly reduces the hypothesis space and the temporal logic provides a complete oracle for rejection. Programs hold commitments because the final candidate passes full LTL verification.\", \"probability\": 0.079}, {\"conjecture\": \"Neuro-symbolic synthesis where a graph neural network learns program structure from input-output examples and a differentiable LTL satisfaction loss backprops through the syntax tree will outperform symbolic methods by 3x on benchmarks with more than 50 examples. The temporal logic loss prevents the network from settling on spurious generalizations that match examples but violate commitments. This holds because gradient descent over LTL satisfaction reaches fixed points corresponding to genuine LTL-compliant programs.\", \"probability\": 0.062}, {\"conjecture\": \"The best technique is to synthesize a deterministic Mealy machine via bounded LTL model checking on the product of the specification automaton and a parameterized candidate transducer, using input-output examples to prune the search. Bounded model checking with satisfiability modulo theories solvers scales better than full automaton-based synthesis because it can stop early on violations. Commitments hold because the bound is lifted only after a complete check passes.\", \"probability\": 0.071}, {\"conjecture\": \"Synthesis succeeds best when temporal logic specifications are decomposed into assume-guarantee contracts between sub-programs, each synthesized from its own localized input-output examples. This decomposition is tractable when the specification is conjunctive and each conjunct references disjoint variable sets. Programs hold commitments because each sub-program is verified against its local LTL contract and the composition theorem guarantees global satisfaction.\", \"probability\": 0.058}, {\"conjecture\": \"The dominant technique is type-directed synthesis where temporal logic safety properties are encoded as refinement types and liveness properties as codata type constraints, with input-output examples guiding the inhabitation search. Type-directed search prunes the program space by orders of magnitude compared to untyped enumeration. Commitments hold because the type system is sound for the temporal logic fragment being encoded.\", \"probability\": 0.066}, {\"conjecture\": \"The best approach is reactive synthesis over a finite abstraction of the input space where the abstraction is refined by counterexample traces from temporal logic verification and seeded by concrete input-output examples. This CEGAR loop converges because each refinement eliminates at least one spurious transition. The resulting concrete program satisfies the temporal logic specification on all real inputs, not just the abstracted ones.\", \"probability\": 0.074}, {\"conjecture\": \"Programs synthesized by large language models fine-tuned on (LTL spec, input-output examples, program) triples will match symbolic synthesizers on safety properties but fail systematically on liveness properties involving unbounded eventualities. This is because next-token prediction captures the local structure of safety constraints but not the coinductive structure of liveness. The conjecture is falsifiable by comparing pass rates on safety-only versus liveness-inclusive benchmark suites.\", \"probability\": 0.053}, {\"conjecture\": \"Synthesis from input-output examples under LTL constraints is best framed as constraint solving over the synthesis instance: encode the program syntax tree, the examples, and the LTL specification automaton as a single SMT formula and solve for the program. This is complete for loop-free programs over bounded inputs because SMT solvers can decide the resulting quantifier-free formula. Commitments hold because the formula encodes exact LTL satisfaction, not an approximation.\", \"probability\": 0.069}, {\"conjecture\": \"The best technique is to use input-output examples to infer an abstract program sketch with temporal logic filling the holes as temporal guards, solved by a combination of enumerative search for structure and symbolic search for temporal conditions. This hybrid outperforms pure enumerative or pure symbolic synthesis because examples constrain structure while LTL constrains behavior in orthogonal ways. The synthesized program holds commitments because the symbolic solver guarantees each hole satisfies its temporal obligation.\", \"probability\": 0.064}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 968,
+      "total_tokens": 1157
+    }
+  },
+  "transport_error": null
+}

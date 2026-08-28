@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.891
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-405",
+    "object": "chat.completion",
+    "created": 1787936235,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a system evolves, locally correct changes implicitly narrow the system's viable design space, creating a web of mutually constraining historical dependencies that were never explicitly chosen. The system's apparent flexibility decreases because each past change, though optimal in its local context, permanently eliminates adjacent architectural possibilities without recording that elimination. Therefore, growing rigidity is an unavoidable thermodynamic-like consequence of accumulating design decisions: entropy increases because each local optimization restricts the global state space, making future global optimizations progressively costlier to discover.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 108,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

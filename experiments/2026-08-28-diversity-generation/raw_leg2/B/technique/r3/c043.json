@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Constructive type theory where the specification is the type and code is the inhabitant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.131
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-256",
+    "object": "chat.completion",
+    "created": 1787941825,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In a dependent type theory where the specification is the type, the best technique is bidirectional synthesis with proof-term reflection: programs are constructed by alternately refining the goal type against an operational semantic sketch, then generating inhabitants of the leftover proof obligations. This will be empirically superior to both tactic-based proof search and pure automated theorem proving because the type structure constrains the search space enough to prevent commitment drift while still permitting partial programs with holes.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 96,
+      "total_tokens": 220
+    }
+  },
+  "transport_error": null
+}

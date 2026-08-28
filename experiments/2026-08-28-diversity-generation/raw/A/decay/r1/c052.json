@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.431
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-587",
+    "object": "chat.completion",
+    "created": 1787930021,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change implicitly prunes the space of all possible future architectures by committing to specific assumptions, and because these assumptions are never explicitly recorded, subsequent changes must blindly navigate a shrinking maze of invisible constraints — a process mathematically equivalent to random graph coloring, where each colored node reduces the available colors for its neighbors until the graph becomes frozen. The system's 'changeability' thus decays as a power law of the number of hidden inter-dependencies, not because of code rot, but because the entropy of the unconstrained design space has been monotonically consumed by a sequence of individually rational, locally greedy decisions that never accounted for their collective constraint cost.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 145,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

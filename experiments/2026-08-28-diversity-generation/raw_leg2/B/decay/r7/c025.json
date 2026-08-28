@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy rise in the call graph's transition matrix under Markov analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.193
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-464",
+    "object": "chat.completion",
+    "created": 1787937844,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change to a software system adds edges to the call graph's transition matrix, and the resulting Markov stationary distribution diffuses probability mass away from the intended entry points and toward a broad basin of interdependent modules. This diffusion monotonically increases the transition matrix's entropy, so the expected number of distinct execution paths between any two functions grows superlinearly with the number of changes. Consequently, the combinatorial cost of verifying that a new change does not perturb an existing path scales with this entropy, making the system harder to modify even when every prior change was individually sound.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 127,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Implicit invariants accumulate in unmodeled gaps between modules\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.851
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-882",
+    "object": "chat.completion",
+    "created": 1787937083,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As systems evolve, modules implicitly co-develop dependencies on each other's internal timing, ordering, and data-shape assumptions that never appear in any explicit interface or contract. These unmodeled invariants survive every review and test because they are locally invisible—they only manifest as cross-module coupling when a future change violates an assumption that was never written down. The accumulation of these silent, cross-boundary dependencies creates an invisible constraint lattice where each local change risks violating an invariant that no single module owns and no test covers, causing maintenance cost to grow superlinearly with the number of surviving implicit contracts.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 126,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

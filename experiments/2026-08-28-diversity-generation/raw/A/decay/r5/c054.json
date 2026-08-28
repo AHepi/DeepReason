@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.164
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-520",
+    "object": "chat.completion",
+    "created": 1787932333,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate a second-order graph of hidden cross-references—shared mutable state, implicit temporal assumptions, and undocumented environmental dependencies—that are invisible to local change review but tightly couple otherwise separate components. Each individually correct change adds edges to this graph, so the blast radius of future changes grows combinatorially rather than linearly, increasing the probability of unexpected interactions even when tests pass. The degradation is therefore structural and thermodynamic: the system's state space becomes progressively more entangled, and the cost of reasoning about a change grows with the accumulated coupling rather than with the change's local footprint.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 130,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

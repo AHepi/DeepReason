@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: state space fragmentation where test coverage becomes a sampling problem over exponentially divergent execution paths\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 49.61
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-766",
+    "object": "chat.completion",
+    "created": 1787933139,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change subtly alters the probability distribution over execution paths, shifting the sampling weight away from previously tested paths toward untested regions. Test suites sample this distribution with finite budget, so accumulated shifts make the suite increasingly unrepresentative of the actual execution space, causing regressions to migrate to regions that are both untested and unlikely to be tested without proportional budget growth.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software aging is fundamentally a divergence phenomenon: each accepted change has nonzero probability of splitting some execution subtree into two branches with different post-conditions. The number of distinct post-conditions grows exponentially while tests sample linearly, so the fraction of the state space validated by any fixed test budget decays exponentially, making undetected semantic regressions statistically inevitable rather than accidental.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Because changes are validated locally against the current test sample rather than globally against the full path space, each change is accepted with confidence proportional to local test density, not global coverage. Over many changes, regions of high local density accumulate while the global sampling ratio declines, so the system becomes harder to change not because any single region is under-tested but because the inter-region transitions that constitute most of the state space are never sampled at all.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Test suites function as point samples in a high-dimensional state space that is being continuously reshaped by each change. As the system evolves, the manifold of reachable states folds and develops regions that are geometrically distant from all existing sample points. The cost of safe change grows as the minimum number of new samples needed to cover the deformed manifold, which increases superlinearly with the number of deformations.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty of long-running system change is governed by an information-theoretic bound: each test provides a fixed number of bits about the state space, while each change adds entropy to the path distribution. When the entropy added per change exceeds the information gained per test, the test suite's mutual information with the true execution space decreases monotonically, and the probability that a change passes tests but fails in production approaches the entropy gap.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each locally correct change creates new path combinations that interact with previously independent subsystems, generating combinatorial paths that no existing test exercises. The test suite was designed for the original path topology, not the fragmented one, so coverage becomes a covering-number problem where the number of tests needed to maintain the same sampling density grows as the product of subsystem path counts rather than their sum.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems fragment because each change is validated against a sample of paths conditioned on the current state distribution, not the future one. As the system evolves, the distribution drifts, making the conditioning of prior tests stale. The set of paths that prior tests validate becomes an increasingly biased sample of the reachable path space, and the bias compounds because each new change's tests are themselves conditioned on the already-biased distribution.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Changes are accepted if they pass tests, but tests verify post-conditions on sampled paths, not path-reachability invariants. Each change can silently make some previously reachable paths unreachable while making others reachable without any test detecting the shift. Over many changes, the reachable set drifts far from the tested set, and the divergence is invisible because tests confirm what is reachable is correct while missing what has become reachable but is wrong.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"State space fragmentation causes the test suite to become a statistical estimator of correctness whose variance increases with each change. Each accepted change adds a degree of freedom to the execution space, and the test suite's sample size stays roughly constant, so the estimator's confidence interval widens until it includes dangerous regressions. The system becomes harder to change because the probability that a passing test suite implies a correct change falls below the threshold required for safe deployment.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The root cause is that test coverage is a measure over a static snapshot of the path space, but the path space is dynamically generated by the interaction of all accumulated changes. Each change modifies the generator, not just the generated space, so the test suite's coverage measure becomes systematically miscalibrated. The miscalibration is undetectable from within the system because the test suite itself is the measuring instrument, and it measures a space that no longer exists.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 195,
+      "completion_tokens": 1035,
+      "total_tokens": 1230
+    }
+  },
+  "transport_error": null
+}

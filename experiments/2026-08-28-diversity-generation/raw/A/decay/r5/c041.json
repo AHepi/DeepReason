@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.505
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-151",
+    "object": "chat.completion",
+    "created": 1787932325,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade not because individual changes are wrong, but because each locally correct modification implicitly assumes a specific interface contract with its callers; these contracts are never explicitly recorded, so subsequent changes can unknowingly violate them. The system's perceived complexity grows as the shadow graph of these unrecorded inter-dependencies expands, meaning no single reviewer or test suite can validate a change against the true space of existing constraints. Software rot is therefore the asymptotic accumulation of invisible coupling, where the rate of constraint violation eventually exceeds the rate of repair.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 120,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Type-theoretic extraction from constructive proofs in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.563
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-767",
+    "object": "chat.completion",
+    "created": 1787931679,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to treat the abstract specification as a theorem in dependent type theory whose constructive proof encodes the program's implementation, yielding an extracted term that holds its commitments by the computational correctness of the proof calculus. Specifically, a specification is faithfully realized if and only if its proof term inhabits the specification type and its extracted lambda term normalizes to a value satisfying the spec. The resulting extraction is guaranteed to hold its commitments because any violation would imply a type inhabitant for False, contradicting the consistency of the constructive theory.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 114,
+      "total_tokens": 234
+    }
+  },
+  "transport_error": null
+}

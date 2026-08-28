@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.604
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-557",
+    "object": "chat.completion",
+    "created": 1787934397,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique is to compile an abstract specification into executable code via a type-theoretic refinement calculus that synthesizes code as a proof artifact, where each refinement step produces both a program fragment and a machine-checkable proof that it satisfies the pre/post-conditions of the specification. This guarantees the result holds its commitments because the executable is extracted directly from a constructive proof of its own correctness, making any violation a logical impossibility rather than a test coverage gap.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 104,
+      "total_tokens": 202
+    }
+  },
+  "transport_error": null
+}

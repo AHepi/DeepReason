@@ -1,0 +1,8 @@
+[
+  "Perturb a hexagonal lattice and clip boundary points to the square",
+  "Direct nonlinear optimization of all 286 triple-area minima via SLP or interior-point",
+  "Integer-lattice search over a fine grid with branch-and-bound on the bottleneck triangle",
+  "Compactness-based existence proof: exhibit a candidate and certify the lower bound algebraically",
+  "Simulated annealing with adaptive temperature on the min-area objective directly",
+  "Symmetry-constrained ansatz: fix a dihedral subgroup and solve the reduced polynomial system"
+]

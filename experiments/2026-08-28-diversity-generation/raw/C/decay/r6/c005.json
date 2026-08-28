@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.417
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-472",
+    "object": "chat.completion",
+    "created": 1787932601,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change introduces latent cross-module constraints that are never documented, so the set of forbidden future changes grows combinatorially even as the codebase's explicit structure remains stable.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Testing and review optimize for local validity but systematically select against architectural refactoring, causing the system to accumulate ossified interfaces that no individual change has incentive to repair.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate implicit invariants that live in the gaps between modules—neither module's tests verify them, but both depend on them—so every change must respect a growing shadow contract that no tool surfaces.\",\n      \"probability\": 0.082\n    },\n    {\n      \"conjecture\": \"The knowledge gradient inverts over time: early changes are made by people who built the system, while late changes are made by people who can only observe its behavior, so the cost of safe change rises with the ratio of inferred-to-known constraints.\",\n      \"probability\": 0.071\n    },\n    {\n      \"conjecture\": \"Each change is optimized to minimize diff size under deadline pressure, so the system undergoes a random walk toward maximal coupling where no single change is large enough to reverse the trend.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Software entropy is fundamentally a compression problem: every locally correct change slightly overfits to current requirements, and the accumulated overfitting creates a fragile interdependence that makes any deviation disproportionately expensive.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Code review and testing enforce sufficiency but not minimalism, so each change leaves behind redundant compatibility scaffolding that accumulates into a thick layer of accidental complexity no one owns.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each correct change expands the configuration space of possible system states, and the testing effort required to certify a new change grows at least linearly with the number of reachable states.\",\n      \"probability\": 0.054\n    },\n    {\n      \"conjecture\": \"The real architecture of a long-running system is not its module structure but its dependency graph of historical decisions, and this graph is never explicit, so every new change must reverse-engineer constraints from a frozen record of past choices.\",\n      \"probability\": 0.067\n    },\n    {\n      \"conjecture\": \"Every locally correct change adds a small amount of semantic debt—implicit context that the change author held but didn't encode—and this debt compounds because future authors must reconstruct it from code that was never designed to carry it.\",\n      \"probability\": 0.061\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 621,
+      "total_tokens": 796
+    }
+  },
+  "transport_error": null
+}

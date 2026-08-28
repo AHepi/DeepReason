@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.62
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-848",
+    "object": "chat.completion",
+    "created": 1787936620,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy is driven by the accumulation of implicit invariants: each locally correct change adds unstated assumptions about the environment, and the probability of a future change violating one of these hidden constraints grows multiplicatively with the number of constraints, creating an exponential increase in modification difficulty.\", \"probability\": 0.085}, {\"conjecture\": \"The increasing difficulty of changing long-running software is a network effect: as the dependency graph grows, the expected path length between any modified node and nodes requiring correlated updates grows logarithmically, making the boundary of required changes computationally harder for developers to trace.\", \"probability\": 0.072}, {\"conjecture\": \"Long-running systems become harder to change because local test suites only validate local behavior, causing the global behavioral specification to drift unobservably; eventually, any new change requires reconciling the codebase against an unknown, fragmented specification that exists only as dispersed historical accident.\", \"probability\": 0.068}, {\"conjecture\": \"As a system ages, the ratio of code justified by historical constraints (legacy) to code justified by current requirements increases; changes become harder because developers must reverse-engineer the historical context of surrounding code before safely modifying it, a cognitive load that grows with system age.\", \"probability\": 0.081}, {\"conjecture\": \"Changes accumulate in a system like genetic drift in an isolated population: locally beneficial modifications slowly degrade the system's conceptual cohesion, making it increasingly probable that any new change will require restructuring unrelated modules to maintain minimum architectural consistency.\", \"probability\": 0.063}, {\"conjecture\": \"The difficulty of modifying a long-running system scales with the Shannon entropy of its execution paths; locally correct changes increase path diversity over time, and the computational effort required to predict the side effects of a new change grows exponentially with this entropy.\", \"probability\": 0.058}, {\"conjecture\": \"Long-running systems become harder to change because of information loss regarding original design intent: each generation of developers retains a fraction 1/r of the previous generation's architectural rationale, causing the effective understanding of the system to decay geometrically until modifications require blind trial-and-error.\", \"probability\": 0.076}, {\"conjecture\": \"Over time, long-running systems accumulate multiple overlapping solutions to the same problem (e.g., redundant caching layers, parallel logging mechanisms); changes become harder because developers must discover and maintain consistency across all untracked duplicates, and the expected number of duplicates grows linearly with system history.\", \"probability\": 0.069}, {\"conjecture\": \"As a software system ages, its dependency network exhibits increasing preferential attachment, where new features cluster around a few high-centrality modules; these modules become change bottlenecks because any modification risks triggering non-local failures, and the bottleneck centrality increases superlinearly with system size.\", \"probability\": 0.061}, {\"conjecture\": \"Long-running systems become harder to change because the codebase acts as an epistemic trap: each locally correct change encodes a new piece of domain knowledge that is never externalized to documentation, meaning the cost of a new change includes the linearly growing cost of re-discovering all previously encoded but undocumented domain rules.\", \"probability\": 0.079}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 684,
+      "total_tokens": 859
+    }
+  },
+  "transport_error": null
+}

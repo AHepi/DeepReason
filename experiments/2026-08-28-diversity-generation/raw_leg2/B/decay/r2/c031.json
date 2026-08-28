@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: organizational knowledge decay as original authors leave and tacit context is lost\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.847
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-349",
+    "object": "chat.completion",
+    "created": 1787936571,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change because each modification is locally correct against the *documented* specification, but the system's actual behavior increasingly depends on undocumented, tacit knowledge held by departing original authors. As this institutional memory decodes, subsequent maintainers unknowingly violate hidden invariants and implicit design assumptions that were never written down because they were 'obvious' to the original team. The system ossifies not because the code is complex, but because the cost of safely modifying it grows exponentially with the volume of unrecoverable contextual knowledge.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 118,
+      "total_tokens": 243
+    }
+  },
+  "transport_error": null
+}

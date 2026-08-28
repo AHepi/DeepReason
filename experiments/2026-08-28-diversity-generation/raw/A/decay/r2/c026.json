@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.643
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-136",
+    "object": "chat.completion",
+    "created": 1787930113,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software entropy is dominated by the silent accumulation of *implicit cross-references*—dependencies that hold without an explicit contract, because one module's behavior happens to satisfy another's unstated assumptions. Each locally correct change shifts the boundary of those coincidences, and because no test suite can enumerate what is merely accidental, the system's true coupling grows invisibly. Over time, the cost of change rises not because any single feature is complex, but because the developer must now reason about an unrecorded web of constraints that exist only in the gap between what the code guarantees and what the rest of the system has come to depend on.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 134,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

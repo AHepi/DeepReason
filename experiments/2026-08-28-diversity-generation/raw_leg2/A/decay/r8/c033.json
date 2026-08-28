@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.559
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-898",
+    "object": "chat.completion",
+    "created": 1787937985,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade via latent interface entanglement: every locally correct change slightly shifts the statistical distribution of implicit assumptions callers make about a module's behavior, even when the explicit contract is preserved. Because tests only sample the space of possible interactions, these untested deviations accumulate as a hidden coupling debt. The system becomes harder to change not because any single modification broke a rule, but because the aggregate of millions of unobserved micro-adaptations has rendered the system's true behavior a brittle artifact of its history rather than a product of its specification.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 122,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

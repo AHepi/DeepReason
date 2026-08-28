@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic sunk-cost and institutional memory encoding in codebase topologies\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.434
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-28",
+    "object": "chat.completion",
+    "created": 1787937613,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Codebase topologies encode institutional memory by accumulating dependency edges that act as epistemic commitments—each locally correct change adds edges reflecting the team's understanding at that time, and these edges persist as frozen inferences long after the reasoning that produced them is forgotten. Because removing edges requires re-deriving the original epistemic justification (which has been lost), maintainers face an asymmetric cost structure where every preserved edge is a sunk epistemic investment that makes future restructuring progressively more expensive, even when no single change introduced technical debt.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 115,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

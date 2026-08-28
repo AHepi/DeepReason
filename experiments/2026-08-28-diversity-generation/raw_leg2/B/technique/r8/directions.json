@@ -1,0 +1,8 @@
+[
+  "synthesize from machine-checked constructive type theory proofs",
+  "infer programs from input-output relational property tests",
+  "compile denotational semantics directly to SAT/SMT solver queries",
+  "evolve code populations against formal contract fitness landscapes",
+  "refine abstract state machines via certified stepwise simulation",
+  "distill behavior from large pretrained code corpora constrained by spec embeddings"
+]

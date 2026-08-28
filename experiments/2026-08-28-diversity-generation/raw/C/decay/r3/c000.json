@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.978
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-738",
+    "object": "chat.completion",
+    "created": 1787930534,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints while tacitly tightening implicit coupling between modules. Over many iterations, this creates a dense graph of invisible dependencies that no individual change could perceive, making future changes require coordinated updates across modules that appear unrelated.\", \"probability\": 0.09}, {\"conjecture\": \"Tests encode assumptions about current behavior that become de facto specifications, freezing implementation details that were originally arbitrary. The accumulation of these frozen arbitrary choices creates a constraint satisfaction problem where every new change must satisfy an increasingly large and inconsistent set of legacy assumptions.\", \"probability\": 0.08}, {\"conjecture\": \"Code review catches local defects but cannot evaluate whether a change increases the dimensionality of the system's state space. Each accepted change adds a branch or mode to the system, and the cost of future changes grows superlinearly because each must reason about an exponentially growing set of possible system states.\", \"probability\": 0.07}, {\"conjecture\": \"Every locally correct change is optimized for the mental model of its original author, but subsequent changes are made under slightly degraded models because tacit knowledge is lost between authors. The system becomes harder to change because the gap between the code's actual structure and any current maintainer's mental model grows monotonically.\", \"probability\": 0.08}, {\"conjecture\": \"The system's abstraction boundaries shift slightly with each locally correct change, creating accumulated drift between the intended and actual purposes of each module. Changes become harder because no module does exactly what its interface suggests, requiring maintainers to understand the full history of boundary migrations rather than just current interfaces.\", \"probability\": 0.06}, {\"conjecture\": \"Each reviewed change optimizes local fitness to the current requirement, but the system's global fitness landscape becomes increasingly rugged with local optima. Future changes must traverse valleys of temporarily degraded fitness to reach new optima, and review/testing processes are designed to reject such valley-traversing changes.\", \"probability\": 0.05}, {\"conjecture\": \"Locally correct changes accumulate technical debt not through poor quality but through the loss of alternative paths not taken. The system's design space narrows with each committed decision, and the cost of future changes grows because reversing any single past decision requires also reversing the decisions that were built on top of it.\", \"probability\": 0.07}, {\"conjecture\": \"The system's dependency graph undergoes percolation as locally correct changes add edges between components. Below a critical threshold the graph remains mostly tree-like and changes are local, but above it a giant connected component forms where any change propagates through the majority of the system.\", \"probability\": 0.06}, {\"conjecture\": \"Each change is accepted because it satisfies immediate requirements, but the requirements themselves encode implicit assumptions about the system's existing structure. The accumulation of requirement-specific optimizations creates a system whose structure is an artifact of its requirement history rather than a coherent architecture, making changes harder because new requirements conflict with old structural assumptions.\", \"probability\": 0.05}, {\"conjecture\": \"The information content needed to understand the system grows faster than the information expressed in its code and documentation. Each locally correct change adds behavior that is implicit in the interaction of components rather than explicit in any single component, so the system's true complexity becomes increasingly tacit and unavailable to future maintainers.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 707,
+      "total_tokens": 882
+    }
+  },
+  "transport_error": null
+}

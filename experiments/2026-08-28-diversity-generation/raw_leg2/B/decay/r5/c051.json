@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.878
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-942",
+    "object": "chat.completion",
+    "created": 1787937406,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct modification to a long-running system appends a new automaton state or transition without pruning existing ones, causing the shortest input sequence required to reach any specific execution path to grow roughly as O(log|S|) in the total state space size |S|. Consequently, the cost of exercising any given path through testing or review increases superlinearly over time, even though every individual change was locally sound. This automaton-state bloat is the mechanistic root cause of progressive rigidity: paths become harder to reach not because logic is wrong, but because the minimal input sequence to distinguish them from all other states lengthens with each unpruned transition.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 133,
+      "completion_tokens": 141,
+      "total_tokens": 274
+    }
+  },
+  "transport_error": null
+}

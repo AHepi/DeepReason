@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.891
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-466",
+    "object": "chat.completion",
+    "created": 1787936760,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems decay not through the accumulation of bugs, but through the accumulation of *implicit invariants*: unstated, untested assumptions about execution context that each locally correct change relies upon. Because these invariants are invisible to both the type system and the test suite, subsequent locally correct changes violate them, creating emergent coupling that grows superlinearly with system size. The difficulty of change is therefore proportional to the number of violated-but-silent assumptions, which increases monotonically because no change is ever rejected for violating an invariant that no one knows exists.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 125,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

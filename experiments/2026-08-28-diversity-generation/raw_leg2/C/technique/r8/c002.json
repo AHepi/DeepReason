@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.362
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-690",
+    "object": "chat.completion",
+    "created": 1787943270,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus: iteratively apply correctness-preserving refinement rules to the abstract specification until reaching executable code. This guarantees the result holds its commitments by construction, as each step is mathematically verifiable.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is to use a Satisfiability Modulo Theories (SMT) solver to synthesize code from the specification via counterexample-guided inductive synthesis (CEGIS). The SMT solver ensures the generated code formally entails the abstract specification across all inputs.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Constructive type theory is the best technique. By encoding the abstract specification as a theorem in a constructive logic, the extracted proof object is inherently an executable program that satisfies the specification by the Curry-Howard correspondence.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is Large Language Model (LLM) translation followed by property-based testing. The LLM excels at translating abstract intent into syntactically correct code, while property-based testing acts as a rigorous empirical filter to ensure the code holds its commitments.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Abstract interpretation is the best technique. It bridges the gap between abstract specifications and concrete code by automatically deriving the sound over-approximations of the program's semantics, ensuring the executable result never violates the specification's safety boundaries.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Denotational design is the best technique. By defining the abstract specification as a mathematical function from inputs to outputs, and then writing the executable code as a stepwise refinement of that function, the commitments hold via direct semantic equivalence.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Reactive synthesis is the best technique for stateful systems. By treating the abstract specification as a game between the system and its environment, synthesis algorithms generate a winning strategy that provably satisfies the specification against any valid environmental behavior.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is algebraic specification and algebraic data type (ADT) modeling. By defining the abstract operations and their equational laws upfront, the executable code can be verified against these laws using automated theorem proving or exhaustive testing.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is to use an Iterative Deductive Verifier (IDV) loop. Generate code heuristically, then use a deductive verifier to check it against the specification; if it fails, feed the verification counterexamples back into the generator to iteratively patch the code until commitments hold.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is the Design-by-Contract approach using executable specifications. By writing the abstract specification as preconditions, postconditions, and invariants directly in the programming language, runtime assertion checking guarantees the code holds its commitments during execution.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 697,
+      "total_tokens": 868
+    }
+  },
+  "transport_error": null
+}

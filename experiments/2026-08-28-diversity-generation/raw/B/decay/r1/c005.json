@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Coupling complexity grows superlinearly via constraint accumulation between modules, formally measurable as an expanding graph diameter of implicit invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.396
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-235",
+    "object": "chat.completion",
+    "created": 1787930029,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The graph diameter of implicit invariants—untested inter-module constraints that hold only by coincidental alignment of current implementations—expands superlinearly over time because each locally correct, reviewed change adds new conditional dependencies between distant modules without severing existing ones. This expanding diameter increases the cognitive cost of modification because any change must now be checked against a growing set of non-local constraints that are invisible to local tests and reviews. The system becomes harder to change not because any individual module degrades, but because the transitive closure of implicit invariant dependencies grows combinatorially, making the search space of safe modifications shrink exponentially with each accepted change.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 139,
+      "total_tokens": 275
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Extraction via proof-carrying synthesis from refinement calculus\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.373
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-86",
+    "object": "chat.completion",
+    "created": 1787931838,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Let S be an abstract specification refined through Morgan's calculus into a program P, decorated with assertions capturing each refinement-step's proof obligations. If P's syntax-directed elaboration yields a term t : ⟨S⟩ in a decidable dependent type theory, and each proof obligation is discharged by an automated SMT-quotiented elaborator, then extraction from the elaborated proof yields executable code that holds S's commitments by construction—provided each refinement rule corresponds to a realizability-preserving type-theoretic elimination form. The hypothesis fails if any refinement rule lacks such a correspondence, making full automation impossible in general.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 135,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

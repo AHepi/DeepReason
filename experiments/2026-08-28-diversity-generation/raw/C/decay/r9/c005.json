@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.054
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-293",
+    "object": "chat.completion",
+    "created": 1787933290,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Long-running systems degrade because each locally correct change introduces hidden constraints that future developers must respect, and these implicit constraints accumulate faster than documentation can capture them. The system becomes harder to change not because any single change was wrong, but because the space of permissible changes shrinks with every commit while remaining invisible until violated.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software entropy increases because testing validates that changes satisfy existing requirements but never validates that the requirements themselves remain coherent. Over time, the accumulation of validated-but-contradictory requirements creates a specification debt that makes any new change appear correct in isolation while conflicting with forgotten design intentions.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty arises from the accumulation of non-reversible decisions: each locally correct change locks in assumptions that become load-bearing for subsequent changes, creating a dependency graph where the cost of modification is proportional to the number of upstream assumptions that must be simultaneously revisited.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Systems become harder to change because code review and testing optimize for local correctness but are structurally incapable of detecting gradual loss of architectural intent. The system's design coherence degrades through a thousand locally-optimal commits, none of which would have been approved had reviewers possessed the full causal model of future consequences.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate coupling debt because each change that crosses a module boundary is locally justified by immediate need, but the boundary crossings themselves are never tracked as costs. The system becomes harder to change because the coupling graph grows monotonically while the organizational capacity to reason about it stays constant.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The phenomenon occurs because every bug fix and feature addition expands the state space of the system, and the difficulty of reasoning about changes grows superlinearly with state space size. Testing and review verify paths through the current state space but cannot prevent the state space itself from becoming cognitively unmanageable.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Systems degrade because the people who understood the original design constraints leave, and each subsequent change is validated against the current code rather than the original rationale. The system becomes progressively harder to change because institutional memory of why things are the way they are decays exponentially while the code itself persists.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each locally correct change adds exceptions to implicit invariants, and the number of exceptions grows until the invariants themselves become meaningless. The system reaches a state where no generalization holds without caveat, making every new change require exhaustive enumeration of special cases.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The increasing difficulty stems from the fact that testing and review enforce backward compatibility with accumulated behavior, including behavior that was never intentionally designed. Each change adds to the set of behaviors that must be preserved, creating a compatibility surface that grows monotonically and constrains future changes in ways nobody explicitly chose.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because local optimization by distributed developers produces a codebase that is globally suboptimal in ways no single developer can perceive. Each change is locally correct but contributes to a fitness landscape where the cost of reaching any significantly different architecture grows combinatorially with the number of prior local optimizations.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 797,
+      "total_tokens": 972
+    }
+  },
+  "transport_error": null
+}

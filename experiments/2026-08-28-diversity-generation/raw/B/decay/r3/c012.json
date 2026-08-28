@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity decay: integration of locally-correct changes asymptotically increases the graph diameter of the program's control-flow dependencies\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.748
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-873",
+    "object": "chat.completion",
+    "created": 1787930467,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally-correct change that adds a conditional branch to a module introduces a new path from that module to the control-flow graph, and because each new path must account for interactions with all pre-existing paths in connected modules, the graph diameter—defined as the longest shortest-path between any two control-flow nodes—grows asymptotically as O(log n) in the number of branches. This means that even when every individual change passes review and testing, the cumulative effect is an unavoidable increase in the minimum number of control-flow hops required to reason about the interaction between any two distant points in the program, making the system progressively harder to modify because the cognitive and verification cost of any new change scales with the full graph diameter rather than the local change radius.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 137,
+      "completion_tokens": 158,
+      "total_tokens": 295
+    }
+  },
+  "transport_error": null
+}

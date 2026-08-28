@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.854
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-350",
+    "object": "chat.completion",
+    "created": 1787935280,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The optimal technique is to synthesize code via proof-theoretic extraction from a dependently typed specification, where the abstract specification is a constructive proof object and the executable code is the witness term extracted via realizability. Because the extracted term is computationally equivalent to the proof's construction, every commitment in the specification (including partial correctness, termination, and resource bounds, if encoded) is preserved by construction rather than verified post-hoc. Conjecture: this approach dominates all competing methods (testing, model-checking, LLM-based generation, post-hoc verification) in commitment-retention, and no method that decouples generation from proof can match its guarantee.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 141,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

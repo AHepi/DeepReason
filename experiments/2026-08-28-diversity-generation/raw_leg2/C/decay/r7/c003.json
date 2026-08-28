@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 27.339
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-20",
+    "object": "chat.completion",
+    "created": 1787937914,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate constraints, leaving behind residual coupling that accumulates faster than refactoring can remove it. The system's state space grows superlinearly with respect to the number of changes, so the fraction of the design space that is reachable without regression shrinks monotonically. The system becomes harder to change not because of any single deficiency, but because the design space collapses around historical decisions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every locally correct change introduces implicit constraints between modules that are invisible to tests and reviews because they exist only in the joint behavior of the system. The number of such implicit constraints grows quadratically with system size, while the mechanisms for detecting them (tests, types, reviews) grow only linearly. Over time, the probability that a change violates an implicit constraint approaches 1.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Tests encode the system's current behavior, not its intended design. As the system evolves, tests accumulate as a fossil record of past requirements, constraining future changes to preserve behavior that no longer has a rationale. The test suite becomes a specification of accidental complexity, and every change must satisfy not only current requirements but the entire accumulated history of past ones.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software changes are made under bounded rationality: developers understand the local context but not the global implications. Each change is locally optimal given the developer's mental model, but the mental model is necessarily incomplete. Over time, the gap between the actual system and any developer's mental model grows, so changes that are correct given the model become incorrect given the system.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each change to a system increases its Kolmogorov complexity relative to any fixed decomposition, because changes are made without knowledge of the global structure. The system becomes harder to change because the shortest description of the system's behavior grows longer than any developer can hold in working memory. What appears as technical debt is actually the accumulation of irreducible descriptive complexity.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Every change optimizes locally because the cost of global optimization is prohibitive, so the system follows a gradient descent in design space toward a local minimum. Each change makes the next change harder because the system moves deeper into the basin of attraction of a suboptimal design. The system becomes harder to change because escaping the local minimum requires simultaneous coordinated changes that no individual actor can justify.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate implicit invariants that are enforced not by code but by the absence of violations. Each change that doesn't trigger a failure is evidence of an invariant, but the invariant is never made explicit. The set of unspoken invariants grows with every change, and the probability that a new change violates one increases with the size of the set, even though each change was individually correct.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every review and test validates a change against the system's current state, not against its future states. Changes are validated against a moving target, and each change shifts the target for all future changes. The system becomes harder to change because the validation cost of each change grows with the number of prior changes, since each prior change expanded the space of states that must be checked.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software systems have a natural entropy that increases with each change because changes add behavior but rarely remove it. Reviews and tests ensure each change is correct but cannot ensure it is minimal. Over time, the system accumulates dead code, redundant paths, and obsolete abstractions that obscure the active design. The system becomes harder to change because the ratio of relevant to irrelevant information decreases.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The interfaces between modules ossify because each change that crosses an interface reinforces the current interface contract. The cost of changing an interface grows with the number of consumers, and consumers accumulate over time. The system becomes harder to change because the interfaces that were chosen early, often arbitrarily, become load-bearing constraints that no single change can revise.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 953,
+      "total_tokens": 1128
+    }
+  },
+  "transport_error": null
+}

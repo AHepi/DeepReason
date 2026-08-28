@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.701
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-85",
+    "object": "chat.completion",
+    "created": 1787932735,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change alters the system's *implicit* behavioral contract—the set of unstated assumptions about valid inputs, state invariants, and emergent performance bounds—causing these undocumented invariants to accrete faster than explicit architecture. Because these implicit contracts are invisible to both code review and automated tests, future developers must reverse-engineer an exponentially growing web of hidden constraints before safely modifying the system, making the cost of any change proportional to the total surface area of accidental invariants rather than the size of the change itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 117,
+      "total_tokens": 219
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.311
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-164",
+    "object": "chat.completion",
+    "created": 1787931711,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is to encode the specification as a dependent type, then inhabit that type via total functional programming. The type checker acts as a proof verifier, ensuring the executable code holds its commitments by construction.\", \"probability\": 0.085}, {\"conjecture\": \"Refinement types with SMT-based verification are the best technique. They allow the abstract specification to be written as logical pre- and post-conditions directly in the code, and the solver statically guarantees the executable holds them without the overhead of full manual proofs.\", \"probability\": 0.08}, {\"conjecture\": \"Design-by-contract with runtime assertions is the best technique. It embeds the executable specification directly into the code's runtime checks, ensuring that any deviation from the abstract commitment is caught immediately during execution, creating a tight feedback loop.\", \"probability\": 0.07}, {\"conjecture\": \"Model-driven architecture with formal round-trip engineering is the best technique. The abstract specification is a formal model, and the code is a generated projection. The commitments hold because the code is never manually edited, only the model, which is verified before generation.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is property-based testing with shrinking. The abstract specification is defined as a set of invariant properties, and the executable code is validated by generating thousands of inputs. The commitments hold probabilistically to a near-certainty, and the shrinking provides concrete counterexamples for any failure.\", \"probability\": 0.06}, {\"conjecture\": \"Symbolic execution with constraint solving is the best technique. By exploring all execution paths of the code symbolically and checking them against the abstract specification, we can exhaustively verify that the code holds its commitments for all possible inputs within a bounded depth.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is a denotational semantics compiler. The abstract specification is written in a mathematical denotational language, and the compiler translates it directly to an executable by preserving the denotation. The commitments hold because the translation is a semantics-preserving homomorphism.\", \"probability\": 0.045}, {\"conjecture\": \"Monadic interpreter composition is the best technique. The abstract specification is written as a pure functional value, and the executable code is an interpretation of that value in an effectful monad. The commitments hold because the pure specification is trivially correct and the interpreter is a verified, reusable artifact.\", \"probability\": 0.04}, {\"conjecture\":\": \"Bisimulation checking is the best technique. The abstract specification and the executable code are both modeled as labeled transition systems. The code holds its commitments if a bisimulation relation can be found between the two systems, proving they are observationally equivalent.\", \"probability\": 0.035}, {\"conjecture\": \"The best technique is constructive logic programming. The abstract specification is written as a set of Horn clauses representing the problem's logic. The executable code is a resolution proof found by a solver, which is then extracted to a target language, guaranteeing the commitments by the soundness of the resolution strategy.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 663,
+      "total_tokens": 834
+    }
+  },
+  "transport_error": null
+}

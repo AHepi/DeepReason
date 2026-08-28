@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic decay of modular invariants under local optimization\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.231
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-810",
+    "object": "chat.completion",
+    "created": 1787937568,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The mutual information between a module's interface and its internal implementation decays monotonically under sequential locally-optimal modifications, because each change optimizes against the current interface distribution while never restoring the interface's entropy capacity. This creates an irreversible information loss: the interface retains its syntactic form but loses its ability to constrain valid implementations, so the cost of verifying a change grows as the inverse of the remaining mutual information. The system appears modular but is functionally a monolith, since the modules' boundaries no longer carry the information needed to localize the blast radius of a change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 123,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

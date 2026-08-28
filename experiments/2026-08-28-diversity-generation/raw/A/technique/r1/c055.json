@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.05
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-556",
+    "object": "chat.completion",
+    "created": 1787931328,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is to compile an abstract specification directly into a test oracle suite that probes the implementation for specification violations, rather than attempting to compile the specification into the implementation itself. The specification is translated into a set of executable property-based tests that encode its semantic commitments, and the implementation is then evolved through search or refinement until every test passes. Because the tests are generated directly from the specification's formal semantics, any implementation that survives the oracle suite provably holds the specification's commitments, assuming the oracle is complete and the test distribution achieves sufficient coverage of the input space.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 126,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

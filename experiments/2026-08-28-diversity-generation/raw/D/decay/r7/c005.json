@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cognitive load from unbounded contextual prerequisites\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.356
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-815",
+    "object": "chat.completion",
+    "created": 1787932872,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software decay is primarily driven by the divergence between a system's actual execution topology and the mental model required to safely modify it; each locally-correct patch increases the gap between what the code does and what a developer can hold in working memory, making the cost of change proportional to the cognitive distance rather than the size of the modification.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every code change implicitly expands the set of upstream contexts a future developer must reconstruct before safely editing, creating a combinatorial explosion where the prerequisite knowledge to modify any single component grows multiplicatively rather than additively over the system's lifetime.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate implicit invariants—unstated relationships between distant components that are never documented because no single change introduces them; these emergent constraints form an invisible dependency graph that must be mentally traversed before any modification, and the traversal cost grows superlinearly with system size.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The fundamental driver of increasing change difficulty is context fragmentation: each review-approved, tested modification embeds its assumptions in a different location, layer, or abstraction than the previous one, forcing future developers to mentally reassemble scattered prerequisites across the codebase before understanding what a change will break.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software rot is governed by a cognitive conservation law: every locally correct change preserves functional correctness by shifting complexity into the contextual prerequisites required to understand the next change, meaning total system comprehensibility degrades at a constant rate per modification regardless of code quality.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems scales with the number of historical decisions whose original rationale is no longer locally evident; each change leaves a residue of implicit constraints that future developers must reverse-engineer, and this archaeological load accumulates because refactoring never fully removes the assumptions of prior patches.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"As systems age, the ratio of context needed for understanding to context needed for execution diverges: the codebase increasingly encodes behaviors that only manifest under specific runtime configurations, data states, or interaction sequences, so the cognitive prerequisites for safe modification include reconstructing execution paths that no single test or review can surface.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each modification optimizes for local cognitive tractability at the expense of global tractability; developers naturally encapsulate their changes behind abstractions that reduce immediate prerequisite load, but each new abstraction adds one more boundary that future developers must understand, query, and trust before modifying anything downstream.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The root cause is loss of counterfactual transparency: in a young system, developers can easily reason about what the code would do if changed, but each locally-correct modification adds conditional logic that narrows the space of safe variations, so the cognitive cost of evaluating any proposed change grows with the number of prior changes whose conditions must be excluded or accounted for.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Change difficulty increases because long-lived systems accumulate temporal coupling—modifications that are correct only given the order in which they were applied—so the prerequisite context for any new change includes not just the current state of the code but the historical sequence of decisions that made that state reachable, and this history is never fully recoverable from the artifact alone.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 812,
+      "total_tokens": 998
+    }
+  },
+  "transport_error": null
+}

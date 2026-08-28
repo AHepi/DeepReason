@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extracting code via constructive proof witnesses in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.435
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-327",
+    "object": "chat.completion",
+    "created": 1787934460,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extracted programs via proof witnesses in dependent type theory achieve their specified postconditions if and only if the extraction mechanism preserves computational content by erasing only proof-level abstractions, leaving all data-level dependencies intact. This means the key technique is not proof search efficiency or tactic design, but strict enforcement of a computational/proof relevance separation theorem during extraction. Any extraction that collapses proof terms into computational units, or vice versa, will violate postconditions under evaluation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 98,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

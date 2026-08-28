@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.117
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-674",
+    "object": "chat.completion",
+    "created": 1787937989,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change optimizes for immediate fitness by consuming the system's remaining slack (redundant capacity, optional generality, decoupled interfaces), creating a one-way entropy where slack is permanently depleted faster than it is regenerated. Because local reviews cannot price the global loss of architectural option value, they systematically approve changes that trade irreplaceable future flexibility for present utility. Consequently, the system's absolute change cost converges upward toward the cost of perfectly specifying all downstream consumers, making modifications progressively prohibitive.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 111,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

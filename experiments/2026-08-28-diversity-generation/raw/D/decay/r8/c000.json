@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic decay of API boundary signal-to-noise\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.25
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-82",
+    "object": "chat.completion",
+    "created": 1787933109,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change that adds an optional parameter or return field raises the API's entropy without removing any existing state, so the mutual information between the interface and any single caller's actual intent decreases monotonically. The system becomes harder to change because the cost of identifying which subset of the API surface is relevant to a given modification grows exponentially with cumulative entropy.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"API boundaries accumulate deprecated-but-unremovable fields faster than they remove them because each deprecation is locally rational (some client still depends on it), creating an asymmetric information channel where noise grows but signal cannot contract. The signal-to-noise ratio of the API degrades according to a biased random walk, and the probability that a developer can locate the correct minimal interface for a new change drops below utility threshold after a predictable number of modifications.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The Kolmogorov complexity of the minimal correct API call sequence grows superlinearly with the number of reviewed changes, because each change preserves backward compatibility by adding conditional branches rather than refactoring the interface. Consequently the shortest program describing how to correctly use the API becomes longer than the shortest program describing the implementation itself, inverting the intended information asymmetry between interface and internals.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Test suites act as lossy compressors of API usage semantics: each passing test encodes one valid invocation pattern, but the space of invalid or unintended patterns grows combinatorially faster than tests can cover them. After N changes the ratio of tested to untested API state-space configurations falls below the threshold at which a developer can infer the safety of a modification by reading tests alone, forcing them to read the entire implementation.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Backward-compatible API changes constitute a Shannon channel with a strictly non-shrinking output alphabet, so the information cost of disambiguating the current intended usage from historical usages accumulates at a rate proportional to the log of the number of past versions still supported. The system becomes harder to change because each modification requires the developer to decode current intent from a signal increasingly dominated by legacy encoding overhead.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every locally correct change that introduces a new error code, exception type, or failure mode increases the channel noise of the API's return-value distribution without proportionally increasing the information any caller can act on, because most callers handle new errors by catching and re-raising. The signal-to-noise ratio of error-handling semantics degrades until the expected value of adding a new error handler falls below the cost of reading all existing handlers.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"API documentation and type annotations form a side-channel whose capacity is bounded by developer attention, while the API's actual behavioral surface grows unboundedly with each reviewed change. The divergence between the documented channel and the behavioral channel increases monotonically, and the system becomes harder to change when the Kullback-Leibler divergence between expected and actual API behavior exceeds the cognitive budget of any single reviewer.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate internal module boundaries whose individual interfaces were each locally optimal at creation time, but the joint entropy of all boundaries grows combinatorially because no individual change can observe or optimize the global interface structure. The system becomes harder to change because the information required to verify a modification's safety is distributed across N boundaries, and the cost of assembling that information exceeds any single reviewer's capacity after the system exceeds a critical size.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each reviewed change that adds a configuration option increases the API's parameter space dimensionality by one without reducing the volume of existing valid configurations, so the probability that a random point in the configuration space corresponds to a currently intended usage decays as O(1/2^d). The system becomes harder to change because verifying that a modification does not disturb any valid configuration requires evaluating an exponentially growing space, and no individual change review can observe this cumulative effect.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The semantic distance between an API's name and its actual behavior, measured as the cross-entropy between the naming distribution a developer would predict from the function names and the true behavioral distribution, increases with each locally correct change because names are stable but behaviors drift. Once the cross-entropy exceeds a threshold, developers can no longer locate the correct API by reasoning from names and must instead search the implementation, making every change require global rather than local comprehension.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 1041,
+      "total_tokens": 1232
+    }
+  },
+  "transport_error": null
+}

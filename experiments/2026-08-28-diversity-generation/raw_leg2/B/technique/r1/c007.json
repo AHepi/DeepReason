@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Property-based test generation from refinement calculus\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.196
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-162",
+    "object": "chat.completion",
+    "created": 1787941250,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A refinement chain from abstract specification to implementation can serve directly as a property-based test generator by interpreting each refinement step's proof obligation as a test invariant: the generator produces inputs satisfying the precondition of the abstract spec, runs both the abstract and concrete levels, and checks the refinement relation holds. This means that a successful refinement proof and a failing property-based test on the same pair cannot coexist, making the test suite a direct operational check of the refinement's correctness.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 100,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

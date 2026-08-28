@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.683
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-204",
+    "object": "chat.completion",
+    "created": 1787937504,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate implicit cross-cutting invariants—relationships between components that are not enforced by the type system or compiler, but are assumed by the code. Each locally correct change subtly shifts this invariant landscape without updating the assumptions held by distant modules, so the set of valid changes shrinks as the gap between encoded rules and assumed rules grows. Maintenance difficulty is therefore not a function of code volume or technical debt, but of the increasing probability that any given change violates an undocumented invariant.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 104,
+      "total_tokens": 206
+    }
+  },
+  "transport_error": null
+}

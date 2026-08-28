@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: cognitive chunking limits crossed as module count exceeds working memory capacity\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.861
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-176",
+    "object": "chat.completion",
+    "created": 1787936913,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"When module count exceeds ~7, developers stop holding the full call graph in working memory and switch to local-only reasoning. Each subsequent change optimizes for its immediate interface rather than system-wide coherence, so globally visible coupling accumulates even when every diff is correct in isolation.\", \"probability\": 0.09}, {\"conjecture\": \"Past the working-memory threshold, developers cache module behavior as stereotypes ('module X handles auth') rather than tracking actual implementations. Changes get routed to the stereotyped module even when another module is now architecturally more appropriate, misaligning responsibilities over time.\", \"probability\": 0.07}, {\"conjecture\": \"Once developers cannot hold all modules simultaneously, they reason about the system as a tree rather than a graph, mentally collapsing cross-cutting concerns into the nearest hierarchical parent. Changes that span these hidden cross-links get split into separate PRs, each locally correct but jointly incoherent.\", \"probability\": 0.06}, {\"conjecture\": \"When system size exceeds working memory, developers stop updating their mental model on every change and instead lazily invalidate it only when tests fail. Because each change is locally correct and passes its tests, the stale mental model persists, and subsequent changes are planned against an increasingly fictional architecture.\", \"probability\": 0.08}, {\"conjecture\": \"Exceeding the chunking limit forces developers to rely on interface signatures rather than behavioral semantics. They infer module behavior from names and types, which are ambiguous, so each change encodes a slightly different guess about what other modules do. These guesses compound into hidden contract violations that only surface under refactoring.\", \"probability\": 0.05}, {\"conjecture\": \"Beyond ~7 modules, developers cannot track which modules share implicit invariants, so they treat each module as independently modifiable. Changes that preserve a module's explicit contract but violate an undocumented cross-module invariant pass review, gradually desynchronizing the system and making future changes require more reconciliation.\", \"probability\": 0.07}, {\"conjecture\": \"When the module graph exceeds working memory, developers stop evaluating changes against the full set of possible states and instead reason about the single state exercised by current tests. Each change is correct for tested states but introduces latent state-space expansions that interact unpredictably, increasing the effective complexity of future changes.\", \"probability\": 0.04}, {\"conjecture\": \"Once the system crosses the chunking threshold, the cost of verifying a change against all consumers exceeds the cost of the change itself. Developers optimize for local verifiability, preferring changes that are easy to validate in isolation over changes that are architecturally clean. The system accumulates locally-verifiable-but-globally-suboptimal patches.\", \"probability\": 0.06}, {\"conjecture\": \"Past the working-memory limit, developers cannot simulate the transitive effects of a change, so they rely on tests as a proxy for correctness. But tests sample behavior, they do not specify it, so each change that passes tests but was not anticipated by the test author silently expands the behavioral contract, making the next change harder to reason about.\", \"probability\": 0.08}, {\"conjecture\": \"When module count exceeds the chunking limit, the system's architecture becomes an epistemological artifact: it exists only in documentation that no one fully reads. Each developer maintains a partial mental model, and changes are planned against the partial model. The divergence between partial models and the real system grows monotonically, increasing the friction of every change.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 740,
+      "total_tokens": 931
+    }
+  },
+  "transport_error": null
+}

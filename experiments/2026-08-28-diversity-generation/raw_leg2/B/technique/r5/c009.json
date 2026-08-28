@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction via proof-carrying synthesis from dependent types\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.833
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-691",
+    "object": "chat.completion",
+    "created": 1787942319,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Specifications written as dependent types in a total language can be compiled to verified executables by a two-phase extraction pipeline: phase one solves the computational content (programs) via proof-search over refinement types, and phase two emits both target code and a proof certificate in a shared logical framework. The certificate is checkable by a small, trusted kernel that validates both the type inhabitation and the translation steps, making the extracted code trustworthy by construction. This approach will outperform conventional theorem-prover extraction (e.g., Coq/Agda) on realistic specifications because the synthesis phase can discharge program-specific obligations that proof engineers otherwise hand-derive.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 135,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Stochastic accumulation of latent cross-module invariants absent from explicit specifications\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.181
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-970",
+    "object": "chat.completion",
+    "created": 1787936648,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software aging is dominated by a stochastic ratchet: each correct change has a nonzero probability of introducing an implicit invariant between two modules not specified in either contract. These invariants are individually harmless but collectively create a dependency graph whose reconstruction cost grows faster than the codebase, making every future change risk triggering an invisible invariant.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The probability that a new change introduces a latent cross-module invariant scales with the number of prior changes, not the number of modules, because each change conditions future assumptions. This creates super-linear rigidity growth proportional to change-history length rather than system size.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Latent invariants accumulate in the gap between specification and implementation at a rate proportional to test suite coverage: high coverage localizes correctness but suppresses the observable failures that would reveal cross-module coupling, causing the most-tested systems to harbor the deepest latent invariants.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Latent invariants cluster in a power-law distribution: most changes introduce zero cross-module coupling, but a heavy tail of changes each introduces multiple invariants. System rigidity is dominated by the few high-invariant changes, so anti-aging efforts should target change types rather than uniform review processes.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The accumulation rate of latent invariants is governed by module interface entropy: interfaces with higher information entropy produce invariants at a rate proportional to entropy squared, because each interface bit doubles the space of possible implicit assumptions another module might depend on.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Refactoring that updates explicit specifications to match latent invariants reduces rigidity only if it captures the invariant precisely; refactoring that over-specifies or under-specifies the invariant accelerates future accumulation. Most refactoring under-specifies because latent invariants are not measurable from code alone.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Latent invariants are disproportionately created by changes that touch error-handling or edge-case paths, because these paths are exercised rarely and under-specified, allowing implicit assumptions to form without test coverage. Rigidity growth is thus driven by the accumulation of error-path couplings rather than happy-path complexity.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each latent invariant persists because the specific input distribution that would violate it occurs with probability below the sampling rate of the test suite, making it statistically invisible. As invariants accumulate, the joint probability of violating any one invariant in production decreases, embedding them deeper because they never fail loudly.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Microservices with asynchronous communication accumulate latent invariants faster than monoliths because the temporal decoupling hides cross-service assumptions during review and testing, but the invariants still exist in the implicit contract about message ordering, timing, and idempotency.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The stochastic process governing latent invariant introduction is a self-reinforcing random walk: each new invariant increases the probability that the next change will introduce another, because developers reason about existing behavior by observing it rather than reading specifications, and observed behavior includes latent invariants.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 759,
+      "total_tokens": 951
+    }
+  },
+  "transport_error": null
+}

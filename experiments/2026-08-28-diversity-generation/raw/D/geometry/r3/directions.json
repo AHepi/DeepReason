@@ -1,0 +1,8 @@
+[
+  "Integer lattice grid with optimized affine rescaling into unit square",
+  "Heilbronn-type greedy point insertion with local repulsion constraints",
+  "Algebraic number field constructions using roots of unity or quadratic irrationals",
+  "Simulated annealing over continuous coordinates with minimum-area penalty",
+  "Finite projective plane PG(2,3) embedded via rational coordinate parametrization",
+  "Exhaustive branch-and-bound over discretized grid with interval arithmetic pruning"
+]

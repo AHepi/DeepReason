@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.135
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-541",
+    "object": "chat.completion",
+    "created": 1787936403,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The system's module dependency graph undergoes a directed random walk that, at scale, inevitably produces cycles and hubs. This locks the system into a topological state where any change triggers a combinatorial explosion of required updates, making large-scale modifications computationally and practically intractable.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Correct individual changes add implicit constraints that eventually intersect, creating a state where all possible new modifications violate an unstated global invariant. The system becomes 'full' not by running out of code, but by running out of mutually compatible future states.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Every locally correct change optimizes for local fitness, causing the system to hill-climb into a local optimum in the design space. Escaping this optimum requires temporarily making the system worse (less locally optimal), which is rejected by the review and testing process.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The documentation and developer mental models lag behind the code, creating a growing semantic gap. The system becomes harder to change because the cost of re-deriving the true state of the system from code outpaces the cognitive capacity of any single engineer or team.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each tested change adds a small risk of regression to the system, increasing the expected liability of future changes. This causes risk aversion to grow exponentially, leading to defensive over-engineering and a culture of minimal, non-refactoring changes that freeze the architecture.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Software systems accumulate specific optimizations that lose their value over time but are never removed. This layering of obsolete optimizations creates an impenetrable sediment of code that must be understood but cannot be touched, obscuring the core logic and hindering further changes.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The number of valid input states and execution paths grows factorially with each change, while test coverage can only grow linearly. This causes the fraction of the system's behavior that is verified to asymptote toward zero, increasing the uncertainty and risk associated with any change.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The interface boundaries between modules ossify due to the coordination cost required to change them. These interfaces become load-bearing walls of the system, making architectural changes prohibitively expensive because they require breaking contracts that many other components depend on.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each change introduces latent coupling between distant modules through shared mutable state or event ordering. This invisible coupling is not captured by interfaces or tests, creating a system where changing one part unpredictably breaks another, increasing the perceived difficulty of any change.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"A long-running system's requirements are a moving target, and each change is a local patch to a shifting problem. The system becomes harder to change because it is an accumulation of patches to past problems, not a solution to the current one, increasing the impedance mismatch with the current environment.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 725,
+      "total_tokens": 900
+    }
+  },
+  "transport_error": null
+}

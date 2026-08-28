@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis via constructive type theory with proof-carrying code\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.094
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-210",
+    "object": "chat.completion",
+    "created": 1787941523,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for specification-to-code synthesis is to compile abstract specifications into dependent type theory expressions where computational content is extracted from constructive proofs of Π-types, treating every refinement step as a proof term whose normalization yields the program. Proof-carrying code then ships the normalized term alongside its type-theoretic derivation, so the consumer re-checks the derivation against the specification before execution. This outperforms synthesis approaches that separate code generation from verification because the proof term *is* the code—there is no gap to close, and any implementation defect manifests as a type error during proof normalization.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 127,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

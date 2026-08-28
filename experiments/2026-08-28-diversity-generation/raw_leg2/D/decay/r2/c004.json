@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Non-local semantic entanglement of identifiers exceeding local reasoning bounds\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.121
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-786",
+    "object": "chat.completion",
+    "created": 1787936659,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate a critical density of identifiers whose referents are defined far from their use sites, creating a semantic coupling that is invisible to any local reasoning process. Each locally correct change propagates through this hidden identifier network, so the system becomes harder to change because the cost of verifying consistency grows superlinearly with the number of non-locally entangled names.\", \"probability\": 0.085}, {\"conjecture\": \"Long-running systems become rigid because identifiers serve as implicit contracts across module boundaries, and these contracts are enforced only by distant type-checking or runtime checks that local reviews ignore. When every change is locally correct, it still risks violating these non-local semantic contracts, making the system progressively harder to modify as the web of identifier dependencies grows denser.\", \"probability\": 0.062}, {\"conjecture\": \"The difficulty of changing long-lived software arises because identifiers accumulate overloaded meanings across distant subsystems, creating semantic interference patterns that no single review can detect. As the number of overloaded identifiers grows, the probability that a local change triggers a non-local semantic conflict increases, which is why the system becomes harder to change even when each change is individually sound.\", \"probability\": 0.071}, {\"conjecture\": \"Long-running systems become harder to change because identifiers form a graph where the semantic distance between definition and usage exceeds the working memory capacity of any reviewer. This causes locally correct changes to silently corrupt distant invariants, and the rate of corruption accelerates as the identifier graph's diameter grows, making the system progressively more brittle.\", \"probability\": 0.058}, {\"conjecture\": \"The rigidity emerges because identifiers in long-lived systems acquire contextual dependencies that are not encoded in their type signatures, creating a form of semantic debt that is invisible to local analysis tools. Each locally correct change increases this debt by adding new contextual dependencies, so the system becomes harder to change because the probability of triggering a non-local semantic violation grows with the total number of context-dependent identifiers.\", \"probability\": 0.067}, {\"conjecture\": \"Over time, identifier namespaces in long-running systems become saturated, forcing developers to choose names that are increasingly semantically similar to existing identifiers, which creates accidental coupling between unrelated code paths. This namespace saturation means that locally correct changes have a rising probability of unintended semantic collisions with distant identifiers, making the system progressively harder to modify.\", \"probability\": 0.044}, {\"conjecture\": \"Long-lived systems become harder to change because identifiers accumulate non-local invariants—constraints on their behavior that are defined by distant code and are never formally specified. Each locally correct change adds new non-local invariants, and since the cost of verifying all invariants grows with their count, the system's modifiability degrades as the invariant network becomes too large for local reasoning.\", \"probability\": 0.079}, {\"conjecture\": \"The difficulty arises because identifiers in long-running systems form transitive dependency chains that are longer than any local review or test can cover. Each locally correct change ripples through these chains, and as the chains grow longer over time, the probability of triggering a non-local semantic failure increases, making the system progressively harder to change.\", \"probability\": 0.053}, {\"conjecture\": \"Long-running systems become harder to change because identifiers drift semantically—their actual runtime behavior diverges from their names—creating a gap between local reasoning and non-local reality. This drift accumulates over time, so locally correct changes increasingly fail to account for the actual non-local semantics of drifted identifiers, making the system progressively more difficult to modify safely.\", \"probability\": 0.049}, {\"conjecture\": \"The entropy of the identifier-semantic mapping in a long-running system increases over time because each change is locally optimized without global coordination, creating a non-local semantic entanglement that no local process can untangle. As this mapping entropy grows, the probability that any local change triggers a non-local semantic conflict increases, making the system progressively harder to change even when every individual change is correct.\", \"probability\": 0.091}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 852,
+      "total_tokens": 1043
+    }
+  },
+  "transport_error": null
+}

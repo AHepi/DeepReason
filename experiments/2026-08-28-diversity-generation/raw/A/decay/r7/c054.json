@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.174
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-68",
+    "object": "chat.completion",
+    "created": 1787932734,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate an implicit constraint network—unseen invariants between distant modules that are never documented because no single change introduces them. Each locally correct change tightens this network by adding another implicit dependency, progressively shrinking the space of future valid changes. Engineers perceive this as increasing complexity not because the code grew, but because the ratio of enforced-but-invisible constraints to visible interfaces asymptotically approaches a state where most modifications violate an invariant they cannot see.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 102,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.351
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-345",
+    "object": "chat.completion",
+    "created": 1787936877,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software architecture drifts because each locally correct change optimizes for immediate constraints, not future ones. The system becomes harder to change because local optimization accumulates into globally suboptimal structures that no individual change caused.\", \"probability\": 0.07}, {\"conjecture\": \"Implicit dependencies grow faster than explicit ones because tests and reviews catch direct breakages but miss indirect coupling. The system becomes harder to change because every change risks triggering an untested interaction that no one knows exists.\", \"probability\": 0.06}, {\"conjecture\": \"Code complexity is subject to entropy: each change leaves residual abstractions that made sense at the time but become dead weight once their original context fades. The system becomes harder to change because obsolete abstractions accumulate faster than anyone can justify removing them.\", \"probability\": 0.05}, {\"conjecture\": \"Domain knowledge fragments across people and code over time, so each change is made with less understanding of the whole than the previous one. The system becomes harder to change because the cost of reconstructing lost context grows with each change made by someone who didn't fully understand it.\", \"probability\": 0.08}, {\"conjecture\": \"Each change adds a constraint to satisfy, and constraints are almost never removed because removing one requires knowing no future change will need it. The system becomes harder to change because the set of simultaneously satisfied constraints grows monotonically, shrinking the space of valid changes.\", \"probability\": 0.09}, {\"conjecture\": \"Testing and review processes optimize for preventing regressions, not for preserving changeability. The system becomes harder to change because the safety net grows thicker with each change, making future changes more expensive to validate even when they are simpler.\", \"probability\": 0.04}, {\"conjecture\": \"Each locally correct change implicitly commits to a design direction, and later changes must conform to accumulated prior commitments. The system becomes harder to change because the cost of reversing any single past decision grows with the number of decisions that built on top of it.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems become harder to change because each change optimizes for the change-maker's local context (deadline, team, feature), not the system's global health. No individual is incentivized to maintain changeability because its value is only visible later and to someone else.\", \"probability\": 0.06}, {\"conjecture\": \"The interfaces between components calcify because each one was validated against a specific set of callers, and changing an interface requires re-validating all of them. The system becomes harder to change because interface stability is rewarded by every process while interface evolution is penalized by every process.\", \"probability\": 0.05}, {\"conjecture\": \"Every change adds code, but code is rarely removed because removal has no immediate feature value and carries regression risk. The system becomes harder to change because the ratio of relevant to irrelevant code decreases with each change, so understanding the system requires filtering out more noise over time.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 636,
+      "total_tokens": 811
+    }
+  },
+  "transport_error": null
+}

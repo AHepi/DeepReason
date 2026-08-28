@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 17.891
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-301",
+    "object": "chat.completion",
+    "created": 1787934550,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The most reliable technique is refinement through constructive type theory: translate the specification into a dependently-typed language (e.g., Agda, Lean), and incrementally fill holes until the program type-checks, at which point it is guaranteed to satisfy the specification.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Writing the specification as an executable property-based test suite and using an LLM or solver to synthesize code that passes the tests is the most practical technique, because it directly anchors the code to the specification's commitments while remaining scalable.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The best technique is deriving the implementation via stepwise refinement in a refinement calculus (e.g., Event-B or Z), where each transformation from abstract specification to concrete code is provably correctness-preserving.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The optimal approach is to write the specification in temporal logic and synthesize executable code via reactive synthesis (e.g., using tools like SLUGS or SYNTCOMP solvers), guaranteeing that the resulting system satisfies all temporal commitments by construction.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Design-by-contract with runtime assertion checking is the best practical technique: encode the specification as executable preconditions, postconditions, and invariants, so that any violation is caught at runtime, making the commitments observable and testable.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is to write the specification as a logic program (e.g., in Prolog or Datalog) and treat it as the executable directly, eliminating the gap between specification and code entirely.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The most effective technique is to use a satisfiability modulo theories (SMT) solver to synthesize code from the specification by encoding the specification as constraints and extracting a satisfying assignment as the implementation.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The best approach is model-driven engineering: express the specification as a formal model (e.g., UML with OCL constraints or Alloy), then auto-generate code from the model, ensuring the code structurally mirrors the verified abstract model.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"The most reliable technique is to use a correct-by-construction methodology like Hoare-logic-based program derivation, where the developer manually derives code from the specification using formal refinement steps backed by verification conditions.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is to train a large language model on paired specification-and-implementation datasets, then use it to generate code from the specification while verifying the output against the specification using an automated theorem prover as a filter.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 664,
+      "total_tokens": 835
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Test suites overfit to historical change distributions, creating a selection shadow where rare-but-critical execution paths lose coverage\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.343
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-265",
+    "object": "chat.completion",
+    "created": 1787936352,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As test suites evolve through incremental additions driven by historical change patterns, they accumulate disproportionate coverage of frequently-modified code paths while rare-but-critical paths experience coverage decay through test deletion, refactoring, and neglect. This creates a selection shadow where mutations on rare paths systematically escape detection because the test suite's sampling distribution has diverged from the true execution distribution of the system. The resulting overfitting means that the test suite's predictive power for catching defects becomes inversely correlated with the rarity of the affected execution path, making the system appear increasingly well-tested while becoming progressively more fragile exactly where it matters most.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 134,
+      "completion_tokens": 129,
+      "total_tokens": 263
+    }
+  },
+  "transport_error": null
+}

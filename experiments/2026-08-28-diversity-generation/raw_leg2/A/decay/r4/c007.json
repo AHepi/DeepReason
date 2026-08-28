@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.918
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-642",
+    "object": "chat.completion",
+    "created": 1787936923,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate a second-order property—implicit logical coupling—that is invisible to individual reviewers. Each locally correct change optimizes for immediate functional requirements while failing to update or preserve latent invariants shared across distant modules. Over time, the density of these unarticulated cross-dependencies grows faster than the explicit interface documentation, raising the cost of any new change because the safe mutation surface becomes impossible for any single maintainer to model or predict.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 95,
+      "total_tokens": 197
+    }
+  },
+  "transport_error": null
+}

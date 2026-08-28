@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.122
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-632",
+    "object": "chat.completion",
+    "created": 1787935114,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to synthesize code directly from the abstract specification's formal proof obligations via constructive type theory, where the specification itself serves as the type and the extracted program is guaranteed to hold its commitments by construction. Any deviation between specification and executable arises only from compiler correctness, which can be independently verified. Conjecture: programs extracted from proofs in dependently-typed languages (e.g., Agda, Lean) satisfy their formal commitments at a rate exceeding 99%, whereas programs written by hand against the same specifications violate them in over 50% of cases under adversarial testing.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 126,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

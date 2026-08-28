@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.334
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-607",
+    "object": "chat.completion",
+    "created": 1787941436,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is a two-phase synthesis pipeline: first compile the abstract specification into a dependently typed intermediate representation whose type-level constraints encode the specification's commitments, then solve the remaining inhabitant gaps via neural-guided search over proof terms that constructively yield executable code. The dependent types act as a hard verification barrier—code that does not satisfy the specification simply fails to type-check, eliminating the gap between specification and behavior. This outperforms both pure LLM generation and traditional theorem-proving because the neural guide learns to navigate the proof search space while the type system guarantees soundness of the result.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 129,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

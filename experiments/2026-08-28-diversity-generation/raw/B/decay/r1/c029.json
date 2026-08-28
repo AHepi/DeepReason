@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Concept drift causes domain models to accumulate semantic dead code as business requirements shift, making local correctness a measure against obsolete intents\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.324
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-895",
+    "object": "chat.completion",
+    "created": 1787930040,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In long-running systems, every locally correct change implicitly branches the domain model from the original intent, creating semantic dead code—validations, invariants, and abstractions that remain technically correct but no longer correspond to any live business requirement. Because local testing only verifies behavior against the immediately surrounding context, it cannot detect that the change itself has rendered adjacent model elements semantically obsolete. The system grows harder to modify not because the code is broken, but because developers must reason through an ever-thickening layer of structurally valid but semantically extinct constructs to determine which parts of the model still represent the actual domain.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 130,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

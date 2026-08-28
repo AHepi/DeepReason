@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.118
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-464",
+    "object": "chat.completion",
+    "created": 1787941466,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique is to compile the abstract specification directly into a refinement type system, then solve the resulting type-checking obligations via counterexample-guided inductive synthesis. This binds every specification clause to an executable code path through a machine-verified logical contract, rather than relying on post-hoc testing or LLM pattern-matching. The approach is falsifiable: if the synthesizer cannot close the proof obligations for a given spec, no code is emitted, making failure observable rather than silent.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 110,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

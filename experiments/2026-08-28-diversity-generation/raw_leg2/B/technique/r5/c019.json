@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative repair against property-based test shrinkages\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.658
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-612",
+    "object": "chat.completion",
+    "created": 1787942337,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Iterative repair against property-based test shrinkages produces verified code faster than repair against the original failing test cases, because shrinkages isolate the minimal failing input and therefore expose the precise contract violation to the repair model without irrelevant context. Specifically, a single cycle of (1) generate, (2) property-test, (3) shrink the first failing case to its local minimum, (4) prompt the model with the shrunk failure, will converge to a correct implementation in fewer iterations than using unshrunken failures. The conjecture is falsifiable: if shrinkage-guided repair does not reduce total iterations-to-fix across a benchmark of formal specifications, the advantage does not exist.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 145,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

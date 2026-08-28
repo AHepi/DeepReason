@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Implicit assumption debt\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.038
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-861",
+    "object": "chat.completion",
+    "created": 1787937683,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change silently narrows the set of future changes deemed safe, because tests and reviews encode the specific assumptions present at that moment. The system doesn't degrade because of bugs, but because the accumulated layer of validated assumptions creates an implicit contract surface that makes any novel change appear risky by default.\", \"probability\": 0.09}, {\"conjecture\": \"Tests written for each change freeze the implicit invariants that were true at that time, turning transient implementation details into permanent constraints. Over years, the test suite becomes a fossil record of past assumptions that blocks future architects from restructuring the code, even when the production logic itself would tolerate the change.\", \"probability\": 0.085}, {\"conjecture\": \"Reviewers approve changes based on whether the new code is consistent with surrounding code, which encodes an implicit assumption that local consistency guarantees global coherence. As the codebase grows, this local consistency criterion causes assumptions to propagate laterally without anyone tracking the global dependency graph, until changes that are locally consistent everywhere still produce system-level conflicts.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally correct change adds implicit preconditions about the execution environment—threading model, failure modes, data shapes, latency budgets—that are never written down because they hold at the time. The difficulty of change grows as the product of these invisible preconditions, because any new change must now satisfy not just the explicit interface but all accumulated environmental assumptions simultaneously.\", \"probability\": 0.075}, {\"conjecture\": \"Code changes are reviewed for correctness against the current state, but each change also implicitly commits the system to a particular abstraction boundary. Over time, the accumulation of decisions that were locally optimal for their boundary creates a constraint network where the boundaries themselves become unmovable, because too many local changes have built dependencies on the exact shape of those boundaries.\", \"probability\": 0.07}, {\"conjecture\": \"Each reviewed change embeds the mental model of the developer who wrote it, and that model includes assumptions about which parts of the system are stable and which are in flux. As developers rotate through a long-running system, these overlapping and contradictory mental models accumulate as implicit assumptions in the code, creating zones where no single developer holds the full set of assumptions needed to safely make a change.\", \"probability\": 0.065}, {\"conjecture\": \"Well-tested changes optimize for the explicit, named requirements while silently encoding assumptions about unnamed constraints—performance characteristics, ordering guarantees, resource limits. The system becomes harder to change because the ratio of unnamed to named assumptions grows monotonically with each change, and the unnamed ones are exactly the ones that break silently when violated.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct API change assumes a particular granularity of consumer need, and each consumer that adopts the API locks that assumption in place. Over time, the API surface accumulates assumptions about consumer usage patterns that were never stated, and changing the API becomes hard not because of technical coupling but because the implicit usage assumptions are unverifiable without auditing every consumer.\", \"probability\": 0.055}, {\"conjecture\": \"Changes that pass review and testing do so by conforming to the dominant assumption set of their era—the architectural style, error handling philosophy, or concurrency model that was current. Long-running systems accumulate layers from different assumption eras, and any cross-cutting change must now reconcile assumptions from multiple eras that were each locally correct but are mutually incompatible.\", \"probability\": 0.05}, {\"conjecture\": \"The practice of reviewing each change for local correctness creates a false implicit assumption that the system's correctness is the composition of locally correct changes. In reality, the system has emergent invariants that no individual change touches but that all changes depend on, and these invariants become progressively harder to reason about because no review ever examines them directly.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 182,
+      "completion_tokens": 816,
+      "total_tokens": 998
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.979
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-926",
+    "object": "chat.completion",
+    "created": 1787937480,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Individually correct changes accumulate as constraints on future changes because each modification optimizes locally without encoding its implicit assumptions, causing the system's effective coupling to grow irreversibly. This unseen coupling—between features, data shapes, and operational expectations—forms a hidden dependency graph that narrows the design space faster than tests can detect, since tests validate past decisions rather than preserve future optionality. The system degrades not through technical debt, but through an entropy-like increase in incidental constraints that makes every safe change require reconciling an ever-larger set of unrecorded historical commitments.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 124,
+      "total_tokens": 226
+    }
+  },
+  "transport_error": null
+}

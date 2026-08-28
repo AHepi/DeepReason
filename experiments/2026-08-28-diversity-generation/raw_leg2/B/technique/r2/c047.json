@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: evolutionary growth from minimal viable kernels via property-based test selection\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.135
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-107",
+    "object": "chat.completion",
+    "created": 1787941568,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Property-based tests serve as the executable genotype of a specification: a minimal kernel program is the initial organism, mutations are program edits, and fitness is the fraction of generated test cases passed. If the property-based test suite is sufficiently complete (covering all specification commitments), then iterative mutation selection from a minimal seed kernel converges to programs that hold every specification commitment, because any surviving mutant that violates a commitment is deterministically killed by the corresponding property. The rate of convergence is governed by the mutational distance between the kernel's implicit behavior and the specification's commitment surface, not by program size.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 129,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

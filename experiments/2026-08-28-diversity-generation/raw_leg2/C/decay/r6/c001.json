@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.644
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-672",
+    "object": "chat.completion",
+    "created": 1787937656,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change adds implicit constraints to the system's state space. Over time, the fraction of valid configurations shrinks relative to invalid ones, making it statistically harder to find a valid change without violating an unstated assumption.\", \"probability\": 0.08}, {\"conjecture\": \"Regression tests encode historical behavior as inviolable specification. This converts the system's accidental properties into deliberate requirements, progressively over-constraining future changes regardless of their local correctness.\", \"probability\": 0.07}, {\"conjecture\": \"Every code change encodes a model of the problem domain. Minor drift between each change's implicit model and the actual domain compounds over time, creating semantic entropy that makes any new change require reconciling an increasingly fragmented understanding.\", \"probability\": 0.09}, {\"conjecture\": \"Dependencies accumulate because removal is never locally necessary. Each change preserves existing dependencies, so the dependency graph monotonically densifies, eventually making every change transitively coupled to a large fraction of the system.\", \"probability\": 0.06}, {\"conjecture\": \"The coordination cost of a change is proportional to the number of stakeholders who must agree. Long-lived systems accumulate stakeholders faster than they lose them, so the political cost of change grows regardless of technical difficulty.\", \"probability\": 0.08}, {\"conjecture\": \"Long-lived systems build an immune system of conventions, linters, and guardrails. Each new guardrail reduces the space of permissible changes, so eventually the cost of navigating the guardrails exceeds the cost of the actual change.\", \"probability\": 0.05}, {\"conjecture\": \"The knowledge required to safely change a system includes implicit context about why prior decisions were made. This context is never fully captured in artifacts, so each change loses some irretrievable information, making the system progressively more opaque to maintainers.\", \"probability\": 0.09}, {\"conjecture\": \"Locally correct changes optimize for immediate context. But the objective function for a long-lived system is adaptability. Optimizing locally at each step is a greedy algorithm that produces globally suboptimal rigidity.\", \"probability\": 0.07}, {\"conjecture\": \"Interfaces accumulate consumers over time. Each consumer depends on specific behavior, so changing an interface requires updating all consumers. The cost of a change is proportional to consumer count, which monotonically increases.\", \"probability\": 0.06}, {\"conjecture\": \"Each change is reviewed against current knowledge, but its interaction with future changes is unknowable. Over time, the number of latent cross-change interactions grows combinatorially, so the probability that a new change triggers an unforeseen interaction approaches certainty.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 569,
+      "total_tokens": 744
+    }
+  },
+  "transport_error": null
+}

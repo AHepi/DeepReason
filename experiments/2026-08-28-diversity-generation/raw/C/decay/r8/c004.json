@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 27.899
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-425",
+    "object": "chat.completion",
+    "created": 1787933077,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture erodes through an information-theoretic ratchet: each locally correct change destroys a small amount of global design information (intent, constraints, invariants) that was never explicitly recorded, and this lost entropy cannot be recovered without total system re-specification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of change scales with the square of the number of implicit assumptions in the codebase, not the number of lines. Each change adds new assumptions while invalidating none, causing assumption density to grow monotonically.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate 'dependency gravity wells' where each new feature adds dependencies on existing modules but never removes them, creating an asymmetric graph that resists modification at its highly-connected core.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Test suites become conservation laws for code: once a behavior is tested, it becomes permanently expensive to change, so the space of allowable modifications shrinks monotonically as tests accumulate, even though each test was individually correct.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each locally correct change optimizes for local fitness (passing tests, meeting requirements) but is blind to global fitness (modifiability, conceptual coherence). Over thousands of changes, this local optimization produces a globally pessimal architecture, analogous to gradient descent getting trapped in a poor basin.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The real cost of change is dominated by 'unknown unknowns'—implicit invariants that hold in the current system but are nowhere stated. Each change preserves existing unknowns while adding new ones, so the probability of violating an unknown invariant grows linearly with system age.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Codebases have a half-life of institutional knowledge: every 18 months, half the developers who understood the original design constraints leave. Each change is made with less context than the last, so modifications drift further from the original design intent over time, creating an accumulation of 'semantic debt.'\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software systems are open thermodynamic systems that increase entropy monotonically. Each change dissipates design energy as heat (ad hoc patches, duplicated logic, dead code). Without external work (refactoring), the system reaches maximum entropy: a state where every change requires touching everything.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Domain complexity grows faster than code can abstract it. Each change addresses a newly discovered domain edge case by adding a special case, and the abstraction layer needed to unify these cases never arrives because no single change justifies the cost of building it.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because of an anti-network effect: the number of constraints a developer must hold in working memory to make a correct change is proportional to the number of modules that interact with the change site, which grows as the system ages. Human working memory is fixed, so the probability of a correct change asymptotically approaches zero.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 735,
+      "total_tokens": 910
+    }
+  },
+  "transport_error": null
+}

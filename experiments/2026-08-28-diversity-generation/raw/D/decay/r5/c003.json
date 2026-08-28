@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Thermodynamic-style entropic growth of structural configuration space under irreversible local patching\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.153
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-460",
+    "object": "chat.completion",
+    "created": 1787932456,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture obeys a modified Second Law of Thermodynamics: every locally-correct patch destroys viable future configurations while leaving unreachable ones intact, causing the accessible design space to monotonically shrink until the system is frozen in a local minimum.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Structural entropy in a codebase increases because each irreversible patch adds a constraint that cannot be removed without systemic refactoring, meaning the total number of forbidden architectural configurations grows asymptotically faster than the number of permitted ones.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become rigid because local patching acts as a biased random walk through configuration space, where the bias is always towards the current state's local neighborhood, causing the system to asymptotically lose the ability to reach distant, structurally distinct states.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The difficulty of changing software over time follows a Boltzmann-like distribution: the 'energy' required to enact a change grows exponentially with the number of prior patches, because each patch increases the system's structural entropy, making any specific future configuration statistically improbable.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software rot is a form of Landauer's principle applied to code: each locally-correct, irreversible patch erases information about previously possible architectural states, and this information erasure manifests as a minimum 'work' cost required to implement future changes.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"A long-running codebase undergoes entropic structural entanglement, where the configuration space of modules becomes increasingly correlated due to shared patch histories. The marginal entropy of any single module approaches zero, making isolated changes impossible without disturbing the entire correlated web.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every locally reviewed patch acts as an irreversible constraint that halves the accessible volume of the architectural configuration space on average, leading to an exponential decrease in system mutability that is invisible at the local level but dominates macroscopic change costs.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The thermodynamic-style degradation of software is driven by the monotonic accumulation of 'defects' in the architectural lattice—each patch introduces topological irregularities in the dependency graph that cannot be smoothed out by local operations, increasing the energy barrier for any global reconfiguration.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software entropy growth is governed by a principle of structural action conservation: every patch fixes the position of a component in configuration space, and the 'force' required to move a component is proportional to the number of prior patches that have established dependent constraints around it, causing resistance to scale with history.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The configuration space of a long-running software system undergoes phase transitions from fluid to rigid to brittle; local patches act as nucleation sites for structural rigidity, and once a critical density of patches is reached, the system globally locks into a single, high-friction configuration basin.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 194,
+      "completion_tokens": 720,
+      "total_tokens": 914
+    }
+  },
+  "transport_error": null
+}

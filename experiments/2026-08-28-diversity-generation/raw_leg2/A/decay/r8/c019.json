@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.27
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-131",
+    "object": "chat.completion",
+    "created": 1787937967,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software degrades because developers locally optimize for immediate task completion while implicitly consuming a shared, finite \\\"capacity for change\\\"—the system's remaining structural flexibility. Each locally correct modification permanently depletes this untracked resource through hidden coupling, creating a tragedy of the commons where individual incentives diverge from long-term system health. The growing difficulty of change is therefore not an accumulation of technical debt, but the inevitable exhaustion of a fungible flexibility commons that was never explicitly governed.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 102,
+      "total_tokens": 204
+    }
+  },
+  "transport_error": null
+}

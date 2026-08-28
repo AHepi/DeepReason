@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy of the implicit contract space: each verified change adds hidden invariants, shrinking the lattice of future viable edits faster than code grows\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.983
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-812",
+    "object": "chat.completion",
+    "created": 1787930334,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each verified change implicitly asserts the preservation of prior observable behavior, creating unstated postconditions that accumulate as a hidden invariant lattice. The space of future viable edits is the set of changes consistent with all accumulated invariants, which shrinks combinatorially even as code grows linearly, because each new invariant intersects with and constrains the pre-existing lattice.\", \"probability\": 0.09}, {\"conjecture\": \"Verified changes fix specific runtime values and interaction patterns that become de facto invariants, even when no code explicitly checks them. The implicit contract space grows as the set of all input-output pairs verified by tests, and any future edit must preserve this entire set, causing the viable edit lattice to shrink at a rate proportional to the product of historical test coverage and behavioral surface area.\", \"probability\": 0.08}, {\"conjecture\": \"Code volume grows linearly with the number of changes, but implicit invariants grow quadratically because each new module interacts with every prior module through unstated assumptions about timing, ordering, and data format. The lattice of viable edits collapses because the intersection of all pairwise implicit constraints becomes empty faster than the codebase expands, making the system effectively frozen once the invariant density exceeds a critical threshold.\", \"probability\": 0.07}, {\"conjecture\": \"The lattice of viable edits is not defined by the code's explicit structure but by the complement: all behaviors that tests did not exercise are implicitly declared as non-behaviors that future edits must not introduce. Each verified change expands the tested surface, shrinking the untested complement and therefore shrinking the space of edits that are provably safe, because any edit touching the untested region risks violating an implicit non-behavior invariant.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct change embeds assumptions about the state space of its callers, and these assumptions become irreversibly cached as implicit invariants once the change passes integration. The viable edit lattice shrinks because removing or relaxing any single invariant requires re-deriving the consistency of all dependent invariants, and the dependency graph among implicit invariants has superlinear diameter growth relative to code size.\", \"probability\": 0.07}, {\"conjecture\": \"Test suites verify specific execution traces, and each verified trace becomes an implicit invariant that the system must reproduce. The lattice of future viable edits shrinks faster than code grows because each new trace constrains the system's possible execution graph along a new dimension, and the intersection of orthogonal trace constraints reduces the viable edit space multiplicatively while code grows additively.\", \"probability\": 0.05}, {\"conjecture\": \"Locally correct changes introduce new data paths that implicitly commit to the schemas, ordering guarantees, and failure modes of their inputs. These commitments form a hidden invariant lattice where each node is a data path and each edge is an implicit schema constraint. The viable edit lattice shrinks because any schema change requires simultaneous consistency across all dependent data paths, and the number of such paths grows as the square of module count while the code grows linearly.\", \"probability\": 0.06}, {\"conjecture\": \"The act of verifying a change against existing tests confirms that the change preserves all implicit invariants encoded in the test suite, but it also adds the change's own implicit invariants to the suite. The lattice of viable edits thus shrinks monotonically because the invariant set is monotonically growing, and no mechanism exists to remove invariants that were implicitly added by changes that later become obsolete but whose tests persist.\", \"probability\": 0.08}, {\"conjecture\": \"Code reviews verify that a change is locally correct, but the review process itself encodes the reviewer's mental model of system boundaries as implicit invariants that are never written down. These mental-model invariants accumulate across reviewers and changes, forming a lattice that constrains future edits more tightly than the code itself, because the code can be refactored but the undocumented expectations of what the system should not do cannot be queried or invalidated.\", \"probability\": 0.04}, {\"conjecture\": \"Each verified change occupies a specific region of the system's behavioral configuration space, and occupation prevents future edits from entering that region without regression risk. The viable edit lattice shrinks because the configuration space has bounded volume but each change irrevocably claims a hyperplane of that volume, and the remaining free volume decreases as a power law in the number of changes while code grows only linearly.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 206,
+      "completion_tokens": 933,
+      "total_tokens": 1139
+    }
+  },
+  "transport_error": null
+}

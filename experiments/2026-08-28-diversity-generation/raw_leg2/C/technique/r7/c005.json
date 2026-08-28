@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.449
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-666",
+    "object": "chat.completion",
+    "created": 1787942981,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is to compile abstract specifications into refinement types, then use type-driven program synthesis to generate executable code. This guarantees the output holds its commitments because the type checker mechanically verifies that the synthesized program satisfies the refined specification. No other technique provides both the automation and the formal guarantee.\", \"probability\": 0.085}, {\"conjecture\": \"Extracting executable code from machine-checked constructive proofs (e.g., Coq or Agda) is the best technique, as the Curry-Howard correspondence ensures the extracted program is correct-by-construction. The specification is expressed as a theorem, the proof is a program, and extraction yields code that provably holds its commitments.\", \"probability\": 0.079}, {\"conjecture\": \"Model-driven engineering with automated model-to-code transformation and generated conformance tests is the best technique. By maintaining traceability links between the abstract specification and the generated code, any deviation from the specification is detectable and preventable through continuous conformance checking at runtime.\", \"probability\": 0.072}, {\"conjecture\": \"Design-by-contract with runtime assertion checking is the best practical technique. The abstract specification is operationalized as preconditions, postconditions, and invariants that are checked at runtime. While not providing mathematical certainty, it catches violations during testing and deployment, empirically yielding the highest commitment-holding rate at the lowest cost.\", \"probability\": 0.068}, {\"conjecture\": \"Neuro-symbolic program synthesis, where a neural model proposes candidate programs and a symbolic verifier filters them against the formal specification, is the best technique. This combines the flexibility of learned priors with the rigor of formal methods, producing code that is both natural and verifiably correct.\", \"probability\": 0.064}, {\"conjecture\": \"Property-based testing combined with mutation testing is the best technique. The abstract specification is encoded as a set of generative properties, and the implementation is validated against millions of generated inputs. Mutation testing ensures the properties are strong enough to catch faulty implementations, providing high empirical confidence that commitments hold.\", \"probability\": 0.059}, {\"conjecture\": \"Abstract interpretation over the specification to derive a sound static analysis, then generating code that is provably within the analysis-safe envelope, is the best technique. This ensures that the generated code cannot violate the derived invariants, guaranteeing commitment-holding behavior without the complexity of full theorem proving.\", \"probability\": 0.053}, {\"conjecture\": \"SMT-based program synthesis is the best technique. The abstract specification is encoded as logical constraints, and an SMT solver searches for a program that satisfies these constraints. The solver's proof of unsatisfiability for the negated specification guarantees the generated program holds its commitments.\", \"probability\": 0.048}, {\"conjecture\": \"Runtime verification with specification monitors is the best technique. The abstract specification is compiled into monitors that observe the execution of the generated code. Any violation triggers a corrective action or rollback, ensuring the system holds its commitments even if the code is imperfect.\", \"probability\": 0.043}, {\"conjecture\": \"Iterative refinement with continuous formal verification is the best technique. The abstract specification is iteratively refined into more concrete specifications, with each step verified against the previous one. The final refinement is directly executable, and the chain of verifications ensures the code holds its original commitments.\", \"probability\": 0.037}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 720,
+      "total_tokens": 891
+    }
+  },
+  "transport_error": null
+}

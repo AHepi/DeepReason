@@ -1,0 +1,8 @@
+[
+  "Refinement calculus with mechanized proof of stepwise correctness preservation",
+  "Large-language-model code generation validated by runtime property-based testing",
+  "Denotational semantics extraction where specs compile directly to executable interpreters",
+  "Iterative genetic programming against a formal fitness function encoding contract obligations",
+  "Constructive type theory where the specification is the type and code is the inhabitant",
+  "Synthesis from temporal-logic constraints via game-theoretic solver against adversarial environment"
+]

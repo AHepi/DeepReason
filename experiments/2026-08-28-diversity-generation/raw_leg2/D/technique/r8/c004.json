@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: generation by constructive proof term extraction from intuitionistic type theory\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.418
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-52",
+    "object": "chat.completion",
+    "created": 1787943307,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Extracting code via proof terms in Martin-Löf type theory is superior to extraction from classical logics because the absence of computational content in classical axioms (e.g., choice sequences) forces unreliable stubs, whereas intuitionistic proofs yield structurally terminating, side-effect-free programs by construction.\", \"probability\": 0.085}, {\"conjecture\": \"The most effective technique is to encode the abstract specification as a Sigma-type in Cubical Type Theory, where the extracted code is the first projection and the specification commitment is the second, leveraging the univalence axiom to guarantee that code refactoring preserves observational equivalence.\", \"probability\": 0.072}, {\"conjecture\": \"Specifications encoded as refinement types in a proof assistant like Lean yield higher commitment-holding rates than Hoare-logic based extraction because the proof term is interleaved with the computation, making it impossible to decouple the program from its behavioral proof during extraction.\", \"probability\": 0.068}, {\"conjecture\": \"Program extraction from Proofs-as-Programs in the Calculus of Constructions is insufficient for holding commitments unless the specification includes explicit performance constraints as cost-indexed types, forcing the extracted term to be not only correct but optimally efficient within a polynomially bounded extraction framework.\", \"probability\": 0.061}, {\"conjecture\": \"The best technique involves writing the specification in a Spatial Type Theory where modalities capture resource usage and spatial distribution; extraction then yields code that holds its commitments by construction because the proof term explicitly manages locality and state, avoiding the need for post-hoc verification.\", \"probability\": 0.055}, {\"conjecture\": \"Commitment-holding extraction fails when the intuitionistic type theory permits unrestricted recursive definitions; thus, the best technique requires formulating the specification in a type theory restricted to strictly structural recursion on higher inductive types, ensuring the extracted code is total and halts.\", \"probability\": 0.049}, {\"conjecture\": \"The key to holding commitments is not the type theory itself, but the use of bidirectional type checking during extraction; if the abstract specification is checked bidirectionally against a computational skeleton, the extracted code inherits the specification's commitments because synthesis is forced to follow the typing derivation strictly.\", \"probability\": 0.044}, {\"conjecture\": \"Abstract specifications translated into Linear Type Theory for extraction produce code that holds its commitments better than intuitionistic logic because linearity enforces resource discipline, guaranteeing that extracted functions do not duplicate or discard resources in ways that violate the specification's operational semantics.\", \"probability\": 0.04}, {\"conjecture\": \"The most robust extraction technique requires specifications to be written in Dependent Type Theory with explicit effect systems (e.g., in Idris or a similar system), where the proof term carries a computational trace of effects, ensuring that extracted code holds commitments regarding state and IO by treating effects as first-class citizens in the type structure.\", \"probability\": 0.037}, {\"conjecture\": \"A specification turned into code via proof term extraction will only hold its commitments if the type theory supports first-class computational reflection, allowing the proof itself to evaluate and verify the code's behavior at compile-time, effectively making the specification and the code identical objects in the theory.\", \"probability\": 0.032}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 699,
+      "total_tokens": 885
+    }
+  },
+  "transport_error": null
+}

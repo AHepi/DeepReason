@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.055
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-275",
+    "object": "chat.completion",
+    "created": 1787937533,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate an implicit load-bearing structure: cross-cutting assumptions, invariants, and undocumented couplings that are locally invisible but globally essential. Each locally correct change survives because it doesn't violate these hidden constraints, yet it simultaneously thickens them by adding new dependencies and assumptions on top of the existing ones. The difficulty of change grows superlinearly with the size of this invisible constraint graph, because the cost of verifying safety shifts from reading local code to reverse-engineering the system's emergent invariants—knowledge that was never explicitly represented and that no individual possesses.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 122,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

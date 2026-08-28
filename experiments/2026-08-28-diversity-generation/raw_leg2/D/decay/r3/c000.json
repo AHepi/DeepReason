@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: entropic growth of irreducible dependency fan-out under bounded review\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.47
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-1",
+    "object": "chat.completion",
+    "created": 1787936905,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change adds at least one irreducible dependency edge that no subsequent review can justify removing, because the review process only evaluates the marginal risk of the new edge, not the cumulative cost of the existing fan-out. The system's changeability is therefore governed by a monotone-increasing edge count with no corresponding thermodynamic sink, making rigidity an inevitable function of edit count rather than time.\", \"probability\": 0.09}, {\"conjecture\": \"Bounded review capacity forces reviewers to approve changes based on local test coverage, which systematically fails to detect the exponential growth of irreversibly coupled transitive state paths. The system hardens because each validated change micro-welds a dependency that is locally rational but globally entropic, and the review bound guarantees no macro-level decoupling operation is ever affordable enough to be approved.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty of changing a long-running system scales with the square of its irreducible inter-module call graph density, because each new edge increases the expected blast radius of any future edit quadratically while review depth remains constant. Since every approved change adds edges and no review process has the budget to verify the value of removing them, the fan-out monotonically inflates until the system becomes computationally intractable to safely modify.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems become rigid because bounded review applies a stopping criterion to defect detection that is local to the change, causing an accumulation of 'hidden' transitive dependencies that are individually below the review threshold but collectively form an irreducible fan-out web. The system's changeability decays exponentially because the probability of a clean, isolated edit drops as the undetected dependency surface grows, even as every recorded edit remains locally correct.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct modification optimizes for immediate compatibility by binding to existing interfaces, permanently increasing the irreducible fan-out of those interfaces by a factor that cannot be reduced by future bounded reviews. Over time, this creates a dependency singularity where the cost of verifying a single change exceeds the maximum possible review budget, freezing the system not due to bad code, but due to the unchecked entropic growth of the interface's downstream fan-out.\", \"probability\": 0.05}, {\"conjecture\": \"Software entropy is driven by the asymmetry between adding and removing dependencies under bounded review: adding a dependency requires only local correctness, while removing an irreducible dependency requires proving the global absence of reliance on it, a cost that grows super-linearly with fan-out. This asymmetry ensures that the dependency graph undergoes a ratcheting effect where the minimum possible review cost increases monotonically until the system is effectively frozen.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems harden because bounded review implicitly treats transitive dependencies as out-of-scope, causing each locally correct change to accidentally increase the irreducible depth of the dependency tree without increasing the system's observable behavior. The system becomes harder to change because the review bound prevents testers from validating the full transitive fan-out, forcing future developers to manually navigate an exponentially growing, untested dependency lattice.\", \"probability\": 0.04}, {\"conjecture\": \"The rigidity of long-running software is a direct consequence of the combinatorial explosion of irreducible stateful dependencies, where each reviewed and tested change adds at least one state-binding path that cannot be safely unwound without invalidating prior local test suites. Because the review process is bounded, it cannot compute the global state-space impact, guaranteeing that the system's irreducible dependency fan-out grows until the state space becomes too large to safely probe with a new change.\", \"probability\": 0.08}, {\"conjecture\": \"As a system ages, the irreducible dependency fan-out grows because bounded review processes are forced to prioritize local functional correctness over architectural decoupling, resulting in a random-walk accumulation of structural edges. The system becomes harder to change because this entropic edge growth increases the probability that any proposed modification will collide with an unreviewed, transitive constraint, eventually pushing the cost of change over the review budget.\", \"probability\": 0.03}, {\"conjecture\": \"The decay in changeability is caused by a phase transition in the dependency graph where the irreducible fan-out crosses a critical threshold, shifting the graph from a sparse, locally-tree-like structure to a densely connected mesh. Bounded review is blind to this macroscopic phase transition because it only evaluates local edges, so it continues approving locally correct changes that push the system past the threshold, after which the cost of any change becomes structurally irreducible.\", \"probability\": 0.07}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 985,
+      "total_tokens": 1176
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Sporadic coupling through shared implicit invariants invisible to static analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.816
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-479",
+    "object": "chat.completion",
+    "created": 1787937834,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate sporadic coupling through shared implicit invariants—unwritten assumptions about runtime state, temporal ordering, or resource behavior that hold across modules without any detectable code dependency. Each locally correct change subtly shifts the behavioral envelope in which these invariants hold, but because the invariants are invisible to static analysis and never violated in any single commit, no review or test catches the drift. Over time, the system's evolvability degrades because the true dependency graph is governed by a growing shadow web of these latent constraints, not the code's visible structure.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 122,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

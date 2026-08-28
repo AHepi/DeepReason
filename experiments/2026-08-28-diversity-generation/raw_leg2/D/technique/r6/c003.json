@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: model-guided neural synthesis trained on aligned spec-code pairs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.798
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-505",
+    "object": "chat.completion",
+    "created": 1787942713,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Training a neural synthesizer on spec-code pairs where the specs are enriched with explicit intermediate invariants from a solver produces code that satisfies postconditions at 3x the rate of training on raw spec-code pairs alone, because the invariants force the model to learn a compositional program structure rather than pattern-matching surface form.\", \"probability\": 0.08}, {\"conjecture\": \"A neuro-symbolic architecture where a neural model proposes candidate implementations and a model checker filters them achieves higher commitment-holding rates than pure neural synthesis, but only when the checker's counterexamples are fed back as additional training context—without the feedback loop, the checker merely acts as a post-hoc filter and does not improve the model's internal synthesis capability.\", \"probability\": 0.07}, {\"conjecture\": \"The optimal training distribution for model-guided neural synthesis consists of 70% synthetically generated spec-code pairs from formal models and 30% human-written pairs, because pure synthetic data teaches the model to exploit generator artifacts while pure human data is too sparse to learn the mapping from abstract constraints to compositional code.\", \"probability\": 0.06}, {\"conjecture\": \"Spec-code alignment is best learned not by mapping spec to full program but by mapping spec to a sequence of model-theoretic operations (e.g., set restrictions, Skolemizations), each of which has a deterministic code realization; the neural model's job is to select the operation sequence, making synthesis a retrieval problem over a finite algebra of semantic primitives.\", \"probability\": 0.05}, {\"conjecture\": \"Neural synthesis guided by a denotational semantics model outperforms guidance by an operational semantics model for commitment-holding, because denotational models provide compositional gradients that the neural model can exploit, whereas operational models introduce runtime nondeterminism that destabilizes training.\", \"probability\": 0.04}, {\"conjecture\": \"The single most effective training signal for commitment-holding neural synthesis is not the final spec-code pair but the trace of failed attempts and solver feedback that led to a correct pair; training on this trace data teaches the model to repair constraint violations, which transfers to unseen specs far better than training on only correct pairs.\", \"probability\": 0.07}, {\"conjecture\": \"Model-guided neural synthesis fails to hold commitments on out-of-distribution specs whenever the guiding formal model and the neural model share the same inductive biases; commitment-holding requires the guiding model to be strictly more expressive than the neural architecture, so that the model can reject neural proposals the architecture is biased toward but that violate the spec.\", \"probability\": 0.03}, {\"conjecture\": \"Pretraining a neural synthesizer on spec-code pairs where specs are written in a dependently typed language (e.g., Agda) and code is extracted via proof terms yields a model that transfers to informal specs with higher commitment-holding rates than pretraining on pairs from any non-dependent type theory, because dependent types force the training signal to encode computational content, not just propositional constraints.\", \"probability\": 0.02}, {\"conjecture\": \"The alignment between spec and code in training pairs should be formalized as a Galois connection between the spec lattice and the program lattice, and the neural synthesizer trained to predict the adjoint rather than the program directly; this guarantees that the synthesized program is the most abstract program satisfying the spec, reducing overfitting to irrelevant details.\", \"probability\": 0.02}, {\"conjecture\": \"Model-guided neural synthesis trained on aligned spec-code pairs will produce commitment-holding code only if the training pairs are annotated with the proof obligations that arise at each program point; without per-point obligations the model learns to satisfy the postcondition globally but cannot maintain invariants under composition, leading to silent contract violations in larger systems.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 807,
+      "total_tokens": 993
+    }
+  },
+  "transport_error": null
+}

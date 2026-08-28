@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.521
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-749",
+    "object": "chat.completion",
+    "created": 1787937900,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate implicit invariants—unstated relationships between components that no single change violates but that collectively constrain future modifications. Each locally correct change adds one more constraint that future changes must not violate, and the constraint space grows combinatorially, making it increasingly likely that any proposed change conflicts with some hidden invariant.\", \"probability\": 0.09}, {\"conjecture\": \"Test suites encode only the behaviors their authors thought to check, so every passing test suite creates a false confidence boundary. The gap between tested behavior and actual required behavior grows with each change, because each change is validated against an increasingly stale specification that never gets re-derived from first principles.\", \"probability\": 0.08}, {\"conjecture\": \"Each code review approves changes relative to the reviewer's mental model of the system, but mental models degrade at a constant rate per unit time while code persists indefinitely. The system drifts away from every living person's understanding, and changes are approved against models that are increasingly wrong, embedding assumptions that future changes must work around.\", \"probability\": 0.07}, {\"conjecture\": \"Abstractions are chosen to minimize complexity for the first N use cases, but each new use case that doesn't fit the abstraction forces a leaky extension rather than a redesign, because local review never justifies the global cost of refactoring. The accumulation of leaky extensions makes the abstraction harder to reason about than no abstraction would have been, yet each extension was individually the lowest-cost correct option.\", \"probability\": 0.08}, {\"conjecture\": \"Dependency graphs in long-lived systems undergo a phase transition from tree-like to mesh-like topology once enough individually reasonable shortcuts are added. Before the transition, changes propagate along predictable paths; after it, every change potentially affects every component, and the cost of verifying safety scales with system size rather than change size.\", \"probability\": 0.06}, {\"conjecture\": \"Every change that passes review sets a precedent that future changes cite as justification, creating a self-reinforcing drift away from the original design intent. The system becomes harder to change not because of technical debt but because the justification graph has no root—every proposed change must be argued against an unbounded set of prior decisions that each seemed reasonable in isolation.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems accumulate operational specializations—compensations for environmental conditions that were never documented because they were transient. These compensations become load-bearing when the environment changes, but they are invisible to code review and testing because they exist only in the interaction between the code and its deployment context.\", \"probability\": 0.07}, {\"conjecture\": \"The probability that a change touches a module whose original author has left scales with system age, and modules without active authors accumulate because no one has both the authority to refactor and the context to do so safely. These orphaned modules become frozen constraints that channel all future changes into increasingly narrow corridors of the design space.\", \"probability\": 0.06}, {\"conjecture\": \"Each locally correct change optimizes for local simplicity, but the global complexity function is non-additive—two changes that each reduce local complexity can increase global complexity when composed. Long-running systems become harder to change because the mapping from local decisions to global complexity is non-monotonic, and no review process observes the global function.\", \"probability\": 0.08}, {\"conjecture\": \"Software systems have a finite design temperature—the diversity of approaches that can coherently coexist—and each change that introduces a new pattern, convention, or idiom consumes some of that temperature. Once the design temperature reaches zero, every new change must conform to one of the existing patterns, but the patterns are mutually inconsistent, so every change is forced into a local inconsistency that makes the next change harder still.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 802,
+      "total_tokens": 977
+    }
+  },
+  "transport_error": null
+}

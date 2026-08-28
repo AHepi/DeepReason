@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Self-organized criticality: verified incremental edits accumulate structural correlations that push the system toward a percolation threshold of cascading faults\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.286
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-420",
+    "object": "chat.completion",
+    "created": 1787930330,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Verified incremental edits create hidden structural dependencies between modules that are individually invisible but collectively form a percolating cluster of correlated fault paths, so the system reaches a critical connectivity where a single correct change can cascade through latent couplings.\", \"probability\": 0.085}, {\"conjecture\": \"Each locally correct, tested edit optimizes a local objective that subtly increases cross-module correlation, driving the dependency graph toward a percolation threshold where the probability of a change triggering non-local faults follows a power law.\", \"probability\": 0.072}, {\"conjecture\": \"Code review and testing filter edits for local correctness but cannot detect the accumulation of long-range structural correlations, so the system self-organizes toward criticality where the largest cluster of interdependent components percolates and cascading faults become inevitable.\", \"probability\": 0.078}, {\"conjecture\": \"The practice of making minimal, verified edits acts as a slow-driving force that pushes the system into a self-organized critical state, where dependency clusters grow via percolation until the correlation length spans the entire system and any change risks systemic cascades.\", \"probability\": 0.064}, {\"conjecture\": \"Individually validated edits accumulate non-local correlations because each change adapts to the existing structure, creating a feedback loop that drives the codebase toward a percolation threshold at which the density of inter-module dependencies supports fault avalanches.\", \"probability\": 0.081}, {\"conjecture\": \"Verified edits incrementally wire the dependency graph toward its percolation threshold; testing ensures each new edge is locally sound but the emergent correlation structure eventually admits cascading faults whose size distribution becomes scale-free.\", \"probability\": 0.069}, {\"conjecture\": \"Every correctly reviewed change adds a small number of dependency edges that pass local validation, but the aggregate effect is a self-organized critical dependency network where the largest connected component percolates and the system loses its capacity to absorb changes without propagating faults.\", \"probability\": 0.075}, {\"conjecture\": \"Locally correct edits accumulate structural correlations because each edit must integrate with existing dependencies, so the system approaches a percolation threshold at which the correlation length diverges and a single verified modification can trigger arbitrarily large fault cascades.\", \"probability\": 0.088}, {\"conjecture\": \"The verification of each individual edit selects for changes that are locally consistent but does not constrain the growth of long-range structural correlations, so the dependency network self-organizes to criticality and cascading faults emerge as percolation clusters breach the threshold.\", \"probability\": 0.067}, {\"conjecture\": \"Tested and reviewed edits behave like grains added to a sandpile: each is locally validated, but the accumulation of inter-component correlations pushes the system toward a percolation threshold where the dependency network can no longer absorb changes without producing cascading faults.\", \"probability\": 0.092}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 205,
+      "completion_tokens": 624,
+      "total_tokens": 829
+    }
+  },
+  "transport_error": null
+}

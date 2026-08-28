@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: stochastic interference between asynchronous state mutations in distributed systems\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.304
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-564",
+    "object": "chat.completion",
+    "created": 1787937602,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The increasing rigidity of long-running distributed systems emerges from the accumulation of stochastic interference events between asynchronous state mutations. While each individually-correct change has a high probability of isolated success, the combinatorial growth of mutation schedules creates a non-linear phase space of untested interleavings. Over time, the probability that any new change will collide with a previously harmless, unconverged state mutation asymptotically approaches certainty, making the system practically immutable without violating prior implicit ordering assumptions.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 103,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

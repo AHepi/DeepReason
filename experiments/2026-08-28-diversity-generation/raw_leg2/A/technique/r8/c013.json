@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.123
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-452",
+    "object": "chat.completion",
+    "created": 1787943040,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique is to compile the abstract specification directly into an executable, test-oracle harness that generates adversarial inputs, then synthesize code by iterative counterexample-driven repair: the generator produces a candidate, the harness searches for a failing input, and the repair loop mutates the candidate until no counterexample survives within a bounded search space. This outperforms both direct transcription and post-hoc verification because it forces the specification to confront its own semantic ambiguities during synthesis, collapsing the gap between intent and execution. The conjecture is falsifiable: if a competing approach (e.g., type-driven synthesis or LLM-based generation with static verification) achieves lower defect rates on a benchmark of formal specifications, the claim fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 154,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

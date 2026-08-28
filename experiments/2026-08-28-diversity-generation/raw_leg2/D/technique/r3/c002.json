@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: denotational compilation from domain-specific algebraic specifications\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.146
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-758",
+    "object": "chat.completion",
+    "created": 1787941888,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Denotational compilation is strictly more robust when the domain algebra is presented as a Lawvere theory rather than as a term-rewriting system, because Lawvere-theoretic compilation preserves universal properties across refinement steps while rewriting systems only preserve operational reachability.\", \"probability\": 0.08}, {\"conjecture\": \"A domain-specific algebraic specification can be compiled into executable code that provably holds its commitments if and only if the target language's effect system admits a faithful functor from the specification's effect algebra into the language's native effect semantics.\", \"probability\": 0.07}, {\"conjecture\": \"The minimal sufficient condition for denotational compilation to preserve commitment-holding is that every domain algebra operation factors through a free monad construction whose denotation is a section-retraction pair with the target language's denotational semantics.\", \"probability\": 0.09}, {\"conjecture\": \"Denotational compilation from algebraic specifications to executable code fails to hold commitments whenever the specification algebra contains operations that are not definable as catamorphisms over the initial algebra of the target language's data types.\", \"probability\": 0.06}, {\"conjecture\": \"The optimal technique is to compile algebraic specifications into tagless final interpreters whose denotation is fixed by a coalgebraic structure on the specification's observables, ensuring that every executable trace is a bisimulation quotient of the specification's behavioral equivalence.\", \"probability\": 0.05}, {\"conjecture\": \"Commitment-holding denotational compilation requires that the domain algebra be enriched over a posetal category whose order encodes refinement, and that compilation be a monotone functor into a CPO-valued presheaf category over the target language's syntax.\", \"probability\": 0.04}, {\"conjecture\": \"The best technique is to represent the algebraic specification as a string diagram in a symmetric monoidal category, compile it into a Cartesian closed category via a structure-preserving functor, and extract code from the internal language of the target CCC.\", \"probability\": 0.08}, {\"conjecture\": \"Denotational compilation holds its commitments precisely when the specification algebra's equational theory is a conservative extension of the target language's native equational theory, making compilation a theory morphism that reflects provability.\", \"probability\": 0.07}, {\"conjecture\": \"The strongest approach is to compile algebraic specifications into dependent type theory where the domain algebra's axioms become type-level propositions, yielding executable code whose denotational correctness is witnessed by a transport along the axiom-to-proof coercion.\", \"probability\": 0.09}, {\"conjecture\": \"Commitment preservation under denotational compilation is achievable if and only if the domain algebra admits a polarization into positive and negative operations that maps onto a call-by-push-value discipline in the target, with the adjunction between positive and negative functors materializing the spec's own adjoint structure.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 623,
+      "total_tokens": 808
+    }
+  },
+  "transport_error": null
+}

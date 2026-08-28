@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-space collapse of architectural constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.264
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-334",
+    "object": "chat.completion",
+    "created": 1787936845,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change eliminates a degree of freedom from the system's architectural phase space by adding a constraint, and because refactoring only restores degrees of freedom near the change site, constraints accumulate disproportionately in regions distant from recent development. Over time, the set of viable configurations contracts toward a low-dimensional manifold where most changes require simultaneously violating multiple accumulated constraints, making modifications harder even when each individual change was independently justified. This predicts that a system's rate of decay correlates with the variance in constraint density across modules, not with total code volume or cyclomatic complexity.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 118,
+      "total_tokens": 236
+    }
+  },
+  "transport_error": null
+}

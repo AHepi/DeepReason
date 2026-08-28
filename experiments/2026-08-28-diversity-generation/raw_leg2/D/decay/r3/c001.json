@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: implicit invariant accumulation outside the typed interface boundary\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.534
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-442",
+    "object": "chat.completion",
+    "created": 1787936903,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change encodes a new assumption about the global execution environment that is never represented in the type system. Over time, the density of these untyped environmental assumptions creates a combinatorial explosion of required runtime states, making any change increasingly likely to violate an undocumented invariant.\", \"probability\": 0.09}, {\"conjecture\": \"Software systems accumulate invariants through data rather than code; persisted data silently encodes structural assumptions from historical code versions. The type system validates current code against current types, but cannot validate existing data against the historical invariants it now implicitly depends on, making changes that alter data schemas progressively riskier.\", \"probability\": 0.08}, {\"conjecture\": \"The interfaces between modules capture explicit contracts, but the temporal ordering of side effects creates an implicit, ever-growing contract space that is invisible to the type checker. As the system ages, the number of valid interleavings of side effects shrinks relative to the total possible, meaning any change risks violating a temporal invariant that was never formally specified.\", \"probability\": 0.07}, {\"conjecture\": \"Code reviews and tests validate changes against known scenarios, but each accepted change narrows the space of future valid changes by creating undocumented load-bearing dependencies on specific implementation details. The difficulty of change grows proportionally to the square of these implicit dependencies because changing any one node risks breaking its hidden coupling with any other node.\", \"probability\": 0.06}, {\"conjecture\": \"Configuration values, deployment environments, and operational practices become implicit type extensions that are never captured in the codebase. Long-running systems develop a shadow type system in their configuration and infrastructure that evolves independently, so changes that are type-safe in code increasingly conflict with these operational invariants.\", \"probability\": 0.05}, {\"conjecture\": \"Changes that are locally correct create emergent invariants by narrowing the behavioral space of the system in ways that other components silently begin to rely on. Because these emergent invariants are discovered only through violation rather than specification, the probability of a change being safe decreases exponentially with the number of prior changes, as each change adds a new constraint that could be violated.\", \"probability\": 0.04}, {\"conjecture\": \"Error handling code accumulates implicit assumptions about failure modes that are specific to the system's operational history. Over time, error handlers become load-bearing components that encode undocumented invariants about the system's failure space, so any change that alters failure behavior risks cascading through handlers that were never designed against the new failure mode.\", \"probability\": 0.03}, {\"conjecture\": \"Long-running systems develop performance invariants where component timing characteristics become implicit dependencies for other components. Since these timing contracts exist outside the type system and are never specified, changes that are functionally correct but alter performance profiles violate these invariants, and the probability of such violations grows with system age as more components develop timing sensitivities.\", \"probability\": 0.025}, {\"conjecture\": \"System logs, monitoring, and operational responses become implicit invariants that constrain future changes. Operations teams tune alerts and responses based on observed behavior, creating an undocumented feedback loop where code changes that alter monitored behavior violate operational invariants, and this constraint space grows monotonically with system age.\", \"probability\": 0.02}, {\"conjecture\": \"Each code change implicitly constrains the future evolution of the system by creating a new state space that is now considered canonical. The type system cannot distinguish between accidental and essential states, so over time the accumulated accidental states create a gravitational well that makes any deviation from the established trajectory increasingly costly to validate, even when each individual change was well-justified.\", \"probability\": 0.015}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 773,
+      "total_tokens": 960
+    }
+  },
+  "transport_error": null
+}

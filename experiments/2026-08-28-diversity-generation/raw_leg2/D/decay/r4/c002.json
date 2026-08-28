@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic accumulation of hidden coupling in APIs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.243
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-573",
+    "object": "chat.completion",
+    "created": 1787937240,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each API integration encodes probabilistic assumptions about producer behavior that are never explicitly represented in the type system. The entropy of the joint distribution over these implicit assumptions grows monotonically with the number of integrations, so the probability that a proposed change violates at least one hidden assumption approaches one exponentially, making safe modification intractable without global rediscovery of the dependency graph.\", \"probability\": 0.09}, {\"conjecture\": \"APIs accumulate undocumented behavioral contracts because consumers infer and exploit regularities (e.g., timing, ordering, error semantics) that carry mutual information with the implementation but are not captured in the interface signature. The mutual information between an API's observable behavior and its internal implementation increases with usage diversity, meaning any change that preserves the explicit contract still has a high probability of breaking hidden statistical contracts.\", \"probability\": 0.08}, {\"conjecture\": \"The Kolmogorov complexity of the effective API specification—what consumers actually depend on—grows with each integration because each consumer narrows the set of acceptable producer behaviors in a way that is locally invisible. The system becomes harder to change because the minimum description length of the constraint set that must be preserved exceeds the working memory of any review process, so changes that are locally correct violate constraints that are encoded only in the distribution of consumer code.\", \"probability\": 0.07}, {\"conjecture\": \"Every API call site is a lossy compression of the caller's mental model of the callee's state machine. Over time, the aggregate information encoded across all call sites about the callee's internal transitions exceeds the information in the callee's own documentation, so the callee cannot be changed without destroying information that exists only as a distributed property of the consumer population.\", \"probability\": 0.06}, {\"conjecture\": \"APIs become harder to change because the channel capacity of the interface (bits transmitted via types, names, docs) is fixed, but the entropy of the constraint set that consumers impose on the API grows without bound as consumers adapt to implementation quirks. Once the constraint entropy exceeds the channel capacity, the interface becomes a bottleneck: the information needed to determine whether a change is safe exists only in the consumer codebase and cannot be transmitted through the API itself.\", \"probability\": 0.05}, {\"conjecture\": \"Each locally correct API change perturbs the distribution of observable behaviors that consumers have implicitly adapted to. The accumulated Kullback-Leibler divergence between the behavioral distribution consumers were optimized against and the post-change distribution grows as a random walk, so the expected cost of any change increases with the number of prior changes because consumers have been incrementally fitting to a moving target that is never explicitly tracked.\", \"probability\": 0.04}, {\"conjecture\": \"API versioning creates an information ratchet: each version freezes a subset of implementation decisions into the interface, and these frozen decisions become inputs to downstream systems that evolve to depend on them. The total information ratcheted into the API surface grows linearly with version count, and because this information is never de-ratcheted, the cost of a change is proportional to the accumulated frozen information, not the local complexity of the change.\", \"probability\": 0.03}, {\"conjecture\": \"The information rate of API changes—bits of behavioral specification transmitted per unit time through code review—is bounded by human review capacity, but the information needed to validate a change grows with the number of hidden correlations between API consumers. Once the validation information requirement exceeds the review channel capacity, all changes are under-determined: reviewers cannot distinguish safe changes from unsafe ones, so the system enters a regime where change cost is dominated by the information deficit.\", \"probability\": 0.02}, {\"conjecture\": \"APIs accumulate latent coupling because each consumer that handles an error case or edge behavior encodes information about the producer's failure modes, and this information is stochastically replicated across consumers. The expected number of consumers encoding contradictory assumptions about the same failure mode grows with system age, so any change to the failure behavior triggers a phase transition where the probability of cascading contract violations jumps discontinuously once the replication count exceeds a threshold.\", \"probability\": 0.01}, {\"conjecture\": \"The semantic distance between an API's declared contract and its de facto contract—measured as the information-theoretic divergence between the distribution of behaviors permitted by the types and the distribution of behaviors consumers actually rely on—grows monotonically because each consumer narrows the de facto contract without updating the declared contract. Changes become harder because modifying the implementation requires satisfying the de facto contract, whose information content is distributed across the consumer graph and grows faster than any team's capacity to reconstruct it.\", \"probability\": 0.01}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 982,
+      "total_tokens": 1171
+    }
+  },
+  "transport_error": null
+}

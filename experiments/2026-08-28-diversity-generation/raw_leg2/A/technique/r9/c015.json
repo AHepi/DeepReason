@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.04
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-174",
+    "object": "chat.completion",
+    "created": 1787943377,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The most reliable technique for deriving executable code from an abstract specification is property-based test-driven synthesis, where a solver generates candidate programs and iteratively prunes them against a large space of automatically generated invariant-checking inputs. This forces the code to satisfy its commitments not by construction (which depends on a fallible mapping), but by empirical survival against adversarial cases that expose the gap between the spec's intent and the implementation's behavior. The resulting program holds its commitments because it is the fittest survivor of a selective pressure directly derived from the specification's formal properties.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 120,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

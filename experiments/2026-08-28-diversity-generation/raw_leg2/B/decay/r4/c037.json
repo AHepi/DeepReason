@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cognitive load grows with the semantic distance between domain and code\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.751
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-910",
+    "object": "chat.completion",
+    "created": 1787937140,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The accumulation of many individually-correct changes causes semantic drift between the domain model and the code's implementation, increasing the cognitive distance a developer must traverse to map real-world concepts onto the software. As this semantic distance widens, the mental effort required to locate where a domain concept lives in the codebase grows non-linearly, because the developer must reconcile not just the current domain state but the layered history of locally-sensible mappings that have since diverged from the original domain intent. This non-linear growth in cognitive load, not technical debt in the traditional sense, is what makes changes progressively harder: each change becomes harder to locate, validate, and reason about because the developer must continuously bridge a widening gap between the problem domain and its accumulated representation in the code.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 160,
+      "total_tokens": 283
+    }
+  },
+  "transport_error": null
+}

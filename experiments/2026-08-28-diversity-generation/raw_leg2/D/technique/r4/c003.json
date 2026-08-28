@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constraint-synthesized code: treat the spec as a logical formula and use SMT-based syntax-guided synthesis to find satisfying programs\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.824
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-75",
+    "object": "chat.completion",
+    "created": 1787942217,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Encoding the spec as a Constrained Horn Clause system and using a CEGAR loop with interpolants as candidate sketches yields higher commitment-satisfaction rates than monolithic SMT synthesis, because interpolants localize the blame for counterexamples into composable program fragments.\", \"probability\": 0.085}, {\"conjecture\": \"Synthesizing code via property-directed reachability (PDR) over the SMT encoding produces programs that generalize better to unseen inputs than enumeration-based syntax-guided synthesis, because PDR computes inductive invariants that certify the spec beyond the search depth.\", \"probability\": 0.072}, {\"conjecture\": \"Treating the abstract specification as a refinement type and synthesizing inhabitants via SMT solves the commitment problem more reliably than flat first-order encoding, because the type structure prunes the search space toward structurally sound programs.\", \"probability\": 0.068}, {\"conjecture\": \"Multi-query SMT synthesis where the solver caches lemmas about operator semantics across synthesis attempts reduces exponential blowup, making the approach scale to specs with nested quantifiers that currently defeat single-shot SyGuS.\", \"probability\": 0.055}, {\"conjecture\": \"Synthesizing the program and its proof of correctness simultaneously as a single SMT problem—where the proof is a first-class term—yields lower bug rates than post-hoc verification of synthesized candidates, because the solver never explores programs without a witness.\", \"probability\": 0.063}, {\"conjecture\": \"Abstracting the spec into a quantifier-free boolean skeleton and synthesizing against that skeleton first, then concretizing operators via SMT, is faster and more reliable than direct synthesis against the full quantified formula, because the skeleton fixes the control structure before committing to arithmetic.\", \"probability\": 0.049}, {\"conjecture\": \"Using decidable fragments of first-order logic—specifically EPR or Bernays-Schönfinkel-Ramsey—for the spec encoding guarantees synthesis terminates, and the resulting programs satisfy commitments exactly as often as those from undecidable encodings but with predictable runtime.\", \"probability\": 0.041}, {\"conjecture\": \"Specs written in separation logic and synthesized via bi-abduction-guided SMT produce heap-manipulating programs that satisfy memory safety commitments more reliably than classical Hoare-logic encodings, because the frame inference restricts synthesis to heap-aware shapes.\", \"probability\": 0.038}, {\"conjecture\": \"Synthesizing code through observation-based SMT—treating the spec as an oracle producing input-output examples on demand—outperforms syntax-guided synthesis with fixed grammars on specs involving complex arithmetic, because the oracle adaptively targets the hardest constraints.\", \"probability\": 0.052}, {\"conjecture\": \"An SMT-based synthesis approach that simultaneously generates the program and a set of candidate loop invariants, using a single satisfiability check over the combined proof obligation, is the only way to reliably synthesize loops that hold their commitments without a separate verification pass.\", \"probability\": 0.057}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 201,
+      "completion_tokens": 653,
+      "total_tokens": 854
+    }
+  },
+  "transport_error": null
+}

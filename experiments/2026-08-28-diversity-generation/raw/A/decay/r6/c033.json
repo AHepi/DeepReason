@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.358
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-714",
+    "object": "chat.completion",
+    "created": 1787932496,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The entropy of a software system's hidden dependency graph—the set of un-enforced, non-obvious couplings between components—increases monotonically with each locally correct change, because each modification optimizes a local fitness function while remaining oblivious to the global constraint network. As this latent coupling density grows, the probability that any given change violates an unstated invariant asymptotically approaches 1, meaning the cost of change scales with the size of the hidden graph rather than the visible code structure. This process is irreversible under standard engineering practices because the hidden dependencies are never explicitly modeled, and thus can never be systematically pruned.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 137,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

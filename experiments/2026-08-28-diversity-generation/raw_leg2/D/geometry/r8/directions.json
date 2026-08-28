@@ -1,0 +1,8 @@
+[
+  "perturb a known 13-point lattice arrangement to equalize all small triangle areas",
+  "formulate as nonlinear optimization with 26 variables and algebraic area constraints",
+  "exploit finite projective plane combinatorial structure to balance triple incidences",
+  "derive a density-based upper bound via Heilbronn-type inequalities for 13 points",
+  "use simulated annealing over point coordinates with minimum-area fitness landscape",
+  "map the problem onto a circle-packing analog and transfer tangent configurations"
+]
