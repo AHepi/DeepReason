@@ -1,0 +1,71 @@
+[
+  {
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c",
+    "invited_dispatches": [
+      {
+        "seq": 167,
+        "raw_ref": "84b3effe4b660adcf3626b7937b6b43a789adc262605be9c755d81627996d314",
+        "raw_len": 1148,
+        "cases_with_premise_fields": [
+          {
+            "premise": null,
+            "premise_evidence": null,
+            "attack": true
+          }
+        ],
+        "parsed": true
+      },
+      {
+        "seq": 204,
+        "raw_ref": "0c5f71fac9f25bc19fc9f44af2cfe443fecb276a2bc550553042a7bd81d698fb",
+        "raw_len": 1109,
+        "cases_with_premise_fields": [
+          {
+            "premise": null,
+            "premise_evidence": null,
+            "attack": true
+          }
+        ],
+        "parsed": true
+      },
+      {
+        "seq": 340,
+        "raw_ref": "153fe0da48e31bcd1c8ab83fe2cdefdd8cdba9fae32b3d35b6e7dd778d995488",
+        "raw_len": 1515,
+        "cases_with_premise_fields": [
+          {
+            "premise": null,
+            "premise_evidence": null,
+            "attack": true
+          }
+        ],
+        "parsed": true
+      }
+    ]
+  },
+  {
+    "root": "run",
+    "invited_dispatches": [
+      {
+        "seq": 141,
+        "raw_ref": "9bd4e95c29a9baa59d8a77ebdeaf1b74a60a35606ba14cda0d0865a3cbecda56",
+        "raw_len": 770,
+        "cases_with_premise_fields": [],
+        "parsed": true
+      },
+      {
+        "seq": 180,
+        "raw_ref": "93aff9ea2009f1dc057644cc7f746625cbda544b1fbdad4a03e883409fc6936b",
+        "raw_len": 917,
+        "cases_with_premise_fields": [
+          {
+            "premise": "The problem is executable in principle and nothing in it forbids performing and reporting a real run; the target's inability to execute is a limitation of the solver, not a property of the problem.",
+            "premise_evidence": null,
+            "attack": true
+          }
+        ],
+        "parsed": true
+      }
+    ]
+  }
+]

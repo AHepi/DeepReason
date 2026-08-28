@@ -1,0 +1,116 @@
+[
+  {
+    "by_role": {
+      "argumentative_critic": {
+        "citable_list": 0,
+        "dispatches": 29,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 25
+      },
+      "conjecturer": {
+        "citable_list": 7,
+        "dispatches": 23,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 0
+      }
+    },
+    "root": "failed-epoch0-run-19c2ff747b7e72c1ff1ba262aee2de360caf32696d2e1e8287247683fef74389"
+  },
+  {
+    "by_role": {
+      "argumentative_critic": {
+        "citable_list": 0,
+        "dispatches": 15,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 15
+      },
+      "conjecturer": {
+        "citable_list": 27,
+        "dispatches": 45,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 0
+      }
+    },
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3"
+  },
+  {
+    "by_role": {
+      "argumentative_critic": {
+        "citable_list": 3,
+        "dispatches": 10,
+        "evidence_ask": [
+          167,
+          204,
+          340
+        ],
+        "evidence_ask_count": 3,
+        "invited": [
+          167,
+          204,
+          340
+        ],
+        "invited_count": 3,
+        "no_prompt_blob": 0,
+        "schema_field": 10
+      },
+      "conjecturer": {
+        "citable_list": 6,
+        "dispatches": 32,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 0
+      }
+    },
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c"
+  },
+  {
+    "by_role": {
+      "argumentative_critic": {
+        "citable_list": 2,
+        "dispatches": 44,
+        "evidence_ask": [
+          141,
+          180
+        ],
+        "evidence_ask_count": 2,
+        "invited": [
+          141,
+          180
+        ],
+        "invited_count": 2,
+        "no_prompt_blob": 0,
+        "schema_field": 43
+      },
+      "conjecturer": {
+        "citable_list": 7,
+        "dispatches": 41,
+        "evidence_ask": [],
+        "evidence_ask_count": 0,
+        "invited": [],
+        "invited_count": 0,
+        "no_prompt_blob": 0,
+        "schema_field": 0
+      }
+    },
+    "root": "run"
+  }
+]
