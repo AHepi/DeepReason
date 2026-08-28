@@ -1,0 +1,58 @@
+[
+  {
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "artifacts_total": 80,
+    "by_role": {
+      "import": 39,
+      "critic": 16,
+      "controller": 12,
+      "conjecturer": 9,
+      "seed": 4
+    },
+    "accepted_by_role": {
+      "import": 39,
+      "critic": 16,
+      "controller": 12,
+      "conjecturer": 8,
+      "seed": 4
+    },
+    "accepted_conjecturer_by_problem_class": {},
+    "accepted_by_role_and_problem_class": {
+      "ProvenanceRole.IMPORT/seed": 26,
+      "ProvenanceRole.CRITIC/unaddressed": 16,
+      "ProvenanceRole.IMPORT/unaddressed": 13,
+      "ProvenanceRole.CONTROLLER/unaddressed": 12,
+      "ProvenanceRole.CONJECTURER/conn": 6,
+      "ProvenanceRole.SEED/unaddressed": 4,
+      "ProvenanceRole.CONJECTURER/seed": 2
+    }
+  },
+  {
+    "root": "run",
+    "artifacts_total": 115,
+    "by_role": {
+      "critic": 45,
+      "import": 36,
+      "conjecturer": 20,
+      "controller": 10,
+      "seed": 4
+    },
+    "accepted_by_role": {
+      "critic": 45,
+      "import": 36,
+      "conjecturer": 13,
+      "controller": 10,
+      "seed": 4
+    },
+    "accepted_conjecturer_by_problem_class": {},
+    "accepted_by_role_and_problem_class": {
+      "ProvenanceRole.CRITIC/unaddressed": 45,
+      "ProvenanceRole.IMPORT/seed": 24,
+      "ProvenanceRole.IMPORT/unaddressed": 12,
+      "ProvenanceRole.CONTROLLER/unaddressed": 10,
+      "ProvenanceRole.CONJECTURER/conn": 10,
+      "ProvenanceRole.SEED/unaddressed": 4,
+      "ProvenanceRole.CONJECTURER/seed": 3
+    }
+  }
+]

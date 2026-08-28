@@ -1,0 +1,102 @@
+[
+  {
+    "root": "failed-epoch0-run-19c2ff747b7e72c1ff1ba262aee2de360caf32696d2e1e8287247683fef74389",
+    "terminal_cycle_in_status": 2,
+    "cycle_heartbeats_emitted": 3,
+    "cycles_that_bypassed_the_cap": -1,
+    "wander_readings": 3,
+    "wander_throttles": 0,
+    "share_trajectory": [
+      1.0,
+      1.0,
+      0.5
+    ],
+    "heartbeat_problem_counts": {
+      "question-a1c1f4d2bfe907d82a6c3022ddac282c": 1,
+      "disc:question-a1c1f4d2bfe907d82a6c3022ddac282c": 1,
+      "conn:1d20a81a6703": 1
+    },
+    "seed_problem": "question-a1c1f4d2bfe907d82a6c3022ddac282c",
+    "seed_share_of_heartbeat_cycles": 0.3333,
+    "capability_event_counts": {}
+  },
+  {
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "terminal_cycle_in_status": 12,
+    "cycle_heartbeats_emitted": 12,
+    "cycles_that_bypassed_the_cap": 0,
+    "wander_readings": 12,
+    "wander_throttles": 5,
+    "share_trajectory": [
+      1.0,
+      1.0,
+      0.5,
+      0.333333,
+      0.5,
+      0.4,
+      0.5,
+      0.428571,
+      0.5,
+      0.444444,
+      0.5,
+      0.454545
+    ],
+    "heartbeat_problem_counts": {
+      "question-a1c1f4d2bfe907d82a6c3022ddac282c": 6,
+      "disc:question-a1c1f4d2bfe907d82a6c3022ddac282c": 3,
+      "conn:0c3b94e4bf35": 1,
+      "conn:18be3e4e7240": 1,
+      "conn:356f9389aeb1": 1
+    },
+    "seed_problem": "question-a1c1f4d2bfe907d82a6c3022ddac282c",
+    "seed_share_of_heartbeat_cycles": 0.5,
+    "capability_event_counts": {}
+  },
+  {
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c",
+    "terminal_cycle_in_status": 2,
+    "cycle_heartbeats_emitted": 3,
+    "cycles_that_bypassed_the_cap": -1,
+    "wander_readings": 3,
+    "wander_throttles": 0,
+    "share_trajectory": [
+      1.0,
+      1.0,
+      0.5
+    ],
+    "heartbeat_problem_counts": {
+      "question-9e8800977c3e1deaf5b034b93db38959": 1,
+      "disc:question-9e8800977c3e1deaf5b034b93db38959": 1,
+      "conn:0a89b2b812ae": 1
+    },
+    "seed_problem": "question-9e8800977c3e1deaf5b034b93db38959",
+    "seed_share_of_heartbeat_cycles": 0.3333,
+    "capability_event_counts": {}
+  },
+  {
+    "root": "run",
+    "terminal_cycle_in_status": 24,
+    "cycle_heartbeats_emitted": 24,
+    "cycles_that_bypassed_the_cap": 0,
+    "wander_readings": 4,
+    "wander_throttles": 1,
+    "share_trajectory": [
+      1.0,
+      1.0,
+      0.5,
+      0.333333
+    ],
+    "heartbeat_problem_counts": {
+      "simulation-result:sha256:b5a7f81254d93c6f98974a24cd1cf48b51d7a753d3a6f3c371c51d854277df58": 19,
+      "question-9e8800977c3e1deaf5b034b93db38959": 2,
+      "disc:question-9e8800977c3e1deaf5b034b93db38959": 1,
+      "conn:0a89b2b812ae": 1,
+      "simulation-request:sha256:295ce6b0769fa1c115a012843d1850a01d29a0166872a78cb8e2bfc6e253c3fc": 1
+    },
+    "seed_problem": "question-9e8800977c3e1deaf5b034b93db38959",
+    "seed_share_of_heartbeat_cycles": 0.0833,
+    "capability_event_counts": {
+      "sha256:604f48d51ff8b5d5d47e7c0f98a0235e1e6bf463ba2279679ea0b5ac8d53cad6": 7
+    }
+  }
+]

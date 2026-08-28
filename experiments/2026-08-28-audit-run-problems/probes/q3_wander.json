@@ -1,0 +1,1736 @@
+[
+  {
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "allocation_events": [
+      {
+        "seq": 78,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "1.000000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 250,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 251,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 252,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.166667"
+        ]
+      },
+      {
+        "seq": 253,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 265,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "1.000000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 278,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 279,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 280,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.166667"
+        ]
+      },
+      {
+        "seq": 281,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 283,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 379,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 380,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 381,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 382,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 386,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.333333",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 387,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.3333 below floor 0.5000"
+        ]
+      },
+      {
+        "seq": 415,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 416,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 417,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 418,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 420,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 447,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 448,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 449,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 450,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 453,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.400000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 454,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.4000 below floor 0.5000"
+        ]
+      },
+      {
+        "seq": 482,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 483,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 484,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 485,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 487,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 498,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 499,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 500,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 501,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 504,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.428571",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 505,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.4286 below floor 0.5000"
+        ]
+      },
+      {
+        "seq": 533,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 534,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 535,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 536,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 538,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 565,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 566,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 567,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 568,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 571,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.444444",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 572,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.4444 below floor 0.5000"
+        ]
+      },
+      {
+        "seq": 600,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 601,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 602,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 603,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 605,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 617,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 618,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 619,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 620,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 623,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.454545",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 624,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.4545 below floor 0.5000"
+        ]
+      }
+    ],
+    "problem_count": 24,
+    "problems_by_prefix": {
+      "conn": 15,
+      "research": 6,
+      "disc": 2,
+      "seed": 1
+    },
+    "problems_by_trigger": {
+      "?": 23,
+      "seed": 1
+    },
+    "problem_detail": [
+      {
+        "id": "conn:b163d8d2a8b2",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:c4822fe5063d",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:a1a7cfdf9e7b",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:e0a62e76502f",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@c78c44019025ccaa0e78f409:916b1882d933",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:ff96705a5db3",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:88110246b22e",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:b95e203bfd86",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@21e90da756727736a14086fd:916b1882d933",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@f19059917974ae85e304fbf7:67677fd035c0",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@0bc6a4c7ac47845dc9e8ec47:67677fd035c0",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@40d6a1a22ac6879320467e1f:67677fd035c0",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@44145cc8f4f19082a2039d2c:916b1882d933",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:916b1882d933",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:5b9fd66c1f57",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:18be3e4e7240",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:67677fd035c0",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:3c930c1aef77",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:356f9389aeb1",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "disc:conn:0c3b94e4bf35",
+        "prefix": "disc",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:0c3b94e4bf35",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "question-a1c1f4d2bfe907d82a6c3022ddac282c",
+        "prefix": "seed",
+        "trigger": "seed",
+        "from": null
+      },
+      {
+        "id": "disc:question-a1c1f4d2bfe907d82a6c3022ddac282c",
+        "prefix": "disc",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:a19c768ec682",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      }
+    ]
+  },
+  {
+    "root": "run",
+    "allocation_events": [
+      {
+        "seq": 73,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "1.000000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 306,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 307,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 308,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 309,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 321,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "1.000000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 334,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 335,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 336,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 337,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 339,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.500000",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 641,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 642,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 643,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 644,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 648,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seed-lineage-share.v1",
+          "0.333333",
+          "0.500000"
+        ]
+      },
+      {
+        "seq": 649,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.wander-throttled.v1",
+          "wander-cap.v1",
+          "wander-cap.v1: seed-lineage share 0.3333 below floor 0.5000"
+        ]
+      },
+      {
+        "seq": 819,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 820,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 821,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 822,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 830,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 831,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 832,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 833,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 839,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 840,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 841,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 842,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 847,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 848,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 849,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 850,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 856,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 857,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 858,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 859,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 864,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 865,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 866,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 867,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 873,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 874,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 875,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 876,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 881,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 882,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 883,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 884,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 890,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 891,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 892,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 893,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 898,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 899,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 900,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 901,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 907,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 908,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 909,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 910,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 915,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 916,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 917,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 918,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 924,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 925,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 926,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 927,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 932,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 933,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 934,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 935,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 940,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 941,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 942,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 943,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 948,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 949,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 950,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 951,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 956,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 957,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 958,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 959,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 964,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 965,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 966,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 967,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 972,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 973,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 974,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 975,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 980,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 981,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "argumentative_critic",
+          "0.000000"
+        ]
+      },
+      {
+        "seq": 982,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-truncation.v1",
+          "conjecturer",
+          "0.333333"
+        ]
+      },
+      {
+        "seq": 983,
+        "rule": "Measure",
+        "inputs": [
+          "allocation.seat-repair.v1",
+          "conjecturer",
+          "0.000000"
+        ]
+      }
+    ],
+    "problem_count": 22,
+    "problems_by_prefix": {
+      "conn": 14,
+      "research": 5,
+      "disc": 2,
+      "seed": 1
+    },
+    "problems_by_trigger": {
+      "?": 21,
+      "seed": 1
+    },
+    "problem_detail": [
+      {
+        "id": "conn:0a89b2b812ae",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:1576661cd0e9",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:c5c2d701bb69",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@c9cbbac294ce27b866812c34:d123e16d9266",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "disc:question-9e8800977c3e1deaf5b034b93db38959",
+        "prefix": "disc",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@4a43f56c849fedf831915154:d123e16d9266",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:d123e16d9266",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@6f3e62854a471ff17c35791b:cb86b12a7b37",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:76f2ae0d7233",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@283130a70a36b9005ecd6233:d123e16d9266",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:cb86b12a7b37",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:bc83fa3899f2",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "disc:conn:0a89b2b812ae",
+        "prefix": "disc",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:cccc741404e8",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:4616fb662429",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "research:reason-counter@d2771ca33d85e2a0f28a8b8b:d123e16d9266",
+        "prefix": "research",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:b3d479730311",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "question-9e8800977c3e1deaf5b034b93db38959",
+        "prefix": "seed",
+        "trigger": "seed",
+        "from": null
+      },
+      {
+        "id": "conn:3a3f6c8d87d7",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:ddf9cd54f237",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:ad5ebe75e2f8",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      },
+      {
+        "id": "conn:d5ff3c2e5a20",
+        "prefix": "conn",
+        "trigger": "?",
+        "from": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "root": "run",
+    "criticism_policy_in_manifest": false,
+    "rubric_policy": "require_cross_family",
+    "judge_routes_bound": 2,
+    "judge_models": [
+      "glm-5.3-flash",
+      "qwen3.5:397b"
+    ],
+    "engine_echo_key_count": 71,
+    "config_fields": {
+      "JUDGE_SEATS_ENABLED": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": false,
+        "config_default": false,
+        "took_default": true
+      },
+      "JUDGE_SUMMONS_PER_CYCLE": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": 0,
+        "config_default": 0,
+        "took_default": true
+      },
+      "JUDGE_SUMMONS_COOLDOWN": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": 4,
+        "config_default": 4,
+        "took_default": true
+      },
+      "ADJUDICATION_STATUS_AUTHORITY_ENABLED": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": false,
+        "config_default": false,
+        "took_default": true
+      },
+      "ENGAGED_CRITICISM_AUTHORITY": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": "observe_only",
+        "config_default": "observe_only",
+        "took_default": true
+      },
+      "LEGACY_CRITICISM_ENABLED": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": true,
+        "config_default": true,
+        "took_default": true
+      },
+      "ARGUMENTATIVE_AUTHORITY": {
+        "in_manifest_echo": true,
+        "effective_at_run_time": "observe_only",
+        "config_default": "observe_only",
+        "took_default": false
+      },
+      "ADVISORY_TRIALS_PER_CYCLE": {
+        "in_manifest_echo": true,
+        "effective_at_run_time": 0,
+        "config_default": 0,
+        "took_default": false
+      },
+      "RUBRIC_TRIALS_PER_ARTIFACT": {
+        "in_manifest_echo": true,
+        "effective_at_run_time": null,
+        "config_default": null,
+        "took_default": false
+      },
+      "SCHOOL_SEATS_ENABLED": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": false,
+        "config_default": false,
+        "took_default": true
+      },
+      "SEED_PROBLEM_BUDGET_FLOOR": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": 0.5,
+        "config_default": 0.5,
+        "took_default": true
+      },
+      "ATTENTION_ALLOCATION_POLICY": {
+        "in_manifest_echo": false,
+        "effective_at_run_time": "wander-cap.v1",
+        "config_default": "wander-cap.v1",
+        "took_default": true
+      }
+    }
+  }
+]
