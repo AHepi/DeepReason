@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: intrinsic type-carrying IRs where safety obligations are unforgeable tokens\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.669
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-433",
+    "object": "chat.completion",
+    "created": 1787935613,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"An intrinsic type-carrying IR where safety obligations are unforgeable tokens can only preserve commitments if tokens are linearly typed—preventing both duplication and discarding—such that any valid IR program is a proof of total obligation discharge.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Safety obligations in an intrinsic IR should be encoded as continuation tokens: every capability to perform an action consumes a token and yields a distinct post-condition token, making the control flow graph a directed acyclic graph of capability transfers that is structurally verifiable.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The most effective approach is to compile abstract specifications into a token-carrying IR where each obligation token encodes a dependent pair of (precondition proof, postcondition contract), and code generation is a series of refinement steps that are sound by construction because tokens cannot be forged or dropped.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Obligation tokens should be existential types packing a safety witness, such that the only way to produce a token is by discharging the obligation—turning the IR into an evidence-carrying calculus where compilation is obligation-preserving rewriting.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The key mechanism is to make safety obligations cryptographic capabilities in the IR: tokens are signed by the specification, the IR type system enforces that every side-effecting node presents an unforgeable token, and the compiler is a token-transformer that never synthesizes new tokens, only routes and decomposes them.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Safety obligations should be represented as session-typed channels in the IR, where each obligation is a protocol endpoint that must be used exactly once according to its session type, making obligation discharge equivalent to protocol completion and obligation abandonment a type error.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is an IR where obligation tokens are algebraic effects handled by a proof-carrying interpreter: the IR type system tracks token flow, and the backend compiler must supply a handler for each effect that discharges the obligation, with compilation failing if any handler's proof is invalid.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Obligation tokens should be indexed by a monotonically decreasing resource budget (e.g., fuel, allocation count), and the IR type system enforces that token transfer strictly decreases this index, guaranteeing termination of obligation discharge and preventing infinite token circulation.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The solution is a bidirectional IR where obligation tokens are generated at specification boundaries and consumed at code generation boundaries, with the invariant that the set of consumed tokens is exactly the set of generated tokens—enforced by a type system that treats tokens as affine resources with origin tracking.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Safety obligations should be encoded as fractional permissions in the IR's type system (à la separation logic), where obligation tokens are permission shares that must be reassembled to 1.0 before an action is permitted, enabling safe parallel code generation while preserving the unforgeability of total obligation discharge.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 755,
+      "total_tokens": 945
+    }
+  },
+  "transport_error": null
+}

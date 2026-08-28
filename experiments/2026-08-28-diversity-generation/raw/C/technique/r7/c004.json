@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.288
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-333",
+    "object": "chat.completion",
+    "created": 1787935219,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement through theorem proving: the specification is written as a constructive type, and the program is extracted from a proof that the type is inhabited. This guarantees the code satisfies the specification by construction, assuming the proof checker is sound and the specification captures the true intent.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Test-driven generation from formal specifications is the most effective technique. An LLM generates code candidate attempts, which are then filtered by a property-based testing harness derived from the abstract specification. This loop will produce reliable code because stochastic search combined with a rigid oracle converges on the commitment space without the overhead of full formal verification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The only viable technique is compiling the specification into a state machine and synthesizing code via reactive synthesis algorithms. Abstract commitments are inherently temporal, and explicit state exploration guarantees that all allowed execution paths satisfy the constraints, bypassing the ambiguity of natural language or under-specified types.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Model-driven engineering using algebraic specification languages is the best approach. The abstract specification defines an algebraic theory, and the executable code is generated as a concrete model of that theory. If the morphism between the specification and the implementation is formally verified, the commitments are preserved.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to use a dependent type system as the specification language, then write the code as a term inhabiting that type. The type checker acts as an automated theorem prover, ensuring that the executable code cannot violate its commitments without a type error, thereby making verification a byproduct of compilation.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Iterative refinement using LLMs with formal verification feedback is the most practical technique. The LLM proposes an implementation, a verification tool checks it against the spec, and the counterexamples are fed back to the LLM. This works because the LLM provides the semantic gap bridging while the verifier enforces strict adherence to commitments.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Specifications should be transformed into executable code via interpretation rather than compilation. If the abstract specification is written in a domain-specific language with a formally verified interpreter, the specification itself becomes the executable code, trivially holding its commitments because there is no translation step to introduce errors.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The optimal approach is to derive code via constraint programming. The abstract specification is translated into a set of constraints over program variables and execution traces, and an SMT solver synthesizes a program that satisfies these constraints. This guarantees commitments are met because the solver explores the complete space of valid programs.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Abstract specifications should be turned into code via genetic programming with a fitness function derived from the specification's formal semantics. The evolutionary pressure enforces the commitments by heavily penalizing any deviation from the spec in the fitness evaluation. This scales better than symbolic methods for complex, non-linear requirements.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is to bypass synthesis entirely and use runtime monitoring. The abstract specification is compiled into a runtime monitor that observes the execution of hand-written or LLM-generated code. If a commitment is violated, the system halts or rolls back. This is optimal because static analysis of complex systems is undecidable, making runtime enforcement the only complete solution.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 809,
+      "total_tokens": 980
+    }
+  },
+  "transport_error": null
+}

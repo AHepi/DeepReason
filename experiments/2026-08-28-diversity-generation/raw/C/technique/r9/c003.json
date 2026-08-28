@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.075
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-457",
+    "object": "chat.completion",
+    "created": 1787935590,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus with mechanized proof: each refinement step from abstract specification to code is a theorem, and the resulting code holds its commitments because the proof is machine-checked. Any approach that separates verification from code generation will exhibit commitment violations at a rate proportional to the size of the separation.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is to make the specification itself executable by embedding it as a property-based test suite with shrinking, then generate code via genetic programming that must pass the suite on a coverage-guided corpus. Commitments hold because the specification *is* the test oracle, and the genetic search cannot optimize against what it cannot observe.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Abstract specifications should be compiled to deterministic state machines via synchronous dataflow languages (e.g., Lustre/SCADE), where the specification language IS the implementation language. The result holds commitments because there is no translation step — the abstract model is rendered directly into scheduled C code with the same semantics.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is to use a large language model to generate candidate implementations, then automatically extract refinement obligations as SMT queries by symbolic execution of the specification against the generated code. The LLM proposes; the SMT solver disposes. This works because the hard part is search (which LLMs do well) and the verification is decidable for the fragment most specifications inhabit.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is constructive type theory in a proof assistant (e.g., Agda or Lean), where the specification is a type and the code is a proof inhabitant. The result holds commitments because type checking *is* verification, and extraction produces code by erasure — there is nothing left to go wrong because the program was always there inside the proof.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is to use a denotational-design DSL (à la Conal Elliott's denotational design) where the specification defines a semantic model and the compiler is a correctness-preserving transform chain from semantic model to low-level IR. Commitments hold because each compiler pass is a semantic equivalence proof, and the DSL constrains the user to specifications that admit such proofs.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is to avoid the translation problem entirely by using abstract interpretation to compute the most precise over-approximation of the specification that is expressible in the target language, then synthesize code that realizes that approximation. Commitments hold because the approximation is provably conservative and the gap between specification and implementation is explicitly quantified rather than hidden.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The best technique is to write the specification in a temporal logic (e.g., TLA+), then use bounded model checking to validate it on all traces up to bound N, then synthesize a controller via reactive synthesis from the same logic formula. The result holds commitments because the controller is winning strategy for the game defined by the specification — if synthesis succeeds, every behavior satisfies the formula by construction.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the specification as a grammar of valid program traces and use parser-based synthesis: the implementation is a generator that produces only traces accepted by the grammar. Commitments hold because the grammar is a recognizer and the generator is structurally constrained to its language — this is essentially why parsers are easier to get right than general programs.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The best technique is to use a total functional language with dependent types where the specification is embedded as a refinement type and code is written to inhabit it, compiled via a type-preserving compiler. Commitments hold because type preservation through compilation means the target code carries the same proofs as the source — the specification survives the journey to executable form.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 907,
+      "total_tokens": 1078
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.699
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-699",
+    "object": "chat.completion",
+    "created": 1787935412,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement calculus with continuous machine-checked proofs: every refinement step from abstract specification to executable code is a formal proof step, making the final code a theorem whose proof guarantees commitment-holding by construction.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Synthesize code via LLM but verify via model checking: the specification is directly translated into a temporal-logic property checked against the generated code's state space, with iterative resynthesis until the model checker passes.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The optimal approach is dependent-type-theoretic extraction in the style of Coq/Agda: the specification is a type, the program is extracted from a proof inhabitant, and commitments are enforced by the type checker at compile time with zero runtime overhead.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is SMT-guided program synthesis from contract specifications: an SMT solver searches the space of programs satisfying pre/postconditions directly, emitting code that is correct-by-construction because it was found as a solution to the constraint system.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The dominant technique is property-based test generation with shrinking combined with runtime contract enforcement: the specification becomes a generator of adversarial test cases, and the code is considered valid only after surviving millions of generated tests plus runtime assertion checking in production.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is abstract interpretation–driven static analysis applied to hand-written code derived from the spec: the abstract specification defines the lattice and transfer functions, and the analyzer certifies that the concrete code's abstract semantics entail the specification.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is writing the specification as an executable model in a domain-specific language, then using counterexample-guided inductive synthesis (CEGIS) to derive an optimized implementation that is behaviorally equivalent across all model-traceable inputs.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The optimal technique is typestate-oriented programming where the abstract specification is encoded as a state machine in the type system, making illegal state transitions unrepresentable and guaranteeing protocol commitments statically.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is proof-carrying code: the specification is paired with a formal proof that the generated code satisfies it, and the runtime system refuses to execute any code whose proof does not check against the spec before loading.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is to compile the abstract specification directly into a constraint logic program, treating execution as proof search, so that the code holds its commitments because every successful execution is ipso facto a proof of the specification.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 666,
+      "total_tokens": 837
+    }
+  },
+  "transport_error": null
+}

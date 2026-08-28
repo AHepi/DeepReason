@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: conformal-predictive constraint synthesis with measured coverage\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.067
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-103",
+    "object": "chat.completion",
+    "created": 1787935320,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Given an abstract specification as a set of formal constraints, synthesizing executable code through conformal-predictive sampling yields a system whose runtime constraint-satisfaction rate matches a pre-calibrated coverage threshold, provided the calibration data is drawn from the same distribution as the deployment queries. Specifically, treating the synthesizer as a nonconformity function allows us to guarantee that with probability 1−α, the generated program will satisfy the specification on at least 1−α of unseen inputs drawn from that distribution. This reduces the verification problem from exhaustive proof to a statistical guarantee over the synthesis search space, making it tractable for complex, real-world specifications where traditional deductive verification fails.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 144,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

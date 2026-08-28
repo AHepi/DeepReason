@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.981
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-594",
+    "object": "chat.completion",
+    "created": 1787935253,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Specifications can be compiled into executable code that provably holds its commitments by translating them into dependent type theory, deriving a skeleton where every program invariant is encoded as a type-level proof obligation, and requiring the implementation to inhabit that type — making any violation a compile-time error rather than a runtime discovery. The key mechanism is that the type system itself becomes the enforcement layer: the abstract specification is not a comment or a separate proof artifact but the very type that the code must inhabit, eliminating the gap between what is specified and what is checked.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 119,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

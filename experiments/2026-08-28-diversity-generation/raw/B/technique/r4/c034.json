@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: property-based test generation as an evolutionary search for implementations satisfying specs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.993
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-832",
+    "object": "chat.completion",
+    "created": 1787934500,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"An evolutionary search that mutates AST nodes weighted by the counterexamples produced by property-based testing will converge on spec-conforming implementations faster than random mutation, because failing properties localize the exact sub-expressions whose semantics must change. The fitness function should reward partial satisfaction of properties while heavily penalizing divergent execution, creating a gradient that guides search toward full conformance. This approach treats the property-based test runner as the oracle in a genetic programming loop, making the spec itself the sole driver of both selection and guidance.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 114,
+      "total_tokens": 234
+    }
+  },
+  "transport_error": null
+}

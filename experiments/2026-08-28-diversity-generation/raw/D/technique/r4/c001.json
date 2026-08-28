@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Neural code generation with post-condition verification by randomized property testing\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.928
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-633",
+    "object": "chat.completion",
+    "created": 1787934572,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Neural code generation models should be prompted to output both the implementation and a randomized property test suite simultaneously; executing these tests and feeding the pass/fail signal back into the model's context for a single revision cycle yields higher post-condition adherence than generating code alone.\", \"probability\": 0.09}, {\"conjecture\": \"Property-based testing frameworks (e.g., Hypothesis, QuickCheck) can serve as an automated reward signal for reinforcement learning, fine-tuning LLMs to generate code that survives randomized input fuzzing, resulting in higher semantic correctness than supervised fine-tuning on human-written code alone.\", \"probability\": 0.085}, {\"conjecture\": \"Structuring the specification as a formal post-condition allows the generator to use an LLM to synthesize a custom property test oracle, which when executed via random sampling acts as a necessary and sufficient filter for functional correctness in 90% of algorithmic tasks.\", \"probability\": 0.08}, {\"conjecture\": \"Decoding via Best-of-N sampling with a randomized property test filter allows even small open-source code models (e.g., 7B parameters) to match the post-condition adherence of models 10x their size, provided N is scaled to 50 or greater.\", \"probability\": 0.075}, {\"conjecture\": \"An LLM prompted to generate a property test suite from an abstract spec, and subsequently prompted to write code that strictly passes that specific suite, will produce implementations with a 30% higher pass rate on hidden, held-out property tests compared to zero-shot generation.\", \"probability\": 0.07}, {\"conjecture\": \"When using randomized property testing to verify LLM-generated code, mutating the abstract specification via LLM-driven paraphrasing before generating the property tests creates an ensemble of orthogonal test suites that catches edge cases missed by tests derived from the original spec alone.\", \"probability\": 0.065}, {\"conjecture\": \"Instructing the LLM to generate the randomized property test oracle first, and then using chain-of-thought to explicitly trace how the generated code will satisfy the invariants in that oracle, reduces the number of false-positive passes (where the test is flawed) by 40%.\", \"probability\": 0.06}, {\"conjecture\": \"Injecting counterexamples found by randomized property testing directly into the decoder's KV cache as negative prompts during generation actively steers the model away from known logical failure modes in real-time, improving post-condition adherence without requiring full weight updates.\", \"probability\": 0.055}, {\"conjecture\": \"Specifying post-conditions as dependent types and using an LLM to generate candidate implementations alongside randomized inputs that check the type constraints at runtime provides a strictly higher guarantee of semantic correctness than natural language post-conditions with standard property testing.\", \"probability\": 0.05}, {\"conjecture\": \"The optimal strategy is to iteratively expand the input domain of the randomized property tests based on coverage feedback from the generated code, forcing the LLM to fix code precisely where execution paths are under-tested, resulting in a logarithmic reduction in specification violations relative to iteration count.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 667,
+      "total_tokens": 853
+    }
+  },
+  "transport_error": null
+}

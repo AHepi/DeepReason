@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constraint-based program sketching with SMT-encoded specification conformance\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.639
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-875",
+    "object": "chat.completion",
+    "created": 1787934719,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Iterative constraint-guided sketch refinement outperforms monolithic SMT solving for specification-to-code generation: encoding the abstract specification as a global SMT conformance predicate, then synthesizing code through bounded-depth sketch enumeration with localized solver calls per program hole, yields executable programs that provably satisfy the specification while keeping synthesis tractable. The key claim is that decomposing the global conformance constraint into per-hole obligations—guided by the sketch's control-flow skeleton—reduces solver complexity from exponential in total holes to polynomial in the product of per-hole domain sizes, without losing global conformance guarantees.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 128,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

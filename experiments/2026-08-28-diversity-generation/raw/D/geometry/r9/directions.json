@@ -1,0 +1,8 @@
+[
+  "algebraic lattice scaled from known Heilbronn-optimal p=13 residue construction",
+  "perturbative local search from hexagonal jittered grid via simulated annealing on the min-area objective",
+  "projective lift to unit torus using modular arithmetic then cut to fundamental domain",
+  "exhaustive flag-algebra or interval-arithmetic branch-and-bound proving the global optimum and extracting its witness",
+  "conformal-map deformation of a known extremal spherical point packing projected back to the square",
+  "parametric family optimized via nonlinear programming with complementarity constraints encoding the 286 active-area lower bound"
+]

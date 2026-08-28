@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.131
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-12",
+    "object": "chat.completion",
+    "created": 1787934438,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The dominant strategy for generating commitment-preserving code from specifications is to synthesize code as a byproduct of automated theorem proving: treat the specification as a theorem and extract a witness-producing program from the proof's computational content. This binds every emitted instruction to a logical invariant, making a violation of the specification a direct type-theoretic contradiction. Techniques that attempt to generate code first and verify or test after are fundamentally inferior because they decouple semantics from synthesis, leaving a gap where commitments can be silently dropped.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 113,
+      "total_tokens": 211
+    }
+  },
+  "transport_error": null
+}

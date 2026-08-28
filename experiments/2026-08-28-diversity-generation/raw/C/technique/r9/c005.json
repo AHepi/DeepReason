@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.793
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-166",
+    "object": "chat.completion",
+    "created": 1787935588,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is to compile the abstract specification directly into an executable target via a machine-verifiable refinement calculus, where each compilation step preserves semantic equivalence by construction. This eliminates the gap between specification and code by making the specification itself executable through verified refinement steps.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the abstract specification as a property-based test oracle and use evolutionary program synthesis to generate candidate programs that pass the specification's test suite. The resulting code holds its commitments because survival is defined entirely by conformance to the abstract specification's observable properties.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"The most reliable technique is to use large language models to generate code from the specification, followed by automated formal verification of the generated code against the specification in a proof assistant. This leverages LLM pattern-matching for initial generation and formal methods for commitment-holding, creating a generate-and-verify loop.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The best technique is to never leave the abstract domain: write the specification in a total functional language with dependent types (e.g., Agda, Idris) where the specification is literally a type and the executable code is a inhabitant of that type. The code holds its commitments because it type-checks against the specification.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The optimal approach is to synthesize code via type-directed program synthesis from refinement types that encode the abstract specification as constraints. The synthesizer explores the program space bounded by the refinement types, producing code that provably satisfies the specification by construction.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The best technique is to make the abstract specification executable by interpreting it directly at runtime via an abstract interpretation framework, avoiding code generation entirely. The specification IS the program, and commitments are held because there is no translation step to introduce divergence.\",\n      \"probability\": 0.043\n    },\n    {\n      \"conjecture\": \"The most effective technique is to use an interactive theorem prover (e.g., Coq, Lean) to extract executable code from a constructive proof that the specification is realizable. The extracted code holds its commitments because it is derived from a proof of correctness, leveraging the Curry-Howard correspondence.\",\n      \"probability\": 0.076\n    },\n    {\n      \"conjecture\": \"The best technique is to use a model-driven engineering pipeline where the abstract specification is a formal model that is iteratively transformed through verified model-to-model transformations until it reaches a concrete executable model, with each transformation provably preserving the specification's invariants.\",\n      \"probability\": 0.052\n    },\n    {\n      \"conjecture\": \"The optimal technique is to use concolic execution to guide the generation of executable code from an abstract specification: the specification defines symbolic constraints, and concolic search produces concrete program paths that satisfy those constraints, yielding code that holds its commitments by construction.\",\n      \"probability\": 0.038\n    },\n    {\n      \"conjecture\": \"The best technique is to encode the abstract specification as a set of contracts (preconditions, postconditions, invariants) and use contract-driven program synthesis to generate code where every function body is derived to satisfy its contracts. Runtime contract checking serves as a fallback verification layer, but the synthesis aims for provable satisfaction.\",\n      \"probability\": 0.057\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 774,
+      "total_tokens": 945
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.859
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-906",
+    "object": "chat.completion",
+    "created": 1787935487,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code is refinement-driven compilation, where each successive refinement step is proven to be a behavioral concretization of the prior abstraction, and the final artifact is extracted directly from the machine-verified proof rather than written by hand. This approach holds its commitments because any deviation between the specification and the executable would manifest as a broken proof obligation at the specific refinement step where the deviation was introduced, making silent regressions impossible. The technique fails if refinement proofs can be bypassed or if the extraction step itself is not formally verified against the target language's semantics.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 132,
+      "total_tokens": 230
+    }
+  },
+  "transport_error": null
+}

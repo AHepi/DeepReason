@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: proof-carrying code via dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.372
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-639",
+    "object": "chat.completion",
+    "created": 1787934894,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Compiling abstract specifications to executable code via proof-carrying code through dependent type theory is best achieved by compilation to a dependently typed core calculus (like Cedille or a variant of the Calculus of Constructions) where erasure is type-preserving by construction, making the extracted executable's adherence to its specification a corollary of type soundness rather than a separately verified property. In this framework, the 'best technique' is not a post-hoc verification tool but a compiler that guarantees that if extraction succeeds, the resulting code is a computational realization of the specification's commitments, placing the entire burden of correctness on the type checker's soundness proof.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 141,
+      "total_tokens": 258
+    }
+  },
+  "transport_error": null
+}

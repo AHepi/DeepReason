@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.187
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-104",
+    "object": "chat.completion",
+    "created": 1787934394,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Specifications can be directly compiled into executable code with provable adherence by treating the spec as an abstract state machine and generating code via constructive type theory, where each transition rule becomes a verified function and every commit is a proof obligation discharged at compile time. The resulting executable is then guaranteed to hold its commitments because the code is literally the computational content extracted from the proof that the state machine refines its specification. Any spec without sufficient constructive content to yield such an extraction is inherently unexecutable and must be rejected before compilation.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 114,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

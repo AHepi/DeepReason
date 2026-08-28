@@ -1,0 +1,8 @@
+[
+  "synchronous refinement calculus with weakest-precondition step-indexing",
+  "synthesis by type-theoretic proof-search over dependent linear logical specifications",
+  "automated test-case generation from algebraic property specifications with runtime assertion enforcement",
+  "executable denotational semantics interpreted directly as a definitional interpreter",
+  "neuro-symbolic translation with formal verification of the generated artifact's proof-carrying code",
+  "constructive logic program extraction from intuitionistic proofs of behavioral theorems"
+]

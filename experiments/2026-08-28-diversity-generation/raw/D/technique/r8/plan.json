@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.862
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-15",
+    "object": "chat.completion",
+    "created": 1787935428,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"extraction via refinement calculus with mechanized proof-carrying code\", \"neural program synthesis conditioned by runtime property-based test oracles\", \"dependent type-theoretic elaboration where specs are intrinsic types\", \"denotational-interpreter scaffolding compiled down via partial evaluation\", \"large-language-model translation constrained by formal verification backends\", \"synthesis from input-output examples using SMT-backed deductive oracle solving\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 145,
+      "completion_tokens": 90,
+      "total_tokens": 235
+    }
+  },
+  "transport_error": null
+}

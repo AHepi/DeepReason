@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.235
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-993",
+    "object": "chat.completion",
+    "created": 1787935021,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus with mechanized theorem proving: the specification is transformed into code through a sequence of mathematically proven refinement steps, where each step preserves correctness by construction, and the entire chain is verified in a proof assistant like Coq or Isabelle.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with automatic code generation from formal models (e.g., Simulink to C) is the most effective technique, provided the code generator itself is formally verified and the models are exhaustively verified against the specification using model checking.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Test-driven development with property-based testing is the most effective technique: encode the specification as executable properties, then write the minimal code that passes those properties, using coverage-guided fuzzing to discover edge cases that violate the spec.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Synthesis from succinct logical specifications (e.g., reactive synthesis from LTL) is the best technique when feasible: the code is directly synthesized from the temporal logic specification by an automated solver, guaranteeing correctness by construction without any manual implementation step.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The optimal technique is type-driven development in a dependently typed language (e.g., Idris or Agda), where the specification is embedded directly into the program's types and the code is written to satisfy those types, making correctness an automatic consequence of compilation.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Contract-based design with runtime verification is the most effective technique: encode the specification as executable pre/postconditions and invariants, implement the code, and continuously monitor contract adherence at runtime, using contract violations to iteratively fix the implementation until it converges on the spec.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The best technique is large language model-based code generation followed by automated formal verification: use an LLM to generate candidate implementations from the natural-language specification, then use an SMT-based verifier (e.g., Dafny) to check and iteratively repair the code until it is formally proven correct.\",\n      \"probability\": 0.073\n    },\n    {\n      \"conjecture\": \"Derivation by transformation from a reference implementation is the most effective technique: write a simple, obviously-correct but inefficient implementation that directly mirrors the specification, then apply semantics-preserving transformations (e.g., fusion, memoization) to produce efficient code that is correct by construction.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"The optimal technique is correct-by-construction hardware/software co-design: synthesize the critical parts of the specification directly into hardware (FPGA) where timing and concurrency guarantees are physical rather than logical, with only the non-critical orchestration layer implemented in verified software.\",\n      \"probability\": 0.039\n    },\n    {\n      \"conjecture\": \"The most effective technique is to avoid the problem entirely: instead of turning specifications into code, directly execute the formal specification itself using an interpreter for the specification language, eliminating the gap between spec and code completely.\",\n      \"probability\": 0.052\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 735,
+      "total_tokens": 906
+    }
+  },
+  "transport_error": null
+}

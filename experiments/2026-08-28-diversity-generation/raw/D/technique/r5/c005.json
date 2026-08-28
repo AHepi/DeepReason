@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Lifting declarative constraint specifications into deterministic executables via conflict-driven clause learning\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.086
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-353",
+    "object": "chat.completion",
+    "created": 1787934766,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"CDCL-driven synthesis outperforms type-directed synthesis for generating executable implementations from declarative specifications because conflict analysis prunes the search space exponentially faster than type unification when the specification contains contradictory or nearly-contradictory clauses.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The key bottleneck in lifting declarative constraints to deterministic executables is not the solver but the translation layer: existing CDCL solvers are sufficient if the specification-to-CNF compiler preserves the semantic structure needed for learned clauses to generalize across the program search space.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Conflict-driven clause learning can be directly adapted to synthesize deterministic programs by treating each program trace as a partial assignment, each specification violation as a conflict, and each learned clause as a structural invariant that eliminates entire families of candidate programs.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"Specifications lifted via CDCL produce executables that hold their commitments more reliably than those lifted via SMT-based synthesis because CDCL's learned clauses become runtime assertions that remain valid under composition, whereas SMT proofs do not decompose into composable runtime checks.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"The optimal technique is to run CDCL over a constrained Horn clause encoding of the specification, using each conflict to derive a program invariant that doubles as a runtime guard, yielding an executable that is correct-by-construction and self-monitoring.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Abstract specifications can be lifted to deterministic executables by iteratively running CDCL on candidate programs, where each conflict teaches the synthesizer a negative refinement; convergence is guaranteed if the specification is Horn-definable and the target language is structurally inductive.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"The best technique is not pure CDCL but a hybrid where CDCL handles the combinatorial structure of the specification while genetic programming explores the program syntax tree, because learned clauses from CDCL provide the fitness gradient that genetic search lacks.\",\n      \"probability\": 0.043\n    },\n    {\n      \"conjecture\": \"CDCL-based lifting fails to scale beyond specifications with fewer than 50 atomic constraints because the learned clause database grows superlinearly with specification depth, making the approach impractical without aggressive clause deletion strategies borrowed from modern SAT solvers.\",\n      \"probability\": 0.052\n    },\n    {\n      \"conjecture\": \"The most effective approach is to compile the declarative specification into a Boolean satisfiability problem over program sketches, use CDCL to find a satisfying model, then extract the executable directly from the satisfying assignment without an intermediate verification step, because the CDCL proof already constitutes the correctness argument.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Conflict-driven clause learning is necessary but not sufficient for reliable lifting; the specification must first be normalized into a canonical form where each constraint is both Horn and monotonic, otherwise learned clauses capture spurious conflicts that do not correspond to genuine program impossibilities.\",\n      \"probability\": 0.057\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 714,
+      "total_tokens": 904
+    }
+  },
+  "transport_error": null
+}

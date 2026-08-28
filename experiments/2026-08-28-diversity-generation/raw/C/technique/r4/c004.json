@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.423
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-995",
+    "object": "chat.completion",
+    "created": 1787934550,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement through proof-carrying code generation: the specification is refined stepwise into code, and each refinement step emits a machine-checkable proof of behavioral conformance, so the executable result provably holds its commitments.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The best technique is generative AI with adversarial specification testing: the LLM generates candidate code, and an automated oracle generates tests from the spec to filter or refine the code until it passes, yielding high-probability conformance.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The best technique is dependently-typed programming where the specification is encoded as a type and the act of writing executable code is simultaneously the act of proving the code satisfies that type.\",\n      \"probability\": 0.080\n    },\n    {\n      \"conjecture\": \"The best technique is correct-by-construction synthesis from formal specifications using SMT-backed deductive synthesis, which directly produces programs satisfying the spec by solving synthesis constraints.\",\n      \"probability\": 0.070\n    },\n    {\n      \"conjecture\": \"The best technique is to compile a formal specification in a language like TLA+ or Alloy into a constrained execution sandbox that enforces the spec's invariants at runtime, guaranteeing commitments are held by construction.\",\n      \"probability\": 0.060\n    },\n    {\n      \"conjecture\": \"The best technique is property-based test-driven refinement: an abstract spec is translated into a property-based test suite, and code is iteratively refined until it passes, yielding empirically-validated conformance.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is to use a denotational semantics approach where the specification is given a mathematical meaning and the executable code is generated as a direct implementation of that denotation, ensuring fidelity.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The best technique is refinement calculus with automated invariant discovery: the spec is refined into a program using weakest-precondition reasoning, with an AI assistant proposing loop invariants that are then verified.\",\n      \"probability\": 0.070\n    },\n    {\n      \"conjecture\": \"The best technique is to use an executable specification language like Agda or Idris where the specification is itself runnable code, eliminating the gap between abstract spec and executable.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is a hybrid approach: LLMs propose refinements from spec to code, and a formal verifier checks each step, combining the flexibility of AI with the guarantees of formal methods.\",\n      \"probability\": 0.075\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 616,
+      "total_tokens": 787
+    }
+  },
+  "transport_error": null
+}

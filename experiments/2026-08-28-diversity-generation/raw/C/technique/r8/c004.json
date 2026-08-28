@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.453
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-756",
+    "object": "chat.completion",
+    "created": 1787935425,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement calculus: incrementally transform an abstract specification into code through a sequence of correctness-preserving refinement steps, each verifiable against the prior abstraction. This guarantees the executable result holds its commitments because each step is a formal refinement, making the final code a provable implementation of the original specification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is to extract executable code directly from constructive type theory proofs (e.g., via Coq or Agda), where the abstract specification is stated as a theorem and the program is the proof's witness. The result holds its commitments because the type checker mechanically verifies that the extracted code satisfies the specification.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is design-by-contract with runtime assertion checking: embed the abstract specification's preconditions, postconditions, and invariants directly into the code as executable assertions that are checked at every call. This holds commitments by making violations immediately observable rather than deferred, creating tight feedback loops that catch spec-code divergence during development and testing.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is generative AI with iterative verification loops: use an LLM to generate code from the spec, then automatically verify it against formal property tests or a model checker, feeding failures back for regeneration until all checks pass. This works because the verification step compensates for the LLM's unreliability, and the iterative loop converges on code that satisfies the spec's commitments.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is test-driven development from examples derived from the specification: enumerate concrete instances implied by the abstract spec, write failing tests for each, then implement minimal code to pass them. The result holds its commitments because the tests are traceable to spec requirements and serve as continuously-checked regression guards.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is model-driven engineering with verified code generation: express the specification in a formal modeling language (e.g., Event-B, Alloy, or TLA+), verify desired properties at the model level, then generate code from the verified model using a certified code generator. The commitments hold because the generator is trusted infrastructure that has itself been verified to produce behavior-equivalent code.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is property-based testing with shrinking as the primary bridge from abstract spec to code: express the spec's commitments as executable properties, then use automated input generation and failure minimization to discover and fix discrepancies between spec and implementation. This holds commitments because property-based testing exposes edge cases that human-authored tests miss, driving the implementation toward genuine conformance.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is to write the specification in an executable specification language (e.g., Prolog, Dafny, or Frama-C's ANSI/ACSL) where the specification language itself has a defined execution semantics, then either interpret or compile the spec directly. The result holds its commitments because the spec IS the code—there is no gap to bridge.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is type-driven development with refinement types (e.g., in Liquid Haskell or F*): encode the abstract specification's constraints as refinement types that statically constrain values, then write code that type-checks against these refined types. The result holds its commitments because the type system proves at compile time that the code satisfies the encoded constraints.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is symbolic execution with constraint solving (e.g., using KLEE or CBMC) to verify that the implementation satisfies the specification across all feasible execution paths, not just sampled tests. The result holds its commitments because a symbolic execution tool that explores all paths and finds no spec violation provides a proof of conformance for the verified input domain.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 900,
+      "total_tokens": 1071
+    }
+  },
+  "transport_error": null
+}

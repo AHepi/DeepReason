@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: type-theoretic correct-by-construction with dependent intersection refinements\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.584
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-790",
+    "object": "chat.completion",
+    "created": 1787935567,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"A dependent intersection type of the form ∃(p : Spec), (p ⊨ φ) × Realizer(p) serves as the correct-by-construction code extraction target, where the first component is an abstract proof object satisfying the specification φ and the second is its computational realizer. Because the intersection forces both components to share the same witness p, any program extracted from a term inhabiting this type necessarily realizes φ by the identity of p. The resulting code holds its commitments not via post-hoc verification but because the extracted lambda-term is structurally identical to the proof's computational content, making violation of φ a type error at extraction time.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 142,
+      "total_tokens": 263
+    }
+  },
+  "transport_error": null
+}

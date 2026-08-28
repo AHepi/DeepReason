@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Refinement from constructive type theory via tactic-driven extraction\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.501
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-521",
+    "object": "chat.completion",
+    "created": 1787934583,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The most effective extraction technique is to maintain a single syntactic artifact serving as both the proof term and the extracted program, where tactics construct proof terms that are definitionally equal to efficient programs, eliminating the extraction step entirely.\", \"probability\": 0.085}, {\"conjecture\": \"Tactic-driven extraction from CTT is most reliable when every tactic corresponds to a refinement step in a stepwise refinement calculus, where each step produces both a proof of semantic preservation and a code fragment, making the two inseparable.\", \"probability\": 0.078}, {\"conjecture\": \"The best technique is to use 'tactic-generated refinement scripts' where each tactic operates on a goal of the form `{P} prog {Q}`, and the extracted code is literally the concatenation of the `prog` terms produced by each tactic application.\", \"probability\": 0.072}, {\"conjecture\": \"Correct extraction requires that the abstract specification be expressed as a quotient-inductive type, and that tactics construct setoids-aware proof terms whose computational content respects the quotient by construction, avoiding the need for separate quotient-elimination erasure.\", \"probability\": 0.069}, {\"conjecture\": \"The optimal approach is 'semi-decidable refinement': tactics are restricted to those that produce proof terms in a decidable fragment of CTT (e.g., only induction on strictly positive types with guarded recursion), guaranteeing that extracted code is total and terminating without separate verification.\", \"probability\": 0.064}, {\"conjecture\": \"The best technique is to treat the abstract specification as a 'partial correctness logic' over a monad, where tactics build proofs in a monad-indexed type theory and extraction yields programs in the corresponding computational monad, with effect-safety guaranteed by the type-theoretic structure.\", \"probability\": 0.061}, {\"conjecture\": \"The key is to use 'proof-relevant refinement': instead of proving `spec ⟹ implementation`, tactics construct inhabitants of a dependent sum type `Σ (code : Program). Correct code spec`, and the extracted program is the first projection—making the commitment-holding property a type-theoretic invariant rather than a theorem.\", \"probability\": 0.058}, {\"conjecture\": \"The most robust extraction is achieved when the specification is written in a 'refinement-type' fragment of CTT where logical propositions are embedded as types, and tactics are designed to produce only 'realizer-positive' proof terms—terms whose computational content is already in normal form, requiring no erasure transformation.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is 'incremental commitment refinement': the abstract specification is a type, tactics decompose it into subtypes via partial inverses, and extraction is the composition of the computational content of these inverses—each tactic step being a verified refinement in the sense of Back-Morgan but internalized in CTT.\", \"probability\": 0.051}, {\"conjecture\": \"The correct approach is to restrict tactics to those that construct 'canonicity-preserving' proof terms—terms where the reduction of the proof term to normal form corresponds exactly to the execution of the extracted program—so that specification-to-code is literally normalization-by-evaluation with side conditions.\", \"probability\": 0.047}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 701,
+      "total_tokens": 886
+    }
+  },
+  "transport_error": null
+}

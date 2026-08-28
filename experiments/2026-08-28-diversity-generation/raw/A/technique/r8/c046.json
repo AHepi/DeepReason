@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.484
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-356",
+    "object": "chat.completion",
+    "created": 1787935290,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The optimal technique is bidirectional refinement, where the abstract specification and the executable code are co-evolved through a continuous equivalence-checking loop that treats the specification itself as a runtime-refutable artifact. Rather than compiling specs down to code or extracting code from proofs, both layers are maintained as first-class objects and checked against each other at every change, forcing violations of abstract commitments to surface as concrete test failures before integration. This approach outperforms both top-down synthesis and post-hoc verification because it makes specification drift structurally impossible rather than merely detectable.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 123,
+      "total_tokens": 221
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: executable denotational semantics interpreted directly as a definitional interpreter\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.485
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-351",
+    "object": "chat.completion",
+    "created": 1787935245,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"A definitional interpreter written in a total functional language with guarded recursion is the only form of executable denotational semantics that holds its commitments without separate soundness proofs, because the definitional translation IS the proof of denotational adequacy.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Abstract specifications are best turned into executable code by defining the denotational semantics as a fold over the syntax, then running that fold directly — any compilation step or optimization introduces a gap between specification and behavior that must be re-verified.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The most reliable technique is to embed the definitional interpreter in a dependently typed host language where the denotational semantics is literally the type-level definition, making the interpreter's correctness a type-checking obligation rather than an external theorem.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Direct execution of denotational semantics via a definitional interpreter yields code that holds its commitments if and only if the semantic metalanguage is restricted to monotone, continuous functions over domains — any escape to general recursion breaks the adequacy guarantee.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"An executable denotational semantics interpreted as a definitional interpreter is superior to a small-step operational semantics for commitment-holding because denotational semantics composes compositionally: the meaning of a whole is determined by the meaning of its parts, eliminating whole-classes of context-sensitivity bugs.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The single best technique is to normalize-by-evaluating the abstract specification using a definitional interpreter over a presheaf model, yielding executable code whose semantics is justified by the glueing/crucial correspondence between syntax and denotation.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"If a definitional interpreter is used, the abstract specification must be expressed in a monadic denotational semantics to thread effects, and the resulting executable holds its commitments precisely when the monad is the free monad over the specification's primitive operations.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Definitional interpreters that directly execute denotational semantics hold their commitments only when the semantic equations are definitional (equality, not arbitrary rewrite), and the host language's evaluation strategy is irrelevant as long as it is confluent and normalizing.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best approach is to avoid writing a definitional interpreter at all: instead, reflect the denotational semantics into the host language via quotation so that the semantic function produces host-language code that is definitionally equal to the specification.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Executable denotational semantics interpreted as a definitional interpreter will hold its commitments if and only if the interpreter is written in continuation-passing style, because only CPS makes the control-flow commitments of the specification observationally literal in the interpreter's behavior.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 704,
+      "total_tokens": 891
+    }
+  },
+  "transport_error": null
+}

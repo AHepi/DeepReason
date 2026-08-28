@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Refinement calculus with constructive stepwise data refinement\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.592
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-654",
+    "object": "chat.completion",
+    "created": 1787935144,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Constructive stepwise data refinement can be fully mechanized by treating each refinement step as a type-theoretic adjunction between abstract and concrete specifications, where the abstraction-inclusion relation is witnessed by a computational morphism that transports proof obligations. Under this framework, the resulting concrete code holds its commitments if and only if the composition of these morphisms yields a section of the abstraction relation, which can be discharged automatically by constructive meta-programming during code extraction.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 103,
+      "total_tokens": 220
+    }
+  },
+  "transport_error": null
+}

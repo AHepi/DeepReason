@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: neuro-symbolic synthesis with continuous relaxation over program lattices\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.411
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-117",
+    "object": "chat.completion",
+    "created": 1787935547,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Synthesis fidelity is governed by a sharp phase transition in the latent temperature of a continuous relaxation over a program lattice: above a critical temperature T_c, gradient descent traverses semantic superpositions to discover the correct abstract proof skeleton, but cooling below T_c collapses the relaxation into a unique executable program that provably satisfies the specification only if the lattice's join structure mirrors the specification's dependency poset. If the lattice poset and specification poset are order-incompatible, the relaxed optimum always converges to a program that silently violates at least one abstract commitment, regardless of network capacity or training data.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 127,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

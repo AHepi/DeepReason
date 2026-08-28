@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.677
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-639",
+    "object": "chat.completion",
+    "created": 1787935018,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The best technique is refinement calculus: incrementally transform an abstract specification into executable code through a series of mathematically verified refinement steps, where each step preserves correctness by construction.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The best technique is to use a dependent type theory system like Agda or Idris, where the abstract specification is encoded as a type and the executable code is a proof inhabitant of that type, guaranteeing correctness through the type checker.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The best technique is to use a satisfiability modulo theories (SMT) solver to synthesize code directly from formal specifications, where the solver searches for a program that provably satisfies the specification's constraints.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is property-based testing with shrinking, where executable code is generated to satisfy a specification's invariants, and failures are automatically minimized to reveal specification gaps before deployment.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The best technique is to use large language models to generate code from natural language specifications, followed by automated formal verification of the generated code against the specification using proof assistants.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is to use model-driven engineering with executable UML, where specifications are defined as platform-independent models that are automatically transformed into executable code through verified model-to-code transformations.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The best technique is to use Hoare logic-based deductive synthesis, where preconditions, postconditions, and loop invariants are used to guide the automatic generation of code that is provably correct with respect to the specification.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The best technique is to use constructive type theory with extraction, as in Coq, where the specification is proved constructively and the computational content of the proof is extracted as executable code that satisfies the specification by construction.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The best technique is to use genetic programming with formal verification as the fitness function, evolving executable programs from an abstract specification by selecting only those that can be formally verified against the spec.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The best technique is to use abstract interpretation to automatically derive executable code from specifications, where the abstract semantics of the specification are concretized into an implementation that preserves the specification's safety properties.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 610,
+      "total_tokens": 781
+    }
+  },
+  "transport_error": null
+}

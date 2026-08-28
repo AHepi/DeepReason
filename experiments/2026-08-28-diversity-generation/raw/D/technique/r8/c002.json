@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: dependent type-theoretic elaboration where specs are intrinsic types\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.588
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-494",
+    "object": "chat.completion",
+    "created": 1787935451,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The decisive technique is bidirectional elaboration where the abstract specification is a dependent type containing partial implementations of proofs, and elaboration fills the remaining proof obligations via canonical structure search — yielding executable code that satisfies its type by construction, with no separate verification pass.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The best technique is to use the intrinsic type as a refinement predicate over a skeleton extracted by constraint-solving: elaboration first solves for the computational skeleton via constraint logic programming over the type's indices, then refines it against the proof obligations embedded in the type's constructors.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Canonical instance inference over dependent records is the single most effective technique: when the specification type carries algebraic laws as field obligations, elaboration through unification hints plus canonical structure resolution produces code whose correctness is entailed by the instance resolution trace itself.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The key technique is elaboration-by-equational-reasoning: the intrinsic type is treated as an equality-theoretic specification, and the program is generated as the computational content of a tactic-driven proof script, where each tactic step corresponds to a program refinement step.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The optimal approach is to stratify the intrinsic type into a computational spine and a propositional residue: elaboration generates the executable code from the computational spine via standard type-directed translation, and the propositional residue is discharged by automated proof search during elaboration, producing code that holds its commitments by the stratification invariant.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"The decisive technique is to make the abstract specification a higher inductive type where the path constructors encode program equivalences: elaboration then generates code by pattern-matching on the type's point constructors, and the path constructors guarantee that the generated code satisfies the equational specification.\",\n      \"probability\": 0.054\n    },\n    {\n      \"conjecture\": \"The best technique is elaboration through definitional unfolding of a domain-specific dependent type theory: the specification type is defined in a custom theory whose definitional equalities encode the domain's operational semantics, so that elaboration to a target language produces code that holds its commitments simply because the target's reduction relation matches the source's definitional equality.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"The critical technique is to use the intrinsic type's induction principle as the code generation strategy: the recursive structure of the generated program is dictated by the elimination rule for the specification type, ensuring that the program's termination and correctness are direct consequences of the type's induction principle.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"The best technique is staged elaboration where stage one constructs a quote-elimination proof that the abstract type is inhabited, and stage two extracts the program as the proof's computational content via a realizability interpretation — the resulting code holds its commitments because the realizability interpretation is sound by construction.\",\n      \"probability\": 0.046\n    },\n    {\n      \"conjecture\": \"The decisive technique is to treat the abstract specification as a display-type whose elements are elaboration scripts: elaboration executes the script (which is itself well-typed code in a meta-language), and the resulting program holds its commitments because the script's type encodes a verified translation from the specification's interface to its implementation.\",\n      \"probability\": 0.038\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 792,
+      "total_tokens": 979
+    }
+  },
+  "transport_error": null
+}

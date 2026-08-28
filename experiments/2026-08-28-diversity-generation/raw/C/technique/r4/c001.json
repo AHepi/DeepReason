@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.104
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-756",
+    "object": "chat.completion",
+    "created": 1787934539,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus with continuous theorem proving, where each refinement step from specification to code is a formally verified logical implication, making the executable code a mathematical theorem of the specification.\", \"probability\": 0.09}, {\"conjecture\": \"Test-generation from the specification via property-based testing, combined with mutation testing to ensure test suite adequacy, yields higher real-world commitment fidelity than formal verification due to the gap between formal models and actual runtime environments.\", \"probability\": 0.08}, {\"conjecture\": \"The best approach is to make the specification itself executable by writing it as a pure functional program in a total language like Agda or Idris, eliminating the translation gap entirely.\", \"probability\": 0.07}, {\"conjecture\": \"Neuro-symbolic program synthesis, where a large language model generates candidate implementations and a symbolic solver verifies them against the specification, will outperform purely formal or purely neural methods.\", \"probability\": 0.06}, {\"conjecture\": \"The dominant technique is abstract interpretation, where the abstract specification defines a lattice of program states and the implementation is verified by computing a sound over-approximation of its semantics that maps onto the specification lattice.\", \"probability\": 0.05}, {\"conjecture\": \"No single technique suffices; the best method is a layered pipeline combining refinement types for data invariants, Hoare logic for control flow, and runtime contract monitoring for environment interactions.\", \"probability\": 0.04}, {\"conjecture\": \"Design-by-contract with runtime assertion checking is the most effective technique because it guarantees commitment-holding at runtime in the actual deployment environment, whereas static methods only verify idealized models.\", \"probability\": 0.03}, {\"conjecture\": \"Model-driven engineering with automatic code generation from a formally specified state machine is the best technique, as it eliminates human error in the translation from abstract specification to executable logic.\", \"probability\": 0.02}, {\"conjecture\": \"The best technique is type-driven development using dependent types, where the abstract specification is encoded in the type signature of the program and the compiler rejects any implementation that fails to hold its commitments.\", \"probability\": 0.02}, {\"conjecture\": \"Iterative counterexample-guided synthesis (CEGIS) is the optimal technique, where a solver generates candidate code, a verifier searches for counterexamples against the specification, and the process repeats until no counterexamples exist.\", \"probability\": 0.01}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 520,
+      "total_tokens": 691
+    }
+  },
+  "transport_error": null
+}

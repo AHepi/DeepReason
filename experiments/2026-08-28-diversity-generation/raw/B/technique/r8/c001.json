@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive type theory with proof-carrying code\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.067
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-355",
+    "object": "chat.completion",
+    "created": 1787935314,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique is to compile abstract specifications into dependent type theory via a refinement-preserving extraction procedure, where every computational step is paired with a proof certificate in a strongly normalizing core calculus, such that the resulting executable code is, by construction, a inhabitant of the specification's dependent type. This approach ensures commitment-holding because the proof certificate guarantees both termination and partial correctness at runtime, making verification a compile-time byproduct rather than a separate validation phase.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 104,
+      "total_tokens": 221
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.319
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-91",
+    "object": "chat.completion",
+    "created": 1787935251,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The optimal technique is iterative counterexample-guided synthesis, where a formal prover and a generator adversarially co-evolve: the generator proposes code from the specification, the prover attempts to violate its commitments via counterexamples, and each failed proof becomes training signal that refines the next generation. This collapses the specification-to-code gap because the generator only converges when no counterexample survives, meaning the executable code is formally entailed by its abstract specification.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 104,
+      "total_tokens": 202
+    }
+  },
+  "transport_error": null
+}

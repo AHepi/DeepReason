@@ -1042,5 +1042,527 @@
     ],
     "calls": 7,
     "wall_s": 26.1
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 7,
+    "tokens": 16178,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 46.5
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 7,
+    "tokens": 18175,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "triangular lattice perturbation with boundary defect correction",
+      "probabilistic simulated annealing on area-minimizing objective",
+      "algebraic optimization via semidefinite relaxation of copositive constraints",
+      "geometric variational argument proving optimal configuration is triangular lattice",
+      "symbolic Gröbner basis search for rational coordinates with guaranteed minimum",
+      "exhaustive combinatorial enumeration of order types with linear programming bounds"
+    ],
+    "calls": 61,
+    "wall_s": 62.0
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 7,
+    "tokens": 6523,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 25.4
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 7,
+    "tokens": 7127,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturb a regular 12-point boundary lattice plus centroid",
+      "coordinate-wise nonlinear stretch of triangular grid remapped to square",
+      "simulated annealing on area-of-smallest-triangle objective with continuous coordinates",
+      "algebraic number field construction forcing all triangle areas to share a common lower bound",
+      "greedy farthest-point insertion in area-of-triangle metric rather than Euclidean distance",
+      "exhaustive branch-and-bound over discretized grid with interval arithmetic lower bounds"
+    ],
+    "calls": 7,
+    "wall_s": 42.7
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 8,
+    "tokens": 15616,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 49.8
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 8,
+    "tokens": 18831,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturbed integer lattice with defect migration",
+      "centroidal Voronoi relaxation under minimum-area loss",
+      "repulsive log-potential with collinearity penalty terms",
+      "finite projective plane PG(2,3) coordinates mapped affinely",
+      "simulated annealing over point coordinates with area-constrained energy",
+      "algebraic number field construction optimizing 3x3 determinant spectra"
+    ],
+    "calls": 61,
+    "wall_s": 76.7
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 8,
+    "tokens": 5974,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 20.0
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 8,
+    "tokens": 7760,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Perturb a hexagonal lattice and clip boundary points to the square",
+      "Direct nonlinear optimization of all 286 triple-area minima via SLP or interior-point",
+      "Integer-lattice search over a fine grid with branch-and-bound on the bottleneck triangle",
+      "Compactness-based existence proof: exhibit a candidate and certify the lower bound algebraically",
+      "Simulated annealing with adaptive temperature on the min-area objective directly",
+      "Symmetry-constrained ansatz: fix a dihedral subgroup and solve the reduced polynomial system"
+    ],
+    "calls": 7,
+    "wall_s": 36.2
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 9,
+    "tokens": 16122,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 64.5
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 9,
+    "tokens": 18759,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Lattice-based integer-coordinate grid constructions with computational area proofs",
+      "Continuous nonlinear optimization over point coordinates via sequential convex programming",
+      "Algebraic number field configurations exploiting exact arithmetic area lower bounds",
+      "Probabilistic sampling with randomized local search and empirical minimum-area estimation",
+      "Symmetry-restricted ansatz decomposing the square into congruent subregions with one point each",
+      "Exhaustive branch-and-bound over discretized cells with interval-arithmetic triangle-area bounds"
+    ],
+    "calls": 61,
+    "wall_s": 65.5
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 9,
+    "tokens": 6287,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 20.3
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 9,
+    "tokens": 7298,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "algebraic lattice scaled from known Heilbronn-optimal p=13 residue construction",
+      "perturbative local search from hexagonal jittered grid via simulated annealing on the min-area objective",
+      "projective lift to unit torus using modular arithmetic then cut to fundamental domain",
+      "exhaustive flag-algebra or interval-arithmetic branch-and-bound proving the global optimum and extracting its witness",
+      "conformal-map deformation of a known extremal spherical point packing projected back to the square",
+      "parametric family optimized via nonlinear programming with complementarity constraints encoding the 286 active-area lower bound"
+    ],
+    "calls": 7,
+    "wall_s": 28.2
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 4,
+    "tokens": 12396,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 63.9
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 4,
+    "tokens": 14341,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "extracting code via constructive proof witnesses in dependent type theory",
+      "refinement types with SMT-based synthesis and verification of postconditions",
+      "denotational semantics as a compilation target with Galois connection guarantees",
+      "property-based test generation as an evolutionary search for implementations satisfying specs",
+      "large language model synthesis with runtime assertion monitoring and counterexample replay",
+      "algebraic specification via quotient-inductive types with executable term rewriting"
+    ],
+    "calls": 61,
+    "wall_s": 78.5
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 4,
+    "tokens": 4817,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 21.5
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 4,
+    "tokens": 5665,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "SMT-synthesized Skolem functions from Hoare-style contracts",
+      "Neural code generation with post-condition verification by randomized property testing",
+      "Refinement from constructive type theory via tactic-driven extraction",
+      "Model-theoretic synthesis bounded by counterexample-guided abstraction",
+      "Runtime enforcement of LTL policies through monitor-injected shields",
+      "Algebraic specification to executable term-rewriting systems via quotient inductive types"
+    ],
+    "calls": 7,
+    "wall_s": 29.8
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 5,
+    "tokens": 12305,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 55.9
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 5,
+    "tokens": 14615,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "interactive theorem proving with refinement calculus",
+      "denotational semantics round-tripping through definitional interpreters",
+      "neural synthesis with runtime verification and proof-carrying code",
+      "dependent type theory with total functions and extraction",
+      "constructive logic program synthesis from realizability witnesses",
+      "constraint-based program sketching with SMT-encoded specification conformance"
+    ],
+    "calls": 61,
+    "wall_s": 82.8
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 5,
+    "tokens": 5231,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 23.4
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 5,
+    "tokens": 5797,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Extracting programs via constructive proof witnesses in dependent type theory",
+      "Synthesizing code from CTL or LTL temporal logic specifications via model-theoretic games",
+      "Refining abstract state machines into executables through stepwise behavioral simulation proofs",
+      "Inducing executable implementations from input-output examples constrained by abstract SMT specifications",
+      "Distilling code by iterated refinement against a verifier model with provable guarantees on the fixed point",
+      "Lifting declarative constraint specifications into deterministic executables via conflict-driven clause learning"
+    ],
+    "calls": 7,
+    "wall_s": 39.1
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 6,
+    "tokens": 12253,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 63.5
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 6,
+    "tokens": 14218,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "proof-carrying code via dependent type theory",
+      "constrained neural program synthesis from input-output examples",
+      "iterative refinement against a runtime property oracle",
+      "denotational-semantic compilation with refinement types",
+      "specification mining through large language model hallucination filtering",
+      "automated controller synthesis from temporal logic specifications"
+    ],
+    "calls": 61,
+    "wall_s": 162.4
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 6,
+    "tokens": 5391,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 35.9
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 6,
+    "tokens": 5605,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Satisfiability modulo theories with proof-carrying code synthesis",
+      "Type-theoretic refinement via dependent contracts and runtime monitors",
+      "Large language model code generation with differential testing oracles",
+      "Model-driven engineering with automated model-to-text transformations",
+      "Reinforcement learning program synthesis guided by formal reward shaping",
+      "Synthesis from input-output examples using inductive logic programming"
+    ],
+    "calls": 7,
+    "wall_s": 30.6
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 7,
+    "tokens": 12238,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 55.4
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 7,
+    "tokens": 14688,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Refinement calculus with constructive stepwise data refinement",
+      "Dependent type theory enforcing spec-level invariants at compile time",
+      "Large language model decoding constrained by runtime proof witnesses",
+      "SMT-driven synthesis from input-output examples and background theories",
+      "Denotational semantics compilation preserving observational equivalence",
+      "Iterative genetic programming with formal verification as fitness oracle"
+    ],
+    "calls": 61,
+    "wall_s": 66.7
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 7,
+    "tokens": 5625,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 23.6
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 7,
+    "tokens": 6169,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "synchronous refinement calculus with weakest-precondition step-indexing",
+      "synthesis by type-theoretic proof-search over dependent linear logical specifications",
+      "automated test-case generation from algebraic property specifications with runtime assertion enforcement",
+      "executable denotational semantics interpreted directly as a definitional interpreter",
+      "neuro-symbolic translation with formal verification of the generated artifact's proof-carrying code",
+      "constructive logic program extraction from intuitionistic proofs of behavioral theorems"
+    ],
+    "calls": 7,
+    "wall_s": 26.3
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 8,
+    "tokens": 12355,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 57.4
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 8,
+    "tokens": 15204,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "constructive type theory with proof-carrying code",
+      "conformal-predictive constraint synthesis with measured coverage",
+      "denotational-semantic compilation through domain-theoretic fixpoints",
+      "behavioral synthesis from temporal-logic specifications via reactive game solving",
+      "large-language-model translation with round-trip equivalence testing and counterexample-guided repair",
+      "algebraic effect handler reification into verified effectful state machines"
+    ],
+    "calls": 61,
+    "wall_s": 96.2
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 8,
+    "tokens": 5203,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.5
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 8,
+    "tokens": 5561,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "extraction via refinement calculus with mechanized proof-carrying code",
+      "neural program synthesis conditioned by runtime property-based test oracles",
+      "dependent type-theoretic elaboration where specs are intrinsic types",
+      "denotational-interpreter scaffolding compiled down via partial evaluation",
+      "large-language-model translation constrained by formal verification backends",
+      "synthesis from input-output examples using SMT-backed deductive oracle solving"
+    ],
+    "calls": 7,
+    "wall_s": 25.5
+  },
+  {
+    "arm": "A",
+    "question": "technique",
+    "rep": 9,
+    "tokens": 12522,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 61.0
+  },
+  {
+    "arm": "B",
+    "question": "technique",
+    "rep": 9,
+    "tokens": 14613,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "extraction-by-enumeration of witness programs from constructive proofs",
+      "refinement calculus with monotonic weakest-precondition strengthening",
+      "denotational compilation via game-semantic abstract machines",
+      "neuro-symbolic synthesis with continuous relaxation over program lattices",
+      "type-theoretic correct-by-construction with dependent intersection refinements",
+      "observable-equivalence distillation from black-box behavioral sampling"
+    ],
+    "calls": 61,
+    "wall_s": 67.2
+  },
+  {
+    "arm": "C",
+    "question": "technique",
+    "rep": 9,
+    "tokens": 5318,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 19.5
+  },
+  {
+    "arm": "D",
+    "question": "technique",
+    "rep": 9,
+    "tokens": 5894,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "extracting witnesses from constructive proofs via cut-elimination",
+      "constraint-driven synthesis from refinement types and SMT solving",
+      "denotational compiling via Galois connections between semantics and assembly",
+      "neural code generation validated by runtime property-based testing oracles",
+      "term-rewriting normalization of declarative logic programs into target-language kernels",
+      "intrinsic type-carrying IRs where safety obligations are unforgeable tokens"
+    ],
+    "calls": 7,
+    "wall_s": 27.8
   }
 ]

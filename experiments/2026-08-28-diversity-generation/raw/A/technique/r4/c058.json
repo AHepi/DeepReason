@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.221
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-457",
+    "object": "chat.completion",
+    "created": 1787934451,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique for turning an abstract specification into executable code that holds its commitments is refinement via property-based executable contracts, where each abstraction layer is paired with machine-checked generators that falsify implementations against the spec before composition. This bridges the gap by making the specification itself the primary test oracle, ensuring that any executable artifact either survives the spec's generated trials or is provably non-conformant. The conjecture predicts that systems built this way will have measurably fewer specification-implementation drift defects than those using post-hoc verification or manual translation, with the defect rate scaling inversely with generator quality.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 133,
+      "total_tokens": 231
+    }
+  },
+  "transport_error": null
+}

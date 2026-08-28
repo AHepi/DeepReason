@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: iterative refinement against a runtime property oracle\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.972
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-42",
+    "object": "chat.completion",
+    "created": 1787934910,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The most reliable technique is a counterexample-guided inductive synthesis loop where the property oracle is a runtime monitor that executes candidate programs against adversarially generated inputs, and the synthesizer treats each violation as a hard constraint to prune the search space rather than a soft loss to minimize. This works because runtime violations provide precise, concrete failure traces that can be directly inverted into structural program edits, unlike static or gradient-based signals. The approach will outperform LLM-based sampling and neurosymbolic methods on specifications with compositional structure, converging quadratically rather than linearly in the number of oracle queries.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 133,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

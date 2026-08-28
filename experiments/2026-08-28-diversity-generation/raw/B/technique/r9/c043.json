@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: type-theoretic correct-by-construction with dependent intersection refinements\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.127
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-556",
+    "object": "chat.completion",
+    "created": 1787935564,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The best technique is to represent abstract specifications as dependent intersection refinement types over a total language fragment, where each refinement clause corresponds to a guarded code-generation step that introduces exactly one elimination or introduction form. The resulting executable holds its commitments because the generated term inhabits the intersection of all refinements, making the specification's proof object identical to the program itself. This eliminates the extraction gap by construction, as every computational step is simultaneously a cut-elimination in the corresponding refinement proof.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 103,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

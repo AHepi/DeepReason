@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: SMT-driven synthesis from input-output examples and background theories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.171
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-35",
+    "object": "chat.completion",
+    "created": 1787935172,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Counterexample-guided inductive synthesis (CEGIS) will produce verified programs from input-output examples if and only if the SMT solver is configured to emit not just satisfiability witnesses but also unsatisfiable cores over the background theory, and these cores are reused as lemmas in subsequent synthesis iterations. The unsatisfiable cores act as theory-specific abstractions that prevent the synthesizer from re-exploring spurious program spaces, making convergence to a specification-faithful program guaranteed for theories with the finite model property. This approach fails for theories requiring quantifier instantiation beyond a bounded depth, which provides a precise falsifiable boundary on the class of specifications amenable to SMT-driven synthesis from examples.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 153,
+      "total_tokens": 272
+    }
+  },
+  "transport_error": null
+}

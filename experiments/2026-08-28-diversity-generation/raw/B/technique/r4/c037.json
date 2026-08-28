@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: property-based test generation as an evolutionary search for implementations satisfying specs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.966
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-468",
+    "object": "chat.completion",
+    "created": 1787934506,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Property-based tests define a continuous fitness landscape where the fitness gradient is dominated by the counterexamples that falsify the implementation most cheaply. Therefore, guiding an evolutionary search to discover executable code from an abstract specification requires the mutation operators themselves to be parameterized by the shrinking paths of failed tests, so that structural edits are directed toward the specific program terms implicated by the minimal failing case. This makes the fittest candidate implementations those that not only pass the current test suite, but whose structural shape is most amenable to repair by the very shrinking procedure that would expose their next remaining flaw.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 128,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

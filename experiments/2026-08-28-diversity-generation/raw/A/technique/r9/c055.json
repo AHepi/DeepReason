@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.429
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-687",
+    "object": "chat.completion",
+    "created": 1787935501,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The best technique for deriving faithful code from abstract specifications is refinement calculus augmented with automated, property-based proof witnesses at each refinement step. Rather than asking whether a final implementation satisfies a spec, this method requires each intermediate refinement to emit a machine-checkable invariant that ties it to the preceding abstraction, making faithfulness a compositional property of the derivation chain rather than a post-hoc verification burden. Under this scheme, any implementation that cannot produce a complete chain of witnesses is definitionally unfaithful, regardless of its runtime behavior.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 98,
+      "completion_tokens": 117,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

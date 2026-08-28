@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Large language model decoding constrained by runtime proof witnesses\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.069
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-942",
+    "object": "chat.completion",
+    "created": 1787935164,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Embedding a lightweight proof witness—such as a refinement type skeleton or Hoare-triple invariant set—into the LLM decoding context as a structured token tree allows the model to generate code that is not merely plausible but locally dischargeable at each generation step. The key mechanism is interleaving neural decoding with an external SMT solver that checks each generated code fragment against the active witness obligations, pruning tokens that violate invariants before they are committed to the output.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 100,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

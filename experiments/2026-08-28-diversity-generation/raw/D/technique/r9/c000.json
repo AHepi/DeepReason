@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extracting witnesses from constructive proofs via cut-elimination\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.775
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-672",
+    "object": "chat.completion",
+    "created": 1787935624,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The most reliable technique is to express the specification as a Σ¹₁-theorem in arithmetic, then run a cut-elimination procedure on its proof; the only surviving witness in the normal form is the executable program, and its correctness is guaranteed by the subformula property.\", \"probability\": 0.09}, {\"conjecture\": \"Specifications should be encoded as intuitionistic sequents where the existential on the right is the program to extract. A single focused cut-elimination pass yields a λ-term that is definitionally equal to the specification, making testing redundant.\", \"probability\": 0.08}, {\"conjecture\": \"The bottleneck is not extraction itself but proof size: cut-elimination on realistic specifications has doubly-exponential blowup, so no technique relying on full cut-elimination will scale to industrial code without aggressive proof-nets compaction.\", \"probability\": 0.07}, {\"conjecture\": \"Classical proofs with Σ¹₁-conclusions can yield correct witnesses if and only if cut-elimination is replaced by Friedman's A-translation followed by intuitionistic cut-elimination; direct classical extraction produces spurious witnesses in over 60% of cases.\", \"probability\": 0.06}, {\"conjecture\": \"The best approach is to restrict the specification logic to a polarized, focused fragment where cut-elimination is strongly normalizing and each synchronous phase corresponds to one computational step, giving a direct isomorphism between proof phases and program execution.\", \"probability\": 0.07}, {\"conjecture\": \"Extracted witnesses from cut-elimination are computationally useless unless the axiom set is restricted to computational axioms (recursive definitions); any non-computational axiom (choice, bar-induction) leaves residual cuts that block full extraction.\", \"probability\": 0.05}, {\"conjecture\": \"The real technique is to never run cut-elimination on the full proof: instead, lazily normalize only the subproof corresponding to the witness, using head-cut-elimination, which terminates exactly when the existential is satisfied and leaves the correctness proof partially unfolded.\", \"probability\": 0.08}, {\"conjecture\": \"Cut-elimination produces correct code only when the specification is given in a linear logic fragment, because affine/intuitionistic proofs permit weakening that introduces phantom dependencies; linearity forces every resource in the witness to trace to a concrete input.\", \"probability\": 0.04}, {\"conjecture\": \"The dominant failure mode is that cut-elimination preserves witness existence but not witness efficiency; the extracted program is correct but can be hyper-exponentially slower than the proof suggests, so the technique requires a post-extraction optimization phase guided by the cut-elimination trace.\", \"probability\": 0.06}, {\"conjecture\": \"The only specification method compatible with reliable witness extraction is dependent type theory with a universe-polymorphic encoding, because the cut-elimination procedure (normalization-by-evaluation) simultaneously computes the witness and checks its type, making the specification and the correctness proof the same object.\", \"probability\": 0.07}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 651,
+      "total_tokens": 836
+    }
+  },
+  "transport_error": null
+}

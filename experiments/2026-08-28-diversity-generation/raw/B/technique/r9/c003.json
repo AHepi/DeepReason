@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction-by-enumeration of witness programs from constructive proofs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.721
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-781",
+    "object": "chat.completion",
+    "created": 1787935523,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The reliability of extracted code from constructive proofs scales with the density of computational content in the proof's intermediate lemmas, not the length or elegance of the final proof term. Specifically, proofs that construct witnesses via bounded enumeration at each lemma boundary—rather than deferring construction to a single global step—yield extracted programs whose executable commitments are locally verifiable, reducing semantic gaps by an order of magnitude compared to direct extraction from monolithic proofs. This is falsifiable: given two extraction methods over the same specification, the lemma-bounded-enumeration method should produce programs with measurably fewer refinement-failures under property-based testing, and this advantage should correlate with the count of intermediate witness-producing lemmas, not total proof size.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 158,
+      "total_tokens": 277
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive type theory with proof-carrying code\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.963
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-394",
+    "object": "chat.completion",
+    "created": 1787935311,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A refinement-type-directed extraction from constructive type theory to proof-carrying code yields software that holds its commitments iff every abstract specification is encoded as a Σ-type over a computational monad, with proof obligations internalized as indexed propositions rather than post-hoc verification conditions. The resulting extracted code carries its correctness certificate as a runtime witness, making commitment violations unrepresentable at the operational level. This approach fails precisely when specifications require non-constructive reasoning, exposing a strict boundary: commitment-preserving compilation from abstract specs is possible only for properties that admit computational witnesses in the type-theoretic sense.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 127,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

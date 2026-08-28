@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: Dependent type theory enforcing spec-level invariants at compile time\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.658
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-594",
+    "object": "chat.completion",
+    "created": 1787935156,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Specifications should be written directly as dependent type signatures where every postcondition is a return type and every precondition is a dependent argument, making compilation a proof of correctness. To eliminate the semantic gap between spec and code, the runtime execution path must be extracted from the compile-time proof object itself via proof terms, rather than allowing developers to write arbitrary term-level implementations that merely inhabit the proven type. This collapses the specification-implementation boundary into a single artifact: the program is its own correctness proof, and any spec violation is structurally impossible to compile.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 120,
+      "total_tokens": 240
+    }
+  },
+  "transport_error": null
+}

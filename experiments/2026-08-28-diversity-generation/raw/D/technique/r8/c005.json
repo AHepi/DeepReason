@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: synthesis from input-output examples using SMT-backed deductive oracle solving\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.339
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-314",
+    "object": "chat.completion",
+    "created": 1787935449,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Synthesis from input-output examples is most reliable when the deductive oracle is queried with the negation of the specification translated into an SMT formula, yielding a counterexample input that either breaks a candidate program or proves its correctness; programs should be enumerated by increasing structural complexity and filtered by this oracle before any example-based testing.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The fastest convergence to a correct program occurs when each synthesized candidate is verified against the full SMT encoding of the specification rather than against the concrete input-output examples, making the examples redundant once a symbolic specification is available.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Input-output examples should be used exclusively to bias the search heuristic toward likely-correct program sketches, while the SMT oracle alone determines final acceptance, because example-guided enumeration reduces the search space by a factor proportional to the number of examples without sacrificing completeness.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The key bottleneck in SMT-backed synthesis from examples is not the solver's reasoning power but the quality of the candidate program grammar; restricting the grammar using type constraints extracted from the examples reduces the solver's workload more than any improvement to the encoding strategy.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Counterexample-guided inductive synthesis (CEGIS) with an SMT oracle dominates all other architectures for this problem: the oracle generates new examples that maximally distinguish remaining candidate programs, and convergence is guaranteed in a number of iterations bounded by the logarithm of the candidate space size.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The specification-to-code gap is best closed by synthesizing not the final program directly but an intermediate verification condition: the SMT solver first produces a proof sketch, and then a second solver pass extracts executable code from that proof, ensuring the program is correct-by-construction.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"SMT-backed synthesis from examples fails silently when the specification is under-constrained — the solver returns a program consistent with the examples but violating unstated requirements — and this cannot be fixed by adding more examples; the only remedy is to require the specification to be logically complete before synthesis begins.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The most effective technique is to encode the input-output examples as SMT constraints over the syntax tree of an unknown program, solve for the tree structure first, then solve for the constants in a second independent pass, because joint solving is an order of magnitude slower due to the mixed integer-real-boolean theory.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Synthesis from examples using SMT oracles is fundamentally the wrong approach for producing code that holds its commitments, because the oracle can only verify what was explicitly encoded; the resulting programs are correct relative to the formalization but the formalization itself is where commitments are lost.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The dominant factor determining whether synthesized code holds its commitments is whether the SMT solver operates over a rich enough theory to express the specification's domain — e.g., arrays, strings, or floating-point — and switching to a decidable but weaker theory to gain solver performance is the most common cause of silent failures.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 768,
+      "total_tokens": 956
+    }
+  },
+  "transport_error": null
+}

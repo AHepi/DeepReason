@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: denotational-semantic compilation with refinement types\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.291
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-986",
+    "object": "chat.completion",
+    "created": 1787934964,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"A denotational-semantic compiler that interprets an abstract specification as a semantic domain equation, then generates code by solving a constraint system over refinement-type annotations at every intermediate domain, will produce executable code satisfying the specification's commitments whenever the refinement constraints are satisfiable. The key insight is that refinement types at each semantic level serve as proof obligations that propagate denotational correctness downward through compilation stages, making verification an inherent byproduct of code generation rather than a post hoc check.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 117,
+      "completion_tokens": 107,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extracting code via constructive proof witnesses in dependent type theory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.938
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-962",
+    "object": "chat.completion",
+    "created": 1787934466,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Extracting code via proof witnesses in dependent type theory yields software that holds its commitments because the constructive proof *is* the implementation, and the dependent type *is* the specification. In this paradigm, the Curry-Howard correspondence eliminates the semantic gap: the extracted code is guaranteed to satisfy its commitments by construction, as the type-checker mechanically verifies that the proof term inhabits the specification type. Therefore, no separate verification or testing phase is required to ensure compliance with the abstract specification.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 109,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

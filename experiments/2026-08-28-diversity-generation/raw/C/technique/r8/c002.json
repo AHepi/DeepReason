@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 16.647
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-99",
+    "object": "chat.completion",
+    "created": 1787935419,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The most reliable technique is refinement calculus: stepwise transform the abstract specification into code via formal refinement laws, where each step preserves correctness. This guarantees commitments hold because every transformation is provably valid.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Extract executable code directly from constructive type theory proofs. The specification is stated as a theorem, and the proof term *is* the program, so the code holds its commitments by virtue of the proof's correctness.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Write the specification as a set of property-based tests, then use genetic programming or search-based synthesis to generate code that passes a large, systematically generated test suite. The commitments are held empirically with measurable confidence.\",\n      \"probability\": 0.062\n    },\n    {\n      \"conjecture\": \"Use large language models to translate specifications into code, then verify the output with an automated theorem prover or model checker. Iterate with LLM-generated repair until verification passes, combining generative flexibility with formal assurance.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Treat the specification as a contract and use design-by-contract with runtime assertion checking, generating code that includes executable assertions derived directly from the specification. Commitments are enforced at runtime rather than compile time.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"Use deductive program synthesis from logical specifications via SMT solving, where the synthesizer directly solves for programs satisfying pre/postconditions. The solver's completeness on the target theory fragments guarantees the commitments.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Model the specification as a state machine and synthesize code via model-driven engineering with verified transformations from model to implementation. Each transformation layer is a refinement preserving the original invariants.\",\n      \"probability\": 0.041\n    },\n    {\n      \"conjecture\": \"Use dependent type theory to embed the specification directly into the type of the program, so that any type-correct program satisfies the specification by construction. The type checker enforces all commitments at compile time.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Use symbolic execution to explore all paths through a candidate implementation, checking that each path satisfies the specification's postconditions under the given preconditions. This provides exhaustive path-level verification without requiring full theorem proving.\",\n      \"probability\": 0.037\n    },\n    {\n      \"conjecture\": \"There is no single best technique. The optimal approach depends on the specification's formalism, the target language, the available verification infrastructure, and the cost of failure. The question as posed has no universal answer.\",\n      \"probability\": 0.054\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 626,
+      "total_tokens": 797
+    }
+  },
+  "transport_error": null
+}

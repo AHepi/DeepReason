@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: constructive logic program synthesis from realizability witnesses\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.692
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-652",
+    "object": "chat.completion",
+    "created": 1787934706,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Extracting code via modified realizability from a proof in a dependent type theory with intersection types yields executably correct-by-construction programs whose extracted terms are extensionally equal to hand-optimized implementations, provided the target specification is stated in the fragment of geometric logic. The key mechanism is that intersection type discipline on proof terms forces computational content to be minimal and compositional, eliminating the bureaucratic lemmas that inflate realizability extracts. This predicts that realizability witnesses from proofs using only geometric connectives (∧, ∨, ∃, ⊤, ⊥ with universal quantification over Harrop predicates) produce extracted code within a constant factor of optimal size relative to specification complexity.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 116,
+      "completion_tokens": 143,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

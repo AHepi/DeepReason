@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.501
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-15",
+    "object": "chat.completion",
+    "created": 1787935210,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The optimal technique is refinement calculus: the abstract specification is transformed into code through a series of mathematically proven refinement steps, where each step preserves correctness by construction, eliminating the gap between specification and implementation entirely.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best approach is to embed the specification directly into a dependent type system (e.g., in Lean or Agda), where the type checker mechanically verifies that the extracted executable code satisfies the abstract specification, making commitments unforgeable.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Large language models will prove to be the best technique: given an abstract specification and a formal verification harness, an LLM can iteratively generate candidate implementations and repair them against the specification until verification passes, scaling where traditional methods fail.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The best technique is correct-by-construction synthesis, where a solver (e.g., based on SMT or constraint solving) directly synthesizes executable code from the abstract specification, guaranteeing that the output satisfies the specification by the soundness of the solver.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Design-by-contract with runtime assertion checking is the most effective technique: the abstract specification is expressed as executable preconditions, postconditions, and invariants that are checked at runtime, ensuring the code holds its commitments in practice without the overhead of full verification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is property-based testing with shrinking: the abstract specification is encoded as generative test properties, and the code is iteratively refined until no counterexamples can be found, providing high confidence that commitments are held at a fraction of the cost of formal proof.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The best technique is a hybrid approach: use refinement types to enforce critical commitments statically, supplemented by runtime contract checking for properties that are undecidable or too expensive to verify at compile time, achieving both safety and practicality.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Model-driven engineering with executable UML or similar action languages is optimal: the abstract specification is written in a formalism that is directly executable, so the specification itself becomes the code, eliminating any translation gap.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The best technique is refinement via interactive theorem proving: a human-guided proof in a system like Coq or Isabelle/HOL incrementally refines the abstract specification down to executable code, with each step checked by the kernel, ensuring end-to-end commitment holding.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The best technique is to treat the specification as an oracle and use genetic programming to evolve executable code: fitness is measured by conformance to the specification across a comprehensive test suite, and the evolutionary process discovers implementations that satisfy the commitments without manual translation.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 691,
+      "total_tokens": 862
+    }
+  },
+  "transport_error": null
+}

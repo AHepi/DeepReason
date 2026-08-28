@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.933
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-290",
+    "object": "chat.completion",
+    "created": 1787935594,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The optimal technique is refinement calculus: iteratively apply correctness-preserving transformations to the abstract specification until reaching executable code, guaranteeing commitments hold by construction.\", \"probability\": 0.085}, {\"conjecture\": \"Extracting code from constructive proofs is the best technique: the specification is stated as a theorem, and the proof term is itself the executable program, guaranteeing adherence by the Curry-Howard correspondence.\", \"probability\": 0.08}, {\"conjecture\": \"The best technique is dependent type theory (e.g., Agda/Idris), where the abstract specification is embedded directly into the program's type, and the compiler certifies that the code satisfies its commitments.\", \"probability\": 0.075}, {\"conjecture\": \"SMT-based synthesis is the best technique: use automated theorem provers to generate code by solving constraints derived from the specification, then use the same solver to verify the result holds its commitments.\", \"probability\": 0.07}, {\"conjecture\": \"The best technique is model-driven engineering with automatic code generation: build a formal model, verify it against temporal logic commitments, then generate code from the verified model via certified translators.\", \"probability\": 0.065}, {\"conjecture\": \"The best technique is LLM-based code synthesis paired with an automated verification loop: the model generates candidate code, an SMT solver or runtime checker tests it against the spec, and failures are fed back until verified.\", \"probability\": 0.06}, {\"conjecture\": \"The best technique is design-by-contract with runtime assertion checking: embed the abstract specification as executable preconditions, postconditions, and invariants directly in the code, ensuring commitments are enforced at runtime.\", \"probability\": 0.055}, {\"conjecture\": \"The best technique is property-based testing generation: automatically synthesize code from the specification by searching for implementations that satisfy randomly generated test cases derived from the abstract commitments.\", \"probability\": 0.05}, {\"conjecture\": \"The best technique is high-level synthesis from formal automata: translate the abstract specification into a state machine model, then compile this automaton directly into executable code, preserving commitments by construction.\", \"probability\": 0.045}, {\"conjecture\": \"The best technique is refinement types with liquid types: annotate the program with logical predicates derived from the specification, allowing the type checker to statically verify that the code holds its commitments.\", \"probability\": 0.04}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 525,
+      "total_tokens": 696
+    }
+  },
+  "transport_error": null
+}

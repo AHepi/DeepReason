@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "What is the best technique for turning an abstract specification into executable code — such that the result actually holds its commitments?\n\nStay within this direction: extraction-by-enumeration of witness programs from constructive proofs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.475
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-179",
+    "object": "chat.completion",
+    "created": 1787935525,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Witness-program extraction via exhaustive enumeration with bounded search-depth will yield verified code that holds its specifications if and only if the enumeration is guided by a relevance measure that filters proof-relevant subterms by their occurrence in the computational trace of the specification. The optimal relevance measure is the ratio of shared type-classes between the subterm and the goal type, which reduces the enumeration space to polynomial size for any specification with bounded quantifier alternation depth. Unfiltered enumeration, regardless of search strategy, fails to scale beyond toy examples because it drowns in type-correct but proof-irrelevant terms.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 127,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}
