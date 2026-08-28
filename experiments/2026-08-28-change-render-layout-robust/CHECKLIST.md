@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 4 next.
+State: step 5 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -18,7 +18,7 @@ Spec: SPEC.md. Request: REQUEST.md.
 - [x] 3. S3 — question-last on the two `informal/trial.py` judge packs.
       DONE WHEN: A3 passes, RED against the pre-change tree.
 
-- [ ] 4. S4 — carry-forward: `_distilled` replaces `_head` under the policy,
+- [x] 4. S4 — carry-forward: `_distilled` replaces `_head` under the policy,
       the in-band cap marker and retrieval note, the `live-neighbourhood`
       section, the `superseded-conjectures` section defaulting to absent.
       DONE WHEN: A4 passes, RED against the pre-change tree.

@@ -242,6 +242,57 @@ def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> s
     return text[:limit].replace("\n", " ")
 
 
+# What a carried-forward entry says about its own truncation, and where the
+# rest of it is. A silent cut is indistinguishable, from the model's side,
+# from content that never existed -- the same argument the citable-evidence
+# legend's disclosure rests on.
+_CARRY_FORWARD_CLIPPED = " …[clipped; request this alias for the whole text]"
+_CARRY_FORWARD_ROUTE = (
+    "each entry is its CLAIM, distilled; request an alias through "
+    "context_request to read that artifact whole"
+)
+
+
+def _claim_of(text: str) -> str | None:
+    """The artifact's own claim, if it carries one.
+
+    Distillation here is STRUCTURAL, not a model call: this tree's reasoning
+    envelopes name their claim, so the "one-line claim summary, no prose" form
+    is already present in the record and only has to be selected. An artifact
+    with no parseable claim -- prose, a school policy, a relation -- returns
+    None and falls back to the prefix head, so nothing loses its entry.
+    """
+
+    try:
+        parsed = json.loads(text)
+    except (TypeError, ValueError):
+        return None
+    if not isinstance(parsed, dict):
+        return None
+    claim = parsed.get("claim")
+    if isinstance(claim, str) and claim.strip():
+        return claim.strip()
+    return None
+
+
+def _distilled(
+    state: EpistemicState,
+    artifact_id: str,
+    blobs,
+    layout: "RenderLayoutPolicyV1",
+) -> str:
+    """One carried-forward entry, under the layout policy."""
+
+    text = content_text(state.artifacts[artifact_id], blobs)
+    if not layout.distil_carry_forward:
+        return text[: layout.distilled_head_chars].replace("\n", " ")
+    body = (_claim_of(text) or text).replace("\n", " ").strip()
+    if len(body) <= layout.distilled_head_chars:
+        return body
+    clipped = body[: layout.distilled_head_chars].rstrip()
+    return clipped + (_CARRY_FORWARD_CLIPPED if layout.retrieval_note else "")
+
+
 def _question_section(text: str) -> PackSection:
     """The seat's question, restated as the final block.
 
@@ -749,12 +800,19 @@ def render_conj_pack(
                 min_tokens=96,
             )
         )
-    if accepted:
-        neighbourhood = [
-            "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"
-        ]
-        for aid in accepted:
-            neighbourhood.append(f"- {aid}: {_head(state, aid, blobs)}")
+    # The most recent accepted artifacts render WHOLE and LATE; the rest are
+    # distilled here. Live material placed near the question is the one row of
+    # the research note's table that asks for verbatim, and it asks for FEW --
+    # a late slot amplifies whatever occupies it, distractors included.
+    live = list(accepted[-layout.live_verbatim_n:]) if layout.live_verbatim_n else []
+    distilled_ids = [aid for aid in accepted if aid not in set(live)]
+    if distilled_ids:
+        header = "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural)"
+        if layout.retrieval_note and layout.distil_carry_forward:
+            header += f" — {_CARRY_FORWARD_ROUTE}"
+        neighbourhood = [header + ":"]
+        for aid in distilled_ids:
+            neighbourhood.append(f"- {aid}: {_distilled(state, aid, blobs, layout)}")
         sections.append(
             _pack_section(
                 "neighbourhood",
@@ -763,9 +821,60 @@ def render_conj_pack(
                 droppable=True,
                 compressible=True,
                 min_tokens=32,
-                provenance_refs=tuple(accepted),
+                provenance_refs=tuple(distilled_ids),
             )
         )
+    if live:
+        live_lines = [
+            "LIVE NEIGHBOURHOOD (accepted and still standing — shown whole "
+            "because these are the ones to build on or beat):"
+        ]
+        for aid in live:
+            live_lines.append(f"- {aid}: {content_text(state.artifacts[aid], blobs)}")
+        sections.append(
+            _pack_section(
+                "live-neighbourhood",
+                "\n".join(live_lines),
+                12,
+                droppable=True,
+                compressible=True,
+                min_tokens=32,
+                provenance_refs=tuple(live),
+            )
+        )
+    if layout.superseded_summary_n:
+        # OFF by default, and the default is the point. Rendering refuted
+        # artifacts back to the seat whose job is to leave them is an
+        # EPISTEMIC change, not a layout one; the research note's own table
+        # gives "Middle or omit" for this row, and omission is what this tree
+        # ships. The capability exists so the question can be settled by a
+        # calibration run rather than by argument.
+        superseded = [
+            aid
+            for aid, status in state.status.items()
+            if status == Status.REFUTED and aid not in suppressed
+        ][-layout.superseded_summary_n:]
+        if superseded:
+            header = (
+                "SUPERSEDED (refuted — do not re-propose these; they are here "
+                "so you can tell a new idea from a repeat)"
+            )
+            if layout.retrieval_note and layout.distil_carry_forward:
+                header += f" — {_CARRY_FORWARD_ROUTE}"
+            lines = [header + ":"]
+            for aid in superseded:
+                lines.append(f"- {aid}: {_distilled(state, aid, blobs, layout)}")
+            sections.append(
+                _pack_section(
+                    "superseded-conjectures",
+                    "\n".join(lines),
+                    8,
+                    droppable=True,
+                    compressible=True,
+                    min_tokens=24,
+                    provenance_refs=tuple(superseded),
+                )
+            )
     crossover = (school or {}).get("crossover") if school else None
     if crossover:
         crossover_lines = [
@@ -775,7 +884,9 @@ def render_conj_pack(
         ]
         for aid in crossover:
             if aid in state.artifacts and aid not in suppressed:
-                crossover_lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+                crossover_lines.append(
+                    f"- {aid}: {_distilled(state, aid, blobs, layout)}"
+                )
         sections.append(
             _pack_section(
                 "crossover",

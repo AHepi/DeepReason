@@ -85,6 +85,16 @@ class RenderLayoutPolicyV1(BaseModel):
     Few by design: the late slot amplifies whatever occupies it, distractors
     included, so it is spent only on material that should dominate."""
 
+    distil_carry_forward: bool = True
+    """Carry a prior-round artifact as its CLAIM rather than as the first N
+    characters of its serialized envelope. Distillation here is STRUCTURAL and
+    deterministic -- the claim field is read, not summarized by a model -- so
+    it costs no call and cannot hallucinate. A prefix clip cuts through the
+    middle of an envelope and is the shape the research note argues against
+    twice over: verbose half-baked prior text causes rehashing, and a
+    one-sentence claim summary matched or beat full context on 3-4 of 4
+    models at roughly eight times less context."""
+
     distilled_head_chars: int = Field(default=160, ge=32, le=4096)
     """The width of a distilled carry-forward entry."""
 
@@ -113,6 +123,7 @@ LEGACY_LAYOUT_POLICY = RenderLayoutPolicyV1(
     policy_id=LEGACY_LAYOUT_POLICY_ID,
     question_last=False,
     live_verbatim_n=0,
+    distil_carry_forward=False,
     superseded_summary_n=0,
     retrieval_note=False,
     merge_head_label_blocks=False,

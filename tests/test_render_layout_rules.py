@@ -182,3 +182,144 @@ def test_the_standard_trial_judge_pack_asks_last(harness):
         "Rule on the exchange; decisive_point MUST quote a span of it."
     )
     assert sorted(robust.split("\n")) == sorted(legacy.split("\n"))
+
+
+# ---------------------------------------------------------------- R2c
+
+# A claim longer than the default 160-char distillation width, so the in-band
+# clip marker is exercised, inside an envelope whose serialization is far
+# longer still, so the prefix-clip and the distillation cannot be confused.
+ENVELOPE = (
+    '{"analogy": null, "claim": "Nocturnal urban warmth is stored daytime heat '
+    'released after sunset from surfaces with high thermal admittance, and the '
+    'single best cross-city modulator is the sky view factor, which sets how '
+    'much longwave escapes to the cold sky.", '
+    '"mechanism": "' + "long prose about radiative exchange. " * 40 + '", '
+    '"counterconditions": [], "premises": []}'
+)
+
+
+def _accepted(harness, text):
+    """A created artifact is ACCEPTED until something attacks it."""
+    return _art(harness, text)
+
+
+def test_a_carried_forward_artifact_is_its_claim_not_a_cut_through_its_middle(
+    harness,
+):
+    """Regression (census 2026-08-28): packs.py::_head took the first 160
+    characters of a serialized envelope -- a cut through the middle of a JSON
+    object, which is neither the verbatim text nor a distilled summary."""
+    problem = _problem(harness)
+    art = _accepted(harness, ENVELOPE)
+
+    robust = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=ROBUST,
+    )
+    legacy = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=LEGACY,
+    )
+
+    # With one accepted artifact and live_verbatim_n=2 it renders whole and
+    # late; force it into the distilled section by asking for none verbatim.
+    distilling = ROBUST.model_copy(update={"live_verbatim_n": 0})
+    distilled = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=distilling,
+    )
+    entry = [
+        line for line in distilled.splitlines()
+        if line.startswith(f"- {art.id}:")
+    ][0]
+    assert "Nocturnal urban warmth is stored daytime heat" in entry
+    assert '"mechanism"' not in entry
+    assert entry.endswith("[clipped; request this alias for the whole text]")
+
+    # The header names the retrieval route the pack never used to mention.
+    assert "context_request" in distilled
+
+    # Legacy is the cut through the middle, with no marker and no route.
+    legacy_entry = [
+        line for line in legacy.splitlines()
+        if line.startswith(f"- {art.id}:")
+    ][0]
+    assert legacy_entry.startswith("- " + art.id + ': {"analogy": null, "claim"')
+    assert "clipped" not in legacy_entry
+    assert "context_request" not in legacy
+    assert robust != legacy
+
+
+def test_live_neighbours_render_whole_and_late(harness):
+    problem = _problem(harness)
+    live = _accepted(harness, ENVELOPE)
+
+    pack = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=6000, layout=ROBUST,
+    )
+    headers = _headers(pack)
+    assert "live-neighbourhood" in headers
+    # Late: after every context section, before only the question.
+    # Late: the LAST context section, with only the output contract and the
+    # question after it.
+    assert headers[-3:] == ["live-neighbourhood", "output-contract", "question"]
+    body = pack.split("## live-neighbourhood", 1)[1].split("\n## ", 1)[0]
+    assert ENVELOPE in body        # whole, not distilled
+    assert live.id in body
+
+    legacy = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=6000, layout=LEGACY,
+    )
+    assert "live-neighbourhood" not in _headers(legacy)
+
+
+def test_superseded_conjectures_are_omitted_by_default_and_renderable_on_request(
+    harness,
+):
+    """Omission is one of the two options the research note's own table gives
+    for this row, and it is what this tree ships. The knob exists so the
+    question can be settled by a run rather than by argument."""
+    from deepreason.ontology import Status
+    from tests.conftest import attack
+
+    problem = _problem(harness)
+    dead = _art(harness, '{"claim": "the tide is the moon alone"}')
+    attack(harness, dead.id, "moon-only")
+    assert harness.state.status[dead.id] is Status.REFUTED
+
+    default = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=ROBUST,
+    )
+    assert "superseded-conjectures" not in _headers(default)
+    assert dead.id not in default
+
+    asked = ROBUST.model_copy(update={"superseded_summary_n": 3})
+    carried = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=asked,
+    )
+    assert "superseded-conjectures" in _headers(carried)
+    assert "the tide is the moon alone" in carried
+    assert '"claim"' not in carried.split("## superseded-conjectures", 1)[1]
+
+
+def test_an_artifact_with_no_claim_keeps_its_entry(harness):
+    """The fallback is not decoration: prose artifacts, school policies and
+    relations have no claim field, and an entry that vanished would be a
+    silent omission."""
+    problem = _problem(harness)
+    prose = _accepted(harness, "a plain prose artifact with no claim field " * 8)
+
+    distilling = ROBUST.model_copy(update={"live_verbatim_n": 0})
+    pack = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=2, token_budget=2500, layout=distilling,
+    )
+    entry = [
+        line for line in pack.splitlines() if line.startswith(f"- {prose.id}:")
+    ][0]
+    assert "a plain prose artifact with no claim field" in entry
