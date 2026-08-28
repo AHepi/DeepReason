@@ -1,0 +1,174 @@
+{
+  "model": "kimi-k3",
+  "n_per_arm": 8,
+  "token_cap": 100000,
+  "tokens_spent": 60769,
+  "calls_made": 16,
+  "errors": 0,
+  "hits": {
+    "A_control": 0,
+    "B_exemplar": 0
+  },
+  "attempts": {
+    "A_control": 8,
+    "B_exemplar": 8
+  },
+  "rows": [
+    {
+      "arm": "A_control",
+      "rep": 0,
+      "tokens": 3711,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1095
+    },
+    {
+      "arm": "A_control",
+      "rep": 1,
+      "tokens": 3685,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1114
+    },
+    {
+      "arm": "A_control",
+      "rep": 2,
+      "tokens": 3725,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1125
+    },
+    {
+      "arm": "A_control",
+      "rep": 3,
+      "tokens": 3765,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1467
+    },
+    {
+      "arm": "A_control",
+      "rep": 4,
+      "tokens": 3680,
+      "hit": false,
+      "premise_evidence_values": [],
+      "response_chars": 1133
+    },
+    {
+      "arm": "A_control",
+      "rep": 5,
+      "tokens": 3789,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1003
+    },
+    {
+      "arm": "A_control",
+      "rep": 6,
+      "tokens": 3818,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1686
+    },
+    {
+      "arm": "A_control",
+      "rep": 7,
+      "tokens": 3795,
+      "hit": false,
+      "premise_evidence_values": [],
+      "response_chars": 1150
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 0,
+      "tokens": 3902,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1213
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 1,
+      "tokens": 3823,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1086
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 2,
+      "tokens": 3754,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1120
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 3,
+      "tokens": 3968,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1265
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 4,
+      "tokens": 3794,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1229
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 5,
+      "tokens": 3832,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1331
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 6,
+      "tokens": 3841,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1309
+    },
+    {
+      "arm": "B_exemplar",
+      "rep": 7,
+      "tokens": 3887,
+      "hit": false,
+      "premise_evidence_values": [
+        null
+      ],
+      "response_chars": 1621
+    }
+  ]
+}
