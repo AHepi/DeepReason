@@ -1,6 +1,6 @@
 # Checklist for: make the critic's byte-checked citation channel reachable, and stop it latching shut
 
-State: next=3 blockers=none
+State: next=6 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -31,7 +31,7 @@ written, and this change stays on the rules side of it.
       done-when: `git log --oneline -1` names the red-test commit and
       `proof/s4_red.txt` is tracked.
 
-- [ ] 3. (S1) Implement the ladder in `src/deepreason/premises.py`
+- [x] 3. (S1) Implement the ladder in `src/deepreason/premises.py`
       `premise_work_invited`: count this problem's standing attributions;
       return `refuted >= after * (standing + 1)`. Docstring states the ladder,
       its bound (`floor(refuted/after)` invitations per problem) and the
@@ -40,14 +40,14 @@ written, and this change stays on the rules side of it.
       (the gate-arithmetic half of step 1 now GREEN; the loop half may still be
       red until step 5).
 
-- [ ] 4. (S1, S5) Move `docs/map/CON-problem-layer-lifecycle.md` in the SAME
+- [x] 4. (S1, S5) Move `docs/map/CON-problem-layer-lifecycle.md` in the SAME
       change: lines 149 and 216 state the ladder, with a NEW `check:` that would
       fail if the latch came back. Run the check before writing it down.
       done-when: the new `check:` command exits 0 when run by hand, AND
       `python tools/docs_verify.py --fast` reports no NEW failure over the C7
       baseline.
 
-- [ ] 5. (S1, S5) [COMMIT] Commit the ladder + its map move together.
+- [x] 5. (S1, S5) [COMMIT] Commit the ladder + its map move together.
       done-when: `git show --stat HEAD` lists `src/deepreason/premises.py` and
       `docs/map/CON-problem-layer-lifecycle.md` in one commit, and
       `python3 tools/diff_budget.py` (or the equivalent line count) is within

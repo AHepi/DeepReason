@@ -632,14 +632,33 @@ def premise_work_invited(
     -- so H1 is intact (a failure redirects attention, it does not spawn) and
     nothing is ranked on whether an attribution exists.
 
-    Fires when a problem has accumulated refuted candidates and nobody has yet
-    questioned the problem itself.
+    THE LADDER. Every invitation costs `after` refuted candidates: the first is
+    bought by the first `after`, and a problem already standing N attributions
+    must accumulate `after * (N + 1)` before it may ask again. So a problem can
+    be asked more than once, and the number of times is bounded by
+    `floor(refuted / after)` -- bought by refutations the run had to produce
+    anyway, never by a free re-ask.
+
+    A latch was the alternative and the record refuted it. Until 2026-08-28 any
+    standing attribution closed a problem to further invitations for the rest of
+    the run; the technique run then established at seq 779, in a surviving
+    conjecture, that its own question was malformed -- 593 events after the only
+    channel for saying so had closed (AUDIT_REPORT.md section F-B, and the
+    per-dispatch counterfactual in
+    experiments/2026-08-28-change-premise-invitation-reachability/probes/).
+    Criticism that arrives late is exactly the criticism this channel exists
+    for, so the gate that shuts before it arrives is the defect.
+
+    With no attribution standing this is byte-for-byte the rule it replaces, so
+    a run that never files a premise sees no difference at all. An attribution
+    that is itself refuted stops standing (`standing_attributions` counts only
+    unrefuted ones), which LOWERS the rung rather than deleting it -- N1
+    reversibility, unchanged.
     """
-    if any(pid == problem_id for _, pid, _ in standing_attributions(harness)):
-        return False
+    standing = sum(1 for _, pid, _ in standing_attributions(harness) if pid == problem_id)
     refuted = sum(
         1
         for aid, pid in harness.state.addr
         if pid == problem_id and harness.state.status.get(aid) == Status.REFUTED
     )
-    return refuted >= after
+    return refuted >= after * (standing + 1)

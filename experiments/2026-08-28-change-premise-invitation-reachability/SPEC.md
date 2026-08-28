@@ -509,6 +509,43 @@ S7 0, S8 (artifact) 0.
 S4, then S6/S8 artifacts). Frozen surfaces touched: none (verdict CLEAR, pasted
 above).
 
+### Budget amendment 1 (2026-08-28, mid-execution) — the ceiling was wrong
+
+Recorded rather than absorbed. After step 1 (the red regression) the actual
+diff already stood at:
+
+    $ python tools/diff_budget.py origin/main --ceiling 233 --paths src tests docs
+    {"areas": {"src": 24, "tests": 275, "docs": 27}, "total_insertions": 326,
+     "ceiling": 233, "verdict": "EXCEEDED"}
+
+The overrun is entirely in TESTS: S4 was itemized at 130 lines and the tests it
+actually needs are ~275, because the disposition receipt has a four-case matrix
+(never invited / invited-and-silent / premise-without-citations / premise-with-
+citations) and the ladder has four rungs to pin (first rung, re-invitation
+price, N1 reversibility, and the unchanged-at-zero-attributions case) — nine
+tests, not the three the itemization assumed. Source is UNDER its own estimate:
+24 insertions against S1+S2+S3's 58.
+
+This is a mis-estimate in this spec, not scope creep: every one of the nine
+tests traces to R1, R3 or R5, and R5/R6 are the operator's own instruction that
+the change ship with mutation-proven regression tests. Nothing unrequested
+entered `src/`.
+
+Re-itemized, with the source ceiling deliberately left where it was so the
+thing the ceiling exists to guard is still guarded:
+
+    $ python3 -c "print(sum([60, 330, 90]))"
+    480
+
+    src   <= 60    (S1 12 + S2 26 + S3 20, unchanged)
+    tests <= 330   (S4, re-estimated from the written tests)
+    docs  <= 90    (S5, three map documents rather than the two-and-a-line
+                    the original itemization assumed)
+
+New headline: **~480 changed lines, ceiling 480, source sub-ceiling 60.**
+Flagged to the operator in DELIVERY.md rather than settled silently: a spec
+whose headline is quietly rewritten to match its own diff is not a ceiling.
+
 Rubric: 6/6 yes — every R1..R9 has a spec item with a machine-decidable accept
 (R1→S1, R2→S6/answer 1, R3→S2+S3+S6, R4→S6/answer 3, R5→S4, R6→S5+S7,
 R7→the R7 section, R8→S8, R9→S8); blast-radius census pasted from the tool and
