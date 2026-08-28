@@ -1,0 +1,6 @@
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+=========================== short test summary info ============================
+FAILED tests/test_terminal_lifecycle_refusal_is_recorded.py::test_a_refused_terminal_records_the_refusal_and_no_surface_claims_continue
+FAILED tests/test_terminal_lifecycle_refusal_is_recorded.py::test_a_lifecycle_bug_records_a_DIFFERENT_code_than_a_correct_refusal
+2 failed, 3 passed in 8.24s

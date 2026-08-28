@@ -1,0 +1,7 @@
+{
+  "code": "STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY",
+  "detail": "STOPPED refuses unfinished workflow authority: 11 outstanding work items, 0 unconsumed bound calls",
+  "outstanding_work": 11,
+  "schema": "deepreason-terminal-lifecycle-refusal-v1",
+  "unconsumed_bound_calls": 0
+}

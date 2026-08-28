@@ -1,0 +1,6 @@
+tests/test_terminal_lifecycle_refusal_is_recorded.py:155: AssertionError
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+=========================== short test summary info ============================
+FAILED tests/test_terminal_lifecycle_refusal_is_recorded.py::test_a_refused_terminal_records_the_refusal_and_no_surface_claims_continue
+1 failed, 4 passed in 8.22s

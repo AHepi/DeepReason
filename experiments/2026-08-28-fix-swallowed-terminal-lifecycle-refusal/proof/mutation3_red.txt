@@ -1,0 +1,6 @@
+E           ValueError: STOPPED refuses unfinished workflow authority
+
+src/deepreason/workflow/lifecycle.py:243: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_terminal_lifecycle_refusal_is_recorded.py::test_the_stopped_refusal_is_typed_and_carries_the_counts_that_caused_it
+1 failed, 4 passed in 8.17s

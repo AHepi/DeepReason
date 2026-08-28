@@ -468,12 +468,16 @@ def test_verification_is_a_typed_absence_when_no_verdict_was_published():
 def test_terminal_readiness_answers_the_amend_question():
     """R10: amendment epochs, and whether the root stands at a valid typed terminal.
 
-    The two halves answer different questions and both are required: the replay
-    verdict says the record is sound, the stop reason says the lifecycle will
-    resume from it.
+    The THREE halves answer different questions and all are required: the
+    replay verdict says the record is sound, the stop reason says the
+    lifecycle will resume from that KIND of stop, and the continuation
+    authority says the lifecycle actually RECORDED the transition resumption
+    reads.  The third was added 2026-08-28 after a root satisfying the first
+    two refused `continue` (P6; audit finding F-C).
     """
 
     from deepreason.application.results import results_summary
+    from deepreason.harness import Harness
     from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
 
     root = _smallest_root_with(*_TERMINAL_FILES)
@@ -485,6 +489,8 @@ def test_terminal_readiness_answers_the_amend_question():
     assert set(terminal) == {
         "valid_typed_terminal",
         "stop_reason_resumable",
+        "continuation_authority",
+        "lifecycle_refusal",
         "amend_ready",
         "terminal_epoch",
     }
@@ -494,8 +500,20 @@ def test_terminal_readiness_answers_the_amend_question():
     assert terminal["stop_reason_resumable"] == (
         stop["reason"] in RESUMABLE_STOP_REASONS
     )
+    # The third half, added 2026-08-28: `continue` resumes from a recorded
+    # lifecycle decision, never from a stop REASON, so a reader consulting
+    # only the reason promised continuations `continue` refused
+    # (CONTINUE_TYPED_STOP_REQUIRED). Derived from the root here, as the
+    # other two are — the reader is not allowed to be its own witness.
+    state = Harness(root, read_only=True).workflow_state
+    assert terminal["continuation_authority"] == (
+        state.terminal_lifecycle_decision is not None
+        or state.current_resume_decision is not None
+    )
     assert terminal["amend_ready"] == (
-        terminal["valid_typed_terminal"] and terminal["stop_reason_resumable"]
+        terminal["valid_typed_terminal"]
+        and terminal["stop_reason_resumable"]
+        and terminal["continuation_authority"]
     )
     assert terminal["terminal_epoch"] == stored["terminal_binding"]["terminal_epoch"]
 

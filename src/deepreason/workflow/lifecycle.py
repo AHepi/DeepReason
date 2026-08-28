@@ -28,6 +28,32 @@ from deepreason.workflow.models import (
 RESUMABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})
 
 
+class UnfinishedWorkflowAuthorityError(ValueError):
+    """STOPPED refused: the workflow still holds authority no stop may close.
+
+    Typed so a caller can tell this refusal — which is correct, expected, and
+    decided by the record — from the six other ``ValueError``s this module
+    raises, which are bugs.  A handler that cannot tell them apart answers all
+    seven with the same silence, and that is what published roots carrying a
+    budget_exhausted terminal, a valid replay verdict and zero lifecycle
+    decisions (soak case ``epoch3``, 11 outstanding work orders).
+
+    Subclasses ``ValueError`` so every handler written before the type existed
+    keeps catching it unchanged.
+    """
+
+    code = "STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY"
+
+    def __init__(self, snapshot: WorkflowLifecycleSnapshotV1):
+        self.outstanding_work_count = len(snapshot.outstanding_work)
+        self.unconsumed_bound_call_count = len(snapshot.unconsumed_bound_call_seqs)
+        super().__init__(
+            "STOPPED refuses unfinished workflow authority: "
+            f"{self.outstanding_work_count} outstanding work items, "
+            f"{self.unconsumed_bound_call_count} unconsumed bound calls"
+        )
+
+
 def outstanding_work_snapshot(
     workflow_state: Any,
     *,
@@ -214,7 +240,7 @@ def build_stopped_lifecycle(
         event_fence_seq=stop_event_seq - 1,
     )
     if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
-        raise ValueError("STOPPED refuses unfinished workflow authority")
+        raise UnfinishedWorkflowAuthorityError(snapshot)
     observation = StopMetricsObservationV1.create(
         manifest_digest=manifest_digest,
         controller_version=controller_version,

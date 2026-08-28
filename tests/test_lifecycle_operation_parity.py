@@ -367,10 +367,14 @@ def test_finalize_resumes_after_an_interrupted_terminalization(
     _no_provider_scheduler()(harness, None, 1, None)
     # Exactly the state the killed process left: a durable typed stop, no
     # terminal commitment, no result.
-    stop = _record_exhaustion_lifecycle_stop(
+    stop, refusal = _record_exhaustion_lifecycle_stop(
         harness, manifest, policy=StopPolicy(), metrics=StopMetrics(cycle=1)
     )
     assert stop is not None
+    # This root's workflow holds no unfinished authority, so the receipt is
+    # taken and nothing is refused; a root that DID hold some would get the
+    # typed refusal instead (test_terminal_lifecycle_refusal_is_recorded.py).
+    assert refusal is None
     assert not (root / "run-result.json").exists()
 
     def _stop_events(base):

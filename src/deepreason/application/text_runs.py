@@ -30,6 +30,11 @@ from deepreason.application.models import (
 )
 from deepreason.locking import ProcessLockBusy, operator_locks
 
+# A terminal that could not take its STOPPED lifecycle receipt says so here,
+# in the run result and in the terminal progress event, so that no surface
+# has to infer the rejection from the ABSENCE of a lifecycle decision.
+TERMINAL_LIFECYCLE_REFUSAL_SCHEMA = "deepreason-terminal-lifecycle-refusal-v1"
+
 
 class TextRunWorkerRegistry:
     """Process-local handles; durable ownership remains the operator lock."""
@@ -187,13 +192,31 @@ def _v6_run_result(
     )
 
 
+def _refusal(code: str, detail: str, **facts) -> dict[str, Any]:
+    """One typed reason this root could not take a STOPPED lifecycle receipt."""
+
+    return {
+        "schema": TERMINAL_LIFECYCLE_REFUSAL_SCHEMA,
+        "code": code,
+        "detail": detail[:2_000],
+        **facts,
+    }
+
+
 def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
     """Record a typed, continuable STOPPED receipt for a budget-exhausted run.
 
-    Returns the persisted stop record, or ``None`` when this root cannot
-    carry the receipt (no owned control plane, or the workflow holds
-    unfinished authority) — the caller then keeps the bare stop record and
-    the terminal stays non-resumable, exactly as before.
+    Returns ``(stop_record, None)`` on success, or ``(None, refusal)`` when
+    this root cannot carry the receipt — the caller then keeps the bare stop
+    record and the terminal stays non-resumable, exactly as before.
+
+    The refusal is RETURNED rather than swallowed because the terminal it
+    produces is indistinguishable, from outside, from a continuable one: a
+    bare ``except ValueError: return None`` here published roots reporting
+    ``ready for continue: yes`` that ``continue`` refused with
+    CONTINUE_TYPED_STOP_REQUIRED (P6; audit 2026-08-28 finding F-C).  Whether
+    unfinished authority OUGHT to block continuation is a separate, open
+    question — this path only stops hiding that it does.
     """
 
     from deepreason.runtime.stop import (
@@ -202,7 +225,10 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
         build_stop_record,
         persist_stop_record,
     )
-    from deepreason.workflow.lifecycle import build_stopped_lifecycle
+    from deepreason.workflow.lifecycle import (
+        UnfinishedWorkflowAuthorityError,
+        build_stopped_lifecycle,
+    )
 
     control = (
         getattr(manifest, "control_plane_policy", None)
@@ -219,7 +245,17 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
         }
         or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
     ):
-        return None
+        return None, _refusal(
+            "TERMINAL_LIFECYCLE_UNSUPPORTED_CONTROL_PLANE",
+            "this configuration owns no control plane that may carry a "
+            "STOPPED lifecycle receipt",
+            controller_version=(
+                getattr(control, "controller_version", None)
+                if control is not None
+                else None
+            ),
+            mode=getattr(control, "mode", None) if control is not None else None,
+        )
     stop_event_seq = harness._next_seq
     record = build_stop_record(
         reason="budget_exhausted",
@@ -242,14 +278,25 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
             stop_event_seq=stop_event_seq,
             stop_record_digest=record["digest"],
         )
-    except ValueError:
-        return None
+    except UnfinishedWorkflowAuthorityError as refused:
+        return None, _refusal(
+            UnfinishedWorkflowAuthorityError.code,
+            str(refused),
+            outstanding_work=refused.outstanding_work_count,
+            unconsumed_bound_calls=refused.unconsumed_bound_call_count,
+        )
+    except ValueError as error:
+        # The builder raises ValueError in six further places, every one of
+        # them a bug rather than a refusal.  Recording them separately is the
+        # point of typing the refusal above: one code no longer stands for
+        # both.
+        return None, _refusal("TERMINAL_LIFECYCLE_REJECTED", str(error))
     event = harness.record_lifecycle_transition(observation, snapshot, lifecycle)
     if event.seq != stop_event_seq:
         raise RuntimeError("lifecycle Control event crossed its stop fence")
     stop = persist_stop_record(harness.root, record)
     harness.write_workflow_checkpoint()
-    return stop
+    return stop, None
 
 
 def _recoverable_typed_stop(harness, root: Path):
@@ -315,6 +362,7 @@ def terminalize_text_run(
     from deepreason.status_display import display_status_counts
 
     root = Path(root)
+    lifecycle_refusal: dict[str, Any] | None = None
     scheduler_reason = result.get("stop_reason")
     stop_reason = (
         "operator_cancelled"
@@ -334,8 +382,9 @@ def terminalize_text_run(
             # continuable terminal (owner decision: budget stops on public
             # runs are resumable).  A root that cannot take the receipt (no
             # owned control plane, unfinished workflow authority) keeps the
-            # bare fail-closed stop.
-            stop = _record_exhaustion_lifecycle_stop(
+            # bare fail-closed stop AND records why, so the terminal it
+            # publishes cannot be mistaken for a continuable one.
+            stop, lifecycle_refusal = _record_exhaustion_lifecycle_stop(
                 harness, manifest, policy=policy, metrics=metrics
             )
         if stop is None:
@@ -385,6 +434,7 @@ def terminalize_text_run(
         ),
         "capability_audits": capability_audits,
         "stop": stop,
+        "terminal_lifecycle_refusal": lifecycle_refusal,
     }, harness=harness)
     payload = finalize_terminal_result(harness, manifest, payload)
     _atomic_json(root / "run-result.json", payload)
@@ -1445,6 +1495,9 @@ class TextRunApplicationService:
                 token_limit=display_token_limit,
                 determinate=False,
                 stop_reason=stop_reason,
+                terminal_lifecycle_refusal=(
+                    (payload.get("terminal_lifecycle_refusal") or {}).get("code")
+                ),
                 display_status_counts=display_status_counts(harness, manifest),
             )
             notify(terminal)

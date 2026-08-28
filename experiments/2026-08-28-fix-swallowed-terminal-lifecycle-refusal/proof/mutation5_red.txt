@@ -1,0 +1,5 @@
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+=========================== short test summary info ============================
+FAILED tests/test_terminal_lifecycle_refusal_is_recorded.py::test_an_unrefused_terminal_still_reports_ready_and_records_no_refusal
+1 failed, 4 passed in 8.31s
