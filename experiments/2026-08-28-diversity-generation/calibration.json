@@ -1,0 +1,31 @@
+{
+  "seed": 20260828,
+  "embedder_fingerprint": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.29.0",
+    "sentinel": "d6e3599ce0377000"
+  },
+  "documents": 40,
+  "n_pairs_per_class": 200,
+  "metric": "cosine similarity of NeuralEmbedder vectors (raw text, no task prefix)",
+  "hard_negative_same_document": {
+    "n": 200,
+    "min": 0.4718373427955395,
+    "p10": 0.556355096258322,
+    "median": 0.6233448407068022,
+    "p90": 0.7186340071740057,
+    "max": 0.831895982910504
+  },
+  "same_idea_subsample": {
+    "n": 200,
+    "min": 0.6826954670072714,
+    "p10": 0.8111168302151753,
+    "median": 0.9186407520559414,
+    "p90": 0.9709047597800039,
+    "max": 0.9881550223913186
+  },
+  "tau_star": 0.7454,
+  "youden_J": 0.94,
+  "tpr_at_tau_star": 0.97,
+  "fpr_at_tau_star": 0.03
+}
