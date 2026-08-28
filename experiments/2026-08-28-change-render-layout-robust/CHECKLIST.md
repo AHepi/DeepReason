@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 10 next.
+State: STOPPED at step 10 — C3 stop line, two committed pins moved. Awaiting the operator.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two

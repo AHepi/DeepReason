@@ -1,0 +1,27 @@
+            ),
+            "executable_test_yield": len(verdicts) / len(artifacts),
+            "verifier_backed_success_rate": useful / len(verdicts),
+            "tokens_per_admitted_useful_candidate": sum(
+                call.tokens for call in calls
+            )
+            / useful,
+        }
+        baseline = json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
+    
+        assert baseline["evidence_class"] == "offline_mock"
+        assert baseline["status_input"] is False
+>       assert measured == baseline["metrics"]
+E       AssertionError: assert {'valid_first...dies': 2, ...} == {'candidate_f...': 784.5, ...}
+E         
+E         Omitting 6 identical items, use -vv to show
+E         Differing items:
+E         {'tokens_per_admitted_useful_candidate': 825.0} != {'tokens_per_admitted_useful_candidate': 784.5}
+E         Use -v to get more diff
+
+tests/test_semantic_freedom_constitution.py:480: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_incident_wave_a_v2_fixtures.py::test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic
+FAILED tests/test_semantic_freedom_constitution.py::test_offline_semantic_freedom_baseline_is_measurable
+2 failed, 4401 passed, 6 skipped in 1109.28s (0:18:29)
+
+[exited with code 0]
