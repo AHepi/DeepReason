@@ -462,6 +462,60 @@ before treating a green soak as full coverage
   `experiments/2026-08-14-change-calculus-reconciliation-v2/` REQUEST.md
   Amendment 2; the mechanism lands at that program's Rung 1b.
 
+- **Seat configuration is ungated, gates are optional-with-warnings, and
+  modes are the point of the modularity** (2026-08-28, operator's words
+  verbatim, sharpening the all-configurations law (2026-08-12), the
+  operations-parity law (2026-08-13) and the modularity law (2026-08-26)):
+  "My intention was that configuration of seats need to be able to turn
+  gates on and off at will. Meaning no limits to what model you place
+  where. It also means that when and if I decide to replace schools with
+  something different, those flags don't gate seat configuration paths.
+  Gates are always optional: with warnings. Although behaviour path
+  should be deterministic, yet also configurable. Do I want to
+  prioritise brainstorming and idea generation first before subjecting
+  the content to rigorous criticism and elimination -- the difference
+  between strict narrowing and interesting options for a user to choose.
+  Do I want to pick and argument apart and poke holes wherever possible
+  and not necessarily create novel ideas. This isn't an exhaustive list,
+  it's just two examples. That's why I made DeepReason modular, so these
+  types of modes could be generated: Analysis mode, daydream mode,
+  critic model, novel exploration mode; whatever." Operational reading:
+  ANY model may sit in ANY seat; NO flag — school flags included, and
+  whatever replaces schools — may gate a seat-configuration path; every
+  gate (qualification, criticism authority, judge invocation, admission
+  screens) is switchable per run, and switching one off produces a typed
+  WARNING, never a refusal and never silence; behaviour paths stay
+  deterministic given a configuration while remaining configurable
+  between runs; and the modularity exists so run-level MODES (analysis,
+  daydream/generation-first, critic/hole-poking, novel exploration, …)
+  can be composed from configuration. The audit finding P10 (2026-08-28,
+  five switches silently reverted by the manifest echo with zero
+  notices) violates this law's letter twice over — silent, and a gate
+  the configuration could not actually turn on.
+
+- **The judge law, amended on the record's own evidence** (2026-08-28,
+  operator verbatim: "The judge statement should have been amended. We
+  did some research on this, relying on external sources, but I've
+  forgotten the results." Amended wording drafted by the monitor from
+  the committed evidence the operator directed to; the 2026-08-09
+  statement above stands as history): the caution "they prosecute
+  without any discernable discrimination" is SUPERSEDED by measurement
+  (experiments/2026-08-09-change-judge-evidence-review/ REVIEW.md;
+  docs/RESEARCH_JUDGE_BLINDING_2026-08-22.md). What the record shows:
+  in the frozen configuration (cross-family pairing, unanimous vote)
+  judges UNDER-convict — 11.9% sensitivity on planted ground-truth
+  defects, 0-2.5% false conviction of sound work; every looser
+  configuration measured (same-family, either-suffices) over-convicts
+  at 47-60%; the indiscriminate stage is the CRITIC's raw objection
+  flow, not the judge-gated conviction; and label/provenance exposure,
+  not content, carries the bias — so blinding is STRUCTURAL: renderers
+  OMIT provenance fields entirely (a present-but-blank slot draws more
+  attention than a filled one), and no prompt-level fix substitutes.
+  Unmeasured residue, still open: self-preference and verbosity bias
+  have zero live measurements. Judge use is a per-run configuration
+  choice under the ungated-seats law above; the solo-run law is
+  untouched.
+
 ## The map — `docs/map/` (read this before scoping any change)
 
 125 000 lines across 34 packages. Do not scope a change by grepping; scope it
