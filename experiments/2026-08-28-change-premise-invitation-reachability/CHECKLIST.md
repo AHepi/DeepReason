@@ -1,6 +1,6 @@
 # Checklist for: make the critic's byte-checked citation channel reachable, and stop it latching shut
 
-State: next=15 blockers=none
+State: COMPLETE (all 17 steps checked) blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -113,18 +113,18 @@ written, and this change stays on the rules side of it.
       done-when: `git status --porcelain` shows no untracked file under the
       tranche directory.
 
-- [ ] 15. (S5, all) Map check, FULL mode (not `--fast`: `--fast` reuses cached
+- [x] 15. (S5, all) Map check, FULL mode (not `--fast`: `--fast` reuses cached
       results and cannot catch a document this tranche's `src/` change broke).
       Run on an otherwise idle box — never concurrently with the gate.
       done-when: `python tools/docs_verify.py` failures <= 4 (C7 baseline: 3
       shallow-clone + 1 pre-existing falsified census), and
       `python tools/docs_verify.py --audit` reports no new unfailable check.
 
-- [ ] 16. (S7, all) Full gate.
+- [x] 16. (S7, all) Full gate.
       done-when: `python -m pytest tests/ -q -n 4` output ends "N passed, 0
       failed" with N >= 4374, pasted into VALIDATION.md.
 
-- [ ] 17. (all) [COMMIT] Push and confirm a clean tree.
+- [x] 17. (all) [COMMIT] Push and confirm a clean tree.
       done-when: `git status --porcelain` is empty AND
       `git rev-parse HEAD origin/claude/deepreason-premise-invitation-7qs3kc`
       prints the same sha twice.
