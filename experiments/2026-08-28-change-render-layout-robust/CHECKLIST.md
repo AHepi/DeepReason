@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 9 next.
+State: step 10 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -39,7 +39,7 @@ Spec: SPEC.md. Request: REQUEST.md.
       DONE WHEN: `python tools/docs_verify.py` full run shows no delta beyond
       C5's four known failures, and `--audit` accepts the new checks.
 
-- [ ] 9. S8 — PARKED.md with R3's ready-to-send calibration prompt and the
+- [x] 9. S8 — PARKED.md with R3's ready-to-send calibration prompt and the
       two disclosed follow-ups (the qualification-probe divergence, the
       task-frame-only seats).
       DONE WHEN: PARKED.md committed with one fenced, paste-ready prompt.
