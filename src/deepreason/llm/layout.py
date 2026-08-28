@@ -39,6 +39,7 @@ an argument or from the environment, reaches neither.
 from __future__ import annotations
 
 import os
+import re
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -173,3 +174,74 @@ def resolve_layout_policy(
             + ", ".join(layout_policy_ids()),
         )
     return policy
+
+
+# ---------------------------------------------------------------------------
+# The unit the instruction ceiling is measured in.
+#
+# A ceiling without a counting rule is not a bound, so the rule lives here,
+# beside the number, and one definition serves both the gate
+# (`tests/test_render_layout_rules.py`) and the census instrument in
+# `experiments/2026-08-28-change-render-layout-robust/tools/prompt_census.py`.
+#
+# A STANDING INSTRUCTION is one normative clause addressed to the model in the
+# NATURAL-LANGUAGE part of a rendered prompt: a sentence or semicolon-clause
+# that is imperative or carries a deontic marker.
+#
+# TWO EXCLUSIONS, disclosed rather than assumed, because the number means
+# nothing without them:
+#
+# 1. The JSON Schema. It is the largest text in most prompts and carries up to
+#    154 machine-checkable constraints, and the harness VALIDATES it and
+#    repairs violations through the contract-repair protocol. Its clauses do
+#    not compete for the adherence budget the research note measured; prose
+#    clauses, which nothing checks, do. Counted in, the conjecturer reads 163
+#    rather than 28 -- past the note's own hard floor -- and that number would
+#    be measuring the wrong thing.
+# 2. Data lines: artifact bodies, `predicate:`/`program:` commitment schemas,
+#    alias listings. They are what the model reasons ABOUT, not what it is
+#    told to do.
+
+_DEONTIC = re.compile(
+    r"\b(must|never|only|always|should|shall|may not|cannot|do not|don't|"
+    r"required|require|forbidden|invalid|rejected|refuted|ensure|avoid)\b",
+    re.IGNORECASE,
+)
+_IMPERATIVE = re.compile(
+    r"^(return|respond|propose|give|judge|answer|write|mount|assess|state|"
+    r"choose|include|carry|apply|classify|concede|explore|complete|vary|"
+    r"reconcile|produce|argue|tie|set|use|read|list|report|treat|copy|"
+    r"submit|address|explain|name|cite|quote|repair|do|never|always)\b",
+    re.IGNORECASE,
+)
+_DATA_LINE = re.compile(
+    r"^\s*(\{|\[|- [0-9a-f]{12,}|- SRC_\d+|- [A-Za-z0-9_.@-]+: (predicate|program):"
+    r"|\"|PROBLEM [0-9a-z-]+$|TARGET [0-9a-f]{12,}|spec \d+:)"
+)
+
+
+def model_facing_prose(prompt: str) -> str:
+    """The part of a rendered prompt the instruction ceiling is about."""
+
+    kept = []
+    for line in prompt.splitlines():
+        stripped = line.strip()
+        if not stripped or _DATA_LINE.match(line):
+            continue
+        if len(stripped) > 400 and stripped.count('"') > 20:
+            continue  # an inlined record rendered on one line
+        kept.append(line)
+    return "\n".join(kept)
+
+
+def count_standing_instructions(prompt: str) -> int:
+    """How many normative clauses one rendered prompt asks the model to hold."""
+
+    total = 0
+    for chunk in re.split(r"(?<=[.!?;:])\s+|\n", model_facing_prose(prompt)):
+        clause = chunk.strip(" -\t")
+        if len(clause) < 12:
+            continue
+        if _IMPERATIVE.match(clause) or _DEONTIC.search(clause):
+            total += 1
+    return total

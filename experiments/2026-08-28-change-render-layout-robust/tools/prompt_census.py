@@ -18,15 +18,11 @@ Counting rules, stated so they can be disputed rather than trusted:
 *   A BLOCK is a delimiter-bounded region of the rendered prompt: each `## id`
     pack section, plus each `\n\n`-separated region of the pre-pack head.
     This is the unit the research note's scale-free U-shape claim is about.
-*   A STANDING INSTRUCTION is one normative clause addressed to the model in
-    the NATURAL-LANGUAGE portion: a sentence or semicolon-clause that is
-    imperative or carries a deontic marker (must/never/only/do not/may
-    not/always/should/required/forbidden/return/propose/judge/...).
-    EXCLUDED, and this exclusion is a disclosed choice: the JSON Schema, the
-    syntax example, and data lines (artifact bodies, `predicate:`/`program:`
-    commitment schemas, alias listings). The harness VALIDATES the schema
-    mechanically and repairs violations, so schema clauses do not compete for
-    the adherence budget 2607.19257 measured; prose clauses do.
+*   A STANDING INSTRUCTION is counted by
+    `deepreason.llm.layout.count_standing_instructions`, which is the SHIPPED
+    definition -- the same one the gate's ceiling test uses. Its counting rule
+    and its two disclosed exclusions are documented there. A census with its
+    own private rule would be measuring something the gate does not enforce.
 *   ATTEMPT INDEX is reported separately: attempt 0 is the run's real layout;
     attempts >0 are REPAIR turns whose pack is a diagnostic envelope carrying
     the model's own rejected output, so their block counts measure the repair
@@ -55,23 +51,11 @@ import re
 import statistics
 import sys
 
-_DEONTIC = re.compile(
-    r"\b(must|never|only|always|should|shall|may not|cannot|do not|don't|"
-    r"required|require|forbidden|invalid|rejected|refuted|ensure|avoid)\b",
-    re.IGNORECASE,
+from deepreason.llm.layout import (
+    count_standing_instructions,
+    model_facing_prose,
 )
-# An imperative opener: a sentence beginning with a bare verb we actually use.
-_IMPERATIVE = re.compile(
-    r"^(return|respond|propose|give|judge|answer|write|mount|assess|state|"
-    r"choose|include|carry|apply|classify|concede|explore|complete|vary|"
-    r"reconcile|produce|argue|tie|set|use|read|list|report|treat|copy|"
-    r"submit|address|explain|name|cite|quote|repair|do|never|always)\b",
-    re.IGNORECASE,
-)
-_DATA_LINE = re.compile(
-    r"^\s*(\{|\[|- [0-9a-f]{12,}|- SRC_\d+|- [A-Za-z0-9_.@-]+: (predicate|program):"
-    r"|\"|PROBLEM [0-9a-z-]+$|TARGET [0-9a-f]{12,}|spec \d+:)"
-)
+
 _QUESTION_MARKER = re.compile(r"(?m)^(QUESTION|DIRECTIVE|TASK):")
 _QUESTION_SECTION = {
     "conjecturer": ("problem", "problem-context"),
@@ -82,21 +66,6 @@ _QUESTION_SECTION = {
     "summarizer": ("problem-context", "problem"),
     "thesis": ("problem-context", "problem"),
 }
-
-
-def _strip_json(text: str) -> str:
-    """Drop machine-checked and data regions, keep model-facing prose."""
-    out = []
-    for line in text.splitlines():
-        stripped = line.strip()
-        if not stripped:
-            continue
-        if _DATA_LINE.match(line):
-            continue
-        if len(stripped) > 400 and stripped.count('"') > 20:
-            continue  # an inlined record rendered on one line
-        out.append(line)
-    return "\n".join(out)
 
 
 _SCHEMA_KEYWORD = re.compile(
@@ -110,15 +79,6 @@ def count_schema_constraints(prompt: str) -> int:
     return len(_SCHEMA_KEYWORD.findall(prompt))
 
 
-def count_instructions(prose: str) -> int:
-    n = 0
-    for chunk in re.split(r"(?<=[.!?;:])\s+|\n", prose):
-        clause = chunk.strip(" -\t")
-        if len(clause) < 12:
-            continue
-        if _IMPERATIVE.match(clause) or _DEONTIC.search(clause):
-            n += 1
-    return n
 
 
 def split_blocks(prompt: str) -> tuple[list[tuple[str, str]], str, str]:
@@ -145,7 +105,7 @@ def split_blocks(prompt: str) -> tuple[list[tuple[str, str]], str, str]:
 
 def census_one(prompt: str, role: str) -> dict:
     blocks, head, pack = split_blocks(prompt)
-    prose = _strip_json(prompt)
+    prose = model_facing_prose(prompt)
     ids = [label for label, _ in blocks]
     question = None
     for candidate in _QUESTION_SECTION.get(role, ("problem", "problem-context")):
@@ -173,7 +133,7 @@ def census_one(prompt: str, role: str) -> dict:
         "block_ids": ids,
         "median_block_chars": int(statistics.median(sizes)) if sizes else 0,
         "small_blocks": sum(1 for s in sizes if s < 400),
-        "instructions": count_instructions(prose),
+        "instructions": count_standing_instructions(prompt),
         "schema_constraints": count_schema_constraints(prompt),
         "prose_chars": len(prose),
         "question_section": question,

@@ -374,3 +374,52 @@ def test_the_standard_profile_head_is_already_few_blocks_and_is_untouched():
     assert render_role_prompt(**kwargs, layout=ROBUST) == render_role_prompt(
         **kwargs, layout=LEGACY
     )
+
+
+# ---------------------------------------------------------------- R2b
+
+
+def test_no_seat_carries_more_standing_instructions_than_the_ceiling(harness):
+    """R2b closed as ALREADY-MET on the census -- 28 was the maximum over 2836
+    real dispatched prompts against a ceiling of 40. Nothing was restructured.
+    This is the guard the census found missing: the property held, and nothing
+    in the gate would have noticed a seat crossing it.
+    """
+    from deepreason.llm.layout import count_standing_instructions
+    from deepreason.llm.roles import COMPACT_TEMPLATES, TEMPLATES, render_role_prompt
+
+    problem = _problem(harness)
+    _accepted(harness, ENVELOPE)
+    pack = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=6, token_budget=6000, layout=ROBUST,
+    )
+
+    over = {}
+    for role in sorted(set(TEMPLATES) | set(COMPACT_TEMPLATES)):
+        for profile in ("standard", "compact"):
+            if profile == "standard" and role not in TEMPLATES:
+                continue
+            prompt = render_role_prompt(
+                role, schema='{"type": "object"}', pack=pack, profile=profile,
+                example="{}", aliases="SRC_001",
+            )
+            count = count_standing_instructions(prompt)
+            if count > ROBUST.instruction_ceiling:
+                over[f"{role}/{profile}"] = count
+    assert not over, over
+
+
+def test_the_instruction_counter_can_actually_fire():
+    """A guard whose instrument cannot reach its own threshold is not a
+    guard. `docs_verify --audit` refuses map checks that cannot fail; a gate
+    assertion is owed the same standard."""
+    from deepreason.llm.layout import count_standing_instructions
+
+    fifty = "\n".join(
+        f"You must always perform step {i} and never omit it." for i in range(50)
+    )
+    assert count_standing_instructions(fifty) == 50
+    assert count_standing_instructions(fifty) > ROBUST.instruction_ceiling
+    # Data lines and schema text do not inflate it.
+    assert count_standing_instructions('{"required": ["a"], "pattern": "^x$"}') == 0

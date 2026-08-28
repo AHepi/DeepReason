@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 6 next.
+State: step 8 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -26,10 +26,10 @@ Spec: SPEC.md. Request: REQUEST.md.
 - [x] 5. S5 — head block merging in `render_role_prompt`'s compact branch.
       DONE WHEN: A5 passes, RED against the pre-change tree.
 
-- [ ] 6. S6 — the instruction-count guard.
+- [x] 6. S6 — the instruction-count guard.
       DONE WHEN: A6 passes and the mutated-template run is RED.
 
-- [ ] 7. S7 — the three-limb architecture test.
+- [x] 7. S7 — the three-limb architecture test.
       DONE WHEN: all three limbs pass and limb 1 is RED against a consumer
       patched to ignore its `layout` argument.
 
