@@ -1,0 +1,1101 @@
+[
+  {
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "repair_payloads": 6,
+    "mode_values": {
+      "'whole_object_syntax'": 4,
+      "'patch'": 2
+    },
+    "illegal_modes": [
+      {
+        "work_id": "sha256:98d5cc3b4",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:cdb044df1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:79e14e242",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:c6ac3c365",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      }
+    ],
+    "rows": [
+      {
+        "work_id": "sha256:98d5cc3b4",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:cdb044df1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:79e14e242",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:c6ac3c365",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:81cf1ad03",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/counterconditions",
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:716456eac",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 3,
+        "attempt_index": 3,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      }
+    ]
+  },
+  {
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c",
+    "repair_payloads": 18,
+    "mode_values": {
+      "'whole_object_syntax'": 12,
+      "'patch'": 6
+    },
+    "illegal_modes": [
+      {
+        "work_id": "sha256:8b9ee054f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:93fd9b66f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:a27f460c1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:3c1a76676",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:05fd0eb1f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:ba6ee5b18",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:99f81e5c1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:020431962",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:18eee5d81",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:4a69164c3",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:dc5f11c46",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:27d7df85a",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      }
+    ],
+    "rows": [
+      {
+        "work_id": "sha256:8b9ee054f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:93fd9b66f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:a27f460c1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:3c1a76676",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:05fd0eb1f",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:d9e315c6a",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.atomic-candidate.v1",
+        "authorized_pointers": [
+          "/candidate/discharges/4/kind"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:ba6ee5b18",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:99f81e5c1",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:020431962",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:18eee5d81",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:4a69164c3",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:dc5f11c46",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:27d7df85a",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      },
+      {
+        "work_id": "sha256:3029e69d4",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:048262f02",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/counterconditions",
+          "/candidates/1/mechanism",
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:9b5dfc7f4",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/5/neighbours/0"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:34a1a917f",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 3,
+        "attempt_index": 3,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/counterconditions",
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:ffad5829b",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 4,
+        "attempt_index": 4,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": null
+      }
+    ]
+  },
+  {
+    "root": "run",
+    "repair_payloads": 32,
+    "mode_values": {
+      "'whole_object_syntax'": 20,
+      "'patch'": 12
+    },
+    "illegal_modes": [
+      {
+        "work_id": "sha256:a6c7655c4",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:d57edc93b",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5a57736f5",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:dc7ffd76e",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:cf21ab709",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:c52885d7b",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:78d6d0afb",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:c272fc13c",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:be9d469cc",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5448291cc",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:a2fb0afe5",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:094a9f56e",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:0056b1937",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:7de5874ce",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:f60a227fd",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:97578f35d",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:d69594ccd",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5a5e73c02",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:77f80b179",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:c2ca39a2c",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      }
+    ],
+    "rows": [
+      {
+        "work_id": "sha256:2f0b6fcba",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:b90d6d593",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:e7fdd5aa6",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:bfcfb7c23",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:a6c7655c4",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:e572bc0ea",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      },
+      {
+        "work_id": "sha256:b4dd35bdf",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      },
+      {
+        "work_id": "sha256:4b4a1b4e4",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      },
+      {
+        "work_id": "sha256:1ad165e57",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "batch-critic.v2",
+        "authorized_pointers": [
+          "/cases/0/premise_evidence/0/block",
+          "/cases/0/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "schema_exhausted"
+      },
+      {
+        "work_id": "sha256:d57edc93b",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5a57736f5",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:dc7ffd76e",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:cf21ab709",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:c52885d7b",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:78d6d0afb",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:c272fc13c",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:be9d469cc",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5448291cc",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:a2fb0afe5",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:094a9f56e",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:0056b1937",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:7de5874ce",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:f60a227fd",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:97578f35d",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:d69594ccd",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:5a5e73c02",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:77f80b179",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:c2ca39a2c",
+        "mode": "whole_object_syntax",
+        "mode_is_legal": false,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [],
+        "pointers_canonical": true,
+        "terminal_status": null
+      },
+      {
+        "work_id": "sha256:d79a3217d",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/1/typicality"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:87797f716",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "conjecturer.turn.v6",
+        "authorized_pointers": [
+          "/candidates/0/discharges/7/kind"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      },
+      {
+        "work_id": "sha256:f37e89a4f",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 1,
+        "attempt_index": 1,
+        "contract_id": "critic.atomic-target.v1",
+        "authorized_pointers": [
+          "/premise_evidence/0/block",
+          "/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "rejected"
+      },
+      {
+        "work_id": "sha256:3840a7cb0",
+        "mode": "patch",
+        "mode_is_legal": true,
+        "repair_index": 2,
+        "attempt_index": 2,
+        "contract_id": "critic.atomic-target.v1",
+        "authorized_pointers": [
+          "/premise_evidence/1/block"
+        ],
+        "pointers_canonical": true,
+        "terminal_status": "completed"
+      }
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "root": "failed-epoch0-run-19c2ff747b7e72c1ff1ba262aee2de360caf32696d2e1e8287247683fef74389",
+    "state": "failed",
+    "status_stop_reason": "operational_failure",
+    "stop_record_reason": "operational_failure",
+    "status_token_spend": 0,
+    "reason_in_RESUMABLE_STOP_REASONS": false,
+    "terminal_lifecycle_decision_present": false,
+    "lifecycle_decision_count": 0,
+    "current_resume_decision_present": false,
+    "terminal_commitment_present": true,
+    "continue_would_raise_CONTINUE_TYPED_STOP_REQUIRED": true,
+    "surfaces_disagree": false
+  },
+  {
+    "root": "completed-epoch1-run-92e63dcbdc3665c931560d7869e410012fd075059ff25b688c73a060fb8a97e3",
+    "state": "completed",
+    "status_stop_reason": "budget_exhausted",
+    "stop_record_reason": "budget_exhausted",
+    "status_token_spend": 413631,
+    "reason_in_RESUMABLE_STOP_REASONS": true,
+    "terminal_lifecycle_decision_present": false,
+    "lifecycle_decision_count": 0,
+    "current_resume_decision_present": false,
+    "terminal_commitment_present": true,
+    "continue_would_raise_CONTINUE_TYPED_STOP_REQUIRED": true,
+    "surfaces_disagree": true
+  },
+  {
+    "root": "failed-epoch5-run-456885c569c0f4f70477df38dd5dda9986ef81443c0a386f3956f85f3446df8c",
+    "state": "failed",
+    "status_stop_reason": "operational_failure",
+    "stop_record_reason": "operational_failure",
+    "status_token_spend": 0,
+    "reason_in_RESUMABLE_STOP_REASONS": false,
+    "terminal_lifecycle_decision_present": false,
+    "lifecycle_decision_count": 0,
+    "current_resume_decision_present": false,
+    "terminal_commitment_present": true,
+    "continue_would_raise_CONTINUE_TYPED_STOP_REQUIRED": true,
+    "surfaces_disagree": false
+  },
+  {
+    "root": "run",
+    "state": "completed",
+    "status_stop_reason": "budget_exhausted",
+    "stop_record_reason": "budget_exhausted",
+    "status_token_spend": 772482,
+    "reason_in_RESUMABLE_STOP_REASONS": true,
+    "terminal_lifecycle_decision_present": false,
+    "lifecycle_decision_count": 0,
+    "current_resume_decision_present": false,
+    "terminal_commitment_present": true,
+    "continue_would_raise_CONTINUE_TYPED_STOP_REQUIRED": true,
+    "surfaces_disagree": true
+  }
+]

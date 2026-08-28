@@ -1,0 +1,13 @@
+PASS  producer Literal is exactly {initial, whole_object_syntax, patch} -- ['initial', 'patch', 'whole_object_syntax']
+PASS  checker set is exactly {patch, full} -- ['full', 'patch']
+PASS  the two vocabularies intersect in {'patch'} only -- ['patch']
+PASS  'full' is accepted by the checker and emitted nowhere in src/
+PASS  'whole_object_syntax' is emitted by the producer and rejected by the checker
+PASS  completed-epoch1-run-92e63dc: observed modes subset of the producer Literal -- ['patch', 'whole_object_syntax']
+PASS  completed-epoch1-run-92e63dc: every observed illegal mode is whole_object_syntax -- 4 illegal of 6
+PASS  failed-epoch5-run-456885c569: observed modes subset of the producer Literal -- ['patch', 'whole_object_syntax']
+PASS  failed-epoch5-run-456885c569: every observed illegal mode is whole_object_syntax -- 12 illegal of 18
+PASS  run: observed modes subset of the producer Literal -- ['patch', 'whole_object_syntax']
+PASS  run: every observed illegal mode is whole_object_syntax -- 20 illegal of 32
+
+FAILURES: none
