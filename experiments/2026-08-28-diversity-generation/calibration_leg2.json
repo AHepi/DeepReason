@@ -1,0 +1,44 @@
+{
+  "source": "LEG 1 candidates only (arms B and D, all questions, reps 1-9)",
+  "embedder_fingerprint": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.29.0",
+    "sentinel": "d6e3599ce0377000"
+  },
+  "labelled_cells": 54,
+  "same_direction_pairs": {
+    "n": 14432,
+    "p10": 0.7173477807048075,
+    "median": 0.8388114178112684,
+    "p90": 0.9084123649753796
+  },
+  "different_direction_pairs": {
+    "n": 79854,
+    "p10": 0.5986682972551625,
+    "median": 0.6896496934438378,
+    "p90": 0.7839194539063644
+  },
+  "tau2": 0.76,
+  "youden_J": 0.634817058662547,
+  "tpr": 0.7995426829268293,
+  "fpr": 0.1647256242642823,
+  "linkage_scores": {
+    "single": {
+      "mean_adjusted_rand": 0.11801196516385637,
+      "mean_clusters": 3.814814814814815,
+      "cells": 54
+    },
+    "complete": {
+      "mean_adjusted_rand": 0.6760299884182003,
+      "mean_clusters": 14.981481481481481,
+      "cells": 54
+    },
+    "average": {
+      "mean_adjusted_rand": 0.6323728259323089,
+      "mean_clusters": 10.944444444444445,
+      "cells": 54
+    }
+  },
+  "linkage": "complete",
+  "leg1_tau_star_for_contrast": 0.7454
+}

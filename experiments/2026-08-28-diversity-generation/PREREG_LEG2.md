@@ -1,20 +1,4 @@
-#!/usr/bin/env python3
-"""Render PREREG_LEG2.md from calibration_leg2.json.
-
-The calibrated numbers appear in the pre-registration exactly as the
-calibration produced them; no number is retyped, so the frozen document and
-the committed calibration artifact cannot drift apart."""
-import json
-import pathlib
-
-HERE = pathlib.Path(__file__).resolve().parent
-c = json.loads((HERE / "calibration_leg2.json").read_text())
-tau2, linkage = c["tau2"], c["linkage"]
-sens = [round(tau2 - 0.02, 4), tau2, round(tau2 + 0.02, 4)]
-grid = sorted({round(tau2 + d, 4) for d in (-0.04, -0.02, 0.0, 0.02, 0.04)})
-ls = c["linkage_scores"]
-
-TEXT = f"""# PREREG — LEG 2: the same experiment with a metric that can measure it
+# PREREG — LEG 2: the same experiment with a metric that can measure it
 
 **Frozen 2026-08-28, before any leg 2 provider call.** Committed and pushed
 before `raw_leg2/` contains a single response. Same standing as PREREG.md:
@@ -26,27 +10,24 @@ dated appendix.
 ## §1 — Why there is a second leg
 
 Leg 1 ran as registered and its result stands, including the part that went
-wrong. Its primary counter **M1 saturated**: at the frozen τ\\* = 0.7454 with
+wrong. Its primary counter **M1 saturated**: at the frozen τ\* = 0.7454 with
 single linkage, nearly every cell reported ONE cluster, for every arm.
 
 The cause is diagnosed, not guessed, and the calibration below locates it
 precisely — in a place different from where it was first supposed.
 
-The obvious suspect was the THRESHOLD: τ\\* was calibrated on paragraphs from
+The obvious suspect was the THRESHOLD: τ\* was calibrated on paragraphs from
 DIFFERENT documents, whereas sixty conjectures answering ONE question sit in
 a tighter band. That suspect is largely innocent. Recalibrating the threshold
-in the correct regime gives **τ₂ = {tau2}**, within 0.015 of the frozen
-τ\\* = 0.7454. The threshold was very nearly right.
+in the correct regime gives **τ₂ = 0.76**, within 0.015 of the frozen
+τ\* = 0.7454. The threshold was very nearly right.
 
 The actual fault is the JOINING RULE. Single linkage merges two clusters when
 ANY member pair crosses the threshold, so candidates chain: each one bridges
 to the next until the cell fuses into one blob. Measured against the
 direction labels below, single linkage scores an adjusted Rand index of
-{ls['single']['mean_adjusted_rand']:.3f} and returns
-{ls['single']['mean_clusters']:.1f} clusters per cell, while complete linkage
-scores {ls['complete']['mean_adjusted_rand']:.3f} at
-{ls['complete']['mean_clusters']:.1f} clusters on the same vectors and the
-same threshold. The vectors were never the problem, and neither, much, was
+0.118 and returns 3.8 clusters per cell, while complete linkage scores 0.676
+at 15.0 clusters on the same vectors and the same threshold. The vectors were never the problem, and neither, much, was
 the cut.
 
 That is a correction to this experiment's own first reading of its failure,
@@ -62,12 +43,12 @@ that does not exist yet at the moment this file is frozen.
 ## §2 — What changes, and what does not
 
 **Changes — exactly one thing.** M1's clustering rule. The threshold moves
-barely at all (0.7454 → {tau2}); the joining rule is what changes.
+barely at all (0.7454 → 0.76); the joining rule is what changes.
 
 | | leg 1 | leg 2 |
 |---|---|---|
-| threshold | τ\\* = 0.7454 | **τ₂ = {tau2}** |
-| linkage | single | **{linkage}** |
+| threshold | τ\* = 0.7454 | **τ₂ = 0.76** |
+| linkage | single | **complete** |
 | calibrated on | paragraphs from 40 committed `docs/*.md` | **leg 1's own candidates** |
 | label used | paragraph-vs-subsample, and same-document pairs | **the named direction each B/D candidate was generated under** |
 
@@ -97,27 +78,26 @@ different-family pair. These are labelled pairs in exactly the regime the
 metric must work in — candidates answering one question — which is precisely
 what leg 1's calibration lacked.
 
-Source: **{c['labelled_cells']} labelled cells**, {c['source']}.
+Source: **54 labelled cells**, LEG 1 candidates only (arms B and D, all questions, reps 1-9).
 
 | class | n pairs | p10 | median | p90 |
 |---|---|---|---|---|
-| same direction | {c['same_direction_pairs']['n']} | {c['same_direction_pairs']['p10']:.4f} | {c['same_direction_pairs']['median']:.4f} | {c['same_direction_pairs']['p90']:.4f} |
-| different direction | {c['different_direction_pairs']['n']} | {c['different_direction_pairs']['p10']:.4f} | {c['different_direction_pairs']['median']:.4f} | {c['different_direction_pairs']['p90']:.4f} |
+| same direction | 14432 | 0.7173 | 0.8388 | 0.9084 |
+| different direction | 79854 | 0.5987 | 0.6896 | 0.7839 |
 
-**τ₂ = {tau2}**, the cut maximizing Youden's J on those pair labels
-(J = {c['youden_J']:.4f}, TPR {c['tpr']:.4f}, FPR {c['fpr']:.4f}). Chosen
+**τ₂ = 0.76**, the cut maximizing Youden's J on those pair labels
+(J = 0.6348, TPR 0.7995, FPR 0.1647). Chosen
 linkage-free, so the threshold does not presuppose the joining rule.
 
-**Linkage = {linkage}**, chosen at τ₂ by the adjusted Rand index between the
+**Linkage = complete**, chosen at τ₂ by the adjusted Rand index between the
 clustering each linkage produces and the direction partition:
 
 | linkage | mean adjusted Rand | mean clusters per cell |
 |---|---|---|
-""" + "".join(
-    f"| {'**' if k == linkage else ''}{k}{'**' if k == linkage else ''} | "
-    f"{ls[k]['mean_adjusted_rand']:.4f} | {ls[k]['mean_clusters']:.2f} |\n"
-    for k in ("single", "complete", "average")
-) + f"""
+| single | 0.1180 | 3.81 |
+| **complete** | 0.6760 | 14.98 |
+| average | 0.6324 | 10.94 |
+
 **Honest limit, registered where it is made.** A direction label is a PROXY
 for idea identity: two candidates inside one direction can still be genuinely
 different ideas, so the same-family class is contaminated by construction.
@@ -130,14 +110,14 @@ identically to all four arms, never to score an arm.
 
 ## §4 — Metrics
 
-**M1** = number of clusters at τ₂ = {tau2} under {linkage} linkage, over the
+**M1** = number of clusters at τ₂ = 0.76 under complete linkage, over the
 cell's valid candidates. Reported at **M1@Nmin** (adjudicating) and
 **M1@60** (beside it), Nmin being the smallest valid-candidate count across
 leg 2's 108 cells, subsample taken by candidate-id ascending.
 
-**Sensitivity, registered:** τ₂ ± 0.02 = {sens[0]} / {sens[2]}. A hypothesis
+**Sensitivity, registered:** τ₂ ± 0.02 = 0.74 / 0.78. A hypothesis
 counts as SUPPORTED only if its ordering holds at all three of
-{sens[0]}, {tau2}, {sens[2]}. Full grid reported: {grid}.
+0.74, 0.76, 0.78. Full grid reported: [0.72, 0.74, 0.76, 0.78, 0.8].
 
 **M2**, **M3** and the M3 failure codes: unchanged from PREREG.md §6.
 
@@ -150,7 +130,7 @@ its own source and `analyse.py`'s before computing anything.
 Unchanged from PREREG.md §7 — H1 (B > A), H2 (C > A), H3 (D ≥ B and D ≥ C),
 H4 (C's yield does not degrade by more than 5 percentage points over A) —
 with the same SUPPORTED/REFUTED conditions and the same 3-cluster effect
-floor, now evaluated at τ₂ under {linkage} linkage over 9 repetitions.
+floor, now evaluated at τ₂ under complete linkage over 9 repetitions.
 
 ## §6 — Registered null result
 
@@ -159,7 +139,3 @@ clusters of each other at τ₂, this instrument detected nothing, and that is
 the finding — not rescued by moving τ₂, changing the linkage, or adding arms.
 Leg 1 has already shown this experiment is willing to record an instrument
 failure rather than repair one.
-"""
-
-(HERE / "PREREG_LEG2.md").write_text(TEXT)
-print(f"PREREG_LEG2.md written: tau2={tau2} linkage={linkage}")
