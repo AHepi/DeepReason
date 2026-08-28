@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.56
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-893",
+    "object": "chat.completion",
+    "created": 1787936490,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software becomes harder to change because each locally correct modification inadvertently increases the dimensionality of the system's implicit state space, causing the combinatorial explosion of untested interaction paths to outpace the growth of the explicit test suite. Consequently, the probability that any new change triggers an unexercised, pathological interaction rises monotonically, shifting the system's fitness landscape toward a rugged regime where nearly all trajectories degrade global integrity. The system freezes not because its parts are broken, but because the cost of verifying safety across the hyperexpanding interaction graph asymptotically approaches the cost of rewriting the system itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 131,
+      "total_tokens": 233
+    }
+  },
+  "transport_error": null
+}

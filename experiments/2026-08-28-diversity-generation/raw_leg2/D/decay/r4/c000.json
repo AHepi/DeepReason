@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: entropy of dependency graphs under bounded-rational refactoring\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.512
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-128",
+    "object": "chat.completion",
+    "created": 1787937240,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Local correctness checks act as a ratchet: they prevent changes that break immediate contracts but permit changes that increase global dependency graph entropy. Because developers operate under bounded rationality, they cannot perceive long-range coupling, so every locally-validated refactoring monotonically increases the graph's Kolmogorov complexity, making future changes require strictly more context to validate.\", \"probability\": 0.085}, {\"conjecture\": \"The number of 'hidden modules'—clusters of nodes with dense internal dependencies but unobserved external coupling—grows superlinearly with system size under bounded-rational refactoring. A developer can only hold a constant number of dependencies in working memory, so they refactor within their visible subgraph, inadvertently creating implicit dependencies between hidden modules that no single actor can perceive or dismantle.\", \"probability\": 0.072}, {\"conjecture\": \"The half-life of a dependency edge in a long-running system decreases inversely with the topological betweenness centrality of the nodes it connects. Because bounded-rational developers avoid touching high-centrality nodes (which require excessive context to understand), edges connecting peripheral nodes are constantly refactored and duplicated, while core edges persist, causing the graph to ossify into an immutable core wrapped by an entangled, fragile periphery.\", \"probability\": 0.061}, {\"conjecture\": \"Review and testing enforce local invariants but provide no mechanism to penalize the accumulation of 'dead' dependency paths. Under bounded rationality, refactoring is path-dependent: developers add new edges to satisfy immediate requirements but rarely remove old ones because proving their obsolescence exceeds cognitive limits. Thus, the dependency graph's edge-to-node ratio monotonically increases, strictly proportional to the number of locally-correct changes.\", \"probability\": 0.078}, {\"conjecture\": \"As a system grows, the probability that a refactoring introduces a cyclic dependency approaches 1. Bounded-rational developers use local heuristics (e.g., 'extract interface') to resolve immediate compilation issues, but these heuristics are blind to global cycles. Because testing only validates runtime behavior, not topological acyclicity, the graph inevitably collapses into a single strongly connected component, at which point no change can be locally validated without global context.\", \"probability\": 0.055}, {\"conjecture\": \"Modularity in software graphs follows a power law where the size of the largest irreducible cluster is proportional to the integral of past developer turnover. Each bounded-rational developer maintains a mental model of only their immediate subsystem, refactoring to optimize local cohesion. The interfaces between these subsystems become irreversibly coupled 'integration patches' that no subsequent developer has the rational bandwidth to refactor, causing inter-module dependencies to accumulate monotonically.\", \"probability\": 0.068}, {\"conjecture\": \"Bounded rationality forces developers to minimize immediate cognitive cost, which biases refactoring toward creating 'hub' nodes (e.g., utility classes, god objects) rather than distributed networks. This creates a preferential attachment process where the dependency graph's degree distribution becomes increasingly scale-free. The system becomes harder to change because the average path length decreases (increasing entanglement) while the hub nodes become unmaintainable 'black holes' of context.\", \"probability\": 0.049}, {\"conjecture\": \"The entropy of a dependency graph increases because local tests enforce behavior, not architecture. A bounded-rational developer can only optimize the graph topology within a radius of k nodes. Since k is fixed by human cognitive limits, as the system size N grows, the fraction of the graph subject to architectural optimization approaches zero. Therefore, topological entropy increases as a direct function of the unoptimized fraction: ΔS ∝ (N - k) / N per change.\", \"probability\": 0.092}, {\"conjecture\": \"Refactoring under bounded rationality optimizes for local transitive reduction (removing redundant direct edges) but fails to account for global transitive closure. This locally minimizes edges but globally increases the 'fan-in' volatility of distant nodes. Consequently, the graph becomes harder to change not because of edge density, but because the blast radius of any node deletion becomes computationally intractable to predict from a local vantage point.\", \"probability\": 0.064}, {\"conjecture\": \"Every locally correct change adds a unit of 'semantic noise' to dependency labels (e.g., method names, interface contracts) because developers under bounded rationality reuse existing names rather than creating precise new ones. This causes the mutual information between the dependency graph's structure and its semantic labels to degrade monotonically. The system becomes harder to change because the graph no longer serves as a reliable map of the system's behavior.\", \"probability\": 0.058}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 1003,
+      "total_tokens": 1192
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: coupling-coefficient inflation measured as a rising average ratio of the transitive closure of required test state mutations per targeted code mutation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.944
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-404",
+    "object": "chat.completion",
+    "created": 1787937399,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems become harder to change because each locally correct change adds a small invariant to the transitive closure of state dependencies, causing the average ratio of required test-state mutations to targeted code mutations to inflate asymptotically with system age. This coupling-coefficient inflation is monotonic and irreversible because the added invariants persist even when subsequent changes are refactors, meaning the cost of safe change grows as a function of cumulative historical edits rather than current code volume.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 99,
+      "total_tokens": 235
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.555
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-473",
+    "object": "chat.completion",
+    "created": 1787936249,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade not because individual changes are wrong, but because each locally correct change optimizes for immediate constraints while silently raising the global coupling between modules. Over time, this creates an implicit dependency graph that no single change can observe, so every new modification must satisfy an exponentially growing set of unstated, cross-cutting assumptions. The system becomes hard to change because the cost of any modification is now dominated by the invisible tax of discovering and reconciling these accumulated implicit couplings, not by the complexity of the new feature itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 113,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

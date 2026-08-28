@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated transactional log state imposes unbounded reconstruction cost on any new observer or refactoror\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.321
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-879",
+    "object": "chat.completion",
+    "created": 1787936377,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change appends a transactional decision to the system's log state—tests, commits, tickets, configurations—whose interdependencies grow faster than the codebase itself. Any refactoror attempting to safely change the system must reconstruct the causal history of why each prior decision was made, but this reconstruction cost scales with the total log volume, not the change size. Thus, even a one-line modification eventually requires unbounded causal reconstruction across an ever-growing event history, making the system effectively immutable once accumulated log state exceeds any observer's reconstruction budget.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 118,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

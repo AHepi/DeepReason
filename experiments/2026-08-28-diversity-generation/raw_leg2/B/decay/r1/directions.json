@@ -1,0 +1,8 @@
+[
+  "Coupled state spaces form a growing product automaton, making the fraction of reachable-safe states shrink combinatorially",
+  "Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants",
+  "Entropy of the call graph topology increases monotonically under locality-preserving edits, reducing spectral gap and information flow",
+  "Test suites overfit to historical change distributions, creating a selection shadow where rare-but-critical execution paths lose coverage",
+  "Accumulated transactional log state imposes unbounded reconstruction cost on any new observer or refactoror",
+  "Organizational memory decays faster than code, so tacit design rationale becomes unrecoverable, leaving only brittle literal constraints"
+]

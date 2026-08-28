@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.96
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-308",
+    "object": "chat.completion",
+    "created": 1787937400,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change adds a new execution path to the system's effective control automaton while rarely removing old ones, causing the shortest input sequence needed to reach any given path to grow as the graph diameter of the reachable state-space increases. Because every change is validated against paths reachable by short sequences, the paths requiring increasingly long, specific input sequences to exercise become structurally invisible to normal testing and review. The system thus becomes harder to change not because any single modification degrades quality, but because the minimum input length needed to exercise and verify any given behavior grows monotonically with accumulated paths.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 133,
+      "completion_tokens": 126,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

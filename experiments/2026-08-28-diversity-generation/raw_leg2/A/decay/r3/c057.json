@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.516
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-161",
+    "object": "chat.completion",
+    "created": 1787936781,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade because every locally correct change introduces latent cross-cutting couplings—shared assumptions between distant modules that are never explicitly represented in any interface or test. These implicit couplings form a hidden dependency graph that grows quadratically with codebase size, so the fraction of changes requiring coordinated multi-site updates grows over time. Because each individual change passed review and tests, the coupling remains invisible until someone violates an unstated assumption, at which point the system has already become effectively frozen.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 105,
+      "total_tokens": 207
+    }
+  },
+  "transport_error": null
+}

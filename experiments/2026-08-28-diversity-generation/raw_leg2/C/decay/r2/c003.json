@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.876
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-914",
+    "object": "chat.completion",
+    "created": 1787936621,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, incrementally increasing coupling between modules. The system's state space drifts away from the sparse connectivity it had when originally designed, making any new change require understanding a denser dependency graph that no single developer can hold in working memory.\", \"probability\": 0.08}, {\"conjecture\": \"Tests validate specific behavioral paths but cannot encode the full intent behind design decisions. Over time, the surviving code embodies tacit knowledge that is never re-articulated, so subsequent developers make changes consistent with the tests but inconsistent with the original architecture, creating a semantic drift that eventually makes the codebase illegible.\", \"probability\": 0.07}, {\"conjecture\": \"Software systems accumulate dead code, configuration flags, and backwards-compatibility shims faster than they are removed because each removal is individually risky and no single change justifies the cleanup cost. This debris increases the cognitive load of every future change, creating a ratchet effect where complexity monotonically increases.\", \"probability\": 0.09}, {\"conjecture\": \"Each change is locally correct but makes implicit assumptions about the broader execution context, assumptions that are never documented because they are invisible at the time of the change. These hidden assumptions compound combinatorially, so the number of things a developer must verify before making a change grows superlinearly with system age.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems are subject to entropy driven by the fact that useful changes get copied and adapted more often than they get abstracted. This creates a fitness landscape where duplication outcompetes abstraction, and the system becomes harder to change because finding the right place to modify requires distinguishing among many superficially similar but subtly different implementations.\", \"probability\": 0.05}, {\"conjecture\": \"Code review and testing enforce local consistency but are structurally incapable of detecting the loss of conceptual coherence. The difficulty of change grows with the distance between the system's current structure and any coherent mental model of it, and this distance increases with every change that is correct in behavior but incoherent in design.\", \"probability\": 0.08}, {\"conjecture\": \"The problem is a misalignment of incentives: developers are rewarded for shipping changes, not for maintaining the changeability of the system. Every change is a local utility maximization that slightly degrades the global property of modifiability, and without an explicit force counteracting this, the system undergoes the software equivalent of the tragedy of the commons.\", \"probability\": 0.07}, {\"conjecture\": \"Every change that passes review and testing becomes a constraint on future changes by virtue of being a precedent. The system's evolution is a path-dependent process where each accepted change narrows the space of changes that will be considered acceptable, and this shrinking space of permitted modifications is what makes the system feel harder to change.\", \"probability\": 0.04}, {\"conjecture\": \"Long-lived systems accumulate domain knowledge that was never explicitly modeled, only encoded in code structure. The difficulty of change is proportional to the ratio of tacit to explicit domain knowledge, and this ratio increases over time because developers add behavior without adding to the domain model, so the code becomes the only specification and it is not designed to be read as one.\", \"probability\": 0.06}, {\"conjecture\": \"The system's dependency graph undergoes a percolation transition: initially, modules are weakly connected and changes have limited blast radius, but each locally correct change adds edges. Once the graph crosses a critical density, nearly every change touches a giant connected component, and the cost of any change becomes proportional to system size rather than to the local scope of the modification.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 781,
+      "total_tokens": 956
+    }
+  },
+  "transport_error": null
+}

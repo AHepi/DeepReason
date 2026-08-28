@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: cognitive load scaling with the non-local blast radius of edits\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.299
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-749",
+    "object": "chat.completion",
+    "created": 1787937251,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy increases not because changes are wrong, but because each locally correct edit leaves behind implicit assumptions that future edits must respect; the cognitive load of tracking these non-local constraints grows quadratically with system size, making every new change require understanding a larger fraction of the whole.\", \"probability\": 0.07}, {\"conjecture\": \"The blast radius of an edit grows superlinearly with the density of implicit invariants in the codebase. Each reviewed change preserves existing invariants but adds new ones, so the fraction of the system a developer must hold in working memory before safely editing approaches 100% as the system matures.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally correct change creates latent coupling between the modified site and distant code that happens to depend on the pre-change behavior. This coupling is invisible in tests and review because it is conditional on future edits, so it accumulates silently until the cognitive cost of any edit includes reasoning about all possible future edits that could activate the coupling.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems become harder to change because each correct edit increases the semantic distance between the system's actual behavior and its recoverable specification. The developer must reverse-engineer the specification from code, and the search space for relevant non-local effects grows exponentially with the number of edits since the last complete specification.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty of change scales with the product of the number of implicit interfaces and the average distance between call sites. Each locally correct edit either creates a new implicit interface or extends an existing one, so cognitive load grows as O(n*d) where n is interface count and d is average spatial distance in the dependency graph.\", \"probability\": 0.04}, {\"conjecture\": \"Review and testing validate that a change preserves local invariants but cannot validate that it preserves the set of permissible future changes. Each edit narrows the space of safe future edits in a way that is invisible at the time of review, so the system accumulates constraints until the cognitive load of finding any safe edit exceeds the developer's working memory.\", \"probability\": 0.09}, {\"conjecture\": \"As a system ages, the ratio of non-local to local invariants grows monotonically because local invariants are enforced by compilers and tests while non-local invariants are enforced only by developer memory. The cognitive load of an edit is proportional to the number of non-local invariants that touch the edit site, and this number grows because each edit adds non-local invariants faster than it removes them.\", \"probability\": 0.08}, {\"conjecture\": \"The blast radius of edits in mature systems is dominated by transitive data-flow dependencies that cross module boundaries through shared mutable state. Each locally correct change seeds new transitive dependencies, and the cognitive cost of an edit is the cost of traversing the transitive closure of data-flow from the edit site, which grows polynomially with system age.\", \"probability\": 0.03}, {\"conjecture\": \"Every reviewed and tested change optimizes for local correctness, which means it tends to encode assumptions about the calling context rather than generalizing. These context-specific assumptions become non-local preconditions for future edits, so the cognitive load of any new change includes verifying that all sites matching the encoded context still satisfy the preconditions.\", \"probability\": 0.06}, {\"conjecture\": \"The increasing difficulty of changing long-running systems is a consequence of the exploration-exploitation tradeoff in developer cognition: early edits explore the design space and create reusable abstractions, but later edits must exploit existing abstractions whose non-local blast radius is proportional to their reuse count. Since reuse grows monotonically, so does the minimum cognitive load per edit.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 796,
+      "total_tokens": 986
+    }
+  },
+  "transport_error": null
+}

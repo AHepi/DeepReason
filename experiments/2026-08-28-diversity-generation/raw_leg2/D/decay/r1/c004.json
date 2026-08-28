@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Divergence between the system's actual execution topology and its maintained documentation\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.037
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-62",
+    "object": "chat.completion",
+    "created": 1787936448,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Documentation drift creates a growing impedance mismatch where developers reason about changes using stale topological models, producing locally correct code that degrades global coherence because the actual execution topology has silently diverged from the documented one.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"As the gap between documented and actual execution topology widens, developers increasingly rely on reverse-engineering code rather than reading docs, making each change require a full local rediscovery of hidden dependencies, which monotonically increases change cost.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"When documentation describes an idealized architecture that no longer matches runtime topology, each locally correct change inadvertently encodes the documented fiction into executable code, creating a class of latent integration defects that only manifest under specific runtime conditions and accumulate undetected.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The rate of documentation-topology divergence is proportional to the frequency of changes that are reviewed and tested only at the code level, because such reviews validate syntactic correctness but never validate that documentation still reflects the change, causing unchecked semantic drift.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each instance where a developer follows documented topology rather than actual topology and their change passes tests anyway—because tests also encode the documented model—permanently entrenches the divergence, making future correction exponentially more expensive as dependencies accumulate around the fictional model.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the documentation-to-topology gap creates two populations of code: changes made against documentation and changes made against actual topology, and the interaction surface between these populations generates unpredictable coupling that neither model explains.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"As divergence grows, the proportion of changes requiring a documentation correction before the code change can be safely designed increases nonlinearly, because the developer must first reconstruct actual topology, update documentation, get that reviewed, and only then make the intended change—tripling the effective cost per change.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The actual execution topology of a long-running system includes undocumented emergent paths—implicit data flows, timing-dependent ordering, and side effects—so changes tested against the documented topology pass locally but corrupt the undocumented topology, and each such corruption permanently increases the system's resistance to further change.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Test suites encode the documented execution topology at the time they were written, so as the actual topology diverges, tests become weaker detectors of topological errors, creating a false signal that changes are safe when they are merely consistent with an outdated model.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Code review validates changes against the reviewer's mental model, which is constructed from documentation rather than runtime observation, so the review process itself becomes a mechanism that selects for consistency with the documented topology over consistency with the actual topology, accelerating divergence.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 701,
+      "total_tokens": 894
+    }
+  },
+  "transport_error": null
+}

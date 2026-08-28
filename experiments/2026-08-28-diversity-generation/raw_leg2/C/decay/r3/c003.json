@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.152
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-568",
+    "object": "chat.completion",
+    "created": 1787936879,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate constraints, but the accumulation of these local optima locks the system into a globally suboptimal architecture that resists further change because any single improvement would temporarily degrade local fitness.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Dependencies accumulate not as a side effect but as the primary output of each change, since every locally correct modification must interface with existing components, and the resulting dependency graph's connectivity grows superlinearly, increasing the blast radius of every future change.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The system's behavioral specification is never written down in full; it exists only as the union of all tests and code paths. Each change adds paths without removing old ones, so the implicit specification grows monotonically, and any future change must satisfy an ever-larger set of unstated constraints.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every change introduces a small mismatch between the developer's mental model of the system and the actual code. These mismatches compound across changes and developers, so the cost of future changes rises with the total accumulated cognitive debt, not with code complexity per se.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each locally correct fix reduces the density of remaining bugs, and the surviving bugs are increasingly structural rather than local. The cost of each fix rises because fixing structural bugs requires coordinated changes across modules that were never designed to change together.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each change is validated against the current test suite, which encodes current behavior. Tests are added but rarely removed, so the test suite increasingly overconstrains the system, making legitimate architectural changes appear as failures even when they are correct.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Locally correct changes are made by developers who understand the touched modules but not the whole system. Over time, the system becomes a patchwork of module-local mental models that are mutually inconsistent. Changes become harder because no single developer's model matches enough of the system to safely make a cross-cutting change.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each change is selected to be locally correct under current requirements, but requirements drift over time. The system accumulates design decisions that were correct for past requirements but are now constraints, and the cost of change grows with the gap between the system's frozen design assumptions and current requirements.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every change that is locally correct and tested is accepted without requiring a corresponding abstraction. Over time, the system accumulates concrete special cases faster than it accumulates generalizing abstractions, so the ratio of special-case code to abstraction code rises, and each new change must handle a growing number of special cases.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The system's state space grows with each change because new code paths create new combinations of state transitions. Even if each change is locally correct, the state space grows combinatorially, and the cost of verifying that a future change is safe rises with the size of the reachable state space, which no test suite can fully cover.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 757,
+      "total_tokens": 932
+    }
+  },
+  "transport_error": null
+}

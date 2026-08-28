@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: friction from epistemic gaps in turnover and undocumented implicit context\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.861
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-235",
+    "object": "chat.completion",
+    "created": 1787937248,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Each undocumented design decision survives in the system as an implicit constraint, but the rate at which departing developers take these constraints with them scales with the cube root of system age, creating a widening gap between the code's visible structure and the reasoning that produced it.\", \"probability\": 0.09}, {\"conjecture\": \"When the original author of a subsystem leaves, the replacement developer reconstructs the design rationale from the code itself, but this reconstruction systematically overestimates how much of the implementation was deliberate versus accidental, leading to changes that violate the original implicit invariants.\", \"probability\": 0.08}, {\"conjecture\": \"Test suites encode the explicit contracts of a system but decay in their coverage of implicit invariants—assumptions that were obvious to the original authors and therefore never asserted—so turnover causes the effective safety net to shrink faster than the committed test count grows.\", \"probability\": 0.07}, {\"conjecture\": \"The difficulty of a change is proportional to the number of unstated assumptions a developer must simultaneously hold to make it safely; this number grows monotonically with developer turnover because each generation of maintainers adds a layer of implicit context without removing the previous layer.\", \"probability\": 0.09}, {\"conjecture\": \"Code review prevents locally incorrect changes but cannot prevent the gradual erosion of shared mental models, because reviewers approve changes based on their own implicit context which is always a strict subset of the system's full accumulated context, so each approved change has a nonzero probability of violating an unshared assumption.\", \"probability\": 0.06}, {\"conjecture\": \"The friction of change in a long-lived system is dominated by the cost of rediscovering why the system is the way it is, and this cost grows superlinearly with turnover because the search space of possible original reasons expands combinatorially as each generation of maintainers leaves behind partially-reconstructed rationales.\", \"probability\": 0.08}, {\"conjecture\": \"A long-running system accumulates design decisions that were contingent on constraints which no longer exist, but because the contingency was never documented, departing developers take knowledge of the original constraint with them, leaving behind code that appears load-bearing for reasons no one can reconstruct or safely dismiss.\", \"probability\": 0.07}, {\"conjecture\": \"Every time a maintainer with deep implicit context leaves, the system's effective complexity increases by a discrete step because the remaining team must treat previously-understood subsystems as black boxes, converting known unknowns into unknown unknowns that cannot be safely modified without reverse engineering.\", \"probability\": 0.05}, {\"conjecture\": \"Documentation written by the original authors systematically fails to capture the information subsequently needed by replacement developers, because authors document what they found surprising while replacements need to know what authors found obvious—precisely the implicit context that is never written down.\", \"probability\": 0.09}, {\"conjecture\": \"The probability that any given change violates an implicit invariant is a function of the ratio of departed-to-remaining original context holders, and this probability compounds across changes, so systems become harder to modify not because of code decay but because each turnover event permanently raises the baseline risk of every future modification.\", \"probability\": 0.06}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 681,
+      "total_tokens": 872
+    }
+  },
+  "transport_error": null
+}

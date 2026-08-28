@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Stochastic accumulation of architectural constraint-violation debt\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 31.254
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-330",
+    "object": "chat.completion",
+    "created": 1787937470,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally-correct change has a small probability of violating an implicit architectural constraint, and these violations are individually undetectable but collectively create a random-walk drift in coupling that eventually makes safe changes impossible to reason about.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Architectural constraints degrade under a gambler's-ruin process: no change can violate a constraint that is already violated, so violations are absorbing states, meaning even a zero-mean rate of local violations guarantees eventual architectural decay.\",\n      \"probability\": 0.08\n    },\n    {\nconjecture\": \"The probability that a change introduces a constraint violation is proportional to the number of existing violations, because violations locally redefine what counts as correct, creating a positive-feedback loop that makes architectural decay accelerate over time.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Because reviewers and tests validate only intended invariants, the space of untested architectural constraints is always larger than the tested space, so every change stochastically violates untested constraints at a constant rate, accumulating invisible debt.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Architectural constraint-violation debt is governed by percolation theory: below a critical fraction of violated edges in the module-dependence graph, the system remains refactorable; above it, a giant component of unresolvable coupling forms, making change difficulty jump discontinuously.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each constraint violation slightly enlarges the set of modules a future change must touch, and because change size increases the probability of further violations, the system follows a Pólya-urn-like process where early violations self-reinforce into structural rigidity.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"The rate of constraint-violation introduction is constant per change, but the cost of each violation grows superlinearly with system size because violations interact combinatorially, so the same stochastic process produces negligible debt early on but crippling debt after enough accumulation.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Constraint violations accumulate like radioactive decay: each module has a half-life of architectural integrity determined by its exposure to changes, and violations in upstream modules propagate downstream, causing dependent modules to decay even when their own changes were clean.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The difficulty of change grows with the variance, not the mean, of the architectural constraint-violation distribution: a system with many small violations distributed uniformly is harder to refactor than one with a few large violations clustered together, because distributed violations create widespread implicit coupling that cannot be isolated.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Architectural decay is a noise-induced ordering phenomenon analogous to stochastic resonance: the random component of each locally-correct change occasionally pushes a module across a threshold where it becomes cheaper to bypass an architectural boundary than respect it, and once bypassed, the boundary is permanently weakened.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 698,
+      "total_tokens": 886
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated transactional log state imposes unbounded reconstruction cost on any new observer or refactoror\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.607
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-291",
+    "object": "chat.completion",
+    "created": 1787936375,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A system's refactorability is inversely proportional to the entropy of its unmodelable transactional history: because every locally-correct change optimizes for the immediate state transition without encoding its rationale, the accumulated event log forms a lossy shadow specification. Any new observer must pay an unbounded reconstruction cost to re-derive the implicit invariants preserved across this history, meaning the system's true complexity is not in its current code but in the n-dimensional manifold of states it successfully avoided. Therefore, the growing delta between the explicit codebase and its undocumented historical survival constraints eventually exceeds any bounded computational budget for safe modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 131,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

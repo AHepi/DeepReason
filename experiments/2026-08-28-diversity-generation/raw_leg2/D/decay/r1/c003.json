@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift of shared abstractions under pressure from disjoint use cases\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.566
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-626",
+    "object": "chat.completion",
+    "created": 1787936435,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"When different teams independently extend a shared abstraction, each team implicitly narrows its mental model to only their own use cases. Over time, the abstraction's intended meaning fragments into incompatible local dialects, making any unifying change feel like a breaking change to all parties.\", \"probability\": 0.09}, {\"conjecture\": \"The original semantic intent of an abstraction erodes because pressure to ship features causes developers to add parameters or conditional branches rather than refactor the abstraction itself. The abstraction accumulates disjoint use-case metadata until it becomes a pass-through structure with no coherent meaning left to guide change.\", \"probability\": 0.085}, {\"conjecture\": \"Once a shared abstraction is used by two disjoint use cases, any change to that abstraction must simultaneously satisfy both use case invariants. Since these invariants were never explicitly negotiated against each other, the abstraction becomes locked in an implicit state of mutually incompatible expectations.\", \"probability\": 0.08}, {\"conjecture\": \"Each team using a shared abstraction reads its behavior as the specification, regardless of whether the behavior was intentional. Accidental properties become load-bearing across disjoint use cases, so fixing the abstraction to match its original intent breaks the semantic contracts that teams retroactively imposed on it.\", \"probability\": 0.075}, {\"conjecture\": \"Shared abstractions are initially built to unify similar use cases, but as new use cases are bolted on under deadline pressure, the unifying concept is stretched to cover semantically distant needs. The abstraction becomes a broad placeholder whose meaning depends entirely on the caller, so any change to it produces unpredictable ripple effects across unrelated subsystems.\", \"probability\": 0.07}, {\"conjecture\": \"When a shared abstraction serves disjoint use cases, its tests and documentation are written locally by each team from their own perspective. The abstraction accumulates contradictory test suites that encode incompatible assumptions, so any change to the abstraction will necessarily violate the locally correct expectations of at least one team.\", \"probability\": 0.065}, {\"conjecture\": \"A shared abstraction's actual semantic contract is not its original design but the intersection of all local interpretations applied to it over time. Since each disjoint use case introduces a new interpretation, the intersection of valid changes shrinks monotonically until only no-op changes are safe.\", \"probability\": 0.06}, {\"conjecture\": \"Developers extending a shared abstraction for a new use case preserve backward compatibility by adding optional behavior, but this gradual accretion shifts the abstraction's center of gravity away from its original purpose. The abstraction drifts toward a least-common-denominator interface whose semantics are so overloaded that no one can safely change it without understanding every use case simultaneously.\", \"probability\": 0.055}, {\"conjecture\": \"When a shared abstraction is consumed by disjoint use cases, its name and documentation become increasingly misleading because they still reflect the original use case while the implementation serves many. This semantic gap means that even well-intentioned changes guided by the abstraction's stated purpose will inadvertently break use cases that silently diverged from that purpose.\", \"probability\": 0.05}, {\"conjecture\": \"Because each use case of a shared abstraction is locally correct and independently tested, no single change reveals the growing semantic incoherence. The system only becomes harder to change at the moment a cross-cutting modification is required, exposing that the shared abstraction now means mutually exclusive things to its different consumers.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 724,
+      "total_tokens": 915
+    }
+  },
+  "transport_error": null
+}

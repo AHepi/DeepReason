@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.173
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-504",
+    "object": "chat.completion",
+    "created": 1787936753,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change because each locally correct change selectively optimizes for immediate constraints, causing the system to drift into a high-dimensional local optimum in the fitness landscape of design. Escaping this local optimum requires traversing a valley of temporarily degraded functionality, which is rejected by local validation mechanisms (tests, code review) that cannot evaluate global architectural fitness. Thus, local correctness gates act as an annealing lock-in, making the system progressively more rigid with each accepted change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 105,
+      "total_tokens": 207
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.859
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-602",
+    "object": "chat.completion",
+    "created": 1787936418,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally-correct change optimizes the system's structure for the assumptions present at the time of the change, but makes the code a worse fit for assumptions that are even slightly different. This local optimization accumulates until the system becomes an extremely specific fit to its historical trajectory rather than its current requirements, increasing the cost of any change that violates past assumptions.\", \"probability\": 0.08}, {\"conjecture\": \"As a system grows, each new change must be validated against an increasing space of possible interactions with prior features. The combinatorial explosion of these feature interactions means the cognitive cost of any single change scales superlinearly with system size, even when the implementation itself is trivial.\", \"probability\": 0.07}, {\"conjecture\": \"Test suites encode past requirements as executable constraints, but they overconstrain the implementation by testing incidental implementation details alongside intended behavior. As the suite grows, any change requires updating tests that have become coupled to historical implementation choices, turning the suite from a safety net into a rigidity trap.\", \"probability\": 0.09}, {\"conjecture\": \"Each change refines a shared model of the system held by its developers. As developers turn over, the shared model fragments because the new developers never experienced the history of changes and thus cannot reconstruct the implicit rationale behind the current structure. The cost of change rises proportionally to the loss of this shared mental model.\", \"probability\": 0.06}, {\"conjecture\": \"Individual changes are selected for local correctness under current constraints, but they create implicit invariants that future changes must not violate. These invariants are never documented because they were never deliberately designed, so future changes become harder because developers must discover an ever-growing set of undocumented constraints by trial and error.\", \"probability\": 0.08}, {\"conjecture\": \"Each change increases the number of dependencies between modules by a small amount, and each dependency adds a constraint on future changes to either module. Over time the dependency graph becomes a constraint satisfaction problem where any modification requires simultaneous coordination across too many modules to be practically feasible, even though each individual dependency was justified.\", \"probability\": 0.09}, {\"conjecture\": \"Any abstraction introduced to simplify one change becomes a permanent interface that future changes must work through rather than around. As abstractions accumulate, every new change must navigate layers of abstraction that were designed for different problems, adding indirection cost without contributing to the current change. The system becomes harder to modify because every change pays a tax imposed by all prior abstractions.\", \"probability\": 0.07}, {\"conjecture\": \"Each change is locally correct relative to the developer's working context, which is a small subset of the full system context. The information about why a change was made a certain way is lost after the change is merged, so future developers facing a similar situation cannot reuse the rationale. The system becomes harder to change because the knowledge gradient between what was known when making each change and what can be inferred when reading the result steepens with every change.\", \"probability\": 0.05}, {\"conjecture\": \"Changes that simplify the system are rarely individually justified because their benefit is diffuse across future changes, while changes that add complexity are always locally justified by an immediate need. This asymmetry means that even a rigorously reviewed system accumulates net complexity over time, and each increment of complexity raises the cost of all subsequent changes.\", \"probability\": 0.08}, {\"conjecture\": \"Every change shifts the system's center of gravity toward the specific problems it addresses, making the codebase progressively more specialized to a particular problem trajectory. Future changes that diverge from this trajectory face increasing resistance because the system's internal structures, naming, and module boundaries increasingly assume a particular direction of evolution that may no longer match the desired direction.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 798,
+      "total_tokens": 973
+    }
+  },
+  "transport_error": null
+}

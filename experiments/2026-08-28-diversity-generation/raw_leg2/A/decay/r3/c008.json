@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.738
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-159",
+    "object": "chat.completion",
+    "created": 1787936700,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems calcify not because of code decay, but because repeated locally-correct edits build an implicit dependency graph between modules that is never represented in any artifact. Each correct change adds an unstated constraint, and the space of permissible future changes shrinks by the intersection of all past decisions. The system becomes harder to change because developers must infer an ever-growing set of invisible invariants before safely modifying anything, and the cost of this inference grows superlinearly with system age.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 104,
+      "total_tokens": 206
+    }
+  },
+  "transport_error": null
+}

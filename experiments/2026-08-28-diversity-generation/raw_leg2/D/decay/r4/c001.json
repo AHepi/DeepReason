@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between tests and tacit domain invariants\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 26.666
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-480",
+    "object": "chat.completion",
+    "created": 1787937251,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Test suites encode implicit domain invariants at the time they are written, but these invariants drift as the domain evolves. Because tests rarely fail when invariants become outdated—they merely encode increasingly irrelevant constraints—developers learn to route around them. The accumulated mass of these semi-irrelevant tests makes changes harder without catching real regressions.\", \"probability\": 0.09}, {\"conjecture\": \"Each correct change introduces tacit domain knowledge into the implementation that the tests do not capture. Over time the gap between what is tested and what is actually required widens. Changes become harder because developers must reconstruct the full invariant space—only partly represented in tests—from sparse contextual clues.\", \"probability\": 0.08}, {\"conjecture\": \"Well-tested code accumulates tests that assert specific output values rather than underlying domain invariants. These value-level tests become load-bearing: any change, even a correct one, risks breaking them. The system becomes rigid not because the code is wrong but because the tests over-specify transient details.\", \"probability\": 0.07}, {\"conjecture\": \"Domain invariants exist as tacit knowledge distributed across teams, documentation, and code, but tests freeze only a subset at a single moment. As the domain shifts, tests become a fossil record of past invariants. The cost of change rises because developers must classify each test failure as 'real regression' versus 'stale invariant' with no mechanical procedure to distinguish them.\", \"probability\": 0.06}, {\"conjecture\": \"Test maintenance naturally prioritizes fixing failing tests over retiring obsolete ones, so the proportion of tests encoding stale invariants grows monotonically. This creates an asymmetric signal: every change triggers failures from both real regressions and obsolete assertions. The decreasing signal-to-noise ratio makes each change progressively riskier and slower.\", \"probability\": 0.05}, {\"conjecture\": \"When a test breaks due to a correct change, developers often update the expected value without re-deriving the underlying invariant. Each such patch severs another link between the test suite and the domain logic it was meant to guard. Eventually the test suite becomes a parallel system of its own rules, and every change must satisfy two increasingly divergent specification layers.\", \"probability\": 0.04}, {\"conjecture\": \"Tests implicitly define the boundary of what developers need to worry about. When tacit invariants drift outside this boundary, they become invisible to the test suite. Changes become harder because the real risk surface has grown beyond what the tests delineate, and developers must reason about untested invariants with no feedback signal.\", \"probability\": 0.03}, {\"conjecture\": \"Testing encourages the codification of domain rules into explicit assertions, which selects for invariants that are easy to test. Tacit invariants that resist direct testing accumulate silently in the code. Over time the ratio of untestable to testable invariants increases, and the test suite provides decreasing coverage of the actual constraint space governing the system.\", \"probability\": 0.02}, {\"conjecture\": \"Every correctly-passing test reinforces the current implementation's behavior as the de facto specification, even when the domain has moved on. The test suite thus accumulates a growing backlog of reified past-domain states. Changes become harder because each modification must now satisfy not only current domain needs but also the accumulated weight of prior domain snapshots encoded in passing tests.\", \"probability\": 0.02}, {\"conjecture\": \"As a system matures, the most important domain invariants become so deeply assumed that nobody writes tests for them—they are constitutive rather than checkable. The test suite focuses on edge cases and derived properties. Changes become harder because modifying the core invariants produces no test failure; the damage surfaces indirectly through cascading effects in unrelated areas, making diagnosis increasingly difficult.\", \"probability\": 0.01}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 803,
+      "total_tokens": 992
+    }
+  },
+  "transport_error": null
+}

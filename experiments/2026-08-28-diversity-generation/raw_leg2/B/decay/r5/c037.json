@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic opacity from drift in implicit, un-enforced domain assumptions across maintainer generations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.63
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-45",
+    "object": "chat.completion",
+    "created": 1787937377,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems ossify because each locally-correct change silently narrows the set of surviving implicit domain assumptions, making the remaining un-enforced invariants statistically more specialized to current maintainer context. As maintainer generations turn over, the original mapping between code and domain reality decays, and the surviving assumption set becomes epistemically opaque: it encodes a world model that no single maintainer holds, yet no individual change can surface. The system becomes hard to change not because the code is complex, but because the cost of violating an unstated assumption is now invisible to the actor making the change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 129,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

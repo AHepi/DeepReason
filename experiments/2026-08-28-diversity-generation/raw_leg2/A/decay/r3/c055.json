@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.425
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-843",
+    "object": "chat.completion",
+    "created": 1787936765,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade not through the accumulation of bugs, but through the invisible buildup of cross-module causal coupling: each locally correct change implicitly narrows the set of future changes that remain globally valid. The system's entropy is not in its code, but in the shrinking intersection of assumptions that all modules still agree to hold. Because no individual change violates these assumptions, review and testing cannot detect the trap—until a later, equally correct change finally does.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 97,
+      "total_tokens": 199
+    }
+  },
+  "transport_error": null
+}

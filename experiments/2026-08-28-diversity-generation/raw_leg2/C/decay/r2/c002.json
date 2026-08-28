@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.552
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-385",
+    "object": "chat.completion",
+    "created": 1787936629,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, leaving behind micro-debt that is individually invisible but collectively forms a different system architecture than any stakeholder intended. The system becomes harder to change not because of any single failure, but because the gap between the implicit mental model and the implemented code grows monotonically with each edit.\", \"probability\": 0.07}, {\"conjecture\": \"The number of implicit invariants grows combinatorially with code size, and each locally correct change preserves existing invariants but fails to document the new ones it creates. Eventually the undocumented invariant space is so large that any change risks violating one, making all changes dangerous regardless of test coverage.\", \"probability\": 0.08}, {\"conjecture\": \"Tests act as a ratchet: they encode current behavior as a specification, and because tests are expensive to rewrite, they resist architectural change even when the architecture is wrong. The system calcifies not from technical decay but from its test suite progressively narrowing the space of allowable modifications.\", \"probability\": 0.06}, {\"conjecture\": \"Code review optimizes for local correctness and risk avoidance, creating a selection pressure against bold restructuring. Over thousands of reviews, the system drifts toward a local optimum that no individual reviewer would have chosen but that the review process mathematically guarantees.\", \"probability\": 0.05}, {\"conjecture\": \"Each correct change is designed by someone with a slightly different mental model of the system than the previous change's author, so the codebase becomes a palimpsest of incompatible assumptions. The difficulty of change grows because reconciling N mental models is O(N) while any single change only requires understanding one.\", \"probability\": 0.09}, {\"conjecture\": \"Dependencies form a directed graph where each correct change adds edges but never removes them, because removing edges risks breaking unknown consumers. The graph's transitive closure grows superlinearly until most of the codebase is reachable from any change point, making isolation impossible.\", \"probability\": 0.04}, {\"conjecture\": \"Domain knowledge that isn't in the code is lost at a constant rate per developer departure, while the code grows linearly. The ratio of unstated context to stated code increases, so each change requires more archaeology to execute safely, independent of code quality.\", \"probability\": 0.03}, {\"conjecture\": \"Every change leaves dead code because deleting code is riskier than leaving it, and dead code is indistinguishable from live code without expensive tracing. The fraction of dead code grows asymptotically toward 100%, so changes increasingly navigate through irrelevant logic that obscures the relevant paths.\", \"probability\": 0.02}, {\"conjecture\": \"Naming and abstraction boundaries that were correct at time T become wrong at T+k as requirements drift, but renaming and re-bundling are never locally justified because they change no behavior. The system's vocabulary desynchronizes from its actual function, making comprehension the bottleneck rather than modification.\", \"probability\": 0.07}, {\"conjecture\": \"Each change is locally correct relative to the current state, but the current state includes accumulated workarounds for problems that no longer exist. Changes compound on workarounds rather than roots, so the distance between any change site and the actual problem it addresses grows linearly with change count.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 704,
+      "total_tokens": 879
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: coupling-coefficient inflation measured as a rising average ratio of the transitive closure of required test state mutations per targeted code mutation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.076
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-479",
+    "object": "chat.completion",
+    "created": 1787937392,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change because each locally correct, tested change inflates a system-wide coupling coefficient: the average ratio of the transitive closure of required test state mutations per targeted code mutation. This coefficient inflates because individual changes are validated against local test sets that do not account for the global growth in stateful dependencies, causing each accepted mutation to implicitly widen the transitive closure of state mutations required by future tests. Therefore, even when every change is independently justified, the system's average coupling coefficient inflates monotonically, making each subsequent change progressively more expensive to validate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 126,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

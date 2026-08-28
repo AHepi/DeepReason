@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.881
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-926",
+    "object": "chat.completion",
+    "created": 1787937187,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate implicit invariants—unstated relationships between components that no single change controls but that every change must preserve. Reviewers and tests only check the explicit contract of a change, not the myriad unstated couplings, so each locally correct change slightly increases the space of hidden constraints that future changes must navigate.\", \"probability\": 0.08}, {\"conjecture\": \"Test suites become progressively less sensitive to regressions as they accrete mocks, fixtures, and special cases, because tests encode the current design's assumptions rather than the system's actual behavioral requirements. The test suite still passes after each change, but its effective power to detect integration-level regressions degrades, so developers must do increasing manual verification.\", \"probability\": 0.05}, {\"conjecture\": \"Each locally correct change adds at least one assumption another component silently depends on, so the number of constraints any future change must satisfy grows combinatorially with system size. The cost of verifying a change is therefore superlinear in the number of prior changes, not constant, making the system feel harder to modify even though no individual change was wrong.\", \"probability\": 0.07}, {\"conjecture\": \"The proportion of changes that require coordinated modification of multiple components grows as a power law of system age, because dependencies accumulate faster than refactoring removes them. Each reviewed change adds dependencies; refactoring removes them but is itself a change subject to the same review constraints, so the system drifts toward higher coupling.\", \"probability\": 0.04}, {\"conjecture\": \"Code review optimizes for the correctness of the diff, not the comprehensibility of the resulting system, so each change can make the system harder to understand even while making it more correct. The system's understandability is a public good that no individual reviewer is responsible for defending, so it degrades through accumulated local optimization.\", \"probability\": 0.06}, {\"conjecture\": \"Long-lived systems accumulate features that are used by unknown users in unknown ways, so the set of behaviors that must be preserved grows faster than the set of behaviors that are documented or tested. Each change is locally correct relative to known requirements, but the space of unknown requirements grows monotonically, increasing the chance that any change breaks something nobody knew about.\", \"probability\": 0.09}, {\"conjecture\": \"As a system ages, the fraction of changes requiring coordination across team boundaries grows because knowledge of the system fragments across the people who wrote each part. No individual change is wrong, but the communication cost of ensuring cross-team correctness grows with the number of teams whose code is touched, and this cost is not bounded by review or testing of the individual change.\", \"probability\": 0.05}, {\"conjecture\": \"Every change to a long-running system either adds an abstraction boundary or violates an existing one, and abstraction boundaries are easier to add than to remove, so the system accumulates layers that must be traversed by future changes. Each layer was locally justified, but the aggregate effect is that the path length between cause and effect grows, making changes harder to reason about.\", \"probability\": 0.03}, {\"conjecture\": \"Software entropy is real and irreducible: each change has a nonzero probability of introducing a subtle constraint that is never discovered until a future change violates it, and these constraints accumulate like radioactive decay products. Even with perfect review and testing of each individual change, the aggregate constraint density grows monotonically because no process can detect all implicit constraints created by a change.\", \"probability\": 0.07}, {\"conjecture\": \"The difficulty of changing long-running systems is proportional to the divergence between the system's actual architecture and the mental model held by current developers, and this divergence grows monotonically because documentation decays faster than code. Each change was locally correct for the person who made it, but the mental model it was correct relative to is not the mental model of future developers, who must reconstruct the actual architecture before changing it safely.\", \"probability\": 0.08}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 836,
+      "total_tokens": 1011
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.265
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-742",
+    "object": "chat.completion",
+    "created": 1787937404,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change to a long-running system adds at least one state and transition to the system's effective automaton, increasing the average shortest-path length from the initial state to any given execution state. Because test suites are bounded in input length, the fraction of states reachable within that bound shrinks monotonically, making regression coverage of deep paths exponentially harder. This explains why systems become harder to change even when every individual change was reviewed, tested, and locally correct: the accumulated automaton-state bloat decouples local validation from global reachability.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 133,
+      "completion_tokens": 118,
+      "total_tokens": 251
+    }
+  },
+  "transport_error": null
+}

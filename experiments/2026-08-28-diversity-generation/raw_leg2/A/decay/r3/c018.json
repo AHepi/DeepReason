@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.746
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-227",
+    "object": "chat.completion",
+    "created": 1787936718,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems decay not because individual changes are wrong, but because each change optimizes locally against the current configuration space while silently narrowing the future configuration space. The growing gap between the code's explicit structure and its accumulated implicit constraints means subsequent changes require reconciling an ever-larger shadow system of unstated invariants. This creates an asymptotic 'change viscosity' where the cost of modification rises as a function of the entropy of hidden interdependencies, independent of code size or complexity metrics.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 104,
+      "total_tokens": 206
+    }
+  },
+  "transport_error": null
+}

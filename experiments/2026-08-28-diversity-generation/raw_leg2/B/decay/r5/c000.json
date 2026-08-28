@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic growth in Kolmogorov complexity of minimum-viable patches\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.076
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-712",
+    "object": "chat.completion",
+    "created": 1787937334,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The Kolmogorov complexity of the minimum-viable patch required to safely implement any given feature request grows monotonically with the system's change history, because each locally correct modification irreversibly increases the mutual information between the codebase's implicit invariants and its external behaviors. Consequently, the information needed to verify that a new change does not violate those accumulated invariants exceeds the information contained in the change itself, creating an entropic ratchet where the description length of the shortest safe patch eventually exceeds the description length of the feature being requested.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 129,
+      "completion_tokens": 118,
+      "total_tokens": 247
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.124
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-190",
+    "object": "chat.completion",
+    "created": 1787936417,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate implicit invariants—unstated relationships between distant components—that are never written down or checked. Each locally correct change inadvertently tightens this invisible constraint web, making the next change require exponentially more reverse-engineering effort.\", \"probability\": 0.09}, {\"conjecture\": \"The total number of behavioral paths in a system grows factorially with each added feature, but the test suite only samples them linearly. Eventually most of the system's behavior is in the untested regime, so changes have unpredictable consequences despite passing all tests.\", \"probability\": 0.08}, {\"conjecture\": \"Every change optimizes for local readability, but the system-level architecture drifts because there is no selection pressure operating at that level. Architectural decay is the software equivalent of mutational load in an asexual population with no recombination.\", \"probability\": 0.07}, {\"conjecture\": \"Correctness is defined per-change relative to current requirements, but the mapping between code and the original problem domain degrades with each abstraction layer. The system becomes harder to change because the code no longer mirrors the domain structure, requiring translation between two increasingly divergent ontologies.\", \"probability\": 0.08}, {\"conjecture\": \"Each integration point added for a new feature becomes a permanent constraint on all future changes, creating an n-body problem where every new feature must coordinate with all prior ones. The difficulty of change grows as the square of features, not linearly, because each new feature must satisfy compatibility with every existing integration point.\", \"probability\": 0.09}, {\"conjecture\": \"Programmers build mental models of the system to make changes, but each change invalidates part of the shared mental model held by the team. The cost of change is dominated by the cost of maintaining and updating these mental models, which degrades faster than the code itself because knowledge is lossily transmitted between people and over time.\", \"probability\": 0.08}, {\"conjecture\": \"Software systems are path-dependent: each change constrains the space of future changes by making some alternatives more expensive to reach. This creates a lock-in effect analogous to the QWERTY keyboard, where the locally optimal choice at each step produces a globally suboptimal architecture that is expensive to escape.\", \"probability\": 0.06}, {\"conjecture\": \"Abstractions introduced for one purpose are inevitably reused for purposes their designers never intended, creating accidental coupling. Each such reuse makes the abstraction harder to modify because it must now satisfy additional constraints, and the abstraction becomes a load-bearing wall rather than a removable partition.\", \"probability\": 0.07}, {\"conjecture\": \"The system's dependency graph starts as a tree but evolves toward a fully connected graph through incremental shortcut additions, each locally justified. The difficulty of change is proportional to the cyclomatic complexity of this graph, which increases monotonically because no one ever removes edges—they only add them.\", \"probability\": 0.08}, {\"conjecture\": \"Tests encode a frozen specification that becomes increasingly misaligned with the evolving intent of the system. As the gap widens, changes must satisfy two masters—the actual requirements and the ossified test suite—so the cost of change is dominated by the friction of maintaining compatibility with tests that no longer represent what you want.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 697,
+      "total_tokens": 872
+    }
+  },
+  "transport_error": null
+}

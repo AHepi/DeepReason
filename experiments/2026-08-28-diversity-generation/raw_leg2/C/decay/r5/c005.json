@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.356
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-321",
+    "object": "chat.completion",
+    "created": 1787937435,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architectures inevitably accumulate 'constraint debt' because each locally correct modification optimizes for immediate boundary conditions, implicitly encoding invariants that future modifications cannot safely violate without a global knowledge no single developer possesses. Thus, the system's rigidity is not a byproduct of decay but the cumulative shadow of all past localized decisions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the ratio of explicit, machine-checked invariants to implicit, undocumented invariants inverts over time. As testing and review catch explicit errors, the system's behavior increasingly depends on emergent interactions between correct modules that are never formalized, making any change a gamble against a growing space of hidden assumptions.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software entropy is driven by the divergence between the latent state graph of the system and the mental model of the developers. Individual changes are locally correct but incrementally shift the latent state graph, making the system harder to change because the cognitive load required to resynchronize the mental model with the actual system eventually exceeds the capacity of any single engineer.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is a direct consequence of the non-linear expansion of the system's dependency manifold. Each locally correct change adds a new dimension to the state space of potential interactions. The cost of a future change scales with the surface area of this manifold, not the size of the codebase, meaning the system becomes brittle because the number of untested interaction paths grows combinatorially.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The system's changeability degrades because of 'epistemic decay': the original design intent is lost not through documentation failure, but because the system's success relies on a specific, historical configuration of dependencies that is never re-validated. Future changes are hard because they must be made against a system whose operating assumptions are historically contingent rather than structurally necessary.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems ossify because the feedback loop between a change and its systemic consequences lengthens over time. Early changes have immediate, local effects; later changes interact with a deep substrate of past changes, creating delayed, distant, and non-obvious failures. This increased latency between cause and effect makes it impossible for standard review and testing to catch errors, forcing developers to be overly cautious.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is caused by the 'tragedy of the commons' in shared abstractions. Each locally correct modification slightly bends a shared abstraction to fit a new use case. Over time, the abstraction becomes a 'big ball of mud' that serves all use cases poorly, and changing it becomes a coordination problem requiring simultaneous updates across the entire system, which is never feasible.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because of the accumulation of 'defensive mutations': code added not to implement features but to handle edge cases and integration errors from past changes. These defensive mutations create a tangled web of compensatory logic where it is impossible to distinguish core functionality from error-handling, making any change likely to break a hidden invariant.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The rigidity of long-running systems is a byproduct of 'semantic drift' between modules. Each module evolves its own internal logic and implicit assumptions, while the interfaces between them remain syntactically stable. The system becomes harder to change because the interfaces mask a growing mismatch between the actual semantics of the modules they connect.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"Long-running software becomes hard to change because of 'structural phase locking'. As a system grows, its components self-organize into a rigidly stable configuration where each part relies on the specific quirks of others. This configuration is locally optimal for stability but globally suboptimal for adaptability, requiring a massive, coordinated energy input (a rewrite) to move the system to a new, flexible state.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 930,
+      "total_tokens": 1105
+    }
+  },
+  "transport_error": null
+}

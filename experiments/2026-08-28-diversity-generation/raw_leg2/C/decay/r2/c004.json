@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.99
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-841",
+    "object": "chat.completion",
+    "created": 1787936631,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems degrade not because of code rot, but because of semantic drift: the implicit domain model embedded in the code becomes increasingly disconnected from the actual, evolved business reality. Each locally correct change patches the gap between the old model and new reality, but the accumulation of these patches creates a semantic impedance mismatch that makes future changes require reconciling multiple layers of outdated assumptions.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems scales with the growth of undocumented, emergent behavioral contracts between distant components. Individual changes are reviewed against explicit requirements but cannot be checked against the vast space of implicit dependencies, so each change silently adds to a web of constraints that makes the next change harder.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their architecture co-evolves with organizational and operational processes in ways that are never documented. The code's structure implicitly encodes assumptions about team boundaries, deployment rhythms, and operational workflows, and changing the code without simultaneously changing these coupled processes creates friction that manifests as technical resistance.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Each locally correct change optimizes for local simplicity, but the global effect is a steady increase in the dimensionality of the system's state space. The system becomes harder to change because the number of interacting state variables grows combinatorially, and any new change must navigate an exponentially growing space of potential interactions that no test suite can fully cover.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"The core issue is loss of causal knowledge: over time, the chain of reasoning that explains why each design decision was made gets severed from the code itself. New developers face code whose structure encodes constraints they cannot reconstruct, making every change a gamble against unknown historical forces that shaped the system.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate 'behavioral fossils'—features, edge cases, and compatibilities that no longer serve any current user but cannot be removed because no one can prove they are unused. These fossils constrain new changes because they occupy conceptual and interface space, forcing new features to route around them, increasing complexity with each generation.\",\n      \"probability\": 0.067\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because each locally correct change slightly shifts the system's center of gravity toward a particular solution pattern. Over time, the accumulated weight of these local decisions creates a gravitational pull that makes alternative approaches progressively more expensive, even when they would be globally superior.\",\n      \"probability\": 0.052\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is driven by the widening gap between the system's tested behavior and its actual production execution environment. As the system ages, the production environment accumulates unique configurations, data shapes, and load patterns that no test environment replicates, so changes that pass all tests still carry hidden risk that slows down future modification.\",\n      \"probability\": 0.048\n    },\n    {\n      \"conjecture\": \"Every reviewed and tested change reinforces a local optimization heuristic that becomes embedded as an implicit constraint. Over time, the system becomes a palimpsest of overlapping local optima, none of which are globally consistent, so any new change must satisfy constraints that were never explicitly stated but are enforced by the accumulated weight of prior local decisions.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"The fundamental problem is that software changes are irreversible in practice: even when a change can be technically reverted, the organizational memory of the change—training, documentation, integration points, user adaptation—cannot. This asymmetry means the system's evolution follows a ratchet where each change permanently constrains the future, and the constraint space grows monotonically.\",\n      \"probability\": 0.055\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 864,
+      "total_tokens": 1039
+    }
+  },
+  "transport_error": null
+}

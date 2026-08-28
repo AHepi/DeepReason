@@ -1,0 +1,292 @@
+[
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 12180,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 78.7
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 15251,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Coupled state spaces form a growing product automaton, making the fraction of reachable-safe states shrink combinatorially",
+      "Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants",
+      "Entropy of the call graph topology increases monotonically under locality-preserving edits, reducing spectral gap and information flow",
+      "Test suites overfit to historical change distributions, creating a selection shadow where rare-but-critical execution paths lose coverage",
+      "Accumulated transactional log state imposes unbounded reconstruction cost on any new observer or refactoror",
+      "Organizational memory decays faster than code, so tacit design rationale becomes unrecoverable, leaving only brittle literal constraints"
+    ],
+    "calls": 61,
+    "wall_s": 82.7
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 5299,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 25.9
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 5800,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information-theoretic growth of irreducible coupling between modules",
+      "Accumulation of implicit invariants outside the type system and test surface",
+      "Entropy increase in the space of reachable configurations relative to explicit constraints",
+      "Semantic drift of shared abstractions under pressure from disjoint use cases",
+      "Divergence between the system's actual execution topology and its maintained documentation",
+      "Saturation of working memory capacity relative to dependency graph depth"
+    ],
+    "calls": 7,
+    "wall_s": 30.6
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 12111,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 82.8
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 15036,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "state-space blow-up from accumulated feature interactions exceeding working memory",
+      "dependency coupling drift measured by eigenvector centrality in static call graphs",
+      "implicit invariant accretion forming an unverifiable latent specification layer",
+      "organizational knowledge decay as original authors leave and tacit context is lost",
+      "interface impedance mismatch from independent module boundary evolution",
+      "fitness landscape ruggedization reducing marginal value of local refactoring"
+    ],
+    "calls": 61,
+    "wall_s": 77.7
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 5505,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.9
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 5951,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information-theoretic growth of required context to certify change-safety",
+      "Stochastic accumulation of latent cross-module invariants absent from explicit specifications",
+      "Causal representational drift between domain state and codebase ontology",
+      "Topological rigidification of the dependency graph past a phase-transition threshold",
+      "Non-local semantic entanglement of identifiers exceeding local reasoning bounds",
+      "Epistemic closure of the maintainer community around outdated tacit assumptions"
+    ],
+    "calls": 7,
+    "wall_s": 26.2
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 12192,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 122.5
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 14239,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "information-theoretic entropy of API contracts",
+      "nonequilibrium thermodynamics of dependency graphs",
+      "Kolmogorov complexity growth in code paths",
+      "sociotechnical decay via knowledge attrition",
+      "phase-space collapse of architectural constraints",
+      "submodular deficit of test coverage"
+    ],
+    "calls": 61,
+    "wall_s": 87.8
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 5238,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 20.1
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 6117,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "entropic growth of irreducible dependency fan-out under bounded review",
+      "implicit invariant accumulation outside the typed interface boundary",
+      "semantic drift between domain language and code symbols over time",
+      "decayed test suites that pin implementation rather than contract",
+      "cognitive chunking limits crossed as module count exceeds working memory capacity",
+      "false-negative integration space expanding combinatorially with change surface area"
+    ],
+    "calls": 7,
+    "wall_s": 27.7
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 12401,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 81.7
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 14311,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Implicit invariants accumulate in unmodeled gaps between modules",
+      "Dependency entropy monotonically increases under locally rational edits",
+      "Test suites overfit to historical implementations, masking valid refactorings",
+      "Cognitive load grows with the semantic distance between domain and code",
+      "Change amplification emerges from coupled state spaces lacking algebraic decomposition",
+      "Technical debt compounds via delayed feedback loops in the deployment pipeline"
+    ],
+    "calls": 61,
+    "wall_s": 175.3
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 5373,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 41.6
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 6441,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "entropy of dependency graphs under bounded-rational refactoring",
+      "semantic drift between tests and tacit domain invariants",
+      "information-theoretic accumulation of hidden coupling in APIs",
+      "fitness landscape ruggedness from incremental constraint stacking",
+      "cognitive load scaling with the non-local blast radius of edits",
+      "friction from epistemic gaps in turnover and undocumented implicit context"
+    ],
+    "calls": 7,
+    "wall_s": 35.8
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 12193,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 76.9
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 15543,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "information-theoretic growth in Kolmogorov complexity of minimum-viable patches",
+      "thermodynamic-style entropy accumulation in configuration-state space via irreversibility of locally-correct commits",
+      "topological rigidification of dependency graph reducing the size of the boundary-permitting change manifold",
+      "epistemic opacity from drift in implicit, un-enforced domain assumptions across maintainer generations",
+      "coupling-coefficient inflation measured as a rising average ratio of the transitive closure of required test state mutations per targeted code mutation",
+      "automaton-state bloat increasing the average length of the shortest input sequence required to exercise any given execution path"
+    ],
+    "calls": 61,
+    "wall_s": 84.0
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 5571,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 23.9
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 6324,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Cumulative information-theoretic entropy in valid execution paths",
+      "Misaligned local-global optimization gradients across dependency boundaries",
+      "Semantically irreversible refactorings creating latent invariant entanglement",
+      "Stochastic accumulation of architectural constraint-violation debt",
+      "Decay of causal executable knowledge graphs under non-monotonic change",
+      "Topological rigidification of the call graph lowering mutation traversability"
+    ],
+    "calls": 7,
+    "wall_s": 34.2
+  }
+]

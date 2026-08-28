@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.241
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-878",
+    "object": "chat.completion",
+    "created": 1787937183,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software entropy is driven by the slow accumulation of implicit invariants—unstated relationships between components that tests verify but no code declares. Each change adds one more invariant that future developers must reverse-engineer before safely modifying the system.\", \"probability\": 0.09}, {\"conjecture\": \"Every locally correct change slightly shifts the system's center of complexity away from the domain problem and toward accidental coordination overhead. This ratchet is irreversible because coordination code, once written, becomes a dependency for future changes.\", \"probability\": 0.08}, {\"conjecture\": \"Long-lived codebases accumulate dependency debt: each change adds a usage of an existing interface, making that interface harder to modify. The cost of change grows quadratically with the number of consumers, not linearly with the codebase size.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty stems from semantic drift: each change is correct against the tests as written, but tests encode assumptions that become stale as the system's environment evolves. The gap between what tests check and what the system must do grows monotonically.\", \"probability\": 0.07}, {\"conjecture\": \"Complexity grows because each change optimizes locally, creating micro-abstractions that are individually reasonable but collectively redundant. The system becomes harder to change not because any single abstraction is wrong, but because the space of overlapping abstractions is combinatorially complex.\", \"probability\": 0.07}, {\"conjecture\": \"Changes become harder because of coupling density: every reviewed change adds at least one new coupling between modules, and couplings are never removed because decoupling has no immediate feature value. The system's change cost is proportional to its coupling density, which increases monotonically.\", \"probability\": 0.06}, {\"conjecture\": \"The system accumulates a growing set of historical constraints—undocumented commitments to specific behaviors made for specific past users. These constraints are invisible in the code but enforceable in production, so every change must satisfy an ever-growing shadow specification.\", \"probability\": 0.06}, {\"conjecture\": \"Knowledge of the system decays faster than the system evolves. Each change is written by someone with slightly less understanding of the original design, so each change is slightly more conservative and more invasive than necessary. The system degrades because it is modified by people who understand it less than those who built it.\", \"probability\": 0.06}, {\"conjecture\": \"The primary driver is test accumulation. Each change adds tests, each test encodes assumptions, and the test suite becomes a second codebase that must be maintained. The cost of change grows with the ratio of test code to production code, which increases monotonically.\", \"probability\": 0.05}, {\"conjecture\": \"Systems become harder to change because each change expands the API surface that external integrations depend on. Once an integration works, it becomes a constraint. The system's effective specification grows with every integration, not with every line of code.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 637,
+      "total_tokens": 812
+    }
+  },
+  "transport_error": null
+}

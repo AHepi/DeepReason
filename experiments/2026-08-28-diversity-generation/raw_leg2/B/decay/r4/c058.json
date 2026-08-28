@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Technical debt compounds via delayed feedback loops in the deployment pipeline\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.923
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-779",
+    "object": "chat.completion",
+    "created": 1787937170,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software architecture optimizes for the feedback structure present at build time, so when deployment pipelines delay production exposure by hours or days, architectural decisions implicitly encode assumptions about an environment that no longer matches runtime reality. Each locally correct change then accretes around these stale assumptions, making future changes harder not because the code is more complex, but because the feedback signal needed to validate architectural decisions arrives too late to correct them before they become load-bearing.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 95,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

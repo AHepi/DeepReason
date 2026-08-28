@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.161
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-637",
+    "object": "chat.completion",
+    "created": 1787936946,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change optimizes for immediate constraints while implicitly narrowing the system's viable design space, causing a progressive loss of latent architectural degrees of freedom. The system becomes harder to change not because of accumulated bugs or coupling, but because the surviving design alternatives shrink exponentially with every decision, until nearly every new requirement demands traversing an implausibly narrow evolutionary bottleneck. This 'entropy of omitted alternatives' is invisible to local review, which can only evaluate the change made, never the exponentially growing space of changes foreclosed.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 111,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

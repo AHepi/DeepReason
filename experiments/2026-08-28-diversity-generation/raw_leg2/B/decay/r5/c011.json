@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: thermodynamic-style entropy accumulation in configuration-state space via irreversibility of locally-correct commits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.108
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-776",
+    "object": "chat.completion",
+    "created": 1787937344,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-correct commit is a thermodynamically irreversible transition in configuration-state space: it destroys information about which alternative configurations would also have satisfied the prior requirements. Because every accepted commit narrows the set of reachable future states without recording the rejected alternatives, the system's entropy monotonically increases as accumulated dead-path constraints make valid new configurations vanishingly rare. Consequently, the difficulty of any change grows with the number of prior irreversible commits, not with code complexity per se — the system becomes trapped in a deep local optimum of the requirement-satisfaction landscape that no local refactor can escape.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 125,
+      "total_tokens": 255
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic growth of irreducible coupling between modules\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.183
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-656",
+    "object": "chat.completion",
+    "created": 1787936436,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct modification to a system implicitly encodes assumptions about the hidden states of non-adjacent modules. Over time, the cumulative mutual information between distant modules grows monotonically, meaning the global state space becomes an irreducibly coupled manifold that no local change can safely navigate without full global knowledge.\", \"probability\": 0.085}, {\"conjecture\": \"Software entropy is driven by the unidirectional ratcheting of conditional mutual information. Every tested change adds a non-removable dependency constraint between the changer and the changed, making the Kolmogorov complexity of safe decoupling grow exponentially with the number of historical interactions.\", \"probability\": 0.075}, {\"conjecture\": \"The difficulty of modifying a long-running system is proportional to the loss of conditional independence among its modules. As local fixes propagate implicit constraints, the system transitions from a factorizable probability distribution to a dense graphical model where safely evaluating any local patch requires inference over the entire global dependency graph.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally validated change increases the algorithmic mutual information between a module's internal state and the historical sequence of inputs it has processed. This accumulated information becomes an irreducible coupling, meaning the module's future behavior is only safely predictable by simulating its entire causal history alongside its peers.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems develop an information-theoretic 'shadow state': an unobservable but strictly constraining mutual information between modules created by shared historical adaptations. The shadow state's entropy grows linearly with interactions, eventually exceeding the channel capacity of any local interface and forcing changes to require global coordination.\", \"probability\": 0.09}, {\"conjecture\": \"As systems age, the algorithmic mutual information between their test suites and their implementation graphs converges toward maximum entropy. The tests become an irreducible structural component of the system's state space, meaning any local change must preserve not just functional correctness, but an exponentially growing set of historically encoded, non-local invariant constraints.\", \"probability\": 0.05}, {\"conjecture\": \"The apparent growth in software rigidity is actually the growth of implicit, non-local invariants: unspoken assumptions about the rate, order, or format of data exchanged between modules. The mutual information of these hidden invariants scales super-linearly with system size, creating an entangled state where local modifications break unstated global contracts.\", \"probability\": 0.07}, {\"conjecture\": \"Irreducible coupling arises because every successful local optimization subtly narrows the global state space, pruning 'incorrect' configurations. Over time, the mutual information between a module's valid inputs and the global system state increases, meaning the Kolmogorov complexity of defining a safe local change grows exponentially as the volume of valid global states shrinks.\", \"probability\": 0.065}, {\"conjecture\": \"Software degradation is an unavoidable consequence of the Data Processing Inequality applied to system modules. As each module locally refines its internal state based on inputs from others, the mutual information between any two non-adjacent modules ratchets upward, creating an irreducible global coupling that strictly limits the bandwidth of local changes.\", \"probability\": 0.085}, {\"conjecture\": \"Every locally correct change minimizes local entropy by hardcoding assumptions about the environment. This reduces local uncertainty but permanently increases the non-local mutual information across the system. The global system eventually reaches a Shannon capacity limit, where the channel capacity for any single interface is insufficient to express the information required to safely modify its coupled state.\", \"probability\": 0.07}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 190,
+      "completion_tokens": 762,
+      "total_tokens": 952
+    }
+  },
+  "transport_error": null
+}

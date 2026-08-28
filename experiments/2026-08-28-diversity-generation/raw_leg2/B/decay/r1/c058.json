@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Organizational memory decays faster than code, so tacit design rationale becomes unrecoverable, leaving only brittle literal constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.965
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-419",
+    "object": "chat.completion",
+    "created": 1787936392,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Because every locally correct change encodes an unstated hypothesis about the system's invariant, and the organizations that review and approve these changes can only validate them against the literal artifact, tacit design rationale is irreversibly lost when personnel turnover outpaces the codebase. The result is that future maintainers—constrained by brittle literal specifications they cannot semantically reinterpret—must treat historical code as a load-bearing constraint rather than a contingent implementation, freezing accidental properties into permanent requirements.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 103,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.651
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-347",
+    "object": "chat.completion",
+    "created": 1787936661,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate latent cross-cutting constraints—implicit assumptions spread across distant modules—that are never represented in the code, tests, or architecture documentation. Each locally correct change introduces new such constraints without violating any existing test, so the invisible web grows monotonically. The system becomes harder to change because the developer must manually reconstruct and satisfy an ever-larger set of undocumented, untested interdependencies that no single review or test suite was designed to detect.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 98,
+      "total_tokens": 200
+    }
+  },
+  "transport_error": null
+}

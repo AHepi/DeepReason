@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.227
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-675",
+    "object": "chat.completion",
+    "created": 1787937423,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate constraints, leaving behind implicit assumptions that future developers must reverse-engineer. The system becomes harder to change because the cost of discovering these accumulated hidden dependencies grows super-linearly with the number of past modifications.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Individual changes add execution paths without removing old ones, causing the state space of the system to grow exponentially. The difficulty of change increases because verifying the global correctness of a new modification requires reasoning about an unbounded number of rarely-triggered historical execution paths.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Software systems accumulate technical debt not because of poor local decisions, but because the optimal local abstraction boundary shifts as requirements change, but refactorings across those boundaries are never locally justified. The system freezes because global optimality is structurally inaccessible to local review.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"Tests encode historical invariants that become statistically redundant but are never deleted. As the test suite grows, it creates an artificial constraint mesh where any meaningful architectural change requires updating thousands of coupled, outdated assertions, making change cost proportional to system history rather than system size.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The system's implicit domain knowledge is distributed across its code, tests, and operators. Every change adds to this distribution without updating the global map. The system becomes harder to change because the cognitive load of reconstructing the mental model required for safe modification exceeds human working memory capacity.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"In the absence of global architectural enforcement, locally correct changes inevitably create incidental topological couplings between modules. The probability of a new change triggering an unintended side effect in a distant module approaches 1 as the density of these incidental couplings crosses a critical threshold, halting forward progress.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Reviewers evaluate changes against the system's current behavior, not its intended design. This shifts the baseline of acceptability toward the current state, causing the system to undergo a random walk away from its original coherent architecture. Change difficulty increases because the architecture's entropy increases monotonically with each approved patch.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"Every modification is validated against a local context, but the system's behavior is determined by the interaction of all local contexts. The system becomes harder to change because the number of interacting local contexts grows combinatorially, meaning the global impact of a change becomes computationally intractable to predict.\",\n      \"probability\": 0.074\n    },\n    {\n      \"conjecture\": \"As a system ages, the ratio of code maintaining stable invariants to code driving new features shifts toward the former. The system becomes harder to change because the density of load-bearing historical assumptions per line of code increases, raising the risk of violating a critical invariant with any modification.\",\n      \"probability\": 0.066\n    },\n    {\n      \"conjecture\": \"Locally correct changes are approved because they satisfy immediate requirements, but they permanently encode the specific historical context that motivated them. The system becomes progressively harder to change because developers must untangle a growing web of context-specific optimizations to make any generalized modification.\",\n      \"probability\": 0.088\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 758,
+      "total_tokens": 933
+    }
+  },
+  "transport_error": null
+}

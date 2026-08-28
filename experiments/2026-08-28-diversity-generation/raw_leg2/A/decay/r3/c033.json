@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.897
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-709",
+    "object": "chat.completion",
+    "created": 1787936736,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate a hidden graph of cross-module temporal invariants—implicit assumptions about execution order, timing, and state co-evolution that are never documented because no single change introduces them. Each locally correct modification inadvertently strengthens this graph by adding new dependencies while preserving old ones, causing the set of valid changes to shrink monotonically even as test coverage grows. The system becomes hard to modify not because its explicit complexity increases, but because the space of non-breaking changes collapses into an increasingly narrow manifold within an unobserved constraint space.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 115,
+      "total_tokens": 217
+    }
+  },
+  "transport_error": null
+}

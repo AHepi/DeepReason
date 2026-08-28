@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: state-space blow-up from accumulated feature interactions exceeding working memory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.229
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-50",
+    "object": "chat.completion",
+    "created": 1787936542,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade not because individual changes are wrong, but because each locally correct change increases the size of the system's effective state space faster than it increases the working memory capacity of any single maintainer. Once the number of latent feature interactions exceeds the combinatorial threshold that a human can mentally simulate, every subsequent change appears safe by local inspection but carries an unbounded set of nonlocal consequences. This interaction overhang—hidden by passing tests, which sample only a vanishing fraction of reachable states—means the system's true behavior space has grown beyond cognitive reach, making change difficult not due to technical debt but due to a fundamental information-theoretic mismatch between system complexity and working memory.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 146,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

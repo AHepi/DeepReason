@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.909
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-238",
+    "object": "chat.completion",
+    "created": 1787937302,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through the accumulation of bad code, but through the accumulation of locally-correct code that is globally incoherent: each modification optimizes for the immediate problem, leaving behind implicit assumptions and unexpressed dependencies that future modifications must reverse-engineer or unknowingly violate. The system's true architecture migrates into the unstated relationships between components while the documented architecture drifts further from reality, until no individual change can be validated against the system's actual constraints, only against its formalized but obsolete specification. This transforms the system into a tractability trap where the cost of any change is not in writing the code, but in reconstructing the lost knowledge of why the existing code is the way it is.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 153,
+      "total_tokens": 255
+    }
+  },
+  "transport_error": null
+}

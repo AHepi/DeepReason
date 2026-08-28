@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: submodular deficit of test coverage\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.02
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-790",
+    "object": "chat.completion",
+    "created": 1787936867,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Test suite quality is submodular: the marginal value of each new test for covering future change trajectories decreases as the suite grows, creating a submodular deficit where each locally correct change adds code surface area faster than tests can constrain the behavior of that surface. Consequently, even with 100% local test coverage on every change, the global constraint density (tests per unit of behavioral coupling) decays monotonically, because each change introduces implicit cross-module interactions that no individual change's tests are incentivized to cover. This submodular gap between local coverage and global constraint is why the system becomes progressively harder to change, even though no single change was negligent.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 141,
+      "total_tokens": 260
+    }
+  },
+  "transport_error": null
+}

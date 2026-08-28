@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedization reducing marginal value of local refactoring\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.674
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-64",
+    "object": "chat.completion",
+    "created": 1787936602,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate a configuration of mutually adapted modules that, while individually optimal, collectively rigidify the fitness landscape into a deep local optimum. Each reviewed, tested change incrementally steepens the adaptive ridgelines surrounding this configuration, so that subsequent local refactors yield diminishing fitness returns because they cannot traverse the widening fitness valleys between the current architecture and any superior one. Consequently, the system becomes harder to change not because of code rot per se, but because the landscape's ruggedization structurally suppresses the marginal value of any locally-correct improvement.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 118,
+      "total_tokens": 241
+    }
+  },
+  "transport_error": null
+}

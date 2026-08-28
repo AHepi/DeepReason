@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.598
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-106",
+    "object": "chat.completion",
+    "created": 1787936879,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture irreversibly accumulates implicit invariants that are never documented. Each locally correct change assumes certain invariants hold, but as the system evolves, these assumptions become invisible constraints. Over time, the space of valid changes shrinks because nobody knows which invariants are load-bearing.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Every code change optimizes for local understandability, which systematically sacrifices global understandability. Developers name things, structure modules, and choose abstractions that make their current change easy to review, but these local choices fragment the conceptual integrity of the system. The system becomes harder to change because no single mental model covers it anymore.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Testing creates a feedback loop that selects for changes that preserve existing test behavior rather than changes that improve system structure. Tests encode current assumptions, so any change that would reduce structural complexity also risks breaking tests, creating evolutionary pressure toward complexity accumulation.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Code review processes are fundamentally local optimization algorithms. They evaluate each change against its immediate context, but no review process can evaluate a change against the cumulative history of all past changes. Therefore, code review is structurally incapable of preventing entropy accumulation.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software systems accumulate dead code paths that cannot be safely removed because no one can prove they are unused. Each path was added for a reason, but the reason is forgotten. The system becomes harder to change because every change must navigate around dead paths that may still be exercised by unknown callers.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The coupling between modules grows monotonically because changes that reduce coupling require coordinated edits across modules, while changes that increase coupling require edits to only one. Since coordinated changes are harder to review and test, the system drifts toward maximum coupling.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Abstractions degrade through accumulated special cases. Each change that adds a special case to an existing abstraction is locally correct and well-tested, but each special case makes the abstraction harder to use correctly. Eventually the abstraction becomes a liability, but replacing it requires changing all its callers at once.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software difficulty is governed by a variant of the second law of thermodynamics: every change increases the total information entropy of the system because changes add states without removing them. The entropy is irreducible without external energy (refactoring) that itself adds entropy elsewhere.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the knowledge graph of developer expertise degrades faster than the code itself. Each developer who leaves takes with them tacit knowledge about why certain decisions were made. The code remains but the decision rationale evaporates, making every change riskier.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The difficulty of changing a system is proportional to the number of implicit dependencies between its components. Each locally correct change creates new implicit dependencies because the developer only needed to understand the dependencies relevant to their change. These dependencies accumulate invisibly until the system becomes a rigid web.\",\n      \"probability\": 0.08\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 750,
+      "total_tokens": 925
+    }
+  },
+  "transport_error": null
+}

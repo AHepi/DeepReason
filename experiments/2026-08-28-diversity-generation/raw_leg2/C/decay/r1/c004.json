@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.224
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-655",
+    "object": "chat.completion",
+    "created": 1787936416,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems degrade because of the second law of thermodynamics for information: each locally correct change increases global entropy by introducing implicit constraints that are never documented, making future modifications require exponentially more context to reason about.\", \"probability\": 0.085}, {\"conjecture\": \"The difficulty stems from the accumulation of non-reversible decisions: each change forecloses certain future options, and the compounding of these foreclosures creates a combinatorial lock-in where any new change conflicts with at least one past implicit commitment.\", \"probability\": 0.072}, {\"conjecture\": \"Long-running systems become harder to change because each locally correct change optimizes for current constraints, creating a rugged fitness landscape where the system becomes trapped in a local optimum that requires simultaneous coordinated changes across many modules to escape.\", \"probability\": 0.068}, {\"conjecture\": \"The root cause is epistemic opacity: every change adds dependencies that are invisible at the interface level, so the true cost of a modification grows superlinearly with the number of modules because the developer must reconstruct an ever-larger mental model of hidden couplings.\", \"probability\": 0.079}, {\"conjecture\": \"Systems harden because of defensive programming accumulation: each change adds guards, checks, and edge-case handling that become load-bearing over time, creating a conservation of complexity where removing any guard risks breaking an unknown downstream assumption.\", \"probability\": 0.063}, {\"conjecture\": \"The phenomenon is driven by semantic drift: the meaning of each module's interface accumulates implicit context from every change, so the gap between documented behavior and actual behavior grows monotonically, making every new change operate on a false model of the system.\", \"probability\": 0.074}, {\"conjecture\": \"Long-running systems become harder to change because each locally correct change creates a new invariant that future changes must preserve, and the number of invariants grows quadratically with system age since each pair of changes can interact to create a joint constraint.\", \"probability\": 0.081}, {\"conjecture\": \"The increasing difficulty is a measurement artifact: the system itself is not getting harder to change, but the rate of change required by the environment accelerates while the system's architecture remains fixed, so the perceived difficulty is the growing gap between needed change rate and architectural change capacity.\", \"probability\": 0.041}, {\"conjecture\": \"Software hardens because of stakeholder expectation crystallization: each locally correct change creates user-visible behavior that becomes a dependency for external systems, so the system's effective API grows monotonically even when the codebase doesn't, creating an ever-larger surface that must be preserved.\", \"probability\": 0.057}, {\"conjecture\": \"The difficulty arises from test suite calcification: each change adds tests that encode current implementation details rather than specifications, so as the test suite grows it increasingly penalizes any architectural improvement that would require updating tests, creating an immune response against beneficial change.\", \"probability\": 0.069}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 641,
+      "total_tokens": 816
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.156
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-817",
+    "object": "chat.completion",
+    "created": 1787936256,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate an unobservable graph of semantic coupling—implicit dependencies between components that share no formal interface but rely on identical assumptions about undocumented domain invariants. Because these invariants are never expressed in code, tests, or types, every locally correct change silently thickens this hidden graph until the cost of safe modification exceeds the cost of replacement. The system calcifies not from accumulated bugs, but from the growing gap between the code's explicit structure and the irreducible web of shared assumptions it actually embodies.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 108,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

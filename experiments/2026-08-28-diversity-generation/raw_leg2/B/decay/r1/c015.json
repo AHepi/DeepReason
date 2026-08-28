@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.563
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-729",
+    "object": "chat.completion",
+    "created": 1787936339,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software identifiers and interface names act as semantic anchors that resist renaming even as their actual obligations diverge from their original meaning. Each locally correct change attaches a new unstated invariant to an existing name rather than introducing a new one, because reuse avoids the cost of explicit contract revision. The result is that the name becomes a stable reference to an increasingly unstable set of implicit, context-dependent requirements—none of which are visible in the type signature or documentation, but all of which must be satisfied by any future change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 131,
+      "completion_tokens": 109,
+      "total_tokens": 240
+    }
+  },
+  "transport_error": null
+}

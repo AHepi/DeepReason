@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.669
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-362",
+    "object": "chat.completion",
+    "created": 1787936335,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change over time because identifiers and interfaces serve as semantic anchors whose implicit obligations grow with each locally-correct change: each new caller relies on an unstated, context-dependent invariant of the name, so the name's meaning drifts to encompass a union of all past usage constraints without any single invariant being explicitly recorded. Because the anchor name is preserved across changes, the accumulated invariants are invisible to tests (which check specific callers) and reviews (which check local correctness), yet any future change that violates any one of them breaks a distant caller that had silently come to depend on it.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 131,
+      "completion_tokens": 131,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

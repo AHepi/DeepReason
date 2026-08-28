@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Dependency entropy monotonically increases under locally rational edits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.509
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-282",
+    "object": "chat.completion",
+    "created": 1787937083,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Under any sequence of individually rational, locally correct edits to a software system, the normalized Shannon entropy of its dependency graph is non-decreasing. Each developer optimizes for local coherence and immediate task fitness, thereby introducing shortcuts, utility couplings, and cross-cutting links that raise the graph's entropy without violating any local invariant. Consequently, long-running systems accumulate structural disorder as a thermodynamic inevitability, not as a failure of individual review or test discipline.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 100,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

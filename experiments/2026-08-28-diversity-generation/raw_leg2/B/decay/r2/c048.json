@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: interface impedance mismatch from independent module boundary evolution\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.149
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-949",
+    "object": "chat.completion",
+    "created": 1787936598,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade because module interfaces evolve through locally-optimistic adjustments that preserve each side's current semantics while silently shifting the implicit contract—caller and callee remain type-compatible but diverge on unmodeled assumptions about ordering, partial failure, or side effects. This creates a growing impedance mismatch at every boundary where the two sides' internal models of the interaction drift apart without triggering any test failure, since tests validate each module's behavior in isolation against its own assumptions, not the other module's. The system becomes harder to change not because any single change was wrong, but because the accumulated mismatches form a hidden coupling layer that no interface definition, type system, or test suite currently represents, making every new change must navigate drift that is invisible to all existing verification tools.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 162,
+      "total_tokens": 282
+    }
+  },
+  "transport_error": null
+}

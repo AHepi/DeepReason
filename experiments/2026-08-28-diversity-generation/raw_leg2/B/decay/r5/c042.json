@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: coupling-coefficient inflation measured as a rising average ratio of the transitive closure of required test state mutations per targeted code mutation\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.002
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-450",
+    "object": "chat.completion",
+    "created": 1787937389,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The average ratio of transitive test-state mutations to targeted code mutations grows at least logarithmically with system age because each locally-correct change adds new invariant relationships that subsequent changes must preserve, and the rate of invariant accumulation is proportional to the current coupling coefficient. This coupling-coefficient inflation is unavoidable even under perfect engineering practices because the growth is driven by the combinatorial interaction of accumulated invariants, not by any individual defect. The conjecture predicts that systems will eventually reach a critical threshold where the median test-state mutation cost exceeds the median feature value, causing development velocity to collapse independently of team skill or tooling.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 132,
+      "total_tokens": 268
+    }
+  },
+  "transport_error": null
+}

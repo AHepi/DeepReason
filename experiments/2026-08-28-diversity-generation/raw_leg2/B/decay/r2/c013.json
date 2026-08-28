@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: dependency coupling drift measured by eigenvector centrality in static call graphs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.041
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-795",
+    "object": "chat.completion",
+    "created": 1787936551,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In a static call graph, the eigenvector centrality of the node modified by a change predicts the amount of coupling drift introduced by that change, even when the change is locally correct. Specifically, modifications to high-centrality nodes create disproportionately large increases in the transitive dependency burden of neighboring nodes, which compounds over time into structural rigidity. This implies that a sequence of individually sound changes can be globally destructive if the centrality-weighted drift sum exceeds a critical threshold, after which the system's call graph becomes an absorbing state resistant to further modification.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 120,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

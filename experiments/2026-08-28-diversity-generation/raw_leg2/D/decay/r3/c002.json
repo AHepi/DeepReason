@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain language and code symbols over time\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.226
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-766",
+    "object": "chat.completion",
+    "created": 1787936917,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The binding between domain terms and code symbols decays because stakeholders continue using old terms for new concepts, creating a many-to-one ambiguity where a single symbol name must serve multiple evolving domain meanings, and each refactor resolves only the local conflict without re-establishing global referential integrity.\", \"probability\": 0.09}, {\"conjecture\": \"Code symbols accumulate ghost meanings: a method originally named for a domain concept retains that name even after the concept splits or is replaced, so the symbol now denotes only a fragment of the original domain meaning, yet callers continue to assume the original full meaning, introducing latent semantic mismatches that are invisible to type systems and tests.\", \"probability\": 0.08}, {\"conjecture\": \"Each locally correct change updates either the code symbol or the domain vocabulary but rarely both simultaneously, so the two evolve as independent random walks whose divergence is never caught because no test validates the continued correspondence between a symbol's name and its intended domain referent.\", \"probability\": 0.07}, {\"conjecture\": \"Domain language drifts through accretion—new terms are added faster than old terms are retired—so code symbols that once mapped to a small, stable vocabulary now map to an overloaded one, and the cost of disambiguation grows superlinearly because each new term increases the ambiguity of every existing symbol that partially overlaps it.\", \"probability\": 0.06}, {\"conjecture\": \"The semantic distance between a code symbol and its domain referent is a function of the number of people who have modified the symbol without consulting the original domain expert, and this distance grows monotonically because each successive maintainer reconstructs the meaning from code rather than from domain discourse, introducing small translation errors that compound.\", \"probability\": 0.05}, {\"conjecture\": \"Refactoring tools preserve symbol names but not their semantic contracts, so when a domain concept migrates across module boundaries, the original symbol is left behind as a delegate or wrapper that retains the name but no longer carries the conceptual authority, making future changes harder because developers cannot determine which symbol is the canonical referent.\", \"probability\": 0.05}, {\"conjecture\": \"The mapping between domain language and code symbols is a bipartite graph that loses edges faster than it gains them: domain terms die when business priorities shift, but the code symbols they mapped to persist as orphaned names, and the accumulation of orphaned symbols increases the cognitive load of every future change because developers must reverse-engineer which symbols still carry live domain meaning.\", \"probability\": 0.04}, {\"conjecture\": \"Test suites encode domain semantics at the moment they are written and then become the de facto specification, so when domain language drifts, tests enforce the old mapping and actively resist updates to symbols that would restore alignment with current domain language, creating a lock-in effect where the tests themselves are the primary obstacle to semantic correction.\", \"probability\": 0.04}, {\"conjecture\": \"Code symbols and domain terms maintain a one-to-one mapping only during initial development; subsequent changes violate this mapping by introducing synonyms (multiple symbols for one domain term) and homonyms (one symbol for multiple domain terms), and the combinatorial explosion of these violations makes each new change require resolving an increasingly dense graph of partial overlaps before a safe edit can be made.\", \"probability\": 0.03}, {\"conjecture\": \"The rate of semantic drift between domain language and code symbols is proportional to the half-life of the development team: each generation of maintainers inherits symbols whose original domain rationale is undocumented, reconstructs a plausible meaning from usage patterns, and encodes that reconstruction in new code, so after n generations the symbol's effective meaning is an nth-order approximation of the domain concept with error growing as roughly the square root of n.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 798,
+      "total_tokens": 987
+    }
+  },
+  "transport_error": null
+}

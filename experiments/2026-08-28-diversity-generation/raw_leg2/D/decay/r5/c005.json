@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topological rigidification of the call graph lowering mutation traversability\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.009
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-285",
+    "object": "chat.completion",
+    "created": 1787937447,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change tends to add edges to the call graph without removing commensurate ones, causing a monotonic increase in average vertex degree. This topological densification reduces mutation traversability because any proposed change now propagates through more paths, increasing the surface area that must be re-validated.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems accumulate SCCs in the call graph because locally correct fixes create back-edges to avoid duplication. The growth of these SCCs lowers mutation traversability by trapping control flow in cycles that cannot be surgically modified without affecting all members of the cycle.\", \"probability\": 0.08}, {\"conjecture\": \"Individual changes create shortcut edges in the call graph that bypass intermediate layers, progressively destroying the hierarchical (DAG) structure. This topological flattening reduces mutation traversability because hierarchical modifications rely on clean separation of concerns that shortcuts violate.\", \"probability\": 0.07}, {\"conjecture\": \"Locally correct changes preferentially connect to high-degree hub functions (logging, error handling, config) for convenience, causing the call graph's degree distribution to shift toward a power law. The resulting hub-dominated topology lowers mutation traversability because any change to a hub cascades non-locally, making targeted mutation infeasible.\", \"probability\": 0.06}, {\"conjecture\": \"Over time, the call graph develops a core-periphery topology where all new features route through a dense central core. This topological rigidification lowers mutation traversability because the core becomes a bottleneck where any change requires coordinated mutation of densely interconnected nodes.\", \"probability\": 0.05}, {\"conjecture\": \"Each reviewed change increases the betweenness centrality of a small set of intermediary functions. As betweenness concentrates, the call graph's mutation traversability drops because high-betweenness nodes become single points of failure where any local change has system-wide propagation effects.\", \"probability\": 0.04}, {\"conjecture\": \"Locally correct changes incrementally increase the graph diameter by adding nodes at the periphery without adding shortcuts, creating elongated call chains. This topological extension lowers mutation traversability because changes must propagate across longer paths, increasing the cost of each mutation.\", \"probability\": 0.04}, {\"conjecture\": \"The call graph undergoes progressive barycentric contraction where new edges cluster around a small subset of high-traffic nodes, shrinking the effective graph radius. This contraction lowers mutation traversability because the dense center cannot be mutated without triggering cascading effects through the majority of paths.\", \"probability\": 0.03}, {\"conjecture\": \"Each locally correct change increases the spectral gap of the call graph's Laplacian, reflecting tighter coupling. A larger spectral gap lowers mutation traversability because perturbations diffuse rapidly through the graph, making it impossible to contain the effects of a change to a local neighborhood.\", \"probability\": 0.03}, {\"conjecture\": \"As the call graph grows, its treewidth increases monotonically because locally correct changes add cross-cutting dependencies that cannot be decomposed into tree-like separators. Higher treewidth lowers mutation traversability because no small cut set can isolate a change, forcing global re-validation.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 681,
+      "total_tokens": 872
+    }
+  },
+  "transport_error": null
+}

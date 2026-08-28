@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 29.207
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-358",
+    "object": "chat.completion",
+    "created": 1787936704,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The system accumulates a latent execution-space of unexercised state configurations that are never explicitly represented in code or tests, but are implicitly assumed to remain stable by existing logic. Each locally correct change optimizes for the specific test paths and immediate context it can observe, inadvertently shifting the invariant boundaries of this unobserved space without any test failing. Over time, the probability that any new change violates an unrepresented invariant in this dark state-space approaches one, because the system's true behavioral constraints have become distributed across a combinatorial space far larger than its documented or tested surface.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 125,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

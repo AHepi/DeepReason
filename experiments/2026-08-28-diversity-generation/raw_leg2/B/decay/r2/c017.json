@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: dependency coupling drift measured by eigenvector centrality in static call graphs\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.654
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-192",
+    "object": "chat.completion",
+    "created": 1787936557,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate high-eigenvector-centrality nodes in their static call graphs faster than refactoring removes them, because locally correct, tested changes preferentially attach to already-central modules to minimize immediate integration risk. This creates a ratchet where each acceptable change increases the eigenvector centrality of a small set of hub functions, raising the global blast radius of future edits to those hubs. The metric 'mean eigenvector centrality of the top-k nodes' should therefore increase monotonically with system age in healthy projects, and the rate of increase predicts the onset of change difficulty better than cyclomatic complexity or raw dependency count.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 138,
+      "total_tokens": 264
+    }
+  },
+  "transport_error": null
+}

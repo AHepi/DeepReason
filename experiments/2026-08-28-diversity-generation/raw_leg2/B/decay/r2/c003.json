@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: state-space blow-up from accumulated feature interactions exceeding working memory\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.207
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-151",
+    "object": "chat.completion",
+    "created": 1787936539,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change adds a feature interaction term to the system's effective state space, causing the graph of behavioral dependencies to grow combinatorially rather than linearly. Once the number of latent interaction paths exceeds the working-memory capacity of any individual maintainer, developers can no longer hold enough of the dependency graph to predict the blast radius of a change, so every modification requires expensive re-derivation of context that was previously implicit. This is why review and testing do not prevent rigidity: they validate local correctness but cannot halt the accumulation of interaction complexity that eventually exceeds human cognitive bandwidth.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 129,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

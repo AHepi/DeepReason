@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift: identifiers and contracts retain names while their implicit obligations accumulate unstated context-dependent invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.279
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-986",
+    "object": "chat.completion",
+    "created": 1787936345,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change appends at least one unstated invariant to an existing identifier's obligations, causing the identifier's semantic drift to grow monotonically even under perfect review. A system's changeability decays asymptotically toward zero as a direct, inevitable function of this accumulated invariant count, because any future modification must satisfy an ever-growing set of undocumented, context-dependent contracts that are invisible to the compiler and the reviewer.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 131,
+      "completion_tokens": 93,
+      "total_tokens": 224
+    }
+  },
+  "transport_error": null
+}

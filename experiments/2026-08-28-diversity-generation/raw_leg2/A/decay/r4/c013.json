@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.977
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-583",
+    "object": "chat.completion",
+    "created": 1787936934,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through the accumulation of bugs, but through the gradual destruction of implicit design invariants—unstated constraints that no longer hold once the original designers leave and the implicit context is lost. Each locally correct change is validated against the surviving explicit tests, which are blind to the now-dead implicit invariants, allowing violations to accumulate silently. The system becomes hard to change because the effective design has drifted further from the actual code than any documentation or test suite can reveal, forcing every new change to reverse-engineer an intent that no longer exists.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 120,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

@@ -114,3 +114,26 @@
 2026-08-28T16:46:38Z cell C/technique/r9: 6 calls, 5318 tokens, 19.5s
 2026-08-28T16:47:06Z cell D/technique/r9: 7 calls, 5894 tokens, 27.8s
 2026-08-28T16:47:06Z === driver done; 108 cells, 1118171 tokens total ===
+2026-08-28T16:57:11Z === driver start; root=raw_leg2; PREREG frozen at commit 79b9145e7ae371b0320bb813441192ba341ad898 ===
+2026-08-28T16:57:11Z provider: https://ollama.com/v1 model=glm-5.2 temperature=0.9 top_p=0.95 reasoning_effort=none
+2026-08-28T16:57:11Z question digests verified: {"decay": "875059b0cc2e11dec8b71862336f19a6357cc04eb31bb3e5c435c68fa2c8598a", "geometry": "938411430006153e48e9aec2d5f0f8843e162a15f2b438847cc8349c5f7e6167", "technique": "ec18e174eef61c8851f06bb78d48805bcecc0c42a131ebc5b1c7ec2a0c7caed2"}
+2026-08-28T16:58:30Z cell A/decay/r1: 60 calls, 12180 tokens, 78.7s
+2026-08-28T16:59:52Z cell B/decay/r1: 61 calls, 15251 tokens, 82.7s
+2026-08-28T17:00:18Z cell C/decay/r1: 6 calls, 5299 tokens, 25.9s
+2026-08-28T17:00:49Z cell D/decay/r1: 7 calls, 5800 tokens, 30.6s
+2026-08-28T17:02:12Z cell A/decay/r2: 60 calls, 12111 tokens, 82.8s
+2026-08-28T17:03:29Z cell B/decay/r2: 61 calls, 15036 tokens, 77.7s
+2026-08-28T17:03:52Z cell C/decay/r2: 6 calls, 5505 tokens, 22.9s
+2026-08-28T17:04:19Z cell D/decay/r2: 7 calls, 5951 tokens, 26.2s
+2026-08-28T17:06:21Z cell A/decay/r3: 60 calls, 12192 tokens, 122.5s
+2026-08-28T17:07:49Z cell B/decay/r3: 61 calls, 14239 tokens, 87.8s
+2026-08-28T17:08:09Z cell C/decay/r3: 6 calls, 5238 tokens, 20.1s
+2026-08-28T17:08:37Z cell D/decay/r3: 7 calls, 6117 tokens, 27.7s
+2026-08-28T17:09:58Z cell A/decay/r4: 60 calls, 12401 tokens, 81.7s
+2026-08-28T17:12:54Z cell B/decay/r4: 61 calls, 14311 tokens, 175.3s
+2026-08-28T17:13:35Z cell C/decay/r4: 6 calls, 5373 tokens, 41.6s
+2026-08-28T17:14:11Z cell D/decay/r4: 7 calls, 6441 tokens, 35.8s
+2026-08-28T17:15:28Z cell A/decay/r5: 60 calls, 12193 tokens, 76.9s
+2026-08-28T17:16:52Z cell B/decay/r5: 61 calls, 15543 tokens, 84.0s
+2026-08-28T17:17:16Z cell C/decay/r5: 6 calls, 5571 tokens, 23.9s
+2026-08-28T17:17:50Z cell D/decay/r5: 7 calls, 6324 tokens, 34.2s

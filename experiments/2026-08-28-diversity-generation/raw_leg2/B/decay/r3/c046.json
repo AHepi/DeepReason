@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-space collapse of architectural constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.989
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-816",
+    "object": "chat.completion",
+    "created": 1787936853,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change that introduces a constraint coupling (shared schema, API, or implicit invariant) between two components permanently shrinks the set of future architectural configurations reachable without simultaneous multi-component revision. Because reviewed changes only verify local correctness against the existing system, each accepted constraint tightens the viable phase space while becoming invisible to subsequent local-change validation. Over time, the reachable design manifold collapses to a measure-zero sliver, and any desired architectural transition requires escaping a local minimum that no sequence of individually-reviewable, locally-correct changes can traverse. The system becomes hard to change not because any single change was wrong, but because the accumulated constraint graph has mathematically eliminated the paths by which correct changes can reach alternative architectures.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 118,
+      "completion_tokens": 152,
+      "total_tokens": 270
+    }
+  },
+  "transport_error": null
+}

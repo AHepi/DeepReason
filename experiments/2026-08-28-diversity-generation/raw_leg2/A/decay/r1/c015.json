@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.173
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-177",
+    "object": "chat.completion",
+    "created": 1787936246,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems degrade not through the accumulation of bad code, but through the systematic loss of implicit invariants: every locally correct, reviewed change permanently severs a fraction of undocumented cross-module assumptions that tests cannot detect because the tests were written to validate the prior assumption state. This creates an epistemic drift where the system's actual behavior diverges from the collective mental model of its maintainers, making future changes increasingly likely to trigger non-local failures.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 99,
+      "total_tokens": 201
+    }
+  },
+  "transport_error": null
+}

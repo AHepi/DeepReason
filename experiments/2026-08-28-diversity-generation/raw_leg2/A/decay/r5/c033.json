@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.493
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-145",
+    "object": "chat.completion",
+    "created": 1787937302,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems degrade because locally correct changes inevitably introduce implicit invariants between modules that are never documented, tested, or even recognized by their authors. These phantom dependencies form a hidden dependency graph that grows quadratically with system size, meaning every subsequent change has a higher probability of violating an unrecognized constraint. Over time, the codebase's true complexity resides entirely in this undocumented coupling layer, which is invisible to both human reviewers and automated test suites, making any modification a gamble against an exponentially expanding space of unexpressed system states.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 112,
+      "total_tokens": 214
+    }
+  },
+  "transport_error": null
+}

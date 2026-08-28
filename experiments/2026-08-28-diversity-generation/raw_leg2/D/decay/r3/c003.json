@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: decayed test suites that pin implementation rather than contract\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.919
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-565",
+    "object": "chat.completion",
+    "created": 1787936913,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Test suites accumulate assertions on internal state, private collaborators, and call sequences rather than observable outputs, so any refactoring that preserves the contract but restructures the internals causes widespread test failures that developers eventually learn to avoid by not refactoring.\", \"probability\": 0.09}, {\"conjecture\": \"Mock-heavy testing practices freeze interaction topology at the unit level: once every collaborator is mocked, reorganizing component boundaries requires rewriting every test, making architectural change cost O(tests) instead of O(code), which suppresses structural improvement.\", \"probability\": 0.07}, {\"conjecture\": \"Over time, each regression fix adds a narrow test asserting the exact buggy input and its exact output, creating a dense lattice of pointwise behavioral pins that collectively overfit to historical incidents while leaving the general contract under-tested, so any generalization risks violating a pin someone added years ago.\", \"probability\": 0.06}, {\"conjecture\": \"Tests become the de facto specification because the prose specification drifts, but tests specify the implementation's accidental properties, so the system's real contract converges to its current implementation and every change becomes a contract violation by definition.\", \"probability\": 0.05}, {\"conjecture\": \"When a test fails, developers almost always change the code to match the test rather than asking whether the test still reflects a valid contract, because the test is treated as a regression oracle, so implementation details become permanently load-bearing.\", \"probability\": 0.08}, {\"conjecture\": \"The ratio of implementation-pinning assertions to contract-asserting assertions grows monotonically because each maintenance episode adds the former while rarely pruning the latter, causing the fraction of the test suite that blocks beneficial change to increase steadily even as total coverage rises.\", \"probability\": 0.04}, {\"conjecture\": \"White-box test coverage tools incentivize testing every branch and line, which forces tests to depend on control-flow structure, so higher coverage correlates with greater coupling between tests and implementation, making well-covered code paradoxically harder to refactor than poorly-covered code.\", \"probability\": 0.03}, {\"conjecture\": \"Snapshot and golden-file tests serialize the full internal representation at a point in time and assert equality on every subsequent run, so any change to the representation, even an improvement, breaks the snapshot and must be manually inspected and re-approved, creating friction proportional to snapshot size rather than to behavioral risk.\", \"probability\": 0.05}, {\"conjecture\": \"Tests written at the time of initial implementation encode the author's mental model of the architecture, including assumptions about data flow and ownership that are never re-examined, so later developers face a choice between reverse-engineering a decade-old mental model to make a change or working around it, and they choose the latter.\", \"probability\": 0.02}, {\"conjecture\": \"The test suite's execution speed degrades as it grows, so the feedback loop for any change slows, which causes developers to make smaller, more incremental, more conservative changes that never address structural decay, creating a feedback loop where slow tests cause the architecture to ossify further.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 661,
+      "total_tokens": 850
+    }
+  },
+  "transport_error": null
+}

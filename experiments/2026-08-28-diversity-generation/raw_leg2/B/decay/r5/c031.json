@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: epistemic opacity from drift in implicit, un-enforced domain assumptions across maintainer generations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.249
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-409",
+    "object": "chat.completion",
+    "created": 1787937365,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each generation of maintainers operates on a partial, un-enforced mental model of the system's domain assumptions—constraints that were once obvious to the original authors but were never encoded as executable assertions. Because tests and code reviews validate local behavior against the current maintainer's implicit model, each locally correct change silently violates assumptions held only in the minds of departed predecessors. The system becomes harder to change not because the code degrades, but because the epistemic substrate of *why the code must be the way it is* becomes irrecoverably opaque, and no maintainer can confidently determine whether a proposed change is safe or contradicts a forgotten invariant.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 138,
+      "total_tokens": 268
+    }
+  },
+  "transport_error": null
+}

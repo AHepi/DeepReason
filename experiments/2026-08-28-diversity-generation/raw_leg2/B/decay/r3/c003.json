@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: information-theoretic entropy of API contracts\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.613
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-265",
+    "object": "chat.completion",
+    "created": 1787936787,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each reviewed and tested API change preserves the correctness of its specific transaction, but each change increases the Shannon entropy of the contract by adding new states and optional behaviors without ever removing old ones. The difficulty of future changes grows in proportion to the number of valid input-output combinations the contract now affords, because the engineer must prove their change is correct against every surviving prior path. Thus, the increasing information content of the API contract itself imposes an irreducible cognitive cost per modification that no local testing or review practice can eliminate.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "completion_tokens": 115,
+      "total_tokens": 235
+    }
+  },
+  "transport_error": null
+}

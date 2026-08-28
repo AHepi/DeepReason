@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Organizational memory decays faster than code, so tacit design rationale becomes unrecoverable, leaving only brittle literal constraints\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.596
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-850",
+    "object": "chat.completion",
+    "created": 1787936390,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change implicitly assumes the survival of the design rationale that motivated the existing code's structure, but organizational memory of that rationale decays exponentially while the code persists. Once the tacit rationale becomes unrecoverable, developers treat the existing structure as a literal constraint rather than a contingent design choice, causing subsequent changes to wrap brittle assumptions in defensive compatibility layers rather than refactor the underlying intent. The system's modifiability therefore degrades as a function of the growing gap between what the code literally requires and what anyone can still explain why it requires.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 136,
+      "completion_tokens": 118,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

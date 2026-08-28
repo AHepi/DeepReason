@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy of the call graph topology increases monotonically under locality-preserving edits, reducing spectral gap and information flow\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.2
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-980",
+    "object": "chat.completion",
+    "created": 1787936354,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A sequence of locally-correct, reviewed edits to a long-running system constitutes a locality-preserving Markov process on the call graph: each change adds or rewires edges within a small neighborhood of existing nodes, never rewiring globally to preserve modularity. Such edits monotonically increase the von Neumann graph entropy of the call graph's normalized Laplacian and decrease its spectral gap, because they preferentially fill in low-conductance cuts that prior structure relied on for information flow. Consequently, the system's mixing time grows superlinearly in the number of edits, and no sequence of locally-rational changes can reverse the entropy increase without a non-local, globally-coordinated rewrite.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 146,
+      "total_tokens": 281
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.618
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-834",
+    "object": "chat.completion",
+    "created": 1787936405,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, but the accumulation of these local optimizations creates a globally suboptimal architecture whose internal tensions actively resist further change. The system becomes hard to modify not because of code complexity, but because the implicit optimization landscape has converged to a local minimum that requires simultaneous coordinated changes across many components to escape.\", \"probability\": 0.08}, {\"conjecture\": \"Every tested, reviewed change encodes implicit assumptions about the environment, callers, and data shapes. These assumptions are never fully documented or tested, so they accumulate as hidden coupling. The system becomes harder to change because the true dependency graph grows faster than the visible one, and each change risks violating an assumption that no test covers.\", \"probability\": 0.09}, {\"conjecture\": \"Software systems accumulate irreversibility: each correct change narrows the space of future changes by committing to specific abstractions, interfaces, and data formats. The difficulty of change grows with the number of committed-to decisions that must be honored, and this grows monotonically even when each individual decision was locally optimal.\", \"probability\": 0.07}, {\"conjecture\": \"The knowledge gradient collapses over time: early changes are made by people who hold the full system model in their heads, but each change adds detail faster than any maintainer can absorb. Eventually all remaining changes require understanding more of the system than any single person can hold, so every change requires expensive model reconstruction that was unnecessary in the system's youth.\", \"probability\": 0.06}, {\"conjecture\": \"Tested and reviewed changes are locally correct with respect to current requirements, but they freeze a particular interpretation of those requirements into code. As requirements drift, the frozen interpretations become constraints that contradict new needs. The difficulty of change is the cost of renegotiating thousands of frozen micro-interpretations, each of which was correct when made.\", \"probability\": 0.05}, {\"conjecture\": \"Each change adds a small amount of accidental complexity that is individually too small to justify cleanup. Over time this complexity compounds multiplicatively rather than additively, because new changes must navigate all prior complexity, creating an O(n²) interaction surface where n is the number of historical changes. The system resists change because the cost of each new change is proportional to the accumulated interaction surface, not to the change's intrinsic size.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems become harder to change because the cost of validation, not the cost of implementation, grows superlinearly. Each correct change adds test cases, invariants, and integration points that future changes must not violate. The validation cost grows as O(n²) because each new change must be checked against an expanding set of existing constraints, and eventually validation dominates the change budget entirely.\", \"probability\": 0.07}, {\"conjecture\": \"Software entropy is real but misattributed: it is not randomness that accumulates but rather displaced generality. Each locally correct change solves a specific problem by specializing a general mechanism. Over time the system loses its general-purpose substrates and becomes a web of special cases. Change becomes hard because there is no general layer left to modify; every change must be replicated across many special cases.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems become harder to change because each correct change adds invariants that the organization comes to depend on externally. The resistance to change is not internal complexity but the growing web of external commitments, integrations, and data format expectations. The system becomes a load-bearing wall in an organizational structure, and each change risks organizational rather than software failure.\", \"probability\": 0.06}, {\"conjecture\": \"Each reviewed, tested change is optimized for understandability by the current team. As team composition turns over, the cognitive style of the codebase becomes a patchwork of different mental models. Change becomes hard because a maintainer must now context-switch between multiple incompatible mental models embedded in different parts of the code, and this switching cost grows with the diversity of past contributors.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 855,
+      "total_tokens": 1030
+    }
+  },
+  "transport_error": null
+}
