@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.03
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-36",
+    "object": "chat.completion",
+    "created": 1787932068,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change implicitly prunes the space of future system states, causing the codebase to accumulate irreversible constraints analogous to thermodynamic entropy. Because no individual change carries enough information to reveal which constraints are essential versus incidental, subsequent developers must treat all constraints as load-bearing, causing the cost of any new change to grow monotonically with the number of prior changes regardless of code quality.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 85,
+      "total_tokens": 187
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.48
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-912",
+    "object": "chat.completion",
+    "created": 1787932329,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct change adds implicit constraints to the system's configuration space—untested combinations of states that are presumed unreachable but never explicitly forbidden. The system's entropy is not in the code itself, but in the exponentially growing shadow of untested execution paths, making every subsequent change riskier because it must navigate an increasingly dense field of invisible invariants. Software rots not because any change is wrong, but because the space of possible interactions grows faster than tests can constrain them.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 108,
+      "total_tokens": 210
+    }
+  },
+  "transport_error": null
+}

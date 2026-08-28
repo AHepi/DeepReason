@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.772
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-959",
+    "object": "chat.completion",
+    "created": 1787932491,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems degrade because each locally-correct change optimizes the system's structure for its immediate context, slowly reducing the Shannon entropy of the codebase relative to future, unanticipated requirements. This creates an asymptotic constraint surface where the computational cost of finding a correct modification path grows super-linearly, as developers must search an exponentially expanding space of implicit cross-module dependencies that were never explicitly encoded. The system becomes 'harder to change' not due to accumulated technical debt, but because the codebase's Kolmogorov complexity has diverged so far from its functional description that reverse-engineering the necessary execution paths exceeds working memory capacity.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 140,
+      "total_tokens": 242
+    }
+  },
+  "transport_error": null
+}

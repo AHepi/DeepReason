@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.104
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-892",
+    "object": "chat.completion",
+    "created": 1787932335,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The difficulty of changing long-running software systems increases because each locally correct change consumes the finite supply of architectural degrees of freedom—uncommitted design decisions that define what the system could become. Like a thermodynamic system where entropy monotonically increases, each accepted change eliminates possible future states while adding constraints that subsequent changes must navigate. This 'decision debt' accumulates even when changes are high-quality, because the cost is not paid by the individual change but by the narrowing of the solution space available to all future changes.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 114,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift and vocabulary drift across human–AI–human knowledge transfer\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.186
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-502",
+    "object": "chat.completion",
+    "created": 1787932406,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not through accumulated code defects, but through the silent divergence of shared semantic vocabulary across human-AI-human transfer cycles. Each time intent is translated between human mental models and AI-generated representations, the operational meaning of identifiers, contracts, and patterns drifts slightly from their original consensus, producing a system where every component remains locally correct yet globally incoherent. This semantic drift compounds multiplicatively rather than additively, because later changes are authored against already-drifted vocabulary, creating an epistemic gap where neither humans nor AI can reliably reconstruct the system's actual coordination semantics from its artifacts.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 134,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

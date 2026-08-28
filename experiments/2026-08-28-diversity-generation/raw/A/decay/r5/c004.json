@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.767
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-436",
+    "object": "chat.completion",
+    "created": 1787932277,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software accumulates a semantic debt caused by the divergence between its code's behavior and its developers' mental models. Because each modification is tested only for local correctness and not for fidelity to the system's tacit design intent, it quietly severs links in this semantic dependency graph. Eventually, the system's behavior becomes an emergent patchwork that no single mental model can safely navigate, making every new change a hazard.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 91,
+      "total_tokens": 193
+    }
+  },
+  "transport_error": null
+}

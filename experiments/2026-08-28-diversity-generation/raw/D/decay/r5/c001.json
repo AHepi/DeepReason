@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic lock-in: Shannon entropy of the effective input domain contracts as edge cases are patched\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.512
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-95",
+    "object": "chat.completion",
+    "created": 1787932466,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each bug fix collapses a region of the admissible input space by adding a constraint, so the Shannon entropy of the effective input domain decreases monotonically with patch count. This entropy contraction is irreversible because removing a constraint would re-open a patched failure mode, making the system progressively harder to modify without violating a prior fix.\",\n      \"probability\": 0.095\n    },\n    {\n      \"conjecture\": \"The effective input domain's entropy contracts in proportion to the cumulative count of edge cases patched, following H_eff(n) = H_0 - k * log(n), because each patch partitions the input space further. The difficulty of future changes scales exponentially with this entropy loss, as the developer must reason about an increasingly fragmented constraint set.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"Patching edge cases creates an information-theoretic ratchet: each fix encodes implicit knowledge about forbidden inputs, reducing the Shannon entropy of the valid input distribution. This ratchet is irreversible under local review because no single patch contains enough information to assess the global entropy reduction it imposes.\",\n      \"probability\": 0.082\n    },\n    {\n      \"conjecture\": \"The maintainability of a software system is bounded below by the Shannon entropy of its effective input domain, and this entropy contracts asymptotically toward zero as edge cases are patched. Once entropy falls below a system-specific threshold, any further change requires exponential search effort to find modifications that don't violate the accumulated constraint set.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Locally correct patches reduce the Kolmogorov complexity of the admissible input set by pruning disallowed subspaces, which in turn contracts the Shannon entropy of the effective domain. The system becomes harder to change because the description length of the boundary between allowed and disallowed inputs grows superlinearly with each patch.\",\n      \"probability\": 0.073\n    },\n    {\n      \"conjecture\": \"Each edge-case patch adds a clause to an implicit conjunction of input constraints, causing the volume of the effective input domain to shrink geometrically while its surface complexity grows. The Shannon entropy of the domain contracts as log(volume), and the cost of safe modification scales with the surface complexity, which diverges from the entropy at a rate proportional to the number of patches.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The rate of entropy contraction in the effective input domain accelerates over time because early patches eliminate broad invalid regions while late patches carve narrow exceptions, each requiring disproportionate specification information. This creates an inverse relationship between remaining entropy and modification cost: as entropy approaches zero, the marginal cost of each change diverges.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Under an observation model where users sample inputs proportionally to the system's current effective domain, each edge-case patch shifts the sampling distribution toward a lower-entropy regime. The cumulative KL divergence between the original and patched input distributions correlates with architectural rigidity, because the system's internal representations have been optimized for a narrowing input regime.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Each reviewed patch locally minimizes failure probability but globally maximizes the mutual information between input history and system constraints, causing the effective input domain to lose entropy in a way invisible to any single reviewer. The system becomes harder to change because the true constraint graph has higher mutual information than any local patch reveals.\",\n      \"probability\": 0.052\n    },\n    {\n      \"conjecture\": \"The effective input domain undergoes entropy contraction via a phase transition: patches accumulate without apparent difficulty until a critical density of edge-case constraints is reached, at which point the domain's Shannon entropy drops sharply and modifications become abruptly harder. This transition occurs when the constraint graph becomes connected, meaning every input variable is transitively constrained by every prior patch.\",\n      \"probability\": 0.047\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 199,
+      "completion_tokens": 863,
+      "total_tokens": 1062
+    }
+  },
+  "transport_error": null
+}

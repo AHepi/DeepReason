@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.61
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-29",
+    "object": "chat.completion",
+    "created": 1787932078,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate an irreducible complement of implicit constraints—relationships between modules, undocumented performance assumptions, and emergent invariants—that exist nowhere in the code, tests, or documentation but are nonetheless enforced by the system's operational history. Each locally correct change tightens this constraint network by adding one more unspoken dependency, until the cost of any modification is dominated by the work of discovering and preserving constraints that no individual developer knows or could have known. The system becomes hard to change not because it is poorly built, but because it has become an archaeological record of its own evolution.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 125,
+      "total_tokens": 227
+    }
+  },
+  "transport_error": null
+}

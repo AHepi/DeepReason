@@ -35,7 +35,7 @@ REASONING_EFFORT = "none"          # llm/providers.py::_ollama_reasoning; thinki
 TIMEOUT_S = 300
 
 ARMS = ("A", "B", "C", "D")
-REPS = (1, 2, 3)
+REPS = (1, 2, 3, 4, 5, 6, 7, 8, 9)  # PREREG Appendix A (registered blind)
 N_DIRECTIONS = 6
 K = 10
 PER_DIRECTION_CALLS = 10           # arm B: 6 x 10 = 60 candidates

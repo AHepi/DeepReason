@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.069
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-22",
+    "object": "chat.completion",
+    "created": 1787932439,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software rot is the thermodynamic cost of information processing: every locally correct change increases the system's Kolmogorov complexity relative to its original specification, and the energy required to compress it back into a coherent architecture grows superlinearly with the number of accumulated changes.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each change optimizes for local variables, causing the system to hill-climb away from global architectural optima into a local maximum that can only be escaped through large-scale refactoring.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The difficulty of change grows proportionally to the Shannon entropy of the system's dependency graph: each correct change adds edges between modules, and the cognitive capacity required to reason about all possible interaction paths exceeds human working memory once edge density crosses a critical threshold.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every locally correct change implicitly encodes assumptions about the system's future trajectory, and these assumptions accumulate as latent technical debt that becomes actualized only when a future change violates them, creating an illusion of increasing difficulty that is really the deferred cost of earlier shortcuts.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The phenomenon is a manifestation of Conway's Law: as organizations maintaining long-running systems experience turnover and structural drift, the software's architecture increasingly mismatches the communication structure of the team, making changes require coordination across organizational boundaries that no longer exist or are politically costly to traverse.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems harden because each change adds implicit invariants that are never documented but are depended upon by subsequent changes, creating a growing corpus of unstated constraints that make seemingly safe modifications violate assumptions the original authors never knew they were making.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The increasing difficulty is an epistemological problem: the system's behavior becomes an emergent property of component interactions that no single developer can hold in their head, so the cost of change is dominated not by writing code but by building sufficient mental models to predict side effects across boundaries nobody remembers existed.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software systems exhibit entropic decay analogous to biological aging: each change, even when correct, introduces microscopic specification drift that accumulates stochastically, and the system's maintainability degrades as a power law of the number of changes, regardless of the quality of any individual change.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The root cause is the loss of conceptual integrity: in any long-running system, changes are made by people who did not author the original design and who hold partial, imperfect models of its intent, so each change drifts from the original organizing principles until the system becomes a patchwork of locally rational but globally incoherent decisions.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because test suites and CI pipelines accumulate as fossil records of past concerns, creating a defensive perimeter that makes every change pay a tax proportional to the number of historical bugs the system has fixed, even when those concerns are no longer relevant.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 749,
+      "total_tokens": 924
+    }
+  },
+  "transport_error": null
+}

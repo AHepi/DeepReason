@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.12
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-391",
+    "object": "chat.completion",
+    "created": 1787932130,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate a hidden dependency graph between implicit assumptions—constraints that are never explicitly enforced in code but become load-bearing through observed behavior. Each locally correct change preserves local assumptions but globally perturbs this implicit graph, making future changes harder as developers must reverse-engineer an ever-growing web of unwritten invariants. The system's true architecture diverges from its physical structure, and the cognitive cost of mapping the hidden architecture before each change grows super-linearly with system size.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 103,
+      "total_tokens": 205
+    }
+  },
+  "transport_error": null
+}

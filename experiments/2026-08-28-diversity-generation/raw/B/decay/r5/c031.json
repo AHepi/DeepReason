@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Path-dependence and lock-in via irreversible architectural commitments\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.197
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-681",
+    "object": "chat.completion",
+    "created": 1787932370,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate a load-bearing irreversible commitments (LBIC) measure: the count of design decisions that cannot be reversed without simultaneously changing N>1 components, where N grows monotonically because each locally-correct change introduces new implicit dependencies on prior decisions. The marginal cost of the next change is proportional to the current LBIC, not to the size of the requested change itself, because the developer must now reason about all surviving commitments to find a locally-correct modification that violates none of them. This explains why rigor in individual changes accelerates lock-in: each reviewed, tested change that succeeds despite the existing commitments proves those commitments are load-bearing and discourages future reversal, even when no explicit decision was made to enshrine them.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 159,
+      "total_tokens": 281
+    }
+  },
+  "transport_error": null
+}

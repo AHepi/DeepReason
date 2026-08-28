@@ -520,5 +520,132 @@
     ],
     "calls": 7,
     "wall_s": 25.7
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 12087,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 83.2
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 14634,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "information-theoretic Kolmogorov complexity growth exceeding linear marginal encoding cost",
+      "phase-locking of design assumptions into a shared implicit ontology between code and developers",
+      "expanding manifold of configuration interactions creating combinatorial test intractability",
+      "fitness landscape ruggedization depleting locally accessible neutral mutations",
+      "service contract ossification via untracked external dependency coupling",
+      "semantic drift between domain language and architectural vocabulary creating irreversible translation layers"
+    ],
+    "calls": 61,
+    "wall_s": 86.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 5606,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 24.8
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 4,
+    "tokens": 6039,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Hidden coupling accumulation via implicit shared invariants",
+      "Architecture as thermodynamic entropy over the state space of viable modifications",
+      "Cognitive load scaling limit where maintainer working memory exceeds system causal depth",
+      "Constraint satisfaction deadlock from overlapping non-composable backwards-compatibility guarantees",
+      "Search cost super-linear growth in the dependency graph for safe edit boundaries",
+      "Domain shift drift where code's implicit ontology progressively misaligns with the evolved operational environment"
+    ],
+    "calls": 7,
+    "wall_s": 27.4
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 12225,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 69.5
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 14878,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information-theoretic growth of coordination requirements",
+      "Misalignment between developer mental models and actual code topologies",
+      "Metric-space deformation of the test suite's reachable state manifold",
+      "Path-dependence and lock-in via irreversible architectural commitments",
+      "Statistical-mechanics of dependency network phase transitions",
+      "Semantic drift and vocabulary drift across human–AI–human knowledge transfer"
+    ],
+    "calls": 61,
+    "wall_s": 78.7
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 5531,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 24.7
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 5,
+    "tokens": 6065,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Catastrophic interference in neural network function approximators trained on evolving reward signals",
+      "Information-theoretic lock-in: Shannon entropy of the effective input domain contracts as edge cases are patched",
+      "Semantic drift between domain ontology versions measured by category-theoretic functorial maps",
+      "Thermodynamic-style entropic growth of structural configuration space under irreversible local patching",
+      "Cyclomatic complexity inflation driven by gradual accumulation of conditional branches for deprecated states",
+      "Spectral graph shift of the dependency network's largest eigenvalue as API surfaces accrete"
+    ],
+    "calls": 7,
+    "wall_s": 25.1
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 12482,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 56.5
   }
 ]

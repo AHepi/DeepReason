@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.461
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-953",
+    "object": "chat.completion",
+    "created": 1787932225,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, creating a random walk through design space that accumulates structural entropy, making future changes require increasingly more contextual adaptation to fit the existing irregular landscape.\", \"probability\": 0.07}, {\"conjecture\": \"The system's dependency graph undergoes percolation where individual, safe changes create enough cross-module links to push the codebase past a critical connectivity threshold, turning local modifications into globally propagating side effects.\", \"probability\": 0.06}, {\"conjecture\": \"Every change adds implicit, undocumented assumptions about valid inputs and states, which compound such that the fraction of the state space that is 'known safe' shrinks relative to the total state space, increasing the probability that any new change violates a hidden constraint.\", \"probability\": 0.09}, {\"conjecture\": \"The codebase accumulates micro-couplings—shared variable names, similar function signatures, overlapping data formats—that are invisible at the module level but create entangled decision trees, meaning every new change must satisfy an exponentially growing set of implicit constraints to remain locally correct.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems drift toward a critical state where changes, while individually correct, are super-additive in complexity, meaning the cost of the Nth change is proportional to the accumulated interaction surface rather than the change's intrinsic size.\", \"probability\": 0.05}, {\"conjecture\": \"Test suites optimize for the changes that were made, not the changes that will be made, creating a fitness landscape where passing tests increasingly fail to constrain the behaviors that future modifications might disrupt.\", \"probability\": 0.04}, {\"conjecture\": \"Because each change is reviewed against current code, the system lacks a mechanism for revisiting past decisions in light of new information, so architectural assumptions become load-bearing faster than they can be refactored, creating an accumulation of technical debt that compounds non-linearly.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems develop homeostatic mechanisms—error handlers, fallback paths, compatibility shims—that mask the symptoms of architectural drift, allowing underlying structural problems to accumulate undetected until the cost of change becomes prohibitive.\", \"probability\": 0.06}, {\"conjecture\": \"Each correct change creates new, untested interaction surfaces with existing code, so the probability that a future change touches a previously unexercised interaction grows over time, creating an expanding 'unknown unknown' region that resists testing and review.\", \"probability\": 0.08}, {\"conjecture\": \"The system's architecture is a memory of past requirements, and as requirements change, the architecture becomes an increasingly lossy compression of current intent, so every new change requires reconstructing the original design context that has been progressively overwritten.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 598,
+      "total_tokens": 773
+    }
+  },
+  "transport_error": null
+}

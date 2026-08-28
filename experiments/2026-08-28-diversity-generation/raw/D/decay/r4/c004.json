@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Search cost super-linear growth in the dependency graph for safe edit boundaries\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.267
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-896",
+    "object": "chat.completion",
+    "created": 1787932268,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The set of safe edit boundaries in a dependency graph shrinks super-linearly over time because each correct change implicitly tightens coupling constraints along its dependency paths, reducing future safe edit boundary candidates combinatorially. Even when each change is locally correct, it reduces the graph's entropy of safe modification regions.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Search cost for safe edit boundaries grows super-linearly because dependency graphs accumulate latent invariant contracts along edges that are never explicitly documented, requiring exhaustive path traversal to verify safety. Each locally correct change adds such an implicit invariant, making future boundary searches require exploring an exponentially growing space of hidden constraints.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Safe edit boundaries in a dependency graph follow a k-core decomposition where each correct change increases edge density within cores, and the cost of finding a safe boundary grows as O(n^k) where k is the core number. Systems become harder to change because the minimum viable safe edit boundary expands to include entire k-cores rather than individual nodes.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty of finding safe edit boundaries grows super-linearly because dependency graphs develop hierarchical bottleneck structures where each locally correct change preferentially connects to high-centrality nodes, creating O(n log n) fan-in that makes boundary search require checking all downstream dependents of these increasingly dominant hubs.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Each locally correct change creates transitive semantic dependencies that are invisible in the explicit dependency graph, and the cost of identifying safe edit boundaries grows as the product of explicit graph depth and implicit semantic fan-out, which is super-linear. The graph's explicit structure underestimates true coupling by a factor that grows with system age.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Safe edit boundaries become harder to find because dependency graphs accumulate feedback cycles through indirect paths, and the search for safe boundaries requires cycle detection whose cost grows as O(V*E), which becomes super-linear as edge count grows faster than node count. Each locally correct change adds edges without removing them, monotonically increasing cycle density.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The search for safe edit boundaries in a dependency graph is equivalent to finding graph separators, and as each correct change adds edges, the minimum separator size grows linearly while the number of candidate separators to evaluate grows combinatorially, yielding super-linear search cost. Systems become harder to change because the safe minimum edit unit expands faster than the codebase.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Dependency graphs develop scale-free degree distributions over time where each correct change preferentially attaches to well-connected nodes, and finding safe edit boundaries requires verifying all dependents of these hubs, costing O(k^d) where k is hub degree and d is depth. The super-linear growth arises because hub degree grows with system age while depth remains constant.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The cost of finding safe edit boundaries grows super-linearly because each locally correct change tightens type constraints along dependency edges, and verifying safety requires constraint propagation whose cost is O(n * c) where c is average constraint count per edge, with c growing monotonically. The system becomes harder to change as constraint density makes each boundary search increasingly expensive.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"Safe edit boundaries shrink super-linearly because dependency graphs develop small-world properties over time, and each locally correct change reduces the average path length, causing any local edit to potentially affect a super-linear fraction of the system through short paths. The cost of verifying safety grows as the reachable set size, which grows faster than the codebase due to shrinking path lengths.\",\n      \"probability\": 0.08\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 863,
+      "total_tokens": 1055
+    }
+  },
+  "transport_error": null
+}

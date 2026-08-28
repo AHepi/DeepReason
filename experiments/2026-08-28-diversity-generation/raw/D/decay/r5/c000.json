@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Catastrophic interference in neural network function approximators trained on evolving reward signals\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.485
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-77",
+    "object": "chat.completion",
+    "created": 1787932457,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"If we model a software system as a neural network-based policy trained to map change-requests to code-modifications, its hardening over time is a direct manifestation of catastrophic interference: new, locally-correct modifications overwrite the network's internal representation of older, still-valid features, causing the cost of any subsequent change to rise as the network must relearn forgotten mappings.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems arises because the system's implicit 'reward function' drifts with each accepted modification, and training a single function approximator on this non-stationary signal leads to representation collapse, where old functionality is systematically forgotten in favor of recent optimization targets.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software maintainability degrades because the evolving reward signal (e.g., passing tests, review approval) creates a moving target that forces a neural approximator into a narrow basin of attraction; each new change pushes the policy further into this basin, making the gradient required to escape and implement a different change vanishingly small.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the function approximator responsible for implementing changes is trained on a replay buffer biased toward recent, higher-reward modifications, leading to a temporal discounting of older system states and causing interference when a new change requires interacting with those older states.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The hardening of software systems is a form of representational interference: as the reward signal evolves to favor more complex, higher-level modifications, the neural policy's internal features become specialized for these tasks, 'overwriting' the low-level features needed to make simple, foundational changes, thus increasing their cost.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The phenomenon is caused by a loss of plasticity in the change-policy network; training on an evolving reward signal leads to a progressive deadening of units and saturation of activations, so that the network can only express a shrinking repertoire of modifications, making any out-of-distribution change prohibitively expensive.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software entropy is a direct function of the divergence between the policy network's learned world-model and the true system state; because the reward signal only provides sparse, local feedback, the evolving training data causes the network's internal model to drift, and the cost of a change is proportional to the correction needed to realign this model.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The system becomes harder to change because the function approximator, trained on a sequence of reward signals, is forced to find a compromise policy that satisfies all past modifications, leading to a 'cliff edge' where any new change requires a disproportionately large gradient step to break the existing equilibrium.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The core issue is that the evolving reward signal lacks sufficient exploration; the policy network converges on a local optimum defined by the initial sequence of changes, and without a mechanism to encourage exploration of alternative implementations, it becomes trapped, making any deviation (i.e., future change) increasingly costly to learn.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Hardening is caused by the entanglement of features in the neural policy's latent space; because the evolving reward signal does not enforce modularity, training on new changes corrupts the shared representations for older features, so any future change touching those features requires disentangling them first, increasing the learning cost.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 194,
+      "completion_tokens": 826,
+      "total_tokens": 1020
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.3
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-556",
+    "object": "chat.completion",
+    "created": 1787932521,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not through bad changes, but because each locally-correct edit slightly tightens the implicit coupling between modules—adding a parameter there, a shared flag here—until the cost of any change is dominated by discovering and preserving these accumulated, invisible constraints. This 'implicit constraint entanglement' is invisible to standard review and testing because no single change introduces it; it is an emergent property of the history of changes themselves, like metal fatigue accumulating in a bridge that was never overloaded in any single crossing.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 116,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

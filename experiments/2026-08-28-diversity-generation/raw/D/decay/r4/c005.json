@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Domain shift drift where code's implicit ontology progressively misaligns with the evolved operational environment\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.111
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-73",
+    "object": "chat.completion",
+    "created": 1787932262,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Code accumulates 'semantic load-bearing' assumptions about the environment that were never explicitly encoded, so as the operational domain shifts, these invisible dependencies create a web of constraints where any local change violates unstated invariants elsewhere.\", \"probability\": 0.09}, {\"conjecture\": \"Each correct change optimizes for the current operational ontology, but since ontological evolution is non-monotonic, the system's accumulated optimizations become mutually contradictory once the domain shifts, requiring simultaneous coordinated rewrites that locally-correct changes cannot achieve.\", \"probability\": 0.08}, {\"conjecture\": \"The codebase's implicit type system—encoded in variable names, comments, and structural conventions—drifts from the evolving real-world categories it tracks, causing changes that are type-correct but semantically wrong relative to the new domain reality.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems develop 'epistemic rigidity': early architectural decisions encode a particular decomposition of the problem space that becomes increasingly misaligned with how the operational domain naturally decomposes, forcing every change to fight the architecture rather than express domain logic.\", \"probability\": 0.06}, {\"conjecture\": \"Boundary objects between modules are defined in terms of the original domain ontology; as the domain shifts, these interfaces maintain backward compatibility while the underlying reality changes, creating translation overhead that makes each change require more reconciliation work.\", \"probability\": 0.05}, {\"conjecture\": \"Test suites encode frozen snapshots of domain semantics that become progressively more conservative than the live operational environment, so passing tests provides decreasing signal about actual correctness and increasingly constrains legitimate changes.\", \"probability\": 0.04}, {\"conjecture\": \"Domain shift creates 'conceptual debt' where the code's vocabulary no longer matches practitioners' vocabulary, so requirements communicated in evolved terms must be translated into obsolete code terms, introducing errors at every translation boundary that accumulate across changes.\", \"probability\": 0.03}, {\"conjecture\": \"The system's emergent behavior becomes coupled to environmental regularities that no longer hold, but because the coupling was never explicit, each change must reverse-engineer which historical environmental assumptions are now invalid before it can be safely made.\", \"probability\": 0.02}, {\"conjecture\": \"As the operational domain evolves, the granularity of the code's abstractions becomes increasingly mismatched—too coarse where the domain now requires fine distinctions, too fine where the domain has collapsed categories—so every change requires working around abstraction boundaries rather than using them.\", \"probability\": 0.01}, {\"conjecture\": \"Long-running systems undergo 'ontological entropy': the mapping between code entities and real-world entities becomes many-to-many as the domain evolves, so any change to code entity A has unpredictable consequences for real-world entity B that was previously independent.\", \"probability\": 0.005}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 196,
+      "completion_tokens": 605,
+      "total_tokens": 801
+    }
+  },
+  "transport_error": null
+}

@@ -15,12 +15,14 @@ of its probability value would be reading the number as a signal, which is
 exactly what the binding rule forbids.  `_assert_probabilities_unused` below
 is that rule made checkable.
 """
+import argparse
+import hashlib
 import itertools
 import json
-import math
 import pathlib
 import statistics
 import sys
+import tempfile
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -36,9 +38,12 @@ VS_EXPECTED_ITEMS = 10
 PROBABILITY_CEILING = 0.10
 
 
+REPS_USED = list(REPS)
+
+
 def cells():
     for q in sorted(QUESTIONS):
-        for rep in REPS:
+        for rep in REPS_USED:
             for arm in ARMS:
                 yield arm, q, rep
 
@@ -141,24 +146,62 @@ def mean_pairwise_distance(vectors):
 
 
 def _assert_probabilities_unused(source_text):
-    """The binding rule, made checkable: outside the M3 contract check, no
-    metric in this file may touch a probability field."""
-    body = source_text.split("def _assert_probabilities_unused")[0]
-    offending = [
-        line.strip() for line in body.splitlines()
-        if "probability" in line
-        and "off_format_probability" not in line
-        and "PROBABILITY_CEILING" not in line
-        and not line.strip().startswith("#")
-    ]
+    """The binding rule, made checkable.
+
+    `extract` is the ONE function allowed to touch a probability field, and
+    only for the M3 contract check.  Every other function -- the clustering,
+    the distances, the per-arm means, the verdicts -- must be unable to see
+    the number at all.  This walks the parsed module rather than the text so
+    it cannot be satisfied by a comment, and it fails on an identifier, a
+    string key, or an attribute: writing
+    `sorted(items, key=lambda c: c["probability"])` inside any metric
+    function trips it.
+    """
+    import ast
+
+    allowed = {"extract"}
+    tree = ast.parse(source_text)
+    offending = []
+
+    def mentions(node):
+        for sub in ast.walk(node):
+            if isinstance(sub, ast.Name) and "probability" in sub.id.lower():
+                yield sub.lineno, sub.id
+            elif isinstance(sub, ast.Attribute) and "probability" in sub.attr.lower():
+                yield sub.lineno, sub.attr
+            elif isinstance(sub, ast.arg) and "probability" in sub.arg.lower():
+                yield sub.lineno, sub.arg
+            elif isinstance(sub, ast.Constant) and isinstance(sub.value, str) \
+                    and sub.value.strip().lower() == "probability":
+                yield sub.lineno, sub.value
+
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            if node.name in allowed or node.name == "_assert_probabilities_unused":
+                continue
+            offending += [(node.name, ln, what) for ln, what in mentions(node)]
+        elif not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.Expr)):
+            offending += [("<module>", ln, what) for ln, what in mentions(node)]
+
     if offending:
         raise SystemExit(
-            "BINDING VIOLATION (PREREG §6): probability values reached a metric:\n  "
-            + "\n  ".join(offending)
+            "BINDING VIOLATION (PREREG §6): a self-reported probability value "
+            "reached a metric:\n  "
+            + "\n  ".join(f"{fn}() line {ln}: {what}" for fn, ln, what in offending)
         )
 
 
 def main():
+    global REPS_USED
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--reps", default=",".join(str(r) for r in REPS),
+                    help="repetitions to analyse; the full set is PREREG "
+                         "Appendix A's 1-9. A subset is a DEBUG run and its "
+                         "output is not the experiment's result.")
+    ap.add_argument("--out", default="metrics.json")
+    args = ap.parse_args()
+    REPS_USED = [int(r) for r in args.reps.split(",")]
+
     _assert_probabilities_unused((HERE / "analyse.py").read_text())
     from deepreason.llm.embedder import NeuralEmbedder
 
@@ -170,17 +213,43 @@ def main():
               "  tau* was calibrated under the frozen fingerprint; this is a "
               "different measurement (PREREG §6).", file=sys.stderr)
 
+    # Embeddings are cached on disk by content hash under the frozen
+    # fingerprint.  A pure performance measure: the vector for a given text is
+    # the same object the uncached path would compute, and the cache key
+    # carries the fingerprint so a drifted embedder can never read a stale
+    # vector.
+    # Outside the repository on purpose: this is a derived, large, and
+    # entirely reconstructible file, and the write cone for this tranche is
+    # the experiment directory.
+    cache_path = pathlib.Path(tempfile.gettempdir()) / "dr_diversity_embcache.json"
+    cache = {}
+    if cache_path.exists():
+        blob = json.loads(cache_path.read_text())
+        if blob.get("fingerprint") == fingerprint:
+            cache = blob["vectors"]
+
+    def embed(text):
+        key = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        if key not in cache:
+            cache[key] = emb.embed(text)
+        return cache[key]
+
     raw_cells, vectors = {}, {}
     for arm, q, rep in cells():
+        if not (HERE / "raw" / arm / q / f"r{rep}").exists():
+            continue
         cands, m3 = extract(arm, q, rep)
         raw_cells[(arm, q, rep)] = (cands, m3)
-        vectors[(arm, q, rep)] = [emb.embed(text) for _, text in cands]
+        vectors[(arm, q, rep)] = [embed(text) for _, text in cands]
+    cache_path.write_text(json.dumps({"fingerprint": fingerprint, "vectors": cache}))
 
     counts = [len(c) for (c, _) in raw_cells.values() if c]
     n_min = min(counts) if counts else 0
 
     rows = []
     for arm, q, rep in cells():
+        if (arm, q, rep) not in raw_cells:
+            continue
         cands, m3 = raw_cells[(arm, q, rep)]
         vecs = vectors[(arm, q, rep)]
         sub = vecs[:n_min]
@@ -276,7 +345,8 @@ def main():
         "verdicts": verdicts,
         "instrument_null_result": null_result,
     }
-    (HERE / "metrics.json").write_text(json.dumps(report, indent=2) + "\n")
+    report["reps_analysed"] = REPS_USED
+    (HERE / args.out).write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({"n_min": n_min, "arm_totals": report["arm_totals"],
                       "verdicts": {k: v["verdict"] for k, v in verdicts.items()},
                       "instrument_null_result": null_result}, indent=2))

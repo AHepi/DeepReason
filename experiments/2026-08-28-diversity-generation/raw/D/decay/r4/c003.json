@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint satisfaction deadlock from overlapping non-composable backwards-compatibility guarantees\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.18
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-441",
+    "object": "chat.completion",
+    "created": 1787932257,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Long-running systems accumulate a global constraint graph of pairwise backward-compatibility promises (API contracts, data format expectations, behavioral invariants). Each new feature must satisfy this entire graph, and eventually the system enters a state of combinatorial deadlock where no change can be made without simultaneously violating at least one existing guarantee. The system becomes frozen not by technical debt, but by the impossibility of finding any modification that remains a valid solution to the complete accumulated constraint set.\", \"probability\": 0.085}, {\"conjecture\": \"Backward-compatibility guarantees behave as monotonic constraints that can never be relaxed, only added. Over time, the set of valid system states shrinks monotonically while the set of required invariants grows, causing the feasible region for any new change to asymptotically approach the empty set. This creates an effective constraint-satisfaction deadlock: every individual guarantee was locally sound, but their union renders the system mathematically immutable.\", \"probability\": 0.072}, {\"conjecture\": \"Each backward-compatible change introduces implicit constraints that are never documented but are depended on by some subsystem. These undocumented invariants form a hidden constraint network whose edges are only discovered when violated. The system deadlocks because the actual constraint graph is denser than any team can model, making it impossible to verify that a proposed change satisfies all constraints before attempting it.\", \"probability\": 0.068}, {\"conjecture\": \"Backward-compatibility guarantees are path-dependent: each promise was rational given the constraints at the time, but the sequence of promises creates a non-composable lock-in. The system reaches a state where the only solutions to the constraint graph require coordinated simultaneous changes across all guarantees, which is impossible under incremental evolution. The deadlock is structural—no single-agent, single-change process can escape it.\", \"probability\": 0.061}, {\"conjecture\": \"Every backward-compatible API or behavior becomes a node in a constraint graph where edges represent implicit assumptions other components make about that node. The graph's diameter grows superlinearly with system age, and the probability that any change propagates a constraint violation approaches 1. The system deadlocks because the constraint graph becomes so densely connected that local changes are provably insufficient to maintain global consistency.\", \"probability\": 0.055}, {\"conjecture\": \"Each individually-correct backward-compatible change adds a constraint that narrows the space of future changes. The constraints are non-composable: satisfying guarantee A and guarantee B simultaneously requires a solution that satisfies neither individually. Over time, the system accumulates enough pairwise-incompatible guarantees that the constraint satisfaction problem becomes NP-hard in practice, and the system freezes because no tractable change can satisfy all constraints at once.\", \"probability\": 0.049}, {\"conjecture\": \"Backward-compatibility guarantees create a coordination problem where each guarantee is a player in a constraint game. Each player (guarantee) has a dominant strategy to never relax its constraint. The Nash equilibrium of this game is universal rigidity: every guarantee maintains its constraint, no change is possible, and no single player can benefit by deviating. The system deadlocks because the incentive structure makes relaxation individually irrational even when collectively beneficial.\", \"probability\": 0.042}, {\"conjecture\": \"Backward-compatibility guarantees accumulate as a sequence of constraints where each new constraint is locally consistent but globally incompressible. The system reaches a critical density where the constraint graph forms a rigid structure—like a jammed packing—where every element is overconstrained by its neighbors. Changes become impossible because the system is in a jammed state where no local rearrangement can relieve the constraint pressure without breaking the global structure.\", \"probability\": 0.038}, {\"conjecture\": \"Long-running systems enter a phase transition: below a critical number of backward-compatibility guarantees, changes remain easy because the constraint graph has many solutions. Above the threshold, the graph abruptly becomes overconstrained and the system rigidifies. The transition is sharp because it follows percolation dynamics—once enough constraints exist to form a spanning rigid cluster, no local change can propagate without violating the cluster.\", \"probability\": 0.035}, {\"conjecture\": \"Each backward-compatible change optimizes locally for compatibility but adds a constraint that makes future global optimization harder. The system follows a gradient descent into a local minimum of the changeability landscape: each step is locally correct, but the accumulated constraints create barriers in all directions. The system deadlocks because it is trapped in a basin of the constraint landscape where every exit requires climbing over a compatibility-violation barrier that incremental change cannot cross.\", \"probability\": 0.029}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 969,
+      "total_tokens": 1160
+    }
+  },
+  "transport_error": null
+}

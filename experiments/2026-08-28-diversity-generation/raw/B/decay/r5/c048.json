@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Statistical-mechanics of dependency network phase transitions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.21
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-884",
+    "object": "chat.completion",
+    "created": 1787932406,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In a software dependency network, the accumulation of individually-correct edits drives the system toward a percolation threshold at which a giant strongly connected component (GSCC) of cyclic dependencies forms, undergoing a structural phase transition. Below the threshold, changes remain locally compartmentalized; above it, any modification propagates through a divergent fraction of the graph, making the effective cost of any edit scale superlinearly with system size. The transition is thermodynamically sharp—driven by the monotonic increase in edge density from routine maintenance—meaning the onset of rigidity is not gradual but appears as a sudden, catastrophic freezing of the codebase.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 139,
+      "total_tokens": 261
+    }
+  },
+  "transport_error": null
+}

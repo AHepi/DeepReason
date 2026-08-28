@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.298
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-380",
+    "object": "chat.completion",
+    "created": 1787932237,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The architecture's von Neumann entropy strictly increases over a system's lifecycle, measuring an irreversible accumulation of latent state couplings. Even when individual changes are locally correct, they locally minimize energy while globally increasing structural entropy, trapping the system in a configuration space where the cost of escaping the local minimum grows exponentially with the number of prior modifications.\", \"probability\": 0.085}, {\"conjecture\": \"Software systems possess a thermodynamic tendency toward structural convolution because each locally correct modification increases the total information shared between modules. This interdependency growth is asymptotically irreversible without a full system reset, meaning the system becomes harder to change as the entropy of the dependency graph monotonically increases under the constraint of backward-compatible local edits.\", \"probability\": 0.082}, {\"conjecture\": \"The Kolmogorov complexity of the system's implicit specification increases faster than the complexity of its explicit documentation, because each reviewed change encodes tacit knowledge not captured by tests or types. The system becomes harder to change because the gap between what the code mechanically verifies and what it actually requires widens, forcing developers to reverse-engineer an ever-growing invisible specification.\", \"probability\": 0.078}, {\"conjecture\": \"Every locally correct change optimizes for immediate fitness while ignoring the long-range topological strain it places on the dependency graph. This process mirrors metal fatigue: individually harmless stress cycles accumulate microscopic fractures in the structural invariants until the system's architectural yield strength drops below the threshold required for safe modification.\", \"probability\": 0.075}, {\"conjecture\": \"Mutually exclusive implicit invariants accumulate in the system's dead code and undocumented edge cases. While every change is locally valid, it resolves its immediate constraints by violating a latent, globally necessary invariant, causing the space of valid future changes to intersect emptily as the system matures.\", \"probability\": 0.072}, {\"conjecture\": \"The apparent difficulty of changing a system grows linearly with its cyclomatic complexity, but the actual difficulty grows combinatorially because each change must satisfy an exponentially expanding product space of historical regression constraints. Tests and reviews ensure local validity, but they lock the system into a rigid trajectory by progressively constraining the state space of acceptable future modifications.\", \"probability\": 0.069}, {\"conjecture\": \"Maintainers chronically under-discover non-local dependencies during review because the cognitive cost of tracing transitive side effects exceeds human working memory limits. Thus, even reviewed changes introduce invisible structural debt by creating dependencies that are only discovered when a future change attempts to exercise them, making the system seem harder to change over time.\", \"probability\": 0.065}, {\"conjecture\": \"Software rot is dominated by the accumulation of accidental API contract violations rather than code decay. Each locally correct change slightly shifts the de facto behavior of a module away from its de jure interface, meaning future changes must navigate an ever-widening chasm between the system's documented architecture and its actual implementation behavior.\", \"probability\": 0.062}, {\"conjecture\": \"Long-running systems become harder to change because the combinatorial explosion of execution paths causes test suites to provide diminishing marginal coverage. Each new change adds states faster than tests can constrain them, meaning the probability of a locally correct change triggering an untested, catastrophic non-local interaction asymptotically approaches one.\", \"probability\": 0.058}, {\"conjecture\": \"The effort required to change a system is a function of the mutual information between its modules, which strictly increases when changes are made under the constraint of backward compatibility. Locally correct changes minimize immediate work by reusing existing interfaces, inadvertently fusing the modules' state spaces and making future independent modification impossible without severing the accumulated couplings.\", \"probability\": 0.055}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 793,
+      "total_tokens": 968
+    }
+  },
+  "transport_error": null
+}

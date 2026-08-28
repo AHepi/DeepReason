@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Hidden coupling accumulation via implicit shared invariants\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.583
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-597",
+    "object": "chat.completion",
+    "created": 1787932252,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change secretly tightens a shared invariant by exploiting an existing assumption, so the system's true coupling grows in the negative space of what tests assert rather than what code says.\", \"probability\": 0.08}, {\"conjecture\": \"Tests freeze behavior, not meaning. A reviewed change passes because it preserves observable output while silently narrowing the semantic contract that future changes must obey, making the next change harder in a way no diff can reveal.\", \"probability\": 0.07}, {\"conjecture\": \"The cost of change grows as the square of implicit invariants: each new feature is constrained not only by every prior feature but by the unprescribed interactions between every prior pair of features.\", \"probability\": 0.06}, {\"conjecture\": \"Code review catches explicit coupling but is blind to invariant coupling. A change that adds a harmless-looking branch can lock in a temporal ordering assumption that makes the next ten changes each slightly harder until the system seizes.\", \"probability\": 0.05}, {\"conjecture\": \"Systems degrade because each locally correct fix closes off regions of the design space that no one knows were open. The accumulation of these silent exclusions is what makes the system feel rigid long before any single change is impossible.\", \"probability\": 0.07}, {\"conjecture\": \"Every bug fix is a local optimization that trades global flexibility for local correctness. The system becomes harder to change because each fix, viewed as a constraint on the state space, permanently removes degrees of freedom the original design did not know it was using.\", \"probability\": 0.06}, {\"conjecture\": \"Refactoring preserves behavior but not invariant surface. A rename or extract can move code so that two modules now silently depend on the same unwritten assumption, increasing coupling even as the diff looks like a pure simplification.\", \"probability\": 0.04}, {\"conjecture\": \"The unit of technical debt is not lines of code or missing tests but unwritten invariants that multiple modules have independently converged on. The system becomes harder to change because the set of modules sharing each invariant grows monotonically with every locally correct change.\", \"probability\": 0.05}, {\"conjecture\": \"A change is locally correct when it satisfies all known invariants. But satisfying an invariant is not the same as preserving it; the change can quietly convert a contingent coincidence into a load-bearing assumption that future changes must respect without knowing it exists.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems harden because implicit invariants, unlike explicit ones, have no deletion path. A deprecated comment or interface can be removed, but an assumption that three modules silently share cannot be deleted because no one owns it and no test exercises its absence.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 587,
+      "total_tokens": 774
+    }
+  },
+  "transport_error": null
+}

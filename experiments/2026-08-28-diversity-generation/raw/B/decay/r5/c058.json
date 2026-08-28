@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift and vocabulary drift across human–AI–human knowledge transfer\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.57
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-488",
+    "object": "chat.completion",
+    "created": 1787932413,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every code change is accompanied by an implicit shift in the vocabulary used by developers, tools, and AI assistants to describe the system's intent, but this semantic drift is never recorded in the code itself. As a result, the shared mental model diverges from the implementation across successive human–AI–human transfer cycles, making each new change harder because developers and AI must first reconstruct an unknown mapping between current vocabulary and outdated code. The degradation is invisible to review and testing because both validate local consistency, not the fidelity of the human–AI lexicon against the artifact it describes.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 123,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

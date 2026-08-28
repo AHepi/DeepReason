@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 13.993
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-954",
+    "object": "chat.completion",
+    "created": 1787932230,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally correct change adds implicit constraints to the system—preconditions and postconditions that are never documented but are depended upon by other parts of the code. The accumulation of these invisible constraints creates a dependency graph where any new change must satisfy an exponentially growing set of unstated requirements, making change difficulty grow combinatorially even when the codebase remains clean.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Software systems lose evolvability because each change optimizes for local fitness under current requirements, causing the system to overfit to historical contingencies. Like an organism adapted to a specific environment, the codebase becomes increasingly specialized to past conditions, so any deviation from the expected change trajectory requires disproportional effort to restructure. The system becomes a paleontological record of past decisions rather than a general-purpose substrate.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The number of implicit invariants grows linearly with each change, but they are never formalized, so the cognitive load on developers grows quadratically because each new change requires checking compatibility against all prior invariants. Testing and review verify explicit behavior but cannot capture the space of things that must remain true, so the invariant space grows invisibly until change becomes effectively impossible without reintroducing violations.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Each change is locally correct under a specific decomposition of responsibilities, but the optimal decomposition shifts as requirements evolve. Over time, the gap between the current decomposition and the optimal one widens, so every new change must be contorted to fit an increasingly maladapted structure. The system becomes harder to change not because of complexity per se, but because the architectural assumptions baked in by thousands of local decisions are collectively wrong for current needs.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The system's state space grows with each feature, but test coverage only checks points in that space, not regions. As the state space expands, the untested volume grows faster than tested points, so the probability that a new change violates an untested interaction rises monotonically. Change becomes harder because developers must manually reason about an expanding untested space that tools cannot help them explore.\",\n      \"probability\": 0.045\n    },\n    {\n      \"conjecture\": \"Changes accumulate along paths of least resistance—modifying existing modules rather than restructuring—so the system's module boundaries ossify around historical rather than logical divisions. Each change reinforces the existing boundary structure, making future restructuring more costly relative to local modification. This creates a positive feedback loop where the system becomes increasingly rigid because the cheap path always preserves the wrong boundaries.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Developers carry an implicit model of the system's behavior, but this model degrades as original developers leave and new ones infer the model from code. Each generation of developers holds a lower-fidelity model because inferred models lose information that was never encoded. Change difficulty grows because the maximum fidelity of any developer's mental model decreases over time, and changes are made against increasingly degraded understanding.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The system has a finite surface area of interfaces, and each change consumes some of that surface's unused flexibility. Early changes exploit easy modifications, leaving only harder modifications for later. The marginal cost of change increases because the cheapest transformations are consumed first, leaving a residue of structural constraints that only expensive changes can satisfy.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The dependency graph's effective cyclomatic complexity grows as changes add connections, and developers must hold the graph in working memory to make safe changes. Human working memory is bounded, so once complexity exceeds that bound, developers can no longer verify safety through reasoning alone and must rely on tests. But tests only cover known cases, so change becomes risky and slow because the gap between graph complexity and verifiable complexity creates irreducible uncertainty.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the cost-benefit calculation of each individual change never accounts for the entropy it introduces. Local review and testing optimize for immediate correctness, but no mechanism prices in the long-term rigidity cost. The system drifts toward maximum entropy because every locally rational decision increases global disorder, and no individual decision can justify paying the global restructuring cost.\",\n      \"probability\": 0.09\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 980,
+      "total_tokens": 1155
+    }
+  },
+  "transport_error": null
+}

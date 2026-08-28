@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.739
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-882",
+    "object": "chat.completion",
+    "created": 1787932441,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally-correct change optimizes the system's structure for the assumptions present at the time of the change. As the distribution of future requirements drifts from those historical assumptions, the accumulated structural optimizations become anti-optimizations, increasing the friction of any new change.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade because the rate of adding implicit dependencies exceeds the rate of making them explicit. Each locally-correct change introduces hidden couplings that are invisible to individual reviews and tests, and the total number of these hidden couplings grows combinatorially, eventually making every change risky.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software entropy is driven by the irreducible information loss that occurs when a change is made at the wrong abstraction level. Each such change creates a local patch that works but leaves the abstraction layer semantically scarred, and the accumulation of these scars makes the layer progressively harder to reason about and extend.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The difficulty arises from the divergence between the system's implicit execution model and the evolving mental models of its maintainers. Each locally-correct change is made relative to some mental model, but as maintainers turn over and requirements shift, the gap between the system's actual behavior and any single coherent mental model widens, increasing the cognitive cost of every change.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every change carries a small probability of introducing a constraint that is unnecessary for the current requirement but is never removed. Over time, the density of these accidentally-over-constrained components increases, meaning any new change must satisfy a growing body of irrelevant constraints, making development harder regardless of the change's intrinsic complexity.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because of an inherent conservation law: reducing the complexity of one change requires deferring complexity to the system's structure. Over time, the system becomes a saturated reservoir of deferred complexity, and each new change, however simple, must push against this saturated boundary.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The degradation is driven by the tension between the scale-free topology of software dependency networks and the hierarchical nature of human reasoning. Each locally-correct change adds edges to the network, and as the network's degree distribution becomes more homogeneous, it becomes impossible to hierarchically partition the system, making changes require system-wide comprehension.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Every change necessarily leaves behind a residue of dead code, configuration, and interface scaffolding because the cost of removal is rarely justified locally. This residue accumulates as a sediment that obscures the active logic, increasing the search cost for understanding what is relevant to any future change.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The increasing difficulty is a consequence of the exploration-exploitation tradeoff applied at the granularity of individual changes. Early changes explore the design space and create flexible structures, but later changes exploit existing structures, progressively locking the system into a narrow region of the design space and making deviations from that region increasingly expensive.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because each change, being locally correct, reinforces the existing architectural patterns. This reinforcement creates a path dependency where the system's structure becomes increasingly optimized for its historical trajectory, and any deviation required by new requirements faces a combinatorially growing number of local reinforcements that must be overcome.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 813,
+      "total_tokens": 988
+    }
+  },
+  "transport_error": null
+}

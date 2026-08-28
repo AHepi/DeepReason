@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Statistical-mechanics of dependency network phase transitions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.748
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-36",
+    "object": "chat.completion",
+    "created": 1787932400,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software dependency networks undergo a percolation phase transition when the fraction of transitively coupled modules exceeds a critical threshold p_c, below which changes propagate through finite clusters and above which they percolate through the giant connected component, making every modification systemically contagious regardless of local correctness. The apparent 'decay' of maintainability is not gradual erosion but a sharp, thermodynamic-like transition: on the subcritical side, independent teams can modify modules in parallel; on the supercritical side, the correlation length diverges and the system effectively freezes because any nontrivial change activates a positive fraction of all modules. This transition is structurally inevitable under normal development pressures—each locally justified dependency increments p, and no amount of testing or review can prevent the crossing—so long-lived systems accumulate dependencies until they hit p_c and then catastrophically lose evolvability.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 184,
+      "total_tokens": 306
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.139
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-352",
+    "object": "chat.completion",
+    "created": 1787932128,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software decays not because changes introduce bugs, but because each locally correct change narrows the system's implicit design phase space by permanently encoding assumptions about its current state. Over time, these crystallized assumptions form a rigid dependency lattice where the cost of a change is dominated by the combinatorial explosion of reconciling mutually reinforcing, outdated constraints rather than implementing the new logic itself. The system becomes hard to change because the remaining valid design configurations shrink with every commit, until only the exact evolution path already taken remains feasible.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 111,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: phase-locking of design assumptions into a shared implicit ontology between code and developers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.587
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-550",
+    "object": "chat.completion",
+    "created": 1787932148,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a codebase evolves, each locally-correct change phases locks the system's design assumptions into a shared implicit ontology between code and developers. Because these assumptions are never explicitly documented, the developers' mental model of the system gradually diverges from the code's actual structure. This phase-locking effect means that even trivial changes require understanding an increasingly complex web of implicit dependencies, making the system harder to modify over time.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 91,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}
