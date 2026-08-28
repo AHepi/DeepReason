@@ -279,3 +279,70 @@ test drives a run with capability cycles and asserts the emitted count; the
 policy's behaviour on the committed epoch 6 record is unchanged or its change
 is stated; full gate 0 failed; map moved in the same commit.
 ```
+
+---
+
+## A6 — the anti-E28 receipt reports that the premise channel never fired, on a run where it fired
+
+**What.** `scheduler.py:2065-2072` emits `premise.work-invited.v1` so that "a
+mechanism nobody triggers" is visible on the record. It recorded **0 in all
+four committed roots**. In epoch 6 the invitation demonstrably reached two
+critic prompts and produced a standing critic-role premise + attribution pair
+on the seed problem.
+
+The receipt reads `premise_work_invited(selected_problem)` at cycle START; the
+pack computes the invitation per criticism TARGET mid-cycle. In epoch 6 both
+events fell inside cycle 0, and the attribution filed in that same cycle then
+flipped the predicate False (`premises.py:638-639`) before the next selection
+boundary.
+
+This audit's own first census was wrong because of it — evidence that the
+receipt actively misleads a reader rather than merely under-reporting.
+
+**Ready-to-send prompt:**
+
+```
+Route: deepreason-orchestrator (defect).
+
+Goal, one sentence: make the premise-channel receipt report whether the
+invitation actually fired, so the record answers "did this mechanism ever
+run" correctly.
+
+Evidence, all committed (branch claude/spec-to-code-technique-k5209o,
+read-only):
+  experiments/2026-08-27-change-technique-run/run/log.jsonl
+      -> zero "premise.work-invited.v1" Measures across the whole run
+      -> the invitation prompt blobs 98e3b56dcb33... and 20c3f7b621b2...
+         referenced at seq 141 and seq 180 (both inside cycle 0)
+  the same root's state: standing_attributions == 1, a CRITIC-role premise +
+      attribution pair (09cff5b9abfa..., b38afbf002e6...) on problem
+      question-9e8800977c3e1deaf5b034b93db38959, both ACCEPTED
+  the other three roots: 0 attributions, 0 receipts (consistent there)
+  experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md Q1
+
+Pointers:
+  src/deepreason/scheduler/scheduler.py:2065-2072  the receipt, sampled on the
+      SELECTED problem at cycle start
+  src/deepreason/rules/crit.py:1477 and :1641 (_batch_premise_invitation)
+      where the invitation is actually computed, per TARGET, mid-cycle
+  src/deepreason/premises.py:625-645  premise_work_invited -- note :638-639,
+      a standing attribution flips it False
+  src/deepreason/premises.py:68  PREMISE_INVITE_AFTER = 2
+
+Read docs/map/CON-problem-layer-lifecycle.md before designing.
+
+The question to answer first: should the receipt move to where the invitation
+is DECIDED (crit.py, per target, which is what actually happens), or should
+the cycle-start sample be retained and a second receipt added at the decision
+site? Moving it is smaller and truer; adding one keeps the cycle-boundary
+reading someone may already depend on. Say which and why.
+
+Watch the boundary: the receipt is a Measure -- attention evidence, never a
+status (C5, and the invitation carries no penalty for declining). Do not let
+the fix make filing or declining a premise consequential.
+
+End state: a run in which the invitation reaches a critic pack records a
+receipt saying so; a regression test drives the cycle-0 timing that produced
+the false zero and would fail today; full gate 0 failed; map moved in the same
+commit.
+```

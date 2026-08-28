@@ -53,5 +53,38 @@ problem `question-9e8800977c3e1deaf5b034b93db38959`.
 
 ## Census 4 — was a premise ever filed?
 
-No `premise` and no `attribution` object type exists under `objects/` in ANY
-of the four roots. The critic declined both invitations it received.
+CORRECTED 2026-08-28 (the first reading of this census was wrong: attributions
+are stored as ordinary artifacts, not under an `objects/<schema>/` directory,
+so a directory listing missed them). Measured with
+`premises.standing_attributions`:
+
+| root | standing attributions |
+|---|---|
+| epoch 0 | 0 |
+| epoch 1 | 0 |
+| epoch 5 | 0 |
+| **epoch 6** | **1** |
+
+Epoch 6's pair — `09cff5b9abfa…` (attribution) and `b38afbf002e6…` (premise),
+both `ProvenanceRole.CRITIC`, both `ACCEPTED`, on the seed problem — means the
+critic ACCEPTED the invitation and filed a premise. It filed no
+`premise_evidence` with it, so `_check_premise_citations` returned at its
+`if not refs` guard (`crit.py:1369-1370`) and recorded nothing.
+
+## Census 5 — the anti-E28 receipt disagrees with the record
+
+`scheduler.py:2065-2072` emits `premise.work-invited.v1` so that "a mechanism
+nobody triggers" is visible. It recorded **0 in all four roots**, including
+epoch 6 where the invitation demonstrably reached two critic prompts
+(blobs referenced at seq 141 and 180) and produced a standing attribution.
+
+The receipt samples `premise_work_invited(selected_problem)` at cycle START;
+the pack computes the invitation per criticism TARGET mid-cycle
+(`crit.py:1477`, `:1641`). In epoch 6 both events fell inside cycle 0 — the
+refuted count crossed `PREMISE_INVITE_AFTER = 2` after selection, and the
+attribution filed during the same cycle then made the predicate False
+(`premises.py:638-639`) before the next selection boundary. So the receipt's
+window was never open when it was read.
+
+A reader asking the record "did the premise channel ever fire?" gets **no**,
+and the answer is **yes**.

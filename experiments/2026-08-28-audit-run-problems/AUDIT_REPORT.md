@@ -36,13 +36,14 @@ Ranked by what blocks the mission or violates a ledgered operator law.
 | **1** | Q2 | The judge road is severed one layer below an ON flag, and the manifest compiled **zero notices** about it | **CAUSE LOCATED** |
 | **2** | Q3 | Epoch 6 did **4 working cycles, not 24** — 19 cycles were budget-denied no-ops on one dead package | **CAUSE LOCATED** |
 | **3** | Q4b | Every committed root is **unresumable while reporting resumable** (P6), confirmed on the newest root | **CAUSE ESTABLISHED**, extended |
-| **4** | Q1 | The critic has **no citation channel attached to criticism** — only to an optional premise behind a rare gate | **CAUSE LOCATED** |
+| **4** | Q1 | The critic has **no citation channel attached to criticism** — only to an optional premise behind a gate open on 2 of 98 critic calls | **CAUSE LOCATED** |
 | **5** | Q4a | One budget-denial condition has **at least four distinct dispositions**, not two | **CAUSE LOCATED**, extends P2 |
 | **6** | Q3b | The wander cap's "every cycle" disclosure is bypassed by capability cycles; `_cycles` grows where `_seed_cycles` cannot | **CAUSE LOCATED** |
 | **7** | Q4a | `token_spend: 0` on a run that spent its budget (P3) — confirmed on two roots | **CAUSE ESTABLISHED** |
 | **8** | Q5a | `SpawnTrigger.SUCCESSOR` **exists and was deliberately decommissioned** — the capability P9 wants was removed, not absent | **CAUSE LOCATED**, sharpens P9 |
 | **9** | Q5b | P7's parked claim "no typed backoff bound exists" is **wrong**; a bound exists at `endpoints.py:15,51-70` | **CAUSE LOCATED**, corrects P7 |
-| **10** | Q5c | P8 repair-mode death: still a two-run control | **UNDETERMINED** |
+| **10** | Q1 | The anti-E28 receipt `premise.work-invited.v1` reports **0** on a run where the mechanism fired and completed | **CAUSE LOCATED** |
+| **11** | Q5c | P8 repair-mode death: still a two-run control | **UNDETERMINED** |
 
 ---
 
@@ -114,15 +115,59 @@ across 44 calls. Epoch 6's two invitation blobs
 citable clause and both name the seed problem
 `question-9e8800977c3e1deaf5b034b93db38959`.
 
-And on both invitations the critic declined: **no `premise` and no
-`attribution` object exists under `objects/` in any of the four roots.**
+And on the epoch 6 invitation **the critic accepted**: a critic-role
+premise + attribution pair (`09cff5b9abfa…`, `b38afbf002e6…`, both
+`ProvenanceRole.CRITIC`, both `ACCEPTED`) stands on the seed problem.
+Standing attributions across the roots: epoch 0 = 0, epoch 1 = 0,
+epoch 5 = 0, **epoch 6 = 1**.
+
+So the critic took the channel up and filed **no citation with it** —
+`premise_evidence` was empty, so `_check_premise_citations` returned at its
+`if not refs` guard (`crit.py:1369-1370`) and emitted nothing.
 
 ### What this settles
 
-M2's six-epoch silence is **a prompt-surface defect on top of a
-contract-shape defect**, not a wiring defect and not (on this evidence) model
-reluctance. The channel works — it verified 20 conjecture-side citations
-across four roots. It is simply not attached to the thing critics do.
+M2's six-epoch silence is **a contract-shape defect with a prompt-surface
+defect on top**, not a wiring defect. The channel works — it verified 20
+conjecture-side citations across four roots. It is simply not attached to the
+thing critics do.
+
+Stated with the precision the evidence supports, the six epochs split:
+
+- **Epochs 0, 1 (and 5): structurally unreachable.** The critic was never once
+  shown the channel across 54 calls. Nothing a model did or did not do can
+  explain those epochs.
+- **Epoch 6: reachable twice, taken up once, cited zero times.** This is **one
+  observation** of the channel being available and unused for citation — not a
+  pattern, and not enough to attribute the silence to model reluctance.
+
+The honest verdict is therefore that M2 is **currently unmeetable by
+construction for criticism proper** (no field exists on `case`), and that the
+one narrow road that does exist was open for roughly 4.5 % of one epoch's
+critic calls.
+
+### A second finding, found while checking the first: the receipt lies
+
+`scheduler.py:2065-2072` emits a `premise.work-invited.v1` Measure whenever
+the premise invitation is live, and its comment states exactly why it exists:
+*"The anti-E28 receipt: a mechanism nobody triggers is a mechanism that never
+runs, and this harness has shipped two of those."*
+
+**It recorded 0 in all four roots** — including epoch 6, where the invitation
+reached two critic prompts (blobs referenced at seq 141 and 180) and produced
+a standing attribution.
+
+The receipt samples `premise_work_invited(selected_problem)` at cycle START.
+The pack computes the invitation per criticism TARGET mid-cycle
+(`rules/crit.py:1477`, `:1641`). In epoch 6 both fell inside cycle 0: the
+refuted count crossed `PREMISE_INVITE_AFTER = 2` *after* selection, and the
+attribution filed in that same cycle then flipped the predicate False
+(`premises.py:638-639`) before the next selection boundary. The receipt's
+window was never open at a moment it was read.
+
+So an instrument built precisely to prove this mechanism fires reports that it
+never did, on a run where it fired and completed. **This is why the audit's
+own first reading of Census 4 was wrong**, and it is corrected above.
 
 Recurrence check: this is the same shape as
 `DR-INV-evidence-channels`' recorded trap — *"An enabled channel can still be a
