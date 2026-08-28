@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 3 next.
+State: step 4 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -15,7 +15,7 @@ Spec: SPEC.md. Request: REQUEST.md.
       `test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact`
       is made with the map sentence in the same commit.
 
-- [ ] 3. S3 — question-last on the two `informal/trial.py` judge packs.
+- [x] 3. S3 — question-last on the two `informal/trial.py` judge packs.
       DONE WHEN: A3 passes, RED against the pre-change tree.
 
 - [ ] 4. S4 — carry-forward: `_distilled` replaces `_head` under the policy,

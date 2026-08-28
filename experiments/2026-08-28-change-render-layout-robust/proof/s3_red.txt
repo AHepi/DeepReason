@@ -1,0 +1,54 @@
+...FF                                                                    [100%]
+=================================== FAILURES ===================================
+_________________ test_the_argument_trial_judge_pack_asks_last _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f81f84b98d0>
+
+    def test_the_argument_trial_judge_pack_asks_last(monkeypatch):
+        """Regression (census 2026-08-28): across 342 recorded judge prompts the
+        QUESTION line preceded the case and the defence -- the two things the
+        judge is asked to weigh -- by up to 7503 characters."""
+        from deepreason.informal.trial import argument_trial_judge_pack
+    
+        t = _judge_texts()
+        robust = argument_trial_judge_pack(**t, layout=ROBUST)
+        legacy = argument_trial_judge_pack(**t, layout=LEGACY)
+    
+>       assert robust.index("QUESTION:") > robust.index("THE DEFENCE:")
+E       AssertionError: assert 64 > 283
+E        +  where 64 = <built-in method index of str object at 0x7f81f8526c30>('QUESTION:')
+E        +    where <built-in method index of str object at 0x7f81f8526c30> = 'TARGET:\nthe nocturnal gap is driven by reduced sky view factor\n\nQUESTION: does the case establish a decisive fault...ith a mathematical definition; the target names both.\n\nRule on the exchange; decisive_point MUST quote a span of it.'.index
+E        +  and   283 = <built-in method index of str object at 0x7f81f8526c30>('THE DEFENCE:')
+E        +    where <built-in method index of str object at 0x7f81f8526c30> = 'TARGET:\nthe nocturnal gap is driven by reduced sky view factor\n\nQUESTION: does the case establish a decisive fault...ith a mathematical definition; the target names both.\n\nRule on the exchange; decisive_point MUST quote a span of it.'.index
+
+tests/test_render_layout_rules.py:155: AssertionError
+_________________ test_the_standard_trial_judge_pack_asks_last _________________
+
+harness = <deepreason.harness.Harness object at 0x7f81f84c5d50>
+
+    def test_the_standard_trial_judge_pack_asks_last(harness):
+        from deepreason.config import Config
+        from deepreason.informal.trial import _judge_pack
+    
+        body = {"spec": "s-uhi", "mode": "direct", "rubric": "the standard"}
+        kwargs = dict(
+            harness=harness, config=Config(), body=body,
+            target_text="stored heat release explains the nocturnal gap",
+            case="the case for fail", answer="the defence",
+            standard_id="s-uhi",
+        )
+        robust = _judge_pack(**kwargs, layout=ROBUST)
+        legacy = _judge_pack(**kwargs, layout=LEGACY)
+    
+>       assert robust.index("QUESTION:") > robust.index("THE DEFENCE:")
+E       AssertionError: assert 101 > 243
+E        +  where 101 = <built-in method index of str object at 0x7f81f8735530>('QUESTION:')
+E        +    where <built-in method index of str object at 0x7f81f8735530> = 'STANDARD s-uhi (mode: direct):\nthe standard\n\nTARGET:\nstored heat release explains the nocturnal gap\n\nQUESTION: ...FAIL:\nthe case for fail\n\nTHE DEFENCE:\nthe defence\n\nRule on the exchange; decisive_point MUST quote a span of it.'.index
+E        +  and   243 = <built-in method index of str object at 0x7f81f8735530>('THE DEFENCE:')
+E        +    where <built-in method index of str object at 0x7f81f8735530> = 'STANDARD s-uhi (mode: direct):\nthe standard\n\nTARGET:\nstored heat release explains the nocturnal gap\n\nQUESTION: ...FAIL:\nthe case for fail\n\nTHE DEFENCE:\nthe defence\n\nRule on the exchange; decisive_point MUST quote a span of it.'.index
+
+tests/test_render_layout_rules.py:179: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_rules.py::test_the_argument_trial_judge_pack_asks_last
+FAILED tests/test_render_layout_rules.py::test_the_standard_trial_judge_pack_asks_last
+2 failed, 3 passed in 0.21s

@@ -127,3 +127,58 @@ def test_the_question_survives_a_budget_that_drops_everything_optional(harness):
     )
     assert _headers(pack)[-1] == "question"
     assert QUESTION in pack.split("## question", 1)[1]
+
+
+# ---------------------------------------------------------------- R2a, judge
+
+
+def _judge_texts():
+    return {
+        "target_text": "the nocturnal gap is driven by reduced sky view factor",
+        "case_text": "SRC_001 confuses emissivity with geometry, and the "
+                     "cross-city modulator it names is a proxy, not a cause.",
+        "defence": "The critic conflates an algorithmic process with a "
+                   "mathematical definition; the target names both.",
+    }
+
+
+def test_the_argument_trial_judge_pack_asks_last(monkeypatch):
+    """Regression (census 2026-08-28): across 342 recorded judge prompts the
+    QUESTION line preceded the case and the defence -- the two things the
+    judge is asked to weigh -- by up to 7503 characters."""
+    from deepreason.informal.trial import argument_trial_judge_pack
+
+    t = _judge_texts()
+    robust = argument_trial_judge_pack(**t, layout=ROBUST)
+    legacy = argument_trial_judge_pack(**t, layout=LEGACY)
+
+    assert robust.index("QUESTION:") > robust.index("THE DEFENCE:")
+    assert robust.rstrip().endswith(
+        "Rule on the exchange; decisive_point MUST quote a span of it."
+    )
+    assert legacy.index("QUESTION:") < legacy.index("THE CASE FOR FAIL:")
+
+    # A reordering and only a reordering: the same lines, in a different order.
+    assert sorted(robust.split("\n")) == sorted(legacy.split("\n"))
+
+
+def test_the_standard_trial_judge_pack_asks_last(harness):
+    from deepreason.config import Config
+    from deepreason.informal.trial import _judge_pack
+
+    body = {"spec": "s-uhi", "mode": "direct", "rubric": "the standard"}
+    kwargs = dict(
+        harness=harness, config=Config(), body=body,
+        target_text="stored heat release explains the nocturnal gap",
+        case="the case for fail", answer="the defence",
+        standard_id="s-uhi",
+    )
+    robust = _judge_pack(**kwargs, layout=ROBUST)
+    legacy = _judge_pack(**kwargs, layout=LEGACY)
+
+    assert robust.index("QUESTION:") > robust.index("THE DEFENCE:")
+    assert legacy.index("QUESTION:") < legacy.index("THE CASE FOR FAIL:")
+    assert robust.rstrip().endswith(
+        "Rule on the exchange; decisive_point MUST quote a span of it."
+    )
+    assert sorted(robust.split("\n")) == sorted(legacy.split("\n"))
