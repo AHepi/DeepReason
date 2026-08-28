@@ -5,6 +5,7 @@ Each role = prompt template + output contract (contracts.py) + endpoint
 ``pack -> schema-validated JSON`` (§0): templates demand raw JSON only.
 """
 
+from deepreason.llm.layout import RenderLayoutPolicyV1, resolve_layout_policy
 from deepreason.llm.profiles import ModelProfile, get_profile
 
 ROLES = (
@@ -380,19 +381,32 @@ def render_role_prompt(
     profile: str | ModelProfile | None = None,
     example: str = "",
     aliases: str = "",
+    layout: RenderLayoutPolicyV1 | None = None,
 ) -> str:
     """Render a profile-specific role prompt without changing role meaning."""
+    layout = layout or resolve_layout_policy()
     spec = get_profile(profile)
     if spec.name != ModelProfile.COMPACT:
         return TEMPLATES[role].format(schema=schema, pack=pack)
     directive = COMPACT_TEMPLATES.get(role, "Complete the one task in the input.")
+    # A label and the body it labels are ONE block, not two. The U-shape
+    # re-instantiates inside every delimiter-bounded interval, so a bare
+    # "INPUT:" on its own buys a block boundary and a dead zone for six
+    # characters of text. Joining them changes no word and no order -- the
+    # census measured five head blocks under 100 characters per compact
+    # prompt, four of them bare labels (DR-INV-render-layout).
+    join = "\n" if layout.merge_head_label_blocks else "\n\n"
     sections = [
         directive,
-        "Return ONLY one JSON value matching this closed schema:",
-        schema,
+        "Return ONLY one JSON value matching this closed schema:" + join + schema,
     ]
     if aliases:
-        sections += ["LOCAL REFERENCES (copy aliases, not identifiers):", aliases]
+        sections += [
+            "LOCAL REFERENCES (copy aliases, not identifiers):" + join + aliases
+        ]
     # Exactly one syntax-only example in compact mode.
-    sections += ["ONE SYNTAX EXAMPLE:", example or "{}", "INPUT:", pack]
+    sections += [
+        "ONE SYNTAX EXAMPLE:" + join + (example or "{}"),
+        "INPUT:" + join + pack,
+    ]
     return "\n\n".join(sections)

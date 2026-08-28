@@ -1,0 +1,33 @@
+.........F.                                                              [100%]
+=================================== FAILURES ===================================
+______________ test_a_label_and_the_body_it_labels_are_one_block _______________
+
+    def test_a_label_and_the_body_it_labels_are_one_block():
+        """Regression (census 2026-08-28): a compact prompt head carried nine
+        blocks, five of them under 100 characters and four of them bare labels.
+        The U-shape re-instantiates inside every delimiter-bounded interval, so a
+        bare label buys a block boundary for six characters of text."""
+        from deepreason.llm.roles import render_role_prompt
+    
+        kwargs = dict(
+            role="conjecturer",
+            schema='{"type": "object"}',
+            pack="## problem\nwhy is the city warm at night",
+            profile="compact",
+            example='{"abstention": {"search_signal": "stuck"}}',
+            aliases="SRC_001\nSRC_002",
+        )
+        robust = render_role_prompt(**kwargs, layout=ROBUST)
+        legacy = render_role_prompt(**kwargs, layout=LEGACY)
+    
+>       assert len(_head_blocks(robust)) < len(_head_blocks(legacy))
+E       assert 7 < 7
+E        +  where 7 = len(['Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local nei...type": "object"}', 'LOCAL REFERENCES (copy aliases, not identifiers):', 'SRC_001\nSRC_002', 'ONE SYNTAX EXAMPLE:', ...])
+E        +    where ['Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local nei...type": "object"}', 'LOCAL REFERENCES (copy aliases, not identifiers):', 'SRC_001\nSRC_002', 'ONE SYNTAX EXAMPLE:', ...] = _head_blocks('Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neig...E SYNTAX EXAMPLE:\n\n{"abstention": {"search_signal": "stuck"}}\n\nINPUT:\n\n## problem\nwhy is the city warm at night')
+E        +  and   7 = len(['Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local nei...type": "object"}', 'LOCAL REFERENCES (copy aliases, not identifiers):', 'SRC_001\nSRC_002', 'ONE SYNTAX EXAMPLE:', ...])
+E        +    where ['Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local nei...type": "object"}', 'LOCAL REFERENCES (copy aliases, not identifiers):', 'SRC_001\nSRC_002', 'ONE SYNTAX EXAMPLE:', ...] = _head_blocks('Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neig...E SYNTAX EXAMPLE:\n\n{"abstention": {"search_signal": "stuck"}}\n\nINPUT:\n\n## problem\nwhy is the city warm at night')
+
+tests/test_render_layout_rules.py:354: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_rules.py::test_a_label_and_the_body_it_labels_are_one_block
+1 failed, 10 passed in 0.25s

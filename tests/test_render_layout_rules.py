@@ -323,3 +323,54 @@ def test_an_artifact_with_no_claim_keeps_its_entry(harness):
         line for line in pack.splitlines() if line.startswith(f"- {prose.id}:")
     ][0]
     assert "a plain prose artifact with no claim field" in entry
+
+
+# ---------------------------------------------------------------- R2d
+
+
+def _head_blocks(prompt: str) -> list[str]:
+    head = prompt.split("\nINPUT:", 1)[0]
+    return [b for b in head.split("\n\n") if b.strip()]
+
+
+def test_a_label_and_the_body_it_labels_are_one_block():
+    """Regression (census 2026-08-28): a compact prompt head carried nine
+    blocks, five of them under 100 characters and four of them bare labels.
+    The U-shape re-instantiates inside every delimiter-bounded interval, so a
+    bare label buys a block boundary for six characters of text."""
+    from deepreason.llm.roles import render_role_prompt
+
+    kwargs = dict(
+        role="conjecturer",
+        schema='{"type": "object"}',
+        pack="## problem\nwhy is the city warm at night",
+        profile="compact",
+        example='{"abstention": {"search_signal": "stuck"}}',
+        aliases="SRC_001\nSRC_002",
+    )
+    robust = render_role_prompt(**kwargs, layout=ROBUST)
+    legacy = render_role_prompt(**kwargs, layout=LEGACY)
+
+    assert len(_head_blocks(robust)) < len(_head_blocks(legacy))
+    assert not any(
+        b.strip() in {"ONE SYNTAX EXAMPLE:", "INPUT:",
+                      "LOCAL REFERENCES (copy aliases, not identifiers):",
+                      "Return ONLY one JSON value matching this closed schema:"}
+        for b in _head_blocks(robust)
+    )
+    # Not one word changes, and not one changes order.
+    assert robust.split() == legacy.split()
+
+
+def test_the_standard_profile_head_is_already_few_blocks_and_is_untouched():
+    """R1's closure rule: the non-compact template is role text, schema, pack.
+    There is no bare label to merge, so nothing is churned."""
+    from deepreason.llm.roles import render_role_prompt
+
+    kwargs = dict(
+        role="conjecturer", schema='{"type": "object"}',
+        pack="## problem\nwhy is the city warm at night", profile="standard",
+    )
+    assert render_role_prompt(**kwargs, layout=ROBUST) == render_role_prompt(
+        **kwargs, layout=LEGACY
+    )

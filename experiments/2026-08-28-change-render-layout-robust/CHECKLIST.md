@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 5 next.
+State: step 6 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -23,7 +23,7 @@ Spec: SPEC.md. Request: REQUEST.md.
       section, the `superseded-conjectures` section defaulting to absent.
       DONE WHEN: A4 passes, RED against the pre-change tree.
 
-- [ ] 5. S5 — head block merging in `render_role_prompt`'s compact branch.
+- [x] 5. S5 — head block merging in `render_role_prompt`'s compact branch.
       DONE WHEN: A5 passes, RED against the pre-change tree.
 
 - [ ] 6. S6 — the instruction-count guard.
