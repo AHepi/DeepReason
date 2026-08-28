@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic epistemic opacity of emergent combinatorial state\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 18.943
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-244",
+    "object": "chat.completion",
+    "created": 1787932668,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change creates implicit constraints between modules that are invisible at the single-change level, and the number of these constraints grows superlinearly while the number of explicitly documented constraints grows linearly, so the system's true constraint graph becomes information-theoretically unrecoverable from its documentation.\", \"probability\": 0.09}, {\"conjecture\": \"The Kolmogorov complexity of the minimal specification needed to safely modify a system grows monotonically with the number of changes applied, because each change adds a combinatorial dependency that participates in a state space whose entropy exceeds what any reviewer or test suite can enumerate.\", \"probability\": 0.08}, {\"conjecture\": \"Maintainability decay is the accumulation of epistemic debt: each change consumes a fraction of the system's remaining state-space compressibility, and once the Shannon entropy of the behavioral specification space exceeds the bandwidth of the team's review and testing process, changes become effectively unverifiable.\", \"probability\": 0.08}, {\"conjecture\": \"A long-running system's configuration space is a high-dimensional lattice where each change carves out a region of valid states, and the intersection of all such regions becomes an irregular polytope whose shape cannot be inferred from the individual carving operations, making safe change identification an NP-hard problem in the system's age.\", \"probability\": 0.07}, {\"conjecture\": \"The difficulty of changing a system is proportional to the mutual information between the target module and all prior change sequences, and this mutual information grows faster than the channel capacity of any documentation, testing, or review process, creating an irreversible epistemic bottleneck.\", \"probability\": 0.07}, {\"conjecture\": \"Each locally correct change adds a term to an emergent constraint satisfaction problem whose dimensionality equals the number of prior changes, and the solver complexity grows exponentially while the team's verification capacity stays constant, so the system crosses a phase transition where most proposed changes become statistically likely to violate an unknown constraint.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate non-local correlations between components that have no shared interface, created by shared participation in historical change sequences, and these correlations form an implicit coupling structure whose information content is invisible to any tool that examines only the current architectural topology.\", \"probability\": 0.06}, {\"conjecture\": \"The probability that a change is safe decays as 2^(-n/k) where n is the number of prior changes and k is a constant determined by the system's modularity, because each change creates a latent interaction that is individually improbable to matter but collectively forms an incompressible web of constraints.\", \"probability\": 0.05}, {\"conjecture\": \"Software entropy is not noise but the growth of algorithmically random correlations: each change, being locally motivated, introduces dependencies that are orthogonal to the system's design rationale, and the accumulation of these orthogonal dependencies makes the system's behavior increasingly incompressible by any model shorter than the system itself.\", \"probability\": 0.05}, {\"conjecture\": \"The reason every individual change can be correct while the system becomes rigid is that correctness is verified against a local specification whose entropy is O(1) per change, but the global specification entropy grows as O(n log n) because each change interacts with the combinatorial legacy of all previous local decisions, and this gap is fundamental rather than accidental.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 194,
+      "completion_tokens": 722,
+      "total_tokens": 916
+    }
+  },
+  "transport_error": null
+}

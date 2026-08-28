@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Domain knowledge tacitly decays as maintainer turnover severs undocumented epistemic links\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.347
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-502",
+    "object": "chat.completion",
+    "created": 1787933237,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate a substrate of undocumented design constraints—implicit assumptions, non-obvious invariants, and cross-component epistemic dependencies—that were originally held in the tacit knowledge of the builders. Each maintainer turnover event severs a subset of these epistemic links without destroying the code that depends on them, so the surviving code increasingly encodes dependencies on knowledge that no living maintainer possesses. The system becomes harder to change not because the code has degraded, but because the cost of a locally correct change is now dominated by the逆向-engineering of forgotten constraints that review and testing cannot detect because the tests themselves were written by people who also lacked that knowledge.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 143,
+      "total_tokens": 273
+    }
+  },
+  "transport_error": null
+}

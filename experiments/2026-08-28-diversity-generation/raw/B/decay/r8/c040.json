@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: accumulation of dead code paths that obscure the system's reachable behavioral envelope\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.865
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-432",
+    "object": "chat.completion",
+    "created": 1787933017,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conserture\": \"Every locally correct change leaves behind unreachable conditional branches whose predicates can never be satisfied under the new configuration, causing the ratio of dead code paths to live behavioral paths to grow superlinearly with commit count. Because tests only exercise reachable states, these zombie branches accumulate invisibly, expanding the cognitive search space a developer must traverse to identify the system's true behavioral envelope before making any new change. The increasing difficulty of modification is therefore not a function of code complexity per se, but of the shrinking signal-to-noise ratio between what the code appears capable of doing and what it can actually do.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 129,
+      "total_tokens": 254
+    }
+  },
+  "transport_error": null
+}

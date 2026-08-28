@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.719
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-788",
+    "object": "chat.completion",
+    "created": 1787932700,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems accumulate implicit invariants—unstated assumptions about component behavior, execution order, and data state—faster than they accumulate explicit documentation, because developers consistently optimize local changes for correctness without accounting for the global invariant surface area they introduce. Each accepted change slightly increases the ratio of undocumented constraints to documented ones, causing the cost of future modifications to scale with the size of this hidden invariant graph rather than with the complexity of the new feature itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 103,
+      "total_tokens": 205
+    }
+  },
+  "transport_error": null
+}

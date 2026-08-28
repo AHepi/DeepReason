@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint satisfaction problem hardness from accumulated cross-module invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.341
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-811",
+    "object": "chat.completion",
+    "created": 1787932761,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change to a long-running system adds a constraint to a growing implicit CSP over module interactions, where the variables are module states and the invariants are the union of all past correct behaviors that must be preserved. Because constraints accumulate monotonically and are never explicitly represented, the CSP's constraint graph becomes densely connected over time, making satisfiability checking for any new change NP-hard in the number of accumulated invariants rather than in system size. This explains why late-stage changes require exponentially more analysis effort even though no single change introduced complexity: the system has crossed the phase transition from under-constrained to critically-constrained, where almost all candidate modifications violate at least one hidden invariant.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 145,
+      "total_tokens": 267
+    }
+  },
+  "transport_error": null
+}

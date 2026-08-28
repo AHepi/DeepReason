@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Loss of test-suite epistemic coverage\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 42.866
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-167",
+    "object": "chat.completion",
+    "created": 1787932891,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Long-running test suites accumulate 'semantic fossils': assertions that continue to pass only because the specific combination of deprecated inputs and boundary conditions they exercise can no longer be reached by current production code paths. This creates an illusion of behavioral coverage, masking the fact that the tests are no longer epistemically connected to the system's actual state space.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Test suites lose epistemic coverage through 'assertion atrophy,' where repeated refactoring of production code causes tests to be silently simplified (e.g., asserting only that no exceptions are thrown rather than checking specific state transitions) to maintain CI throughput. This reduces the test suite's ability to falsify incorrect future changes, making the system empirically rigid even when the code is structurally flexible.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"As a system ages, its test suite shifts from testing 'invariants' to testing 'historical implementations,' encoding specific algorithmic steps rather than input-output contracts. This means any architecturally superior change triggers massive test failures, not because the change is wrong, but because the suite has lost the epistemic ability to distinguish between 'correct behavior' and 'current implementation.'\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"Integration and unit tests gradually become 'epistemically decoupled' as mocks and stubs accumulate to handle dependencies. The test suite eventually validates a system that is a strict subset of the production system's actual interaction graph, meaning large classes of potential changes are validated against a fictional architecture, making real-world changes unpredictable and discouraging modification.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"The loss of changeability stems from 'coverage shadowing,' where highly tested, stable legacy modules accumulate dense test coverage, while newer, more volatile integration boundaries receive minimal testing. Developers infer system-wide rigidity from the high cost of changing the heavily tested core, even if the actual change target is elsewhere, because the test suite provides a distorted epistemic map of where architectural flexibility actually resides.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Test suites suffer from 'invariant drift': the implicit assumptions encoded in test data and setup fixtures become outdated relative to the current domain model. Because these fixtures are rarely updated, any change that aligns code with the new domain reality breaks the tests, forcing developers to waste effort reconciling code with epistemically obsolete test assumptions rather than improving the system.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"Over time, test suites develop 'epistemic monocultures' where a large number of tests are generated from the same narrow set of template scenarios or factory functions. This creates high line coverage but low behavioral coverage, meaning the test suite cannot falsify changes outside the template distribution, making the system appear safe to change but actually risky, thereby increasing the perceived cost of modification.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Long-lived systems suffer from 'falsification inversion,' where the test suite transitions from attempting to break the system to proving it works. As tests become dependent on specific implementation details to achieve green status, they lose their power to falsify bad architectural decisions, leaving developers without an epistemic safety net for structural changes and thus discouraging them.\",\n      \"probability\": 0.053\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of changing old systems is driven by 'configuration epistemic loss.' Tests increasingly rely on complex, shared global state and implicit execution order. This makes the behavior of the test suite non-compositional, meaning the epistemic value of any single test cannot be trusted in isolation, forcing developers to hold the entire test execution graph in their heads to safely make changes.\",\n      \"probability\": 0.047\n    },\n    {\n      \"conjecture\": \"Test suites lose epistemic coverage via 'error masking,' where the accumulation of broad exception handlers in production code causes tests to pass even when the intended functionality silently fails. Because the test suite validates the absence of crashes rather than the presence of correct behavior, it loses the ability to detect degradations, making developers justifiably hesitant to change code.\",\n      \"probability\": 0.059\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 957,
+      "total_tokens": 1144
+    }
+  },
+  "transport_error": null
+}

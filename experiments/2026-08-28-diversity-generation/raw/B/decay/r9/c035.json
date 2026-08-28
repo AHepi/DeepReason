@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Domain knowledge tacitly decays as maintainer turnover severs undocumented epistemic links\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.619
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-227",
+    "object": "chat.completion",
+    "created": 1787933237,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change encodes an implicit dependency on tacit domain knowledge held by its author—unstated invariants, business rationale, and environmental assumptions. When maintainer turnover severs these undocumented epistemic links, subsequent developers lack the contextual understanding needed to safely modify the system, causing them to over-constrain changes with defensive workarounds or inadvertently violate hidden invariants. Software entropy therefore accelerates not from code degradation but from an expanding surface of orphaned tacit dependencies that no surviving maintainer can reconstruct.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 116,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

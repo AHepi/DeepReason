@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 38.323
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-626",
+    "object": "chat.completion",
+    "created": 1787933087,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture is a thermodynamic system where each locally-correct change increases global entropy. Because developers optimize for local compliance, they inevitably increase the number of valid states the system can occupy, degrading the mutual information between component interfaces and making the system's state space progressively harder to reason about.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The 'LeBlanc's Law' constraint (delay equals waste) forces developers to implement changes via the shortest dependency path rather than the architecturally correct one. Over time, this creates a scale-free network of shortcut dependencies that increases the system's eigenvector centrality at critical nodes, causing any future change to cascade through a disproportionately large fraction of the codebase.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each locally correct change leaves behind 'island abstractions'—interfaces designed for a single use case that fail to generalize. The accumulation of these one-shot abstractions creates a combinatorial explosion of edge cases, where new changes must navigate a dense thicket of non-reusable logic, increasing the cognitive load quadratically with the number of past changes.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Knowledge of system constraints is purely tacit and erodes via survivorship bias: developers only document the 'why' for changes that fail, leaving the rationale for successful local optimizations unrecorded. This creates an epistemological vacuum where future developers must treat the system as a black box, increasing the cost of change because they must reverse-engineer the latent constraints of every component they touch.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate 'semantic drift' where identical function names and data structures evolve different meanings across modules due to isolated local changes. This creates a false cognate problem: developers assume uniformity where none exists, and the cost of change rises because every modification requires a full semantic audit of all adjacent, superficially identical interfaces.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Test suites become epistemological ballast: because tests encode assumptions about current behavior rather than intended invariants, they mathematically constrain the space of valid refactorings. Each locally correct change adds tests that lock in implementation details, creating a gravitational well that makes architectural improvements exponentially more expensive than feature additions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software systems are co-evolving with their environments, and the rate of environmental change outpaces the rate of architectural adaptation. This creates an adaptive valley where the system's internal model of the external world becomes increasingly stale, forcing each new change to bridge the gap between the system's outdated ontology and the environment's current state, increasing friction linearly with time.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The primary mechanism is Conway's Law compounding: organizational turnover causes the communication structure that originally shaped the architecture to dissolve. New teams with different communication topologies make locally correct changes that map to their own structure, creating an architectural palimpsest where conflicting organizational imprints make the code increasingly incoherent.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because of 'defensive programming accretion': each locally correct change handles edge cases by adding conditional logic rather than refactoring the model. This creates a fractal surface of special cases where the probability of any new change triggering an unhandled interaction approaches 1 as the system grows, making every change feel like walking through a minefield.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The difficulty arises from 'implicit inversion of control': as systems age, locally correct changes introduce hidden event orderings and side effects that create emergent state machines no single developer understands. The system's behavior becomes path-dependent, meaning the cost of a change is no longer proportional to its scope but to the number of historical states that must be preserved, creating an O(n!) testing burden.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 905,
+      "total_tokens": 1080
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topological deformation of invariant manifolds under local diffeomorphisms\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 33.939
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-928",
+    "object": "chat.completion",
+    "created": 1787932683,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture corresponds to a stratified manifold of invariants, where each locally correct, tested change acts as a local diffeomorphism preserving a tubular neighborhood of those invariants. Over time, the repeated application of these local diffeomorphisms causes the global invariant manifolds to stretch and fold, increasing the topological distance between features, which manifests as software brittleness and increased change difficulty.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing a long-running system increases monotonically with the Hausdorff dimension of the invariant manifold induced by its accumulated test suite. Each locally correct change acts as a diffeomorphism that preserves the current constraints while adding new ones, fractally increasing the dimensional complexity of the safe-change manifold, thereby shrinking the set of valid future modifications.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-lived software modules form interacting invariant manifolds in configuration space; locally correct changes are local diffeomorphisms that, while preserving each manifold locally, cumulatively induce global shear and torsion. The observed hardness of change is the topological friction caused by the increasing geometric deformation required to satisfy the hyperbolic intersections of these manifolds.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The invariant manifold representing the system's valid state space undergoes topological mixing under the repeated application of local diffeomorphisms (code changes). Because each change is locally validated, it only guarantees a diffeomorphism on a local chart, but the sequential composition of these charts causes the global manifold to fold onto itself, making distant state regions adjacent and requiring exponentially larger analysis to ensure non-interference.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Code changes are local diffeomorphisms on the manifold of program executions that preserve local behavioral invariants but progressively destroy the global foliation of the state space. The increasing rigidity of old systems stems directly from this loss of a differentiable foliation, as developers can no longer guarantee that a change in one local chart smoothly translates to adjacent charts without crossing emerging topological singularities.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"As a software system evolves via local diffeomorphisms of its API contracts, the invariant manifold of backward compatibility undergoes repeated isotopy until it crosses a critical threshold of self-intersection. The system becomes hard to change precisely when this invariant manifold transitions from an embedded to an immersed submanifold, requiring developers to navigate discontinuous compatibility regions.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The topological entropy of the invariant manifold defining safe system configurations increases super-linearly with the number of applied local diffeomorphisms. Because each reviewed change acts as a smooth local map preserving immediate invariants, the global system's invariant manifold stretches to accommodate new states, and the exponential divergence of nearby configuration trajectories is what makes future changes computationally difficult to verify.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running software degradation is the gradual loss of a global symplectic structure on the phase space of system states, driven by local diffeomorphisms that only preserve local test invariants. The system becomes harder to change because the local charts of the developers no longer align into a coherent global atlas, meaning every local modification introduces accumulating topological aberrations in the invariant manifold.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The invariant manifold representing the system's non-failure state progressively develops handles of higher genus under the cumulative effect of local diffeomorphisms. Each locally correct patch closes a local topological hole but globally increases the genus of the invariant manifold, meaning any future change must navigate a fundamentally more complex, multiply-connected topological space.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The invariant manifold of valid program states is deformed by local diffeomorphisms until the geodesic distance between any two desired features exceeds the cognitive working limit of a development team. The hardness of change is therefore not a software-specific phenomenon, but a geometric inevitability of repeated local chart mappings failing to preserve the global metric tensor of the system's invariant manifold.\",\n      \"probability\": 0.09\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 958,
+      "total_tokens": 1151
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 34.079
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-159",
+    "object": "chat.completion",
+    "created": 1787932625,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture decays because local optimizations accumulate: each individually correct change optimizes for immediate constraints, but the global constraint network becomes increasingly entangled, making future optimizations require simultaneous coordination across more components.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Every correct change adds implicit assumptions to the codebase. These assumptions are invisible to tests and reviewers because they are encoded in what the change does NOT do, but they accumulate as hidden constraints that future changes must not violate.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Test suites are anti-fragile barriers: each test added to verify a correct change also constrains future changes, and the constraint surface grows monotonically. The system becomes harder to change because the test suite increasingly overfits to current behavior rather than intended behavior.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty grows because each correct change narrows the space of valid future designs. The system's design space is reduced with every decision, and the remaining valid designs become increasingly specific, requiring more knowledge to discover and implement.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate hidden coupling through shared environmental state—databases, file systems, caches, message queues. Each locally correct change implicitly depends on the current state of these shared resources, creating coupling that no code review or test can detect because the dependency is temporal, not structural.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Code reviews approve changes based on whether the change is correct given current understanding, but understanding degrades as original authors leave and tacit knowledge is lost. The system becomes harder to change because the fraction of changes requiring reconstruction of lost tacit knowledge grows monotonically.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every correct change adds at least one abstraction boundary. Over time, changes must traverse increasing numbers of abstraction boundaries, and the cost of traversal—marshaling, validation, error handling, context propagation—grows superlinearly with boundary count.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The problem is an information-theoretic one: each correct change adds information to the system, and the entropy of the system's state space grows. To make a correct change, a developer must rule out an exponentially growing number of incorrect interactions, making the verification cost grow even when implementation cost does not.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because error handling code accumulates faster than happy-path code. Each correct change handles its specific error cases, but these error handlers interact with each other in untested combinations, creating a combinatorial explosion of failure modes that future changes must navigate.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The root cause is semantic drift: each locally correct change uses slightly different terminology, metaphors, or mental models for the same domain concepts. Over time, the codebase contains multiple incompatible semantic models, and any change must reconcile them, which no individual change was required to do.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 724,
+      "total_tokens": 899
+    }
+  },
+  "transport_error": null
+}

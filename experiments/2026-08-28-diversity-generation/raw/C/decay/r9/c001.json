@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.812
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-489",
+    "object": "chat.completion",
+    "created": 1787933276,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software architecture decays because each locally correct change exploits the current structure without reinforcing it, meaning the system's design is consumed rather than maintained, and the capacity to absorb future changes degrades proportionally.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems is governed by a combinatorial explosion of implicit, untested state transitions, where each correct change adds new states to the system's execution space, making the probability of unforeseen interaction bugs grow exponentially.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Entropy in software is driven by the accumulation of dead code and obsolete abstractions that cannot be safely removed because tests only verify additive behavior, meaning the system's conceptual mass increases monotonically while its actual utility grows sublinearly.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their original architectural invariants become progressively obscured by local optimizations, causing the cognitive load required to reconstruct the system's hidden global rules to exceed the working memory capacity of any individual maintainer.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"The rigidity emerges from an accretion of integration assumptions, where each subsystem change hardcodes expectations about its peers' behavior, creating a dense mesh of undocumented temporal and data couplings that are invisible to local tests but fatal to global modification.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Software rot is fundamentally a knowledge loss problem, where the original mental models and design intentions decay over time faster than the code itself, making each successive change progressively more conservative and structurally distorting because maintainers must add defensive code to compensate for uncertainty.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Testing and review create a paradox where they prevent local failure but guarantee global ossification by optimizing the system for its current tested paths, pruning alternative evolutionary branches and making the system progressively more fragile to any change that alters those specific paths.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because dependency networks naturally evolve toward scale-free topologies, where a few heavily-coupled modules become attractors for new functionality, eventually creating bottlenecks whose modification cost dominates the entire system.\",\n      \"probability\": 0.051\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is a thermodynamic consequence of information accumulation, where the system's configuration space expands faster than its constraint space (tests, types, documentation), causing the number of valid configurations to shrink asymptotically toward zero.\",\n      \"probability\": 0.043\n    },\n    {\n      \"conjecture\": \"Technical debt compounds because local changes are made by different actors with varying mental models, causing the system to become a palimpsest of conflicting design philosophies, where the cost of any new change includes the growing overhead of reconciling these incompatible implicit paradigms.\",\n      \"probability\": 0.061\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 693,
+      "total_tokens": 868
+    }
+  },
+  "transport_error": null
+}

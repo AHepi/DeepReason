@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Type-theoretic anti-unification cost and refactor lattice depth\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.35
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-288",
+    "object": "chat.completion",
+    "created": 1787932775,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software systems degrade because each locally-correct change increases the depth of the refactor lattice—the partial order of type-compatible program transformations—forcing future modifications to traverse exponentially longer anti-unification chains to find the least general generalization that reconciles divergent type signatures. The anti-unification cost of identifying a common refactor anchor grows superpolynomially with lattice depth, so even trivial feature additions eventually require reconstructing intermediate unifiers that no single developer can hold in working memory. This predicts that change difficulty is governed not by code volume or cyclomatic complexity, but by the rank of the maximal antichain in the refactor lattice, and that systems with bounded lattice depth remain maintainable indefinitely regardless of size.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 153,
+      "total_tokens": 277
+    }
+  },
+  "transport_error": null
+}

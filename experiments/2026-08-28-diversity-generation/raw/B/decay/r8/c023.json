@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain models and code via accreted abstraction layers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.68
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-720",
+    "object": "chat.completion",
+    "created": 1787932989,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change accretes a new abstraction layer that partially overlaps with, rather than fully replaces, the domain semantics of the layer below it, producing an accreted stack where the same domain concept is represented differently at each stratum. The cost of change grows superlinearly because developers must manually maintain cross-layer semantic coherence without any machine-checkable mapping, so the probability of introducing latent semantic drift approaches certainty as layer count increases.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 100,
+      "total_tokens": 225
+    }
+  },
+  "transport_error": null
+}

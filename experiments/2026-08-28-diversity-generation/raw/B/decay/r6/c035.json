@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ergodic divergence between developer mental models and commit trajectories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.627
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-204",
+    "object": "chat.completion",
+    "created": 1787932567,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A developer's mental model of a codebase is a finite-state approximation that remains locally synchronized with each commit but globally diverges from the actual commit trajectory because the system explores configuration paths the developer never visits. This divergence is ergodic: the set of states the system actually occupies over time has a measure-zero intersection with the set of states any single developer's model can represent, making every change increasingly computed against a counterfactual system. The observed rigidity is therefore not accumulated technical debt but a measurable breakdown in model ergodicity—each locally correct commit widens the phase-space gap between the developer's implicit transition function and the codebase's actual one.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 140,
+      "total_tokens": 262
+    }
+  },
+  "transport_error": null
+}

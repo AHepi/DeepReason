@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Aging as entropy growth in the design intent distribution\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.688
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-735",
+    "object": "chat.completion",
+    "created": 1787932558,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Every locally correct modification is a Bayesian update on the implicit design intent distribution, expanding its entropy as stakeholders optimize for divergent local fitness functions. This entropy growth is irreparable by any single subsequent change, because the accumulated uncertainty reflects a loss of mutual information between the system and any single coherent intent. The resulting rigidity is therefore thermodynamic rather than accidental: the system resists further change not because its code has decayed, but because the design intent distribution has become maximally entropic.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 110,
+      "total_tokens": 231
+    }
+  },
+  "transport_error": null
+}

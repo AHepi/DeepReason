@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Metric-space contraction of behavioral preservation predicates\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.653
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-229",
+    "object": "chat.completion",
+    "created": 1787932538,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Under any behavioral equivalence relation used for local validation, the set of states satisfying all accumulated preservation predicates contracts monotonically in the metric space of possible implementations, so each accepted change shrinks the radius of the ball of next-acceptable modifications; over thousands of changes this contraction drives the preservation set to a set of measure zero, making every further modification require exponentially larger specification effort to prove equivalence, even though each individual step was locally correct.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 119,
+      "completion_tokens": 99,
+      "total_tokens": 218
+    }
+  },
+  "transport_error": null
+}

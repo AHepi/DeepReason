@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Type-theoretic anti-unification cost and refactor lattice depth\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.29
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-334",
+    "object": "chat.completion",
+    "created": 1787932777,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The maintainability of a software system decays as an inverse function of the depth of its refactor lattice, because each locally-correct change forces future type-theoretic anti-unifications to reconcile increasingly divergent computational contexts. As the lattice deepens, the informational cost of abstracting a common type-theoretic structure across distant components grows exponentially, making global refactors computationally intractable even when every incremental modification remains type-safe and locally sound.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 98,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

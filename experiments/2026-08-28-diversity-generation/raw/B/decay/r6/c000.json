@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Catastrophic risk premiums from unobservable state dependencies\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.656
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-425",
+    "object": "chat.completion",
+    "created": 1787932532,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate a shadow state graph of unobservable dependencies—hidden couplings between modules via shared timing, resource contention, implicit ordering, and environmental assumptions—that no individual change can detect because each modification is validated only against observable behavior within a local test envelope. As this shadow graph grows denser, the probability that any given change triggers a catastrophic failure in an untested execution path increases superlinearly, forcing developers to impose ever-larger change-aversion premiums (slower review, broader regression scopes, defensive over-engineering) to compensate for risks they cannot measure or see. The system's changeability degrades not because any single change was wrong, but because the unobservable dependency graph creates an epistemic blind spot where the cost of certifying safety grows faster than the cost of making the change itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 172,
+      "total_tokens": 294
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Domain knowledge tacitly decays as maintainer turnover severs undocumented epistemic links\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.833
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-144",
+    "object": "chat.completion",
+    "created": 1787933240,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems accumulate a substrate of undocumented design constraints—invariants, rejected alternatives, and environmental assumptions—that were once tacitly held by departed maintainers. Each locally correct change that ignores this invisible substrate appears sound in review and testing but incrementally severs the epistemic links between the code's current behavior and the original problem-domain logic it encodes. The system becomes harder to change not because the code degrades, but because the surviving maintainers must reverse-engineer domain rationale that was never written down, making every modification a gamble against unknown constraints they cannot even name.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 128,
+      "total_tokens": 258
+    }
+  },
+  "transport_error": null
+}

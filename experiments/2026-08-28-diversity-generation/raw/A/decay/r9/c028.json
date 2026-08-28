@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.169
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-630",
+    "object": "chat.completion",
+    "created": 1787933169,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems degrade not through individual errors, but through the systematic deletion of failed experiments: because negative information (what was tried and rejected) is never recorded in the codebase, each new developer must re-discover the same dead ends, forcing the system to carry increasingly heavy guardrails against exploratory changes. The accumulating absence of this negative knowledge manifests as ossification, where the cost of ruling out already-disproven alternatives exceeds the cost of implementing the change itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 106,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

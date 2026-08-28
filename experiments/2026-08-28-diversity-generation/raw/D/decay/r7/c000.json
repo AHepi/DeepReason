@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated constraint satisfaction complexity\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 44.244
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-755",
+    "object": "chat.completion",
+    "created": 1787932893,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change adds an implicit constraint that future changes must satisfy. The difficulty of a new change grows as the product of these accumulated constraints, not their sum, because the developer must find a solution that simultaneously satisfies all of them.\", \"probability\": 0.085}, {\"conjecture\": \"Long-running systems accumulate a constraint graph where each new feature edges the system closer to a phase transition. The observed difficulty spike is not gradual but a critical phenomenon: once the constraint density exceeds a threshold, finding any valid change becomes exponentially hard, analogous to NP-hard satisfiability problems at their phase transition.\", \"probability\": 0.072}, {\"conjecture\": \"The dominant cost in evolving mature systems is not understanding what the code does, but discovering the set of invariant constraints a proposed change would violate. This 'constraint discovery cost' grows monotonically because each correct change adds constraints that are never explicitly documented, forcing future developers to re-derive them via test failures and production incidents.\", \"probability\": 0.091}, {\"conjecture\": \"Software decay is the accumulation of non-local coupling constraints. Each locally correct change optimizes for local coherence, inadvertently creating a constraint that links two previously independent modules. The rate of hardening is proportional to the growth of this non-local coupling graph, making changes require global reasoning to satisfy constraints the original modules never intended.\", \"probability\": 0.068}, {\"conjecture\": \"Because every change is made to satisfy the constraints existing at time t, the system converges to a state that is a local minimum in the constraint satisfaction landscape. The system becomes harder to change because every new requirement requires escaping this increasingly deep minimum, demanding simultaneous coordinated changes across modules that each individually would violate existing constraints.\", \"probability\": 0.079}, {\"conjecture\": \"Each reviewed and tested change encodes assumptions about permissible future states, effectively shrinking the volume of the system's valid configuration space. The difficulty of making a change grows as the inverse of this remaining volume: as the space of valid solutions becomes smaller and more topologically fragmented, finding a path to implement a new feature requires increasingly radical restructuring.\", \"probability\": 0.063}, {\"conjecture\": \"Code review and testing ensure local correctness but are structurally blind to the accretion of satisfiable but mutually constraining invariants. The system becomes harder to change because each new invariant reduces the dimensionality of the solution space for future modifications, eventually pushing the system into a rigid state where the only satisfiable changes are trivial ones.\", \"probability\": 0.088}, {\"conjecture\": \"The constraint satisfaction complexity grows because each change, while correct, adds constraints that are semantically entangled rather than independent. The cost of change scales with the entanglement entropy of the constraint network: as modules become mutually constrained through shared history, any modification requires updating the entire entangled subsystem to maintain global consistency.\", \"probability\": 0.057}, {\"conjecture\": \"Software systems harden because locally correct changes optimize the system into a highly constrained region of the design space while simultaneously reducing the gradient signal for how to satisfy new constraints. Change difficulty increases because the system loses the 'slack' or redundant degrees of freedom that early-stage systems use to absorb new requirements without violating existing constraints.\", \"probability\": 0.094}, {\"conjecture\": \"Mature systems become hard to change because they accumulate a hierarchy of satisfiable constraints where higher-level constraints emerge from the interaction of lower-level ones. These emergent constraints are invisible to local review and testing, but any change that violates them causes systemic failure, forcing developers to reason about the entire emergent hierarchy before making any modification.\", \"probability\": 0.081}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 779,
+      "total_tokens": 963
+    }
+  },
+  "transport_error": null
+}

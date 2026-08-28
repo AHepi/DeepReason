@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ecological niche exhaustion in saturated extension surfaces\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.207
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-210",
+    "object": "chat.completion",
+    "created": 1787932660,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally correct change consumes an available extension point (hook, interface, configuration path), and since the number of structurally distinct extension surfaces is finite, the system eventually reaches a saturation point where no remaining surface can accommodate a new change without requiring architectural refactoring.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade because early changes preferentially colonize the lowest-cost extension niches (e.g., simple parameter additions), leaving later changes with no option but to invade higher-cost, more structurally invasive niches, making every subsequent change objectively harder.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The increasing difficulty of change is driven by competitive exclusion between features: once an extension surface is occupied by one feature, it becomes unavailable to others, forcing new features into increasingly contrived and coupled niches that raise the cost of every future modification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software rot is the progressive exhaustion of semantic degrees of freedom: each locally correct change narrows the range of future changes that remain consistent with the system's accumulated invariants, until the only remaining niches are those that require violating an existing implicit contract.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"As an extension surface saturates, the probability that a new change will conflict with an existing one increases superlinearly, because each new extension reduces the dimensionality of the remaining unoccupied niche space, causing the cost of change to grow combinatorially rather than additively.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every reviewed and tested change occupies an extension niche and introduces a coupling edge between that niche and the core system, so the cost of future change is proportional to the density of occupied niches, because each new change must navigate an increasingly dense web of cross-niche dependencies.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Changes become harder because extension surfaces have a finite carrying capacity determined by their original design, and once the density of extensions exceeds that capacity, each additional change forces tradeoffs that propagate costs across the entire surface, analogous to overpopulation in an ecosystem.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems follows a pattern of niche succession: early changes fill simple, well-adapted extension points, but as these are exhausted, later changes are forced into marginal niches that are structurally fragile, making each change more likely to destabilize the system.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"As extension surfaces become saturated, the system's evolvability declines because each occupied niche constrains the range of possible future mutations, analogous to how a mature ecosystem resists invasion by new species due to the closure of available ecological roles.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The rigidity of long-running systems emerges from the closure of the extension surface's affordance space: each locally correct change consumes an affordance (a way the system can be extended), and once all low-friction affordances are exhausted, further changes require creating entirely new affordances, which is architecturally expensive.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 747,
+      "total_tokens": 934
+    }
+  },
+  "transport_error": null
+}

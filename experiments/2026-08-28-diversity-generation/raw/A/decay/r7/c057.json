@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.597
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-346",
+    "object": "chat.completion",
+    "created": 1787932739,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running systems accumulate hidden cross-dependencies through the repeated application of locally-correct changes, creating a shadow coupling layer invisible to individual code reviews and tests. Because each change optimizes for immediate correctness rather than global structural integrity, the system undergoes entropy ratchet: each locally-rational modification permanently constrains the future search space of possible changes, making subsequent modifications progressively more expensive. This is not technical debt accumulated through shortcuts, but an emergent property of decentralized optimization—no single actor can perceive or reverse the coupling, because it exists only in the aggregate topology of thousands of independent decisions.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 130,
+      "total_tokens": 232
+    }
+  },
+  "transport_error": null
+}

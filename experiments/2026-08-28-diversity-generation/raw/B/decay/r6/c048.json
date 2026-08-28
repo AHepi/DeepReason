@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Type-theoretic proof-carrying debt from local decidable checks\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.742
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-969",
+    "object": "chat.completion",
+    "created": 1787932581,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally decidable, type-correct change carries an implicit proof only against a local specification fragment, and the ambient global invariant is never reconstructed; therefore the set of admissible next edits shrinks monotonically because each accepted proof fixes free variables in the shared type context without discharging the obligations they impose on unseen modules. The system's editability degrades as an accumulation of undischarged global proof obligations that are invisible to the local checker, making the gap between local type-correctness and global invariant-preservation grow without bound.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 116,
+      "total_tokens": 242
+    }
+  },
+  "transport_error": null
+}

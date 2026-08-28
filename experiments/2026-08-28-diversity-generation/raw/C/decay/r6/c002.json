@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.341
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-527",
+    "object": "chat.completion",
+    "created": 1787932610,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change optimizes for immediate problem-solving, creating a random walk through design space that inevitably drifts away from any coherent global architecture, making future changes require increasingly complex reconciliations of accidental structural contradictions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate implicit, untested dependencies between distant modules—connections that no individual change creates but that emerge from the intersection of many changes, so that eventually any modification risks triggering failures in seemingly unrelated parts of the system.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The set of test cases grows to encode the system's current behavior rather than its intended behavior, creating a regression straitjacket where every change requires updating tests that have become prescriptive rather than descriptive, multiplying the cost of even simple modifications.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software difficulty compounds because each change adds at least one new concept or abstraction to the system, and the cognitive cost of understanding the system grows quadratically with the number of concepts due to pairwise interaction possibilities, exceeding any individual developer's working memory capacity.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every locally correct change introduces at least one new assumption about the environment, inputs, or internal state; these assumptions are individually invisible but collectively form a dense web of unspoken preconditions that must be respected by all future changes, making the system progressively more constrained.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The knowledge required to safely modify the system is originally distributed across multiple developers' heads; as turnover occurs, this tacit knowledge is lost faster than it can be encoded in documentation, so the fraction of changes that inadvertently violate unwritten design constraints grows monotonically over time.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Each change optimizes local code quality metrics (coupling, cohesion, test coverage) but these local optimizations collectively produce a globally suboptimal structure because they are made without knowledge of future requirements, creating a form of greedy algorithm failure where the system gets trapped in a local minimum far from any good global architecture.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Backward compatibility constraints accumulate monotonically because each change adds at least one consumer or interface that cannot be broken, so the dimensionality of the constraint space grows linearly while the volume of valid solutions shrinks super-linearly, eventually making most desired changes infeasible without violating some existing contract.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because error handling and edge-case logic accumulate in a way that cannot be safely simplified—each special case was added to solve a real problem, but their interactions create a combinatorial explosion of states that must be preserved and reasoned about in every subsequent change.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The system's domain model fragments over time as each change introduces slightly different terminology and abstractions for the same underlying concepts, creating semantic drift where developers must mentally translate between multiple incompatible models of the same business domain, increasing the cognitive cost of every change.\",\n      \"probability\": 0.04\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 741,
+      "total_tokens": 916
+    }
+  },
+  "transport_error": null
+}

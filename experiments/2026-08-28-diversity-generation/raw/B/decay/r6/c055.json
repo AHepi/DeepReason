@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic obsolescence of test suites as specification fossils\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.993
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-643",
+    "object": "chat.completion",
+    "created": 1787932585,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each test encodes a single bit of a system's original specification, so as the implicit specification evolves, the test suite becomes an increasingly stale fossil that constrains the implementer's search space away from the true target distribution. The gap between the information needed to validate a correct modern change and the information actually captured by legacy tests grows monotonically, meaning the cost of any new change includes the rising entropy of reconstructing the unstated current specification from a fossilized one.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 103,
+      "total_tokens": 228
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.375
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-619",
+    "object": "chat.completion",
+    "created": 1787932929,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate a deep network of non-obvious, untested cross-dependencies (both semantic and architectural) that act as hidden load-bearing structures, meaning each locally correct change subtly shifts the system's equilibrium and increases the total interconnectedness of the codebase. This rising interconnectedness causes the cognitive cost of a change to grow quadratically with system size, because verifying correctness requires reasoning about an expanding set of implicit interactions that are invisible to both local tests and human reviewers.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 106,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

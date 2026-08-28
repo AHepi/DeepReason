@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Implicit invariant networks expand combinatorially while explicit contracts remain static\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.798
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-251",
+    "object": "chat.completion",
+    "created": 1787933215,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change implicitly depends on a subset of the system's current observable behavior, creating an unstated invariant binding that change to those observations; while explicit contracts stay fixed, the number of these implicit bindings grows combinatorially with each change, so the fraction of future modifications that would violate some prior implicit binding grows exponentially until nearly all modifications appear risky.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 79,
+      "total_tokens": 203
+    }
+  },
+  "transport_error": null
+}

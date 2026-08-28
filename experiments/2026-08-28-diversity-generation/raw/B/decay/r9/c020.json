@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Dependency entanglement creates irreversible architectural decisions via bounded-rationality local commits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.525
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-495",
+    "object": "chat.completion",
+    "created": 1787933220,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-correct commit optimizes for immediate functional requirements under bounded rationality, inadvertently creating latent cross-module dependencies that are invisible to current tests but constrain future modification options. Once a dependency entanglement is merged, the cost of disentangling it exceeds the cost of any single feature change, so subsequent commits route around it rather than resolve it—compounding the constraint. This produces a monotonic increase in effective coupling: the system's state space of architecturally reachable futures shrinks with every commit, even though no individual commit was wrong.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 117,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

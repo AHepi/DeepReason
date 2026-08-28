@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: shifting implicit invariants that testing never encodes but changes silently violate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.826
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-66",
+    "object": "chat.completion",
+    "created": 1787933049,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Long-running software decays not through explicit invariant violations, but through the silent accumulation of what I call 'test-unguarded load invariants'—implicit assumptions about the statistical distribution, rate, and interleaving of inputs that tests encode as fixed fixtures rather than as properties to be preserved across changes. Each locally correct modification subtly shifts these distributions (e.g., a caching layer changes temporal locality, a batching change alters request ordering), and because no test asserts 'the distribution of inputs to module X remains within envelope E,' the system's correctness becomes path-dependent on historical load patterns that no longer hold. The system grows harder to change because the true invariant set—the set of distributional assumptions each module depends on—drifts further from the tested invariant set with every release, until any change risks violating an invariant that was never named, never tested, and only ever held by accident.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 190,
+      "total_tokens": 315
+    }
+  },
+  "transport_error": null
+}

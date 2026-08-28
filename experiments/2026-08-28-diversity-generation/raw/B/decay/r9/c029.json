@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Dependency entanglement creates irreversible architectural decisions via bounded-rationality local commits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.55
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-988",
+    "object": "chat.completion",
+    "created": 1787933234,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct commit, made under bounded rationality, optimizes for immediate feasibility rather than global architectural integrity, causing dependency entanglement to accumulate as a thermodynamic ratchet where reversing any single coupling requires simultaneously refactoring mutually-adapted neighbors—making the cost of architectural correction grow superlinearly with entanglement depth until the system reaches a frozen state where only additive, peripheral changes remain economically rational.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 95,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Game-theoretic misalignment between local refactor incentives and global architecture\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.415
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-673",
+    "object": "chat.completion",
+    "created": 1787933317,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Long-running software degrades because refactoring is a voluntary contribution to a public good (the global architecture), while feature delivery is a private good (credited to the individual developer). In any mixed-motive game where developers optimize for career capital, the Nash equilibrium converges to zero proactive refactoring, leaving architecture to rot despite every local change being correct.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Each locally correct change extracts a tiny externality from future developers by slightly increasing the global search cost of understanding the system. Because these externalities are unpriced—no developer pays for the cognitive load they impose on others—the system follows a tragedy of the commons trajectory where total technical debt grows monotonically even under perfect code review.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Code review acts as a Nash equilibrium enforcement mechanism for local code quality, but because reviewers only see diffs and not the global call graph, the equilibrium enforces a strategy profile where every player minimizes local risk by adding new interfaces rather than modifying existing ones, causing architectural fragmentation to increase as a strict consequence of rational play under incomplete information.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"The architectural decay rate is governed by a repeated game where the discount factor is the inverse of developer turnover. When turnover is high, the effective discount rate makes any investment in global architecture a strictly dominated strategy, because the developer who pays the cost of refactoring will not be present to collect the future benefit. The system therefore converges to the defect-defect equilibrium of a finitely repeated prisoner's dilemma.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Software architecture degrades because the optimal local strategy under uncertainty is to add indirection rather than remove it, creating an asymmetric game where abstraction creation has positive expected payoff for the individual but abstraction deletion has negative expected payoff (risk of regression vs. invisible simplification benefit). This asymmetry means that even with identical skill levels and good intentions, the system accumulates indirection monotonically.\",\n      \"probability\": 0.047\n    },\n    {\n      \"conjecture\": \"Test suites create a game-theoretic lock-in effect: once a test covers a specific interface contract, modifying that contract becomes costly for the local developer while the benefit of a better global architecture is distributed across all future developers. This transforms every architectural decision into a coordination game with high switching costs, trapping the system in Pareto-inferior equilibria that no individual developer can profitably deviate from.\",\n      \"probability\": 0.041\n    },\n    {\n      \"conjecture\": \"The fundamental issue is a temporal principal-agent problem: developers are agents of their current sprint (short-term principal) but architecture is an asset of the organization (long-term principal). Because monitoring is instantaneous (CI/CD, code review) but value realization is delayed, the only Nash equilibrium sustainable under standard monitoring mechanisms is one where agents optimize for the observable short-term signal, and architectural quality is an unobservable that receives zero investment.\",\n      \"probability\": 0.038\n    },\n    {\n      \"conjecture\": \"Architecture rots because each module boundary creates a sub-game where the module owner's dominant strategy is to internalize complexity within their module rather than negotiate a cross-module simplification. Cross-module refactoring is a cooperative game with no enforceable binding agreements, so rational players fall back to the non-cooperative equilibrium of local encapsulation, causing the system to accumulate redundant abstractions at every boundary.\",\n      \"probability\": 0.035\n    },\n    {\n      \"conjecture\": \"Under bounded rationality, each developer faces a multi-armed bandit where 'extend existing pattern' has known low cost and 'redesign for global coherence' has unknown high cost with uncertain payoff. Because the exploration-exploitation tradeoff is evaluated per-individual rather than per-organization, the system-wide strategy converges to pure exploitation of existing (degrading) patterns, making architectural stagnation the mathematically optimal response to individual uncertainty.\",\n      \"probability\": 0.029\n    },\n    {\n      \"conjecture\": \"The degradation is driven by an information cascade: early architectural decisions signal to later developers that the existing structure is intentional and load-bearing, even when it was incidental. Each developer rationally updates their prior toward 'do not touch the architecture' based on the observation that no previous developer touched it, creating a herding equilibrium where the system's design freezes at its first local optimum regardless of its global quality.\",\n      \"probability\": 0.024\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 1002,
+      "total_tokens": 1194
+    }
+  },
+  "transport_error": null
+}

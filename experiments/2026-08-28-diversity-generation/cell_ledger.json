@@ -647,5 +647,400 @@
     "directions": null,
     "calls": 60,
     "wall_s": 56.5
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 14836,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Catastrophic risk premiums from unobservable state dependencies",
+      "Metric-space contraction of behavioral preservation predicates",
+      "Aging as entropy growth in the design intent distribution",
+      "Ergodic divergence between developer mental models and commit trajectories",
+      "Type-theoretic proof-carrying debt from local decidable checks",
+      "Information-theoretic obsolescence of test suites as specification fossils"
+    ],
+    "calls": 61,
+    "wall_s": 68.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 5500,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 56.3
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 6150,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Thermodynamic entropy accumulation in irreversible transformation histories",
+      "Graph-theoretic distance decay between frequently co-modified dependency clusters",
+      "Ecological niche exhaustion in saturated extension surfaces",
+      "Information-theoretic epistemic opacity of emergent combinatorial state",
+      "Topological deformation of invariant manifolds under local diffeomorphisms",
+      "Cognitive search-space expansion outpacing developer working memory"
+    ],
+    "calls": 7,
+    "wall_s": 35.7
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 12561,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 57.9
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 15111,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Thermodynamic information-theoretic entropy growth in edit-distance topology",
+      "Constraint satisfaction problem hardness from accumulated cross-module invariants",
+      "Epistemic opacity of emergent execution paths under causal erasure",
+      "Type-theoretic anti-unification cost and refactor lattice depth",
+      "Network-theoretic loss of structural holes in call graph evolution",
+      "Statistical learning model drift in defect-prediction latent spaces"
+    ],
+    "calls": 61,
+    "wall_s": 70.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 5709,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 35.7
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 6244,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Accumulated constraint satisfaction complexity",
+      "Loss of test-suite epistemic coverage",
+      "Semantic drift via interface translation chains",
+      "Coupling entropy from dependency graph growth",
+      "Implicit invariants escaping executable representation",
+      "Cognitive load from unbounded contextual prerequisites"
+    ],
+    "calls": 7,
+    "wall_s": 46.2
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 12568,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 64.4
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 15290,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "information-theoretic growth of hidden coupling entropy across module boundaries",
+      "fitness landscape ruggedification causing valid local moves to reduce global adaptability",
+      "semantic drift between domain models and code via accreted abstraction layers",
+      "irreducible architectural decisions as path-dependent constraints on future state transitions",
+      "accumulation of dead code paths that obscure the system's reachable behavioral envelope",
+      "shifting implicit invariants that testing never encodes but changes silently violate"
+    ],
+    "calls": 61,
+    "wall_s": 91.8
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 5520,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 38.3
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 6345,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "information-theoretic decay of API boundary signal-to-noise",
+      "constraint accumulation as a monotonic increase in implicit invariants",
+      "state space fragmentation where test coverage becomes a sampling problem over exponentially divergent execution paths",
+      "entropic growth of dependency coupling measured by graph-theoretic rigidity",
+      "epistemic erosion of original design intent via developer turnover and undocumented tacit knowledge",
+      "fitness landscape flattening where local search moves yield diminishing marginal complexity reduction"
+    ],
+    "calls": 7,
+    "wall_s": 51.9
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 12720,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 61.3
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 14737,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Cyclomatic complexity accumulation outpaces test surface coverage at a measurable rate",
+      "Implicit invariant networks expand combinatorially while explicit contracts remain static",
+      "Dependency entanglement creates irreversible architectural decisions via bounded-rationality local commits",
+      "Domain knowledge tacitly decays as maintainer turnover severs undocumented epistemic links",
+      "Abstraction boundaries calcify through premature API freezing, coupling unrelated change propagation",
+      "Technical debt compounds nonlinearly as short-term patch frequency degrades underlying information entropy"
+    ],
+    "calls": 61,
+    "wall_s": 64.6
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 5515,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 25.1
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 5915,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Thermodynamic irreversibility of edit histories",
+      "Information-theoretic growth of coupling entropy",
+      "Network percolation threshold in the dependency graph",
+      "Adaptive preference drift in automated test suites",
+      "Semantic embedding drift in representation spaces",
+      "Game-theoretic misalignment between local refactor incentives and global architecture"
+    ],
+    "calls": 7,
+    "wall_s": 26.5
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 16053,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 55.7
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 18713,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Lattice perturbation search optimizing exact triple-area minimums",
+      "Algebraic number field construction via Heilbronn-type parametric families",
+      "Mixed-integer nonlinear programming with big-M area lower-bound constraints",
+      "Convex geometry / affine-regular polygon stacking with explicit overlap proofs",
+      "Continuous optimization with log-barrier over all 286 triangle determinants",
+      "Simulated annealing on bounded square with combinatorial local moves"
+    ],
+    "calls": 61,
+    "wall_s": 57.4
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 5735,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 21.8
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 6423,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Lattice-based integer grid point configurations",
+      "Greedy local optimization with nonlinear programming solvers",
+      "Algebraic number field constructions using roots of unity",
+      "Combinatorial design-theoretic point arrangements",
+      "Symmetry-group constrained configurations (dihedral, cyclic)",
+      "Perturbative search from known extremal packings"
+    ],
+    "calls": 7,
+    "wall_s": 24.8
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 16318,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 48.4
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 18507,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Explicit coordinate construction via affine-regular polygon perturbation",
+      "Integer-grid lattice search with post-hoc continuous relaxation",
+      "Computer-assisted nonlinear optimization with interval-arithmetic verification",
+      "Algebraic number field construction using optimal circle packing duals",
+      "Combinatorial design theory via balanced incomplete block arrangements",
+      "Delaunay-triangulation-driven sequential point insertion maximizing local gaps"
+    ],
+    "calls": 61,
+    "wall_s": 61.4
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 5843,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 17.5
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 6801,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "lattice-perturbation search over near-rational grids",
+      "simulated-annealing with area-gap objective",
+      "algebraic construction from finite projective planes",
+      "convex-geometry lower bound via Heilbronn-type theorems",
+      "exhaustive branch-and-bound with interval arithmetic on triangulations",
+      "genetic algorithm with geometric crossover and Hall-geometry mutation"
+    ],
+    "calls": 7,
+    "wall_s": 25.6
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 16235,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 58.5
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 18053,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Heilbronn-style analytic number theory with Kronecker sequences and discrepancy bounds",
+      "Continuous optimization via gradient ascent on the min-area objective with log-sum-exp smoothing",
+      "Integer-programming or SAT encoding that exhaustively rules out configurations above a threshold area",
+      "Algebraic lattice constructions using sublattices of Z^2 scaled into the unit square",
+      "Combinatorial hypergraph discrepancy theory framing triples as constraints to balance",
+      "Randomized search with simulated annealing and local coordinate perturbations seeded from known best solutions"
+    ],
+    "calls": 61,
+    "wall_s": 120.2
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 6115,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 18.0
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 6687,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturbing the integer-grid 5x5 candidate by continuous optimization over pairwise area constraints",
+      "linear-programming feasibility search for point placements with a prescribed minimum-area threshold",
+      "algebraic construction from finite-projective-plane incidence geometry projected into the square",
+      "probabilistic simulated-annealing maximizing the 286th-order area statistic directly",
+      "number-theoretic lattice cosets with provable minimum-determinant bounds via Minkowski",
+      "constructive lower-bound argument giving an explicit configuration without proving optimality"
+    ],
+    "calls": 7,
+    "wall_s": 26.1
   }
 ]

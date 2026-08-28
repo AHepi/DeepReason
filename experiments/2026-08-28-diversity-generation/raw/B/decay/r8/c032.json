@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: irreducible architectural decisions as path-dependent constraints on future state transitions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.945
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-314",
+    "object": "chat.completion",
+    "created": 1787933008,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The state space of a software architecture is a directed graph where each locally-correct change deletes more outgoing edges than it creates, because any working integration encodes implicit assumptions about adjacent components that cannot be recovered once the change is committed. This produces a monotonic narrowing of the reachable design space that is invisible at the level of individual code review, meaning architectural lock-in is an entropic property of the transition graph itself rather than a failure of engineering discipline.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 102,
+      "total_tokens": 226
+    }
+  },
+  "transport_error": null
+}

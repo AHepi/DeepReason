@@ -48,10 +48,13 @@ def cells():
                 yield arm, q, rep
 
 
-def extract(arm, q, rep):
+def extract(arm, q, rep, root="raw"):
     """-> (candidates, m3) for one cell.  candidates are (id, text) pairs in
-    candidate-id order; m3 counts every registered failure code."""
-    d = HERE / "raw" / arm / q / f"r{rep}"
+    candidate-id order; m3 counts every registered failure code.
+
+    `root` selects the raw record: leg 1 writes "raw", leg 2 "raw_leg2".  The
+    extraction is identical for both -- only the location differs."""
+    d = HERE / root / arm / q / f"r{rep}"
     m3 = {"calls": 0, "parse_failure": 0, "empty_candidate": 0,
           "off_format_count": 0, "off_format_probability": 0,
           "transport_error": 0, "planning_failed": 0, "tokens": 0}

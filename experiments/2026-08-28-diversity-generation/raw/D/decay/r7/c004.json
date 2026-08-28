@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Implicit invariants escaping executable representation\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 17.283
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-818",
+    "object": "chat.completion",
+    "created": 1787932866,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Long-running systems accumulate 'spectator invariants' — properties that no module asserts but that downstream components silently depend on. These invariants emerge from the interaction of individually correct changes but are never represented in any executable check, so they persist invisibly until a future change violates them.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every change that passes review but doesn't add an invariant assertion for the property it relied on creates a latent invariant debt. The debt compounds because each subsequent change assumes the prior behavior was intentional, building deeper dependency chains on unrepresented constraints.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The test suite of a long-running system encodes only the invariants that were known to be broken at some past point. Invariants that have never been violated — and thus never been tested — become load-bearing for new features while remaining entirely absent from executable representation.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Refactorings that preserve observable behavior while changing internal structure sever the causal link between a constraint and the code that enforced it. Post-refactoring, the constraint holds only by accident of the new structure, but no assertion marks it as intentional, making it invisible to future modification.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Performance invariants — timing, ordering, resource limits — are the first class of invariant to escape executable representation because they are framed as non-functional. Yet long-running systems develop load-bearing dependencies on these emergent temporal properties, which no unit test or type system captures.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The fraction of a system's true invariants that have executable representation follows a power-law decay with system age. This is because each change has a constant probability of introducing an implicit invariant without encoding it, while the half-life of existing assertions decreases as surrounding code evolves away from the context that made them meaningful.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"In long-running systems, the dominant source of implicit invariants is cross-module analogical reasoning — developers copy a pattern from one location assuming it carries the same constraints, but the constraints were enforced by context that doesn't transfer. The new location inherits the invariant structurally but not representationally.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Changes that fix a bug introduce the fix as a local patch but encode the bug's invariant as a global constraint only at the fix site. Other modules that were coincidentally compatible with the buggy behavior now implicitly depend on the fix's side effects, creating an invariant that is represented nowhere except in the diff history.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Type systems and contracts capture compositional invariants — how parts combine — but miss behavioral invariants that emerge from the history of interactions in a long-running process. State accumulated through valid sequences of operations creates constraints that are real but unrepresentable in any static or entry-point-based specification.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems scales with the ratio of emergent invariants to encoded invariants, not with lines of code or cyclomatic complexity. This ratio increases monotonically because emergent invariants accumulate with every interaction while encoded invariants accumulate only when a developer explicitly writes an assertion.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 776,
+      "total_tokens": 961
+    }
+  },
+  "transport_error": null
+}

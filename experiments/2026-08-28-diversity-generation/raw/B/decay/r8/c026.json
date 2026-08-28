@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: semantic drift between domain models and code via accreted abstraction layers\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.084
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-187",
+    "object": "chat.completion",
+    "created": 1787933003,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change accretes a new abstraction layer that partially overlaps semantically with the domain model it wraps, creating an implicit many-to-one mapping between code concepts and domain concepts that no single reviewer can detect. Over time, the original domain model becomes unreachable through the accreted layers, so any new change must be expressed in the vocabulary of the nearest abstraction rather than the domain itself, forcing developers to reverse-engineer semantic intent through increasingly lossy translations. The system becomes hard to change not because any layer is wrong, but because the semantic distance between what the business means and what the code expresses grows monotonically with each accepted change, until the cost of bridging that distance exceeds the cost of the change itself.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 158,
+      "total_tokens": 283
+    }
+  },
+  "transport_error": null
+}

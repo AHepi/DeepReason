@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 56.342
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-808",
+    "object": "chat.completion",
+    "created": 1787932647,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software rot is driven by the gradual accumulation of implicit assumptions. Each locally correct change encodes assumptions about existing behavior that are never explicitly documented, and future changes inadvertently violate these unstated invariants, causing complexity to grow superlinearly.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems stems from the divergence between the evolved mental model of the system and its actual execution state. Reviews and tests enforce consistency with the code, not with the developers' understanding, so the conceptual model drifts until changes become unpredictable.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Technical debt accumulates because each change optimizes for local immediate cost rather than global long-term cost. Even reviewed changes are shaped by economic pressure to minimize current effort, so the system's modularity degrades as a byproduct of thousands of locally optimal but globally suboptimal decisions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The entropy of a software system's dependency graph increases monotonically because changes are made without full knowledge of the graph. Each locally correct modification creates new implicit dependencies, and the system becomes harder to change because the effective coupling between components grows beyond what any individual can reason about.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their test suites become progressively weaker at detecting the actual failure modes that matter. Tests are written for known behaviors, but as the system evolves, the space of important untested behaviors grows, making changes feel safe when they are not.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The problem is that every locally correct change adds a small amount of accidental complexity that is never subsequently removed. Over time, this layer of incidental detail obscures the essential problem the code solves, so each new change must navigate not only the real complexity but also the accumulated noise.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running software becomes harder to change because the cost of verification grows with system size, not change size. Each change requires confirming it doesn't break existing behavior, and as the behavior surface grows, the verification cost eventually dominates the cost of writing the change itself.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The degradation is caused by the loss of problem-domain alignment. Each change is validated against tests and reviews but not against the original problem statement, so the code drifts toward accidental features and away from a clean model of the problem, making future changes require increasingly convoluted reasoning.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Systems become harder to change because of knowledge decay: the original rationale for design decisions is lost, and subsequent changes are made without understanding the constraints that motivated them. Each locally correct change is built on an incomplete model of why the code is the way it is, so changes progressively erode the system's intentional structure.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The root cause is that software systems accumulate exceptions faster than they accumulate rules. Each change introduces special cases to handle new requirements, and these exceptions interact combinatorially, so the system becomes harder to change because the number of interaction cases that must be considered grows exponentially.\",\n      \"probability\": 0.07\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 758,
+      "total_tokens": 933
+    }
+  },
+  "transport_error": null
+}

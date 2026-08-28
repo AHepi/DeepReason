@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic obsolescence of test suites as specification fossils\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.76
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-394",
+    "object": "chat.completion",
+    "created": 1787932578,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A test suite is a lossy encoding of the system's specification at the time each test was written; as the system evolves, individual tests are never rewritten wholesale, so the suite accumulates fossilized constraints from dead specifications that constrain future changes without encoding current intent. The mutual information between the test suite and the true current specification decays monotonically with each modification, because each change patches the suite locally rather than re-deriving it from the updated specification, creating an information gap that manifests as architectural rigidity.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 112,
+      "total_tokens": 237
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint satisfaction problem hardness from accumulated cross-module invariants\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.406
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-470",
+    "object": "chat.completion",
+    "created": 1787932758,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a software system evolves, each locally correct change adds implicit cross-module invariants to a hidden constraint graph whose vertices are modules and whose edges are semantic dependencies. The cost of a new change is proportional to the hardness of finding a satisfying assignment for this growing CSP, which transitions from tractable to NP-hard as the constraint graph density crosses a percolation threshold (~one inter-module invariant per module pair). Therefore, engineering slowdown is not cultural debt but a combinatorial phase transition: beyond a critical ratio of accumulated invariants to available module autonomy, verifying that a modification satisfies all implicit constraints requires exponential search, making every change feel disproportionately expensive.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 122,
+      "completion_tokens": 137,
+      "total_tokens": 259
+    }
+  },
+  "transport_error": null
+}

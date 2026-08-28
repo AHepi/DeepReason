@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedification causing valid local moves to reduce global adaptability\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.765
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-49",
+    "object": "chat.completion",
+    "created": 1787932989,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems undergo ruggedification of their fitness landscape because each locally-correct change deepens inter-module coupling, transforming a smooth adaptive landscape into one dominated by local optima separated by deep fitness valleys. The system's architecture becomes locked in: valid local moves (refactoring, feature addition within existing constraints) strictly decrease the number of globally accessible high-fitness states, even as test coverage and code quality metrics remain stable or improve. Therefore, the measurable rate of architectural degradation is not proportional to code churn or defect density, but to the cumulative count of dependencies created between modules that were previously independent in the dependency graph.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 132,
+      "total_tokens": 257
+    }
+  },
+  "transport_error": null
+}

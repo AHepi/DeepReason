@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 31.991
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-317",
+    "object": "chat.completion",
+    "created": 1787932843,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software degradation is driven by microscopic architectural violations: each locally correct change slightly increases the coupling between distant modules. Over time, the system reaches a phase transition where the dependency graph becomes a small-world network, meaning any change has non-local, unpredictable consequences.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The problem is information loss regarding original design intent. Each approved change overwrites the implicit 'why' of the previous state. Eventually, the code perfectly encodes 'what' happens but contains zero retrievable information about 'why' it must be that way, making every modification a gamble against hidden invariants.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software complexity increases because of an analog of the Second Law of Thermodynamics. Each locally correct change increases the entropy of the system's total state space. Reversing this degradation requires expending work to actively refactor and decrease entropy, which local testing and review processes are not designed to enforce.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Maintainability degrades because of the conservation of complexity under abstraction. When developers hide messy implementations behind clean interfaces, the complexity doesn't disappear; it is pushed into the environment. Over time, the system's interfaces become pristine but the environment required to orchestrate them becomes an incomprehensible tangled web.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The primary mechanism of decay is interface accretion. Every locally correct change either extends an existing interface or adds a new one. Because deleting interfaces is risky and rarely rewarded, the API surface area grows monotonically, eventually reaching a combinatorial explosion where valid states and interactions exceed human comprehension.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Codebases become harder to change due to the buildup of cross-cutting concerns that lack explicit representation. Features like logging, caching, and error handling are added locally and correctly, but they form an invisible shadow architecture. This shadow architecture eventually dominates the system's behavior, making changes impossible to reason about via the primary domain model.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Maintenance difficulty scales with the accumulation of implicit temporal invariants. Locally correct changes often rely on the execution order of asynchronous or distributed events without enforcing it. Over time, the system's correctness becomes dependent on a fragile, undocumented web of timing assumptions that trivial modifications inadvertently break.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software aging is driven by the divergence of the mental models held by different developers. As turnover occurs, each new developer updates the code to match their slightly different mental model. Over years, the codebase becomes a palimpsest of contradictory paradigms, requiring anyone making a change to simultaneously hold all past developers' disjoint worldviews.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Test suites themselves are the primary source of rigidity. As tests accumulate to verify locally correct changes, they over-specify the system's implementation details rather than its behavior. This creates a brittle cage where any attempt to change the underlying architecture, even if functionally correct, is rejected by the CI pipeline.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems decay because of path dependence in technical debt repayment. Developers consistently choose the locally optimal refactoring path given current constraints. This creates a random walk through the design space that eventually leads the system into a local maximum of architecture, from which any large improvement is temporarily worse before it is better.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 813,
+      "total_tokens": 988
+    }
+  },
+  "transport_error": null
+}

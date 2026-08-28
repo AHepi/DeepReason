@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity accumulation outpaces test surface coverage at a measurable rate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.48
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-579",
+    "object": "chat.completion",
+    "created": 1787933209,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In any long-lived software system, cyclomatic complexity grows as a function of branching-path additions while test surface coverage grows only as a function of exercised entry points, producing a coverage deficit that increases at a rate proportional to the log of interaction paths divided by the square root of test count. This means the untested interaction space—the fraction of decision combinations never explicitly validated—expands monotonically even when line coverage remains at 100%, because each new branch multiplies the Cartesian product of reachable states faster than tests can enumerate them. The resulting 'change difficulty' is therefore not social or organizational decay but a measurable geometric divergence: the ratio of cyclomatic complexity to test surface coverage predicts the probability that a locally correct change will trigger an untested interaction, and this ratio worsens at a quantifiable, accelerating rate in every system that adds features faster than it adds combinatorial tests.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 185,
+      "total_tokens": 310
+    }
+  },
+  "transport_error": null
+}

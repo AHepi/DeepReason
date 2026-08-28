@@ -235,9 +235,9 @@ def directions_from(record):
     return dirs[:N_DIRECTIONS] if len(dirs) >= N_DIRECTIONS else None
 
 
-def run_cell(session, key, arm, qkey, rep):
+def run_cell(session, key, arm, qkey, rep, root="raw"):
     """One arm x question x repetition cell.  Returns its ledger row."""
-    cell_dir = HERE / "raw" / arm / qkey / f"r{rep}"
+    cell_dir = HERE / root / arm / qkey / f"r{rep}"
     question = QUESTIONS[qkey]
     spent = 0
     truncated = False
@@ -305,11 +305,18 @@ def main():
     ap.add_argument("--arms", default=",".join(ARMS))
     ap.add_argument("--questions", default=",".join(sorted(QUESTIONS)))
     ap.add_argument("--reps", default=",".join(str(r) for r in REPS))
+    # Leg 2 (PREREG_LEG2.md) reuses this driver unchanged and writes to its
+    # own root, so leg 1's raw record can never be appended to or mixed with
+    # leg 2's.  Generation is IDENTICAL across the legs by construction --
+    # only the metric differs -- and that is only true if one driver serves
+    # both.
+    ap.add_argument("--root", default="raw")
+    ap.add_argument("--ledger", default="cell_ledger.json")
     args = ap.parse_args()
 
     sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=HERE, capture_output=True,
                          text=True).stdout.strip()
-    log(f"=== driver start; PREREG frozen at commit {sha} ===")
+    log(f"=== driver start; root={args.root}; PREREG frozen at commit {sha} ===")
     log(f"provider: {BASE_URL} model={MODEL} temperature={TEMPERATURE} "
         f"top_p={TOP_P} reasoning_effort={REASONING_EFFORT}")
     assert_questions_frozen()
@@ -317,7 +324,7 @@ def main():
     key = api_key()
     session = requests.Session()
     ledger = []
-    ledger_path = HERE / "cell_ledger.json"
+    ledger_path = HERE / args.ledger
     if ledger_path.exists():
         ledger = json.loads(ledger_path.read_text())
     done = {(r["arm"], r["question"], r["rep"]) for r in ledger}
@@ -329,7 +336,7 @@ def main():
                     log(f"cell {arm}/{qkey}/r{rep}: already in ledger, skipping")
                     continue
                 t0 = time.time()
-                row = run_cell(session, key, arm, qkey, rep)
+                row = run_cell(session, key, arm, qkey, rep, root=args.root)
                 row["wall_s"] = round(time.time() - t0, 1)
                 ledger.append(row)
                 ledger_path.write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n")

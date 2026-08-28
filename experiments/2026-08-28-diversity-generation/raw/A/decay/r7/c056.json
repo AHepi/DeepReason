@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.543
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-892",
+    "object": "chat.completion",
+    "created": 1787932738,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"The system accumulates an implicit dependency graph between untested execution paths—paths that are never triggered by the current test suite but are nonetheless load-bearing for certain users or workflows. Each locally correct change inadvertently prunes or alters some subset of these latent paths, and because they are unobserved, the damage is invisible until it surfaces as a regression in production. Over time, the growing volume of untested latent paths makes every change riskier, because the probability of disrupting one approaches certainty.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 110,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.531
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-590",
+    "object": "chat.completion",
+    "created": 1787932705,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally correct change optimizes for immediate constraints while implicitly assuming the irrelevance of untested cross-module interactions, causing the system's true behavioral surface to diverge from its tested surface. This creates a growing shadow API of emergent coupling that is invisible to local review, meaning any future change must navigate an unobserved dependency graph that grows monotonically with each accepted patch. The system becomes harder to change not because of code complexity, but because the ratio of untested to tested interactions asymptotically approaches 1, making every modification a blind gamble against an exponentially expanding space of undocumented invariants.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 133,
+      "total_tokens": 235
+    }
+  },
+  "transport_error": null
+}

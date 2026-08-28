@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 25.751
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-787",
+    "object": "chat.completion",
+    "created": 1787932617,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems accumulate implicit cross-module invariants that are never documented, and each locally-correct change increases the surface area of these undocumented invariants, making the probability of a violation grow combinatorially with system size.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Every change that is locally correct but suboptimal becomes a constraint on future changes, and the accumulation of these local optima creates a fitness landscape where any single change to improve the system's structure has negative expected value, even though the accumulated structure is globally pathological.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing a long-running system is dominated by the growth of the 'test surface'—the set of tests that must be understood, updated, or reconciled with each change—and this surface grows superlinearly because each new feature introduces tests that couple to multiple existing features.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their state spaces grow combinatorially while the mental models of developers remain fixed-size, and the gap between the actual state space and the mental model grows monotonically, so every change increasingly relies on an incomplete model of what the system does.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Each reviewed and tested change is optimized for the problem at hand, not for future changes, so the system accumulates design decisions that are locally optimal but globally entangling, and the entanglement is invisible at review time because reviewers evaluate changes against current requirements, not future changeability.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running software is fundamentally a problem of information loss: each change destroys some information about why previous decisions were made, and the rate of information loss is proportional to the rate of change, so systems that change frequently lose their own design rationale fastest.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their dependency graphs evolve toward a scale-free topology where a small number of modules become hubs, and every change that touches a hub has high cognitive cost, so the probability that a change touches a hub grows with system size.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Every locally-correct change adds at least one implicit assumption to the system, and the cost of a future change is proportional to the number of assumptions it might violate, so the cost of changes grows linearly with the number of prior changes, even if each prior change was correct.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running software is a consequence of the observer effect: the act of measuring correctness (via tests and reviews) constrains the system to preserve its current observable behavior, and this constraint set grows with each change, progressively narrowing the space of acceptable future changes.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the people who understood the original design constraints leave, and the system itself does not encode those constraints, so each change is made with progressively less understanding of why the system is the way it is, and this knowledge decay is irreversible.\",\n      \"probability\": 0.06\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 751,
+      "total_tokens": 926
+    }
+  },
+  "transport_error": null
+}

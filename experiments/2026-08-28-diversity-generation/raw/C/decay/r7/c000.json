@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 35.669
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-738",
+    "object": "chat.completion",
+    "created": 1787932847,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change introduces implicit, undocumented constraints that future developers must not violate. The system's true specification grows with every commit, but its explicit documentation remains static, causing the gap between the developer's mental model and the system's actual invariants to widen monotonically.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Testing primarily catches functional regressions but fails to detect architectural drift. Changes that preserve behavior while violating structural invariants—like dependency direction, module boundaries, or coupling limits—accumulate silently until the architecture becomes an accidental cage that makes every new feature require a rewrite.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems optimize for local changeability by adding abstraction layers, but each layer increases the semantic distance between cause and effect. Eventually, the cognitive cost of tracing a requirement through multiple layers of indirection exceeds the cost of rewriting the system from scratch.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every change optimizes for the immediate context, creating a random walk through design space. While each step is locally correct, the random walk leads the system away from any coherent global architecture. The difficulty of change scales with the architectural entropy accumulated by this stochastic process.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Individual changes are reviewed against existing tests, but tests encode past requirements, not future needs. As the environment shifts, the test suite becomes a growing fossil record of obsolete constraints that actively resist necessary adaptation, making the system progressively harder to align with current reality.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Successful systems attract more users and use cases, causing every module to accumulate special-case branches for diverse stakeholders. The branching factor grows super-linearly because each new case interacts with existing cases, making the combinatorial space of required testing and validation explode.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Code review evaluates changes against the current state, not against future flexibility. Reviewers accept locally correct changes that hardcode assumptions about current usage, gradually replacing flexible interfaces with rigid, over-fitted implementations until the system loses the slack needed to accommodate new patterns.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the original developers leave, taking with them the tacit knowledge of why the code is structured the way it is. The code becomes harder to change not because of the code itself, but because the social system that understood it has decayed.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Software systems accumulate dependencies on external libraries, platform APIs, and tools that themselves evolve. Each individual upgrade is correct, but the transitive closure of compatibility constraints grows combinatorially, creating a dependency gridlock where no single component can be changed without cascading breakage.\",\n      \"probability\": 0.015\n    },\n    {\n      \"conjecture\": \"The interfaces between modules become load-bearing walls. Each correct change slightly tightens the coupling between modules by adding a new assumption about the other's behavior. Over time, the interfaces become so entangled that no module can be modified without triggering failures in its neighbors, making the system effectively monolithic.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 745,
+      "total_tokens": 920
+    }
+  },
+  "transport_error": null
+}

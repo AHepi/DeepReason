@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: fitness landscape ruggedification causing valid local moves to reduce global adaptability\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.862
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-494",
+    "object": "chat.completion",
+    "created": 1787932981,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate constraints through locally valid changes because each modification optimizes for an immediate requirement rather than global evolvability, effectively pushing the system into a deeper basin of attraction in a rugged fitness landscape. As these basins steepen, the set of reachable higher-fitness configurations shrinks to only those accessible via neutral or downhill moves, meaning every locally correct change further rigidifies the landscape by eliminating gradient paths to structurally distant but more adaptable architectures. The system becomes trapped not because any individual change was wrong, but because the cumulative effect of greedy local optimization has destroyed the gradient connectivity needed for future adaptation.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 131,
+      "total_tokens": 256
+    }
+  },
+  "transport_error": null
+}

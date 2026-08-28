@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.102
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-661",
+    "object": "chat.completion",
+    "created": 1787933063,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change introduces hidden cross-module constraints (temporal, ordering, or data-shape) that are never documented. The system's true coupling grows combinatorially, but the explicit architecture remains static, making future changes increasingly likely to violate an invisible constraint.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Software aging is driven by the accumulation of load-bearing special cases. Each bug fix or edge-case handling adds a permanent branch to the logic. Over time, the cost of a change is dominated by the need to verify it against an exponentially growing space of historical special cases.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Local correctness is validated against tests, but tests only encode a fraction of the requirements. Each passing change permanently narrows the system's untested behavioral surface, making future regressions more likely to occur in the unvalidated remainder.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The system becomes harder to change because of an implicit dependency inversion. Originally, high-level modules depended on low-level ones. Over time, bug fixes and patches cause low-level modules to accumulate knowledge of high-level use cases, creating a rigid bidirectional coupling that resists modification.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Cognitive load limits drive architectural decay. A developer can only hold a small context in working memory. As the system grows, developers make changes based on an increasingly incomplete mental model. These context-limited changes inevitably introduce subtle inconsistencies, accelerating future decay.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because of data model ossification. The code can be refactored, but production data reflects the old model. The cost of changing the code becomes dominated by the risk and effort of migrating the production data, which grows with scale.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each change is optimized for local implementation cost, not for minimizing architectural entropy. This is a greedy algorithm that provably converges to a local optimum. The system becomes harder to change because escaping the local optimum requires a globally coordinated refactor.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Testing and review enforce correctness but simultaneously penalize structural variation. Over time, this evolutionary pressure selects for the most conservative, incremental changes. The system loses the genetic variation needed to adapt to novel requirements, resulting in architectural senescence.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their interfaces accumulate backward compatibility constraints. Each change adds a new consumer. The cost of a future change is the sum of the costs of verifying compatibility with all existing consumers, growing linearly with system age.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"Software entropy increases because bug fixes are selected for immediate survival, not for long-term evolvability. The system evolves into a highly optimized but brittle configuration. Like a mature ecosystem, it is highly efficient but unable to adapt to environmental shifts without catastrophic collapse.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 719,
+      "total_tokens": 894
+    }
+  },
+  "transport_error": null
+}

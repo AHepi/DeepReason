@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Thermodynamic entropy accumulation in irreversible transformation histories\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.316
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-543",
+    "object": "chat.completion",
+    "created": 1787932670,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change is thermodynamically irreversible, dissipating information about prior system states. Accumulated entropy manifests as latent constraint incompatibilities, making future modifications exponentially more costly as the system loses memory of viable alternative configurations.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Irreversible transformation histories accumulate entropy in the form of non-redundant, path-dependent dependencies. Even when each change is locally optimal, the global dependency graph becomes increasingly entangled, requiring exponentially more energy to reconfigure as the number of irreversible historical interactions grows.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems lose degrees of freedom over time because each irreversible change locks in historical assumptions, increasing thermodynamic entropy in the configuration space. The system becomes harder to change because useful reconfigurations require traversing increasingly improbable low-entropy states in an expanding sea of incompatible historical artifacts.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Software entropy accumulates as unobservable historical coupling: each transformation creates latent correlations between components that are never explicitly represented. The cost of future changes grows with the Kolmogorov complexity of the transformation history, as predicting safe modifications requires reconstructing an increasingly long chain of irreversible context-dependent decisions.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every reviewed, tested change adds microstates to the system's configuration space without removing existing ones, increasing thermodynamic entropy. The probability that a new change intersects a historically accumulated constraint grows monotonically, so the system asymptotically approaches a frozen state where no modification is thermodynamically favorable.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Refactoring is thermodynamically uphill: it requires reducing entropy in the codebase by expending developer energy, but the Second Law guarantees that the dissipated context is lost. Long-running systems become harder to change because each local change increases global entropy, and no sequence of locally correct changes can reverse this without external work proportional to accumulated history length.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The software's effective temperature—its capacity for accepting changes without failure—decreases as irreversible transformations accumulate dead code, deprecated APIs, and vestigial abstractions. Like a cooling glass, the system undergoes an effective glass transition where it becomes rigid: changes that would have been trivial at high temperature become structurally impossible because the frozen historical layers cannot absorb the perturbation.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each tested change is locally correct but globally entangling because it creates new information-theoretic correlations with prior states. The system's entropy grows as the joint distribution over component behaviors becomes more complex, and the energy required to predict the consequences of a new change scales with the mutual information accumulated across the irreversible history.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Software aging is a thermodynamic ratchet: each irreversible change narrows the set of future-compatible states, and the system cannot spontaneously return to a more flexible configuration. The ratchet advances because every locally correct change eliminates degrees of freedom, so the number of accessible future states decays monotonically while the number of inaccessible historical states grows without bound.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"As irreversible changes accumulate, the system's state space fragments into isolated basins separated by energy barriers proportional to the number of historical transformations. A new change must cross these barriers to reach a valid state, but the barriers grow with the entropy of the history, so the probability of finding a thermodynamically accessible path to a desired new state decreases exponentially.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 834,
+      "total_tokens": 1021
+    }
+  },
+  "transport_error": null
+}

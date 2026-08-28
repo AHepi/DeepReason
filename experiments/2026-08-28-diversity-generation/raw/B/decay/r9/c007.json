@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity accumulation outpaces test surface coverage at a measurable rate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.848
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-690",
+    "object": "chat.completion",
+    "created": 1787933210,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The ratio of cyclomatic complexity to test surface coverage grows according to a superlinear power law as a function of cumulative commits, because each locally correct change adds at least one branch while only linearly extending existing test paths rather than generating the combinatorial path combinations the new branches create. This diverging ratio—measurable as (Σ branching decisions) / (Σ tested execution paths)—quantifies the 'harder to change' phenomenon as the gap between the state space a developer must reason about and the state space tests actually exercise. The rate of divergence can be predicted from the commit history's branch-addition rate and empirically validated by comparing the complexity-to-coverage ratio at sequential commit milestones against the number of bug-introducing commits in the same intervals.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 160,
+      "total_tokens": 285
+    }
+  },
+  "transport_error": null
+}

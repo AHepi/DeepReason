@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic obsolescence of test suites as specification fossils\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.842
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-177",
+    "object": "chat.completion",
+    "created": 1787932578,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Test suites are executable records of the specifications that existed at the time they were written. As a system evolves, its true specification drifts away from this fixed encoding, causing the mutual information between the test suite and the current operational requirements to decay monotonically. Consequently, modifications that are locally correct and pass all existing tests can still introduce semantic regressions—changes that violate the system's current, undocumented specification—because the fossilized test suite lacks the information-theoretic capacity to detect them, increasing the entropy of valid system states and making every subsequent change riskier and harder to reason about.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 127,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

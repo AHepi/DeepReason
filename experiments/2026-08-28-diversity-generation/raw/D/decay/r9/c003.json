@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Adaptive preference drift in automated test suites\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.581
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-362",
+    "object": "chat.completion",
+    "created": 1787933301,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Test suites undergo adaptive preference drift: because tests are written to validate recent changes, they gradually encode implementation-specific invariants of the current architecture. This makes the test suite increasingly reject structurally different but functionally equivalent implementations, ossifying the system.\", \"probability\": 0.09}, {\"conjecture\": \"Each locally correct change adds tests that assert on specific rather than abstract behavior, causing the suite's preference boundary to drift toward implementation details. Over time, the probability that a globally correct architectural change passes the test suite decreases monotonically.\", \"probability\": 0.08}, {\"conjecture\": \"Automated tests exhibit preference adaptation by learning to 'expect' the side effects and ordering guarantees of the current implementation. The suite becomes a learned classifier that overfits to historical implementation patterns, raising the cost of paradigmatic change.\", \"probability\": 0.07}, {\"conjecture\": \"The test suite's tolerance for implementation variance shrinks over time due to adaptive preference drift: each new test constrains the solution space to the neighborhood of the current implementation, making the set of passing implementations converge to a single point.\", \"probability\": 0.06}, {\"conjecture\": \"Because tests are added incrementally to validate specific changes, they adaptively prefer the current interface's affordances. The test suite becomes a non-functional requirement that freezes the API surface, making evolution impossible without大规模 test rewrites.\", \"probability\": 0.05}, {\"conjecture\": \"Adaptive preference drift causes the test suite to accumulate a hidden 'structural prior': tests pass not because behavior is correct but because the implementation matches the accumulated structural expectations. This prior becomes so strong that structurally novel implementations fail tests despite being functionally correct.\", \"probability\": 0.08}, {\"conjecture\": \"Each reviewed, tested change adds assertions that bind to the current implementation's accidental properties. The test suite's preference drifts adaptively toward these accidents, transforming the suite from a behavioral specification into a regression-to-implementation detector.\", \"probability\": 0.07}, {\"conjecture\": \"Test suites adaptively drift toward preferring the current decomposition of responsibilities: each change adds tests that assume current module boundaries, so refactoring that shifts boundaries fails tests even when end-to-end behavior is preserved.\", \"probability\": 0.04}, {\"conjecture\": \"Adaptive preference drift in test suites follows a ratchet: each change adds tests tied to current implementation, but no mechanism removes tests that have become over-specified. The suite's preference for the status quo increases monotonically because over-specified tests accumulate without bound.\", \"probability\": 0.09}, {\"conjecture\": \"The test suite acts as an adaptive preference learner that rewards proximity to the current implementation's behavior surface. As the behavior surface grows more complex with each change, the suite's preference for the exact current state strengthens, making the system progressively harder to restructure.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 618,
+      "total_tokens": 804
+    }
+  },
+  "transport_error": null
+}

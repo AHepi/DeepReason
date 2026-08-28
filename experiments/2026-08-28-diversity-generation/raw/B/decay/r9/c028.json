@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Dependency entanglement creates irreversible architectural decisions via bounded-rationality local commits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.238
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-545",
+    "object": "chat.completion",
+    "created": 1787933230,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Each locally-correct commit, made under bounded rationality, permanently entangles the changed component with its callers through implicit assumptions about data shape, timing, or failure semantics that were never documented because they were invisible at the local scope. These entanglements accumulate as a directed graph of unstated cross-component invariants whose count grows superlinearly with commit history, making the cost of any future change proportional to the number of invariant-entangled nodes rather than the logical size of the modification. The architectural decisions become effectively irreversible because reversing any single entanglement requires simultaneously updating all transitive dependents whose implicit invariants would be violated, exceeding the bounded rationality of any individual commit and thus requiring a coordinated multi-team refactor that no locally-rational review process will ever approve.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 167,
+      "total_tokens": 294
+    }
+  },
+  "transport_error": null
+}

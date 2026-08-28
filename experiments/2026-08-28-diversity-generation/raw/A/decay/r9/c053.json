@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.7
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-424",
+    "object": "chat.completion",
+    "created": 1787933196,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems degrade not through bad code but through the silent accumulation of valid, locally-correct dependencies that progressively eliminate viable alternative execution paths. Each reviewed change implicitly prunes the space of possible system architectures by committing to specific assumptions, so the difficulty of future change grows as the intersection of remaining viable solutions asymptotically approaches zero. This is an entropic process driven entirely by local optimization without a global coordinator, meaning no individual change is wrong yet the sequence is inexorably pathological.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 106,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

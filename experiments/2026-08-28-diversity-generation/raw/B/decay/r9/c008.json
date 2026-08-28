@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity accumulation outpaces test surface coverage at a measurable rate\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.744
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-890",
+    "object": "chat.completion",
+    "created": 1787933218,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In long-lived codebases, cyclomatic complexity grows combinatorially through branching interactions across modules, while test surface coverage grows only additively through per-path assertions—creating a divergence where the ratio of untested branch combinations to tested paths increases as a power law of commit count. This divergence rate is quantifiable as the Coverage Deficit Exponent (CDE), and when CDE exceeds 1.0, the system crosses a predictable threshold where the probability of any given change introducing an untested interaction defect exceeds 50%, explaining why locally correct, fully reviewed changes still degrade maintainability.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 127,
+      "total_tokens": 252
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cognitive search-space expansion outpacing developer working memory\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 34.253
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-703",
+    "object": "chat.completion",
+    "created": 1787932683,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change adds a non-zero number of valid future branching possibilities to the system's overall state space. The combinatorial growth of these possibilities eventually exceeds any developer's working memory capacity, making it impossible to mentally simulate the full impact of a new change, even if every prior change was individually sound.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade not because code gets worse, but because the depth of the required dependency trace for any given change grows linearly while human working memory remains fixed. Developers hit a hard ceiling when the number of upstream conditions they must hold in mind to verify a change exceeds roughly four to seven items.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The core issue is that each locally correct change implicitly adds a new invariant to the system. The number of invariants a developer must actively search and verify against grows super-linearly, eventually crossing the threshold of cognitive search capacity and causing unrecognized invariant violations.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Every correctly implemented change increases the total number of valid states the system can occupy. The difficulty of change scales with the logarithm of the state space, and system entropy reaches a point where the cognitive search space for finding the correct modification path exceeds human working memory limits.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"As a system grows, the number of independent execution contexts multiplies. A developer can only hold one context fully in working memory at a time, so the cost of a change scales with the number of context switches required to validate it across the expanding search space of the system's runtime environments.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software becomes harder to change because the ratio of implementation code to interface code shifts over time. The cognitive search space required to understand a change expands as developers must parse an increasingly dense graph of abstraction boundaries, outpacing the fixed capacity of working memory to trace side effects.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Each accepted change optimizes for a local variable, adding a dimension to the system's overall configuration space. The cognitive search space for finding a globally optimal next change expands combinatorially with these dimensions, while working memory remains constant, making local optimizations increasingly likely to cause global regressions.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The difficulty arises from the accumulating graph of non-local side effects. Every correct change adds edges to this graph, and the cognitive search required to traverse the graph from a modification point to all affected nodes eventually exceeds the developer's working memory span.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Long-lived systems accumulate implicit assumptions that are never documented because they were locally obvious at the time of the change. The cognitive search space of these hidden assumptions grows until it vastly overshadows the explicit code, making it impossible for a developer to hold the true operational constraints in working memory.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"The problem is an instance of the n-body problem in software: each change introduces a new 'mass' of logic that interacts gravitationally with all existing logic. The cognitive search space required to calculate the trajectory of a new change through this n-body system grows quadratically, rapidly overwhelming working memory.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 772,
+      "total_tokens": 961
+    }
+  },
+  "transport_error": null
+}

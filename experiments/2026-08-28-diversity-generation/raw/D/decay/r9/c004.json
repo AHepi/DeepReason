@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic embedding drift in representation spaces\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.47
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-275",
+    "object": "chat.completion",
+    "created": 1787933300,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct code change introduces a minute semantic shift in the system's embedding space, moving it further from its original attractor basin. This accumulated drift makes future modifications exponentially more likely to trigger unintended nonlinear interactions, increasing change difficulty even when each step is logically sound.\", \"probability\": 0.09}, {\"conjecture\": \"The latent representation space of a long-running system undergoes catastrophic forgetting, where old constraints are pushed out of the active embedding subspace by new features. This causes engineers to unconsciously propose changes that violate forgotten invariants, requiring increasingly complex refactorings to restore semantic coherence.\", \"probability\": 0.08}, {\"conjecture\": \"As a system evolves, its semantic embedding space becomes increasingly anisotropic, stretching along dimensions of recent changes and contracting along neglected dimensions. This distortion makes modifications in neglected areas require exponentially larger representational corrections to achieve local correctness, manifesting as increased change resistance.\", \"probability\": 0.07}, {\"conjecture\": \"Local correctness checks operate on a low-dimensional projection of the system's true semantic embedding space. Over time, modifications accumulate in the unobserved null space of this projection, increasing the system's representational entropy and making it statistically inevitable that new changes will collide with this hidden complexity.\", \"probability\": 0.09}, {\"conjecture\": \"Software aging is fundamentally an expansion in the diameter of the system's semantic embedding space. As the manifold grows, the distance between any newly proposed change and its integration points increases, requiring exponentially more cognitive and computational work to verify local correctness against the global context.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems suffer from representational fragmentation, where different subsystems develop incompatible local embedding spaces. Each locally correct change increases the orthogonalization between these subspaces, requiring increasingly complex translation layers for future modifications to maintain global consistency.\", \"probability\": 0.05}, {\"conjecture\": \"The semantic embedding space of an evolving software system tends toward a critical state, where the density of constraints near any given point increases with each change. This density causes locally correct modifications to trigger cascading representational shifts, making the system progressively more brittle and harder to change safely.\", \"probability\": 0.08}, {\"conjecture\": \"The difficulty of changing long-running software scales with the curvature of its semantic embedding manifold. Each locally correct change adds a fold or kink to this manifold, increasing the non-Euclidean distance between cause and effect, thereby making the impact of new changes progressively harder to predict and execute.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running software becomes harder to change because its semantic embedding space develops topological defects, such as torsion or self-intersections, introduced by individually correct but globally inconsistent changes. Navigating these defects to implement new features requires increasingly complex workarounds to maintain functional integrity.\", \"probability\": 0.04}, {\"conjecture\": \"Every locally correct change optimizes the system's semantic embedding for a specific local context, causing the global representation space to overfit to recent modifications. This overfitting reduces the system's latent capacity to accommodate new changes, requiring disproportionately larger representational shifts for any subsequent feature addition.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 185,
+      "completion_tokens": 679,
+      "total_tokens": 864
+    }
+  },
+  "transport_error": null
+}
