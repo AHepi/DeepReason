@@ -1,6 +1,6 @@
 # Checklist for: make the critic's byte-checked citation channel reachable, and stop it latching shut
 
-State: next=1 blockers=none
+State: next=3 blockers=none
 Re-read REQUEST.md + SPEC.md before every step. Execute strictly in order.
 One step per dr-execute-step invocation.
 
@@ -16,7 +16,7 @@ M4 relies on and C4 forbids touching).
 No seam document needs CREATING: the pair is `scheduler x rules`, already
 written, and this change stays on the rules side of it.
 
-- [ ] 1. (S4) Write the RED regression: the late-refutation reopen, plus the
+- [x] 1. (S4) Write the RED regression: the late-refutation reopen, plus the
       disposition receipts, against the UNCHANGED tree.
       New tests in `tests/test_premise_channel.py` (the gate arithmetic) and
       `tests/test_premise_channel_loop.py` (the driven run: refutations →
@@ -27,7 +27,7 @@ written, and this change stays on the rules side of it.
       `proof/s4_red.txt` (this is the mutation proof: the tests are red on the
       tree that lacks the fix).
 
-- [ ] 2. (S4) [COMMIT] Commit the red tests with their pasted red output.
+- [x] 2. (S4) [COMMIT] Commit the red tests with their pasted red output.
       done-when: `git log --oneline -1` names the red-test commit and
       `proof/s4_red.txt` is tracked.
 

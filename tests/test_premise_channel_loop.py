@@ -73,7 +73,12 @@ _ANSWERS_ALL_PASSING = ("the colour is red", "the colour is grey")
 
 
 def _siren_run(
-    tmp_path, critic_responses, answers=_ANSWERS, variator=_flat_variator, **config_kwargs
+    tmp_path,
+    critic_responses,
+    answers=_ANSWERS,
+    variator=_flat_variator,
+    answer_rounds=None,
+    **config_kwargs,
 ):
     """A run whose problem refutes most of what is offered for it.
 
@@ -89,17 +94,25 @@ def _siren_run(
         Commitment(id="k-colour", eval="predicate:'colour' in content")
     )
     _problem(harness, "colour-of-a-siren", criteria=["k-colour"])
-    conjectures = json.dumps(
-        {
-            "candidates": [
-                {"content": text, "typicality": 0.9 - 0.1 * index}
-                for index, text in enumerate(answers)
-            ]
-        }
-    )
+    # One payload per conjecturer call. `answer_rounds` exists so a caller can
+    # make each cycle offer DIFFERENT candidates: identical content dedupes, so
+    # a run that repeats itself accumulates no further refutations and cannot
+    # exercise anything that depends on criticism arriving late.
+    rounds = tuple(answer_rounds) if answer_rounds is not None else (answers,) * 4
+    conjectures = [
+        json.dumps(
+            {
+                "candidates": [
+                    {"content": text, "typicality": 0.9 - 0.1 * index}
+                    for index, text in enumerate(round_answers)
+                ]
+            }
+        )
+        for round_answers in rounds
+    ]
     adapter = LLMAdapter(
         {
-            "conjecturer": MockEndpoint([conjectures] * 4),
+            "conjecturer": MockEndpoint(conjectures),
             "argumentative_critic": MockEndpoint(critic_responses),
             # The second demarcation reading (§6 mod) needs the variator seat.
             "variator": MockEndpoint(variator),
@@ -122,6 +135,18 @@ def _measures(harness, signal: str):
         event
         for event in harness.log.read()
         if event.rule.value == "Measure" and event.inputs[:1] == [signal]
+    ]
+
+
+def _tagged(harness, prefix: str):
+    """Measures whose tag STARTS WITH `prefix` -- the shape a declared signal
+    family uses (`DR-REC-add-signal`), where the suffix is the outcome."""
+    return [
+        event
+        for event in harness.log.read()
+        if event.rule.value == "Measure"
+        and event.inputs[:1]
+        and event.inputs[0].startswith(prefix)
     ]
 
 
@@ -346,3 +371,165 @@ def test_a_marked_problem_yields_to_unmarked_work(tmp_path, liveness):
     scheduler._problem_worked.clear()
     assert scheduler._select_problem().id == "bbb-unmarked"
     assert harness.state.problems["aaa-marked"] is not None  # nothing deleted
+
+
+# --- the ladder, and the disposition receipt (P11) --------------------------
+
+_LATE_ROUNDS = (
+    ("the colour is red", "it is loud", "it is shrill"),
+    ("the colour is grey", "it is piercing", "it is urgent"),
+    ("the colour is blue", "it wails", "it rises"),
+    ("the colour is amber", "it warns", "it repeats"),
+)
+
+
+def _late_refutation_run(tmp_path, critic_responses):
+    """A run whose criticism keeps arriving after the first premise is filed.
+
+    Each cycle offers DIFFERENT candidates, so the problem's own criterion
+    keeps felling them and the refuted count keeps climbing past the rung the
+    first attribution bought.
+    """
+    return _siren_run(tmp_path, critic_responses, answer_rounds=_LATE_ROUNDS)
+
+
+def test_a_late_refutation_reopens_the_channel_in_the_real_loop(tmp_path):
+    """The named regression (P11 end state). Before the ladder this was
+    impossible by construction: `premise_work_invited` returned False for the
+    rest of the run the moment one attribution stood, so the technique run
+    proved its own question malformed 593 events after the only channel for
+    saying so had closed (AUDIT_REPORT.md section F-B).
+
+    Nothing here re-derives the gate: the scheduler's own receipt and the
+    critic's own pack are the evidence, exactly as `_the_producer_fires_in_the
+    _real_loop` reads them.
+    """
+    seen: list[str] = []
+
+    def critic(prompt: str) -> str:
+        seen.append(prompt)
+        if len(seen) == 2:
+            return json.dumps({"attack": False, "case": "", "premise": _PREMISE})
+        return json.dumps({"attack": False, "case": ""})
+
+    harness, scheduler = _late_refutation_run(tmp_path, critic)
+    scheduler.step()
+    scheduler.step()
+
+    filed = _measures(harness, "premise.attribution-filed.v1")
+    assert len(filed) == 1, "the first premise must be filed before the latch matters"
+    assert len(standing_attributions(harness)) == 1
+    closed_at = filed[0].seq
+
+    # The late criticism: a third cycle of candidates the problem also fells.
+    scheduler.step()
+
+    reopened = [
+        event
+        for event in _measures(harness, "premise.work-invited.v1")
+        if event.seq > closed_at
+    ]
+    assert reopened, "the invitation never returned after the attribution stood"
+    assert reopened[0].inputs[1] == "colour-of-a-siren"
+
+    # And it is not merely a receipt: the critic was shown the channel again.
+    assert sum("PREMISE INVITATION" in prompt for prompt in seen) >= 2
+
+
+def test_a_declined_invitation_is_typed_on_the_record(tmp_path):
+    """P11 answer 2. A seat that was ASKED and said nothing is evidence about
+    that seat; before this receipt it was indistinguishable from a seat that
+    was never asked, because both recorded zero.
+    """
+    harness, scheduler = _late_refutation_run(
+        tmp_path, lambda prompt: json.dumps({"attack": False, "case": ""})
+    )
+    scheduler.step()
+    scheduler.step()
+
+    declined = _tagged(harness, "premise-answer:")
+    assert declined, "an invited dispatch that filed nothing left no trace"
+    assert all(event.inputs[0] == "premise-answer:DECLINED" for event in declined)
+    assert all(event.inputs[1] == "colour-of-a-siren" for event in declined)
+    assert all(len(event.inputs) == 3 for event in declined)
+
+
+def test_a_premise_filed_without_citations_is_typed_as_uncited(tmp_path):
+    """The third of the four cases the record could not separate: a premise
+    WAS filed, and nothing was quoted for it. `_check_premise_citations`
+    records nothing when `refs` is empty, so this read as zero too."""
+    harness, scheduler = _late_refutation_run(
+        tmp_path,
+        [
+            json.dumps({"attack": False, "case": ""}),
+            json.dumps({"attack": False, "case": "", "premise": _PREMISE}),
+        ],
+    )
+    scheduler.step()
+    scheduler.step()
+
+    answers = _tagged(harness, "premise-answer:")
+    assert "premise-answer:UNCITED" in [event.inputs[0] for event in answers]
+    uncited = [e for e in answers if e.inputs[0] == "premise-answer:UNCITED"]
+    assert len(uncited) == 1 and uncited[0].inputs[1] == "colour-of-a-siren"
+
+
+def test_an_uninvited_dispatch_records_no_disposition(tmp_path):
+    """The distinguishability this whole receipt exists for: silence still
+    means NEVER ASKED, and only that. A receipt on every dispatch would
+    destroy the very difference it was added to record."""
+    harness, scheduler = _late_refutation_run(
+        tmp_path,
+        lambda prompt: json.dumps(
+            {"attack": False, "case": "", "premise": _PREMISE}
+        ),
+    )
+    # No candidate is ever refuted, so no invitation ever stands.
+    harness_answers = _ANSWERS_ALL_PASSING
+    harness2, scheduler2 = _siren_run(
+        tmp_path / "second",
+        lambda prompt: json.dumps(
+            {"attack": False, "case": "", "premise": _PREMISE}
+        ),
+        answers=harness_answers,
+    )
+    scheduler2.step()
+    scheduler2.step()
+
+    assert not _measures(harness2, "premise.work-invited.v1")
+    assert not _tagged(harness2, "premise-answer:")
+
+
+def test_a_declined_invitation_moves_no_status(tmp_path):
+    """C5/H1 -- the producer carries no penalty for a critic who declines, and
+    the receipt must not quietly become one. It is a Measure: it mints no
+    artifact, moves no status, and nothing in the tree reads it."""
+    harness, scheduler = _late_refutation_run(
+        tmp_path, lambda prompt: json.dumps({"attack": False, "case": ""})
+    )
+    scheduler.step()
+    before = dict(harness.state.status)
+    artifacts_before = set(harness.state.artifacts)
+
+    scheduler.step()
+
+    declined = _tagged(harness, "premise-answer:")
+    assert declined
+    for event in declined:
+        assert event.state_diff is None or not event.state_diff.status_changed, (
+            "a disposition receipt changed a status"
+        )
+        assert event.state_diff is None or not getattr(event.state_diff, "A_added", None)
+    # Whatever else the cycle did, it did not do it through this receipt.
+    assert set(harness.state.artifacts) >= artifacts_before
+    assert before  # the run really had a graph to leave alone
+
+
+def test_the_disposition_signal_is_declared(tmp_path):
+    """`DR-REC-add-signal` step 3: an emitted tag that is not declared fails
+    `tests/test_signals.py`, and a declaration with `unspecified` values is a
+    stale read waiting to happen."""
+    contract = declaration("premise-answer:DECLINED")
+    assert contract is not None
+    assert contract.unit != "unspecified"
+    assert contract.staleness != "unspecified"
