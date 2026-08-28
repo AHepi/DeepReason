@@ -648,3 +648,36 @@ running `deepreason continue` against a *copy* of the epoch 6 root — and I did
 not work around it; the code trace at `continuation.py:364` plus the measured
 `terminal_lifecycle_decision=None` plus RESUME_PROBE.md's existing experiment
 settle that point without it.
+
+---
+
+# DELIVERY GATE
+
+```
+$ git diff --stat origin/main -- src tests docs
+$                                     (empty)
+```
+
+**docs_verify: 4 failed — exactly the recorded baseline, no delta.**
+
+```
+docs_verify [full]: 68 documents, 1131 checks, 4 workers
+  FAIL CON-run-identity.md:200   (shallow clone: renamed-root history absent)
+  FAIL CON-run-identity.md:202   ("ambiguous argument '1637e808'" — shallow)
+  FAIL CON-run-identity.md:204   ("ambiguous argument 'f304fec1'" — shallow)
+  FAIL INV-frozen-surfaces.md:181 (the pre-existing falsified census,
+                                   parked as execution-safety P7)
+docs_verify: 4 failed
+```
+
+`pytest` was missing from the fresh container and had to be installed before
+this number meant anything: without it, 492 checks fail with
+`No module named pytest`. That is an environment gap, not a finding — worth
+noting beside the known-missing `jsonschema` (execution-safety P6), since a
+runner who takes the first `docs_verify` result at face value in a fresh
+container will report 492 false failures.
+
+No full pytest gate is owed: the tree is untouched.
+
+The technique branch worktree used for reading was verified clean
+(`git status --porcelain` empty) after all analysis.
