@@ -472,35 +472,66 @@ every cached "qualified" verdict refers to a subject that no longer exists.
 
 `check: grep -q "def qualification_subject_payload" src/deepreason/qualification.py`
 
-**Contact REQUESTED and NOT YET GRANTED, 2026-08-28 — excluding one notice code
-from the subject.** Recorded here because a requested contact is written down
-whether or not it is granted, and because the tree currently CARRIES it pending
-the operator's answer
-(`experiments/2026-08-28-defect-manifest-config-disclosure/FIX.md` Amendment 1).
+**Granted contact, 2026-08-28 — excluding one notice code from the subject
+(audit F-A / P10).** The monitor GRANTED this contact on the record, on the
+measurements rather than on the argument, after the request was written into
+`experiments/2026-08-28-defect-manifest-config-disclosure/FIX.md` Amendment 1
+BEFORE the code stood — the same discipline the four surface-4 grants above
+record. The grant's own words: *"zero subject digests move, no cache
+invalidates, no battery is owed, no schema/validator/model is touched, and the
+rule generalises the committed exclusion guarantee rather than special-casing
+it."*
 
-Why it arose: `qualification_subject_payload` builds its subject from
-`manifest.model_dump(...)`, which includes `compile_notices`. A notice NAMING a
-dropped `Config` field therefore carries that field's name and value INTO the
-subject — defeating, by way of its own disclosure, the exclusion three
-committed tests exist to guarantee (Parts C/D/E, S2a/S2b/S2d, C9: these knobs
+**Why it was needed, which is the part worth remembering.** The uncarried-field
+disclosure recorded under surface 4 above emits notices that NAME the dropped
+`Config` field. The qualification subject is built from
+`manifest.model_dump(...)`, which includes `compile_notices` — so a notice
+about a subject-EXCLUDED field puts that field's name and value straight back
+into the subject, defeating the exclusion by way of its own disclosure. Three
+committed tests guarantee that exclusion and they are right to: these knobs
 gate dispatch, not provider identity, so they must never cost a home a
-~14-minute battery).
+~14-minute battery (Parts C/D/E, S2a/S2b/S2d, C9 —
+`test_adjudication_status_authority_flag_excluded_from_subject_digest`,
+`test_judge_seats_fields_excluded_from_subject_digest`,
+`test_school_seats_enabled_field_excluded_from_subject_digest`). The
+alternative was to INVERT all three, which is deleting a guarantee to get
+green.
 
-What it does: seven inserted lines dropping notices whose code is
-`ENGINE_CONFIG_FIELD_NOT_CARRIED` from the subject. Every other notice keeps
-its contribution unchanged.
+**The rule, stated once so a future notice code is measured against it:** a
+disclosure that a subject-excluded `Config` field was not carried must not
+itself enter the qualification subject, or the exclusion is defeated by its own
+disclosure. It generalises the three tests rather than routing around them.
 
-What it costs, MEASURED rather than argued
-(`.../MEASUREMENTS.md`): **zero qualification subject digests move.** The
-default fixture stays `02ee7e098bb92390…`; a P-T1-shaped config stays
-`02ee7e098bb92390…` instead of moving to `f40357e9e31b8768…`; a manifest
-already carrying an unrelated notice stays `061efe5bdf7eb565…`. No cache entry
-is invalidated and no home owes a battery. Without it, 7 of the 8 committed
-`run-config.yaml` files on main get new subject digests and the three exclusion
-tests must be INVERTED, which CLAUDE.md forbids.
+What moved: SEVEN lines in `qualification_subject_payload`, between the two
+`behavior.pop(...)` lines already there, dropping notices whose code is
+`ENGINE_CONFIG_FIELD_NOT_CARRIED`. **Insertions only — 7 and 0.** Every other
+notice keeps its subject contribution unchanged; no schema, validator, Pydantic
+model, check name or record format was touched.
+
+**Preservation is measured per case, not argued**
+(`experiments/2026-08-28-defect-manifest-config-disclosure/MEASUREMENTS.md`,
+and `probe/digests_base.txt` vs `probe/digests_optionA.txt` vs
+`probe/digests_optionB_narrow.txt`):
+
+```
+config                                       base          without the grant   WITH it
+default                                      02ee7e098bb9  02ee7e098bb92390    identical
+JUDGE_SEATS_ENABLED=True                     02ee7e098bb9  478c15619dd81fb4    identical
+ADJUDICATION_STATUS_AUTHORITY_ENABLED=True   02ee7e098bb9  230c5dff627a7d37    identical
+SCHOOL_SEATS_ENABLED=True                    02ee7e098bb9  170fec05dc38d47a    identical
+P-T1's five switches                         02ee7e098bb9  f40357e9e31b8768    identical
+a manifest already carrying an unrelated
+  notice (SECOND_JUDGE_FAMILY_REQUIRED)      061efe5bdf7e  061efe5bdf7eb565    identical
+```
+
+Zero subject digests move, including for a manifest that already carried a
+notice before this tranche existed — which is why the exclusion is scoped to
+one notice CODE rather than to `compile_notices` wholesale. Dropping the whole
+field would have moved that last row from `061efe5bdf7e…` to `ae14adca4722…`,
+measured and rejected on exactly that ground.
 
 `check: python -c "
-from deepreason.qualification import qualification_subject_digest
+from deepreason.qualification import qualification_subject_digest, qualification_subject_payload
 from tests.test_reusable_qualification import _manifest, _profile
 p = _profile()
 base = qualification_subject_digest(_manifest(p), p)
@@ -508,7 +539,19 @@ assert base == '02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
 loud = _manifest(p, config_updates={'JUDGE_SEATS_ENABLED': True, 'ADJUDICATION_STATUS_AUTHORITY_ENABLED': True, 'ENGAGED_CRITICISM_AUTHORITY': 'defended_trial', 'LEGACY_CRITICISM_ENABLED': False, 'SCHOOL_SEATS_ENABLED': True})
 assert any(n.code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED' for n in loud.compile_notices), loud.compile_notices
 assert qualification_subject_digest(loud, p) == base
+dumped = str(qualification_subject_payload(loud, p))
+for field in ('JUDGE_SEATS_ENABLED', 'ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'SCHOOL_SEATS_ENABLED'):
+    assert field not in dumped, field
 "`
+`check: python -c "
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+p = _profile()
+noisy = _manifest(p, rubric_policy='require_cross_family', criticism_policy=None)
+assert [n.code for n in noisy.compile_notices] == ['SECOND_JUDGE_FAMILY_REQUIRED']
+assert qualification_subject_digest(noisy, p) == '061efe5bdf7eb5654c569dfab134efd47c88be0eb18134012242c295a653d754'
+" && test "$(grep -c 'ENGINE_CONFIG_FIELD_NOT_CARRIED' src/deepreason/qualification.py)" -eq 1`
+`check: python -m pytest tests/test_reusable_qualification.py::test_adjudication_status_authority_flag_excluded_from_subject_digest tests/test_reusable_qualification.py::test_judge_seats_fields_excluded_from_subject_digest tests/test_reusable_qualification.py::test_school_seats_enabled_field_excluded_from_subject_digest -q`
 
 ## Where authority is allowed to live instead
 

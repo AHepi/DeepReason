@@ -116,3 +116,65 @@ answer them, not route around them.
 End state: a verdict on whether carriage is wanted, and if so a design whose
 qualification price is measured and reported before implementation.
 ```
+
+---
+
+## P16 — the new frozen-surface tripwire cannot express a GRANTED contact, so it is red on every branch that has one
+
+**What.** `docs/map/INV-frozen-surfaces.md:297`, added by `925b17f62` (merged to
+main in `90b1347f4`), carries:
+
+```
+check: ! git diff --name-only origin/main...HEAD | grep -qE "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"
+```
+
+It is GREEN on `main` for the trivial reason that `origin/main...HEAD` is empty
+there, and RED on any working branch that touches a frozen-surface file — a
+granted contact and an ungranted one alike, because the check cannot tell them
+apart. This tranche turned it red with two contacts the monitor granted on the
+record (`run_manifest.py`, surface 4, forecast and granted; `qualification.py`,
+surface 5, requested in FIX.md and granted on the measurements). Not worked
+around and not edited: a tripwire another tranche just landed is not something
+to file down because it caught you.
+
+Six of the seven granted contacts already recorded in that document would each
+have turned it red on their own branch. The document is BUILT on the premise
+that contact is permitted when it is forecast, named before implementation, and
+recorded with re-runnable checks; a check that forbids contact outright
+contradicts the section it sits in.
+
+**Ready-to-send prompt:**
+
+```
+Route: deepreason-orchestrator (defect). Small and self-contained.
+
+Goal, one sentence: make the frozen-surface branch tripwire at
+docs/map/INV-frozen-surfaces.md:297 distinguish a GRANTED contact from an
+ungranted one, so it stays a real tripwire on main and stops being red by
+construction on every branch that legitimately touches a frozen surface.
+
+Evidence:
+  docs/map/INV-frozen-surfaces.md:297      -> the check
+  git log -1 925b17f62                     -> the commit that added it
+  experiments/2026-08-28-defect-manifest-config-disclosure/probe/docs_verify_merged.out
+      -> it firing on two contacts the monitor granted on the record
+  docs/map/INV-frozen-surfaces.md          -> the seven granted contacts already
+      recorded; six of them would have turned this check red on their own branch
+
+The shape that would work, offered so it is priced rather than re-derived: the
+check has to consult the same thing a human reviewer does -- whether the
+touched file appears in a "Granted contact" section of THIS document, added in
+the same branch. A check keyed on the branch diff alone cannot know that, which
+is why it currently answers a question nobody asked ("did anything change?")
+instead of the one the section asks ("was it forecast, named and recorded?").
+
+Do NOT solve it by deleting the check: a tripwire over these six paths is worth
+having. Solve it by making it able to pass for the case the document's own
+discipline permits. Also check tools/docs_verify.py --audit still accepts the
+replacement (a check that cannot fail is worse than no check).
+
+End state: green on main, green on a branch whose contact is recorded, RED on a
+branch that touches a frozen path with no recorded grant -- the last of those
+demonstrated by a mutation, not asserted. Full gate 0 failed; map moved in the
+same commit.
+```
