@@ -36,7 +36,7 @@ Ranked by what blocks the mission or violates a ledgered operator law.
 | **1** | Q2 | The judge road is severed one layer below an ON flag, and the manifest compiled **zero notices** about it | **CAUSE LOCATED** |
 | **2** | Q3 | Epoch 6 did **4 working cycles, not 24** — 19 cycles were budget-denied no-ops on one dead package | **CAUSE LOCATED** |
 | **3** | Q4b | Every committed root is **unresumable while reporting resumable** (P6), confirmed on the newest root | **CAUSE ESTABLISHED**, extended |
-| **4** | Q1 | The critic has **no citation channel attached to criticism** — only to an optional premise behind a gate open on 2 of 98 critic calls | **CAUSE LOCATED** |
+| **4** | Q1 | The critic has **no citation channel attached to criticism** — only to an optional premise behind a gate that reached 4 prompts in 98 critic calls | **CAUSE LOCATED** |
 | **5** | Q4a | One budget-denial condition has **at least four distinct dispositions**, not two | **CAUSE LOCATED**, extends P2 |
 | **6** | Q3b | The wander cap's "every cycle" disclosure is bypassed by capability cycles; `_cycles` grows where `_seed_cycles` cannot | **CAUSE LOCATED** |
 | **7** | Q4a | `token_spend: 0` on a run that spent its budget (P3) — confirmed on two roots | **CAUSE ESTABLISHED** |
@@ -134,9 +134,11 @@ thing critics do.
 
 Stated with the precision the evidence supports, the six epochs split:
 
-- **Epochs 0, 1 (and 5): structurally unreachable.** The critic was never once
-  shown the channel across 54 calls. Nothing a model did or did not do can
-  explain those epochs.
+- **Epochs 0 and 1: structurally unreachable.** The critic was never once
+  shown the channel across 44 calls. Nothing a model did or did not do can
+  explain those two epochs.
+- **Epoch 5: shown twice (distinct blobs `a5be92a35660…`, `4c510fb93879…`),
+  then the run died at cycle 2** with no attribution filed — inconclusive.
 - **Epoch 6: reachable twice, taken up once, cited zero times.** This is **one
   observation** of the channel being available and unused for citation — not a
   pattern, and not enough to attribute the silence to model reluctance.
