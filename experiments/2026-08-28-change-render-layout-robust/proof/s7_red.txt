@@ -1,0 +1,62 @@
+...........F...F                                                         [100%]
+=================================== FAILURES ===================================
+___________ test_limb2_every_layout_decision_is_read_from_the_policy ___________
+
+    def test_limb2_every_layout_decision_is_read_from_the_policy():
+        """A renderer may not HOLD a layout constant; it READS one.
+    
+        This is the limb that fails at authoring time. A consumer that decides an
+        arrangement with a literal -- `if True`, a bare 160, a fixed section order
+        -- stops naming the field, and the field it stopped naming is listed here.
+        """
+        missing = []
+        for path, functions in _CONSUMERS.items():
+            for name, fields in functions.items():
+                source = _function_source(path, name)
+                for field in fields:
+                    if f"layout.{field}" not in source:
+                        missing.append(f"{path}::{name} does not read layout.{field}")
+>       assert not missing, missing
+E       AssertionError: ['src/deepreason/llm/roles.py::render_role_prompt does not read layout.merge_head_label_blocks']
+E       assert not ['src/deepreason/llm/roles.py::render_role_prompt does not read layout.merge_head_label_blocks']
+
+tests/test_render_layout_policy.py:147: AssertionError
+________ test_limb1_a_bypass_is_visible_as_two_policies_rendering_alike ________
+
+    def test_limb1_a_bypass_is_visible_as_two_policies_rendering_alike():
+        """Limb 1, stated generically: two policies that DISAGREE on every flag
+        must produce different bytes at every consumer. A consumer that ignores
+        its policy renders identically under both, and this is what notices.
+    
+        `tests/test_render_layout_rules.py` carries the same comparison per rule,
+        with the specific difference each rule names; this limb is the blanket
+        one, so a NEW consumer that forgets its policy is caught here even before
+        a rule-specific test exists for it.
+        """
+        from deepreason.harness import Harness  # noqa: F401  (fixtures build one)
+        from deepreason.informal.trial import argument_trial_judge_pack
+        from deepreason.llm.roles import render_role_prompt
+    
+        robust = resolve_layout_policy(DEFAULT_LAYOUT_POLICY_ID)
+        legacy = resolve_layout_policy(LEGACY_LAYOUT_POLICY_ID)
+        assert robust != legacy
+    
+        renders = {
+            "argument_trial_judge_pack": lambda p: argument_trial_judge_pack(
+                target_text="t", case_text="c", defence="d", layout=p
+            ),
+            "render_role_prompt": lambda p: render_role_prompt(
+                "conjecturer", schema="{}", pack="## problem\nq",
+                profile="compact", example="{}", aliases="SRC_001", layout=p,
+            ),
+        }
+        same = [name for name, fn in renders.items() if fn(robust) == fn(legacy)]
+>       assert not same, f"consumers ignoring their layout policy: {same}"
+E       AssertionError: consumers ignoring their layout policy: ['render_role_prompt']
+E       assert not ['render_role_prompt']
+
+tests/test_render_layout_policy.py:223: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_policy.py::test_limb2_every_layout_decision_is_read_from_the_policy
+FAILED tests/test_render_layout_policy.py::test_limb1_a_bypass_is_visible_as_two_policies_rendering_alike
+2 failed, 14 passed in 0.30s

@@ -1,0 +1,20 @@
+Full gate, AFTER the two re-pins (monitor ruling, condition 3)
+==============================================================
+
+$ python -m pytest tests/ -q -n 4
+
+................                                                         [100%]
+4403 passed, 6 skipped in 1152.19s (0:19:12)
+EXIT=0
+
+Baseline for comparison (C5): main 29e33f702 was 4374 passed, 0 failed.
+This tree adds 29 tests (test_render_layout_policy.py 15,
+test_render_layout_rules.py 14 net) and fails none.
+
+The two pins that caused the C3 stop:
+  tests/test_incident_wave_a_v2_fixtures.py::
+      test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic
+  tests/test_semantic_freedom_constitution.py::
+      test_offline_semantic_freedom_baseline_is_measurable
+Both now pass against their re-pinned values, each of which records its
+before/after and its reason at the pin site.

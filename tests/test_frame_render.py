@@ -1191,6 +1191,13 @@ def test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact(harne
     "slow-changing sections precede volatile ones"). This is a caching claim,
     not a claim about where a model reads best: a mandatory section is
     retained in full at any priority, so moving it costs nothing it was doing.
+
+    Since 2026-08-28 the QUESTION restatement sorts after it, at
+    `_QUESTION_PRIORITY`. The caching claim above is untouched — the notice
+    still leads nothing — so this asserts what that claim actually says: the
+    notice is last among the CONTEXT sections, and only the question follows
+    it (`experiments/2026-08-28-change-render-layout-robust/SPEC.md` S2, which
+    predicted this update before the code was written).
     """
     from deepreason.llm.packs import render_conj_pack, render_crit_pack
 
@@ -1212,5 +1219,6 @@ def test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact(harne
     for pack in (conj, crit):
         headers = [l for l in pack.splitlines() if l.startswith("## ")]
         assert "## context-withheld" in headers, headers
-        assert headers[-1] == "## context-withheld", headers
+        assert headers[-1] == "## question", headers
+        assert headers[-2] == "## context-withheld", headers
         assert headers[0] != "## context-withheld", headers

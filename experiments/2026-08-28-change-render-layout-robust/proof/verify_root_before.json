@@ -1,0 +1,27 @@
+{
+ "experiments/2026-08-12-live-grounded-extension-expansion/run": [],
+ "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c": [],
+ "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6": [
+  "attempt-validity::event seq=2413: successful call must have one final valid attempt, got []"
+ ],
+ "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf": [
+  "foreign-criticism::target 387895a53f28ecacb8fce69ae1985d7c508f5f78f165700e320f1a88d9004df5 has 0 fo",
+  "foreign-criticism::target 7044e31d991386ec5a8473c03ae7350e47ce980a285a12f0eb0f4d06d2280592 has 0 fo",
+  "foreign-criticism::target 758d4b028e9d9a59cc52dac42777d06b4327988b732421275adbaa8e5366d0d9 has 0 fo",
+  "foreign-criticism::target d1c5dc486d4b2541561e98904f849f85d929d8522bbee7465aaf72b85d29705c has 0 fo",
+  "foreign-criticism::target d75a99fefb3c9548fad373f1d891ab0e1bc0555216f1f42ed6676f2f26fb8ca4 has 0 fo",
+  "foreign-criticism::target efbc45de65e2c5f102fffbde9b0e0097c1f2940413def328dbb064b63dc063ce has 0 fo"
+ ],
+ "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346": [
+  "foreign-criticism::target 72c3d6b61ab91a9e676ab6a04d4554108dab1872af387240d772d26f6ab52ba7 has 0 fo",
+  "foreign-criticism::target 918e9c064687e00fa4ab2e76123be27e98cc771d9c5a89137958e92def6ef851 has 0 fo"
+ ],
+ "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5": [
+  "foreign-criticism::target 1125d2505d938b2ef74d79b974a3b6b03efe5b8c1ebae6249c29b4624de13032 has 0 fo",
+  "foreign-criticism::target 2f808c4f2b071a3f4523ba13bcd3c12245718e0cc2d3f7810f7270432a8c4653 has 0 fo",
+  "foreign-criticism::target 77cb6a85e89c4fc3c273c473f2ecaff86371c0a44790440add077ff13510dd7b has 0 fo",
+  "foreign-criticism::target 8bb983dfe0858fd4d5b979d419ae7bf18090a4ad2627f87c90a8973aa6d5b811 has 0 fo",
+  "foreign-criticism::target d4ac80712e18ecfa69be84d2f2d9661c13168daee211efa10eb922b69fc93c36 has 0 fo",
+  "foreign-criticism::target d9d2311a00cc76cc9bc30d41b0f5fe7231d9b0f48afd23e7b1682182f6c53797 has 0 fo"
+ ]
+}

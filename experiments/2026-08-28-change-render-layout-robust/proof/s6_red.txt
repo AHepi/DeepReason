@@ -1,0 +1,42 @@
+...........F.                                                            [100%]
+=================================== FAILURES ===================================
+_______ test_no_seat_carries_more_standing_instructions_than_the_ceiling _______
+
+harness = <deepreason.harness.Harness object at 0x7fe498053f50>
+
+    def test_no_seat_carries_more_standing_instructions_than_the_ceiling(harness):
+        """R2b closed as ALREADY-MET on the census -- 28 was the maximum over 2836
+        real dispatched prompts against a ceiling of 40. Nothing was restructured.
+        This is the guard the census found missing: the property held, and nothing
+        in the gate would have noticed a seat crossing it.
+        """
+        from deepreason.llm.layout import count_standing_instructions
+        from deepreason.llm.roles import COMPACT_TEMPLATES, TEMPLATES, render_role_prompt
+    
+        problem = _problem(harness)
+        _accepted(harness, ENVELOPE)
+        pack = render_conj_pack(
+            problem, harness.state, harness.commitments, harness.blobs,
+            vs_k=6, token_budget=6000, layout=ROBUST,
+        )
+    
+        over = {}
+        for role in sorted(set(TEMPLATES) | set(COMPACT_TEMPLATES)):
+            for profile in ("standard", "compact"):
+                if profile == "standard" and role not in TEMPLATES:
+                    continue
+                prompt = render_role_prompt(
+                    role, schema='{"type": "object"}', pack=pack, profile=profile,
+                    example="{}", aliases="SRC_001",
+                )
+                count = count_standing_instructions(prompt)
+                if count > ROBUST.instruction_ceiling:
+                    over[f"{role}/{profile}"] = count
+>       assert not over, over
+E       AssertionError: {'conjecturer/standard': 64}
+E       assert not {'conjecturer/standard': 64}
+
+tests/test_render_layout_rules.py:410: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_render_layout_rules.py::test_no_seat_carries_more_standing_instructions_than_the_ceiling
+1 failed, 12 passed in 0.34s

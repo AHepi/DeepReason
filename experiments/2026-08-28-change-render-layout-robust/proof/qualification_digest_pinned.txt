@@ -1,0 +1,14 @@
+..                                                                       [100%]
+2 passed in 0.51s
+
+The tree already pins the shipped qualification subject digest to a literal
+sha256 in two committed tests. Both pass on this branch, which is stronger
+than a before/after computation of my own: the pin is the gate's, not mine.
+
+  tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move
+      83454b08365d695de25e9705892b19eaf14af472a9cd6286aff4f8bf155f8874
+  tests/test_discharge_wire.py::test_the_qualification_subject_digest_does_not_move
+
+tools/blast_radius.py --files <the four touched files> --against origin/main
+reports "qualification_digest": [] and frozen_surface_verdict CLEAR
+(proof/blast_radius.txt).

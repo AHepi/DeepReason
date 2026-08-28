@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: 7e1ab8a54
+Verified-at: 5f7e413d6
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -29,6 +29,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | know why an artifact is (or is not) framing its problems | `CON-standing-and-background.md`, then `SUB-calculus.md` |
 | know what a pack shows about the frame it is posed in | `SEAM-calculus-x-rules.md`, then `CON-packs-and-token-economy.md` |
 | know what a pack shows about the criticism already made of a problem | `CON-discharge-channel.md` |
+| change WHERE a rendered prompt puts something, or how much of a prior round it carries | `INV-render-layout.md`, then `CON-packs-and-token-economy.md` |
 | write or update a map document | `SCHEMA.md` |
 
 **The one ordering rule:** read the SEAM before the subsystems it joins. A seam
@@ -82,6 +83,7 @@ than you need.
 | `INV-evidence-channels.md` | the three evidence-minting channels, on by default, and the one field that turns any of them off |
 | `INV-axiom-basis.md` | the eleven axioms the calculus rests on, which rung proves each, and which rungs must not break it |
 | `INV-reference-menu.md` | the one authority for every legal handle set, and why a menu may never decide validity |
+| `INV-render-layout.md` | where a rendered prompt puts what it carries, and the policy that decides |
 | `REC-change-a-seam.md` | the recipe for the commonest large change, worked on schools × scratchpad |
 
 ## Seam matrix

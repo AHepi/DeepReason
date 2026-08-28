@@ -1,0 +1,71 @@
+Where the semantic-freedom token delta lands, attempt by attempt
+================================================================
+
+Instrument: tests/test_semantic_freedom_constitution.py::
+            test_offline_semantic_freedom_baseline_is_measurable
+Metric:     tokens_per_admitted_useful_candidate  (offline mock, 2 useful)
+Before:     tree 29e33f702 (this branch's base = C5's KNOWN CURRENT STATE main)
+After:      this tree
+Method:     the fixture's own calls, re-run on both trees, dumping EVERY
+            attempt prompt from attempt_trace (the call's own prompt_ref
+            points at the LAST attempt, so the repair prompt; reading only
+            that hides the conjecturer prompt on any repaired call).
+
+Totals
+------
+                       before   after   delta
+  call 0 (2 attempts)     815     850     +35
+  call 1 (1 attempt)      754     800     +46
+  TOTAL                  1569    1650     +81
+  per admitted useful    784.5   825.0    +40.5   (+5.2%)
+
+Every added character, by attempt
+---------------------------------
+  attempt 0_0 (conjecture, school-alpha)   2715 ->  2856 chars   +141
+  attempt 0_1 (repair)                      445 ->   445 chars      0   IDENTICAL
+  attempt 1_0 (conjecture, school-beta)    2920 ->  3106 chars   +186
+                                                       total     +327 chars
+
+  327 chars / 81 tokens = 4.04 chars per token, matching the estimator's
+  ~4:1 on both trees.  The character delta and the token delta are the
+  same fact counted twice; there is no unaccounted remainder.
+
+The two diffs in full
+---------------------
+attempt 0_0 and 1_0 both gain ONLY this, appended after the directive:
+
+    +
+    +## question
+    +QUESTION (restated last, so nothing load-bearing follows it)
+    +PROBLEM pi-semantic-baseline
+    +Propose two independent explanations.
+
+attempt 1_0 additionally renames one section header (R2c):
+
+    -## neighbourhood
+    -NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+    +## live-neighbourhood
+    +LIVE NEIGHBOURHOOD (accepted and still standing -- shown whole because
+    +these are the ones to build on or beat):
+
+attempt 0_1, the repair prompt, is byte-identical: the repair path renders
+no question section, so it pays nothing.
+
+Why this is a COST and not the F2-d defect class
+------------------------------------------------
+This same metric caught a real defect once (tests/test_reference_menu.py::
+test_a_pre_v6_conjecture_pack_carries_no_v6_menu -- 784.5 -> 875.0 with every
+epistemic metric identical, caused by a reference menu naming a field the
+seat could not fill; the fixture was NOT re-pinned, the bug was fixed).
+The signature here looks the same from the metric alone, so it is
+distinguished from the prompt bytes rather than from the number:
+
+  - the delta is TWO named sections, both required by R2a and R2c, and
+    nothing else -- no new menu, no new handle, no field the seat cannot
+    fill, no added instruction (the instruction-count guard, S6/A6, holds);
+  - the repair prompt, which is where an over-eager menu would also have
+    shown up, is byte-identical;
+  - the six other metrics -- valid_first_attempt_rate, repair_rate,
+    candidate_family_count, unique_candidate_bodies, executable_test_yield,
+    verifier_backed_success_rate -- are unchanged, so the seat's behaviour
+    is unchanged and only the rendering grew.

@@ -266,9 +266,17 @@ def test_production_conj_pack_uses_sections_and_preserves_mandatory_tail(harness
     )
     assert "## criteria" in pack and "k-large" in pack
     assert "## output-contract" in pack
-    assert pack.rstrip().endswith(
+    # The directive arrives IN FULL under a 40-token budget -- that is the
+    # mandatory-tail claim. Since 2026-08-28 the pack ends with the QUESTION
+    # restatement, itself mandatory, so the tail this test guards is now two
+    # mandatory sections rather than one
+    # (experiments/2026-08-28-change-render-layout-robust/SPEC.md S2).
+    assert (
         "estimates. Include atypical candidates, not just the modal answer."
+        in pack
     )
+    assert pack.rstrip().endswith("bounded production renderer")
+    assert "## question" in pack
     assert len(pack) > 40 * 4  # explicit mandatory overflow, not prefix clipping
     assert "optional memory" not in pack
 

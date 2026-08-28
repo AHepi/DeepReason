@@ -128,10 +128,18 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
     root = tmp_path / "run"
     h = Harness(root)
     _seed(h)
-    # Reserve-settle sizing: the garbage attempts reserve ~1383/665/651 and
-    # settle ~657/119/108 tokens, so 1400 admits attempts 1-2 and rejects
+    # Reserve-settle sizing: the garbage attempts reserve 1418/665/651 and
+    # settle ~657/119/108 tokens, so 1420 admits attempts 1-2 and rejects
     # the third reservation mid-retry with spend already on the meter.
-    meter = TokenMeter(budget=1400)
+    # The window is [1418, 1426]: below 1418 the FIRST reserve is refused and
+    # the scenario never starts; at 1427 the third (776 + 651) fits and the
+    # mid-retry death never happens. The first reserve was 1383 until
+    # 2026-08-28, when the question restatement added 35 tokens to this
+    # fixture's prompt (experiments/2026-08-28-change-render-layout-robust/
+    # SPEC.md S2). The budget is the calibration, not the claim: what this
+    # test asserts is that the meter and the log reconcile exactly at the
+    # death, whatever budget puts it there.
+    meter = TokenMeter(budget=1420)
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint(lambda p: "never valid json {{{")},
         h.blobs, retry_max=2, meter=meter)
