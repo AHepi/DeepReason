@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Causal confounding in test suites: tests encode observed correlations rather than invariants, so they validate past contexts but fail to constrain unseen future interactions\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.948
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-493",
+    "object": "chat.completion",
+    "created": 1787930222,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Test suites accumulate as observational correlations between system inputs and outputs from past contexts, so each passing test merely confirms the system still matches historical behavior rather than enforcing any true invariant. As the codebase evolves, these encoded correlations become confounders: a developer changes one module, tests pass because the change preserves a previously observed input-output mapping, but an untested interaction between the new code and latent assumptions from another era breaks in production. Thus, local correctness validated by correlational tests cannot constrain the combinatorial space of future interactions, making the system progressively harder to change safely without rewriting the tests themselves.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 141,
+      "completion_tokens": 128,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

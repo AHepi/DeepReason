@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.451
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-721",
+    "object": "chat.completion",
+    "created": 1787930410,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade because each locally correct change implicitly narrows the space of *unconsidered* alternative architectures, causing a cumulative loss of evolvability that is invisible to any single review. Developers optimize for immediate correctness against the current design, making the system increasingly specialized to a trajectory of historical assumptions rather than to its current requirements. This architectural specialization accumulates as implicit, untested constraints—coupling between modules that only manifests under unanticipated future changes—producing rigidity that no individual change could detect or prevent.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 113,
+      "total_tokens": 215
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.326
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-866",
+    "object": "chat.completion",
+    "created": 1787930061,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Every locally correct change consumes a finite, unrenewed resource of design slack. Because slack is never explicitly budgeted or replenished, the system asymptotically approaches a state of zero architectural degrees of freedom, making future changes combinatorially explosive.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade because of undocumented invariant accretion. Each change is locally correct because it satisfies the immediately visible tests, but it also implicitly creates hidden, cross-module invariants that the next developer must reverse-engineer before making a safe change.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The local correctness of individual changes causes a global semantic drift. The original domain model is slowly compromised by pragmatic patches until the system's conceptual framework no longer matches the reality of the code, increasing the cognitive load required to map intent to implementation.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Test suites enforce local correctness but simultaneously fossilify accidental complexity. When tests over-specify implementation details rather than behavioral contracts, they create a rigid scaffolding that penalizes structural changes, forcing developers to build around the tests rather than refactor them.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The friction arises from the growing divergence between the system's actual execution topology and its assumed development topology. Individual changes are verified against the assumed topology, but the accumulated state causes the actual runtime topology to become an implicit, brittle dependency graph invisible to the local reviewer.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Code reviews filter out local bugs but pass local design entropy. Because reviewers evaluate diffs, not the whole system, they cannot detect the gradual accumulation of duplicated logic, parallel hierarchies, and fragmented abstractions that make the system progressively harder to navigate and modify.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because every local change optimizes for immediate comprehension, flattening abstractions locally. This repeated local flattening destroys the hierarchical boundaries that make the system comprehensible at scale, turning the architecture into an undifferentiated mass.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The primary cause is the accumulation of unobservable temporal coupling. Individual changes are locally correct in state, but they inadvertently create sequences of operations that become implicitly required, meaning future changes must not only be locally correct but must preserve an invisible historical execution order.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because technical debt is serviced linearly while complexity compounds exponentially. Each locally correct change adds a node to the dependency graph, and the cost of understanding the graph grows quadratically, while our tools for managing it remain linear.\",\n      \"probability\": 0.01\n    },\n    {\n      \"conjecture\": \"The degradation is driven by the paradox of local optimization: every change optimizes the system locally, but without a global optimization function, the system is pushed away from its global optimum. The further the system drifts from the global optimum, the harder any change becomes because the system is balanced on a knife-edge of interdependencies.\",\n      \"probability\": 0.01\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 730,
+      "total_tokens": 905
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.761
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-895",
+    "object": "chat.completion",
+    "created": 1787930497,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a codebase evolves, each locally-correct change resolves some local constraints while silently adding new implicit invariants that become constraints for all future changes. The codebase therefore undergoes a phase transition from a sparse CSP (most features are compatible with most potential changes) to a near-complete CSP (most features conflict with most potential changes). The difficulty of change grows exponentially because each new feature must simultaneously satisfy a dense web of non-obvious invariants that were never explicitly documented but were implicitly assumed by prior locally-correct modifications. This explains why individual code review and testing cannot prevent rigidity: each change is verified against explicit constraints, but the accumulating implicit constraint graph is invisible to all local verification processes.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 148,
+      "total_tokens": 287
+    }
+  },
+  "transport_error": null
+}

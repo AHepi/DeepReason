@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.256
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-584",
+    "object": "chat.completion",
+    "created": 1787930061,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software rot is driven primarily by the steady accumulation of implicit cross-module invariants. Because these constraints are never explicitly encoded in the type system or interfaces, each locally correct change subtly expands the hidden state space, making future safe modifications computationally intractable for human developers.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Each accepted patch increases the dimensionality of the system's configuration space. Over time, the cost of verifying that a new change does not trigger a non-linear interaction with this exponentially growing set of prior states overwhelms the actual cost of writing the new code.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Test suites act as evolutionary anchors that freeze local architecture. By optimizing for the preservation of existing behavior, tests penalize structural refactoring, ensuring that the system accumulates historical accidents rather than evolving optimal structures.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Code review optimizes strictly for local correctness and immediate risk mitigation, systematically rejecting architectural exploration. This Darwinian selection pressure favors conservative, incremental patches, causing the system's design to drift away from its changing operational environment until the gap becomes unbridgeable.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become rigid because dependencies accumulate faster than they are removed, creating a monotonically increasing coupling density. The system eventually reaches a critical threshold where the cost of safely upgrading or removing any single dependency exceeds the expected value of the change.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The 'correctness' of a local change is historically contingent on the API contracts and execution context present at the time of merge. As the surrounding system evolves, these original contexts dissolve, silently mutating previously correct code into latent technical debt without triggering any test failures.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Maintainability is a victim of the second law of thermodynamics applied to information theory. Each locally correct change increases the total Shannon entropy of the codebase because developers add specific logic without pruning dead abstractions, inevitably dispersing the system's original architectural information.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Software rigidity scales with the undocumented entropy of the domain model. As the real-world domain evolves, the gap between the implicit real-world state and the explicit codebase state widens; each locally correct patch temporarily patches this gap but structurally solidifies the outdated model.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every locally correct change is an evolutionary step that optimizes for immediate fitness while ignoring long-term adaptability. Over thousands of iterations, the system climbs a local maximum in the fitness landscape, making any future structural change require a massive, unviable 'valley crossing' rewrite.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running systems stems from the accumulation of exception-handling code. Locally correct patches handle edge cases by adding special cases rather than unifying abstractions, causing control flow to become a combinatorial explosion of historical accidents that cannot be safely reasoned about.\",\n      \"probability\": 0.08\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 728,
+      "total_tokens": 903
+    }
+  },
+  "transport_error": null
+}

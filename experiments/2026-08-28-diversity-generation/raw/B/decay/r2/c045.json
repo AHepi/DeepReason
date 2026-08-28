@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Linguistic semantic drift: APIs accumulate de facto meanings via usage patterns that diverge from their declared types, making type-checking a decreasingly tight bound on behavioral correctness\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.519
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-554",
+    "object": "chat.completion",
+    "created": 1787930268,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"APIs develop covert semantic contracts through usage patterns that type signatures cannot encode—callers come to rely on undocumented ordering, timing, or partial-failure behaviors that become load-bearing over time. Because each local change preserves declared types while silently shifting these de facto semantics, type-checking becomes a progressively looser bound on actual system behavior. The result is that long-running systems ossify not from accumulated bugs, but from an expanding gap between the formal interface grammar and the operational dialect the code actually speaks.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 145,
+      "completion_tokens": 108,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

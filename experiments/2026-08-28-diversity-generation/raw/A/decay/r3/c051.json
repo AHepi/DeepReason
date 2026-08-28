@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.612
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-968",
+    "object": "chat.completion",
+    "created": 1787930419,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a system evolves, individual locally-correct changes accumulate implicit cross-dependencies that form a hidden coupling graph never explicitly represented in the code or tests. Each change optimizes locally but irreversibly thickens this graph, progressively narrowing the space of future changes that preserve global invariants. The system becomes harder to change not because any single change was wrong, but because the hidden coupling graph's density eventually makes most non-local modifications require simultaneously updating an unspecifiable number of entangled assumptions.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 106,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

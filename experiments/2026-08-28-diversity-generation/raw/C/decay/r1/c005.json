@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.185
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-795",
+    "object": "chat.completion",
+    "created": 1787930066,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"The primary cause of decay is implicit dependency inversion: locally correct changes accumulate hidden state couplings between modules that have no syntactic representation, meaning the system's true dependency graph diverges from its declared architecture until no single change is locally evaluable.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Long-running systems degrade because test suites optimize for the detection of regressions rather than the preservation of changeability, causing tests to over-constrain internal implementation details until the cost of any modification exceeds the cost of the feature it enables.\",\n      \"probability\": 0.092\n    },\n    {\n      \"conjecture\": \"Software entrenchment is driven by the loss of design intent: each locally correct change patches a symptom of a previous architectural decision, but the original constraints that justified that decision are never recorded, forcing future developers to reverse-engineer the system's own history before safely modifying it.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"The system becomes harder to change because continuous integration enforces a Nash equilibrium where individual developers optimize for minimizing local review friction, leading to an accumulation of narrow patches and wrappers rather than the structural refactoring that would prevent architectural erosion.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"Complexity accumulates because the frequency of changes scales super-linearly with the number of conceptual boundaries crossed, meaning locally reviewed changes naturally avoid crossing boundaries, causing the architecture to calcify around initial accidental boundaries rather than evolving toward the domain's true structural axes.\",\n      \"probability\": 0.071\n    },\n    {\n      \"conjecture\": \"The system's state space grows combinatorially with each correct change, but the documentation of invalid state combinations grows linearly at best, meaning the probability of a developer unknowingly introducing an incompatible state interaction approaches 1.0 as a function of system age.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Long-running systems become intractable because they undergo continuous pressure to maintain backward compatibility with external interfaces, resulting in a buildup of deprecated-but-unremovable code paths that choke the system's ability to adopt new internal abstractions, a phenomenon strictly analogous to the accumulation of neutral mutations in asexual populations.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The core issue is temporal coupling: changes are reviewed and tested for correctness at time T, but their half-lives of relevance are never measured, causing the system to accumulate obsolete logic, dead parameters, and zombie dependencies that cannot be safely removed because no test asserts their irrelevance.\",\n      \"probability\": 0.062\n    },\n    {\n      \"conjecture\": \"Every locally correct change optimizes for a specific use case, but the global system lacks a mechanism for deprecating the use cases that are no longer valuable, resulting in an architecture that must simultaneously satisfy an unbounded, monotonically increasing set of historical requirements.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Code review processes are structurally blind to emergent complexity: they evaluate the diff against the immediate surrounding context, but the cognitive cost of a change is a function of the system's total cyclomatic complexity, meaning the review process systematically underestimates the true cost of the changes it approves.\",\n      \"probability\": 0.074\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 749,
+      "total_tokens": 924
+    }
+  },
+  "transport_error": null
+}

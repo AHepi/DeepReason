@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Mandatory dependency eigenvalues from combinatorial version constraints\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.635
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-793",
+    "object": "chat.completion",
+    "created": 1787930565,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The spectral radius of the package dependency graph's adjacency matrix acts as a mandatory eigenvalue: as dependency depth grows, this radius exceeds 1, forcing small local version perturbations to amplify exponentially through transitive constraints, making globally-consistent change configurations unreachable regardless of individual correctness.\", \"probability\": 0.087}, {\"conjecture\": \"Every combinatorial version constraint in a dependency graph contributes a discrete eigenvalue to the system's constraint Jacobian; long-lived systems accumulate eigenvalues near zero, and the resulting ill-conditioning means valid version combinations become measure-zero sets that no local search process can find.\", \"probability\": 0.079}, {\"conjecture\": \"The Perron-Frobenius eigenvalue of a software system's directed dependency graph is a mandatory invariant: once it crosses a critical threshold determined by the combinatorial product of version constraint densities, the system enters a phase where the fraction of satisfiable version assignments collapses super-polynomially, creating an effective change barrier.\", \"probability\": 0.082}, {\"conjecture\": \"Long-running systems accumulate mandatory eigenvalues at the combinatorial intersection of version constraint polytopes; each correctly-reviewed change adds a constraint facet that shifts eigenvalues toward degeneracy, until the constraint matrix's null space dimension forces all feasible changes to require simultaneous coordination across a number of packages scaling with system age.\", \"probability\": 0.068}, {\"conjecture\": \"The dominant eigenvalue of the version-constraint incidence matrix is a Lyapunov exponent for the change process: when it becomes positive (guaranteed once the combinatorial dependency expansion exceeds a threshold), individual correct changes diverge from globally stable configurations, and the system's Kolmogorov complexity for any valid change set grows linearly with dependency count.\", \"probability\": 0.074}, {\"conjecture\": \"Each version-pinned dependency edge introduces a mandatory eigenvalue constraint on the space of permissible changes; as the system ages, the product of these eigenvalues converges to zero, meaning the volume of simultaneously-updatable package subsets shrinks exponentially, so eventually only the empty change is satisfiable.\", \"probability\": 0.061}, {\"conjecture\": \"The algebraic multiplicity of the zero eigenvalue in the dependency constraint Laplacian is a mandatory function of combinatorial version constraint density; long-lived systems reach a regime where this multiplicity exceeds the rank of feasible change vectors, so every non-trivial change violates at least one constraint regardless of local testing.\", \"probability\": 0.055}, {\"conjecture\": \"Software aging is governed by a mandatory spectral transition: the largest eigenvalue of the semver-satisfaction matrix crosses 1 when the combinatorial ratio of constrained-to-unconstrained edges exceeds a critical value, after which the system enters a frozen phase where the number of valid global configurations drops from exponential to sub-exponential.\", \"probability\": 0.071}, {\"conjecture\": \"The trace of the dependency version-constraint matrix—that is, the sum of its mandatory eigenvalues—grows superlinearly with combinatorial constraint accumulation; once it exceeds the matrix rank, the system develops mandatory rank-deficiency in its change manifold, meaning no sequence of locally-correct edits can span the space of required updates.\", \"probability\": 0.049}, {\"conjecture\": \"Combinatorial version constraints produce a mandatory spectral gap in the dependency graph's normalized Laplacian; as this gap narrows with system age, the mixing time of any local change-propagation process grows exponentially, so even individually-correct changes can never propagate to a globally consistent state within polynomial time.\", \"probability\": 0.066}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 780,
+      "total_tokens": 969
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.159
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-438",
+    "object": "chat.completion",
+    "created": 1787930386,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems decay because each locally correct change is validated only against the existing test suite, so the tests themselves silently encode accumulated, incidental coupling rather than intended invariants. This creates a fitness landscape where the cost of any change is proportional to the distance between the code's current accidental structure and the new requirement, independent of the change's intrinsic complexity. Thus, the system becomes progressively trapped in a local optimum of its own making, where every path to a better global structure requires temporarily degrading correctness as measured by the accumulated tests.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 114,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

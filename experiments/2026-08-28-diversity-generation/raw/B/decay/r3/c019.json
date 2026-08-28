@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Cyclomatic complexity decay: integration of locally-correct changes asymptotically increases the graph diameter of the program's control-flow dependencies\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.077
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-273",
+    "object": "chat.completion",
+    "created": 1787930477,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-correct change adds at least one edge to the program's control-flow dependency graph while removing none, because local tests cannot detect global dependency paths; therefore, graph diameter grows monotonically as O(n) in the number of changes, asymptotically forcing any future modification to transitively touch a fraction of nodes that approaches one. The system becomes harder to change because the reachable set from any edited node eventually encompasses the entire graph, making isolation of blast radius impossible.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 137,
+      "completion_tokens": 103,
+      "total_tokens": 240
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.547
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-598",
+    "object": "chat.completion",
+    "created": 1787930131,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade via an accretion of implicit invariants: each locally correct, reviewed change encodes a hidden assumption about the system's current state, and over time these assumptions become load-bearing constraints that no single module or test suite can make explicit. The system's changeability decays not because any single modification was wrong, but because the density of invisible inter-dependencies grows superlinearly with each edit, eventually reaching a threshold where the cost of proving a new change is safe exceeds the cost of the change itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 114,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

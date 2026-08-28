@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.558
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-123",
+    "object": "chat.completion",
+    "created": 1787930001,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software decays not because of accumulated defects, but because of accumulated local invariants—implicit constraints on the global state space that were never encoded in the type system or tests. Each locally correct change permanently narrows the set of future compatible changes by adding another unstated coupling between modules. The system becomes harder to modify because the developer's mental model of these hidden invariants degrades faster than the code itself, until the cognitive cost of verifying a change exceeds the cost of a rewrite.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 109,
+      "total_tokens": 211
+    }
+  },
+  "transport_error": null
+}

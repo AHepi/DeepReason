@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.173
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-533",
+    "object": "chat.completion",
+    "created": 1787930068,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Local correctness guarantees are systematically decoupled from global architectural constraints. Each locally valid modification introduces implicit assumptions about the system's macro-state that are invisible to localized testing, causing the architectural configuration space to undergo a constrained random walk that progressively eliminates viable future modification paths.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The specification of a software system is never fully formalized, meaning each modification encodes latent, unstated requirements specific to its immediate context. Over time, the accumulation of these implicit requirements creates a divergent specification shadow that must be reverse-engineered by any future developer, increasing modification cost superlinearly with the number of prior changes.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Software modification difficulty is governed by an entropy-like property where the number of possible valid configurations decays with each change. Every locally correct patch narrows the state space of the system by implicitly ruling out alternative architectures, eventually funneling the system into a rigid, low-entropy state where any further change requires violating multiple implicit historical constraints simultaneously.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The cognitive model required to safely modify a system grows according to a power law relative to its history of changes, because each change creates new, non-obvious dependencies between components. Developers rely on transitive assumptions that are only locally validated, meaning the mental graph of interactions that must be held simultaneously to make a correct change expands beyond individual cognitive capacity.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"Automated tests act as evolutionary stabilization mechanisms that lock in historical design decisions. Because tests validate specific implementation structures rather than abstract invariants, a system's test suite progressively constrains the space of possible refactorings, ensuring that architectural rigidity increases monotonically with test coverage as the cost of updating tests outweighs the cost of working around the existing architecture.\",\n      \"probability\": 0.079\n    },\n    {\n      \"conjecture\": \"Code review processes optimize for the minimization of immediate risk, systematically rejecting changes that alter existing patterns in favor of changes that mimic them. This local risk-aversion creates a path-dependent architectural lock-in where sub-optimal initial design choices are replicated infinitely because any deviation is perceived as riskier than propagating the flaw.\",\n      \"probability\": 0.063\n    },\n    {\n      \"conjecture\": \"Software systems accumulate 'dark dependencies'—runtime couplings and execution-order sensitivities that are not expressed in the static code structure or type system. Because local testing only verifies explicitly modeled dependencies, each change adds unmodeled coupling, meaning the true complexity of the system diverges from its structural representation until modifications require solving an NP-hard reverse-engineering problem.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"The abstraction boundaries in a software system decay stochastically with each modification because developers must occasionally 'leak' across them to solve local problems. This boundary leakage is locally optimal and individually negligible, but over thousands of changes, the cumulative degradation of abstraction boundaries means the system eventually behaves as a single monolithic entity where any change risks global side effects.\",\n      \"probability\": 0.088\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because their accumulated modification history creates a combinatorial explosion of untested execution paths. While each individual change is verified against known test cases, the interaction of N changes creates O(N^2) implicit execution contexts, meaning the probability of a future change triggering an unanticipated behavioral intersection approaches 1 as the system ages.\",\n      \"probability\": 0.074\n    },\n    {\n      \"conjecture\": \"The difficulty of changing long-running software scales with the accumulation of 'workarounds'—locally correct patches that compensate for upstream deficiencies rather than fixing them. Each workaround transfers complexity from the immediate problem domain to the global integration domain, meaning the system's apparent functionality is increasingly maintained by a fragile equilibrium of mutually compensating errors.\",\n      \"probability\": 0.069\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 892,
+      "total_tokens": 1067
+    }
+  },
+  "transport_error": null
+}

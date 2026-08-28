@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.512
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-288",
+    "object": "chat.completion",
+    "created": 1787930547,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"The dominant cause of increasing rigidity is the accumulation of implicit invariants—unstated relationships between modules that no single developer holds in mind. Every locally correct change that preserves explicit interfaces can still violate these hidden invariants, so the safe change set shrinks as the invariant space grows, making every future change require more reverse-engineering effort.\", \"probability\": 0.085}, {\"conjecture\": \"Software rigidity increases because each change optimizes locally for the problem at hand, leaving behind a residue of accidental complexity that no subsequent change has incentive to clean up. This one-way ratchet means the codebase accumulates cruft proportional to the number of changes, not the number of features, and each unit of cruft independently increases the cost of reasoning about the next change.\", \"probability\": 0.079}, {\"conjecture\": \"The root cause is the progressive entanglement of the dependency graph: each change tends to add edges faster than it removes them because adding a dependency is cheaper than decoupling. Over time the graph's transitive closure grows until most changes have a blast radius exceeding the change itself, requiring coordination across teams that have no shared mental model.\", \"probability\": 0.072}, {\"conjecture\": \"Long-running systems harden because each bug fix and feature addition encodes a specific expectation about how the system behaves, and these expectations are never consolidated into a single specification. The system becomes a palimpsest of overlapping, partially contradictory assumptions, so any new change must satisfy a growing and increasingly inconsistent set of implicit test cases that exist only as code paths.\", \"probability\": 0.068}, {\"conjecture\": \"The difficulty grows because knowledge about the system is distributed across the codebase, the tests, and the developers, and each developer departure or module rewrite destroys some fraction of it. The system becomes harder to change not because the code is worse but because the ratio of living knowledge to dead code decreases monotonically, increasing the考古 effort required before any change can be safely made.\", \"probability\": 0.063}, {\"conjecture\": \"Each locally correct change adds a small amount of path-dependent complexity that could have been avoided with a different but equally valid local choice. Over thousands of changes, the codebase converges to a state that is a local optimum in the design space but far from any global optimum, and escaping that local optimum requires a coordinated refactoring whose cost exceeds any single feature's budget.\", \"probability\": 0.058}, {\"conjecture\": \"The increasing change cost is fundamentally a coupling-entropy phenomenon: each change increases the mutual information between modules because it introduces new shared assumptions, and this coupling is never removed because removing it has no immediate business value. The system's entropy monotonically increases until the cost of understanding any change exceeds the value of making it.\", \"probability\": 0.052}, {\"conjecture\": \"Test suites accumulate as a one-way ratchet because tests are added to prevent regression but rarely deleted even when the behavior they test becomes irrelevant. The test suite grows to encode the full history of the system's behavior, so any change must satisfy not just current requirements but an ever-growing archive of historical expectations, making even beneficial changes appear as failures.\", \"probability\": 0.047}, {\"conjecture\": \"Long-running systems become harder to change because the mental model required to operate on them fragments across the team: no single developer maintains a complete model, and the overlap between developers' models shrinks over time as people specialize. The cost of a change is proportional to the inverse of model overlap, so as specialization increases, coordination cost grows superlinearly.\", \"probability\": 0.041}, {\"conjecture\": \"The system's behavior space expands combinatorially with each feature flag, configuration option, and conditional path added, while the test suite only ever covers a vanishing fraction of that space. Change difficulty grows because the probability that any given change triggers an untested behavioral combination increases monotonically, making regressions inevitable and their causes increasingly hard to isolate.\", \"probability\": 0.036}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 860,
+      "total_tokens": 1035
+    }
+  },
+  "transport_error": null
+}

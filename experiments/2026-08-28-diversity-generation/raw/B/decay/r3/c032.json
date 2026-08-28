@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.727
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-650",
+    "object": "chat.completion",
+    "created": 1787930500,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As a codebase matures, it asymptotically approaches a state of constraint-satisfaction saturation where the ratio of implicit, undocumented invariants to explicit interfaces exceeds a critical threshold, causing every new feature to collide with at least one invisible constraint. Individual changes remain locally correct because tests and reviews validate only the explicit interface graph, leaving the vast shadow graph of implicit invariants invisible to both human reviewers and automated tooling. This predicts a measurable phase transition: maintainability does not degrade linearly but collapses suddenly once the implicit constraint density crosses a specific topological threshold in the codebase's dependency graph.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 127,
+      "total_tokens": 266
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.006
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-477",
+    "object": "chat.completion",
+    "created": 1787930069,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Hidden Markov chain of architectural states with absorbing entropy wells\", \"Semantic drift measured by embedding distance between commit messages and code intent\", \"Topological rigidity of the dependency graph as measured by algebraic connectivity loss\", \"Information-theoretic decay of executable specification alignment with runtime behavior\", \"Phase-transition model where coupled test suites create a glassy energy landscape that traps refactoring moves\", \"Ecological competition model where design patterns occupy overlapping niches and resist displacement\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 149,
+      "completion_tokens": 99,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

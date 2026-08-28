@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic opacity: the system's behavior becomes computationally irreducible from its source text, making local proof of correctness irrelevant to global changeability\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.449
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-878",
+    "object": "chat.completion",
+    "created": 1787930332,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Source text is a generative description of state trajectories, not the trajectories themselves. Once the number of executed branches exceeds what any reviewer can replay mentally, the running system's behavior is computationally irreducible from the text. Local correctness of each diff is therefore irrelevant to whether the next diff will preserve global behavior.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Every reviewed change is locally correct but encodes an implicit assumption about non-local runtime conditions. These assumptions accumulate faster than they can be documented. The system's behavior becomes irreducible from source because the actual execution path depends on a combinatorial explosion of undocumented state-dependent assumptions.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Unit tests prove local correctness, but the composition of locally-correct modules produces emergent behaviors that are computationally irreducible from the modules themselves. Changeability degrades because no proof at the module level can predict whether a change will preserve the irreducible composed behavior.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Each accepted change increases the state space the next change must reason about. The state space eventually exceeds the Kolmogorov complexity any maintainer can hold. The system becomes computationally irreducible from its source because the shortest description of its behavior is the execution itself.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The source text describes a transition function, not the attractor landscape it produces. Reviewers verify the transition function locally, but the system's actual behavioral constraints are determined by the attractors that emerge over long execution. These attractors are computationally irreducible from the transition function.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Every locally-correct change that passes review still perturbs the distribution of runtime states. The accumulated perturbations create a state distribution that is computationally irreducible from the source text. The next change must preserve behavior across this distribution, but the distribution cannot be derived from the text.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Reviewed changes are locally correct with respect to the developer's mental model of the system, but the mental model's predictive accuracy degrades with each change because the system's behavior is computationally irreducible. The gap between model and reality grows monotonically, making each subsequent change riskier than the last.\",\n      \"probability\": 0.02\n    },\n    {\n      \"conjecture\": \"Locally-correct changes are accepted because they preserve behavior on the test distribution. The test distribution is a finite sample of the system's reachable state space. As the state space grows, the gap between tested and reachable states widens, and the system's behavior on untested states is computationally irreducible from the source.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Reviewers prove correctness relative to the specification they hold in working memory. Each change updates the system but not the specification. The true specification is the union of all changes, which is computationally irreducible from any individual's memory. Local proof against a stale specification is irrelevant to global changeability.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"Every locally-correct change adds a dependency edge in the program's semantic graph. The graph's transitive closure eventually becomes computationally irreducible from any local neighborhood. No reviewer can determine the full set of behaviors affected by a change because that set is defined by the irreducible transitive closure.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 208,
+      "completion_tokens": 796,
+      "total_tokens": 1004
+    }
+  },
+  "transport_error": null
+}

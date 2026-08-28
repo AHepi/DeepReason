@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.901
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-94",
+    "object": "chat.completion",
+    "created": 1787930316,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software entropy is driven by the accumulation of implicit assumptions: each locally correct change encodes the developer's mental model of the system's current state, and these models diverge over time, making future changes require reverse-engineering an ever-larger set of unstated invariants.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Every change to a software system narrows the space of future compatible changes. This creates a combinatorial lock-in where the cost of the next change grows exponentially with the number of prior changes, regardless of code quality.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Testing and review optimize for local correctness but systematically fail to capture cross-cutting concerns. The difficulty of change grows with the square of system size because the number of potential cross-cutting interactions grows quadratically while test coverage remains linear.\",\n      \"probability\": 0.068\n    },\n    {\n      \"conjecture\": \"The fundamental problem is that software architecture is a lossy compression of intent. Each change introduces slight drift between the architecture and the true intent, and this drift compounds because each subsequent change is built on the already-drifted architecture, not the original intent.\",\n      \"probability\": 0.061\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each change optimizes for the problem being solved at that moment, creating a rugged fitness landscape. The system becomes trapped in local optima where any single change to improve maintainability would temporarily reduce functionality.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"The difficulty arises from semantic coupling rather than syntactic coupling. Locally correct changes create hidden semantic dependencies between modules that share data formats, timing assumptions, or error handling patterns. These dependencies are invisible to review and testing but make changes increasingly likely to break distant parts of the system.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Software systems become harder to change because the cost of understanding the system grows faster than the system's value. Each change adds cognitive load that must be paid by every future developer, creating a tragedy of the commons where individual changes are locally rational but globally destructive.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"The root cause is that software requirements evolve on a different timescale than software architecture. Each change patches the gap between current requirements and the original architecture, and these patches accumulate into a layer of technical debt whose servicing cost grows nonlinearly because patches interfere with each other.\",\n      \"probability\": 0.058\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each change adds to the system's specification, but no change removes from it. The specification grows monotonically while the codebase's ability to express that specification does not, creating an expanding gap between what the system must do and what it can express cleanly.\",\n      \"probability\": 0.052\n    },\n    {\n      \"conjecture\": \"The problem is that every change to a software system adds information to the codebase, but the information is distributed across commits, comments, tests, and developer knowledge. As this information accumulates, the probability that any future change conflicts with existing implicit information approaches one, making every change require exhaustive search of the system's history.\",\n      \"probability\": 0.047\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 753,
+      "total_tokens": 928
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.98
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-689",
+    "object": "chat.completion",
+    "created": 1787930493,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A long-lived codebase converges toward a near-satisficing boundary where every implicit invariant among interacting components acts as a constraint, so each locally correct change flips one constraint into a conflict with a previously hidden invariant elsewhere. The system's entropy is not in the code's complexity but in the density of these non-obvious interdependencies, making the constraint graph NP-hard to navigate: any new feature requires solving a constraint-satisfaction problem over invariants that were never explicitly encoded. Because reviews and tests verify local consistency, they cannot detect when a change pushes the global constraint graph past the satisfiability threshold, at which point the next change—no matter how small—cascades into violations across distant modules.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 149,
+      "total_tokens": 288
+    }
+  },
+  "transport_error": null
+}

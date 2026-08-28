@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Phase-transition model where coupled test suites create a glassy energy landscape that traps refactoring moves\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.401
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-462",
+    "object": "chat.completion",
+    "created": 1787930075,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Test suites behave like quenched disorder in spin glasses: each test pins specific behavioral expectations to specific code locations, creating a random-field energy landscape. Locally correct changes minimize energy at their insertion point but collectively produce frustration, so the global minimum drifts away from any reachable state via incremental refactoring.\", \"probability\": 0.09}, {\"conjecture\": \"The glass transition in software occurs when the density of test-code coupling exceeds a threshold where most refactor moves intersect at least one test constraint. Below this threshold refactoring is liquid; above it, the system enters an amorphous solid phase where locally correct changes can no longer rearrange global structure.\", \"probability\": 0.085}, {\"conjecture\": \"Test assertions act as metastable traps: each passing test lowers energy for its specific expected behavior, but the combination of all tests creates a rugged landscape with exponentially many local minima. A refactoring move that is correct for one subsystem is blocked by energy barriers from tests in adjacent subsystems it happens to touch.\", \"probability\": 0.08}, {\"conjecture\": \"The aging of long-running software systems is analogous to physical aging in glasses: the system was formed by rapid sequential deposition of changes, each quenched by tests, preventing annealing. The energy landscape has no single basin but a hierarchy of metastable states, and the system sinks deeper into whichever basin it happened to be deposited in.\", \"probability\": 0.075}, {\"conjecture\": \"Coupled test suites generate frustration analogous to spin glass systems: test A expects behavior X from module M, test B expects behavior Y from module N, but a refactoring that would improve both requires simultaneously changing M and N in a way that temporarily violates both A and B. The frustration energy creates a barrier no single locally correct change can cross.\", \"probability\": 0.07}, {\"conjecture\": \"The effective temperature of a software system — its capacity to explore configuration space via refactoring — decreases monotonically as test coverage increases. High coverage acts like cooling: each test removes degrees of freedom, lowering entropy. The system freezes not because any individual change is wrong, but because the exploration rate drops below the barrier-crossing rate.\", \"probability\": 0.065}, {\"conjecture\": \"Refactoring moves in long-lived systems exhibit sub-Arrhenius barrier crossing: the activation energy required to change a module grows superlinearly with the number of tests that transitively depend on it. This creates a Vogel-Fulcher-like divergence where the effective viscosity of change diverges at a finite test-coupling density, producing a practical glass transition before the system is fully frozen.\", \"probability\": 0.06}, {\"conjecture\": \"Test suites create non-local constraints: a test in subsystem X asserts behavior that implicitly depends on implementation details in subsystem Y. These hidden coupling links form a random graph with a giant connected component above a critical density. Once the giant component forms, any refactoring move has finite probability of triggering cascading test failures, creating an effective glass where the system is trapped in its current configuration.\", \"probability\": 0.055}, {\"conjecture\": \"The hardness of refactoring is governed by a replica symmetry breaking structure in the test-code coupling landscape: different development histories (replicas) would produce different but equally valid configurations, but the actual history quenched one specific configuration. The overlap between reachable configurations under incremental refactoring goes to zero above a critical test density, meaning the system cannot be reshaped without simultaneously violating many tests.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems undergo a Kauzmann-like paradox: as test suites grow, the configurational entropy of reachable refactoring states drops faster than the enthalpy cost of staying in the current state. At a critical test density, the entropy of alternative configurations vanishes, and the system becomes an ideal glass where no refactoring move can access a distinct state — not because moves are forbidden, but because no thermodynamically distinct state is reachable.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 197,
+      "completion_tokens": 854,
+      "total_tokens": 1051
+    }
+  },
+  "transport_error": null
+}

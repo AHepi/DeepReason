@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Concept drift causes domain models to accumulate semantic dead code as business requirements shift, making local correctness a measure against obsolete intents\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 1.148
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-756",
+    "object": "chat.completion",
+    "created": 1787930039,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As business requirements drift, the domain model's conceptual vocabulary decouples from operational reality, leaving code that is locally correct against an obsolete intent but globally unreachable by any current execution path. This conceptual orphaning is invisible to tests and reviews because both validate against the documented model, not the emergent domain, causing the system to accumulate semantic dead code faster than it accumulates technical debt. The growing shadow of this unreachable-but-valid logic increases change friction not through coupling, but because developers must continuously reason over a surface area that no longer maps to the problem they are solving.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 121,
+      "total_tokens": 256
+    }
+  },
+  "transport_error": null
+}

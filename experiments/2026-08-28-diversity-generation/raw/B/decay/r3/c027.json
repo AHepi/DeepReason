@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic model erosion: the system drifts from the development team's mental model as undocumented micro-decisions accumulate below the threshold of code review\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.523
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-454",
+    "object": "chat.completion",
+    "created": 1787930486,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Code review fails to prevent model erosion because reviewers can only verify local correctness against their current mental model, rendering invisible any decision that is locally correct but globally unmodeled. Each such micro-decision widens the gap between the system's actual behavior and the team's working theory of it, and this accumulated discrepancy—not structural complexity—creates the resistance to change perceived as technical debt.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 142,
+      "completion_tokens": 84,
+      "total_tokens": 226
+    }
+  },
+  "transport_error": null
+}

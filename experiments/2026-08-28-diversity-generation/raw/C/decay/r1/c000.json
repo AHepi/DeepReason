@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.838
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-527",
+    "object": "chat.completion",
+    "created": 1787930067,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change encodes implicit assumptions about the existing system state. As the system grows, the set of latent assumptions any new change must satisfy grows combinatorially, increasing the probability that a new change will inadvertently violate a prior, undocumented constraint.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The cost of a change is proportional to the size of the transitive dependency graph of the modified component. Even if each change is locally correct, it necessarily increases the dependency graph's size or density, guaranteeing a monotonic increase in the cost of future changes.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Testing and review validate behavior for known inputs, but each change expands the space of possible system states. The difficulty of change grows as the square root of the number of reachable system states, because the testing effort required to maintain certainty scales sub-linearly, leaving an exponentially growing 'dark state space' of untested configurations.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Software architecture degrades like a thermodynamic system gaining entropy. Each locally correct change minimizes local energy (effort) but globally increases structural entropy. The system becomes harder to change because the 'temperature' required to re-organize the accumulated entropy exceeds the energy of any single incremental change.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The 'locally correct' property is a direct cause of decay. By optimizing for local correctness, developers avoid the larger refactoring steps needed to maintain global architectural integrity. This local optimization bias ensures the global structure slowly drifts into a sub-optimal basin of attraction from which incremental changes cannot escape.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"The difficulty does not grow because of the code itself, but because of the accumulation of external integrations. Each change makes the system slightly more coupled to specific external runtime conditions, data formats, or third-party behaviors. The difficulty of future changes is dominated by the cost of coordinating updates across this growing web of external dependencies.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"Software systems follow a preferential attachment model for dependencies. New changes preferentially attach to the most connected (central) modules. Over time, these central modules become bottlenecked hubs. The system becomes harder to change because any significant modification must route through these overloaded, fragile hubs.\",\n      \"probability\": 0.03\n    },\n    {\n      \"conjecture\": \"The difficulty is an artifact of the difference between the developers' working memory and the system's state. Each change adds a small amount of implicit, undocumented context. The system becomes harder to change when the total implicit context exceeds the working memory capacity of the team, making the system's behavior effectively unknowable.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The system becomes harder to change because each locally correct change adds a constraint that narrows the set of permissible future architectures. The system eventually reaches a state where the space of allowed changes that do not violate existing constraints becomes vanishingly small, making any change feel disproportionately difficult.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Software degradation is an instance of the second law of thermodynamics applied to information structures. Each locally correct change increases the system's information entropy. The effort required to make a change is proportional to the negentropy needed to locally reverse this entropy, which grows monotonically with the system's history.\",\n      \"probability\": 0.02\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 794,
+      "total_tokens": 969
+    }
+  },
+  "transport_error": null
+}

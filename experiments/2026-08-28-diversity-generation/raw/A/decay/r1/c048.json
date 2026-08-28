@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.419
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-436",
+    "object": "chat.completion",
+    "created": 1787930021,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through bad code but through the silent accumulation of implicit cross-module invariants—unstated semantic dependencies between components that no single review or test can capture because they were never written down. Each locally correct change tightens this invisible constraint network, shrinking the space of future valid modifications. Therefore, the system's increasing rigidity is not a failure of engineering discipline but an emergent thermodynamic property: unrecorded dependencies act as entropy that accumulates irreversibly with every commit, because the cost of re-discovering and re-documenting them is never paid at the time the dependency is introduced.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 131,
+      "total_tokens": 233
+    }
+  },
+  "transport_error": null
+}

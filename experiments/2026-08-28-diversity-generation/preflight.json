@@ -1,0 +1,34 @@
+{
+  "http_status": 200,
+  "model_echoed": "glm-5.2",
+  "content": "It can be logically tested and potentially proven false through observation or experiment.",
+  "reasoning_field_present": false,
+  "reasoning_payload": {},
+  "usage": {
+    "prompt_tokens": 23,
+    "completion_tokens": 15,
+    "total_tokens": 38
+  },
+  "raw": {
+    "id": "chatcmpl-599",
+    "object": "chat.completion",
+    "created": 1787929955,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "It can be logically tested and potentially proven false through observation or experiment."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "completion_tokens": 15,
+      "total_tokens": 38
+    }
+  }
+}

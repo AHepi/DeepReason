@@ -1,0 +1,16 @@
+2026-08-28T15:13:13Z === driver start; PREREG frozen at commit 9354749ec35d6617a71898945564619e2ca13e21 ===
+2026-08-28T15:13:13Z provider: https://ollama.com/v1 model=glm-5.2 temperature=0.9 top_p=0.95 reasoning_effort=none
+2026-08-28T15:13:13Z question digests verified: {"decay": "875059b0cc2e11dec8b71862336f19a6357cc04eb31bb3e5c435c68fa2c8598a", "geometry": "938411430006153e48e9aec2d5f0f8843e162a15f2b438847cc8349c5f7e6167", "technique": "ec18e174eef61c8851f06bb78d48805bcecc0c42a131ebc5b1c7ec2a0c7caed2"}
+2026-08-28T15:13:44Z cell A/decay/r1: 60 calls, 12550 tokens, 31.2s
+2026-08-28T15:14:16Z cell B/decay/r1: 61 calls, 15691 tokens, 31.6s
+2026-08-28T15:14:28Z cell C/decay/r1: 6 calls, 5595 tokens, 12.2s
+2026-08-28T15:14:40Z cell D/decay/r1: 7 calls, 5813 tokens, 11.5s
+2026-08-28T15:15:58Z cell A/decay/r2: 60 calls, 12363 tokens, 78.7s
+2026-08-28T15:18:14Z cell B/decay/r2: 61 calls, 15823 tokens, 135.2s
+2026-08-28T15:18:36Z cell C/decay/r2: 6 calls, 5047 tokens, 22.0s
+2026-08-28T15:19:05Z cell D/decay/r2: 7 calls, 6060 tokens, 29.7s
+2026-08-28T15:20:37Z cell A/decay/r3: 60 calls, 11958 tokens, 92.0s
+2026-08-28T15:22:04Z cell B/decay/r3: 61 calls, 15771 tokens, 87.1s
+2026-08-28T15:22:30Z cell C/decay/r3: 6 calls, 5540 tokens, 25.7s
+2026-08-28T15:22:58Z cell D/decay/r3: 7 calls, 5956 tokens, 28.1s
+2026-08-28T15:24:10Z cell A/geometry/r1: 60 calls, 15991 tokens, 71.5s

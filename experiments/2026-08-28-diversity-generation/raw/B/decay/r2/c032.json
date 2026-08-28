@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Topological knot formation: dependency links between modules are locally tree-like but globally form non-contractible loops that cannot be untangled by local operations\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 20.966
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-548",
+    "object": "chat.completion",
+    "created": 1787930244,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become rigid because individually correct, locally reviewed changes accumulate dependency links that are tree-like in every local neighborhood but globally form non-contractible loops in the dependency graph. Each such loop encodes an implicit invariant—e.g., module A transitively constrains B which constrains C which constrains A—so no sequence of single-module edits can contract it, because breaking any one edge simultaneously violates the invariant enforced by the other edges. The system's resistance to change therefore scales not with total dependency count but with the rank of its first homology group: the number of independent non-contractible loops, which grows monotonically under locally conservative edits and can only be reduced by a global, multi-module refactor that contracts a loop in a single coordinated step.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 141,
+      "completion_tokens": 164,
+      "total_tokens": 305
+    }
+  },
+  "transport_error": null
+}

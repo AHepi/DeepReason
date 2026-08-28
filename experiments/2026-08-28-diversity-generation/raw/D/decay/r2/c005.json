@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Affordance network collapse: repeated optimization of existing interfaces eliminates nearby alternatives, stranding the system in a deep basin of the design landscape\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.157
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-494",
+    "object": "chat.completion",
+    "created": 1787930342,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Repeated optimization of an interface tightens its coupling to its callers' assumptions, eroding nearby alternatives that could have been swapped in at low cost. Each well-reviewed change sharpens the interface's affordances until the design landscape forms a deep basin where every neighboring design requires simultaneous, coordinated changes across many consumers.\", \"probability\": 0.085}, {\"conjecture\": \"Test suites written against current interfaces encode those interfaces' affordances as hard constraints, collapsing the set of nearby alternatives by penalizing any deviation. Over time, the system becomes stranded in a design basin where changing the interface requires rewriting the very tests that validated past changes.\", \"probability\": 0.072}, {\"conjecture\": \"Every locally correct change to an interface prunes some unused affordances while strengthening the remaining ones, gradually eliminating the nearby alternatives that once made the system flexible. The design landscape deepens around the surviving interface until escape requires a discontinuous redesign.\", \"probability\": 0.068}, {\"conjecture\": \"Code review norms favor changes that reuse existing interface affordances over introducing new ones, causing the affordance network to collapse toward a small set of heavily optimized paths. The system falls into a deep basin where nearby alternatives were never explored and are now prohibitively expensive to reconstruct.\", \"probability\": 0.061}, {\"conjecture\": \"As an interface is optimized through repeated local changes, its implicit invariants grow faster than its explicit contracts, creating a deep basin where any nearby alternative violates an unstated assumption. The system becomes hard to change because the collapsed affordance network makes every neighboring design infeasible without first reconstructing the lost invariants.\", \"probability\": 0.078}, {\"conjecture\": \"Documentation and mental models of senior developers track the current affordance network but not the alternatives that were pruned, so as the network collapses, the organization loses the conceptual scaffolding needed to navigate out of the design basin. Every new change deepens the basin by reinforcing the only design path anyone can still reason about.\", \"probability\": 0.054}, {\"conjecture\": \"Each well-tested change to an interface eliminates nearby alternative interfaces by making them redundant with the optimized one, so over time the affordance network collapses to a single path. The system becomes stranded because any change to the surviving interface now requires rebuilding the entire eliminated affordance network from scratch.\", \"probability\": 0.063}, {\"conjective\": \"Repeated optimization of an interface causes its consumers to shed their own fallback affordances, collapsing the broader affordance network into a deep basin of mutual dependency. Changing any single interface becomes infeasible because all nearby alternatives were eliminated not in the interface itself but in every system that learned to rely on its optimized form.\", \"probability\": 0.057}, {\"conjecture\": \"The act of optimizing an interface's affordances creates a gravity well that attracts future changes to extend rather than replace it, collapsing the affordance network through cumulative path dependence. The design basin deepens with each extension until the nearest viable alternative design is farther than any incremental change can reach.\", \"probability\": 0.066}, {\"conjecture\": \"Interfaces that are repeatedly optimized acquire affordances for edge cases that were never anticipated by nearby alternative designs, collapsing the network by making alternatives appear incomplete. The system becomes stranded in a deep basin because any replacement interface must simultaneously reproduce all the emergent affordances or face rejection during review.\", \"probability\": 0.059}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 206,
+      "completion_tokens": 732,
+      "total_tokens": 938
+    }
+  },
+  "transport_error": null
+}

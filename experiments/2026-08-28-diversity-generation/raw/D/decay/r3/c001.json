@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic entropy accumulation across inferred invariants\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.651
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-375",
+    "object": "chat.completion",
+    "created": 1787930564,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change implicitly relies on unstated invariants about the system. Over time, the number of these inferred, undocumented invariants grows, and the probability that any new change violates one of them increases, causing locally correct changes to become globally incorrect.\", \"probability\": 0.085}, {\"conjecture\": \"Semantic entropy accumulates because each tested change narrows the system's observable behavior but leaves the space of acceptable unobserved behaviors unspecified. As the ratio of specified to unspecified behaviors decreases, the likelihood that a new change violates an inferred but untested invariant rises.\", \"probability\": 0.072}, {\"conjecture\": \"Code review and testing enforce explicit correctness but cannot constrain the invariants developers internally infer to make sense of the system. These inferred invariants drift and multiply across the team, so eventually no single developer's inferred model matches another's, making coordinated change impossible without regression.\", \"probability\": 0.068}, {\"conjecture\": \"Each locally correct change preserves the invariants it was tested against but silently invalidates other invariants that were never written down. The system's difficulty of change scales with the square of the number of inferred invariants, because each change must now be checked against an unbounded set of implicit constraints.\", \"probability\": 0.061}, {\"conjecture\": \"Long-running systems become rigid because the semantic distance between the code's explicit behavior and the developers' inferred invariants widens over time. Each change is correct relative to the code, but the code no longer matches the inferred invariants, so changes based on the code inevitably violate the invariants.\", \"probability\": 0.057}, {\"conjecture\": \"Testing and review select for changes that satisfy known invariants but are neutral toward unknown ones. Over time, this selection pressure causes the system to accumulate implicit dependencies on invariants that were never deliberately chosen, and the system becomes increasingly brittle because the space of accidental invariants is unmanageable.\", \"probability\": 0.053}, {\"conjecture\": \"Every correct change adds a constraint to the system's future behavior, reducing the space of valid future changes. Over many iterations, the remaining valid change space shrinks toward zero, not because of code complexity, but because the intersection of all inferred invariants becomes empty.\", \"probability\": 0.049}, {\"conjecture\": \"Locally correct changes are selected to preserve existing invariants, but they simultaneously create new inferred invariants that future changes must also preserve. This ratchet effect means the number of implicit constraints grows monotonically, and the cost of verifying a new change grows linearly with the number of accumulated invariants.\", \"probability\": 0.044}, {\"conjectory\": \"Semantic entropy increases because each change resolves a local ambiguity by fixing a behavior, but the resolution creates new ambiguities at the boundaries of the changed code. These boundary ambiguities accumulate as inferred invariants, and the system becomes harder to change because the boundary interactions exceed any developer's working memory.\", \"probability\": 0.041}, {\"conjecture\": \"The system's difficulty of change is proportional to the variance in developers' inferred invariants. Each reviewed change is consistent with the author's inferred invariants but adds noise to the shared understanding, so over time the variance in what different developers believe the system guarantees becomes large enough that any change is likely to conflict with someone's inferred model.\", \"probability\": 0.038}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 726,
+      "total_tokens": 912
+    }
+  },
+  "transport_error": null
+}

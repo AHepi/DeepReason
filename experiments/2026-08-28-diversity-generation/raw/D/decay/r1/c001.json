@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift measured by embedding distance between commit messages and code intent\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 4.045
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-947",
+    "object": "chat.completion",
+    "created": 1787930073,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems become harder to change because the embedding distance between commit messages and the actual code delta widens monotonically over time. This occurs because early commits describe primitive, accurate intents, while later commits rely on implicit project context, causing a semantic divergence between documented intent and executed logic.\", \"probability\": 0.085}, {\"conjecture\": \"When commit message embeddings and code intent embeddings drift apart, future developers unknowingly build on the documented intent rather than the actual code behavior. This creates an accumulated layer of false assumptions that must be manually untangled before any new change can be safely made.\", \"probability\": 0.092}, {\"conjecture\": \"The rate of change difficulty scales with the variance of the embedding distance between commit messages and code intent across the dependency graph. High variance forces developers to perform expensive, localized semantic reconciliation before making safe modifications.\", \"probability\": 0.078}, {\"conjecture\": \"As a codebase ages, commit messages increasingly reference other commits rather than primitive intents, creating a semantic drift where embedding distance to actual code behavior grows exponentially. This forces developers to traverse a deep graph of historical commit contexts to understand current behavior.\", \"probability\": 0.065}, {\"conjecture\": \"Semantic drift between commit messages and code intent reaches a critical threshold after which the embedding distance becomes so large that automated code search tools return irrelevant results. This makes locating the correct code to modify exponentially harder over time.\", \"probability\": 0.081}, {\"conjecture\": \"Local correctness masks global decay because each locally correct change slightly shifts the code intent embedding without updating the commit message vocabulary. This continuous, unidirectional drift accumulates until the system's actual semantic state is completely unrecognizable from its commit history.\", \"probability\": 0.088}, {\"conjecture\": \"Code intent embeddings drift faster than commit message embeddings because code is constrained by execution requirements while messages are constrained only by human vocabulary. This asymmetry causes the embedding distance between them to grow, creating a semantic debt that makes every change require a full re-derivation of system intent.\", \"probability\": 0.072}, {\"conjecture\": \"Refactoring commits preserve code intent but alter its embedding representation, causing a semantic drift from the original commit messages. This drift makes the system harder to change because developers must continuously map between the original intent vocabulary and the refactored implementation vocabulary.\", \"probability\": 0.059}, {\"conjecture\": \"Semantic drift between commit messages and code intent reduces the accuracy of retrieval-augmented generation tools used for code modification. As the embedding distance grows, LLM-assisted development retrieves increasingly incorrect historical contexts, actively slowing down the rate of safe change.\", \"probability\": 0.095}, {\"conjecture\": \"The embedding distance between commit messages and code intent grows fastest in highly coupled modules because local changes ripple through the code intent without updating the commit messages. This localized drift acts as a spreading infection that makes coupled modules disproportionately harder to modify over time.\", \"probability\": 0.067}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 642,
+      "total_tokens": 833
+    }
+  },
+  "transport_error": null
+}

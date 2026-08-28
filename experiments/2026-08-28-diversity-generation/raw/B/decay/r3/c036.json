@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.76
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-251",
+    "object": "chat.completion",
+    "created": 1787930493,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally-correct change to a long-running system implicitly introduces new constraints by preserving existing behavior, causing the codebase to asymptotically approach a saturated constraint-satisfaction problem where feasible solutions for new features collapse to a measure-zero set. The implicit invariants—unwritten dependencies between components that emerge from accumulated local optimizations—are invisible to tests and reviews precisely because they were never explicitly designed. Therefore, the difficulty of change grows combinatorially not due to code complexity or technical debt, but because the system reaches a state where nearly every candidate modification violates at least one of thousands of accidentally-coupled constraints, making further evolution require simultaneous satisfaction of a nearly-impossible CSP instance.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 143,
+      "total_tokens": 282
+    }
+  },
+  "transport_error": null
+}

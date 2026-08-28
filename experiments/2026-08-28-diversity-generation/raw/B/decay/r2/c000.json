@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information thermodynamics: each correct change injects entropy into the dependency graph, making future reachable states diffuse irreversibly\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.332
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-584",
+    "object": "chat.completion",
+    "created": 1787930166,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct software change diffuses information across the dependency graph irreversibly, increasing the entropy of the system's reachable state space by an amount proportional to the log of newly created coupling edges. This entropy is a thermodynamic resource that cannot be destroyed by subsequent testing or review, which act as local measurements blind to global graph entropy. Consequently, the difficulty of a future change scales with exp(ΔS), where ΔS is the cumulative entropy injected by all prior changes, making the system progressively harder to modify even as it remains functionally correct.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 135,
+      "completion_tokens": 118,
+      "total_tokens": 253
+    }
+  },
+  "transport_error": null
+}

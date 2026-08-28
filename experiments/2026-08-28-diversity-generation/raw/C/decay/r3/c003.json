@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.978
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-11",
+    "object": "chat.completion",
+    "created": 1787930534,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change optimizes for immediate constraints, but the accumulation of these local optimizations creates a rugged fitness landscape where the global cost of any future change increases non-linearly. The system becomes trapped in a local optimum that is increasingly expensive to escape, even though no single change caused the entrapment.\", \"probability\": 0.09}, {\"conjecture\": \"The testing strategy for each change only validates the immediate behavior, creating an implicit, undocumented coupling between modules that share the same test suites. Over time, the cost of changing one module becomes dominated by the cost of updating tests for modules that are not logically related but are structurally entangled, making change prohibitively expensive.\", \"probability\": 0.07}, {\"conjecture\": \"Software architecture is a form of institutional memory, and every locally correct change that bypasses the intended architecture erodes the shared mental model of the system. This erosion creates an asymmetry where developers can no longer predict the blast radius of a change, forcing them to treat the system as a black box and increasing the cost of change due to uncertainty.\", \"probability\": 0.08}, {\"conjecture\": \"Each change adds a new constraint to the system, and the number of constraints grows combinatorially, not additively, as the system ages. The difficulty of change is not proportional to the size of the new feature but to the number of existing constraints that must be simultaneously satisfied, leading to a combinatorial explosion of edge cases.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate implicit state machines that are never modeled explicitly, and every locally correct change adds a transition to these machines without documenting it. The system becomes harder to change because the true state space is unobserved and grows exponentially, making it impossible to reason about all possible state transitions before making a change.\", \"probability\": 0.07}, {\"conjecture\": \"Software systems become harder to change because every locally correct change must preserve backward compatibility with an ever-growing set of consumers, and this compatibility constraint is the primary driver of complexity. The system ossifies not because of internal code decay but because the external interface becomes a rigid contract that cannot be broken without disproportionate cost.\", \"probability\": 0.05}, {\"conjecture\": \"The decomposition of a system into modules is an act of predictive caching, and every change that does not follow the predicted decomposition forces a cache miss that requires a developer to reconstruct the full context. The system becomes harder to change because the accumulation of cache misses means that the cost of reconstructing context for any change grows with the size of the system.\", \"probability\": 0.04}, {\"conjecture\": \"Every locally correct change is a successful mutation that survives the review process, and the system's evolution is a form of genetic drift where neutral or slightly deleterious changes accumulate because they are not selected against. The system becomes harder to change because the genetic drift creates a tangled web of dependencies that have no selective pressure to be simplified.\", \"probability\": 0.03}, {\"conjecture\": \"Software systems are isomorphic to ecosystems, and every locally correct change is the introduction of a new species that fills a niche, creating new niches for further changes. The system becomes harder to change because the ecosystem becomes increasingly specialized and interdependent, and any change risks a cascading extinction event.\", \"probability\": 0.02}, {\"conjecture\": \"The review and testing process is a form of error correction that preserves the information content of the system, but the information content is the code itself, not the design intent. The system becomes harder to change because the error correction process preserves accidental complexity with the same fidelity as essential complexity, making both equally difficult to modify.\", \"probability\": 0.04}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 787,
+      "total_tokens": 962
+    }
+  },
+  "transport_error": null
+}

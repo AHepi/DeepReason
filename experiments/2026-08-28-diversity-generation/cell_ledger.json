@@ -1,0 +1,187 @@
+[
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 12550,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 31.2
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 15691,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Coupling complexity grows superlinearly via constraint accumulation between modules, formally measurable as an expanding graph diameter of implicit invariants",
+      "Test suites act as adaptive organisms that progressively overfit to past implementation specifics, calcifying the interface between behavioral specification and accidental structure",
+      "Concept drift causes domain models to accumulate semantic dead code as business requirements shift, making local correctness a measure against obsolete intents",
+      "Architectural knowledge becomes progressively tacit and undocumented, increasing the cognitive entropy required to reconstruct safe-change boundaries from code alone",
+      "The Lindy effect on dependency graphs creates a hidden monoculture where transitive dependencies age and ossify, making systemic upgrades disproportionately risk-prone",
+      "Information thermodynamics of the development process: each locally-correct change exhausts the 'phase space' of easy modifications, increasing the Kolmogorov complexity required for the next equivalent delta"
+    ],
+    "calls": 61,
+    "wall_s": 31.6
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 5595,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 12.2
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 1,
+    "tokens": 5813,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Hidden Markov chain of architectural states with absorbing entropy wells",
+      "Semantic drift measured by embedding distance between commit messages and code intent",
+      "Topological rigidity of the dependency graph as measured by algebraic connectivity loss",
+      "Information-theoretic decay of executable specification alignment with runtime behavior",
+      "Phase-transition model where coupled test suites create a glassy energy landscape that traps refactoring moves",
+      "Ecological competition model where design patterns occupy overlapping niches and resist displacement"
+    ],
+    "calls": 7,
+    "wall_s": 11.5
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 12363,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 78.7
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 15823,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information thermodynamics: each correct change injects entropy into the dependency graph, making future reachable states diffuse irreversibly",
+      "Game-theoretic review decay: local code reviews optimize for immediate reviewer approval, systematically sacrificing long-term architectural option value",
+      "Causal confounding in test suites: tests encode observed correlations rather than invariants, so they validate past contexts but fail to constrain unseen future interactions",
+      "Topological knot formation: dependency links between modules are locally tree-like but globally form non-contractible loops that cannot be untangled by local operations",
+      "Linguistic semantic drift: APIs accumulate de facto meanings via usage patterns that diverge from their declared types, making type-checking a decreasingly tight bound on behavioral correctness",
+      "Ecological entrenchment: a system's components co-adapt into a fragile mutualism where any single change breaks local fitness, requiring simultaneous multi-component mutation to remain viable"
+    ],
+    "calls": 61,
+    "wall_s": 135.2
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 5047,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.0
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 2,
+    "tokens": 6060,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Goodhart decay: metrics selected for local correctness optimize away the unmeasured affordances future changes depend on",
+      "Self-organized criticality: verified incremental edits accumulate structural correlations that push the system toward a percolation threshold of cascading faults",
+      "Entropy of the implicit contract space: each verified change adds hidden invariants, shrinking the lattice of future viable edits faster than code grows",
+      "Epistemic opacity: the system's behavior becomes computationally irreducible from its source text, making local proof of correctness irrelevant to global changeability",
+      "Ecosystem lock-in: co-evolution with external dependencies creates an entangled network whose joint state space eventually permits no independent local moves",
+      "Affordance network collapse: repeated optimization of existing interfaces eliminates nearby alternatives, stranding the system in a deep basin of the design landscape"
+    ],
+    "calls": 7,
+    "wall_s": 29.7
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 11958,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 92.0
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 15771,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information-theoretic coupling: each correct change narrows the entropy of the system's future state-space toward implicit architectural invariants",
+      "Cyclomatic complexity decay: integration of locally-correct changes asymptotically increases the graph diameter of the program's control-flow dependencies",
+      "Epistemic model erosion: the system drifts from the development team's mental model as undocumented micro-decisions accumulate below the threshold of code review",
+      "Constraint-satisfaction saturation: the codebase becomes a near-complete CSP where every new feature conflicts with an existing, non-obvious implicit invariant",
+      "Phase-transition to self-organized criticality: the dependency network migrates to a critical state where perturbations of equivalent size trigger arbitrarily large cascades",
+      "Algorithmic undecidability of refactoring scope: determining the minimal safe change-set asymptotically approaches the Halting Problem as cross-module invariants scale"
+    ],
+    "calls": 61,
+    "wall_s": 87.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 5540,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 25.7
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 3,
+    "tokens": 5956,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Mandatory dependency eigenvalues from combinatorial version constraints",
+      "Semantic entropy accumulation across inferred invariants",
+      "Control-theoretic gain margin decay in coupled feedback loops",
+      "Topological lock-in via circular waits in mutable state graphs",
+      "Information-theoretic bit rot of unexercised execution paths",
+      "Bayesian posterior brittleness from sparsely observed production states"
+    ],
+    "calls": 7,
+    "wall_s": 28.1
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 15991,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 71.5
+  }
+]

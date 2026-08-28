@@ -1,0 +1,8 @@
+[
+  "Coupling complexity grows superlinearly via constraint accumulation between modules, formally measurable as an expanding graph diameter of implicit invariants",
+  "Test suites act as adaptive organisms that progressively overfit to past implementation specifics, calcifying the interface between behavioral specification and accidental structure",
+  "Concept drift causes domain models to accumulate semantic dead code as business requirements shift, making local correctness a measure against obsolete intents",
+  "Architectural knowledge becomes progressively tacit and undocumented, increasing the cognitive entropy required to reconstruct safe-change boundaries from code alone",
+  "The Lindy effect on dependency graphs creates a hidden monoculture where transitive dependencies age and ossify, making systemic upgrades disproportionately risk-prone",
+  "Information thermodynamics of the development process: each locally-correct change exhausts the 'phase space' of easy modifications, increasing the Kolmogorov complexity required for the next equivalent delta"
+]

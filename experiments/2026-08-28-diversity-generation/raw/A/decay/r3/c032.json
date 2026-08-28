@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.177
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-907",
+    "object": "chat.completion",
+    "created": 1787930399,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software entropy accumulates because each locally correct change optimizes for immediate constraints without preserving the system's navigability of dependency boundaries. Over time, this creates an asymptotic increase in the transaction cost of future changes, as developers must reconstruct lost causal context across increasingly coupled modules. The system becomes brittle not because any single change introduced a defect, but because the aggregate loss of architectural separability makes the cost of verifying a change grow faster than the functionality it adds.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 99,
+      "total_tokens": 201
+    }
+  },
+  "transport_error": null
+}

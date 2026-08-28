@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Epistemic model erosion: the system drifts from the development team's mental model as undocumented micro-decisions accumulate below the threshold of code review\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.532
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-160",
+    "object": "chat.completion",
+    "created": 1787930489,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"The accumulation of undocumented micro-decisions creates an epistemic shadow: a growing set of implicit constraints that govern the system's behavior but are invisible to both code review and automated tests. When a new change is proposed, reviewers evaluate it against the explicit code structure and their own mental model, both of which have drifted from the system's actual behavioral surface. The system becomes harder to change not because the code is more complex, but because the probability of violating an invisible constraint approaches certainty as the shadow grows, making every locally correct change a potential trigger for a distant, inexplicable failure.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 142,
+      "completion_tokens": 126,
+      "total_tokens": 268
+    }
+  },
+  "transport_error": null
+}
