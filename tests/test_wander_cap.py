@@ -538,3 +538,219 @@ def test_no_policy_referenced_signal_is_left_without_an_emit_site():
             # The one that always had an emit site: the drop site tags it.
             continue
         assert f'"{name}"' in emitted, name
+
+
+# --- P12: capability cycles, the denominator, and the silence -------------- #
+
+
+def _capability_step_stub(index):
+    """The shipped capability step's observable contract, and nothing else.
+
+    `_simulation_capability_step` emits a `cycle` heartbeat naming the package
+    or proposal it is working (`scheduler.py:1802`, `1950`, `2030`) and returns
+    True to claim the cycle. A stub of exactly that lets `Scheduler.step()` run
+    the SHIPPED capability branch -- the code under test -- without binding a
+    seat or a capability controller.
+    """
+
+    def step(self):
+        self.harness.record_measure(
+            inputs=[
+                "cycle",
+                str(self._cycles),
+                f"simulation-result:sha256:{index:064x}",
+            ]
+        )
+        return True
+
+    return step
+
+
+def _drive_mixed(scheduler, harness, seed, plan, monkeypatch):
+    """Drive a run whose cycles are a mix of capability and selection cycles.
+
+    CAPABILITY cycles call the real `Scheduler.step()`; only
+    `_simulation_capability_step` is stubbed, to the heartbeat-and-True above.
+    The branch that early-returns is therefore exercised as it ships, which is
+    the whole point -- the defect is in the branch, not in the step.
+
+    SELECTION cycles are driven the way `_drive` above drives them, because
+    `step()`'s selection path continues into conjecture and this fixture binds
+    no seats. Same three-line contract: select, emit, advance.
+    """
+    taken = []
+    for index, kind in enumerate(plan):
+        if kind == "capability":
+            monkeypatch.setattr(
+                Scheduler, "_simulation_capability_step", _capability_step_stub(index)
+            )
+            scheduler.step()
+            taken.append("capability")
+            continue
+        _spawn(harness, index, seed.id)
+        problem = scheduler._select_problem()
+        harness.record_measure(
+            inputs=["cycle", str(scheduler._cycles), problem.id if problem else "-"]
+        )
+        scheduler._disclose_wander()
+        scheduler._cycles += 1
+        taken.append(problem.id if problem else "-")
+    return taken
+
+
+# Epoch 1's committed share trajectory, verbatim from
+# `experiments/2026-08-28-audit-run-problems/probes/q3_cycle_accounting.json`
+# (root `completed-epoch1-run-92e63dcb...a97e3`, 12 cycles, 12 readings,
+# 5 throttles, zero capability cycles). The offline spawner below reproduces
+# it exactly, which is what makes it usable as a bit-for-bit pin.
+_EPOCH1_TRAJECTORY = [
+    "1.000000",
+    "1.000000",
+    "0.500000",
+    "0.333333",
+    "0.500000",
+    "0.400000",
+    "0.500000",
+    "0.428571",
+    "0.500000",
+    "0.444444",
+    "0.500000",
+    "0.454545",
+]
+
+
+def test_the_offline_spawner_reproduces_epoch_1_bit_for_bit(harness):
+    """S3, the control: a run with NO capability cycles must not move.
+
+    This is the arm the fix may not disturb. Epoch 1 is the live root where the
+    cap was measured working -- 12 readings over 12 cycles, the throttle
+    pulling the share back to the floor five times -- and it had zero
+    capability cycles. Pinning its trajectory here makes any change to the
+    non-capability path visible as a byte difference rather than as a
+    plausible-looking number.
+    """
+    seed = _seed_problem(harness)
+    scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+
+    _drive(scheduler, harness, seed, cycles=12)
+
+    readings = _measures(harness, "allocation.seed-lineage-share.v1")
+    assert [r[1] for r in readings] == _EPOCH1_TRAJECTORY
+    assert {r[2] for r in readings} == {"0.500000"}
+    throttles = _measures(harness, "allocation.wander-throttled.v1")
+    assert len(throttles) == 5
+    assert throttles[0] == [
+        "allocation.wander-throttled.v1",
+        "wander-cap.v1",
+        "wander-cap.v1: seed-lineage share 0.3333 below floor 0.5000",
+    ]
+
+
+def test_capability_cycles_do_not_dilute_the_floor(harness, monkeypatch):
+    """Regression (P-T1 epoch 6, audit finding F-F, parked P12).
+
+    Epoch 6 ran 24 cycles: 20 taken by the simulation capability step and 4 by
+    problem selection. It emitted 4 seed-lineage-share readings. Each of the 20
+    advanced `self._cycles` -- the share's denominator -- while
+    `_seed_cycles` and `wander.decide` sat below an early return it never
+    reached, so work that IS the operator's own experiment diluted the floor
+    meant to protect the operator's question, invisibly.
+
+    The rule this pins: a capability cycle selects no problem, so the throttle
+    has no candidacy to restrict on it. It is therefore counted OUT of the
+    policy's denominator and the share it reads is unchanged across it. What is
+    NOT excluded is the disclosure: the reading is emitted on every cycle that
+    advanced the counter, so 20 cycles of silence cannot be mistaken for
+    20 cycles of stability.
+    """
+    seed = _seed_problem(harness)
+    scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+
+    plan = ["selection"] * 4 + ["capability"] * 20
+    _drive_mixed(scheduler, harness, seed, plan, monkeypatch)
+
+    assert scheduler._cycles == 24
+    heartbeats = [
+        list(event.inputs)
+        for event in harness.log.read()
+        if event.inputs and event.inputs[0] == "cycle"
+    ]
+    assert len(heartbeats) == 24
+
+    readings = _measures(harness, "allocation.seed-lineage-share.v1")
+    # No silence: one reading per cycle that advanced the counter.
+    assert len(readings) == 24
+    # The four selection cycles read exactly what epoch 6 recorded.
+    assert [r[1] for r in readings[:4]] == [
+        "1.000000",
+        "1.000000",
+        "0.500000",
+        "0.333333",
+    ]
+    # And the twenty capability cycles moved the denominator not at all: two
+    # seeded selection cycles out of four governed cycles is 0.5, at the floor,
+    # for every one of them. Under the defect this figure is unrecorded; under
+    # a denominator that counted capability cycles it would fall to 2/24.
+    assert {r[1] for r in readings[4:]} == {"0.500000"}
+    assert {r[2] for r in readings} == {"0.500000"}
+
+
+def test_the_denominator_is_order_independent(harness, monkeypatch):
+    """Interleaving must not change the accounting.
+
+    Epoch 6's committed census gives the COUNTS -- 20 capability, 4 selection
+    -- not the order they arrived in. If the share depended on where the
+    capability cycles fell, this tranche could not state what epoch 6 would
+    have recorded. It does not: the governed denominator counts selection
+    cycles, and interleaving moves none of them.
+    """
+    seed = _seed_problem(harness)
+    scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+
+    plan = []
+    for _ in range(4):
+        plan.append("selection")
+        plan.extend(["capability"] * 5)
+    _drive_mixed(scheduler, harness, seed, plan, monkeypatch)
+
+    readings = _measures(harness, "allocation.seed-lineage-share.v1")
+    assert len(readings) == 24
+    selection_readings = [
+        r[1] for r, kind in zip(readings, plan) if kind == "selection"
+    ]
+    assert selection_readings == ["1.000000", "1.000000", "0.500000", "0.333333"]
+    assert readings[-1][1] == "0.500000"
+
+
+def test_a_capability_cycle_discloses_without_inventing_a_throttle(
+    harness, monkeypatch
+):
+    """The throttle is an EVENT on a transition; a capability cycle is not one.
+
+    The reading must be emitted on every cycle. The throttle record must not:
+    a capability cycle restricts no candidacy, and a run that spent twenty
+    cycles inside one experiment must not read as twenty throttling decisions.
+    Because the governed counters cannot move across a capability cycle, the
+    engagement state cannot transition on one either -- so this holds by
+    construction, and this test is what says so out loud.
+    """
+    seed = _seed_problem(harness)
+    scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+
+    plan = ["selection"] * 4 + ["capability"] * 20
+    _drive_mixed(scheduler, harness, seed, plan, monkeypatch)
+
+    throttles = _measures(harness, "allocation.wander-throttled.v1")
+    assert len(throttles) == 1
+    assert throttles[0][2] == (
+        "wander-cap.v1: seed-lineage share 0.3333 below floor 0.5000"
+    )
+    policy_artifacts = [
+        event
+        for event in harness.log.read()
+        if event.rule == Rule.REFL
+        for aid in event.outputs
+        if "allocation.wander-cap.v1"
+        in (getattr(harness.state.artifacts.get(aid), "content_ref", "") or "")
+    ]
+    assert len(policy_artifacts) == 1

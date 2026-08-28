@@ -1,0 +1,78 @@
+.FF.                                                                     [100%]
+=================================== FAILURES ===================================
+________________ test_capability_cycles_do_not_dilute_the_floor ________________
+
+harness = <deepreason.harness.Harness object at 0x7ff6656f3f10>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ff66552b250>
+
+    def test_capability_cycles_do_not_dilute_the_floor(harness, monkeypatch):
+        """Regression (P-T1 epoch 6, audit finding F-F, parked P12).
+    
+        Epoch 6 ran 24 cycles: 20 taken by the simulation capability step and 4 by
+        problem selection. It emitted 4 seed-lineage-share readings. Each of the 20
+        advanced `self._cycles` -- the share's denominator -- while
+        `_seed_cycles` and `wander.decide` sat below an early return it never
+        reached, so work that IS the operator's own experiment diluted the floor
+        meant to protect the operator's question, invisibly.
+    
+        The rule this pins: a capability cycle selects no problem, so the throttle
+        has no candidacy to restrict on it. It is therefore counted OUT of the
+        policy's denominator and the share it reads is unchanged across it. What is
+        NOT excluded is the disclosure: the reading is emitted on every cycle that
+        advanced the counter, so 20 cycles of silence cannot be mistaken for
+        20 cycles of stability.
+        """
+        seed = _seed_problem(harness)
+        scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+    
+        plan = ["selection"] * 4 + ["capability"] * 20
+        _drive_mixed(scheduler, harness, seed, plan, monkeypatch)
+    
+        assert scheduler._cycles == 24
+        heartbeats = [
+            list(event.inputs)
+            for event in harness.log.read()
+            if event.inputs and event.inputs[0] == "cycle"
+        ]
+        assert len(heartbeats) == 24
+    
+        readings = _measures(harness, "allocation.seed-lineage-share.v1")
+        # No silence: one reading per cycle that advanced the counter.
+>       assert len(readings) == 24
+E       AssertionError: assert 4 == 24
+E        +  where 4 = len([['allocation.seed-lineage-share.v1', '1.000000', '0.500000'], ['allocation.seed-lineage-share.v1', '1.000000', '0.500...location.seed-lineage-share.v1', '0.500000', '0.500000'], ['allocation.seed-lineage-share.v1', '0.333333', '0.500000']])
+
+tests/test_wander_cap.py:682: AssertionError
+__________________ test_the_denominator_is_order_independent ___________________
+
+harness = <deepreason.harness.Harness object at 0x7ff6655335d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ff665596dd0>
+
+    def test_the_denominator_is_order_independent(harness, monkeypatch):
+        """Interleaving must not change the accounting.
+    
+        Epoch 6's committed census gives the COUNTS -- 20 capability, 4 selection
+        -- not the order they arrived in. If the share depended on where the
+        capability cycles fell, this tranche could not state what epoch 6 would
+        have recorded. It does not: the governed denominator counts selection
+        cycles, and interleaving moves none of them.
+        """
+        seed = _seed_problem(harness)
+        scheduler = _scheduler(harness, SEED_PROBLEM_BUDGET_FLOOR=0.5)
+    
+        plan = []
+        for _ in range(4):
+            plan.append("selection")
+            plan.extend(["capability"] * 5)
+        _drive_mixed(scheduler, harness, seed, plan, monkeypatch)
+    
+        readings = _measures(harness, "allocation.seed-lineage-share.v1")
+>       assert len(readings) == 24
+E       AssertionError: assert 4 == 24
+E        +  where 4 = len([['allocation.seed-lineage-share.v1', '1.000000', '0.500000'], ['allocation.seed-lineage-share.v1', '0.166667', '0.500...location.seed-lineage-share.v1', '0.166667', '0.500000'], ['allocation.seed-lineage-share.v1', '0.166667', '0.500000']])
+
+tests/test_wander_cap.py:717: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor
+FAILED tests/test_wander_cap.py::test_the_denominator_is_order_independent - ...
+2 failed, 2 passed, 16 deselected in 0.38s
