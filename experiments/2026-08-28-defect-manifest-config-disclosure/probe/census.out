@@ -1,0 +1,153 @@
+== 1. fields dropped from engine_config_json at schema v6: 25 ==
+   RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    default=False                  authority.py, rules/crit.py, rules/experiment.py, signals.py, imports.py
+   RUN       ATTENTION_ALLOCATION_POLICY              default='wander-cap.v1'        wander.py
+   RUN       CAPTURE14_AGE_FLOOR                      default=50                     capture/diagnostics.py
+   RUN       CAPTURE14_ENTER_K                        default=2                      capture/hysteresis.py
+   RUN       CAPTURE14_EXIT_K                         default=0                      capture/hysteresis.py
+   RUN       CAPTURE14_PRECISION                      default=6                      capture/diagnostics.py, capture/hysteresis.py
+   RUN       CAPTURE14_SC_CEILING                     default=0.5                    capture/hysteresis.py
+   RUN       CAPTURE14_WINDOW                         default=200                    capture/diagnostics.py
+   RUN       CHANNELS_DISABLED                        default=[]                     channels.py, v6_policy.py, preparation.py
+   RUN       DISCHARGE_POLICY                         default='discharge-required.v1' discharge/policy.py
+   COMPILE   ENGAGED_CRITICISM_AUTHORITY              default='observe_only'         preparation.py only
+   RUN       FRAME_SLICE_ATTACKERS                    default=5                      capture/hysteresis.py
+   RUN       FRAME_SLICE_DEPARTURES                   default=4                      capture/hysteresis.py
+   RUN       JUDGE_SEATS_ENABLED                      default=False                  authority.py, scheduler/scheduler.py
+   RUN       JUDGE_SUMMONS_COOLDOWN                   default=4                      scheduler/scheduler.py
+   RUN       JUDGE_SUMMONS_PER_CYCLE                  default=0                      scheduler/scheduler.py
+   RUN       K_FRAME                                  default=2                      calculus/nomination.py
+   COMPILE   LEGACY_CRITICISM_ENABLED                 default=True                   preparation.py, cli/main.py
+   RUN       PROMOTION_ENVIRONMENT_MAX                default=64                     calculus/nomination.py
+   COMPILE   SCHOOL_SEATS_ENABLED                     default=False                  preparation.py, cli/main.py
+   RUN       SCOPE_MAX_DEPTH                          default=16                     calculus/nomination.py
+   RUN       SCOPE_MAX_NODES                          default=512                    calculus/nomination.py
+   RUN       SEED_PROBLEM_BUDGET_FLOOR                default=0.5                    wander.py
+   RUN       SPLIT_BUDGET_EXTRACTION_TOKENS           default=512                    llm/adapter.py
+   RUN       SPLIT_BUDGET_SEAT_PROTOCOL               default='auto'                 llm/adapter.py
+
+   BEHAVIOURAL (silently reverts at run time): 22
+   IDENTITY-ONLY (spent at compile time):      3  ['ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+
+== 2. committed run-config.yaml: dropped fields set away from default ==
+  experiments/2026-08-12-live-grounded-extension-expansion/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      RUN       JUDGE_SEATS_ENABLED                      configured=True               run takes=False
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-13-defect-controller-steering-inert/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      RUN       JUDGE_SEATS_ENABLED                      configured=True               run takes=False
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-22-live-reach-rich-run/run-config.yaml
+      (none -- every dropped field at its default)
+  experiments/2026-08-25-change-constructive-frontier/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-25-poietics-program/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      RUN       JUDGE_SEATS_ENABLED                      configured=True               run takes=False
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-26-pc2-rematch/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-27-defect-split-leg-recording/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+  experiments/2026-08-27-pc2b-symmetric-reasoning/run-config.yaml
+      RUN       ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True               run takes=False
+      COMPILE   ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial'   run takes='observe_only'
+      COMPILE   LEGACY_CRITICISM_ENABLED                 configured=False              run takes=True
+      COMPILE   SCHOOL_SEATS_ENABLED                     configured=True               run takes=False
+
+   configs losing at least one dropped field: 7 of 8
+
+== 3. committed run-manifest.json: what the echo actually carries ==
+  experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/2026-08-09-change-fix-p-cepp-1-dual-mode-wiring/live_run_v7/run-manifest.json    v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-12-live-grounded-extension-expansion/run/run-epochs/001/run-manifest.json v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-12-live-grounded-extension-expansion/run/run-manifest.json               v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-13-defect-controller-steering-inert/control-run/run-manifest.json        v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d/run-manifest.json v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d/run-manifest.json v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d/run-manifest.json v6 dropped-present=none criticism_policy=defended_trial compile_notices=0
+  experiments/2026-08-21-fix-wheel-smoke-reason-stage/evidence/run-e9d4bb16-run-manifest.json  v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-change-epoch3-second-lineage/run/run-manifest.json                    v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-change-epoch3-second-lineage/unqualified-attempt1-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-change-epoch3-second-lineage/unqualified-attempt4a-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-22-live-reach-rich-run/run/run-manifest.json                             v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-24-change-rung7-wounds-falls-succession/run/run-manifest.json            v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-25-change-constructive-frontier/run/run-manifest.json                    v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-25-poietics-program/refused-attempt1-manifest-1b31f0065687bd24/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-25-poietics-program/run/run-manifest.json                                v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-26-pc2-rematch/run/run-manifest.json                                     v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-26-pc2-rematch/run_h3/run-manifest.json                                  v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/2026-08-27-pc2b-symmetric-reasoning/run/run-manifest.json                        v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/bronze_pilot_2026-07-14/run-manifest.json                                        v2 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/gemma4_dna_unattended_2026-07-12/run-manifest.json                               v1 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/gemma4_dna_unattended_3_2026-07-12/run-manifest.json                             v1 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/glm_judge_2026-07-14/run-manifest.json                                           v2 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/jolt_architecture_2026-07-16/run-manifest.json                                   v3 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/jolt_architecture_2026-07-16/run/run-manifest.json                               v3 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/live_compare_2026-07-28/deepseek/shallow-runs/shallow-dc6fe3f9c26cede686906a16/run-manifest.json v6 dropped-present=none criticism_policy=None           compile_notices=0
+  experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf/run-manifest.json   v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be/run-manifest.json v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c/run-manifest.json       v6 dropped-present=none criticism_policy=observe_only   compile_notices=0
+  runs/jolt_positive_headroom_v3_1/calibration/20260701/run-manifest.json                      v2 dropped-present=none criticism_policy=None           compile_notices=0
+  runs/jolt_positive_headroom_v3_1/calibration/20260702/run-manifest.json                      v2 dropped-present=none criticism_policy=None           compile_notices=0
+  runs/jolt_positive_headroom_v3_1/calibration/20260703/run-manifest.json                      v2 dropped-present=none criticism_policy=None           compile_notices=0
+
+   committed manifests whose echo carries any dropped field: 0
