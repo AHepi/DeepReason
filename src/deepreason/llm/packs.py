@@ -19,6 +19,10 @@ from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
 from deepreason.ontology.state import EpistemicState, Status
 from deepreason.oracle import EXEC_PROGRAMS
+from deepreason.llm.layout import (
+    RenderLayoutPolicyV1,
+    resolve_layout_policy,
+)
 from deepreason.packs import PackIR, PackSection, allocate_pack
 from deepreason.packs.allocate import approximate_tokens
 from deepreason.programs import content_text
@@ -238,6 +242,26 @@ def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> s
     return text[:limit].replace("\n", " ")
 
 
+def _question_section(text: str) -> PackSection:
+    """The seat's question, restated as the final block.
+
+    MANDATORY and EXACT for the reason `target` and `open-criticisms` are: a
+    droppable restatement would let budget pressure silently restore the
+    arrangement this section exists to abolish, and a compressible one would
+    lose its middle while still looking present. It carries NO new content --
+    the same bytes as the pack's own priority-1 section -- so the cost is one
+    duplication and the benefit is that nothing load-bearing follows it.
+    """
+
+    return _pack_section(
+        "question",
+        text,
+        _QUESTION_PRIORITY,
+        droppable=False,
+        compressible=False,
+    )
+
+
 def _clip(text: str, token_budget: int) -> str:
     return text[: token_budget * _CHARS_PER_TOKEN]
 
@@ -287,6 +311,12 @@ _WITHHELD_ID = "context-withheld"
 # Above every declared priority in either renderer, so the notice always
 # sorts last however many sections a future pack grows.
 _WITHHELD_PRIORITY = 99
+# After the withheld notice, and after everything else. The question restated
+# last is what makes "nothing load-bearing after the question" true of a pack
+# whose material necessarily follows its problem statement; allocation orders
+# by `(priority, id)`, so a priority above every other section is the whole
+# mechanism.
+_QUESTION_PRIORITY = 100
 
 
 def _withheld_notice(dropped: tuple[str, ...]) -> str:
@@ -505,6 +535,7 @@ def render_conj_pack(
     open_criticism_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
     reference_menus: tuple[MenuRender, ...] = (),
+    layout: RenderLayoutPolicyV1 | None = None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -512,7 +543,12 @@ def render_conj_pack(
     stagnation directive. specs are Level-2 diversity specifications:
     candidate k must realize spec k (llm/specs.py). neighbourhood_n caps
     the exemplar section (0 = blind generation — the basin study's
-    conditioning-vs-repertoire manipulation); presentation only."""
+    conditioning-vs-repertoire manipulation); presentation only.
+
+    layout is the render layout policy (DR-INV-render-layout); resolved per
+    call rather than bound at import, so selecting an arrangement through the
+    environment takes effect without a restart."""
+    layout = layout or resolve_layout_policy()
     sections = [
         _pack_section(
             "problem",
@@ -812,6 +848,13 @@ def render_conj_pack(
     # at 4 -- so the legal set is adjacent to what it is legal FOR, rather
     # than in a block of its own at the end of the pack.
     sections += _menu_sections(reference_menus, 4)
+    if layout.question_last:
+        sections.append(
+            _question_section(
+                "QUESTION (restated last, so nothing load-bearing follows "
+                f"it)\nPROBLEM {problem.id}\n{problem.description}"
+            )
+        )
     return _allocate_sections("conjecturer", token_budget, sections)
 
 
@@ -1096,7 +1139,9 @@ def render_crit_pack(
     frame_slice_context: str | None = None,
     frame_crisis_context: str | None = None,
     reference_menus: tuple[MenuRender, ...] = (),
+    layout: RenderLayoutPolicyV1 | None = None,
 ) -> str:
+    layout = layout or resolve_layout_policy()
     target = state.artifacts[target_id]
     # Commitments render BEFORE the target (angle 4): problem criteria lead
     # each interface list, so sibling targets share this section verbatim
@@ -1309,4 +1354,12 @@ def render_crit_pack(
         )
     )
     sections += _menu_sections(reference_menus, 4)
+    if layout.question_last:
+        restated = [
+            "QUESTION (restated last, so nothing load-bearing follows it)",
+            *problem_context,
+            f"DIRECTIVE: mount the strongest NEW specific case against TARGET "
+            f"{target_id}, or attack=false if you find no genuine fault.",
+        ]
+        sections.append(_question_section("\n".join(restated).strip()))
     return _allocate_sections("argumentative-critic", token_budget, sections)

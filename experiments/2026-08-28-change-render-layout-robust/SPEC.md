@@ -135,6 +135,27 @@ minimally updated to: the notice is last among the CONTEXT sections
 map's own sentence in `CON-packs-and-token-economy.md` moves with it, in the
 same commit.
 
+**SECOND PREDICTED FIXTURE UPDATE — added 2026-08-28 DURING execution, and
+recorded here before the test was touched, because the discipline is that a
+fixture may be updated only when the design predicted it and this one was not
+predicted.**
+`tests/test_runtime_workload_integration.py::test_production_conj_pack_uses_sections_and_preserves_mandatory_tail`
+asserts `pack.rstrip().endswith(<the output-contract directive>)`. Its claim,
+named in its own assertions on either side, is that at a 40-token budget the
+MANDATORY sections survive whole while the optional ones are cut — "explicit
+mandatory overflow, not prefix clipping". That claim is untouched and is in
+fact strengthened: the question restatement is one more mandatory section that
+must survive the same budget. The assertion is minimally updated to check that
+the directive arrives IN FULL and that the pack ends with the question. The
+three assertions carrying the actual claim — criteria present, output-contract
+present, optional memory absent, length above the budget — are unchanged.
+
+A third scan found `tests/test_pack_prefix.py::test_long_critic_target_arrives_whole_rather_than_excerpted`
+also asserting an end-of-pack sentence. That one needed NO fixture change: the
+critic's restatement was written to close with the seat's own directive
+wording, so the existing assertion passes unaltered. Recorded because "no
+change needed" is only credible if the near miss is stated.
+
 **Acceptance A2:** for both renderers, with `render-layout.v1` the last `## `
 header is `question` and the census instrument reports
 `after_question_chars == 0`; with `render-layout.legacy-v0` there is no

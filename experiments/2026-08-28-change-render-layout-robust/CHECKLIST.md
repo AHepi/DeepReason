@@ -1,6 +1,6 @@
 # CHECKLIST — one step, one done-criterion
 
-State: step 2 next.
+State: step 3 next.
 Spec: SPEC.md. Request: REQUEST.md.
 
 - [x] 1. S1 — `src/deepreason/llm/layout.py`: `RenderLayoutPolicyV1`, the two
@@ -9,7 +9,7 @@ Spec: SPEC.md. Request: REQUEST.md.
       DONE WHEN: A1's four assertions pass in a new
       `tests/test_render_layout_policy.py::test_the_policy_registry_resolves_and_refuses`.
 
-- [ ] 2. S2 — question-last on `render_conj_pack` and `render_crit_pack`.
+- [x] 2. S2 — question-last on `render_conj_pack` and `render_crit_pack`.
       DONE WHEN: A2 passes, RED against the pre-change tree, and the predicted
       minimal update to
       `test_the_withheld_notice_sorts_last_and_leaves_the_cache_prefix_intact`
