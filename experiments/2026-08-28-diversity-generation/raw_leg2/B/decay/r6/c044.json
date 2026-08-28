@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: stochastic interference between asynchronous state mutations in distributed systems\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.087
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-442",
+    "object": "chat.completion",
+    "created": 1787937603,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"As distributed systems accumulate independent, locally-verified state mutations, the probability of semantically incompatible concurrent interleavings grows super-linearly because each new mutation introduces additional timing permutations that may violate unstated invariants from prior mutations. The system becomes harder to change not because of code complexity, but because the expanding product of concurrent execution orders creates a stochastic shadow state space that no individual review or test can observe, yet which determines global correctness. Therefore, the effective test coverage of concurrent behavior decays combinatorially with each accepted change, causing future modifications to increasingly risk activating latent interference patterns that were previously invisible.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 121,
+      "completion_tokens": 128,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

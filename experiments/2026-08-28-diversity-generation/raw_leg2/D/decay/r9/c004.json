@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Change amplification from emergent coupling between distant modules\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.83
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-101",
+    "object": "chat.completion",
+    "created": 1787938424,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"As a system grows, the number of latent invariants spanning distant modules grows quadratically, but only a linear fraction are captured by tests. The uncaptured invariants become implicit contracts, so any locally correct change that violates one triggers a distant failure that is discovered only after deployment, making developers increasingly cautious and changes increasingly costly.\", \"probability\": 0.09}, {\"conjecture\": \"Emergent coupling accumulates primarily through shared data formats rather than direct calls. Two distant modules become coupled because both serialize or deserialize the same implicit data shape, and any change to that shape in one module breaks the other without any compile-time or test-time signal.\", \"probability\": 0.085}, {\"conjecture\": \"The difficulty of change grows not with total coupling density but with the diameter of the dependency graph's strongly connected components. Once distant modules belong to the same SCC, any change ripples through the cycle, and the system enters a regime where no module can be modified independently regardless of how well each individual change is tested.\", \"probability\": 0.08}, {\"conjecture\": \"Locally correct changes are individually safe but compositionally unsafe: each change slightly shifts the distribution of inputs a distant module receives. Over time, the distant module operates outside its tested input distribution, and failures emerge not from any single change but from the accumulated drift of many individually harmless modifications.\", \"probability\": 0.075}, {\"conjecture\": \"Test suites validate behavioral correctness at each module boundary but cannot validate semantic correctness across boundaries. Emergent coupling manifests as semantic drift: distant modules agree syntactically but diverge in their interpretation of shared concepts, so changes that are locally correct propagate misinterpretations that eventually cause failures.\", \"probability\": 0.07}, {\"conjecture\": \"The cost of change is dominated by the cost of identifying which distant modules are affected, not by the cost of making the change itself. As the system grows, the search space for affected modules grows faster than any static or dynamic analysis tool can prune it, so developers must manually verify an expanding set of distant modules.\", \"probability\": 0.065}, {\"conjecture\": \"Emergent coupling is driven by transitive observability: module A affects module B not through a direct dependency but because both are observed by a shared monitoring, logging, or analytics layer. Changes to A alter the observable behavior that B's consumers depend on, creating coupling that no code-level dependency analysis can detect.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems accumulate temporal coupling: distant modules become coupled through assumptions about the order and timing of each other's operations. These assumptions are never written down or tested, so any change that alters timing — even a locally correct optimization — breaks distant modules in ways that are intermittent and hard to reproduce.\", \"probability\": 0.055}, {\"conjecture\": \"Each locally correct change that does not break anything increases the implicit coupling surface by a small amount, because it reinforces the assumption that the current behavior of distant modules is stable. The system becomes harder to change not because coupling increases in code but because the set of untested assumptions that developers rely on grows with every successful change.\", \"probability\": 0.05}, {\"conjecture\": \"Emergent coupling between distant modules is caused by the progressive elimination of redundancy. Initially, redundant implementations allow independent change, but each locally correct refactor that removes duplication creates a shared dependency. Over time, the system loses all redundancy and every module change requires updating all modules that share the now-unique implementation.\", \"probability\": 0.045}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 189,
+      "completion_tokens": 751,
+      "total_tokens": 940
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.652
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-714",
+    "object": "chat.completion",
+    "created": 1787937911,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate constraints faster than they accumulate explicit documentation of those constraints. Each correct change encodes a requirement, but the requirement itself is rarely recorded, so future maintainers cannot distinguish accidental complexity from essential invariants.\", \"probability\": 0.07}, {\"conjecture\": \"The coupling between modules in a maturing system follows a preferential attachment process: new features attach to the most-connected modules because those are the ones with the most capabilities, creating a power-law dependency distribution where a few modules become change bottlenecks.\", \"probability\": 0.06}, {\"conjecture\": \"Test suites encode the current design as the correct design. As tests proliferate, they make refactoring proportionally harder because any structural change requires updating tests that assert on implementation details rather than behavioral contracts.\", \"probability\": 0.08}, {\"conjecture\": \"Every change that is locally correct still has a nonzero probability of subtly violating an unstated assumption elsewhere in the system. These latent assumption violations accumulate like radioactive isotopes—they are invisible until triggered by a specific future change, at which point they manifest as surprising friction.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty of changing a system is proportional to the square of its state space, not its code size. Each correct change expands the set of reachable states, and the cost of reasoning about any new change grows with the number of states that must be checked for compatibility.\", \"probability\": 0.09}, {\"conjecture\": \"Developer knowledge of a system decays faster than code rot accumulates. The original maintainers' mental model of why each decision was made degrades over time, and the replacement documentation is always incomplete relative to the lived understanding that produced the code.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems converge toward a local optimum in the design landscape. Each change was a greedy step that improved fitness given the current context, but the accumulation of context-dependent steps makes movement toward any global optimum increasingly expensive because it requires traversing a valley of temporarily degraded fitness.\", \"probability\": 0.07}, {\"conjecture\": \"The fraction of code that exists to handle edge cases grows monotonically because edge cases are discovered faster than they are generalized away. Changing the system requires understanding an increasingly long tail of special-case logic, and each change risks creating new edge cases that must be individually handled.\", \"probability\": 0.06}, {\"conjecture\": \"API boundaries ossify because the cost of breaking an external contract grows with the number of consumers, while the cost of working around the boundary internally stays constant. Systems become harder to change because the ratio of internal workarounds to clean refactorings increases as a direct function of external adoption.\", \"probability\": 0.05}, {\"conjecture\": \"The problem is fundamentally thermodynamic: each locally correct change increases the system's information entropy by adding distinctions without simplifying existing ones. The apparent difficulty of change is the metabolic cost of maintaining a low-entropy internal representation against the tendency toward maximum-entropy code.\", \"probability\": 0.03}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 649,
+      "total_tokens": 824
+    }
+  },
+  "transport_error": null
+}

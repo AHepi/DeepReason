@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Sporadic coupling through shared implicit invariants invisible to static analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.05
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-77",
+    "object": "chat.completion",
+    "created": 1787937827,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems accumulate a mesh of unwritten temporal invariants across separately-modified modules—e.g., assumptions about event ordering, rate of arrival, or permissible interleavings—that no individual change violates locally but that collectively narrow the space of safe future modifications. Static analysis cannot see these invariants because they live in runtime behavior across deployment boundaries, not in code structure. The system becomes harder to change not because coupling is visible, but because each past change silently added a constraint that future changes must now satisfy without knowing it exists.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 114,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.765
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-954",
+    "object": "chat.completion",
+    "created": 1787937898,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems accumulate hidden invariants—implicit contracts between distant components that are never documented, tested, or even known to any single developer. Each locally correct change adds new invariants while preserving old ones, so the space of constraints a change must satisfy grows combinatorially, making truly safe modifications impossible to reason about.\", \"probability\": 0.085}, {\"conjecture\": \"Test suites optimize for coverage of existing behavior rather than specification of intended behavior. As the system grows, tests encode accidental implementation details as required behavior, so any change that improves architecture also breaks tests that were never meant to pin that architecture, creating pressure to preserve suboptimal designs.\", \"probability\": 0.078}, {\"conjecture\": \"Every change to a long-running system is selected for local correctness, not global coherence. Over time this selects for changes that minimize immediate disruption rather than changes that maintain conceptual integrity, so the system's architecture drifts toward a local optimum that is increasingly distant from any clean design.\", \"probability\": 0.072}, {\"conjecture\": \"Code reviews catch defects but cannot catch semantic entropy: the gradual increase in the number of distinct concepts a module handles. Each reviewed change adds one concept 'just this once,' and no review can reject it on grounds of cumulative conceptual burden, so modules accrete responsibilities until comprehension fails.\", \"probability\": 0.069}, {\"conjecture\": \"The dependencies between modules in a mature system form a directed graph that gradually becomes a small-world network. Each locally correct change adds edges, and the graph diameter shrinks until changing any node perturbs the entire system, making isolation impossible regardless of testing rigor.\", \"probability\": 0.064}, {\"conjecture\": \"Long-running systems become harder to change because their execution paths converge: over time, the same code handles increasingly many cases, and the probability that any modification affects some rare but important path approaches 1. Testing verifies common paths, but the long tail of edge cases grows faster than test coverage can track.\", \"probability\": 0.061}, {\"conjecture\": \"Each locally correct change consumes conceptual capacity—the finite mental model that developers maintain of the system. Changes are reviewed for correctness but not for model-compression cost, so the system eventually exceeds any developer's working memory, and unmodeled regions become effectively immutable.\", \"probability\": 0.058}, {\"conjecture\": \"Software systems age because their interfaces accumulate optional parameters, feature flags, and backward-compatible shims. Each addition is locally correct and reviewed, but the combinatorial space of interface configurations grows exponentially while the testing budget grows linearly, so untested configuration combinations dominate the change risk.\", \"probability\": 0.055}, {\"conjecture\": \"The difficulty of changing a system is proportional to the number of implicit assumptions encoded in its data formats. Every schema change is backward-compatible and locally correct, but each migration leaves residual assumptions in data that outlives the code that created it, so changes must satisfy constraints imposed by historical data that no current developer understands.\", \"probability\": 0.052}, {\"conjecture\": \"Long-running systems become rigid because their error-handling code co-evolves with their happy paths, creating tight coupling between modules that never call each other directly. Each error path is locally correct, but over time the error-handling graph becomes denser than the call graph, and any change risks perturbing error recovery logic that was never exercised in tests.\", \"probability\": 0.048}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 738,
+      "total_tokens": 913
+    }
+  },
+  "transport_error": null
+}

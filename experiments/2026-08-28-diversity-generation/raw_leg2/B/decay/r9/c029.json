@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift accumulation: local correctness masks micro-decay of shared vocabulary, causing the gap between domain ontology and codebase ontology to ratchet irreversibly\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.554
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-496",
+    "object": "chat.completion",
+    "created": 1787938327,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change introduces sub-symbol deviations between domain terms and their codebase implementations that are individually undetectable because they preserve functional behavior while shifting semantic anchors. Because shared vocabulary terms serve as coordination points, each micro-drift mutates the implicit contract that subsequent changes rely on, meaning the ratchet is driven by transitive misalignment rather than by the accumulated complexity of individual changes. This implies the gap is structurally irreversible: no sequence of locally-correct modifications can restore a drifted term to its prior domain meaning, because the mutations are not bugs but functionally-neutral ontological displacements.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 143,
+      "completion_tokens": 127,
+      "total_tokens": 270
+    }
+  },
+  "transport_error": null
+}

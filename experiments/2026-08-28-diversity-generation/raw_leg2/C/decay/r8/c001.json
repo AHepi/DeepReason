@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.724
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-139",
+    "object": "chat.completion",
+    "created": 1787938132,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software difficulty increases because each locally correct change adds implicit constraints to the system. Over time, these constraints form a combinatorial lock where modifying any single component requires simultaneously adjusting an exponentially growing set of dependent assumptions that were never explicitly documented.\", \"probability\": 0.08}, {\"conjecture\": \"The phenomenon is driven by the divergence between the system's implemented state space and the developers' mental model. Every locally correct change optimizes for immediate behavior, but the accumulated gap between the actual code paths and the team's shared understanding makes predicting the consequences of new changes increasingly unreliable.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems degrade because test suites encode historical regressions rather than architectural intent. As tests accumulate to verify local correctness, they create a rigid behavioral specification that penalizes structural improvements, making the system progressively more resistant to non-local changes.\", \"probability\": 0.06}, {\"conjecture\": \"The difficulty arises from semantic drift in shared abstractions. Each locally correct change slightly extends or repurposes an existing interface or module to avoid broader refactoring. Over years, these abstractions accumulate contradictory meanings, so any new change must navigate the gap between what an abstraction was named for and what it actually does.\", \"probability\": 0.09}, {\"conjecture\": \"Software systems become harder to change because each correct change adds a new coupling edge between modules. The system's changeability is a function of its coupling graph density, and since local optimization never removes edges, the graph asymptotically approaches a state where any modification triggers cascading updates across the entire system.\", \"probability\": 0.08}, {\"conjecture\": \"The root cause is the accumulation of dead code and orphaned logic that survives because it is locally correct and tested but no longer serves any user-facing purpose. This debris increases the cognitive load of navigation and the risk surface for any change, as developers cannot distinguish live logic from historical residue without expensive archaeological investigation.\", \"probability\": 0.05}, {\"conjecture\": \"Every locally correct change optimizes for a local objective function, but the system's global maintainability is a non-linear function of these local choices. The mismatch between local optimization and global degradation means that even perfect local decisions systematically destroy the system's capacity for future change.\", \"probability\": 0.07}, {\"conjecture\": \"The increasing difficulty reflects a phase transition in the system's dependency network. Initially, dependencies form a sparse tree where local changes have bounded impact. As changes accumulate, the network crosses a percolation threshold, forming a giant connected component where any change can propagate anywhere, making every modification effectively global.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems become harder to change because each change encodes knowledge about a specific historical context that is later forgotten. The code becomes an archive of obsolete requirements, and the cost of change grows because developers must reverse-engineer which behaviors are still intentional and which are vestigial artifacts of past decisions.\", \"probability\": 0.06}, {\"conjecture\": \"The problem is that review and testing enforce correctness relative to past decisions, not consistency with future direction. Each approved change locks in a design choice that narrows the space of feasible future architectures. Over time, the accumulated weight of locked-in choices creates a local optimum that is increasingly expensive to escape.\", \"probability\": 0.09}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 710,
+      "total_tokens": 885
+    }
+  },
+  "transport_error": null
+}

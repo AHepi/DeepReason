@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Software aging via unmodeled external environmental drift\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.018
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-798",
+    "object": "chat.completion",
+    "created": 1787938414,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software becomes harder to change because implicit dependencies accumulate on specific environmental states—filesystem layouts, DNS conventions, ambient network latency—that were never explicitly modeled. Each locally correct change silently hardcodes another assumption about the environment, so the system gradually crystallizes around a configuration that no longer exists.\", \"probability\": 0.08}, {\"conjecture\": \"Each change is tested against the current environment, so tests encode assumptions about environmental behavior that drift over time. As the environment shifts, the test suite becomes a fossil of past conditions, making changes appear incorrect when they would actually be correct for the current environment.\", \"probability\": 0.06}, {\"conjecture\": \"Locally correct changes don't propagate to external systems that have adapted to the software's previous behavior. Over time, an implicit API contract emerges between the software and its environment that exists nowhere in code but constrains every future change.\", \"probability\": 0.05}, {\"conjecture\": \"The relative frequency of environmental conditions changes over time, so code paths that were rarely exercised become dominant and vice versa. Changes to now-critical paths are hard because they were never designed for the load and importance they now carry, yet local review sees them as peripheral.\", \"probability\": 0.04}, {\"conjecture\": \"Because the environment drifts, the cost of verifying a change grows over time as developers must reconstruct increasingly obsolete environmental conditions. The difficulty is not in the change itself but in the growing gap between the environment the code was written for and the environment needed to validate it.\", \"probability\": 0.07}, {\"conjecture\": \"Changes are reviewed against explicit requirements but not against the implicit environmental invariants those changes rely on. Over time, the set of unmodeled invariants grows until any change risks violating one, but no one knows which ones exist or which change will trigger the violation.\", \"probability\": 0.03}, {\"conjecture\": \"Each locally correct change adapts the software to current environmental conditions without abstracting the adaptation. Over years, the system accumulates dozens of environment-specific adaptations layered on top of each other, making every new change require understanding the entire stack of past adaptations.\", \"probability\": 0.05}, {\"conjecture\": \"The environment drifts in ways that introduce new failure modes the software was never designed to handle. Each change is locally correct relative to known failure modes, but the growing set of unhandled environmental failures makes any change risky because it might interact with an unknown mode.\", \"probability\": 0.02}, {\"conjecture\": \"External systems in the environment evolve their own compatibility layers around the software's quirks. Every locally correct change that fixes a quirk risks breaking those external adaptations, but since these adaptations are invisible to the change's reviewers, the system becomes increasingly constrained by them.\", \"probability\": 0.04}, {\"conjecture\": \"The mapping between environmental inputs and meaningful system states becomes increasingly ambiguous as the environment drifts. Changes become hard because developers can no longer determine whether a behavior change reflects their code or an environmental shift, making it impossible to distinguish correct from incorrect changes.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 660,
+      "total_tokens": 848
+    }
+  },
+  "transport_error": null
+}

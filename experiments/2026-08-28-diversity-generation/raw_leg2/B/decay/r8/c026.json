@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Design intent is destroyed bit-by-bit by locally-Bayesian patches that never update the prior\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.658
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-674",
+    "object": "chat.completion",
+    "created": 1787938049,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally-Bayesian patch optimizes code against an implicit, frozen prior derived from the system's state at the time of the change, so the accumulated codebase becomes a palimpsest of incompatible assumptions that no single change can reconcile. Because the design intent is never re-derived as a coherent posterior from the full sequence of patches, the system's behavior is eventually governed by the unresolved contradictions between these stale priors rather than by any current specification, making further change increasingly likely to trigger unintended interactions.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 108,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

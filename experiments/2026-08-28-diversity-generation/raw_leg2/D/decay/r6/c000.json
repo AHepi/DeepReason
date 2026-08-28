@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated constraint covariance\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.127
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-838",
+    "object": "chat.completion",
+    "created": 1787937681,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Each locally correct change introduces implicit invariants that couple non-adjacent modules, so the system's effective constraint surface grows superlinearly with change count. Review and testing cannot detect this because they validate each change against documented requirements, not against the growing space of undocumented invariant interactions.\", \"probability\": 0.08}, {\"conjecture\": \"Constraints accumulate not as explicit rules but as covariance between assumptions held by different subsystems, where each subsystem's assumptions were locally valid at creation time but collectively form a rigid lattice invisible to any single reviewer or test.\", \"probability\": 0.07}, {\"conjecture\": \"Every test that passes encodes a constraint on future changes, because passing tests implicitly define behavioral invariants that future modifications must preserve. A system with N tests has N dimensions of constraint covariance, and the probability that a new change satisfies all N simultaneously decreases as O(1/N^k) for some k>1.\", \"probability\": 0.06}, {\"conjecture\": \"Code review enforces local consistency but is structurally blind to constraint covariance: reviewers compare changes against immediate context, but the interaction between the new change and constraints introduced by all prior changes forms an exponentially growing space that no reviewer can traverse.\", \"probability\": 0.05}, {\"conjecture\": \"Software systems harden because each fix creates a constraint that future fixes must respect, and the set of mutually reinforcing constraints grows combinatorially. The system becomes harder to change not because any single constraint is rigid but because the covariance matrix of constraints becomes nearly singular, leaving almost no degrees of freedom for new modifications.\", \"probability\": 0.07}, {\"conjecture\": \"The half-life of architectural flexibility follows a power law where each change reduces the entropy of the design space by collapsing compatible futures. After enough locally correct changes, the system reaches a constraint-locked state where the only remaining changes are those that reinforce existing constraint covariance rather than introducing new capabilities.\", \"probability\": 0.04}, {\"conjecture\": \"Every correctly implemented change eliminates possible futures, and the elimination is non-random: changes cluster around existing constraints, creating positively correlated constraint densities. This concentration effect means the system develops regions where constraint covariance is so dense that any change requires simultaneously relaxing multiple coupled constraints.\", \"probability\": 0.06}, {\"conjecture\": \"Long-running systems become hard to change because each change optimizes locally, which over time aligns all local constraint surfaces into a globally rigid configuration. This is the software analog of grain boundary locking in metallurgy: individually correct adjustments collectively eliminate the slip planes needed for further deformation.\", \"probability\": 0.05}, {\"conjecture\": \"Constraint covariance accumulates because changes are made in response to different pressures at different times, each encoding a partial model of the system's required behavior. These partial models are individually testable but collectively form a constraint system whose interactions were never validated, creating latent rigidity that manifests only when new changes require spanning multiple models simultaneously.\", \"probability\": 0.07}, {\"conjecture\": \"The difficulty of changing a long-running system scales with the square of the number of constraint-introducing changes, because each new constraint must be checked for compatibility with every prior constraint. This O(n^2) covariance checking is invisible to developers because it manifests as design difficulty rather than runtime cost, making it undetectable by any test suite.\", \"probability\": 0.06}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 183,
+      "completion_tokens": 715,
+      "total_tokens": 898
+    }
+  },
+  "transport_error": null
+}

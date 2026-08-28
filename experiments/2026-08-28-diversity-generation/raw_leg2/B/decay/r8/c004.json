@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Lebesgue measure of tests touched by a random change grows as a power law in system age\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.143
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-297",
+    "object": "chat.completion",
+    "created": 1787938021,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"In a software system of age T (measured in committed changes), the fraction of the test suite executed by a uniformly random future change grows as T^β for some β>0, implying the expected Lebesgue measure of tests touched per change diverges as the system ages. This occurs because semantic coupling between modules grows superlinearly with refactor history, causing each locally correct modification to perturb an expanding subspace of behavioral specifications. The exponent β is determined by the graph-theoretic expansion rate of the dependency network and can be empirically estimated by sampling test-impact sets across historical commits.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 131,
+      "completion_tokens": 129,
+      "total_tokens": 260
+    }
+  },
+  "transport_error": null
+}

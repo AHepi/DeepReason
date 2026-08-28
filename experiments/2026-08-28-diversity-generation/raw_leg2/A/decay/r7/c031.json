@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 15.06
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-665",
+    "object": "chat.completion",
+    "created": 1787937755,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through the accumulation of bad code, but through the systematic destruction of the implicit invariants that originally enabled local reasoning. Each locally correct, reviewed change slightly perturbs the system's historical usage patterns, causing dependencies to form on emergent, undocumented behaviors that were never intended as invariants. Consequently, the conceptual model required to safely make the next change grows combinatorially because developers must now reason about a wider, unstable graph of non-explicit constraints, making safe modification progressively harder regardless of code quality.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 114,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

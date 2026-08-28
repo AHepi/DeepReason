@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Causal coupling accumulation under repeated conditioning\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 29.658
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-132",
+    "object": "chat.completion",
+    "created": 1787938178,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Each locally correct change acts as a conditioning event that increases the mutual information between the module being changed and its environment. This accumulated mutual information manifests as implicit coupling: the environment comes to depend on behaviors of the module that were never part of its specified contract. The system becomes harder to change because the true interface has grown larger than the declared one, and the coupling is invisible until a change violates it.\", \"probability\": 0.085}, {\"conjecture\": \"Repeated conditioning on past changes causes the system's effective state space to concentrate on a narrowing manifold of viable configurations. Each accepted change eliminates nearby alternatives that would have been compatible, so the set of feasible next changes shrinks geometrically. Hardness of change is therefore not accumulated technical debt but an entropy reduction: the system has been overfit to its change history and lost the degrees of freedom needed to absorb novel requirements.\", \"probability\": 0.072}, {\"conjecture\": \"Every correct change establishes a new invariant that downstream code implicitly assumes. These invariants form a growing Bayesian conditioning chain where each change updates the prior over what the system guarantees. The cost of the next change grows linearly with the number of established invariants it must preserve, creating rigidity that is invisible at the level of any single change.\", \"probability\": 0.068}, {\"conjecture\": \"Tests, reviews, and integration checks constitute repeated conditioning on observed system outputs. Each conditioning event prunes the space of alternative implementations the system could tolerate, so the system becomes increasingly constrained to its current trajectory. Future changes become hard because the conditioning has eliminated the structural diversity that would have made alternative designs reachable.\", \"probability\": 0.064}, {\"conjecture\": \"Locally correct changes accumulate because each one conditions only on the immediate context, not on the full distribution of future changes that might be needed. This repeated local conditioning causes the system to converge toward a locally optimal but globally brittle structure. The system becomes harder to change because it has been hill-climbed into a configuration where every dimension of change is blocked by a different accumulated coupling.\", \"probability\": 0.061}, {\"conjecture\": \"Each change conditions downstream consumers on a slightly more specific distribution of inputs and behaviors from the changed component. Over many changes, consumers develop implicit distributional assumptions that are never documented but become load-bearing. A future change becomes hard when it would shift the input distribution enough to violate these accumulated implicit assumptions, even though each individual past change was within spec.\", \"probability\": 0.058}, {\"conjecture\": \"Under repeated conditioning, each accepted change reduces the probability that the next change will be independently accepted. The mechanism is that each change creates a new causal dependency: future changes must preserve the new behavior in addition to all prior ones. This creates a monotone increasing cost function where the expected work of the next change is proportional to the number of prior causal commitments already accumulated.\", \"probability\": 0.055}, {\"conjecture\": \"The system's observable behavior under repeated changes becomes increasingly specified by the conjunction of all past conditioning events, not by any single design. This conjunction grows in logical specificity: the system must satisfy condition 1 AND condition 2 AND ... AND condition n. The probability that a new change satisfies all n conditions decreases multiplicatively, so the cost of finding a compatible change grows exponentially in the number of past changes.\", \"probability\": 0.052}, {\"conjecture\": \"Each change creates a coupling edge between the changed component and the test suite that validates it. Over time, the test suite becomes a dense causal graph conditioning the implementation on a growing set of specific expectations. Changes become hard not because of code complexity but because the test suite has accumulated so many conditioning constraints that any nontrivial change violates at least one test, even when the change is architecturally sound.\", \"probability\": 0.048}, {\"conjecture\": \"Repeated conditioning causes the system to develop causal couplings that are individually negligible but collectively dominant, analogous to weak correlations that become strong in aggregate. No single change review can detect these couplings because each one contributes a vanishingly small amount of constraint. The system becomes hard to change when the sum of these micro-couplings crosses a threshold above which the next change must simultaneously satisfy too many weak constraints to be locally correct.\", \"probability\": 0.045}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 915,
+      "total_tokens": 1101
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.978
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-329",
+    "object": "chat.completion",
+    "created": 1787938388,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, but the accumulation of these local optima creates a globally suboptimal architecture that resists further modification because any single change can no longer address the systemic complexity.\", \"probability\": 0.085}, {\"conjecture\": \"Tests encode specific structural assumptions about the code, turning them into constraints that freeze the underlying implementation in place, making refactoring prohibitively expensive even when behavior is preserved.\", \"probability\": 0.072}, {\"conjecture\": \"Knowledge of why specific structural choices were made decays faster than the code itself, leaving future developers to navigate a mass of implicit invariants they cannot safely refactor or remove.\", \"probability\": 0.068}, {\"conjecture\": \"Dependencies between modules grow stochastically over time, increasing the effective branching factor of possible side effects for any future change until the system's state space becomes computationally intractable to reason about.\", \"probability\": 0.061}, {\"conjecture\": \"Code reviews only verify local correctness against explicit specifications, but system-level coupling emerges from implicit, undocumented interactions between modules that reviews are structurally blind to.\", \"probability\": 0.055}, {\"conjecture\": \"As a system ages, the ratio of functionality representing active business value to historical dead code decreases, increasing the cognitive load and risk of altering any given module without proportional benefit.\", \"probability\": 0.049}, {\"conjecture\": \"Locally correct changes accumulate technical debt by satisfying immediate requirements without updating the system's abstract model, causing the codebase to progressively diverge from a coherent architecture until it fractures.\", \"probability\": 0.078}, {\"conjecture\": \"The complexity of a software system grows super-linearly with its size because the number of implicit state interactions grows combinatorially, outpacing the linear capacity of documentation and testing to capture them.\", \"probability\": 0.058}, {\"conjecture\": \"Individual changes lack the context to anticipate future requirements, causing the system to accumulate point-specific optimizations that actively conflict with the generalizations needed for subsequent adaptations.\", \"probability\": 0.064}, {\"conjecture\": \"The interfaces between system components ossify because changing them requires synchronized updates across multiple teams, creating a coordination tax that makes structural improvements economically irrational even when technically possible.\", \"probability\": 0.052}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 503,
+      "total_tokens": 678
+    }
+  },
+  "transport_error": null
+}

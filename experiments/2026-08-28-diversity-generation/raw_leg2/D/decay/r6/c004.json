@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Test suite overfitting to past mutations\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 32.706
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-76",
+    "object": "chat.completion",
+    "created": 1787937702,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Regression suites act as a genetic algorithm whose fitness function is historical defect reproduction. Each passing test encodes a past mutation as a non-negotiable invariant, so the suite progressively freezes the system into a shape that only admits changes isomorphic to past ones, rejecting functionally valid novel mutations.\", \"probability\": 0.07}, {\"conjecture\": \"Tests overfit to the specific mutation operators that produced past bugs. When a developer proposes a change structurally dissimilar to any prior defect lineage, the suite lacks tests calibrated for that operator class and either falsely passes or falsely fails, creating a systematic bias toward changes resembling historical ones.\", \"probability\": 0.08}, {\"conjecture\": \"Each test pins not one behavior but the entire causal chain that produced a past bug. As these chains overlap, the intersection of allowed state-space shrinks multiplicatively, so difficulty grows exponentially in the number of independent historical defect lineages the suite has memorized.\", \"probability\": 0.06}, {\"conjecture\": \"Test suites encode an implicit specification equal to the union of all past implementation states. Because developers add tests after each fix, the suite conflates accidental historical implementation choices with intended behavior, making any change to an accident appear as a regression.\", \"probability\": 0.09}, {\"conjecture\": \"Long-lived suites overfit to the mutation distribution of their own past CI runs. Tests are added only when a mutation escapes detection, so the suite becomes an adversarial classifier specialized to historical mutants and loses sensitivity to novel mutation classes, causing valid new changes to be blocked as collateral.\", \"probability\": 0.05}, {\"conjecture\": \"Tests written after a bug fix implicitly encode the specific causal path of that bug as the specification. Over time the suite becomes an overfitted classifier that rejects any change perturbing a historically bug-bearing code path, even if the change is behavior-preserving, because the test cannot distinguish the intended invariant from the accident of the past defect's structure.\", \"probability\": 0.09}, {\"conjecture\": \"Test suites accumulate specification overfitting: each test added after a defect encodes not just the required invariant but the particular implementation trace that was patched. The suite's implicit specification drifts toward a conjunction of historical traces rather than intended behavior, so any refactor deviating from past traces triggers a false regression.\", \"probability\": 0.08}, {\"conjecture\": \"Because tests are written in response to specific historical mutations, the suite's detection power is distributed non-uniformly over the mutation space. Regions with dense historical coverage become nearly impossible to change—any perturbation triggers a test—while sparsely covered regions accept arbitrary mutations. The system ossifies precisely where it has historically been defect-prone.\", \"probability\": 0.07}, {\"conjecture\": \"A regression test encodes the delta between a past buggy state and its fix. As the system evolves, these deltas compound: the test suite's implicit specification becomes a high-dimensional conjunction of historical fix points, and any new change must satisfy all of them simultaneously, making the feasible change set shrink combinatorially.\", \"probability\": 0.06}, {\"conjecture\": \"Mutation-tested CI pipelines select for tests that catch historical mutants, creating an overfitted fitness landscape. The test suite evolves to maximize detection of past mutation classes at the cost of generality, so novel but correct changes are increasingly likely to collide with a test that was calibrated against a structurally different historical defect.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 738,
+      "total_tokens": 925
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic entropy of identifiers and interfaces increases monotonically due to non-colliding name reuse\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.019
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-728",
+    "object": "chat.completion",
+    "created": 1787938055,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every locally correct change reuses existing identifiers and interface names in new semantic contexts that do not collide at compile or test time, so the mapping between a name and its possible runtime meanings grows monotonically. Because no collision occurs, reviewers and tests approve the change, yet the accumulated semantic entropy of each identifier increases until the cost of safely modifying it requires reasoning over all past contexts simultaneously. The system becomes harder to change not because any single change was wrong, but because the entropy is invisible to every local verification that approved each step.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 114,
+      "total_tokens": 244
+    }
+  },
+  "transport_error": null
+}

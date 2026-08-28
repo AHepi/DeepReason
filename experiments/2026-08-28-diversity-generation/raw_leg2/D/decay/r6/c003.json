@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Change footprint scaling\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.095
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-92",
+    "object": "chat.completion",
+    "created": 1787937692,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"The expected change footprint grows superlinearly with system size because each new feature introduces implicit coupling to a fraction of existing features, so the number of modules that must be touched per change scales with the surface area of past decisions rather than the size of the intended modification.\", \"probability\": 0.08}, {\"conjecture\": \"Well-tested changes accumulate invisible architectural constraints: each test encodes assumptions about component interactions, so the set of tests effectively constrains the future design space at a rate proportional to the number of past changes, making each new change require more constraint-checking across a growing implicit dependency graph.\", \"probability\": 0.07}, {\"conjecture\": \"Code review catches local defects but cannot detect when a change introduces a new dependency between previously independent subsystems, so each change has a small probability p of creating a hidden cross-module coupling, and after N changes the expected number of hidden couplings grows as pN, expanding the blast radius of every future change.\", \"probability\": 0.09}, {\"conjecture\": \"The change footprint scales with the number of distinct abstraction layers a modification must propagate through, and each locally-correct change tends to add at least one new abstraction without removing old ones, so the propagation depth grows monotonically with change count.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally-correct change optimizes for the current call graph topology, but subsequent changes alter the topology in ways that make prior optimizations become constraints, so the system accumulates structural debt at a rate proportional to the frequency of graph rewiring, and each future change must navigate a denser thicket of frozen optimizations.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty of changing a system scales with the number of implicit invariants—assumptions about state, ordering, or concurrency that are not formally declared. Each correct change preserves existing invariants but introduces new ones, so the invariant count grows linearly with changes while the ability to reason about all of them simultaneously decays combinatorially.\", \"probability\": 0.08}, {\"conjecture\": \"Change footprints grow because each locally-correct modification has a nonzero probability of converting a previously stateless component into a stateful one, and stateful components require coordinated changes across all callers; the number of such components grows over time, increasing the fraction of changes that require multi-site coordination.\", \"probability\": 0.04}, {\"conjecture\": \"The cost of a change is proportional to the number of semantic boundaries it crosses, and each past change tends to sharpen rather than smooth these boundaries; after enough changes the system develops rigid interfaces that are individually clean but collectively form a maze that every new change must navigate.\", \"probability\": 0.05}, {\"conjecture\": \"Each reviewed and tested change encodes a local decision that becomes a precedent for future changes, so the system accumulates decision-specific compatibility constraints at a rate proportional to the change rate, and each new change must respect a growing set of precedents—making the effective change footprint grow as O(N) in the number of prior changes.\", \"probability\": 0.07}, {\"conjecture\": \"Tested changes create a ratchet effect: each test suite that passes becomes a constraint that future changes must not violate, so the number of test-inforced constraints grows linearly with changes while the probability that a new change intersects any given constraint grows with the constraint count, making the expected number of constraints touched per change scale as O(N^2).\", \"probability\": 0.06}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 182,
+      "completion_tokens": 747,
+      "total_tokens": 929
+    }
+  },
+  "transport_error": null
+}

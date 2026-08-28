@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.77
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-830",
+    "object": "chat.completion",
+    "created": 1787937543,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running software systems become harder to change because each locally correct modification probabilistically increases the number of implicit, cross-module invariants that are never represented in code or tests. Over time, the density of these unexpressed invariants grows superlinearly, meaning any new change—though individually sound—risks violating a constraint that was established as an undocumented side-effect of prior changes. The system thus ossifies not because of bad code, but because the true specification of the system has silently diverged from its implementation, rendering the cost of verifying a change asymptotically greater than the change itself.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 128,
+      "total_tokens": 230
+    }
+  },
+  "transport_error": null
+}

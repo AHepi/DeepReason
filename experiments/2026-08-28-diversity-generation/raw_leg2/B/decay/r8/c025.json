@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Design intent is destroyed bit-by-bit by locally-Bayesian patches that never update the prior\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.302
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-637",
+    "object": "chat.completion",
+    "created": 1787938047,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"A software system's architecture functions as an implicit prior encoding the original design intent, and each locally-Bayesian patch—correct in isolation and passing all tests—performs a marginal Bayesian update on the implementation without ever updating that prior. Because the patch is evaluated against local evidence rather than global intent, the posterior implementation drifts from the prior architecture bit-by-bit, accumulating invisible misalignment that eventually makes any further change require reconstructing intent that was never explicitly recorded. This conjecture predicts that the rate of architectural decay is proportional to the ratio of locally-validated patches to intent-updating patches, and is falsifiable by measuring whether systems requiring explicit design-intent documentation alongside each patch exhibit measurably slower growth in change cost over time.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 130,
+      "completion_tokens": 156,
+      "total_tokens": 286
+    }
+  },
+  "transport_error": null
+}

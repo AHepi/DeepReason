@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Shift in untyped latent contracts between boundary modules\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.202
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-161",
+    "object": "chat.completion",
+    "created": 1787937941,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change slightly shifts the distribution of untyped data shapes crossing module boundaries. Over time, downstream modules develop implicit statistical expectations about these shapes that no test or review can capture, because the expectations are never written down. The system becomes harder to change because any modification perturbs a latent distribution that consumers have silently optimized for.\", \"probability\": 0.09}, {\"conjecture\": \"Boundary modules converge on shared semantic assumptions about untyped data that are never formalized. Each approved change refines these assumptions locally, but the global contract becomes a product of all local assumptions, which grows combinatorially and is impossible to inspect. Future changes are hard because they must satisfy an invisible constraint set spanning all module pairs.\", \"probability\": 0.08}, {\"conjecture\": \"Modules develop stochastic coupling through untyped boundary data: each change shifts the latent contract slightly, and consumers adapt silently, creating a random walk of mutual expectations. The probability that a new change violates some consumer's adapted expectation grows with the number of prior changes, even though every prior change was individually correct.\", \"probability\": 0.07}, {\"conjecture\": \"Untyped boundary data causes module pairs to develop private dialects of interaction, each locally rational but globally inconsistent. Every reviewed change deepens one dialect, making cross-module changes require translating between dialects that were never specified. The cost of change grows with the number of distinct dialects, which grows with system age.\", \"probability\": 0.08}, {\"conjecture\": \"Every locally correct change adds one untyped assumption at a boundary. Because the assumption is untyped, no downstream module can detect it until it is violated. The system's changeability degrades as a sum of invisible one-way constraints, each individually harmless, collectively forming a binding web that makes every new change likely to violate some prior assumption.\", \"probability\": 0.09}, {\"conjecture\": \"Modules develop latent type expectations at boundaries that drift independently with each change. Because the types are untyped, drift is undetectable by tests until it causes failure. The expected number of drifted expectations that a new change must satisfy grows linearly with system age, making change cost grow linearly even when each change is locally perfect.\", \"probability\": 0.06}, {\"conjecture\": \"Each reviewed change optimizes a local objective at a boundary, shifting the untyped contract toward that module's needs. Over many changes, the contract becomes an irregular compromise shaped by the order of changes, not by design. The contract becomes harder to change because it encodes historical accident rather than intentional structure, and any new change must work around the accidents.\", \"probability\": 0.07}, {\"conjecture\": \"Untyped boundary contracts create information loss: the producing module's assumptions are stripped when data crosses the boundary as untyped data. Each change adds assumptions that are lost at the boundary, accumulating in the consuming module as undocumented expectations. Change cost grows because the information needed to safely modify the boundary is distributed across modules and was never recorded.\", \"probability\": 0.08}, {\"conjecture\": \"Because boundary contracts are untyped, modules cannot distinguish between essential and accidental properties of the data they receive. Each locally correct change causes consumers to depend on accidental properties (e.g., key ordering, null-vs-missing) that happen to hold. The system becomes harder to change as more accidental properties become load-bearing, but no review can detect this because the dependence is invisible.\", \"probability\": 0.09}, {\"conjecture\": \"Module pairs at boundaries undergo co-evolution through untyped data, each adapting to observed shapes without recording the adaptation. This creates a growing graph of pairwise latent contracts where each edge is a function of the history of exchanges. Change cost grows with the number of edges that must be re-validated, which grows quadratically with module count.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 814,
+      "total_tokens": 1002
+    }
+  },
+  "transport_error": null
+}

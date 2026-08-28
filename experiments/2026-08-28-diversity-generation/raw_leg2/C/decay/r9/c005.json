@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 19.375
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-432",
+    "object": "chat.completion",
+    "created": 1787938399,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems become harder to change because each locally correct modification over-constrains the future design space, creating a combinatorial lock-in where new features must navigate an exponentially growing set of historical architectural decisions that cannot be reversed without invalidating prior assumptions.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Technical debt accumulates not from bad engineering, but from the entropic decay of tacit knowledge: each correct change encodes implicit assumptions that are never documented, so future maintainers must reverse-engineer an increasingly opaque dependency graph before making any modification.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"The system's behavior space grows superlinearly with each change, but its test suite only covers a shrinking fraction of that space, so every modification carries rising probability of triggering an uncovered state, making the risk of any change asymptotically approach certainty of failure.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Each correct change optimizes locally but perturbs the global incentive structure, causing subsequent changes to be made in a regime that is locally rational but globally path-dependent, so the system drifts toward a configuration where every new change requires contradicting an earlier one.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Coupling is an emergent property of independently correct changes: two modules modified separately for correct reasons will acquire implicit shared assumptions that neither module's tests can detect, so the system's effective coupling grows as the square of the number of changes even when the code's explicit structure stays fixed.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Every reviewed and tested change introduces a new implicit invariant the system now depends on, and these invariants accumulate faster than they can be identified or documented, so the number of invisible constraints on future changes grows monotonically while the maintainer's awareness of them decays.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because they accumulate correct-but-irreversible decisions: each change locks in a design choice that was optimal at the time, and the cost of reversing any single decision grows with the number of downstream decisions that have since depended on it, creating a ratchet with no backward mechanism.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"The difficulty of change scales with the number of distinct mental models that have been embedded in the code by successive developers, and because each developer's model is locally correct but mutually incommensurable, the cognitive cost of reconciling them grows faster than any single developer can absorb.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Changes become harder because each correct modification shifts the system's equilibrium slightly, and the system's error-handling and recovery paths accumulate around these equilibria, so any future change must preserve not just the intended behavior but the entire accumulated history of adaptations to past perturbations.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The problem is that testing validates correctness but not relevance: every tested change preserves the system's current behavior contract, but the contract itself drifts away from the organization's actual needs, so changes become harder because each modification must satisfy a growing, implicit, and partially obsolete set of behavioral commitments that no one can safely revoke.\",\n      \"probability\": 0.05\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 765,
+      "total_tokens": 940
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Causal coupling between distant modules emerges via shared hidden variables invisible to static analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.353
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-430",
+    "object": "chat.completion",
+    "created": 1787938084,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems accumulate causal coupling between distant modules through shared hidden variables—timing assumptions, resource contention patterns, and emergent execution orders—that are invisible to static analysis because they exist only at runtime. Each locally correct change alters the statistical distribution of these hidden variables, silently breaking invariants in modules that share no code dependency, no data type, and no call path. The system becomes harder to change because the true dependency graph is defined by runtime causal links that no static representation can surface, making every change an unknowable perturbation to a hidden coupling network.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 127,
+      "completion_tokens": 119,
+      "total_tokens": 246
+    }
+  },
+  "transport_error": null
+}

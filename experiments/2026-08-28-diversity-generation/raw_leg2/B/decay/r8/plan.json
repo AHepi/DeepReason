@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nName 6 genuinely different directions an answer to this could take --\ndifferent in mechanism, level of description, measurement, scope, formal\napparatus, or failure mode. Do not answer the question itself.\nOutput exactly one JSON object and nothing else:\n{\"directions\": [\"<one short phrase>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\", \"<...>\"]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 800,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.087
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-225",
+    "object": "chat.completion",
+    "created": 1787938012,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"directions\": [\"Lebesgue measure of tests touched by a random change grows as a power law in system age\", \"Dependency-graph betweenness centrality of stable modules creates irreversible architectural singularities\", \"Design intent is destroyed bit-by-bit by locally-Bayesian patches that never update the prior\", \"Semantic entropy of identifiers and interfaces increases monotonically due to non-colliding name reuse\", \"The space of valid configurations becomes a non-convex manifold where local gradients trap all feasible refactorings\", \"Causal coupling between distant modules emerges via shared hidden variables invisible to static analysis\"]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 149,
+      "completion_tokens": 121,
+      "total_tokens": 270
+    }
+  },
+  "transport_error": null
+}

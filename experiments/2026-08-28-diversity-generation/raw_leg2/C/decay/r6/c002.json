@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 24.22
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-55",
+    "object": "chat.completion",
+    "created": 1787937656,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Software systems degrade because each locally correct change optimizes for immediate constraints rather than global architecture, producing an accumulation of local optima that collectively form a globally suboptimal and rigid structure.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Implicit dependencies accumulate faster than explicit dependencies because tests and reviews validate behavior but not assumptions, meaning every change silently narrows the space of future valid changes without anyone noticing.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"The system's state space grows combinatorially with each change, but the test suite only grows linearly, so the fraction of behavior validated by tests asymptotically approaches zero, making every change riskier over time.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because the institutional knowledge of *why* code exists decays faster than the code itself, leaving maintainers unable to distinguish load-bearing constraints from accidental complexity.\",\n      \"probability\": 0.075\n    },\n    {\n      \"conjecture\": \"Each correct change adds a constraint that future changes must not violate, so the set of permissible changes shrinks monotonically. The system becomes harder to change because the constraint surface grows linearly while valid solution paths shrink geometrically.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"Technical debt compounds non-linearly because early shortcuts create coupling that forces future shortcuts, creating a positive feedback loop where each workaround increases the cost of the next clean solution.\",\n      \"probability\": 0.065\n    },\n    {\n      \"conjecture\": \"The architecture's initial abstractions become progressively more leaky as edge cases are handled at the wrong layer, and each locally correct patch further entrenches the misplaced boundaries until refactoring requires simultaneously fixing all layers.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Long-running systems become harder to change because each change optimizes locally for the current change frequency distribution, creating a system increasingly brittle to changes outside that distribution. The system becomes specialized to its history of changes.\",\n      \"probability\": 0.055\n    },\n    {\n      \"conjecture\": \"Test suites become adversarial barriers to change because they encode current behavior rather than intended behavior, so every correct change requires updating tests that overfit to implementation details, making the cost of change proportional to test coverage.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The system accumulates entropic coupling: modules that were never designed to interact become coupled through shared infrastructure (logs, configs, deployment), and each new coupling is invisible in code review because it lives outside the code's formal structure.\",\n      \"probability\": 0.045\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 621,
+      "total_tokens": 796
+    }
+  },
+  "transport_error": null
+}

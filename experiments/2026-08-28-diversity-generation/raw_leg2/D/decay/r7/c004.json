@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Non-compositional emergent invariants in asynchronous runtime behavior\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.029
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-242",
+    "object": "chat.completion",
+    "created": 1787937940,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Long-running asynchronous systems accumulate implicit timing invariants—sets of event orderings that never occur in practice but are never explicitly forbidden. Each locally correct change preserves the invariants that have been exercised, but narrows the space of possible interleavings until any new change, however correct in isolation, violates an invariant that was never documented because it never held.\", \"probability\": 0.085}, {\"conjecture\": \"Asynchronous systems develop hidden critical sections: sequences where the runtime's scheduling decisions implicitly guarantee mutual exclusion without any explicit lock. Changes grow harder because new code cannot see these emergent critical sections and may introduce interleavings that violate them, causing failures that are invisible in review and local testing.\", \"probability\": 0.072}, {\"conjecture\": \"The difficulty of change in long-running async systems scales with the growth of a latent concurrency contract: the set of all temporal orderings of cross-component events that have become load-bearing. This contract is never written down, never tested directly, and grows monotonically with each change, so every new change must satisfy an increasingly large set of constraints it cannot observe.\", \"probability\": 0.068}, {\"conjecture\": \"Each locally correct change in an async system slightly reduces the set of reachable global states. Over time, the system converges toward a narrow operational envelope where only a small subset of possible interleavings ever occurs. Changes become hard because any modification that shifts the envelope exposes states that were always possible but never tested, and the system has lost the redundancy needed to tolerate them.\", \"probability\": 0.061}, {\"conjecture\": \"Long-running async systems develop causal shortcuts: components implicitly depend on the fact that certain event orderings are guaranteed by propagation delay rather than by explicit synchronization. Each locally correct change preserves these dependencies in the common case, but the system becomes brittle because changes that alter timing characteristics break causal assumptions that exist only in the runtime's emergent behavior, not in the code.\", \"probability\": 0.055}, {\"conjecture\": \"As systems age, components develop implicit ordering dependencies on the emergent interleaving patterns of upstream async events. These dependencies are invisible at the code level because no single component owns the ordering; it emerges from the interaction of all components' timing. Changes become harder because modifying any component's timing behavior can break ordering assumptions in components it has no static dependency on.\", \"probability\": 0.049}, {\"conjecture\": \"Long-running async systems accumulate phase-locked behavior: groups of components settle into stable temporal relationships (e.g., A always completes before B starts) without explicit coordination. Each locally correct change preserves existing phase locks it depends on, but the system becomes hard to change because any perturbation can shift the phase, causing cascading failures across components that had no known dependency.\", \"probability\": 0.044}, {\"conjecture\": \"Long-running async systems develop emergent backpressure networks: the timing of one component's output implicitly regulates the rate of another's input through a chain of runtime effects. Each locally correct change preserves the backpressure it can observe, but the system becomes hard to change because modifications can break invisible backpressure paths, causing feedback oscillations that no single component controls.\", \"probability\": 0.039}, {\"conjecture\": \"In aging async systems, components develop state coherence invariants that emerge from the timing of their interactions rather than from explicit synchronization. These invariants are never specified and are invisible to static analysis. Changes become hard because each modification risks breaking the temporal conditions that maintain coherence, and the resulting inconsistency appears only under scheduling patterns that local testing cannot reproduce.\", \"probability\": 0.033}, {\"conjecture\": \"Asynchronous systems accumulate emergent invariant transitions: state changes that are safe only because the runtime's timing guarantees they occur in a specific order, even though no code enforces this. Each locally correct change preserves the transitions it depends on, but the system becomes hard to change because new code may introduce transitions whose safety depends on ordering invariants that exist only in the current emergent scheduling pattern and are invisible to all analysis tools.\", \"probability\": 0.028}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 191,
+      "completion_tokens": 867,
+      "total_tokens": 1058
+    }
+  },
+  "transport_error": null
+}

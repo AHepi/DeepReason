@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift accumulation: local correctness masks micro-decay of shared vocabulary, causing the gap between domain ontology and codebase ontology to ratchet irreversibly\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.2
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-159",
+    "object": "chat.completion",
+    "created": 1787938311,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct code change subtly re-purposes a shared identifier's effective meaning, and because no test can detect a semantic shift that remains consistent with all local call sites, the original domain ontology decays through a ratchet of accumulated micro-redefinitions. Since reviewers validate each change against the codebase's current (already-drifted) vocabulary rather than against the original domain intent, the gap between domain ontology and codebase ontology widens irreversibly—each reconciliation would require a coordinated global rename that no local change can justify. The ratchet is irreversible because the original meaning leaves no executable trace: once every reference uses a term in its drifted sense, no test fails, no warning fires, and the original ontology exists only in documentation that is itself subject to the same drift.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 143,
+      "completion_tokens": 165,
+      "total_tokens": 308
+    }
+  },
+  "transport_error": null
+}

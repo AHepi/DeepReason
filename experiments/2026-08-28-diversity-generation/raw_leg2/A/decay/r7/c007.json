@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.946
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-361",
+    "object": "chat.completion",
+    "created": 1787937710,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade because every locally correct change encodes an implicit assumption about the system's prevailing invariants, and these assumptions accumulate as an entangled dependency graph that is invisible to any single reviewer. The system's state space becomes a high-dimensional manifold of coupled constraints, so any new change—though individually valid—unwittingly violates an unstated invariant established years prior. Thus, maintenance difficulty grows superlinearly with the number of historical changes, not because of code volume, but because the unstated assumption space expands combinatorially while the test suite only verifies the explicitly known subset.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 127,
+      "total_tokens": 229
+    }
+  },
+  "transport_error": null
+}

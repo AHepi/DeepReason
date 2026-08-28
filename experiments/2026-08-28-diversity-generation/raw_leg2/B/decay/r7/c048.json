@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ossification of execution paths through reinforcement of high-traffic runtime trajectories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.369
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-99",
+    "object": "chat.completion",
+    "created": 1787937876,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems develop an implicit, traffic-driven coupling between components that is invisible to static analysis: because high-frequency execution paths reinforce shared runtime invariants (timing, caching state, partial-failure modes), any change that alters those paths—even if locally correct—breaks the unstated assumptions other components have adapted to. Over time, the set of such reinforced trajectories becomes a de facto specification that is never written down but is strictly enforced by the cost of deviating from it. Ossification is therefore not accumulation of technical debt but convergence of the system toward a small set of self-reinforcing execution grooves whose constraints no individual change can see or safely violate.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 141,
+      "total_tokens": 267
+    }
+  },
+  "transport_error": null
+}

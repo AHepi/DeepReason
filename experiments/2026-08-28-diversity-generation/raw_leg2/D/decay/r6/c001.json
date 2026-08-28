@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic entropy growth in valid input streams\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 22.669
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-19",
+    "object": "chat.completion",
+    "created": 1787937692,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each valid input the system processes is drawn from a growing space of semantically distinct execution paths. Even though tests cover each path individually, the entropy of the union of all observed paths grows superlinearly, making it statistically improbable that any future change avoids corrupting some previously-unseen but valid semantic class.\", \"probability\": 0.09}, {\"conjecture\": \"Valid input streams encode an implicit, evolving specification of system behavior whose Kolmogorov complexity increases monotonically. The codebase must grow to track this complexity, and the marginal cost of each change scales with the current entropy of the input distribution, not with the size of the change itself.\", \"probability\": 0.08}, {\"conjecture\": \"Long-running systems accumulate latent semantic dependencies between input fields that were never explicitly coupled at design time. As the entropy of valid input combinations grows, these implicit correlations become load-bearing, so any change that ignores them introduces regressions in rare but legal input classes.\", \"probability\": 0.07}, {\"conjecture\": \"The set of valid inputs forms a manifold in a high-dimensional feature space whose intrinsic dimensionality increases over time as new fields, flags, and formats are added. The system's code implicitly partitions this manifold; changes become harder because any refactor risks shifting partition boundaries across regions of high semantic entropy that lack test coverage.\", \"probability\": 0.06}, {\"conjecture\": \"Every locally correct change that adds a new valid input class increases the mutual information between the system's internal state and the full input history. This accumulated mutual information acts as an implicit contract: future changes must preserve it, and the probability of violating the contract grows with the entropy of the input stream, creating an entropy-driven maintenance tax.\", \"probability\": 0.08}, {\"conjecture\": \"Valid input streams to a long-running system drift in distribution according to a random walk in the space of semantic intents. The codebase's implicit assumptions lag behind this drift, and the gap between assumed and actual input entropy accumulates as technical debt that scales with the total variation distance between the original and current input distributions.\", \"probability\": 0.05}, {\"conjecture\": \"The difficulty of changing a long-running system is proportional to the Shannon entropy of the distribution of valid input types it has historically processed. Systems that have processed a more entropic input distribution have more implicit behavioral constraints baked into their codepaths, making each change riskier even when tests pass.\", \"probability\": 0.07}, {\"conjecture\": \"As a system runs, it accumulates valid input sequences whose collective semantic content cannot be compressed below a threshold that grows with runtime. The codebase serves as a lossy compression of this content; when entropy exceeds the codebase's representational capacity, changes become hard because the code can no longer faithfully encode all the implicit contracts the input stream has established.\", \"probability\": 0.06}, {\"conjecture\": \"The reason changes get harder is that valid inputs form a context-sensitive language whose grammar grows in production rules over time. Each accepted input adds a production rule; the parsing logic becomes entangled with the grammar's entropy, so any modification to the parser risks invalidating rules that were added by valid inputs the developers never explicitly designed for.\", \"probability\": 0.04}, {\"conjecture\": \"Long-running systems become harder to change because the entropy of valid input streams causes the system to implicitly learn a statistical model of expected inputs. This model is distributed across conditionals, defaults, and edge-case handlers; any change perturbs this implicit model, and the expected number of regressions is proportional to the KL divergence between the pre- and post-change implicit input distributions.\", \"probability\": 0.05}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 186,
+      "completion_tokens": 777,
+      "total_tokens": 963
+    }
+  },
+  "transport_error": null
+}

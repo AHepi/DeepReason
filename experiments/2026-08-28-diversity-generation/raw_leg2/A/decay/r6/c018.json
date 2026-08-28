@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.653
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-752",
+    "object": "chat.completion",
+    "created": 1787937501,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate implicit cross-cutting invariants—unstated assumptions about data lifecycles, call ordering, and failure modes—that no individual module owns and no test suite captures. Each locally correct change encodes and reinforces these invariants without documenting them, so the invariant space grows combinatorially while remaining invisible to developers. A system becomes harder to change not because its code degrades, but because the ratio of undocumented semantic constraints to explicit representations increases until any modification risks violating a constraint that no one knows exists.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 111,
+      "total_tokens": 213
+    }
+  },
+  "transport_error": null
+}

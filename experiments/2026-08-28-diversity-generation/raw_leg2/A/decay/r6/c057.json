@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.783
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-93",
+    "object": "chat.completion",
+    "created": 1787937543,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change must thread its logic through existing seams rather than create new ones, so the system's coupling topology is a martingale: every modification preserves the current coupling level as its expected outcome. Because variance is strictly positive, entropy accrues as a random walk, and the rising cost of change is the structural debt of this accumulated, unreversed coupling. Code review and testing are blind to this degradation because they validate functional correctness, not topological integrity, allowing the walk to drift unopposed.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 110,
+      "total_tokens": 212
+    }
+  },
+  "transport_error": null
+}

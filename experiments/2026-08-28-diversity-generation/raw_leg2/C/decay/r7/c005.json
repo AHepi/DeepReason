@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.031
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-805",
+    "object": "chat.completion",
+    "created": 1787937910,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Software systems degrade because of an accumulation of implicit assumptions. Each locally correct change encodes the assumptions of its author, which become invisible constraints that future changes must not violate, making the system increasingly rigid.\", \"probability\": 0.085}, {\"conjecture\": \"Every change to a system increases the dimensionality of its state space. As the number of possible states grows, the combinatorial interactions between components become impossible to fully model, making the blast radius of any new change unpredictable and thus harder to safely execute.\", \"probability\": 0.072}, {\"conjecture\": \"System degradation is driven by the accumulation of non-reversible decisions. When a change is made, it is often impossible to undo later, meaning the system's design space shrinks monotonically over time until developers are trapped in a narrow corridor of viable changes.\", \"probability\": 0.064}, {\"conjecture\": \"Entropy increases because each change optimizes for local simplicity while ignoring the global topology. Over time, the codebase becomes a patchwork of local optima, and any new change requires navigating the friction between these incompatible local designs rather than fitting into a coherent whole.\", \"probability\": 0.058}, {\"conjecture\": \"Testing practices introduce a bias toward conservation. Once a change is covered by tests, those tests become an obstacle to future refactoring, as developers avoid changes that require updating large numbers of tests, leading to a fossilization of the original design.\", \"probability\": 0.045}, {\"conjecture\": \"The difficulty of change grows because the gap between the system's original architecture and its current requirements widens. Each change is a local patch to a static architecture, and as the requirements drift further from the original design, every new change requires more conceptual bending to fit.\", \"probability\": 0.067}, {\"conjecture\": \"Knowledge rot is the primary cause. A change is only locally correct relative to the mental model of the developer who made it. As developers leave, their mental models are lost, and the remaining team must reverse-engineer the system before making changes, a cost that grows with every change.\", \"probability\": 0.078}, {\"conjecture\": \"Every change adds new dependencies, and dependencies are additive. Over time, the system becomes a dense graph of interdependencies, and the cost of a change is proportional to the number of edges it affects, making the system asymptotically harder to modify.\", \"probability\": 0.051}, {\"conjecture\": \"Code review processes systematically reject changes that are globally optimal but locally complex. This creates a selection pressure for changes that are locally simple, leading to an accumulation of patches that individually look good but collectively destroy the system's coherence.\", \"probability\": 0.039}, {\"conjecture\": \"The system's abstraction boundaries degrade over time because each locally correct change leaks some detail across a boundary. This leakage accumulates until the abstractions no longer mean what they say, and any change requires understanding the entire system rather than just the local module.\", \"probability\": 0.062}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 652,
+      "total_tokens": 827
+    }
+  },
+  "transport_error": null
+}

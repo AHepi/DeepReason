@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 34.466
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-845",
+    "object": "chat.completion",
+    "created": 1787937667,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate constraints, creating a random walk through design space that moves the system away from any global optima. The accumulation of these local optimizations creates a mismatch between the system's actual structure and the structure required to make the next change easily, increasing friction exponentially.\", \"probability\": 0.09}, {\"conjecture\": \"Knowledge of a system's structure is distributed across both the code and the minds of its developers. Over time, developer turnover ensures that the cognitive model held by the current team diverges from the implicit design assumptions embedded in the code by original authors, making every change require costly archaeological reconstruction of intent.\", \"probability\": 0.08}, {\"conjecture\": \"Every successful change adds a dependency between a concept and the existing system state. The number of possible interactions grows combinatorially with the number of concepts, meaning the testing and validation required to ensure a change is locally correct must expand until it consumes all available development time.\", \"probability\": 0.07}, {\"conjecture\": \"Software systems accumulate accidental complexity because developers prefer to add new code rather than refactor existing code, due to the immediate risk of refactoring outweighing its long-term benefit. This asymmetry in risk discounting causes the system to become increasingly bloated with overlapping, redundant pathways that must all be navigated for any future change.\", \"probability\": 0.06}, {\"conjecture\": \"The API surface area of a long-running system grows linearly with changes, but the number of implicit invariants that surface area protects grows superlinearly. Changes become harder because developers must satisfy an expanding set of undocumented invariants that are only discovered when they are violated.\", \"probability\": 0.05}, {\"conjecture\": \"Long-running systems accumulate configuration flags, feature toggles, and backward-compatibility shims that are never removed because the cost of removing them is borne by the current team while the benefit is distributed across future teams. This creates a tragedy of the commons where dead pathways accumulate and obscure the active logic.\", \"probability\": 0.05}, {\"conjecture\": \"Each change is tested against current requirements, but the set of past requirements that the system still satisfies is never re-validated. Over time, the system encodes a growing set of zombie requirements that constrain future changes, and developers cannot distinguish between code that is essential and code that exists only to satisfy a defunct constraint.\", \"probability\": 0.04}, {\"conjecture\": \"Software systems become harder to change because the domain itself evolves, and the system's internal boundaries were drawn around domain concepts that no longer match the real domain structure. Every change must traverse an increasing number of boundaries that cross-cut the actual domain logic, creating friction that grows with the divergence between the modeled and actual domain.\", \"probability\": 0.04}, {\"conjecture\": \"Reviewers can only verify that a change is locally correct relative to the immediate context, but they cannot verify that the change preserves the system's evolvability. Since evolvability is never explicitly tested or measured, each change is free to degrade it, and this degradation compounds over time until the system becomes rigid.\", \"probability\": 0.03}, {\"conjecture\": \"The difficulty of changing a system is proportional to the number of distinct execution paths that a change might affect. Because each change adds paths rather than removing them, and because testing covers a vanishing fraction of possible paths as the system grows, the uncertainty associated with any change increases until developers are effectively making blind modifications.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 744,
+      "total_tokens": 919
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy rise in the call graph's transition matrix under Markov analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.205
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-53",
+    "object": "chat.completion",
+    "created": 1787937838,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Under a Markov model of a software call graph, every locally correct modification appends new states and edges but almost never deletes them, so the spectral gap of the transition matrix monotonically shrinks and stationary-distribution entropy rises. Each change is individually rational, yet the cumulative effect is a directed random walk through an ever-slower-mixing graph whose stationary distribution concentrates mass on rarely-exercised, high-fan-in nodes. This entropy increase is the formal mechanism behind observed rigidity: the expected code path length and conditional uncertainty of the next call both grow, making any further change disproportionately likely to disturb edges it does not nominally touch.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 139,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

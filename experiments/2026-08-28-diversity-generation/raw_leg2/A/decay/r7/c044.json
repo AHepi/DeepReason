@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.885
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-811",
+    "object": "chat.completion",
+    "created": 1787937777,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through accumulated errors, but through accumulated constraints: each correct, tested change implicitly prunes the space of future architectures by encoding assumptions into interfaces, tests, and operational habits. These constraints are locally invisible—each change makes sense in isolation—but globally they form a constraint lattice that makes any new change require violating an ever-growing set of implicit invariants. The system becomes hard to change not because anything is broken, but because every possible improvement is now adjacent to a forbidden move.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 107,
+      "total_tokens": 209
+    }
+  },
+  "transport_error": null
+}

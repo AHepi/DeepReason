@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.722
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-341",
+    "object": "chat.completion",
+    "created": 1787937744,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems degrade not through individual defects, but through the silent accumulation of implicit cross-module invariants: each locally correct change makes the system's true behavior depend on unstated assumptions that are never encoded in types, tests, or interfaces. Over time, the set of valid changes shrinks because the space of hidden constraints grows, while the developers who hold this tacit knowledge turn over. The system becomes rigid not because any single part is broken, but because the combinatorial web of unwritten dependencies exceeds any individual's working memory, making locally rational changes globally unsafe.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 123,
+      "total_tokens": 225
+    }
+  },
+  "transport_error": null
+}

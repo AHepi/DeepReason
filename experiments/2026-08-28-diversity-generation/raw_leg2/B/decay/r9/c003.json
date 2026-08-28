@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Information-theoretic accretion: each locally rational change monotonically increases Shannon entropy of the configuration space, bounding navigability\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.367
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-475",
+    "object": "chat.completion",
+    "created": 1787938290,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally rational change to a software system adds at least one new degree of freedom to the system's configuration space, strictly increasing its Shannon entropy. This monotonic entropy growth expands the volume of valid-but-unintended states exponentially faster than the linearly growing set of intended states, causing the mutual information between a developer's localized intent and the system's global execution path to decay. Consequently, the information cost of safely navigating to any desired target state rises toward a bound determined by the total entropy accreted, guaranteeing that changeability degrades even when every prior modification was independently correct, tested, and reviewed.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 138,
+      "completion_tokens": 131,
+      "total_tokens": 269
+    }
+  },
+  "transport_error": null
+}

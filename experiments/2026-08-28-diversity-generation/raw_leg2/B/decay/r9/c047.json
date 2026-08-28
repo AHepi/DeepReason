@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Non-ergodic path dependence: early arbitrary choices compound via lock-in, trapping the system in a vanishingly small subset of theoretically reachable architectural basins\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.098
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-313",
+    "object": "chat.completion",
+    "created": 1787938347,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change operates as a non-ergodic step that irreversibly constrains the future state space, so early arbitrary design choices trigger a ratchet effect: subsequent adaptations must conform to existing interfaces and data contracts, steadily pruning the tree of reachable architectures. Because backward-incompatible refactors scale superlinearly in cost with system size, the system becomes trapped in whichever architectural basin it stumbled into first, regardless of whether that basin is globally optimal. Thus, over time, the set of reachable architectures shrinks to a vanishingly small subset of the theoretically possible designs, making fundamental change increasingly prohibitive even when every individual modification was justified at the time.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 143,
+      "completion_tokens": 141,
+      "total_tokens": 284
+    }
+  },
+  "transport_error": null
+}

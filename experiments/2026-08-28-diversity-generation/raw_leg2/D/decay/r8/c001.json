@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift between domain language and code structure\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 14.229
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-432",
+    "object": "chat.completion",
+    "created": 1787938163,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change binds code structure to a specific, transient interpretation of domain language. Over time, these accumulated bindings create a composite structure that matches no single coherent domain model, making further changes require reconciling multiple incompatible semantic commitments simultaneously.\",\n      \"probability\": 0.085\n    },\n    {\n      \"conjecture\": \"Code changes are validated against the current domain language, but the domain language itself drifts through external pressure. The codebase becomes a sedimentary record of successive domain meanings, and any new change must implicitly reverse-engineer which historical domain epoch each affected module encodes before it can be safely modified.\",\n      \"probability\": 0.072\n    },\n    {\n      \"conjecture\": \"Because developers name code constructs after domain terms at the time of writing, subsequent domain-level semantic drift silently invalidates the naming without breaking any test. The system becomes harder to change because the code's vocabulary persistently misleads new developers into mapping current domain concepts onto structures that implement obsolete ones.\",\n      \"probability\": 0.091\n    },\n    {\n      \"conjecture\": \"Every locally correct change optimizes code structure for the domain's current grain size—the level of granularity at which domain concepts are currently decomposed. As domain understanding coarsens or refines over time, the code structure's fixed grain becomes a barrier: changes that are natural at the new grain require invasive restructuring because the old grain is embedded in control flow and data layout.\",\n      \"probability\": 0.064\n    },\n    {\n      \"conjecture\": \"Tests encode domain semantics at write-time and are rarely updated unless they fail. Because locally correct changes pass tests, the test suite accumulates assertions tied to outdated domain meanings. This frozen semantic layer makes changes harder because developers must satisfy constraints from multiple domain eras simultaneously.\",\n      \"probability\": 0.078\n    },\n    {\n      \"conjecture\": \"Domain terms enter the codebase as names but evolve into structural commitments through use—a class named Customer eventually accumulates fields and methods that assume a specific definition of customer. When the domain meaning of customer drifts, the structural commitments survive as fossil constraints, making the code harder to change because the name and the structure now imply contradictory things.\",\n      \"probability\": 0.082\n    },\n    {\n      \"conjecture\": \"Because each change is validated locally, developers preserve existing structural boundaries even when domain semantics have shifted across them. The result is that domain concepts become fragmented across code structures that were originally aligned but are now semantically misaligned, and any change touching a drifted concept must be propagated through structures whose boundaries no longer correspond to meaningful domain distinctions.\",\n      \"probability\": 0.069\n    },\n    {\n      \"conjecture\": \"Domain language drifts through metaphor extension—terms acquire new senses while retaining old ones. Code cannot represent polysemy efficiently; each module commits to one sense. As the domain's polysemy grows, the codebase fragments into modules using the same terms with different meanings, and changes require developers to disambiguate which sense each affected module uses before making a change.\",\n      \"probability\": 0.057\n    },\n    {\n      \"conjecture\": \"Each change introduces implicit coupling between code structure and domain assumptions that is invisible at change-time because the assumptions hold. As domain assumptions shift, the coupling becomes visible as resistance: the code structure cannot be modified without simultaneously revising assumptions that are distributed across many modules but were never made explicit.\",\n      \"probability\": 0.074\n    },\n    {\n      \"conjecture\": \"Domain language has a natural decomposition into concepts, but code structure has a natural decomposition into mechanisms. Each change is locally correct because it aligns mechanism with the current concept decomposition. Over time, domain concept decomposition shifts, but code mechanisms are locked into prior decompositions. The cost of change grows as the gap between the current domain decomposition and the code's frozen mechanism decomposition widens.\",\n      \"probability\": 0.061\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "completion_tokens": 856,
+      "total_tokens": 1043
+    }
+  },
+  "transport_error": null
+}

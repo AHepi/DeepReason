@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 23.019
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-137",
+    "object": "chat.completion",
+    "created": 1787938144,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Every locally correct change introduces implicit constraints—assumptions about caller behavior, data invariants, or environmental state—that are never documented. These constraints accumulate as a hidden dependency graph, so future changes must satisfy an ever-growing set of unstated conditions, making modification progressively harder even though no single change introduced a bug.\", \"probability\": 0.09}, {\"conjecture\": \"Software systems degrade because test suites encode a specific instantiation of requirements, and as requirements drift over time, tests act as institutional memory that resists change. The cost of modification grows because any change requires updating tests that were written for a context that no longer matches the current understanding of the system.\", \"probability\": 0.08}, {\"conjecture\": \"Each correct change optimizes for the immediate problem context, creating local adaptations that are individually beneficial but collectively form a rugged fitness landscape. The system becomes harder to change because any modification must navigate an increasing number of local optima, where small changes break the fragile equilibrium established by previous adaptations.\", \"probability\": 0.07}, {\"conjecture\": \"Long-running systems accumulate technical debt not through poor decisions, but because every design decision closes off some future options while opening others. The shrinking option space means that any new change is more likely to conflict with prior commitments, increasing the design effort required to find a compatible modification.\", \"probability\": 0.09}, {\"conjecture\": \"The difficulty arises because each change is validated against current behavior rather than intended behavior, so the system drifts away from its original design rationale. The accumulated gap between design intent and implemented behavior means that future changes must reverse-engineer the current system's actual logic rather than working from a coherent design.\", \"probability\": 0.06}, {\"conjecture\": \"As a system grows, the number of possible interaction paths grows combinatorially, but each change is tested against only the paths its authors can foresee. Over time, an increasing fraction of the system's behavior lives in untested interaction paths, so changes become risky because they may trigger behaviors that were never explicitly designed or observed.\", \"probability\": 0.08}, {\"conjecture\": \"Every change to a long-running system must be understood by its developers, but the original context for each decision is lost over time. The system becomes harder to change because developers must reconstruct this lost context before making safe modifications, and the cost of reconstruction grows with the number of historical changes.\", \"probability\": 0.05}, {\"conjecture\": \"Software aging is driven by the accumulation of exceptions to rules—general mechanisms get special-cased to handle specific needs, and these exceptions persist even after the needs they addressed are gone. The system becomes harder to change because the ratio of special cases to general logic increases, making every change require awareness of more exceptions.\", \"probability\": 0.07}, {\"conjecture\": \"Every locally optimal change adds a small amount of coupling between system parts, because solving the immediate problem requires connecting previously separate concerns. The accumulated coupling creates a state where the system is effectively a single monolithic entity regardless of its modular structure, so every change has system-wide consequences.\", \"probability\": 0.09}, {\"conjecture\": \"Long-running systems become harder to change because each change is designed to be minimally invasive, avoiding refactoring of surrounding code. This incrementalism causes the system's structure to lag increasingly far behind its actual behavior, so future changes must work against a structure that no longer represents how the system actually functions.\", \"probability\": 0.06}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 735,
+      "total_tokens": 910
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ossification of execution paths through reinforcement of high-traffic runtime trajectories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.116
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-427",
+    "object": "chat.completion",
+    "created": 1787937870,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-running systems develop an implicit memory of their actual execution trajectories: the high-traffic paths become progressively over-optimized at every layer of the stack—JIT compilation, branch prediction, caching, and data layout—creating a hidden coupling between the code and the specific runtime distribution it experiences. Any change that alters this distribution, even if semantically correct, triggers a cascade of re-optimization costs across the stack, manifesting as latency regressions and performance anomalies that make modification increasingly expensive and discouraging over time.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 112,
+      "total_tokens": 238
+    }
+  },
+  "transport_error": null
+}

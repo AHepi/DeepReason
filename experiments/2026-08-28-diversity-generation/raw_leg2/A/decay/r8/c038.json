@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 5.524
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-166",
+    "object": "chat.completion",
+    "created": 1787937982,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change optimizes the system's coupling structure for its immediate context, causing a gradual divergence between the code's physical dependency graph and the logical graph of future requirements. This creates a rising 'coupling debt' where the probability of a desired change triggering an unintended cascade approaches 1.0 as the system accumulates exceptions to its original invariants. The software becomes rigid not because of technical decay, but because the optimization landscape of local modifications becomes a high-dimensional local minimum that resists any single, reviewable change.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 114,
+      "total_tokens": 216
+    }
+  },
+  "transport_error": null
+}

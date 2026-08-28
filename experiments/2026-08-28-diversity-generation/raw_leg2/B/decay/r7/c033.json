@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ontological drift between domain abstractions and stabilized code contracts\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.956
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-624",
+    "object": "chat.completion",
+    "created": 1787937855,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Ontological drift occurs because code contracts stabilize around a domain abstraction at a point in time, then resist synchronization as the domain itself evolves. Each locally correct change is validated against the ossified contract rather than the current domain reality, so the system accumulates a hidden semantic gap between what the code models and what the domain requires. This gap manifests as change difficulty because modifications must bridge two incompatible ontologies—the code's frozen abstractions and the domain's living ones—requiring exponentially more translation effort as the drift widens.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 123,
+      "completion_tokens": 116,
+      "total_tokens": 239
+    }
+  },
+  "transport_error": null
+}

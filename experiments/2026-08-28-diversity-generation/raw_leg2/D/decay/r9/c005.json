@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: State space fragmentation outpaces test suite coverage growth\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 12.43
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-696",
+    "object": "chat.completion",
+    "created": 1787938416,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change creates implicit invariants between modules that no test explicitly checks. The number of such invariants grows quadratically with module count, while test coverage grows only linearly with new features. Eventually, the untested invariant space dwarfs the tested one, making every change likely to violate an unseen constraint.\", \"probability\": 0.09}, {\"conjecture\": \"Test suites verify paths through the state space that have been exercised historically, but each change carves new reachable states that no regression test visits. The ratio of reachable-but-untested states to tested states grows monotonically because tests are written for observed behaviors, not for the combinatorial possibilities opened by each change.\", \"probability\": 0.08}, {\"conjecture\": \"Configuration spaces fragment faster than test suites because each feature flag or runtime parameter doubles the state space, while tests typically cover only the default configuration. After N changes introducing flags, the tested configuration is one of 2^N states, so the probability that a change is validated against the actual runtime configuration approaches zero.\", \"probability\": 0.07}, {\"conjecture\": \"Every correct change adds a dependency edge in the system's semantic graph, increasing the number of transitive invariants that must hold. Tests are written to verify the direct behavior of each change, not the transitive closure of invariants it participates in. The invariant space therefore grows as a graph density function while test coverage grows linearly, creating a widening gap where most constraints are unverified.\", \"probability\": 0.06}, {\"conjecture\": \"Error handling paths accumulate across changes but are rarely tested because each change's tests assume the change succeeds. The space of failure-recovery states grows combinatorially as new operations interact with existing error handlers, but tests cover only success paths. After enough changes, most of the reachable state space consists of untested error-recovery combinations.\", \"probability\": 0.05}, {\"conjecture\": \"The system's observable behavior space is a projection of a larger internal state space. Each change is tested against the observable projection but may leave the internal state space in an inconsistent region that only manifests under future changes. The internal state space fragments faster than observable behavior tests can detect, so changes become harder because developers must reason about unobservable inconsistencies.\", \"probability\": 0.05}, {\"conjecture\": \"Temporal state space grows faster than test coverage because tests validate snapshots at single points in time. Each change adds new possible execution orderings and interleavings with existing operations, but tests check only the ordering the developer intended. The ratio of valid orderings to tested orderings grows factorially, so eventually most execution sequences are untested even though every individual change passed its tests.\", \"probability\": 0.04}, {\"conjecture\": \"Test suites encode a theory of what the system should do, but each change adds degenerate states: configurations that are technically reachable but were never intended. Tests do not cover degenerate states because they were not imagined. The space of degenerate but reachable states grows faster than the space of tested intended states, so changes increasingly risk activating unintended configurations.\", \"probability\": 0.03}, {\"conjecture\": \"Each change that passes its tests is provably correct in isolation but shifts the probability distribution of future changes toward regions of the state space with no test coverage. The system performs a random walk through the state space where each step is locally validated but the overall trajectory moves into untested territory. The expected distance from tested states grows with each change, making future changes harder to validate.\", \"probability\": 0.03}, {\"conjecture\": \"The state space reachable through normal use and the state space reachable through maintenance operations diverge after each change, because tests cover normal use but not maintenance transitions. Each change adds new maintenance states, such as partial migrations or mixed-version states, that are reachable but untested. The maintenance state space grows without bound while tests remain fixed on normal operation, so any change involving maintenance becomes increasingly likely to enter an untested state.\", \"probability\": 0.02}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 188,
+      "completion_tokens": 847,
+      "total_tokens": 1035
+    }
+  },
+  "transport_error": null
+}

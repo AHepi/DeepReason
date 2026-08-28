@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Semantic drift accumulation: local correctness masks micro-decay of shared vocabulary, causing the gap between domain ontology and codebase ontology to ratchet irreversibly\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 6.436
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-855",
+    "object": "chat.completion",
+    "created": 1787938310,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Each locally correct change introduces a sub-semantic inconsistency between the code's named concepts and the domain's actual concepts—small enough to pass review and tests, but large enough to shift the codebase ontology by a fraction. Because reviewers validate changes against the current codebase ontology rather than the original domain ontology, every accepted drift becomes the new baseline, making the ratchet irreversible: the system cannot distinguish a correction from a change, so rollback of drift is structurally indistinguishable from feature regression. The accumulating gap is therefore not debt that can be paid back, but entropy that can only be expelled through a wholesale ontology reset.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 143,
+      "completion_tokens": 133,
+      "total_tokens": 276
+    }
+  },
+  "transport_error": null
+}

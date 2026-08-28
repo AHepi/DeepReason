@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Construct a configuration of 13 points in the unit square achieving the largest minimum triangle area you can; the score is the smallest area among all 286 triangles formed by triples of your 13 points, every point must lie in [0,1]x[0,1] and all 13 points must be distinct.\n\nStay within this direction: Computer-assisted proof with interval arithmetic certifying a lower bound\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.682
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-935",
+    "object": "chat.completion",
+    "created": 1787940321,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"A computer-assisted proof using interval arithmetic and a branch-and-bound search over the configuration space certifies that placing 13 points at the vertices of a perturbed triangular lattice inscribed in the unit square achieves a minimum triangle area of at least 0.00405, and no configuration can exceed 0.00415.\", \"probability\": 0.095}, {\"conjecture\": \"Using interval arithmetic to rigorously verify the Hessian and KKT conditions, a specific 13-point configuration with points near the boundary and one central point is certified to be a local maximum of the minimum triangle area functional with a value of exactly 0.00392.\", \"probability\": 0.085}, {\"conjecture\": \"A branch-and-bound algorithm using interval arithmetic to bound triangle areas over sub-boxes of the configuration space proves that the optimal 13-point configuration has a minimum triangle area strictly between 0.00410 and 0.00420, achieved by a configuration symmetric under 90-degree rotation.\", \"probability\": 0.090}, {\"conjecture\": \"Interval arithmetic applied to a semidefinite programming relaxation of the problem certifies that the maximum minimum triangle area for 13 points in the unit square is at most 0.00425, and a constructed configuration achieves 0.00418, establishing the optimum within this interval.\", \"probability\": 0.080}, {\"conjecture\": \"A certified computation using interval arithmetic on a subdivision of the unit square into 64 equal cells proves that any 13-point configuration must have a triangle of area at most 0.00400, while a specific near-lattice configuration is verified to have all triangles of area at least 0.00395.\", \"probability\": 0.075}, {\"conjecture\": \"The optimal configuration of 13 points in the unit square, certified by interval arithmetic bounds on all 286 triangle determinants, consists of 4 points at the corners, 8 points at specific irrational-valued positions along the edges, and 1 point at the center, achieving a minimum triangle area of 0.00412.\", \"probability\": 0.088}, {\"conjecture\": \"Using a verified homotopy continuation method with interval arithmetic to track all critical configurations, the global maximum of the minimum triangle area for 13 points is certified to lie in the interval [0.00408, 0.00411], achieved at an asymmetric configuration.\", \"probability\": 0.072}, {\"conjecture\": \"An interval arithmetic computation certifying the absence of any 13-point configuration with minimum triangle area exceeding 0.00430, combined with an explicit configuration verified to have minimum area 0.00422, proves the optimal value lies in [0.00422, 0.00430].\", \"probability\": 0.068}, {\"conjecture\": \"A computer-assisted proof using interval arithmetic on a reduced search space exploiting symmetry constraints certifies that the optimal 13-point arrangement has dihedral symmetry D2 and minimum triangle area in the closed interval [0.00415, 0.00418].\", \"probability\": 0.065}, {\"conjecture\": \"By partitioning the configuration space into regions and using interval arithmetic to bound the minimum triangle area in each, a specific 13-point configuration derived from a perturbed hexagonal packing is certified to have minimum triangle area at least 0.00403, and this is proven to be within 0.00002 of the global optimum.\", \"probability\": 0.060}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 230,
+      "completion_tokens": 771,
+      "total_tokens": 1001
+    }
+  },
+  "transport_error": null
+}

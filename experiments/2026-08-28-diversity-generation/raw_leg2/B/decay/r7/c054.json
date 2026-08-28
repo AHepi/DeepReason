@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Shifting burden of latent state space complexity exceeding bounded rationality limits\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 8.876
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-336",
+    "object": "chat.completion",
+    "created": 1787937879,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software degradation arises because each locally-correct change optimizes for explicit behavior while silently expanding the system's latent state space—the combinatorial set of implicit interactions, historical configurations, and unenforced invariants. As this latent space grows, the cognitive load required to safely reason about the consequences of any new change eventually exceeds the bounded rationality of both developers and their testing tools. The system becomes hard to change not because the code is objectively tangled, but because the true complexity of its hidden state interactions has outstripped the biological and computational limits of the humans maintaining it.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 123,
+      "total_tokens": 248
+    }
+  },
+  "transport_error": null
+}

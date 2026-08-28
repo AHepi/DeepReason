@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.315
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-795",
+    "object": "chat.completion",
+    "created": 1787937488,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Software systems accumulate a second-order property called \\\"change coupling\\\" where local correctness is insufficient because modifications must traverse an ever-growing web of tacit, untested cross-module invariants. Even when every individual change is reviewed and tested, it only validates the immediate transformation, not the silent constraints it imposes on future modifications. Thus, the difficulty of change grows non-linearly not due to code complexity, but because the system's hidden invariant space expands faster than its explicit test coverage can capture it.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 106,
+      "total_tokens": 208
+    }
+  },
+  "transport_error": null
+}

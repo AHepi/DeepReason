@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 7.688
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-39",
+    "object": "chat.completion",
+    "created": 1787937530,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"System maintainability degrades because each locally correct change implicitly raises the cost of future changes by leaving behind latent coupling—assumptions embedded in callers, tests, and data shapes that aren't directly visible from the change site. Over time this accumulated coupling forms an implicit dependency web that makes any new change require understanding an unbounded context, regardless of how well the previous change was validated in isolation. The system becomes harder to change not because any single change was wrong, but because each one optimized locally while irreversibly constraining the global space of future modifications.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 120,
+      "total_tokens": 222
+    }
+  },
+  "transport_error": null
+}

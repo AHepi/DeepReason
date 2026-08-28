@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Architectural attractor drift\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.075
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-493",
+    "object": "chat.completion",
+    "created": 1787937681,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"candidates\": [{\"conjecture\": \"Each locally correct change slightly shifts the system's de-facto architecture toward a small set of implicit architectural styles. Over time, these styles become deep attractors that constrain future changes, so even well-intentioned modifications drift toward reinforcing the dominant style rather than exploring alternatives.\", \"probability\": 0.085}, {\"conjecture\": \"Architectural attractors form when repeated, locally correct changes create hidden coupling between modules that share a pattern of data flow. Once this coupling reaches a critical mass, any change touching that flow is naturally pulled toward extending the coupled pattern, making divergent modifications disproportionately expensive.\", \"probability\": 0.092}, {\"conjecture\": \"Every individually correct change widens the basin of attraction of the system's current architectural state by adding more code that depends on that state. The system becomes harder to change not because complexity grows linearly, but because the attractor basin's gradient steepens—deviations from the current architecture face increasing restoring forces from accumulated dependencies.\", \"probability\": 0.088}, {\"conjecture\": \"Test suites act as attractor landscapes that reward changes matching existing patterns and penalize deviations. As the suite grows, it deepens the attractor of the original architecture by making any structurally different change likely to break tests, even if the change is functionally correct.\", \"probability\": 0.079}, {\"conjecture\": \"Locally correct changes create architectural attractors through implicit invariants that are never documented but are assumed by each new change. As these invariants accumulate, the attractor basin widens silently, and the cost of change grows because developers must satisfy an increasing number of unstated constraints they cannot see.\", \"probability\": 0.083}, {\"conjecture\": \"The architecture drifts toward attractors defined by the most frequently modified subsystems. Changes concentrate in high-traffic areas, which grow increasingly coupled and rigid, while rarely-touched areas remain flexible. The system's overall changeability is dominated by the attractor strength of these hotspots, even though most of the codebase is untouched.\", \"probability\": 0.071}, {\"conjecture\": \"Developer familiarity with the existing architecture acts as a cognitive attractor. Each correct change reinforces shared mental models of how the system works, and these models increasingly guide future changes toward the familiar pattern. The system becomes harder to change because the development team's cognitive basin of attraction narrows over time.\", \"probability\": 0.068}, {\"conjecture\": \"Changes drift toward architectural attractors determined by the system's dominant data model. Each locally correct change that conforms to the existing data representation deepens the attractor, and the cost of change grows because any deviation requires restructuring data that increasingly many modules depend on in its current form.\", \"probability\": 0.075}, {\"conjecture\": \"The system's architecture has multiple competing attractors from its original design decisions. Each locally correct change resolves tension between attractors by favoring one, and over time the system locks into a single dominant attractor. Change becomes harder because any modification that would rebalance the attractors requires coordinated multi-site changes that no single local change can justify.\", \"probability\": 0.062}, {\"conjecture\": \"Architectural attractors drift as each correct change optimizes locally for minimal disruption, incrementally entrenching the current structure. The system becomes harder to change because the attractor landscape itself shifts to reward conservative extensions and penalize restructurings, creating a self-reinforcing feedback loop that makes the cost of deviation grow faster than the rate of complexity accumulation.\", \"probability\": 0.094}]}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 763,
+      "total_tokens": 947
+    }
+  },
+  "transport_error": null
+}

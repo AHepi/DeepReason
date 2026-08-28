@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 9.035
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-223",
+    "object": "chat.completion",
+    "created": 1787938130,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Each locally correct change optimizes for immediate convenience, incrementally tightening a web of implicit dependencies. The system becomes harder to change not because any single change was wrong, but because the cumulative optimization surface has narrowed the path of future viable modifications to near zero.\", \"probability\": 0.09}, {\"conjecture\": \"Local tests verify behavior but do not constrain the representation of the problem. Over time, the mapping between the code's structure and the real-world problem it solves drifts, meaning changes require translating between an increasingly alien internal model and the external reality.\", \"probability\": 0.08}, {\"conjecture\": \"Knowledge of why a system is structured a certain way is lost because the reasons are never encoded in the code itself. The accumulation of this unencoded 'dark knowledge' means future changes risk violating invisible constraints that only exist in the minds of departed developers.\", \"probability\": 0.085}, {\"conjecture\": \"Well-tested changes allow developers to avoid understanding the entire system before modifying it. This creates a tragedy of the commons where global architectural coherence is slowly sacrificed for local development speed, eventually making the system too tangled for anyone to hold in their head.\", \"probability\": 0.07}, {\"conjecture\": \"Every correct change adds to the state space of the system. The difficulty of change grows combinatorially because future changes must navigate an exponentially expanding graph of possible interactions, most of which are theoretically valid but practically catastrophic.\", \"probability\": 0.06}, {\"conjecture\": \"Changes that are reviewed and tested are selected for local fitness, but the system's architecture evolves via a random walk with no global selection pressure. The system becomes harder to change because it drifts into regions of the design space where the cost of any single step backward to a coherent state is higher than any local step forward.\", \"probability\": 0.065}, {\"conjecture\": \"Software systems are built on layers of abstraction that slowly leak as edge cases are discovered and patched. Each patch makes the abstraction less predictive, so changing the system eventually requires understanding not just the abstraction but the full complexity it was meant to hide.\", \"probability\": 0.075}, {\"conjecture\": \"As a system grows, the probability that a required change cuts across multiple organizational boundaries approaches one. The difficulty arises not from the code itself, but from the escalating coordination cost required to align independent groups with misaligned incentives and timelines.\", \"probability\": 0.05}, {\"conjecture\": \"Every correct change slightly increases the system's coupling to its current environment, tools, and expectations. The system becomes harder to change because the cost of untangling this incidental coupling eventually exceeds the cost of the actual feature being requested.\", \"probability\": 0.055}, {\"conjecture\": \"Testing locks in specific implementations by asserting specific outputs. Over time, this creates a massive fixed cost for any structural change, meaning developers naturally avoid necessary refactoring until the system is so brittle that even trivial changes require heroic effort.\", \"probability\": 0.08}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 642,
+      "total_tokens": 817
+    }
+  },
+  "transport_error": null
+}

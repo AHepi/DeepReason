@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nPropose ONE conjecture in response.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 3.252
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-56",
+    "object": "chat.completion",
+    "created": 1787938196,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"conjecture\": \"Software systems accumulate implicit cross-cutting invariants—assumptions about behavior that hold globally but are never encoded in any single module's interface. Each locally correct change tightens this invariant web by introducing new dependencies while preserving existing ones, causing the system's true complexity to grow combinatorially rather than additively. Because these invariants are invisible to local review and testing, they form a hidden coupling matrix that must be reverse-engineered before any change can be safely made, making modification cost proportional to the size of the invariant web rather than the size of the change.\"}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 127,
+      "total_tokens": 229
+    }
+  },
+  "transport_error": null
+}

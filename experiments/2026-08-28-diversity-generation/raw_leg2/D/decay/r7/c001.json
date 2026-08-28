@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Entropy of test-suite distributions decaying via Goodhart's Law\n\nGenerate 10 candidate conjectures within that direction, sampled from the\nfull distribution of responses you could give. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.049
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-265",
+    "object": "chat.completion",
+    "created": 1787937927,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\"candidates\": [{\"conjecture\": \"Every locally correct change shifts the distribution of execution paths away from the regions originally stressed by the test suite. Tests become calibrated to a distribution that no longer reflects production, so passing tests increasingly measure adherence to a stale proxy rather than correctness.\", \"probability\": 0.09}, {\"conjecture\": \"As changes accumulate, the test suite's coverage distribution concentrates on recently modified code, leaving inter-module interaction paths progressively under-tested. Goodhart's Law ensures developers optimize for the measurable (covered paths), so correctness along unmeasured interaction paths silently decays.\", \"probability\": 0.08}, {\"conjecture\": \"Each accepted change is selected for passing tests, biasing the system toward states the test suite can validate. Over time this creates an entropy sink: the space of reachable system states narrows to those easily testable, and structurally complex but necessary states become unreachable without rewriting tests.\", \"probability\": 0.07}, {\"conjecture\": \"Test suites encode a distribution of expected behaviors, but each locally correct change slightly shifts the true behavior distribution. Goodhart's Law causes developers to optimize against the test distribution rather than the evolving true distribution, so the gap between tested and actual behavior monotonically widens.\", \"probability\": 0.09}, {\"conjecture\": \"Regression tests fix specific historical bugs, creating a test distribution that over-weights past failure modes. As the system drifts, Goodhart's Law drives optimization toward avoiding these known failure patterns, leaving the system increasingly fragile to novel failure modes that the test suite cannot detect.\", \"probability\": 0.08}, {\"conjecture\": \"The Shannon entropy of the test suite's input distribution decreases over time because new tests target narrow regressions rather than broad behavioral classes. Low-entropy test distributions are more susceptible to Goodhart's Law, because developers can satisfy tests via increasingly narrow, non-generalizable implementations.\", \"probability\": 0.06}, {\"conjecture\": \"Each locally correct change is selected to preserve test passage, which biases the system toward low-surprise states relative to the test suite. This creates an anti-entropy pressure: the system loses structural diversity because changes that would introduce richer, harder-to-test behavior are systematically rejected.\", \"probability\": 0.05}, {\"conjecture\": \"Integration tests encode a joint distribution over module behaviors, but local changes shift each module's marginal distribution. The test suite's joint distribution becomes a stale proxy, so Goodhart's Law drives each team to optimize their module's local test passage, destroying the global coherence that the original joint distribution encoded.\", \"probability\": 0.07}, {\"conject\": \"Test suites implicitly define a distribution over what counts as a valid change. As this distribution diverges from the true distribution of needed changes, Goodhart's Law ensures developers produce changes that are valid by the test proxy but increasingly misaligned with actual system requirements.\", \"probability\": 0.06}, {\"conjecture\": \"The Kolmogorov complexity of the test suite grows sub-linearly with the complexity of the system, so the test distribution becomes an increasingly coarse proxy for system behavior. Goodhart's Law then guarantees that changes optimized for this coarse proxy progressively diverge from genuine correctness.\", \"probability\": 0.05}]}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 192,
+      "completion_tokens": 683,
+      "total_tokens": 875
+    }
+  },
+  "transport_error": null
+}

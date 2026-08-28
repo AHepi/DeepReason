@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nGenerate 10 candidate conjectures in response, sampled from the full\ndistribution of responses you could give to this prompt. For each, give the\nconjecture and your estimated probability that it is the response you would\ngive to this prompt. Every candidate's probability must be below 0.10.\nOutput exactly one JSON object and nothing else:\n{\"candidates\": [{\"conjecture\": \"<2-4 sentences>\", \"probability\": <number below 0.10>}, ... 10 items]}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 3000,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 21.523
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-829",
+    "object": "chat.completion",
+    "created": 1787938402,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"candidates\": [\n    {\n      \"conjecture\": \"Each locally correct change creates implicit, undocumented dependencies between modules that share data structures or side effects. The accumulation of these invisible couplings means the blast radius of any new change grows monotonically, making safe modification require exponentially more context to reason about.\",\n      \"probability\": 0.09\n    },\n    {\n      \"conjecture\": \"Testing and review optimize for the absence of immediate failures, not the preservation of architectural evolvability. Because local correctness is measured against current requirements, the system's structure progressively ossifies around accidental complexities of early implementation choices, making future adaptation require breaking invariants that have become load-bearing.\",\n      \"probability\": 0.08\n    },\n    {\n      \"conjecture\": \"Long-running systems accumulate special-case branches that are each individually justified and tested. The combinatorial interaction space of these branches grows superlinearly, so the probability of a new change triggering an unexpected interaction exceeds a tolerable threshold, causing developers to resort to increasingly defensive, change-resistant practices.\",\n      \"probability\": 0.07\n    },\n    {\n      \"conjecture\": \"The knowledge required to safely change the system is proportional to the sum of historical decisions, but this knowledge is distributed across people, comments, tests, and code with no unified representation. The cost of reconstituting the necessary context for any single change grows with system history length, independent of code size, because the reasons behind existing constraints become increasingly opaque.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Every change that is locally correct but not globally optimal shifts the system's architecture toward a local optimum in the design space. The longer a system runs, the deeper into this local optimum it settles, and the larger the temporary regression required to move toward a different configuration that could accommodate new requirements.\",\n      \"probability\": 0.06\n    },\n    {\n      \"conjecture\": \"Software systems have a natural entropy governed by the second law: each change increases the number of historically contingent states the system can reach. Because review and testing enforce local invariants but not global reversibility, the system progressively loses the ability to be decomposed into independent, re-orderable operations, making every change a coupled event with growing historical baggage.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"The difficulty of change is governed by the growth of invariants the system must preserve. Each locally correct change adds at least one new invariant, and the cost of verifying a new change against all existing invariants grows linearly with their count, causing maintenance cost to increase as a function of cumulative change history.\",\n      \"probability\": 0.05\n    },\n    {\n      \"conjecture\": \"Changes are accepted based on their value at the time of integration, but their long-term cost depends on how future changes interact with them. Because future requirements are unknowable, every accepted change is a liability with an unknown cost distribution. Over time, the accumulated liability of all past changes creates a drag on all future changes.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"A long-running system becomes a palimpsest of past design philosophies. Each era's locally correct changes embed assumptions that later eras must work around, and the friction between incompatible assumptions from different periods makes change progressively harder because developers must reconcile multiple implicit worldviews embedded in the same codebase.\",\n      \"probability\": 0.04\n    },\n    {\n      \"conjecture\": \"The system's data model accumulates fields and relationships that are each individually necessary, but whose collective structure has no coherent organizing principle. Because changing the data model carries high migration risk, the schema becomes a fossil record of past requirements, and every new change must navigate this increasingly irregular terrain.\",\n      \"probability\": 0.03\n    }\n  ]\n}\n```"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 175,
+      "completion_tokens": 818,
+      "total_tokens": 993
+    }
+  },
+  "transport_error": null
+}

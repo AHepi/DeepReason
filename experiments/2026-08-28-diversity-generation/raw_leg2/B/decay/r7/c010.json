@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Sporadic coupling through shared implicit invariants invisible to static analysis\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 10.546
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-623",
+    "object": "chat.completion",
+    "created": 1787937826,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Long-lived systems accumulate sporadic coupling through shared implicit invariants—unstated assumptions about temporal ordering, value distributions, or resource states—that are invisible to static analysis because no single code path enforces them. Each locally correct change subtly shifts the boundary of these invariants, creating a growing shadow contract layer that later changes must satisfy but cannot discover. The system becomes harder to change not because of explicit dependencies, but because the true coupling graph is encoded in runtime behavioral regularities that no tool or reviewer can see, making every change a blind wager against an unknown and growing set of constraints.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 124,
+      "completion_tokens": 125,
+      "total_tokens": 249
+    }
+  },
+  "transport_error": null
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Ossification of execution paths through reinforcement of high-traffic runtime trajectories\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 2.983
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-879",
+    "object": "chat.completion",
+    "created": 1787937864,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conjecture\": \"Every execution of a code path reinforces the implicit assumptions encoded in its surrounding environment—database states, cached configurations, JIT-compiled optimizations, and serialized data formats—creating a shadow coupling between the code and the specific runtime trajectories it has experienced. Because high-traffic paths accumulate vastly more reinforcement, their implicit dependencies become deeply entrenched, such that any locally correct change to the code itself fails to account for the unspoken contract forged by millions of prior executions. Thus, the system ossifies not in its source code, but in the reinforced alignment between frequently traversed paths and the runtime artifacts they have shaped, making change hard not because the code is complex, but because the executed history has become load-bearing.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 126,
+      "completion_tokens": 148,
+      "total_tokens": 274
+    }
+  },
+  "transport_error": null
+}

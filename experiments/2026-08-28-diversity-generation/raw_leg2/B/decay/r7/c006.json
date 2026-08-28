@@ -1,0 +1,49 @@
+{
+  "request": {
+    "model": "glm-5.2",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are proposing scientific conjectures. A conjecture is a bold, specific,\nfalsifiable claim or approach -- not a summary, not a plan, and not a hedge.\nWrite plainly."
+      },
+      {
+        "role": "user",
+        "content": "Why do long-running software systems become harder to change over time, even when every individual change was reviewed, tested, and locally correct?\n\nStay within this direction: Accumulated constraint load measured via Kolmogorov complexity of minimal test suites\n\nPropose ONE conjecture in response, within that direction.\nOutput exactly one JSON object and nothing else:\n{\"conjecture\": \"<2-4 sentences>\"}"
+      }
+    ],
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "max_tokens": 400,
+    "reasoning_effort": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "http_status": 200,
+      "elapsed_s": 11.092
+    }
+  ],
+  "response": {
+    "id": "chatcmpl-741",
+    "object": "chat.completion",
+    "created": 1787937813,
+    "model": "glm-5.2",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\"conuncture\": \"The Kolmogorov complexity of the minimal test suite required to certify correctness of a software system grows superlinearly with the number of individually correct changes, because each change implicitly adds constraints to the global valid-input space. This occurs because tests must encode not only each change's local behavior but also the combinatorial interactions among prior constraints, making the shortest description of 'what must not break' incompressible beyond a superlinear bound. Thus, long-running systems become harder to change because the information-theoretic cost of proving a new change is locally correct rises with the accumulated constraint load, not because of code rot or human negligence.\"}"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 128,
+      "completion_tokens": 137,
+      "total_tokens": 265
+    }
+  },
+  "transport_error": null
+}

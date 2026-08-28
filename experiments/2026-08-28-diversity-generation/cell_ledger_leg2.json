@@ -288,5 +288,585 @@
     ],
     "calls": 7,
     "wall_s": 34.2
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 12474,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 74.7
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 14504,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "microstate-space expansion and combinatorial reachability limits",
+      "coupled latent intents creating negative transfer in evolutionary search",
+      "information-theoretic decay of modular invariants under local optimization",
+      "hyperparameter drift in deployment environments causing non-stationary evaluation baselines",
+      "stochastic interference between asynchronous state mutations in distributed systems",
+      "epistemic sunk-cost and institutional memory encoding in codebase topologies"
+    ],
+    "calls": 61,
+    "wall_s": 87.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 4986,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 34.5
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 6,
+    "tokens": 5858,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Accumulated constraint covariance",
+      "Semantic entropy growth in valid input streams",
+      "Architectural attractor drift",
+      "Change footprint scaling",
+      "Test suite overfitting to past mutations",
+      "Implicit assumption debt"
+    ],
+    "calls": 7,
+    "wall_s": 35.7
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 12436,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 93.8
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 14980,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Accumulated constraint load measured via Kolmogorov complexity of minimal test suites",
+      "Sporadic coupling through shared implicit invariants invisible to static analysis",
+      "Entropy rise in the call graph's transition matrix under Markov analysis",
+      "Ontological drift between domain abstractions and stabilized code contracts",
+      "Ossification of execution paths through reinforcement of high-traffic runtime trajectories",
+      "Shifting burden of latent state space complexity exceeding bounded rationality limits"
+    ],
+    "calls": 61,
+    "wall_s": 90.5
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 5683,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 27.3
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 7,
+    "tokens": 6223,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Hidden Markov coupling between change sequences and latent developer mental models",
+      "Entropy of test-suite distributions decaying via Goodhart's Law",
+      "Topology of dependency graph drifting toward forbidden minors",
+      "Algorithmic information distance between successive code states growing monotonically",
+      "Non-compositional emergent invariants in asynchronous runtime behavior",
+      "Shift in untyped latent contracts between boundary modules"
+    ],
+    "calls": 7,
+    "wall_s": 27.1
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 12109,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 68.1
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 15021,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Lebesgue measure of tests touched by a random change grows as a power law in system age",
+      "Dependency-graph betweenness centrality of stable modules creates irreversible architectural singularities",
+      "Design intent is destroyed bit-by-bit by locally-Bayesian patches that never update the prior",
+      "Semantic entropy of identifiers and interfaces increases monotonically due to non-colliding name reuse",
+      "The space of valid configurations becomes a non-convex manifold where local gradients trap all feasible refactorings",
+      "Causal coupling between distant modules emerges via shared hidden variables invisible to static analysis"
+    ],
+    "calls": 61,
+    "wall_s": 111.6
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 5248,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 23.0
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 8,
+    "tokens": 7116,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Causal coupling accumulation under repeated conditioning",
+      "Semantic drift between domain language and code structure",
+      "Entropy growth in dependency graphs under locally greedy edits",
+      "Test suite overfitting to historical execution paths",
+      "Implicit invariants encoded only in execution traces and team memory",
+      "Option value destruction via premature interface stabilization"
+    ],
+    "calls": 7,
+    "wall_s": 34.6
+  },
+  {
+    "arm": "A",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 12294,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 103.5
+  },
+  {
+    "arm": "B",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 15992,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Information-theoretic accretion: each locally rational change monotonically increases Shannon entropy of the configuration space, bounding navigability",
+      "Architectural phase locking: independent design constraints eventually satisfy the conditions for a percolation threshold, freezing the dependency graph into a single rigid cluster",
+      "Semantic drift accumulation: local correctness masks micro-decay of shared vocabulary, causing the gap between domain ontology and codebase ontology to ratchet irreversibly",
+      "Epistemic opacity growth: the cognitive cost of reconstructing latent design intent scales combinatorially with cross-cutting historical interactions",
+      "Non-ergodic path dependence: early arbitrary choices compound via lock-in, trapping the system in a vanishingly small subset of theoretically reachable architectural basins",
+      "Combinatorial constraint saturation: marginal changes optimize local gradients until the density of intersecting invariants makes the feasible mutation set approach zero"
+    ],
+    "calls": 61,
+    "wall_s": 98.1
+  },
+  {
+    "arm": "C",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 5193,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 21.5
+  },
+  {
+    "arm": "D",
+    "question": "decay",
+    "rep": 9,
+    "tokens": 5565,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Accumulation of implicit invariants invisible to the type system",
+      "Entropy of dependency graph topology monotonically increases",
+      "Software aging via unmodeled external environmental drift",
+      "Cognitive load limits bound the maximum maintainable call-graph span",
+      "Change amplification from emergent coupling between distant modules",
+      "State space fragmentation outpaces test suite coverage growth"
+    ],
+    "calls": 7,
+    "wall_s": 22.8
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 15832,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 87.6
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 18346,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturb a known optimal packing of 13 disks to maximize minimal triangular gap",
+      "lift a finite projective plane configuration into the square via affine map",
+      "derive exact lower bounds from oriented matroid realizability constraints",
+      "use tropical geometry to parametrize area-degenerate triple arrangements",
+      "simulate annealing with exact-rational area scoring under simplex constraints",
+      "reduce to a min-max semialgebraic optimization and certify via sum-of-squares"
+    ],
+    "calls": 61,
+    "wall_s": 150.1
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 6266,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 23.2
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 1,
+    "tokens": 6908,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "structured lattice perturbations with defect engineering",
+      "greedy max-min local search via simulated annealing",
+      "algebraic number field coordinates from minimal-area polynomial systems",
+      "convex geometric extremal constructions with boundary anchor points",
+      "interval arithmetic certified optimization with branch and bound",
+      "evolutionary population heuristics on continuous domain with clustering"
+    ],
+    "calls": 7,
+    "wall_s": 51.8
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 15953,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 160.6
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 18448,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "perturbed affine image of a triangular lattice",
+      "stretched projective orbit of a finite reflection group",
+      "greedy local search over continuous coordinates with simulated annealing",
+      "integer-program feasibility for a fixed minimum-area threshold",
+      "heilbronn-type analytic number theory bounds using low-discrepancy point sets",
+      "combinatorial classification of 13-uniform hypergraph packings on the torus"
+    ],
+    "calls": 61,
+    "wall_s": 110.8
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 6630,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.1
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 2,
+    "tokens": 7468,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Exact integer-lattice configuration with optimal min-determinant search",
+      "Continuous nonlinear optimization via simulated annealing on point coordinates",
+      "Algebraic construction from finite projective plane incidence geometry",
+      "Probabilistic lower-bound argument using discrepancy theory",
+      "Symmetric ansatz with prescribed point group (dihedral/cyclic) reducing dimension",
+      "Known optimal packing relaxation where triangle area proxies point separation"
+    ],
+    "calls": 7,
+    "wall_s": 59.8
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 15676,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 111.6
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 18931,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "affine-regular 13-gon projected into the square",
+      "integer lattice with optimized shear",
+      "simulated annealing on continuous coordinates",
+      "finite projective plane incidence geometry embedded in the square",
+      "linear programming bound with explicit certificate",
+      "structured multi-scale hexagonal packing"
+    ],
+    "calls": 61,
+    "wall_s": 90.6
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 5602,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.8
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 3,
+    "tokens": 7450,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "explicit coordinate list optimized via simulated annealing",
+      "lattice perturbation from hexagonal packing near Jamison bound",
+      "algebraic construction over a finite field mapped to the square",
+      "metric entropy argument proving achievable and upper bounds without instantiation",
+      "recursive point-insertion greedy maximizing local clearance",
+      "symmetry-anchored design forcing all collinear triples to zero area"
+    ],
+    "calls": 7,
+    "wall_s": 33.9
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 15703,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 121.5
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 18406,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Perturbation of integer lattice 3x3 plus corners",
+      "Stochastic search with convex-hull-aware sampling",
+      "Algebraic construction from finite-field elliptic curves",
+      "Hexagonal close packing scaled to the unit square",
+      "Repulsion-based force model with triangle-area potential",
+      "Exhaustive branch-and-bound over triangulation combinatorics"
+    ],
+    "calls": 61,
+    "wall_s": 140.9
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 5792,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 22.1
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 4,
+    "tokens": 6526,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Lattice perturbation from optimal 13-point triangular packing",
+      "Simulated annealing with area-minimax penalty on continuous domain",
+      "Algebraic number field construction forcing equal small triangles",
+      "Transfer from known Heilbronn-type extremal configurations",
+      "Exhaustive rational-coordinate search over bounded denominator grids",
+      "Topological graph rigidity enforcing uniform local triangle areas"
+    ],
+    "calls": 7,
+    "wall_s": 54.4
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 16143,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 98.6
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 18778,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "lattice perturbation from scaled Z^2 grid",
+      "projective pullback of finite affine plane AG(2,3)",
+      "convex 13-gon boundary with interior points at area-critical spots",
+      "simulated annealing over continuous coordinate pairs",
+      "algebraic number-theoretic construction using roots of unity",
+      "exhaustive branch-and-bound with interval arithmetic bounds"
+    ],
+    "calls": 61,
+    "wall_s": 91.4
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 6708,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 66.2
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 5,
+    "tokens": 7041,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "direct coordinate specification of a 13-point set with computed minimal triangle area",
+      "number-theoretic construction using roots of unity or Farey fractions projected into the square",
+      "optimization pipeline output via nonlinear programming or simulated annealing on the area functional",
+      "combinatorial/graph-theoretic argument bounding achievable minimal area by packing constraints",
+      "existential proof of a lower bound via probabilistic or discrepancy methods without explicit coordinates",
+      "computer-assisted exhaustive search over a discretized grid with interval-arithmetic certification"
+    ],
+    "calls": 7,
+    "wall_s": 34.7
+  },
+  {
+    "arm": "A",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 16102,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 60,
+    "wall_s": 139.0
+  },
+  {
+    "arm": "B",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 20806,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Explicit Cartesian coordinates with exact algebraic or rational entries",
+      "Probabilistic simulated-annealing search reporting best-found coordinates as decimals",
+      "Constructive geometric design based on affine-regular point lattices or sublattices",
+      "Proof-based upper bound via combinatorial geometry and Heilbronn-type lemmas",
+      "Symmetry-constrained ansatz parameterized by a few variables then globally optimized",
+      "Algebraic-number-theoretic construction using roots of unity projected to the square"
+    ],
+    "calls": 61,
+    "wall_s": 145.5
+  },
+  {
+    "arm": "C",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 6025,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": null,
+    "calls": 6,
+    "wall_s": 36.6
+  },
+  {
+    "arm": "D",
+    "question": "geometry",
+    "rep": 6,
+    "tokens": 7042,
+    "budget_truncated": false,
+    "planning_failed": false,
+    "directions": [
+      "Exact algebraic coordinates from lifting a triangular lattice fragment",
+      "Numerical simulated-annealing search with floating-point coordinates",
+      "Combinatorial construction on a regular grid with proven gap",
+      "Probabilistic existence argument via random point distributions",
+      "Reduction from a known optimal 13-point packing or projection thereof",
+      "Computer-assisted proof with interval arithmetic certifying a lower bound"
+    ],
+    "calls": 7,
+    "wall_s": 34.1
   }
 ]
