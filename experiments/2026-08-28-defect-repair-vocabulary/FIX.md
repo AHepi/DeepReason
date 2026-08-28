@@ -185,3 +185,63 @@ lines in `scripts/cycle_soak.py` (an instrument, not the harness), ~150 lines
 of tests, and 2 map entries. Production total well under the 150-line budget;
 class is `defect` with no frozen surface, so this proceeds to
 `dr-implement-fix` without an operator stop.
+
+---
+
+## Amendment 1 (during implementation) — one change site FIX.md missed
+
+**Added change site: `scripts/wheel_operational_smoke.py`, the loopback
+handler's response serialization (~6 lines).**
+
+What forced it: the soak's stub server serializes whatever
+`response_for_schema` returns with
+`content = json.dumps(response, sort_keys=True, separators=(",", ":"))`
+(`wheel_operational_smoke.py:1216`). So an "unparseable" induction that
+returns a Python string arrives at the adapter as a QUOTED JSON string —
+`"I cannot answer that as JSON. {{{"` — which is one complete JSON value.
+`parse_one_json_value` accepts it (`llm/repair.py:446`,
+`JSONDecoder().raw_decode`), `candidate_from_raw` sets `_pending_candidate`,
+and `note_invalid` takes the `invalid_value_parseable = True` branch
+(`llm/repair.py:1683-1696`) — a PATCH turn, which is the mode the soak could
+already reach. There is no value `json.dumps` can emit that is not valid JSON,
+so the induction cannot be made to work from `cycle_soak.py` alone.
+
+The change: a `RawResponse(str)` marker in the smoke, and one branch in the
+handler that serves a `RawResponse` verbatim instead of encoding it. Every
+existing return value is untouched and still encoded, so no existing stage of
+`wheel_operational_smoke.py` or `cycle_soak.py` changes behaviour. This
+keeps the module's own rule — "the stub is REUSED, never re-minted; a second
+stub would be a second thing to keep true" (`cycle_soak.py:35-38`) — which is
+exactly the reason not to solve this by minting a second server in the soak.
+
+Not a public-surface change (no console entry point, MCP tool, schema sha or
+wheel-layout pin touched), but `scripts/wheel_smoke.py`,
+`python -u scripts/wheel_operational_smoke.py` and
+`tests/test_wheel_operational.py` — which loads this module by path — are all
+run before the commit, since this is the file they exercise.
+
+Revised estimated diff: production code unchanged at ~30 lines across the two
+`src/` files; instruments now ~50 lines in `scripts/cycle_soak.py` plus ~6 in
+`scripts/wheel_operational_smoke.py`.
+
+## Amendment 2 (during implementation) — one planned test could not be written as planned, and was replaced
+
+FIX.md's regression conditions asked that the new mode/pointer-agreement check
+be shown to reject BOTH directions, "or the check is decorative". Writing it
+revealed why that is not reachable through the ordinary path: a repair
+payload is digest-bound to its preparation by
+`_trigger(preparation, payload, "repair:")`, which recomputes
+`"repair:" + sha256(canonical_json(payload))`
+(`nonconjecture_recovery.py:162-164`). A payload with a substituted field
+therefore fails the TRIGGER check before it ever reaches the mode or pointer
+checks, and no writer can produce a disagreeing payload in the first place.
+
+Resolved, not dropped: the two direction tests call `_repair_authority`
+directly over a real recorded repair — real harness, real work item, real
+preparation, real raw value — with `_trigger` stubbed for that one call and
+the reason stated in the helper's docstring. That makes the agreement check
+mutation-provable, and it was mutation-proved: replacing the condition with
+`True` turns both tests red (one gets "repair envelope pointers differ"
+instead, the other stops raising), and restoring it returns 7 passed. A third
+test then pins the WRITER guarantee the check depends on, read from both
+fixture roots rather than reasoned about.
