@@ -1,0 +1,6 @@
+default                                      manifest_sha=de66096f79454255 subject=02ee7e098bb92390
+JUDGE_SEATS_ENABLED=True                     manifest_sha=de66096f79454255 subject=02ee7e098bb92390
+ADJUDICATION_STATUS_AUTHORITY_ENABLED=True   manifest_sha=de66096f79454255 subject=02ee7e098bb92390
+SCHOOL_SEATS_ENABLED=True                    manifest_sha=de66096f79454255 subject=02ee7e098bb92390
+PT1 five switches                            manifest_sha=de66096f79454255 subject=02ee7e098bb92390
+source_config_hash: ['6c2d01f6b8cbe65e', '6c2d01f6b8cbe65e', '2624603035bc335e', '2624603035bc335e', '2624603035bc335e', '2624603035bc335e']

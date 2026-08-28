@@ -2476,6 +2476,109 @@ def _versioned_source_config_data(
     return data
 
 
+# Every `Config` field the engine-config echo drops UNCONDITIONALLY, derived
+# from the drop list above rather than restated beside it: a knob added there
+# must join the disclosure automatically, not escape it. Derived at the highest
+# schema version so the version-conditional `scratchpad`/`bridge` pops stay out
+# -- those have their own typed policy fields and their own compile notices.
+# Deferred to call time because this module must not import `deepreason.config`
+# at module scope (`config_from_run_manifest` imports it inside the function
+# for the same reason).
+_DROPPED_CONFIG_FIELDS: tuple[str, ...] | None = None
+_DEFAULT_CONFIG_DATA: dict[str, Any] | None = None
+
+# The three dropped fields whose whole effect is a COMPILE-time decision the
+# manifest records in a typed policy field of its own; every other dropped
+# field is consulted at a site inside the run, where only the rebuilt Config
+# exists. A pointer here names where the effect must appear instead, and
+# `_dropped_field_effect_is_compiled` suppresses the notice when it does.
+_DROPPED_FIELD_CARRIERS: dict[str, str] = {
+    "ENGAGED_CRITICISM_AUTHORITY": "/criticism_policy/authority",
+    "LEGACY_CRITICISM_ENABLED": "/criticism_policy",
+    "SCHOOL_SEATS_ENABLED": "/control_plane_policy/school_execution",
+}
+
+
+def _unconditionally_dropped_config_fields() -> tuple[str, ...]:
+    global _DROPPED_CONFIG_FIELDS, _DEFAULT_CONFIG_DATA
+    if _DROPPED_CONFIG_FIELDS is None:
+        from deepreason.config import Config
+
+        defaults = _source_config_data(Config())
+        _DEFAULT_CONFIG_DATA = defaults
+        _DROPPED_CONFIG_FIELDS = tuple(
+            sorted(defaults.keys() - _versioned_source_config_data(Config(), 6).keys())
+        )
+    return _DROPPED_CONFIG_FIELDS
+
+
+def _default_config_data() -> dict[str, Any]:
+    _unconditionally_dropped_config_fields()
+    assert _DEFAULT_CONFIG_DATA is not None
+    return _DEFAULT_CONFIG_DATA
+
+
+def _dropped_field_effect_is_compiled(
+    field: str, configured: Any, criticism_policy, control_policy
+) -> bool:
+    if field == "ENGAGED_CRITICISM_AUTHORITY":
+        return criticism_policy is not None and criticism_policy.authority == configured
+    if field == "LEGACY_CRITICISM_ENABLED":
+        # Only the False setting asks for anything; True is the default and
+        # never reaches here.
+        return criticism_policy is not None
+    if field == "SCHOOL_SEATS_ENABLED":
+        return (
+            control_policy is not None
+            and getattr(control_policy, "school_execution", None) is not None
+            and control_policy.school_execution.mode == "route_bound"
+        )
+    return False
+
+
+def _emit_uncarried_config_notices(
+    data: dict[str, Any],
+    engine_config: dict[str, Any],
+    *,
+    notices: list[CompileNoticeV1],
+    criticism_policy,
+    control_policy,
+) -> None:
+    """Disclose every configured Config field this manifest does not carry.
+
+    `config_from_run_manifest` rebuilds Config from `engine_config_json` and
+    nothing else, and `apply_profile_to_config` touches none of the dropped
+    fields, so an absent field takes its declared default for the whole run.
+    Putting them in the echo instead would move `source_config_hash`, and with
+    it every manifest digest and every qualification subject digest
+    (docs/ERRATA.md E44) -- so the drop is disclosed rather than reversed.
+    Operator law, 2026-08-28: "Gates are always optional: with warnings."
+
+    Compile time only. No read path calls this, so loading a committed
+    manifest attaches no notice and moves no stored digest or verdict.
+    """
+
+    defaults = _default_config_data()
+    for field in _unconditionally_dropped_config_fields():
+        if field not in data or field in engine_config:
+            continue
+        configured = data[field]
+        if configured == defaults[field]:
+            continue
+        if _dropped_field_effect_is_compiled(
+            field, configured, criticism_policy, control_policy
+        ):
+            continue
+        _emit_compile_notice(
+            notices,
+            "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+            f"{field}={configured!r} is not carried by this manifest's engine "
+            f"config; the run will use {defaults[field]!r}",
+            f"/engine_config/{field}",
+            resolution=_DROPPED_FIELD_CARRIERS.get(field),
+        )
+
+
 def source_config_hash(
     config, *, schema_version: Literal[1, 2, 3, 4, 5, 6] = SCHEMA_VERSION
 ) -> str:
@@ -3798,6 +3901,13 @@ def compile_run_manifest(
     )
 
     engine_config = _versioned_source_config_data(data, schema_version)
+    _emit_uncarried_config_notices(
+        data,
+        engine_config,
+        notices=notices,
+        criticism_policy=resolved_criticism_policy,
+        control_policy=resolved_control_policy,
+    )
     engine_config["roles"] = {}
     if schema_version >= 3:
         # Typed v3 policy is canonical and must not be duplicated inside the

@@ -1,5 +1,5 @@
 <!-- DR-CON-authority -->
-Verified-at: d057f306
+Verified-at: HEADSHA
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py, src/deepreason/v6_policy.py, src/deepreason/preparation.py
 Seams: DR-SEAM-adjudication-x-authority
@@ -235,6 +235,29 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
 | Widen the manifest authority vocabulary | Don't. DR-INV-frozen-surfaces surface 4; put the mode on `Config` | `python -m pytest tests/test_v6_manifest_defended_trial.py -q` |
 
 ## Traps
+
+- **Both master gates are invisible to the run that executes them.**
+  `JUDGE_SEATS_ENABLED` and `ADJUDICATION_STATUS_AUTHORITY_ENABLED` are dropped
+  from the manifest's engine-config echo, and the echo is the only source of a
+  run's `Config` — so a run built from a manifest takes BOTH at `False`
+  whatever its builder wrote, and `authority.py`'s readers see the default
+  rather than the choice. `ENGAGED_CRITICISM_AUTHORITY` goes the same way; only
+  `ARGUMENTATIVE_AUTHORITY` survives, because it is not dropped. P-T1 qualified
+  two judge seats, at real cost, for a road closed four times over (audit
+  2026-08-28, F-A). Since 2026-08-28 the compile DISCLOSES each one it does not
+  carry (`ENGINE_CONFIG_FIELD_NOT_CARRIED`), which is a warning and not a
+  repair: reading an authority knob off a run's `Config` still tells you what
+  the run did, never what its operator asked for. To learn the latter, read the
+  manifest's `compile_notices`.
+`check: python -c "
+from deepreason.run_manifest import config_from_run_manifest
+from tests.test_reusable_qualification import _manifest, _profile
+m = _manifest(_profile(), config_updates={'JUDGE_SEATS_ENABLED': True, 'ADJUDICATION_STATUS_AUTHORITY_ENABLED': True})
+runtime = config_from_run_manifest(m)
+assert runtime.JUDGE_SEATS_ENABLED is False and runtime.ADJUDICATION_STATUS_AUTHORITY_ENABLED is False
+named = {n.pointer for n in (m.compile_notices or ()) if n.code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED'}
+assert named == {'/engine_config/JUDGE_SEATS_ENABLED', '/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED'}, named
+"`
 
 - **Reading one vocabulary and assuming the other.** `_POLICY_AUTHORITIES`
   (manifest) and `_ARGUMENTATIVE_VALUES` (Config) are separate closed sets, and

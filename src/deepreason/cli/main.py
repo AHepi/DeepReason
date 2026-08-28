@@ -2982,6 +2982,11 @@ def _cmd_run(args) -> int:
     except (ProcessLockError, ValueError) as error:
         print(str(error), file=sys.stderr)
         return 1
+    # A manifest is frozen long before it is launched, and this verb may be
+    # handed one it did not compile. Its compile-time disclosures are then the
+    # only warning the operator gets that the configuration about to execute is
+    # not the one its builder wrote (audit 2026-08-28, finding F-A).
+    report_preflight_notices(manifest.compile_notices)
     if args.dry_run:
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")

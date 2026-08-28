@@ -264,6 +264,13 @@ def qualification_subject_payload(
     behavior = manifest.model_dump(mode="json", by_alias=True)
     behavior.pop("compiled_at", None)
     behavior.pop("run_input_digest", None)
+    notices = behavior.get("compile_notices")
+    if notices is not None:
+        kept = [n for n in notices if n.get("code") != "ENGINE_CONFIG_FIELD_NOT_CARRIED"]
+        if kept:
+            behavior["compile_notices"] = kept
+        else:
+            behavior.pop("compile_notices", None)
     pairs = tuple(
         {
             "pair_subject_digest": _pair_subject_digest(_pair_payload(pair)),

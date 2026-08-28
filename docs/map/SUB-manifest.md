@@ -1,5 +1,5 @@
 <!-- DR-SUB-manifest -->
-Verified-at: debff8d9b
+Verified-at: HEADSHA
 Verify: python -m pytest tests/test_v6_only_manifest_loading.py tests/test_reusable_qualification.py tests/test_qualification_tier.py tests/test_v6_route_seat_behavioral_capability_plan.py -q
 Owns: src/deepreason/run_manifest.py, src/deepreason/qualification.py, src/deepreason/cli/doctor.py
 Seams: DR-SEAM-bridge-x-manifest, DR-SEAM-llm-x-manifest, DR-SEAM-manifest-x-schools
@@ -201,6 +201,39 @@ credential. The only mutable in-memory state is `_EXECUTOR_OPTIONS` in
 `check: for s in _compile_route_seat_behavioral_capability_plan _compile_route_seat_contract_decomposition_plan _compile_route_seat_presentation_plan _validate_v4_control_plane_policy _validate_v4_criticism_policy _preflight_text_authority; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && grep -q "^LEGACY_CANONICAL_ROLES = (" src/deepreason/run_manifest.py && grep -q "^V3_CANONICAL_ROLES = (\*LEGACY_CANONICAL_ROLES, \"grounding_reviewer\")" src/deepreason/run_manifest.py && for s in _production_probe_contract _production_bridge_ledger_probe _production_bridge_composition_probe _production_grounding_probe _production_scratch_probe _release_gate _validate_production_contract_request_envelopes; do grep -q "^def $s(" src/deepreason/cli/doctor.py || exit 1; done && grep -q "^PRODUCTION_CASES_PER_PAIR = 20$" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19$" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_PAIR_RE_EXERCISE_LIMIT = 3$" src/deepreason/cli/doctor.py && grep -q "^SHALLOW_FITNESS_CASES = 6$" src/deepreason/qualification.py && grep -q "^SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM = 5$" src/deepreason/qualification.py && grep -q "class QualificationTierRecordV1" src/deepreason/qualification.py`
 
 ## Traps
+
+- **"It lives on Config only" is a reason it is LOST, not a reason it is safe
+  to drop.** `_versioned_source_config_data` pops 25 `Config` fields out of
+  `engine_config_json` so a new knob does not move every digest, and its
+  comments justify each pop with one of two sentences. The second — "it lives
+  on Config only, consulted at dispatch sites" — was written as a reason the
+  echo need not carry the field, and it is exactly backwards: since the
+  single-run-path unification (2026-08-13) `run_scheduler` is handed
+  `config_from_run_manifest(manifest)`, so `Config` IS the echo and a dropped
+  field takes its DEFAULT for the whole run. Twenty-two of the 25 rest on that
+  sentence. P-T1 lost five switches this way with `compile_notices == []`
+  (audit 2026-08-28, finding F-A; the fifth recorded instance of the shape
+  `RUN_ANATOMY_SYNTHESIS` §3.2 item 6 named). Fixed 2026-08-28
+  (`experiments/2026-08-28-defect-manifest-config-disclosure/`): the drop stays
+  — reversing it moves every qualification subject digest, `docs/ERRATA.md` E44
+  — and `compile_run_manifest` now DISCLOSES it, one
+  `ENGINE_CONFIG_FIELD_NOT_CARRIED` notice per configured field it does not
+  carry. Adding a `data.pop` line is therefore no longer the whole recipe for a
+  new knob: check whether the knob is read at a site inside a run, and if it is,
+  say so in the tranche's own documents — the notice will fire, and it should.
+`check: python -m pytest tests/test_manifest_config_disclosure.py::test_pt1_builder_shape_discloses_every_uncarried_switch tests/test_manifest_config_disclosure.py::test_the_dropped_set_is_exactly_the_unconditional_pops -q`
+- **A disclosure can defeat the exclusion it describes.** The qualification
+  subject embeds `compile_notices`, so a notice naming a subject-EXCLUDED
+  `Config` field puts that field's name straight back into the subject. Found
+  by measurement, not by reading (`.../MEASUREMENTS.md`). Any new notice code
+  that quotes a `Config` field name must be checked against
+  `qualification_subject_payload` before it ships.
+`check: python -c "
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+p = _profile()
+assert qualification_subject_digest(_manifest(p, config_updates={'JUDGE_SEATS_ENABLED': True}), p) == qualification_subject_digest(_manifest(p), p)
+"`
 
 - **A retired refusal can leave an unguarded lookup behind it.** Converting
   `BRIDGE_*_ROUTE_REQUIRED` to a notice (2026-08-12) let a grounded-bridge

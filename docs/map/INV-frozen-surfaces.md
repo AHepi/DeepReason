@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: e9fac8671
+Verified-at: HEADSHA
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -419,6 +419,51 @@ and the `capture14-hysteresis.v1` policy artifact.
 `check: test "$(grep -c 'data.pop("CAPTURE14_' src/deepreason/run_manifest.py)" -eq 6 && test "$(grep -c 'data.pop("SCOPE_MAX_\|data.pop("FRAME_SLICE_' src/deepreason/run_manifest.py)" -eq 4`
 `check: python -c "from deepreason.config import Config; from deepreason.run_manifest import source_config_hash; h=[source_config_hash(Config(), schema_version=v) for v in (1,2,3,4,5,6)]; assert h[0]==h[1] and h[2]==h[3]==h[4]==h[5]" && python -m pytest tests/test_allocation_signal_consumption.py::test_the_shipped_qualification_subject_digest_does_not_move -q`
 
+**Granted contact, 2026-08-28 — the uncarried-field disclosure (audit F-A / P10).**
+The monitor FORECAST this contact in the tranche instruction and granted it
+conditionally, to the discipline the four grants above record: name in FIX.md,
+before implementation, exactly what moves, what cannot move, and why no
+committed root changes verdict. Requested at
+`experiments/2026-08-28-defect-manifest-config-disclosure/FIX.md`.
+
+The defect it repairs: `_versioned_source_config_data` pops 25 `Config` fields
+out of `engine_config_json`, and `config_from_run_manifest` is the ONLY source
+of a run's `Config`, so each of them silently took its default for the whole
+run and nothing anywhere said so. Twenty-two of the 25 are consumed at sites
+INSIDE a run; the drop list's own justification ("it lives on Config only,
+consulted at dispatch sites") is the one that fails, because on the single run
+path `Config` IS the echo. Census over every committed `run-config.yaml` and
+`run-manifest.json` on main:
+`.../probe/census_dropped_fields.py`.
+
+What moved: `compile_run_manifest` now emits one `ENGINE_CONFIG_FIELD_NOT_CARRIED`
+compile notice per dropped field whose configured value differs from its
+default, on the `CompileNoticeV1` channel the all-configurations tranche built
+for exactly this. **Insertions only, and no `data.pop` line was added, removed
+or made conditional** — the echo is READ, never edited, so `source_config_hash`
+is byte-identical at every schema version. No Pydantic model, validator, schema
+guard, serializer branch or record format was touched, so the mistake §4 names
+("reading the model and not the validator") cannot arise: no validator is in
+the diff.
+
+Emission is COMPILE-TIME ONLY, and that is what keeps every committed root
+fixed. A committed manifest is READ (`model_validate_json`), never recompiled;
+no read path calls `compile_run_manifest`, so no notice attaches, no canonical
+byte moves, and no stored verdict can change. The root sweep is retired as an
+instrument (operator ruling 2026-08-22); this categorical argument is the proof,
+and the census re-derives its premise on demand — 0 of 79 committed manifests
+carry a notice or a dropped field.
+
+The drop set is DERIVED from the drop list, not restated beside it, so a future
+`data.pop` line joins the disclosure automatically instead of escaping it.
+
+`check: python -c "
+from deepreason.run_manifest import _unconditionally_dropped_config_fields as f
+dropped = set(f())
+assert {'JUDGE_SEATS_ENABLED','ADJUDICATION_STATUS_AUTHORITY_ENABLED','SCHOOL_SEATS_ENABLED','ENGAGED_CRITICISM_AUTHORITY','LEGACY_CRITICISM_ENABLED'} <= dropped, sorted(dropped)
+assert 'scratchpad' not in dropped and 'bridge' not in dropped
+" && python -m pytest tests/test_manifest_config_disclosure.py -q`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the
@@ -426,6 +471,44 @@ pair inventory and the provider profile. Change what enters that digest and
 every cached "qualified" verdict refers to a subject that no longer exists.
 
 `check: grep -q "def qualification_subject_payload" src/deepreason/qualification.py`
+
+**Contact REQUESTED and NOT YET GRANTED, 2026-08-28 — excluding one notice code
+from the subject.** Recorded here because a requested contact is written down
+whether or not it is granted, and because the tree currently CARRIES it pending
+the operator's answer
+(`experiments/2026-08-28-defect-manifest-config-disclosure/FIX.md` Amendment 1).
+
+Why it arose: `qualification_subject_payload` builds its subject from
+`manifest.model_dump(...)`, which includes `compile_notices`. A notice NAMING a
+dropped `Config` field therefore carries that field's name and value INTO the
+subject — defeating, by way of its own disclosure, the exclusion three
+committed tests exist to guarantee (Parts C/D/E, S2a/S2b/S2d, C9: these knobs
+gate dispatch, not provider identity, so they must never cost a home a
+~14-minute battery).
+
+What it does: seven inserted lines dropping notices whose code is
+`ENGINE_CONFIG_FIELD_NOT_CARRIED` from the subject. Every other notice keeps
+its contribution unchanged.
+
+What it costs, MEASURED rather than argued
+(`.../MEASUREMENTS.md`): **zero qualification subject digests move.** The
+default fixture stays `02ee7e098bb92390…`; a P-T1-shaped config stays
+`02ee7e098bb92390…` instead of moving to `f40357e9e31b8768…`; a manifest
+already carrying an unrelated notice stays `061efe5bdf7eb565…`. No cache entry
+is invalidated and no home owes a battery. Without it, 7 of the 8 committed
+`run-config.yaml` files on main get new subject digests and the three exclusion
+tests must be INVERTED, which CLAUDE.md forbids.
+
+`check: python -c "
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+p = _profile()
+base = qualification_subject_digest(_manifest(p), p)
+assert base == '02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713', base
+loud = _manifest(p, config_updates={'JUDGE_SEATS_ENABLED': True, 'ADJUDICATION_STATUS_AUTHORITY_ENABLED': True, 'ENGAGED_CRITICISM_AUTHORITY': 'defended_trial', 'LEGACY_CRITICISM_ENABLED': False, 'SCHOOL_SEATS_ENABLED': True})
+assert any(n.code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED' for n in loud.compile_notices), loud.compile_notices
+assert qualification_subject_digest(loud, p) == base
+"`
 
 ## Where authority is allowed to live instead
 

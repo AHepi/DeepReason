@@ -1,0 +1,60 @@
+F...FF...                                                                [100%]
+=================================== FAILURES ===================================
+___________ test_pt1_builder_shape_discloses_every_uncarried_switch ____________
+
+    def test_pt1_builder_shape_discloses_every_uncarried_switch():
+        manifest = _pt1_manifest()
+        runtime = config_from_run_manifest(manifest)
+        disclosed = _disclosed(manifest)
+    
+>       assert set(disclosed) == set(PT1_SWITCHES), (
+            "every switch the echo drops must be named in a typed notice; "
+            f"named={sorted(disclosed)}"
+        )
+E       AssertionError: every switch the echo drops must be named in a typed notice; named=[]
+E       assert set() == {'ADJUDICATIO...EATS_ENABLED'}
+E         
+E         Extra items in the right set:
+E         'LEGACY_CRITICISM_ENABLED'
+E         'JUDGE_SEATS_ENABLED'
+E         'ENGAGED_CRITICISM_AUTHORITY'
+E         'ADJUDICATION_STATUS_AUTHORITY_ENABLED'
+E         'SCHOOL_SEATS_ENABLED'
+E         Use -v to get more diff
+
+tests/test_manifest_config_disclosure.py:81: AssertionError
+__ test_identity_only_field_is_disclosed_when_the_manifest_does_not_carry_it ___
+
+    def test_identity_only_field_is_disclosed_when_the_manifest_does_not_carry_it():
+        # The same two switches, with the criticism policy the builder forgot.
+        disclosed = _disclosed(
+            _manifest(
+                _profile(),
+                config_updates={
+                    "LEGACY_CRITICISM_ENABLED": False,
+                    "ENGAGED_CRITICISM_AUTHORITY": "defended_trial",
+                },
+                criticism_policy=None,
+            )
+        )
+>       assert "LEGACY_CRITICISM_ENABLED" in disclosed
+E       AssertionError: assert 'LEGACY_CRITICISM_ENABLED' in {}
+
+tests/test_manifest_config_disclosure.py:141: AssertionError
+__________ test_a_behavioural_knob_outside_the_five_is_disclosed_too ___________
+
+    def test_a_behavioural_knob_outside_the_five_is_disclosed_too():
+        # The five switches are one instance; the disclosure is over the whole
+        # drop set, so a knob from an unrelated tranche discloses identically.
+        disclosed = _disclosed(
+            _manifest(_profile(), config_updates={"JUDGE_SUMMONS_PER_CYCLE": 3})
+        )
+>       assert "JUDGE_SUMMONS_PER_CYCLE" in disclosed
+E       AssertionError: assert 'JUDGE_SUMMONS_PER_CYCLE' in {}
+
+tests/test_manifest_config_disclosure.py:151: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_manifest_config_disclosure.py::test_pt1_builder_shape_discloses_every_uncarried_switch
+FAILED tests/test_manifest_config_disclosure.py::test_identity_only_field_is_disclosed_when_the_manifest_does_not_carry_it
+FAILED tests/test_manifest_config_disclosure.py::test_a_behavioural_knob_outside_the_five_is_disclosed_too
+3 failed, 6 passed in 0.36s

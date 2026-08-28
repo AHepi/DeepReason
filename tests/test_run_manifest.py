@@ -678,7 +678,14 @@ def test_judge_seats_opt_in_does_not_bypass_cross_family_requirement():
         rubric_policy="require_cross_family", compiled_at=STAMP,
     )
     assert len(manifest.roles["judge"]) == 1
-    assert [n.code for n in manifest.compile_notices] == ["SECOND_JUDGE_FAMILY_REQUIRED"]
+    codes = [n.code for n in manifest.compile_notices]
+    # The opt-in flag itself is dropped from the engine-config echo, so it
+    # discloses too (audit 2026-08-28, F-A) -- a second notice about a
+    # different thing, which is exactly this test's point: the cross-family
+    # guarantee's own disclosure is unchanged, and still the only one of its
+    # kind.
+    assert codes.count("SECOND_JUDGE_FAMILY_REQUIRED") == 1
+    assert codes == ["SECOND_JUDGE_FAMILY_REQUIRED", "ENGINE_CONFIG_FIELD_NOT_CARRIED"]
 
 
 def test_second_explicit_family_is_allowed_without_fallback():

@@ -199,3 +199,96 @@ default, so both must be unchanged. `VERIFY.md` records the measurement.
 Any subject digest or committed pin moves → STOP and report before re-pinning.
 Contact required with any frozen surface other than 4 → STOP. Diff over ~150
 production lines → STOP.
+
+---
+
+## Amendment 1 (2026-08-28) — a second frozen surface, discovered by measurement
+
+Implementation of the design above turned four tests red and one of the four is
+not a fixture: it is the design telling us something the design doc missed.
+Recorded here BEFORE the code stands, per the granted-contact discipline.
+
+**What was missed.** `qualification_subject_payload` builds its subject from
+`manifest.model_dump(mode="json", by_alias=True)`, which includes
+`compile_notices`. A notice NAMING a dropped `Config` field therefore carries
+that field's name and value INTO the qualification subject — defeating, by its
+own disclosure, the exclusion three committed tests exist to guarantee (Parts
+C/D/E, S2a/S2b/S2d, C9). Measured: `MEASUREMENTS.md`. The rule those tests
+encode is right, and this tranche does not weaken it.
+
+**Design amendment.** One rule, seven inserted lines in
+`qualification_subject_payload`: a notice whose code is
+`ENGINE_CONFIG_FIELD_NOT_CARRIED` does not enter the qualification subject.
+Every other notice keeps its contribution unchanged. The rule generalises the
+three tests rather than special-casing around them — *a disclosure that a
+subject-excluded `Config` field was not carried must not itself enter the
+subject, or the exclusion is defeated by its own disclosure.*
+
+### Frozen-surface request — surface 5, NOT GRANTED, this tranche's STOP
+
+The monitor's disposition granted surface 4 and said: *"Any surface other than
+4 → STOP."* `qualification.py` is surface 5. This is that stop, stated with the
+measurement that makes it answerable:
+
+**What would move.** Seven inserted lines inside `qualification_subject_payload`,
+between the two `behavior.pop(...)` lines already there. Insertions only.
+
+**What would NOT move, measured rather than argued (`MEASUREMENTS.md`).** Zero
+qualification subject digests. The default fixture stays
+`02ee7e098bb92390…`; every P-T1-shaped config stays `02ee7e098bb92390…`
+instead of moving to `f40357e9e31b8768…`; a manifest already carrying an
+unrelated notice stays `061efe5bdf7eb565…`. `source_config_hash` is
+byte-identical at every schema version. No cache entry is invalidated, no home
+owes a battery, no committed pin is re-pinned. No schema, validator, Pydantic
+model, check name or record format is touched, in either file.
+
+**The alternative if the grant is refused.** Option A in `MEASUREMENTS.md`:
+7 of 8 committed configurations get new subject digests and one ~14-minute
+battery each, and the three exclusion tests must be inverted — deleting a
+guarantee to get green, which CLAUDE.md forbids. Option C (print, do not store)
+keeps the disclosure out of the record entirely.
+
+## Amendment 2 — one predicted fixture update
+
+`tests/test_run_manifest.py::test_judge_seats_opt_in_does_not_bypass_cross_family_requirement`
+sets `JUDGE_SEATS_ENABLED = True` and asserts the notice list equals exactly
+`["SECOND_JUDGE_FAMILY_REQUIRED"]`. With the disclosure, that config also
+yields `ENGINE_CONFIG_FIELD_NOT_CARRIED` for `JUDGE_SEATS_ENABLED` — which is
+the new behaviour working, on the very flag the test is about. Its stated point
+is that the cross-family disclosure is UNAFFECTED by `JUDGE_SEATS_ENABLED`, and
+that point survives intact: the assertion becomes that
+`SECOND_JUDGE_FAMILY_REQUIRED` is still present and still the only
+cross-family notice, with the new disclosure named explicitly so the test
+records both facts rather than fewer. Predicted here before the edit, per
+CLAUDE.md's rule on fixture updates.
+
+## Amendment 3 — a second predicted fixture update, and the best evidence in the tranche
+
+`tests/test_single_run_path.py::test_the_grounded_tranche_config_enters_through_the_new_door`
+recompiles `experiments/2026-08-12-live-grounded-extension-expansion/run-config.yaml`
+— an OPERATOR's own committed configuration — through its builder and compares
+the result field by field against the manifest that live run committed. With
+the disclosure, the recompile gains a `compile_notices` key the August manifest
+does not have, so the key-set comparison fails.
+
+That is the fix working on real evidence rather than a fixture, and the test's
+own docstring already sets the discipline for it: *"Each delta is asserted below
+rather than waived — excluding a field without pinning what changed inside it is
+how a second, unnoticed drift would ride along."* The update follows that
+discipline: `compile_notices` is named as a new key and its CONTENTS are pinned
+exactly.
+
+What the notices say on that config is itself the measurement worth keeping.
+The config sets all five switches; the recompile discloses exactly TWO —
+`ADJUDICATION_STATUS_AUTHORITY_ENABLED` and `JUDGE_SEATS_ENABLED`, the two
+BEHAVIOURAL ones. The three identity-only fields
+(`ENGAGED_CRITICISM_AUTHORITY`, `LEGACY_CRITICISM_ENABLED`,
+`SCHOOL_SEATS_ENABLED`) are silent because that builder DID re-express them, in
+the manifest's own `criticism_policy` and `control_plane_policy.school_execution`
+— which is the suppression rule of §3 firing correctly on a case nobody
+constructed for it. The 2026-08-12 config is the difference between a builder
+that carried what it could and P-T1's, which carried none of it.
+
+The old-runs-owe-nothing law (2026-08-14) applies here exactly as the docstring
+already applies it to the two earlier deltas: a committed manifest ceasing to
+match a fresh compile is that law in action, not a regression.

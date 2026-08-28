@@ -358,9 +358,38 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     # law, 2026-08-14): a committed manifest ceasing to match a fresh compile is
     # this law in action, not a regression.
     moved = {"inquiry_capability_policy", "toolchains"}
-    assert _without_evidence(compiled).keys() == _without_evidence(committed).keys()
+    #
+    # The uncarried-field disclosure (2026-08-28, audit finding F-A) adds a
+    # NEW key rather than moving one: this config sets two behavioural
+    # switches the engine-config echo cannot carry, so a recompile now says
+    # so where the August manifest was silent. Pinned exactly, per this
+    # docstring's own rule, because on the operator's own committed config
+    # this is a second and independent instance of the P10 regression -- and
+    # because WHICH two it names is the suppression rule working: the config
+    # sets five switches, and the three whose effect this builder re-expressed
+    # in criticism_policy and control_plane_policy.school_execution are
+    # correctly silent.
+    added = {"compile_notices"}
+    assert (
+        _without_evidence(compiled).keys() - _without_evidence(committed).keys()
+    ) == added
+    assert [
+        (notice["code"], notice["pointer"]) for notice in compiled["compile_notices"]
+    ] == [
+        (
+            "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+            "/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED",
+        ),
+        ("ENGINE_CONFIG_FIELD_NOT_CARRIED", "/engine_config/JUDGE_SEATS_ENABLED"),
+    ]
+    assert (
+        _without_evidence(compiled).keys() - added
+        == _without_evidence(committed).keys()
+    )
     assert {
-        k: v for k, v in _without_evidence(compiled).items() if k not in moved
+        k: v
+        for k, v in _without_evidence(compiled).items()
+        if k not in moved | added
     } == {k: v for k, v in _without_evidence(committed).items() if k not in moved}
 
     # The toolchain moved from the local runner to the contained one, and

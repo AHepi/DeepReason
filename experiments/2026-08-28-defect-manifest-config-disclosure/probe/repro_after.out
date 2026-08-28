@@ -1,0 +1,13 @@
+manifest.criticism_policy = None
+manifest.compile_notices  = (CompileNoticeV1(code='SECOND_JUDGE_FAMILY_REQUIRED', message='rubric workloads require at least two frozen judge families; supply --judge-family or use --rubric-policy forbid only for program/predicate workloads', pointer='/roles/judge', resolution=None), CompileNoticeV1(code='ENGINE_CONFIG_FIELD_NOT_CARRIED', message="ADJUDICATION_STATUS_AUTHORITY_ENABLED=True is not carried by this manifest's engine config; the run will use False", pointer='/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED', resolution=None), CompileNoticeV1(code='ENGINE_CONFIG_FIELD_NOT_CARRIED', message="ENGAGED_CRITICISM_AUTHORITY='defended_trial' is not carried by this manifest's engine config; the run will use 'observe_only'", pointer='/engine_config/ENGAGED_CRITICISM_AUTHORITY', resolution='/criticism_policy/authority'), CompileNoticeV1(code='ENGINE_CONFIG_FIELD_NOT_CARRIED', message="JUDGE_SEATS_ENABLED=True is not carried by this manifest's engine config; the run will use False", pointer='/engine_config/JUDGE_SEATS_ENABLED', resolution=None), CompileNoticeV1(code='ENGINE_CONFIG_FIELD_NOT_CARRIED', message="LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine config; the run will use True", pointer='/engine_config/LEGACY_CRITICISM_ENABLED', resolution='/criticism_policy'), CompileNoticeV1(code='ENGINE_CONFIG_FIELD_NOT_CARRIED', message="SCHOOL_SEATS_ENABLED=True is not carried by this manifest's engine config; the run will use False", pointer='/engine_config/SCHOOL_SEATS_ENABLED', resolution='/control_plane_policy/school_execution'))
+
+  REVERTED JUDGE_SEATS_ENABLED                      configured=True             run time=False
+  REVERTED ADJUDICATION_STATUS_AUTHORITY_ENABLED    configured=True             run time=False
+  REVERTED ENGAGED_CRITICISM_AUTHORITY              configured='defended_trial' run time='observe_only'
+  REVERTED LEGACY_CRITICISM_ENABLED                 configured=False            run time=True
+  REVERTED SCHOOL_SEATS_ENABLED                     configured=True             run time=False
+
+  reverted: 5 of 5
+  disclosed in compile_notices: 5
+
+No silent revert: every reverted switch is disclosed.
