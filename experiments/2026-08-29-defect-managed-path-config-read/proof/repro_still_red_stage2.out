@@ -1,0 +1,8 @@
+            )
+E           Failed: MANAGED PATH HAS NO CONFIGURATION INPUT: build_preparation_manifest cannot be given the operator's Config at all -- build_preparation_manifest() got an unexpected keyword argument 'config'
+
+tests/test_managed_path_config_read.py:77: Failed
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_reason_forwards_the_operator_config_to_preparation
+FAILED tests/test_managed_path_config_read.py::test_managed_manifest_carries_or_discloses_every_operator_setting
+2 failed, 1 skipped in 0.32s

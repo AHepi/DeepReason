@@ -1,0 +1,134 @@
+== BASELINE: the managed path as it is today ==
+  manifest sha256          37e3fa54edb75346a5b180d54b77d032a749c9c87da4ec5db5f3c21652327d06
+  source_config_hash       76e35e1604b6e4f090860d07ac6e87dfca29985f1e88de05b8bed793f8e850f1
+  qualification subject    7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  compile_notices          None
+
+== CONTROL: carrying a DEFAULT-valued Config ==
+  manifest sha256          37e3fa54edb75346a5b180d54b77d032a749c9c87da4ec5db5f3c21652327d06
+  qualification subject    7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  verdict                  FREE (byte-identical to baseline)
+
+== PRICE: 8 committed operator run-config.yaml files ==
+
+2026-08-12-live-grounded-extension-expansion
+  fields set away from default   7: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, JUDGE_SEATS_ENABLED, LEGACY_CRITICISM_ENABLED, RESEARCH_BACKEND, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      1: RESEARCH_BACKEND
+  manifest sha256                MOVED  39b0112b8d66d124
+  qualification subject          MOVED  02bf21e8123ca514
+  of those fields, carried to run time  1: RESEARCH_BACKEND
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 3: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/JUDGE_SEATS_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-13-defect-controller-steering-inert
+  fields set away from default   7: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, JUDGE_SEATS_ENABLED, LEGACY_CRITICISM_ENABLED, RESEARCH_BACKEND, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      1: RESEARCH_BACKEND
+  manifest sha256                MOVED  39b0112b8d66d124
+  qualification subject          MOVED  02bf21e8123ca514
+  of those fields, carried to run time  1: RESEARCH_BACKEND
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 3: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/JUDGE_SEATS_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-22-live-reach-rich-run
+  fields set away from default   2: RESEARCH_BACKEND, roles
+  echo keys that would move      1: RESEARCH_BACKEND
+  manifest sha256                MOVED  97619f0473b9fd91
+  qualification subject          MOVED  7ed9d28ab27e99a7
+  of those fields, carried to run time  1: RESEARCH_BACKEND
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 0: (none)
+
+2026-08-25-change-constructive-frontier
+  fields set away from default   5: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, LEGACY_CRITICISM_ENABLED, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      0: (none)
+  manifest sha256                MOVED  42297a7bfe2cb333
+  qualification subject          MOVED  99936f85f52b2471
+  of those fields, carried to run time  0: (none)
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 2: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-25-poietics-program
+  fields set away from default   6: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, JUDGE_SEATS_ENABLED, LEGACY_CRITICISM_ENABLED, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      0: (none)
+  manifest sha256                MOVED  60b64dff8f66bedf
+  qualification subject          MOVED  99936f85f52b2471
+  of those fields, carried to run time  0: (none)
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 3: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/JUDGE_SEATS_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-26-pc2-rematch
+  fields set away from default   5: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, LEGACY_CRITICISM_ENABLED, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      0: (none)
+  manifest sha256                MOVED  42297a7bfe2cb333
+  qualification subject          MOVED  99936f85f52b2471
+  of those fields, carried to run time  0: (none)
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 2: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-27-defect-split-leg-recording
+  fields set away from default   5: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, LEGACY_CRITICISM_ENABLED, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      0: (none)
+  manifest sha256                MOVED  42297a7bfe2cb333
+  qualification subject          MOVED  99936f85f52b2471
+  of those fields, carried to run time  0: (none)
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 2: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+2026-08-27-pc2b-symmetric-reasoning
+  fields set away from default   5: ADJUDICATION_STATUS_AUTHORITY_ENABLED, ENGAGED_CRITICISM_AUTHORITY, LEGACY_CRITICISM_ENABLED, SCHOOL_SEATS_ENABLED, roles
+  echo keys that would move      0: (none)
+  manifest sha256                MOVED  42297a7bfe2cb333
+  qualification subject          MOVED  99936f85f52b2471
+  of those fields, carried to run time  0: (none)
+  ENGINE_CONFIG_FIELD_NOT_CARRIED notices 2: /engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED, /engine_config/SCHOOL_SEATS_ENABLED
+
+== VARIANT: carry ONLY the 25 fields the echo already drops ==
+   (the cheapest carriage that could satisfy the operator law, because
+    a dropped field never enters engine_config_json at all)
+
+   drop set, derived from run_manifest itself: 25 fields
+
+  2026-08-12-live-grounded-extension-expansion   subject MOVED     99936f85f52b2471
+  2026-08-13-defect-controller-steering-inert    subject MOVED     99936f85f52b2471
+  2026-08-22-live-reach-rich-run                 subject UNCHANGED 7c0ba0a174fdc2d9
+  2026-08-25-change-constructive-frontier        subject MOVED     99936f85f52b2471
+  2026-08-25-poietics-program                    subject MOVED     99936f85f52b2471
+  2026-08-26-pc2-rematch                         subject MOVED     99936f85f52b2471
+  2026-08-27-defect-split-leg-recording          subject MOVED     99936f85f52b2471
+  2026-08-27-pc2b-symmetric-reasoning            subject MOVED     99936f85f52b2471
+
+== ISOLATION: each dropped field carried ALONE, at a non-default value ==
+   MOVED means this one switch costs a home a qualification battery.
+
+  FREE     23
+           ADJUDICATION_STATUS_AUTHORITY_ENABLED
+           ATTENTION_ALLOCATION_POLICY
+           CAPTURE14_AGE_FLOOR
+           CAPTURE14_ENTER_K
+           CAPTURE14_EXIT_K
+           CAPTURE14_PRECISION
+           CAPTURE14_SC_CEILING
+           CAPTURE14_WINDOW
+           DISCHARGE_POLICY
+           ENGAGED_CRITICISM_AUTHORITY
+           FRAME_SLICE_ATTACKERS
+           FRAME_SLICE_DEPARTURES
+           JUDGE_SEATS_ENABLED
+           JUDGE_SUMMONS_COOLDOWN
+           JUDGE_SUMMONS_PER_CYCLE
+           K_FRAME
+           PROMOTION_ENVIRONMENT_MAX
+           SCHOOL_SEATS_ENABLED
+           SCOPE_MAX_DEPTH
+           SCOPE_MAX_NODES
+           SEED_PROBLEM_BUDGET_FLOOR
+           SPLIT_BUDGET_EXTRACTION_TOKENS
+           SPLIT_BUDGET_SEAT_PROTOCOL
+  PRICED   1
+           LEGACY_CRITICISM_ENABLED -> 87fab457c9a7dd0c
+  SKIPPED  1
+           CHANNELS_DISABLED (profile-derived: `only=` carriage cannot reach it)
+  REFUSED  0
+
+== SUMMARY ==
+  committed operator configs measured               8
+  FULL carriage: subject would MOVE for             8 of 8
+  DROPPED-ONLY carriage: subject would MOVE for     7 of 8
+  default-valued carriage is free                   True
+  dropped fields free to carry, measured one by one 23
+  dropped fields that cost a battery                1
+  battery size on THIS manifest                     15 pairs x 20 cases = 300 provider calls MINIMUM (repair turns add more)
+  battery cost recorded for a live home (CLAUDE.md) ~14 min, ~1160 provider calls

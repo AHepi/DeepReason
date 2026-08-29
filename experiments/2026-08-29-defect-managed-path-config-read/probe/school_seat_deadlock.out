@@ -1,0 +1,9 @@
+managed-path Config.SCHOOL_SEATS_ENABLED   = False
+managed-path Config.LEGACY_CRITICISM_ENABLED = True
+
+reason --school-seat popper=<profile>        -> REFUSED SCHOOL_SEATS_DISABLED at /control_plane_policy/school_execution: school_seats/criticism_seats requires Config.SCHOOL_SEATS_ENABLED
+reason --criticism-seat popper=<profile>     -> REFUSED SCHOOL_SEATS_DISABLED at /control_plane_policy/school_execution: school_seats/criticism_seats requires Config.SCHOOL_SEATS_ENABLED
+
+VERDICT: on the managed path these opt-ins are unreachable for every
+provider profile, because no route exists by which the operator's
+SCHOOL_SEATS_ENABLED could reach _config_for_profile.

@@ -1952,9 +1952,15 @@ def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | No
     if refusal is not None:
         print(refusal, file=sys.stderr)
         return None
+    from deepreason.config import load as load_config
+
+    # The battery this warms must be the battery `deepreason reason --config`
+    # needs: one configuration, one subject, or a configuration that compiles
+    # is a configuration no operation can qualify.
     manifest = qualification_subject_manifest(
         profile,
         attached_evidence=bool(getattr(args, "attached_evidence", False)),
+        config=load_config(Path(args.config)) if getattr(args, "config", None) else None,
         seat_bindings=seat_bindings,
     )
     cache_dir = provider_state_dir() / "qualification-cache"
@@ -2458,6 +2464,7 @@ def _cmd_reason(args) -> int:
                 question=args.question,
                 budget={"cycles": cycles, "token_budget": tokens},
                 profile_path=args.provider_profile,
+                config_path=args.config,
                 dossier_digest=dossier_digest,
             )
         )

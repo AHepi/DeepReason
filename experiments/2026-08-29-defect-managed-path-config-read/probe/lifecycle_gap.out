@@ -1,0 +1,42 @@
+== 1. What `deepreason qualify` can address ==
+  qualification_subject_manifest(profile: 'ProviderProfileV1', *, attached_evidence: 'bool' = False, seat_bindings: 'Mapping[str, ProviderProfileV1] | None' = None)
+  config parameter         ABSENT
+
+== 2. The reuse property that makes `qualify` once / `reason` many work ==
+  qualify subject          7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  reason subject (today)   7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  verdict                  SAME -- one battery serves every question
+
+== 3. A fully qualified home, then a CONFIGURED reason run ==
+  cache holds              7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+
+  CONTROL  reason, no --config          STARTS (cache hit)
+
+  2026-08-12-live-grounded-extension-expansion
+    subject                             02bf21e8123ca514...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-13-defect-controller-steering-inert
+    subject                             02bf21e8123ca514...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-22-live-reach-rich-run
+    subject                             7ed9d28ab27e99a7...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-25-change-constructive-frontier
+    subject                             99936f85f52b2471...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-25-poietics-program
+    subject                             99936f85f52b2471...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-26-pc2-rematch
+    subject                             99936f85f52b2471...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-27-defect-split-leg-recording
+    subject                             99936f85f52b2471...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+  2026-08-27-pc2b-symmetric-reasoning
+    subject                             99936f85f52b2471...
+    reason --config <this file>         REFUSED QUALIFICATION_NOT_CONFIGURED
+
+== VERDICT: 8 of 8 committed configurations are REFUSED on a fully qualified home ==
+   and `deepreason qualify` has no parameter that could address their
+   subject, so the refusal is not clearable by any committed command.
