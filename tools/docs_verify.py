@@ -45,6 +45,14 @@ _PATHISH = re.compile(r"(?:src|tests|tools|docs)/[\w./-]+")
 # rule is what lets SCHEMA.md show worked examples inside indented code blocks
 # without the verifier trying to run them.
 _CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")
+# Every column-0 opener, parseable or not. The two patterns are deliberately
+# split: _CHECK decides what RUNS, _CHECK_OPEN decides what must be ACCOUNTED
+# FOR. An opener that matches only the second is a defect in the document, and
+# reporting it is the whole point - a check the instrument cannot read used to
+# fall through the parse loop with no branch to catch it, so a claim could
+# carry a check that had never once been executed and read, in the document,
+# exactly like a claim that had.
+_CHECK_OPEN = re.compile(r"^`check:")
 _HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Seams-undocumented|Sides|Sweep|Depends-on):\s*(?P<val>.*)$")
 _ID = re.compile(r"^<!--\s*(?P<id>DR-[A-Z]+-[a-z0-9\-]+|DR-[A-Z]+)\s*-->\s*$")
 
@@ -61,6 +69,7 @@ class Doc:
     doc_id: str | None = None
     headers: dict[str, str] = field(default_factory=dict)
     checks: list[tuple[int, str]] = field(default_factory=list)
+    errors: list[tuple[int, str]] = field(default_factory=list)
 
 
 def parse_text(text: str, path: Path | None = None) -> Doc:
@@ -74,6 +83,14 @@ def parse_text(text: str, path: Path | None = None) -> Doc:
             continue
         if m := _CHECK.match(line):
             doc.checks.append((number, m.group("cmd").strip()))
+            continue
+        if _CHECK_OPEN.match(line):
+            doc.errors.append((
+                number,
+                "unparseable check: a column-0 `check: opener must close with "
+                "a backtick at the end of the same line. "
+                f"Opener reads: {line[:100]!r}",
+            ))
     return doc
 
 
@@ -160,6 +177,8 @@ def cmd_run(fast: bool = False, only_failed: bool = False, jobs: int = 0,
     for doc in docs:
         if doc.doc_id is None:
             failures.append(f"{doc.path.name}: no `<!-- DR-... -->` id on the first line")
+        for number, problem in doc.errors:
+            failures.append(f"{doc.path.name}:{number}: {problem}")
         for number, cmd in doc.checks:
             key = _fingerprint(cmd)
             prior = cache.get(key)
@@ -377,6 +396,9 @@ def cmd_audit() -> int:
         if not doc.checks and doc.doc_id not in {"DR-SCHEMA", "DR-INDEX"}:
             print(f"{doc.path.name}: no checks — every claim in it is unverifiable")
             flagged += 1
+        for number, problem in doc.errors:
+            print(f"{doc.path.name}:{number}: {problem}")
+            flagged += 1
         for number, cmd in doc.checks:
             if _VACUOUS.match(cmd):
                 print(f"{doc.path.name}:{number}: vacuous check `{cmd}`")
@@ -405,8 +427,15 @@ Prose mentioning `check: not-a-check` inline should not parse.
         assert doc.headers["Owns"] == "src/deepreason/example.py", doc.headers
         assert len(doc.checks) == 1, doc.checks
         assert doc.checks[0][1] == "test 1 -eq 1", doc.checks
+        assert doc.errors == [], doc.errors
         # An indented check is an EXAMPLE, not a claim, and must not parse.
         assert parse_text("    `check: false`").checks == []
+        assert parse_text("    `check: false`").errors == []
+        # A column-0 opener that does not close is an ERROR, never a skip.
+        unclosed = parse_text("`check: python -c \"\nassert False\n\"`")
+        assert unclosed.checks == [], unclosed.checks
+        assert len(unclosed.errors) == 1, unclosed.errors
+        assert "unparseable check" in unclosed.errors[0][1], unclosed.errors
         assert _VACUOUS.match("true") and not _VACUOUS.match("grep -q x y")
     finally:
         tmp.unlink(missing_ok=True)
