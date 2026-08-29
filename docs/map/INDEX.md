@@ -22,6 +22,7 @@ contract: ID grammar, the check rule, and how a document is updated.
 | change how two things interact | the seam table, then `REC-change-a-seam.md` |
 | know whether you are allowed to change it | `INV-frozen-surfaces.md` — **first, always** |
 | know which outside-reaching channels a run has, and how one is turned off | `INV-evidence-channels.md` |
+| know whether a channel that says ON can actually reach the capability it enables | `SEAM-capabilities-x-channels.md` |
 | understand a cross-cutting idea (schools, authority, warrants) | the concept table |
 | diagnose a defect | the `Traps` section of the covering document, then the record |
 | know which rung answers for a calculus axiom | `INV-axiom-basis.md` |
@@ -122,6 +123,7 @@ traffic at all.
 | — | manifest × schools | `SEAM-manifest-x-schools.md` |
 | — | adjudication × authority | `SEAM-adjudication-x-authority.md` |
 | — | adjudication × rules | `SEAM-adjudication-x-rules.md` |
+| — | capabilities × channels | `SEAM-capabilities-x-channels.md` |
 | — | capabilities × rules | `SEAM-capabilities-x-rules.md` |
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
@@ -129,7 +131,7 @@ traffic at all.
 | — | llm × verification | `SEAM-llm-x-verification.md` |
 | — | calculus × rules | `SEAM-calculus-x-rules.md` |
 
-The last ten carry no import-count because at least one side is a concept
+The last eleven carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification and calculus × rules cases — every import between
 the sides is function-local, which the coupling metric cannot see. The adjudication ×
@@ -155,6 +157,18 @@ mode came out replay-invalid
 (`experiments/2026-08-27-defect-split-leg-recording/`). **A pair with zero
 measured traffic can still be load-bearing; absence from this table is
 evidence about the metric, not about the code.**
+
+The capabilities × channels case is the SECOND measured instance of that exact
+shape, and it is the reason the sentence above is stated as a rule rather than
+as one incident. Counted the way this table counts — directed `deepreason.*`
+imports between the files each side declares it `Owns:`, summed both ways —
+the pair scores **0**: `src/deepreason/capabilities/` names
+`deepreason.channels` nowhere, and `src/deepreason/channels.py` names
+`deepreason.capabilities` nowhere. The agreement travels as a COMPILED POLICY
+through `v6_policy`, and the cost of nobody having written it down was four
+live epochs read as model reluctance while a channel reported ON over a road
+that could not dispatch
+(`experiments/2026-08-27-change-execution-safety/SPEC.md` F2/F3).
 
 `check: python tools/docs_verify.py --links`
 

@@ -2,8 +2,8 @@
 Verified-at: 9cda513bd
 Verify: python -m pytest tests/test_evidence_channels.py -q
 Owns: src/deepreason/channels.py
-Seams: DR-SEAM-capabilities-x-rules
-Seams-undocumented: capabilities x channels, channels x manifest
+Seams: DR-SEAM-capabilities-x-channels, DR-SEAM-capabilities-x-rules
+Seams-undocumented: channels x manifest
 
 # Evidence channels — the three that mint, on by default, and what turns one off
 
