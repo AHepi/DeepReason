@@ -333,3 +333,28 @@ committed code and committed records. And the disclosure limb it delivers for
 the 22 dispatch-site switches is a warning, not a switch: after this fix the
 record will say, in typed form, that `JUDGE_SEATS_ENABLED: true` was not carried
 — which is the law's "never silence", not its "at will".
+
+---
+
+## 10. The map moves in the same commit as the code
+
+`proof/blast_radius.out` names every map document that asserts on the touched
+targets. All four below are inside the lane cone (`docs/map/` documents of the
+files this fix touches); a separate "update docs" commit is the commit that gets
+dropped, so they move with the code.
+
+| document | what changes | new check that would FAIL if the behaviour regressed |
+|---|---|---|
+| `CON-authority.md` (owns `config.py`, `preparation.py`, `run_manifest.py`; hits at :4, :72, :83, :84) | its Traps entry "Both master gates are invisible to the run that executes them" is REWRITTEN, never deleted, to record that the managed path now reads the operator `Config` and to name this tranche. Its closing instruction — "To learn the latter, read the manifest's `compile_notices`" — becomes true on this path for the first time. | `check:` a one-liner asserting `"config" in inspect.signature(build_preparation_manifest).parameters` and that a non-default config produces at least one `ENGINE_CONFIG_FIELD_NOT_CARRIED` notice. Red if either the parameter or the disclosure is removed. |
+| `CON-run-identity.md` (owns `preparation.py`; hits at :32, :33, :73, :79, :82, :210 — the `_request_digest` and `RunPreparationRequestV1` rows) | records that run identity now covers the configuration, conditionally, and that a question-only digest is unchanged | `check:` the R6 node ids. Red under either mutation in §5 (omit the key => collision; add it unconditionally => the pinned historical digest moves). |
+| `CON-seats.md` (owns `preparation.py`; hits at :115, :116 — the `_config_for_profile` rows) | records the deterministic resolution rule (the profile owns seven fields) and that a configured `SCHOOL_SEATS_ENABLED` now reaches the school-seat gate; Traps entry for §1b naming this tranche | `check:` the R7 and R8 node ids. Red if `base` is allowed to win on `roles`, or if the school-seat gate stops being reachable. |
+| `SUB-application.md` (owns `cli/main.py`; hits at :48, :111, :146, :176, :214, :249, :260, :329, :465 — the dispatch rows) | the `reason` and `qualify` rows record that both read the global `--config` and reach the same subject | `check:` the R4 node id. Red the moment one consumer bypasses the single configuration door. |
+
+Every `check:` is written SINGLE-LINE, run before it is written down, and
+`python tools/docs_verify.py --audit` must accept each one (it refuses checks
+that cannot fail). `Verified-at:` advances only on documents whose checks were
+actually re-run.
+
+`INV-frozen-surfaces.md` is NOT edited by this fix: no surface is contacted, so
+there is no grant to record. P21's tranche is the one that would add a grant
+entry there.
