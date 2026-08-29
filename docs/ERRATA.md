@@ -1792,3 +1792,121 @@ were red against the tree the audit described), and
 `experiments/2026-08-28-audit-run-problems/probes/q1_invited_replies.json` for
 the 4-and-1 split, which the audit itself recorded and did not carry into its
 sentence about the mechanism.
+
+---
+
+## E62 — the "18 minutes" a qualification battery is said to have cost is unsupported by any committed record, and four documents carry it
+
+**What the documents say.** Four committed documents state, as measured fact,
+that an account-level provider condition cost a qualification battery about
+eighteen minutes:
+
+| # | file:line | text |
+|---|---|---|
+| 1 | `experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md:551` | "80 cases × 4 pairs of bounded ladders is how 18 minutes is spent" |
+| 2 | `experiments/2026-08-28-audit-run-problems/PARKED.md:463-464` | "The 18 minutes is 80 bounded ladders, not one unbounded one" |
+| 3 | `experiments/2026-08-28-audit-run-problems/second-window/AUDIT_REPORT.md:561-563` | "≈ 19 minutes, against the 18 minutes epoch 2's qualification actually took (10:43:39 → 11:01:55)" |
+| 4 | `experiments/2026-08-28-audit-run-problems/second-window/PARKED.md:187-188` | "≈ 19 min, against the measured 18 min" |
+
+**What the record shows.** The evidence file the claim rests on,
+`experiments/2026-08-25-change-constructive-frontier/qualify-attempt2-VOID-agent-error.json`,
+records 80 cases, `eventual_valid_count: 0`, and **140 `ENDPOINT_ERROR` and
+nothing else** — no HTTP status, because the absent status IS the defect that
+tranche was later opened to fix. Its own tranche says what happened, in the
+author's words (`.../CHECKLIST.md:352-358`): *"I had written `source env` in a
+manual command … so the doctor ran against an empty key and every call
+returned HTTP 401."*
+
+A 401 is not in `_RETRYABLE_HTTP` (`src/deepreason/llm/endpoints.py:15`), so
+`request_with_retries` raises on the first attempt and **the backoff ladder
+never sleeps**. The eighteen minutes cannot have been spent there.
+
+Three further facts, each measured:
+
+- That invocation was **manual**, so it has **no committed timing at all** —
+  `CHECKLIST.md:356` records that the ladder itself was unaffected because it
+  sources an absolute path. The five committed qualification batteries in the
+  same tranche's `driver.log:164-165, 256-259, 344-347` ran 3m19s, 2m58s,
+  2m28s, 2m05s and 2m41s.
+- Row 3's wall-clock interval `10:43:39 → 11:01:55`, the only provenance any
+  of the four offers, **appears nowhere in the repository except in that
+  sentence** (`grep -rn "10:43:39\|11:01:55"` returns one hit, its own line).
+- `experiments/2026-08-26-pc2-rematch/PREREG.md:481` ("Eighteen minutes
+  spent") is a DIFFERENT phenomenon — reason-run socket timeouts, not a
+  qualification battery — and is NOT a carrier of this error.
+
+**The defect the figure was cited for is real, and is now better evidenced
+than the audit had it.** Re-measured offline on the current default 15-pair
+subject, with only the socket and the clock faked
+(`experiments/2026-08-29-defect-qualification-circuit-breaker/proof/measure_account_level_battery_cost.py`,
+18.7 s to re-run): a persistent 429 costs 1440 HTTP calls and **5040 s (84.0
+min)** of mandated wait; a 401 costs 360 calls and **0 s**; and the two
+reports are identical in **all 83 035 bytes**, not merely in their
+failure-code counts. The cost gap is larger than the audit claimed and the
+indistinguishability is stronger.
+
+**Where corrected.** The four documents above are NOT corrected in place —
+they are an audit's committed findings, and this entry is the correction of
+record. Corrected in place, on the operator's instruction, was
+`experiments/2026-08-29-ultracode-batch-1/BATCH.md` §5 — see E63.
+
+Evidence: `experiments/2026-08-29-defect-qualification-circuit-breaker/`
+(`FIX.md` §3 for the census and the derivation, `proof/account_level_battery_cost.out`
+for the re-measurement).
+
+---
+
+## E63 — BATCH.md published, as its headline evidence, figures matching no commit in its own ancestry
+
+**What the document said.** `experiments/2026-08-29-ultracode-batch-1/BATCH.md`
+§5 stated lane C's offline measurement as **260 cases / 1040 HTTP calls / 780
+sleeps / 3640 s (60.7 min)**, and the paragraph beneath it as "Two failures an
+hour apart in cost".
+
+**What the record shows.** 260 is 13 pairs × 20. The qualification subject
+built by `preparation.qualification_subject_manifest` is **15 pairs** — checked
+at the batch's own commit `db7b332ef` and before the P14 subject change at
+`a82872b38^`. The published figures therefore correspond to no commit in this
+branch's ancestry: they were the withheld lane's numbers, already stale when
+the manifest was committed, and no re-run could reproduce them.
+
+Re-measured on this tree: **360 cases executed / 1440 calls / 1080 sleeps /
+5040 s (84.0 min)** — the understatement was 24 minutes.
+
+**Where corrected.** In place, in `BATCH.md` §5, on the operator's explicit
+instruction, with the superseded figures preserved in a dated note rather than
+deleted. The generator that produces the replacement figures is committed and
+re-runnable.
+
+Evidence: `experiments/2026-08-29-ultracode-batch-1/BATCH.md` §5 (the
+correction note); `experiments/2026-08-29-defect-qualification-circuit-breaker/proof/account_level_battery_cost.out`.
+
+---
+
+## E64 — AUDIT_BASELINES.md states the docs_verify corpus at a size it no longer has
+
+**What the document says.** `docs/AUDIT_BASELINES.md:25-26`: *"**1212 checks
+over 69 documents**; 6 failed on a full clone, 9 on a shallow one."*
+
+**What the record shows.** On `main` at `facea8f81` the corpus already holds
+**70 documents and 1246 column-0 `check:` openers**:
+
+    git archive facea8f81 docs/map | tar -xO | grep -c '^`check:'   -> 1246
+    ls docs/map/*.md | wc -l                                        -> 70
+
+The stated size is stale by one document and roughly 34 checks — consistent
+with the re-baselining sentence having been written before the 2026-08-29
+batch's own Lane D seam document merged.
+
+**What is NOT wrong.** The FAILURE list, which is what the baseline exists to
+pin, is exact: a shallow-clone run on this branch returns 9 failures and every
+one maps to a listed class (four line numbers have moved because those
+documents grew; the checks are the same). A tranche comparing failures against
+this baseline is comparing against a correct list.
+
+**Where corrected.** Uncorrected. `docs/AUDIT_BASELINES.md` was outside the
+cone of the tranche that found this, and the correction wants a fresh
+measurement on a FULL clone (this container is shallow) to restate both halves
+of the sentence at once.
+
+Evidence: `experiments/2026-08-29-defect-qualification-circuit-breaker/proof/docs_verify_disposition.md`.
