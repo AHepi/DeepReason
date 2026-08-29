@@ -1,0 +1,24 @@
+=== BASELINE (unmutated tree) ===
+  check A (no channels/config import in capabilities/): rc=0 GREEN
+  check E (manifest-echo differential): rc=0 GREEN
+  check F (severed-road notice is channel-gated): rc=0 GREEN
+
+=== M1: capabilities/simulation.py acquires a Config import ===
+    (the exact regression the seam's first check exists to catch)
+ 1 file changed, 2 insertions(+)
+  check A: rc=1 RED
+
+=== M2: engaged_research_policy stops consulting the channel ===
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  check E: rc=1 RED
+
+=== M3: the severed-road notice stops being channel-gated ===
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  check F: rc=1 RED
+
+=== RESTORED ===
+  check A: rc=0 GREEN
+  check E: rc=0 GREEN
+  check F: rc=0 GREEN
+git status (src/ must be clean):
+[end]
