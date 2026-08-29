@@ -314,8 +314,68 @@ Accepted does not mean true.
 
 ---
 
-## 7. Fan-in gate
+## 7. Fan-in gate — ONE full gate, ONE docs_verify, on the integrated branch
 
-Evidence appended below by the orchestrator after the single full gate and the
-single `docs_verify` run on the integrated session branch.
+Session branch `85e288224`. Raw transcript: `evidence/fanin_gate.out`.
+Started 12:16:53, ended 12:42:58.
 
+### Full gate — 0 failed
+
+    $ python -m pytest tests/ -q -n 4
+    4453 passed, 6 skipped in 923.92s (0:15:23)
+
+**0 failed. The only acceptable result, and it was met.** No assertion was
+weakened anywhere in this batch to reach it.
+
+Growth priced against the measurement, not the dispatch: `SETUP.md` recorded
+4438 collected on `main`; this branch collects **4458**, +20 from the lanes'
+new regression tests. (The batch brief stated a 4419 baseline; that figure was
+already stale when the batch began, which is why `SETUP.md` re-measured it.)
+
+### docs_verify — 4 failed, delta ZERO
+
+    $ python tools/docs_verify.py
+    docs_verify [full]: 70 documents, 1174 checks, 4 workers
+      FAIL CON-run-identity.md:211   (shallow clone: rename history absent)
+      FAIL CON-run-identity.md:213   fatal: ambiguous argument '1637e808'
+      FAIL CON-run-identity.md:215   fatal: ambiguous argument 'f304fec1'
+      FAIL INV-frozen-surfaces.md:181  (pre-existing falsified census)
+    docs_verify: 4 failed
+
+**Exactly the stated baseline, with no fifth and no different failure.** The
+three `CON-run-identity.md` line numbers moved (200/213/215 from 200/202/204)
+because the document grew; they are the same three shallow-clone checks.
+
+The instrument itself grew with the batch: **69 -> 70 documents** (Lane D's
+new seam document) and **1150 -> 1174 checks** (+24), every one of them run
+and passing.
+
+**The forecast fifth failure did not occur, as `SETUP.md`'s retraction in
+section 1 predicted:** the `INV-frozen-surfaces.md:297` branch tripwire stays
+green because no committed history on this branch touches a frozen path.
+
+### One unreconciled observation, recorded rather than explained away
+
+Collect-only reports **4458** items; the gate reports **4453 passed + 6
+skipped = 4459 outcomes** — one more outcome than the tree collects. The same
++1 was independently observed by the B1 verifier on its own tree (4446
+collectable, 4447 outcomes), so it is systematic and reproduces, not a
+transcription slip.
+
+Ruled out by measurement, not by argument:
+
+    grep -rn "pytest_generate_tests|pytest_collection_modifyitems|collect_ignore|pytest_ignore_collect" tests/conftest.py conftest.py   -> no hooks
+    grep -rln "pytest.main|subprocess.*pytest" tests/                                                                                  -> no test invokes pytest
+    pip list | grep -iE "rerun|flaky|repeat"                                                                                           -> no rerun plugin (xdist 3.8.0 only)
+    python -m pytest tests/ -q --collect-only        -> 4458
+    python -m pytest tests/ -q --collect-only -n 4   -> 4458   (identical; not an xdist collection difference)
+
+The three `pytestmark = pytest.mark.skipif(...)` modules were considered and
+rejected as the cause: `skipif` is evaluated at run time, so those items ARE
+collected and are already inside the 4458.
+
+**It affects no verdict** — 0 failed either way, and the acceptance criterion
+is failures, not arithmetic. It is left as an open question about the
+instrument rather than given an explanation nobody measured. Fitting, for a
+batch whose main result is that instruments can pass while not measuring what
+they claim.
