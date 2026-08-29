@@ -77,10 +77,15 @@ fails `DR-INV-signal-contract`'s arithmetic check.
   plus `test_channel_and_wander_modularity`, `test_signal_contract`,
   `test_allocation_signal_consumption`, `test_scheduler`, `test_rotation`,
   `test_controller`, `test_reflexive_discipline` — **101 passed**.
-- Full gate at the boundary: see `proof-gate.txt`.
-- `python tools/docs_verify.py`: **4 failed**, exactly the recorded baseline
-  (3 shallow-clone `CON-run-identity.md`, 1 pre-existing
-  `INV-frozen-surfaces.md:181`). No delta. `--audit`: 0 findings.
+- Full gate at the boundary, run on the EXACT committed tree (`4b801172b`):
+  **4407 passed, 6 skipped, 0 failed** in 13:36. The stated baseline was 4403
+  passed; the delta is exactly this tranche's four new tests.
+  `proof-gate.txt`.
+- `python tools/docs_verify.py` on the same tree: **4 failed**, exactly the
+  recorded baseline (3 shallow-clone `CON-run-identity.md`, 1 pre-existing
+  `INV-frozen-surfaces.md:181`). No delta. Collected checks moved 1139 → 1143,
+  the four this tranche added, all of them single-line so they are actually
+  collected (`PARKED.md` §Q1). `--audit`: 0 findings. `proof-docs-verify.txt`.
 
 ## Residue — what remains unproven
 
