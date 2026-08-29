@@ -1,0 +1,13 @@
+docs_verify [full]: 69 documents, 1150 checks, 4 workers
+  FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
+      -> 
+  FAIL CON-run-identity.md:202: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-run-identity.md:204: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL INV-frozen-surfaces.md:181: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+      -> 
+  FAIL SUB-application.md:403: grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q 'or fence.get("event_seq") != current_resume.resume_event_seq' src/deepreason/runtime/continuation.py && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q
+      -> TIMEOUT after 300s - this check is too expensive; narrow it to the claim it actually tests
+docs_verify: 5 failed
+exit=1

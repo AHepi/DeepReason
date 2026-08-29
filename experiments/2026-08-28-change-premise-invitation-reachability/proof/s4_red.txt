@@ -1,0 +1,281 @@
+MUTATION PROOF, RED HALF (S4). Command:
+    python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py -q
+run against the UNCHANGED tree (origin/main 2a5e984c8 plus the new tests only,
+before premises.py, rules/crit.py or signals.py were touched).
+The five tests that stay GREEN here are the ones asserting behaviour the
+ladder does NOT change; the seven RED ones are what the change buys.
+
+.........................FF............FFF.FF                            [100%]
+=================================== FAILURES ===================================
+________________ test_a_late_refutation_reopens_the_invitation _________________
+
+harness = <deepreason.harness.Harness object at 0x7f7e086b4e90>
+
+    def test_a_late_refutation_reopens_the_invitation(harness):
+        """The ladder (P11 answer 1). The latch is the wound, not the threshold:
+        the technique run established at seq 779 that its own question was
+        malformed, 593 events after the only channel for saying so had closed
+        (experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md section F-B).
+    
+        A criticism that arrives late must still find the channel open, and the
+        price of re-opening it is another `after` refutations -- not nothing.
+        """
+        problem = _problem(harness, "why does the kettle whistle")
+        for i in range(2):
+            _refute(harness, problem, i)
+        assert premise_work_invited(harness, problem, after=2)
+    
+        premise = art(harness, "a kettle is the kind of thing that whistles")
+        _attribution(harness, problem, premise.id)
+        assert not premise_work_invited(harness, problem, after=2)
+    
+        # One further refutation does not buy the next rung: the ladder charges
+        # `after` for every invitation, so a single late failure cannot re-ask.
+        _refute(harness, problem, 2)
+        assert not premise_work_invited(harness, problem, after=2)
+    
+        # The second one does. This is the case the record needed and never got.
+        _refute(harness, problem, 3)
+>       assert premise_work_invited(harness, problem, after=2)
+E       AssertionError: assert False
+E        +  where False = premise_work_invited(<deepreason.harness.Harness object at 0x7f7e086b4e90>, 'why-does-the-kettle-whistle', after=2)
+
+tests/test_premise_channel.py:521: AssertionError
+________ test_the_ladder_charges_the_same_rung_for_every_re_invitation _________
+
+harness = <deepreason.harness.Harness object at 0x7f7e086db8d0>
+
+    def test_the_ladder_charges_the_same_rung_for_every_re_invitation(harness):
+        """Bounded at `floor(refuted / after)` invitations per problem, so the
+        channel's cost is bought by refutations the run had to produce anyway."""
+        problem = _problem(harness, "why does the kettle whistle")
+        for i in range(6):
+            _refute(harness, problem, i)
+    
+        for standing in range(3):
+>           assert premise_work_invited(harness, problem, after=2), standing
+E           AssertionError: 1
+E           assert False
+E            +  where False = premise_work_invited(<deepreason.harness.Harness object at 0x7f7e086db8d0>, 'why-does-the-kettle-whistle', after=2)
+
+tests/test_premise_channel.py:532: AssertionError
+_________ test_a_late_refutation_reopens_the_channel_in_the_real_loop __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_a_late_refutation_reopens1')
+
+    def test_a_late_refutation_reopens_the_channel_in_the_real_loop(tmp_path):
+        """The named regression (P11 end state). Before the ladder this was
+        impossible by construction: `premise_work_invited` returned False for the
+        rest of the run the moment one attribution stood, so the technique run
+        proved its own question malformed 593 events after the only channel for
+        saying so had closed (AUDIT_REPORT.md section F-B).
+    
+        Nothing here re-derives the gate: the scheduler's own receipt and the
+        critic's own pack are the evidence, exactly as `_the_producer_fires_in_the
+        _real_loop` reads them.
+        """
+        seen: list[str] = []
+    
+        def critic(prompt: str) -> str:
+            seen.append(prompt)
+            if len(seen) == 2:
+                return json.dumps({"attack": False, "case": "", "premise": _PREMISE})
+            return json.dumps({"attack": False, "case": ""})
+    
+        harness, scheduler = _late_refutation_run(tmp_path, critic)
+        scheduler.step()
+        scheduler.step()
+    
+        filed = _measures(harness, "premise.attribution-filed.v1")
+        assert len(filed) == 1, "the first premise must be filed before the latch matters"
+        assert len(standing_attributions(harness)) == 1
+        closed_at = filed[0].seq
+    
+        # The late criticism: a third cycle of candidates the problem also fells.
+>       scheduler.step()
+
+tests/test_premise_channel_loop.py:425: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepreason/scheduler/scheduler.py:2296: in step
+    admitted = conj(
+src/deepreason/rules/conj.py:2195: in conj
+    return conj(
+src/deepreason/rules/conj.py:1940: in conj
+    output, llm_call = adapter.call(
+src/deepreason/llm/adapter.py:1626: in call
+    raw = endpoint.complete(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <deepreason.llm.endpoints.MockEndpoint object at 0x7f7e085e97d0>
+prompt = 'You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You... A submission missing any of them is returned to you once with the open list, and then accepted with the gap recorded.'
+images = None, kwargs = {}
+
+    def complete(self, prompt: str, images: list[bytes] | None = None, **kwargs) -> str:
+        self.last_usage = None
+        self.last_transport_attempts = 1
+        self.last_transport_diagnostics = []
+        self.last_images = list(images) if images else []  # test-inspectable
+        self.last_kwargs = dict(kwargs)
+        self.last_reasoning_trace = None
+        override = kwargs.get("max_tokens", _UNSET)
+        self.calls.append({
+            "prompt": prompt,
+            "max_tokens": self.max_tokens if override is _UNSET else override,
+            "reasoning": _resolve(kwargs.get("reasoning", _UNSET), None),
+            "kwargs": dict(kwargs),
+        })
+        if self._fn is not None:
+            # A two-parameter script also sees the request knobs, so a test can
+            # model the one thing that actually distinguishes the emission leg:
+            # the same model behaves differently when it is not thinking.
+            # Callable OBJECTS (a class with __call__) have no __code__, and
+            # several suites script this endpoint with one; they keep the
+            # one-parameter contract.
+            wants_knobs = getattr(
+                getattr(self._fn, "__code__", None), "co_argcount", 1
+            ) >= 2
+            response = (
+                self._fn(prompt, dict(kwargs)) if wants_knobs else self._fn(prompt)
+            )
+        elif self._responses:
+            response = self._responses.pop(0)
+        else:
+>           raise RuntimeError("MockEndpoint exhausted")
+E           RuntimeError: MockEndpoint exhausted
+
+src/deepreason/llm/endpoints.py:229: RuntimeError
+______________ test_a_declined_invitation_is_typed_on_the_record _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_a_declined_invitation_is_0')
+
+    def test_a_declined_invitation_is_typed_on_the_record(tmp_path):
+        """P11 answer 2. A seat that was ASKED and said nothing is evidence about
+        that seat; before this receipt it was indistinguishable from a seat that
+        was never asked, because both recorded zero.
+        """
+        harness, scheduler = _late_refutation_run(
+            tmp_path, lambda prompt: json.dumps({"attack": False, "case": ""})
+        )
+        scheduler.step()
+        scheduler.step()
+    
+        declined = _tagged(harness, "premise-answer:")
+>       assert declined, "an invited dispatch that filed nothing left no trace"
+E       AssertionError: an invited dispatch that filed nothing left no trace
+E       assert []
+
+tests/test_premise_channel_loop.py:451: AssertionError
+__________ test_a_premise_filed_without_citations_is_typed_as_uncited __________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_a_premise_filed_without_c0')
+
+    def test_a_premise_filed_without_citations_is_typed_as_uncited(tmp_path):
+        """The third of the four cases the record could not separate: a premise
+        WAS filed, and nothing was quoted for it. `_check_premise_citations`
+        records nothing when `refs` is empty, so this read as zero too."""
+        harness, scheduler = _late_refutation_run(
+            tmp_path,
+            [
+                json.dumps({"attack": False, "case": ""}),
+                json.dumps({"attack": False, "case": "", "premise": _PREMISE}),
+            ],
+        )
+        scheduler.step()
+>       scheduler.step()
+
+tests/test_premise_channel_loop.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/deepreason/scheduler/scheduler.py:2410: in step
+    self._arg_crit([a.id for a in admitted])
+src/deepreason/scheduler/scheduler.py:1488: in _arg_crit
+    crit_argumentative_batch(harness, batch, self.adapter, config)
+src/deepreason/rules/crit.py:1702: in crit_argumentative_batch
+    critic = crit_argumentative(
+src/deepreason/rules/crit.py:1505: in crit_argumentative
+    output, llm_call = adapter.call(
+src/deepreason/llm/adapter.py:1626: in call
+    raw = endpoint.complete(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <deepreason.llm.endpoints.MockEndpoint object at 0x7f7e0890d390>
+prompt = 'You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report...ct\nDIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.'
+images = None, kwargs = {}
+
+    def complete(self, prompt: str, images: list[bytes] | None = None, **kwargs) -> str:
+        self.last_usage = None
+        self.last_transport_attempts = 1
+        self.last_transport_diagnostics = []
+        self.last_images = list(images) if images else []  # test-inspectable
+        self.last_kwargs = dict(kwargs)
+        self.last_reasoning_trace = None
+        override = kwargs.get("max_tokens", _UNSET)
+        self.calls.append({
+            "prompt": prompt,
+            "max_tokens": self.max_tokens if override is _UNSET else override,
+            "reasoning": _resolve(kwargs.get("reasoning", _UNSET), None),
+            "kwargs": dict(kwargs),
+        })
+        if self._fn is not None:
+            # A two-parameter script also sees the request knobs, so a test can
+            # model the one thing that actually distinguishes the emission leg:
+            # the same model behaves differently when it is not thinking.
+            # Callable OBJECTS (a class with __call__) have no __code__, and
+            # several suites script this endpoint with one; they keep the
+            # one-parameter contract.
+            wants_knobs = getattr(
+                getattr(self._fn, "__code__", None), "co_argcount", 1
+            ) >= 2
+            response = (
+                self._fn(prompt, dict(kwargs)) if wants_knobs else self._fn(prompt)
+            )
+        elif self._responses:
+            response = self._responses.pop(0)
+        else:
+>           raise RuntimeError("MockEndpoint exhausted")
+E           RuntimeError: MockEndpoint exhausted
+
+src/deepreason/llm/endpoints.py:229: RuntimeError
+__________________ test_a_declined_invitation_moves_no_status __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_a_declined_invitation_mov0')
+
+    def test_a_declined_invitation_moves_no_status(tmp_path):
+        """C5/H1 -- the producer carries no penalty for a critic who declines, and
+        the receipt must not quietly become one. It is a Measure: it mints no
+        artifact, moves no status, and nothing in the tree reads it."""
+        harness, scheduler = _late_refutation_run(
+            tmp_path, lambda prompt: json.dumps({"attack": False, "case": ""})
+        )
+        scheduler.step()
+        before = dict(harness.state.status)
+        artifacts_before = set(harness.state.artifacts)
+    
+        scheduler.step()
+    
+        declined = _tagged(harness, "premise-answer:")
+>       assert declined
+E       assert []
+
+tests/test_premise_channel_loop.py:517: AssertionError
+___________________ test_the_disposition_signal_is_declared ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_the_disposition_signal_is0')
+
+    def test_the_disposition_signal_is_declared(tmp_path):
+        """`DR-REC-add-signal` step 3: an emitted tag that is not declared fails
+        `tests/test_signals.py`, and a declaration with `unspecified` values is a
+        stale read waiting to happen."""
+        contract = declaration("premise-answer:DECLINED")
+>       assert contract is not None
+E       assert None is not None
+
+tests/test_premise_channel_loop.py:533: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_premise_channel.py::test_a_late_refutation_reopens_the_invitation
+FAILED tests/test_premise_channel.py::test_the_ladder_charges_the_same_rung_for_every_re_invitation
+FAILED tests/test_premise_channel_loop.py::test_a_late_refutation_reopens_the_channel_in_the_real_loop
+FAILED tests/test_premise_channel_loop.py::test_a_declined_invitation_is_typed_on_the_record
+FAILED tests/test_premise_channel_loop.py::test_a_premise_filed_without_citations_is_typed_as_uncited
+FAILED tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status
+FAILED tests/test_premise_channel_loop.py::test_the_disposition_signal_is_declared
+7 failed, 38 passed in 3.23s

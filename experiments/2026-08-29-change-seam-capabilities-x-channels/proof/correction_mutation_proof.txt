@@ -1,0 +1,94 @@
+MUTATION PROOF — the 2026-08-29 correction pass
+Tree: an isolated byte-copy of lane/d-seam at 56d4df1e7 + this tranche's docs,
+under /tmp/claude-0/-home-user-DeepReason/ce9ac1a1-97d9-550e-bb0a-417cbd2cd9ea/scratchpad/mirror. The lane worktree itself was NEVER mutated
+(SCHEMA.md: 'run a falsification pass, or measure the tree, never both at once').
+__pycache__ is cleared before every single check run (SCHEMA.md's measurement rule).
+
+The checks under test, by line in the corrected documents:
+  identity-tripwire      SEAM:166
+  import-arrows          SEAM:24
+  no-production-caller   SEAM:91
+  p10-disclosure         SEAM:134
+  reader-census          SEAM:200
+  runner-guard-ast       SEAM:280
+  seams-table-agrees     SUB:30
+  typo-not-typed         SEAM:326
+  OLD187                 the strings-only Traps check as Lane D delivered it (kept here only as a control)
+
+BASELINE (no mutation):
+  identity-tripwire      exit 0  (GREEN)
+  import-arrows          exit 0  (GREEN)
+  no-production-caller   exit 0  (GREEN)
+  p10-disclosure         exit 0  (GREEN)
+  reader-census          exit 0  (GREEN)
+  runner-guard-ast       exit 0  (GREEN)
+  seams-table-agrees     exit 0  (GREEN)
+  typo-not-typed         exit 0  (GREEN)
+  OLD187                 exit 0  (GREEN)
+
+M-C1  indirect Config read: ResearchCapabilityController recompiles its own policy
+       (`from deepreason.v6_policy import engaged_research_policy` inside __init__)
+       identity-tripwire      exit 1  RED     [expected: RED]
+       import-arrows          exit 0  GREEN   [expected: green - THIS is the scope correction]
+       reverted
+
+M-C2  direct Config import in capabilities/simulation.py (the form the lane demonstrated)
+       import-arrows          exit 1  RED     [expected: RED]
+       reverted
+
+M-C3  runner guard INVERTED: != container -> != declarative (the trap pointed the other way)
+       runner-guard-ast       exit 1  RED     [expected: RED]
+       OLD187                 exit 0  GREEN   [expected: green - THIS is what the verifier falsified]
+       reverted
+
+M-C4  runner guard DELETED entirely
+       runner-guard-ast       exit 1  RED     [expected: RED]
+       OLD187                 exit 1  RED     [expected: RED]
+       reverted
+
+M-C5  a SECOND module reads the channel registry (`from deepreason import channels` in preparation.py)
+       reader-census          exit 1  RED     [expected: RED]
+       reverted
+
+M-C6  a channel reader inside capabilities/, by RELATIVE import (`from ..channels import enabled`)
+       reader-census          exit 1  RED     [expected: RED]
+       import-arrows          exit 1  RED     [expected: RED]
+       reverted
+
+M-C7  unknown_channel_notices acquires a production caller in v6_policy.py
+       no-production-caller   exit 1  RED     [expected: RED]
+       reverted
+
+M-C9  the P10 disclosure is suppressed for this field (compile_notices goes silent again)
+       p10-disclosure         exit 1  RED     [expected: RED]
+       reverted
+
+M-C10 SUB-capabilities.md's body row put back the way Lane D left it
+       seams-table-agrees     exit 1  RED     [expected: RED]
+       reverted
+
+M-C11 a body row deleted while its header entry stays
+       seams-table-agrees     exit 1  RED     [expected: RED]
+       reverted
+
+M-C8  positive anchor: channels.py DELETED (SCHEMA.md check-rule 1 — a negative
+      grep must not pass when its subject is gone)
+       no-production-caller   exit 1  RED     [expected: RED]
+       reverted
+
+FINAL STATE (every mutation reverted):
+  identity-tripwire      exit 0  (GREEN)
+  import-arrows          exit 0  (GREEN)
+  no-production-caller   exit 0  (GREEN)
+  p10-disclosure         exit 0  (GREEN)
+  reader-census          exit 0  (GREEN)
+  runner-guard-ast       exit 0  (GREEN)
+  seams-table-agrees     exit 0  (GREEN)
+  typo-not-typed         exit 0  (GREEN)
+
+M-C12 the registry stops typing an unknown id (unknown_channel_notices gutted to `return ()`)
+       typo-not-typed         exit 1  RED     [expected: RED]
+       reverted -> exit 0 (GREEN)
+
+Every mutation above was reverted in the isolated mirror; the lane worktree
+carries no src/ change at all (git diff --name-only origin/main...HEAD has zero src paths).

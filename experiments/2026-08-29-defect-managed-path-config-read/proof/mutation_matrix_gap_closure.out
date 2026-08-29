@@ -1,0 +1,257 @@
+MUTATION PROOF -- closing the two gaps an adversarial verifier found in P14
+Tranche: experiments/2026-08-29-defect-managed-path-config-read/
+Lane: lane/b1-only, worktree /home/user/dr-lanes/b1-only, base a4f0d3ce2.
+Date: 2026-08-29. Production code UNCHANGED by this work: tests and map only.
+
+WHY THIS FILE EXISTS
+  proof/mutation_matrix.out records 7 planted mutations, 7 caught RED, and it
+  is a true record of those seven runs. It is not a complete one. Two of the
+  fix's guarantees had NO test that could fail:
+
+  GAP 1  the central behaviour. `return None` as the first statement of
+         preparation._load_operator_config reinstates P14 exactly --
+         prepare() stores config_path on the request and then ignores it.
+  GAP 2  change site 7, the `config=load_config(...)` line in
+         cli.main._qualify_one_profile -- the operations-parity limb the fix
+         commit itself calls load-bearing ("carriage alone would have left all
+         8 committed run-config.yaml files permanently unrunnable").
+
+REPRODUCTION OF BOTH GAPS, BEFORE ANY TEST WAS WRITTEN
+  (commands run in this worktree at a4f0d3ce2, tests/ unmodified)
+
+  GAP 1, the two files the fix's own criterion names:
+    $ python -m pytest tests/test_managed_path_config_read.py \
+                       tests/test_run_preparation_service.py -q
+      with `return None` planted : 23 passed in 93.05s
+
+  GAP 1, the whole blast-radius ring (run_preparation_service,
+  manifest_config_disclosure, reusable_qualification, single_run_path,
+  v6_only_cli_admission, admission, v6_only_application_admission,
+  managed_path_config_read):
+      with `return None` planted : 217 passed, 1 skipped in 56.53s
+      clean tree                 : 217 passed, 1 skipped in 58.11s
+    -> byte-identical. Nothing anywhere goes red.
+
+  GAP 2, change site 7 deleted (git diff --stat: 1 file changed, 1 deletion):
+    $ python -m pytest tests/test_managed_path_config_read.py -q
+                                 : 8 passed in 32.69s
+    $ grep -rln "_qualify_one_profile" tests/
+                                 : (no output; exit 1)
+    -> the function had no test of any kind.
+
+  Verifier's diagnosis confirmed: R1 monkeypatches RunPreparationService
+  wholesale, so it can only prove the path reaches the request object and can
+  never observe what prepare() does with it; R2-R8 call
+  build_preparation_manifest / qualification_subject_manifest directly and
+  never enter prepare() or either CLI verb. No test joined the two halves.
+
+TESTS ADDED (tests/test_managed_path_config_read.py, alongside the eight)
+  R9  test_prepare_compiles_the_run_from_the_operator_config_file
+      Drives the REAL RunPreparationService.prepare() -- not monkeypatched --
+      with a real run-config.yaml on disk, and asserts on the manifest AS
+      WRITTEN to the run root: RESEARCH_BACKEND is CARRIED into the Config the
+      run executes, JUDGE_SEATS_ENABLED is DISCLOSED by typed notice, and an
+      unconfigured run of the same question through the same service shows
+      neither limb and lands on a different root.
+  R10 test_qualify_addresses_the_subject_the_configured_run_needs
+      Calls cli.main._qualify_one_profile through a real parsed
+      `--config F --provider-profile P qualify` argument namespace, on a home
+      whose cache holds ONLY the configured subject, and asserts the verb
+      addressed the subject a `reason --config F` run needs, reused it, and
+      proposed zero provider calls.
+
+TRANSCRIPT
+== CONTROL: unmutated tree ==
+$ git -C /home/user/dr-lanes/b1-only diff --stat src/
+(no source diff)
+$ PYTHONPATH=src:mini python -m pytest tests/test_managed_path_config_read.py -q
+..........                                                               [100%]
+10 passed in 45.95s
+
+== M8: reinstate P14 -- 'return None' as the FIRST statement of
+       preparation._load_operator_config (prepare() stores config_path
+       and ignores it; production code is otherwise untouched) ==
+M8 applied
+$ git diff --stat src/deepreason/preparation.py
+ src/deepreason/preparation.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git diff src/deepreason/preparation.py
+diff --git a/src/deepreason/preparation.py b/src/deepreason/preparation.py
+index 7d41fad7d..4cfc6d9d9 100644
+--- a/src/deepreason/preparation.py
++++ b/src/deepreason/preparation.py
+@@ -264,6 +264,7 @@ def _load_operator_config(config_path: str | None) -> Config | None:
+     than a traceback out of yaml.
+     """
+ 
++    return None
+     if config_path is None:
+         return None
+     from deepreason.config import load as load_config
+
+-- RED: the whole file, so the transcript shows WHICH tests catch it --
+$ PYTHONPATH=src:mini python -m pytest tests/test_managed_path_config_read.py -q
+            RunPreparationRequestV1(
+                question="Why is the sky blue?",
+                profile_path=str(profile_path),
+                config_path=str(config_path),
+            )
+        )
+        manifest = load_run_manifest(Path(prepared.root) / "run-manifest.json")
+        runtime = config_from_run_manifest(manifest)
+        disclosed = {
+            notice.pointer
+            for notice in (manifest.compile_notices or ())
+            if notice.code == "ENGINE_CONFIG_FIELD_NOT_CARRIED"
+        }
+    
+>       assert runtime.RESEARCH_BACKEND == "stub", (
+            "prepare() compiled a run that does not carry the operator's "
+            f"RESEARCH_BACKEND: the run executes {runtime.RESEARCH_BACKEND!r}, the "
+            f"file at {config_path} says 'stub'. The managed path took the "
+            "configuration path and did not read the file."
+        )
+E       AssertionError: prepare() compiled a run that does not carry the operator's RESEARCH_BACKEND: the run executes 'agent', the file at /tmp/pytest-of-root/pytest-5584/test_prepare_compiles_the_run_0/run-config.yaml says 'stub'. The managed path took the configuration path and did not read the file.
+E       assert 'agent' == 'stub'
+E         
+E         - stub
+E         + agent
+
+tests/test_managed_path_config_read.py:548: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_prepare_compiles_the_run_from_the_operator_config_file
+1 failed, 9 passed in 44.19s
+
+-- RESTORE + GREEN --
+$ git checkout -- src/deepreason/preparation.py
+source tree restored (git diff src/ empty)
+$ PYTHONPATH=src:mini python -m pytest tests/test_managed_path_config_read.py -q
+..........                                                               [100%]
+10 passed in 45.67s
+
+== M9: delete change site 7 -- the single config=load_config(...) line in
+       cli.main._qualify_one_profile (the operations-parity limb) ==
+M9 applied
+$ git diff --stat src/deepreason/cli/main.py
+ src/deepreason/cli/main.py | 1 -
+ 1 file changed, 1 deletion(-)
+$ git diff src/deepreason/cli/main.py
+diff --git a/src/deepreason/cli/main.py b/src/deepreason/cli/main.py
+index 283d39d1d..9fe3fe557 100644
+--- a/src/deepreason/cli/main.py
++++ b/src/deepreason/cli/main.py
+@@ -1960,7 +1960,6 @@ def _qualify_one_profile(profile_path, *, args, seat_bindings=None) -> dict | No
+     manifest = qualification_subject_manifest(
+         profile,
+         attached_evidence=bool(getattr(args, "attached_evidence", False)),
+-        config=load_config(Path(args.config)) if getattr(args, "config", None) else None,
+         seat_bindings=seat_bindings,
+     )
+     cache_dir = provider_state_dir() / "qualification-cache"
+
+-- RED: the whole file, so the transcript shows WHICH tests catch it --
+$ PYTHONPATH=src:mini python -m pytest tests/test_managed_path_config_read.py -q
+                str(profile_path),
+                "qualify",
+            ]
+        )
+        result = _qualify_one_profile(args.provider_profile, args=args)
+    
+>       assert result is not None, (
+            "`deepreason qualify --config F` proposed a fresh battery on a home "
+            "that has already qualified F: it addressed the unconfigured subject "
+            f"{unconfigured[:16]} instead of {needed[:16]}, which is the "
+            "8-of-8 refusal probe/lifecycle_gap.out measured"
+        )
+E       AssertionError: `deepreason qualify --config F` proposed a fresh battery on a home that has already qualified F: it addressed the unconfigured subject 1d49732b809c1a75 instead of 8101f309191e7376, which is the 8-of-8 refusal probe/lifecycle_gap.out measured
+E       assert None is not None
+
+tests/test_managed_path_config_read.py:644: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Qualification will test openai/model-a; maximum expected provider calls: 1140. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+QUALIFICATION_CONFIRMATION_REQUIRED: qualification spends provider calls; rerun with --yes to confirm noninteractively. No provider calls were made.
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_qualify_addresses_the_subject_the_configured_run_needs
+1 failed, 9 passed in 47.23s
+
+-- RESTORE + GREEN --
+$ git checkout -- src/deepreason/cli/main.py
+source tree restored (git diff src/ empty)
+$ PYTHONPATH=src:mini python -m pytest tests/test_managed_path_config_read.py -q
+..........                                                               [100%]
+10 passed in 47.36s
+
+== RING EVIDENCE: the blast-radius ring the verifier measured byte-identical ==
+   (run_preparation_service, manifest_config_disclosure, reusable_qualification,
+    single_run_path, v6_only_cli_admission, admission,
+    v6_only_application_admission, managed_path_config_read)
+
+-- under M8, WITH the new tests present --
+M8 applied
+tests/test_managed_path_config_read.py:548: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_prepare_compiles_the_run_from_the_operator_config_file
+1 failed, 218 passed, 1 skipped in 57.00s
+
+-- under M9, WITH the new tests present --
+M9 applied
+QUALIFICATION_CONFIRMATION_REQUIRED: qualification spends provider calls; rerun with --yes to confirm noninteractively. No provider calls were made.
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_qualify_addresses_the_subject_the_configured_run_needs
+1 failed, 218 passed, 1 skipped in 56.69s
+
+-- restored, clean --
+source tree restored (git diff src/ empty)
+......s................................................................. [ 98%]
+....                                                                     [100%]
+219 passed, 1 skipped in 56.57s
+
+== DEFAULTS-ONLY DIGEST CENSUS: this tranche adds TESTS, so nothing may move ==
+   pins from probe/price.out and probe/request_identity_baseline.out
+  baseline manifest sha256                 UNCHANGED  37e3fa54edb75346a5b180d54b77d032a749c9c87da4ec5db5f3c21652327d06
+  baseline source_config_hash              UNCHANGED  76e35e1604b6e4f090860d07ac6e87dfca29985f1e88de05b8bed793f8e850f1
+  baseline qualification subject           UNCHANGED  7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  defaults-Config manifest sha256          UNCHANGED  37e3fa54edb75346a5b180d54b77d032a749c9c87da4ec5db5f3c21652327d06
+  defaults-Config qualification subject    UNCHANGED  7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+  question-only request digest             UNCHANGED  7ea3afd5a387993d19999918ea26698529245bbf1c1ba23dc5ac6a22e03c93e9
+  qualify subject: none vs Config()        IDENTICAL
+  verdict: 0 of 6 committed pins MOVED
+  exit=0
+
+== MAP: docs/map/SUB-application.md:214 -- the check that could not fail ==
+   The row claimed '_qualify_one_profile passes the loaded Config into
+   qualification_subject_manifest' and cited a check that stayed GREEN with
+   change site 7 deleted. Re-derivation is the map's authentication, so the
+   check now names the two tests that exercise the two VERBS.
+
+-- the edited check, clean tree --
+....                                                                     [100%]
+4 passed in 46.13s
+
+-- the SAME check under M9 (site 7 deleted): it must now FAIL --
+M9 applied
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_qualify_addresses_the_subject_the_configured_run_needs
+1 failed, 3 passed in 46.78s
+source tree restored (git diff src/ empty)
+
+VERDICT
+  M8 (GAP 1) RED, caught by R9 alone; the other 9 tests in the file stay green.
+  M9 (GAP 2) RED, caught by R10 alone; the other 9 tests in the file stay green.
+  Both restored; clean tree green at 10 passed, and the blast-radius ring at
+  219 passed, 1 skipped.
+  The ring that was byte-identical under both mutations now reports
+  1 failed, 218 passed, 1 skipped under each.
+  Six committed defaults-only digest pins UNCHANGED: this tranche adds tests.
+
+LANE RING (the six files the lane brief names), clean tree
+  $ python -m pytest tests/test_managed_path_config_read.py \
+      tests/test_run_preparation_service.py tests/test_manifest_config_disclosure.py \
+      tests/test_reusable_qualification.py tests/test_single_run_path.py \
+      tests/test_v6_only_cli_admission.py -q -n 4
+    172 passed in 56.60s   (0 failed)
+
+MAP CHECK, docs/map/SUB-application.md:214, after the edit
+  clean tree : 4 passed in 46.13s
+  under M9   : 1 failed, 3 passed in 46.78s   (the check can now fail)
+  $ python tools/docs_verify.py --audit -> 0 finding(s)

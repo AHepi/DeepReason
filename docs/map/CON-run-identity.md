@@ -30,6 +30,7 @@ enforced in another, extended in a third, and operated from a fourth.
 | Aspect | File | Symbol |
 |---|---|---|
 | Run id minted from question + config | `preparation.py` | `RunPreparationService.prepare`, `_request_digest` |
+| Where the operator's `--config` is loaded, and the typed refusal for a file that is not a configuration at all | `preparation.py` | `_load_operator_config`, `RunPreparationRequestV1.config_path`, `CONFIG_PROFILE_INVALID` |
 | What the identity digest covers | `preparation.py` | `_request_digest` payload, `_REQUEST_DOMAIN` |
 | The question digest — a DIFFERENT digest, not part of run identity | `preparation.py` | `_question_digest`, `_QUESTION_DOMAIN` |
 | The durable identity record in the root | `preparation.py` | `RunPreparationRecordV1`, `PREPARATION_RECORD_NAME` |
@@ -87,6 +88,16 @@ question-only ids stay byte-identical to their historical values. Widening this
 unconditionally would rename every existing question-only root.
 
 `check: grep -q 'payload\["dossier_digest"\] = request.dossier_digest' src/deepreason/preparation.py`
+
+**A configuration digest enters the payload on exactly the same terms**
+(2026-08-29): only when the operator named a `--config`, so a question-only id
+is unchanged, and over the configuration's VALUES rather than the file's bytes,
+so reformatting a YAML profile does not mint a second run of one question. Two
+different configurations of one question are two roots -- without this, the
+second is refused `RUN_ALREADY_STARTED` against the first's root, which is a
+launch verb refusing a configuration that compiled.
+
+`check: python -m pytest tests/test_managed_path_config_read.py::test_run_identity_covers_the_configuration -q`
 
 **Preparing the same request twice mutates nothing.** The second call re-opens
 the root, re-validates every bound document against `run-preparation.json`, and
@@ -251,6 +262,14 @@ them, including the two that were never renamed.
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and
   never what they expected.
+- **Expecting `--config` to be free of the identity.** Since 2026-08-29
+  (tranche `experiments/2026-08-29-defect-managed-path-config-read/`, defect
+  P14) the configuration is part of the run id, so changing one switch and
+  re-asking the same question mints a DIFFERENT root rather than reopening the
+  old one -- the same surprise budget has always carried. Before that tranche
+  the file was never read, so this could not bite; the reason it must bite now
+  is the alternative, which is two differently-configured runs colliding on one
+  id and the second being refused against the first's root.
 - **Retiring a root without committing the rename first.** CLAUDE.md's rule —
   `git mv run-<id> failed-epochN-run-<id>`, COMMIT THE RENAME FIRST — exists
   because the cloud container can roll back to a stale checkout, restoring the

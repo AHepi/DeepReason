@@ -1,0 +1,70 @@
+== control: unmutated tree ==
+  tests/test_managed_path_config_read.py: rc=0  8 passed in 32.25s
+
+M1 drop config_path from _cmd_reason (site 6)
+  targets : test_reason_forwards_the_operator_config_to_preparation
+  verdict : RED (mutation caught)   [1 failed in 0.33s]
+M2 stop threading base into _config_for_profile (sites 2-3)
+  targets : test_managed_manifest_carries_or_discloses_every_operator_setting test_a_configured_school_seat_opt_in_compiles
+  verdict : RED (mutation caught)   [2 failed in 0.40s]
+M3 model_copy instead of model_validate (site 2)
+  targets : test_a_default_valued_operator_config_changes_nothing
+  verdict : RED (mutation caught)   [1 failed, 1 warning in 0.33s]
+M4 drop config= from qualification_subject_manifest (site 4 ONLY -- the
+   'sites 4/7' this line originally claimed is CORRECTED below)
+  targets : test_qualify_and_reason_agree_on_the_subject_for_every_configuration test_a_configured_run_is_refused_nowhere_a_default_run_starts
+  verdict : RED (mutation caught)   [2 failed in 32.00s]
+M5 omit config_digest from run identity (site 5)
+  targets : test_run_identity_covers_the_configuration
+  verdict : RED (mutation caught)   [1 failed in 0.31s]
+M6 admit config_digest UNCONDITIONALLY (site 5)
+  targets : test_run_identity_covers_the_configuration
+  verdict : RED (mutation caught)   [1 failed in 0.32s]
+M7 let the operator's roles win (site 2)
+  targets : test_the_provider_profile_owns_routes_under_a_configured_run
+  verdict : RED (mutation caught)   [1 failed in 0.38s]
+
+files restored
+
+============================================================================
+CORRECTION, 2026-08-29 (lane/b1-only) -- what each row above actually proves
+============================================================================
+The seven runs above happened and their verdicts are true. This line's ORIGINAL
+label was not: row M4 said it covered "sites 4/7", and it did not. An
+adversarial verifier deleted change site 7 alone -- the single
+`config=load_config(Path(args.config)) ...` line in
+`cli.main._qualify_one_profile`, git diff --stat "1 file changed, 1 deletion" --
+and `pytest tests/test_managed_path_config_read.py -q` reported 8 passed.
+`grep -rln "_qualify_one_profile" tests/` returned nothing at all. All of M4's
+redness came from site 4, the `config=` parameter on
+`preparation.qualification_subject_manifest`.
+
+Per row, stated as what is proven and what is not:
+
+  M1  site 6 only -- `config_path=args.config` in `_cmd_reason`. R1 observes
+      only that SOMETHING about the path reaches the (monkeypatched) service.
+  M2  sites 2-3 only -- `base=`/`config=` on `_config_for_profile` and
+      `build_preparation_manifest`, both called directly by R2/R8.
+  M3  site 2 only -- model_validate vs model_copy.
+  M4  site 4 only -- the `config=` parameter on
+      `qualification_subject_manifest`. NOT site 7: R4 and R5 call that builder
+      themselves, so neither can observe whether the `qualify` VERB calls it.
+  M5  site 5 only -- `config_digest` omitted from `_request_digest`.
+  M6  site 5 only -- `config_digest` admitted unconditionally.
+  M7  site 2 only -- the profile's ownership of `roles`.
+
+Not covered by any row above, and the reason this correction exists:
+  - `preparation._load_operator_config` and the `prepare()` call that uses it.
+    `return None` as its first statement reinstates P14 exactly and left the
+    whole blast-radius ring at 217 passed, 1 skipped -- byte-identical to the
+    clean run.
+  - change site 7, `cli.main._qualify_one_profile`, untested by anything.
+
+Both are now covered, mutation-proven in
+proof/mutation_matrix_gap_closure.out:
+  M8  `return None` first in `_load_operator_config`  -> RED, caught by
+      tests/test_managed_path_config_read.py::test_prepare_compiles_the_run_from_the_operator_config_file
+  M9  change site 7 deleted                           -> RED, caught by
+      tests/test_managed_path_config_read.py::test_qualify_addresses_the_subject_the_configured_run_needs
+Each is caught by its own new test alone; the other nine tests in the file stay
+green under both, which is the measurement of what the suite could not see.

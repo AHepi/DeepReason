@@ -1,8 +1,8 @@
 <!-- DR-SUB-capabilities -->
-Verified-at: 546544b5
+Verified-at: 56d4df1e7
 Verify: python -m pytest tests/test_simulation_capability_v5.py tests/test_research_capability.py tests/test_research_root_replay.py -q
 Owns: src/deepreason/capabilities/
-Seams: DR-SEAM-capabilities-x-rules
+Seams: DR-SEAM-capabilities-x-channels, DR-SEAM-capabilities-x-rules
 Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x ontology, capabilities x scheduler, capabilities x verification, capabilities x workflow
 
 # Capabilities — running a program and fetching a document, under frozen authority
@@ -17,8 +17,17 @@ Seams-undocumented: capabilities x harness, capabilities x llm, capabilities x o
 | capabilities x harness | undocumented | real: every capability transition is a chained, typed event through the ordinary append-only log — "a denial is a durable record rather than silence" |
 | capabilities x verification | undocumented | real: this document's own claim names "the replay validator" as shared machinery between the two capabilities — `DR-SUB-verification`'s territory |
 | capabilities x llm | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
-| capabilities x channels | undocumented | real: `DR-INV-evidence-channels` decides whether the simulation and research policies this package consumes compile ENABLED at all. The registry owns enablement; this package owns the lifecycle that follows from it |
+| `DR-SEAM-capabilities-x-channels` | documented | the channel decides at COMPILE time and this package obeys at RUN time: `DR-INV-evidence-channels` decides whether the simulation and research policies this package consumes compile ENABLED at all, and what crosses is a frozen policy object, never a flag. Zero import coupling both ways |
 | capabilities x workflow | undocumented | not evidenced here either way — candidate pair, not yet analyzed |
+
+This table and the `Seams:` / `Seams-undocumented:` headers above it are the
+same claim written twice, so they drift: on 2026-08-29 the header named
+`DR-SEAM-capabilities-x-channels` while this row still read `undocumented`, and
+`--links` cannot catch it because a body row is prose. Every row's first column
+now has to appear in exactly one of the two headers, and every header entry has
+to appear as a row.
+
+`check: python3 -c 'import re,pathlib;t=pathlib.Path("docs/map/SUB-capabilities.md").read_text();sec=t.split("## Seams",1)[1].split("\n## ",1)[0];rows=[l.split("|")[1].strip().strip("`") for l in sec.splitlines() if l.startswith("|") and not l.startswith("|---") and l.split("|")[1].strip()!="Side"];H=lambda k:{x.strip() for x in re.search("^"+k+": (.*)$",t,re.M).group(1).split(",") if x.strip()};assert len(rows)==8,rows;assert {r for r in rows if r.startswith("DR-")}==H("Seams"),(sorted(rows),sorted(H("Seams")));assert {r for r in rows if not r.startswith("DR-")}==H("Seams-undocumented"),(sorted(rows),sorted(H("Seams-undocumented")))'`
 
 ## What it is
 

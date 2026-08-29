@@ -1,5 +1,5 @@
 <!-- DR-CON-criticism-source -->
-Verified-at: 7e1ab8a54
+Verified-at: 499886a3e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/crit.py
 Seams: DR-SEAM-rules-x-scratch
@@ -80,6 +80,7 @@ warrant.
 | Which generators/properties `crit_fuzz` probes with | `rules/experiment.py` `accepted_generators`/`active_properties`/`promoted_properties` | `tests/test_experiment.py::test_refuted_generators_are_never_used` |
 | Whether criticism may read the scratchpad | `DR-SEAM-rules-x-scratch` — a seam change, not isolated; follow `docs/map/REC-change-a-seam.md` | `tests/test_prose_refutation_boundaries.py -k scratch` |
 | What a filed premise may cite, and how the citation is checked | `_file_attribution` / `_check_premise_citations` here; the checker itself is `DR-SUB-evidence` | `tests/test_p4_citable_evidence.py -k quote` |
+| What an invited dispatch records about how the seat ANSWERED | `_file_attribution`'s `premise-answer:` Measure here; the tag's meaning is declared in `signals.py` under `DR-REC-add-signal`, never redefined here | `tests/test_premise_channel_loop.py -k "declined or uncited"` |
 
 ## Where an `observe_only` criticism goes next
 
@@ -147,3 +148,23 @@ from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase a
 for model in (O, B):
     assert 'premise_evidence' in model.model_fields, sorted(model.model_fields)
 "`
+
+- **An invited dispatch always leaves a disposition; an uninvited one never
+  does.** `_file_attribution` resolves the invitation BEFORE the premise text,
+  and every invited call records exactly one
+  `premise-answer:{DECLINED|UNCITED|CITED}` Measure — the seat's answer to a
+  question the run actually asked. The order is the whole content of the fix:
+  the earlier code returned on an empty premise without ever asking whether an
+  invitation stood, so `_check_premise_citations` (which records nothing when
+  `refs` is empty) was not even reached, and a seat that was ASKED and said
+  nothing recorded what a seat that was NEVER ASKED recorded. Measured across
+  the four committed technique roots, that made 93 never-asked dispatches
+  indistinguishable from 4 asked-and-silent ones and 1 asked-and-uncited one
+  (`experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md` §F-B). Silence
+  is now a fact rather than an ambiguity, so DO NOT add a receipt to the
+  uninvited path: it would destroy the very difference the receipt records.
+  `CITED` says an array was submitted, never that it verified — the byte-check's
+  own outcome stays on `premise-citation:`, which is what the M2 census counts,
+  and this signal deliberately does not touch it.
+`check: python -m pytest tests/test_premise_channel_loop.py::test_a_declined_invitation_is_typed_on_the_record tests/test_premise_channel_loop.py::test_a_premise_filed_without_citations_is_typed_as_uncited tests/test_premise_channel_loop.py::test_an_uninvited_dispatch_records_no_disposition tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status -q`
+`check: python -c "import ast, inspect; from deepreason.rules.crit import _file_attribution; body = ast.parse(inspect.getsource(_file_attribution)).body[0].body; stmts = [n for n in body if not isinstance(n, (ast.Expr, ast.ImportFrom))]; first = ast.unparse(stmts[0]); assert '_premise_invited_problem' in first, first"`

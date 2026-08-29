@@ -1,5 +1,5 @@
 <!-- DR-CON-seats -->
-Verified-at: 23bb8bf66
+Verified-at: a82872b38
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/llm/roles.py, src/deepreason/llm/firewall.py, src/deepreason/llm/adapter.py, src/deepreason/preparation.py, src/deepreason/provider_profile.py, src/deepreason/cli/doctor.py, src/deepreason/seat_bindings.py, src/deepreason/readiness.py, src/deepreason/seat_events.py
 Seams: DR-SEAM-llm-x-manifest, DR-SEAM-llm-x-rules, DR-SEAM-llm-x-scheduler
@@ -113,6 +113,7 @@ of information the manifest already froze at mint time.
 | Split dispatch: one seat call, two provider legs on one lease and one authorization (deliberate at `B_r`, then serialize at `B_a` with thinking off) | `llm/split.py`, `llm/adapter.py` | `plan_split`, `LLMAdapter._split_plan`, `LLMAdapter._dispatch_split` |
 | Presentation profile (compact/standard/frontier) — per-run today; per-`(role, seat, endpoint_id)` already possible in v6 | `llm/adapter.py`, `run_manifest.py` | `LLMAdapter.profile_for`/`base_profile_for` (legacy, one `self.base_model_profile`); `resolve_route_seat_base_profile` (v6, already seat-scoped) |
 | Where every canonical role's route is built (uniform by default, per-role override when bound) | `preparation.py` | `_config_for_profile` |
+| Which SEVEN values the host owns whatever the operator's `--config` says, and which the configuration therefore sets (2026-08-29) | `preparation.py` | `_config_for_profile`'s `owned` dict: `engine_profile`, `model_profile`, `scratchpad`, `bridge`, `EMBEDDER_MODEL`, `CHANNELS_DISABLED`, `roles` -- everything else comes from the operator's `base` |
 | Whether the compiled manifest's criticism goes through a school seat at all — a Config-driven branch, not a seat mechanism itself (adjudication-judge-seats-optins tranche, S2c/R3, 2026-08-10; full detail in `DR-CON-authority`) | `preparation.py` | `build_preparation_manifest`; `Config.LEGACY_CRITICISM_ENABLED` |
 | The setup-time provider/model/transport bundle | `provider_profile.py` | `ProviderProfileV1` |
 | Role-group -> role-name expansion, binding persistence, and deterministic conflict RESOLUTION (a direct group beats an alias, then alphabetically-last-group-wins — all-configs-allowed, 2026-08-12: was a refusal, "never last-one-wins"; SeatBindingError now covers only malformed/unknown-group shape errors) | `seat_bindings.py` | `GROUP_ROLES`, `GROUP_ALIASES`, `resolve_seat_bindings`, `SeatBindingError` |
@@ -157,6 +158,19 @@ endpoint when bound.** The uniform default, not a limitation in
 carry it (already-heterogeneous-capable, per this document's own
 "one role-seat bound to one immutable route" row).
 `check: grep -q "seat_bindings and role in seat_bindings" src/deepreason/preparation.py`
+
+**The operator's `roles` never redirects a managed run, and never refuses
+one either** (2026-08-29). On the managed path the provider profile holds the
+credential and the endpoint, and the seat-binding mechanism owns per-role
+divergence, so `roles` is one of the seven host-owned values: a configuration
+naming a different endpoint still COMPILES (all-configurations law,
+2026-08-12) and the compiled routes stay the profile's. This is a
+deterministic resolution rule, not a gate. Its DISCLOSURE as a typed manifest
+notice is parked (P22): emitting one needs both frozen surface 4 and surface 5,
+because an undisclosed-from-the-subject notice would otherwise move the
+qualification subject digest of every committed configuration.
+
+`check: python -m pytest tests/test_managed_path_config_read.py::test_the_provider_profile_owns_routes_under_a_configured_run tests/test_managed_path_config_read.py::test_a_configured_school_seat_opt_in_compiles -q`
 
 **A role bound by two different `--seat` groups with two different
 profiles resolves deterministically; it never silently picks whichever
@@ -209,6 +223,20 @@ one — no new manifest role, no change to the degrees-of-freedom count.
 
 ## Traps
 
+- **A flag gated a seat-configuration path, and no configuration could turn
+  it on.** Until 2026-08-29, `deepreason reason --school-seat` and
+  `--criticism-seat` refused `SCHOOL_SEATS_DISABLED` for EVERY provider
+  profile: the managed path synthesised its `Config` from the profile, so
+  `SCHOOL_SEATS_ENABLED` was always the factory `False`, while the shipped
+  `--school-seat` help text told the operator the master gate "is still set via
+  `--config`" -- the file that was never read. The documented workflow was
+  broken end to end, which is the sharpest form of the 2026-08-28 law's
+  violation: not a missing warning, but a gate the configuration could not
+  reach. FIXED 2026-08-29, tranche
+  `experiments/2026-08-29-defect-managed-path-config-read/` (defect P14),
+  measured before the fix in that tranche's `probe/school_seat_deadlock.out`.
+  The gate itself is unchanged and still refuses typed when nothing turned it
+  on -- what changed is that something now can.
 - **"This configuration compiles" says nothing about what its seats may
   do.** Since 2026-08-16 (`experiments/2026-08-16-change-configs-complete-
   seats-test/`, completing the all-configurations law) a seat topology can

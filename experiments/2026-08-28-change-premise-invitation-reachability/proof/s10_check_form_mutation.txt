@@ -1,0 +1,52 @@
+S10 — the fourth map check, converted to the single-line form and
+mutation-proven. 2026-08-29, lane A stage 2 (delivery), on the MERGED
+tree (branch lane/a-p11, base 25a3a0687).
+
+WHY THIS EXISTS
+The check written at CON-criticism-source.md:170 (the AST pin asserting
+that the invitation lookup is the FIRST statement of _file_attribution)
+was authored in the MULTI-LINE form. tools/docs_verify.py on this tree
+parses a check with the single-line pattern only:
+
+    _CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")     tools/docs_verify.py:47
+
+so the block was never executed by the verifier. Measured before the fix:
+
+    $ python -c "import sys; sys.path.insert(0,'tools'); import docs_verify as d, pathlib;
+      doc = d.parse(pathlib.Path('docs/map/CON-criticism-source.md'));
+      print('parsed checks:', len(doc.checks)); print('lines:', [c[0] for c in doc.checks])"
+    parsed checks: 13
+    lines: [27, 32, 37, 47, 51, 54, 59, 101, 102, 123, 130, 135, 169]
+
+Line 170 absent. The claim itself was TRUE — it passes when run by hand —
+but a written claim the verifier never runs is exactly what the map's
+re-derivation authentication exists to prevent.
+
+AFTER CONVERSION TO THE SINGLE-LINE FORM
+    parsed checks: 14
+    lines: [27, 32, 37, 47, 51, 54, 59, 101, 102, 123, 130, 135, 169, 170]
+
+MUTATION PROOF — the check can FAIL if the behaviour regresses
+The regression this check guards is the ordering fix itself: resolving the
+premise text BEFORE the invitation, which is what made an asked-and-silent
+seat indistinguishable from a never-asked one. Mutation applied to
+src/deepreason/rules/crit.py::_file_attribution — `text = (premise_text or
+"").strip()` hoisted above `problem_id = _premise_invited_problem(...)`:
+
+    $ python -c "import ast, inspect; from deepreason.rules.crit import _file_attribution; body = ast.parse(inspect.getsource(_file_attribution)).body[0].body; stmts = [n for n in body if not isinstance(n, (ast.Expr, ast.ImportFrom))]; first = ast.unparse(stmts[0]); assert '_premise_invited_problem' in first, first"
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    AssertionError: text = (premise_text or '').strip()
+    rc=1
+
+RED. Then `git checkout -- src/deepreason/rules/crit.py`; `git status
+--porcelain` empty; same command re-run:
+
+    GREEN: problem_id = _premise_invited_problem(harness, target_id)
+    rc=0
+
+NOT FIXED, REPORTED — the same inert form is PRE-EXISTING in this document
+at line 146 (the P4 contract pin, `premise_evidence` in the two contract
+models). It arrived on main before this tranche and is not this tranche's
+work, so it is left alone rather than swept in. It resolves on its own when
+the separate window landing multi-line check support merges.
