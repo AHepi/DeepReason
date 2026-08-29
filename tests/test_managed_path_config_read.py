@@ -16,15 +16,33 @@ optional: with warnings."
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 
 from deepreason import preparation
+from deepreason.cli.doctor import (
+    ProductionContractCaseResultV1,
+    run_production_contract_doctor,
+)
 from deepreason.cli.main import _cmd_reason, build_parser
 from deepreason.config import Config, load as load_config
-from deepreason.preparation import build_preparation_manifest
+from deepreason.preparation import (
+    RunPreparationRequestV1,
+    _request_digest,
+    build_preparation_manifest,
+    qualification_subject_manifest,
+)
 from deepreason.provider_profile import ProviderProfileV1
-from deepreason.run_manifest import config_from_run_manifest
+from deepreason.qualification import (
+    qualification_subject_digest,
+    resolve_completed_qualification,
+)
+from deepreason.run_manifest import (
+    V3_CANONICAL_ROLES,
+    RunManifestError,
+    config_from_run_manifest,
+)
 
 STAMP = datetime(2026, 7, 23, tzinfo=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -196,3 +214,245 @@ def test_a_default_valued_operator_config_changes_nothing(tmp_path):
         )
     assert carried.sha256 == baseline.sha256
     assert carried.source_config_hash == baseline.source_config_hash
+
+
+# --------------------------------------------------------------------------
+# R4-R8: the limbs stage 2 measured and stage 1 did not see.
+#   probe/lifecycle_gap.out         -- 8 of 8 committed configs REFUSED
+#   probe/school_seat_deadlock.out  -- --school-seat unreachable for every profile
+#   probe/request_identity_baseline.out -- the historical digest R6 pins
+# --------------------------------------------------------------------------
+
+REPO = Path(__file__).resolve().parents[1]
+
+# probe/request_identity_baseline.out, re-derived on this tree. A question-only
+# request must keep this identity: admitting configuration into run identity is
+# conditional, exactly as `dossier_digest` was admitted.
+QUESTION_ONLY_REQUEST_DIGEST = (
+    "7ea3afd5a387993d19999918ea26698529245bbf1c1ba23dc5ac6a22e03c93e9"
+)
+
+
+def _committed_configs() -> list[Path]:
+    """Every committed operator configuration, or none -- absence-tolerant."""
+    return sorted(REPO.glob("experiments/*/run-config.yaml"))
+
+
+def _distinct_profile() -> ProviderProfileV1:
+    return ProviderProfileV1.create(
+        provider="openai",
+        endpoint="https://distinct.example.test/v1",
+        model_id="model-b",
+        model_revision="rev-b",
+        family="family-b",
+        context_window_tokens=262144,
+        maximum_completion_tokens=4096,
+        credential_env="DEEPREASON_TEST_KEY_B",
+    )
+
+
+def _passing_battery(manifest):
+    """A production-contract battery that passes every case, without a provider."""
+    return run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _m, _pair, index: ProductionContractCaseResultV1(
+            case_id=f"case-{index + 1:03d}",
+            first_pass_valid=True,
+            eventual_valid=True,
+            repair_count=0,
+            semantic_admission=True,
+        ),
+    )
+
+
+def test_qualify_and_reason_agree_on_the_subject_for_every_configuration():
+    """ARCHITECTURE TEST (modularity law, 2026-08-26): one configuration door.
+
+    `deepreason qualify` warms a subject; `deepreason reason` needs one. If the
+    two builders can diverge on what a configuration means, a configured run is
+    unqualifiable -- the operations-parity failure of 2026-08-13. This goes RED
+    the moment either consumer stops going through the same `config=` door.
+    """
+    profile = _profile()
+    cases: list[tuple[str, Config | None]] = [("<defaults>", None)]
+    cases.extend((str(path.parent.name), load_config(path)) for path in _committed_configs())
+
+    disagreed = []
+    for label, operator in cases:
+        qualify_subject = qualification_subject_digest(
+            qualification_subject_manifest(profile, config=operator), profile
+        )
+        reason_subject = qualification_subject_digest(
+            build_preparation_manifest(
+                profile,
+                question="Why is the sky blue?",
+                compiled_at=STAMP,
+                config=operator,
+            ),
+            profile,
+        )
+        if qualify_subject != reason_subject:
+            disagreed.append((label, qualify_subject[:16], reason_subject[:16]))
+
+    assert not disagreed, (
+        "qualify and reason address DIFFERENT qualification subjects for "
+        f"{len(disagreed)} of {len(cases)} configurations, so the battery one "
+        f"warms is not the battery the other needs: {disagreed}"
+    )
+
+
+def test_a_configured_run_is_refused_nowhere_a_default_run_starts(tmp_path):
+    """The operational consequence of the test above, measured end to end.
+
+    probe/lifecycle_gap.out recorded 8 of 8 committed configurations REFUSED
+    QUALIFICATION_NOT_CONFIGURED on a home that had fully qualified, with no
+    committed command able to clear the refusal. Seed the cache the way
+    `deepreason qualify --config F` would, then prepare the way
+    `deepreason reason --config F` would: it must start.
+    """
+    profile = _profile()
+    cases: list[tuple[str, Config | None]] = [("<defaults>", None)]
+    cases.extend((str(path.parent.name), load_config(path)) for path in _committed_configs())
+
+    refused = []
+    for label, operator in cases:
+        cache = tmp_path / f"cache-{abs(hash(label))}"
+        resolve_completed_qualification(
+            qualification_subject_manifest(profile, config=operator),
+            profile,
+            cache_dir=cache,
+            executor=_passing_battery,
+        )
+        prepared = build_preparation_manifest(
+            profile,
+            question="Why is the sky blue?",
+            compiled_at=STAMP,
+            config=operator,
+        )
+        try:
+            resolve_completed_qualification(prepared, profile, cache_dir=cache)
+        except ValueError as error:
+            refused.append((label, getattr(error, "code", type(error).__name__)))
+
+    assert not refused, (
+        f"{len(refused)} of {len(cases)} configurations are refused on a home "
+        f"that just qualified THAT configuration: {refused}"
+    )
+
+
+def test_run_identity_covers_the_configuration(tmp_path):
+    """Two configurations of one question are two runs, not one refused run.
+
+    Both directions in one test, because both mutations are real: omitting the
+    configuration from the request digest collides the two ids (the second run
+    is refused RUN_ALREADY_STARTED against the first's root), and admitting it
+    UNCONDITIONALLY moves every historical question-only run id.
+    """
+    profile = _profile()
+    question = "Why is the sky blue?"
+
+    question_only = RunPreparationRequestV1(question=question)
+    assert _request_digest(question_only, profile) == QUESTION_ONLY_REQUEST_DIGEST, (
+        "a question-only request digest moved: every historical managed run id "
+        "is derived from it"
+    )
+    assert (
+        _request_digest(question_only, profile, config=None)
+        == QUESTION_ONLY_REQUEST_DIGEST
+    ), "an ABSENT configuration must contribute nothing to run identity"
+
+    judges_on = tmp_path / "judges-on.yaml"
+    judges_on.write_text("JUDGE_SEATS_ENABLED: true\n")
+    judges_off = tmp_path / "judges-off.yaml"
+    judges_off.write_text("JUDGE_SEATS_ENABLED: false\n")
+
+    request_on = RunPreparationRequestV1(question=question, config_path=str(judges_on))
+    request_off = RunPreparationRequestV1(question=question, config_path=str(judges_off))
+    digest_on = _request_digest(request_on, profile, config=load_config(judges_on))
+    digest_off = _request_digest(request_off, profile, config=load_config(judges_off))
+
+    assert digest_on != digest_off, (
+        "two different configurations of one question share a managed run id, "
+        "so the second run is refused against the first's root"
+    )
+    assert digest_on != QUESTION_ONLY_REQUEST_DIGEST
+
+    # Semantic, not textual: reformatting a file does not mint a new run.
+    reformatted = tmp_path / "judges-on-reformatted.yaml"
+    reformatted.write_text("# a comment the operator added\nJUDGE_SEATS_ENABLED:   true\n")
+    request_reformatted = RunPreparationRequestV1(
+        question=question, config_path=str(reformatted)
+    )
+    assert (
+        _request_digest(request_reformatted, profile, config=load_config(reformatted))
+        == digest_on
+    ), "run identity must follow the configuration's VALUES, not its bytes"
+
+
+def test_the_provider_profile_owns_routes_under_a_configured_run():
+    """The deterministic resolution rule, in the one place it must not slip.
+
+    A configuration file may not redirect a managed run to an arbitrary
+    endpoint: the provider profile holds the credential and the seat-binding
+    mechanism owns per-role divergence. The rule is a resolution, never a
+    refusal (all-configurations law, 2026-08-12) -- the file still compiles.
+    """
+    profile = _profile()
+    other = _distinct_profile()
+    hijack = Config(
+        roles={role: dict(other.endpoint_spec()) for role in V3_CANONICAL_ROLES}
+    )
+
+    baseline = build_preparation_manifest(
+        profile, question="Why is the sky blue?", compiled_at=STAMP
+    )
+    configured = build_preparation_manifest(
+        profile, question="Why is the sky blue?", compiled_at=STAMP, config=hijack
+    )
+
+    assert configured.roles == baseline.roles, (
+        "a configuration file redirected a managed run's routes, bypassing the "
+        "provider-profile credential model"
+    )
+    endpoint_ids = {
+        route.endpoint_id
+        for routes in configured.roles.values()
+        for route in (routes if isinstance(routes, list) else [routes])
+    }
+    assert endpoint_ids == {profile.endpoint_id}
+
+
+def test_a_configured_school_seat_opt_in_compiles():
+    """probe/school_seat_deadlock.out: `--school-seat` was unreachable, always.
+
+    `_config_for_profile` synthesised SCHOOL_SEATS_ENABLED=False for every
+    provider profile, so the gate refused for all of them -- while the shipped
+    `--school-seat` help text says the master gate "is still set via --config",
+    the file that was never read. A flag that gates a seat-configuration path
+    and cannot be turned on is the sharpest form of the 2026-08-28 law's
+    violation.
+    """
+    profile = _profile()
+    distinct = _distinct_profile()
+
+    # Control: the gate still refuses typed when nothing turned it on.
+    with pytest.raises(RunManifestError, match="SCHOOL_SEATS_DISABLED"):
+        build_preparation_manifest(
+            profile,
+            question="Why is the sky blue?",
+            compiled_at=STAMP,
+            school_seats={"school-1": distinct},
+        )
+
+    manifest = build_preparation_manifest(
+        profile,
+        question="Why is the sky blue?",
+        compiled_at=STAMP,
+        school_seats={"school-1": distinct},
+        config=Config(SCHOOL_SEATS_ENABLED=True),
+    )
+    conjecturer_routes = manifest.roles["conjecturer"]
+    assert len(conjecturer_routes) == 2
+    assert conjecturer_routes[0].endpoint_id == profile.endpoint_id
+    assert conjecturer_routes[1].endpoint_id == distinct.endpoint_id
+    assert manifest.control_plane_policy.school_execution.mode == "route_bound"
