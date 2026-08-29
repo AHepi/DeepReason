@@ -16,6 +16,16 @@ separator-normalised.
   cmp      : BYTE-IDENTICAL
 
 The new optional `circuit_breaker` field is therefore invisible to every
-report the breaker does not fire on, which is every report a healthy
-provider produces. It is not "probably invisible": the two files compare
-equal byte for byte.
+report the breaker does not fire on. It is not "probably invisible": the two
+files compare equal byte for byte.
+
+SCOPE, corrected after an adversarial re-run found the broader claim false.
+This proves the ALL-ADMITTED case. It does NOT prove that every battery which
+fails to trip writes identical bytes: a block with one to nineteen transport
+failures never trips (it needs twenty) and still qualifies, but its
+`cases[].failure_code` changed from ENDPOINT_ERROR to the new typed codes,
+and that value reaches the BUNDLE digest. It does not reach the SUBJECT
+digest -- `ReusableQualificationPairV1.pair_payload()` excludes `cases` --
+so no home owes a re-battery. That is the honest boundary: the cache key
+cannot move; the bundle bytes can, and do, exactly where the legibility fix
+is doing its job.

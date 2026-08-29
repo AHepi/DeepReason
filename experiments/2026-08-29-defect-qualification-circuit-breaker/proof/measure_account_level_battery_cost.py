@@ -10,8 +10,13 @@ So the evidence is generated instead of cited. This is the real doctor, the
 real qualification-subject manifest, the real endpoint and the real retry
 ladder. EXACTLY TWO symbols are faked and nothing else:
 
-  1. `endpoints.urllib.request.urlopen` -- raises a scripted HTTPError and
-     counts the call.
+  1. `urllib.request.urlopen` -- raises a scripted HTTPError and counts the
+     call. Stated precisely, because the `time` note below is precise and
+     this one was not: the GLOBAL is replaced, not an endpoints-module
+     attribute, so every urlopen in the process is faked for the duration.
+     That is wider than it needs to be; it is harmless here and measured to
+     be so (360 calls for the 401 row is exactly one per case, so nothing
+     else called it).
   2. `endpoints.time` -- a shim whose `sleep` records the mandated delay and
      returns immediately. The module ATTRIBUTE is replaced, never
      `time.sleep` itself, so the real clock is untouched process-wide.
@@ -31,6 +36,7 @@ measure_account_level_battery_cost.py
 from __future__ import annotations
 
 import collections
+import json
 import urllib.error
 import urllib.request
 
@@ -132,7 +138,14 @@ def _measure(manifest, status: int, *, breaker: bool, legible: bool = True):
     for pair_report in report.pairs:
         for case in pair_report.cases + (pair_report.first_draw_cases or ()):
             codes[case.failure_code] += 1
-    return report, calls, clock.sleeps, codes
+    # The whole serialized report, not just the code multiset: the defect is
+    # stronger than "the counts match" and should be stated at its strength.
+    serialized = json.dumps(
+        report.model_dump(mode="json", by_alias=True, exclude_none=True),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return report, calls, clock.sleeps, codes, serialized
 
 
 def main() -> int:
@@ -152,8 +165,10 @@ def main() -> int:
     rows = {}
     for label, kwargs in modes:
         for status in STATUSES:
-            report, calls, sleeps, codes = _measure(manifest, status, **kwargs)
-            rows[(status, label)] = (len(calls), sum(sleeps), codes)
+            report, calls, sleeps, codes, serialized = _measure(
+                manifest, status, **kwargs
+            )
+            rows[(status, label)] = (len(calls), sum(sleeps), codes, serialized)
             print(
                 f"{label} status={status} cases={report.summary.case_count} "
                 f"http_calls={len(calls)} sleeps={len(sleeps)} "
@@ -178,8 +193,12 @@ def main() -> int:
         f"on its own, the other never will"
     )
     print(
-        f"    records BYTE-IDENTICAL? {pre_401[2] == pre_429[2]}"
+        f"    failure-code multiset identical? {pre_401[2] == pre_429[2]}"
         f"  -> {dict(pre_401[2])}"
+    )
+    print(
+        f"    WHOLE REPORT byte-identical? {pre_401[3] == pre_429[3]}"
+        f"  ({len(pre_401[3])} vs {len(pre_429[3])} bytes)"
     )
     print("THE FIX:")
     print(
@@ -187,7 +206,10 @@ def main() -> int:
         f"{pre_429[0]} -> {fix_429[0]} (429)"
     )
     print(f"    mandated wait {pre_429[1]:g}s -> {fix_429[1]:g}s")
-    print(f"    records still identical? {fix_401[2] == fix_429[2]}")
+    print(f"    failure-code multiset still identical? {fix_401[2] == fix_429[2]}")
+    print(
+        f"    WHOLE REPORT still byte-identical? {fix_401[3] == fix_429[3]}"
+    )
     return 0
 
 

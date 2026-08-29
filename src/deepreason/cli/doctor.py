@@ -21,7 +21,14 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
 
 from deepreason.canonical import canonical_json
 from deepreason.run_manifest import (
@@ -163,13 +170,24 @@ def _release_gate(cases: tuple[ProductionContractCaseResultV1, ...]) -> bool:
 
 
 class QualificationCircuitPolicyV1(_DoctorRecord):
-    """What arms the breaker and when. Resolved from configuration only."""
+    """What arms the breaker and when. Resolved from configuration only.
+
+    Out-of-range thresholds CLAMP rather than refuse, so the programmatic
+    road and the environment road resolve an identical configuration to an
+    identical policy (all-configurations law, 2026-08-12: a deterministic
+    resolution rule, never a stop).
+    """
 
     enabled: bool = True
-    minimum_block_failures: int = Field(
-        default=PRODUCTION_CASES_PER_PAIR, ge=1, le=PRODUCTION_CASES_PER_PAIR
-    )
+    minimum_block_failures: int = Field(default=PRODUCTION_CASES_PER_PAIR)
     code_prefixes: tuple[str, ...] = _DEFAULT_CIRCUIT_CODE_PREFIXES
+
+    @field_validator("minimum_block_failures", mode="before")
+    @classmethod
+    def _clamp_threshold(cls, value):
+        if isinstance(value, int) and not isinstance(value, bool):
+            return max(1, min(value, PRODUCTION_CASES_PER_PAIR))
+        return value
 
 
 class QualificationCircuitNoticeV1(_DoctorRecord):
@@ -1201,7 +1219,13 @@ def _resolve_circuit_policy(
     raw = os.environ.get(
         _CIRCUIT_ENV_BY_FIELD["minimum_block_failures"], ""
     ).strip()
-    minimum = int(raw) if raw.isdigit() else PRODUCTION_CASES_PER_PAIR
+    # `str.isdigit` is True for superscripts and fraction digits that `int`
+    # then refuses ('\u00b2'), so parsing must be guarded by the parse itself.
+    # An unparseable value falls back; it never stops a battery.
+    try:
+        minimum = int(raw)
+    except ValueError:
+        minimum = PRODUCTION_CASES_PER_PAIR
     raw = os.environ.get(_CIRCUIT_ENV_BY_FIELD["code_prefixes"], "")
     prefixes = tuple(item.strip().upper() for item in raw.split(",") if item.strip())
     return QualificationCircuitPolicyV1(
@@ -1239,6 +1263,16 @@ class _QualificationCircuit:
         if not self._policy.enabled or not code:
             return False
         return any(code.startswith(prefix) for prefix in self._policy.code_prefixes)
+
+    def _inert(self) -> bool:
+        """Enabled, but configured so that nothing can ever arm it.
+
+        An empty prefix set is an accepted configuration that reaches the
+        same exhaustive behaviour as `enabled=False`. It must therefore reach
+        the same WARNING, or one of the two roads to OFF is silent.
+        """
+
+        return self._policy.enabled and not self._policy.code_prefixes
 
     def opening(
         self, pair: ProductionContractPairV1
@@ -1300,25 +1334,70 @@ class _QualificationCircuit:
             for index in range(PRODUCTION_CASES_PER_PAIR)
         )
 
-    def record(self) -> QualificationCircuitRecordV1 | None:
-        """None unless the breaker is disabled or a circuit opened, so a
-        battery that never trips writes the bytes it wrote before."""
+    def _warnings(self):
+        """Every way this policy departs from the shipped one, as notices.
 
-        if self._policy.enabled and not self._open:
+        A table rather than a branch chain: a future gate state is a row.
+        Silence here is the failure mode -- two roads reach the same OFF
+        behaviour (`enabled=False` and an empty prefix set) and BOTH must
+        warn, or one of them is the silence the 2026-08-28 law forbids.
+        """
+
+        policy = self._policy
+        threshold = policy.minimum_block_failures
+        below = threshold < PRODUCTION_CASES_PER_PAIR
+        for applies, code, message, pointer in (
+            (
+                not policy.enabled,
+                "QUALIFICATION_CIRCUIT_BREAKER_DISABLED",
+                "the qualification circuit breaker is disabled; an "
+                "account-level provider condition will be re-tested by every "
+                "remaining case",
+                "/circuit_breaker/enabled",
+            ),
+            (
+                self._inert(),
+                "QUALIFICATION_CIRCUIT_BREAKER_INERT",
+                "the qualification circuit breaker is enabled but no failure "
+                "code can arm it, so the battery runs exhaustively exactly as "
+                "if it were disabled",
+                "/circuit_breaker/code_prefixes",
+            ),
+            (
+                threshold != PRODUCTION_CASES_PER_PAIR,
+                "QUALIFICATION_CIRCUIT_BREAKER_THRESHOLD_LOWERED"
+                if below
+                else "QUALIFICATION_CIRCUIT_BREAKER_THRESHOLD_RAISED",
+                f"the circuit opens after {threshold} of "
+                f"{PRODUCTION_CASES_PER_PAIR} arming failures rather than a "
+                "fully refused block; a route may be left unmeasured on fewer "
+                "failures than an account-level condition implies",
+                "/circuit_breaker/minimum_block_failures",
+            ),
+        ):
+            if applies:
+                yield code, message, pointer
+
+    def record(self) -> QualificationCircuitRecordV1 | None:
+        """None only for the SHIPPED policy with nothing opened.
+
+        Two obligations meet here. A default battery that never trips must
+        write the bytes it wrote before this field existed (proven byte for
+        byte against the pre-fix tree). And a gate the operator RECONFIGURED
+        must never be silent about it (operator law, 2026-08-28) -- so any
+        departure from the shipped policy is recorded even when nothing
+        fires, which is precisely the case an emit-on-fire rule would hide.
+        """
+
+        if (
+            not self._open
+            and self._policy == QualificationCircuitPolicyV1()
+        ):
             return None
-        notices = ()
-        if not self._policy.enabled:
-            notices = (
-                QualificationCircuitNoticeV1(
-                    code="QUALIFICATION_CIRCUIT_BREAKER_DISABLED",
-                    message=(
-                        "the qualification circuit breaker is disabled; an "
-                        "account-level provider condition will be re-tested by "
-                        "every remaining case"
-                    ),
-                    pointer="/circuit_breaker/enabled",
-                ),
-            )
+        notices = tuple(
+            QualificationCircuitNoticeV1(code=code, message=message, pointer=pointer)
+            for code, message, pointer in self._warnings()
+        )
         openings = tuple(
             item.model_copy(update={"skipped_case_count": self._skipped.get(key, 0)})
             for key, item in sorted(self._open.items())

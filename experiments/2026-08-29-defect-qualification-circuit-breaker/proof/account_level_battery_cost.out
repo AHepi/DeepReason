@@ -16,8 +16,10 @@ BREAKER   status=429 cases=300 http_calls=80 sleeps=60 mandated_wait_s=280 re_ex
 
 THE DEFECT (pre-fix):
     mandated wait differs by 5040s (84.0 min) -- one condition clears on its own, the other never will
-    records BYTE-IDENTICAL? True  -> {'ENDPOINT_ERROR': 360}
+    failure-code multiset identical? True  -> {'ENDPOINT_ERROR': 360}
+    WHOLE REPORT byte-identical? True  (83035 vs 83035 bytes)
 THE FIX:
     http calls 360 -> 20 (401), 1440 -> 80 (429)
     mandated wait 5040s -> 280s
-    records still identical? False
+    failure-code multiset still identical? False
+    WHOLE REPORT still byte-identical? False

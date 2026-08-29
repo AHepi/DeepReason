@@ -269,17 +269,35 @@ missing evidence offline** — the real doctor, the real manifest, the real
 endpoint and the real retry ladder, with only the network call and
 `time.sleep` faked:
 
-| account-level condition | cases | HTTP calls | sleeps | mandated wait | record written |
+| account-level condition | cases executed | HTTP calls | sleeps | mandated wait | record written |
 |---|---|---|---|---|---|
-| **429** (quota — retryable) | 260 | 1040 | 780 | **3640 s (60.7 min)** | `{'ENDPOINT_ERROR': 260}` |
-| **401** (credential — not retryable) | 260 | 260 | 0 | **0 s** | `{'ENDPOINT_ERROR': 260}` |
+| **429** (quota — retryable) | 360 | 1440 | 1080 | **5040 s (84.0 min)** | `{'ENDPOINT_ERROR': 360}` |
+| **401** (credential — not retryable) | 360 | 360 | 0 | **0 s** | `{'ENDPOINT_ERROR': 360}` |
 
-Two failures an hour apart in cost — one that clears on its own, one that
-never will — leave **byte-identical records**. That is the defect in one
-table, and it is why the 2026-08-25 report was misread by its own author, in
-writing, at the time. The number was wrong; the defect is real and is now
-better evidenced than the audit had it. **C1** parks the ERRATA correction the
-two audit documents still owe.
+Two failures **84 minutes** apart in cost — one that clears on its own, one
+that never will — leave **byte-identical records**. Not merely the same
+failure-code multiset: all **83 035 bytes** of the serialized report are
+equal. That is the defect in one table, and it is why the 2026-08-25 report
+was misread by its own author, in writing, at the time. The number was wrong;
+the defect is real and is now better evidenced than the audit had it.
+
+**CORRECTED 2026-08-29, in place, on the operator's instruction.** This table
+previously read **260 cases / 1040 calls / 780 sleeps / 3640 s (60.7 min)**,
+and the paragraph above it said "an hour apart". Those were the LOST lane's
+figures and they correspond to **no commit in this branch's ancestry**: 260
+is 13 pairs × 20, and the qualification subject has been **15 pairs**
+throughout — checked at the batch commit `db7b332ef` and before the P14
+subject change at `a82872b38^`. So the manifest published, as its headline
+evidence, numbers that were already stale when they were committed and that
+no re-run could reproduce. The figures above are re-measured on this tree by
+the committed, re-runnable generator
+(`experiments/2026-08-29-defect-qualification-circuit-breaker/proof/measure_account_level_battery_cost.py`,
+18.7 s), and the old ones are recorded here rather than deleted.
+
+**C1** parks the ERRATA correction, and its target list is **four documents,
+not two** — enumerated in that tranche's `FIX.md` §3. The worst of the four
+manufactures a wall-clock provenance (`10:43:39 → 11:01:55`) that appears
+nowhere in the repository except in that audit's own sentence.
 
 Lane C also found `doctor.py:535-560`, the brief's cited range, has MOVED —
 it is now inside a single case's repair loop, not the battery loop.

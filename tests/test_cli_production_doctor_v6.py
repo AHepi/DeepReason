@@ -1567,6 +1567,13 @@ def test_the_circuit_is_keyed_per_route_and_never_globally():
         ),
     )
 
+    # The breaker MUST have fired, and on the dead route only. Without these
+    # two the test passes on a tree with no breaker at all -- it was written
+    # that way and an adversarial re-run caught it.
+    assert report.circuit_breaker is not None
+    assert [o.endpoint_id for o in report.circuit_breaker.openings] == ["critic"]
+    assert calls["argumentative_critic"] == PRODUCTION_CASES_PER_PAIR
+
     healthy = ("thesis", "summarizer", "conjecturer", "judge")
     assert all(calls[role] == 2 * PRODUCTION_CASES_PER_PAIR for role in healthy)
     assert report.summary.qualified_pair_count == 8
@@ -1586,6 +1593,16 @@ def test_a_tripped_battery_still_writes_a_complete_typed_report(tmp_path):
         case_executor=_refusing_executor("argumentative_critic", "ENDPOINT_HTTP_401"),
     )
 
+    assert report.circuit_breaker is not None
+    # The synthesized block is what must round-trip: a report containing
+    # cases no provider ever answered.
+    synthesized = [
+        case
+        for pair_report in report.pairs
+        for case in pair_report.cases
+        if (case.failure_code or "").startswith("CIRCUIT_OPEN_")
+    ]
+    assert len(synthesized) == PRODUCTION_CASES_PER_PAIR
     assert report.summary.case_count == report.summary.pair_count * (
         PRODUCTION_CASES_PER_PAIR
     )
@@ -1688,3 +1705,92 @@ def test_the_circuit_policy_resolves_from_the_environment_and_clamps(monkeypatch
     # for the process environment to drive the battery.
     explicit = QualificationCircuitPolicyV1(minimum_block_failures=3)
     assert _resolve_circuit_policy(explicit) is explicit
+
+
+# --- defects found by adversarial re-run, after the first implementation --- #
+#
+# Each of these pins a defect that shipped in the tranche's own first commit
+# (70fdef7e6) and was caught by an independent skeptic re-running its claims
+# rather than reading them. They are regression tests for the fix, and for
+# the review discipline that found it.
+
+
+def test_a_nonsense_threshold_never_stops_a_battery(monkeypatch):
+    """`str.isdigit()` is True for '²' while `int('²')` raises.
+
+    The first implementation guarded on `isdigit()` and took the whole
+    battery down on a superscript, which `qualification.py` then flattens to
+    QUALIFICATION_EXECUTION_FAILED with the cause erased -- the exact failure
+    mode the breaker exists to prevent.
+    """
+
+    for raw in ("²", "٣", "junk", "", "  ", "1e3", "-5"):
+        monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES", raw)
+        policy = _resolve_circuit_policy()
+        assert 1 <= policy.minimum_block_failures <= PRODUCTION_CASES_PER_PAIR
+
+
+def test_the_explicit_policy_road_clamps_exactly_as_the_environment_does():
+    """Two roads to one knob must resolve one configuration identically.
+
+    The first implementation put `ge`/`le` on the model, so the environment
+    road clamped while the programmatic road REFUSED a well-shaped value --
+    a compile-time denial the all-configurations law (2026-08-12) abolished.
+    """
+
+    assert QualificationCircuitPolicyV1(
+        minimum_block_failures=999
+    ).minimum_block_failures == PRODUCTION_CASES_PER_PAIR
+    assert QualificationCircuitPolicyV1(minimum_block_failures=0).minimum_block_failures == 1
+    assert QualificationCircuitPolicyV1(minimum_block_failures=-1).minimum_block_failures == 1
+
+
+def test_a_gate_that_cannot_arm_warns_like_a_gate_that_is_off(monkeypatch):
+    """`code_prefixes=()` reaches the same OFF behaviour as `enabled=False`.
+
+    Both roads must warn, or one of them is the silence the 2026-08-28 law
+    forbids. The first implementation warned on only one of them.
+    """
+
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_CODE_PREFIXES", " , ")
+    calls = {}
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor(
+            "argumentative_critic", "ENDPOINT_HTTP_401", calls=calls
+        ),
+        circuit_policy=QualificationCircuitPolicyV1(code_prefixes=()),
+    )
+
+    assert calls["argumentative_critic"] == 4 * PRODUCTION_CASES_PER_PAIR
+    assert report.circuit_breaker is not None
+    assert [n.code for n in report.circuit_breaker.notices] == [
+        "QUALIFICATION_CIRCUIT_BREAKER_INERT"
+    ]
+
+
+def test_a_reconfigured_gate_is_never_silent_even_when_nothing_fires():
+    """The emission rule that buys byte-identity must not hide a policy.
+
+    The first implementation emitted only on `disabled` or `opened`, so an
+    ambient non-default policy -- including one that skips 20 live cases on a
+    single blip -- left ZERO trace in the record it claimed to be recorded in.
+    """
+
+    healthy = lambda _manifest, _pair, index: _admitted_case(index)
+
+    shipped = run_production_contract_doctor(_manifest(), case_executor=healthy)
+    assert shipped.circuit_breaker is None
+
+    for policy, expected in (
+        (QualificationCircuitPolicyV1(minimum_block_failures=1),
+         "QUALIFICATION_CIRCUIT_BREAKER_THRESHOLD_LOWERED"),
+        (QualificationCircuitPolicyV1(code_prefixes=("SCHEMA_",)), None),
+    ):
+        report = run_production_contract_doctor(
+            _manifest(), case_executor=healthy, circuit_policy=policy
+        )
+        assert report.circuit_breaker is not None, policy
+        assert report.circuit_breaker.code_prefixes == policy.code_prefixes
+        if expected is not None:
+            assert expected in [n.code for n in report.circuit_breaker.notices]

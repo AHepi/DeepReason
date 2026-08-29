@@ -222,7 +222,7 @@ credential. The only mutable in-memory state is `_EXECUTOR_OPTIONS` in
   `test_battery_parallelism_changes_wall_clock_never_the_report` asserts a
   parallel report equals a sequential one byte for byte.
 
-`check: python -c "
+`check: env -u DEEPREASON_QUALIFY_BREAKER -u DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES -u DEEPREASON_QUALIFY_BREAKER_CODE_PREFIXES python -c "
 import sys; sys.path.insert(0, '.')
 from tests.test_cli_production_doctor_v6 import _manifest, _admitted_case
 from deepreason.cli.doctor import ProductionContractCaseResultV1, run_production_contract_doctor

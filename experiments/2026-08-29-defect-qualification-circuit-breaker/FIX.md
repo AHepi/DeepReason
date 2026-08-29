@@ -80,11 +80,29 @@ case, not argued"* (`:511`).
   rides `failure_code`, which already exists.
 - **Why no committed root changes verdict.** The new report field is
   `| None = None`, and both persist paths dump with `exclude_none=True`
-  (`doctor.py:1280` write, `doctor.py:1421` canonical re-check). Measured on
-  a committed report: 3 of 4 pairs carry no `first_draw_cases` key at all and
-  a valid case carries no `failure_code` key, so `exclude_none=True` really
-  does drop unset optionals on these models. A default-on battery that never
-  trips writes the bytes it writes today.
+  (`doctor.py:1280` write, `doctor.py:1421` canonical re-check).
+
+  **CORRECTED after adversarial re-run — the first form of this claim was
+  over-broad.** What is TRUE and measured: a battery whose cases all succeed
+  writes bytes identical to the pre-fix tree's (39510 both sides, `cmp`
+  equal, against `git archive 08c2d7bd1` — `proof/byte_identity.out`), and
+  the QUALIFICATION SUBJECT DIGEST — the cache key that decides whether a
+  home owes a battery — cannot move at all, because
+  `ReusableQualificationPairV1.pair_payload()` (`qualification.py:98-102`)
+  excludes `cases`.
+
+  What is FALSE as first stated: "a battery that never trips writes the bytes
+  it writes today", full stop. A battery with between one and nineteen
+  transport failures per block never trips (it needs twenty) and still
+  qualifies on the 19/20 gate, yet writes DIFFERENT bytes — because
+  `_failure_code`'s output for a transport condition changed, which is the
+  point of the legibility half. `cases[].failure_code` reaches the BUNDLE
+  digest through `_reusable_pair` (`qualification.py:679-684`) and
+  `ReusableQualificationBundleV1.identity_payload()` (`:146-149`). The
+  tranche did not add a case-level FIELD, as it undertook not to; it changed
+  a case-level VALUE, which has the same reach into the bundle and no reach
+  into the subject. Recorded because the disposition presented itself as
+  complete and was not.
 
 **No grant is requested and none is needed.** `qualification.py` (surface 5)
 stays OUT of the cone — which is also this tranche's own park list (GOAL.md,
@@ -124,6 +142,55 @@ hidden.
 The contingency stays rejected, and this tranche re-measured it rather than
 inheriting the rejection — see §5.
 
+### Second re-declaration, 2026-08-29 — 356, on the review's findings
+
+The first implementation measured **276 / 323, WITHIN**, and was committed
+(`70fdef7e6`). An independent skeptic then re-ran its claims rather than
+reading them and confirmed **six defects in it**. Fixing them cost **+80
+source lines**, taking the total to **356**, and the gate said `EXCEEDED`.
+
+Put to the operator as a STOP with priced options, not absorbed as a
+footnote. **Ruling: BUDGET RE-DECLARED at the measured 356.** Grounds, to the
+same discipline as the first re-declaration:
+
+- The cone never moved. Every added line sits inside a change site this
+  document already enumerated — `_resolve_circuit_policy`,
+  `QualificationCircuitPolicyV1`, `_QualificationCircuit.record`.
+- The overrun is not scope creep; it is correctness the first pass got wrong.
+  Two of the thirteen regression tests were VACUOUS (green on a tree with no
+  breaker at all), the resolver CRASHED the battery on a value
+  `str.isdigit()` accepts and `int()` refuses, and two roads to the same OFF
+  behaviour warned on only one of them.
+- The compression option was MEASURED and rejected: rewriting the notice
+  chain as a declared table (better design, and kept) came out four lines
+  LARGER, not smaller. The content is irreducible.
+- The one option that would have fit — dropping the INERT and THRESHOLD
+  warnings — was rejected for cause: it reinstates a confirmed violation of
+  the 2026-08-28 law, leaving a reconfigured gate that skips twenty live
+  cases on a single blip with zero trace in the record.
+
+Condition, carried forward unchanged: the re-declaration and its grounds are
+recorded here, and `tools/diff_budget.py` stays armed at its normal ceiling
+for every future tranche. **This is a re-declaration, not a repeal.**
+
+### What the review found, recorded because it shipped once
+
+| # | defect in `70fdef7e6` | disposition |
+|---|---|---|
+| 1 | R7 and R8 were **vacuous** — both pass on the pre-fix tree; neither asserted the breaker existed or fired | strengthened; both now fail pre-fix with `AssertionError` |
+| 2 | "a battery that never trips writes the bytes it wrote before" is **over-broad** | corrected in §1; the all-admitted case is proven, the general case is false, and the reach is the BUNDLE digest not the SUBJECT digest |
+| 3 | `_resolve_circuit_policy` **crashed the battery** on `'²'` (`isdigit()` true, `int()` raises), contradicting its own docstring and R13 | guarded by the parse itself; regression test sweeps six hostile values |
+| 4 | a **reconfigured gate that never fired left zero trace** — the emission rule bought byte-identity with silence | record is emitted for any departure from the shipped policy |
+| 5 | `code_prefixes=()` **silently disabled** the gate — same OFF behaviour as `enabled=False`, no warning | typed `..._INERT` notice; both roads to OFF now warn |
+| 6 | the explicit road **refused** what the environment road clamped | clamped in the model; the two roads resolve identically |
+
+Two further findings were recorded rather than fixed: `minimum_block_failures
+= 20` means a single non-arming failure in a block prevents that block from
+opening the circuit, so the bound is guaranteed only for a uniformly-arming
+block (the knob lowers it, and lowering it now warns); and
+`derive_route_seat_model_classification` consumes synthesized cases, which is
+unchanged from pre-fix behaviour but was not analysed in §1's disposition.
+
 ## 3. The cause, re-measured on THIS tree
 
 The brief's cited `cli/doctor.py:535-560` HAS moved, as BATCH.md said. That
@@ -141,7 +208,12 @@ looked.
 ### The defect in one table, re-measured offline on the CURRENT default subject
 
 Real doctor, real manifest, real endpoint, real ladder; only the socket and
-the clock faked. 15 pairs, 360 cases:
+the clock faked. 15 pairs; 300 cases by `summary.case_count`, **360 cases
+actually executed** (three pairs re-exercise a fresh block of twenty, and the
+first draw is preserved rather than counted in the summary) — the executed
+figure is the right basis for a cost. Both rows below are the PRE-FIX mode:
+breaker absent AND the legibility branches removed, which is the only
+configuration in which the two records can be identical.
 
 | account-level condition | HTTP calls | sleeps | mandated wait | record written |
 |---|---|---|---|---|
@@ -162,12 +234,44 @@ own tranche says why, in its author's words
 command; without a leading `./`, bash searches PATH first and sources
 `/usr/bin/env` — the coreutils BINARY — which sets nothing, so the doctor ran
 against an empty key and every call returned HTTP 401."* A 401 is not on the
-retryable list, so **the ladder never slept once** and that battery took about
-a minute, not eighteen.
+retryable list, so **the ladder never slept once**.
+
+**Corrected after an independent re-derivation.** An earlier form of this
+paragraph said that battery "took about a minute". That was an INFERENCE from
+140 calls and zero sleeps, stated as if it were a measurement, and it is not
+evidenced: `CHECKLIST.md:356` records that invocation as MANUAL — *"The ladder
+itself was never affected (it sources an absolute path)"* — so it has **no
+committed timing at all**. What the record does support: no committed timing
+exists for it, and the five committed qualification batteries in the same
+tranche's driver log (`driver.log:164-165, 256-259, 344-347`) ran 3m19s,
+2m58s, 2m28s, 2m05s and 2m41s. The eighteen-minute figure remains unsupported
+— the wall-clock interval one audit cites for it (`10:43:39 → 11:01:55`)
+appears nowhere in the repository except in that audit's own sentence.
 
 The number was wrong. The defect is real, and is now better evidenced than
-the audit had it. **C1** parks the ERRATA correction the two audit documents
-still owe; `docs/ERRATA.md` is outside this cone.
+the audit had it.
+
+**C1's target list, corrected from two to FOUR.** A repo-wide census of the
+committed carriers, so the parked prompt names the right files:
+
+| # | file:line | what it says |
+|---|---|---|
+| 1 | `experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md:551` | "80 cases × 4 pairs of bounded ladders is how 18 minutes is spent" |
+| 2 | `experiments/2026-08-28-audit-run-problems/PARKED.md:463-464` | "The 18 minutes is 80 bounded ladders, not one unbounded one" |
+| 3 | `experiments/2026-08-28-audit-run-problems/second-window/AUDIT_REPORT.md:561-563` | "≈ 19 minutes, against the 18 minutes epoch 2's qualification actually took (10:43:39 → 11:01:55)" |
+| 4 | `experiments/2026-08-28-audit-run-problems/second-window/PARKED.md:187-188` | "≈ 19 min, against the measured 18 min" |
+
+Row 3 is the one C1 most needs to name: it is the only carrier that
+manufactures a PROVENANCE — a wall-clock interval — and that interval has no
+committed source. Rows 2 and 4 are the parked-prompt texts, i.e. the ones a
+future runner is actually handed.
+
+Ruled out explicitly: `experiments/2026-08-26-pc2-rematch/PREREG.md:481`
+("Eighteen minutes spent") describes a DIFFERENT phenomenon — reason-run
+socket timeouts, not a qualification battery — and is not a C1 target.
+
+`docs/ERRATA.md` is outside this cone, so C1 stays parked; what this tranche
+owes it is an accurate target list, and that is now on the record.
 
 ## 4. The fix — change sites, enumerated before code
 
