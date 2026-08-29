@@ -4,10 +4,23 @@ Orchestrator manifest. Four lanes, each in its own git worktree on its own
 branch, integrated SERIALLY into `claude/deepreason-ultracode-batch-7j6vqe`.
 Setup baselines, measured before any lane started, are in `SETUP.md`.
 
-**Three lanes delivered and are integrated. Two tranches are WITHHELD on
-operator decisions — both stopped on the same mechanized instrument, neither
-waived.** Nothing was worked around, no assertion was weakened anywhere, and
-no frozen surface was touched.
+**ALL FIVE lanes are now delivered.** Three (D, A, B1) were integrated on
+2026-08-29. The two that were WITHHELD on operator stops — C and B2 — were
+never pushed and were **LOST when their container was reclaimed**
+(`LOSS.md`); both were re-run from scratch on the same day against the
+surviving evidence, under the operator's rulings, and delivered.
+
+Nothing was worked around and no assertion was weakened anywhere. ONE frozen
+surface was touched, by lane B2, under a standing grant disposed row by row
+before the code (`INV-frozen-surfaces.md`, granted contact 2026-08-29).
+
+**The batch's main result held a second time, and then a third.** Lanes D and
+B1 shipped work that passed their own review and green checks and was still
+wrong. So did lane C's first implementation — six confirmed defects, including
+two regression tests that were VACUOUS on a tree with no fix in it. So did
+lane B2's — five more, one of them raised by the operator challenging a
+premise. Every one was found by a skeptic RE-RUNNING the claims rather than
+reading them.
 
 ---
 
@@ -18,24 +31,46 @@ no frozen surface was touched.
 | **A** | `2026-08-28-change-premise-invitation-reachability` (P11) | **DELIVERED, integrated** | 21 paths | `premises.py`, `rules/crit.py`, `signals.py` | full gate on merged tree **4443 passed, 6 skipped, 0 failed**; docs_verify 4 failed = baseline, delta zero; ring after integration 54 passed |
 | **D** | `2026-08-29-change-seam-capabilities-x-channels` (P5) | **DELIVERED, integrated** | 13 paths | **none — docs only** | `--audit` 0 findings; `--links` 0 dangling over 70 documents; all 33 check lines of both touched documents run by hand, 0 failed; ring after integration 56 passed |
 | **B1** | `2026-08-29-defect-managed-path-config-read` (P14) | **DELIVERED, integrated** (gap closed post-verification) | 45 paths | `preparation.py`, `cli/main.py` (75 insertions, diff budget WITHIN 150) | ring 172 passed, 0 failed; blast-radius ring 219 passed, 1 skipped; 6 of 6 committed digest pins UNMOVED |
-| **B2** | `2026-08-29-change-config-carriage` (P15) | **WITHHELD — operator stop** | not integrated | — | work complete and green; implementation uncommitted, preserved as `proof/implementation.patch` |
-| **C** | `2026-08-29-defect-qualification-circuit-breaker` (P7-A) | **WITHHELD — operator stop** | 26 paths on its branch | `cli/doctor.py`, `llm/endpoints.py` | full gate on its branch **4451 passed, 6 skipped, 0 failed**; 13 mutations, one per regression test |
+| **B2** | `2026-08-29-change-config-carriage` (P15) | **DELIVERED** (re-run 2026-08-29; the withheld work was LOST — see `LOSS.md`) | 12 paths | `run_manifest.py` (surface 4, granted) | ring **161 → 187 passed, 0 failed**; carriage 0 of 25 → **24 of 25**; 24 of 25 move no subject digest; 72 committed manifests inert, delta zero |
+| **C** | `2026-08-29-defect-qualification-circuit-breaker` (P7-A) | **DELIVERED** (re-run 2026-08-29; the withheld work was LOST — see `LOSS.md`) | 11 paths | `cli/doctor.py`, `llm/endpoints.py` | ring **190 → 216 passed, 0 failed**; 6/6 GOAL criteria PASS; 13 mutations one per test, plus 6 defects found by adversarial re-run and fixed |
 
 Integration order was D, A, B1 — cheapest first, so a late failure could not
 strand finished work. C and B2 were not integrated; see §2.
 
-### Frozen surfaces — the grant was forecast and NEVER USED
+### The two withheld lanes, re-run — added 2026-08-29
+
+Both were finished, green and parked on an operator stop, and **neither was
+ever pushed**. The container was reclaimed and took the branches, the tranche
+directories, the `STOP.md` briefs and `proof/implementation.patch` with it.
+`LOSS.md` records the evidence that they were gone rather than misplaced, and
+the discipline that would have prevented it: **a STOP is a phase boundary**,
+and work parked awaiting a verdict is finished work that must be pushed at the
+moment it is parked.
+
+Both were redone from the surviving committed evidence, under the operator's
+rulings, on 2026-08-29. Every number in their rows above is a fresh
+measurement, not an inherited one.
+
+### Frozen surfaces — the forecast grant was NOT used by the original batch,
+### and IS used by the re-run
 
     git diff --name-only origin/main...HEAD | grep -E "capabilities/state\.py|/harness\.py|/invariants\.py|/run_manifest\.py|/qualification\.py|llm/firewall\.py"
     -> (no output)
 
 Surface 4 (`run_manifest.py`) was forecast for B2 and granted conditionally.
-B2 is withheld and its implementation is uncommitted, so no committed history
-on this branch touches any of the seven frozen paths. **`SETUP.md`'s forecast
-of a fifth `docs_verify` failure from the `INV-frozen-surfaces.md:297` branch
-tripwire is therefore RETIRED — the tripwire correctly stays green.** The
-forecast was honest when written and is wrong in outcome; recorded rather than
-deleted.
+
+**In the original batch that grant was never used**, because B2 was withheld
+with its implementation uncommitted — so `SETUP.md`'s forecast of an extra
+`docs_verify` failure from the `INV-frozen-surfaces.md:297` branch tripwire did
+not occur. That was recorded here as RETIRED.
+
+**In the re-run it IS used, and the forecast is reinstated.** B2's carriage
+touches `run_manifest.py` under the standing grant, disposed row by row in
+`SPEC.md` §1 before the code and recorded in `INV-frozen-surfaces.md` with a
+re-runnable check proven RED under three mutations. The `:297` tripwire is
+therefore RED on this branch, as parked defect **P16** predicts for any branch
+holding a granted contact — a tripwire that cannot tell a granted contact from
+an ungranted one. It is not filed down.
 
 ---
 
