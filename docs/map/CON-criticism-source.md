@@ -1,5 +1,5 @@
 <!-- DR-CON-criticism-source -->
-Verified-at: 7e1ab8a54
+Verified-at: 499886a3e
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/crit.py
 Seams: DR-SEAM-rules-x-scratch
@@ -167,11 +167,4 @@ for model in (O, B):
   own outcome stays on `premise-citation:`, which is what the M2 census counts,
   and this signal deliberately does not touch it.
 `check: python -m pytest tests/test_premise_channel_loop.py::test_a_declined_invitation_is_typed_on_the_record tests/test_premise_channel_loop.py::test_a_premise_filed_without_citations_is_typed_as_uncited tests/test_premise_channel_loop.py::test_an_uninvited_dispatch_records_no_disposition tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status -q`
-`check: python -c "
-import ast, inspect
-from deepreason.rules.crit import _file_attribution
-body = ast.parse(inspect.getsource(_file_attribution)).body[0].body
-stmts = [n for n in body if not isinstance(n, (ast.Expr, ast.ImportFrom))]
-first = ast.unparse(stmts[0])
-assert '_premise_invited_problem' in first, first
-"`
+`check: python -c "import ast, inspect; from deepreason.rules.crit import _file_attribution; body = ast.parse(inspect.getsource(_file_attribution)).body[0].body; stmts = [n for n in body if not isinstance(n, (ast.Expr, ast.ImportFrom))]; first = ast.unparse(stmts[0]); assert '_premise_invited_problem' in first, first"`
