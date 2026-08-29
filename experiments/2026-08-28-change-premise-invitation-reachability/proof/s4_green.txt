@@ -1,0 +1,9 @@
+MUTATION PROOF, GREEN HALF (S4). The SAME command as proof/s4_red.txt:
+    python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py -q
+run against the CHANGED tree (the ladder in premises.py, the disposition
+receipt in rules/crit.py, the declaration in signals.py). The seven tests
+that were red are green, and the five that guarded unchanged behaviour are
+still green -- so the change did what it claimed and nothing beside it.
+
+.............................................                            [100%]
+45 passed in 3.04s

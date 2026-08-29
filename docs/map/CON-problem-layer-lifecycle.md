@@ -146,12 +146,32 @@ re-derivable and owes no certificate.
 ## The producer, wired
 
 The critic's pack gains an INVITATION when the problem it is working has
-accumulated `PREMISE_INVITE_AFTER` refuted candidates and carries no standing
-attribution. The critic answers in one optional contract field (`premise`) on
-its existing contracts — no new role, no new `contract_id`, so no qualification
-subject digest moves. `rules/crit.py::_file_attribution` gates registration on
-the INVITATION rather than on the field, so a call cannot file work no producer
-offered.
+accumulated enough refuted candidates. The critic answers in one optional
+contract field (`premise`) on its existing contracts — no new role, no new
+`contract_id`, so no qualification subject digest moves.
+`rules/crit.py::_file_attribution` gates registration on the INVITATION rather
+than on the field, so a call cannot file work no producer offered.
+
+**"Enough" is a LADDER, not a one-shot.** Every invitation costs
+`PREMISE_INVITE_AFTER` refuted candidates: a problem already standing N
+attributions must reach `PREMISE_INVITE_AFTER × (N + 1)` before it may ask
+again, so the number of invitations one problem can ever stand is bounded by
+`floor(refuted / PREMISE_INVITE_AFTER)` — bought by refutations the run had to
+produce anyway. With N = 0 this is byte-for-byte the rule that shipped before
+2026-08-28, so a run that never files a premise sees no difference.
+
+The ladder replaced a LATCH, and the record is why. Until 2026-08-28 one
+standing attribution closed a problem to further invitations for the rest of the
+run. Measured over the four committed technique roots: 98 critic dispatches, 5
+carried the invitation, and in the largest root the gate was open at 2 of 44
+dispatches and shut from seq 187 to the run's end at 989 — while that run
+established at **seq 779**, in a surviving conjecture, that its own question was
+malformed. The ladder opens the same root at 10 of 44, five of them before seq
+779 (`experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md` §F-B;
+`experiments/2026-08-28-change-premise-invitation-reachability/probes/p11_ladder_counterfactual.py`).
+
+`check: python -m pytest tests/test_premise_channel.py::test_a_late_refutation_reopens_the_invitation tests/test_premise_channel.py::test_the_ladder_charges_the_same_rung_for_every_re_invitation tests/test_premise_channel.py::test_the_ladder_is_the_shipped_rule_when_no_attribution_stands tests/test_premise_channel.py::test_refuting_an_attribution_lowers_the_rung -q`
+`check: python -c "import inspect, re; from deepreason.premises import premise_work_invited as f, PREMISE_INVITE_AFTER as A; s = inspect.getsource(f); assert A == 2, A; assert re.search(r'return refuted >= after \* \(standing \+ 1\)', s), s"`
 
 The scheduler's three consults are all attention: a `retired` problem leaves
 the candidate pool, a marked problem yields one rank position (after the SEED
@@ -213,7 +233,7 @@ reach a label.
 `open_orphans` (marked and unresolved — the work), `orphan_causes` (problem →
 what fell), `batch_translation_offers` (§9.8's groups), `standing_resolutions`,
 `retired_problems`,
-`premise_work_invited` (the producer rule), `file_premise` (registers X and ρ),
+`premise_work_invited` (the producer rule — the LADDER above, not a one-shot), `file_premise` (registers X and ρ),
 `premise_rent_sweep` (the demarcation adjudication),
 `independence_resolution_rate` (the over-binding diagnostic).
 

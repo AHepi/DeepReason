@@ -485,3 +485,81 @@ def test_the_producer_stands_down_once_a_premise_is_attributed(harness):
     _attribution(harness, problem, premise.id)
 
     assert not premise_work_invited(harness, problem, after=2)
+
+
+def _refute(harness, problem, label):
+    candidate = _addressed(harness, problem, f"answer {label}")
+    attack(harness, candidate.id, f"refutation {label}")
+    return candidate
+
+
+def test_a_late_refutation_reopens_the_invitation(harness):
+    """The ladder (P11 answer 1). The latch is the wound, not the threshold:
+    the technique run established at seq 779 that its own question was
+    malformed, 593 events after the only channel for saying so had closed
+    (experiments/2026-08-28-audit-run-problems/AUDIT_REPORT.md section F-B).
+
+    A criticism that arrives late must still find the channel open, and the
+    price of re-opening it is another `after` refutations -- not nothing.
+    """
+    problem = _problem(harness, "why does the kettle whistle")
+    for i in range(2):
+        _refute(harness, problem, i)
+    assert premise_work_invited(harness, problem, after=2)
+
+    premise = art(harness, "a kettle is the kind of thing that whistles")
+    _attribution(harness, problem, premise.id)
+    assert not premise_work_invited(harness, problem, after=2)
+
+    # One further refutation does not buy the next rung: the ladder charges
+    # `after` for every invitation, so a single late failure cannot re-ask.
+    _refute(harness, problem, 2)
+    assert not premise_work_invited(harness, problem, after=2)
+
+    # The second one does. This is the case the record needed and never got.
+    _refute(harness, problem, 3)
+    assert premise_work_invited(harness, problem, after=2)
+
+
+def test_the_ladder_charges_the_same_rung_for_every_re_invitation(harness):
+    """Bounded at `floor(refuted / after)` invitations per problem, so the
+    channel's cost is bought by refutations the run had to produce anyway."""
+    problem = _problem(harness, "why does the kettle whistle")
+    for i in range(6):
+        _refute(harness, problem, i)
+
+    for standing in range(3):
+        assert premise_work_invited(harness, problem, after=2), standing
+        premise = art(harness, f"a kettle presupposes {standing}")
+        _attribution(harness, problem, premise.id)
+
+    # Six refutations bought three invitations and no more.
+    assert not premise_work_invited(harness, problem, after=2)
+
+
+def test_refuting_an_attribution_lowers_the_rung(harness):
+    """N1, unchanged by the ladder: attacking the attribution ("the problem
+    never assumed that") releases the rung it occupied, because
+    `standing_attributions` counts only unrefuted ones."""
+    problem = _problem(harness, "why does the kettle whistle")
+    for i in range(2):
+        _refute(harness, problem, i)
+    premise = art(harness, "a kettle is the kind of thing that whistles")
+    attribution = _attribution(harness, problem, premise.id)
+    assert not premise_work_invited(harness, problem, after=2)
+
+    attack(harness, attribution.id, "the problem never assumed that")
+    assert premise_work_invited(harness, problem, after=2)
+
+
+def test_the_ladder_is_the_shipped_rule_when_no_attribution_stands(harness):
+    """The change is a strict extension: with zero standing attributions the
+    ladder reduces to `refuted >= after`, so no run that never filed a premise
+    sees any difference at all."""
+    problem = _problem(harness, "why does the kettle whistle")
+    assert not premise_work_invited(harness, problem, after=2)
+    _refute(harness, problem, 0)
+    assert not premise_work_invited(harness, problem, after=2)
+    _refute(harness, problem, 1)
+    assert premise_work_invited(harness, problem, after=2)
+    assert standing_attributions(harness) == []
