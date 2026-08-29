@@ -434,6 +434,38 @@ than one-hop. Widening an enumeration without pinning why the new member is
 admissible turns a check into a formality, which is the failure mode
 `docs_verify --audit` exists to refuse.
 
+**Confirmed after the fix**, by re-running only what was not green:
+
+```
+$ python tools/docs_verify.py --failed
+docs_verify [failed-only]: 68 documents, 4 checks, 1127 skipped (green last run)
+  FAIL CON-run-identity.md:200 / :202 / :204   (shallow-clone git history)
+  FAIL INV-frozen-surfaces.md:181              (pre-existing, parked P7)
+docs_verify: 4 failed
+```
+
+Back to the four that were failing before this tranche began. The
+`SEAM-evaluation-x-ontology` check is green, confirmed twice — once by running
+its command directly and once here.
+
 `Verified-at:` was NOT advanced on any map document this tranche touched.
 Every check ADDED runs and passes; the documents' full check sets were not
 re-derived, and a stale stamp is honest where a false one is not.
+
+---
+
+## Tranche closed
+
+| Instrument | Result |
+|---|---|
+| full gate | **4374 passed, 6 skipped, 0 failed** |
+| docs_verify | **4 failed — all four pre-existing**, none introduced here |
+| containment probe | every escape refused; BEFORE/AFTER from the same script |
+| mutation proof | M1 boundary: 9 red → 20 green. M2 default: 6 red → 9 green |
+| frozen surfaces | 2 touched inside `verification/`, documented per C7; 5 untouched |
+| parked | 9 entries, each with a ready-to-send prompt |
+
+Two container restarts interrupted this tranche's final instrument runs. No
+work was lost: every phase was committed and pushed at its boundary, the
+checkout survived intact at `cae5df984`, and the only casualties were
+long-running processes, which were re-run.
