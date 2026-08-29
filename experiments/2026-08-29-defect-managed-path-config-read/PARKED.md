@@ -288,3 +288,54 @@ End state: either the tool carries a configuration (schema pin updated, smokes
 re-run in the same commit) or the divergence is recorded as a deliberate,
 documented limit of the MCP surface. Map moved in the same commit.
 ```
+
+## P23 — an ERRATA entry this tranche earned but could not write
+
+Found: stage 3 (implementation), 2026-08-29.
+
+`docs/map/CON-authority.md`'s Traps entry read, before this tranche, *"Since
+2026-08-28 the compile DISCLOSES each one it does not carry
+(`ENGINE_CONFIG_FIELD_NOT_CARRIED`)"*. True of the compiler; false of the
+MANAGED PATH, where the disclosure could not fire at all because the `Config`
+handed to `compile_run_manifest` never differed from its defaults in any
+dropped field. That sentence is exactly the kind of claim `docs/ERRATA.md`
+exists to record as already-found-wrong, so the next reader does not re-trust
+it.
+
+The Traps entry itself was REWRITTEN in the fix commit (never deleted, per
+SCHEMA.md), so the map no longer carries the wrong reading. What is missing is
+the append-only ERRATA ledger entry, and `docs/ERRATA.md` is outside this
+lane's file cone — it is not one of the map documents of the files this fix
+touches, and other windows are live in this repo. Not written rather than
+written outside the cone.
+
+A second, smaller candidate for the same entry: this tranche's own
+`STOP.md` (stage 1) recommended "road A", which stage 2 measured to be
+incoherent — a field the manifest echo DROPS is by definition absent from
+`engine_config_json`, and `config_from_run_manifest` reads nothing else, so
+carrying a dropped field cannot make it reach the run. That correction is
+already stated in `FIX.md` §2; it is named here only so the ERRATA entry, if
+written, covers both.
+
+**Ready-to-send prompt:**
+
+```
+Route: dr-change-orchestrator (a one-step documentation change).
+
+Goal, one sentence: append one docs/ERRATA.md entry recording that
+docs/map/CON-authority.md's pre-2026-08-29 Traps claim -- "Since 2026-08-28
+the compile DISCLOSES each one it does not carry" -- was true of the compiler
+and false of the managed path, where no configuration was ever read, and name
+the tranche that fixed it.
+
+Evidence: experiments/2026-08-29-defect-managed-path-config-read/ (defect P14);
+that tranche's REPRO.md and probe/echo_census.out (41 committed managed-path
+roots, one engine-config echo, zero compile notices); the rewritten Traps entry
+now in docs/map/CON-authority.md.
+
+Also cover, in the same entry or a sibling: that tranche's own STOP.md stage-1
+recommendation of "road A" (carry only the echo-dropped fields), withdrawn in
+FIX.md section 2 because a dropped field cannot reach the run.
+
+End state: docs/ERRATA.md carries the entry; nothing else changes.
+```
