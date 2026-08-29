@@ -90,6 +90,39 @@ Any claim that could rot gets a trailing check on its own line:
 A check must start at **column 0** — that is what lets the worked examples above
 sit inside an indented block without the verifier trying to run them.
 
+A check MAY SPAN SEVERAL LINES. It opens with a `check:` span at column 0 and
+closes at the first later line whose text ends with a backtick. The newlines
+between are part of the command, so a `python -c` body keeps its statements:
+
+    Cascade integrity re-frames the fallen problem's own scope, once.
+    `check: python -c "
+    import inspect
+    from deepreason.invariants import verify_root
+    block = inspect.getsource(verify_root)
+    assert '_framed_problem_ids(h, fallen.scope)' in block
+    "`
+
+The grammar is TOTAL: at column 0, `check:` opens a check or an ERROR — never
+prose. An opener that reaches the next column-0 opener, or the end of the
+file, without closing FAILS the run with an `unparseable check` line, and
+`--audit` reports it beside the vacuous ones. There is no third disposition,
+deliberately: a parser free to decide that an opener was "probably prose" is
+how 72 checks across 27 documents went unexecuted from this instrument's first
+day until 2026-08-29, while looking in the document exactly like checks that
+ran — the INV- documents worst of all, because a claim strong enough to need
+an invariant is usually defended by a multi-statement block.
+
+The price of totality is one authoring rule: **never begin a line with a
+quoted `check:` span you do not mean to run.** Wrap the sentence so the span
+sits mid-line, or indent it.
+
+`check: python tools/docs_verify.py --self-test && python -c "
+import sys; sys.path.insert(0, 'tools')
+import docs_verify as dv
+multi = [(d.path.name, n) for d in dv.documents() for n, c in d.checks if '\n' in c]
+assert len(multi) >= 70, len(multi)
+"`
+
 Use `python -m pytest`, never bare `pytest`: the container's PATH may resolve
 `pytest` to a tool shim that cannot see the editable install, which fails a
 check for a reason that has nothing to do with the claim.
@@ -155,9 +188,9 @@ field), not readers. When every candidate spec flags only readers — it happens
 `SEAM-evaluation-x-ontology` is the recorded case — leave the header off and
 say why in the body rather than shipping a spec that cries wolf.
 
-**Do not write a check that cannot fail.** `check: true` and
-`check: test -f src/deepreason/harness.py` are worse than no check, because they
-buy the claim false credibility. `tools/docs_verify.py --audit` flags checks
+**Do not write a check that cannot fail.** A check reading `check: true` is
+worse than no check, and so is `check: test -f src/deepreason/harness.py`:
+both buy the claim false credibility. `tools/docs_verify.py --audit` flags checks
 that pass against a deliberately mutated tree.
 
 ## How to READ the map
