@@ -1,0 +1,613 @@
+# Validation for: make the critic's byte-checked citation channel reachable, and stop it latching shut
+
+Every command below was re-run in this phase, in SPEC.md item order, on an idle
+box, with the map instruments and the gate run SEQUENTIALLY and never
+concurrently (`dr-drive-harness` §5b).
+
+## Acceptance checks
+
+**S1 (R1, R2, C1) — the ladder**
+
+    $ python -m pytest tests/test_premise_channel.py -k "producer or ladder" -q
+    4 passed, 25 deselected in 0.29s
+                                                                        : PASS
+
+    $ python -c "from deepreason.premises import PREMISE_INVITE_AFTER; assert PREMISE_INVITE_AFTER == 2"
+    (exit 0 — the threshold is untouched, C1)                           : PASS
+
+**S2 (R3, C5) — the disposition receipt**
+
+    $ python -m pytest tests/test_premise_channel_loop.py -k "declined or disposition" -q
+    4 passed, 12 deselected in 0.73s
+                                                                        : PASS
+
+    $ python -m pytest tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status -q
+    1 passed in 2.31s
+                                                                        : PASS
+
+    $ python -c "<the M2-census namespace check, SPEC.md S2 accept 3>"
+    M2 census namespace untouched OK                                    : PASS
+
+**S3 (R3) — the signal declaration**
+
+    $ python -m pytest tests/test_signal_contract.py tests/test_signals.py -q
+    19 passed in 3.66s
+                                                                        : PASS
+
+    $ python -c "from deepreason.signals import describe, is_known; assert is_known('premise-answer:DECLINED'); assert 'invitation' in describe('premise-answer:DECLINED')"
+    declared OK                                                         : PASS
+
+**S4 (R5) — the named regression, mutation-proven**
+
+    proof/s4_red.txt   (UNCHANGED tree):  7 failed, 38 passed in 3.23s
+    proof/s4_green.txt (CHANGED tree):    45 passed in 3.04s
+
+Same command both sides. The seven that flipped are what the change buys; the
+five that were green in BOTH are the guards on behaviour it must not move —
+`test_the_ladder_is_the_shipped_rule_when_no_attribution_stands`,
+`test_refuting_an_attribution_lowers_the_rung`,
+`test_an_uninvited_dispatch_records_no_disposition`,
+`test_the_producer_fires_after_enough_refutations`,
+`test_the_producer_stands_down_once_a_premise_is_attributed`.
+                                                                        : PASS
+
+**S5 (R6) — map, in the same commits.** See the Map section below.  : PASS
+
+**S6 (R2, R3, R4, R7, R8) — the written answers**
+
+    $ grep -c "^## " ANSWERS.md
+    5
+    $ grep -o "THE LATCH|THE EMPTY-REFS SILENCE|THE UNINVITED SCHEMA FIELD" ANSWERS.md | sort -u
+    THE EMPTY-REFS SILENCE
+    THE LATCH
+    THE UNINVITED SCHEMA FIELD
+                                                                        : PASS
+
+    $ git diff --stat origin/main -- src/deepreason/llm/contracts.py src/deepreason/llm/wire.py
+    (empty)
+                                                                        : PASS
+    R4's answer is NO, and it is decided by leaving the contract alone. The
+    empty diff IS the acceptance output.
+
+**S7 (R6, C7) — the gate.** See the Full gate section below.           : PASS
+
+**S8 (R8, R9) — parked and delivered**
+
+    $ grep -c "Ready-to-send prompt" PARKED.md
+    3                                                                   : PASS
+
+## Full gate
+
+    $ python -m pytest tests/ -q -n 4
+    4384 passed, 6 skipped in 879.80s (0:14:39)
+                                                                        : PASS
+
+0 failed. The C7 baseline is 4374; +10 is exactly the ten tests this tranche
+added (four gate-arithmetic tests in `test_premise_channel.py`, six loop tests
+in `test_premise_channel_loop.py`). No pre-existing failure to record, so
+nothing goes to PARKED.md on that account.
+
+## Record-behavior preservation
+
+**n/a, and the reason is checkable rather than asserted.** This change touches
+no reader or validator of the append-only record: `invariants.py`,
+`verification/`, `harness.py`, `capabilities/state.py`, `run_manifest.py` and
+`qualification.py` are all untouched (see the frozen-surface diff below). What
+it adds to the record is one new Measure family, and a Measure carries no
+state diff — `test_a_declined_invitation_moves_no_status` asserts that no
+status moves and no artifact is minted on the receipt's own events.
+
+The root sweep is RETIRED as an instrument (operator ruling 2026-08-22), so no
+sweep is owed and none was run; the targeted regression on committed roots is
+`probes/p11_ladder_counterfactual.py`, which replays all four committed
+technique roots read-only with `Harness.at()` and is the stronger instrument
+here because it looks at the exact predicate that changed.
+
+## Frozen-surface diff
+
+    $ git diff --stat origin/main..HEAD -- \
+        src/deepreason/capabilities/state.py src/deepreason/harness.py \
+        src/deepreason/invariants.py src/deepreason/run_manifest.py \
+        src/deepreason/qualification.py src/deepreason/verification/ \
+        src/deepreason/llm/firewall.py
+    (empty)
+
+Empty, as SPEC.md's forecast predicted and `tools/blast_radius.py` computed
+(`"frozen_surface_verdict": "CLEAR"`, `"frozen_surface_contacts": []`). All
+seven paths of the five surfaces are covered, plus the frozen-ADJACENT
+`route_fingerprint` file.                                               : PASS
+
+## Parallel-window cones (C4)
+
+    $ git diff --stat origin/main..HEAD -- \
+        src/deepreason/llm/layout.py src/deepreason/llm/packs.py \
+        src/deepreason/llm/roles.py src/deepreason/informal/trial.py \
+        src/deepreason/preparation.py
+    (empty)
+
+The render-layout tranche's and the manifest tranche's cones are untouched.
+`llm/packs.py` was READ (its `DISCLOSED_ON_DROP` set is what bounds the
+invitation's pack cost) and never written.                              : PASS
+
+## Map
+
+    $ python tools/docs_verify.py
+    docs_verify: 4 failed                                               : PASS
+
+    The four are exactly the C7 baseline and none names a file this tranche
+    touched: CON-run-identity.md:200/202/204 (three shallow-clone failures —
+    `fatal: ambiguous argument '1637e808'`, a revision this clone does not
+    carry) and INV-frozen-surfaces.md:181 (the pre-existing falsified
+    `transport_failure` census). Delta beyond four: ZERO.
+
+    $ python tools/docs_verify.py --audit
+    docs_verify --audit: 0 finding(s)                                   : PASS
+
+    $ python tools/docs_verify.py --links
+    docs_verify --links: 0 dangling reference(s), 68 document(s)        : PASS
+
+    $ python tools/docs_verify.py --coverage
+    docs_verify --coverage: 7 seam(s) swept, 18 without a Sweep: header, 2 finding(s)
+                                                                        : PASS (pre-existing)
+
+    Both findings name files outside this cone — `SEAM-periphery-x-verification.md:
+    enforcement site not named: src/deepreason/amendment/apply.py` and
+    `SEAM-schools-x-scratch.md: enforcement site not named:
+    src/deepreason/informal/trial.py`. Neither file is in this tranche's diff
+    (trial.py is a PARALLEL tranche's cone, C4), so neither finding can be
+    this change's, and neither is this change's to fix.
+
+    $ python tools/docs_verify.py --stale
+    docs_verify --stale: 8 document(s) worth re-reading
+
+    Every entry, judged rather than passed over:
+
+    - `SEAM-rules-x-scratch.md` — lists THIS tranche's commit 9b4801d2f,
+      because it owns `rules/crit.py`. **Dismissed with reason:** the document's
+      concern is the criticism/scratchpad separation, and the change adds no
+      scratch import and no pack parameter. Both of its enforcing tests are
+      green (`test_the_criticism_rule_imports_no_scratch_module`,
+      `test_the_criticism_rule_touches_scratch_only_as_an_ordering_fence`), and
+      its pinned `render_crit_pack`/`render_batch_crit_pack` parameter lists are
+      unchanged — which is exactly why no pack parameter was added.
+    - `CON-run-identity.md`, `INV-reference-menu.md`, `SEAM-llm-x-scheduler.md`,
+      `SUB-periphery.md`, `SUB-scheduler.md` — all list only cfe8d111c, a
+      commit from ANOTHER tranche (P-C2) that predates this branch.
+      **Dismissed:** not this tranche's staleness, and not this tranche's to
+      clear; also listed against `SEAM-rules-x-scratch.md` above.
+    - `SUB-llm.md`, `SUB-manifest.md` — list aa3e9cbc2 / ba4720a95 / 8240f8b95 /
+      b6727ceea / debff8d9b, all from earlier tranches. **Dismissed:** predate
+      this branch entirely.
+
+    None of the eight is stale BECAUSE of this change except
+    `SEAM-rules-x-scratch.md`, and that one is dismissed on its own green
+    checks rather than on assertion.
+
+    new checks added by this change:
+      docs/map/CON-problem-layer-lifecycle.md — 2 (the four ladder tests; the
+        arithmetic pin `refuted >= after * (standing + 1)` plus `A == 2`)
+      docs/map/CON-criticism-source.md — 2 (the four disposition tests; an AST
+        pin that the invitation lookup is the FIRST statement of
+        `_file_attribution`, which is the thing that would silently regress)
+      Both were RUN by hand before being written down, per DR-SCHEMA.
+
+    record observables added vs sweep probes:
+      One observable — the `premise-answer:{DECLINED|UNCITED|CITED}` Measure
+      family. Its probe is `probes/p11_ladder_counterfactual.py`, committed in
+      this tranche and re-run against the CHANGED tree, which reads the shipped
+      predicate directly (`"shipped_agrees_with_new": true` on all four roots).
+      The root sweep itself is RETIRED (operator ruling 2026-08-22) and is
+      therefore not owed; SPEC.md's step-4 guardrail is met by the absence-
+      tolerant direction of the change — the receipt is ADDITIVE, so every
+      committed root reads correctly with it absent, which is what
+      `test_an_uninvited_dispatch_records_no_disposition` and the four
+      historical roots (0 `premise-answer:` events, all still replayable)
+      demonstrate.
+
+    wheel smoke:
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+
+      Run even though the packaging surface did not move (no change to
+      pyproject.toml, console entry points, the MCP tool set or the wheel
+      layout), because no gate runs it and the cost of being wrong about
+      "untouched" is a silently rotted instrument.
+      `wheel_operational_smoke.py` NOT run and NOT owed: the operational
+      provider-facing surface did not move — no contract, no contract id, no
+      role, no endpoint and no manifest field changed.
+
+## Requirement sweep
+
+| R | demonstrated by |
+|---|---|
+| R1 (a problem can invite premise work more than once under a stated rule) | S1's four ladder tests; the shipped predicate replayed over four committed roots — epoch 6 goes from 2 to 10 open dispatches, `"shipped_agrees_with_new": true` |
+| R2 (answer the latch question, with the price) | ANSWERS.md §(1): the rule, all three alternatives refuted on measurements, and the price read from the prompt bytes (~1 035 tokens per invited dispatch; ~1.1 % of the epoch-6 run) |
+| R3 (type the invited-and-declined case; agree or refute) | ANSWERS.md §(2) AGREES and strengthens (four cases, not two); S2 + S3's tests; `test_an_uninvited_dispatch_records_no_disposition` proves silence still means never-asked |
+| R4 (decide the uninvited schema field) | ANSWERS.md §(3): NO, on four reasons, two of them read from source (the hardcoded contract id; the closed Literal → `pair_inventory` → qualification digest chain). Acceptance output is the EMPTY contract diff |
+| R5 (a regression driving a run where the channel opens after a late refutation) | `test_a_late_refutation_reopens_the_channel_in_the_real_loop`, driving `Scheduler.step` three times; mutation-proven in proof/s4_red.txt → proof/s4_green.txt |
+| R6 (full gate 0 failed; map in the same commit) | 4384 passed, 6 skipped, 0 failed; commits 13ed9b50f and 9b4801d2f each carry their map documents |
+| R7 (note that live M2 re-measurement waits for both tranches) | SPEC.md "R7 — live re-measurement of M2"; ANSWERS.md §R7 |
+| R8 (park the planted-presupposition probe) | PARKED.md P14, unstarted, with a ready-to-send prompt |
+| R9 (R-by-R delivery with pasted proof) | DELIVERY.md (next phase), built on this table |
+
+No R is deferred. Every one has an acceptance output above.
+
+## Assumptions carried (SPEC.md, for the operator to overrule)
+
+- **A1** — the reopen rule is the multiplicative ladder rather than "any new
+  refutation reopens". Chosen because the bare version is unbounded in
+  invitations per problem (~43 000 tokens on epoch 6 alone) and the brief asked
+  for the cost of re-asking to be priced.
+- **A2** — the disposition gets its own `premise-answer:` tag namespace. Forced
+  rather than chosen: `premise-citation:` IS the M2 census's definition.
+- **A3** — no committed digest pin moves. Verified: `qualification_digest: []`,
+  `wheel_smoke_pins: []`, and the frozen-surface diff is empty.
+- **A4** — `PREMISE_INVITE_AFTER` stays a module constant. The modularity law
+  wants it reachable as configuration and frozen surface 4 stands in the way;
+  parked as P16 rather than resolved silently.
+- **A5** — the disposition is derived from the same `_premise_invited_problem`
+  lookup the filing gate uses, not from the invitation the PACK carried, so the
+  record holds one answer to one question.
+
+Two budget overruns are also carried, both recorded as dated amendments in
+SPEC.md with the tool's own output pasted rather than by rewriting the headline
+to match the diff: total 416 insertions against an original 233 (the overrun is
+entirely in the regression tests R5/R6 mandate), and source 73 against 60, of
+which **10 are executable statements** and the remaining 63 are the signal
+declaration's required semantics and two docstrings naming the run ids the
+change answers to.
+
+## Verdict: PASS
+
+---
+
+# Segment 2 — 2026-08-29: validation of the MERGED state, against current main
+
+**Why this segment exists.** The segment above is true and is not withdrawn,
+but it measured the tranche against its OWN base, `2a5e984c8`. Current main is
+`25a3a0687`, 176 files ahead of that base. A PASS on a tree that is 176 files
+behind speaks about a tree that will never ship. This segment re-runs every
+SPEC.md acceptance check on the merged tree and records the result verbatim.
+
+Merge: `83876f025` — `lane/a-p11` (at `25a3a0687`) merged with
+`origin/claude/deepreason-premise-invitation-7qs3kc` (at `2cae3b972`).
+
+**One merge conflict, resolved, and it is the one C6 predicted.**
+`docs/ERRATA.md` only. Both sides minted **E57** from the same tail; both
+entries carried a written renumber instruction. Both are kept whole — they
+correct different documents and neither subsumes the other — and the INCOMING
+entry (this tranche's, on the citation-channel attribution) is renumbered to
+**E61** per its own instruction ("if a merge finds E57 already taken, renumber
+THIS entry, not theirs"). The entry records the collision and the renumber;
+`DELIVERY.md`'s two cross-references were updated to match. No other file
+conflicted; no semantic fork arose, so nothing was parked.
+
+Also recorded, and NOT this lane's to fix: the ledger already carried two
+earlier collisions from parallel minting — a second **E56** (~line 1545) and
+the **E57** at ~line 1410.
+
+**Box conditions, stated because they affect one number.** This lane ran inside
+a parallel batch; other lanes' processes were visible on the box during the
+gate, and the gate took 19:41 here against 14:39 in segment 1. Contention
+changes DURATION, not verdicts, and the verdict here is 0 failed — but the
+duration is recorded rather than presented as a clean-box measurement
+(`dr-drive-harness` §5b).
+
+## Acceptance checks, re-run on the merged tree
+
+**S1 (R1, R2, C1) — the ladder**
+
+    $ python -m pytest tests/test_premise_channel.py -k "producer or ladder" -q
+    ....                                                                     [100%]
+    4 passed, 25 deselected in 0.37s
+                                                                        : PASS
+
+    $ python -c "from deepreason.premises import PREMISE_INVITE_AFTER; assert PREMISE_INVITE_AFTER == 2"
+    PREMISE_INVITE_AFTER == 2 OK                                        : PASS
+
+**S2 (R3, C5) — the disposition receipt**
+
+    $ python -m pytest tests/test_premise_channel_loop.py -k "declined or disposition" -q
+    ....                                                                     [100%]
+    4 passed, 12 deselected in 0.80s
+                                                                        : PASS
+
+    $ python -m pytest tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status -q
+    .                                                                        [100%]
+    1 passed in 0.34s
+                                                                        : PASS
+
+    $ python -c "<SPEC.md S2 accept 3 — the M2-census namespace check>"
+    OK: premise-answer: present; no disposition on the premise-citation namespace
+                                                                        : PASS
+
+**S3 (R3) — the signal declaration**
+
+    $ python -m pytest tests/test_signal_contract.py tests/test_signals.py -q
+    ...................                                                      [100%]
+    19 passed in 3.91s
+                                                                        : PASS
+
+    $ python -c "from deepreason.signals import describe, is_known; assert is_known('premise-answer:DECLINED'); assert 'invitation' in describe('premise-answer:DECLINED')"
+    OK is_known + describe contains 'invitation'
+    "how one critic dispatch ANSWERED a standing premise invitation (suffix =
+     the typed disposition -- DECLINED, UNCITED or CITED; inputs: [signal,
+     problem id, target id]). Emitted only where an invitation actually stood,
+     so its ABSENCE means the dispatch was never asked, and its presence means
+     it was. ..."
+                                                                        : PASS
+
+**S4 (R5) — the named regression, mutation RE-DERIVED on the merged tree**
+
+Segment 1 cited `proof/s4_red.txt` and `proof/s4_green.txt`, both produced on
+the old base. Neither is taken on trust here; the RED half was re-derived by
+reverting the three behaviour files to their pre-tranche content ON THE MERGED
+TREE and re-running the identical command, then restoring:
+
+    $ git checkout 25a3a0687 -- src/deepreason/premises.py \
+        src/deepreason/rules/crit.py src/deepreason/signals.py
+    $ python -m pytest tests/test_premise_channel.py tests/test_premise_channel_loop.py -q
+    FAILED tests/test_premise_channel.py::test_a_late_refutation_reopens_the_invitation
+    FAILED tests/test_premise_channel.py::test_the_ladder_charges_the_same_rung_for_every_re_invitation
+    FAILED tests/test_premise_channel_loop.py::test_a_late_refutation_reopens_the_channel_in_the_real_loop
+    FAILED tests/test_premise_channel_loop.py::test_a_declined_invitation_is_typed_on_the_record
+    FAILED tests/test_premise_channel_loop.py::test_a_premise_filed_without_citations_is_typed_as_uncited
+    FAILED tests/test_premise_channel_loop.py::test_a_declined_invitation_moves_no_status
+    FAILED tests/test_premise_channel_loop.py::test_the_disposition_signal_is_declared
+    7 failed, 38 passed in 3.15s
+    $ git checkout HEAD -- src/deepreason/premises.py \
+        src/deepreason/rules/crit.py src/deepreason/signals.py
+    $ git status --porcelain
+    (empty — tree restored)
+
+Byte-for-byte the same seven failures as `proof/s4_red.txt`. Reverting the
+three files is an exact reconstruction of the pre-change tree here, because
+main changed none of them between `2a5e984c8` and `25a3a0687`.
+
+    $ python -m pytest tests/test_premise_channel_loop.py tests/test_premise_channel.py -q
+    .............................................                            [100%]
+    45 passed in 2.95s
+                                                                        : PASS
+
+The mutation pair therefore holds on the MERGED tree, re-derived rather than
+inherited: 7 red before, 45 green after, same command.
+
+**S5 (R6) — map, in the same commits.** See the Map section below.  : PASS
+
+**S6 (R2, R3, R4, R7, R8) — the written answers**
+
+    $ test -f ANSWERS.md && grep -q "THE LATCH" && grep -q "THE EMPTY-REFS SILENCE" && grep -q "THE UNINVITED SCHEMA FIELD"
+    OK: ANSWERS.md present with all three headings                      : PASS
+
+    $ git diff --stat 25a3a0687..HEAD -- src/deepreason/llm/contracts.py src/deepreason/llm/wire.py
+    (empty)
+                                                                        : PASS
+    (`origin/main` resolves to `25a3a0687` in this worktree, so this is
+    SPEC.md's own command with the ref spelled out.)
+
+**S7 (R6, C7) — the gate.** See the Full gate section below.           : PASS
+
+**S8 (R8, R9) — parked and delivered**
+
+    $ grep -c "Ready-to-send prompt" PARKED.md
+    3                                                                   : PASS
+
+    $ grep -c '^| R[1-9]' DELIVERY.md
+    9  (R1..R9, one row each)                                           : PASS
+
+## Full gate (merged tree)
+
+    $ python -m pytest tests/ -q -n 4
+    ........................................................                 [100%]
+    4443 passed, 6 skipped in 1181.46s (0:19:41)
+                                                                        : PASS
+
+0 failed. The count is 4443, not segment 1's 4384, because current main brings
+its own new tests (render-layout, manifest disclosure, wander cap, lifecycle
+refusal, repair vocabulary and others). The C7 baseline of 4374 was stated for
+`2a5e984c8` and does not apply to `25a3a0687`; what is checked here is the only
+thing that transfers — **0 failed**.
+
+## Record-behavior preservation
+
+n/a on the merged tree for the same checkable reason as segment 1: the
+frozen-surface diff below is empty, so no reader or validator of the
+append-only record is touched. The root sweep is RETIRED (operator ruling
+2026-08-22) and is not owed.
+
+## Frozen-surface diff (merged tree)
+
+    $ git diff --stat 25a3a0687..HEAD -- \
+        src/deepreason/capabilities/state.py src/deepreason/harness.py \
+        src/deepreason/invariants.py src/deepreason/verification/ \
+        src/deepreason/run_manifest.py src/deepreason/qualification.py \
+        src/deepreason/llm/firewall.py
+    (empty)
+                                                                        : PASS
+
+All seven paths of the five surfaces, plus the frozen-ADJACENT
+`route_fingerprint` file. Nothing to STOP for under C3.
+
+## Parallel-window cones (C4), merged tree
+
+    $ git diff --stat 25a3a0687..HEAD -- \
+        src/deepreason/llm/layout.py src/deepreason/llm/packs.py \
+        src/deepreason/llm/roles.py src/deepreason/informal/trial.py \
+        src/deepreason/run_manifest.py src/deepreason/preparation.py
+    (empty)
+                                                                        : PASS
+
+## Merged footprint
+
+    $ git diff --stat 25a3a0687..HEAD | tail -1
+    20 files changed, 3636 insertions(+), 26 deletions(-)
+
+Source files touched: `premises.py` (+29/-10), `rules/crit.py` (+31/-6),
+`signals.py` (+21). Everything else is tests, map documents, the tranche
+directory and the ERRATA entry.
+
+## Map (merged tree)
+
+    $ python tools/docs_verify.py
+    docs_verify [full]: 69 documents, 1153 checks, 4 workers
+      FAIL CON-run-identity.md:200  (shallow clone: rename history absent)
+      FAIL CON-run-identity.md:202  fatal: ambiguous argument '1637e808'
+      FAIL CON-run-identity.md:204  fatal: ambiguous argument 'f304fec1'
+      FAIL INV-frozen-surfaces.md:181  (pre-existing falsified transport_failure census)
+    docs_verify: 4 failed                                               : PASS
+
+    Exactly the four-failure baseline this lane was given, and none names a
+    file this tranche touched. **Delta beyond four: ZERO.**
+
+    $ python tools/docs_verify.py --audit
+    docs_verify --audit: 0 finding(s)                                   : PASS
+
+    $ python tools/docs_verify.py --links
+    docs_verify --links: 0 dangling reference(s), 69 document(s)        : PASS
+
+    $ python tools/docs_verify.py --coverage
+    docs_verify --coverage: 7 seam(s) swept, 18 without a Sweep: header, 2 finding(s)
+                                                                        : PASS (pre-existing)
+
+    The two findings are unchanged from segment 1 and name files outside this
+    cone (`amendment/apply.py`, `informal/trial.py` — the latter a parallel
+    tranche's cone under C4). Noted, not fixed: `SEAM-scheduler-x-rules.md` is
+    among the 18 documents with no `Sweep:` header and this tranche DID touch
+    it (line 58), so the tool's "add when next touched" advice went untaken.
+    It is advisory, not a finding, and adding a header is an edit validation
+    may not make.
+
+    $ python tools/docs_verify.py --stale
+    docs_verify --stale: 15 document(s) worth re-reading
+
+    Fifteen, against segment 1's eight, because current main's own tranches
+    moved files. Judged rather than passed over:
+
+    - Listing a commit from THIS tranche (`9b4801d2f`) or the merge
+      (`83876f025`): `CON-authority.md`, `CON-packs-and-token-economy.md`,
+      `INV-signal-contract.md`, `SEAM-rules-x-scratch.md`.
+      **All four dismissed, each on its own green checks rather than on
+      assertion** — every check in all four ran in the full pass above and
+      none is among the four baseline failures. Specifically:
+      `CON-authority.md` — the change resolves no authority and adds no
+      warrant; `CON-packs-and-token-economy.md` — no pack parameter and no
+      pack call was added, and its `DISCLOSED_ON_DROP` pin (which M4 leans on)
+      is unmoved; `INV-signal-contract.md` — the tranche ADDED a signal
+      through the declared channel that document governs, which is the
+      sanctioned path (`DR-REC-add-signal`) and changes no contract, and the
+      registry's own enforcement (`test_signals.py::
+      test_every_emitted_signal_is_registered`) is green;
+      `SEAM-rules-x-scratch.md` — no scratch import and no pack parameter,
+      both enforcing tests green, as segment 1 recorded.
+    - The other eleven (`CON-run-identity.md`, `CON-scheduler-ranking.md`,
+      `INV-evidence-channels.md`, `INV-reference-menu.md`,
+      `SEAM-llm-x-scheduler.md`, `SEAM-scheduler-x-workflow.md`,
+      `SUB-application.md`, `SUB-llm.md`, `SUB-periphery.md`,
+      `SUB-scheduler.md`, `SUB-workflow.md`) list only commits from OTHER
+      tranches already on main (`4b801172b`, `aeb83d3c5`, `1baa2a791`,
+      `a40450f1c`, `75da91e26`, `9a7b75388`, `5f7e413d6`, `47206940c`,
+      `25a3a0687`). **Dismissed: not this tranche's staleness and not this
+      tranche's to clear.**
+
+    wheel smoke, re-run on the merged tree (main moved `cli/main.py`, so the
+    "untouched" claim is no longer free):
+
+      $ python scripts/wheel_smoke.py
+      wheel smoke passed: isolated V6-only contents, clean imports, exact entry
+      points, module parity, MCP registration, and exact MCP schemas
+                                                                        : PASS
+
+      `wheel_operational_smoke.py` NOT run and NOT owed: no contract, contract
+      id, role, endpoint or manifest field moved in this tranche's diff.
+
+## Findings from this validation (neither is a FAIL; both are reported)
+
+**F1 — one of the tranche's four new map checks is in the MULTI-LINE form,
+which `tools/docs_verify.py` on this tree does not parse, so it is never run.**
+Measured, not inferred, by asking the parser itself:
+
+    $ python -c "import sys; sys.path.insert(0,'tools'); import docs_verify as dv, pathlib;
+      print(len(dv.parse(pathlib.Path('docs/map/CON-criticism-source.md')).checks))"
+    13     # and the parsed line numbers stop at 169 — the block opening at 170
+           # (the AST pin on _file_attribution's first statement) is absent
+
+The cause is `docs_verify._CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")`
+— a check must open AND close on one line, so a block whose first line ends in
+`python -c "` matches nothing and is silently skipped.
+
+Three things bound how much this matters, and all three are measured:
+
+1. **The claim is TRUE.** Run by hand on the merged tree it passes:
+   `BY HAND: PASS -> problem_id = _premise_invited_problem(harness, target_id)`.
+   The map does not lie; it carries one claim the instrument does not check.
+2. **The behaviour is still covered by a check that DOES run.** The live
+   single-line check at `CON-criticism-source.md:169` runs
+   `test_a_declined_invitation_is_typed_on_the_record`, which is red the
+   moment the invitation lookup moves back below the premise-text return —
+   that is exactly the regression the inert AST pin was a second guard for.
+   So `dr-validate-change`'s "behaviour added is covered by at least one new
+   map check" is satisfied: 3 of the 4 new checks are live.
+3. **The form is a PRE-EXISTING pattern in the same document, not something
+   this tranche introduced.** `git show 25a3a0687:docs/map/CON-criticism-source.md`
+   already carries an identical multi-line block (the P4 `premise_evidence`
+   contract pin), equally inert. This lane's instruction is that a multi-line
+   `check:` form is being landed by a separate window and is not on main;
+   until it lands, both blocks are decoration.
+
+Not fixed here: `dr-validate-change` validates and never patches, and this is
+not a FAIL of any SPEC.md acceptance check (`docs_verify` is at baseline and
+`--audit` reports 0 findings, because an unparsed check is invisible to both).
+Reported to the integrating window instead. Not added to `PARKED.md` either,
+deliberately: S8's acceptance check is
+`grep -c "Ready-to-send prompt" PARKED.md == 3`, and a fourth prompt would
+break the very check this segment is validating.
+
+**F2 — checklist step 11's counterfactual probe cannot be re-run on this tree,
+and is recorded as inherited rather than re-derived.**
+`probes/p11_ladder_counterfactual.py` replays four committed technique roots
+(`failed-epoch0-run-19c2ff74…`, `completed-epoch1-run-92e63dcb…`,
+`failed-epoch5-run-456885c5…`, and the epoch-6 `run`). None is present in this
+checkout — the technique branch was read-only evidence for the tranche and was
+never merged to main:
+
+    $ find . -maxdepth 5 -type d -name 'failed-epoch5-run-456885*'
+    (no output)
+
+So `probes/p11_ladder_counterfactual_shipped.json` stands as the executor's
+committed measurement (epoch 6: 2 open dispatches under the shipped latch, 10
+under the ladder; `"shipped_agrees_with_new": true` on all four roots) and is
+NOT re-derived here. Stated as an inconclusive re-derivation rather than
+asserted as re-confirmed. It costs nothing this segment relies on: M1 prices
+the channel's frequency and no acceptance check depends on it, and the ladder's
+arithmetic is pinned by the four live tests at
+`CON-problem-layer-lifecycle.md:173`.
+
+## Requirement sweep (merged tree)
+
+| R | demonstrated on the MERGED tree by |
+|---|---|
+| R1 | S1's four ladder tests, re-run: `4 passed, 25 deselected` |
+| R2 | `ANSWERS.md` §(1), unchanged by the merge |
+| R3 | S2 + S3 re-run: `4 passed, 12 deselected` and `19 passed` |
+| R4 | the contract diff `25a3a0687..HEAD` is empty — the decision is still "leave it alone" |
+| R5 | mutation pair RE-DERIVED above: 7 red on the reverted merged tree, 45 green on it |
+| R6 | full gate `4443 passed, 6 skipped`, 0 failed; map documents ride commits `13ed9b50f` / `9b4801d2f`, both inside the merge |
+| R7 | `SPEC.md` §"R7", unchanged |
+| R8 | `PARKED.md` P14, still unstarted; `grep -c "Ready-to-send prompt"` = 3 |
+| R9 | `DELIVERY.md`, 9 R-rows, with the E57→E61 renumber carried into rows C6 and the Errata section |
+
+No R is deferred and none regressed across the merge.
+
+## Assumptions carried (unchanged: A1–A5 above)
+
+The merge introduced no new assumption. A4 (the `PREMISE_INVITE_AFTER`
+configuration tension) is still live and still parked as P16.
+
+## Verdict for segment 2: PASS
+
+Every SPEC.md acceptance check passes on the merged tree; the full gate is
+`4443 passed, 6 skipped`, 0 failed; `docs_verify` is exactly at the 4-failure
+baseline with delta ZERO; the frozen-surface and parallel-cone diffs are empty;
+and the mutation pair was re-derived here rather than inherited. Two findings
+(F1, F2) are reported and neither is a failure of an acceptance check.
