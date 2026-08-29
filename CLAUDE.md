@@ -516,6 +516,48 @@ before treating a green soak as full coverage
   choice under the ungated-seats law above; the solo-run law is
   untouched.
 
+- **Exhaustion is a clean stop, every stop secures continuation, and
+  continuation is integrity-gated** (2026-08-29, operator's words
+  verbatim, deciding the parked P2 question and extending it): "clean
+  stop. with an assurance that continuing is possible. Too often an
+  operational failure overlooks securing enough checkpoints to allow
+  relaunches or forgets to ensure continuing is possible that trigger
+  corrupted stops. On that note, checkpoints need to be hardned. I
+  don't want a jailbroken run to be continuable." Operational reading:
+  a budget denial on an exhausted budget terminates as
+  `budget_exhausted` (clean), never `operational_failure`; EVERY
+  terminal — clean or failed — must leave checkpoints sufficient for
+  relaunch, and a stop that cannot assure continuability is itself a
+  defect (a "corrupted stop"); and `continue`/`amend` are gated on the
+  record verifying intact — a run whose record fails replay validation
+  or carries unresolved containment-breach evidence is REFUSED
+  continuation with a typed refusal. Security boundary, not a
+  convenience: tampering with a record must not buy a resumable run.
+
+- **Successor questions: optional to propose, routed by pluggable
+  destination, minting gated off-by-default** (2026-08-29, operator's
+  words verbatim, deciding the parked P9 question): "This should be an
+  optional field the LLM can fill in. Not enforceable. If it is filled
+  in, it goes to scratchpad by default, linked to the problem it was
+  proposed under and visible by conjecturers. But build the wiring to
+  mint, with the option to switch it on with a flag saying something
+  like 'may cause critics to fully consume conjecturer role'. Switch
+  off by default. Again, maximum configurable surface. The scratch pad
+  option must function like a plugin that allows for movement
+  elsewhere as well. Again, the modularity thing and Max config
+  thing." Operational reading: the successor-question field is
+  OPTIONAL on criticism output — never required, never penalized
+  (formalism-optional pattern applies); a filled proposal routes to
+  the scratchpad by default, linked to its originating problem and
+  rendered visible to conjecturer seats; the DESTINATION is a
+  versioned, registered routing point (plugin-shaped, per the
+  signal-contract pattern) so it can be re-aimed by configuration;
+  the minting road (criticism → new problem, the SUCCESSOR trigger)
+  is BUILT and gated by a per-run flag, OFF by default, whose
+  enablement emits the operator's own warning text; every piece is
+  configuration, none is a code edit ("maximum configurable
+  surface").
+
 ## The map — `docs/map/` (read this before scoping any change)
 
 125 000 lines across 34 packages. Do not scope a change by grepping; scope it
