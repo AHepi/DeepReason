@@ -1,112 +1,106 @@
-# DELIVERY.md — config carriage (change P15)
+# DELIVERY.md — config carriage (P15, road A)
 
-Requirement-by-requirement reconciliation against `REQUEST.md`, whose
-authority is the operator's own words. Gate evidence in `VALIDATION.md`.
+Requirement-by-requirement against the operator's verbatim words in
+`REQUEST.md`.
 
-## The operator's words, and what was built
+## The headline
 
-> "My intention was that configuration of seats need to be able to turn gates
-> on and off at will. Meaning no limits to what model you place where. It also
-> means that when and if I decide to replace schools with something different,
-> those flags don't gate seat configuration paths. Gates are always optional:
-> with warnings."
+**A configuration can now turn on the gates it names.** Measured on this tree:
 
-The 2026-08-28 tranche delivered the WARNINGS. This one delivers the **at
-will**: a configuration can now turn on the gates the manifest's engine-config
-echo drops.
+| | before | after |
+|---|---|---|
+| dropped fields that reach a manifest-launched run | **0 of 25** | **24 of 25** |
 
-**Measured, on this tree, before and after:**
+The 25th, `CHANNELS_DISABLED`, is host-owned on the managed path and
+unreachable for a reason outside this cone — parked **P21**.
 
-| | dropped fields that reach a manifest-launched run |
-|---|---|
-| before this tranche | **0 of 25** |
-| after | **24 of 25** |
+## Requirement by requirement
 
-## R-by-R
+| req | the operator's requirement | verdict |
+|---|---|---|
+| **R1** | a configuration must be able to turn an echo-dropped gate ON | **MET.** 24 of 25 round-trip; 0 of 25 before |
+| **R2** | carriage must not cost a qualification battery for a switch outside the qualification subject | **MET, and better than priced.** 24 of 25 move no subject digest, byte-identical to the pre-carriage measurement |
+| **R3** | where carriage IS priced, the price must be disclosed at compile time, typed and visible — never a refusal, never silent | **MET.** The notice names the requalification in the message a person reads |
+| **R4** | nothing retroactive | **MET.** 72 committed manifests; the 2 that differ differ identically on the pre-change tree, and 0 reconstruct a different `Config` |
+| **R5** | the behaviour must be reachable as configuration, not by editing code | **MET, narrowed.** The emitter reads a declared table and nothing else, so pricing needs no new branch — but adding the row is still an edit to a frozen-surface file, and the tranche says so rather than claiming more |
 
-### R1 — a configuration must be able to turn a dropped gate ON — **MET**
+## The accepted price, stated plainly
 
-`proof/roundtrip_carriage.out`: 24 of 25 fields round-trip through
-`config_from_run_manifest` at the value the operator set, including
-`JUDGE_SEATS_ENABLED`, `ADJUDICATION_STATUS_AUTHORITY_ENABLED`,
-`SCHOOL_SEATS_ENABLED`, `ENGAGED_CRITICISM_AUTHORITY` and `DISCHARGE_POLICY`.
+The monitor's ruling accepted one price: *"one ~14-minute qualification
+battery per home that sets `LEGACY_CRITICISM_ENABLED: false`"*.
 
-Proven on the operator's OWN committed configuration, not only on a fixture:
-`tests/test_single_run_path.py::test_the_grounded_tranche_config_enters_through_the_new_door`
-now asserts that all **five** switches that config sets reach the run.
+**Re-measured, that battery is already owed today — before any carriage
+exists.** Setting the field false makes `preparation.build_preparation_manifest`
+compile an engaged criticism policy onto the manifest, and that moves the
+qualification subject digest at HEAD. The single `MOVED` row in
+`proof/price_carriage.out` is identical before and after this change.
 
-**The 25th is not delivered, and this is stated rather than rounded up.**
-`CHANNELS_DISABLED` cannot be carried on the managed path, because
-`preparation._config_for_profile` lists it among seven HOST-OWNED fields and
-overwrites the operator's value before compile. That is the already-parked
-**P21**, it needs frozen surfaces 4 AND 5, and it is why the reachable count
-is 24 and not 25.
+So **carriage adds no battery anywhere.** What it changes is that the price
+becomes VISIBLE, in a typed notice, and the switch becomes EFFECTIVE. The
+accepted price stands as accepted; it is smaller than the ruling priced it,
+not larger. Nothing is owed for the past: no committed manifest is
+recompiled, and none carries a notice.
 
-### R2 — carriage must not cost a battery for a switch outside the subject — **MET**
+One honesty note on the word "effective". The acceptance checks measure a
+round trip on the reconstructed configuration. For `JUDGE_SEATS_ENABLED` and
+`ADJUDICATION_STATUS_AUTHORITY_ENABLED` that is also an effect at run time —
+both have real readers in `scheduler.py`, `authority.py`, `rules/crit.py`.
+For `ENGAGED_CRITICISM_AUTHORITY`, `LEGACY_CRITICISM_ENABLED` and
+`SCHOOL_SEATS_ENABLED` the only readers are at COMPILE time. Parked as
+**P29**, because "carried" is proven for all of them and "changes what the run
+does" is proven for two.
 
-`proof/price_carriage_after.out` is identical to the pre-carriage run: 24
-fields SAME, 1 MOVED. The carrier rides a notice that
-`qualification.py::qualification_subject_payload` already strips before
-digesting, so the fingerprint a home requalifies on cannot move because of
-carriage. The drop list itself is untouched, so `source_config_hash` is
-byte-identical at every schema version.
+## B1's residual finding — road A's acceptance test
 
-The four committed exclusion tests (Part B/C/D/E, `S2a/S2b/S2d`, `C9`) were
-read before designing, as the P15 brief instructed, and are ANSWERED rather
-than routed around: they assert a raw `Config` field NAME must not appear in
-the subject payload, and after carriage they still pass, unmodified.
+> `LEGACY_CRITICISM_ENABLED: false` is NEITHER carried NOR disclosed. B1's own
+> success criterion is false for it.
 
-### R3 — where carriage IS priced, the price must be typed and visible — **MET**
-
-A configuration setting `LEGACY_CRITICISM_ENABLED: false` compiles — never a
-refusal — and its notice reads:
-
-> `LEGACY_CRITICISM_ENABLED=False is not carried by this manifest's engine
-> config and is restored at run time from this notice; carrying this value
-> engages the criticism policy, which changes the qualification subject; this
-> home requalifies once (~14 minutes)`
-
-**The accepted price, stated plainly.** The monitor accepted "one ~14-minute
-qualification battery per home that sets `LEGACY_CRITICISM_ENABLED: false`".
-Re-measured on this tree, that battery is **already owed today**, before any
-carriage exists: setting the field false makes `preparation` compile an
-engaged criticism policy onto the manifest, which moves the qualification
-subject digest at HEAD (`proof/price_carriage.out`, the single `MOVED` row).
-
-**So carriage adds no battery anywhere.** What it changes is that the price is
-now VISIBLE and the switch is now EFFECTIVE. The accepted price stands as
-accepted; the measurement makes it smaller than it was priced, not larger, and
-nothing is owed retroactively.
-
-### R4 — nothing retroactive — **MET**
-
-72 committed `run-manifest.json` files; **none carries any compile notice**, so
-none carries a carried value, so `config_from_run_manifest` returns for each
-exactly what it returned before. `proof/manifest_inertness_probe.py` run on
-both trees returns the same 2 differing manifests — a pre-existing difference,
-delta zero. No committed manifest is recompiled and no battery is owed for the
-past.
-
-### R5 — reachable as configuration, not by editing code — **MET**
-
-`_CARRIAGE_REQUALIFIES` is a declared table: a future priced field is a ROW,
-not a branch. Pinned by
-`test_the_priced_field_table_is_data_not_a_branch`.
-
-## What this tranche found that it did not fix
-
-- **P21** — the seven host-owned overrides are silent. Reproduced
-  independently here (it is why `CHANNELS_DISABLED` is uncarriable) and left
-  parked: disclosing a host-owned override needs frozen surfaces 4 AND 5.
-- **A re-measurement disagreement with the ruling's own cost line**, recorded
-  in `SPEC.md` §4 and above: the priced battery is pre-existing, not caused by
-  carriage.
+**Closed.** The field is carried, the runtime comes back `False`, and the
+notice states its price. It was the one field the old suppression helper hid
+entirely — under carriage the notice IS the road back, so suppressing it meant
+"not carried", which is why that helper is deleted.
 
 ## Frozen surface
 
-`run_manifest.py`, surface 4. Grant disposed row by row in `SPEC.md` §1 BEFORE
-the file was touched (`63167a110`, one commit earlier than the code), and the
-contact recorded in `docs/map/INV-frozen-surfaces.md` with a re-runnable check
-in the same commit as the code. The check was proven RED under three
-mutations — serializer removed, read half removed, drop line removed — and the
-tree verified byte-identical afterwards.
+Surface 4 contacted under the standing grant, disposed row by row in
+`SPEC.md` §1 BEFORE the code, and recorded in
+`docs/map/INV-frozen-surfaces.md` with a re-runnable check proven RED under
+three mutations. Surface 5 was reached and NOT edited: the carrier keeps the
+notice code the subject payload already strips.
+
+## Budget
+
+Re-declared twice by the operator, at the measured figures. Final: source and
+total both over their re-declared ceilings again after the review fixes, with
+the same grounds — cone unchanged, the additions are correctness the review
+found missing. Recorded in `SPEC.md` §6, including the fact that the change
+DELETES a function, so insertions-only accounting charges it for a
+replacement and credits nothing for the removal.
+
+## What was found wrong in this tranche's own work
+
+An independent skeptic re-ran the claims rather than reading them and found
+five confirmed defects. Four are fixed here and one is parked with the
+operator's decision. The most serious, and the one the operator themself
+surfaced by challenging a premise:
+
+**Carriage restored a value the manifest's own carrier field contradicted.**
+`ENGAGED_CRITICISM_AUTHORITY: defended_trial` came back in the rebuilt
+configuration while the manifest held `observe_only`, and the notice's own
+pointer sent a reader to the field that disagreed. The cause is not carriage:
+a second switch, `ADJUDICATION_STATUS_AUTHORITY_ENABLED`, silently overrides
+the setting that names the gate. That is the P10 shape one layer above the
+one P15 just repaired, and it is parked as **P28** with all three roads
+priced, on the operator's decision that changing what criticism may do to a
+claim's status needs its own tranche and its own evidence.
+
+Disclosed in the meantime: the notice states the disagreement in words, and
+its pointer is dropped, because a pointer that sends a reader to a
+contradicting field is worse than no pointer.
+
+## Parked
+
+**P28** the silent authority gate · **P29** three switches with no run-time
+reader · **P30** the serializer's end-to-end guard lives in a map check rather
+than in the gate every tranche runs · **P21** (inherited) the host-owned
+override.
