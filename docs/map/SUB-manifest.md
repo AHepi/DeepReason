@@ -256,10 +256,13 @@ assert r.circuit_breaker and r.circuit_breaker.openings[0].failure_code == 'ENDP
   — reversing it moves every qualification subject digest, `docs/ERRATA.md` E44
   — and `compile_run_manifest` now DISCLOSES it, one
   `ENGINE_CONFIG_FIELD_NOT_CARRIED` notice per configured field it does not
-  carry. Adding a `data.pop` line is therefore no longer the whole recipe for a
-  new knob: check whether the knob is read at a site inside a run, and if it is,
-  say so in the tranche's own documents — the notice will fire, and it should.
-`check: python -m pytest tests/test_manifest_config_disclosure.py::test_pt1_builder_shape_discloses_every_uncarried_switch tests/test_manifest_config_disclosure.py::test_the_dropped_set_is_exactly_the_unconditional_pops -q`
+  carry. **Since 2026-08-29 (P15) that notice also CARRIES the value**, so the
+  drop is no longer a loss: `config_from_run_manifest` restores it. Adding a
+  `data.pop` line is therefore still not the whole recipe for a new knob, but
+  the reason changed — the knob now REACHES the run, and the notice is how,
+  so a tranche adding one should check that the carried value is what it
+  wants rather than that the default is tolerable.
+`check: python -m pytest tests/test_manifest_config_disclosure.py::test_pt1_builder_shape_carries_and_discloses_every_dropped_switch tests/test_manifest_config_disclosure.py::test_the_dropped_set_is_exactly_the_unconditional_pops tests/test_manifest_config_disclosure.py::test_every_dropped_field_the_managed_path_can_set_round_trips -q`
 - **A disclosure can defeat the exclusion it describes.** The qualification
   subject embeds `compile_notices`, so a notice naming a subject-EXCLUDED
   `Config` field puts that field's name straight back into the subject. Found
