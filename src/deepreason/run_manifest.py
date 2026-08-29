@@ -2565,11 +2565,37 @@ def _default_config_data() -> dict[str, Any]:
     return _DEFAULT_CONFIG_DATA
 
 
+def _carrier_field_effective_value(field, criticism_policy, control_policy):
+    """What this manifest's OWN carrier field says, or None if it says nothing.
+
+    `_DROPPED_FIELD_CARRIERS` points a reader at a typed policy field that
+    also expresses the setting. That pointer must not imply agreement it
+    cannot deliver: `preparation` gates the compiled authority behind
+    `ADJUDICATION_STATUS_AUTHORITY_ENABLED`, so a manifest can hold
+    `observe_only` while the configuration asked for `defended_trial`. When
+    the two differ the notice says so rather than sending a reader to a field
+    that contradicts it. The GATE itself is a separate, parked defect -- a
+    named setting silently overridden, which is this batch's own subject one
+    layer up (`PARKED.md`, the criticism-authority gate).
+    """
+
+    if field == "ENGAGED_CRITICISM_AUTHORITY":
+        return getattr(criticism_policy, "authority", None)
+    if field == "LEGACY_CRITICISM_ENABLED":
+        return criticism_policy is None
+    if field == "SCHOOL_SEATS_ENABLED":
+        execution = getattr(control_policy, "school_execution", None)
+        return getattr(execution, "mode", None) == "route_bound"
+    return None
+
+
 def _emit_uncarried_config_notices(
     data: dict[str, Any],
     engine_config: dict[str, Any],
     *,
     notices: list[CompileNoticeV1],
+    criticism_policy=None,
+    control_policy=None,
 ) -> None:
     """Carry every configured Config field the engine-config echo drops.
 
@@ -2593,14 +2619,30 @@ def _emit_uncarried_config_notices(
         if configured == defaults[field]:
             continue
         price = _CARRIAGE_REQUALIFIES.get(field)
+        carrier = _DROPPED_FIELD_CARRIERS.get(field)
+        effective = _carrier_field_effective_value(
+            field, criticism_policy, control_policy
+        )
+        diverged = carrier is not None and effective is not None and (
+            effective != configured
+        )
         _emit_compile_notice(
             notices,
             _CARRIAGE_NOTICE_CODE,
             f"{field}={configured!r} is not carried by this manifest's engine "
             f"config and is restored at run time from this notice"
-            + (f"; {price}" if price else ""),
+            + (f"; {price}" if price else "")
+            + (
+                f"; NOTE this manifest's {carrier} holds {effective!r}, which "
+                "this setting did not change -- another switch gated it, so "
+                "the two disagree"
+                if diverged
+                else ""
+            ),
             f"{_CARRIAGE_POINTER_PREFIX}{field}",
-            resolution=_DROPPED_FIELD_CARRIERS.get(field),
+            # A pointer that disagrees is worse than no pointer: it sends a
+            # reader to a field that contradicts the value beside it.
+            resolution=None if diverged else carrier,
             value=_canonical_json(configured).decode("utf-8"),
         )
 
@@ -3927,7 +3969,13 @@ def compile_run_manifest(
     )
 
     engine_config = _versioned_source_config_data(data, schema_version)
-    _emit_uncarried_config_notices(data, engine_config, notices=notices)
+    _emit_uncarried_config_notices(
+        data,
+        engine_config,
+        notices=notices,
+        criticism_policy=resolved_criticism_policy,
+        control_policy=resolved_control_policy,
+    )
     engine_config["roles"] = {}
     if schema_version >= 3:
         # Typed v3 policy is canonical and must not be duplicated inside the
@@ -4414,6 +4462,38 @@ def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManif
     return manifest
 
 
+def _strict_carried_value(field: str, decoded: Any, pointer: str) -> Any:
+    """Validate one carried value against its own Config field, strictly."""
+
+    from pydantic import ValidationError
+
+    from deepreason.config import Config
+
+    try:
+        validated = Config.__pydantic_validator__.validate_assignment(
+            Config.model_construct(), field, decoded
+        )
+    except ValidationError as error:
+        raise RunManifestError(
+            "CARRIED_CONFIG_VALUE_INVALID",
+            f"carriage notice for {field!r} holds a value {type(decoded).__name__} "
+            f"that {field} does not accept: {error.errors()[0]['msg']}",
+            pointer,
+        ) from error
+    accepted = getattr(validated, field)
+    if type(accepted) is not type(decoded) and not (
+        isinstance(decoded, list) and isinstance(accepted, tuple)
+    ):
+        raise RunManifestError(
+            "CARRIED_CONFIG_VALUE_INVALID",
+            f"carriage notice for {field!r} holds a {type(decoded).__name__} that "
+            f"would be coerced to {type(accepted).__name__}; a record must not "
+            "buy a run by coercion",
+            pointer,
+        )
+    return accepted
+
+
 def _carried_config_values(manifest: RunManifest) -> dict[str, Any]:
     """Values this manifest's carriage notices restore into the rebuilt Config.
 
@@ -4444,13 +4524,21 @@ def _carried_config_values(manifest: RunManifest) -> dict[str, Any]:
                 notice.pointer,
             )
         try:
-            carried[field] = json.loads(notice.value)
+            decoded = json.loads(notice.value)
         except json.JSONDecodeError as error:
             raise RunManifestError(
                 "CARRIED_CONFIG_VALUE_INVALID",
                 f"carriage notice for {field!r} holds undecodable JSON: {error}",
                 notice.pointer,
             ) from error
+        # Shape is not enough. `Config` validates in lax mode, so a JSON
+        # string "yes" would COERCE into a bool and a hand-edited record would
+        # buy a working run -- the exact thing the continuation-integrity law
+        # (2026-08-29) forbids. Validate the field on its own, in strict mode,
+        # and surface a coercion or a range violation as a TYPED refusal
+        # rather than letting a raw ValidationError escape a function whose
+        # every other failure mode is coded.
+        carried[field] = _strict_carried_value(field, decoded, notice.pointer)
     return carried
 
 

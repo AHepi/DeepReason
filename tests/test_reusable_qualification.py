@@ -198,11 +198,21 @@ def test_legacy_criticism_flag_excluded_from_subject_digest():
     tests above."""
 
     profile = _profile()
+    # The NON-default value, deliberately. Set to True -- its own default --
+    # no carriage notice is ever emitted, so this test passed without ever
+    # exercising the exclusion it names: removing the strip from
+    # `qualification_subject_payload` reddened the other three Parts and left
+    # this one green. Found by an adversarial re-run, 2026-08-29.
     manifest = _manifest(
         profile,
-        config_updates={"LEGACY_CRITICISM_ENABLED": True},
+        config_updates={"LEGACY_CRITICISM_ENABLED": False},
         criticism_policy=None,
     )
+
+    assert any(
+        notice.pointer == "/engine_config/LEGACY_CRITICISM_ENABLED"
+        for notice in (manifest.compile_notices or ())
+    ), "no carriage notice: the exclusion below would not be exercised"
 
     payload = qualification_subject_payload(manifest, profile)
 

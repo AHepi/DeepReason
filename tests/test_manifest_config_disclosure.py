@@ -259,8 +259,13 @@ def test_every_dropped_field_the_managed_path_can_set_round_trips():
     }
     carried = 0
     for field in dropped:
-        # CHANNELS_DISABLED is host-owned on the managed path (parked P21) and
-        # is exercised by its own test below, not here.
+        # CHANNELS_DISABLED is host-owned on the managed path (parked P21):
+        # `preparation._config_for_profile` overwrites the operator's value
+        # before compile, so no carriage notice is emitted and no round trip
+        # is possible. Its behaviour is pinned by the `check:` in
+        # docs/map/SEAM-capabilities-x-channels.md, which `pytest tests/`
+        # does NOT run -- stated because an earlier version of this comment
+        # claimed a test "below" that never existed.
         if field == "CHANNELS_DISABLED":
             continue
         default = getattr(Config(), field)
@@ -354,10 +359,96 @@ def test_a_tampered_carriage_notice_is_refused_typed_never_defaulted():
             raise AssertionError(f"expected {code}, got a silent default")
 
 
-def test_the_priced_field_table_is_data_not_a_branch():
-    """R5. A future priced field is a row, never a code edit."""
+def test_pricing_a_field_is_a_table_row_not_a_code_branch():
+    """R5, restated to what is actually true.
+
+    An earlier version of this test asserted the table's contents EXACTLY,
+    which made adding a row -- the thing its own docstring called free --
+    turn the test red. That is a pin pointing the wrong way, and an
+    adversarial re-run caught it.
+
+    What is genuinely true, and what this now checks: the emitter reads the
+    TABLE and nothing else, so pricing a field needs no new branch. Proven by
+    pricing a field the table does not mention and watching its message
+    change.
+    """
 
     from deepreason.run_manifest import _CARRIAGE_REQUALIFIES
 
-    assert set(_CARRIAGE_REQUALIFIES) == {"LEGACY_CRITICISM_ENABLED"}
+    # Every priced field must be a field the echo actually drops, or the row
+    # is dead text.
     assert set(_CARRIAGE_REQUALIFIES) <= set(_unconditionally_dropped_config_fields())
+    assert "LEGACY_CRITICISM_ENABLED" in _CARRIAGE_REQUALIFIES
+
+    profile = _profile()
+    before = _disclosed(_manifest(profile, config_updates={"K_FRAME": 3}))["K_FRAME"]
+    assert "requalifies" not in before
+
+    _CARRIAGE_REQUALIFIES["K_FRAME"] = "a probe price, added as a ROW"
+    try:
+        after = _disclosed(_manifest(profile, config_updates={"K_FRAME": 3}))["K_FRAME"]
+    finally:
+        del _CARRIAGE_REQUALIFIES["K_FRAME"]
+    assert "a probe price, added as a ROW" in after, after
+
+    # And the table is back to shipped state, so the row really was the only
+    # thing that changed.
+    assert "requalifies" not in _disclosed(
+        _manifest(profile, config_updates={"K_FRAME": 3})
+    )["K_FRAME"]
+
+
+def test_a_carrier_pointer_that_would_disagree_is_dropped_and_the_note_says_why():
+    """A pointer that contradicts the value beside it is worse than none.
+
+    `preparation` gates the compiled criticism authority behind
+    ADJUDICATION_STATUS_AUTHORITY_ENABLED, so a manifest can hold
+    `observe_only` while the configuration asked for `defended_trial`.
+    Carriage restores the configured value ungated, so without this the
+    record would contradict itself and its own resolution pointer would send
+    a reader to the field that disagrees.
+
+    Found by an adversarial re-run of this tranche's own delivery, 2026-08-29.
+    The GATE is a separate parked defect -- a named setting silently
+    overridden, which is this batch's subject one layer up.
+    """
+
+    from deepreason.preparation import build_preparation_manifest
+    from deepreason.provider_profile import ProviderProfileV1
+
+    profile = ProviderProfileV1.create(
+        provider="openai", endpoint="https://api.example.com/v1",
+        model_id="m", model_revision="r", family="f",
+        context_window_tokens=262144, maximum_completion_tokens=4096,
+        credential_env="K",
+    )
+
+    def notice_for(field, **updates):
+        config = Config().model_copy(update=updates)
+        manifest = build_preparation_manifest(
+            profile, question="q", compiled_at="2026-08-25T00:00:00Z", config=config
+        )
+        for notice in manifest.compile_notices or ():
+            if notice.pointer.endswith(f"/{field}"):
+                return manifest, notice
+        raise AssertionError(f"no carriage notice for {field}")
+
+    # DIVERGED: the master gate is off, so the manifest kept observe_only.
+    manifest, notice = notice_for(
+        "ENGAGED_CRITICISM_AUTHORITY",
+        ENGAGED_CRITICISM_AUTHORITY="defended_trial",
+        LEGACY_CRITICISM_ENABLED=False,
+    )
+    assert manifest.criticism_policy.authority == "observe_only"
+    assert config_from_run_manifest(manifest).ENGAGED_CRITICISM_AUTHORITY == (
+        "defended_trial"
+    )
+    assert notice.resolution is None, "a disagreeing pointer must be dropped"
+    assert "observe_only" in notice.message and "disagree" in notice.message
+
+    # AGREEING: the pointer is kept, and no note is added.
+    _manifest_ok, agreeing = notice_for(
+        "LEGACY_CRITICISM_ENABLED", LEGACY_CRITICISM_ENABLED=False
+    )
+    assert agreeing.resolution == "/criticism_policy"
+    assert "disagree" not in agreeing.message
