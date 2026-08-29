@@ -274,6 +274,35 @@ of a canonical controller-v3 history).
 
 ## Traps
 
+- **A repair child recovered here is checked by a vocabulary this side does
+  not own, and once it did not match. FIXED (repair-vocabulary tranche,
+  2026-08-28).** `recover_atomic_child_output` selects `descendants[-1]` among
+  the `repair.semantic-task.v1` work items whose `parent_work_id` is the
+  child's own preparation, then hands the payload to
+  `nonconjecture_recovery._repair_authority` — the same authority the
+  non-conjecture path uses, reached from `rules/conj.py`'s
+  `_v6_atomic_conjecture_fallback` whenever a decomposition child's
+  preparation payload already matches and its stored output is recovered
+  instead of re-dispatched. That authority checked `mode` against a set typed
+  independently of the writer's `Literal`, so a `whole_object_syntax` child —
+  the mode a session takes when a response cannot be parsed at all, and 36 of
+  56 repair payloads across three committed roots — raised
+  `NonConjectureRecoveryAuthorityError("repair mode is invalid")` and killed
+  the run. Technique run-456885c569c0f4f7, epoch 5, cycle 2: the
+  `run-result.json` records it under a CONJECTURER-seat decomposition
+  (`atomic_contract_id: "conjecturer.atomic-candidate.v1"`, `work_kind:
+  "schema_repair"` children on `work_kind: "atomic_child"` parents), which is
+  this call site and not `recover_nonconjecture_admission`. The vocabulary now
+  comes from `llm/repair.py` by import (see `DR-SEAM-llm-x-workflow`'s Traps
+  entry for the type), and the authority additionally requires mode and
+  pointer shape to agree — whole-object repairs carry no pointers because they
+  have no parsed baseline to point at; patch repairs carry at least one
+  because `RepairDiagnosticEnvelopeV2.authorized_pointers` is `min_length=1`.
+  The lesson for this seam is the general one: when a checker lives on the
+  other side of a seam from the writer it checks, it consumes the writer's
+  type or it drifts.
+`check: python -c "import inspect; from deepreason.workflow import atomic_recovery as A, nonconjecture_recovery as N; assert 'if preparation.task_kind.value == \"repair\"' in inspect.getsource(A.recover_atomic_child_output); assert '_repair_authority(' in inspect.getsource(A.recover_atomic_child_output); assert 'V6_REPAIR_TASK_MODES' in inspect.getsource(N._repair_authority)" && python -m pytest tests/test_v6_repair_mode_vocabulary.py -q`
+
 - **The seam's own name is a grep trap.** `src/deepreason/workflows/` (workload
   definitions) and `src/deepreason/workflow/` (the control plane) are different
   packages, and `grep -r "deepreason.workflow"` matches both. It reports 37 files

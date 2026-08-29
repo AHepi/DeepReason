@@ -20,6 +20,8 @@ from pydantic import BaseModel, ValidationError
 from deepreason.canonical import canonical_json
 from deepreason.llm.firewall import reject_model_control_fields, route_fingerprint
 from deepreason.llm.repair import (
+    V6_REPAIR_TASK_MODES,
+    V6_WHOLE_OBJECT_REPAIR_MODES,
     RepairDiagnosticEnvelopeV2,
     apply_repair_patch,
     parse_one_json_value,
@@ -999,12 +1001,24 @@ def _repair_authority(harness, item, preparation, payload, raw_value):
     _authority(payload.get("repair_index") == preparation.attempt_index, "repair index differs")
     _authority(payload.get("contract_id") == preparation.contract_id, "repair payload contract differs")
     mode = payload.get("mode")
-    _authority(mode in {"patch", "full"}, "repair mode is invalid")
+    # Imported from the writer's own type rather than restated: the two sets
+    # drifted apart once and killed a run at cycle 2 over the commonest mode
+    # there is (technique run-456885c569c0f4f7, epoch 5).
+    _authority(mode in V6_REPAIR_TASK_MODES, "repair mode is invalid")
     pointers = payload.get("authorized_pointers")
     _authority(
         isinstance(pointers, (tuple, list))
         and tuple(pointers) == tuple(sorted(set(pointers))),
         "repair pointers are not finite and canonical",
+    )
+    # A whole-object repair has no parsed baseline, so nothing can be pointed
+    # at; a patch repair takes its pointers from an envelope whose
+    # `authorized_pointers` is min_length=1. The correspondence is a writer
+    # guarantee, so asserting it here catches a mode that is misnamed OR
+    # mis-branched rather than letting a raw value stand where a patch is owed.
+    _authority(
+        bool(pointers) is (mode not in V6_WHOLE_OBJECT_REPAIR_MODES),
+        "repair pointers do not match the repair mode",
     )
     diagnostic_ref = payload.get("diagnostic_ref")
     _authority(
@@ -1019,7 +1033,7 @@ def _repair_authority(harness, item, preparation, payload, raw_value):
         hashlib.sha256(baseline_bytes).hexdigest() == payload.get("baseline_sha256"),
         "repair baseline digest differs",
     )
-    if mode == "full":
+    if mode in V6_WHOLE_OBJECT_REPAIR_MODES:
         return tuple(pointers), raw_value
     try:
         envelope = RepairDiagnosticEnvelopeV2.model_validate_json(

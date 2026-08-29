@@ -1688,3 +1688,52 @@ Evidence: `experiments/2026-08-28-fix-capability-cycle-share/DIAGNOSIS.md`
 `experiments/2026-08-28-audit-run-problems/probes/q3_cycle_accounting.json`
 (the `cycles_that_bypassed_the_cap: 0` field on epoch 6), and
 `src/deepreason/scheduler/scheduler.py:1802,1950,2030`.
+
+---
+
+## 2026-08-28 (the repair-mode vocabulary defect)
+
+**E60 — the run-problems audit's P13 prompt says the soak has no
+schema-invalid stub mode, and it has had one since 2026-08-26.**
+`experiments/2026-08-28-audit-run-problems/PARKED.md` §P13 closes with
+"cycle_soak.py's D1 seam is PARTIAL on every run because the deterministic
+stub always returns schema-valid responses, so no gate has ever exercised the
+repair path at all. A stub mode returning a schema-INVALID response on demand
+makes this whole class reachable offline". `AUDIT_REPORT.md` §F-D carries the
+same reading.
+
+`scripts/cycle_soak.py::install_repair_inducer` and its `--induce-repairs N`
+flag landed at `cfe8d111c` (the P-C2 tranche), two days before the audit ran.
+Measured on `main` at `2a5e984c8`:
+`python -u scripts/cycle_soak.py --case epoch3 --cycles 8 --induce-repairs 2`
+exits 0 with D1-seat-contract `covered`, not `partial`, and one
+`repair.semantic-task.v1` preparation in the root.
+
+The correction is smaller than it looks, and it cuts the audit's way: the
+instrument exists but does not reach the mode the audit's own finding is
+about. The induced response is `{"soak_induced_repair": <title>}` — well-formed
+JSON — so a baseline always parses and the session can only ever take the
+`patch` turn. `whole_object_syntax`, the mode that killed technique
+run-456885c569c0f4f7 at cycle 2, needs an UNPARSEABLE response and was
+unreachable offline. So P13's conclusion ("this whole class is not reachable
+offline") was right while its premise ("there is no schema-invalid stub mode")
+was wrong, and a runner who checked only the premise would have closed the
+item and left the gap open.
+
+The general shape, which is why this is worth an entry: an audit dimension
+that reads a DISPOSITION STRING out of an instrument's source ("partial …
+always returns a schema-valid response") without running the instrument
+inherits whatever that string last meant. Here the string was stale by two
+days; D1's own predicate also rested on a count of provider attempts past
+index 0, which is not the same fact as a repair task having been written.
+
+Corrected in the tranche rather than in place, per this ledger's convention:
+the induction gained an `unparseable` kind, D1's predicate moved onto
+`repair_payloads`, and the seam now reports `repair_modes` so its verdict
+names what it actually saw.
+
+Evidence: `experiments/2026-08-28-defect-repair-vocabulary/REPRO.md`
+("One finding this phase turned up") and `VERIFY.md` for the three soak runs
+(`invalid` -> `repair_modes: ["patch"]`; `unparseable` -> `["whole_object_syntax"]`);
+`experiments/2026-08-28-audit-run-problems/PARKED.md` §P13 and
+`AUDIT_REPORT.md` §F-D for the claim; `cfe8d111c` for the flag's arrival.

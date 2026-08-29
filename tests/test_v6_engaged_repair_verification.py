@@ -71,12 +71,19 @@ def _config() -> Config:
     )
 
 
-def _atomic_child_responses(index: int, *, repaired: bool) -> list[str]:
+def _atomic_child_responses(
+    index: int, *, repaired: bool, repair_kind: str = "patch"
+) -> list[str]:
     """One atomic child's provider responses, optionally via a repair step.
 
-    A wire-invalid first response (``typicality`` out of range) is the same
-    class of rejection the live run took — a generic envelope failure — and the
-    patch that follows is the minimal one that makes the candidate admissible.
+    ``repair_kind`` selects WHICH repair mode the child's repair turn takes,
+    because the two are reached by different first responses and the record
+    contains both. ``patch``: a wire-invalid but PARSEABLE first response
+    (``typicality`` out of range) leaves a JSON baseline, so the session
+    returns a patch turn. ``whole_object``: an UNPARSEABLE first response
+    leaves no baseline at all, so the session's one whole-object retry is the
+    only turn available and the repair payload carries
+    ``mode="whole_object_syntax"`` with an empty ``authorized_pointers``.
     """
 
     candidate = {
@@ -86,6 +93,13 @@ def _atomic_child_responses(index: int, *, repaired: bool) -> list[str]:
     }
     if not repaired:
         return [json.dumps({"candidate": candidate})]
+    if repair_kind == "whole_object":
+        return [
+            # Not JSON at all: no baseline can be parsed, so no pointer can be
+            # authorized and the whole object must be re-asked for.
+            "I cannot answer that as JSON. {{{",
+            json.dumps({"candidate": candidate}),
+        ]
     return [
         json.dumps({"candidate": {**candidate, "typicality": 2.0}}),
         json.dumps(
@@ -99,7 +113,12 @@ def _atomic_child_responses(index: int, *, repaired: bool) -> list[str]:
     ]
 
 
-def _engaged_root(tmp_path: Path, *, repair_child: int | None = None) -> Path:
+def _engaged_root(
+    tmp_path: Path,
+    *,
+    repair_child: int | None = None,
+    repair_kind: str = "patch",
+) -> Path:
     """Drive one turn through rejected patches into a decomposition merge.
 
     ``repair_child`` makes that atomic child's first response wire-invalid so
@@ -109,7 +128,11 @@ def _engaged_root(tmp_path: Path, *, repair_child: int | None = None) -> Path:
     of three merges) and no fixture exercised it before.
     """
 
-    root = tmp_path / ("engaged-repair" if repair_child is None else f"engaged-repair-r{repair_child}")
+    root = tmp_path / (
+        "engaged-repair"
+        if repair_child is None
+        else f"engaged-repair-r{repair_child}-{repair_kind}"
+    )
     commitment = Commitment(
         id="k-engaged-repair", eval="predicate:len(content) > 0"
     )
@@ -185,7 +208,9 @@ def _engaged_root(tmp_path: Path, *, repair_child: int | None = None) -> Path:
             piece
             for index in range(6)
             for piece in _atomic_child_responses(
-                index, repaired=(index == repair_child)
+                index,
+                repaired=(index == repair_child),
+                repair_kind=repair_kind,
             )
         ),
     ]
