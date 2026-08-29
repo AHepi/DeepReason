@@ -1,0 +1,78 @@
+GATE EVIDENCE — lane/d-seam, tranche 2026-08-29-change-seam-capabilities-x-channels
+All commands run from /home/user/dr-lanes/d-seam with
+PYTHONPATH=/home/user/dr-lanes/d-seam/src:/home/user/dr-lanes/d-seam/mini
+
+================================================================================
+1. TEST RING (the document's own Verify: header)
+================================================================================
+$ python -m pytest tests/test_evidence_channels.py tests/test_simulation_runner_default.py tests/test_channel_and_wander_modularity.py -q
+.............................................                            [100%]
+45 passed in 2.64s
+
+================================================================================
+2. python tools/docs_verify.py   (FULL)   -- run under concurrent-lane load
+================================================================================
+docs_verify [full]: 70 documents, 1160 checks, 4 workers
+  FAIL CON-run-identity.md:200: git log -M --diff-filter=R --name-status ... (shallow clone)
+      ->
+  FAIL CON-run-identity.md:202: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree.
+  FAIL CON-run-identity.md:204: test -z "$(git show -M --diff-filter=R ... f304fec1)" ...
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree.
+  FAIL INV-frozen-surfaces.md:181: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+      ->
+  FAIL SUB-application.md:403: grep -q "fence_seq > current_resume.resume_event_seq" ... && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q
+      -> TIMEOUT after 300s - this check is too expensive; narrow it to the claim it actually tests
+docs_verify: 5 failed
+
+The first four ARE the orchestrator's measured baseline (3 shallow-clone
+failures on CON-run-identity.md at lines 200/202/204, plus the pre-existing
+falsified census at INV-frozen-surfaces.md:181).
+
+The FIFTH is CONTENTION, not a regression. `ps` showed duplicate pytest
+invocations from a second docs_verify running in another lane, on a 4-CPU box.
+CLAUDE.md 5b: "Never run the full gate concurrently with docs_verify ... the
+contention manufactures failures" and "A surprising measurement taken under
+load is not a measurement. Re-run idle before recording it."
+
+RE-MEASURED IDLE (no docs_verify or pytest process running):
+
+$ time bash -c 'grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q ... && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q'
+...............                                                          [100%]
+15 passed in 155.43s (0:02:35)
+real    2m36.564s
+
+PASSES idle, in 155s against a 300s budget. The tree is at the 4-failure
+baseline. NONE of this tranche's ten checks failed in either run.
+
+Observation, not a fix (out of cone): that check has only ~2x headroom on its
+own timeout, and docs_verify's own message says it "is too expensive; narrow it
+to the claim it actually tests". It will keep flapping in any parallel batch.
+
+================================================================================
+3. python tools/docs_verify.py --links
+================================================================================
+docs_verify --links: 0 dangling reference(s), 70 document(s)
+
+================================================================================
+4. python tools/docs_verify.py --audit   (refuses checks that cannot fail)
+================================================================================
+docs_verify --audit: 0 finding(s)
+
+================================================================================
+5. python tools/docs_verify.py --coverage  (the new Sweep: header)
+================================================================================
+docs_verify --coverage: 8 seam(s) swept, 18 without a Sweep: header, 2 finding(s)
+
+Both findings are PRE-EXISTING on other seams and untouched by this tranche:
+  SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
+  SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py
+
+SEAM-capabilities-x-channels.md is swept and produces ZERO findings: every
+enforcing site its Sweep: expression identifies is already named in the body.
+
+================================================================================
+6. CONE
+================================================================================
+$ git diff --name-only origin/main...HEAD
+(see cone.txt — zero src/ paths)

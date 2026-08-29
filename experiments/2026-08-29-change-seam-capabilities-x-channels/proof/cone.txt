@@ -1,0 +1,7 @@
+docs/map/INDEX.md
+docs/map/INV-evidence-channels.md
+docs/map/SEAM-capabilities-x-channels.md
+docs/map/SUB-capabilities.md
+experiments/2026-08-29-change-seam-capabilities-x-channels/PARKED.md
+experiments/2026-08-29-change-seam-capabilities-x-channels/REQUEST.md
+experiments/2026-08-29-change-seam-capabilities-x-channels/proof/parse_census.txt

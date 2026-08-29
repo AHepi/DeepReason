@@ -1,0 +1,2 @@
+SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
+SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py

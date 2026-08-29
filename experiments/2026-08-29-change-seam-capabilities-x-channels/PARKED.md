@@ -171,3 +171,63 @@ may be red on their own merits, which is a finding, not something to weaken.
 
 GATE: python tools/docs_verify.py, --audit refuses nothing.
 ```
+
+---
+
+## P4 — MEDIUM: `SUB-application.md:403` flaps under any parallel batch
+
+**What.** That check shells out to
+`python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q`,
+which takes **155s idle** against docs_verify's **300s** per-check budget — about
+2x headroom on a 4-CPU box. During this batch, with a second lane's docs_verify
+running concurrently, it exceeded the budget and `docs_verify` reported
+`TIMEOUT after 300s`, taking the run to 5 failed against a 4-failure baseline.
+Re-measured idle it passes (`15 passed in 155.43s`). The checker's own message
+already says the right thing: *"this check is too expensive; narrow it to the
+claim it actually tests"*.
+
+Not fixed here: `docs/map/SUB-application.md` is outside this lane's cone, and
+`tools/docs_verify.py` is an external stop line for this batch.
+
+**Why it matters beyond one flaky line.** A baseline stated as a COUNT ("expect
+4 failed") cannot distinguish a real regression from a timeout, so a
+load-induced fifth failure costs every future lane a re-measurement — this one
+cost 2m36s to disprove. Evidence:
+`experiments/2026-08-29-change-seam-capabilities-x-channels/proof/gate_evidence.txt`.
+
+**Prompt:**
+
+```
+TARGET REPOSITORY: AHepi/DeepReason.
+
+Route through dr-change-orchestrator. One tranche, one goal: no map check may
+be so expensive that ordinary machine load turns it red.
+
+THE FACT, already measured — cite, do not re-derive:
+experiments/2026-08-29-change-seam-capabilities-x-channels/proof/gate_evidence.txt.
+docs/map/SUB-application.md:403 runs two whole test files (155s idle, 300s
+budget) and TIMED OUT during a parallel batch, putting docs_verify at 5 failed
+against a 4-failure baseline for no code reason.
+
+WHAT TO DO:
+1. Narrow that check to the claim it actually tests. SCHEMA.md already states
+   the rule — "prefer the cheapest command that would actually fail if the
+   claim became false" — and the claim here is a fence-ordering predicate in
+   src/deepreason/runtime/continuation.py. Two named test ids, or an AST pin
+   plus one test id, will pin it; two full files will not pin it better.
+2. Take the census, not just this one line: list every map check whose measured
+   runtime exceeds some fraction of the 300s budget (time them; do not guess),
+   and narrow each. Report the list even for the ones you leave alone.
+3. Consider whether a TIMEOUT should be reported as a distinct outcome from a
+   FAIL. A baseline stated as a count cannot tell a regression from a slow box,
+   which is what cost this batch a re-measurement. If tools/docs_verify.py is
+   free at that time, a separate TIMEOUT tally is the cheap fix; if another
+   window owns that file, park it and say so.
+
+MEASURE IDLE. CLAUDE.md 5b: never run the full gate or a second docs_verify
+concurrently, and re-run any surprising measurement on an idle box before
+recording it.
+
+GATE: python tools/docs_verify.py at the stated baseline, --audit refuses
+nothing, --links clean.
+```
