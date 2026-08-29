@@ -49,7 +49,11 @@ Mutation (reader trusts the sidecar unconditionally) → RED,
 
 ## Criterion 4 — the gate, the map, the record
 
-- Full gate: `proof/gate.txt` — recorded below.
+- Full gate (`python -m pytest tests/ -q -n 4`, idle box, never
+  concurrent with `docs_verify`): **4413 passed, 0 failed, 6 skipped**
+  in 13:57. `proof/gate.txt`. Tranche 1 of this window left the gate at
+  4408; the delta of 5 is exactly this tranche's regressions, so no
+  pre-existing test changed state in either direction.
 - `docs_verify` FULL: **4 failed**, exactly the session baseline (3
   shallow-clone `CON-run-identity.md` git-history checks, 1 pre-existing
   falsified census). `proof/docs_verify.txt`.
