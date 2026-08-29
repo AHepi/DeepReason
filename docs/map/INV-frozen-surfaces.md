@@ -464,6 +464,83 @@ assert {'JUDGE_SEATS_ENABLED','ADJUDICATION_STATUS_AUTHORITY_ENABLED','SCHOOL_SE
 assert 'scratchpad' not in dropped and 'bridge' not in dropped
 " && python -m pytest tests/test_manifest_config_disclosure.py -q`
 
+**Granted contact, 2026-08-29 — the disclosure notice becomes a CARRIER
+(P15).** The monitor forecast this contact and granted it conditionally, to
+the discipline the five grants above record: the disposition named in
+`SPEC.md` BEFORE implementation, with `tools/blast_radius.py`'s own CONTACT
+verdict pasted and every row disposed one by one, at
+`experiments/2026-08-29-change-config-carriage/SPEC.md` §1. The operator's
+road decision ("ROAD A — carry the 25 echo-dropped settings") is ledgered
+verbatim at that tranche's `REQUEST.md`.
+
+The defect it repairs is the SECOND limb of the 2026-08-28 law, which the
+grant above delivered only the first limb of: the notice said a switch was
+dropped, and nothing could turn it on. Measured at HEAD before this tranche:
+**0 of 25** dropped fields round-tripped through `config_from_run_manifest`.
+After: **24 of 25** (`proof/roundtrip_carriage.py`). The 25th,
+`CHANNELS_DISABLED`, is host-owned on the managed path and unreachable for a
+reason outside this cone — parked P21.
+
+What moved: `CompileNoticeV1` gains ONE optional field, `value`, holding the
+canonical JSON of the configured value; `config_from_run_manifest` gains one
+`data.update(_carried_config_values(manifest))`; and
+`_dropped_field_effect_is_compiled` is DELETED, because under carriage
+suppressing the notice means "not carried" — which was precisely the residual
+finding this tranche was opened to close. **The drop list itself is
+untouched**: no `data.pop` was added, removed or made conditional, so
+`source_config_hash` is byte-identical at every schema version and the 24
+unpriced fields move no qualification subject digest.
+
+**This grant is NOT insertions-only and does not claim to be** — it deletes a
+function and adds a serializer branch, so §4's warning ("reading the model and
+not the validator is the specific mistake to avoid here") bites directly. What
+carries the safety instead is MEASURED, not argued: a bare optional field is
+UNSAFE here, because `qualification_subject_payload` strips
+`ENGINE_CONFIG_FIELD_NOT_CARRIED` notices but KEEPS every other notice, so a
+`"value": null` on an unrelated notice moves the manifest sha256
+(`1b6ab4e6…` → `62c6ddc0…`) AND the subject digest (`cdb59e87…` →
+`3db1bc26…`). The field therefore ships with a `@model_serializer(mode="wrap")`
+that omits `value` when absent; `proof/notice_digest_probe.py` re-derives both
+rows on demand.
+
+**Where the 2026-08-28 argument does NOT transfer, stated rather than
+inherited.** That grant bought its safety on *"no read path calls
+`compile_run_manifest`"*. A carrier IS read, by `config_from_run_manifest`.
+EMISSION is still compile-time only (one caller, inside
+`compile_run_manifest`); what is new is that a notice already present is
+CONSULTED on read. For every committed manifest that consult is a no-op —
+72 committed `run-manifest.json` files, **none carrying any notice** — and the
+read is fail-closed: a pointer outside `/engine_config/`, a field the echo
+does not drop, or undecodable JSON is a TYPED refusal
+(`CARRIED_CONFIG_POINTER_INVALID`, `CARRIED_CONFIG_FIELD_UNKNOWN`,
+`CARRIED_CONFIG_VALUE_INVALID`), never a silent default. Tampering with a
+record must not buy a working run (continuation-integrity law, 2026-08-29).
+
+Surface 5 is reached and NOT edited: the carrier keeps the code
+`ENGINE_CONFIG_FIELD_NOT_CARRIED`, which is the exact key the seven-line strip
+in `qualification_subject_payload` already removes, so the rule that section
+states — *"a disclosure … must not itself enter the qualification subject"* —
+holds by construction.
+
+`check: python -c "
+import json
+from deepreason.config import Config
+from deepreason.run_manifest import CompileNoticeV1, source_config_hash, config_from_run_manifest
+from deepreason.preparation import qualification_subject_manifest
+from deepreason.provider_profile import ProviderProfileV1
+from deepreason.qualification import qualification_subject_digest
+# the omitting serializer is the safety argument: absent means ABSENT in bytes
+assert 'value' not in CompileNoticeV1(code='X', message='m', pointer='/p').model_dump(mode='json')
+assert CompileNoticeV1(code='X', message='m', pointer='/p', value='true').model_dump(mode='json')['value'] == 'true'
+# the drop list is untouched, so the echo hash cannot have moved
+assert source_config_hash(Config()) == '6c2d01f6b8cbe65e2a26bb57e864a80feec07b0896142fb2267bc83d2717dc81'
+p = ProviderProfileV1.create(provider='openai', endpoint='https://api.example.com/v1', model_id='m', model_revision='r', family='f', context_window_tokens=262144, maximum_completion_tokens=4096, credential_env='K')
+base = qualification_subject_digest(qualification_subject_manifest(p, config=Config()), p)
+on = qualification_subject_manifest(p, config=Config().model_copy(update={'JUDGE_SEATS_ENABLED': True}))
+assert qualification_subject_digest(on, p) == base, 'carriage moved a subject digest'
+assert config_from_run_manifest(on).JUDGE_SEATS_ENABLED is True, 'the value is not carried'
+"`
+
 ### 5. Anything altering qualification subject digests — `qualification.py`
 
 The qualification cache keys on a subject digest built from the manifest, the

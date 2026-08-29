@@ -1,0 +1,31 @@
+dropped fields: 25
+
+ADJUDICATION_STATUS_AUTHORITY_ENABLED      True           CARRIED
+ATTENTION_ALLOCATION_POLICY                wander-cap.v   CARRIED
+CAPTURE14_AGE_FLOOR                        51             CARRIED
+CAPTURE14_ENTER_K                          3              CARRIED
+CAPTURE14_EXIT_K                           1              CARRIED
+CAPTURE14_PRECISION                        7              CARRIED
+CAPTURE14_SC_CEILING                       0.75           CARRIED
+CAPTURE14_WINDOW                           201            CARRIED
+CHANNELS_DISABLED                          ('research',   NOT CARRIED (got ())
+DISCHARGE_POLICY                           discharge-re   CARRIED
+ENGAGED_CRITICISM_AUTHORITY                defended_tri   CARRIED
+FRAME_SLICE_ATTACKERS                      6              CARRIED
+FRAME_SLICE_DEPARTURES                     5              CARRIED
+JUDGE_SEATS_ENABLED                        True           CARRIED
+JUDGE_SUMMONS_COOLDOWN                     5              CARRIED
+JUDGE_SUMMONS_PER_CYCLE                    1              CARRIED
+K_FRAME                                    3              CARRIED
+LEGACY_CRITICISM_ENABLED                   False          CARRIED
+PROMOTION_ENVIRONMENT_MAX                  65             CARRIED
+SCHOOL_SEATS_ENABLED                       True           CARRIED
+SCOPE_MAX_DEPTH                            17             CARRIED
+SCOPE_MAX_NODES                            513            CARRIED
+SEED_PROBLEM_BUDGET_FLOOR                  0.75           CARRIED
+SPLIT_BUDGET_EXTRACTION_TOKENS             513            CARRIED
+SPLIT_BUDGET_SEAT_PROTOCOL                 on             CARRIED
+
+carried: 24/25   not carried: 1
+
+The uncarried field is CHANNELS_DISABLED, and it is uncarried for a reason outside this tranche: preparation._config_for_profile lists it among seven HOST-OWNED fields and overwrites the operator's value BEFORE compile, so no carriage notice is ever emitted for it. That is parked P21, and it is why the reachable count is 24 and not 25.

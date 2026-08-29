@@ -259,14 +259,19 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
   and every gate the echo still drops arrives as a notice naming the operator's
   value. What is unchanged, and is the reason this entry is rewritten rather
   than retired: the echo's drop list is untouched, so a DROPPED gate is
-  disclosed and not carried -- the law's "never silence", not yet its "at will"
-  (that limb is P15).
+  disclosed and not carried -- the law's "never silence", not yet its "at will".
+  **Both limbs land 2026-08-29 (P15).** The echo's drop list is STILL
+  untouched, which is what keeps every qualification subject digest still; what
+  changed is that the notice disclosing the drop now CARRIES the value, so the
+  gate the configuration asked for is the gate the run gets. The check below
+  therefore asserts `True`/`True` where it asserted `False`/`False`: the same
+  two switches, the same notice pointers, the opposite runtime.
 `check: python -c "
 from deepreason.run_manifest import config_from_run_manifest
 from tests.test_reusable_qualification import _manifest, _profile
 m = _manifest(_profile(), config_updates={'JUDGE_SEATS_ENABLED': True, 'ADJUDICATION_STATUS_AUTHORITY_ENABLED': True})
 runtime = config_from_run_manifest(m)
-assert runtime.JUDGE_SEATS_ENABLED is False and runtime.ADJUDICATION_STATUS_AUTHORITY_ENABLED is False
+assert runtime.JUDGE_SEATS_ENABLED is True and runtime.ADJUDICATION_STATUS_AUTHORITY_ENABLED is True
 named = {n.pointer for n in (m.compile_notices or ()) if n.code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED'}
 assert named == {'/engine_config/JUDGE_SEATS_ENABLED', '/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED'}, named
 "`

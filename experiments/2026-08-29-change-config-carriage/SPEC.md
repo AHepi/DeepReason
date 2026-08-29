@@ -194,5 +194,28 @@ stays parked. It is why the reachable count is 24 and not 25.
 
 ## 6. Budget
 
-Re-declared by the monitor: **source 94**, source+tests+map **513**. Every
-change site is enumerated in §2 and in `CHECKLIST.md`, helpers included.
+Re-declared by the monitor: **source 94**, source+tests+map **513**.
+
+**Measured at implementation: source 113, total 515 — EXCEEDED on both.** Put
+to the operator as a STOP with priced options. **Ruling: RE-DECLARED at
+113/515**, same grounds discipline as this tranche's first re-declaration and
+lane C's two.
+
+Grounds, and one fact that had not come up before:
+
+- **The fix DELETES a function.** `run_manifest.py` is 113 inserted / **49
+  deleted** — net **+64**, comfortably inside 94. The instrument counts
+  insertions ONLY, by explicit design ("a budget ceiling bounds what is
+  ADDED"), so a change that removes machinery is charged for its replacement
+  and credited nothing for the removal. Recorded because it will recur on any
+  refactor-shaped fix.
+- **The cone never moved.** Every line is inside a change site §2 enumerated.
+- **16 of the 113 are pure constraint comments** and most of the remainder are
+  the three new helpers' docstrings, which carry the fail-closed reasoning and
+  the measured serializer argument. CLAUDE.md requires comments that state
+  constraints the code cannot show; trimming them to fit a counter would trade
+  a standing convention for a number.
+- The total overrun is **2 lines** on a 513 ceiling.
+
+Condition, unchanged: `tools/diff_budget.py` stays armed at its normal ceiling
+for every future tranche. This is a re-declaration, not a repeal.

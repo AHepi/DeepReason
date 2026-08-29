@@ -1199,6 +1199,27 @@ class CompileNoticeV1(BaseModel):
     message: str = Field(min_length=1)
     pointer: str = Field(min_length=1)
     resolution: str | None = None
+    # Canonical JSON of the configured value this notice CARRIES, so a
+    # disclosure is also the road back: `config_from_run_manifest` restores it.
+    # None when the notice carries nothing.
+    value: str | None = None
+
+    @model_serializer(mode="wrap")
+    def _omit_absent_carried_value(self, handler):
+        """Drop `value` from the dump when absent.
+
+        Load-bearing, not tidiness. `qualification_subject_payload` strips
+        ENGINE_CONFIG_FIELD_NOT_CARRIED notices but KEEPS every other notice,
+        so a `"value": null` on an unrelated notice moves the manifest sha256
+        AND every qualification subject digest that manifest feeds. Measured
+        both ways before this field was added; see the tranche's
+        `proof/notice_digest_probe.py`.
+        """
+
+        dumped = handler(self)
+        if self.value is None:
+            dumped.pop("value", None)
+        return dumped
 
 
 # A notice sink bound to one manifest construction. Helper validators
@@ -1216,9 +1237,16 @@ def _emit_compile_notice(
     pointer: str,
     *,
     resolution: str | None = None,
+    value: str | None = None,
 ) -> None:
     sink.append(
-        CompileNoticeV1(code=code, message=message, pointer=pointer, resolution=resolution)
+        CompileNoticeV1(
+            code=code,
+            message=message,
+            pointer=pointer,
+            resolution=resolution,
+            value=value,
+        )
     )
 
 
@@ -2490,12 +2518,31 @@ _DEFAULT_CONFIG_DATA: dict[str, Any] | None = None
 # The three dropped fields whose whole effect is a COMPILE-time decision the
 # manifest records in a typed policy field of its own; every other dropped
 # field is consulted at a site inside the run, where only the rebuilt Config
-# exists. A pointer here names where the effect must appear instead, and
-# `_dropped_field_effect_is_compiled` suppresses the notice when it does.
+# exists. A pointer here names where the effect ALSO appears; it never
+# suppresses the notice, because under carriage the notice IS the road back.
 _DROPPED_FIELD_CARRIERS: dict[str, str] = {
     "ENGAGED_CRITICISM_AUTHORITY": "/criticism_policy/authority",
     "LEGACY_CRITICISM_ENABLED": "/criticism_policy",
     "SCHOOL_SEATS_ENABLED": "/control_plane_policy/school_execution",
+}
+
+
+# The pointer prefix every carriage notice uses, and the notice code itself.
+# The CODE must stay ENGINE_CONFIG_FIELD_NOT_CARRIED: it is the exact key
+# `qualification.py::qualification_subject_payload` strips before digesting,
+# so renaming it for cosmetics would contact frozen surface 5.
+_CARRIAGE_POINTER_PREFIX = "/engine_config/"
+_CARRIAGE_NOTICE_CODE = "ENGINE_CONFIG_FIELD_NOT_CARRIED"
+
+# Fields whose carriage changes what a run QUALIFIES against, and therefore
+# costs a home one battery. Data, not a branch: a future priced field is a row
+# here, which is what keeps the price a configuration concern rather than a
+# code edit (modularity law, 2026-08-26).
+_CARRIAGE_REQUALIFIES: dict[str, str] = {
+    "LEGACY_CRITICISM_ENABLED": (
+        "carrying this value engages the criticism policy, which changes the "
+        "qualification subject; this home requalifies once (~14 minutes)"
+    ),
 }
 
 
@@ -2518,44 +2565,24 @@ def _default_config_data() -> dict[str, Any]:
     return _DEFAULT_CONFIG_DATA
 
 
-def _dropped_field_effect_is_compiled(
-    field: str, configured: Any, criticism_policy, control_policy
-) -> bool:
-    if field == "ENGAGED_CRITICISM_AUTHORITY":
-        return criticism_policy is not None and criticism_policy.authority == configured
-    if field == "LEGACY_CRITICISM_ENABLED":
-        # Only the False setting asks for anything; True is the default and
-        # never reaches here.
-        return criticism_policy is not None
-    if field == "SCHOOL_SEATS_ENABLED":
-        return (
-            control_policy is not None
-            and getattr(control_policy, "school_execution", None) is not None
-            and control_policy.school_execution.mode == "route_bound"
-        )
-    return False
-
-
 def _emit_uncarried_config_notices(
     data: dict[str, Any],
     engine_config: dict[str, Any],
     *,
     notices: list[CompileNoticeV1],
-    criticism_policy,
-    control_policy,
 ) -> None:
-    """Disclose every configured Config field this manifest does not carry.
+    """Carry every configured Config field the engine-config echo drops.
 
-    `config_from_run_manifest` rebuilds Config from `engine_config_json` and
-    nothing else, and `apply_profile_to_config` touches none of the dropped
-    fields, so an absent field takes its declared default for the whole run.
-    Putting them in the echo instead would move `source_config_hash`, and with
-    it every manifest digest and every qualification subject digest
-    (docs/ERRATA.md E44) -- so the drop is disclosed rather than reversed.
-    Operator law, 2026-08-28: "Gates are always optional: with warnings."
+    The echo cannot hold them: putting them there would move
+    `source_config_hash`, and with it every manifest digest and every
+    qualification subject digest (docs/ERRATA.md E44). So the value travels
+    BESIDE the echo, on the notice that already disclosed its absence -- which
+    makes one channel serve both limbs of the operator's 2026-08-28 law, the
+    warning and the "at will".
 
-    Compile time only. No read path calls this, so loading a committed
-    manifest attaches no notice and moves no stored digest or verdict.
+    Emission stays COMPILE-TIME ONLY: this has exactly one caller, inside
+    `compile_run_manifest`. Loading a committed manifest attaches no notice.
+    The READ half is `_carried_config_values`.
     """
 
     defaults = _default_config_data()
@@ -2565,17 +2592,16 @@ def _emit_uncarried_config_notices(
         configured = data[field]
         if configured == defaults[field]:
             continue
-        if _dropped_field_effect_is_compiled(
-            field, configured, criticism_policy, control_policy
-        ):
-            continue
+        price = _CARRIAGE_REQUALIFIES.get(field)
         _emit_compile_notice(
             notices,
-            "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+            _CARRIAGE_NOTICE_CODE,
             f"{field}={configured!r} is not carried by this manifest's engine "
-            f"config; the run will use {defaults[field]!r}",
-            f"/engine_config/{field}",
+            f"config and is restored at run time from this notice"
+            + (f"; {price}" if price else ""),
+            f"{_CARRIAGE_POINTER_PREFIX}{field}",
             resolution=_DROPPED_FIELD_CARRIERS.get(field),
+            value=_canonical_json(configured).decode("utf-8"),
         )
 
 
@@ -3901,13 +3927,7 @@ def compile_run_manifest(
     )
 
     engine_config = _versioned_source_config_data(data, schema_version)
-    _emit_uncarried_config_notices(
-        data,
-        engine_config,
-        notices=notices,
-        criticism_policy=resolved_criticism_policy,
-        control_policy=resolved_control_policy,
-    )
+    _emit_uncarried_config_notices(data, engine_config, notices=notices)
     engine_config["roles"] = {}
     if schema_version >= 3:
         # Typed v3 policy is canonical and must not be duplicated inside the
@@ -4394,6 +4414,46 @@ def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManif
     return manifest
 
 
+def _carried_config_values(manifest: RunManifest) -> dict[str, Any]:
+    """Values this manifest's carriage notices restore into the rebuilt Config.
+
+    Fail-closed on every malformed input. Silently defaulting is the defect
+    being repaired, and a hand-edited record must not buy a working run
+    (continuation-integrity law, 2026-08-29) -- so a pointer outside the
+    engine-config namespace, a field that is not actually dropped, or
+    undecodable JSON is a TYPED refusal, never a shrug.
+    """
+
+    dropped = set(_unconditionally_dropped_config_fields())
+    carried: dict[str, Any] = {}
+    for notice in manifest.compile_notices or ():
+        if notice.code != _CARRIAGE_NOTICE_CODE or notice.value is None:
+            continue
+        if not notice.pointer.startswith(_CARRIAGE_POINTER_PREFIX):
+            raise RunManifestError(
+                "CARRIED_CONFIG_POINTER_INVALID",
+                "carriage notice points outside the engine-config namespace",
+                notice.pointer,
+            )
+        field = notice.pointer[len(_CARRIAGE_POINTER_PREFIX):]
+        if field not in dropped:
+            raise RunManifestError(
+                "CARRIED_CONFIG_FIELD_UNKNOWN",
+                f"carriage notice names {field!r}, which the engine config "
+                "does not drop",
+                notice.pointer,
+            )
+        try:
+            carried[field] = json.loads(notice.value)
+        except json.JSONDecodeError as error:
+            raise RunManifestError(
+                "CARRIED_CONFIG_VALUE_INVALID",
+                f"carriage notice for {field!r} holds undecodable JSON: {error}",
+                notice.pointer,
+            ) from error
+    return carried
+
+
 def config_from_run_manifest(manifest: RunManifest):
     """Reconstruct Config with routes sourced only from the manifest."""
     from deepreason.config import Config
@@ -4413,6 +4473,10 @@ def config_from_run_manifest(manifest: RunManifest):
             )
         data["scratchpad"] = _effective_source_policy(manifest.scratch_policy)
         data["bridge"] = _effective_source_policy(manifest.bridge_policy)
+    # Carriage lands BEFORE the roles/profile injection below, so a carried key
+    # can never become a second route authority even if the drop-set guard
+    # above were ever defeated.
+    data.update(_carried_config_values(manifest))
     data["roles"] = {
         role: (
             [route.endpoint_spec() for route in routes]

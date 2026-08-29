@@ -20,13 +20,17 @@ from pathlib import Path
 
 from deepreason.config import Config
 from deepreason.run_manifest import (
+    CompileNoticeV1,
     RunManifest,
+    RunManifestError,
+    _CARRIAGE_NOTICE_CODE,
     _source_config_data,
     _unconditionally_dropped_config_fields,
     _versioned_source_config_data,
     config_from_run_manifest,
     source_config_hash,
 )
+from deepreason.qualification import qualification_subject_digest
 from deepreason.v6_policy import engaged_criticism_policy
 
 from tests.test_reusable_qualification import _manifest, _profile
@@ -73,7 +77,14 @@ def _disclosed(manifest) -> dict[str, str]:
     }
 
 
-def test_pt1_builder_shape_discloses_every_uncarried_switch():
+def test_pt1_builder_shape_carries_and_discloses_every_dropped_switch():
+    """Road A's acceptance test (P15): the notice is the carrier.
+
+    Was `..._discloses_every_uncarried_switch`, and asserted
+    `getattr(runtime, field) != configured` -- the silent revert. Carriage
+    inverts exactly that assertion; the disclosure half is unchanged.
+    """
+
     manifest = _pt1_manifest()
     runtime = config_from_run_manifest(manifest)
     disclosed = _disclosed(manifest)
@@ -83,12 +94,12 @@ def test_pt1_builder_shape_discloses_every_uncarried_switch():
         f"named={sorted(disclosed)}"
     )
     for field, configured in PT1_SWITCHES.items():
-        # The run really does take the default -- the notice is not describing
-        # a loss that does not happen.
-        assert getattr(runtime, field) != configured
-        message = disclosed[field]
-        assert repr(configured) in message, (field, message)
-        assert repr(getattr(runtime, field)) in message, (field, message)
+        # The configured value REACHES the run. This is the limb of the
+        # 2026-08-28 law the disclosure tranche could not deliver.
+        assert getattr(runtime, field) == configured, (
+            field, getattr(runtime, field), configured
+        )
+        assert repr(configured) in disclosed[field], (field, disclosed[field])
 
 
 def test_default_config_compiles_byte_identically():
@@ -109,7 +120,17 @@ def test_source_config_hash_is_unchanged_at_every_schema_version():
     )
 
 
-def test_identity_only_fields_are_silent_when_the_manifest_carries_them():
+def test_a_field_whose_effect_is_compiled_is_still_carried_and_still_named():
+    """Was `..._are_silent_when_the_manifest_carries_them`.
+
+    That silence WAS the defect for these two fields, and it is the one B1's
+    residual finding named: `LEGACY_CRITICISM_ENABLED` was neither carried nor
+    disclosed. Under road A the notice IS the carrier, so suppressing it means
+    "not carried" -- `_dropped_field_effect_is_compiled` is therefore deleted,
+    and a compiled effect no longer buys silence. The typed policy field it
+    pointed at survives as the notice's `resolution`.
+    """
+
     profile = _profile()
     manifest = _manifest(
         profile,
@@ -122,8 +143,25 @@ def test_identity_only_fields_are_silent_when_the_manifest_carries_them():
         ),
     )
     disclosed = _disclosed(manifest)
-    assert "LEGACY_CRITICISM_ENABLED" not in disclosed
-    assert "ENGAGED_CRITICISM_AUTHORITY" not in disclosed
+    runtime = config_from_run_manifest(manifest)
+
+    assert "LEGACY_CRITICISM_ENABLED" in disclosed
+    assert "ENGAGED_CRITICISM_AUTHORITY" in disclosed
+    assert runtime.LEGACY_CRITICISM_ENABLED is False
+    assert runtime.ENGAGED_CRITICISM_AUTHORITY == "defended_trial"
+
+    # The effect the old suppression pointed at is still named, as the
+    # notice's resolution rather than as a reason to say nothing.
+    resolutions = {
+        n.pointer.rsplit("/", 1)[-1]: n.resolution
+        for n in (manifest.compile_notices or ())
+        if n.code == DISCLOSURE
+    }
+    assert resolutions["LEGACY_CRITICISM_ENABLED"] == "/criticism_policy"
+    assert resolutions["ENGAGED_CRITICISM_AUTHORITY"] == "/criticism_policy/authority"
+
+    # And the priced switch says its price, in the message a person reads.
+    assert "requalifies" in disclosed["LEGACY_CRITICISM_ENABLED"]
 
 
 def test_identity_only_field_is_disclosed_when_the_manifest_does_not_carry_it():
@@ -189,3 +227,137 @@ def test_loading_a_committed_manifest_adds_no_notice():
     assert RunManifest.model_validate(manifest.model_dump(mode="json")).sha256 == (
         manifest.sha256
     )
+
+
+# --- carriage: the notice is the road back (P15) --------------------------- #
+#
+# The 2026-08-28 tranche fixed the SILENCE, which is the first limb of the
+# operator's law ("Gates are always optional: with warnings"). It did not fix
+# the second: 22 behavioural switches still could not be turned ON by any
+# route. Road A makes the disclosure notice the CARRIER as well.
+
+
+def _carried(manifest):
+    return {
+        n.pointer.rsplit("/", 1)[-1]: n.value
+        for n in (manifest.compile_notices or ())
+        if n.code == _CARRIAGE_NOTICE_CODE
+    }
+
+
+def test_every_dropped_field_the_managed_path_can_set_round_trips():
+    """R1. At HEAD before this tranche the answer was 0 of 25."""
+
+    dropped = _unconditionally_dropped_config_fields()
+    explicit = {
+        "ATTENTION_ALLOCATION_POLICY": "wander-cap.v1-probe",
+        "CAPTURE14_SC_CEILING": 0.75,
+        "DISCHARGE_POLICY": "discharge-required.v1-probe",
+        "ENGAGED_CRITICISM_AUTHORITY": "defended_trial",
+        "SEED_PROBLEM_BUDGET_FLOOR": 0.75,
+        "SPLIT_BUDGET_SEAT_PROTOCOL": "on",
+    }
+    carried = 0
+    for field in dropped:
+        # CHANNELS_DISABLED is host-owned on the managed path (parked P21) and
+        # is exercised by its own test below, not here.
+        if field == "CHANNELS_DISABLED":
+            continue
+        default = getattr(Config(), field)
+        if field in explicit:
+            want = explicit[field]
+        elif isinstance(default, bool):
+            want = not default
+        else:
+            want = default + 1
+        manifest = _manifest(_profile(), config_updates={field: want})
+        assert getattr(config_from_run_manifest(manifest), field) == want, field
+        carried += 1
+    assert carried == len(dropped) - 1 == 24
+
+
+def test_carriage_moves_no_qualification_subject_digest_it_did_not_already_move():
+    """R2. The carrier rides a notice `qualification_subject_payload` strips.
+
+    So the digest a home requalifies on cannot move because of carriage. The
+    one field that DOES move it moved it before this tranche too, because
+    `preparation` compiles a criticism policy for it -- carriage adds no
+    battery anywhere.
+    """
+
+    profile = _profile()
+    base = _manifest(profile)
+    for field, want in (
+        ("JUDGE_SEATS_ENABLED", True),
+        ("SCHOOL_SEATS_ENABLED", True),
+        ("ADJUDICATION_STATUS_AUTHORITY_ENABLED", True),
+        ("K_FRAME", 3),
+    ):
+        moved = _manifest(profile, config_updates={field: want})
+        assert _carried(moved)[field] is not None, field
+        assert qualification_subject_digest(moved, profile) == (
+            qualification_subject_digest(base, profile)
+        ), field
+
+
+def test_the_priced_switch_compiles_with_its_price_visible():
+    """R3. Never a refusal, and never silent about what it costs."""
+
+    profile = _profile()
+    manifest = _manifest(
+        profile, config_updates={"LEGACY_CRITICISM_ENABLED": False}
+    )
+    disclosed = _disclosed(manifest)
+
+    assert config_from_run_manifest(manifest).LEGACY_CRITICISM_ENABLED is False
+    assert "requalifies" in disclosed["LEGACY_CRITICISM_ENABLED"]
+    assert "qualification subject" in disclosed["LEGACY_CRITICISM_ENABLED"]
+
+
+def test_a_manifest_with_no_carriage_notice_behaves_exactly_as_before():
+    """R4. Nothing retroactive: all 72 committed manifests carry no notice."""
+
+    manifest = _manifest(_profile())
+    assert manifest.compile_notices in (None, ())
+    assert _carried(manifest) == {}
+    # And the absent `value` is absent from the BYTES, not merely null --
+    # a `"value": null` on an unrelated notice would move every digest that
+    # manifest feeds, because the subject payload keeps non-carriage notices.
+    other = CompileNoticeV1(code="SOME_OTHER_NOTICE", message="m", pointer="/p")
+    assert "value" not in other.model_dump(mode="json")
+
+
+def test_a_tampered_carriage_notice_is_refused_typed_never_defaulted():
+    """Continuation-integrity law (2026-08-29): editing a record must not buy
+    a working run. Silently defaulting is the defect being repaired."""
+
+    profile = _profile()
+    base = _manifest(profile, config_updates={"JUDGE_SEATS_ENABLED": True})
+
+    for notice, code in (
+        (CompileNoticeV1(code=_CARRIAGE_NOTICE_CODE, message="m",
+                         pointer="/somewhere_else/X", value="true"),
+         "CARRIED_CONFIG_POINTER_INVALID"),
+        (CompileNoticeV1(code=_CARRIAGE_NOTICE_CODE, message="m",
+                         pointer="/engine_config/NOT_A_DROPPED_FIELD", value="true"),
+         "CARRIED_CONFIG_FIELD_UNKNOWN"),
+        (CompileNoticeV1(code=_CARRIAGE_NOTICE_CODE, message="m",
+                         pointer="/engine_config/JUDGE_SEATS_ENABLED", value="{bad"),
+         "CARRIED_CONFIG_VALUE_INVALID"),
+    ):
+        tampered = base.model_copy(update={"compile_notices": (notice,)})
+        try:
+            config_from_run_manifest(tampered)
+        except RunManifestError as error:
+            assert error.code == code, (code, error.code)
+        else:
+            raise AssertionError(f"expected {code}, got a silent default")
+
+
+def test_the_priced_field_table_is_data_not_a_branch():
+    """R5. A future priced field is a row, never a code edit."""
+
+    from deepreason.run_manifest import _CARRIAGE_REQUALIFIES
+
+    assert set(_CARRIAGE_REQUALIFIES) == {"LEGACY_CRITICISM_ENABLED"}
+    assert set(_CARRIAGE_REQUALIFIES) <= set(_unconditionally_dropped_config_fields())

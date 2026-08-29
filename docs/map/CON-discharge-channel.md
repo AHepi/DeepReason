@@ -156,7 +156,7 @@ route = {'endpoint': 'https://example.invalid/v1', 'endpoint_id': 'e', 'provider
 c = Config(DISCHARGE_POLICY='off', roles={r: route for r in ('conjecturer', 'argumentative_critic', 'defender', 'variator', 'judge', 'summarizer', 'synthesizer', 'vision_critic', 'property_designer', 'thesis', 'grounding_reviewer')})
 m = compile_run_manifest(c, schema_version=6, workload_profile='text', rubric_policy='forbid', single_model='m', concurrency=2, compiled_at='2026-08-25T00:00:00Z', control_plane_policy=engaged_control_plane_policy_v3(), toolchains=(engaged_local_simulation_toolchain(),), inquiry_capability_policy=engaged_inquiry_capability_policy(attached_evidence=False), run_input_digest='0'*64)
 assert 'DISCHARGE_POLICY' not in json.loads(m.engine_config_json)
-assert config_from_run_manifest(m).DISCHARGE_POLICY == 'discharge-required.v1', 'the pop no longer discards the configured value -- F-A may be fixed; re-read this section'
+assert config_from_run_manifest(m).DISCHARGE_POLICY == 'off', 'carriage no longer restores the configured value -- P15 may have regressed; re-read this section'
 "`
 
 That check asserts the DEFECT and says so: it passes while a configured `off`

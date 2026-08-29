@@ -359,16 +359,19 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
     # this law in action, not a regression.
     moved = {"inquiry_capability_policy", "toolchains"}
     #
-    # The uncarried-field disclosure (2026-08-28, audit finding F-A) adds a
-    # NEW key rather than moving one: this config sets two behavioural
-    # switches the engine-config echo cannot carry, so a recompile now says
-    # so where the August manifest was silent. Pinned exactly, per this
-    # docstring's own rule, because on the operator's own committed config
-    # this is a second and independent instance of the P10 regression -- and
-    # because WHICH two it names is the suppression rule working: the config
-    # sets five switches, and the three whose effect this builder re-expressed
-    # in criticism_policy and control_plane_policy.school_execution are
-    # correctly silent.
+    # The carriage notice (P15, 2026-08-29) adds a NEW key rather than moving
+    # one: this config sets five behavioural switches the engine-config echo
+    # cannot hold, so a recompile now carries all five beside the echo where
+    # the August manifest was silent. Pinned exactly, per this docstring's own
+    # rule.
+    #
+    # ALL FIVE, not two. Under the 2026-08-28 disclosure this test pinned two,
+    # because `_dropped_field_effect_is_compiled` suppressed the notice for the
+    # three whose effect the builder re-expressed in `criticism_policy` and
+    # `control_plane_policy.school_execution`. Carriage deletes that
+    # suppression: the notice is now the road back, so suppressing it means
+    # "not carried", which was exactly the residual finding P15 was opened to
+    # close. The re-expressed effect survives as each notice's `resolution`.
     added = {"compile_notices"}
     assert (
         _without_evidence(compiled).keys() - _without_evidence(committed).keys()
@@ -380,8 +383,27 @@ def test_the_grounded_tranche_config_enters_through_the_new_door(
             "ENGINE_CONFIG_FIELD_NOT_CARRIED",
             "/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED",
         ),
+        (
+            "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+            "/engine_config/ENGAGED_CRITICISM_AUTHORITY",
+        ),
         ("ENGINE_CONFIG_FIELD_NOT_CARRIED", "/engine_config/JUDGE_SEATS_ENABLED"),
+        (
+            "ENGINE_CONFIG_FIELD_NOT_CARRIED",
+            "/engine_config/LEGACY_CRITICISM_ENABLED",
+        ),
+        ("ENGINE_CONFIG_FIELD_NOT_CARRIED", "/engine_config/SCHOOL_SEATS_ENABLED"),
     ]
+    # And every one of the five actually REACHES the run -- the point of the
+    # tranche, on the operator's own committed configuration.
+    from deepreason.run_manifest import RunManifest, config_from_run_manifest
+
+    runtime = config_from_run_manifest(RunManifest.model_validate(compiled))
+    assert runtime.ADJUDICATION_STATUS_AUTHORITY_ENABLED is True
+    assert runtime.ENGAGED_CRITICISM_AUTHORITY == "defended_trial"
+    assert runtime.JUDGE_SEATS_ENABLED is True
+    assert runtime.LEGACY_CRITICISM_ENABLED is False
+    assert runtime.SCHOOL_SEATS_ENABLED is True
     assert (
         _without_evidence(compiled).keys() - added
         == _without_evidence(committed).keys()

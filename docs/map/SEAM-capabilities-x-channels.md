@@ -138,11 +138,18 @@ the intended behaviour, not a defect in the check.)
 
 **It cannot do that here, and the reason is structural rather than lucky.**
 The channel decision never travels in the echo; it travels as the compiled
-policy, which the manifest carries and which the controllers read directly. The
-differential below shows both halves at once: the rebuilt `Config` HAS lost the
-toggle, and the compiled policy has NOT lost the decision.
+policy, which the manifest carries and which the controllers read directly.
 
-`check: python3 -c 'import sys,json;sys.path.insert(0,".");from tests.test_v6_engaged_public_defaults import STAMP,_profile;from deepreason.preparation import build_preparation_manifest as B;from deepreason.run_manifest import config_from_run_manifest as C;m=B(_profile(),question="q",compiled_at=STAMP,channels_disabled=("research",));assert m.inquiry_capability_policy.research.enabled is False;assert m.inquiry_capability_policy.simulation.enabled is True;assert "CHANNELS_DISABLED" not in json.loads(m.engine_config_json);assert C(m).CHANNELS_DISABLED==(),C(m).CHANNELS_DISABLED'`
+**Updated 2026-08-29 (P15 carriage).** Until carriage, this differential also
+showed the rebuilt `Config` having LOST the toggle, and that loss was the
+point: the decision survived only in the policy. Carriage restores the toggle
+too — the notice that disclosed the drop now carries the value — so the two
+halves no longer disagree. The immunity claim is UNCHANGED and is what the
+check still pins: the compiled policy carries the decision whether or not the
+`Config` does, so a controller reading the policy is right either way. What is
+gone is the asymmetry, not the immunity.
+
+`check: python3 -c 'import sys,json;sys.path.insert(0,".");from tests.test_v6_engaged_public_defaults import STAMP,_profile;from deepreason.preparation import build_preparation_manifest as B;from deepreason.run_manifest import config_from_run_manifest as C;m=B(_profile(),question="q",compiled_at=STAMP,channels_disabled=("research",));assert m.inquiry_capability_policy.research.enabled is False;assert m.inquiry_capability_policy.simulation.enabled is True;assert "CHANNELS_DISABLED" not in json.loads(m.engine_config_json);assert C(m).CHANNELS_DISABLED==("research",),C(m).CHANNELS_DISABLED'`
 
 **The consequence for anyone changing this seam:** the immunity is bought by
 the capability side reading no configuration. A change that gave a controller a
