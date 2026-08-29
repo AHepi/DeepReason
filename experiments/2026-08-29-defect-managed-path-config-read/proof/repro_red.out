@@ -1,0 +1,153 @@
+FFs                                                                      [100%]
+=================================== FAILURES ===================================
+___________ test_reason_forwards_the_operator_config_to_preparation ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-361/test_reason_forwards_the_opera0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbe3e9e9b50>
+
+    def test_reason_forwards_the_operator_config_to_preparation(tmp_path, monkeypatch):
+        """`deepreason --config FILE reason Q` must let FILE reach preparation.
+    
+        Deliberately neutral about HOW: the assertion is satisfied by forwarding
+        the path, or the loaded Config, or anything carrying the operator's value.
+        It fails only if NOTHING about FILE reaches the preparation service, which
+        is the state of the tree today.
+        """
+        config_path = tmp_path / "run-config.yaml"
+        config_path.write_text(OPERATOR_YAML)
+    
+        seen: dict[str, object] = {}
+    
+        class _Stop(Exception):
+            pass
+    
+        class _CapturingService:
+            def __init__(self, *args, **kwargs):
+                seen["init_args"] = args
+                seen["init_kwargs"] = kwargs
+    
+            def prepare(self, request, *args, **kwargs):
+                seen["request"] = request
+                seen["prepare_args"] = args
+                seen["prepare_kwargs"] = kwargs
+                raise _Stop()
+    
+        monkeypatch.setattr(preparation, "RunPreparationService", _CapturingService)
+        monkeypatch.setattr(
+            "deepreason.cli.main._reasoning_disabled_refusal", lambda _profile: None
+        )
+    
+        args = build_parser().parse_args(
+            ["--config", str(config_path), "reason", "Why is the sky blue?"]
+        )
+        assert args.config == str(config_path), "the global --config flag must parse"
+    
+        with pytest.raises(_Stop):
+            _cmd_reason(args)
+    
+        forwarded = repr(seen)
+>       assert str(config_path) in forwarded or "JUDGE_SEATS_ENABLED" in forwarded, (
+            "deepreason reason discards --config: nothing about the operator's "
+            f"configuration file reached RunPreparationService. Captured: {forwarded}"
+        )
+E       AssertionError: deepreason reason discards --config: nothing about the operator's configuration file reached RunPreparationService. Captured: {'init_args': (), 'init_kwargs': {}, 'request': RunPreparationRequestV1(schema_='deepreason-run-preparation-request.v1', question='Why is the sky blue?', budget=RunBudgetIntentV1(cycles=6, token_budget=100000), profile_path=None, managed_run_id=None, dossier_digest=None), 'prepare_args': (), 'prepare_kwargs': {}}
+E       assert ('/tmp/pytest-of-root/pytest-361/test_reason_forwards_the_opera0/run-config.yaml' in "{'init_args': (), 'init_kwargs': {}, 'request': RunPreparationRequestV1(schema_='deepreason-run-preparation-request.v...udget=100000), profile_path=None, managed_run_id=None, dossier_digest=None), 'prepare_args': (), 'prepare_kwargs': {}}" or 'JUDGE_SEATS_ENABLED' in "{'init_args': (), 'init_kwargs': {}, 'request': RunPreparationRequestV1(schema_='deepreason-run-preparation-request.v...udget=100000), profile_path=None, managed_run_id=None, dossier_digest=None), 'prepare_args': (), 'prepare_kwargs': {}}")
+E        +  where '/tmp/pytest-of-root/pytest-361/test_reason_forwards_the_opera0/run-config.yaml' = str(PosixPath('/tmp/pytest-of-root/pytest-361/test_reason_forwards_the_opera0/run-config.yaml'))
+
+tests/test_managed_path_config_read.py:124: AssertionError
+______ test_managed_manifest_carries_or_discloses_every_operator_setting _______
+
+profile = ProviderProfileV1(schema_='deepreason-provider-profile.v1', profile_digest='1e9efe7c053041ede690a4d969c209cea05b65ae8d...asoning=None, output_mode='json_object', output_mechanism='json_text', temperature=None, timeout_s=120, logprobs=False)
+operator = Config(engine_profile='full', model_profile='standard', scratchpad=ScratchpadConfig(enabled=False, max_blocks_per_pack..., PACK_TOKEN_BUDGET=2500, RETRY_MAX=2, SPLIT_BUDGET_SEAT_PROTOCOL='auto', SPLIT_BUDGET_EXTRACTION_TOKENS=512, roles={})
+
+    def _managed_manifest(profile, operator: Config | None):
+        """Prepare the MANAGED manifest, optionally under the operator's Config.
+    
+        THE ONE FIX-SHAPE ASSUMPTION IN THIS FILE, stated so a fix that chooses a
+        different route updates one helper instead of three tests: the managed
+        manifest builder must be able to be GIVEN the operator's configuration.
+        Whether the route is a `Config` object, a path, or a field on
+        `RunPreparationRequestV1` is the fix's business; that some route exists is
+        the defect.
+        """
+        if operator is None:
+            return build_preparation_manifest(
+                profile, question="Why is the sky blue?", compiled_at=STAMP
+            )
+        try:
+>           return build_preparation_manifest(
+                profile,
+                question="Why is the sky blue?",
+                compiled_at=STAMP,
+                config=operator,
+            )
+E           TypeError: build_preparation_manifest() got an unexpected keyword argument 'config'
+
+tests/test_managed_path_config_read.py:70: TypeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-361/test_managed_manifest_carries_0')
+
+    def test_managed_manifest_carries_or_discloses_every_operator_setting(tmp_path):
+        """Field by field: carried into the run, OR disclosed as not carried.
+    
+        This is GOAL.md's success criterion verbatim, and it is the disjunction the
+        2026-08-28 operator law requires -- a gate is either on because the
+        configuration turned it on, or the record says why it is not.
+        """
+        config_path = tmp_path / "run-config.yaml"
+        config_path.write_text(OPERATOR_YAML)
+        operator = load_config(config_path)
+    
+        default = Config()
+        configured = {
+            name: getattr(operator, name)
+            for name in type(default).model_fields
+            if getattr(operator, name) != getattr(default, name)
+        }
+        assert configured, "the fixture must set something away from its default"
+    
+        profile = _profile()
+>       manifest = _managed_manifest(profile, operator)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_managed_path_config_read.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+profile = ProviderProfileV1(schema_='deepreason-provider-profile.v1', profile_digest='1e9efe7c053041ede690a4d969c209cea05b65ae8d...asoning=None, output_mode='json_object', output_mechanism='json_text', temperature=None, timeout_s=120, logprobs=False)
+operator = Config(engine_profile='full', model_profile='standard', scratchpad=ScratchpadConfig(enabled=False, max_blocks_per_pack..., PACK_TOKEN_BUDGET=2500, RETRY_MAX=2, SPLIT_BUDGET_SEAT_PROTOCOL='auto', SPLIT_BUDGET_EXTRACTION_TOKENS=512, roles={})
+
+    def _managed_manifest(profile, operator: Config | None):
+        """Prepare the MANAGED manifest, optionally under the operator's Config.
+    
+        THE ONE FIX-SHAPE ASSUMPTION IN THIS FILE, stated so a fix that chooses a
+        different route updates one helper instead of three tests: the managed
+        manifest builder must be able to be GIVEN the operator's configuration.
+        Whether the route is a `Config` object, a path, or a field on
+        `RunPreparationRequestV1` is the fix's business; that some route exists is
+        the defect.
+        """
+        if operator is None:
+            return build_preparation_manifest(
+                profile, question="Why is the sky blue?", compiled_at=STAMP
+            )
+        try:
+            return build_preparation_manifest(
+                profile,
+                question="Why is the sky blue?",
+                compiled_at=STAMP,
+                config=operator,
+            )
+        except TypeError as error:
+>           pytest.fail(
+                "MANAGED PATH HAS NO CONFIGURATION INPUT: build_preparation_manifest "
+                f"cannot be given the operator's Config at all -- {error}"
+            )
+E           Failed: MANAGED PATH HAS NO CONFIGURATION INPUT: build_preparation_manifest cannot be given the operator's Config at all -- build_preparation_manifest() got an unexpected keyword argument 'config'
+
+tests/test_managed_path_config_read.py:77: Failed
+=========================== short test summary info ============================
+FAILED tests/test_managed_path_config_read.py::test_reason_forwards_the_operator_config_to_preparation
+FAILED tests/test_managed_path_config_read.py::test_managed_manifest_carries_or_discloses_every_operator_setting
+2 failed, 1 skipped in 0.40s

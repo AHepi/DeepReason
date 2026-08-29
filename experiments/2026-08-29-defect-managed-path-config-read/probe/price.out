@@ -130,4 +130,5 @@
   default-valued carriage is free                   True
   dropped fields free to carry, measured one by one 23
   dropped fields that cost a battery                1
-  battery owed per moved subject, per home          ~14 min, ~1160 provider calls
+  battery size on THIS manifest                     15 pairs x 20 cases = 300 provider calls MINIMUM (repair turns add more)
+  battery cost recorded for a live home (CLAUDE.md) ~14 min, ~1160 provider calls

@@ -7,7 +7,9 @@
 #   sh experiments/2026-08-29-defect-managed-path-config-read/probe/echo_census_managed_roots.sh
 #
 # Expected: one distinct echo digest, N roots, several distinct
-# source_config_hash values (the profile-derived roles DO vary; nothing else does).
+# source_config_hash values (the profile-derived roles DO vary; nothing else
+# does), and notices=0 on every root -- the 2026-08-28 disclosure has never
+# fired on this path, because no field on it ever differs from its default.
 cd "$(dirname "$0")/../../.." || exit 1
 for f in $(find experiments -name run-preparation.json | sort); do
   d=$(dirname "$f")
@@ -16,6 +18,7 @@ for f in $(find experiments -name run-preparation.json | sort); do
   PYTHONPATH=src:mini python -c "
 import json, hashlib, sys
 m = json.load(open(sys.argv[1]))
-print(hashlib.sha256(m['engine_config_json'].encode()).hexdigest()[:16], m['source_config_hash'][:16])
+notices = m.get('compile_notices')
+print(hashlib.sha256(m['engine_config_json'].encode()).hexdigest()[:16], m['source_config_hash'][:16], 'notices=%d' % (0 if not notices else len(notices)))
 " "$m"
-done | tee /dev/stderr | awk '{e[$1]++; s[$2]++; n++} END {printf "\nroots=%d distinct_echo_digests=%d distinct_source_config_hashes=%d\n", n, length(e), length(s)}'
+done | tee /dev/stderr | awk '{e[$1]++; s[$2]++; n++} {c[$3]++} END {printf "\nroots=%d distinct_echo_digests=%d distinct_source_config_hashes=%d distinct_notice_counts=%d\n", n, length(e), length(s), length(c); for (k in c) printf "  %s on %d roots\n", k, c[k]}'

@@ -31,6 +31,10 @@ from deepreason import preparation  # noqa: E402
 from deepreason.config import Config, load as load_config  # noqa: E402
 from deepreason.preparation import build_preparation_manifest  # noqa: E402
 from deepreason.provider_profile import ProviderProfileV1  # noqa: E402
+from deepreason.cli.doctor import (  # noqa: E402
+    PRODUCTION_CASES_PER_PAIR,
+    production_contract_pairs,
+)
 from deepreason.qualification import qualification_subject_digest  # noqa: E402
 from deepreason.run_manifest import (  # noqa: E402
     _unconditionally_dropped_config_fields,
@@ -285,7 +289,13 @@ def main() -> int:
     print(f"  default-valued carriage is free                   {default_subject == base_subject}")
     print(f"  dropped fields free to carry, measured one by one {len(isolated['free'])}")
     print(f"  dropped fields that cost a battery                {len(isolated['priced'])}")
-    print(f"  battery owed per moved subject, per home          ~14 min, ~1160 provider calls")
+    pairs = len(production_contract_pairs(base_manifest))
+    print(
+        f"  battery size on THIS manifest                     {pairs} pairs x "
+        f"{PRODUCTION_CASES_PER_PAIR} cases = {pairs * PRODUCTION_CASES_PER_PAIR}"
+        " provider calls MINIMUM (repair turns add more)"
+    )
+    print(f"  battery cost recorded for a live home (CLAUDE.md) ~14 min, ~1160 provider calls")
     return 0
 
 
