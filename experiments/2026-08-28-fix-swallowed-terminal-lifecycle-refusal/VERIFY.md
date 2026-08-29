@@ -85,7 +85,11 @@ proves the control is doing work).
 
 ## Criterion 5 — the gate, the map, and the record
 
-- Full gate: see `proof/gate.txt` — **0 failed** required and met.
+- Full gate (`python -m pytest tests/ -q -n 4`, idle box, never
+  concurrent with `docs_verify`): **4408 passed, 0 failed, 6 skipped**
+  in 13:30. `proof/gate.txt`. The session baseline is 4403 passed;
+  the delta is exactly the 5 regressions this tranche adds, so no
+  pre-existing test changed state in either direction.
 - `python tools/docs_verify.py` FULL mode: **4 failed**, exactly the
   session baseline (3 shallow-clone `CON-run-identity.md` git-history
   checks that cannot resolve in this container, and the 1 pre-existing
