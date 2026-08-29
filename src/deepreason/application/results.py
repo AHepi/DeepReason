@@ -139,7 +139,52 @@ def _identity(root: Path, status: dict | None, replay: dict | None) -> dict[str,
     }
 
 
-def _run(status: dict | None, stop: dict | None) -> dict[str, Any]:
+def _token_spend(status: dict | None, harness) -> Any:
+    """This run's provider spend, taken from the LOG rather than the sidecar.
+
+    The append-only log IS the record; `run-status.json` is a derived snapshot
+    of it, and on a run that died before terminal accounting that snapshot
+    states a spend of zero it never measured — the three failure emits in
+    `application/text_runs.py` omitted the figure, and
+    `runtime/progress.py`'s `token_spend` defaults to 0, so the key is PRESENT
+    and the absence sentinel below can never fire on it. 18 of 54 committed
+    roots carry that false zero, one of them on a 702 789-token run
+    (`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` organ 10).
+
+    The writer is fixed for new roots; the ones already committed are evidence
+    and are never edited, so the truth is recovered here by walking their own
+    log — the same power `_adjudication` already uses in this file, and the
+    only power a reader over an append-only record has.
+
+    The sidecar still decides whether the run was RECORDED at all: a root with
+    no `run-status.json` reports its typed absence, never a number.
+
+    SCOPE, deliberately narrow: the log is consulted only where the sidecar
+    says ZERO, because that is the only value known to be a NON-measurement
+    rather than a stale one — omitting the kwarg is what produced it. Measured
+    over the committed tree: 20 of 59 roots carry that false zero (up to
+    1 193 009 tokens), and a further NINE carry a nonzero sidecar figure that
+    is smaller than their log, from an unrelated and un-diagnosed cause
+    (`RUN_ANATOMY_SYNTHESIS` organ 10's "three token instruments, 27
+    disagreements"). Deciding which of two real measurements is authoritative
+    is a different question; this reader does not silently answer it, and the
+    nine are PARKED rather than re-adjudicated here.
+    """
+
+    if status is None or "token_spend" not in status:
+        return _absent("NO_RUN_STATUS_JSON")
+    recorded = status["token_spend"]
+    if recorded != 0:
+        return recorded
+    try:
+        return sum(
+            event.llm.tokens for event in harness.log.read() if event.llm
+        )
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the log reader
+        return recorded
+
+
+def _run(status: dict | None, stop: dict | None, harness) -> dict[str, Any]:
     stop_reason: Any = _absent("NO_STOP_RECORD")
     if status and status.get("stop_reason"):
         stop_reason = status["stop_reason"]
@@ -170,7 +215,7 @@ def _run(status: dict | None, stop: dict | None) -> dict[str, Any]:
         "stop_reason": stop_reason,
         "message": status.get("message", ""),
         "cycles_completed": cycles,
-        "token_spend": status.get("token_spend", _absent("NO_RUN_STATUS_JSON")),
+        "token_spend": _token_spend(status, harness),
         "token_limit": "unlimited" if limit is None else limit,
     }
 
@@ -656,7 +701,7 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "resolved_from": resolved_from,
         "question": findings.get("question") or _absent("NO_RUN_INPUT"),
         "identity": _identity(root, status, replay),
-        "run": _run(status, stop),
+        "run": _run(status, stop, harness),
         "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),

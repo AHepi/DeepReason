@@ -1,0 +1,62 @@
+state      status_spend   log_spend  calls  root
+completed        175005      175005     45  experiments/2026-08-02-stress-triplet/home-orbit/runs/run-6472629dbc5d408a733d472040671752
+completed        170132      170132     42  experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc
+completed        172738      172738     52  experiments/2026-08-02-stress-triplet/home-workshop/runs/run-1a0d4168a446f052bc7ccc9aa20b9829
+completed        110107      110107     31  experiments/2026-08-04-change-rung5-dumb-alternative-backend/ab-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+completed        111445      111445     24  experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c
+completed        174043      174043     59  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0becdcfe2987fea4b74bc1c7e58e41ea
+completed        176856      176856     63  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-0cdd57d1d8edc5328803a7bb5070a1d1
+completed        161868      161868     55  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-167fe0eb4b373a0e27e87f0482ee5ce7
+completed        157302      157302     48  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-18ca3170f2ff30d99e8255b48f47ab70
+completed        176095      176095     58  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4056c2bce14e9eeabd35956c4fab1e4b
+completed        179556      179556     53  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-4c08a14af6e9db79ddd67c253bfc8913
+completed        193258      193258     78  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-8af8d02b35c6afad6c76604d39809008
+running               0      177755     56  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7  <-- reports 0, log says otherwise
+completed        189309      189309     64  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-f7718a2254b048b88d50d56208ef0726
+completed        161554      161554     56  experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-fd071eaf7b1741b165a97a3529900a06
+failed                0      140461     41  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949  <-- reports 0, log says otherwise
+completed        212097      212097     57  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-6995cd12124d2697030bb4b9e48f79bd
+completed        140812      140812     38  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/run-79900e7847544b09bfb266518e2d8484
+completed       1244594     1244594    666  experiments/2026-08-12-live-grounded-extension-expansion/run
+failed                0       45147      4  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d  <-- reports 0, log says otherwise
+failed                0       56531      7  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d  <-- reports 0, log says otherwise
+failed                0       64007     14  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d  <-- reports 0, log says otherwise
+failed                0      165466     56  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4  <-- reports 0, log says otherwise
+failed                0      109975     49  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4  <-- reports 0, log says otherwise
+completed        371169      371169    140  experiments/2026-08-22-change-epoch3-second-lineage/run
+failed                0      117017     41  experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c  <-- reports 0, log says otherwise
+failed                0      118092     47  experiments/2026-08-22-live-reach-rich-run/run  <-- reports 0, log says otherwise
+failed                0      116319     38  experiments/2026-08-24-change-rung7-wounds-falls-succession/run  <-- reports 0, log says otherwise
+failed                0      702789    292  experiments/2026-08-25-change-constructive-frontier/run  <-- reports 0, log says otherwise
+failed                0      493364     84  experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6  <-- reports 0, log says otherwise
+completed        521838      521838    163  experiments/2026-08-25-poietics-program/run
+running               0           0      1  experiments/2026-08-26-pc2-rematch/retired-transport-timeout180-run-42ad288038dd606c
+running               0      166770      3  experiments/2026-08-26-pc2-rematch/retired-truncation-cap32768-run-58fb0d20488be869  <-- reports 0, log says otherwise
+failed                0     1193009    135  experiments/2026-08-26-pc2-rematch/run  <-- reports 0, log says otherwise
+running               0           0      0  experiments/2026-08-26-pc2-rematch/run_h3
+completed        198156      198156     10  experiments/2026-08-27-pc2b-symmetric-reasoning/run
+completed         90700      119659     29  experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf
+completed        314308      351440     57  experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332
+completed        178642      178642     31  experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5
+completed        174513      174513     20  experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch3-run-9e9812feefa792179d490db7734825b5
+failed                0       96233     18  experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7  <-- reports 0, log says otherwise
+completed        176730      176730     26  experiments/live_research_2026-07-29/openchallenge/runs/run-27b80f26bd398c718360e97e2a403593
+completed        176638      176638     23  experiments/live_research_2026-07-29/openchallenge/runs/run-9e9812feefa792179d490db7734825b5
+completed         90937       90937     15  experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00
+failed                0       90826     18  experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107  <-- reports 0, log says otherwise
+completed        191165      191165     38  experiments/live_research_2026-07-29/referee/runs/run-e6c07aec698426a9b21d01399ba6b5b0
+completed        191232      191232     42  experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a
+failed                0      192230     40  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a  <-- reports 0, log says otherwise
+failed                0      111351     27  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a  <-- reports 0, log says otherwise
+running               0       43291      7  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch4-run-9175f0ecb055e57455af3c50df153c5a  <-- reports 0, log says otherwise
+completed        189909      189909     35  experiments/live_research_2026-07-29/selfstudy/runs/run-9175f0ecb055e57455af3c50df153c5a
+running               0       85664     16  experiments/live_research_2026-07-29/wide/runs/run-0c3ce902cc5bca75a709b04e2473d100  <-- reports 0, log says otherwise
+completed         89385      109935     17  experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be
+completed        191871      251938     49  experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346
+completed         88966      123845     21  experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847
+completed         94560      110295     21  experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345
+completed        193361      220682     36  experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5
+completed        178613      244198     22  experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03
+completed        192000      330396     26  experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c
+
+roots examined: 59   roots reporting 0 while their own log carries a real figure: 20

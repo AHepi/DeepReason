@@ -153,6 +153,7 @@ def test_results_summary_reports_run_identity_state_and_budget():
     """R6: run id, state, stop_reason, cycles completed, token spend vs budget."""
 
     from deepreason.application.results import results_summary
+    from deepreason.harness import Harness
 
     root = _smallest_root_with(*_TERMINAL_FILES)
     summary = results_summary(root)
@@ -162,7 +163,21 @@ def test_results_summary_reports_run_identity_state_and_budget():
     assert summary["run"]["state"] == status["state"]
     assert summary["run"]["stop_reason"] == status["stop_reason"]
     assert summary["run"]["cycles_completed"] == status["cycle"]
-    assert summary["run"]["token_spend"] == status["token_spend"]
+    # Spend comes from the LOG, not from the sidecar, wherever the sidecar
+    # says zero: the three failure terminals used to omit the argument, and
+    # `ProgressEvent.token_spend` defaults to 0, so a zero there is an
+    # omission asserting a measurement rather than a measurement (fixed
+    # 2026-08-29; 20 of 59 committed roots carry that false zero, this
+    # fixture among them). A nonzero sidecar figure is still reported as
+    # recorded. Derived from the root here, never from the reader's own code.
+    logged = sum(
+        event.llm.tokens
+        for event in Harness(root, read_only=True).log.read()
+        if event.llm
+    )
+    assert summary["run"]["token_spend"] == (
+        logged if status["token_spend"] == 0 else status["token_spend"]
+    )
     # `null` in the record means no ceiling; the reader must SAY so rather
     # than emit a bare None a caller would read as "unknown".
     expected_limit = status["token_limit"]

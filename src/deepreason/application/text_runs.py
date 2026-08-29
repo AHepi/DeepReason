@@ -192,6 +192,33 @@ def _v6_run_result(
     )
 
 
+def log_token_spend(harness_or_root) -> int:
+    """This root's provider spend, summed from its own append-only log.
+
+    The ONE derivation, because the three failure terminals used to omit the
+    figure entirely and `ProgressEvent.token_spend` defaults to 0 — so
+    omitting the argument ASSERTED a spend of zero rather than leaving a gap a
+    reader could detect. 18 of 54 committed roots state `token_spend: 0` while
+    their own log carries a real figure, one of them 702 789 tokens
+    (`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` organ 10).
+
+    Fails to 0 only when the log itself cannot be read, which is the one case
+    where no evidence of spending exists to report.
+    """
+
+    from deepreason.harness import Harness
+
+    try:
+        harness = (
+            harness_or_root
+            if hasattr(harness_or_root, "log")
+            else Harness(Path(harness_or_root), read_only=True)
+        )
+        return sum(event.llm.tokens for event in harness.log.read() if event.llm)
+    except Exception:  # noqa: BLE001 - an unreadable log reports no spend
+        return 0
+
+
 def _refusal(code: str, detail: str, **facts) -> dict[str, Any]:
     """One typed reason this root could not take a STOPPED lifecycle receipt."""
 
@@ -1410,9 +1437,7 @@ class TextRunApplicationService:
                     )
             prior = progress.read_since(-1)
             base_cycle = max((event.cycle for event in prior), default=0)
-            base_token_spend = sum(
-                event.llm.tokens for event in harness.log.read() if event.llm
-            )
+            base_token_spend = log_token_spend(harness)
             display_token_limit = (
                 None if token_budget is None else base_token_spend + token_budget
             )
@@ -1437,11 +1462,7 @@ class TextRunApplicationService:
                     if label.value in counts:
                         counts[label.value] += 1
                 report = scheduler.report()
-                token_spend = sum(
-                    event.llm.tokens
-                    for event in scheduler.harness.log.read()
-                    if event.llm
-                )
+                token_spend = log_token_spend(scheduler.harness)
                 event = progress.emit(
                     state="running",
                     phase="reasoning",
@@ -1489,9 +1510,7 @@ class TextRunApplicationService:
                 activity=stop_reason,
                 cycle=latest_cycle,
                 problem_id=spec.problem.id,
-                token_spend=sum(
-                    event.llm.tokens for event in harness.log.read() if event.llm
-                ),
+                token_spend=log_token_spend(harness),
                 token_limit=display_token_limit,
                 determinate=False,
                 stop_reason=stop_reason,
@@ -1519,6 +1538,12 @@ class TextRunApplicationService:
                         phase="stop",
                         activity="operational failure",
                         cycle=0,
+                        # No harness was built, so the root is opened
+                        # read-only to read its own log: a resumed root
+                        # carries its earlier epochs' spend, and reporting 0
+                        # for it would understate the run by everything it
+                        # had already spent.
+                        token_spend=log_token_spend(root),
                         token_limit=token_budget,
                         determinate=False,
                         message=str(error)[:500],
@@ -1535,6 +1560,7 @@ class TextRunApplicationService:
                         phase="stop",
                         activity="terminal publication recovery required",
                         cycle=latest_cycle,
+                        token_spend=log_token_spend(harness),
                         token_limit=token_budget,
                         determinate=False,
                         message="TERMINAL_PUBLICATION_RECOVERY_REQUIRED",
@@ -1587,6 +1613,7 @@ class TextRunApplicationService:
                     phase="stop",
                     activity="operational failure",
                     cycle=latest_cycle,
+                    token_spend=log_token_spend(harness),
                     token_limit=token_budget,
                     determinate=False,
                     message=str(error)[:500],

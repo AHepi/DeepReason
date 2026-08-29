@@ -1,0 +1,5 @@
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+=========================== short test summary info ============================
+FAILED tests/test_failure_terminal_reports_real_token_spend.py::test_a_failed_run_reports_the_spend_its_own_log_carries
+1 failed, 4 passed in 63.78s (0:01:03)

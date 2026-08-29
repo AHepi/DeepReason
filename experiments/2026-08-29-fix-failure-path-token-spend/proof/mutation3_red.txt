@@ -1,0 +1,5 @@
+
+tests/test_failure_terminal_reports_real_token_spend.py:263: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_failure_terminal_reports_real_token_spend.py::test_a_nonzero_sidecar_figure_is_reported_as_recorded_and_not_re_derived
+1 failed, 4 passed in 63.12s (0:01:03)

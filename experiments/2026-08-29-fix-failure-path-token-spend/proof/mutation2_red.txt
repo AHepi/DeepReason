@@ -1,0 +1,5 @@
+
+tests/test_failure_terminal_reports_real_token_spend.py:217: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_failure_terminal_reports_real_token_spend.py::test_the_reader_recovers_the_spend_of_a_committed_root_stating_zero
+1 failed, 4 passed in 63.69s (0:01:03)
