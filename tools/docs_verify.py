@@ -23,17 +23,21 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import contextlib
+import io
 import hashlib
 import json
 import re
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
 MAP_DIR = Path(__file__).resolve().parents[1] / "docs" / "map"
+_MAP_DIR = MAP_DIR  # restored by --self-test, which redirects MAP_DIR at a fixture
 REPO = Path(__file__).resolve().parents[1]
 CACHE = REPO / ".docs_verify_cache.json"
 
@@ -41,10 +45,31 @@ CACHE = REPO / ".docs_verify_cache.json"
 # paths, so the files a command reads are almost always spelled in it.
 _PATHISH = re.compile(r"(?:src|tests|tools|docs)/[\w./-]+")
 
-# A check rides its own line as an inline-code span, at COLUMN 0. The column
-# rule is what lets SCHEMA.md show worked examples inside indented code blocks
+# A check opens as an inline-code span at COLUMN 0 and closes at a trailing
+# backtick - on the same line, or at the end of a later line. The column rule
+# is what lets SCHEMA.md show worked examples inside indented code blocks
 # without the verifier trying to run them.
+#
+# The grammar is TOTAL: a column-0 opener is a check or an ERROR, never prose.
+# The rejected alternative was to treat a closed span followed by more text as
+# prose, which reads well and reintroduces exactly the silence this parser was
+# fixed to remove - `check: foo` bar at column 0 would vanish unreported. The
+# cost of totality is that a sentence may not BEGIN with a quoted check; the
+# benefit is that no opener can be discarded without a line of output.
 _CHECK = re.compile(r"^`check:\s*(?P<cmd>.+?)`\s*$")
+# Every column-0 opener, parseable or not. The two patterns are deliberately
+# split: _CHECK decides what RUNS, _CHECK_OPEN decides what must be ACCOUNTED
+# FOR. An opener that matches only the second is a defect in the document, and
+# reporting it is the whole point - a check the instrument cannot read used to
+# fall through the parse loop with no branch to catch it, so a claim could
+# carry a check that had never once been executed and read, in the document,
+# exactly like a claim that had.
+_CHECK_OPEN = re.compile(r"^`check:")
+_UNPARSEABLE = (
+    "unparseable check: a column-0 `check: opener must close with a trailing "
+    "backtick, on its own line or at the end of a later line, before the next "
+    "opener or the end of the file. Opener reads: {opener!r}"
+)
 _HEADER = re.compile(r"^(?P<key>Verified-at|Verify|Owns|Seams|Seams-undocumented|Sides|Sweep|Depends-on):\s*(?P<val>.*)$")
 _ID = re.compile(r"^<!--\s*(?P<id>DR-[A-Z]+-[a-z0-9\-]+|DR-[A-Z]+)\s*-->\s*$")
 
@@ -61,19 +86,51 @@ class Doc:
     doc_id: str | None = None
     headers: dict[str, str] = field(default_factory=dict)
     checks: list[tuple[int, str]] = field(default_factory=list)
+    errors: list[tuple[int, str]] = field(default_factory=list)
+
+
+def _read_block(doc: Doc, lines: list[str], start: int) -> int:
+    """Consume a multi-line check beginning at `lines[start]`; return the next index.
+
+    Newlines are PRESERVED in the command. Almost every multi-line check in
+    this map is a `python -c "..."` body whose statements are newline-
+    separated, so folding the block onto one line would change what it means;
+    `subprocess.run(..., shell=True)` takes the multi-line string as it stands.
+
+    The block closes at the first later line whose right-stripped text ends
+    with a backtick. It never crosses another column-0 opener: an opener
+    reached first means the previous check was left unclosed, and both get
+    reported rather than the first silently swallowing the second.
+    """
+    end = start + 1
+    while end < len(lines) and not _CHECK_OPEN.match(lines[end]):
+        if lines[end].rstrip().endswith("`"):
+            block = lines[start:end + 1]
+            block[0] = block[0][len("`check:"):]
+            block[-1] = block[-1].rstrip()[:-1]
+            doc.checks.append((start + 1, "\n".join(block).strip()))
+            return end + 1
+        end += 1
+    doc.errors.append((start + 1, _UNPARSEABLE.format(opener=lines[start][:100])))
+    return start + 1
 
 
 def parse_text(text: str, path: Path | None = None) -> Doc:
     doc = Doc(path=path or Path("<memory>"))
-    for number, line in enumerate(text.splitlines(), 1):
+    lines = text.splitlines()
+    index = 0
+    while index < len(lines):
+        line, number = lines[index], index + 1
         if doc.doc_id is None and (m := _ID.match(line)):
             doc.doc_id = m.group("id")
-            continue
-        if m := _HEADER.match(line):
+        elif m := _HEADER.match(line):
             doc.headers.setdefault(m.group("key"), m.group("val").strip())
-            continue
-        if m := _CHECK.match(line):
+        elif m := _CHECK.match(line):
             doc.checks.append((number, m.group("cmd").strip()))
+        elif _CHECK_OPEN.match(line):
+            index = _read_block(doc, lines, index)
+            continue
+        index += 1
     return doc
 
 
@@ -128,6 +185,12 @@ def _save_cache(cache: dict) -> None:
 CHECK_TIMEOUT_S = 300
 
 
+def _render(cmd: str) -> str:
+    """Indent a multi-line command's continuation lines so a report stays readable."""
+    first, *rest = cmd.splitlines() or [""]
+    return first if not rest else first + "".join("\n        " + r for r in rest)
+
+
 def run(cmd: str) -> tuple[bool, str, float]:
     started = time.monotonic()
     try:
@@ -160,6 +223,8 @@ def cmd_run(fast: bool = False, only_failed: bool = False, jobs: int = 0,
     for doc in docs:
         if doc.doc_id is None:
             failures.append(f"{doc.path.name}: no `<!-- DR-... -->` id on the first line")
+        for number, problem in doc.errors:
+            failures.append(f"{doc.path.name}:{number}: {problem}")
         for number, cmd in doc.checks:
             key = _fingerprint(cmd)
             prior = cache.get(key)
@@ -170,7 +235,7 @@ def cmd_run(fast: bool = False, only_failed: bool = False, jobs: int = 0,
                 reused += 1
                 if not prior["ok"]:
                     failures.append(
-                        f"{doc.path.name}:{number}: {cmd}\n      -> "
+                        f"{doc.path.name}:{number}: {_render(cmd)}\n      -> "
                         f"{prior.get('detail', '')} (cached)")
                 continue
             pending.append((doc.path.name, number, cmd, key))
@@ -191,7 +256,7 @@ def cmd_run(fast: bool = False, only_failed: bool = False, jobs: int = 0,
                 fresh[key] = {"ok": ok, "detail": detail, "cmd": cmd}
                 timings.append((elapsed, name, number))
                 if not ok:
-                    failures.append(f"{name}:{number}: {cmd}\n      -> {detail}")
+                    failures.append(f"{name}:{number}: {_render(cmd)}\n      -> {detail}")
     _save_cache(fresh)
     if slow:
         for elapsed, name, number in sorted(timings, reverse=True):
@@ -377,39 +442,87 @@ def cmd_audit() -> int:
         if not doc.checks and doc.doc_id not in {"DR-SCHEMA", "DR-INDEX"}:
             print(f"{doc.path.name}: no checks — every claim in it is unverifiable")
             flagged += 1
+        for number, problem in doc.errors:
+            print(f"{doc.path.name}:{number}: {problem}")
+            flagged += 1
         for number, cmd in doc.checks:
             if _VACUOUS.match(cmd):
-                print(f"{doc.path.name}:{number}: vacuous check `{cmd}`")
+                print(f"{doc.path.name}:{number}: vacuous check `{_render(cmd)}`")
                 flagged += 1
     print(f"docs_verify --audit: {flagged} finding(s)")
     return 1 if flagged else 0
 
 
 def cmd_self_test() -> int:
-    """Prove the parser reads what the schema says it reads."""
+    """Prove the parser reads what the schema says it reads.
+
+    This is the tool's own gate: nothing in tests/ exercises it, so every
+    grammar rule SCHEMA.md states is pinned here, in both directions - what
+    must parse, and what must be reported rather than dropped.
+    """
     sample = """<!-- DR-SUB-example -->
 Verified-at: deadbee
 Verify: true
 Owns: src/deepreason/example.py
 
-A claim.
+A claim with a one-line check.
 `check: test 1 -eq 1`
 Prose mentioning `check: not-a-check` inline should not parse.
+
+A claim with a multi-line check.
+`check: python -c "
+import sys
+sys.exit(0)
+"`
+
+A claim with a multi-line check that cannot fail.
+`check: true &&
+  true`
 """
-    tmp = MAP_DIR / "_selftest.md"
-    try:
-        tmp.write_text(sample, encoding="utf-8")
-        doc = parse(tmp)
-        assert doc.doc_id == "DR-SUB-example", doc.doc_id
-        assert doc.headers["Verified-at"] == "deadbee", doc.headers
-        assert doc.headers["Owns"] == "src/deepreason/example.py", doc.headers
-        assert len(doc.checks) == 1, doc.checks
-        assert doc.checks[0][1] == "test 1 -eq 1", doc.checks
-        # An indented check is an EXAMPLE, not a claim, and must not parse.
-        assert parse_text("    `check: false`").checks == []
-        assert _VACUOUS.match("true") and not _VACUOUS.match("grep -q x y")
-    finally:
-        tmp.unlink(missing_ok=True)
+    doc = parse_text(sample, Path("<selftest>"))
+    assert doc.doc_id == "DR-SUB-example", doc.doc_id
+    assert doc.headers["Verified-at"] == "deadbee", doc.headers
+    assert doc.headers["Owns"] == "src/deepreason/example.py", doc.headers
+    assert doc.errors == [], doc.errors
+    assert [n for n, _ in doc.checks] == [7, 11, 17], doc.checks
+    assert doc.checks[0][1] == "test 1 -eq 1", doc.checks
+    # Newlines survive: the statements of a `python -c` body are the command.
+    assert doc.checks[1][1] == 'python -c "\nimport sys\nsys.exit(0)\n"', doc.checks
+    assert doc.checks[2][1] == "true &&\n  true", doc.checks
+    # A multi-line check runs as written and is judged on its exit code.
+    ok, detail, _ = run(doc.checks[1][1])
+    assert ok, detail
+    # An indented check is an EXAMPLE, not a claim: no check AND no error.
+    assert parse_text("    `check: false`").checks == []
+    assert parse_text("    `check: false`").errors == []
+    # A column-0 opener that never closes is an ERROR, never a skip - in the
+    # middle of a document and at end of file alike.
+    for text in ('`check: python -c "\nassert False\n', 'x\n`check: a\n`check: b`\n'):
+        unclosed = parse_text(text)
+        assert len(unclosed.errors) == 1, (text, unclosed.errors)
+        assert "unparseable check" in unclosed.errors[0][1], unclosed.errors
+    assert _VACUOUS.match("true") and not _VACUOUS.match("grep -q x y")
+    # --audit must flag a vacuous check and an unparseable opener alike, on a
+    # multi-line block as readily as a single-line one.
+    with tempfile.TemporaryDirectory() as tmp:
+        globals()["MAP_DIR"] = Path(tmp)
+        try:
+            (Path(tmp) / "INV-selftest.md").write_text(
+                sample + '\nA claim whose check lost its backtick.\n'
+                '`check: python -c "\nassert True\n', encoding="utf-8")
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                status = cmd_audit()
+            audit = buffer.getvalue()
+        finally:
+            globals()["MAP_DIR"] = _MAP_DIR
+    print("  --audit over the self-test fixture:")
+    for line in audit.splitlines():
+        print(f"    {line}")
+    assert status == 1, audit
+    assert "vacuous check `true &&" in audit, audit
+    assert "unparseable check" in audit, audit
+    assert "2 finding(s)" in audit, audit
     print("docs_verify --self-test: ok")
     return 0
 
