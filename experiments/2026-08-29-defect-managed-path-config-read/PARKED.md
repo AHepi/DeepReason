@@ -100,3 +100,69 @@ Note the wording collision: CLAUDE.md's live-run section already states
 config input today, so the sentence is vacuously true. It stops being vacuous
 the moment P14 lands.
 ```
+
+---
+
+## P19 — `docs_verify` check `SUB-application.md:403` is 54% of its own timeout on an IDLE box, so it goes red whenever the box is busy
+
+**What.** Reported here because the batch's stated `docs_verify` baseline is
+**4 failed** and this lane measured **5**, and the fifth is neither the P16
+tripwire (which correctly stayed green — this lane's branch diff touches no
+frozen-surface path) nor anything this lane changed. This lane changed no
+`src/` file and no map document.
+
+    FAIL SUB-application.md:403: grep -q "fence_seq > current_resume.resume_event_seq"
+      src/deepreason/runtime/continuation.py && ! grep -q '...' && python -m pytest
+      tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q
+      -> TIMEOUT after 300s - this check is too expensive; narrow it to the claim
+         it actually tests
+
+Full output: `proof/docs_verify.out`.
+
+**It is a load artefact of a real fragility, not a false alarm and not a broken
+claim.** Re-run standalone on an otherwise-idle box
+(`proof/subapp403_recheck.out`): **15 passed in 160.88s**, exit 0. The claim the
+check makes is TRUE. But 161s against a 300s cap leaves no headroom, and
+`docs_verify` itself fans out to 4 workers — so the instrument can starve its
+own most expensive check, and this batch runs several lanes concurrently on one
+container. `dr-drive-harness` §5b already states the general rule this is an
+instance of: *"Never run the full gate concurrently with docs_verify … the
+contention manufactures failures."*
+
+Not fixed here: `tools/docs_verify.py` is off-limits to this batch (an external
+operator window is live on it), the fix belongs to whoever owns
+`SUB-application.md`, and it is a different goal from this tranche's.
+
+**Ready-to-send prompt:**
+
+```
+Route: deepreason-orchestrator (defect — an instrument that reports failure
+without a failure). Small and self-contained.
+
+Goal, one sentence: make the docs check at docs/map/SUB-application.md:403
+prove its claim in a fraction of its 300s budget, so it stops going red on a
+busy box while the behaviour it describes is intact.
+
+Evidence:
+  experiments/2026-08-29-defect-managed-path-config-read/proof/docs_verify.out
+      -> the TIMEOUT, on a tree where no src/ file and no map document changed
+  experiments/2026-08-29-defect-managed-path-config-read/proof/subapp403_recheck.out
+      -> 15 passed in 160.88s, exit 0, standalone on an idle box
+  .claude/skills/dr-drive-harness §5b -> the recorded rule about contention
+
+The check's own failure message names the fix: "narrow it to the claim it
+actually tests". The claim is about ONE resume-fence comparison in
+runtime/continuation.py. Two whole test FILES (15 tests, 161s) are not that
+claim; the one or two node ids that would fail if the comparison were mutated
+are. Find them by mutating the comparison and recording which tests go red
+(commit that output), then pin exactly those node ids.
+
+Do NOT solve it by raising the timeout, and do NOT edit tools/docs_verify.py:
+the 300s cap is a property of the instrument, and a check that needs more than
+300s to prove a one-line claim is the thing that is wrong.
+
+End state: the narrowed check passes in seconds, is demonstrated RED by the
+same mutation that selected its node ids, `python tools/docs_verify.py --audit`
+still accepts it, and docs_verify returns to its stated baseline. Map moved in
+the same commit.
+```
