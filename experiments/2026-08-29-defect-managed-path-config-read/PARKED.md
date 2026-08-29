@@ -166,3 +166,125 @@ same mutation that selected its node ids, `python tools/docs_verify.py --audit`
 still accepts it, and docs_verify returns to its stated baseline. Map moved in
 the same commit.
 ```
+
+---
+
+## P20 — `deepreason status` / the web page report readiness for a subject a configured run will not use
+
+**What.** `readiness.py:147` and `webapp.py:355` both call
+`qualification_subject_manifest(profile)` with no configuration. After the P14
+fix, `deepreason reason --config F` needs the subject built FROM `F`, so a home
+that has qualified only the default subject would be told "ready" by `status`
+and then refused by `reason`. Not a lifecycle break — `status` reports PROVIDER
+readiness, not a run's subject (CLAUDE.md says so explicitly) — but it becomes
+misleading the moment configurations vary. Measured shape of the underlying gap:
+`probe/lifecycle_gap.out` (8 of 8 committed configurations refused on a home
+qualified at the default subject).
+
+**Not fixed here:** `readiness.py` and `webapp.py` are outside this lane's file
+cone, and the truthfulness question is a different goal from "is the file read".
+
+**Ready-to-send prompt:**
+
+```
+Route: deepreason-orchestrator (defect). Depends on the P14 fix having landed.
+
+Goal, one sentence: `deepreason status` must not report a home ready for a
+configuration whose qualification subject it has not warmed.
+
+Evidence:
+  experiments/2026-08-29-defect-managed-path-config-read/probe/lifecycle_gap.py
+      -> 8 of 8 committed run-config.yaml files are refused
+         QUALIFICATION_NOT_CONFIGURED on a home qualified at the default subject
+  src/deepreason/readiness.py:147, src/deepreason/webapp.py:355
+      -> both build the subject with no configuration
+
+Decide first, in writing, WHICH question status answers: provider readiness (in
+which case the fix is a disclosure that the projection is config-blind) or
+this-run readiness (in which case status learns --config the way qualify did).
+CLAUDE.md's own gloss says the former. Do not widen it without the operator.
+
+End state: `deepreason status` either carries the configuration or states in
+typed form that its verdict is for the default subject only; a regression test
+that goes red if the projection silently answers for the wrong subject; map
+moved in the same commit.
+```
+
+---
+
+## P21 — the profile-owned override is silent, and disclosing it needs surfaces 4 AND 5
+
+**What.** On the managed path the provider profile owns seven `Config` fields
+(`engine_profile`, `model_profile`, `scratchpad`, `bridge`, `EMBEDDER_MODEL`,
+`CHANNELS_DISABLED`, `roles`). All 8 committed `run-config.yaml` files set
+`roles` (`probe/profile_owned_fields.out`), so under the P14 fix every real
+configuration has a field deterministically overridden — correctly, because the
+credentialed endpoint and the seat-binding mechanism are host-owned — and the
+record says nothing about it. The 2026-08-28 law's "never silence" limb is
+therefore only partly delivered.
+
+**Why it is not in the P14 fix.** Recording it needs (a) a new
+`CompileNoticeV1` code emitted inside `compile_run_manifest` — SURFACE 4 — and
+(b) that code excluded from `qualification_subject_payload` — SURFACE 5 —
+because otherwise the disclosure itself moves the subject digest for all 8
+configurations, which is exactly the failure the 2026-08-28 surface-5 grant
+exists to prevent ("a disclosure ... must not itself enter the qualification
+subject, or the exclusion is defeated by its own disclosure"). Surface 5 is
+granted to no tranche in this batch.
+
+**Ready-to-send prompt:**
+
+```
+Route: dr-change-orchestrator (a grant request, then a change). Depends on the
+P14 fix having landed.
+
+Goal, one sentence: when the managed path overrides an operator-configured
+field because the provider profile owns it, the manifest must say so in typed
+form, without that disclosure costing any home a qualification battery.
+
+This needs TWO frozen-surface grants, requested in SPEC.md BEFORE any code, to
+the discipline docs/map/INV-frozen-surfaces.md records for its six prior grants
+(name exactly what moves, what cannot move, and why no committed root changes
+verdict; paste tools/blast_radius.py's own contact rows):
+  surface 4 (run_manifest.py): one additive notice code, insertions only, no
+    data.pop line added, removed or made conditional
+  surface 5 (qualification.py): that code added to the subject exclusion beside
+    ENGINE_CONFIG_FIELD_NOT_CARRIED, insertions only
+
+Evidence:
+  experiments/2026-08-29-defect-managed-path-config-read/FIX.md §1c and §7
+  experiments/2026-08-29-defect-managed-path-config-read/probe/profile_owned_fields.out
+  docs/map/INV-frozen-surfaces.md, the 2026-08-28 grants under surfaces 4 and 5
+
+End state: an operator config whose `roles` (or any of the other six) is
+overridden compiles with a typed notice naming the configured value and the
+owner; measured proof that every subject digest is unchanged, per case, in the
+shape of that tranche's MEASUREMENTS.md; map moved in the same commit.
+```
+
+---
+
+## P22 — `reason` over MCP has no configuration at all
+
+**What.** `mcp_server.py:576` constructs `RunPreparationRequestV1` from its own
+arguments. After the P14 fix the CLI can configure a managed run and the MCP
+facade cannot, so the two public surfaces diverge on what a run may be. Outside
+this lane's file cone.
+
+**Ready-to-send prompt:**
+
+```
+Route: dr-change-orchestrator. Depends on the P14 fix having landed.
+
+Goal, one sentence: decide, and then implement or disclose, whether the MCP
+`reason` tool may carry a run configuration.
+
+Evidence: src/deepreason/mcp_server.py:562-580; the P14 fix's change site 6.
+Note the constraint that decides the shape: the MCP tool set and its schema sha
+are PINNED by scripts/wheel_smoke.py, which no gate runs — so any surface
+change updates the pins and re-runs both wheel smokes in the SAME commit.
+
+End state: either the tool carries a configuration (schema pin updated, smokes
+re-run in the same commit) or the divergence is recorded as a deliberate,
+documented limit of the MCP surface. Map moved in the same commit.
+```

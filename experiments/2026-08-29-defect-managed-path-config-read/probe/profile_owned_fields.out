@@ -1,0 +1,38 @@
+2026-08-12-live-grounded-extension-expansion
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'JUDGE_SEATS_ENABLED', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : ['RESEARCH_BACKEND']
+2026-08-13-defect-controller-steering-inert
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'JUDGE_SEATS_ENABLED', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : ['RESEARCH_BACKEND']
+2026-08-22-live-reach-rich-run
+  profile-owned set : ['roles']
+  echo-dropped set  : -
+  echoed set        : ['RESEARCH_BACKEND']
+2026-08-25-change-constructive-frontier
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : -
+2026-08-25-poietics-program
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'JUDGE_SEATS_ENABLED', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : -
+2026-08-26-pc2-rematch
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : -
+2026-08-27-defect-split-leg-recording
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : -
+2026-08-27-pc2b-symmetric-reasoning
+  profile-owned set : ['roles']
+  echo-dropped set  : ['ADJUDICATION_STATUS_AUTHORITY_ENABLED', 'ENGAGED_CRITICISM_AUTHORITY', 'LEGACY_CRITICISM_ENABLED', 'SCHOOL_SEATS_ENABLED']
+  echoed set        : -
+
+configs setting a profile-owned field : 8 of 8
+configs setting an echoed field       : 3 of 8
+configs setting an echo-dropped field : 7 of 8
+
+dropped-field count: 25
