@@ -1,0 +1,33 @@
+dropped fields: 25
+base subject digest: 7c0ba0a174fdc2d93256d25a61079e5ca519e356487b3cdd692f35757fb76c62
+base compile notices: []
+
+ADJUDICATION_STATUS_AUTHORITY_ENABLED       False -> True   SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+ATTENTION_ALLOCATION_POLICY                wander -> wander SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_AGE_FLOOR                            50 -> 51     SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_ENTER_K                               2 -> 3      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_EXIT_K                                0 -> 1      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_PRECISION                             6 -> 7      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_SC_CEILING                          0.5 -> 0.75   SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CAPTURE14_WINDOW                              200 -> 201    SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+CHANNELS_DISABLED                              () -> ('rese SAME  notices=[]
+DISCHARGE_POLICY                           discha -> discha SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+ENGAGED_CRITICISM_AUTHORITY                observ -> defend SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+FRAME_SLICE_ATTACKERS                           5 -> 6      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+FRAME_SLICE_DEPARTURES                          4 -> 5      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+JUDGE_SEATS_ENABLED                         False -> True   SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+JUDGE_SUMMONS_COOLDOWN                          4 -> 5      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+JUDGE_SUMMONS_PER_CYCLE                         0 -> 1      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+K_FRAME                                         2 -> 3      SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+LEGACY_CRITICISM_ENABLED                     True -> False  MOVED notices=[]
+PROMOTION_ENVIRONMENT_MAX                      64 -> 65     SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SCHOOL_SEATS_ENABLED                        False -> True   SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SCOPE_MAX_DEPTH                                16 -> 17     SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SCOPE_MAX_NODES                               512 -> 513    SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SEED_PROBLEM_BUDGET_FLOOR                     0.5 -> 0.75   SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SPLIT_BUDGET_EXTRACTION_TOKENS                512 -> 513    SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+SPLIT_BUDGET_SEAT_PROTOCOL                   auto -> on     SAME  notices=['ENGINE_CONFIG_FIELD_NOT_CARRIED']
+
+MOVED   (1): ['LEGACY_CRITICISM_ENABLED']
+SAME    (24): 24 fields
+SKIPPED (0): []
