@@ -22,10 +22,57 @@ Recorded 2026-08-12 at main 074ef1549.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
-- **docs_verify** (`python tools/docs_verify.py`): 3 pre-existing
-  failures, all `CON-run-identity.md` git-history checks — they
-  require an unshallowed clone; on a full clone the expected value
-  is 0 failed.
+- **docs_verify** (`python tools/docs_verify.py`): **1212 checks over
+  69 documents; 6 failed on a full clone, 9 on a shallow one.**
+  Re-baselined 2026-08-29 (`experiments/2026-08-29-fix-docs-verify-
+  multiline-checks/`), because the superseded baseline below counted
+  only what the parser could read.
+
+  Expected failures, by class. A delta from THIS list is a finding; a
+  match is disposition `baseline`.
+
+  | where | class | why |
+  |---|---|---|
+  | `SEAM-llm-x-verification.md:19` | claim rotted | `invariants.py:21` imports `deepreason.llm.firewall`; the seam claims no import in either direction. Parked P1. |
+  | `INV-frozen-surfaces.md:657` | claim rotted | stale qualification-digest pin; the same document's `:533` pins the value the tree actually produces. Parked P2. |
+  | `SEAM-llm-x-rules.md:54` | check malformed | a lost closing backtick merged the check with the paragraph after it. Reported as `unparseable check`. Parked P3. |
+  | `INV-signal-contract.md:222` | check imprecise | `inspect.getsource` sees `LINEAGE_POLICIES` in a COMMENT at `scheduler.py:1127`; the claim holds, the check does not. Parked P4. |
+  | `CON-discharge-channel.md:150` | check unreachable | manifest construction dies on `V6_SIMULATION_TOOLCHAIN_REQUIRED`; the claim is untested, not disproven. Parked P5. |
+  | `INV-frozen-surfaces.md:181` | claim rotted | the census asserting ZERO committed `transport_failure` attempts; one exists, in a root committed 2026-08-26. Pre-existing. |
+
+  Plus, on a SHALLOW clone only, 3 more: `CON-run-identity.md:200`,
+  `:202`, `:204` are git-history checks that need the full history.
+  All three PASS after `git fetch --unshallow`; measured 2026-08-29.
+  A container that reports `git rev-parse --is-shallow-repository`
+  as `true` will show 9, not 6, and those 3 are not findings.
+
+  ENVIRONMENT, or the number is meaningless: this container resolves
+  `python` to `/usr/local/bin/python` while `pip` resolves to
+  `/usr/bin/pip`, so `pip install -e .` arms a DIFFERENT interpreter
+  than the checks invoke and every `python -m pytest` check dies with
+  `No module named pytest`. Measured cost of getting this wrong: 502
+  failures, none of them real. Run `python -m pip install -e . pytest
+  pytest-xdist jsonschema --break-system-packages` and confirm
+  `python -m pytest --version` before trusting any docs_verify total.
+
+- ~~**docs_verify**, superseded 2026-08-29~~ (`python tools/
+  docs_verify.py`): "3 pre-existing failures, all `CON-run-identity.md`
+  git-history checks — they require an unshallowed clone; on a full
+  clone the expected value is 0 failed." Kept visible because tranche
+  artifacts cite it, and because HOW it was wrong is the lesson.
+
+  It undercounted BY CONSTRUCTION. The parser (`tools/
+  docs_verify.py:47`) required a check's opening and closing backtick
+  on one line, and the parse loop had no `else`: a column-0 `check:`
+  opener it could not read was discarded with no output at all. 72
+  such openers stood across 27 map documents — concentrated in the
+  INV- documents, because a claim strong enough to need an invariant
+  is usually defended by a multi-statement block. So the old "0 failed
+  on a full clone" was a statement about 1141 checks presented as a
+  statement about the map, and 4 of the 5 non-shallow failures now
+  listed above were already true when it was recorded. The instrument
+  cannot regress this way again: an opener the grammar cannot parse is
+  now a loud `unparseable check` failure, never a skip.
 - **treadle doctor** (`tools/treadle/.venv/bin/treadle --repo . doctor`,
   with `OLLAMA_API_KEY` exported): expected **exit 0 and every line OK**
   — no `MISS`, no `WARN`. Recorded 2026-08-23 at install: 5 environment

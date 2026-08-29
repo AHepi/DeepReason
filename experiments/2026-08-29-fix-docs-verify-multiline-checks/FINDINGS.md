@@ -163,3 +163,22 @@ before this branch. Listed so the R4 total is readable, not as findings.
 - That B2's digest never moved. It proves the pin at :657 disagrees with
   the tree and with the same document's :533. Which of the three is
   historically correct is a question for the surface-5 owner.
+
+## Addendum — the same run on a FULL clone
+
+The clone was unshallowed (`git fetch --unshallow`) and the instrument
+re-run from a cleared cache:
+
+    docs_verify [full]: 69 documents, 1212 checks, 4 workers
+      FAIL SEAM-llm-x-rules.md:54       (C1, malformed)
+      FAIL CON-discharge-channel.md:150 (B3)
+      FAIL INV-frozen-surfaces.md:181   (pre-existing falsified census)
+      FAIL INV-frozen-surfaces.md:657   (B2)
+      FAIL INV-signal-contract.md:222   (B4)
+      FAIL SEAM-llm-x-verification.md:19 (B1)
+    docs_verify: 6 failed
+
+The three `CON-run-identity.md` git-history checks PASS on the full
+clone, individually re-run and confirmed. So the honest totals are **6
+failed on a full clone, 9 on a shallow one**, and both are recorded in
+`docs/AUDIT_BASELINES.md` rather than one being presented as the truth.
