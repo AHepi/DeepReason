@@ -432,3 +432,71 @@ is failures, not arithmetic. It is left as an open question about the
 instrument rather than given an explanation nobody measured. Fitting, for a
 batch whose main result is that instruments can pass while not measuring what
 they claim.
+
+
+---
+
+## 8. Fan-in gate for lanes C and B2 — ONE full gate, ONE docs_verify
+
+Branch head `0f65f4eca`. Raw transcripts:
+`evidence/fanin_gate_lanes_c_b2.out`, `evidence/fanin_docs_verify_lanes_c_b2.out`.
+
+### Full gate — 0 failed
+
+    $ python -m pytest tests/ -q -n 4
+    4486 passed, 6 skipped in 876.49s (0:14:36)
+
+**0 failed. The only acceptable result.** No assertion was weakened anywhere
+in either re-run to reach it.
+
+Growth priced against the batch's own fan-in measurement: that run collected
+**4453 passed**; this one **4486**, +33 from the two lanes' regression and
+architecture tests.
+
+An earlier run of the same gate on an intermediate tree reported 2 failed,
+both in `tests/test_mcp_run.py`. `docs/AUDIT_BASELINES.md` records that file
+as known-flaky under `-n 4` and green in serial. **Verified rather than
+assumed:** `python -m pytest tests/test_mcp_run.py -q -p no:randomly` → **7
+passed**. The final gate above reproduced no failure at all.
+
+### docs_verify — 10 failed, and every one accounted for
+
+    $ python tools/docs_verify.py
+    docs_verify [full]: 70 documents, 1248 checks, 4 workers
+    docs_verify: 10 failed
+
+`docs/AUDIT_BASELINES.md` states 6 expected failures on a full clone and **9
+on a shallow one**; `git rev-parse --is-shallow-repository` is `true` here.
+So the baseline is 9, and the delta is **+1** — forecast, not a surprise:
+
+| observed | disposition |
+|---|---|
+| `SEAM-llm-x-verification.md:19` | baseline, claim rotted (P1) |
+| `INV-frozen-surfaces.md:734` | baseline, stale digest pin (P2) — sat at `:657`; moved by lane B2's 77-line grant entry |
+| `SEAM-llm-x-rules.md:54` | baseline, check malformed (P3) |
+| `INV-signal-contract.md:243` | baseline, check imprecise (P4) |
+| `CON-discharge-channel.md:150` | baseline, check unreachable (P5) |
+| `INV-frozen-surfaces.md:181` | baseline, falsified census |
+| `CON-run-identity.md:211`, `:213`, `:215` | baseline, shallow clone only |
+| **`INV-frozen-surfaces.md:297`** | **the +1: the P16 branch tripwire, firing exactly as forecast** |
+
+**The +1 is `SETUP.md`'s forecast reinstated.** That tripwire greps the branch
+diff for the seven frozen paths and cannot tell a GRANTED contact from an
+ungranted one. Lane B2 holds a granted surface-4 contact, so it fires. It is
+parked defect **P16**, and it is not filed down: *a tripwire another tranche
+just landed is not something to weaken because it caught you.*
+
+**One baseline failure was checked rather than waved through.** `:734` pins a
+qualification subject digest, and a stale pin would hide a real digest move by
+carriage. Measured on both trees:
+
+    this branch : 02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
+    main        : 02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713
+    the pin says: b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386
+
+Byte-identical to `main`. The pin was already wrong before this branch existed,
+and **carriage moved nothing**.
+
+The instrument itself grew **1246 → 1248 checks**: lane C added two `Traps`
+checks and lane B2 one granted-contact check, against one the map lost to a
+rename it repaired. Every one of the 1248 ran.
