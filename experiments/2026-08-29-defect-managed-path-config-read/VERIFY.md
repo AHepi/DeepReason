@@ -40,10 +40,15 @@ the tree restored. **7 of 7 caught RED.**
 | M1 drop `config_path=args.config` (site 6) | R1 | RED |
 | M2 stop threading `base=config` (sites 2-3) | R2, R8 | RED |
 | M3 `model_copy` instead of `model_validate` (site 2) | R3 | RED |
-| M4 drop `config=` from the qualification subject (sites 4/7) | R4, R5 | RED |
+| M4 drop `config=` from the qualification subject (**site 4 only** — corrected 2026-08-29, see §8) | R4, R5 | RED |
 | M5 omit `config_digest` from run identity (site 5) | R6 | RED |
 | M6 admit `config_digest` UNCONDITIONALLY (site 5) | R6 | RED |
 | M7 let the operator's `roles` win (site 2) | R7 | RED |
+
+**This table is incomplete, and §8 corrects it.** Seven mutations were planted
+and seven were caught, but they do not cover seven of the seven change sites:
+the M4 row's "sites 4/7" was wrong, and neither `_load_operator_config` nor
+change site 7 had a test that could fail. Both are covered as of 2026-08-29.
 
 M5 and M6 are opposite mutations caught by one test: that is the two-sided
 guarantee P18 needed — a configuration must enter run identity, and a
@@ -157,3 +162,71 @@ reading; the append-only `docs/ERRATA.md` entry is missing because
 `docs/ERRATA.md` is outside this lane's file cone and other windows are live in
 this repository. A ready-to-send prompt is in `PARKED.md` under P23, and it also
 covers this tranche's own withdrawn stage-1 "road A" recommendation.
+
+---
+
+## 8. Correction, 2026-08-29 — two guarantees this document claimed and did not have
+
+Stated plainly, because §2 above reads as complete coverage and was not. An
+independent adversarial verifier planted two mutations this tranche's suite
+could not see, and both reproduce in this worktree (`lane/b1-only`, base
+`a4f0d3ce2`). Full transcript: `proof/mutation_matrix_gap_closure.out`.
+
+**Gap 1 — the central behaviour had zero protection.** `return None` as the
+first statement of `preparation._load_operator_config` reinstates P14 exactly:
+`prepare()` stores `config_path` on the request and then ignores it. Measured
+on the delivered tranche, tests unmodified:
+
+    pytest tests/test_managed_path_config_read.py tests/test_run_preparation_service.py -q
+      -> 23 passed
+    the whole blast-radius ring, mutated -> 217 passed, 1 skipped
+    the whole blast-radius ring, clean   -> 217 passed, 1 skipped
+
+Byte-identical. R1 monkeypatches `RunPreparationService` wholesale, so it can
+only prove the path REACHES the request object and can never observe what
+`prepare()` does with it; R2–R8 call `build_preparation_manifest` /
+`qualification_subject_manifest` directly and never enter `prepare()`. No test
+joined the two halves — which is exactly the join the fix is.
+
+**Gap 2 — change site 7 was untested.** Deleting the single
+`config=load_config(Path(args.config)) ...` line from
+`cli/main.py::_qualify_one_profile` (`git diff --stat`: 1 file changed, 1
+deletion) left `pytest tests/test_managed_path_config_read.py -q` at 8 passed,
+and `grep -rln "_qualify_one_profile" tests/` returned nothing at all. This is
+the limb the fix commit itself calls load-bearing: "carriage alone would have
+left all 8 committed `run-config.yaml` files permanently unrunnable."
+
+**Closed by two tests, mutation-proven, production code untouched:**
+
+| id | test | mutation that turns it RED | verdict |
+|---|---|---|---|
+| **R9** | `...::test_prepare_compiles_the_run_from_the_operator_config_file` — the REAL `prepare()`, a real config file on disk, both limbs asserted on the manifest as written to the run root, plus an unconfigured control through the same service | M8: `return None` first in `_load_operator_config` | RED, caught by R9 alone |
+| **R10** | `...::test_qualify_addresses_the_subject_the_configured_run_needs` — `_qualify_one_profile` called through a real parsed `--config F --provider-profile P qualify` namespace, on a home holding only the configured subject | M9: change site 7 deleted | RED, caught by R10 alone |
+
+Under each mutation the other nine tests in the file stay green; the ring that
+was byte-identical now reports 1 failed, 218 passed, 1 skipped. Clean tree:
+219 passed, 1 skipped across the ring.
+
+**One map claim was wrong too, and moved in the same commit.**
+`docs/map/SUB-application.md:213` claimed "`_qualify_one_profile` passes the
+loaded `Config` into `qualification_subject_manifest`" and cited a check
+(:214) that stayed GREEN with change site 7 deleted — a check that could not
+fail, which is the one thing re-derivation must never be. The check now names
+R9 and R10 as well; measured passing on the clean tree (4 passed) and failing
+under M9 (1 failed, 3 passed). `Verified-at:` on that document was NOT advanced
+— its other checks were not re-run in this lane, and a stale stamp is honest
+where a false one is not. `python tools/docs_verify.py --audit`: 0 finding(s).
+
+**Nothing moved that must not.** Six committed defaults-only digest pins
+re-derived UNCHANGED (`probe/defaults_digest_census.py`, pins from
+`probe/price.out` and `probe/request_identity_baseline.out`): baseline manifest
+`sha256`, baseline `source_config_hash`, baseline qualification subject, the
+same two under an explicit defaults `Config()`, and the question-only request
+digest `7ea3afd5…`. `src/` is byte-unchanged by this work.
+
+**Residue.** These two tests close the two gaps that were measured. They are
+not a claim that the remaining five change sites are now covered end to end:
+M1's coverage of site 6 is still a monkeypatched capture, and M2/M3/M5/M6/M7
+still exercise the builders directly rather than through a verb. Whether that
+matters is a question for a coverage pass, not something this correction
+decides.

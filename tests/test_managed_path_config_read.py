@@ -15,6 +15,7 @@ optional: with warnings."
 
 from __future__ import annotations
 
+import io
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -25,15 +26,16 @@ from deepreason.cli.doctor import (
     ProductionContractCaseResultV1,
     run_production_contract_doctor,
 )
-from deepreason.cli.main import _cmd_reason, build_parser
+from deepreason.cli.main import _cmd_reason, _qualify_one_profile, build_parser
 from deepreason.config import Config, load as load_config
 from deepreason.preparation import (
     RunPreparationRequestV1,
+    RunPreparationService,
     _request_digest,
     build_preparation_manifest,
     qualification_subject_manifest,
 )
-from deepreason.provider_profile import ProviderProfileV1
+from deepreason.provider_profile import ProviderProfileV1, write_provider_profile
 from deepreason.qualification import (
     qualification_subject_digest,
     resolve_completed_qualification,
@@ -42,6 +44,7 @@ from deepreason.run_manifest import (
     V3_CANONICAL_ROLES,
     RunManifestError,
     config_from_run_manifest,
+    load_run_manifest,
 )
 
 STAMP = datetime(2026, 7, 23, tzinfo=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -456,3 +459,199 @@ def test_a_configured_school_seat_opt_in_compiles():
     assert conjecturer_routes[0].endpoint_id == profile.endpoint_id
     assert conjecturer_routes[1].endpoint_id == distinct.endpoint_id
     assert manifest.control_plane_policy.school_execution.mode == "route_bound"
+
+
+# --------------------------------------------------------------------------
+# R9-R10: the two limbs an adversarial verifier found UNPROTECTED (2026-08-29).
+#
+# Measured on the delivered tranche, before these two tests existed:
+#   `return None` as the first statement of `preparation._load_operator_config`
+#   reinstates P14 exactly -- prepare() stores config_path and ignores it --
+#   and the whole blast-radius ring stays 217 passed, 1 skipped, byte-identical
+#   to the clean run. R1 monkeypatches RunPreparationService wholesale, so it
+#   can only prove the path reaches the request object; R2-R8 call the manifest
+#   builders directly and never enter prepare(). No test joined the two halves.
+#
+#   Deleting the single `config=load_config(...)` line from
+#   `cli.main._qualify_one_profile` (change site 7) left this file 8 passed, and
+#   `grep -rln _qualify_one_profile tests/` returned nothing at all -- while the
+#   fix commit calls that line the operations-parity limb, without which all 8
+#   committed run-config.yaml files are permanently unrunnable.
+# --------------------------------------------------------------------------
+
+# `RunPreparationService` clocks in datetimes; STAMP above is its rendering.
+PREPARED_AT = datetime(2026, 7, 23, tzinfo=timezone.utc)
+
+
+def _managed_service(tmp_path):
+    """The REAL preparation service -- nothing about it is monkeypatched.
+
+    Only the battery executor is offline (`_passing_battery`, no provider), so
+    the configuration route under test is production code end to end.
+    """
+    return RunPreparationService(
+        runs_dir=tmp_path / "runs",
+        qualification_cache_dir=tmp_path / "qualification-cache",
+        environ={"DEEPREASON_TEST_KEY": "super-secret-value"},
+        qualification_executor=_passing_battery,
+        clock=lambda: PREPARED_AT,
+    )
+
+
+def _reasoning_off_profile() -> ProviderProfileV1:
+    """`deepreason qualify` refuses to spend calls while thinking is left on."""
+    return ProviderProfileV1.create(
+        provider="openai",
+        endpoint="https://api.example.com/v1",
+        model_id="model-a",
+        model_revision="rev-a",
+        family="family-a",
+        context_window_tokens=262144,
+        maximum_completion_tokens=4096,
+        credential_env="DEEPREASON_TEST_KEY",
+        reasoning="none",
+    )
+
+
+def test_prepare_compiles_the_run_from_the_operator_config_file(tmp_path):
+    """R9: the real `prepare()`, a real file on disk, the manifest the root carries.
+
+    This is the join R1 and R2-R8 leave open. `prepare()` may accept
+    `config_path`, digest it into the run id, and still hand
+    `build_preparation_manifest` nothing -- which is P14 itself, and which every
+    other test in this file passes through unchanged.
+
+    Both limbs of GOAL.md's disjunction are asserted on the manifest as WRITTEN
+    to the run root: an echoed switch is CARRIED into the Config the run
+    executes, an echo-dropped switch is DISCLOSED by typed notice.
+    """
+    profile_path = write_provider_profile(_profile(), tmp_path / "profile.yaml")
+    config_path = tmp_path / "run-config.yaml"
+    config_path.write_text("RESEARCH_BACKEND: stub\nJUDGE_SEATS_ENABLED: true\n")
+
+    service = _managed_service(tmp_path)
+    prepared = service.prepare(
+        RunPreparationRequestV1(
+            question="Why is the sky blue?",
+            profile_path=str(profile_path),
+            config_path=str(config_path),
+        )
+    )
+    manifest = load_run_manifest(Path(prepared.root) / "run-manifest.json")
+    runtime = config_from_run_manifest(manifest)
+    disclosed = {
+        notice.pointer
+        for notice in (manifest.compile_notices or ())
+        if notice.code == "ENGINE_CONFIG_FIELD_NOT_CARRIED"
+    }
+
+    assert runtime.RESEARCH_BACKEND == "stub", (
+        "prepare() compiled a run that does not carry the operator's "
+        f"RESEARCH_BACKEND: the run executes {runtime.RESEARCH_BACKEND!r}, the "
+        f"file at {config_path} says 'stub'. The managed path took the "
+        "configuration path and did not read the file."
+    )
+    assert "/engine_config/JUDGE_SEATS_ENABLED" in disclosed, (
+        "prepare() compiled a run whose record is SILENT about an operator "
+        "switch the manifest cannot carry -- the 2026-08-28 law's 'never "
+        f"silence'. Notices present: {sorted(disclosed)}"
+    )
+
+    # Control: the same service and the same question, with no configuration,
+    # must show neither limb -- so the two assertions above are the file's
+    # doing and not something the managed path does for every run.
+    default_prepared = service.prepare(
+        RunPreparationRequestV1(
+            question="Why is the sky blue?", profile_path=str(profile_path)
+        )
+    )
+    default_manifest = load_run_manifest(
+        Path(default_prepared.root) / "run-manifest.json"
+    )
+    assert (
+        config_from_run_manifest(default_manifest).RESEARCH_BACKEND
+        == Config().RESEARCH_BACKEND
+    )
+    assert not (default_manifest.compile_notices or ())
+    assert prepared.root != default_prepared.root, (
+        "a configured run and an unconfigured run of the same question share "
+        "one root, so the second is refused against the first"
+    )
+
+
+def test_qualify_addresses_the_subject_the_configured_run_needs(tmp_path, monkeypatch):
+    """R10: change site 7, `cli.main._qualify_one_profile` -- untested until now.
+
+    `deepreason qualify --config F` must warm the battery `deepreason reason
+    --config F` needs. probe/lifecycle_gap.out measured the alternative: 8 of 8
+    committed configurations REFUSED QUALIFICATION_NOT_CONFIGURED on a home that
+    had fully qualified, with no committed command able to clear it. R4 and R5
+    pin the two BUILDERS agreeing; only this test pins the CLI verb going
+    through that door at all.
+    """
+    home = tmp_path / "home"
+    home.mkdir()
+    monkeypatch.setenv("DEEPREASON_HOME", str(home))
+    monkeypatch.setenv("DEEPREASON_TEST_KEY", "super-secret-value")
+    # A cache miss branches into an interactive confirmation; pinning stdin
+    # keeps the failure this test reports deterministic and spends no calls.
+    monkeypatch.setattr("sys.stdin", io.StringIO(""))
+
+    profile = _reasoning_off_profile()
+    profile_path = write_provider_profile(profile, tmp_path / "profile.yaml")
+    config_path = tmp_path / "run-config.yaml"
+    config_path.write_text("RESEARCH_BACKEND: stub\n")
+    operator = load_config(config_path)
+
+    needed = qualification_subject_digest(
+        build_preparation_manifest(
+            profile,
+            question="Why is the sky blue?",
+            compiled_at=STAMP,
+            config=operator,
+        ),
+        profile,
+    )
+    unconfigured = qualification_subject_digest(
+        qualification_subject_manifest(profile), profile
+    )
+    assert needed != unconfigured, (
+        "the fixture must set something that MOVES the subject, or this test "
+        "cannot distinguish a qualify that read the configuration from one "
+        "that did not"
+    )
+
+    # Warm the cache the way a passing battery under `qualify --config F` does,
+    # and ONLY for that subject: the unconfigured subject stays cold.
+    resolve_completed_qualification(
+        qualification_subject_manifest(profile, config=operator),
+        profile,
+        cache_dir=home / "qualification-cache",
+        executor=_passing_battery,
+    )
+
+    args = build_parser().parse_args(
+        [
+            "--config",
+            str(config_path),
+            "--provider-profile",
+            str(profile_path),
+            "qualify",
+        ]
+    )
+    result = _qualify_one_profile(args.provider_profile, args=args)
+
+    assert result is not None, (
+        "`deepreason qualify --config F` proposed a fresh battery on a home "
+        "that has already qualified F: it addressed the unconfigured subject "
+        f"{unconfigured[:16]} instead of {needed[:16]}, which is the "
+        "8-of-8 refusal probe/lifecycle_gap.out measured"
+    )
+    assert result["qualification_subject_digest"] == needed, (
+        "`deepreason qualify --config F` warmed the WRONG subject: it "
+        f"addressed {result['qualification_subject_digest'][:16]}, a run of F "
+        f"needs {needed[:16]}. The battery one warms is not the battery the "
+        "other needs."
+    )
+    assert result["cache_reused"] is True
+    assert result["maximum_expected_provider_calls"] == 0
