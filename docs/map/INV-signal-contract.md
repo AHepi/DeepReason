@@ -1,5 +1,5 @@
 <!-- DR-INV-signal-contract -->
-Verified-at: 748c9ab61
+Verified-at: 6c65f95e8
 Verify: python -m pytest tests/test_signal_contract.py tests/test_allocation_signal_consumption.py -q
 Owns: src/deepreason/signals.py, src/deepreason/allocation.py, src/deepreason/wander.py
 Seams: 
@@ -195,6 +195,27 @@ assert wander.decide(Config(SEED_PROBLEM_BUDGET_FLOOR=0.1), wander.reading_from(
 assert wander.decide(Config(ATTENTION_ALLOCATION_POLICY='open-lineage.v1'), r).engaged is False
 assert wander.decide(Config(ATTENTION_ALLOCATION_POLICY='nope'), r).fallback_from == 'nope'
 "`
+
+**The reading is a PARTITION of the run's cycles, and the policy owns the cut**
+(audit finding F-F, 2026-08-28). `seed_worked + other_worked +
+capability_cycles == cycles`, exactly. `capability_cycles` counts the cycles
+`Scheduler.step()`'s capability branch took: they advance the scheduler's
+counter and select no problem, so a candidacy gate has nothing to withhold on
+them. Both shipped policies divide by GOVERNED cycles —
+`cycles - capability_cycles` — which is arithmetically identical to the old
+denominator on every run that has none, and that identity is pinned live
+against epoch 1's committed share trajectory. The scheduler decides nothing
+here: it reports the count, the policy applies the cut, and a different cut is
+a registry entry under `DR-REC-revise-allocation-policy`. The field is a count
+of cycles and the FROZEN row is untouched — no status, no artifact, no kind.
+
+`check: python -c "from deepreason import wander; from deepreason.config import Config; c = Config(SEED_PROBLEM_BUDGET_FLOOR=0.5); r = wander.reading_from(c, cycles=24, seed_worked=2, capability_cycles=20); assert r.seed_worked + r.other_worked + r.capability_cycles == r.cycles; d = wander.decide(c, r); assert abs(d.share - 0.5) < 1e-9 and d.engaged is False; assert wander.decide(c, wander.reading_from(c, cycles=24, seed_worked=2)).engaged is True"`
+
+Single-line, and that is load-bearing rather than a style choice: `docs_verify`
+parses a `check:` LINE BY LINE (`tools/docs_verify.py:47,75`), so a check
+spanning several lines is silently never run. Several already in this map do.
+Parked: `experiments/2026-08-28-fix-capability-cycle-share/PARKED.md` §Q1.
+`check: python -m pytest tests/test_wander_cap.py -q -k "epoch_1 or dilute or order_independent" -q`
 
 **The same strictest row, for the THIRD controller.** Allocation touches
 EFFICIENCY, NEVER EVIDENCE, and this policy gets the identical guard: a

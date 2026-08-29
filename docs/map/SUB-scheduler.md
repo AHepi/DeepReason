@@ -1,5 +1,5 @@
 <!-- DR-SUB-scheduler -->
-Verified-at: debff8d9b
+Verified-at: 6c65f95e8
 Verify: python -m pytest tests/test_scheduler.py tests/test_rotation.py tests/test_v6_scheduler_model_phase_deferral.py tests/test_controller.py tests/test_controller_steering_parity.py -q
 Owns: src/deepreason/scheduler/, src/deepreason/controller.py
 Seams: DR-SEAM-scheduler-x-rules, DR-SEAM-scheduler-x-workflow, DR-SEAM-schools-x-scheduler, DR-SEAM-llm-x-scheduler
@@ -126,11 +126,13 @@ injected, never imported: roughly thirty branch points read its
 epistemic — `_problem_worked` (liveness ages), `_disc_attempts` / `_disc_last`
 (discrimination futility), `_fuzz_clean`, `_vision_done`, `_hv_skipped`,
 `_recrit_cursor`, `_flag_streak` / `_cooldown` (capture hysteresis),
-`_intervention_until` (ladder expiry), `_v6_deferred_model_phases`. Rebuilding a
+`_intervention_until` (ladder expiry), `_v6_deferred_model_phases`,
+`_seed_cycles` / `_capability_cycles` (the allocation policy's two cycle
+classes — `DR-CON-scheduler-ranking`). Rebuilding a
 `Scheduler` mid-run wipes them, which is why `run()` takes an `on_cycle`
 early-stop hook instead. Every signal the package emits is registered in
 `src/deepreason/signals.py` — with one exception, recorded under Traps.
-`check: for s in _problem_worked _disc_attempts _disc_last _fuzz_clean _vision_done _hv_skipped _recrit_cursor _flag_streak _cooldown _intervention_until _v6_deferred_model_phases; do grep -q "self\.$s" src/deepreason/scheduler/scheduler.py || exit 1; done && for t in cycle embedder spec-generation scheduler-stop stop-escape disc-attempts-exhausted disc-transport-deferred hv-skip-oversize research-awaiting-agent research-fetch-exhausted foreign-criticism-coverage.v1; do grep -q "\"$t\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py tests/test_scheduler.py::test_on_cycle_true_stops_the_run_early -q`
+`check: for s in _problem_worked _disc_attempts _disc_last _fuzz_clean _vision_done _hv_skipped _recrit_cursor _flag_streak _cooldown _intervention_until _v6_deferred_model_phases _seed_cycles _capability_cycles; do grep -q "self\.$s" src/deepreason/scheduler/scheduler.py || exit 1; done && for t in cycle embedder spec-generation scheduler-stop stop-escape disc-attempts-exhausted disc-transport-deferred hv-skip-oversize research-awaiting-agent research-fetch-exhausted foreign-criticism-coverage.v1; do grep -q "\"$t\"" src/deepreason/signals.py || exit 1; done && python -m pytest tests/test_signals.py tests/test_scheduler.py::test_on_cycle_true_stops_the_run_early -q`
 The "one exception" is an exact count, not a hedge: this check AST-scans every
 `record_measure` head in the package, fails on any unregistered literal, and
 fails if a SECOND variable-headed signal appears (both mutations were run).

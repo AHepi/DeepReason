@@ -49,18 +49,25 @@ SIGNALS: tuple[str, ...] = (
 class LineageReading:
     """Everything a lineage policy is handed, and nothing else.
 
-    Four numbers over PROCESS facts -- how many cycles have been worked, how
-    they split between the operator's seeded lineage and everything the run
-    spawned for itself, and the configured floor. No status, no artifact, no
-    problem body, no criticism kind: a policy that cannot SEE an outcome has no
-    outcome to game, which is the same structural argument the allocation
-    controller's process-only signal diet rests on.
+    Numbers over PROCESS facts -- how many cycles have been worked, how they
+    split between the operator's seeded lineage, everything the run spawned for
+    itself and the run's own capability work, and the configured floor. No
+    status, no artifact, no problem body, no criticism kind: a policy that
+    cannot SEE an outcome has no outcome to game, which is the same structural
+    argument the allocation controller's process-only signal diet rests on.
     """
 
     cycles: int
     seed_worked: int
     other_worked: int
     floor: float
+    # Cycles the capability step took. NOT a fifth process fact bolted on: it
+    # completes the partition, so seed_worked + other_worked +
+    # capability_cycles == cycles exactly. A capability cycle advances the
+    # scheduler's counter and selects no problem, so a throttle has no
+    # candidacy to restrict on it; the POLICY decides what that means, which
+    # is why the count arrives here rather than being resolved by the caller.
+    capability_cycles: int = 0
 
 
 @dataclass(frozen=True)
@@ -94,11 +101,19 @@ def wander_cap_v1(reading: LineageReading) -> LineageDecision:
     violation would throttle cycle 0 -- the one cycle the operator's question
     is guaranteed outright by the scheduler's own oldest tie-break rule
     (`DR-CON-scheduler-ranking`).
+
+    The denominator is GOVERNED cycles, not all of them: a capability cycle
+    selects no problem, so this throttle -- a candidacy gate and nothing else
+    -- has no candidacy to withhold on it. Counting it would drive the share
+    down for a reason the gate can never act on. Live evidence that this is not
+    hypothetical: P-T1 epoch 6 spent 20 of 24 cycles inside one simulation
+    (audit finding F-F).
     """
-    share = (reading.seed_worked / reading.cycles) if reading.cycles else 1.0
+    governed = reading.cycles - reading.capability_cycles
+    share = (reading.seed_worked / governed) if governed > 0 else 1.0
     return LineageDecision(
         policy_id="wander-cap.v1",
-        engaged=reading.cycles > 0 and share < reading.floor,
+        engaged=governed > 0 and share < reading.floor,
         share=share,
         floor=reading.floor,
     )
@@ -112,7 +127,8 @@ def open_lineage_v1(reading: LineageReading) -> LineageDecision:
     a configuration rather than a code edit like everything else here. It is
     also the second arm of the evidence differential.
     """
-    share = (reading.seed_worked / reading.cycles) if reading.cycles else 1.0
+    governed = reading.cycles - reading.capability_cycles
+    share = (reading.seed_worked / governed) if governed > 0 else 1.0
     return LineageDecision(
         policy_id="open-lineage.v1",
         engaged=False,
@@ -152,8 +168,10 @@ def decide(config, reading: LineageReading) -> LineageDecision:
     return policy(reading)
 
 
-def reading_from(config, *, cycles: int, seed_worked: int) -> LineageReading:
-    """Build the reading from the two counters a scheduler already keeps.
+def reading_from(
+    config, *, cycles: int, seed_worked: int, capability_cycles: int = 0
+) -> LineageReading:
+    """Build the reading from the counters a scheduler already keeps.
 
     Here rather than in the scheduler so that the floor is read from
     configuration in ONE place: a consumer that assembled its own reading could
@@ -163,6 +181,7 @@ def reading_from(config, *, cycles: int, seed_worked: int) -> LineageReading:
     return LineageReading(
         cycles=int(cycles),
         seed_worked=int(seed_worked),
-        other_worked=max(0, int(cycles) - int(seed_worked)),
+        other_worked=max(0, int(cycles) - int(seed_worked) - int(capability_cycles)),
         floor=float(getattr(config, "SEED_PROBLEM_BUDGET_FLOOR", 0.0)),
+        capability_cycles=int(capability_cycles),
     )

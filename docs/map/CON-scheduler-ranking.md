@@ -1,5 +1,5 @@
 <!-- DR-CON-scheduler-ranking -->
-Verified-at: 1662a3f96
+Verified-at: 6c65f95e8
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py
 Seams: DR-SEAM-scheduler-x-rules
@@ -82,8 +82,9 @@ read only, never mutated here); `reflexive_problems(state)`, the lineage-
 following meta-work set; the `Config` knobs `FOCUS_PROBLEM`, `FOCUS_FAMILY`,
 `LIVENESS_QUEUE`, `INTEGRATION_BUDGET_SHARE`, `SEED_PROBLEM_BUDGET_FLOOR` and
 `ATTENTION_ALLOCATION_POLICY`; and the scheduler's own per-instance attention
-caches `_problem_worked` (liveness ages) and `_seed_cycles` (worked cycles on
-the seeded lineage) — both rebuildable and non-epistemic.
+caches `_problem_worked` (liveness ages), `_seed_cycles` (worked cycles on
+the seeded lineage) and `_capability_cycles` (cycles the capability step took)
+— all rebuildable and non-epistemic.
 
 **The wander cap is a CANDIDACY gate, never a rank term** (F3, 2026-08-26).
 This is the sharpest thing to know about it. It sits beside
@@ -113,6 +114,26 @@ assert gate < rank, 'the wander gate must sit in candidacy, before the rank key'
 assert 'decision' not in src[rank:src.index('best = min(')], 'the throttle leaked into the rank key'
 "`
 `check: python -m pytest tests/test_wander_cap.py -q -k "floor_holds or starves or never_loses or yields"`
+
+**Which cycles the cap is computed over, and which it is disclosed on**
+(audit finding F-F, fixed 2026-08-28). `step()` has one branch that advances
+`self._cycles` without selecting a problem: the capability step. Those cycles
+are counted as their OWN class and are OUT of the policy's denominator —
+a candidacy gate has no candidacy to withhold on a cycle that selects nothing,
+so a denominator counting them would fall for a reason the gate can never act
+on. The scheduler decides none of this: it reports `capability_cycles` on the
+reading and `wander_cap_v1` subtracts it, so an alternative accounting (say,
+attributing a capability cycle to its proposal's lineage) is a registry entry
+under `DR-REC-revise-allocation-policy`, not an edit here.
+
+The exclusion is arithmetic only. The reading is emitted on EVERY cycle that
+advanced the counter, capability cycles included, because P-T1 epoch 6 went
+silent for 20 of its 24 cycles and a reader cannot tell silence from stability.
+The throttle record stays a transition event and cannot fire on a capability
+cycle, because neither counter the share is built from moves across one.
+
+`check: python -c "import inspect; from deepreason.scheduler.scheduler import Scheduler as S; src = inspect.getsource(S.step); b = src[src.index('_simulation_capability_step()'):src.index('scan_spawns(')]; assert 'self._disclose_wander()' in b, 'the capability branch stopped disclosing'; assert 'self._capability_cycles += 1' in b, 'capability cycles re-entered the denominator'; assert b.index('_wander_reading()') < b.index('self._capability_cycles += 1')"`
+`check: python -m pytest tests/test_wander_cap.py -q -k "dilute or order_independent or inventing or epoch_1" -q`
 
 **Must never do:** write to disk or assign a `Status`/`hv`/`reach` value —
 attention and ranking only, exactly like the rest of `DR-SUB-scheduler`
@@ -156,6 +177,7 @@ reflexive set entirely when tracked by trigger alone.
 | Stage isolation for a staged pipeline | `scheduler/scheduler.py` | `problem_family`, `Config.FOCUS_FAMILY` |
 | Discrimination backoff feeding the candidate filter | `scheduler/scheduler.py` | `_disc_paused` |
 | The attention cache ranking reads | `scheduler/scheduler.py` | `_problem_worked` |
+| The two cycle classes the wander cap is computed over | `scheduler/scheduler.py` | `_seed_cycles`, `_capability_cycles`, `_wander_reading` |
 
 ## Where to change what
 
@@ -163,6 +185,7 @@ reflexive set entirely when tracked by trigger alone.
 |---|---|---|
 | Which problem a cycle works on, or the rank tie-break | `_select_problem`; `Config.LIVENESS_QUEUE`, `FOCUS_PROBLEM`, `FOCUS_FAMILY` | `tests/test_controller.py::test_operator_question_outranks_spawns_at_cycle_zero`, `tests/test_scheduler.py::test_focus_family_restricts_selection` |
 | What counts as reflexive/meta work, or its budget share | `_REFLEXIVE_TRIGGERS`/`reflexive_problems`; `Config.INTEGRATION_BUDGET_SHARE` | `tests/test_reflexive_discipline.py::test_reflexive_budget_follows_lineage` |
+| How a cycle counts toward the seed-lineage share | a new entry in `wander.LINEAGE_POLICIES` reading `LineageReading.capability_cycles` — never `_select_problem` or `step()` | `tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor` |
 
 ## Traps
 
