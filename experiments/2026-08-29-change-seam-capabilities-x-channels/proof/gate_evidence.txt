@@ -76,3 +76,45 @@ enforcing site its Sweep: expression identifies is already named in the body.
 ================================================================================
 $ git diff --name-only origin/main...HEAD
 (see cone.txt — zero src/ paths)
+
+================================================================================
+ADDENDUM — 2026-08-29 correction pass (after adversarial verification)
+================================================================================
+Scoped deliberately. The orchestrator runs the full suite and the full
+docs_verify sweep once at fan-in; running either again here would contend for a
+shared 4-CPU box and is exactly what manufactured this tranche's phantom fifth
+failure the first time round (P4, above).
+
+$ python tools/docs_verify.py --audit
+docs_verify --audit: 0 finding(s)
+
+$ python tools/docs_verify.py --links
+docs_verify --links: 0 dangling reference(s), 70 document(s)
+
+docs_verify has no per-document selector, so the two documents this pass touched
+were run check by check with docs_verify's own _CHECK regex and its own runner
+semantics (shell, cwd=repo root):
+
+  SEAM-capabilities-x-channels.md   15 checks   0 failed   (was 10; +5)
+  SUB-capabilities.md               18 checks   0 failed   (was 17; +1)
+  TOTAL                             33 checks   0 failed
+
+Both documents' Verify: rings, idle:
+
+$ python -m pytest tests/test_evidence_channels.py tests/test_simulation_runner_default.py tests/test_channel_and_wander_modularity.py -q
+45 passed in 2.35s
+
+$ python -m pytest tests/test_simulation_capability_v5.py tests/test_research_capability.py tests/test_research_root_replay.py -q
+34 passed in 32.63s
+
+NOT RE-RUN, and named so nobody assumes otherwise: the full docs_verify sweep
+(the 4-failure baseline is the orchestrator's to re-measure at fan-in) and the
+full pytest gate. This pass changed no src/ file, so neither could move except
+through the two documents measured above.
+
+WITHDRAWN from section 5 of this file: the `--coverage: 0 findings` line was
+offered as evidence that this seam names every enforcement site. It is not
+evidence — see proof/coverage_sweep.txt for the hand recomputation showing the
+sweep has ZERO enforcement sites to find here, so its zero could not have come
+out any other way. The `Sweep:` header is removed and replaced by a check that
+can fail.

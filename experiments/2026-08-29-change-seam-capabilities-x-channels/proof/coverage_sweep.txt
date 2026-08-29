@@ -1,2 +1,51 @@
-SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
-SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py
+COVERAGE SWEEP — recomputed by hand, 2026-08-29 correction pass
+
+WHY BY HAND: the delivered document declared
+
+    Sweep: CHANNELS_DISABLED|_channel_enabled|channels\.enabled && inquiry_capability_policy|ResearchCapabilityPolicyV1|SimulationCapabilityPolicyV1|policy\.enabled
+
+and the tranche recorded `docs_verify --coverage: ... 0 finding(s)` for this seam
+as gate evidence. An adversarial verifier recomputed the sweep and showed the
+zero is STRUCTURALLY VACUOUS. Re-derived here with docs_verify's own regexes
+(324 source files under src/deepreason):
+
+  files matching the FIELD side (5):
+    src/deepreason/channels.py
+    src/deepreason/config.py
+    src/deepreason/preparation.py
+    src/deepreason/run_manifest.py
+    src/deepreason/v6_policy.py
+
+  candidates matching BOTH sides (3):
+    src/deepreason/preparation.py
+    src/deepreason/run_manifest.py
+    src/deepreason/v6_policy.py
+
+  ENFORCEMENT sites (docs_verify's rule: the file must COMPARE on the field --
+  `field ==` / `!= field` -- or RAISE on it) (0):
+    (none)
+
+With ZERO enforcement sites the sweep cannot produce a finding for this seam
+whatever the document says or omits. The reported zero could not have come out
+any other way, so it was not evidence. The reason is structural: the channel
+decision is consumed by a BOOLEAN GUARD --
+
+    if not _channel_enabled("research", config):        # v6_policy.py
+
+-- never by a comparison and never by a raise, and docs_verify's enforce-regex
+cannot see a boolean guard.
+
+ACTION TAKEN: the `Sweep:` header is REMOVED from
+docs/map/SEAM-capabilities-x-channels.md and the reason is stated in the
+document body, which is what SCHEMA.md prescribes for the neighbouring case it
+already records (SEAM-evaluation-x-ontology: "leave the header off and say why
+in the body rather than shipping a spec that cries wolf"). The completeness
+property the sweep was meant to guard is now carried by a check that CAN come
+out differently: exactly one module under src/deepreason reaches the channel
+registry at all. Mutation-proven in proof/correction_mutation_proof.txt
+(M-C5, M-C6). `--coverage` will now count this document under "without a
+Sweep: header"; that is the honest signal.
+
+PRE-EXISTING findings on other seams, unchanged and untouched by this tranche:
+  SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
+  SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py

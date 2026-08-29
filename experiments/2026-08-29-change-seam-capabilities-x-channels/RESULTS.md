@@ -131,3 +131,94 @@ no check and that this is structural; these are among them.
   idle against a 300s budget, and TIMED OUT under this batch's concurrent load
   — putting `docs_verify` at 5 failed for no code reason. Re-measured idle it
   passes. Cost: 2m36s to disprove.
+
+---
+
+## 2026-08-29 — the correction pass, after adversarial verification
+
+**What happened.** Before this tranche reached the session branch, an
+independent adversarial verifier ran a mutation lens and a discipline lens over
+the delivered document and FALSIFIED SIX of its claims, plus two bookkeeping
+defects. It was right on all eight; every one was re-derived here before being
+acted on, and none of the re-derivations contradicted it. The document as
+delivered would have shipped two outright false sentences and three claims of
+protection it did not have. That is worse than shipping no document, because a
+map document is authenticated by re-derivation and these claims read as
+authenticated.
+
+### What was falsified, and what was done about it
+
+| # | The claim as delivered | Verdict | What it is now |
+|---|---|---|---|
+| 1 | "`disabled_channels()` and `unknown_channel_notices()` serve reporting and compile notices" | FALSE | Neither has ANY production caller: repo-wide the names appear once as a docstring line in `v6_policy.py` and otherwise only in two test files. Corrected in the body, with a check (`no-production-caller`) that reddens on a new caller AND on a deleted `channels.py` |
+| 2 | PARKED P1: the five unrun checks in `INV-evidence-channels.md` include "the registry's own membership check" | FALSE | That check is line 40, single-line, and RUNS. The five that never run are lines 55, 72, 89, 107, 124; PARKED.md now names them by line and by claim. The headline census (10/5/5, and 72 across 27 documents) was exact and stands |
+| 3 | "The first check in this document is what goes red" if a controller acquires a `Config` | OVERCLAIM | The import check pins ARROWS only. An INDIRECT read — a controller importing `deepreason.v6_policy` and recompiling its own policy — left every check green while the manifest said `research.enabled=False` and the controller said `True` with a budget of 6. A new identity check now demands the controller's policy BE the manifest's compiled object; it reddens on that mutation |
+| 4 | The Traps check pins the four-epoch runner-profile trap | OVERCLAIM | It was strings-only. Deleting the guard reddened it; INVERTING it (`!= container` → `!= declarative`, the same defect pointed the other way) did not, because both strings survive elsewhere in `execute`. It now pins the guard's AST — comparisons, operators, literals and reason code together — and reddens on both |
+| 5 | `--coverage: 0 findings` as gate evidence that the seam names every enforcement site | VACUOUS | Recomputed by hand: three candidate files, ZERO enforcement sites, because the channel decision is consumed by a boolean guard and `--coverage` only sees comparisons and raises. A zero that cannot be non-zero is not evidence. The `Sweep:` header is REMOVED with the reason stated in the body, and replaced by a reader census that can fail |
+| 6 | The F-A framing of the engine-config echo drop | STALE | The P10 fix `a40450f1c` is in this tree and now types the drop as `ENGINE_CONFIG_FIELD_NOT_CARRIED` at `/engine_config/CHANNELS_DISABLED`. Both the body section and the Traps entry say so, with a check |
+| 7 | `proof/cone.txt` records the tranche's cone | INCOMPLETE | It listed 7 paths; the diff had 12. Regenerated |
+| 8 | `SUB-capabilities.md` header says documented, body table says undocumented | CONTRADICTION | Fixed, and the cone widened by one file to allow it. PARKED P2 is CLOSED, with the ratchet its own prompt asked for: a check that every body row appears in exactly one header and every header entry appears as a row |
+
+### One thing the verifier did not find, discovered while fixing #1
+
+Correcting #1 collapsed the fourth Trap. It told the reader to "read the compile
+notices, not the policy, to learn" whether a channel is off by intent or by
+typo. Since `unknown_channel_notices` has no production caller, a compile never
+emits `CHANNEL_UNKNOWN`. Measured: `channels_disabled=("reserch",)` compiles a
+manifest whose ONLY notice is the P10 field-not-carried one, with research still
+ENABLED. The advice was false and is withdrawn; the entry now says what a reader
+can actually do, and carries a check that reddens if the registry stops typing
+the distinction or if someone wires it into the compile.
+
+### Checks: 10 → 15 on the seam, 17 → 18 on the subsystem
+
+Five added, one strengthened in place, none deleted and none weakened. Every one
+is single-line, parses under `docs_verify`'s own `_CHECK` regex, and was proven
+RED under a deliberate mutation and GREEN after restore before it was written
+down. Twelve mutations, full transcript in `proof/correction_mutation_proof.txt`,
+run on an isolated byte-copy of the tree so the lane worktree was never wrong
+(`SCHEMA.md`: "run a falsification pass, or measure the tree, never both at
+once"). The transcript deliberately records two GREEN results as well — the
+import check under the indirect read, and the old strings-only check under the
+inversion — because those are the falsifications, and a proof file that only
+shows reds hides what was wrong.
+
+### Residue — what remains unproven
+
+Superseding residue items 3 and 4 of the segment above; items 1 and 2 stand.
+
+1. **The identity tripwire does not make a `Config` unreachable.**
+   `capabilities/audit.py` already imports `deepreason.run_manifest`, which
+   exports `config_from_run_manifest`. A controller reading configuration
+   through an already-permitted module would pass both of this document's
+   checks. The behavioural authority there is the capability test suite —
+   measured, `tests/test_research_capability.py` returns `7 failed, 4 passed`
+   under the indirect-read mutation — and the document now says so rather than
+   letting a map check stand in for a gate.
+2. **The completeness census is an import census, not a use census.** It proves
+   exactly one module reaches `deepreason.channels`. It would not catch a
+   channel decision smuggled across as a plain bool through some other module's
+   signature. Nothing measured suggests that exists today; nothing here rules
+   it out either.
+3. **`--coverage` is now structurally silent for this seam by construction.**
+   Removing the header is the honest move and `SCHEMA.md` prescribes it for the
+   neighbouring case, but it does mean this document has no mechanical
+   completeness sweep — only the hand census. If the channel decision ever
+   becomes a comparison or a raise, the header should come back.
+4. **This pass still wrote no code and proved no behaviour change.** It made a
+   map document stop claiming things that are not true, and made three of its
+   claims enforceable that were not. Everything it asserts about the code was
+   true before it was written.
+5. **Not re-run here, by instruction:** the full pytest gate and the full
+   `docs_verify` sweep. This pass changed no `src/` file; the orchestrator
+   re-measures both at fan-in against the stated 4-failure baseline.
+6. **`SUB-capabilities.md` still carries one check line that never runs**
+   (PARKED P1). It was left alone deliberately: P1 is a repo-wide decision
+   about the parser, another window was reported to be landing it, and
+   rewriting one check here would collide with that and shift the census this
+   tranche just corrected.
+
+**Accepted does not mean true.** Six claims in this document passed a lane's own
+review, its own ten green checks, and a green gate, and were false or hollow
+anyway. What caught them was a reader with no stake in the tranche and a licence
+to mutate the tree.

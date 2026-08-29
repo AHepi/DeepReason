@@ -6,6 +6,14 @@ Cone rule for this lane: `docs/map/SEAM-capabilities-x-channels.md` (new),
 directory. Nothing else. Each finding below is outside that cone and is
 recorded rather than made.
 
+**AMENDED 2026-08-29 (correction pass).** An adversarial verifier falsified six
+claims of the delivered document and found two bookkeeping defects; the
+correction pass that answered it WIDENED the cone by one file — the whole of
+`docs/map/SUB-capabilities.md`, not only its header lines — so that P2 below
+could be fixed rather than parked. P2 is therefore CLOSED. P1's sub-claim about
+WHICH five checks in `INV-evidence-channels.md` never run was wrong and is
+corrected in place below. P1, P3 and P4 remain parked and unfixed.
+
 ---
 
 ## P1 — HIGH: multi-line `check:` blocks in map documents NEVER RUN
@@ -38,15 +46,32 @@ worst offenders, and the two documents that are the sides of this seam:
 problem: ten of the claims authenticating the repository's frozen-surface
 grants are not being re-derived by the instrument that reports itself green.
 
-Among the five unrun claims in `INV-evidence-channels.md` are the registry's
-own membership check, the `enforcement`/`toggle` well-formedness check, the
-`CHANNEL_UNKNOWN` notice check and the `DECOMMISSIONED` website check — the
-four load-bearing claims of the channels side of this seam.
+**CORRECTED 2026-08-29 after adversarial verification.** This paragraph first
+named "the registry's own membership check" among the five that never run. That
+was WRONG: the membership check
+(`set(channels.CHANNEL_DECLARATIONS) == {'research','simulation','code-testing'}`)
+is single-line, parses, and RUNS. Re-derived with `docs_verify.py`'s own `_CHECK`
+regex, `INV-evidence-channels.md` has ten check lines, five parsed
+(the membership check plus four `pytest` one-liners) and five that never run.
+The five, by line and by claim:
+
+| line | the claim that is not being re-derived |
+|---|---|
+| 55 | every declaration's `toggle` is a real `Config` field, and `enforcement` and `authority` are non-empty |
+| 72 | every channel is `default_enabled`, `enabled()` agrees with it, and ONE toggle field serves all of them |
+| 89 | an unknown id is a typed `CHANNEL_UNKNOWN` notice and disables nothing |
+| 107 | `website` is a DECOMMISSIONED declared absence |
+| 124 | research compiles with a non-empty default allowlist and positive budgets |
+
+Those five are the load-bearing claims of the channels side of this seam. The
+headline census (10 written / 5 parsed / 5 never run, and 72 across 27
+documents) was and remains exact.
 
 **Not fixed here** because `tools/docs_verify.py` is an external stop line for
 this batch (another window is live on it) and rewriting other documents' checks
-is outside this lane's cone. This tranche's own ten checks are all SINGLE-LINE
-and all verified to parse and run.
+is outside this lane's cone. This tranche's own checks — ten as delivered,
+fifteen after the correction pass — are all SINGLE-LINE and all verified to
+parse and run.
 
 **Prompt:**
 
@@ -85,13 +110,23 @@ GATE: python tools/docs_verify.py, python tools/docs_verify.py --audit.
 
 ---
 
-## P2 — LOW: `SUB-capabilities.md`'s body Seams table still says this pair is undocumented
+## P2 — CLOSED 2026-08-29: `SUB-capabilities.md`'s body Seams table said this pair was undocumented
 
-**What.** `docs/map/SUB-capabilities.md` carries a `## Seams` table whose
-`capabilities x channels` row reads `undocumented`. That row is now false —
-`DR-SEAM-capabilities-x-channels` exists and the header line names it. This
-lane's cone permits only the `Seams:`/`Seams-undocumented:` HEADER LINES of
-that file, so the body row is left stale rather than edited out of cone.
+**FIXED, not parked.** The adversarial verifier's discipline lens called this
+what it was: a live contradiction inside a file this tranche had already
+edited. The correction pass widened the cone to the whole of
+`docs/map/SUB-capabilities.md` and fixed it — the row now reads
+`` `DR-SEAM-capabilities-x-channels` | documented ``, matching the shape the
+`capabilities x rules` row already used — and added the ratchet the prompt below
+asked for: a single-line check asserting every body row's first column appears
+in exactly one of the two headers and every header entry appears as a row.
+Mutation-proven RED against the original stale row and RED against a deleted
+row, GREEN restored. The prompt below is kept for the record; nothing in it
+remains to do.
+
+**What it was.** `docs/map/SUB-capabilities.md` carried a `## Seams` table whose
+`capabilities x channels` row read `undocumented`, while its own header line
+already named `DR-SEAM-capabilities-x-channels`.
 
 Related and pre-existing: that same body table listed `capabilities x channels`
 while the file's own `Seams-undocumented:` HEADER did NOT — the two disagreed
