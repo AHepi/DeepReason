@@ -1,0 +1,38 @@
+Mutation proof -- each production edit reverted in turn.
+Tree: this tranche's final source. Restored after every arm.
+
+===== M1 -- the capability branch stops disclosing =====
+
+tests/test_wander_cap.py:717: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor
+FAILED tests/test_wander_cap.py::test_the_denominator_is_order_independent - ...
+2 failed, 2 passed, 16 deselected in 0.42s
+
+===== M2 -- _capability_cycles stops advancing (cycles re-enter the denominator) =====
+tests/test_wander_cap.py:744: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor
+FAILED tests/test_wander_cap.py::test_the_denominator_is_order_independent - ...
+FAILED tests/test_wander_cap.py::test_a_capability_cycle_discloses_without_inventing_a_throttle
+3 failed, 1 passed, 16 deselected in 0.46s
+
+===== M3 -- wander_cap_v1 divides by all cycles again =====
+tests/test_wander_cap.py:744: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor
+FAILED tests/test_wander_cap.py::test_the_denominator_is_order_independent - ...
+FAILED tests/test_wander_cap.py::test_a_capability_cycle_discloses_without_inventing_a_throttle
+3 failed, 1 passed, 16 deselected in 2.13s
+
+===== M4 -- the empty-record rule flipped to 0.0 (the epoch-1 pin must catch it) =====
+tests/test_wander_cap.py:721: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_wander_cap.py::test_the_offline_spawner_reproduces_epoch_1_bit_for_bit
+FAILED tests/test_wander_cap.py::test_capability_cycles_do_not_dilute_the_floor
+FAILED tests/test_wander_cap.py::test_the_denominator_is_order_independent - ...
+3 failed, 1 passed, 16 deselected in 0.46s
+
+===== restored: control =====
+....................                                                     [100%]
+20 passed in 1.26s

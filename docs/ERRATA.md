@@ -1640,3 +1640,51 @@ the 260 violations and the byte-identical crash; RESULTS.md for the before/after
 table), `experiments/2026-08-27-pc2b-symmetric-reasoning/BLOCKER.md` at
 `ee0563cf1` for the independent first sighting, and
 `docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` §3.2 item 1 for the claim.
+
+---
+
+## E57 — "a capability cycle emits no `cycle` heartbeat", and the field that
+## reads 0 because of it
+
+**Minted from the tail on 2026-08-28 with parallel windows open; if another
+tranche also minted E57, this entry is the one about the wander cap's
+denominator and should be renumbered, not merged.**
+
+`experiments/2026-08-28-audit-run-problems/probes/q3_cycle_accounting.py`, in
+its module docstring, states:
+
+> So a cycle taken by the simulation-capability step emits NO `cycle`
+> heartbeat, consults NO wander policy, and increments NO `_seed_cycles` --
+> while still advancing `self._cycles`, which is the DENOMINATOR of the
+> seed-lineage share.
+
+Everything after the first clause is right, and the first clause is wrong. The
+capability step emits its own `cycle` heartbeat at three sites —
+`scheduler.py:1802`, `1950` and `2030` — naming the package or proposal it is
+working rather than a problem id.
+
+The consequence is in the probe's output, not only its prose. Its
+`cycles_that_bypassed_the_cap` field is computed as
+`cycle_heartbeats_emitted - terminal_cycle_in_status`, so for epoch 6 it reads
+**`0`** — for a run where 20 of 24 cycles bypassed the cap. A reader taking
+that field at face value would have closed the question.
+
+The audit's own `AUDIT_REPORT.md` §F-F does NOT make this mistake: it reports
+the heartbeat census by problem id (19 `simulation-result:`, 1
+`simulation-request:`, 2 seed, 1 `disc:`, 1 `conn:`) and states the finding
+against the FOUR wander readings, which is the field that shows it. So the
+verdict was reached correctly on the correct evidence; what is corrected here
+is a probe field and the docstring that generated it.
+
+Not corrected in place: the audit tranche's probes are its committed record and
+this tranche does not edit another tranche's root. The generalisable shape —
+**a derived field whose formula encodes a false premise reads clean, and reads
+clean in the direction of "nothing to see"** — is the part worth carrying
+forward. The census that answered the question compared readings to
+heartbeats; the one that hid it compared heartbeats to cycles.
+
+Evidence: `experiments/2026-08-28-fix-capability-cycle-share/DIAGNOSIS.md`
+(the three heartbeat sites and the four-reading solve),
+`experiments/2026-08-28-audit-run-problems/probes/q3_cycle_accounting.json`
+(the `cycles_that_bypassed_the_cap: 0` field on epoch 6), and
+`src/deepreason/scheduler/scheduler.py:1802,1950,2030`.

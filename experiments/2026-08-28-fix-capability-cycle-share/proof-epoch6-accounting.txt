@@ -1,0 +1,19 @@
+probe:                experiments/2026-08-28-audit-run-problems/probes/q3_cycle_accounting.json
+root:                 run
+cycles:               24
+  capability cycles:  20
+  selection cycles:   4
+  of those, seeded:   2
+readings RECORDED:    4
+throttles RECORDED:   1
+trajectory RECORDED:  [1.0, 1.0, 0.5, 0.333333]
+
+terminal reading, three ways
+  as shipped (4 of 24 consulted): share 0.333333 on 3 governed cycles, then 20 cycles UNRECORDED
+  under the fix (capability out): share 0.500000 floor 0.500000 engaged=False  -- emitted on all 24 cycles
+  consulted but diluted:          share 0.083333 floor 0.500000 engaged=True
+
+readings under the fix: 24 (one per cycle that advanced the counter)
+  the 4 on selection cycles: ['1.000000', '1.000000', '0.500000', '0.333333'] -- unchanged
+  the 20 on capability cycles: each repeats the reading current at that point; after all 4 selection cycles that is 0.500000, at the floor
+throttle records under the fix: 1 -- unchanged. Neither counter the share is built from moves across a capability cycle, so the engagement state cannot transition on one.

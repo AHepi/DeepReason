@@ -1,0 +1,17 @@
+The two new map checks, mutation-proven. Both are SINGLE-LINE so
+docs_verify actually collects them (PARKED.md Q1).
+
+--- control: DR-CON-scheduler-ranking structural check ---
+PASS
+--- control: DR-INV-signal-contract arithmetic check ---
+PASS
+
+--- mutation M1 (branch stops disclosing) vs the structural check ---
+  File "<string>", line 1, in <module>
+AssertionError: the capability branch stopped disclosing
+
+--- mutation M3 (policy ignores the field) vs the arithmetic check ---
+  File "<string>", line 1, in <module>
+AssertionError
+
+restored.

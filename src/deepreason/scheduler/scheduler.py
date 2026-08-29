@@ -377,6 +377,11 @@ class Scheduler:
         # `_problem_worked` and `_integration_cycles` beside them: they price
         # attention and are never read by anything that assigns a status.
         self._seed_cycles = 0
+        # Cycles the capability step took. They advance `_cycles` and select no
+        # problem, so they are reported to the allocation policy as their own
+        # class rather than folded into either lineage -- the policy decides
+        # what that means, the scheduler only counts (audit finding F-F).
+        self._capability_cycles = 0
         self._wander_engaged = False
         self._pending_wander = None
         self._arg_crit_this_cycle = 0
@@ -1127,12 +1132,7 @@ class Scheduler:
         # untouched. The policy is selected by id from `wander.LINEAGE_POLICIES`
         # and consumed ONLY through `wander.decide` -- the scheduler is never
         # taught which throttle it is running.
-        decision = wander.decide(
-            self.config,
-            wander.reading_from(
-                self.config, cycles=self._cycles, seed_worked=self._seed_cycles
-            ),
-        )
+        decision = wander.decide(self.config, self._wander_reading())
         if decision.engaged:
             # Yield candidacy to seeded work -- but only while there IS seeded
             # work. A throttle that could empty the pool would lose a cycle to
@@ -1210,6 +1210,21 @@ class Scheduler:
         selected = pool[self._cycles % len(pool)]
         self._count_lineage(selected)
         return selected
+
+    def _wander_reading(self):
+        """The counters the allocation policy is handed, assembled in ONE place.
+
+        Both cycle classes read it: problem selection above, and the capability
+        branch of `step()`, which has no selection to hang it on. Two call sites
+        assembling their own reading is how they stop agreeing about what a
+        cycle is.
+        """
+        return wander.reading_from(
+            self.config,
+            cycles=self._cycles,
+            seed_worked=self._seed_cycles,
+            capability_cycles=self._capability_cycles,
+        )
 
     def _count_lineage(self, problem) -> None:
         """Tally one worked cycle to its lineage class.
@@ -2050,6 +2065,16 @@ class Scheduler:
         if self.controller is not None:
             self.controller.step()  # calibrate generator knobs from process signals
         if self._simulation_capability_step():
+            # A capability cycle advances the counter and selects no problem,
+            # so the throttle has no candidacy to restrict on it: it is counted
+            # as its own class, out of the governed denominator. The reading is
+            # still emitted -- P-T1 epoch 6 went silent for 20 of 24 cycles and
+            # a reader could not tell that from stability (audit finding F-F).
+            # Computed before either counter advances, exactly as the selection
+            # path computes it before `_count_lineage` and the counter bump.
+            self._pending_wander = wander.decide(self.config, self._wander_reading())
+            self._disclose_wander()
+            self._capability_cycles += 1
             self._cycles += 1
             return
         scan_spawns(harness, config)
