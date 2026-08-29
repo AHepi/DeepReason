@@ -47,6 +47,19 @@ PRODUCTION_EVENTUAL_VALID_MINIMUM = 19
 # The battery bound stays finite: at most this many pairs may re-exercise.
 PRODUCTION_PAIR_RE_EXERCISE_LIMIT = 3
 DEFAULT_QUALIFICATION_CONCURRENCY = 4
+# Which typed failure codes ARM the qualification circuit breaker. Everything
+# the transport layer can produce begins ENDPOINT_; a contract or schema
+# failure does not, and must not, because that is genuine model incapacity
+# the battery exists to measure.
+_DEFAULT_CIRCUIT_CODE_PREFIXES = ("ENDPOINT_",)
+# Declared field -> environment name. The architecture test asserts this
+# mapping covers every policy field, so a knob the environment cannot reach
+# is exactly the "changing the behaviour needed a code edit" bypass going red.
+_CIRCUIT_ENV_BY_FIELD = {
+    "enabled": "DEEPREASON_QUALIFY_BREAKER",
+    "minimum_block_failures": "DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES",
+    "code_prefixes": "DEEPREASON_QUALIFY_BREAKER_CODE_PREFIXES",
+}
 _MAX_PRODUCTION_CONTRACT_REPORT_BYTES = 4 * 1024 * 1024
 
 
@@ -149,6 +162,42 @@ def _release_gate(cases: tuple[ProductionContractCaseResultV1, ...]) -> bool:
     )
 
 
+class QualificationCircuitPolicyV1(_DoctorRecord):
+    """What arms the breaker and when. Resolved from configuration only."""
+
+    enabled: bool = True
+    minimum_block_failures: int = Field(
+        default=PRODUCTION_CASES_PER_PAIR, ge=1, le=PRODUCTION_CASES_PER_PAIR
+    )
+    code_prefixes: tuple[str, ...] = _DEFAULT_CIRCUIT_CODE_PREFIXES
+
+
+class QualificationCircuitNoticeV1(_DoctorRecord):
+    """Modelled on CompileNoticeV1: the doctor report has no other notice
+    channel, and a gate switched off must warn rather than refuse or stay
+    silent (operator law, 2026-08-28)."""
+
+    code: str = Field(min_length=1)
+    message: str = Field(min_length=1)
+    pointer: str = Field(min_length=1)
+
+
+class QualificationCircuitOpeningV1(_DoctorRecord):
+    endpoint_id: str = Field(min_length=1)
+    route_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    failure_code: str = Field(pattern=r"^[A-Z][A-Z0-9_]*$", max_length=128)
+    observed_block_failures: int = Field(ge=1, le=PRODUCTION_CASES_PER_PAIR)
+    skipped_case_count: int = Field(ge=0)
+
+
+class QualificationCircuitRecordV1(_DoctorRecord):
+    enabled: bool
+    minimum_block_failures: int = Field(ge=1, le=PRODUCTION_CASES_PER_PAIR)
+    code_prefixes: tuple[str, ...]
+    notices: tuple[QualificationCircuitNoticeV1, ...] = ()
+    openings: tuple[QualificationCircuitOpeningV1, ...] = ()
+
+
 class ProductionContractPairReportV1(_DoctorRecord):
     pair: ProductionContractPairV1
     cases: tuple[ProductionContractCaseResultV1, ...] = Field(
@@ -241,6 +290,13 @@ class ProductionContractDoctorReportV1(_DoctorRecord):
     pairs: tuple[ProductionContractPairReportV1, ...]
     summary: ProductionContractDoctorSummaryV1
     route_seat_model_classification: RouteSeatModelClassificationPlanV1 | None = None
+    # Present only when the breaker is disabled or at least one circuit
+    # opened. Both persist paths dump with exclude_none=True, so a default-on
+    # battery that never trips writes the bytes it wrote before this field
+    # existed. Top-level by construction: a CASE-level field would enter
+    # ReusableQualificationPairV1.cases and invalidate every cached
+    # qualification bundle.
+    circuit_breaker: QualificationCircuitRecordV1 | None = None
 
     @model_validator(mode="after")
     def _summary_matches_pairs(self):
@@ -416,6 +472,16 @@ def _failure_code(error: BaseException) -> str:
     code = str(getattr(error, "code", "") or "").strip().upper()
     if code and all(character.isalnum() or character == "_" for character in code):
         return code[:128]
+    # Transport provenance, between the `.code` branch above and the
+    # class-name fallback below, so RunManifestError precedence is unchanged.
+    # `isinstance(status, int)` also excludes a bool-shaped accident from
+    # producing ENDPOINT_HTTP_TRUE.
+    status = getattr(error, "http_status", None)
+    if isinstance(status, int) and not isinstance(status, bool) and 100 <= status <= 599:
+        return f"ENDPOINT_HTTP_{status}"
+    condition = str(getattr(error, "condition", "") or "")
+    if condition and condition.replace("_", "").isalnum():
+        return ("ENDPOINT_" + condition.upper())[:128]
     name = error.__class__.__name__
     normalized = "".join(
         ("_" + character if character.isupper() and index else character.upper())
@@ -1118,12 +1184,161 @@ def _qualification_concurrency(explicit: int | None = None) -> int:
     return max(1, min(value, 16))
 
 
+def _resolve_circuit_policy(
+    explicit: QualificationCircuitPolicyV1 | None = None,
+) -> QualificationCircuitPolicyV1:
+    """Resolve the breaker policy: explicit wins, else the environment, else
+    the shipped defaults.
+
+    Clamps, never refuses (all-configurations law, 2026-08-12): a nonsense
+    value resolves deterministically instead of stopping a battery.
+    """
+
+    if explicit is not None:
+        return explicit
+    raw = os.environ.get(_CIRCUIT_ENV_BY_FIELD["enabled"], "").strip().casefold()
+    enabled = raw not in {"0", "off", "false", "no"}
+    raw = os.environ.get(
+        _CIRCUIT_ENV_BY_FIELD["minimum_block_failures"], ""
+    ).strip()
+    minimum = int(raw) if raw.isdigit() else PRODUCTION_CASES_PER_PAIR
+    raw = os.environ.get(_CIRCUIT_ENV_BY_FIELD["code_prefixes"], "")
+    prefixes = tuple(item.strip().upper() for item in raw.split(",") if item.strip())
+    return QualificationCircuitPolicyV1(
+        enabled=enabled,
+        minimum_block_failures=max(1, min(minimum, PRODUCTION_CASES_PER_PAIR)),
+        code_prefixes=prefixes or _DEFAULT_CIRCUIT_CODE_PREFIXES,
+    )
+
+
+class _QualificationCircuit:
+    """Cross-case bound on an account-level provider condition.
+
+    Keyed per route, never globally: one dead route must not stop the battery
+    measuring every other (measured — a global key leaves 0 of 10 pairs
+    qualified where the per-route key leaves 8 of 10).
+
+    Consulted at BLOCK boundaries only. A per-case check would make WHICH
+    cases are short-circuited depend on completion order, and
+    `test_battery_parallelism_changes_wall_clock_never_the_report` asserts a
+    parallel battery's report equals a sequential one's byte for byte.
+    Block-boundary state is therefore touched only from the main thread and
+    needs no lock.
+    """
+
+    def __init__(self, policy: QualificationCircuitPolicyV1) -> None:
+        self._policy = policy
+        self._open: dict[tuple[str, str], QualificationCircuitOpeningV1] = {}
+        self._skipped: dict[tuple[str, str], int] = {}
+
+    @staticmethod
+    def key(pair: ProductionContractPairV1) -> tuple[str, str]:
+        return (pair.endpoint_id, pair.route_sha256)
+
+    def arms(self, code: str | None) -> bool:
+        if not self._policy.enabled or not code:
+            return False
+        return any(code.startswith(prefix) for prefix in self._policy.code_prefixes)
+
+    def opening(
+        self, pair: ProductionContractPairV1
+    ) -> QualificationCircuitOpeningV1 | None:
+        if not self._policy.enabled:
+            return None
+        return self._open.get(self.key(pair))
+
+    def observe(
+        self,
+        pair: ProductionContractPairV1,
+        cases: tuple[ProductionContractCaseResultV1, ...],
+    ) -> None:
+        if not self._policy.enabled or self.opening(pair) is not None:
+            return
+        armed = [item.failure_code for item in cases if self.arms(item.failure_code)]
+        if len(armed) < self._policy.minimum_block_failures:
+            return
+        # The most frequent arming code names the condition; ties break on the
+        # code itself so the record is deterministic across identical batteries.
+        ranked = sorted(
+            {code for code in armed},
+            key=lambda code: (-armed.count(code), code),
+        )
+        self._open[self.key(pair)] = QualificationCircuitOpeningV1(
+            endpoint_id=pair.endpoint_id,
+            route_sha256=pair.route_sha256,
+            failure_code=ranked[0],
+            observed_block_failures=len(armed),
+            skipped_case_count=0,
+        )
+
+    def open_block(
+        self, pair: ProductionContractPairV1
+    ) -> tuple[ProductionContractCaseResultV1, ...]:
+        """The canonical twenty, synthesized without a provider call.
+
+        Never an exception: `qualification.py` flattens any executor error
+        into QUALIFICATION_EXECUTION_FAILED, which would erase the very
+        condition this breaker exists to report.
+        """
+
+        opening = self._open[self.key(pair)]
+        self._skipped[self.key(pair)] = (
+            self._skipped.get(self.key(pair), 0) + PRODUCTION_CASES_PER_PAIR
+        )
+        code = ("CIRCUIT_OPEN_" + opening.failure_code)[:128]
+        return tuple(
+            ProductionContractCaseResultV1(
+                case_id=f"case-{index + 1:03d}",
+                first_pass_valid=False,
+                eventual_valid=False,
+                repair_count=0,
+                alias_failures=0,
+                scope_violations=0,
+                semantic_admission=False,
+                failure_code=code,
+            )
+            for index in range(PRODUCTION_CASES_PER_PAIR)
+        )
+
+    def record(self) -> QualificationCircuitRecordV1 | None:
+        """None unless the breaker is disabled or a circuit opened, so a
+        battery that never trips writes the bytes it wrote before."""
+
+        if self._policy.enabled and not self._open:
+            return None
+        notices = ()
+        if not self._policy.enabled:
+            notices = (
+                QualificationCircuitNoticeV1(
+                    code="QUALIFICATION_CIRCUIT_BREAKER_DISABLED",
+                    message=(
+                        "the qualification circuit breaker is disabled; an "
+                        "account-level provider condition will be re-tested by "
+                        "every remaining case"
+                    ),
+                    pointer="/circuit_breaker/enabled",
+                ),
+            )
+        openings = tuple(
+            item.model_copy(update={"skipped_case_count": self._skipped.get(key, 0)})
+            for key, item in sorted(self._open.items())
+        )
+        return QualificationCircuitRecordV1(
+            enabled=self._policy.enabled,
+            minimum_block_failures=self._policy.minimum_block_failures,
+            code_prefixes=self._policy.code_prefixes,
+            notices=notices,
+            openings=openings,
+        )
+
+
 def run_production_contract_doctor(
     manifest: RunManifest,
     *,
     case_executor: CaseExecutor | None = None,
     concurrency: int | None = None,
     progress_callback=None,
+    circuit_policy: QualificationCircuitPolicyV1 | None = None,
 ) -> ProductionContractDoctorReportV1:
     """Execute and summarize all exact v6 production route/contract pairs.
 
@@ -1149,6 +1364,7 @@ def run_production_contract_doctor(
         workers = 1
     else:
         workers = _qualification_concurrency(None)
+    circuit = _QualificationCircuit(_resolve_circuit_policy(circuit_policy))
     progress = {"done": 0, "total": len(pairs) * PRODUCTION_CASES_PER_PAIR}
 
     def _advance() -> None:
@@ -1173,6 +1389,13 @@ def run_production_contract_doctor(
             _validate_production_contract_request_envelopes(
                 manifest, pair, case_index
             )
+        # The envelope check above stays AHEAD of the short-circuit: it spends
+        # no provider call, and a route with an incomplete envelope must still
+        # raise before any case runs.
+        if circuit.opening(pair) is not None:
+            for _ in range(PRODUCTION_CASES_PER_PAIR):
+                _advance()
+            return circuit.open_block(pair)
         if workers <= 1:
             cases_list = []
             for case_index in range(PRODUCTION_CASES_PER_PAIR):
@@ -1180,7 +1403,9 @@ def run_production_contract_doctor(
                     _validated(pair, grant, executor(manifest, pair, case_index))
                 )
                 _advance()
-            return tuple(cases_list)
+            block = tuple(cases_list)
+            circuit.observe(pair, block)
+            return block
         from concurrent.futures import ThreadPoolExecutor, as_completed
 
         results: dict[int, ProductionContractCaseResultV1] = {}
@@ -1201,10 +1426,12 @@ def run_production_contract_doctor(
             except BaseException:
                 pool.shutdown(wait=True, cancel_futures=True)
                 raise
-        return tuple(
+        block = tuple(
             results[case_index]
             for case_index in range(PRODUCTION_CASES_PER_PAIR)
         )
+        circuit.observe(pair, block)
+        return block
 
     reports = []
     re_exercised = 0
@@ -1215,6 +1442,10 @@ def run_production_contract_doctor(
         if (
             not report.qualified
             and re_exercised < PRODUCTION_PAIR_RE_EXERCISE_LIMIT
+            # Re-exercise exists for stochastic flake. Spending the finite
+            # allowance on a route whose circuit is open both wastes it and
+            # misreports re_exercised_pair_count AS flake evidence.
+            and circuit.opening(pair) is None
         ):
             # One fresh twenty-case draw decides the pair; the failing first
             # draw stays in the report as durable flake evidence.  A pair
@@ -1253,6 +1484,7 @@ def run_production_contract_doctor(
         pairs=pair_reports,
         summary=summary,
         route_seat_model_classification=classification,
+        circuit_breaker=circuit.record(),
     )
 
 
@@ -1547,6 +1779,8 @@ __all__ = [
     "ProductionContractDoctorSummaryV1",
     "ProductionContractPairReportV1",
     "ProductionContractPairV1",
+    "QualificationCircuitPolicyV1",
+    "QualificationCircuitRecordV1",
     "derive_route_seat_model_classification",
     "exercise_production_contract_case",
     "load_production_contract_report",

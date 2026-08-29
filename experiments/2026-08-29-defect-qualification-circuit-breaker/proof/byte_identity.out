@@ -1,0 +1,21 @@
+Proof that a battery which never trips writes exactly the bytes it wrote
+before the breaker existed. Measured against the ACTUAL pre-fix tree
+(git archive 08c2d7bd1, the tranche base), not against an argument.
+
+  $ git archive 08c2d7bd1 | tar -x -C <scratch>/prefix
+  $ (cd <scratch>/prefix && PYTHONPATH=.../src:.../mini python bytes_probe.py)
+  $ python bytes_probe.py          # this tree
+
+bytes_probe.py runs run_production_contract_doctor over the committed
+_manifest() fixture with an all-admitted executor and dumps
+model_dump(mode="json", by_alias=True, exclude_none=True) sorted and
+separator-normalised.
+
+  pre-fix  : 39510 bytes
+  post-fix : 39510 bytes
+  cmp      : BYTE-IDENTICAL
+
+The new optional `circuit_breaker` field is therefore invisible to every
+report the breaker does not fire on, which is every report a healthy
+provider produces. It is not "probably invisible": the two files compare
+equal byte for byte.

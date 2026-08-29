@@ -202,3 +202,106 @@ def test_timeout_spec_plumbs_to_endpoint():
     assert tuned.timeout_s == 45
     default = _endpoint_from_spec({"endpoint": "https://example.invalid", "model": "m"})
     assert default.timeout_s == 300
+
+
+# --- transport provenance on EndpointError (P7-A) -------------------------- #
+#
+# Regression (audit finding P7-A, tranche
+# experiments/2026-08-29-defect-qualification-circuit-breaker/): the provider's
+# HTTP status was flattened into a message string and never reached the record,
+# so a credential refusal and a quota refusal wrote byte-identical qualification
+# evidence while costing 0s and 5040s of mandated wait respectively.
+
+
+def _ladder_against(status, monkeypatch):
+    """Drive the REAL request_with_retries against a scripted HTTP status.
+
+    Returns (call_list, sleep_list, run) — `run()` performs one urlopen
+    through the shipped ladder, so the retry policy under test is the
+    production one and not a restatement of it.
+    """
+    import urllib.error
+    import urllib.request
+
+    from deepreason.llm import endpoints as endpoints_module
+
+    calls, sleeps = [], []
+
+    def fake_urlopen(request, timeout=None):
+        calls.append(request)
+        raise urllib.error.HTTPError(
+            "https://example.invalid/v1", status, "scripted", {}, None
+        )
+
+    monkeypatch.setattr(endpoints_module.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(endpoints_module.time, "sleep", sleeps.append)
+
+    def run():
+        return endpoints_module.request_with_retries(
+            lambda: urllib.request.urlopen(
+                urllib.request.Request("https://example.invalid/v1")
+            )
+        )
+
+    return calls, sleeps, run
+
+
+def test_endpoint_error_carries_a_non_retryable_provider_status(monkeypatch):
+    """R1. A 401 is terminal on arrival: one call, no sleep, status kept."""
+    from deepreason.llm.endpoints import EndpointError
+
+    calls, sleeps, run = _ladder_against(401, monkeypatch)
+
+    with pytest.raises(EndpointError) as caught:
+        run()
+
+    assert caught.value.http_status == 401
+    assert caught.value.condition == "http_refusal"
+    assert len(calls) == 1
+    assert sleeps == []
+
+
+def test_endpoint_error_carries_the_status_that_exhausted_the_ladder(monkeypatch):
+    """R2. A 429 walks the whole 2s/4s/8s ladder and still names itself."""
+    from deepreason.llm.endpoints import EndpointError
+
+    calls, sleeps, run = _ladder_against(429, monkeypatch)
+
+    with pytest.raises(EndpointError) as caught:
+        run()
+
+    assert caught.value.http_status == 429
+    assert len(calls) == 4
+    assert sleeps == [2, 4, 8]
+
+
+def test_failure_code_distinguishes_a_credential_from_a_quota_refusal():
+    """R3. The two conditions the defect collapsed now write different bytes."""
+    from deepreason.cli.doctor import _failure_code
+    from deepreason.llm.endpoints import EndpointError
+
+    assert _failure_code(EndpointError("x", http_status=401)) == "ENDPOINT_HTTP_401"
+    assert _failure_code(EndpointError("x", http_status=429)) == "ENDPOINT_HTTP_429"
+    assert (
+        _failure_code(EndpointError("x", condition="read_timeout"))
+        == "ENDPOINT_READ_TIMEOUT"
+    )
+    assert _failure_code(EndpointError("x")) == "ENDPOINT_TRANSPORT"
+
+
+def test_the_provider_status_is_never_exposed_as_a_numeric_code_attribute():
+    """R4. Parked finding C5, pinned so this tranche cannot step on it.
+
+    `_failure_code` reads `.code` FIRST, and a numeric one normalises to the
+    string "429", which fails ProductionContractCaseResultV1.failure_code's
+    own `^[A-Z][A-Z0-9_]*$` pattern and would take the whole battery down
+    through qualification.py's exception flattening.
+    """
+    import re
+
+    from deepreason.cli.doctor import _failure_code
+    from deepreason.llm.endpoints import EndpointError
+
+    error = EndpointError("x", http_status=429)
+    assert not hasattr(error, "code")
+    assert re.fullmatch(r"[A-Z][A-Z0-9_]*", _failure_code(error))

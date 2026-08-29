@@ -8,8 +8,12 @@ import pytest
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.cli.doctor import (
+    PRODUCTION_CASES_PER_PAIR,
     ProductionContractCaseResultV1,
     ProductionContractDoctorReportV1,
+    QualificationCircuitPolicyV1,
+    _CIRCUIT_ENV_BY_FIELD,
+    _resolve_circuit_policy,
     _admit_production_probe_output,
     _contract_schema_repair_grant,
     _is_scope_violation,
@@ -1462,3 +1466,225 @@ def test_reports_without_re_exercise_fields_stay_readable():
     restored = ProductionContractDoctorReportV1.model_validate(payload)
     assert restored.summary.re_exercised_pair_count == 0
     assert all(item.first_draw_cases is None for item in restored.pairs)
+
+
+# --- the qualification circuit breaker (P7-A) ------------------------------ #
+#
+# Regression (audit finding P7-A, tranche
+# experiments/2026-08-29-defect-qualification-circuit-breaker/): the battery
+# had a bounded ladder per CALL and no bound above it, so an account-level
+# provider condition was re-tested by every one of 360 cases. Measured
+# offline: a 429 cost 1440 calls and 5040s of mandated wait, a 401 cost 360
+# calls and 0s, and both wrote the byte-identical record
+# {'ENDPOINT_ERROR': 360}.
+
+
+def _refusing_executor(dead_role, failure_code, *, calls=None):
+    """Every case of one route fails with a typed account-level code."""
+
+    def executor(_manifest, pair, case_index):
+        if calls is not None:
+            calls[pair.role] = calls.get(pair.role, 0) + 1
+        if pair.role == dead_role:
+            return ProductionContractCaseResultV1(
+                case_id=f"case-{case_index + 1:03d}",
+                first_pass_valid=False,
+                eventual_valid=False,
+                repair_count=0,
+                semantic_admission=False,
+                failure_code=failure_code,
+            )
+        return _admitted_case(case_index)
+
+    return executor
+
+
+def _all_codes(report):
+    codes = {}
+    for pair_report in report.pairs:
+        for case in pair_report.cases + (pair_report.first_draw_cases or ()):
+            codes[case.failure_code] = codes.get(case.failure_code, 0) + 1
+    return codes
+
+
+def test_an_account_level_refusal_opens_the_circuit_after_one_block():
+    """R5. One block of a dead route is spent, and no more."""
+
+    calls = {}
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor(
+            "argumentative_critic", "ENDPOINT_HTTP_401", calls=calls
+        ),
+    )
+
+    assert calls["argumentative_critic"] == PRODUCTION_CASES_PER_PAIR
+    assert report.circuit_breaker is not None
+    assert len(report.circuit_breaker.openings) == 1
+    opening = report.circuit_breaker.openings[0]
+    assert opening.endpoint_id == "critic"
+    assert opening.failure_code == "ENDPOINT_HTTP_401"
+    assert opening.observed_block_failures == PRODUCTION_CASES_PER_PAIR
+
+
+def test_a_transient_condition_that_clears_does_not_open_the_circuit():
+    """R6. The other direction: 19 failures and one success never trips."""
+
+    calls = {}
+
+    def executor(_manifest, pair, case_index):
+        calls[pair.role] = calls.get(pair.role, 0) + 1
+        if pair.role == "argumentative_critic" and case_index < 19:
+            return ProductionContractCaseResultV1(
+                case_id=f"case-{case_index + 1:03d}",
+                first_pass_valid=False,
+                eventual_valid=False,
+                repair_count=0,
+                semantic_admission=False,
+                failure_code="ENDPOINT_HTTP_429",
+            )
+        return _admitted_case(case_index)
+
+    report = run_production_contract_doctor(_manifest(), case_executor=executor)
+
+    assert report.circuit_breaker is None
+    # Every case of every block, including the two re-exercised draws.
+    assert calls["argumentative_critic"] == 4 * PRODUCTION_CASES_PER_PAIR
+
+
+def test_the_circuit_is_keyed_per_route_and_never_globally():
+    """R7. One dead route must not decide the verdict on every other.
+
+    The declared contingency (a global key) was measured and rejected: it
+    leaves 0 of 10 pairs qualified where the per-route key leaves 8 of 10.
+    """
+
+    calls = {}
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor(
+            "argumentative_critic", "ENDPOINT_HTTP_401", calls=calls
+        ),
+    )
+
+    healthy = ("thesis", "summarizer", "conjecturer", "judge")
+    assert all(calls[role] == 2 * PRODUCTION_CASES_PER_PAIR for role in healthy)
+    assert report.summary.qualified_pair_count == 8
+    assert report.summary.pair_count == 10
+
+
+def test_a_tripped_battery_still_writes_a_complete_typed_report(tmp_path):
+    """R8. The breaker returns; it never raises.
+
+    `qualification.py` flattens any executor exception into
+    QUALIFICATION_EXECUTION_FAILED, which would erase the condition the
+    breaker exists to report.
+    """
+
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor("argumentative_critic", "ENDPOINT_HTTP_401"),
+    )
+
+    assert report.summary.case_count == report.summary.pair_count * (
+        PRODUCTION_CASES_PER_PAIR
+    )
+    target = tmp_path / "production-contract-qualification.json"
+    write_production_contract_report(report, target)
+    assert load_production_contract_report(target) == report
+
+
+def test_an_open_circuit_suppresses_the_re_exercise_allowance():
+    """R9. The finite allowance of three exists for stochastic flake."""
+
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor("argumentative_critic", "ENDPOINT_HTTP_401"),
+    )
+
+    assert report.summary.re_exercised_pair_count == 0
+    assert all(item.first_draw_cases is None for item in report.pairs)
+
+
+def test_the_open_circuit_case_names_the_condition_that_opened_it():
+    """R10. The defect was that a 401 and a 429 wrote identical bytes."""
+
+    refusal = _all_codes(
+        run_production_contract_doctor(
+            _manifest(),
+            case_executor=_refusing_executor(
+                "argumentative_critic", "ENDPOINT_HTTP_401"
+            ),
+        )
+    )
+    quota = _all_codes(
+        run_production_contract_doctor(
+            _manifest(),
+            case_executor=_refusing_executor(
+                "argumentative_critic", "ENDPOINT_HTTP_429"
+            ),
+        )
+    )
+
+    assert "CIRCUIT_OPEN_ENDPOINT_HTTP_401" in refusal
+    assert "CIRCUIT_OPEN_ENDPOINT_HTTP_429" in quota
+    assert refusal != quota
+
+
+def test_a_battery_that_never_trips_writes_exactly_the_bytes_it_wrote_before():
+    """R11. A default-on breaker is invisible until it fires."""
+
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=lambda _manifest, _pair, index: _admitted_case(index),
+    )
+
+    assert report.circuit_breaker is None
+    dumped = report.model_dump(mode="json", by_alias=True, exclude_none=True)
+    assert "circuit_breaker" not in dumped
+
+
+def test_disabling_the_breaker_warns_and_never_refuses(monkeypatch):
+    """R12. Operator law 2026-08-28: gates are optional, WITH WARNINGS."""
+
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER", "0")
+    calls = {}
+    report = run_production_contract_doctor(
+        _manifest(),
+        case_executor=_refusing_executor(
+            "argumentative_critic", "ENDPOINT_HTTP_401", calls=calls
+        ),
+    )
+
+    # Exhaustive, exactly as before the breaker existed.
+    assert calls["argumentative_critic"] == 4 * PRODUCTION_CASES_PER_PAIR
+    assert report.summary.re_exercised_pair_count == 2
+    assert report.circuit_breaker is not None
+    assert report.circuit_breaker.enabled is False
+    assert [n.code for n in report.circuit_breaker.notices] == [
+        "QUALIFICATION_CIRCUIT_BREAKER_DISABLED"
+    ]
+    assert report.circuit_breaker.openings == ()
+
+
+def test_the_circuit_policy_resolves_from_the_environment_and_clamps(monkeypatch):
+    """R13. Clamp, never refuse (all-configurations law, 2026-08-12)."""
+
+    for name in _CIRCUIT_ENV_BY_FIELD.values():
+        monkeypatch.delenv(name, raising=False)
+    assert _resolve_circuit_policy() == QualificationCircuitPolicyV1()
+
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES", "999")
+    assert _resolve_circuit_policy().minimum_block_failures == PRODUCTION_CASES_PER_PAIR
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES", "0")
+    assert _resolve_circuit_policy().minimum_block_failures == 1
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_MIN_BLOCK_FAILURES", "junk")
+    assert _resolve_circuit_policy().minimum_block_failures == PRODUCTION_CASES_PER_PAIR
+
+    monkeypatch.setenv("DEEPREASON_QUALIFY_BREAKER_CODE_PREFIXES", "schema_, doctor_")
+    assert _resolve_circuit_policy().code_prefixes == ("SCHEMA_", "DOCTOR_")
+
+    # An explicit policy beats the environment, so a caller never has to reach
+    # for the process environment to drive the battery.
+    explicit = QualificationCircuitPolicyV1(minimum_block_failures=3)
+    assert _resolve_circuit_policy(explicit) is explicit

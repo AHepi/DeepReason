@@ -40,7 +40,25 @@ ws ::= [ \t\n\r]*'''
 
 
 class EndpointError(RuntimeError):
-    """A completion failed after transport retries (or non-retryably)."""
+    """A completion failed after transport retries (or non-retryably).
+
+    ``http_status`` is the provider's own status when one arrived;
+    ``condition`` names the transport shape when no status did. NEITHER may
+    be exposed as ``.code``: ``cli/doctor.py::_failure_code`` reads ``.code``
+    first, and a numeric one normalises to the string "429", which fails
+    ``ProductionContractCaseResultV1.failure_code``'s ``^[A-Z][A-Z0-9_]*$``.
+    """
+
+    def __init__(
+        self,
+        message,
+        *,
+        http_status: int | None = None,
+        condition: str = "transport",
+    ) -> None:
+        super().__init__(message)
+        self.http_status = http_status
+        self.condition = condition
 
 
 class _TransientBody(OSError):
@@ -57,7 +75,11 @@ def request_with_retries(fn):
             return fn()
         except urllib.error.HTTPError as e:
             if e.code not in _RETRYABLE_HTTP:
-                raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
+                raise EndpointError(
+                    f"HTTP {e.code}: {e.reason}",
+                    http_status=e.code,
+                    condition="http_refusal",
+                ) from e
             last = e
         except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
                 http.client.HTTPException) as e:
@@ -67,7 +89,10 @@ def request_with_retries(fn):
         if delay is None:
             break
         time.sleep(delay)
-    raise EndpointError(f"transport failed after retries: {last}") from last
+    raise EndpointError(
+        f"transport failed after retries: {last}",
+        http_status=getattr(last, "code", None),
+    ) from last
 
 
 def list_models(base_url: str, api_key: str | None) -> list[str]:
@@ -91,7 +116,10 @@ def _pick_primary(available: list[str]) -> str:
         if hits:
             return sorted(hits)[0]
     if not available:
-        raise EndpointError("provider returned no models to resolve 'auto'")
+        raise EndpointError(
+            "provider returned no models to resolve 'auto'",
+            condition="model_resolution",
+        )
     return sorted(available)[0]
 
 
@@ -448,7 +476,8 @@ class OpenAICompatEndpoint:
                         # EndpointError is not retryable: terminal by design.
                         raise EndpointError(
                             f"no complete response within escalated read "
-                            f"timeouts ({waits}): {e}"
+                            f"timeouts ({waits}): {e}",
+                            condition="read_timeout",
                         ) from e
                 raise
             # Malformed 200 shapes (empty body, missing choices, null content)
@@ -478,7 +507,10 @@ class OpenAICompatEndpoint:
             content = choice["message"]["content"]
         except (KeyError, IndexError, TypeError) as e:
             detail = data.get("error") if isinstance(data, dict) else data
-            raise EndpointError(f"malformed completion response: {detail!r}") from e
+            raise EndpointError(
+                f"malformed completion response: {detail!r}",
+                condition="protocol",
+            ) from e
         message = choice.get("message") or {}
         # Providers spell the side channel differently; neither is the answer,
         # both are the deliberation that produced it.
@@ -492,7 +524,8 @@ class OpenAICompatEndpoint:
             # string, because an empty answer there is still a leg that ran.
             if not allow_empty_content:
                 raise EndpointError(
-                    f"null content (finish_reason={choice.get('finish_reason')!r})"
+                    f"null content (finish_reason={choice.get('finish_reason')!r})",
+                    condition="empty_content",
                 )
             content = ""
         self.last_usage = data.get("usage") or None

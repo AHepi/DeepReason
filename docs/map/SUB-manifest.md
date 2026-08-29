@@ -195,12 +195,50 @@ credential. The only mutable in-memory state is `_EXECUTOR_OPTIONS` in
 | What is DISCLOSED (not refused) before the first provider call — an unsatisfiable calibration-receipt requirement | `_preflight_text_authority` — see `DR-CON-authority` for why (2026-08-13, converted from a refusal) | `python -m pytest tests/test_manifest_integration.py -k calibration_receipt -q` |
 | What one contract's qualification case actually sends | `_production_probe_contract` and the `_production_*_probe` helpers, `cli/doctor.py` | `python -m pytest tests/test_cli_production_doctor_v6.py -q` |
 | The release gate or the re-exercise allowance | `PRODUCTION_CASES_PER_PAIR`, `PRODUCTION_EVENTUAL_VALID_MINIMUM`, `PRODUCTION_PAIR_RE_EXERCISE_LIMIT`, `_release_gate` | `python -m pytest "tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics" -q` |
+| When the battery STOPS asking a dead route | `_QualificationCircuit`, `_resolve_circuit_policy`, `QualificationCircuitPolicyV1` in `cli/doctor.py`; the three wiring points in `run_production_contract_doctor`. Configuration is the `DEEPREASON_QUALIFY_BREAKER*` environment, NEVER a `Config` field — a `Config` knob would move every qualification subject digest unless dropped in `_versioned_source_config_data`, which is frozen surface 4 | `python -m pytest tests/test_qualification_circuit_modularity.py -q` |
 | What a cache hit means (the reusable subject) | `qualification_subject_payload` — **frozen surface**, every cached verdict is keyed by it | `python -m pytest tests/test_reusable_qualification.py -q` |
 | The shallow tier ladder or its battery size | `SHALLOW_FITNESS_*`, `QualificationTierRecordV1`, `shallow_tier_record_from_cases` | `python -m pytest tests/test_qualification_tier.py -q` |
 | Where the qualification cache lives | not here — `_cmd_qualify` in `cli/main.py`, `readiness.py`, `preparation.py`, `webapp.py` | `python -m pytest tests/test_qualification_tier.py -q -k readiness` |
 `check: for s in _compile_route_seat_behavioral_capability_plan _compile_route_seat_contract_decomposition_plan _compile_route_seat_presentation_plan _validate_v4_control_plane_policy _validate_v4_criticism_policy _preflight_text_authority; do grep -q "^def $s(" src/deepreason/run_manifest.py || exit 1; done && grep -q "^LEGACY_CANONICAL_ROLES = (" src/deepreason/run_manifest.py && grep -q "^V3_CANONICAL_ROLES = (\*LEGACY_CANONICAL_ROLES, \"grounding_reviewer\")" src/deepreason/run_manifest.py && for s in _production_probe_contract _production_bridge_ledger_probe _production_bridge_composition_probe _production_grounding_probe _production_scratch_probe _release_gate _validate_production_contract_request_envelopes; do grep -q "^def $s(" src/deepreason/cli/doctor.py || exit 1; done && grep -q "^PRODUCTION_CASES_PER_PAIR = 20$" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19$" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_PAIR_RE_EXERCISE_LIMIT = 3$" src/deepreason/cli/doctor.py && grep -q "^SHALLOW_FITNESS_CASES = 6$" src/deepreason/qualification.py && grep -q "^SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM = 5$" src/deepreason/qualification.py && grep -q "class QualificationTierRecordV1" src/deepreason/qualification.py`
 
 ## Traps
+
+- **The battery had a bound per CALL and none above it.** `endpoints.py`'s
+  `request_with_retries` bounds each call at 2s/4s/8s, so an account-level
+  provider condition was re-tested by every one of the subject's 300 cases.
+  Measured offline on the default 15-pair subject
+  (`experiments/2026-08-29-defect-qualification-circuit-breaker/proof/`): a
+  persistent 429 cost 1440 HTTP calls and **5040 s** of mandated wait, an HTTP
+  401 cost 360 calls and **0 s**, and both wrote the **byte-identical** record
+  `{'ENDPOINT_ERROR': 360}`. Fixed 2026-08-29 by a cross-case breaker keyed per
+  `(endpoint_id, route_sha256)`; the audit's own "18 minutes" figure was wrong
+  and its cited evidence file records a 401, not a quota refusal.
+
+  Two constraints anyone touching this must keep. The breaker **returns a
+  complete report and never raises** — `qualification.py:830-836` flattens any
+  executor exception into `QUALIFICATION_EXECUTION_FAILED`, erasing the
+  condition. And it is evaluated at **block boundaries only**: a per-case check
+  makes WHICH cases are short-circuited depend on completion order, and
+  `test_battery_parallelism_changes_wall_clock_never_the_report` asserts a
+  parallel report equals a sequential one byte for byte.
+
+`check: python -c "
+import sys; sys.path.insert(0, '.')
+from tests.test_cli_production_doctor_v6 import _manifest, _admitted_case
+from deepreason.cli.doctor import ProductionContractCaseResultV1, run_production_contract_doctor
+calls = {}
+def ex(manifest, pair, index):
+    calls[pair.role] = calls.get(pair.role, 0) + 1
+    if pair.role == 'argumentative_critic':
+        return ProductionContractCaseResultV1(case_id=f'case-{index+1:03d}', first_pass_valid=False, eventual_valid=False, repair_count=0, semantic_admission=False, failure_code='ENDPOINT_HTTP_401')
+    return _admitted_case(index)
+r = run_production_contract_doctor(_manifest(), case_executor=ex)
+assert calls['argumentative_critic'] == 20, calls
+assert calls.get('judge') == 40, 'one dead route must not stop the battery measuring every other'
+assert r.summary.qualified_pair_count == 8, r.summary.qualified_pair_count
+assert r.summary.case_count == 200 and r.summary.re_exercised_pair_count == 0
+assert r.circuit_breaker and r.circuit_breaker.openings[0].failure_code == 'ENDPOINT_HTTP_401'
+"`
 
 - **"It lives on Config only" is a reason it is LOST, not a reason it is safe
   to drop.** `_versioned_source_config_data` pops 25 `Config` fields out of

@@ -1,0 +1,23 @@
+qualification subject: 15 route/contract pairs
+cases per pair: 20
+
+PRE-FIX   status=401 cases=300 http_calls=360 sleeps=0 mandated_wait_s=0 re_exercised=3
+    record: {'ENDPOINT_ERROR': 360}
+    open circuits: {}
+PRE-FIX   status=429 cases=300 http_calls=1440 sleeps=1080 mandated_wait_s=5040 re_exercised=3
+    record: {'ENDPOINT_ERROR': 360}
+    open circuits: {}
+BREAKER   status=401 cases=300 http_calls=20 sleeps=0 mandated_wait_s=0 re_exercised=0
+    record: {'ENDPOINT_HTTP_401': 20, 'CIRCUIT_OPEN_ENDPOINT_HTTP_401': 280}
+    open circuits: {'provider-profile-289f0841558af1bb02d67968': 'ENDPOINT_HTTP_401'}
+BREAKER   status=429 cases=300 http_calls=80 sleeps=60 mandated_wait_s=280 re_exercised=0
+    record: {'ENDPOINT_HTTP_429': 20, 'CIRCUIT_OPEN_ENDPOINT_HTTP_429': 280}
+    open circuits: {'provider-profile-289f0841558af1bb02d67968': 'ENDPOINT_HTTP_429'}
+
+THE DEFECT (pre-fix):
+    mandated wait differs by 5040s (84.0 min) -- one condition clears on its own, the other never will
+    records BYTE-IDENTICAL? True  -> {'ENDPOINT_ERROR': 360}
+THE FIX:
+    http calls 360 -> 20 (401), 1440 -> 80 (429)
+    mandated wait 5040s -> 280s
+    records still identical? False

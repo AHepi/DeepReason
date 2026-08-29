@@ -168,6 +168,7 @@ through the caller, including on the failure paths.
 | What model output may never name | `FORBIDDEN_MODEL_CONTROL_FIELDS` / `_OPAQUE_DATA_FIELDS` in `llm/firewall.py` | `tests/test_model_firewall.py` |
 | The judge-ensemble independence rule | `LLMAdapter._select_judge_ensemble`, `require_cross_family_judge_ensemble`, `require_cross_school_judge_ensemble` | `tests/test_judge_ensemble_boundary.py`, `tests/test_prose_refutation_boundaries.py::test_the_cross_school_gate_governs_only_a_single_family_run` |
 | Transport retry / timeout policy | `_BACKOFFS`, `TIMEOUT_FACTORS`, `DEFAULT_TIMEOUT_S`, `request_with_retries` in `llm/endpoints.py` | `tests/test_llm.py` |
+| What a transport failure SAYS about itself | `EndpointError.__init__`'s `http_status` / `condition` in `llm/endpoints.py`; the two branches in `cli/doctor.py::_failure_code` that read them. The bound ABOVE the per-call ladder is not here — see DR-SUB-manifest | `tests/test_llm.py::test_failure_code_distinguishes_a_credential_from_a_quota_refusal`, `::test_the_provider_status_is_never_exposed_as_a_numeric_code_attribute` |
 | The hard provider ceiling or its bound | `TokenMeter.reserve`, `conservative_prompt_bound` (see DR-CON-packs-and-token-economy) | `tests/test_budget.py::test_budget_smaller_than_any_bound_blocks_the_first_dispatch` |
 | How a school resolves to a seat | `resolve_school_role_lease` (see DR-CON-schools) | `tests/test_school_execution_binding_v4.py` |
 | v6 transactional dispatch preconditions | `bind_v6_authority`, `_require_transactional_route_dispatchable`, `_transactional_profile_for` | `tests/test_adapter_workflow_authorization_c2.py`, `tests/test_v6_insufficient_capability_terminal.py` |
@@ -178,6 +179,30 @@ through the caller, including on the failure paths.
 `check: python -m pytest tests/test_providers.py tests/test_compact_profiles.py tests/test_wire_contracts.py tests/test_schema_carries_every_prose_rule.py tests/test_llm_repair_capabilities.py tests/test_model_firewall.py tests/test_llm.py tests/test_budget.py tests/test_judge_ensemble_boundary.py tests/test_school_execution_binding_v4.py tests/test_adapter_workflow_authorization_c2.py tests/test_v6_insufficient_capability_terminal.py tests/test_embedder.py -q`
 
 ## Traps
+
+- **`EndpointError` must never expose its status as `.code`.**
+  `cli/doctor.py::_failure_code` reads `.code` FIRST and returns it as the
+  case's `failure_code`, which is constrained to `^[A-Z][A-Z0-9_]*$`. A
+  numeric `.code` therefore normalises to the string `"429"`, fails that
+  pattern, and — because `qualification.py:830-836` flattens ANY executor
+  exception into `QUALIFICATION_EXECUTION_FAILED` — takes the whole battery
+  down with the cause erased. That is parked finding **C5** pointed at its own
+  fix. Found while fixing P7-A (tranche
+  `experiments/2026-08-29-defect-qualification-circuit-breaker/`); the status
+  therefore rides `http_status`, and a regression test pins that `.code` stays
+  absent.
+
+`check: python -c "
+from deepreason.cli.doctor import _failure_code
+from deepreason.llm.endpoints import EndpointError
+refusal = EndpointError('HTTP 401: Unauthorized', http_status=401, condition='http_refusal')
+quota = EndpointError('transport failed after retries', http_status=429)
+assert not hasattr(refusal, 'code'), 'a numeric .code normalises to the schema-invalid 401 (parked C5)'
+assert _failure_code(refusal) == 'ENDPOINT_HTTP_401', _failure_code(refusal)
+assert _failure_code(quota) == 'ENDPOINT_HTTP_429', _failure_code(quota)
+assert _failure_code(EndpointError('x')) == 'ENDPOINT_TRANSPORT'
+assert _failure_code(refusal) != _failure_code(quota), 'the two conditions must not collapse'
+"`
 
 - **A repair grant is spent by the provider CALL, so a spelling the harness
   cannot read costs the same as a wrong answer.** In reach-rich
