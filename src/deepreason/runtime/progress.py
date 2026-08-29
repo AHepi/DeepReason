@@ -59,6 +59,10 @@ class ProgressEvent(BaseModel):
     total_units: int | None = Field(default=None, gt=0)
     message: str = Field(default="", max_length=500)
     stop_reason: str | None = None
+    # The code of a STOPPED lifecycle receipt this terminal could not take.
+    # Optional with a default, so every progress line written before the field
+    # existed still validates under this model's ``extra="forbid"``.
+    terminal_lifecycle_refusal: str | None = Field(default=None, max_length=120)
 
 
 def _atomic_json(path: Path, value: dict) -> None:

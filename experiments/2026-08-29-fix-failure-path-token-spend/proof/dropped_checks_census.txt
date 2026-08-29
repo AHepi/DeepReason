@@ -1,0 +1,72 @@
+doc                                     line  first 90 chars
+CON-criticism-source.md                  145  `check: python -m pytest tests/test_p4_citable_evidence.py -k "quote or attribution" -q &&
+CON-discharge-channel.md                 150  `check: python -c "
+CON-packs-and-token-economy.md           292  `check: python -c "
+CON-packs-and-token-economy.md           316  `check: python -c "
+CON-problem-layer-lifecycle.md            81  `check: python -c "
+CON-problem-layer-lifecycle.md           188  `check: python -c "
+CON-scheduler-ranking.md                  42  `check: python -c "
+CON-scheduler-ranking.md                  70  `check: python -c "
+CON-scheduler-ranking.md                 105  `check: python -c "
+CON-scheduler-ranking.md                 130  `check: python -c "
+CON-seats.md                             168  `check: python -c "
+CON-standing-and-background.md           336  `check: python -c "
+INV-axiom-basis.md                       171  `check: python -c "
+INV-axiom-basis.md                       239  `check: python -c "
+INV-axiom-basis.md                       263  `check: python -c "
+INV-axiom-basis.md                       278  `check: python -c "
+INV-axiom-basis.md                       311  `check: python -c "
+INV-axiom-basis.md                       402  `check: python -c "
+INV-axiom-basis.md                       437  `check: python -c "
+INV-axiom-basis.md                       444  `check: python -c "
+INV-evidence-channels.md                  55  `check: python -c "
+INV-evidence-channels.md                  72  `check: python -c "
+INV-evidence-channels.md                  89  `check: python -c "
+INV-evidence-channels.md                 107  `check: python -c "
+INV-evidence-channels.md                 124  `check: python -c "
+INV-frozen-surfaces.md                   134  `check: python -c "
+INV-frozen-surfaces.md                   223  `check: grep -q "split-legs" src/deepreason/invariants.py && ! grep -q "split-legs" src/de
+INV-frozen-surfaces.md                   284  `check: python -c "
+INV-frozen-surfaces.md                   374  `check: python -c "
+INV-frozen-surfaces.md                   518  `check: python -c "
+INV-frozen-surfaces.md                   524  `check: python -c "
+INV-frozen-surfaces.md                   531  `check: python -c "
+INV-render-layout.md                      46  `check: python -c "
+INV-render-layout.md                      77  `check: python -c "
+INV-render-layout.md                      90  `check: python -c "
+INV-render-layout.md                     103  `check: python -c "
+INV-render-layout.md                     113  `check: python -c "
+INV-render-layout.md                     122  `check: python -c "
+INV-render-layout.md                     159  `check: python -c "
+INV-signal-contract.md                   189  `check: python -c "
+INV-signal-contract.md                   222  `check: python -c "
+INV-signal-contract.md                   237  `check: python -c "
+REC-revise-allocation-policy.md           62  `check: python -c "
+SCHEMA.md                                159  `check: test -f src/deepreason/harness.py` are worse than no check, because they
+SEAM-evaluation-x-rules.md               223  `check: python -c "
+SEAM-evaluation-x-rules.md               244  `check: python -c "
+SEAM-evaluation-x-rules.md               264  `check: python -c "
+SEAM-llm-x-rules.md                       54  `check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathli
+SEAM-llm-x-rules.md                      116  `check: python -c "import ast,pathlib;n=0
+SEAM-llm-x-scheduler.md                   89  `check: python -c "
+SEAM-llm-x-verification.md                19  `check: python -c "
+SEAM-llm-x-verification.md                67  `check: python -c "
+SEAM-llm-x-verification.md               156  `check: python -m pytest tests/test_split_leg_recording.py::test_a_stand_down_at_dispatch_
+SUB-calculus.md                           26  `check: python -c "from deepreason.calculus.claims import _IMPLEMENTED, CLAIM_SCHEMAS, dec
+SUB-calculus.md                          251  `check: python -c "
+SUB-calculus.md                          284  `check: python -c "
+SUB-calculus.md                          387  `check: python -c "
+SUB-calculus.md                          419  `check: python -c "
+SUB-calculus.md                          459  `check: python -c "import ast, pathlib; tree = ast.parse(pathlib.Path('src/deepreason/prem
+SUB-capabilities.md                      115  `check: python -c "
+SUB-evidence.md                           50  `check: python -c "
+SUB-ontology.md                           87  `check: python -c "
+SUB-ontology.md                          100  `check: python -c "
+SUB-periphery.md                         219  `check: python -c "
+SUB-scheduler.md                         267  `check: python -c "
+SUB-verification.md                      214  `check: python -m pytest tests/test_split_leg_recording.py::test_a_leg_is_never_read_as_a_
+SUB-verification.md                      310  `check: python -c "
+
+column-0 `check: lines           : 1209
+SILENTLY DROPPED by the parser   : 67  across 25 documents
+actually run                     : 1142

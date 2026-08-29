@@ -1,0 +1,7 @@
+{
+  "state": "completed",
+  "stop_reason": "budget_exhausted",
+  "terminal_lifecycle_refusal": "STOPPED_REFUSES_UNFINISHED_WORKFLOW_AUTHORITY",
+  "token_spend": 139356,
+  "cycle": 3
+}

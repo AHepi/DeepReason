@@ -1,0 +1,9 @@
+completed         90700      119659     29  experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf
+completed        314308      351440     57  experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332
+completed         89385      109935     17  experiments/live_research_2026-07-29/wide/runs/run-5a771259557378224bd68591483817be
+completed        191871      251938     49  experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346
+completed         88966      123845     21  experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847
+completed         94560      110295     21  experiments/live_tri_2026-07-27/run-9ae94bb478990cbecca373fc3bcb1345
+completed        193361      220682     36  experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5
+completed        178613      244198     22  experiments/live_tri_2026-07-27/run-c5ab654afd1b4aa131aede83bdca0f03
+completed        192000      330396     26  experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c

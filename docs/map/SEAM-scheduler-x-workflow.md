@@ -1,5 +1,5 @@
 <!-- DR-SEAM-scheduler-x-workflow -->
-Verified-at: 546544b5
+Verified-at: 033b4b263
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py, src/deepreason/workflow/lifecycle.py, src/deepreason/workflow/shadow.py, src/deepreason/workflow/trace.py, src/deepreason/workflow/criticism.py
 Sides: DR-SUB-scheduler, DR-SUB-workflow
@@ -66,7 +66,7 @@ calls.
 | Pre-v6 bracket | `scheduler/scheduler.py`, `workflow/trace.py` | `_workflow_control_trace`, `ConjectureControlTrace.abandon/finalize/seal` | WORK_ENABLED + WORK_ISSUED before the provider; abandon on every fail-closed exit |
 | Shadow channel | `scheduler/scheduler.py`, `workflow/shadow.py` | `_begin_workflow_shadow` / `_finish_workflow_shadow` | observation is non-authoritative in shadow, terminal in active mode |
 | Follow-up assertion | `scheduler/scheduler.py` | `before_work` / `new_work_ids` diff in `_v6_simulation_result_follow_up` | exactly one fresh bound transaction per consumed simulation package |
-| Stop terminal | `scheduler/scheduler.py`, `workflow/lifecycle.py` | `_record_stop` → `build_stopped_lifecycle` | the receipt replays the controller exactly and refuses unfinished authority |
+| Stop terminal | `scheduler/scheduler.py`, `workflow/lifecycle.py` | `_record_stop` → `build_stopped_lifecycle` | the receipt replays the controller exactly and refuses unfinished authority — as a NAMED `UnfinishedWorkflowAuthorityError`, which `_record_stop` deliberately lets PROPAGATE (a caller that swallowed it published roots claiming a continuation `continue` refused; `SUB-application.md` Traps) |
 | Resume consumption | `scheduler/scheduler.py` | `_rehydrate_resumed_stop_controller` | the stop window comes from `current_resume_decision`, not from the constructor |
 | Terminal fence | `workflow/replay.py` | `_post_terminal_composition_call` | a work-bound provider call after a terminal is refused at replay |
 
@@ -117,7 +117,7 @@ The stop path has two shapes. Without a recognised control plane it writes a
 bare stop record and returns; with one it builds the typed receipt, appends the
 lifecycle Control event at a pre-computed seq, verifies the event landed on that
 fence, and only then persists the stop record and the checkpoint.
-`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; from deepreason.workflow import lifecycle as L; r = inspect.getsource(S._record_stop); assert r.index("write_stop_record(") < r.index("return") < r.index("build_stopped_lifecycle"); assert r.index("build_stopped_lifecycle(") < r.index("record_lifecycle_transition(") < r.index("persist_stop_record(") < r.index("write_workflow_checkpoint()"); assert "lifecycle Control event crossed its stop fence" in r; assert "STOPPED refuses unfinished workflow authority" in inspect.getsource(L.build_stopped_lifecycle)' && python -m pytest tests/test_workflow_stop_lifecycle_c4.py::test_terminal_builder_snapshots_then_refuses_unfinished_provider_work tests/test_workflow_stop_lifecycle_c4.py::test_v4_stop_is_a_replayable_control_event_bound_to_run_stop -q`
+`check: python -c 'import inspect; from deepreason.scheduler.scheduler import Scheduler as S; from deepreason.workflow import lifecycle as L; r = inspect.getsource(S._record_stop); assert r.index("write_stop_record(") < r.index("return") < r.index("build_stopped_lifecycle"); assert r.index("build_stopped_lifecycle(") < r.index("record_lifecycle_transition(") < r.index("persist_stop_record(") < r.index("write_workflow_checkpoint()"); assert "lifecycle Control event crossed its stop fence" in r; assert "raise UnfinishedWorkflowAuthorityError(snapshot)" in inspect.getsource(L.build_stopped_lifecycle); assert "STOPPED refuses unfinished workflow authority" in inspect.getsource(L.UnfinishedWorkflowAuthorityError); assert issubclass(L.UnfinishedWorkflowAuthorityError, ValueError)' && python -m pytest tests/test_workflow_stop_lifecycle_c4.py::test_terminal_builder_snapshots_then_refuses_unfinished_provider_work tests/test_workflow_stop_lifecycle_c4.py::test_v4_stop_is_a_replayable_control_event_bound_to_run_stop -q`
 
 ## What is deliberately absent
 

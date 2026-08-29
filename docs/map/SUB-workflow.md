@@ -1,5 +1,5 @@
 <!-- DR-SUB-workflow -->
-Verified-at: 7347d8fe
+Verified-at: 033b4b263
 Verify: python -m pytest tests/test_workflow_reducer_c0.py tests/test_workflow_models_c0.py tests/test_workflow_control_replay_c1.py tests/test_workflow_stop_lifecycle_c4.py tests/test_workflow_resume_lifecycle_c4.py tests/test_workflow_repair_authority_c4.py tests/test_v6_controller3_replay_verification.py -q
 Owns: src/deepreason/workflow/
 Seams: DR-SEAM-harness-x-workflow, DR-SEAM-llm-x-workflow, DR-SEAM-rules-x-workflow, DR-SEAM-scheduler-x-workflow, DR-SEAM-scratch-x-workflow
@@ -85,7 +85,15 @@ are closed, so an unrecognised value is a load error, not a default.
   and `digest` is the value the checkpoint seals.
 - `lifecycle.outstanding_work_snapshot` / `build_stopped_lifecycle` /
   `build_resumed_lifecycle` — pure construction of the typed STOPPED and RESUMED
-  terminal authority, each refusing to forget unfinished work.
+  terminal authority, each refusing to forget unfinished work. That refusal is
+  a NAMED type — `UnfinishedWorkflowAuthorityError`, carrying the outstanding
+  and unconsumed-call counts that caused it — because the module raises
+  `ValueError` in seven places and only this one is a correct, expected
+  refusal decided by the record; the other six are bugs. It subclasses
+  `ValueError`, so every handler written before the type existed still catches
+  it. Added 2026-08-28 after a caller that could not tell the seven apart
+  answered all of them with silence (see `SUB-application.md`'s Traps).
+`check: grep -q "^class UnfinishedWorkflowAuthorityError(ValueError):" src/deepreason/workflow/lifecycle.py && grep -q "raise UnfinishedWorkflowAuthorityError(snapshot)" src/deepreason/workflow/lifecycle.py && python -m pytest tests/test_terminal_lifecycle_refusal_is_recorded.py::test_the_stopped_refusal_is_typed_and_carries_the_counts_that_caused_it tests/test_workflow_stop_lifecycle_c4.py::test_terminal_builder_snapshots_then_refuses_unfinished_provider_work -q`
 - `trace.ConjectureControlTrace` — the live C1 persistence bracket around one
   work order: `authorize_dispatch`, `record_provider_result`, `record_guard`,
   `record_repair_request`, `follow_up`, `capability_follow_up`, `finish`,

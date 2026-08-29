@@ -1,0 +1,16 @@
+[
+  {
+    "root": "run",
+    "state": "completed",
+    "status_stop_reason": "budget_exhausted",
+    "stop_record_reason": "budget_exhausted",
+    "status_token_spend": 139356,
+    "reason_in_RESUMABLE_STOP_REASONS": true,
+    "terminal_lifecycle_decision_present": false,
+    "lifecycle_decision_count": 0,
+    "current_resume_decision_present": false,
+    "terminal_commitment_present": true,
+    "continue_would_raise_CONTINUE_TYPED_STOP_REQUIRED": true,
+    "surfaces_disagree": true
+  }
+]

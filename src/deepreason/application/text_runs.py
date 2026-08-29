@@ -30,6 +30,11 @@ from deepreason.application.models import (
 )
 from deepreason.locking import ProcessLockBusy, operator_locks
 
+# A terminal that could not take its STOPPED lifecycle receipt says so here,
+# in the run result and in the terminal progress event, so that no surface
+# has to infer the rejection from the ABSENCE of a lifecycle decision.
+TERMINAL_LIFECYCLE_REFUSAL_SCHEMA = "deepreason-terminal-lifecycle-refusal-v1"
+
 
 class TextRunWorkerRegistry:
     """Process-local handles; durable ownership remains the operator lock."""
@@ -187,13 +192,58 @@ def _v6_run_result(
     )
 
 
+def log_token_spend(harness_or_root) -> int:
+    """This root's provider spend, summed from its own append-only log.
+
+    The ONE derivation, because the three failure terminals used to omit the
+    figure entirely and `ProgressEvent.token_spend` defaults to 0 — so
+    omitting the argument ASSERTED a spend of zero rather than leaving a gap a
+    reader could detect. 18 of 54 committed roots state `token_spend: 0` while
+    their own log carries a real figure, one of them 702 789 tokens
+    (`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` organ 10).
+
+    Fails to 0 only when the log itself cannot be read, which is the one case
+    where no evidence of spending exists to report.
+    """
+
+    from deepreason.harness import Harness
+
+    try:
+        harness = (
+            harness_or_root
+            if hasattr(harness_or_root, "log")
+            else Harness(Path(harness_or_root), read_only=True)
+        )
+        return sum(event.llm.tokens for event in harness.log.read() if event.llm)
+    except Exception:  # noqa: BLE001 - an unreadable log reports no spend
+        return 0
+
+
+def _refusal(code: str, detail: str, **facts) -> dict[str, Any]:
+    """One typed reason this root could not take a STOPPED lifecycle receipt."""
+
+    return {
+        "schema": TERMINAL_LIFECYCLE_REFUSAL_SCHEMA,
+        "code": code,
+        "detail": detail[:2_000],
+        **facts,
+    }
+
+
 def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
     """Record a typed, continuable STOPPED receipt for a budget-exhausted run.
 
-    Returns the persisted stop record, or ``None`` when this root cannot
-    carry the receipt (no owned control plane, or the workflow holds
-    unfinished authority) — the caller then keeps the bare stop record and
-    the terminal stays non-resumable, exactly as before.
+    Returns ``(stop_record, None)`` on success, or ``(None, refusal)`` when
+    this root cannot carry the receipt — the caller then keeps the bare stop
+    record and the terminal stays non-resumable, exactly as before.
+
+    The refusal is RETURNED rather than swallowed because the terminal it
+    produces is indistinguishable, from outside, from a continuable one: a
+    bare ``except ValueError: return None`` here published roots reporting
+    ``ready for continue: yes`` that ``continue`` refused with
+    CONTINUE_TYPED_STOP_REQUIRED (P6; audit 2026-08-28 finding F-C).  Whether
+    unfinished authority OUGHT to block continuation is a separate, open
+    question — this path only stops hiding that it does.
     """
 
     from deepreason.runtime.stop import (
@@ -202,7 +252,10 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
         build_stop_record,
         persist_stop_record,
     )
-    from deepreason.workflow.lifecycle import build_stopped_lifecycle
+    from deepreason.workflow.lifecycle import (
+        UnfinishedWorkflowAuthorityError,
+        build_stopped_lifecycle,
+    )
 
     control = (
         getattr(manifest, "control_plane_policy", None)
@@ -219,7 +272,17 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
         }
         or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
     ):
-        return None
+        return None, _refusal(
+            "TERMINAL_LIFECYCLE_UNSUPPORTED_CONTROL_PLANE",
+            "this configuration owns no control plane that may carry a "
+            "STOPPED lifecycle receipt",
+            controller_version=(
+                getattr(control, "controller_version", None)
+                if control is not None
+                else None
+            ),
+            mode=getattr(control, "mode", None) if control is not None else None,
+        )
     stop_event_seq = harness._next_seq
     record = build_stop_record(
         reason="budget_exhausted",
@@ -242,14 +305,25 @@ def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
             stop_event_seq=stop_event_seq,
             stop_record_digest=record["digest"],
         )
-    except ValueError:
-        return None
+    except UnfinishedWorkflowAuthorityError as refused:
+        return None, _refusal(
+            UnfinishedWorkflowAuthorityError.code,
+            str(refused),
+            outstanding_work=refused.outstanding_work_count,
+            unconsumed_bound_calls=refused.unconsumed_bound_call_count,
+        )
+    except ValueError as error:
+        # The builder raises ValueError in six further places, every one of
+        # them a bug rather than a refusal.  Recording them separately is the
+        # point of typing the refusal above: one code no longer stands for
+        # both.
+        return None, _refusal("TERMINAL_LIFECYCLE_REJECTED", str(error))
     event = harness.record_lifecycle_transition(observation, snapshot, lifecycle)
     if event.seq != stop_event_seq:
         raise RuntimeError("lifecycle Control event crossed its stop fence")
     stop = persist_stop_record(harness.root, record)
     harness.write_workflow_checkpoint()
-    return stop
+    return stop, None
 
 
 def _recoverable_typed_stop(harness, root: Path):
@@ -315,6 +389,7 @@ def terminalize_text_run(
     from deepreason.status_display import display_status_counts
 
     root = Path(root)
+    lifecycle_refusal: dict[str, Any] | None = None
     scheduler_reason = result.get("stop_reason")
     stop_reason = (
         "operator_cancelled"
@@ -334,8 +409,9 @@ def terminalize_text_run(
             # continuable terminal (owner decision: budget stops on public
             # runs are resumable).  A root that cannot take the receipt (no
             # owned control plane, unfinished workflow authority) keeps the
-            # bare fail-closed stop.
-            stop = _record_exhaustion_lifecycle_stop(
+            # bare fail-closed stop AND records why, so the terminal it
+            # publishes cannot be mistaken for a continuable one.
+            stop, lifecycle_refusal = _record_exhaustion_lifecycle_stop(
                 harness, manifest, policy=policy, metrics=metrics
             )
         if stop is None:
@@ -385,6 +461,7 @@ def terminalize_text_run(
         ),
         "capability_audits": capability_audits,
         "stop": stop,
+        "terminal_lifecycle_refusal": lifecycle_refusal,
     }, harness=harness)
     payload = finalize_terminal_result(harness, manifest, payload)
     _atomic_json(root / "run-result.json", payload)
@@ -1360,9 +1437,7 @@ class TextRunApplicationService:
                     )
             prior = progress.read_since(-1)
             base_cycle = max((event.cycle for event in prior), default=0)
-            base_token_spend = sum(
-                event.llm.tokens for event in harness.log.read() if event.llm
-            )
+            base_token_spend = log_token_spend(harness)
             display_token_limit = (
                 None if token_budget is None else base_token_spend + token_budget
             )
@@ -1387,11 +1462,7 @@ class TextRunApplicationService:
                     if label.value in counts:
                         counts[label.value] += 1
                 report = scheduler.report()
-                token_spend = sum(
-                    event.llm.tokens
-                    for event in scheduler.harness.log.read()
-                    if event.llm
-                )
+                token_spend = log_token_spend(scheduler.harness)
                 event = progress.emit(
                     state="running",
                     phase="reasoning",
@@ -1439,12 +1510,13 @@ class TextRunApplicationService:
                 activity=stop_reason,
                 cycle=latest_cycle,
                 problem_id=spec.problem.id,
-                token_spend=sum(
-                    event.llm.tokens for event in harness.log.read() if event.llm
-                ),
+                token_spend=log_token_spend(harness),
                 token_limit=display_token_limit,
                 determinate=False,
                 stop_reason=stop_reason,
+                terminal_lifecycle_refusal=(
+                    (payload.get("terminal_lifecycle_refusal") or {}).get("code")
+                ),
                 display_status_counts=display_status_counts(harness, manifest),
             )
             notify(terminal)
@@ -1466,6 +1538,12 @@ class TextRunApplicationService:
                         phase="stop",
                         activity="operational failure",
                         cycle=0,
+                        # No harness was built, so the root is opened
+                        # read-only to read its own log: a resumed root
+                        # carries its earlier epochs' spend, and reporting 0
+                        # for it would understate the run by everything it
+                        # had already spent.
+                        token_spend=log_token_spend(root),
                         token_limit=token_budget,
                         determinate=False,
                         message=str(error)[:500],
@@ -1482,6 +1560,7 @@ class TextRunApplicationService:
                         phase="stop",
                         activity="terminal publication recovery required",
                         cycle=latest_cycle,
+                        token_spend=log_token_spend(harness),
                         token_limit=token_budget,
                         determinate=False,
                         message="TERMINAL_PUBLICATION_RECOVERY_REQUIRED",
@@ -1534,6 +1613,7 @@ class TextRunApplicationService:
                     phase="stop",
                     activity="operational failure",
                     cycle=latest_cycle,
+                    token_spend=log_token_spend(harness),
                     token_limit=token_budget,
                     determinate=False,
                     message=str(error)[:500],

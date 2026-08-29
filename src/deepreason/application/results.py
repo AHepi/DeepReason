@@ -32,6 +32,7 @@ ABSENCE_REASONS = frozenset(
         "NO_EMBEDDER_RECORD",
         "NO_FINDING_FAMILIES",
         "NO_FRONTIER_RECORD",
+        "NO_LIFECYCLE_REFUSAL_RECORD",
         "NO_REPLAY_VALIDATION_JSON",
         "NO_RUN_IDENTITY_RECORD",
         "NO_RUN_INPUT",
@@ -138,7 +139,52 @@ def _identity(root: Path, status: dict | None, replay: dict | None) -> dict[str,
     }
 
 
-def _run(status: dict | None, stop: dict | None) -> dict[str, Any]:
+def _token_spend(status: dict | None, harness) -> Any:
+    """This run's provider spend, taken from the LOG rather than the sidecar.
+
+    The append-only log IS the record; `run-status.json` is a derived snapshot
+    of it, and on a run that died before terminal accounting that snapshot
+    states a spend of zero it never measured — the three failure emits in
+    `application/text_runs.py` omitted the figure, and
+    `runtime/progress.py`'s `token_spend` defaults to 0, so the key is PRESENT
+    and the absence sentinel below can never fire on it. 18 of 54 committed
+    roots carry that false zero, one of them on a 702 789-token run
+    (`docs/RUN_ANATOMY_SYNTHESIS_2026-08-26.md` organ 10).
+
+    The writer is fixed for new roots; the ones already committed are evidence
+    and are never edited, so the truth is recovered here by walking their own
+    log — the same power `_adjudication` already uses in this file, and the
+    only power a reader over an append-only record has.
+
+    The sidecar still decides whether the run was RECORDED at all: a root with
+    no `run-status.json` reports its typed absence, never a number.
+
+    SCOPE, deliberately narrow: the log is consulted only where the sidecar
+    says ZERO, because that is the only value known to be a NON-measurement
+    rather than a stale one — omitting the kwarg is what produced it. Measured
+    over the committed tree: 20 of 59 roots carry that false zero (up to
+    1 193 009 tokens), and a further NINE carry a nonzero sidecar figure that
+    is smaller than their log, from an unrelated and un-diagnosed cause
+    (`RUN_ANATOMY_SYNTHESIS` organ 10's "three token instruments, 27
+    disagreements"). Deciding which of two real measurements is authoritative
+    is a different question; this reader does not silently answer it, and the
+    nine are PARKED rather than re-adjudicated here.
+    """
+
+    if status is None or "token_spend" not in status:
+        return _absent("NO_RUN_STATUS_JSON")
+    recorded = status["token_spend"]
+    if recorded != 0:
+        return recorded
+    try:
+        return sum(
+            event.llm.tokens for event in harness.log.read() if event.llm
+        )
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the log reader
+        return recorded
+
+
+def _run(status: dict | None, stop: dict | None, harness) -> dict[str, Any]:
     stop_reason: Any = _absent("NO_STOP_RECORD")
     if status and status.get("stop_reason"):
         stop_reason = status["stop_reason"]
@@ -169,7 +215,7 @@ def _run(status: dict | None, stop: dict | None) -> dict[str, Any]:
         "stop_reason": stop_reason,
         "message": status.get("message", ""),
         "cycles_completed": cycles,
-        "token_spend": status.get("token_spend", _absent("NO_RUN_STATUS_JSON")),
+        "token_spend": _token_spend(status, harness),
         "token_limit": "unlimited" if limit is None else limit,
     }
 
@@ -413,12 +459,39 @@ def _amendment(root: Path) -> dict[str, Any]:
     return {"epochs": len(records), "epoch_seqs": [record.seq for record in records]}
 
 
-def _terminal(replay: dict | None, stop: dict | None) -> dict[str, Any]:
+def _continuation_authority(harness) -> Any:
+    """Exactly the predicate `deepreason continue` evaluates, read here too.
+
+    `runtime.continuation` authorizes a resume from a terminal lifecycle
+    decision or an open resume decision, and raises
+    CONTINUE_TYPED_STOP_REQUIRED when the workflow state carries neither.
+    Reading anything else here is how the two surfaces came to disagree: a
+    root whose STOPPED transition was refused keeps a resumable stop REASON,
+    so a reader consulting only the reason promised a continuation the
+    lifecycle would refuse (P6; audit 2026-08-28 finding F-C).
+    """
+
+    try:
+        workflow_state = harness.workflow_state
+    except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
+        return _absent("REPLAY_STATE_UNREADABLE")
+    return bool(
+        workflow_state.terminal_lifecycle_decision is not None
+        or workflow_state.current_resume_decision is not None
+    )
+
+
+def _terminal(replay: dict | None, stop: dict | None, result: dict | None,
+              harness) -> dict[str, Any]:
     """Whether the root stands where `deepreason amend`/`continue` can act.
 
-    Both halves are required and they answer different questions: the replay
+    Three halves are required and they answer different questions: the replay
     verdict says the record is sound, the stop reason says the run ended in a
-    state the lifecycle will resume from.
+    state the lifecycle will resume from, and the continuation authority says
+    the lifecycle actually RECORDED the transition that resumption reads.  The
+    third is not implied by the other two — a budget-exhausted stop whose
+    STOPPED receipt was refused satisfies both of the first two and continues
+    from neither.
     """
 
     from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
@@ -432,10 +505,22 @@ def _terminal(replay: dict | None, stop: dict | None) -> dict[str, Any]:
     else:
         resumable = _absent("NO_STOP_RECORD")
 
+    authority = _continuation_authority(harness)
+    refusal = (result or {}).get("terminal_lifecycle_refusal")
+    refusal_code: Any = (
+        refusal.get("code", _absent("NO_LIFECYCLE_REFUSAL_RECORD"))
+        if isinstance(refusal, dict)
+        else _absent("NO_LIFECYCLE_REFUSAL_RECORD")
+    )
+
     return {
         "valid_typed_terminal": valid_terminal,
         "stop_reason_resumable": resumable,
-        "amend_ready": bool(valid_terminal and resumable is True),
+        "continuation_authority": authority,
+        "lifecycle_refusal": refusal_code,
+        "amend_ready": bool(
+            valid_terminal and resumable is True and authority is True
+        ),
         "terminal_epoch": (
             binding.get("terminal_epoch", _absent("NO_TERMINAL_BINDING"))
             if has_binding
@@ -559,6 +644,12 @@ def render_results(summary: dict[str, Any]) -> str:
         f"{_show(terminal['valid_typed_terminal'])} (terminal epoch "
         f"{_show(terminal['terminal_epoch'])})",
         f"  stop reason is resumable: {_show(terminal['stop_reason_resumable'])}",
+        f"  carries the lifecycle decision `continue` resumes from (the typed "
+        f"STOPPED receipt; without it `continue` refuses "
+        f"CONTINUE_TYPED_STOP_REQUIRED): "
+        f"{_show(terminal['continuation_authority'])}",
+        f"  the run recorded this reason for refusing that receipt: "
+        f"{_show(terminal['lifecycle_refusal'])}",
         f"  ready for `deepreason amend` / `deepreason continue`: "
         f"{_show(terminal['amend_ready'])}",
     ]
@@ -610,13 +701,13 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "resolved_from": resolved_from,
         "question": findings.get("question") or _absent("NO_RUN_INPUT"),
         "identity": _identity(root, status, replay),
-        "run": _run(status, stop),
+        "run": _run(status, stop, harness),
         "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
         "verification": _verification(root, replay, result, verify=verify),
         "amendment": _amendment(root),
-        "terminal": _terminal(replay, stop),
+        "terminal": _terminal(replay, stop, result, harness),
     }
     absences: set[str] = set()
     _collect_absences(summary, absences)

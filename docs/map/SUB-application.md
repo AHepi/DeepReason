@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: 1662a3f96
+Verified-at: bd73155f4
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -258,6 +258,58 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   all, and both `run` and `start` refuse any manifest whose workload profile is
   not `text`.
 `check: grep -q "V6_PREPARATION_REQUIRED" src/deepreason/easy.py && ! grep -rq "deepreason.workflows\|WebsiteWorkflow\|run_website_workflow" --include=*.py src/deepreason/cli src/deepreason/application src/deepreason/runtime && test "$(grep -roh "workflow_class()" --include=*.py src/deepreason tests | wc -l)" -eq 1 && grep -q "    def workflow_class():" src/deepreason/workloads/website.py && grep -q 'f"run requires text, got {manifest.workload_profile}"' src/deepreason/cli/main.py && grep -q "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest" src/deepreason/application/text_runs.py && python -m pytest tests/test_easy.py::test_easy_make_requires_future_v6_preparation_before_any_side_effect tests/test_easy.py::test_internal_easy_execution_facades_are_fail_closed_tombstones -q`
+- **Omitting a keyword argument ASSERTED a spend of zero, on exactly the runs
+  that overspent.** The success terminal passes
+  `token_spend=sum(event.llm.tokens for event in harness.log.read() if
+  event.llm)`; the three FAILURE terminals passed `token_limit` and no
+  `token_spend` at all, and `runtime/progress.py`'s
+  `token_spend: int = Field(default=0, ge=0)` turns that omission into a
+  positive claim of zero rather than a gap. So the key is PRESENT in
+  `run-status.json`, the results reader's absence sentinel can never fire on
+  it, and `deepreason results` printed `tokens spent vs budget: 0 / 600000`
+  for a run that spent 580 016. Measured over the whole committed tree, not
+  argued: **20 of 59 roots carry the false zero**, the largest a 1 193 009-token
+  run — up from the 18 of 54 `RUN_ANATOMY_SYNTHESIS_2026-08-26.md` organ 10
+  recorded, so the population was growing. FIXED 2026-08-29
+  (`experiments/2026-08-29-fix-failure-path-token-spend/`): one shared
+  `log_token_spend` derivation that all four terminals call, and a reader that
+  walks the log for roots ALREADY committed with the false zero — those are
+  evidence and are never edited, so recovering their truth is the only power a
+  reader has. The general rule this earns: **a default is not an absence.**
+  A field whose default is a legal VALUE cannot represent "not measured", so
+  any writer that may skip it must pass the value explicitly or the model must
+  make the gap representable. Note the reader's scope is deliberately narrow —
+  it consults the log only where the sidecar says ZERO, because nine further
+  roots carry a nonzero figure smaller than their log from an unrelated,
+  un-diagnosed cause, and a reader that quietly re-adjudicated those would
+  answer a question nobody asked (parked, that tranche's `PARKED.md`).
+`check: grep -q "^def log_token_spend(harness_or_root) -> int:" src/deepreason/application/text_runs.py && grep -q "def _token_spend(status: dict | None, harness)" src/deepreason/application/results.py && python -c 'import pathlib, re; src = pathlib.Path("src/deepreason/application/text_runs.py").read_text(); calls = re.findall(r"progress\.emit\((.*?)\n\s*\)", src, re.S); terminal = [c for c in calls if re.search(r"state=\"(failed|completed|cancelled)\"", c) or "state=payload" in c]; assert len(terminal) == 4, len(terminal); assert all("token_spend=" in c for c in terminal), "a terminal progress.emit omits token_spend, which ASSERTS zero"' && python -m pytest tests/test_failure_terminal_reports_real_token_spend.py -q`
+- **A correct refusal, answered with silence, published roots that lied
+  about their own continuability.** `workflow/lifecycle.py` refuses to record
+  a STOPPED transition while the workflow still holds unfinished authority.
+  `_record_exhaustion_lifecycle_stop` caught that refusal with a bare
+  `except ValueError: return None` and fell through to the bare stop record,
+  so the run published `state=completed`, `stop_reason=budget_exhausted` and
+  a clean `verify_root` with NO trace that its terminal transition had been
+  rejected. `deepreason results` then reported *"ready for `deepreason amend`
+  / `deepreason continue`: yes"* on a root `deepreason continue` refused with
+  CONTINUE_TYPED_STOP_REQUIRED. Measured on four committed roots and one
+  minted offline in 98 s (`cycle_soak.py --case epoch3 --cycles 3`: 11
+  outstanding work orders, ZERO lifecycle decisions of any kind); epoch 1
+  carried 3 and epoch 6 carried 9, so the condition was not shrinking. FIXED
+  2026-08-28 (`experiments/2026-08-28-fix-swallowed-terminal-lifecycle-
+  refusal/`) in three places, none of which changes any run's terminal: the
+  refusal became a named type, the handler became specific and RECORDS what
+  it caught as `terminal_lifecycle_refusal` in `run-result.json` and
+  `run-status.json`, and the reader stopped inferring continuability from a
+  stop REASON. Note what the fix deliberately does NOT do: it does not let
+  the run continue. Whether unfinished authority ought to block continuation
+  is an open question for the operator (parked P2); this surface only stopped
+  hiding that it does. The reader's rule generalises past this defect — when
+  two verbs answer one question, the reporting verb reads the ACTING verb's
+  own predicate (`terminal_lifecycle_decision` / `current_resume_decision`,
+  `runtime/continuation.py`), never a proxy for it.
+`check: ! grep -A1 "except ValueError:" src/deepreason/application/text_runs.py | grep -q "return None$" && grep -q "except UnfinishedWorkflowAuthorityError as refused:" src/deepreason/application/text_runs.py && grep -q "TERMINAL_LIFECYCLE_REFUSAL_SCHEMA = \"deepreason-terminal-lifecycle-refusal-v1\"" src/deepreason/application/text_runs.py && grep -q "def _continuation_authority(harness)" src/deepreason/application/results.py && python -m pytest tests/test_terminal_lifecycle_refusal_is_recorded.py tests/test_results_command.py::test_terminal_readiness_answers_the_amend_question -q`
 - **There is ONE run path, and `cli/` is not allowed to be a second one.**
   The bare `deepreason run --run-manifest` path used to call
   `ops.run_scheduler` and then print. Grounded-extension run
