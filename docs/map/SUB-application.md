@@ -1,5 +1,5 @@
 <!-- DR-SUB-application -->
-Verified-at: bd73155f4
+Verified-at: HEADSHA
 Verify: python -m pytest tests/test_v6_only_cli_admission.py tests/test_v6_only_application_admission.py tests/test_easy.py -q && python -m pytest tests/test_application_text_runs_d0.py tests/test_r0_terminal_verification.py tests/test_continuation.py tests/test_stop_policy.py tests/test_progress.py -q
 Owns: src/deepreason/application/, src/deepreason/workflows/, src/deepreason/cli/, src/deepreason/runtime/, src/deepreason/easy.py, src/deepreason/intake_form.py, src/deepreason/shallow.py
 Seams: 
@@ -210,10 +210,28 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 | How a root that stopped without a terminal reaches one | `finalize_stopped_root` in `application/text_runs.py` and `_cmd_finalize` in `cli/main.py` | `tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one` |
 | Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
 | Website stage order, retry scope, or design-manifest compilation | `_NEXT_STAGE` and `WebsiteStateMachine` in `workflows/website.py`; `ManifestCompiler.compile` in `workflows/manifest_compiler.py` | `tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition` |
+| What the global `--config` DOES on the two public verbs, and why both must read it (2026-08-29) | `_cmd_reason` passes `config_path=args.config` into `RunPreparationRequestV1`; `_qualify_one_profile` passes the loaded `Config` into `qualification_subject_manifest`, both in `cli/main.py`. One configuration, one qualification subject: the battery `qualify` warms must be the battery a configured `reason` needs, or a configuration that compiles is one no operation can qualify (operations-parity law, 2026-08-13) | `tests/test_managed_path_config_read.py::test_qualify_and_reason_agree_on_the_subject_for_every_configuration` |
+`check: python -m pytest tests/test_managed_path_config_read.py::test_qualify_and_reason_agree_on_the_subject_for_every_configuration tests/test_managed_path_config_read.py::test_a_configured_run_is_refused_nowhere_a_default_run_starts -q`
 | `deepreason qualify`'s per-profile loop, or `deepreason status`'s per-seat section (Rung S4 of role-seat separation) | `_qualify_one_profile` (the extracted single-profile body, called once for the unchanged combination and additionally per distinct bound profile) and `_print_qualify_headline`/`_print_qualify_failure` in `cli/main.py`; `get_seat_readiness` is called from `_cmd_status`, defined in `readiness.py` (see `DR-CON-seats`, which owns that file) | `tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination` |
 `check: python -m pytest tests/test_v6_only_cli_admission.py::test_public_parser_omits_make_and_unqualified_advanced_commands tests/test_v6_only_cli_admission.py::test_every_shared_root_command_rejects_a_historical_manifest tests/test_v6_only_cli_admission.py::test_run_requires_qualification_before_operator_lock tests/test_v6_only_application_admission.py::test_v6_rejects_mismatched_question tests/test_v6_only_application_admission.py::test_require_v6_launch_allowed_fails_closed_for_non_v6 tests/test_application_text_runs_d0.py::test_start_intent_is_strict_and_has_no_client_authority_fields tests/test_r0_terminal_verification.py::test_run_result_exit_contract tests/test_stop_policy.py::test_corroborated_stuck_exhausts_fixed_escape_ladder_before_stop tests/test_progress.py::test_progress_is_monotonic_append_only_and_latest_is_atomic tests/test_continuation.py::test_continue_rejects_tampered_stop_digest tests/test_cli_production_doctor_v6.py::test_report_computes_19_of_20_gate_and_all_metrics tests/test_easy.py::test_setup_wizard_writes_config_without_the_key tests/test_website_state_machine.py::test_retry_is_local_and_cannot_choose_a_transition tests/test_website_state_machine.py::test_manifest_failure_selects_component_contract_repair tests/test_qualification_per_seat.py::test_two_profile_home_qualifies_each_seat_plus_the_combination tests/test_qualification_per_seat.py::test_status_two_seat_home_names_both_seats tests/test_qualification_per_seat.py::test_single_profile_home_qualify_output_is_byte_identical_to_pre_s4 -q && grep -q "^PRODUCTION_CASES_PER_PAIR = 20" src/deepreason/cli/doctor.py && grep -q "^PRODUCTION_EVENTUAL_VALID_MINIMUM = 19" src/deepreason/cli/doctor.py && grep -q "^ESCAPE_LADDER = (" src/deepreason/runtime/stop.py && grep -q "^_NEXT_STAGE = {" src/deepreason/workflows/website.py && grep -q "^PROVIDERS = {" src/deepreason/easy.py && grep -q "^MAKE_OVERRIDES = {" src/deepreason/easy.py && grep -q "^def _read_policy(" src/deepreason/runtime/launch_policy.py && grep -q "^class WebsiteStateMachine" src/deepreason/workflows/website.py && grep -q "    def compile(" src/deepreason/workflows/manifest_compiler.py && grep -q "^def _v6_run_result(" src/deepreason/application/text_runs.py && grep -q "^def _qualify_one_profile(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_headline(" src/deepreason/cli/main.py && grep -q "^def _print_qualify_failure(" src/deepreason/cli/main.py && grep -q "get_seat_readiness()" src/deepreason/cli/main.py`
 
 ## Traps
+
+- **`deepreason reason` accepted `--config` and threw it away.** The global
+  flag parsed, and nothing downstream ever opened the file: `_cmd_reason` built
+  a `RunPreparationRequestV1` with no configuration field at all, and
+  `preparation._config_for_profile` synthesised a fresh `Config` from the
+  provider profile. Every switch an operator wrote -- judges, adjudication
+  authority, school seats -- was neither carried nor disclosed nor refused, and
+  41 committed managed-path roots share ONE engine-config echo with zero
+  compile notices to show for it. FIXED 2026-08-29, tranche
+  `experiments/2026-08-29-defect-managed-path-config-read/` (defect P14). The
+  companion half is the reason it is filed here rather than only under
+  `DR-CON-authority`: `deepreason qualify` had no way to address a configured
+  subject either, so carriage ALONE would have made all 8 committed
+  `run-config.yaml` files permanently unrunnable (`QUALIFICATION_NOT_CONFIGURED`
+  with no command able to clear it). Both verbs read the same flag or neither
+  should.
 
 - **The survivor count was the writer's word, and the writer was wrong.**
   `_artifacts` reported `len(result["survivors"])` verbatim, so when

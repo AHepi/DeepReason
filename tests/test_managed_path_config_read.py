@@ -417,7 +417,7 @@ def test_the_provider_profile_owns_routes_under_a_configured_run():
     endpoint_ids = {
         route.endpoint_id
         for routes in configured.roles.values()
-        for route in (routes if isinstance(routes, list) else [routes])
+        for route in (routes if isinstance(routes, (list, tuple)) else [routes])
     }
     assert endpoint_ids == {profile.endpoint_id}
 

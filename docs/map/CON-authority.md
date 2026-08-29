@@ -1,5 +1,5 @@
 <!-- DR-CON-authority -->
-Verified-at: a40450f1c
+Verified-at: HEADSHA
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/authority.py, src/deepreason/config.py, src/deepreason/rules/crit.py, src/deepreason/informal/trial.py, src/deepreason/run_manifest.py, src/deepreason/jolts.py, src/deepreason/ops.py, src/deepreason/scheduler/scheduler.py, src/deepreason/v6_policy.py, src/deepreason/preparation.py
 Seams: DR-SEAM-adjudication-x-authority
@@ -248,7 +248,19 @@ and `CALIBRATION_RECEIPT` must be unset. The four share one typed refusal,
   carry (`ENGINE_CONFIG_FIELD_NOT_CARRIED`), which is a warning and not a
   repair: reading an authority knob off a run's `Config` still tells you what
   the run did, never what its operator asked for. To learn the latter, read the
-  manifest's `compile_notices`.
+  manifest's `compile_notices`. PARTLY FIXED 2026-08-29 (tranche
+  `experiments/2026-08-29-defect-managed-path-config-read/`, defect P14): until
+  that day the disclosure could not fire on the managed path AT ALL, because
+  `deepreason reason` never opened the file `--config` named --
+  `_config_for_profile` synthesised a fresh `Config` from the provider profile,
+  so the compiler was handed defaults and had nothing to disclose. Both master
+  gates are now READ; `ENGAGED_CRITICISM_AUTHORITY` and
+  `ADJUDICATION_STATUS_AUTHORITY_ENABLED` reach the compiled criticism policy,
+  and every gate the echo still drops arrives as a notice naming the operator's
+  value. What is unchanged, and is the reason this entry is rewritten rather
+  than retired: the echo's drop list is untouched, so a DROPPED gate is
+  disclosed and not carried -- the law's "never silence", not yet its "at will"
+  (that limb is P15).
 `check: python -c "
 from deepreason.run_manifest import config_from_run_manifest
 from tests.test_reusable_qualification import _manifest, _profile
@@ -258,6 +270,7 @@ assert runtime.JUDGE_SEATS_ENABLED is False and runtime.ADJUDICATION_STATUS_AUTH
 named = {n.pointer for n in (m.compile_notices or ()) if n.code == 'ENGINE_CONFIG_FIELD_NOT_CARRIED'}
 assert named == {'/engine_config/JUDGE_SEATS_ENABLED', '/engine_config/ADJUDICATION_STATUS_AUTHORITY_ENABLED'}, named
 "`
+`check: python -c "import inspect;from deepreason.preparation import build_preparation_manifest as b;from deepreason.config import Config;from tests.test_reusable_qualification import _profile;assert 'config' in inspect.signature(b).parameters;m=b(_profile(),question='q',compiled_at='2026-07-23T00:00:00Z',config=Config(JUDGE_SEATS_ENABLED=True));assert '/engine_config/JUDGE_SEATS_ENABLED' in {n.pointer for n in (m.compile_notices or ()) if n.code=='ENGINE_CONFIG_FIELD_NOT_CARRIED'}"`
 
 - **Reading one vocabulary and assuming the other.** `_POLICY_AUTHORITIES`
   (manifest) and `_ARGUMENTATIVE_VALUES` (Config) are separate closed sets, and

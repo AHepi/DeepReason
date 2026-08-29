@@ -87,6 +87,7 @@ PREPARATION_SCHEMA = "deepreason-run-preparation.v1"
 _REQUEST_DOMAIN = b"deepreason.run-preparation-request.v1\x00"
 _RECORD_DOMAIN = b"deepreason.run-preparation-record.v1\x00"
 _QUESTION_DOMAIN = b"deepreason.question.v1\x00"
+_CONFIG_DOMAIN = b"deepreason.run-preparation-config.v1\x00"
 _DIGEST = r"^[0-9a-f]{64}$"
 _RUN_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 _MAX_RECORD_BYTES = 128 * 1024
@@ -124,6 +125,9 @@ class RunPreparationRequestV1(BaseModel):
         token_budget=PUBLIC_DEFAULT_TOKEN_BUDGET,
     )
     profile_path: str | None = Field(default=None, min_length=1, max_length=4_096)
+    # The operator's run configuration. Absent, preparation compiles from the
+    # provider profile alone, byte-identical to before this field existed.
+    config_path: str | None = Field(default=None, min_length=1, max_length=4_096)
     managed_run_id: str | None = Field(default=None, min_length=1, max_length=128)
     # An admitted-dossier digest binds attached evidence into the run
     # identity; absent, preparation mints the empty question-only dossier.
@@ -251,9 +255,32 @@ def _qualification_report_sha256(report) -> str:
     return sha256_hex(payload)
 
 
+def _load_operator_config(config_path: str | None) -> Config | None:
+    """Load the operator's configuration, or None when none was named.
+
+    A file that does not parse into the configuration model is not a
+    configuration at all (all-configurations law, 2026-08-12: parse/shape
+    errors stay refused), so it is a typed refusal at the boundary rather
+    than a traceback out of yaml.
+    """
+
+    if config_path is None:
+        return None
+    from deepreason.config import load as load_config
+
+    try:
+        return load_config(Path(config_path))
+    except (OSError, ValueError) as error:
+        raise RunPreparationError(
+            "CONFIG_PROFILE_INVALID",
+            f"configuration profile could not be loaded: {error}",
+        ) from error
+
+
 def _request_digest(
     request: RunPreparationRequestV1,
     profile: ProviderProfileV1,
+    config: Config | None = None,
 ) -> str:
     payload = {
         "schema": "deepreason-run-preparation-request-identity.v1",
@@ -267,6 +294,14 @@ def _request_digest(
         # Only dossier-bearing requests carry the key, so question-only
         # request digests remain byte-identical to their historical values.
         payload["dossier_digest"] = request.dossier_digest
+    if config is not None:
+        # Same conditional discipline as dossier_digest above. The digest is
+        # over the config's VALUES, not the file's bytes, so reformatting a
+        # YAML profile does not mint a second run of the same question.
+        payload["config_digest"] = sha256_hex(
+            _CONFIG_DOMAIN
+            + canonical_json(config.model_dump(mode="json", by_alias=True))
+        )
     return sha256_hex(_REQUEST_DOMAIN + canonical_json(payload))
 
 
@@ -308,6 +343,7 @@ def _school_seat_route_ensemble(
 def _config_for_profile(
     profile: ProviderProfileV1,
     *,
+    base: Config | None = None,
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
     criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
@@ -335,7 +371,11 @@ def _config_for_profile(
             profile, criticism_seats
         )
         roles["argumentative_critic"] = critic_routes
-    return Config(
+    # The seven values the HOST owns on this path, whatever the operator's
+    # configuration says: the provider profile holds the credential and the
+    # endpoint, and the seat-binding mechanism owns per-role divergence, so a
+    # configuration file may never redirect a managed run to another endpoint.
+    owned = dict(
         engine_profile="full",
         model_profile=profile.model_profile,
         scratchpad=engaged_scratchpad_source(),
@@ -352,6 +392,15 @@ def _config_for_profile(
         CHANNELS_DISABLED=tuple(channels_disabled),
         roles=roles,
     )
+    if base is None:
+        return Config(**owned)
+    data = base.model_dump(mode="python")
+    data.update(owned)
+    # model_validate, never model_copy: model_copy skips revalidation and
+    # leaves the typed submodels (scratchpad, bridge) as bare dicts, which
+    # moves the serialized bytes -- and therefore the qualification subject
+    # digest -- for a configuration that asked for nothing.
+    return Config.model_validate(data)
 
 
 def _records_for_question(
@@ -425,6 +474,7 @@ def build_preparation_manifest(
     compiled_at: str,
     run_input_digest: str | None = None,
     attached_evidence: bool = False,
+    config: Config | None = None,
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
     school_seats: Mapping[str, ProviderProfileV1] | None = None,
     criticism_seats: Mapping[str, ProviderProfileV1] | None = None,
@@ -450,7 +500,12 @@ def build_preparation_manifest(
     ``Config.SCHOOL_SEATS_ENABLED`` and ``Config.LEGACY_CRITICISM_ENABLED
     is False`` (criticism must already be school-routed before a
     per-school distinct route is meaningful) -- refuses typed, not
-    silently, when either prerequisite is missing.
+    silently, when either prerequisite is missing. ``config`` is the
+    OPERATOR's loaded configuration; every field it sets is either carried
+    into the compiled manifest or disclosed by the compiler as a typed
+    ``ENGINE_CONFIG_FIELD_NOT_CARRIED`` notice, except the seven the host
+    owns (``_config_for_profile``'s ``owned``). Omitted, the manifest is
+    byte-identical to before configuration reached this path.
     """
 
     if run_input_digest is None:
@@ -458,6 +513,7 @@ def build_preparation_manifest(
         run_input_digest = run_input.run_input_digest
     config = _config_for_profile(
         profile,
+        base=config,
         seat_bindings=seat_bindings,
         school_seats=school_seats,
         criticism_seats=criticism_seats,
@@ -531,6 +587,7 @@ def qualification_subject_manifest(
     profile: ProviderProfileV1,
     *,
     attached_evidence: bool = False,
+    config: Config | None = None,
     seat_bindings: Mapping[str, ProviderProfileV1] | None = None,
 ):
     """Return a stable per-profile manifest whose reusable subject is question-neutral.
@@ -538,7 +595,11 @@ def qualification_subject_manifest(
     ``attached_evidence`` warms the subject that ``reason --attach`` runs
     bind (the fixed attached-evidence envelope); the default subject stays
     byte-identical to the historical question-only preset. ``seat_bindings``
-    is threaded straight through (Rung S3); omitted, unchanged.
+    is threaded straight through (Rung S3); omitted, unchanged. ``config``
+    is the operator's configuration, threaded through the SAME door
+    ``prepare`` uses: the battery this warms must be the battery a run of
+    that configuration needs, or a configuration that compiles is a
+    configuration no operation can qualify.
     """
 
     return build_preparation_manifest(
@@ -546,6 +607,7 @@ def qualification_subject_manifest(
         question=_QUALIFICATION_QUESTION,
         compiled_at=_QUALIFICATION_COMPILED_AT,
         attached_evidence=attached_evidence,
+        config=config,
         seat_bindings=seat_bindings,
     )
 
@@ -719,7 +781,8 @@ class RunPreparationService:
                 f"credential environment variable {profile.credential_env} is absent",
             )
 
-        request_digest = _request_digest(request, profile)
+        operator_config = _load_operator_config(request.config_path)
+        request_digest = _request_digest(request, profile, config=operator_config)
         managed_id = request.managed_run_id or f"run-{request_digest[:32]}"
         source_contents: dict[str, bytes] = {}
         if request.dossier_digest is not None:
@@ -758,6 +821,7 @@ class RunPreparationService:
             compiled_at=_compiled_at(self._clock),
             run_input_digest=run_input.run_input_digest,
             attached_evidence=request.dossier_digest is not None,
+            config=operator_config,
             seat_bindings=seat_bindings or None,
             school_seats=school_seats or None,
             criticism_seats=criticism_seats or None,

@@ -1,0 +1,1 @@
+{"result_type": "DIFF_BUDGET_RESULT_V1", "base": "25a3a06877f0a1c62f4222f8ea9f7855b9a4e136", "against": null, "areas": {"src/deepreason/preparation.py": 68, "src/deepreason/cli/main.py": 7}, "total_insertions": 75, "ceiling": 150, "verdict": "WITHIN"}

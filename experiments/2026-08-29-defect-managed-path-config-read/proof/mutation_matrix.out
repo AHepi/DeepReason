@@ -1,0 +1,26 @@
+== control: unmutated tree ==
+  tests/test_managed_path_config_read.py: rc=0  8 passed in 32.25s
+
+M1 drop config_path from _cmd_reason (site 6)
+  targets : test_reason_forwards_the_operator_config_to_preparation
+  verdict : RED (mutation caught)   [1 failed in 0.33s]
+M2 stop threading base into _config_for_profile (sites 2-3)
+  targets : test_managed_manifest_carries_or_discloses_every_operator_setting test_a_configured_school_seat_opt_in_compiles
+  verdict : RED (mutation caught)   [2 failed in 0.40s]
+M3 model_copy instead of model_validate (site 2)
+  targets : test_a_default_valued_operator_config_changes_nothing
+  verdict : RED (mutation caught)   [1 failed, 1 warning in 0.33s]
+M4 drop config= from qualification_subject_manifest (sites 4/7)
+  targets : test_qualify_and_reason_agree_on_the_subject_for_every_configuration test_a_configured_run_is_refused_nowhere_a_default_run_starts
+  verdict : RED (mutation caught)   [2 failed in 32.00s]
+M5 omit config_digest from run identity (site 5)
+  targets : test_run_identity_covers_the_configuration
+  verdict : RED (mutation caught)   [1 failed in 0.31s]
+M6 admit config_digest UNCONDITIONALLY (site 5)
+  targets : test_run_identity_covers_the_configuration
+  verdict : RED (mutation caught)   [1 failed in 0.32s]
+M7 let the operator's roles win (site 2)
+  targets : test_the_provider_profile_owns_routes_under_a_configured_run
+  verdict : RED (mutation caught)   [1 failed in 0.38s]
+
+files restored
