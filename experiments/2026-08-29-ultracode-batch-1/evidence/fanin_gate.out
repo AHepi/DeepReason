@@ -1,0 +1,9 @@
+=== FAN-IN GATE: session branch 85e288224 ===
+2026-08-29 12:16:53 start
+
+--- collect-only ---
+tests/test_zz_cyc.py::test_c
+
+4458 tests collected in 1.99s
+
+--- full gate ---
