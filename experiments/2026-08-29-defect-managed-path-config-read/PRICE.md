@@ -98,8 +98,11 @@ retroactively: no committed manifest is recompiled by any of this.
 
 - Every committed run root: read (`model_validate_json`), never recompiled.
 - The default-valued manifest: `sha256` and `source_config_hash` byte-identical.
-- `INV-frozen-surfaces.md`'s two pinned digests (`b9038b84efdea313…`,
-  `f3bb65623852…`): both configurations sit at every carried field's default.
+- `INV-frozen-surfaces.md`'s pinned digests (e.g. `b9038b84efdea313…` at line
+  662): NOT measured here, and not claimed. This stage changed no production
+  code, so nothing can have moved; whether a fix moves them is a measurement
+  the fix tranche owes at its own gate, not a forecast this document is
+  entitled to make.
 
 ## Reading this against the frozen-surface disposition
 

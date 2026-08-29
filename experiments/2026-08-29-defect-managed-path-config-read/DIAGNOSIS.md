@@ -12,7 +12,7 @@ fields (`question`, `budget`, `profile_path`, `managed_run_id`,
 `dossier_digest`) and none of them is a configuration
 (`preparation.py:108-130`). `_cmd_reason` constructs one from `args` and never
 reads `args.config` (`cli/main.py:2456-2462`), even though `--config` is a
-GLOBAL argument that eleven other commands do read (`cli/main.py:854`, `869`,
+GLOBAL argument that ten other call sites in the same file do read (`cli/main.py:854`, `869`,
 `1177`, `1197`, `1216`, `1234`, `1278`, `1293`, `1628`, `1742`). Downstream,
 `build_preparation_manifest` calls `_config_for_profile`
 (`preparation.py:308-354`), which CONSTRUCTS `Config(...)` from scratch with
