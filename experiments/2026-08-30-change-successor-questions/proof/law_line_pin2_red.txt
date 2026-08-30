@@ -2,7 +2,10 @@ MUTATION PROOF — pin 2 of tests/test_successor_law_line.py
 Date: 2026-08-30T04:42:23Z
 Mutant: a numeric field (rank_bonus: int) added to SuccessorDeclaration —
         the weight the formalism-optional law forbids anyone to be able to set.
-Mutant diff:
+Mutant diff: NOT CAPTURED when this transcript was written. Recorded in words
+        2026-08-30 by the repair pass (audit F22) so the mutant can be re-applied:
+        in src/deepreason/successor/registry.py, add to SuccessorDeclaration
+            rank_bonus: int = 0
 
 Command: python -m pytest tests/test_successor_law_line.py -q
 Output:

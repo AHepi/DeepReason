@@ -4,6 +4,12 @@ Four mutants, each applied alone and reverted, each turning red exactly the
 assertion it exists to defend. A test that stayed green under these would be
 vacuous, which is this repo's most common recorded test defect.
 
+NOTE added 2026-08-30 by the repair pass (audit F22): the FIRST hunk of each of
+the four diffs below is NOT part of the mutant. It is the Appendix-B fix that
+changed route.py to read the scratch policy from the configuration instead of
+harness._workflow_manifest, and it is present because these transcripts were
+regenerated against the fixed file. The mutant in each case is the hunk AFTER it.
+
 === MUTANT: link ===
 diff --git a/src/deepreason/successor/route.py b/src/deepreason/successor/route.py
 index b5defc82e..cb6242e5b 100644
