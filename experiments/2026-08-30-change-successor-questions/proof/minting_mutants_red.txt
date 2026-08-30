@@ -1,0 +1,36 @@
+MUTATION PROOF — tests/test_successor_minting.py
+Date: 2026-08-30T04:47:32Z
+Three mutants, each applied alone and reverted.
+
+=== MUTANT: gate_on ===
+--- python -m pytest tests/test_successor_minting.py -q
+
+tests/test_successor_minting.py:202: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_minting.py::test_the_gate_is_off_by_default_and_mints_nothing
+FAILED tests/test_successor_minting.py::test_the_default_config_object_has_the_gate_off
+FAILED tests/test_successor_minting.py::test_a_run_that_left_the_gate_off_is_told_nothing
+FAILED tests/test_successor_minting.py::test_the_warning_text_is_the_operators_words_on_the_registry_row
+4 failed, 8 passed in 0.17s
+
+=== MUTANT: not_idempotent ===
+--- python -m pytest tests/test_successor_minting.py -q
+E         
+E         Left contains one more item: ['successor-problem-minted', 'succ:244eb4e51f5f', 'pi-successor-mint', 'artifact-under-criticism']
+E         Use -v to get more diff
+
+tests/test_successor_minting.py:130: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_minting.py::test_the_gate_on_mints_exactly_one_problem_and_is_idempotent
+1 failed, 11 passed in 0.18s
+
+=== MUTANT: no_warning ===
+--- python -m pytest tests/test_successor_minting.py -q
+E         - may cause critics to fully consume conjecturer role
+E         + minting is on
+
+tests/test_successor_minting.py:201: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_minting.py::test_enabling_the_gate_discloses_the_operators_own_warning
+FAILED tests/test_successor_minting.py::test_the_warning_text_is_the_operators_words_on_the_registry_row
+2 failed, 10 passed in 0.19s

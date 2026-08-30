@@ -104,3 +104,73 @@ End state: FIX.md naming which of the two sort keys changes, what the new term
 is, which of the two map checks and which regression must be re-derived, and a
 measurement showing the change does not starve non-seed problems entirely.
 ```
+
+---
+
+## Status update — 2026-08-30, after implementation
+
+The lane implemented every in-scope item and left the four parks above
+untouched. Two consequences of the parks are now facts on the branch rather
+than forecasts, and both are recorded here so the operator's answer is priced
+against what actually exists.
+
+**Q1 (frozen surface 4) is still unanswered, and the channel works without it.**
+`resolve` and `minting_enabled` read their selector by `getattr(config, FIELD,
+<default>)`, so the shipped defaults are correct with NO `Config` field in
+existence: an unconfigured run routes to the scratchpad and does not mint.
+What a REFUSED grant costs is therefore narrow and nameable — a run cannot
+CHANGE either default, so R4's per-run switch and R6's configurable surface stay
+parked while everything else is delivered. `src/deepreason/run_manifest.py` and
+`src/deepreason/config.py` both take a zero-line diff in this tranche.
+
+**Q3 (may criticism write to the workshop) is still unanswered, and it is what
+stops the channel from firing in a live run.** `route` and `mint` are built,
+tested and mutation-proved, but NOTHING IN PRODUCTION CALLS THEM: the granted
+cone gives `rules/crit.py` OUTPUT SCHEMA ONLY, and Road B's reader is not a spec
+item. So a live run today records the field on the criticism output and routes
+nothing. That is the honest state, it is stated in DELIVERY.md as the tranche's
+largest residue, and the fix is one dispatch site whose LOCATION is exactly what
+Q3 decides.
+
+---
+
+## P9B-7 — one guard test is left RED, by design and by the rules
+
+WHAT: `tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem`
+fails on this branch. It scans `src/deepreason` for four literal spellings of a
+SUCCESSOR producer and asserts ZERO hits; `successor/mint.py:88` is now one.
+
+WHY IT IS NOT SILENTLY FIXED: the rewrite is spec item S19, and S19 is GATED on
+Q5 — the scope of a superseded operator ruling. An implementer may not decide
+that scope, and evading the scan (resolving the trigger through a variable, say)
+would be worse than leaving it red: it would disarm an alarm the operator
+installed rather than answer it.
+
+BASELINE, so the delta is unambiguous:
+`python -m pytest tests/test_decommissioned_pipeline_stays_out.py tests/test_h1_no_spawn_from_refutation.py -q`
+gave `10 passed in 0.34s` before this tranche and gives `1 failed, 9 passed`
+after. The four protected-channel tests and all five H1 tests are byte-unchanged
+and green. Captured at `proof/predicted_red_decommissioned_tripwire.txt`.
+
+THE EDIT, ready to apply the moment Q5 answers CONFIRM — it is four lines:
+
+```
+In tests/test_decommissioned_pipeline_stays_out.py, replace the final assertion
+of test_no_source_file_produces_a_successor_problem
+
+    assert hits == [], hits
+
+with
+
+    # Operator law 2026-08-29 (P9) supersedes the 2026-08-15 ruling FOR THIS
+    # TRIGGER ALONE: exactly one producer, at this path, outside rules/ and
+    # outside scan_spawns. The website development pipeline itself stays
+    # decommissioned, which is what the four channel tests below still check.
+    assert [h.split(":")[0] for h in hits] == [
+        "src/deepreason/successor/mint.py"
+    ], hits
+
+and add to the test's docstring the supersession sentence Q5 confirms. This is
+a strictly MORE specific claim than "zero": it still fails the moment a second
+producer appears anywhere, and it additionally fails if the one producer MOVES.
+```

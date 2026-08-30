@@ -243,9 +243,18 @@ what fell), `batch_translation_offers` (§9.8's groups), `standing_resolutions`,
   attacking a retirement returns its problem to the frontier; defeating the
   premise's critic un-marks the problem by the same computed predicate. No
   resolution asserts insolubility.
-- **H1.** Nothing here mints a problem from a conjecture's failure. `translate`
-  is the only path that mints a problem, and it fires from an adjudicated
-  resolution, not from a refutation.
+- **H1, as amended 2026-08-29.** Nothing here mints a problem AUTOMATICALLY
+  FROM A REFUTATION, and `translate` remains the only path that mints a
+  problem FROM AN ADJUDICATED RESOLUTION. What the operator's P9 law added is
+  a different road with a different authority: a critic's OPTIONAL PROPOSAL,
+  under a per-run switch that is OFF by default, may mint one problem naming
+  both its parents (`DR-CON-successor-questions`). The distinction is the
+  whole of H1's content and is worth stating in the terms that produced it —
+  the deleted loop spawned a successor for EVERY refuted artifact, so a
+  premise refuted by design would have spawned one every time the channel
+  worked; a proposal a critic wrote on purpose, behind a switch nobody turned
+  on by default, cannot do that.
+`check: python -c "import inspect; from deepreason.rules.spawn import scan_spawns; assert 'SpawnTrigger.SUCCESSOR' not in inspect.getsource(scan_spawns)" && python -m pytest tests/test_h1_no_spawn_from_refutation.py tests/test_successor_minting.py::test_the_gate_is_off_by_default_and_mints_nothing -q`
 - **C5.** The producer redirects attention only, and carries no penalty for a
   critic who declines.
 
@@ -304,13 +313,20 @@ anything could refuse it — the exact hole Remark 9.5's closure exists to shut.
   transport failure. A sweep that re-sampled every cycle would burn tokens and
   churn the record with verdicts that are samples rather than fixed points.
 - **A filed premise must never ADDRESS its problem, and the reason is H1.**
-  `scan_spawns` mints a SUCCESSOR problem for every REFUTED artifact that
-  addresses a problem. A premise is refuted by design — that is the channel
-  working — so registering one with a `problem_id` would make every successful
-  premise criticism spawn a successor question, which is the exact doctrine
+  CORRECTED 2026-08-30: the sentence that stood here — "`scan_spawns` mints a
+  SUCCESSOR problem for every REFUTED artifact that addresses a problem" —
+  described a loop Rung 3a had already deleted, and stayed on the page after
+  the thing it described was gone. What was true is the CONSEQUENCE the trap
+  guards: while that loop existed, a premise refuted by design would have
+  spawned a successor every time the channel worked, which is the doctrine
   defect H1 exists to delete. `file_premise` passes no `problem_id`, so a
-  premise never enters `addr`. This holds until Rung 3 removes the loop, and it
-  is worth keeping afterwards: the premise is not an answer to the problem.
+  premise never enters `addr`, and that is worth keeping now that the loop is
+  gone for the independent reason stated then: the premise is not an answer to
+  the problem. It is worth keeping for a second reason since 2026-08-29 —
+  minting is now possible again, from a critic's OPTIONAL proposal behind a
+  default-OFF switch (`DR-CON-successor-questions`), so an `addr` edge from a
+  premise would once more put the premise where a proposal could descend from
+  it.
 `check: python -c "import inspect; from deepreason.premises import file_premise; src = inspect.getsource(file_premise); assert 'problem_id' not in src.split('harness.create_artifact')[1]"`
 `check: python -m pytest tests/test_premise_channel.py::test_a_premise_falls_by_demarcation_with_no_written_refutation -q`
 - **The invitation is offered inside the RULE, not passed by the scheduler.**

@@ -1,0 +1,30 @@
+MUTATION PROOF — pin 2 of tests/test_successor_law_line.py
+Date: 2026-08-30T04:42:23Z
+Mutant: a numeric field (rank_bonus: int) added to SuccessorDeclaration —
+        the weight the formalism-optional law forbids anyone to be able to set.
+Mutant diff:
+
+Command: python -m pytest tests/test_successor_law_line.py -q
+Output:
+
+    def test_a_successor_declaration_carries_no_number():
+        """R1, structurally. The absence is the guarantee.
+    
+        A rank, weight, priority or score field here is what would let a proposed
+        question reach a decision, and no configuration can set a field that does
+        not exist. Checked over the MODEL rather than over today's rows, so a
+        destination added tomorrow cannot introduce one.
+        """
+        numeric = [
+            name
+            for name, annotation in declaration_field_types().items()
+            if annotation in (int, float)
+        ]
+>       assert not numeric, numeric
+E       AssertionError: ['rank_bonus']
+E       assert not ['rank_bonus']
+
+tests/test_successor_law_line.py:149: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_law_line.py::test_a_successor_declaration_carries_no_number
+1 failed, 7 passed in 0.18s

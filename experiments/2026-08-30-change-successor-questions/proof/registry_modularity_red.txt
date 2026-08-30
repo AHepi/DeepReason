@@ -1,0 +1,38 @@
+MUTATION PROOF — tests/test_successor_registry.py, the modularity claim
+Date: 2026-08-30T04:43:28Z
+Mutant: route() branches on the row id instead of dispatching through the
+        registered writer — i.e. adding a destination WOULD need a consumer edit.
+Mutant diff:
+
+Command: python -m pytest tests/test_successor_registry.py -q
+Output:
+                        offenders.append((str(path), node.lineno, operand.value))
+        assert scanned > 200, scanned                             # positive anchor
+        assert compares > 100, compares                           # positive anchor
+>       assert not offenders, offenders
+E       AssertionError: [('src/deepreason/successor/route.py', 96, 'scratchpad.v1')]
+E       assert not [('src/deepreason/successor/route.py', 96, 'scratchpad.v1')]
+
+tests/test_successor_registry.py:223: AssertionError
+________ test_a_row_id_literal_appears_in_the_registry_and_nowhere_else ________
+
+    def test_a_row_id_literal_appears_in_the_registry_and_nowhere_else():
+        """The blunter half of the same rule, and the one that catches a lookup
+        keyed on a hard-coded id rather than a comparison against one."""
+        for row_id in sorted(_row_ids()):
+            holders = sorted(
+                str(p) for p in SRC.rglob("*.py") if row_id in p.read_text(encoding="utf-8")
+            )
+>           assert holders == ["src/deepreason/successor/registry.py"], (row_id, holders)
+E           AssertionError: ('scratchpad.v1', ['src/deepreason/successor/registry.py', 'src/deepreason/successor/route.py'])
+E           assert ['src/deeprea...sor/route.py'] == ['src/deeprea.../registry.py']
+E             
+E             Left contains one more item: 'src/deepreason/successor/route.py'
+E             Use -v to get more diff
+
+tests/test_successor_registry.py:233: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer
+FAILED tests/test_successor_registry.py::test_no_module_compares_against_a_registered_row_id
+FAILED tests/test_successor_registry.py::test_a_row_id_literal_appears_in_the_registry_and_nowhere_else
+3 failed, 7 passed in 2.00s

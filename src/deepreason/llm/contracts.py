@@ -134,6 +134,15 @@ class ArgumentativeCriticOutput(BaseModel):
     premise_evidence: list[QuotedEvidenceRefV1] | None = Field(
         default=None, max_length=2
     )
+    # A question the critic proposes should be asked NEXT, in its own words.
+    # Optional and absent-legal like `premise` beside it, and additionally
+    # UNREADABLE by anything that decides: no rank, admission or acceptance
+    # path may consult it, so filling it earns nothing and leaving it empty
+    # costs nothing (operator law, 2026-08-29; the absence is pinned by
+    # tests/test_successor_law_line.py). None rather than "" so an unfilled
+    # field canonicalises to the same bytes it always did under
+    # `exclude_none`.
+    successor_question: str | None = None
 
 
 class BatchCase(BaseModel):
@@ -149,6 +158,7 @@ class BatchCase(BaseModel):
     premise_evidence: list[QuotedEvidenceRefV1] | None = Field(
         default=None, max_length=2
     )
+    successor_question: str | None = None  # same semantics as the single contract
 
 
 class BatchCriticOutput(BaseModel):

@@ -1,0 +1,34 @@
+PREDICTED FIXTURE CHANGE P-FIX-1, MEASURED
+Date: 2026-08-30T04:48:49Z
+
+SPEC.md predicted, before any code existed, that S13's mint site would turn
+tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+RED, and that S19 (its rewrite) is GATED on the operator's answer to Q5 — the
+scope of the superseded 2026-08-15 ruling. Q5 is unanswered, so S19 is NOT in
+this lane's scope and the test is left RED rather than silently rewritten.
+
+Baseline before this tranche (SPEC.md M2): 10 passed in 0.34s.
+
+Command: python -m pytest tests/test_decommissioned_pipeline_stays_out.py tests/test_h1_no_spawn_from_refutation.py -q
+Output:
+            if '"trigger": "successor"' in line
+            or "trigger='successor'" in line
+            or 'trigger="successor"' in line
+            or "SpawnTrigger.SUCCESSOR" in line
+            # The enum's own declaration is the one legal mention.
+            if "ontology/problem.py" not in str(path)
+        ]
+>       assert hits == [], hits
+E       AssertionError: ['src/deepreason/successor/mint.py:88']
+E       assert ['src/deeprea...r/mint.py:88'] == []
+E         
+E         Left contains one more item: 'src/deepreason/successor/mint.py:88'
+E         Use -v to get more diff
+
+tests/test_decommissioned_pipeline_stays_out.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_decommissioned_pipeline_stays_out.py::test_no_source_file_produces_a_successor_problem
+1 failed, 9 passed in 0.34s
+
+The producer is exactly ONE line, at one path, outside rules/:
+E       AssertionError: ['src/deepreason/successor/mint.py:88']

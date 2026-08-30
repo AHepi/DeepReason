@@ -248,6 +248,24 @@ where a schema change stops being a design question and becomes a broken root.
 
 ## Traps
 
+- **`SpawnTrigger.SUCCESSOR` acquired its consumer OUTSIDE `rules/`, and this
+  document's own check is what forces that.** Rule 5 above says a new
+  `SpawnTrigger` needs its consumer in the same commit; on 2026-08-29 the
+  operator's P9 law gave SUCCESSOR its first producer since Rung 3a deleted the
+  last one. It could not go in `rules/`: the `ProblemProvenance.model_validate`
+  count inside `src/deepreason/rules/` is pinned at exactly 2 by the check
+  above, and a branch inside `scan_spawns` would additionally break
+  `DR-SEAM-rules-x-scratch`'s six-name trigger set and revive H1's deleted
+  loop. So the producer is `src/deepreason/successor/mint.py`
+  (`DR-CON-successor-questions`), modelled on
+  `calculus/operations.py::ensure_promotion_problem`, which sits outside
+  `rules/` for the same reason. `src/deepreason/rules/spawn.py` took a
+  zero-line diff. The general lesson, which the next new trigger will meet: a
+  trigger's consumer belongs wherever the DECISION to mint is made, and for
+  every trigger that reacts to something a seat WROTE rather than to the shape
+  of the graph, that is not `scan_spawns`.
+`check: test "$(grep -rn "ProblemProvenance.model_validate" --include=*.py src/deepreason/rules/ | wc -l)" -eq 2 && python -m pytest tests/test_successor_minting.py::test_the_producer_is_outside_scan_spawns -q`
+
 - **A content address that is not the address of its content is undetectable.**
   Registration catches only a collision, and `verify_root` reports zero
   violations on a root containing one — demonstrated by the check in "What is

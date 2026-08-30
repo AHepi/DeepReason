@@ -1,0 +1,49 @@
+MUTATION PROOF — tests/test_successor_questions.py
+Date: 2026-08-30T04:45:38Z
+Three mutants, each applied alone and reverted, each turning red exactly the
+assertion it exists to defend. A test that stayed green under these would be
+vacuous.
+
+=== MUTANT: link ===
+--- python -m pytest tests/test_successor_questions.py -q
+E       AssertionError: assert None == 'pi-successor-route'
+E        +  where None = ScratchProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]).origin
+E        +    where ScratchProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]) = ScratchBlockV1(schema_='scratch.block.v1', id='sha256:4b95bcdb7bb302903485ef5a6df57c3870d00a5f92704275dfb34817b0da82bb...hProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]), revision_of=None).provenance
+
+tests/test_successor_questions.py:199: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_filled_field_becomes_exactly_one_linked_block
+1 failed, 7 passed in 0.21s
+
+=== MUTANT: silence ===
+--- python -m pytest tests/test_successor_questions.py -q
+E        +  where 1 = <deepreason.harness.Harness object at 0x7f5382bc8450>._next_seq
+
+tests/test_successor_questions.py:178: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[None]
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[]
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[   ]
+3 failed, 5 passed in 0.21s
+
+=== MUTANT: discard ===
+--- python -m pytest tests/test_successor_questions.py -q
+E         
+E         Right contains one more item: ['successor-question:UNAVAILABLE', 'scratchpad.v1', 'pi-successor-route']
+E         Use -v to get more diff
+
+tests/test_successor_questions.py:278: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_scratch_disabled_run_discloses_instead_of_discarding
+1 failed, 7 passed in 0.21s
+
+=== MUTANT: visibility (the block is written, but not the question) ===
+--- python -m pytest tests/test_successor_questions.py -q
+E        +  where 'SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handle":"B1","unfinished":"Succe...a reason merely to fill an optional field.\\nRelationships are provisional.\\nA guide is a temporary navigation aid."}' = RenderedScratchPackV1(text='SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handl...534c545cbaca9572e494cc0a391d3daddcf933dd'}, cluster_handles={}, link_handles={}, guide_handles={}), truncated_fields=0).text
+E        +    where RenderedScratchPackV1(text='SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handl...534c545cbaca9572e494cc0a391d3daddcf933dd'}, cluster_handles={}, link_handles={}, guide_handles={}), truncated_fields=0) = PlannedConjectureContextV1(formal_fence_seq=2, scratch_fence_seq=2, problem_id='pi-successor-route', school_id=None, m...ection_receipt_ref=None, root_block_ids=None, expansion_request_hash=None, expansion_index=None, added_block_refs=None).rendered_context
+
+tests/test_successor_questions.py:259: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_filled_field_becomes_exactly_one_linked_block
+FAILED tests/test_successor_questions.py::test_the_routed_block_reaches_a_conjecturer_context
+2 failed, 6 passed in 0.21s

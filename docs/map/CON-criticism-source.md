@@ -81,6 +81,12 @@ warrant.
 | Whether criticism may read the scratchpad | `DR-SEAM-rules-x-scratch` — a seam change, not isolated; follow `docs/map/REC-change-a-seam.md` | `tests/test_prose_refutation_boundaries.py -k scratch` |
 | What a filed premise may cite, and how the citation is checked | `_file_attribution` / `_check_premise_citations` here; the checker itself is `DR-SUB-evidence` | `tests/test_p4_citable_evidence.py -k quote` |
 | What an invited dispatch records about how the seat ANSWERED | `_file_attribution`'s `premise-answer:` Measure here; the tag's meaning is declared in `signals.py` under `DR-REC-add-signal`, never redefined here | `tests/test_premise_channel_loop.py -k "declined or uncited"` |
+| What a critic may PROPOSE as the next question, and where that proposal goes | the OPTIONAL `successor_question` field on `ArgumentativeCriticOutput`/`BatchCase` (`DR-SEAM-llm-x-rules`); its DESTINATION is not here at all but a registered row in `DR-CON-successor-questions` | `tests/test_successor_law_line.py::test_the_contract_field_is_optional_on_both_criticism_outputs` |
+
+This socket owns the FIELD and never the destination, and the separation is
+structural rather than stylistic: a critic proposes in words, and where those
+words go is a run's configuration.
+`check: python -c "from deepreason.llm.contracts import ArgumentativeCriticOutput as O, BatchCase as B; assert 'successor_question' in O.model_fields and 'successor_question' in B.model_fields" && grep -q "^def crit_argumentative(" src/deepreason/rules/crit.py && ! grep -q "deepreason.successor" src/deepreason/rules/crit.py`
 
 ## Where an `observe_only` criticism goes next
 
@@ -106,6 +112,19 @@ silently empties the channel rather than merely altering a diagnostic.
 See `DR-SUB-rules`'s Traps for package-wide hazards and `DR-CON-authority`'s
 Traps for the authority vocabulary hazards, both of which bind this socket
 without being re-derived here. Socket-specific:
+
+- **A proposed successor question must stay UNREADABLE by anything that
+  decides.** The field is optional and, unlike `premise`, carries no
+  invitation and no disposition receipt on this side: there is nothing to
+  decline, so declining costs nothing and filling it earns nothing (operator
+  law 2026-08-29; the formalism-optional pattern). The failure mode this
+  guards is quiet — a rank, admission or acceptance path that read the field
+  would turn "the critic bothered to propose something" into a score, which is
+  exactly what the law forbids and what no reviewer would notice in a diff.
+  The absence is pinned over the four deciding packages, and the pin is
+  mutation-proved
+  (`experiments/2026-08-30-change-successor-questions/proof/law_line_pin1_red.txt`).
+`check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_the_contract_field_is_optional_on_both_criticism_outputs -q`
 
 - **A criticism topology that COMPILES is not one that can run.** Since
   2026-08-16 (`experiments/2026-08-16-change-configs-complete-seats-test/`,
