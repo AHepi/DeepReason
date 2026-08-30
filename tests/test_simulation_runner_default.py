@@ -235,12 +235,17 @@ def test_a_sandboxed_python_proposal_executes_on_the_default_configuration():
     assert records[0]["observables"] == {"value": 40, "root": 2.0}
     assert records[0]["passed"] is True
 
-    # Executed UNDER the R2 containment, asserted on the receipt rather than
-    # assumed from the profile name.
-    limits = backend.resource_limits()
-    assert limits["network"] is False
-    assert limits["network_denial"] == "namespace_unshared"
-    assert result.fingerprint["network_denial"] == "namespace_unshared"
+    # The three assertions that stood here read `resource_limits()["network"]`,
+    # `resource_limits()["network_denial"]` and
+    # `fingerprint()["network_denial"]` under a comment claiming they showed
+    # execution happened under containment. All three are dict literals in
+    # `contained.py` (:502, :520, :521); none consults the probe or the launch,
+    # so all three survive a containment that stopped working. The property is
+    # now measured in tests/test_sandbox_guard.py by
+    # test_the_contained_backend_prefix_actually_denies_network (the network
+    # effect) and test_the_contained_worker_argv_really_carries_the_probed_prefix
+    # (that the launch applies the prefix the label names).
+    assert result.backend == backend.fingerprint()["backend"]
 
 
 @needs_containment
@@ -324,7 +329,9 @@ def test_the_default_policy_admits_dispatches_and_executes_end_to_end(tmp_path):
     assert receipt.operational_status == "succeeded"
     attempt = receipt.attempts[-1]
     assert attempt.fingerprint["backend"] == "simulation-python-contained"
-    assert attempt.fingerprint["network_denial"] == "namespace_unshared"
+    # CARRIAGE, not containment -- see the same note in
+    # tests/test_contained_simulation_runner.py: `invariants.py` fails the
+    # replay when this field is anything but False.
     assert receipt.resource_limits["network"] is False
 
     records = json.loads(harness.blobs.get(attempt.output_ref))

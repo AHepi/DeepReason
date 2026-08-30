@@ -21,10 +21,13 @@ Three obligations, all of them here:
 from __future__ import annotations
 
 import ast
+import errno
 import hashlib
 import inspect
 import json
 import pathlib
+import subprocess
+import sys
 import tempfile
 
 import pytest
@@ -41,10 +44,13 @@ from deepreason.sandbox_guard import (
     forbidden_attribute,
     forbidden_name,
 )
+from deepreason.verification import contained as contained_module
 from deepreason.verification.contained import (
     CONTAINED_WORKER_SHA256,
     CONTAINED_WORKER_SOURCE_V1,
     ContainedSimulationBackend,
+    _apply_containment_limits,
+    _containment_limits,
 )
 from deepreason.verification.simulation import SimulationRequest
 from deepreason.workloads.code import SimulationSpec
@@ -517,41 +523,281 @@ def test_the_code_testing_worker_runs_behind_the_network_namespace(monkeypatch):
     assert seen[0][: len(prefix)] == prefix, seen[0]
 
 
-def test_the_network_namespace_actually_denies_network():
-    """The differential the committed suite never carried.
+# The probe both network differentials run. It reports an OS-level effect --
+# the kernel's interface table and the errno a connect returns -- never a value
+# any DeepReason module reports about itself.
+_NETWORK_PROBE = (
+    "import json, socket\n"
+    "try:\n"
+    "    socket.create_connection(('1.1.1.1', 80), 5).close()\n"
+    "    reached, code = True, None\n"
+    "except OSError as error:\n"
+    "    reached, code = False, error.errno\n"
+    "print(json.dumps({'reached': reached, 'errno': code,"
+    " 'interfaces': sorted(name for _index, name in socket.if_nameindex())}))\n"
+)
 
-    Inside the backend's own probed prefix only the loopback interface exists
-    and a connect fails; outside it, the same probe sees real interfaces. That
+
+def _probe_network(prefix: tuple[str, ...]) -> dict:
+    """Run `_NETWORK_PROBE` under `prefix`; `()` is the unprefixed outside arm."""
+
+    return json.loads(
+        subprocess.run(  # noqa: S603
+            [*prefix, sys.executable, "-c", _NETWORK_PROBE],
+            capture_output=True, text=True, timeout=60, check=True,
+        ).stdout
+    )
+
+
+def _observed_environment(env: dict[str, str] | None) -> list[str]:
+    """The variable names a real child SEES; `None` inherits the parent's."""
+
+    return json.loads(
+        subprocess.run(  # noqa: S603
+            [sys.executable, "-c", "import json, os; print(json.dumps(sorted(os.environ)))"],
+            capture_output=True, text=True, timeout=60, check=True, env=env,
+        ).stdout
+    )
+
+
+def _assert_prefix_denies_network(prefix: tuple[str, ...], label: str) -> None:
+    """Both arms of one network differential, or a skip -- never one arm.
+
+    A one-armed inside check passes vacuously on a host whose only interface is
+    already `lo`, which is the shape SAFETY.md G5 records: a test that cannot
+    fail for the reason it exists. The outside arm is measured FIRST and the
+    whole differential skips when the host has nothing to deny.
+    """
+
+    outside = _probe_network(())
+    if outside["interfaces"] == ["lo"]:
+        pytest.skip(f"{label}: host itself has only loopback, nothing to deny")
+    inside = _probe_network(prefix)
+    assert inside["interfaces"] == ["lo"], (label, inside, outside)
+    assert set(outside["interfaces"]) > {"lo"}, (label, outside)
+    assert inside["reached"] is False, (label, inside)
+    assert inside["errno"] == errno.ENETUNREACH, (label, inside)
+
+
+def test_the_network_namespace_actually_denies_network():
+    """The differential the committed suite never carried, for the CODE-TESTING
+    channel's prefix (`sandbox_os.network_denial_prefix`).
+
+    Inside the probed prefix only the loopback interface exists and a connect
+    returns ENETUNREACH; outside it, the same probe sees real interfaces. That
     is what makes property (a) a measurement rather than a claim — and it is
     the property that survived the escape when the language boundary did not.
     """
-
-    import subprocess
-    import sys
 
     from deepreason.sandbox_os import network_denial_available, network_denial_prefix
 
     if not network_denial_available():
         pytest.skip("host cannot create an unshared network namespace")
 
-    probe = (
-        "import socket, json\n"
-        "try:\n"
-        "    socket.create_connection(('1.1.1.1', 80), 5).close()\n"
-        "    reached = True\n"
-        "except OSError:\n"
-        "    reached = False\n"
-        "print(json.dumps({'reached': reached,"
-        " 'interfaces': [n for _i, n in socket.if_nameindex()]}))\n"
+    _assert_prefix_denies_network(network_denial_prefix(), "code-testing channel")
+
+
+def test_the_contained_backend_prefix_actually_denies_network():
+    """The same differential for the CONTAINED simulation backend's OWN prefix.
+
+    `verification/contained.py` probes for its prefix separately from
+    `sandbox_os` and imports nothing from it, so a differential on one says
+    nothing about the other. This one replaces the self-reports
+    `resource_limits()["network"] is False` and
+    `fingerprint()["network_denial"] == "namespace_unshared"`, both of which are
+    dict literals that survive any regression in the launch they describe.
+    """
+
+    prefix = ContainedSimulationBackend.containment_prefix()
+    if not prefix:
+        pytest.skip("host cannot create an unshared network namespace")
+
+    _assert_prefix_denies_network(prefix, "contained simulation backend")
+
+
+@needs_containment
+def test_the_contained_worker_argv_really_carries_the_probed_prefix(monkeypatch):
+    """Wiring, on the ACTUAL argv of a real `ContainedSimulationBackend.verify`.
+
+    `fingerprint()["network_denial"]` and `resource_limits()["network_denial"]`
+    are literals at `contained.py:502` and `:521`; neither consults
+    `containment_prefix()`, and nothing in `src/` reads them back. A launch that
+    stopped prepending the prefix would keep reporting `namespace_unshared`.
+    This test fails on that launch, because it reads the command that ran.
+    """
+
+    seen: list[tuple[list[str], object, dict]] = []
+    real_popen = subprocess.Popen
+
+    def recording_popen(command, *args, **kwargs):
+        seen.append(
+            (list(command), kwargs.get("cwd"), dict(kwargs.get("env") or {}))
+        )
+        return real_popen(command, *args, **kwargs)
+
+    monkeypatch.setattr(contained_module.subprocess, "Popen", recording_popen)
+    result, _ = _contained("def simulate(inputs, rng):\n    return {'value': 1}\n")
+
+    assert result.verdict == "pass", result.trace
+    assert seen, "the contained backend launched no subprocess"
+    argv, _cwd, _env = seen[0]
+    prefix = list(ContainedSimulationBackend.containment_prefix())
+    assert prefix, "containment_available() was true but the prefix is empty"
+    assert argv[: len(prefix)] == prefix, argv
+    assert argv[len(prefix) :] == [sys.executable, "worker.py"], argv
+
+
+@needs_containment
+def test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive(monkeypatch):
+    """The honest replacement for `resource_limits()["filesystem"]`.
+
+    That field reads `"ephemeral scratch workdir"`; it is a literal, and the
+    prefix carries `--net` only, so no mount namespace stands behind it (see
+    this tranche's `proof/filesystem_not_a_jail.out`). What IS true and
+    observable is asserted here: the directory is the launch `cwd`, it is what
+    `HOME` and `TMPDIR` point the worker at, and it is gone when `verify`
+    returns.
+    """
+
+    captured: dict[str, str] = {}
+    real_mkdtemp = tempfile.mkdtemp
+
+    def observing_mkdtemp(*args, **kwargs):
+        captured["scratch"] = real_mkdtemp(*args, **kwargs)
+        return captured["scratch"]
+
+    seen: list[tuple[list[str], object, dict]] = []
+    real_popen = subprocess.Popen
+
+    def recording_popen(command, *args, **kwargs):
+        seen.append(
+            (list(command), kwargs.get("cwd"), dict(kwargs.get("env") or {}))
+        )
+        return real_popen(command, *args, **kwargs)
+
+    monkeypatch.setattr(contained_module.tempfile, "mkdtemp", observing_mkdtemp)
+    monkeypatch.setattr(contained_module.subprocess, "Popen", recording_popen)
+    result, _ = _contained("def simulate(inputs, rng):\n    return {'value': 1}\n")
+
+    assert result.verdict == "pass", result.trace
+    scratch = captured["scratch"]
+    _argv, cwd, env = seen[0]
+    assert cwd == scratch, (cwd, scratch)
+    assert env["HOME"] == scratch, env
+    assert env["TMPDIR"] == scratch, env
+    assert not pathlib.Path(scratch).exists(), scratch
+
+
+def test_the_contained_child_really_receives_every_declared_rlimit():
+    """Read the limits BACK out of a child, instead of comparing two self-reports.
+
+    `test_containment_limits_cover_every_resource_class` used to assert
+    `resource_limits()[k] == _containment_limits(...)[k]` — the same pure
+    function on both sides of the equals sign, which holds whether or not a
+    single `setrlimit` ever runs. Here a real child is launched through
+    `_apply_containment_limits` and reports its own `getrlimit`, and an
+    otherwise identical child launched WITHOUT it is the second arm: every one
+    of the five limits must differ between them, or the containment is
+    measuring the ambient shell rather than doing anything.
+    """
+
+    readback = (
+        "import json, resource\n"
+        "print(json.dumps({k: resource.getrlimit(getattr(resource, 'RLIMIT_' + k))[0]"
+        " for k in ('NOFILE', 'NPROC', 'FSIZE', 'AS', 'CPU')}))\n"
     )
-    inside = json.loads(
-        subprocess.run(  # noqa: S603
-            [*network_denial_prefix(), sys.executable, "-c", probe],
-            capture_output=True, text=True, timeout=60, check=True,
-        ).stdout
+    backend = ContainedSimulationBackend(
+        toolchain_id="python@guard-test",
+        maximum_wall_ms=20_000,
+        maximum_memory_bytes=512 * 1024 * 1024,
     )
-    assert inside["reached"] is False
-    assert inside["interfaces"] == ["lo"], inside["interfaces"]
+    reported = backend.resource_limits()
+    limits = _containment_limits(
+        maximum_wall_ms=20_000, maximum_memory_bytes=512 * 1024 * 1024
+    )
+
+    def child(**kwargs) -> dict:
+        return json.loads(
+            subprocess.run(  # noqa: S603
+                [sys.executable, "-c", readback],
+                capture_output=True, text=True, timeout=60, check=True, **kwargs,
+            ).stdout
+        )
+
+    contained_child = child(
+        preexec_fn=lambda: _apply_containment_limits(limits)  # noqa: PLW1509
+    )
+    bare_child = child()
+
+    assert contained_child["NOFILE"] == reported["nofile"], contained_child
+    assert contained_child["NPROC"] == reported["nproc"], contained_child
+    assert contained_child["FSIZE"] == reported["fsize_bytes"], contained_child
+    assert contained_child["AS"] == reported["memory_bytes"], contained_child
+    assert contained_child["CPU"] == reported["cpu_seconds"], contained_child
+    for key in ("NOFILE", "NPROC", "FSIZE", "AS", "CPU"):
+        assert bare_child[key] != contained_child[key], (
+            key, bare_child, contained_child
+        )
+
+
+@needs_containment
+def test_the_contained_worker_environment_reaches_the_child_scrubbed(monkeypatch):
+    """The allowlist is pinned on a REAL child's `os.environ`, not on the dict.
+
+    `test_worker_environment_is_a_fixed_allowlist` asserts what
+    `_contained_environment` returns. That is a claim about what the child WILL
+    get; this reads what a child actually got, from the `env=` of the real
+    launch, and the unprefixed arm shows the same secrets are visible when the
+    scrub is not applied.
+    """
+
+    monkeypatch.setenv("OLLAMA_API_KEY", "secret-that-must-not-leak")
+    monkeypatch.setenv("DEEPREASON_RESEARCH_ALLOWLIST", "example.com")
+
+    seen: list[dict | None] = []
+    real_popen = subprocess.Popen
+
+    def recording_popen(command, *args, **kwargs):
+        seen.append(kwargs.get("env"))
+        return real_popen(command, *args, **kwargs)
+
+    monkeypatch.setattr(contained_module.subprocess, "Popen", recording_popen)
+    result, _ = _contained("def simulate(inputs, rng):\n    return {'value': 1}\n")
+    assert result.verdict == "pass", result.trace
+    assert seen, "the contained backend launched no subprocess"
+    # A launch that passes no `env=` inherits the parent's whole environment,
+    # and the scrub is then perfect and unused: the allowlist test still passes
+    # while the child sees every secret.
+    assert seen[0], "the launch passed no environment; the worker inherited ours"
+
+    observed = _observed_environment(dict(seen[0]))
+    inherited = _observed_environment(None)
+    assert "OLLAMA_API_KEY" in inherited, "the arm that proves the probe can see it"
+    assert "OLLAMA_API_KEY" not in observed, observed
+    assert not [
+        key for key in observed if "DEEPREASON" in key or "KEY" in key
+    ], observed
+
+
+def test_the_code_testing_worker_environment_reaches_the_child_scrubbed(monkeypatch):
+    """`oracle_sandbox._worker_environment` had no test anywhere in `tests/`.
+
+    The code-testing channel is ON by default, so its scrub is the one a run is
+    most likely to depend on. Same two arms as the contained case.
+    """
+
+    from deepreason import oracle_sandbox
+
+    monkeypatch.setenv("OLLAMA_API_KEY", "secret-that-must-not-leak")
+    monkeypatch.setenv("DEEPREASON_RESEARCH_ALLOWLIST", "example.com")
+
+    observed = _observed_environment(oracle_sandbox._worker_environment())
+    inherited = _observed_environment(None)
+    assert "OLLAMA_API_KEY" in inherited, "the arm that proves the probe can see it"
+    assert "OLLAMA_API_KEY" not in observed, observed
+    assert not [
+        key for key in observed if "DEEPREASON" in key or "KEY" in key
+    ], observed
 
 
 def test_worker_resource_limits_fail_closed(monkeypatch):

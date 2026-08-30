@@ -1,0 +1,11 @@
+the prefix the backend actually applies : ('/usr/bin/unshare', '--map-root-user', '--net', '--')
+mount-namespace flag present            : False
+resource_limits()["filesystem"]         : 'ephemeral scratch workdir'
+
+inside the prefix, cwd=the scratch dir:
+  {"cwd": "/tmp/deepreason-jail-probe-5jtkdwsm", "read_/etc/hostname": "vm", "wrote_outside_scratch": "/tmp/deepreason-jail-probe-marker", "root_listing_visible": ["bin", "bin.usr-is-merged", "boot", "container_info.json", "dev", "etc"]}
+  the marker exists outside the scratch dir: True
+  its contents                             : WRITTEN FROM INSIDE THE PREFIX
+
+VERDICT: the prefix carries --net only. `cwd` is the only confinement,
+and `cwd` is not a jail. The field over-claims by one layer.

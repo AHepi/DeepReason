@@ -1,0 +1,15 @@
+THE CHECK, verbatim from docs/map/SUB-verification.md:
+  python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or argv_really_carries or scratch_directory_is_the_cwd or every_declared_rlimit or environment_reaches_the_child" && test "$(grep -c 'def test_the_contained\|def test_the_network_namespace\|def test_the_code_testing_worker_environment' tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE "assert .*(ephemeral scratch workdir|network_denial)" tests/ --include=*.py
+
+--- unmutated: expect exit 0 ---
+exit=0
+
+--- F1: one differential renamed away; the -eq 7 census must fail ---
+exit=1 (non-zero required)
+
+--- F2: a self-reported filesystem string asserted again; clause 3 must fail ---
+exit=1 (non-zero required)
+
+--- restored ---
+exit=0
+restoration: byte-identical to the pre-run file

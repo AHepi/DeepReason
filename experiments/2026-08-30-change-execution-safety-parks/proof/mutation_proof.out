@@ -1,0 +1,125 @@
+== BASELINE: the real subject, all three ring files ==========================
+...................................................                      [100%]
+51 passed in 5.27s
+
+== M1: the contained backend's probe drops --net =============================
+   (containment_prefix() still returns a prefix, so the backend still
+    believes it is contained and still reports so.)
+--- RED expected ---
+E         Use -v to get more diff
+
+tests/test_sandbox_guard.py:576: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_contained_backend_prefix_actually_denies_network
+1 failed, 25 deselected in 0.19s
+--- STILL TRUE under the same mutation: the confessions this replaced ---
+  containment_prefix()          -> ('/usr/bin/unshare', '--map-root-user', '--')
+  resource_limits()["network"]   -> False
+  fingerprint()["network_denial"]-> namespace_unshared
+  both self-reports UNCHANGED while the network is reachable
+--- and the code-testing differential stays GREEN: separate probe ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.17s
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.17s
+
+== M2: the launch drops the probed prefix from the worker argv ==============
+--- RED expected ---
+E         Use -v to get more diff
+
+tests/test_sandbox_guard.py:646: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_contained_worker_argv_really_carries_the_probed_prefix
+1 failed, 25 deselected in 0.19s
+--- STILL TRUE: the label the launch no longer earns ---
+  fingerprint()["network_denial"]-> namespace_unshared
+  resource_limits()["network"]   -> False
+--- and M1's network differential stays GREEN: it probes the prefix, not the launch ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.15s
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.14s
+
+== M3: _apply_containment_limits stops applying RLIMIT_NOFILE ===============
+--- RED expected ---
+E       assert 20000 == 64
+
+tests/test_sandbox_guard.py:732: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_contained_child_really_receives_every_declared_rlimit
+1 failed, 25 deselected in 0.20s
+--- STILL TRUE: the retired self-to-self comparison ---
+  resource_limits()[k] == _containment_limits()[k] for ['cpu_seconds', 'memory_bytes', 'fsize_bytes', 'nofile', 'nproc']
+  -- the old assertion, unmoved, while the child no longer gets NOFILE
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.15s
+
+== M4: the ephemeral scratch directory stops being removed ==================
+--- RED expected ---
+E        +        where <class 'pathlib.Path'> = pathlib.Path
+
+tests/test_sandbox_guard.py:688: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive
+1 failed, 25 deselected in 0.19s
+--- STILL TRUE: the string that claims the confinement ---
+  resource_limits()["filesystem"] -> 'ephemeral scratch workdir'
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.16s
+
+== M5: the launch stops passing env=, so the worker inherits ours ===========
+--- RED expected ---
+E       assert None
+
+tests/test_sandbox_guard.py:771: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_contained_worker_environment_reaches_the_child_scrubbed
+1 failed, 25 deselected in 0.22s
+--- STILL GREEN: the allowlist test, which asserts the dict, not the child ---
+.                                                                        [100%]
+1 passed, 15 deselected in 0.33s
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.20s
+
+== M6: the code-testing worker environment keeps OLLAMA_API_KEY =============
+--- RED expected ---
+E       assert 'OLLAMA_API_KEY' not in ['LC_ALL', 'OLLAMA_API_KEY', 'PATH', 'PYTHONDONTWRITEBYTECODE', 'PYTHONHASHSEED', 'PYTHONNOUSERSITE', ...]
+
+tests/test_sandbox_guard.py:797: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_code_testing_worker_environment_reaches_the_child_scrubbed
+1 failed, 25 deselected in 0.19s
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.15s
+
+== M7: the code-testing channel's own probe drops --net =====================
+--- RED expected ---
+E         Use -v to get more diff
+
+tests/test_sandbox_guard.py:576: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sandbox_guard.py::test_the_network_namespace_actually_denies_network
+1 failed, 25 deselected in 0.27s
+--- GREEN restored ---
+.                                                                        [100%]
+1 passed, 25 deselected in 0.20s
+
+== V: the vacuity guard, on a host that really has only loopback ============
+   The whole pytest process runs inside an unshared network namespace, so
+   the OUTSIDE arm sees ['lo'] and there is nothing to deny. A two-armed
+   differential must SKIP there. The one-armed form the tree carried until
+   this tranche PASSES there, measuring nothing.
+--- the two differentials, inside a lo-only namespace ---
+ss                                                                       [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_sandbox_guard.py:574: code-testing channel: host itself has only loopback, nothing to deny
+SKIPPED [1] tests/test_sandbox_guard.py:574: contained simulation backend: host itself has only loopback, nothing to deny
+2 skipped, 24 deselected in 0.21s
+--- the retired one-armed assertion, in the same namespace ---
+  one-armed assertion inside["interfaces"] == ["lo"]: PASSED, vacuously
