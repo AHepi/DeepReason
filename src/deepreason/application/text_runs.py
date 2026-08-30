@@ -1522,6 +1522,17 @@ class TextRunApplicationService:
             notify(terminal)
         except (Exception, SystemExit) as error:
             if harness is None:
+                # No harness means no stop record and no checkpoint: this
+                # terminal leaves nothing a relaunch could resume from.  The
+                # 2026-08-29 law calls that a corrupted stop, and requires it
+                # to be recorded rather than inferred from what is missing.
+                no_checkpoint = _refusal(
+                    "TERMINAL_NO_CHECKPOINT_WRITTEN",
+                    "the run root could not be opened, so this terminal wrote "
+                    "no stop record and no checkpoint; nothing here can "
+                    "authorize a relaunch",
+                    error_type=type(error).__name__,
+                )
                 try:
                     _atomic_json(
                         root / "run-result.json",
@@ -1531,6 +1542,7 @@ class TextRunApplicationService:
                             "workload": "text",
                             "error_type": type(error).__name__,
                             "error": str(error)[:2000],
+                            "terminal_lifecycle_refusal": no_checkpoint,
                         }),
                     )
                     failed = progress.emit(
@@ -1538,6 +1550,7 @@ class TextRunApplicationService:
                         phase="stop",
                         activity="operational failure",
                         cycle=0,
+                        terminal_lifecycle_refusal=no_checkpoint["code"],
                         # No harness was built, so the root is opened
                         # read-only to read its own log: a resumed root
                         # carries its earlier epochs' spend, and reporting 0
@@ -1598,6 +1611,25 @@ class TextRunApplicationService:
                         "event_seq": harness._next_seq,
                     },
                 )
+                # Every checkpoint FILE is now on disk and no STOPPED
+                # lifecycle receipt was taken, so `continue` will refuse this
+                # root.  Recording that here is what stops the terminal from
+                # looking, from outside, like one that could be picked up
+                # again (16 committed roots stand in exactly this state and
+                # say nothing about it).
+                # Which code `continue` will raise is NOT recorded: it also
+                # depends on the cycles and tokens the operator later passes,
+                # and on a resume decision an earlier continuation may have
+                # left, so a terminal that named one would be guessing at
+                # another verb's predicate (measured: 15 of the 16 committed
+                # roots of this shape refuse CONTINUE_TYPED_STOP_REQUIRED, one
+                # refuses CONTINUE_RESUME_RECOVERY_MISMATCH).
+                not_continuable = _refusal(
+                    "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
+                    "a failure terminal takes no STOPPED lifecycle receipt, so "
+                    "these checkpoints cannot authorize a continuation",
+                    stop_reason="operational_failure",
+                )
                 payload = _v6_run_result(root, manifest, {
                     "schema": "deepreason-run-result-v1",
                     "state": "failed",
@@ -1605,6 +1637,7 @@ class TextRunApplicationService:
                     "error_type": type(error).__name__,
                     "error": str(error)[:2000],
                     "stop": stop,
+                    "terminal_lifecycle_refusal": not_continuable,
                 }, harness=harness)
                 payload = finalize_terminal_result(harness, manifest, payload)
                 _atomic_json(root / "run-result.json", payload)
@@ -1618,6 +1651,7 @@ class TextRunApplicationService:
                     determinate=False,
                     message=str(error)[:500],
                     stop_reason="operational_failure",
+                    terminal_lifecycle_refusal=not_continuable["code"],
                 )
                 notify(failed)
             except Exception:

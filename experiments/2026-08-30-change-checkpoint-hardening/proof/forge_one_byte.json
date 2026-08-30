@@ -1,0 +1,31 @@
+{
+  "arms": {
+    "forged": {
+      "amend_gate": "PASSED",
+      "continue_gate": "REFUSED ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "results_terminal_default": true,
+      "results_terminal_verify": false,
+      "stored_replay_valid": true,
+      "terminal_authority": "current_valid_committed",
+      "verify_root_violations": [
+        "attempt-route",
+        "frozen-route"
+      ]
+    },
+    "intact": {
+      "amend_gate": "PASSED",
+      "continue_gate": "REFUSED ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "results_terminal_default": true,
+      "results_terminal_verify": true,
+      "stored_replay_valid": true,
+      "terminal_authority": "current_valid_committed",
+      "verify_root_violations": []
+    }
+  },
+  "edit": {
+    "from": "a",
+    "offset": 22948,
+    "to": "7"
+  },
+  "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d"
+}

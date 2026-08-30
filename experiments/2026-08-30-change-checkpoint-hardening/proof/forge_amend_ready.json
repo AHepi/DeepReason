@@ -1,0 +1,30 @@
+{
+  "arms": {
+    "forged": {
+      "amend": "ACCEPTED epoch=1",
+      "continue": "ACCEPTED seq=0",
+      "results_amend_ready_default": true,
+      "results_amend_ready_verify": true,
+      "stored_replay_valid": true,
+      "verify_root_violations": [
+        "attempt-route",
+        "frozen-route"
+      ]
+    },
+    "intact": {
+      "amend": "ACCEPTED epoch=1",
+      "continue": "ACCEPTED seq=0",
+      "results_amend_ready_default": true,
+      "results_amend_ready_verify": true,
+      "stored_replay_valid": true,
+      "verify_root_violations": []
+    }
+  },
+  "edit": {
+    "from": "a",
+    "offset": 11656,
+    "to": "7"
+  },
+  "jailbreak_open": true,
+  "root": "experiments/2026-08-27-pc2b-symmetric-reasoning/run"
+}

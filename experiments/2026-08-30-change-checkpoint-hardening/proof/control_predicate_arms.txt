@@ -1,0 +1,41 @@
+control predicate arms -- real git output, scratch repository
+repo under test: /home/user/dr-lanes/lane-A
+
+### modify log.jsonl (the original mutation proof)
+    git status says      : ['M experiments/fake-tranche/run-abc/log.jsonl']
+    NEW predicate flags  : [' M experiments/fake-tranche/run-abc/log.jsonl']
+    OLD predicate flags  : [' M experiments/fake-tranche/run-abc/log.jsonl']
+    control goes RED     : new=True  old=True   (must be True)
+
+### delete log.jsonl
+    git status says      : ['D experiments/fake-tranche/run-abc/log.jsonl']
+    NEW predicate flags  : [' D experiments/fake-tranche/run-abc/log.jsonl']
+    OLD predicate flags  : []
+    control goes RED     : new=True  old=False   (must be True)
+
+### delete the whole run root
+    git status says      : ['D experiments/fake-tranche/run-abc/blobs/03/031d5c', ' D experiments/fake-tranche/run-abc/log.jsonl', ' D experiments/fake-tranche/run-abc/objects/problem-1.json', ' D experiments/fake-tranche/run-abc/run-status.json']
+    NEW predicate flags  : [' D experiments/fake-tranche/run-abc/blobs/03/031d5c', ' D experiments/fake-tranche/run-abc/log.jsonl', ' D experiments/fake-tranche/run-abc/objects/problem-1.json', ' D experiments/fake-tranche/run-abc/run-status.json']
+    OLD predicate flags  : []
+    control goes RED     : new=True  old=False   (must be True)
+
+### modify content-addressed evidence under blobs/
+    git status says      : ['M experiments/fake-tranche/run-abc/blobs/03/031d5c']
+    NEW predicate flags  : [' M experiments/fake-tranche/run-abc/blobs/03/031d5c']
+    OLD predicate flags  : []
+    control goes RED     : new=True  old=False   (must be True)
+
+### rename a root file out of the root
+    git status says      : ['R  experiments/fake-tranche/run-abc/objects/problem-1.json -> experiments/fake-tranche/problem-1.json']
+    NEW predicate flags  : ['R  experiments/fake-tranche/problem-1.json']
+    OLD predicate flags  : []
+    control goes RED     : new=True  old=False   (must be True)
+
+### CONTROL: edit tranche narrative that is not inside any root
+    git status says      : ['M experiments/fake-tranche/PARKED.md']
+    NEW predicate flags  : []
+    OLD predicate flags  : []
+    control goes RED     : new=False  old=False   (must be False)
+
+NEW predicate correct on all 6 arms: True
+arms the OLD predicate MISSED (4): ['delete log.jsonl', 'delete the whole run root', 'modify content-addressed evidence under blobs/', 'rename a root file out of the root']

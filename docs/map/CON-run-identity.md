@@ -258,6 +258,35 @@ them, including the two that were never renamed.
   negation for that reason: a scheduler call reappearing in `cli/main.py`
   is the defect returning.
 `check: ! grep -q "run_scheduler" src/deepreason/cli/main.py && grep -q "start_manifest_run" src/deepreason/cli/main.py && grep -q "^def finalize_stopped_root(" src/deepreason/application/text_runs.py && grep -q '"finalize"' src/deepreason/cli/main.py && python -m pytest tests/test_lifecycle_operation_parity.py -q`
+- **Assuming terminal authority notices a forged record. It does not, and
+  neither verb consults the replay verdict at all.** Measured 2026-08-30 on
+  committed root
+  `experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d`:
+  flipping ONE byte of the provider endpoint recorded in `log.jsonl` leaves
+  `derive_terminal_authority` reporting `current_valid_committed` and `amend`
+  PASSING, while `verify_root` reports `frozen-route` and `attempt-route` —
+  both SECURITY-channel findings. The same one-byte forgery of an
+  `amend_ready` root (`experiments/2026-08-27-pc2b-symmetric-reasoning/run`)
+  buys the WHOLE sequence: `amend` accepts and commits epoch 1, and `continue`
+  then accepts `seq=0` — measured 2026-08-30, re-runnable as that tranche's
+  `proof/forge_amend_ready.py`. Census of the same day: 16 of 59 committed
+  roots pass amend's entire precondition while their own
+  `REPLAY_VALIDATION.json` publishes `valid: false` (`proof/census.json`). The
+  stored verdict is not a sound fallback either: on four of those sixteen a
+  canonical forge of `valid: true` is UNDETECTED, because
+  `derive_terminal_authority` skips `_validate_result_projection_binding`
+  whenever the published result equals the fail-closed pending projection. The
+  check below RE-DERIVES that last claim on all four blind witnesses and two
+  detected ones (~33 s) rather than re-reading the stored count, so it goes red
+  the moment the blindness is fixed, widened, or moved. STILL OPEN: the
+  integrity gate the 2026-08-29 law asks for is NOT shipped. It was built and
+  measured in `experiments/2026-08-30-change-checkpoint-hardening` and PARKED,
+  because an unconditional `verify_root` refusal also refuses states the
+  product supports on purpose — a partially applied amendment mid-recovery, a
+  bound but unintroduced source that `amend` exists to admit, and any root that
+  is not a complete v6 record. Instruments and the full collision list are in
+  that tranche's `proof/`.
+`check: python -c "import pathlib; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a, 'the integrity gate landed: REWRITE this Traps entry, never delete it'" && python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_probe.py --witnesses`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and

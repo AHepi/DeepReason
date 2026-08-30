@@ -1,0 +1,31 @@
+FFFFF.                                                                   [100%]
+=================================== FAILURES ===================================
+E   AssertionError: byte 22948 'a'->'7' bought a continuation: CONTINUE_TYPED_STOP_REQUIRED
+    assert False
+     +  where False = <built-in method startswith of str object at 0x7f0df680b5f0>('CONTINUE_RECORD_NOT_VERIFIED: ')
+     +    where <built-in method startswith of str object at 0x7f0df680b5f0> = 'CONTINUE_TYPED_STOP_REQUIRED'.startswith
+/home/user/dr-lanes/lane-A/tests/test_checkpoint_hardening.py:105: AssertionError: byte 22948 'a'->'7' bought a continuation: CONTINUE_TYPED_STOP_REQUIRED
+E   Failed: DID NOT RAISE AmendmentError
+/home/user/dr-lanes/lane-A/tests/test_checkpoint_hardening.py:136: Failed: DID NOT RAISE AmendmentError
+E   AssertionError: experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107 publishes valid:false and continue answered CONTINUE_TYPED_STOP_REQUIRED
+    assert False
+     +  where False = <built-in method startswith of str object at 0x7f0df680b5f0>('CONTINUE_RECORD_NOT_VERIFIED: ')
+     +    where <built-in method startswith of str object at 0x7f0df680b5f0> = 'CONTINUE_TYPED_STOP_REQUIRED'.startswith
+     +      where 'CONTINUE_TYPED_STOP_REQUIRED' = str(ValueError('CONTINUE_TYPED_STOP_REQUIRED'))
+     +        where ValueError('CONTINUE_TYPED_STOP_REQUIRED') = <ExceptionInfo ValueError('CONTINUE_TYPED_STOP_REQUIRED') tblen=3>.value
+/home/user/dr-lanes/lane-A/tests/test_checkpoint_hardening.py:204: AssertionError: experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107 publishes valid:false and continue answered CONTINUE_TYPED_STOP_REQUIRED
+E   KeyError: 'terminal_lifecycle_refusal'
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+/home/user/dr-lanes/lane-A/tests/test_checkpoint_hardening.py:252: KeyError: 'terminal_lifecycle_refusal'
+E   KeyError: 'terminal_lifecycle_refusal'
+----------------------------- Captured stdout call -----------------------------
+survivors (0):
+/home/user/dr-lanes/lane-A/tests/test_checkpoint_hardening.py:315: KeyError: 'terminal_lifecycle_refusal'
+=========================== short test summary info ============================
+FAILED tests/test_checkpoint_hardening.py::test_one_flipped_log_byte_turns_a_continue_into_a_typed_integrity_refusal
+FAILED tests/test_checkpoint_hardening.py::test_one_flipped_log_byte_turns_an_amend_into_a_typed_integrity_refusal
+FAILED tests/test_checkpoint_hardening.py::test_every_replay_invalid_committed_root_is_refused_by_both_verbs
+FAILED tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued
+FAILED tests/test_checkpoint_hardening.py::test_a_terminal_that_wrote_no_checkpoint_records_that_fact
+5 failed, 1 passed in 8.46s

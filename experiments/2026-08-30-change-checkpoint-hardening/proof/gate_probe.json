@@ -1,0 +1,200 @@
+{
+  "driven": 6,
+  "max_events": 600,
+  "rows": [
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": false,
+      "continue_gate": "REFUSED ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "events": 294,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "schema_version": "6",
+      "state": "failed",
+      "stop_reason": "operational_failure",
+      "stop_reason_resumable": false,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 15.45,
+      "verify_root_violations": [
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism"
+      ]
+    },
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": true,
+      "continue_gate": "ACCEPTED seq=0",
+      "events": 388,
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "schema_version": "6",
+      "state": "completed",
+      "stop_reason": "budget_exhausted",
+      "stop_reason_resumable": true,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 16.27,
+      "verify_root_violations": [
+        "attempt-validity"
+      ]
+    },
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": true,
+      "continue_gate": "ACCEPTED seq=0",
+      "events": 550,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "schema_version": "6",
+      "state": "completed",
+      "stop_reason": "budget_exhausted",
+      "stop_reason_resumable": true,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 21.57,
+      "verify_root_violations": [
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism"
+      ]
+    },
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": true,
+      "continue_gate": "ACCEPTED seq=0",
+      "events": 561,
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "schema_version": "6",
+      "state": "completed",
+      "stop_reason": "budget_exhausted",
+      "stop_reason_resumable": true,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 26.42,
+      "verify_root_violations": [
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism"
+      ]
+    },
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": false,
+      "continue_gate": "REFUSED ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "events": 581,
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "schema_version": "6",
+      "state": "completed",
+      "stop_reason": "budget_exhausted",
+      "stop_reason_resumable": true,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 25.47,
+      "verify_root_violations": [
+        "foreign-criticism",
+        "foreign-criticism",
+        "foreign-criticism"
+      ]
+    },
+    {
+      "amend_gate": "PASSED",
+      "amend_ready": false,
+      "authority_current_valid": true,
+      "authority_detail_code": null,
+      "authority_status": "current_valid_committed",
+      "continuation_authority": false,
+      "continue_gate": "REFUSED ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "events": 594,
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "schema_version": "6",
+      "state": "failed",
+      "stop_reason": "operational_failure",
+      "stop_reason_resumable": false,
+      "stored_replay_valid": false,
+      "valid_typed_terminal": false,
+      "verification_source": "stored",
+      "verify_root_seconds": 32.4,
+      "verify_root_violations": [
+        "run-input"
+      ]
+    },
+    {
+      "events": 607,
+      "root": "experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 754,
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 820,
+      "root": "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 985,
+      "root": "experiments/live_tri_2026-07-27/run-15a53aca8a6fc66a39f382fc688c5346",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 1155,
+      "root": "experiments/live_research_2026-07-29/narrow/runs/run-7d8723fbe8626c71db880826c244d332",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 1179,
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 1202,
+      "root": "experiments/live_tri_2026-07-27/run-ac1836b6237b6e9d80b3b0cb492b39f5",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 1297,
+      "root": "experiments/2026-08-02-stress-triplet/home-triage/runs/run-0a3e93d6e8031e2e6d1d21dde2fa93cc",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 1369,
+      "root": "experiments/2026-08-08-corpus-enrichment-patrol-pilot/home/runs/run-e3f4f7007c50fe7e09b301d31851c3e7",
+      "skipped": "over MAX_EVENTS"
+    },
+    {
+      "events": 2416,
+      "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6",
+      "skipped": "over MAX_EVENTS"
+    }
+  ],
+  "witness_population": 16
+}
