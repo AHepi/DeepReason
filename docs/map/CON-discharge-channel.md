@@ -1,5 +1,5 @@
 <!-- DR-CON-discharge-channel -->
-Verified-at: a5a435e3e
+Verified-at: 152c7e204
 Verify: python -m pytest tests/test_discharge_contract.py tests/test_discharge_channel.py tests/test_discharge_submission.py tests/test_discharge_wire.py -q
 Owns: src/deepreason/discharge/__init__.py, src/deepreason/discharge/policy.py, src/deepreason/discharge/channel.py, src/deepreason/discharge/submission.py
 Seams: DR-SEAM-llm-x-rules
@@ -121,7 +121,7 @@ numeric field, so there is no weight for any configuration to set.
 | The two call sites | `rules/conj.py` | render threading; the screen before `candidate_rows` |
 | Which preset is in force (FREE) | `config.py` | `Config.DISCHARGE_POLICY` |
 
-## The default, and the road that does not exist (Traps)
+## The default, and how far the configuration road reaches (Traps)
 
 **The channel is ON by default** as of the P-C2 tranche, 2026-08-26. F1 shipped
 it OFF and named the flip as F3's ("turning it on is a Config default, and
@@ -130,40 +130,71 @@ not take the hand-off; `grep -i discharge` over that tranche returns nothing.
 
 `check: python -c "from deepreason.config import Config; assert Config().DISCHARGE_POLICY == 'discharge-required.v1', Config().DISCHARGE_POLICY"`
 
-**The default is the ONLY road, and that is a defect, not a design.**
+**The pop is still there; the value now comes back another way.**
 `Config.DISCHARGE_POLICY` is listed as the FREE layer above, and at the
-resolver it is: `resolve_policy` reads whatever Config carries. But no live
-launch can put a value there. `run_manifest.py` pops the field from the
-manifest's config echo — deliberately, and for the reason recorded at that
-line: echoing it would move every qualification subject digest. The one run
-path (`application/text_runs.py::start_manifest_run`, the operations-parity
-law's single entry) then rebuilds Config with `config_from_run_manifest`, so
-the field falls back to its CODE DEFAULT and a YAML line naming a preset is
-inert. `Config` is a plain `BaseModel`, so no environment road exists either.
+resolver it is: `resolve_policy` reads whatever Config carries. Getting a
+value INTO that Config was the defect. `run_manifest.py` pops the field from
+the manifest's config echo — deliberately, and for the reason recorded at that
+line: echoing it would move every qualification subject digest — and the one
+run path (`application/text_runs.py::start_manifest_run`, the
+operations-parity law's single entry) rebuilds Config with
+`config_from_run_manifest`, which until 2026-08-29 therefore fell back to the
+CODE DEFAULT and left a configuration naming a preset inert. The carriage
+tranche made the DISCLOSURE the road back: the compile emits an
+`ENGINE_CONFIG_FIELD_NOT_CARRIED` notice for the popped field, the notice
+carries the value as canonical JSON, and `config_from_run_manifest` restores
+it from there. The echo stays clean, so no qualification subject digest moves.
 
-The consequence to hold on to: **the FREE layer of this document's own
-three-layer table is, today, reachable only by editing code** — which is what
-the modularity law forbids. F1's R13 architecture test proves the RESOLVER is
-configuration-driven and does not test the path from a file to a scheduler,
-which is where the break is.
+What is MEASURED, by the check below: a `Config` setting
+`DISCHARGE_POLICY='off'` compiles to a manifest whose `engine_config_json`
+does NOT carry the field, and `config_from_run_manifest` over that manifest
+returns `'off'` rather than the `discharge-required.v1` code default. The
+compile → echo → rebuild round trip preserves the configured value.
+
+**What is still NOT measured, and why the defect stays open.** That round trip
+is ONE LINK of the road the modularity law asks for. The other end — a
+configuration file naming a preset, through the real `start_manifest_run`,
+reaching a scheduler that resolves it — has no check anywhere, and
+`docs/ERRATA.md` E56 (the discharge entry; the ledger carries two entries
+numbered E56) names exactly that absence as the thing still missing. `Config`
+is a plain `BaseModel`, so there is still no environment road. F1's R13
+architecture test proves the RESOLVER is configuration-driven and says nothing
+about the path from a file to a scheduler. The defect therefore stays OPEN,
+with its ready-to-send prompt, at
+`experiments/2026-08-26-pc2-rematch/PARKED.md` F-A. Do not read the check
+below as closing it: it proves one link, and that link is not the one E56
+named as missing.
 
 `check: python -c "
 import json
 from deepreason.config import Config
 from deepreason.run_manifest import compile_run_manifest, config_from_run_manifest
-from deepreason.v6_policy import engaged_control_plane_policy_v3, engaged_inquiry_capability_policy, engaged_local_simulation_toolchain
+from deepreason.v6_policy import engaged_control_plane_policy_v3, engaged_inquiry_capability_policy, engaged_simulation_toolchain
 route = {'endpoint': 'https://example.invalid/v1', 'endpoint_id': 'e', 'provider': 'ollama', 'model': 'm', 'model_revision': 'm', 'family': 'glm', 'api_key_env': 'K'}
 c = Config(DISCHARGE_POLICY='off', roles={r: route for r in ('conjecturer', 'argumentative_critic', 'defender', 'variator', 'judge', 'summarizer', 'synthesizer', 'vision_critic', 'property_designer', 'thesis', 'grounding_reviewer')})
-m = compile_run_manifest(c, schema_version=6, workload_profile='text', rubric_policy='forbid', single_model='m', concurrency=2, compiled_at='2026-08-25T00:00:00Z', control_plane_policy=engaged_control_plane_policy_v3(), toolchains=(engaged_local_simulation_toolchain(),), inquiry_capability_policy=engaged_inquiry_capability_policy(attached_evidence=False), run_input_digest='0'*64)
+m = compile_run_manifest(c, schema_version=6, workload_profile='text', rubric_policy='forbid', single_model='m', concurrency=2, compiled_at='2026-08-25T00:00:00Z', control_plane_policy=engaged_control_plane_policy_v3(), toolchains=(engaged_simulation_toolchain(),), inquiry_capability_policy=engaged_inquiry_capability_policy(attached_evidence=False), run_input_digest='0'*64)
 assert 'DISCHARGE_POLICY' not in json.loads(m.engine_config_json)
 assert config_from_run_manifest(m).DISCHARGE_POLICY == 'off', 'carriage no longer restores the configured value -- P15 may have regressed; re-read this section'
 "`
 
-That check asserts the DEFECT and says so: it passes while a configured `off`
-is silently discarded in favour of the default, and goes red the day a real
-configuration road lands — at which point this section is what to re-read.
-Open, with a ready-to-send prompt, at
-`experiments/2026-08-26-pc2-rematch/PARKED.md` F-A; `docs/ERRATA.md` E56.
+That check has two assertions and they fail for opposite reasons, so read the
+assertion text before theorising: the first says the field never reaches the
+echo — a leak there moves every qualification subject digest — and the second
+says carriage restores it, a regression there returning the FREE layer to
+unreachable.
+
+**Traps — bind the toolchain the POLICY names, not the one you had in mind.**
+This check's fixture called `engaged_local_simulation_toolchain()` while
+`engaged_inquiry_capability_policy()` named the CONTAINED toolchain, so
+`compile_run_manifest` raised `V6_SIMULATION_TOOLCHAIN_REQUIRED` and the check
+died before either assertion — testing nothing, in a document that read as
+though it tested something. It was written when the local toolchain was the
+default and went wrong on 2026-08-28, when the container profile switched to
+serve both simulation modes; nothing noticed for two days because the check
+spans several lines and `docs_verify` read checks line by line until
+2026-08-29. `engaged_simulation_toolchain()` returns whichever toolchain the
+engaged policy actually names, which is the binding that cannot drift.
+Repaired 2026-08-30, `experiments/2026-08-30-fix-rotted-map-checks/`.
 
 **Traps — the re-ask spends tokens, and they must reach the log.**
 `screen_submission`'s `reask` verdict returns from `rules/conj.py::conj`

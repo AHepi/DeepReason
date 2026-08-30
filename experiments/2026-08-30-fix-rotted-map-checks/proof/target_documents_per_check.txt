@@ -1,0 +1,72 @@
+# per-check verdicts -- SEAM-llm-x-verification.md, run serially, 2026-08-30 02:07 UTC
+# 4 checks
+SEAM-llm-x-verification.md:36   PASS     0.3s  python -c "
+SEAM-llm-x-verification.md:125  PASS     0.3s  python -c "
+SEAM-llm-x-verification.md:174  PASS     2.2s  python -m pytest tests/test_split_leg_recording.py::test_a_split
+SEAM-llm-x-verification.md:238  PASS     2.5s  python -m pytest tests/test_split_leg_recording.py::test_a_stand
+# 4 checks, 0 failed: []
+
+# per-check verdicts -- CON-discharge-channel.md, run serially, 2026-08-30 02:07 UTC
+# 21 checks
+CON-discharge-channel.md:53   PASS     0.3s  python -c "from deepreason.discharge.policy import DISCHARGE_KIN
+CON-discharge-channel.md:63   PASS     1.4s  python -m pytest tests/test_discharge_contract.py::test_a_fourth
+CON-discharge-channel.md:69   PASS     0.0s  test -f src/deepreason/rules/conj.py && test -f src/deepreason/l
+CON-discharge-channel.md:77   PASS     5.7s  python -m pytest tests/test_discharge_contract.py::test_no_consu
+CON-discharge-channel.md:85   PASS     1.5s  python -m pytest tests/test_discharge_contract.py::test_the_pack
+CON-discharge-channel.md:107  PASS     0.3s  python -c "from deepreason.discharge.policy import DischargeKind
+CON-discharge-channel.md:131  PASS     0.2s  python -c "from deepreason.config import Config; assert Config()
+CON-discharge-channel.md:168  PASS     0.7s  python -c "
+CON-discharge-channel.md:209  PASS     2.1s  python -m pytest tests/test_chaos_invariants.py::test_disagreein
+CON-discharge-channel.md:224  PASS     1.5s  python -m pytest tests/test_discharge_channel.py -q -k "observe_
+CON-discharge-channel.md:235  PASS     1.5s  python -m pytest tests/test_discharge_channel.py::test_a_handle_
+CON-discharge-channel.md:253  PASS     1.5s  python -m pytest tests/test_discharge_channel.py::test_the_open_
+CON-discharge-channel.md:264  PASS     1.4s  python -m pytest tests/test_discharge_channel.py::test_a_critici
+CON-discharge-channel.md:273  PASS     0.3s  python -c 'import inspect, re; from deepreason.discharge import 
+CON-discharge-channel.md:274  PASS     1.4s  python -m pytest tests/test_discharge_submission.py::test_no_can
+CON-discharge-channel.md:283  PASS     0.0s  test "$(cat src/deepreason/rules/conj.py src/deepreason/rules/cr
+CON-discharge-channel.md:289  PASS     0.3s  python -c 'import inspect; from deepreason.discharge import scre
+CON-discharge-channel.md:303  PASS     1.4s  python -m pytest tests/test_discharge_submission.py::test_a_rebu
+CON-discharge-channel.md:317  PASS     1.7s  python -m pytest tests/test_discharge_wire.py -q
+CON-discharge-channel.md:339  PASS     0.6s  python -c 'from deepreason.llm.wire import DischargeWireV1; asse
+CON-discharge-channel.md:340  PASS     1.3s  python -m pytest tests/test_discharge_channel.py::test_a_handle_
+# 21 checks, 0 failed: []
+
+# per-check verdicts -- INV-signal-contract.md, run serially, 2026-08-30 02:08 UTC
+# 27 checks
+INV-signal-contract.md:25   PASS     0.0s  python -c "from deepreason.signals import SIGNALS, SIGNAL_DECLAR
+INV-signal-contract.md:40   PASS     0.0s  ! grep -qE "^from deepreason\\.(rules|informal|capture|schools)"
+INV-signal-contract.md:48   PASS     1.4s  python -m pytest tests/test_signal_contract.py::test_the_allocat
+INV-signal-contract.md:67   PASS     1.3s  python -m pytest tests/test_signal_contract.py::test_the_migrati
+INV-signal-contract.md:88   PASS     1.9s  python -m pytest tests/test_allocation_signal_consumption.py -q 
+INV-signal-contract.md:89   PASS     1.7s  python -m pytest tests/test_allocation_signal_consumption.py::te
+INV-signal-contract.md:97   PASS     0.0s  grep -q "route_cap_for_knob" src/deepreason/invariants.py && gre
+INV-signal-contract.md:112  PASS     1.7s  python -m pytest tests/test_allocation_signal_consumption.py -q 
+INV-signal-contract.md:133  PASS     1.8s  python -m pytest tests/test_allocation_signal_consumption.py -q 
+INV-signal-contract.md:152  PASS     1.9s  python -m pytest tests/test_allocation_signal_consumption.py -q 
+INV-signal-contract.md:153  PASS     0.0s  ! grep -qE "create_artifact|Warrant|att_add|dep_add" src/deeprea
+INV-signal-contract.md:169  PASS     1.5s  python -m pytest tests/test_capture14_hysteresis.py -q -k "theor
+INV-signal-contract.md:170  PASS     0.0s  ! grep -qE "att_add|dep_add|Warrant\(|register_fail_warrant|_adj
+INV-signal-contract.md:189  PASS     0.2s  python -c "
+INV-signal-contract.md:212  PASS     0.2s  python -c "from deepreason import wander; from deepreason.config
+INV-signal-contract.md:226  PASS     1.7s  python -m pytest tests/test_wander_cap.py -q -k "epoch_1 or dilu
+INV-signal-contract.md:243  PASS     1.6s  python -m pytest tests/test_wander_cap.py -q -k "labels_are_iden
+INV-signal-contract.md:244  PASS     0.0s  ! grep -qE "create_artifact|att_add|dep_add|Warrant|Status|from 
+INV-signal-contract.md:256  PASS     1.0s  python -c "
+INV-signal-contract.md:279  PASS     0.9s  python -c "
+INV-signal-contract.md:300  PASS     1.6s  python -m pytest tests/test_wander_cap.py -q -k "phantom or emit
+INV-signal-contract.md:326  PASS     0.0s  python -c "from deepreason.signals import declaration as d; a=d(
+INV-signal-contract.md:333  PASS     0.0s  ! grep -q "record_measure" src/deepreason/capture/detection.py
+INV-signal-contract.md:338  PASS     0.0s  python -c "from deepreason.signals import declaration as d; ns=(
+INV-signal-contract.md:377  PASS     0.0s  test -f docs/map/REC-add-signal.md && test -f docs/map/REC-revis
+INV-signal-contract.md:378  PASS     0.0s  ! test -d .claude/skills/dr-signals
+INV-signal-contract.md:396  PASS     1.5s  grep -q "def _lease_ceiling" src/deepreason/controller.py && pyt
+# 27 checks, 0 failed: []
+
+
+=== 2026-08-30, post-review round: SEAM-llm-x-verification.md, every check, serially ===
+  :36   rc=0     0.3s  python -c "
+  :149  rc=0     0.3s  python -c "
+  :198  rc=0     2.2s  python -m pytest tests/test_split_leg_recording.py::test_a_split
+  :262  rc=0     2.3s  python -m pytest tests/test_split_leg_recording.py::test_a_stand
+  :306  rc=0     4.1s  python experiments/2026-08-30-fix-rotted-map-checks/proof/d1_cro
+  5 checks, 0 failed: []

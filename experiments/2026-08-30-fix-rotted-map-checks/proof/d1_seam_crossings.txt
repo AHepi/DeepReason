@@ -1,0 +1,114 @@
+=== D1 mutation proof -- scratch copy, repo tree untouched ===
+[1] BROKEN FORM (the committed check, on the real tree): rc=1    File "<string>", line 10, in <module> | AssertionError: ('src/deepreason/invariants.py', 'deepreason.llm.firewall')
+[2] REPAIRED FORM (on the real tree):                    rc=0  
+[3] REPAIRED FORM on an unmutated scratch copy:          rc=0  
+[4] M1 eighth forward crossing added:                    rc=1    File "<string>", line 34, in <module> | AssertionError: ['src/deepreason/invariants.py::deepreason.llm.packs::build_pack']
+[5] M2 reverse crossing added (absolute):                rc=1    File "<string>", line 36, in <module> | AssertionError: ['src/deepreason/llm/adapter.py::deepreason.invariants::verify_root']
+[6] M3 reverse crossing added (relative):                rc=1    File "<string>", line 36, in <module> | AssertionError: ['src/deepreason/llm/adapter.py::deepreason.verification.report::verification_report']
+[7] scratch copy restored:                               rc=0  
+=== repo tree status (must be clean of src/ changes) ===
+(no src/ changes)
+
+=== 2026-08-30, SECOND ROUND: independent review found the check above had a hole ===
+The mutation set that produced [4]-[6] planted only DOTTED import forms.
+The check resolved an ImportFrom on node.module alone, so every form that
+names its module in the ALIAS resolved to bare 'deepreason' and matched
+nothing. Sixteen forms, planted one at a time in a scratch mirror of src/,
+the check read out of the document by docs_verify's own parser:
+
+--- the COMMITTED check (7fbbf2bc2), same sixteen forms ---
+  [unmutated scratch mirror]                                     rc=0  (0 = GREEN, as it must be)
+
+== REVERSE: an llm/ module naming the verification side. The prose
+   claims this direction is empty IN ANY FORM; each row must be red. ==
+  R1  from deepreason.invariants import verify_root              rc=1  CAUGHT (red)
+  R2  from ..invariants import verify_root                       rc=1  CAUGHT (red)
+  R3  import deepreason.invariants                               rc=1  CAUGHT (red)
+  R4  from deepreason import invariants                          rc=0  MISSED (green)
+  R5  from .. import invariants                                  rc=0  MISSED (green)
+  R6  from deepreason import verification                        rc=0  MISSED (green)
+  R7  from .. import verification                                rc=0  MISSED (green)
+  R8  from deepreason import signals_read                        rc=0  MISSED (green)
+  R9  from deepreason.verification import report                 rc=1  CAUGHT (red)
+  R10 from deepreason import invariants  [function-local]        rc=0  MISSED (green)
+  R11 from deepreason import invariants  [in a real llm/ file]   rc=0  MISSED (green)
+
+== FORWARD: an eighth crossing on the verification side. The set is
+   pinned EXACTLY, so each row must be red. ==
+  F1  from deepreason.llm.packs import build_pack                rc=1  CAUGHT (red)
+  F2  from deepreason import llm                                 rc=0  MISSED (green)
+  F3  import deepreason.llm.adapter                              rc=1  CAUGHT (red)
+
+== The module-level / function-local SPLIT. The body says 'one at module
+   level, five inside the functions' and INDEX.md's matrix scores 1. ==
+  S1  report.py crossing hoisted to MODULE level                 rc=0  MISSED (green)
+  S2  invariants.py crossing sunk to FUNCTION level              rc=1  CAUGHT (red)
+
+  [scratch mirror restored]                                      rc=0
+  scratch vs repo src/: IDENTICAL
+  git status --short src tests: (clean)
+
+  16 forms planted, 9 MISSED: ['F2  from deepreason import llm', 'R10 from deepreason import invariants  [function-local]', 'R11 from deepreason import invariants  [in a real llm/ file]', 'R4  from deepreason import invariants', 'R5  from .. import invariants', 'R6  from deepreason import verification', 'R7  from .. import verification', 'R8  from deepreason import signals_read', 'S1  report.py crossing hoisted to MODULE level']
+script exit=1   (non-zero = at least one form went unseen)
+
+--- the REPAIRED check, same sixteen forms, same script ---
+  [unmutated scratch mirror]                                     rc=0  (0 = GREEN, as it must be)
+
+== REVERSE: an llm/ module naming the verification side. The prose
+   claims this direction is empty IN ANY FORM; each row must be red. ==
+  R1  from deepreason.invariants import verify_root              rc=1  CAUGHT (red)
+  R2  from ..invariants import verify_root                       rc=1  CAUGHT (red)
+  R3  import deepreason.invariants                               rc=1  CAUGHT (red)
+  R4  from deepreason import invariants                          rc=1  CAUGHT (red)
+  R5  from .. import invariants                                  rc=1  CAUGHT (red)
+  R6  from deepreason import verification                        rc=1  CAUGHT (red)
+  R7  from .. import verification                                rc=1  CAUGHT (red)
+  R8  from deepreason import signals_read                        rc=1  CAUGHT (red)
+  R9  from deepreason.verification import report                 rc=1  CAUGHT (red)
+  R10 from deepreason import invariants  [function-local]        rc=1  CAUGHT (red)
+  R11 from deepreason import invariants  [in a real llm/ file]   rc=1  CAUGHT (red)
+
+== FORWARD: an eighth crossing on the verification side. The set is
+   pinned EXACTLY, so each row must be red. ==
+  F1  from deepreason.llm.packs import build_pack                rc=1  CAUGHT (red)
+  F2  from deepreason import llm                                 rc=1  CAUGHT (red)
+  F3  import deepreason.llm.adapter                              rc=1  CAUGHT (red)
+
+== The module-level / function-local SPLIT. The body says 'one at module
+   level, five inside the functions' and INDEX.md's matrix scores 1. ==
+  S1  report.py crossing hoisted to MODULE level                 rc=1  CAUGHT (red)
+  S2  invariants.py crossing sunk to FUNCTION level              rc=1  CAUGHT (red)
+
+  [scratch mirror restored]                                      rc=0
+  scratch vs repo src/: IDENTICAL
+  git status --short src tests: (clean)
+
+  16 forms planted, 0 MISSED: none
+script exit=0   (zero = every form red)
+
+=== the idiom that made the hole load-bearing, measured on the real tree ===
+$ grep -rcE '^[[:space:]]*from[[:space:]]+deepreason[[:space:]]+import[[:space:]]' src/deepreason/
+  occurrences: 29   files: 24
+$ grep -rnE '^[[:space:]]*from[[:space:]]+\.' src/deepreason/ | wc -l
+  relative imports in src/: 0
+
+=== repo tree status (must be clean of src/ changes) ===
+  (blank above = clean)
+
+=== 2026-08-30, THIRD probe: does the check survive a CARELESS WIDENING? ===
+The documented procedure for a legitimate eighth crossing is to widen
+`expected` in the same commit. That procedure alone would let a
+module-level import in, silently falsifying the body's 'one at module
+level' and INDEX.md's matrix score of 1. The repaired check carries a
+SECOND assertion for exactly that. Scratch mirror of src/ AND of the
+document; both restored afterwards.
+
+  unmutated: real tree, committed document                 rc=0  
+  M1 module-level 8th crossing, `expected` NOT widened     rc=1  AssertionError: [('src/deepreason/invariants.py', 'deepreason.llm.packs', 'build_pack', True)]
+  M2 SAME crossing, `expected` dutifully widened to match  rc=1  AssertionError: [('src/deepreason/invariants.py', 'deepreason.llm.firewall', 'route_fingerprint', True), ('src/deepreason/invariants.py', 'deepreason.
+  restored: real tree, committed document                  rc=0  
+     rc=1 on M2 is the SECOND guard firing -- the module-level COUNT claim,
+     which the set assertion alone cannot defend.
+
+=== repo tree status (must be clean of src/ changes) ===
+  (blank above = clean)

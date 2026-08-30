@@ -22,29 +22,84 @@ Recorded 2026-08-12 at main 074ef1549.
   Known-flaky under `-n 4`, green in serial re-run: 3 tests in
   `tests/test_mcp_run.py`, 2 in `tests/test_mcp_scratch_bridge.py`
   (thread-join timing).
-- **docs_verify** (`python tools/docs_verify.py`): **1212 checks over
-  69 documents; 6 failed on a full clone, 9 on a shallow one.**
-  Re-baselined 2026-08-29 (`experiments/2026-08-29-fix-docs-verify-
-  multiline-checks/`), because the superseded baseline below counted
-  only what the parser could read.
+- **docs_verify** (`python tools/docs_verify.py`): **1250 checks over 70
+  documents. On this container's SHALLOW clone the total is 5 OR 6 failed;
+  on a full clone, 2 or 3.** The two-valued total is a measured property of
+  the documented command on a 4-CPU box, not sloppiness — see the
+  CONTAINER-CONDITIONAL row below, which is the whole of the difference.
+  Re-baselined 2026-08-30
+  (`experiments/2026-08-30-fix-rotted-map-checks/`), which repaired FOUR of
+  the six rows the 2026-08-29 baseline recorded; CORRECTED later the same day
+  after independent review showed the first version of this entry had recorded
+  a single unreplicated LOW observation as a fixed value. The full-clone
+  figures are the shallow ones minus the three git-history rows below —
+  arithmetic, not a measurement, because no full clone was available here.
+
+  Totals actually observed for this command in one evening, same container:
+  **10, 7, 5** (that lane's three runs, on trees that were still moving),
+  **6** (independent reviewer, this tree), **5 and 5** (two fresh runs on the
+  final tree, 2026-08-30 04:04-04:34 UTC, recorded because a baseline resting
+  on one observation is what produced this correction). The reviewer's 6 was
+  the five rows below plus the container-conditional row.
 
   Expected failures, by class. A delta from THIS list is a finding; a
   match is disposition `baseline`.
 
   | where | class | why |
   |---|---|---|
-  | `SEAM-llm-x-verification.md:19` | claim rotted | `invariants.py:21` imports `deepreason.llm.firewall`; the seam claims no import in either direction. Parked P1. |
-  | `INV-frozen-surfaces.md:657` | claim rotted | stale qualification-digest pin; the same document's `:533` pins the value the tree actually produces. Parked P2. |
-  | `SEAM-llm-x-rules.md:54` | check malformed | a lost closing backtick merged the check with the paragraph after it. Reported as `unparseable check`. Parked P3. |
-  | `INV-signal-contract.md:222` | check imprecise | `inspect.getsource` sees `LINEAGE_POLICIES` in a COMMENT at `scheduler.py:1127`; the claim holds, the check does not. Parked P4. |
-  | `CON-discharge-channel.md:150` | check unreachable | manifest construction dies on `V6_SIMULATION_TOOLCHAIN_REQUIRED`; the claim is untested, not disproven. Parked P5. |
-  | `INV-frozen-surfaces.md:181` | claim rotted | the census asserting ZERO committed `transport_failure` attempts; one exists, in a root committed 2026-08-26. Pre-existing. |
+  | `SEAM-llm-x-rules.md:54` | check malformed | a lost closing backtick merged the check with the paragraph after it. Reported as `unparseable check`, and the single finding keeping `--audit` above zero. Parked P3 (`experiments/2026-08-29-fix-docs-verify-multiline-checks/PARKED.md`). |
+  | `INV-frozen-surfaces.md:181` | claim rotted | the census asserting ZERO committed `transport_failure` attempts; one exists, in a root committed 2026-08-26. Pre-existing, and its repair is a design fork rather than a count change — parked at `experiments/2026-08-30-fix-rotted-map-checks/PARKED.md` P-D3. |
+  | `SUB-application.md:421` | CONTAINER-CONDITIONAL | present in some runs of the documented command and absent in others, with nothing about the tree changing between them. The check runs two whole pytest files and costs **160.88 s, 182.8 s, 186.9 s, 195 s, 213.1 s** in five independent SERIAL timings across two days here — 54–71% of docs_verify's own 300 s per-check ceiling (`tools/docs_verify.py:185`) BEFORE it shares 4 CPUs with the 3 other workers the same command starts (`min(16, os.cpu_count())` = 4). It can therefore report `TIMEOUT after 300s` with NO foreign load. Parked as P-D8; narrowing it is a decision about what that claim is defended by. |
 
-  Plus, on a SHALLOW clone only, 3 more: `CON-run-identity.md:200`,
-  `:202`, `:204` are git-history checks that need the full history.
-  All three PASS after `git fetch --unshallow`; measured 2026-08-29.
-  A container that reports `git rev-parse --is-shallow-repository`
-  as `true` will show 9, not 6, and those 3 are not findings.
+  **Disposing of the conditional row takes one command**, and an audit must
+  run it before rowing a delta: re-run that check alone
+  (`python tools/docs_verify.py --failed`, or paste the check's own command).
+  A PASS means the ceiling and the row is `baseline`; a FAIL means the claim
+  moved and it IS a finding. The same command settles `:395` — see below.
+
+  Plus, on a SHALLOW clone only, 3 more: `CON-run-identity.md:211`,
+  `:213`, `:215` are git-history checks that need the full history.
+  All three PASS after `git fetch --unshallow`; measured 2026-08-29,
+  re-measured at their current line numbers 2026-08-30. A container
+  that reports `git rev-parse --is-shallow-repository` as `true` will
+  show 5 or 6, not 2 or 3, and those 3 are not findings.
+
+  REPAIRED 2026-08-30 and no longer expected. A failure at any of these
+  is a REGRESSION, not a baseline: `SEAM-llm-x-verification.md`'s
+  crossing check (now pinning the exact import set in BOTH directions,
+  resolving package-leaf imports, and pinning the module-level/
+  function-local split of every crossing),
+  `INV-frozen-surfaces.md`'s discharge-wire qualification-digest pin
+  (re-pinned `b9038b84…` -> `02ee7e09…`, with a new check that the
+  document's two pins agree), `CON-discharge-channel.md`'s carriage
+  round trip (fixture rebound to `engaged_simulation_toolchain()`), and
+  `INV-signal-contract.md`'s wander-registry decoupling check (now
+  asserted over the unparsed AST rather than raw source text).
+
+  `SUB-application.md:395` is LOAD, not a conditional row, and the two are
+  not in the same class. It reported
+  `test_restart_recovers_stale_preceding_epoch_without_redispatch` FAILED in
+  one loaded run and PASSED serially minutes later on the same tree; two
+  fresh serial trials cost 23.2 s and 23.0 s, so it has no margin problem at
+  all — it is a restart-timing test that flakes when the box is busy. Dispose
+  of it with the same one command.
+
+  ADMISSIBILITY, restated honestly because the earlier wording could not be
+  met here. Never run the full gate and `docs_verify` at the same time
+  (`dr-drive-harness` §5b); parked as P19
+  (`experiments/2026-08-29-ultracode-batch-1/`). But the rule this entry used
+  to state — "a docs_verify total taken under concurrent load is not
+  admissible as a baseline" — is not achievable on this container: NO full run
+  of the instrument here has been taken on a proven-idle box, including the
+  ones behind the figures above (load average 1.9 rising to 4.9 across run 1),
+  and the documented command self-contends regardless of what else is running.
+  Commit `7fbbf2bc2` labelled one such run "quiet box"; that label was wrong
+  and is corrected in
+  `experiments/2026-08-30-fix-rotted-map-checks/DELIVERY.md` §11.3. What
+  replaces the rule: a total from this container is admissible only as the
+  RANGE above with its container-conditional row named, and every delta is
+  disposed of by re-running the specific failing check ALONE before it is
+  rowed.
 
   ENVIRONMENT, or the number is meaningless: this container resolves
   `python` to `/usr/local/bin/python` while `pip` resolves to

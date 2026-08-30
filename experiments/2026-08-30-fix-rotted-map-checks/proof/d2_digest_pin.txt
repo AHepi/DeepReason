@@ -1,0 +1,15 @@
+=== D2 proof ===
+[1] BROKEN FORM (committed pin, asserting b9038b84...): rc=1    File "<string>", line 6, in <module> | AssertionError
+[2] REPAIRED PIN (asserting 02ee7e09...):               rc=0  
+[3] TWIN CHECK on the repo tree:                        rc=0  
+[4] TWIN CHECK on an unmutated scratch copy:            rc=0  
+[5] M1 first pin reverted to the stale value:           rc=1    File "<string>", line 11, in <module> | AssertionError: ('02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713', [762])
+[6] M2 second pin reverted to the stale value:          rc=1    File "<string>", line 11, in <module> | AssertionError: ('02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713', [612])
+[7] M3 one pin deleted outright:                        rc=1    File "<string>", line 11, in <module> | AssertionError: ('02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713', [612])
+[8] scratch copy restored:                              rc=0  
+=== repo tree: docs/map must show only this lane's intended edits ===
+ M docs/map/INDEX.md
+ M docs/map/INV-frozen-surfaces.md
+ M docs/map/SEAM-llm-x-verification.md
+ M docs/map/SUB-verification.md
+

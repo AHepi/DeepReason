@@ -1,0 +1,25 @@
+SUB-application.md :395 and :421, timed SERIALLY, one process at a time,
+2026-08-30 ~03:57-04:04 UTC on the 4-CPU cloud container. Each check was
+read out of the document by docs_verify's own parser and run whole through
+subprocess with shell=True, exactly as docs_verify runs it. One other lane's
+single-process job was running throughout; nothing else.
+
+395 trial1 rc=0 in 23.2s
+395 trial2 rc=0 in 23.0s
+421 trial1 rc=0 in 182.8s
+421 trial2 rc=0 in 186.9s
+
+Context that makes these numbers matter:
+  docs_verify per-check ceiling   300 s   (tools/docs_verify.py:185)
+  docs_verify default workers       4     (min(16, os.cpu_count()) on 4 CPUs)
+
+All five independent serial timings of :421 on this container, two days:
+  160.88 s   2026-08-29, idle box
+  182.8  s   2026-08-30, trial 1 above
+  186.9  s   2026-08-30, trial 2 above
+  195    s   2026-08-30, first round of this tranche
+  213.1  s   2026-08-30, independent reviewer
+=> 54%-71% of the ceiling before sharing 4 CPUs with 3 other workers.
+
+:395 by contrast costs 23.2 s and 23.0 s: no margin problem, only load
+sensitivity in the test itself.

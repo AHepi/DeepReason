@@ -1,0 +1,42 @@
+### --links
+docs_verify --links: 0 dangling reference(s), 70 document(s)
+rc=0
+### --audit
+SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+docs_verify --audit: 1 finding(s)
+rc=1
+### --coverage
+SEAM-adjudication-x-authority.md: no Sweep: header (add when next touched)
+SEAM-adjudication-x-rules.md: no Sweep: header (add when next touched)
+SEAM-bridge-x-llm.md: no Sweep: header (add when next touched)
+SEAM-bridge-x-manifest.md: no Sweep: header (add when next touched)
+SEAM-calculus-x-rules.md: no Sweep: header (add when next touched)
+SEAM-capabilities-x-channels.md: no Sweep: header (add when next touched)
+SEAM-evaluation-x-ontology.md: no Sweep: header (add when next touched)
+SEAM-evaluation-x-rules.md: no Sweep: header (add when next touched)
+SEAM-harness-x-verification.md: no Sweep: header (add when next touched)
+SEAM-llm-x-manifest.md: no Sweep: header (add when next touched)
+SEAM-llm-x-rules.md: no Sweep: header (add when next touched)
+SEAM-llm-x-verification.md: no Sweep: header (add when next touched)
+SEAM-llm-x-workflow.md: no Sweep: header (add when next touched)
+SEAM-ontology-x-rules.md: no Sweep: header (add when next touched)
+SEAM-periphery-x-verification.md: enforcement site not named: src/deepreason/amendment/apply.py
+SEAM-rules-x-workflow.md: no Sweep: header (add when next touched)
+SEAM-scheduler-x-rules.md: no Sweep: header (add when next touched)
+SEAM-scheduler-x-workflow.md: no Sweep: header (add when next touched)
+SEAM-schools-x-scheduler.md: no Sweep: header (add when next touched)
+SEAM-schools-x-scratch.md: enforcement site not named: src/deepreason/informal/trial.py
+SEAM-scratch-x-workflow.md: no Sweep: header (add when next touched)
+docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)
+rc=1
+### --self-test
+  --audit over the self-test fixture:
+    INV-selftest.md:21: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: python -c "'
+    INV-selftest.md:17: vacuous check `true &&
+              true`
+    docs_verify --audit: 2 finding(s)
+docs_verify --self-test: ok
+rc=0
+### multi-line count (SCHEMA.md floor is 70)
+multi-line checks: 75
+total checks: 1249 docs: 70

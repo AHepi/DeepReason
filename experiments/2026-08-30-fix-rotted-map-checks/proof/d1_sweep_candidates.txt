@@ -1,0 +1,8 @@
+SPEC 'attempt_trace|split_legs && LLMAttempt|LLMSplitLegV1' -> 0 unnamed enforcement site(s): []
+SPEC 'split_legs && LLMSplitLegV1|verify_root' -> 0 unnamed enforcement site(s): []
+SPEC 'attempt_trace|split_legs && LLMAttempt|LLMSplitLegV1|verify_root' -> 0 unnamed enforcement site(s): []
+reader   named   src/deepreason/llm/adapter.py
+reader   named   src/deepreason/ontology/event.py
+reader   named   src/deepreason/run_manifest.py
+reader   named   src/deepreason/workflow/trace.py
+candidates=4 enforcement=0
