@@ -1,5 +1,5 @@
 <!-- DR-INV-frozen-surfaces -->
-Verified-at: a40450f1c
+Verified-at: 152c7e204
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/capabilities/state.py, src/deepreason/harness.py, src/deepreason/invariants.py, src/deepreason/run_manifest.py
 Seams: 
@@ -338,10 +338,12 @@ What moved: two `data.pop("SPLIT_BUDGET_*", None)` lines in
 `_versioned_source_config_data`, joining the eight knobs already there.
 **Insertions only — 11 and 0** — and no schema, validator or Pydantic model was
 touched. Additive is provable rather than asserted here: the qualification
-subject digest over a committed fixture returns to
-`b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386`, which is
-byte-identical to the value the tranche base produces, so this contact makes
-the surface MORE stable rather than less. Ledgered at
+subject digest over a committed fixture returned to
+`b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386` — the value
+that fixture produced up to 2026-08-28, and byte-identical to the value the
+tranche base produced — so this contact made the surface MORE stable rather
+than less. The fixture's digest moved later, under a different grant; the F1
+section below carries the trace. Ledgered at
 `experiments/2026-08-22-change-two-call-seat-protocol/REQUEST.md` Amendment 2.
 
 `check: python -c "import json; from tests.test_reusable_qualification import _manifest, _profile; p = _profile(); m = _manifest(p); c = json.loads(m.engine_config_json); leaked = sorted(k for k in c if k.startswith('SPLIT_BUDGET_')); assert not leaked, leaked" && test "$(grep -c 'data.pop(\"SPLIT_BUDGET_' src/deepreason/run_manifest.py)" -eq 2`
@@ -715,8 +717,34 @@ Surface 5 stayed at ZERO for the tranche's other half too, and that is measured
 rather than assumed: the channel adds two optional wire fields to
 `CompactConjectureCandidate` and `ReasoningCandidateProposal`, and the
 qualification subject embeds `contract_id` STRINGS rather than any wire schema,
-so the subject digest over a committed fixture is unchanged at
-`b9038b84efdea313…`.
+so the subject digest over a committed fixture was unchanged BY THIS CONTACT —
+`b9038b84efdea313…` on both sides of it, in August 2026.
+
+**That is no longer the current value, and this is the trace.** The digest
+moved on 2026-08-28 —
+
+    b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386   before
+    02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713   after
+
+— in commit `e9457f8ff`, tranche
+`experiments/2026-08-27-change-execution-safety/`, under the operator's
+conditional grant for that tranche: "Frozen surface changes are permitted as
+long as you document what is affected" (its REQUEST.md, constraint C7). What
+moved it was not this channel: the container profile was switched to serve
+BOTH simulation modes, so the compiled policy binds
+`python@deepreason-public-contained.v1` rather than the local toolchain, and
+the manifest is part of the qualification behaviour subject. The cost was
+priced where it landed — that tranche's DELIVERY.md records that the first
+live run after it pays a fresh qualification battery, ~14 minutes and ~1160
+calls. TWO committed test pins were updated in the same commit
+(`tests/test_discharge_wire.py`, `tests/test_allocation_signal_consumption.py`)
+and the pin below was not, because it could not be run: it spans several lines
+and `docs_verify` read checks line by line until 2026-08-29. It asserted the
+pre-move value, unopposed by the pin above it that asserted the post-move one,
+until re-pinned on 2026-08-30 by
+`experiments/2026-08-30-fix-rotted-map-checks/`. Both pins now compute the
+same expression over the same fixture, both are readable, and the Traps entry
+below keeps them agreeing.
 
 `check: python -c "
 import inspect
@@ -736,7 +764,9 @@ import json
 from tests.test_reusable_qualification import _manifest, _profile
 from deepreason.qualification import qualification_subject_digest
 p = _profile()
-assert qualification_subject_digest(_manifest(p), p) == 'b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386'
+# Twin of the pin higher in this section: same fixture, same expression, so the
+# two must assert the same value or one of them is stale.
+assert qualification_subject_digest(_manifest(p), p) == '02ee7e098bb9239011708a4aa0bce4b7479619b3aff28eff46188125a869e713'
 leaked = sorted(k for k in json.loads(_manifest(p).engine_config_json) if k == 'DISCHARGE_POLICY')
 assert not leaked, leaked
 "`
@@ -892,3 +922,29 @@ docstring, statically derivable from the tree at grant time.
   actual-touch against SPEC.md's own specced radius mechanically, so a
   prose finding three steps back cannot be silently outrun by memory.
 `check: grep -q "frozen_surface_verdict" tools/blast_radius.py`
+- **A pin nobody can run is a claim, not a check.** The discharge-wire
+  qualification subject digest moved on 2026-08-28 under a granted contact
+  (`e9457f8ff`, the execution-safety tranche). The two committed TEST pins were
+  updated in that same commit; this document's own pin was not, and asserted
+  the pre-move value for two days while a second pin a hundred lines above it
+  asserted the post-move one. Neither could argue with the other, because the
+  stale one spanned several lines and `docs_verify` read checks line by line —
+  so it had never once been executed. Found by the first execution of the
+  repaired parser (`experiments/2026-08-29-fix-docs-verify-multiline-checks/`)
+  and re-pinned by `experiments/2026-08-30-fix-rotted-map-checks/`. Two rules
+  come out of it: when a granted contact moves a digest, grep THIS FILE for the
+  old value in the same commit that updates the tests; and a document that
+  pins one expression twice owes a check that the two agree, which is the
+  check below.
+`check: python -c "
+import sys
+sys.path.insert(0, 'tools')
+import docs_verify as dv
+from deepreason.qualification import qualification_subject_digest
+from tests.test_reusable_qualification import _manifest, _profile
+p = _profile()
+live = qualification_subject_digest(_manifest(p), p)
+doc = dv.parse(dv.MAP_DIR / 'INV-frozen-surfaces.md')
+pins = [n for n, c in doc.checks if live in c]
+assert len(pins) == 2, (live, pins)
+"`
