@@ -369,3 +369,46 @@ output file is byte-identical after S7. That is an independent confirmation,
 over 59 real roots rather than one fixture, that S7's default path is
 behaviour-identical — which is what SPEC.md P-FIX-2 predicted and what allowed
 the six-key exact-set assertion to stay put.
+
+## S-RING3 — the delivered tree, final ring, on an idle box
+
+    $ PYTHONPATH=.../src python -m pytest \
+        tests/test_checkpoint_hardening.py tests/test_continuation.py \
+        tests/test_amendment_epochs.py tests/test_amendment_chain_integrity.py \
+        tests/test_lifecycle_operation_parity.py tests/test_results_command.py \
+        tests/test_terminal_lifecycle_refusal_is_recorded.py \
+        tests/test_calculus_standing.py \
+        tests/test_v6_resumed_terminal_revalidation.py \
+        tests/test_v6_terminal_commitment_authority.py \
+        tests/test_workflow_resume_lifecycle_c4.py tests/test_error_catalog.py \
+        tests/test_failure_terminal_reports_real_token_spend.py \
+        tests/test_progress.py tests/test_website_state_machine.py \
+        -q -p no:randomly --tb=short
+
+    208 passed in 649.98s (0:10:49)
+
+`tests/test_website_state_machine.py` is in the ring on purpose: the blast
+radius named four `_terminal` hits there, and they are a NAME COLLISION with
+`results.py`'s `_terminal`, not a consumer of it. Running it proves the
+distinction rather than asserting it.
+
+NO FULL GATE was run by this lane. The orchestrator runs one at fan-in on an
+idle box, per the batch's own process-hygiene rule.
+
+## Summary
+
+| SPEC item | delivered | acceptance |
+|---|---|---|
+| S1 CONTINUE integrity gate | NO — parked F9 | passed when armed; reverted after ring #1 |
+| S2 AMEND integrity gate | NO — parked F9 | passed when armed; reverted after ring #1 |
+| S3 one-byte differential | proven, as an instrument | `proof/forge_one_byte.json` |
+| S4 witness regression | NO — parked with S1/S2 | population preserved in `proof/census.json` |
+| S5 failure terminal records uncontinuability | YES | RED -> GREEN, in ring #3 |
+| S6 no-checkpoint terminal records it | YES | RED -> GREEN, in ring #3 |
+| S7 reader answers from the verdict it holds | YES | RED -> GREEN; census.json byte-identical over 59 roots |
+| S8 map moves in the same commit | YES | docs_verify 9 failed = baseline, delta ZERO |
+| S9 instruments committed | YES | census exit 0, population 59, tree clean |
+
+VERDICT: **PARTIAL.** Limb two of the P2 law is delivered and proven. Limb
+three is not, and is parked with its implementation, its proof, and a
+ready-to-send re-plan.
