@@ -76,6 +76,18 @@ widened here to include `src/deepreason/verification/`, matches nothing.
 | F8 | the diff-budget ceiling read EXCEEDED with the gate armed and WITHIN after the revert; the reading it raised is recorded, the fork is not live | monitor, next time |
 | **F9** | **the integrity gate: what does "fails replay validation" mean, is `amend` gated at all, and do INCOMPLETE roots fail?** | **operator / monitor** |
 
+## The numbers a monitor will want
+
+    ring (15 files, idle box)   208 passed, 0 failed, 649.98s
+    docs_verify                 9 failed = this shallow container's recorded
+                                baseline (AUDIT_BASELINES.md), delta ZERO
+    diff budget                 src 41, tests 224, docs/map 52, total 317,
+                                ceiling 400, WITHIN
+    frozen surfaces             none touched (seven paths plus verification/)
+    census re-run               exit 0, population 59, census.json byte-identical
+
+No full gate was run by this lane; the orchestrator runs one at fan-in.
+
 ## Honest residue
 
 - **The law's security clause is not satisfied.** A tampered record still buys
