@@ -1,0 +1,21 @@
+{
+  "current_equals_stored": false,
+  "current_frontier_is_exactly_the_battery_carriers": false,
+  "current_frontier_len": 233,
+  "empty_battery": 146,
+  "empty_battery_survivors_on_current_frontier": 146,
+  "road_a_frontier_len": 233,
+  "road_b_frontier_len": 233,
+  "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+  "score_triples_under_the_pre_2026_08_30_rule": {
+    "(0.0, 0.0, 0.0)": 146,
+    "(0.0, 0.0, 1.0)": 87
+  },
+  "stored_frontier_len": 87,
+  "survivors": 233,
+  "triples": {
+    "(0.0, 0.0, 1.0, True)": 87,
+    "(0.0, 0.0, None, False)": 146
+  }
+}
+

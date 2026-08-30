@@ -1,0 +1,47 @@
+CONE AND FROZEN-SURFACE VERIFICATION, lane C, 2026-08-30
+
+--- 1. every path this lane writes ---
+docs/map/CON-conjecture-kinds.md
+docs/map/SUB-periphery.md
+docs/map/SUB-scheduler.md
+experiments/2026-08-27-audit-formalism-optional/repro_coverage_rank.py
+experiments/2026-08-30-defect-formalism-rank-penalty/measure_footprint.py
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/AFTER_fix_all_instruments_2026-08-30.txt
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/equal_standing_AFTER_2026-08-30.txt
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/footprint_AFTER_2026-08-30.txt
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/ring1_2026-08-30.txt
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/tests_MUTATION_2026-08-30.txt
+experiments/2026-08-30-defect-formalism-rank-penalty/proof/tests_RED_before_fix_2026-08-30.txt
+src/deepreason/capture/pareto.py
+src/deepreason/scheduler/scheduler.py
+tests/test_formalism_optional_rank.py
+
+--- 2. INV-frozen-surfaces.md:297 branch tripwire, verbatim, over that cone ---
+tripwire exit: 0  (0 = pass, no frozen path in the cone)
+
+--- 3. dr-validate-change's five-path frozen diff (empty = no contact) ---
+[end]
+
+--- 4. the two paths that command OMITS (RECON-SHARED:176): verification/ and llm/firewall.py ---
+[end]
+
+--- 5. tools/blast_radius.py says frozen_surface_verdict: CONTACT. RESOLVED AS A NAME COLLISION: ---
+    both entries are tier SYMBOL_INDIRECT, i.e. a grep for the bare word 'frontier'.
+    every such hit inside a frozen surface is the MODEL-PROFILE TIER name, not the Pareto frontier:
+src/deepreason/invariants.py:1226:                        and manifest.model_profile in {"standard", "frontier"}
+src/deepreason/invariants.py:3932:                        and base_profile in {"standard", "frontier"}
+src/deepreason/invariants.py:4234:        # A closure with no cause. `retire` takes a problem off the frontier
+src/deepreason/run_manifest.py:836:        Literal["standard"], Literal["frontier"]
+src/deepreason/run_manifest.py:837:    ] = ("standard", "frontier")
+src/deepreason/run_manifest.py:974:    base_profile: Literal["compact", "standard", "frontier"]
+src/deepreason/run_manifest.py:1044:    base_profile: Literal["compact", "standard", "frontier"]
+src/deepreason/run_manifest.py:1262:    model_profile: Literal["compact", "standard", "frontier"] = "standard"
+src/deepreason/run_manifest.py:1735:) -> Literal["compact", "standard", "frontier"]:
+src/deepreason/run_manifest.py:2766:    manifest_default: Literal["compact", "standard", "frontier"],
+src/deepreason/run_manifest.py:3621:    model_profile: Literal["compact", "standard", "frontier"] | None = None,
+
+    and neither 'pareto' nor 'run_report' occurs anywhere in ANY frozen surface:
+    [empty above = no reference at all]
+
+    'frontier' does not occur in src/deepreason/verification/ at all:
+    [empty above = none]

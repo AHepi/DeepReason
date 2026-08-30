@@ -1,0 +1,23 @@
+=== proof_equal_standing.py AFTER the fix (expect PENALTY_ABSENT, exit 1) ===
+LEG 1  equal standing, through the shipped run_report
+       statuses : {"formal": "accepted", "prose": "accepted"}
+       survivors: 2
+       frontier : ['formal', 'prose']
+       both on the frontier (the law's requirement): True
+
+LEG 2  mutation control A: prose given one PASSING evaluable commitment
+       frontier : ['formal', 'prose']
+       control holds (the coverage axis is what excludes): True
+
+LEG 3  mutation control B: a FAILED battery must stay dominated
+       frontier : ['passed']
+       control holds (the axis still discriminates): True
+
+LEG 4  simulated fix: road (a) re-scoring, same artifacts as leg 1
+       frontier : ['formal', 'prose']
+       the exclusion disappears under the fix: True
+
+VERDICT: PENALTY_ABSENT
+  The shipped run_report ranks an informal and a formal conjecture
+  of equal standing equally. R-g's requirement is met on this tree.
+EXIT=1

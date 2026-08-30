@@ -1,0 +1,117 @@
+DROPPING ROAD (a) -- the skeptic's finding reproduced, then repaired, then
+verified. Run 2026-08-30 on throwaway clones of claude/b2-lane-C.
+
+SECTION A. THE FINDING, REPRODUCED. Reverting fe6b29ed2 alone does not drop
+road (a) cleanly.
+
+$ git revert --no-edit fe6b29ed2
+Auto-merging docs/map/SUB-periphery.md
+CONFLICT (content): Merge conflict in docs/map/SUB-periphery.md
+Auto-merging docs/map/SUB-scheduler.md
+CONFLICT (modify/delete): experiments/2026-08-30-defect-formalism-rank-penalty/proof/ring1_2026-08-30.txt deleted in parent of fe6b29ed2 (BUILT AND PARKED, NOT INTEGRATED -- road (a) for P2: a Pareto axis the harness did not measure is OMITTED, never scored at its floor) and modified in HEAD.  Version HEAD of experiments/2026-08-30-defect-formalism-rank-penalty/proof/ring1_2026-08-30.txt left in tree.
+Auto-merging src/deepreason/capture/pareto.py
+CONFLICT (content): Merge conflict in src/deepreason/capture/pareto.py
+error: could not revert fe6b29ed2... BUILT AND PARKED, NOT INTEGRATED -- road (a) for P2: a Pareto axis the harness did not measure is OMITTED, never scored at its floor
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git revert --continue".
+hint: You can instead skip this commit with "git revert --skip".
+hint: To abort and get back to the state before "git revert",
+hint: run "git revert --abort".
+REVERT EXIT=1
+
+$ git status --short | head -6
+M  docs/map/CON-conjecture-kinds.md
+UU docs/map/SUB-periphery.md
+M  docs/map/SUB-scheduler.md
+M  experiments/2026-08-27-audit-formalism-optional/repro_coverage_rank.py
+M  experiments/2026-08-30-defect-formalism-rank-penalty/measure_footprint.py
+D  experiments/2026-08-30-defect-formalism-rank-penalty/proof/AFTER_fix_all_instruments_2026-08-30.txt
+
+(A1) At the delivered tip the revert now CONFLICTS, because the review
+repair also touched capture/pareto.py, and it DELETES this tranche's proof
+transcripts, which fe6b29ed2 had added (the D rows above). Resolving the
+conflict the obvious way -- take the pre-road file -- reproduces the
+skeptic's original state exactly:
+$ grep -c '^def pareto_scores(' src/deepreason/scheduler/scheduler.py
+0
+$ ls tests/test_formalism_optional_rank.py
+ls: cannot access 'tests/test_formalism_optional_rank.py': No such file or directory
+
+the two SUB-scheduler.md check lines that SURVIVE the revert, run verbatim:
+=== SUB-scheduler.md:166 ===
+no tests ran in 0.00s
+ERROR: file or directory not found: tests/test_formalism_optional_rank.py::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead
+exit: 4  <-- RED
+=== SUB-scheduler.md:168 ===
+
+exit: 1  <-- RED
+
+================================================================
+SECTION B. THE REPAIR, VERIFIED. drop_road_a.sh on a clean clone.
+
+$ bash experiments/2026-08-30-defect-formalism-rank-penalty/drop_road_a.sh
+green: python -m pytest tests/test_scheduler.py::test_focus_family_restricts_se...
+green: for c in LIVENESS_QUEUE FOCUS_PROBLEM FOCUS_FAMILY INTEGRATION_BUDGET_SH...
+DROPPED: road (a) is removed and staged; the two SUB-scheduler.md checks
+that depend on it are green. Commit with:
+  git commit -m 'drop road (a): the operator answered b or c'
+EXIT=0
+
+$ git diff --stat 736b50839 -- docs/map/ src/ tests/     # the park base
+(empty: docs/map/, src/ and tests/ are BYTE-IDENTICAL to the park base)
+$ ls experiments/2026-08-30-defect-formalism-rank-penalty/proof/ | wc -l
+16
+(the proof transcripts survive the drop; a plain revert deletes them)
+
+================================================================
+SECTION C. THE GUARDS, each exercised. Every "later change" below is
+committed on a SEPARATE branch, so `claude/b2-lane-C` still names the
+delivered tip -- the fan-in's real shape. (A first draft of this section
+committed them onto the lane branch itself, which put the change INSIDE the
+patch and produced a false conclusion. Re-run correctly here.)
+
+C1. Dirty working tree -- REFUSED, nothing written:
+REFUSED: working tree or index is dirty. Commit or stash first.
+EXIT=1
+
+C2. Road already gone (a second run) -- REFUSED by the precondition:
+REFUSED: road (a) is not present on this tree as delivered (its
+definition, its test file, or the map check that greps for it is
+already gone). Nothing to drop.
+EXIT=1
+
+C3. A later change RENAMED the road's function -- REFUSED by the precondition:
+REFUSED: road (a) is not present on this tree as delivered (its
+definition, its test file, or the map check that greps for it is
+already gone). Nothing to drop.
+EXIT=1
+
+C4. A later change EDITED a line inside the road's hunk -- REFUSED, the
+reverse patch does not apply and nothing is written:
+error: patch failed: src/deepreason/scheduler/scheduler.py:199
+error: src/deepreason/scheduler/scheduler.py: patch does not apply
+REFUSED: the reverse patch was empty or did not apply -- $LANE does not
+carry road (a) over $BASE, or its hunks have moved on this tree. Drop
+it by hand and re-run this script's post-drop checks.
+EXIT=1
+
+C5. The patch applies but the road SURVIVES it (a later change added a
+SECOND pareto_scores) -- exit 2, DROP_UNSOUND, so a wrong drop cannot be
+mistaken for a clean one:
+DROP_UNSOUND: pareto_scores is still defined.
+green: python -m pytest tests/test_scheduler.py::test_focus_family_restricts_se...
+green: for c in LIVENESS_QUEUE FOCUS_PROBLEM FOCUS_FAMILY INTEGRATION_BUDGET_SH...
+The removal is STAGED but NOT sound. Inspect it, or undo it with:
+  git reset -q && git checkout -- .
+EXIT=2
+
+C6. $LANE does not carry the road at all (pointed at the park base): the
+reverse patch is empty -- REFUSED before anything is written:
+error: No valid patches in input (allow with "--allow-empty")
+REFUSED: the reverse patch was empty or did not apply -- $LANE does not
+carry road (a) over $BASE, or its hunks have moved on this tree. Drop
+it by hand and re-run this script's post-drop checks.
+EXIT=1
+
+VERDICT: the park is droppable in ONE act, and the act is verified.

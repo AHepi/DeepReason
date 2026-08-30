@@ -1,23 +1,33 @@
-"""Demonstration: the `coverage` Pareto axis prices formality.
+"""Regression: the `coverage` Pareto axis must not price formality.
 
-`scheduler.run_report` (§11.7) scores each survivor on three axes --
-PARETO_AXES = ["hv", "reach", "coverage"] -- and `capture/pareto.frontier`
-keeps the non-dominated set, MAXIMISING every axis.
+HISTORY. As first written (2026-08-27) this script REPRODUCED finding F1:
 
     coverage = passing evaluable commitments / evaluable commitments
              = 0.0 when the artifact has NO evaluable commitment at all
 
-So an artifact whose attack surface is prose-only scores 0.0 on an axis a
-formally-backed sibling scores 1.0 on. If the two are otherwise equal, the
-formal one DOMINATES and the prose one leaves the frontier.
+`scheduler.run_report` (§11.7) scored each survivor on PARETO_AXES =
+["hv", "reach", "coverage"] and `capture/pareto.frontier` kept the
+non-dominated set, MAXIMISING every axis -- so an artifact whose attack
+surface was prose-only scored 0.0 on an axis a formally-backed sibling scored
+1.0 on, the formal one DOMINATED, and the prose one left the frontier. On
+`experiments/2026-08-12-live-grounded-extension-expansion/run` that excluded
+146 of that run's 233 survivors from its published answer.
+
+TODAY it asserts the REPAIRED behaviour and fails if the penalty returns
+(road (a), NOT-MEASURED: an artifact with no evaluable commitment emits no
+`coverage` key at all, and `frontier` drops an axis absent from either point
+out of that pairwise comparison). See
+`experiments/2026-08-30-defect-formalism-rank-penalty/`.
+
+The law (docs/proposals/DUAL_MODE_CONJECTURE_PREPLAN.md R-g:42-57):
+"Formal backing may confer PROTECTION (prose-immunity, as today); its absence
+confers no disadvantage."
 
 Run:  python experiments/2026-08-27-audit-formalism-optional/repro_coverage_rank.py
-Exit 0 means the penalty REPRODUCED (the prose survivor was dropped).
+Exit 0 means the law HOLDS. Exit 1 means the penalty is back.
 """
 
 import json
-import os
-import sys
 import tempfile
 
 from deepreason.capture.pareto import frontier
@@ -29,11 +39,24 @@ def _direct():
     # Two survivors on one problem, identical on every axis the harness
     # actually measured for them (neither was HV-sampled, neither reached a
     # foreign problem). They differ ONLY in whether an evaluable commitment
-    # is present to be scored.
+    # is present to be scored -- so the prose one carries no coverage key.
     formal = {"hv": 0.0, "reach": 0.0, "coverage": 1.0}   # one program: PASS
-    prose = {"hv": 0.0, "reach": 0.0, "coverage": 0.0}    # no evaluable commitment
+    prose = {"hv": 0.0, "reach": 0.0}                     # nothing to check
     kept = frontier([("formal", formal), ("prose", prose)], axes)
-    return kept, formal, prose
+    return sorted(kept), formal, prose
+
+
+def _control():
+    """The axis must still discriminate where it did measure something.
+
+    Without this control the direct leg would also "hold" under a road that
+    simply put every survivor on the frontier: "checked and failed" must stay
+    dominated by "checked and passed".
+    """
+    axes = ["hv", "reach", "coverage"]
+    passed = {"hv": 0.0, "reach": 0.0, "coverage": 1.0}
+    failed = {"hv": 0.0, "reach": 0.0, "coverage": 0.0}
+    return sorted(frontier([("passed", passed), ("failed", failed)], axes))
 
 
 def _live():
@@ -44,7 +67,7 @@ def _live():
     """
     from deepreason.harness import Harness
     from deepreason.ontology import (
-        Commitment, Interface, Problem, Provenance, SpawnTrigger, Status,
+        Commitment, Interface, Problem, Provenance, SpawnTrigger,
     )
     from deepreason.ontology.problem import ProblemProvenance
     from deepreason.config import Config
@@ -93,20 +116,25 @@ def _live():
 
 def main():
     kept, formal, prose = _direct()
-    print("PARETO_AXES = ['hv', 'reach', 'coverage']  (frontier maximises each)")
+    print("PARETO_AXES = ['hv', 'reach', 'coverage']  (an absent axis is NOT MEASURED)")
     print(f"  formal survivor: {formal}")
-    print(f"  prose  survivor: {prose}")
+    print(f"  prose  survivor: {prose}   <- no coverage key: nothing to check")
     print(f"  frontier keeps : {kept}")
-    reproduced = kept == ["formal"]
-    print(f"  prose dropped from the frontier: {reproduced}")
+    equal_standing = kept == ["formal", "prose"]
+    print(f"  prose kept on the frontier: {equal_standing}")
+
+    control = _control()
+    print(f"  control -- 'checked and passed' vs 'checked and failed': {control}")
+    control_holds = control == ["passed"]
+    print(f"  the axis still discriminates where it measured something: {control_holds}")
 
     print()
     try:
         report, formal_id, prose_id, root, statuses = _live()
     except Exception as error:                      # pragma: no cover
         print(f"live leg unavailable ({type(error).__name__}: {error})")
-        print("the direct leg above is the reproduction; the live leg is corroboration")
-        return 0 if reproduced else 1
+        print("the direct leg above is the regression; the live leg is corroboration")
+        return 0 if (equal_standing and control_holds) else 1
     print(f"live root: {root}")
     print("  statuses : " + ", ".join(
         f"{k[:12]}={v.value if v else None}" for k, v in statuses.items()))
@@ -116,25 +144,11 @@ def main():
     prose_kept = prose_id in report["frontier"]
     print(f"  formal id in frontier: {formal_kept}")
     print(f"  prose  id in frontier: {prose_kept}")
-    live = formal_kept and not prose_kept
+    live = formal_kept and prose_kept
 
-    # MUTATION PROOF. Change exactly one thing -- give the prose artifact an
-    # evaluable commitment of its own -- and the drop must disappear. Without
-    # this the script would also "pass" if the prose artifact were being
-    # dropped for some reason that has nothing to do with the coverage axis.
-    control = frontier(
-        [("formal", {"hv": 0.0, "reach": 0.0, "coverage": 1.0}),
-         ("prose", {"hv": 0.0, "reach": 0.0, "coverage": 1.0})],
-        ["hv", "reach", "coverage"],
-    )
-    mutation_holds = sorted(control) == ["formal", "prose"]
+    ok = equal_standing and control_holds and live
     print()
-    print(f"mutation proof (prose given one passing evaluable commitment): "
-          f"frontier keeps {sorted(control)} -> penalty disappears: {mutation_holds}")
-
-    ok = reproduced and live and mutation_holds
-    print()
-    print("REPRODUCED" if ok else "NOT REPRODUCED")
+    print("LAW HOLDS" if ok else "PENALTY RETURNED")
     return 0 if ok else 1
 
 

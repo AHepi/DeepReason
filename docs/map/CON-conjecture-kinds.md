@@ -85,6 +85,22 @@ own ranking key never reads a commitment or an `eval` string — it ranks
 have no kind to read.
 `check: ! grep -n "execution_backed\|formally_backed" src/deepreason/scheduler/scheduler.py`
 
+THAT CHECK IS NOT SUFFICIENT AND NEVER WAS, and the gap is the finding this
+clause now carries: kind can be read WITHOUT naming either guard. Two hundred
+lines from `_select_problem`, in the same file, `run_report` ranked survivors
+on a `coverage` axis that is `passes/evaluable-commitments` — an artifact
+carrying no evaluable commitment has no denominator, and writing 0.0 there let
+`frontier`, which maximises every axis, drop it below a formally-backed
+sibling. Naming a guard is one way to read kind; deriving a score FROM
+`Interface.commitments` is another, and only the second one bit. Since
+2026-08-30, `scheduler.pareto_scores` OMITS an axis it did not measure and
+`capture/pareto.frontier` drops an axis absent from either point out of that
+pairwise comparison, so "nothing to check" is neither last nor first on it. The
+check below re-derives that from behaviour rather than from a grep, and its
+control leg pins the other half: a battery that was checked and FAILED must
+still be dominated, or the axis has been destroyed instead of repaired.
+`check: python -m pytest tests/test_formalism_optional_rank.py::test_informal_and_formal_of_equal_standing_rank_equally tests/test_formalism_optional_rank.py::test_control_b_a_failed_battery_is_still_dominated tests/test_formalism_optional_rank.py::test_kind_blindness_prose_ranks_the_same_with_and_without_a_formal_channel tests/test_formalism_optional_rank.py::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead -q`
+
 ## Dual-mode conjecture (D2 rev 2) — one artifact, prose plus an optional attack surface
 
 Operator Amendment 1 (`experiments/2026-08-08-change-pipeline-design-d2/REQUEST.md`)
@@ -184,6 +200,7 @@ decides "is this prose" before criticism runs.
 | ARGUMENTATIVE refutation (trial-guarded prose) | `informal/trial.py` | `run_argument_trial_from_case`, `_argument_trial_steps` |
 | Foundational kind-blind acceptance | `adjudication/grounded.py`, `adjudication/support.py` | `label0`, `final_labels` |
 | The one kind-conditional SCHEDULING term found | `scheduler/scheduler.py` | `Scheduler._standing_recrit_pool` |
+| The one kind-conditional RANKING term found (2026-08-27 audit F1; fixed 2026-08-30) | `scheduler/scheduler.py`, `capture/pareto.py` | `pareto_scores`, `frontier` |
 | Four executable-commitment paths | `capabilities/simulation.py`, `capabilities/research.py`, `experiments/lambda_run.py`, `oracle.py`, `informal/skeleton.py` | `SimulationController.propose`, `ResearchController.propose`, `run_arm`, `property_oracle_commitment`/`admit_counterexample`, `draft_forbidden_commitments` |
 | The dual-mode conjecture's own code-commitment kind (D2 rev 2) | `oracle.py`, `programs.py` | `candidate_checker_commitment`, `run_from_full_spec`, `PROGRAMS["candidate_checker"]` |
 | Referee-free relatedness for that kind | `rules/relatedness.py` | `mint_relatedness_claim`, `relatedness_claim_holds`, `relatedness_trial` |
@@ -196,6 +213,7 @@ decides "is this prose" before criticism runs.
 | Whether the conjecturer can submit a formal encoding as an explicit option (R-b) — PARTIALLY ANSWERED as of D2 rev 2: `ForbiddenCase.checker_spec`/`Countercondition.checker_spec` let EITHER candidate contract attach `program:candidate_checker` code to its OWN prose; `ConjectureCandidate` itself still carries no dedicated formal-encoding field | `informal/skeleton.py::ForbiddenCase`, `workloads/text.py::Countercondition`/`ReasoningCandidateProposal.checker_specs` | `tests/test_informal.py -k candidate_checker`, `tests/test_semantic_freedom_constitution.py -k checker_specs` |
 | Whether execution supremacy protects a target from prose | `rules/warrants.py::execution_backed`/`formally_backed` — narrow vs wide guard, do not conflate (`DR-CON-criticism-source`'s own Traps entry on this) | `tests/test_oracle.py -k execution_backed`, `tests/test_prose_refutation_boundaries.py -k formal` |
 | Whether one `candidate_checker` commitment specifically keeps `formally_backed`'s protection | `rules/warrants.py::formally_backed`'s relatedness-gated branch, reading `rules/relatedness.py::relatedness_claim_holds` — do NOT extend this to any other kind without re-deriving R43's three couplings (`REQUEST.md` Amendment 2) | `tests/test_prose_refutation_boundaries.py -k challenged_relatedness` |
+| What a survivor scores on a Pareto axis, or whether it is scored on that axis at all | `scheduler/scheduler.py::pareto_scores` — OMIT the key for an axis the harness did not measure; never emit a floor value a commitment-free artifact can reach, and never let `capture/pareto.frontier` default a missing score to 0.0 again | `tests/test_formalism_optional_rank.py::test_informal_and_formal_of_equal_standing_rank_equally`, `::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead` |
 | Which artifacts get re-criticized first when standing capacity is left over | `scheduler/scheduler.py::_standing_recrit_pool` — the one place today's system already orders on kind; changing this is D4/R-g territory, price it against the finding in CENSUS.md section 4 first | (none yet — no dedicated test found for this ordering specifically) |
 | What the critic pack shows about a target's declared commitments | `llm/packs.py::render_crit_pack`, `_MACHINE_EVAL_NOTE` | `tests/test_prose_refutation_boundaries.py -k formal_target` |
 | What happens to a target's dependents when it is refuted | `adjudication/support.py::final_labels` — do not special-case by kind; the cascade's kind-blindness is load-bearing (R-g) | `tests/test_adjudication.py::test_support_cascade_orphaned_not_false` |
@@ -204,6 +222,35 @@ decides "is this prose" before criticism runs.
 
 ## Traps
 
+- **Kind can be read without naming a kind guard, and that is how the one real
+  penalty got in.** Every check on this concept looked for `execution_backed`
+  or `formally_backed`. `run_report`'s `coverage` axis named neither: it
+  DERIVED kind from `Interface.commitments` by counting how many were
+  evaluable, and scored an artifact with none of them 0.0 — the identical
+  coordinate to one that was checked and failed everything. `frontier`
+  maximises every axis, so a formally-backed sibling dominated an otherwise
+  identical prose one and it left the run's published answer. Live footprint,
+  re-measured 2026-08-30 rather than inherited: grounded-extension run
+  `experiments/2026-08-12-live-grounded-extension-expansion/run` had 233
+  survivors in exactly two score triples — 146 at `(0.0, 0.0, 0.0)` carrying
+  nothing evaluable, 87 at `(0.0, 0.0, 1.0)` carrying something — and the
+  published frontier was exactly those 87. FIXED 2026-08-30
+  (`experiments/2026-08-30-defect-formalism-rank-penalty/`) by making an
+  OMITTED axis mean not-measured. The enduring rule is the diagnosis, not the
+  fix: when checking this concept, ask what a term is DERIVED from, not which
+  helper it calls.
+`check: python -m pytest tests/test_formalism_optional_rank.py -q`
+- **A repair to a kind-conditional rank term is not "put everyone on the
+  frontier".** The operator's own question when this was parked was whether
+  "nothing to check" and "checked and failed" should share a coordinate
+  (`experiments/2026-08-27-audit-formalism-optional/PARKED.md:73-77`). The two
+  roads that answer it by ASSIGNING a value both fail: 0.0 is today's penalty,
+  and a neutral 1.0 makes "nothing to check" out-rank a formally-backed
+  artifact whose battery half-passed — the same weight with its sign flipped,
+  which R-g's "may weight ranking ... on a conjecture's KIND" forbids in both
+  directions. Only declining to score the axis removes the weight instead of
+  moving it. The argument is re-runnable at
+  `experiments/2026-08-30-defect-formalism-rank-penalty/road_law_probe.py`.
 - **The two supremacy guards are not interchangeable** — already recorded in
   `DR-CON-criticism-source`'s own Traps, restated here because it is exactly
   a kind-signal trap: `crit.py` consults the narrow `execution_backed`

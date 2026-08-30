@@ -1,0 +1,31 @@
+### MUTANT 1 -- a fourth Pareto axis ('novelty') added to Config.PARETO_AXES, nothing else changed
+        """ARCHITECTURE. A new Pareto axis cannot ship without someone deciding
+        whether an artifact can reach its floor by carrying no commitment. Adding a
+        name to Config.PARETO_AXES turns this red until it is annotated above."""
+>       assert set(Config().PARETO_AXES) == set(COMMITMENT_FREE_CAN_REACH_THE_FLOOR)
+E       AssertionError: assert {'coverage', ...lty', 'reach'} == {'coverage', 'hv', 'reach'}
+E         
+E         Extra items in the left set:
+E         'novelty'
+E         Use -v to get more diff
+
+tests/test_formalism_optional_rank.py:150: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_formalism_optional_rank.py::test_architecture_every_pareto_axis_declares_its_commitment_free_state
+1 failed, 10 passed in 0.91s
+
+### MUTANT 2 -- the penalty reintroduced: pareto_scores emits coverage 0.0 for an empty battery
+E           AssertionError: ('coverage', {'hv': 0.0, 'reach': 0.0, 'coverage': 0.0})
+E           assert ('coverage' in {'hv': 0.0, 'reach': 0.0, 'coverage': 0.0}) is False
+
+tests/test_formalism_optional_rank.py:161: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_formalism_optional_rank.py::test_informal_and_formal_of_equal_standing_rank_equally
+FAILED tests/test_formalism_optional_rank.py::test_a_partly_passing_battery_is_not_out_ranked_by_nothing_to_check
+FAILED tests/test_formalism_optional_rank.py::test_kind_blindness_prose_ranks_the_same_with_and_without_a_formal_channel
+FAILED tests/test_formalism_optional_rank.py::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead
+4 failed, 7 passed in 1.02s
+
+### CONTROL -- the real tree
+...........                                                              [100%]
+11 passed in 0.70s

@@ -1,0 +1,41 @@
+road               L1    L2    L3    L4    
+-------------------------------------------
+today (no change)  FAIL  FAIL  PASS  PASS  
+(a) not-measured   PASS  PASS  PASS  PASS  
+(b) neutral 1.0    PASS  PASS  FAIL  PASS  
+(b) neutral mean   PASS  FAIL  PASS  PASS  
+(c) disclose only  FAIL  FAIL  PASS  PASS  
+
+Detail (the frontier each probe actually computed):
+  today (no change)
+    L1 equal standing        FAIL  frontier=['formal']
+    L2 kind-blindness        FAIL  prose_on_frontier: with_formal_channel=False without=True  (with=['pass'])
+    L3 no reverse weight     PASS  frontier=['formal_partial']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+  (a) not-measured
+    L1 equal standing        PASS  frontier=['formal', 'prose']
+    L2 kind-blindness        PASS  prose_on_frontier: with_formal_channel=True without=True  (with=['pass', 'prose'])
+    L3 no reverse weight     PASS  frontier=['formal_partial', 'prose']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+  (b) neutral 1.0
+    L1 equal standing        PASS  frontier=['formal', 'prose']
+    L2 kind-blindness        PASS  prose_on_frontier: with_formal_channel=True without=True  (with=['pass', 'prose'])
+    L3 no reverse weight     FAIL  frontier=['prose']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+  (b) neutral mean
+    L1 equal standing        PASS  frontier=['formal', 'prose']
+    L2 kind-blindness        FAIL  prose_on_frontier: with_formal_channel=False without=True  (with=['pass'])
+    L3 no reverse weight     PASS  frontier=['formal_partial', 'prose']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+  (c) disclose only
+    L1 equal standing        FAIL  frontier=['formal']
+    L2 kind-blindness        FAIL  prose_on_frontier: with_formal_channel=False without=True  (with=['pass'])
+    L3 no reverse weight     PASS  frontier=['formal_partial']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+
+SHIPPED (the tree this script was run against):
+    L1 equal standing        FAIL  frontier=['formal']
+    L2 kind-blindness        FAIL  prose_on_frontier: with_formal_channel=False without=True  (with=['pass'])
+    L3 no reverse weight     PASS  frontier=['formal_partial']
+    L4 axis keeps meaning    PASS  frontier=['passed']
+    -> the shipped tree matches road: today (no change)
