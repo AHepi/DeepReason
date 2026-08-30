@@ -1,0 +1,22 @@
+LEG 1  equal standing, through the shipped run_report
+       statuses : {"formal": "accepted", "prose": "accepted"}
+       survivors: 2
+       frontier : ['formal']
+       both on the frontier (the law's requirement): False
+
+LEG 2  mutation control A: prose given one PASSING evaluable commitment
+       frontier : ['formal', 'prose']
+       control holds (the coverage axis is what excludes): True
+
+LEG 3  mutation control B: a FAILED battery must stay dominated
+       frontier : ['passed']
+       control holds (the axis still discriminates): True
+
+LEG 4  simulated fix: road (a) re-scoring, same artifacts as leg 1
+       frontier : ['formal', 'prose']
+       the exclusion disappears under the fix: True
+
+VERDICT: PENALTY_PRESENT
+  The prose conjecture is dropped from the frontier for carrying no
+  evaluable commitment, and re-scoring it as NOT-MEASURED restores it.
+EXIT=0
