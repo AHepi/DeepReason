@@ -1,0 +1,17 @@
+PARETO_AXES = ['hv', 'reach', 'coverage']  (frontier maximises each)
+  formal survivor: {'hv': 0.0, 'reach': 0.0, 'coverage': 1.0}
+  prose  survivor: {'hv': 0.0, 'reach': 0.0, 'coverage': 0.0}
+  frontier keeps : ['formal']
+  prose dropped from the frontier: True
+
+live root: /tmp/formalism-audit-d6esi3py
+  statuses : 0ada8ef8e2fe=accepted, f4b88d77cb50=accepted
+  survivors: 2
+  frontier : ["0ada8ef8e2fe50490ce394c1e450137758c7c17b53d60c4868cceb171dc86e24"]
+  formal id in frontier: True
+  prose  id in frontier: False
+
+mutation proof (prose given one passing evaluable commitment): frontier keeps ['formal', 'prose'] -> penalty disappears: True
+
+REPRODUCED
+EXIT=0

@@ -1,0 +1,44 @@
+{
+  "current_equals_stored": true,
+  "current_frontier_is_exactly_the_battery_carriers": true,
+  "current_frontier_len": 87,
+  "empty_battery": 146,
+  "empty_battery_survivors_on_current_frontier": 0,
+  "road_a_frontier_len": 233,
+  "road_b_frontier_len": 233,
+  "root": "experiments/2026-08-12-live-grounded-extension-expansion/run",
+  "shipped_score_triples": {
+    "(0.0, 0.0, 0.0)": 146,
+    "(0.0, 0.0, 1.0)": 87
+  },
+  "stored_frontier_len": 87,
+  "survivors": 233,
+  "triples": {
+    "(0.0, 0.0, 1.0, True)": 87,
+    "(0.0, 0.0, None, False)": 146
+  }
+}
+
+{
+  "current_equals_stored": true,
+  "current_frontier_is_exactly_the_battery_carriers": false,
+  "current_frontier_len": 40,
+  "empty_battery": 0,
+  "empty_battery_survivors_on_current_frontier": 0,
+  "road_a_frontier_len": 40,
+  "road_b_frontier_len": 40,
+  "root": "experiments/2026-08-25-poietics-program/run",
+  "shipped_score_triples": {
+    "(0.0, 0.0, 0.5)": 11,
+    "(0.0, 0.0, 0.5714285714285714)": 7,
+    "(0.0, 0.0, 1.0)": 40
+  },
+  "stored_frontier_len": 40,
+  "survivors": 58,
+  "triples": {
+    "(0.0, 0.0, 0.5, True)": 11,
+    "(0.0, 0.0, 0.5714285714285714, True)": 7,
+    "(0.0, 0.0, 1.0, True)": 40
+  }
+}
+
