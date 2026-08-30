@@ -156,6 +156,48 @@ def _assert_amendment_committed(root: Path) -> None:
         raise ValueError(str(error)) from error
 
 
+def record_verification_refusal(root: Path) -> str | None:
+    """The names of the checks this root's record fails, or None if it verifies.
+
+    ONE definition, consumed by both continuation verbs: `continue` below and
+    `amend` (`amendment/apply.py`), so the two can never drift into deciding
+    the same question differently -- the defect this gate exists to close was
+    two surfaces evaluating independent predicates over facts only one could
+    see.
+
+    The verdict is RE-DERIVED rather than read from ``REPLAY_VALIDATION.json``:
+    that file is a cache of a verdict taken over the log, and is unchanged by a
+    log edited afterwards.  One flipped byte in a recorded provider endpoint
+    leaves the stored verdict and ``derive_terminal_authority`` alike calling
+    the root sound, while ``verify_root`` reports `frozen-route` and
+    `attempt-route`.  Cost is O(run length) -- measured 0.69s at 27 events to
+    32.4s at 594 -- and is paid once, by an operator-initiated verb, before a
+    run that lasts minutes to hours.
+
+    A record the verifier cannot READ is not a record that verified, so an
+    exception is a refusal naming the exception type, never a pass.
+    """
+
+    from deepreason.invariants import verify_root
+
+    try:
+        verdict = verify_root(root)
+    except Exception as error:  # noqa: BLE001 - unreadable is not verified
+        return type(error).__name__
+    violations = verdict.get("violations") or []
+    if not violations:
+        return None
+    return ", ".join(
+        sorted({str(item.get("check", "unknown")) for item in violations})
+    )
+
+
+def _assert_record_verified(root: Path) -> None:
+    refusal = record_verification_refusal(root)
+    if refusal is not None:
+        raise ValueError(f"CONTINUE_RECORD_NOT_VERIFIED: {refusal}")
+
+
 def _assert_no_live_lock(root: Path) -> None:
     try:
         locks = operator_locks(root, owner="continue-check", blocking=False)
@@ -425,6 +467,10 @@ def prepare_continuation(
                 raise ValueError("CONTINUE_CHECKPOINT_EVENT_FENCE_MISMATCH")
     if check_operator_lock:
         _assert_no_live_lock(root_path)
+    # LAST precondition, and before this function's first write (the
+    # ``run-stops/`` archive below): every earlier refusal keeps its own code
+    # and its own witnesses, and a root refused here is byte-unchanged.
+    _assert_record_verified(root_path)
     cycle_limit, cycle_diagnostic = parse_limit(cycles, optional=False)
     token_limit, token_diagnostic = parse_limit(tokens)
     request = ContinuationRequest(cycles=cycle_limit, tokens=token_limit)

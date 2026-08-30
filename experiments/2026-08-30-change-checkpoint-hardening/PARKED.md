@@ -302,3 +302,63 @@ artifact of its own version" -- which is a legitimate answer under the
 End state: a decision, ledgered; and if a verb, one that appends and never
 edits.
 ```
+
+---
+
+## F8 — DIFF BUDGET EXCEEDED, a stop this lane may not decide for itself
+
+WHAT: `tools/diff_budget.py` reads `EXCEEDED` against the ceiling SPEC.md
+declared for this tranche. SPEC.md's own rule says that verdict "is a STOP
+decided above this lane, per the batch-1 record", so it is parked here rather
+than resolved by trimming. Measured at delivery, against tranche base
+`84514a0280f45d29e5066bb3be3d273ba73798db`:
+
+    {"areas": {"src": 103, "tests": 397, "docs/map": 65},
+     "total_insertions": 565, "ceiling": 400, "verdict": "EXCEEDED"}
+
+The overshoot is entirely OUTSIDE production code. `src` came in at 103
+insertions against a SPEC estimate of 102 — the four source edits landed
+almost exactly as designed. `tests` came in at 397 against an estimate of 200,
+because SPEC.md budgeted 150 lines for a NEW test module that has to carry six
+mutation-proven tests, each selecting its witnesses from committed roots and
+each explaining what would make it vacuous. Nothing was trimmed to fit the
+number: a test whose comment explaining the mutation is deleted is a test the
+next reader cannot maintain, and this repo's recorded failure mode is vacuous
+tests, not verbose ones.
+
+```
+Route: no workflow. This is a one-line ruling for the monitor or the operator.
+
+DECIDE: does the ultracode diff-budget ceiling apply to TEST and MAP lines, or
+only to production `src` lines?
+
+The measurement that forces the question
+(experiments/2026-08-30-change-checkpoint-hardening, lane A of batch 2):
+
+    src        103 insertions  (SPEC.md estimated 102)
+    tests      397 insertions  (SPEC.md estimated 200)
+    docs/map    65 insertions  (SPEC.md estimated  58)
+    total      565             ceiling 400  ->  EXCEEDED
+
+Both readings are defensible:
+  (a) the ceiling is a blast-radius instrument, and blast radius is
+      production surface -- so it should be measured over `src` alone, where
+      this lane came in ON estimate;
+  (b) the ceiling is a review-cost instrument, and a 400-line test module is
+      400 lines a reviewer must read -- so the total is the right measure and
+      SPEC.md simply under-budgeted the tests.
+
+If (a): change the ceiling's `--paths` in the tranche template to `src`, and
+say so where the batch-1 withheld lanes are recorded, so the next lane does
+not stop on the same reading.
+If (b): the ceiling stands, this tranche is over it, and the disposition is
+whether to split the delivered work into two tranches after the fact -- which
+buys nothing here, since both commits are already self-contained and gated.
+
+Evidence: run
+  python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db \
+    --ceiling 400 --paths src tests docs/map
+and
+  python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db \
+    --ceiling 400 --paths src
+```

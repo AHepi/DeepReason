@@ -109,10 +109,24 @@ def _reshaped_problem_id(question: str) -> str:
 
 
 def _require_terminal_stop(root: Path, manifest) -> None:
+    from deepreason.runtime.continuation import record_verification_refusal
     from deepreason.runtime.terminal_authority import derive_terminal_authority
 
     authority = derive_terminal_authority(root, manifest=manifest)
     if authority.current_valid:
+        # Authority FIRST, integrity second: a root that never reached a
+        # terminal keeps AMEND_NOT_AT_TERMINAL and its own diagnosis.  Terminal
+        # authority is blind to a forged log -- one flipped byte rewriting a
+        # recorded provider endpoint leaves it `current_valid_committed` -- so
+        # amend re-derives the record through the same predicate `continue`
+        # uses, rather than carrying a second copy of the rule.
+        refusal = record_verification_refusal(root)
+        if refusal is not None:
+            raise AmendmentError(
+                "AMEND_RECORD_NOT_VERIFIED",
+                "amendment requires a record that still verifies; this root "
+                f"fails replay validation ({refusal})",
+            )
         return
     # A staged epoch's own events are authorized past the terminal horizon by
     # the record that declares them. If that record no longer describes them,
