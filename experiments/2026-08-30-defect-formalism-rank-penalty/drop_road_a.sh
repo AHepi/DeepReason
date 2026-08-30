@@ -45,9 +45,22 @@ for ref in "$BASE" "$LANE"; do
     echo "REFUSED: $ref does not resolve in this repository."; exit 1; }
 done
 
+# Preconditions. `git apply` will match a hunk whose lines have been renamed
+# under it, so the write guard is these assertions plus the post-drop checks
+# below -- not the patch application.
+if ! grep -q "^def pareto_scores(" src/deepreason/scheduler/scheduler.py \
+   || [ ! -e tests/test_formalism_optional_rank.py ] \
+   || ! grep -q 'grep -q "\^def pareto_scores("' docs/map/SUB-scheduler.md; then
+  echo "REFUSED: road (a) is not present on this tree as delivered (its"
+  echo "definition, its test file, or the map check that greps for it is"
+  echo "already gone). Nothing to drop."
+  exit 1
+fi
+
 if ! git diff "$BASE" "$LANE" -- "${PATHS[@]}" | git apply -R --index; then
-  echo "REFUSED: the reverse patch did not apply. Road (a)'s hunks have moved"
-  echo "on this tree; drop it by hand and re-run this script's checks below."
+  echo "REFUSED: the reverse patch was empty or did not apply -- \$LANE does not"
+  echo "carry road (a) over \$BASE, or its hunks have moved on this tree. Drop"
+  echo "it by hand and re-run this script's post-drop checks."
   exit 1
 fi
 
@@ -67,7 +80,11 @@ while IFS= read -r line; do
   fi
 done < <(grep -E '^`check: (python -m pytest tests/test_scheduler.py::test_focus_family|for c in LIVENESS_QUEUE)' docs/map/SUB-scheduler.md)
 
-[ "$fail" -ne 0 ] && exit 2
+if [ "$fail" -ne 0 ]; then
+  echo "The removal is STAGED but NOT sound. Inspect it, or undo it with:"
+  echo "  git reset -q && git checkout -- ."
+  exit 2
+fi
 
 echo "DROPPED: road (a) is removed and staged; the two SUB-scheduler.md checks"
 echo "that depend on it are green. Commit with:"

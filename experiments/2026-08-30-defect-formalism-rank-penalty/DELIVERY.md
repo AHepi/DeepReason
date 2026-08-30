@@ -638,7 +638,16 @@ since the park base `736b50839`, refuses on a dirty or moved tree, and re-runs
 the two checks before it reports `DROPPED`. Verified by running it on a
 throwaway clone (`proof/drop_road_a_2026-08-30.txt` §B): after the drop,
 `docs/map/`, `src/` and `tests/` are **byte-identical** to `736b50839` and both
-checks exit 0.
+checks exit 0, and the tranche's proof transcripts survive — which a plain
+`git revert` does not leave, because `fe6b29ed2` added them (§A). Every guard
+is exercised in §C: dirty tree, road already gone, a later change that renamed
+the function, a later change that edited inside the road's hunk, an empty
+reverse patch (all `REFUSED`, exit 1), and a drop the road survives
+(`DROP_UNSOUND`, exit 2, with the undo command printed). A first draft of §C
+claimed a refusal the script did not make; that draft committed its "later
+change" onto the lane branch itself, which put the change inside the patch.
+Re-run with the later change on a separate branch — the fan-in's real shape —
+and recorded with the correction visible rather than silently replaced.
 
 **Residue.** The default fan-in action is still to merge the branch, which
 integrates road (a). That is a batch-level decision this lane cannot make; what
