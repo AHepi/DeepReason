@@ -80,7 +80,8 @@ changed: `docs/map/CON-criticism-source.md`,
 `docs/map/CON-scheduler-ranking.md`, `docs/map/SEAM-ontology-x-rules.md`,
 `docs/map/SEAM-rules-x-scratch.md`, `docs/map/INDEX.md`
 created: `docs/map/CON-successor-questions.md`
-new checks: 14 (11 in the new document, 3 in the amended ones)
+new checks: 17, counted mechanically —
+`git diff 3688713ee..HEAD -- docs/map | grep -c '^+`check:'` -> 17 (twelve in the new document, five across the five amended ones)
 left stale: none — `Verified-at:` was advanced on all six to the commit their
 checks were re-run against, and the re-run output is pasted in VALIDATION.md.
 

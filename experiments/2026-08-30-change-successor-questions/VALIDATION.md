@@ -189,13 +189,17 @@ tranche (`crit.py`, `spawn.py` and `scheduler.py` all take a zero-line diff)
 docs_verify --stale: not run; `Verified-at:` advanced only where checks were
 re-run, and the six documents this tranche touches are exactly those.
 
-new checks added by this change: 14 — eleven in `CON-successor-questions.md`
-(the modularity claim, the row-id absence, the interface `__all__`, the law
-line, the empty permitted-exception list, the link, the visibility, the shipped
-defaults, and three Traps checks) and three in amended documents
-(`CON-criticism-source.md` row + trap, `SEAM-rules-x-scratch.md` trap + rule 6,
-`CON-problem-layer-lifecycle.md` H1, `CON-scheduler-ranking.md` × 2,
-`SEAM-ontology-x-rules.md` trap).
+new checks added by this change: 17, counted mechanically rather than by hand —
+
+    $ git diff 3688713ee..HEAD -- docs/map | grep -c '^+`check:'
+    17
+
+Twelve in `CON-successor-questions.md` (the modularity claim, the row-id
+absence, the interface `__all__`, the law line, the empty permitted-exception
+list, the link, the visibility, the shipped defaults, and four Traps checks)
+and five across the amended documents (`CON-criticism-source.md` row + trap,
+`SEAM-rules-x-scratch.md` rule 6 + trap, `CON-problem-layer-lifecycle.md` H1,
+`SEAM-ontology-x-rules.md` trap, `CON-scheduler-ranking.md` × 2).
 
 record observables added vs sweep probes: two typed Measure families
 (`successor-question:` with three dispositions, and `successor-problem-minted`),
