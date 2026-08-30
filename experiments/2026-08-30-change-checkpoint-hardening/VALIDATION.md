@@ -302,3 +302,70 @@ root's `log.jsonl`, the test run, the byte removed:
 P-FIX-1 was NOT needed in the delivered tree: without the gate,
 `test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`
 passes unchanged, and `tests/test_continuation.py` is untouched by this lane.
+
+## S-DOCS — `tools/docs_verify.py`, delta ZERO against this container's baseline
+
+    $ PYTHONPATH=.../src python tools/docs_verify.py
+      FAIL SEAM-llm-x-rules.md:54
+      FAIL CON-discharge-channel.md:150
+      FAIL CON-run-identity.md:211
+      FAIL CON-run-identity.md:213
+      FAIL CON-run-identity.md:215
+      FAIL INV-frozen-surfaces.md:181
+      FAIL INV-frozen-surfaces.md:734
+      FAIL INV-signal-contract.md:243
+      FAIL SEAM-llm-x-verification.md:19
+    docs_verify: 9 failed
+
+`docs/AUDIT_BASELINES.md` records "6 failed on a full clone, 9 on a shallow
+one"; this container is shallow. Nine, and the three `CON-run-identity.md`
+failures at :211/:213/:215 are `git log`/`git show -M` history checks that a
+shallow clone cannot satisfy — this lane's diff to that document is a pure
+ADDITION at line 258 and later, so none of them can have been caused by it.
+
+THE FIRST RUN OF THIS COMMAND REPORTED **10**, and the tenth was this lane's own
+new check: it asserted `forge.json["undetected"] == 4` where that key is a LIST
+of four root paths. The check was wrong, docs_verify caught it, and it is now
+
+    assert len(rows['undetected']) == 4 and rows['population'] == 16 and rows['detected'] == 12
+
+The gate half of the same check is mutation-proven by construction — it asserts
+`'verify_root' not in` either verb's module, so it goes RED the moment the
+parked gate lands and the Traps entry is not rewritten with it:
+
+    $ python -c "c='...verify_root...'; assert 'verify_root' not in c, 'the integrity gate landed: REWRITE this Traps entry, never delete it'"
+    AssertionError: the integrity gate landed: REWRITE this Traps entry, never delete it
+
+## S-CENSUS — the census re-run, and an independent check on S7
+
+    $ PYTHONPATH=.../src python experiments/2026-08-30-change-checkpoint-hardening/proof/census.py
+    ...
+    population: 59
+    schema_version: {'6': 59}
+    triples (state | stop_reason | amend_ready):
+      completed | budget_exhausted | True  -> 23
+      failed | operational_failure | False  -> 16
+      completed | budget_exhausted | False  -> 13
+      running | {'absent': True, 'reason': 'NO_STOP_RECORD'} | False  -> 4
+      running | budget_exhausted | False  -> 1
+      completed | converged | True  -> 1
+      running | operational_failure | False  -> 1
+    amend_ready: {'False': 35, 'True': 24}
+    stored_replay_valid: {'True': 39, 'False': 16, "{'absent': True, 'reason': 'NO_REPLAY_VALIDATION_JSON'}": 4}
+    authority_status: {'current_valid_committed': 54, 'current_open_uncommitted': 4, 'invalid_incomplete': 1}
+    A2 gap (authority valid AND stored replay invalid): 16
+    A1 failed without continuation authority: 15
+    finalize population (current_open_uncommitted): 4
+    stranded (neither amend nor finalize): 1
+      experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a
+    exit=0
+
+    $ git status --porcelain experiments/2026-08-30-change-checkpoint-hardening/proof/
+    (empty)
+
+The empty second line is worth more than the first: `census.py` drives
+`results_summary` over all 59 committed roots on its DEFAULT path, and its
+output file is byte-identical after S7. That is an independent confirmation,
+over 59 real roots rather than one fixture, that S7's default path is
+behaviour-identical — which is what SPEC.md P-FIX-2 predicted and what allowed
+the six-key exact-set assertion to stay put.
