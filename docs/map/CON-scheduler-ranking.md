@@ -1,5 +1,5 @@
 <!-- DR-CON-scheduler-ranking -->
-Verified-at: 3688713ee
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py
 Seams: DR-SEAM-scheduler-x-rules

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-ontology-x-rules -->
-Verified-at: 3688713ee
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/ontology/artifact.py, src/deepreason/ontology/problem.py, src/deepreason/ontology/event.py, src/deepreason/frozen.py, src/deepreason/rules/spawn.py, src/deepreason/rules/synth.py
 Sides: DR-SUB-ontology, DR-SUB-rules

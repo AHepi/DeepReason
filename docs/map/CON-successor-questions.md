@@ -1,5 +1,5 @@
 <!-- DR-CON-successor-questions -->
-Verified-at: 3688713ee
+Verified-at: bc3175394
 Verify: python -m pytest tests/test_successor_law_line.py tests/test_successor_registry.py tests/test_successor_questions.py tests/test_successor_minting.py tests/test_successor_rank_tie.py -q
 Owns: src/deepreason/successor/__init__.py, src/deepreason/successor/registry.py, src/deepreason/successor/route.py, src/deepreason/successor/mint.py
 Seams-undocumented: successor-questions x scratch, successor-questions x rules, successor-questions x scheduler
@@ -20,6 +20,20 @@ The authority is the operator's law of 2026-08-29 (CLAUDE.md, "Successor
 questions: optional to propose, routed by pluggable destination, minting gated
 off-by-default"), captured verbatim in
 `experiments/2026-08-30-change-successor-questions/REQUEST.md`.
+
+NOTHING IN PRODUCTION CALLS THIS YET. The channel is built, tested and
+mutation-proved, but no module outside `src/deepreason/successor/` imports it,
+so a live run today records the field on the criticism output contract and
+routes nothing: no block is written, no conjecturer meets it, no receipt is
+recorded. Everything this document describes is the library as it behaves when
+called, and today only tests call it. What is missing is one dispatch site, and
+WHERE that site may live is exactly the tranche's parked operator question Q3
+(may criticism write to the workshop?) in
+`experiments/2026-08-30-change-successor-questions/PARKED.md`. The check below
+goes RED on the day a production module imports this package, which is the day
+this paragraph must be rewritten.
+
+`check: ! grep -rqE "deepreason\.successor|from deepreason import successor" --include=*.py src/deepreason --exclude-dir=successor && python -c "import deepreason.successor"`
 
 Three things it is deliberately NOT:
 
@@ -71,15 +85,20 @@ as does a numeric field added to the declaration model
 
 `check: python -m pytest tests/test_successor_law_line.py -q`
 
-The four packages that DECIDE anything — `scheduler`, `adjudication`,
-`informal`, `rules` — name no part of this machinery, and the permitted-
-exception list is EMPTY. That emptiness is the current answer to the tranche's
-parked Q3 (may the criticism side write to the workshop?): until an operator
-answers it, nothing inside `rules/` dispatches this channel.
+The packages that DECIDE anything — `scheduler`, `adjudication`, `informal`,
+`rules`, plus `workflow` and `workflows`, which hold two of the four production
+callers of the admission gate — name no part of this machinery, and the
+permitted-exception list is EMPTY. The package list is not a hand-maintained
+reading: `test_every_caller_of_the_admission_gate_is_inside_a_deciding_package`
+censuses every caller of `anti_relapse.check` under `src/deepreason` and reddens
+if one appears in a package the absence check does not scan. That emptiness is
+the current answer to the tranche's parked Q3 (may the criticism side write to
+the workshop?): until an operator answers it, nothing inside `rules/` dispatches
+this channel.
 
-`check: python -m pytest tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package -q`
+`check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_every_caller_of_the_admission_gate_is_inside_a_deciding_package -q`
 
-## Entry points
+## Entry points (library surface; no production caller yet)
 
 - `deepreason.successor.resolve(config)` — the destination row a run selects;
   an unregistered id falls back to the shipped default and discloses.
@@ -122,6 +141,9 @@ makes — and appears in the rendered pack's ordered block refs.
 
 - `DR-INV-signal-contract` — the registry sits in its VERSIONED layer, and its
   receipts are declared signals with a real unit and a real staleness.
+
+`check: python -m pytest tests/test_successor_registry.py::test_both_receipt_families_are_declared_signals -q`
+
 - `DR-INV-frozen-surfaces` — nothing here touches one. The two per-run `Config`
   switches, and the two `data.pop` lines they owe `run_manifest.py`, are
   REQUESTED and not granted; until they are, `resolve` and `minting_enabled`
@@ -136,10 +158,10 @@ makes — and appears in the rendered pack's ordered block refs.
 
 | To do this | Edit | Test |
 |---|---|---|
-| Send questions somewhere other than the scratchpad | register a row + writer via `registry.register_destination`; select it by `SUCCESSOR_QUESTION_DESTINATION` | `tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer` |
+| Send questions somewhere other than the scratchpad | register a row + writer via `registry.register_destination`; select it by `SUCCESSOR_QUESTION_DESTINATION` — NOTE: no `Config` field carries this selector yet (Q1 pending); a real `Config` refuses it with `extra_forbidden`, so today only a non-`Config` configuration object can select a row | `tests/test_successor_registry.py::test_adding_a_destination_requires_no_edit_to_any_consumer` |
 | Change what the scratchpad block looks like | `route.py::_write_scratch_block` — body shape only; never a new `ScratchBlockBodyV1` field | `tests/test_successor_questions.py` |
 | Change what a run is TOLD when it opens the minting gate | the `warning` field on the `minting.v1` row in `registry.py` — never a paraphrase at an emit site | `tests/test_successor_minting.py::test_enabling_the_gate_discloses_the_operators_own_warning` |
-| Change what a receipt MEANS | the declaration in `signals.py` under `DR-REC-add-signal`, never the emit site | `tests/test_signal_contract.py` |
+| Add or re-declare a receipt this channel emits | declare it in `signals.py` under `DR-REC-add-signal`, never the emit site | its EXISTENCE, unit and staleness are pinned by `tests/test_successor_registry.py::test_both_receipt_families_are_declared_signals`, not by `tests/test_signal_contract.py`, which stays green when a declaration is deleted outright |
 | Give the channel a per-run switch | `config.py` + the matching unconditional `data.pop` in `run_manifest.py::_versioned_source_config_data` — frozen surface 4, grant REQUIRED first | `tests/test_manifest_config_disclosure.py` |
 
 ## Traps
@@ -151,13 +173,13 @@ makes — and appears in the rendered pack's ordered block refs.
   `ProblemProvenance.model_validate` count, and a branch inside `scan_spawns`
   would break `DR-SEAM-rules-x-scratch`'s six-name trigger set AND revive H1's
   deleted loop. `src/deepreason/rules/spawn.py` takes a zero-line diff.
-  `check: test "$(grep -rn "ProblemProvenance.model_validate" --include=*.py src/deepreason/rules/ | wc -l)" -eq 2 && python -m pytest tests/test_successor_minting.py::test_the_producer_is_outside_scan_spawns -q`
+`check: test "$(grep -rn "ProblemProvenance.model_validate" --include=*.py src/deepreason/rules/ | wc -l)" -eq 2 && python -m pytest tests/test_successor_minting.py::test_the_producer_is_outside_scan_spawns -q`
 
 - **The field must default to `None`, never `""`.** `_canonical_value` dumps
   with `exclude_none`, so `None` drops out and an empty string does not: a
   default of `""` would add a key to every critic output ever recorded. This is
   the same trap `ScratchBlockBodyV1`'s advisory refs already paid for once.
-  `check: python -c "from deepreason.llm.contracts import ArgumentativeCriticOutput as O; assert O.model_fields['successor_question'].default is None; assert 'successor_question' not in O(attack=False).model_dump(exclude_none=True)"`
+`check: python -c "from deepreason.llm.contracts import ArgumentativeCriticOutput as O; assert O.model_fields['successor_question'].default is None; assert 'successor_question' not in O(attack=False).model_dump(exclude_none=True)"`
 
 - **A wire field named with the substring `scratch` turns a map check RED.**
   `DR-SEAM-rules-x-scratch` enumerates Critic-named wire models DYNAMICALLY and
@@ -165,14 +187,14 @@ makes — and appears in the rendered pack's ordered block refs.
   `successor_question` on both `CompactCritic` and `BatchCriticCaseWireV2`
   rather than anything naming its destination — which is also correct on the
   merits, because the destination is configuration and the field is not.
-  `check: python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];M=[c for c in K if issubclass(c,BaseModel)];assert M;F=[(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert not F,F;assert any('successor_question' in c.model_fields for c in M)"`
+`check: python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];M=[c for c in K if issubclass(c,BaseModel)];assert M;F=[(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert not F,F;assert {'CompactCritic','BatchCriticCaseWireV2'} <= {c.__name__ for c in M if 'successor_question' in c.model_fields}"`
 
 - **Routing into a run whose workshop is OFF must DISCLOSE, not discard.**
   A question written into a disabled scratch policy would otherwise vanish with
   no trace, and the record is the only admissible evidence about what a run
   did. Reproduced as a mutant in
   `experiments/2026-08-30-change-successor-questions/proof/route_mutants_red.txt`.
-  `check: python -m pytest tests/test_successor_questions.py::test_a_scratch_disabled_run_discloses_instead_of_discarding -q`
+`check: python -m pytest tests/test_successor_questions.py::test_a_scratch_disabled_run_discloses_instead_of_discarding -q`
 
 - **Two map checks count FILES BY THE WORDS IN THEM, so a new module can move
   them without importing anything.** `DR-SEAM-harness-x-workflow` pins the
@@ -193,4 +215,4 @@ makes — and appears in the rendered pack's ordered block refs.
   role is a frozen surface 4 AND 5 contact costing a full battery per home.
   `ScratchService.create_block` takes no role parameter and is the door this
   package uses.
-  `check: grep -q 'block_role: Literal\["conjecturer", "synthesizer"\]' src/deepreason/run_manifest.py && ! grep -q "author_block" src/deepreason/successor/route.py`
+`check: grep -q 'block_role: Literal\["conjecturer", "synthesizer"\]' src/deepreason/run_manifest.py && ! grep -q "author_block" src/deepreason/successor/route.py`

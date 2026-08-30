@@ -1,5 +1,5 @@
 <!-- DR-CON-criticism-source -->
-Verified-at: 3688713ee
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/crit.py
 Seams: DR-SEAM-rules-x-scratch

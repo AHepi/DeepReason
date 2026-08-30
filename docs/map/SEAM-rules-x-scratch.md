@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: 3688713ee
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
@@ -227,7 +227,7 @@ compare it.
    `experiments/2026-08-30-change-successor-questions/PARKED.md` as Q3. Until
    it is answered, nothing under `rules/` names the channel, and that emptiness
    is itself checked.
-`check: python -m pytest tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package tests/test_prose_refutation_boundaries.py -q && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2`
+`check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package tests/test_prose_refutation_boundaries.py -q && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2`
 
 What breaks first, in the order you will see it: `ConjectureContextStale` if you
 plan at the wrong fence; `"final Conj pack must contain the exact advisory
@@ -259,7 +259,7 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
   rather than anything naming where it goes. Recorded 2026-08-30
   (`experiments/2026-08-30-change-successor-questions/`); the counts have not
   moved.
-`check: test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c fence src/deepreason/rules/crit.py)" -eq 6 && python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];M=[c for c in K if issubclass(c,BaseModel)];assert M;assert not [(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert any('successor_question' in c.model_fields for c in M)"`
+`check: test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c fence src/deepreason/rules/crit.py)" -eq 6 && python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];M=[c for c in K if issubclass(c,BaseModel)];assert M;assert not [(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert {'CompactCritic','BatchCriticCaseWireV2'} <= {c.__name__ for c in M if 'successor_question' in c.model_fields}"`
 
 - **`str` operations demote the `AllocatedPack` marker.** `conj.py` swaps the
   canonical scratch text for the v6 aliased render with `pack.replace(...)` and
