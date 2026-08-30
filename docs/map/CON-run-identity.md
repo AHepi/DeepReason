@@ -279,7 +279,7 @@ them, including the two that were never renamed.
   unintroduced source that `amend` exists to admit, and any root that is not a
   complete v6 record. Instruments and the full collision list are in that
   tranche's `proof/`.
-`check: python -c "import pathlib,json; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a, 'the integrity gate landed: REWRITE this Traps entry, never delete it'; rows=json.loads(pathlib.Path('experiments/2026-08-30-change-checkpoint-hardening/proof/forge.json').read_text()); assert rows['undetected'] == 4 and rows['population'] == 16"`
+`check: python -c "import pathlib,json; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a, 'the integrity gate landed: REWRITE this Traps entry, never delete it'; rows=json.loads(pathlib.Path('experiments/2026-08-30-change-checkpoint-hardening/proof/forge.json').read_text()); assert len(rows['undetected']) == 4 and rows['population'] == 16 and rows['detected'] == 12"`
 - **Changing the budget to "re-run the same question".** Budget is inside the
   identity digest, so a different `--cycles` mints a different root and a fresh
   qualification-cached preparation. That is often what an operator wanted, and

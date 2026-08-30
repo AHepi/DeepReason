@@ -151,11 +151,15 @@ def test_a_terminal_that_wrote_no_checkpoint_records_that_fact(tmp_path, monkeyp
 
 
 def test_committed_roots_are_byte_unchanged_by_this_module():
-    """The evidence this module reads is evidence: it may never move."""
+    """The evidence this module reads is evidence: it may never move.
 
-    # `--untracked-files=no`: a tranche's own NEW files are not a mutation of
-    # a committed root, and this assertion is about mutation.
-    dirty = subprocess.run(
+    Scoped to RUN ROOTS -- a tracked file whose own directory carries a
+    `log.jsonl` -- rather than to all of `experiments/`, because a tranche
+    editing its own narrative documents is not a root mutation and a check
+    that cannot tell the two apart goes red for the wrong reason.
+    """
+
+    changed = subprocess.run(
         [
             "git", "status", "--porcelain", "--untracked-files=no",
             "experiments", "runs",
@@ -163,5 +167,10 @@ def test_committed_roots_are_byte_unchanged_by_this_module():
         capture_output=True,
         text=True,
         check=True,
-    ).stdout.strip()
-    assert dirty == "", f"a committed root moved: {dirty}"
+    ).stdout.split("\n")
+    moved = [
+        line
+        for line in changed
+        if line.strip() and (Path(line[3:].strip()).parent / "log.jsonl").exists()
+    ]
+    assert moved == [], f"a committed root moved: {moved}"

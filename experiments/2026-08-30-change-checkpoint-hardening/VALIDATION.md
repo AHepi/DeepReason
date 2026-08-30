@@ -242,3 +242,63 @@ Files this lane changed, as measured rather than as claimed:
     src/deepreason/application/text_runs.py
     tests/test_checkpoint_hardening.py
     tests/test_results_command.py
+
+## S-RING — ring #1, the run that stopped the gate
+
+    $ PYTHONPATH=.../src python -m pytest \
+        tests/test_continuation.py tests/test_amendment_epochs.py \
+        tests/test_amendment_chain_integrity.py \
+        tests/test_lifecycle_operation_parity.py tests/test_results_command.py \
+        tests/test_terminal_lifecycle_refusal_is_recorded.py \
+        tests/test_calculus_standing.py \
+        tests/test_v6_resumed_terminal_revalidation.py \
+        tests/test_v6_terminal_commitment_authority.py \
+        tests/test_workflow_resume_lifecycle_c4.py tests/test_error_catalog.py \
+        -q -p no:randomly --tb=line
+
+    8 failed, 174 passed in 1036.65s (0:17:16)
+
+SPEC.md predicted ONE (P-FIX-1). The eight are classified one by one in
+`proof/gate_collisions.md`; three cannot be repaired as fixtures without
+changing what they assert. Per SPEC.md P-FIX-3(b) this is a STOP and a
+re-plan, so the gate was reverted and parked (F9). Nothing was weakened and no
+test root was exempted.
+
+## S-RING2 — ring #2, as delivered
+
+Same eleven files plus the new module and the two files S5/S6 touch:
+
+    $ PYTHONPATH=.../src python -m pytest \
+        tests/test_checkpoint_hardening.py tests/test_continuation.py \
+        tests/test_amendment_epochs.py tests/test_amendment_chain_integrity.py \
+        tests/test_lifecycle_operation_parity.py tests/test_results_command.py \
+        tests/test_terminal_lifecycle_refusal_is_recorded.py \
+        tests/test_calculus_standing.py \
+        tests/test_v6_resumed_terminal_revalidation.py \
+        tests/test_v6_terminal_commitment_authority.py \
+        tests/test_workflow_resume_lifecycle_c4.py tests/test_error_catalog.py \
+        tests/test_failure_terminal_reports_real_token_spend.py \
+        tests/test_progress.py -q -p no:randomly --tb=short
+
+    1 failed, 193 passed in 703.65s (0:11:43)
+
+The one failure was THIS MODULE'S OWN control test,
+`test_committed_roots_are_byte_unchanged_by_this_module`, and it was right to
+fire and wrong in its predicate: it flagged `PARKED.md`, a tranche narrative
+document edited while the ring ran, as "a committed root moved". Its predicate
+now selects only tracked files whose own directory carries a `log.jsonl` — a
+run root — and the assertion is unchanged. Re-run:
+
+    $ PYTHONPATH=.../src python -m pytest tests/test_checkpoint_hardening.py -q -p no:randomly
+    3 passed in 5.19s
+
+MUTATION PROOF that the narrowed control is not vacuous
+(`proof/RED-byte-unchanged-mutant.txt`) — one byte appended to a committed
+root's `log.jsonl`, the test run, the byte removed:
+
+    E   AssertionError: a committed root moved: [' M experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d/log.jsonl']
+    1 failed in 0.51s
+
+P-FIX-1 was NOT needed in the delivered tree: without the gate,
+`test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`
+passes unchanged, and `tests/test_continuation.py` is untouched by this lane.
