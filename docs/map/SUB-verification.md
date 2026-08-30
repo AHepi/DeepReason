@@ -1,5 +1,5 @@
 <!-- DR-SUB-verification -->
-Verified-at: e9fac8671
+Verified-at: 19db4f0e4
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification, DR-SEAM-llm-x-verification
@@ -188,8 +188,8 @@ when `stats` was otherwise empty.
   neither was true of model-authored code. The committed suite asserted those
   strings. Assert a DIFFERENTIAL — run the probe inside and outside the
   containment and compare — or the test cannot fail for the reason it exists.
-  ADDRESSED 2026-08-30 (`experiments/2026-08-30-change-execution-safety-parks/`,
-  PARKED.md P4): the ten self-reports across
+  ADDRESSED 2026-08-30 (`experiments/2026-08-30-change-execution-safety-parks/`
+  discharges the 2026-08-27 PARKED.md P4): the ten self-reports across
   `tests/test_contained_simulation_runner.py` and
   `tests/test_simulation_runner_default.py` are converted, and seven
   differentials now stand in `tests/test_sandbox_guard.py`'s OS-layer section —

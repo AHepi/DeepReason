@@ -33,7 +33,7 @@ them, and mutates COPIES of them, and edits none of them.
 
 ## What was asked
 
-Verbatim, `experiments/2026-08-27-change-execution-safety/PARKED.md:213-240`:
+Verbatim, `experiments/2026-08-27-change-execution-safety/PARKED.md:216-237`:
 "every containment property claimed by `verification/contained.py` and
 `oracle_sandbox.py` is pinned by a DIFFERENTIAL that can fail, never by a string
 the backend reports about itself." Scope: "tests/ only, plus whatever docs/map
@@ -50,10 +50,12 @@ why G1–G3 went unnoticed"**.
 ## The ten confessions, and what replaced each
 
 A confession is an assertion whose subject is a value the backend states about
-itself. All ten were dict literals with no consumer that could contradict them:
-`contained.py:502` (`fingerprint()["network_denial"]`), `:519`
-(`resource_limits()["filesystem"]`), `:520` (`["network"]`), `:521`
-(`["network_denial"]`).
+itself. All ten read one of four dict literals — `contained.py:502`
+(`fingerprint()["network_denial"]`), `:519` (`resource_limits()["filesystem"]`),
+`:520` (`["network"]`), `:521` (`["network_denial"]`) — none of which consults
+the probe or the launch it describes. Three of the four have no consumer in
+`src/` at all; the fourth, `resource_limits()["network"]`, has exactly one
+(`invariants.py:1854`), and that consumer reads the confession too.
 
 | # | was | file:line (before) | now measured by |
 |---|---|---|---|
@@ -204,6 +206,39 @@ Clause 1 is not re-proved there: `proof/mutation_proof.out` already shows all
 seven of those tests going RED under source mutations, and the check runs exactly
 those tests.
 
+## The map gate, and an honest failure to complete it
+
+`docs/map/SUB-verification.md`'s own checks were re-run — all 32 of them, by
+`docs_verify`'s own parser and its own execution shape, one at a time in a
+single process. `proof/sub_verification_checks.sh`, output at
+`proof/sub_verification_checks.out`, exit 0:
+
+    SUB-verification.md: 32 checks, 0 parse errors
+      ...
+      PASS :211  python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or ar
+      ...
+    SUB-verification.md: 0 failed
+
+`Verified-at:` is therefore advanced from `e9fac8671` to `19db4f0e4`, the HEAD
+the checks actually ran against. (`e9fac8671` predates this shallow clone's
+history and is not resolvable here, which is how the stamp's convention reads:
+the commit at which the checks were run, not the commit containing the text.)
+The document's declared `Verify:` ring was run too: **30 passed, 0 failed**
+(`tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py
+tests/test_verifier_registry.py tests/test_cli_verifiers.py`).
+
+**The FULL `python tools/docs_verify.py` was attempted and did NOT complete.**
+It ran for 20 minutes and was killed by its own `timeout 1200` (exit 143) with
+no output. The cause is recorded rather than guessed: a sibling lane was running
+its own `docs_verify` on this 4-CPU box for the whole window (measured:
+`ps` showed `python -u tools/docs_verify.py` under `/home/user/dr-lanes/lane-D`
+at 23:58 elapsed), and `docs_verify` defaults to `min(16, cpus)` workers — so
+eight workers contended for four CPUs, which is precisely the situation
+`dr-drive-harness` §5b forbids. This lane did not and could not stop the other
+one. **So: no full docs_verify total is claimed here.** The batch's integration
+step owns the single full run on an idle box, and it is the one that must be
+compared against `docs/AUDIT_BASELINES.md`'s expected-failure set.
+
 ## Ring results, exact
 
     $ python -m pytest tests/test_sandbox_guard.py \
@@ -211,9 +246,18 @@ those tests.
         tests/test_simulation_runner_default.py -q
     51 passed in 6.19s
 
+    $ python -m pytest tests/test_sandbox_guard.py \
+        tests/test_contained_simulation_runner.py \
+        tests/test_simulation_runner_default.py \
+        tests/test_schema_carries_every_prose_rule.py -q     (final, after E2)
+    55 passed in 4.80s
+
     $ python -m pytest tests/test_sandbox_guard.py -q
-    26 passed in 1.95s      (18 before this tranche, 26 after; +7 differentials,
-                             D2 rewritten in place)
+    26 passed in 1.95s      (20 test functions at 152c7e204, 26 now: SIX new
+                             differentials, plus D2 rewritten in place -- seven
+                             differentials in total. `git show
+                             152c7e204:tests/test_sandbox_guard.py |
+                             grep -c '^def test_'` -> 20)
 
     $ ruff check tests/test_sandbox_guard.py \
         tests/test_contained_simulation_runner.py tests/test_simulation_runner_default.py
@@ -338,8 +382,10 @@ carries the same install line and reads:
                                                 # names the flaky set too.
 
 **Why a pointer and not a fresh number.** Any literal is stale on arrival: 4334
-(2026-08-27), 4364, 4374 (2026-08-28), 4486 (batch 1's close), 4491 collected in
-this worktree today. `~8 min` was stale by the same mechanism — three recorded
+(2026-08-27), 4364, 4374 (2026-08-28), 4486 (batch 1's close), and 4497
+COLLECTED in this worktree today (`python -m pytest tests/ -q --collect-only` ->
+`4497 tests collected in 10.49s`; RECON-E measured 4491 at the batch anchor,
+before E1 added six tests). `~8 min` was stale by the same mechanism — three recorded
 full-gate runs took 13:43, 14:35 and 16:34. The pointer is phrased as *"0 failed
 is the baseline … AUDIT_BASELINES.md is the living source"*, which is accurate
 today: that file's full-gate bullet states `0 failed` and deliberately carries no
@@ -369,8 +415,13 @@ In short:
 * **Road C — delete the redundant bare `import jsonschema`** at
   `tests/test_schema_carries_every_prose_rule.py:170`, which defeats the
   `pytest.importorskip("jsonschema", …)` twelve lines below at `:182`. That
-  guard has never been able to run. Deleting the one line makes the suite run
-  without `jsonschema` at all.
+  guard has never been able to run. **Measured rather than assumed**, because
+  the brief's own description of C was a claim: `proof/road_c_evidence.out`
+  makes `jsonschema` absent and shows the file as committed giving
+  `1 failed … ModuleNotFoundError`, then the same node giving
+  `SKIPPED [1] … optional checker` with line 170 deleted and nothing else
+  changed. It closes the `jsonschema` half only — `-n 4` still needs
+  `pytest-xdist`, which no import guard reaches.
 
 They are not exclusive; **B + C together make A merely historical**.
 **Recommendation: do B and C, keep A** — B is the root cause, C is a defect in
@@ -388,11 +439,39 @@ dropped: **P6 is PARTIALLY discharged. The gap is documented, not closed.**
 
 ## The cone, as measured
 
-    $ git diff --name-only          (after the E1 commit)
-    CLAUDE.md
-    experiments/2026-08-30-change-execution-safety-parks/DELIVERY.md
+E2 itself changed exactly one tracked file outside this tranche's own directory:
 
-No frozen path, no `src/`, no `tests/`, no `pyproject.toml`.
+    CLAUDE.md
+
+Its evidence added `proof/road_c_evidence.sh` and `proof/road_c_evidence.out`
+inside the tranche directory. No `src/`, no `pyproject.toml`, no frozen path.
+`tests/test_schema_carries_every_prose_rule.py` is MUTATED AND RESTORED by
+`proof/road_c_evidence.sh`; the script's last lines print
+`restoration: byte-identical to the pre-run file` and re-run the node
+unmutated (`1 passed`).
+
+The lane's full cone across both commits, as measured:
+
+    $ git diff --name-only 84514a0280f45d29e5066bb3be3d273ba73798db...HEAD
+    CLAUDE.md
+    docs/map/SUB-verification.md
+    experiments/2026-08-29-ultracode-batch-2/...          (pre-existing, batch)
+    experiments/2026-08-30-change-execution-safety-parks/...
+    tests/test_contained_simulation_runner.py
+    tests/test_sandbox_guard.py
+    tests/test_simulation_runner_default.py
+
+## One false start, recorded rather than smoothed over
+
+The first `road_c_evidence.sh` hid `jsonschema` behind a stub package that
+raised a bare `ImportError`. Under it, arm C failed too, which read as "road C
+does not work". It was the instrument, not the road: a module that raises
+`ImportError` is BROKEN, not absent, and pytest 9's `importorskip` re-raises it.
+Absence is a `ModuleNotFoundError` from the import system. The committed script
+uses a `sys.meta_path` finder that raises exactly that, and prints its own
+faithfulness check (`import jsonschema -> ModuleNotFoundError: No module named
+'jsonschema'`) above the three arms, so a reader can see the instrument is
+measuring what it claims before reading what it measured.
 
 ## Honest residue for E2
 
@@ -403,7 +482,7 @@ No frozen path, no `src/`, no `tests/`, no `pyproject.toml`.
   did; unlike a passed count, a wall-clock hint has no living source to point at.
 * **`docs/AUDIT_BASELINES.md` was NOT edited.** Recording a freshly measured
   passed count there was optional and conditional on this tranche running a full
-  gate. It did not. A collection count (4491 in this worktree today) is not a run
+  gate. It did not. A collection count (4497 in this worktree today) is not a run
   count, and writing one would have been exactly the rot this edit exists to
   stop. The baseline stays at `0 failed`.
 * **No `docs_verify` check covers CLAUDE.md**, so neither edit is mechanically

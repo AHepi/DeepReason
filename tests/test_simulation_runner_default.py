@@ -235,17 +235,13 @@ def test_a_sandboxed_python_proposal_executes_on_the_default_configuration():
     assert records[0]["observables"] == {"value": 40, "root": 2.0}
     assert records[0]["passed"] is True
 
-    # The three assertions that stood here read `resource_limits()["network"]`,
-    # `resource_limits()["network_denial"]` and
-    # `fingerprint()["network_denial"]` under a comment claiming they showed
-    # execution happened under containment. All three are dict literals in
-    # `contained.py` (:502, :520, :521); none consults the probe or the launch,
-    # so all three survive a containment that stopped working. The property is
-    # now measured in tests/test_sandbox_guard.py by
-    # test_the_contained_backend_prefix_actually_denies_network (the network
-    # effect) and test_the_contained_worker_argv_really_carries_the_probed_prefix
-    # (that the launch applies the prefix the label names).
-    assert result.backend == backend.fingerprint()["backend"]
+    # Containment is not assertable from here. `resource_limits()["network"]`,
+    # `["network_denial"]` and `fingerprint()["network_denial"]` are dict
+    # literals in `contained.py` (:502, :520, :521) that consult neither the
+    # probe nor the launch, so they hold whether or not the containment works.
+    # That property is measured by effect in tests/test_sandbox_guard.py:
+    # test_the_contained_backend_prefix_actually_denies_network and
+    # test_the_contained_worker_argv_really_carries_the_probed_prefix.
 
 
 @needs_containment

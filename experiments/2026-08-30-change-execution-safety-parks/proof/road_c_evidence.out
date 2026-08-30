@@ -1,0 +1,30 @@
+the two lines, as committed:
+    import jsonschema
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+the blocker is faithful: absence, not breakage
+   import jsonschema -> ModuleNotFoundError: No module named 'jsonschema'
+
+--- A: jsonschema present (this container): passes either way ---
+.                                                                        [100%]
+1 passed in 0.14s
+
+--- B: jsonschema absent, file UNCHANGED: the guard cannot help ---
+E           ModuleNotFoundError: No module named 'jsonschema'
+
+/tmp/tmp.6M4Av1LGh4/sitecustomize.py:10: ModuleNotFoundError
+1 failed in 0.08s
+
+--- C: jsonschema absent, line 170 deleted: the guard works, test SKIPS ---
+s                                                                        [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_schema_carries_every_prose_rule.py:181: optional checker
+1 skipped in 0.07s
+
+--- restored ---
+restoration: byte-identical to the pre-run file
+.                                                                        [100%]
+1 passed in 0.18s
+
+NOTE, and it limits road C: this closes the jsonschema half only.
+`-n 4` still needs pytest-xdist, which no import can guard.

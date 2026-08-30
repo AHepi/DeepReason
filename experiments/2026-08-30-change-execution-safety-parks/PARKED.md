@@ -33,15 +33,15 @@ layer, which is the same failure mode that let G1-G3 survive a committed proof.
 **Why this lane did not fix it.** P4's own scope sentence is "tests/ only ...
 No src changes — if a differential goes RED, that is a finding for a defect
 tranche, not something to fix here"
-(`experiments/2026-08-27-change-execution-safety/PARKED.md:236-238`), and
+(`experiments/2026-08-27-change-execution-safety/PARKED.md:233-235`), and
 `src/deepreason/verification/` is frozen surface 3
 (`docs/map/INV-frozen-surfaces.md:47`). The operator has refused verbal grants
 on the record (`INV-frozen-surfaces.md:59`).
 
 **Note the overlap.** The 2026-08-27 park P9 already names the honest remedy at
-`PARKED.md:487-491` ("keep cwd + RLIMIT_FSIZE and STOP reporting `"filesystem":
+`PARKED.md:481-484` ("keep cwd + RLIMIT_FSIZE and STOP reporting `"filesystem":
 "ephemeral scratch workdir"` ... A truthful weaker string beats a false stronger
-one"), and gap G2 at `SAFETY.md:397` rates it High. This entry adds the
+one"), and gap G2 at `SAFETY.md:396` rates it High. This entry adds the
 measurement P9 was written without.
 
 **Prompt:**
@@ -261,8 +261,13 @@ The facts, all verified in-tree this session:
 * Twelve lines below that bare import, line 182 reads
   `jsonschema = pytest.importorskip("jsonschema", reason="optional checker")`.
   The bare import at :170 runs first and raises, so the guard never gets to
-  work. Deleting line 170 alone makes the gate green on a container without
-  `jsonschema`.
+  work. **MEASURED, not asserted** — `proof/road_c_evidence.out`: with
+  `jsonschema` made absent, the file as committed gives
+  `1 failed … ModuleNotFoundError: No module named 'jsonschema'`; with line 170
+  deleted and nothing else changed, the same node gives
+  `SKIPPED [1] … optional checker`, `1 skipped`. Road C closes the `jsonschema`
+  half. It does NOT close `-n 4`, which needs `pytest-xdist` and which no
+  import guard can reach.
 * The gap is not hypothetical and not this container's peculiarity: it was
   measured twice. `experiments/2026-08-27-change-execution-safety/
   DELIVERY.md:127-152` records `1 failed, 4334 passed` on
@@ -277,7 +282,7 @@ The facts, all verified in-tree this session:
 |---|---|---|---|---|
 | **A. Document the gap** (shipped by this lane as E2) | CLAUDE.md's Environment and Build-and-test blocks name the two packages and carry the install line | one doc edit, no gate risk | the install is still insufficient; every fresh container still needs the extra line, it just knows to | trivially |
 | **B. Declare the dependencies** in `pyproject.toml`'s `dev` extra | `pip install -e ".[dev]"` becomes sufficient | one line each; the census is already done and is small — `jsonschema` is the ONLY undeclared third-party import in `tests/` and `mini/`, and `pytest-xdist` is not an import at all | nothing; this is the root cause | trivially |
-| **C. Delete the redundant bare import** at `tests/test_schema_carries_every_prose_rule.py:170` | the existing `importorskip` at :182 starts working; the suite runs without `jsonschema` at all | one deleted line | `-n 4` still needs `pytest-xdist`, so C alone does not close the gap | trivially |
+| **C. Delete the redundant bare import** at `tests/test_schema_carries_every_prose_rule.py:170` | the existing `importorskip` at :182 starts working; the suite runs without `jsonschema` at all — **measured, `proof/road_c_evidence.out`** | one deleted line | `-n 4` still needs `pytest-xdist`, so C alone does not close the gap | trivially |
 
 They are not exclusive. **B + C together make A merely historical**: with C the
 suite no longer needs `jsonschema`, and with B `pytest-xdist` arrives with the
@@ -324,7 +329,11 @@ DO BOTH:
      tests/test_schema_carries_every_prose_rule.py:170. Line 182 twelve lines
      below already reads
      `jsonschema = pytest.importorskip("jsonschema", reason="optional checker")`
-     and has never been able to run. C is correct independently of B.
+     and has never been able to run. C is correct independently of B, and is
+     already measured: experiments/2026-08-30-change-execution-safety-parks/
+     proof/road_c_evidence.out shows the node FAILING with jsonschema absent
+     and SKIPPING once line 170 is gone. Re-run that script rather than
+     re-deriving it.
 
 PROOF OBLIGATION: a fresh virtualenv, `pip install -e ".[dev]"`, then the
 documented gate, 0 failed. Paste both. Then, in a SECOND fresh virtualenv
