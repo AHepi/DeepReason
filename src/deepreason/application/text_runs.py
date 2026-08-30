@@ -1617,12 +1617,18 @@ class TextRunApplicationService:
                 # looking, from outside, like one that could be picked up
                 # again (16 committed roots stand in exactly this state and
                 # say nothing about it).
+                # Which code `continue` will raise is NOT recorded: it also
+                # depends on the cycles and tokens the operator later passes,
+                # and on a resume decision an earlier continuation may have
+                # left, so a terminal that named one would be guessing at
+                # another verb's predicate (measured: 15 of the 16 committed
+                # roots of this shape refuse CONTINUE_TYPED_STOP_REQUIRED, one
+                # refuses CONTINUE_RESUME_RECOVERY_MISMATCH).
                 not_continuable = _refusal(
                     "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL",
                     "a failure terminal takes no STOPPED lifecycle receipt, so "
                     "these checkpoints cannot authorize a continuation",
                     stop_reason="operational_failure",
-                    continue_refusal="CONTINUE_TYPED_STOP_REQUIRED",
                 )
                 payload = _v6_run_result(root, manifest, {
                     "schema": "deepreason-run-result-v1",

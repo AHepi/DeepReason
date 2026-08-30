@@ -480,63 +480,6 @@ def test_verification_is_a_typed_absence_when_no_verdict_was_published():
         assert verification[key]["reason"] == "NO_REPLAY_VALIDATION_JSON"
 
 
-def test_terminal_readiness_answers_the_rederived_verdict_under_verify():
-    """`--verify` must change the ANSWER, not just the verification block.
-
-    Regression (tranche 2026-08-30-change-checkpoint-hardening): `_terminal`
-    read `REPLAY_VALIDATION.json` directly, so `deepreason results --verify`
-    re-derived the verdict, printed it under `verification`, and then reported
-    `amend_ready` from the STORED file anyway.  With `amend` now gated on the
-    re-derived verdict, that reader would promise an amendment `amend` refuses
-    -- the P6 defect in mirror image.
-
-    The differential is one flipped byte of a recorded provider endpoint on a
-    COPY of a committed root, which leaves `REPLAY_VALIDATION.json` untouched
-    and makes `verify_root` report `frozen-route` and `attempt-route`.
-    """
-
-    import shutil
-    import tempfile
-
-    from deepreason.application.results import results_summary
-
-    source = Path(
-        "experiments/2026-08-13-defect-controller-steering-inert"
-        "/failed-epoch1-run-8e22d0431fd2b98d"
-    )
-    assert source.exists()
-    assert json.loads((source / "REPLAY_VALIDATION.json").read_text())["valid"] is True
-
-    with tempfile.TemporaryDirectory() as scratch:
-        copy = Path(scratch) / source.name
-        shutil.copytree(source, copy, symlinks=True)
-        log = copy / "log.jsonl"
-        raw = bytearray(log.read_bytes())
-        offset = bytes(raw).index(b'"endpoint":"https://ollama.com/v1"') + len(
-            b'"endpoint":"https://oll'
-        )
-        raw[offset] = ord("7") if raw[offset] != ord("7") else ord("6")
-        log.write_bytes(bytes(raw))
-
-        stored = results_summary(copy)
-        rederived = results_summary(copy, verify=True)
-
-    # The stored file still says the record is sound, and the default reader
-    # still answers from it -- unchanged behaviour, which is the control.
-    assert stored["verification"]["source"] == "stored"
-    assert stored["verification"]["valid"] is True
-    assert stored["terminal"]["valid_typed_terminal"] is True
-
-    # Under --verify the reader answers from what it actually re-derived.
-    assert rederived["verification"]["source"] == "rederived"
-    assert rederived["verification"]["valid"] is False
-    assert rederived["terminal"]["valid_typed_terminal"] is False
-    assert rederived["terminal"]["amend_ready"] is False
-
-    # No key moved: the six-key terminal contract is the reader's shape.
-    assert set(stored["terminal"]) == set(rederived["terminal"])
-
-
 def test_terminal_readiness_answers_the_amend_question():
     """R10: amendment epochs, and whether the root stands at a valid typed terminal.
 

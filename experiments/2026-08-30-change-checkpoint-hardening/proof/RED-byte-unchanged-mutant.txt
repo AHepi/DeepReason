@@ -6,3 +6,18 @@
 =========================== short test summary info ============================
 FAILED tests/test_checkpoint_hardening.py::test_committed_roots_are_byte_unchanged_by_this_module
 1 failed in 0.51s
+
+--------------------------------------------------------------------------
+SCOPE OF THIS TRANSCRIPT, recorded 2026-08-30 in the skeptic pass.
+
+The arm above is ONE mutation class -- modification of a top-level log.jsonl
+-- and it was presented as proving the control. It does not. The predicate it
+proved passed on four other classes: deleting log.jsonl, deleting a whole run
+root, modifying content-addressed evidence under blobs/ or objects/, and
+renaming a file out of a root. Those four are now covered, against real git
+output, in control_predicate_arms.txt -- in a scratch repository rather than
+here, because deleting a committed root to watch a test fire is the mutation
+this control exists to forbid.
+
+The arm above still stands as written: with the repaired predicate the same
+modification is still caught, as arm 1 of control_predicate_arms.txt shows.

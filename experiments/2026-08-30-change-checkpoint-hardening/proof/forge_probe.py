@@ -12,6 +12,18 @@ a write, and a committed root is evidence whose bytes never change.
     python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_probe.py
 
 Reads census.json for the root list, writes forge.json beside itself.
+
+    ... /forge_probe.py --witnesses
+
+RE-DERIVES the measurement instead of re-reading it, over a bounded witness
+set: every root forge.json calls undetected, plus the two smallest it calls
+detected.  Exits non-zero the moment either half stops being true.  This mode
+exists because `DR-CON-run-identity`'s Traps entry states the blindness as a
+fact about CURRENT CODE, and a `check:` that asserted forge.json's stored
+numbers would stay green after the blindness was fixed OR widened -- the
+lane-C failure mode of this same batch (skeptic pass, 2026-08-30).  Bounded
+rather than all sixteen because the full sweep costs ~65 s and the witnesses
+answer the same question: six roots, ~25 s.
 """
 
 from __future__ import annotations
@@ -71,7 +83,46 @@ def probe(root: Path) -> dict:
             }
 
 
+def witnesses() -> int:
+    """Re-derive the Traps entry's own claim; exit 1 the moment it moves."""
+
+    sys.path.insert(0, str(REPO / "src"))
+    stored = json.loads(OUT.read_text())
+    blind = sorted(stored["undetected"])
+    caught = sorted(
+        row["root"] for row in stored["rows"] if row["forge_detected"]
+    )[:2]
+    failures = []
+    for rel in blind + caught:
+        row = probe(REPO / rel)
+        want_detected = rel in caught
+        if row["forge_detected"] != want_detected:
+            failures.append(
+                f"{rel}: forge_detected={row['forge_detected']} "
+                f"(the record says {want_detected}); "
+                f"authority={row.get('authority_status')}"
+            )
+        print(
+            f"{'DETECTED ' if row['forge_detected'] else 'UNDETECTED'} "
+            f"{row.get('authority_status')}  {rel}"
+        )
+    if failures:
+        print(
+            "the forge measurement MOVED -- rewrite DR-CON-run-identity's "
+            "Traps entry, never delete it:"
+        )
+        for line in failures:
+            print(f"  {line}")
+        return 1
+    print(
+        f"re-derived: {len(blind)} still blind, {len(caught)} still detected"
+    )
+    return 0
+
+
 def main() -> int:
+    if "--witnesses" in sys.argv[1:]:
+        return witnesses()
     sys.path.insert(0, str(REPO / "src"))
     census = json.loads(CENSUS.read_text())
     targets = census["A2_gap_authority_valid_but_replay_invalid"]

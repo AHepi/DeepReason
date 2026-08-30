@@ -481,8 +481,7 @@ def _continuation_authority(harness) -> Any:
     )
 
 
-def _terminal(verification: dict[str, Any], replay: dict | None,
-              stop: dict | None, result: dict | None,
+def _terminal(replay: dict | None, stop: dict | None, result: dict | None,
               harness) -> dict[str, Any]:
     """Whether the root stands where `deepreason amend`/`continue` can act.
 
@@ -493,20 +492,13 @@ def _terminal(verification: dict[str, Any], replay: dict | None,
     third is not implied by the other two — a budget-exhausted stop whose
     STOPPED receipt was refused satisfies both of the first two and continues
     from neither.
-
-    The verdict arrives from ``_verification`` rather than being read a second
-    time out of ``REPLAY_VALIDATION.json``: since 2026-08-30 the ACTING verbs
-    re-derive it, so a reader that answered from the stored file under
-    ``--verify`` would print `amend_ready: true` for a root `amend` refuses.
-    The default path is unchanged — ``_verification``'s stored branch returns
-    exactly ``bool(replay.get("valid"))``.
     """
 
     from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
 
     binding = (replay or {}).get("terminal_binding")
     has_binding = isinstance(binding, dict)
-    valid_terminal = verification.get("valid") is True and has_binding
+    valid_terminal = bool(replay and replay.get("valid") and has_binding)
 
     if stop and stop.get("reason"):
         resumable: Any = stop["reason"] in RESUMABLE_STOP_REASONS
@@ -703,7 +695,6 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         replayed_state = harness.state
     except Exception:  # noqa: BLE001 - a legacy root may defeat the replay reader
         replayed_state = None
-    verification = _verification(root, replay, result, verify=verify)
     summary: dict[str, Any] = {
         "schema": RESULTS_SCHEMA,
         "root": str(root),
@@ -714,9 +705,9 @@ def results_summary(path: Path | str, *, verify: bool = False) -> dict[str, Any]
         "artifacts": _artifacts(positions, status, result, replayed_state),
         "adjudication": _adjudication(harness),
         "embedder": embedder_summary(harness),
-        "verification": verification,
+        "verification": _verification(root, replay, result, verify=verify),
         "amendment": _amendment(root),
-        "terminal": _terminal(verification, replay, stop, result, harness),
+        "terminal": _terminal(replay, stop, result, harness),
     }
     absences: set[str] = set()
     _collect_absences(summary, absences)

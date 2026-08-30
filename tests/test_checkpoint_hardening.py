@@ -82,7 +82,10 @@ def test_a_failure_terminal_records_why_it_cannot_be_continued(tmp_path, monkeyp
     assert refusal["schema"] == "deepreason-terminal-lifecycle-refusal-v1"
     assert refusal["code"] == "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL"
     assert refusal["stop_reason"] == "operational_failure"
-    assert refusal["continue_refusal"] == "CONTINUE_TYPED_STOP_REQUIRED"
+    # The record does not name the code `continue` will raise: that also
+    # depends on what the operator passes and on any earlier resume decision,
+    # so naming it would be one verb guessing at another's predicate.
+    assert "continue_refusal" not in refusal
 
     status = json.loads((root / "run-status.json").read_text())
     assert status["stop_reason"] == "operational_failure"
@@ -96,7 +99,7 @@ def test_a_failure_terminal_records_why_it_cannot_be_continued(tmp_path, monkeyp
         copy = _copy(root, scratch)
         with pytest.raises(ValueError) as raised:
             prepare_continuation(copy, cycles=1, tokens=10, check_operator_lock=False)
-    assert str(raised.value) == refusal["continue_refusal"]
+    assert str(raised.value) == "CONTINUE_TYPED_STOP_REQUIRED"
 
 
 def test_a_terminal_that_wrote_no_checkpoint_records_that_fact(tmp_path, monkeypatch):
@@ -150,27 +153,86 @@ def test_a_terminal_that_wrote_no_checkpoint_records_that_fact(tmp_path, monkeyp
     assert status["terminal_lifecycle_refusal"] == "TERMINAL_NO_CHECKPOINT_WRITTEN"
 
 
+def _run_root_prefixes(tracked: str) -> tuple[str, ...]:
+    """Every committed run root, as GIT knows them -- not as the disk does.
+
+    The index is the only source that survives the mutation this control
+    exists to catch: a root whose `log.jsonl` is deleted still has one here,
+    and a predicate that asks the filesystem instead loses the very file it
+    needs to recognise the deletion.
+    """
+
+    return tuple(
+        name[: -len("log.jsonl")]
+        for name in tracked.split("\0")
+        if name.endswith("/log.jsonl")
+    )
+
+
+def _moved_run_root_paths(status: str, tracked: str) -> list[str]:
+    """The status entries that touch a committed run root, in any way.
+
+    NUL-delimited on purpose: git quotes unusual paths in the newline form,
+    and a rename entry carries its ORIGIN in the following field -- which is
+    the half that names the root a rename moved a file OUT of.
+    """
+
+    roots = _run_root_prefixes(tracked)
+    fields = [field for field in status.split("\0") if field]
+    moved: list[str] = []
+    index = 0
+    while index < len(fields):
+        entry = fields[index]
+        index += 1
+        code, path = entry[:2], entry[3:]
+        paths = [path]
+        if "R" in code or "C" in code:
+            # `XY new\0orig` -- both sides matter, and the origin is the one a
+            # rename out of a root would hide.
+            if index < len(fields):
+                paths.append(fields[index])
+                index += 1
+        for candidate in paths:
+            if candidate.startswith(roots):
+                moved.append(entry)
+                break
+    return moved
+
+
 def test_committed_roots_are_byte_unchanged_by_this_module():
     """The evidence this module reads is evidence: it may never move.
 
-    Scoped to RUN ROOTS -- a tracked file whose own directory carries a
+    Scoped to RUN ROOTS -- anything under a directory git's index says holds a
     `log.jsonl` -- rather than to all of `experiments/`, because a tranche
     editing its own narrative documents is not a root mutation and a check
-    that cannot tell the two apart goes red for the wrong reason.
+    that cannot tell the two apart goes red for the wrong reason.  Every path
+    under a root counts, `blobs/` and `objects/` included: those ARE the
+    record.
+
+    Predicate arms (modify, delete a log, delete a whole root, modify content-
+    addressed evidence, rename out of a root) are mutation-proven against real
+    git output in
+    `experiments/2026-08-30-change-checkpoint-hardening/proof/control_predicate_arms.py`;
+    the earlier filesystem-keyed predicate passed on four of the five.
     """
 
-    changed = subprocess.run(
-        [
-            "git", "status", "--porcelain", "--untracked-files=no",
-            "experiments", "runs",
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.split("\n")
-    moved = [
-        line
-        for line in changed
-        if line.strip() and (Path(line[3:].strip()).parent / "log.jsonl").exists()
-    ]
+    def _git(*args: str) -> str:
+        return subprocess.run(
+            ["git", *args],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+
+    tracked = _git("ls-files", "-z", "experiments", "runs")
+    # Non-vacuity: `str.startswith(())` is False for every path, so an empty
+    # root set would make this control pass on any mutation whatsoever.
+    roots = _run_root_prefixes(tracked)
+    assert len(roots) >= 50, f"the committed run-root set collapsed: {len(roots)}"
+
+    moved = _moved_run_root_paths(
+        _git("status", "--porcelain", "--untracked-files=no", "-z",
+             "experiments", "runs"),
+        tracked,
+    )
     assert moved == [], f"a committed root moved: {moved}"

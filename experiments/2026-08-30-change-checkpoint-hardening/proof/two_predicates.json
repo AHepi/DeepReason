@@ -1,0 +1,103 @@
+{
+  "agree_with_stored_under_report_summary_valid": 2,
+  "agree_with_stored_under_verify_root_violations": 6,
+  "population": 6,
+  "rows": [
+    {
+      "finding_counts": {
+        "completion": 24,
+        "epistemic": 1,
+        "integrity": 0,
+        "operational": 7,
+        "security": 0
+      },
+      "report_summary_valid": true,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "foreign-criticism"
+      ],
+      "verify_root_violations": 5
+    },
+    {
+      "finding_counts": {
+        "completion": 32,
+        "epistemic": 2,
+        "integrity": 2,
+        "operational": 8,
+        "security": 0
+      },
+      "report_summary_valid": false,
+      "root": "experiments/2026-08-04-change-rung5-dumb-alternative-backend/rr-home/runs/run-9a6be78e1e79184a0bd89923b957586c",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "attempt-validity"
+      ],
+      "verify_root_violations": 1
+    },
+    {
+      "finding_counts": {
+        "completion": 46,
+        "epistemic": 1,
+        "integrity": 0,
+        "operational": 2,
+        "security": 0
+      },
+      "report_summary_valid": true,
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-d17935a4bf5ffa67c7f6e67b9a637a00",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "foreign-criticism"
+      ],
+      "verify_root_violations": 4
+    },
+    {
+      "finding_counts": {
+        "completion": 33,
+        "epistemic": 1,
+        "integrity": 0,
+        "operational": 11,
+        "security": 0
+      },
+      "report_summary_valid": true,
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/completed-epoch2-run-9e9812feefa792179d490db7734825b5",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "foreign-criticism"
+      ],
+      "verify_root_violations": 3
+    },
+    {
+      "finding_counts": {
+        "completion": 42,
+        "epistemic": 1,
+        "integrity": 0,
+        "operational": 6,
+        "security": 0
+      },
+      "report_summary_valid": true,
+      "root": "experiments/live_tri_2026-07-27/run-faa5feae126bc2558ea9c6d8d200a90c",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "foreign-criticism"
+      ],
+      "verify_root_violations": 3
+    },
+    {
+      "finding_counts": {
+        "completion": 62,
+        "epistemic": 1,
+        "integrity": 2,
+        "operational": 12,
+        "security": 0
+      },
+      "report_summary_valid": false,
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a",
+      "stored_valid": false,
+      "verify_root_checks": [
+        "run-input"
+      ],
+      "verify_root_violations": 1
+    }
+  ]
+}

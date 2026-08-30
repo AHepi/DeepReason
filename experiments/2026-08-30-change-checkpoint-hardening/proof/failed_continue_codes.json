@@ -1,0 +1,154 @@
+{
+  "complete_checkpoint_file_set": 16,
+  "outcomes": {
+    "ValueError: CONTINUE_RESUME_RECOVERY_MISMATCH": 1,
+    "ValueError: CONTINUE_TYPED_STOP_REQUIRED": 15
+  },
+  "population": 16,
+  "rows": [
+    {
+      "continue": "ValueError: CONTINUE_RESUME_RECOVERY_MISMATCH",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-22-live-reach-rich-run/run"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-24-change-rung7-wounds-falls-succession/run"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-25-change-constructive-frontier/run"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/2026-08-26-pc2-rematch/run"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a"
+    },
+    {
+      "continue": "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
+      "files": {
+        "checkpoint.json": true,
+        "run-result.json": true,
+        "run-stop.json": true
+      },
+      "root": "experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a"
+    }
+  ]
+}

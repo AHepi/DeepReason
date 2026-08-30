@@ -206,8 +206,7 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
 | What a continuation may resume from | `prepare_continuation` in `runtime/continuation.py` | `tests/test_continuation.py::test_continue_rejects_tampered_stop_digest` |
 | The published terminal result envelope | `_v6_run_result` in `application/text_runs.py` and `finalize_terminal_result` in `runtime/terminal_authority.py` | `tests/test_r0_terminal_verification.py::test_v6_writer_emits_verified_v2_envelope` |
 | What ANY finished run writes at stop — there is one launch path, so this is every run | `terminalize_text_run` in `application/text_runs.py` (never a second path's copy of it) | `tests/test_lifecycle_operation_parity.py::test_manifest_launched_root_reaches_typed_terminal_and_accepts_amend` |
-| What a FAILURE terminal records about its own continuability | the two `except` branches of `_worker` in `application/text_runs.py` — `TERMINAL_NO_CHECKPOINT_WRITTEN` (no harness) and `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` (ordinary), both through `_refusal` onto the existing `terminal_lifecycle_refusal` key | `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued` |
-| Which replay verdict the results reader answers from | `results_summary` passes its already-computed `verification` dict into `_terminal`, `application/results.py` — the reader never re-derives a second verdict of its own | `tests/test_results_command.py::test_terminal_readiness_answers_the_rederived_verdict_under_verify` |
+| What a FAILURE terminal records about its own continuability | two of the THREE exits of `_worker`'s single `except (Exception, SystemExit)` block in `application/text_runs.py` — `TERMINAL_NO_CHECKPOINT_WRITTEN` (no harness) and `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` (ordinary), both through `_refusal` onto the existing `terminal_lifecycle_refusal` key. The third exit (`current_terminal_commitment is not None`) still records nothing — parked, `2026-08-30-change-checkpoint-hardening` F10 | `tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued` |
 | How a caller holding a compiled manifest starts a run, and what `deepreason run --run-manifest` dispatches into | `TextRunApplicationService.start_manifest_run` in `application/text_runs.py`; `_dispatch_managed_run` in `cli/main.py` renders the result and owns nothing else | `tests/test_single_run_path.py::test_the_door_narrows_no_configuration_the_compiler_admits` |
 | How a root that stopped without a terminal reaches one | `finalize_stopped_root` in `application/text_runs.py` and `_cmd_finalize` in `cli/main.py` | `tests/test_lifecycle_operation_parity.py::test_finalize_reaches_terminal_on_a_root_that_stopped_without_one` |
 | Provider presets, or what the wizard asks | `PROVIDERS` / `MAKE_OVERRIDES` / `setup_wizard` / `apply_setup` in `easy.py` | `tests/test_easy.py::test_setup_wizard_writes_config_without_the_key` |
@@ -335,7 +334,10 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   two failure terminals here now carry
   `TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL` and
   `TERMINAL_NO_CHECKPOINT_WRITTEN` on the same `terminal_lifecycle_refusal`
-  key, and 16 committed roots of that shape stop being silent about it. TWO
+  key, so a FUTURE run of that shape says so. The 16 committed roots of that
+  shape stay silent, as artifacts of their own version — no code here touches
+  a committed record, and the retired cross-version law (2026-08-14) expects
+  exactly that. TWO
   halves stay open, both parked with measurements in that tranche's
   `PARKED.md`: whether unfinished authority — or a failure terminal at all —
   OUGHT to permit continuation (widening `RESUMABLE_STOP_REASONS` would
@@ -344,8 +346,9 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   built, measured, and NOT shipped — see `DR-CON-run-identity`'s Traps.
 `check: ! grep -A1 "except ValueError:" src/deepreason/application/text_runs.py | grep -q "return None$" && grep -q "except UnfinishedWorkflowAuthorityError as refused:" src/deepreason/application/text_runs.py && grep -q "TERMINAL_LIFECYCLE_REFUSAL_SCHEMA = \"deepreason-terminal-lifecycle-refusal-v1\"" src/deepreason/application/text_runs.py && grep -q "def _continuation_authority(harness)" src/deepreason/application/results.py && python -m pytest tests/test_terminal_lifecycle_refusal_is_recorded.py tests/test_results_command.py::test_terminal_readiness_answers_the_amend_question -q`
 - **A failure terminal that says nothing is indistinguishable from one that
-  can be picked up again.** Both worker-failure branches used to publish
-  `state: failed` and no continuability record at all: the ORDINARY one writes
+  can be picked up again.** Two of the three exits of `_worker`'s single
+  `except` block used to publish `state: failed` and no continuability record
+  at all: the ORDINARY one writes
   `run-stop.json`, `checkpoint.json`, `run-result.json` and a progress line and
   takes NO STOPPED lifecycle receipt, so `continue` refuses
   `CONTINUE_TYPED_STOP_REQUIRED`; the NO-HARNESS one writes `run-result.json`
@@ -355,7 +358,13 @@ graph helpers in `easy.py` append only Measure events — `record_llm_calls` is 
   of the 16 carry no continuation authority at all. FIXED 2026-08-30
   (`experiments/2026-08-30-change-checkpoint-hardening`) by recording the fact,
   not by making the terminals resumable — that reading is parked as an operator
-  call. No schema moved: `RunResultV2` is `extra="allow"` and
+  call. NOT fixed on the third exit, the one taken when a terminal commitment
+  is already open: it emits a `failed` progress line carrying
+  `TERMINAL_PUBLICATION_RECOVERY_REQUIRED` as prose in `message`, writes no
+  `run-result.json`, and records no refusal. Measured in that tranche's skeptic
+  pass and parked as F10, because `deepreason finalize` RECOVERS that root to
+  `completed` and a typed "cannot continue" left behind on a root that was
+  continued would be a second wrong record, not a fix. No schema moved: `RunResultV2` is `extra="allow"` and
   `ProgressEvent.terminal_lifecycle_refusal` already existed with a default.
 `check: grep -q "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL" src/deepreason/application/text_runs.py && grep -q "TERMINAL_NO_CHECKPOINT_WRITTEN" src/deepreason/application/text_runs.py && python -m pytest tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued tests/test_checkpoint_hardening.py::test_a_terminal_that_wrote_no_checkpoint_records_that_fact -q`
 - **There is ONE run path, and `cli/` is not allowed to be a second one.**
