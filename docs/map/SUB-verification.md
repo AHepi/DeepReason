@@ -1,5 +1,5 @@
 <!-- DR-SUB-verification -->
-Verified-at: e9fac8671
+Verified-at: 152c7e204
 Verify: python -m pytest tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py tests/test_verifier_registry.py tests/test_cli_verifiers.py -q
 Owns: src/deepreason/invariants.py, src/deepreason/verification/, src/deepreason/signals_read.py
 Seams: DR-SEAM-harness-x-verification, DR-SEAM-periphery-x-verification, DR-SEAM-llm-x-verification

@@ -1,0 +1,12 @@
+### final modes, after every edit (exit codes captured before any pipe)
+--- --self-test  rc=0
+    docs_verify --audit: 2 finding(s)
+docs_verify --self-test: ok
+--- --links  rc=0
+docs_verify --links: 0 dangling reference(s), 70 document(s)
+--- --audit  rc=1
+SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+docs_verify --audit: 1 finding(s)
+--- --coverage  rc=1
+SEAM-scratch-x-workflow.md: no Sweep: header (add when next touched)
+docs_verify --coverage: 7 seam(s) swept, 19 without a Sweep: header, 2 finding(s)

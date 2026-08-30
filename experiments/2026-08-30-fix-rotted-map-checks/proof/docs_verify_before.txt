@@ -1,0 +1,59 @@
+docs_verify [full]: 70 documents, 1248 checks, 4 workers
+  FAIL SEAM-llm-x-rules.md:54: unparseable check: a column-0 `check: opener must close with a trailing backtick, on its own line or at the end of a later line, before the next opener or the end of the file. Opener reads: '`check: test "$(python -c "import ast,pathlib; T=[ast.parse(p.read_text()) for p in pathlib.Path(\'sr'
+  FAIL CON-discharge-channel.md:150: python -c "
+        import json
+        from deepreason.config import Config
+        from deepreason.run_manifest import compile_run_manifest, config_from_run_manifest
+        from deepreason.v6_policy import engaged_control_plane_policy_v3, engaged_inquiry_capability_policy, engaged_local_simulation_toolchain
+        route = {'endpoint': 'https://example.invalid/v1', 'endpoint_id': 'e', 'provider': 'ollama', 'model': 'm', 'model_revision': 'm', 'family': 'glm', 'api_key_env': 'K'}
+        c = Config(DISCHARGE_POLICY='off', roles={r: route for r in ('conjecturer', 'argumentative_critic', 'defender', 'variator', 'judge', 'summarizer', 'synthesizer', 'vision_critic', 'property_designer', 'thesis', 'grounding_reviewer')})
+        m = compile_run_manifest(c, schema_version=6, workload_profile='text', rubric_policy='forbid', single_model='m', concurrency=2, compiled_at='2026-08-25T00:00:00Z', control_plane_policy=engaged_control_plane_policy_v3(), toolchains=(engaged_local_simulation_toolchain(),), inquiry_capability_policy=engaged_inquiry_capability_policy(attached_evidence=False), run_input_digest='0'*64)
+        assert 'DISCHARGE_POLICY' not in json.loads(m.engine_config_json)
+        assert config_from_run_manifest(m).DISCHARGE_POLICY == 'off', 'carriage no longer restores the configured value -- P15 may have regressed; re-read this section'
+        "
+      -> pydantic_core._pydantic_core.ValidationError: 1 validation error for RunManifest |   Value error, V6_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain [type=value_error] |     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  FAIL CON-run-identity.md:211: git log -M --diff-filter=R --name-status --format= -- experiments/live_research_2026-07-29/selfstudy/runs/ | grep -o 'runs/[a-z0-9-]*run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json' | sort -u | tr '\n' ' ' | grep -qx 'runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json runs/run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json '
+      -> 
+  FAIL CON-run-identity.md:213: git log -1 --format=%s 1637e808 | grep -qi retire
+      -> fatal: ambiguous argument '1637e808': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL CON-run-identity.md:215: test -z "$(git show -M --diff-filter=R --name-status --format= f304fec1)" && git log -1 --format=%s f304fec1 | grep -qi "retire.*epoch3" && git show --name-status --format= 6a8758a5 -- experiments/live_research_2026-07-29/selfstudy/runs/completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a/run-manifest.json | grep -q "^A"
+      -> fatal: ambiguous argument 'f304fec1': unknown revision or path not in the working tree. | Use '--' to separate paths from revisions, like this: | 'git <command> [<revision>...] -- [<file>...]'
+  FAIL INV-frozen-surfaces.md:181: test "$(find experiments runs -path '*workflow-provider-attempt-v1/*.json' -exec grep -l 'transport_failure' {} + 2>/dev/null | wc -l)" -eq 0
+      -> 
+  FAIL INV-frozen-surfaces.md:734: python -c "
+        import json
+        from tests.test_reusable_qualification import _manifest, _profile
+        from deepreason.qualification import qualification_subject_digest
+        p = _profile()
+        assert qualification_subject_digest(_manifest(p), p) == 'b9038b84efdea313c3f3f2a8862d8acf180d3938ab3d1bf3588c3585dfe07386'
+        leaked = sorted(k for k in json.loads(_manifest(p).engine_config_json) if k == 'DISCHARGE_POLICY')
+        assert not leaked, leaked
+        "
+      -> Traceback (most recent call last): |   File "<string>", line 6, in <module> | AssertionError
+  FAIL INV-signal-contract.md:243: python -c "
+        import inspect
+        from deepreason.scheduler.scheduler import Scheduler
+        src = inspect.getsource(Scheduler)
+        assert 'wander.decide(' in src and 'wander.reading_from(' in src
+        for fn in ('wander_cap_v1', 'open_lineage_v1', 'LINEAGE_POLICIES'):
+            assert fn not in src, fn
+        "
+      -> Traceback (most recent call last): |   File "<string>", line 7, in <module> | AssertionError: LINEAGE_POLICIES
+  FAIL SEAM-llm-x-verification.md:19: python -c "
+        import ast, pathlib
+        for path, forbidden in (
+            ('src/deepreason/invariants.py', 'deepreason.llm'),
+            ('src/deepreason/llm/adapter.py', 'deepreason.invariants'),
+        ):
+            tree = ast.parse(pathlib.Path(path).read_text())
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module:
+                    assert not node.module.startswith(forbidden), (path, node.module)
+                if isinstance(node, ast.Import):
+                    for alias in node.names:
+                        assert not alias.name.startswith(forbidden), (path, alias.name)
+        "
+      -> Traceback (most recent call last): |   File "<string>", line 10, in <module> | AssertionError: ('src/deepreason/invariants.py', 'deepreason.llm.firewall')
+  FAIL SUB-application.md:421: grep -q "fence_seq > current_resume.resume_event_seq" src/deepreason/runtime/continuation.py && ! grep -q 'or fence.get("event_seq") != current_resume.resume_event_seq' src/deepreason/runtime/continuation.py && python -m pytest tests/test_continuation.py tests/test_v6_resumed_terminal_revalidation.py -q
+      -> TIMEOUT after 300s - this check is too expensive; narrow it to the claim it actually tests
+docs_verify: 10 failed
