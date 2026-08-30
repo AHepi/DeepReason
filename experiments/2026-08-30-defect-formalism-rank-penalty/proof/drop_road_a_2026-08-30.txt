@@ -61,7 +61,7 @@ EXIT=0
 $ git diff --stat 736b50839 -- docs/map/ src/ tests/     # the park base
 (empty: docs/map/, src/ and tests/ are BYTE-IDENTICAL to the park base)
 $ ls experiments/2026-08-30-defect-formalism-rank-penalty/proof/ | wc -l
-15
+16
 (the proof transcripts survive the drop; a plain revert deletes them)
 
 ================================================================
