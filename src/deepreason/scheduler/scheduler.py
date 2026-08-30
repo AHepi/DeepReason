@@ -199,6 +199,49 @@ def stable_component_spec(problem, endpoints: tuple[str, ...]) -> str:
     )
 
 
+def pareto_scores(harness, artifact_id: str) -> dict[str, float]:
+    """One survivor's score on each Pareto axis, or NO KEY where the harness
+    measured nothing (§11.7).
+
+    An OMITTED axis is the typed way to say "not measured"; `capture.pareto.
+    frontier` drops an absent axis from that pairwise comparison rather than
+    reading it as 0.0. `coverage` is passes/evaluable-commitments, so an
+    artifact carrying no evaluable commitment has no denominator — writing
+    0.0 there would put "nothing to check" on the same coordinate as "checked
+    and failed everything" and let a formally-backed sibling dominate it,
+    which weights rank on conjecture KIND (DUAL_MODE_CONJECTURE_PREPLAN.md
+    R-g; CLAUDE.md's formalism-optional law).
+
+    `hv` and `reach` still emit 0.0 for an unmeasured artifact. That is the
+    axis family's remaining 0.0-default shape, rowed STRUCTURAL-GAP rather
+    than unlawful by the 2026-08-27 audit and unreachable as a penalty in any
+    committed root; `tests/test_formalism_optional_rank.py` pins which axes
+    are in which state so a new axis cannot be added without deciding.
+    """
+
+    from deepreason import programs
+
+    state = harness.state
+    artifact = state.artifacts[artifact_id]
+    battery = [
+        c
+        for c in artifact.interface.commitments
+        if c in harness.commitments and programs.evaluable(harness.commitments[c])
+    ]
+    scores = {
+        "hv": state.hv.get(artifact_id, 0.0),
+        "reach": state.reach.get(artifact_id, 0.0),
+    }
+    if battery:
+        scores["coverage"] = sum(
+            1
+            for c in battery
+            if programs.evaluate(harness.commitments[c], artifact, harness.blobs)[0]
+            == programs.PASS
+        ) / len(battery)
+    return scores
+
+
 def run_report(harness, config, *, diagnostics=()) -> dict:
     """The Pareto-retained frontier over one replayed root (§11.7).
 
@@ -208,42 +251,11 @@ def run_report(harness, config, *, diagnostics=()) -> dict:
     not mutate the record to obtain it.
     """
 
-    from deepreason import programs
-
     state = harness.state
     survivors = sorted(
         {aid for aid, _ in state.addr if counts_as_survivor(state, aid)}
     )
-    scored = []
-    for aid in survivors:
-        commitments = [
-            c
-            for c in state.artifacts[aid].interface.commitments
-            if c in harness.commitments and programs.evaluable(harness.commitments[c])
-        ]
-        coverage = (
-            sum(
-                1
-                for c in commitments
-                if programs.evaluate(
-                    harness.commitments[c], state.artifacts[aid], harness.blobs
-                )[0]
-                == programs.PASS
-            )
-            / len(commitments)
-            if commitments
-            else 0.0
-        )
-        scored.append(
-            (
-                aid,
-                {
-                    "hv": state.hv.get(aid, 0.0),
-                    "reach": state.reach.get(aid, 0.0),
-                    "coverage": coverage,
-                },
-            )
-        )
+    scored = [(aid, pareto_scores(harness, aid)) for aid in survivors]
     return {
         "survivors": survivors,
         "frontier": frontier(scored, config.PARETO_AXES),

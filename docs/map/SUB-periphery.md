@@ -162,6 +162,7 @@ workspace root when a patch is applied.
 | where research evidence comes from (add a backend) | `build_service` and the backend classes in `research/backends.py` | `tests/test_research.py::test_backend_modes_are_distinct_and_invalid_values_fail_loudly` |
 | school roster, seats per problem, cross-examiner injection | `init_schools` / `allocate` / `_with_cross_examiner` in `capture/schools.py` | `tests/test_schools.py` |
 | which capture flags fire, and the response to each | `raw_flags` in `capture/detection.py`; `respond` in `capture/ladder.py` | `tests/test_orbit.py::test_ladder_rotates_the_orbiting_school` |
+| what a MISSING score means when computing Pareto dominance | `frontier` in `capture/pareto.py` — it means NOT MEASURED and drops out of that pairwise comparison; restoring the old "missing scores are 0" default re-creates the 2026-08-27 audit's F1 rank penalty (`DR-CON-conjecture-kinds`) | `tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured`, `tests/test_loop.py::test_loop_end_to_end` |
 | the arithmetic a model-authored simulation may use | `_compile_expression` / `compile_declarative_numeric` in `simulation/compiler.py` | `tests/test_simulation_compiler.py` |
 | the MCP tool surface (add, remove, or retype a tool) | `_run_tools` / `_tools` / `call_tool` in `mcp_server.py` — and FOUR pins move with it, in the same commit | `tests/test_mcp.py::test_initialize_and_tools_list_are_truthful_and_exact` |
 | what stops a campaign's later waves | `AuditDimensions` / `classify_dimensions` in `experiments/campaign.py` | `tests/test_campaign_coordinator.py` |
@@ -205,6 +206,23 @@ TARGETS would be unique for every content-addressed artifact, so SC would read
 
 ## Traps
 
+- **`capture/pareto.frontier`'s missing-score default was a rank penalty on
+  informal conjectures, not a convenience.** Its docstring said "missing scores
+  are 0" and its `dominates` read `a.get(x, 0.0)`, so an artifact the harness
+  never measured on an axis was treated as measured AT THE FLOOR of it. On the
+  `coverage` axis that is exactly the set of prose conjectures — nothing
+  evaluable to divide — and a formally-backed sibling therefore dominated an
+  otherwise-identical prose one off the published frontier (146 of 233
+  survivors on `experiments/2026-08-12-live-grounded-extension-expansion/run`).
+  CHANGED 2026-08-30
+  (`experiments/2026-08-30-defect-formalism-rank-penalty/`): an axis absent from
+  either point leaves that pairwise comparison. The trap for anyone editing
+  this function is the second-order one: two points that share NO axis must
+  still never dominate each other, because `loop.py` passes `{}` for every
+  survivor at P1 and relies on the resulting frontier equalling the survivor
+  set. A "shared axes only" rule written without that guard silently makes
+  every P1 survivor dominate every other.
+`check: python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q`
 - **Adding one MCP tool moves FOUR pins, and no gate runs two of them.**
   `tests/test_mcp.py::SUPPORTED_TOOLS` and
   `tests/test_mcp_help.py::SUPPORTED_TOOL_NAMES` fail in the ordinary suite; the

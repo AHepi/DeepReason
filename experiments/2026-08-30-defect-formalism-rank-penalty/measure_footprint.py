@@ -69,7 +69,7 @@ def _measure(root):
     survivors = sorted({aid for aid, _ in state.addr if counts_as_survivor(state, aid)})
 
     triples = collections.Counter()
-    shipped = collections.Counter()   # the triple run_report ACTUALLY emits today
+    zeroed = collections.Counter()   # the triple run_report emitted BEFORE 2026-08-30
     scored_raw = []          # coverage None when the evaluable battery is empty
     empty_battery = 0
     for aid in survivors:
@@ -93,7 +93,7 @@ def _measure(root):
         hv = state.hv.get(aid, 0.0)
         reach = state.reach.get(aid, 0.0)
         triples[(hv, reach, coverage, bool(commitments))] += 1
-        shipped[(hv, reach, 0.0 if coverage is None else coverage)] += 1
+        zeroed[(hv, reach, 0.0 if coverage is None else coverage)] += 1
         scores = {"hv": hv, "reach": reach}
         if coverage is not None:
             scores["coverage"] = coverage
@@ -111,8 +111,8 @@ def _measure(root):
         "survivors": len(survivors),
         "empty_battery": empty_battery,
         "triples": {str(k): v for k, v in sorted(triples.items(), key=lambda kv: -kv[1])},
-        "shipped_score_triples": {
-            str(k): v for k, v in sorted(shipped.items(), key=lambda kv: -kv[1])
+        "score_triples_under_the_pre_2026_08_30_rule": {
+            str(k): v for k, v in sorted(zeroed.items(), key=lambda kv: -kv[1])
         },
         "stored_frontier_len": None if stored is None else len(stored),
         "current_frontier_len": len(report["frontier"]),

@@ -52,15 +52,25 @@ behind it; the cheap deterministic work is deliberately not rationed.
   spawn scan, problem selection, the cycle heartbeat, school allocation, gamma
   (conjecture, or synthesis for connection/integration problems), per-candidate
   criticism, then the sweep tail.
+- `pareto_scores(harness, artifact_id)` — one survivor's score per Pareto axis,
+  with an axis OMITTED where the harness measured nothing. An omitted axis is
+  the typed "not measured", which `capture/pareto.frontier` drops out of that
+  pairwise comparison instead of reading as 0.0. `coverage` is omitted for an
+  artifact carrying no evaluable commitment; `hv` and `reach` still emit their
+  0.0 default. Module-level, and the single place the axis rule lives.
 - `run_report(harness, config, *, diagnostics=())` — survivors, the Pareto
-  `frontier` over (hv, reach, coverage), problems, and the diagnostics passed
-  in. Attention and reporting only, never a status. It is module-level on
+  `frontier` over (hv, reach, coverage) via `pareto_scores`, problems, and the
+  diagnostics passed in. Attention and reporting only, never a status. Since
+  2026-08-30 a survivor with nothing to check does not compete on `coverage`,
+  so a run whose survivors include commitment-free artifacts publishes a LONGER
+  frontier than it used to — and `frontier_delta` is a `StopMetrics` input, so
+  that also moves when such a run stops. It is module-level on
   purpose: constructing a `Scheduler` seeds schools, which APPENDS events, so a
   caller that only wants the report over a stopped root (`finalize_stopped_root`
   in `DR-SUB-application`) would otherwise have to mutate the record to read it.
 - `Scheduler.report()` — the same report, delegating to `run_report` so the two
   can never disagree.
-`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
+`check: grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "^def pareto_scores(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnostics=self.diagnostics)" src/deepreason/scheduler/scheduler.py && grep -q "run_report(harness, config_from_run_manifest(manifest))" src/deepreason/application/text_runs.py && python -m pytest tests/test_lifecycle_operation_parity.py::test_finalize_resumes_after_an_interrupted_terminalization -q`
 - `Scheduler.activate_interventions(names)` — the response ladder's only lever;
   turns named interventions on for `CAPTURE_W` cycles.
 - `reflexive_problems(state)` — the meta-work set, following lineage: a
@@ -159,6 +169,7 @@ fails if a SECOND variable-headed signal appears (both mutations were run).
 | A legacy model phase v6 cannot yet dispatch (argumentative criticism is the one exception, fixed 2026-08-10 — it self-dispatches through `crit_argumentative_batch` instead of deferring; see `SEAM-rules-x-workflow`'s Traps) | `_defer_untransactional_v6_phase` at the phase's call site | `tests/test_v6_scheduler_model_phase_deferral.py::test_v6_deferral_marker_is_durable_bounded_and_resume_deduplicated` |
 | Config-referee cadence | `_maybe_config_referee`; manifest `inquiry_capability_policy.config_referee` | `tests/test_config_referee.py::test_scheduler_fires_referee_only_on_the_frozen_cadence`, `::test_scheduler_absorbs_budget_denied_referee` |
 | What `report()` returns / the Pareto frontier axes | `report`; `Config.PARETO_AXES` and `capture/pareto.frontier` | `tests/test_scheduler.py::test_multi_cycle_spawns_and_persistence` |
+| What each survivor scores on an axis, or whether an axis is scored for it at all | `pareto_scores` — omit the key for an axis the harness did not measure; NEVER emit a floor value a commitment-free artifact can reach, which weights rank on conjecture kind (`DR-CON-conjecture-kinds`, R-g) | `tests/test_formalism_optional_rank.py::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead` |
 
 Every Test cell above is a node id this check runs by name, so renaming a test
 breaks the row instead of silently passing under a whole-file run; every Edit
@@ -169,6 +180,30 @@ cell names a symbol the check greps for.
 
 ## Traps
 
+- **A Pareto axis whose floor is reachable by carrying no commitment ranks on
+  conjecture KIND, and `run_report` did exactly that for four months.**
+  `coverage = passes/evaluable if evaluable else 0.0` gave an artifact with
+  NOTHING to check the same coordinate as one that was checked and failed
+  everything; `frontier` maximises every axis, so a formally-backed sibling
+  dominated an otherwise-identical prose one and it left the published answer.
+  On grounded-extension run
+  `experiments/2026-08-12-live-grounded-extension-expansion/run` that was 146
+  of 233 survivors — the frontier was exactly the 87 that carried a battery,
+  and not one of the 146 survived it. Found by the 2026-08-27 audit (finding
+  F1, its one UNLAWFUL-PENALTY row); the law is CLAUDE.md's formalism-optional
+  design law and `DUAL_MODE_CONJECTURE_PREPLAN.md` R-g. FIXED 2026-08-30
+  (`experiments/2026-08-30-defect-formalism-rank-penalty/`): `pareto_scores`
+  OMITS an axis it did not measure and `frontier` drops an absent axis from
+  that pairwise comparison. Two traps inside the trap. First, the repair is
+  not "put everyone on the frontier": an artifact that WAS checked and failed
+  must still be dominated by one that passed, or the axis has been destroyed
+  rather than fixed — `test_control_b_a_failed_battery_is_still_dominated`
+  exists to catch that. Second, `hv` and `reach` still emit 0.0 for an
+  unmeasured artifact and therefore still carry this shape; the 2026-08-27
+  audit rowed them STRUCTURAL-GAP rather than unlawful and neither is
+  reachable as a penalty in any committed root, but do not read the coverage
+  repair as having closed the class.
+`check: python -m pytest tests/test_formalism_optional_rank.py -q`
 - **The steering controller was attached to every run and could move nothing on
   any of them.** `ops.run_scheduler` builds `Controller(harness, adapter)`
   whenever `config.CONTROLLER` is true, and `Scheduler` steps it once per cycle,

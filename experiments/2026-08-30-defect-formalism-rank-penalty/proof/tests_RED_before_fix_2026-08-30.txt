@@ -1,0 +1,55 @@
+### A. the shipped test module against the PRE-FIX tree (HEAD~ src): collection error, because the pre-fix tree has no pareto_scores seam
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_formalism_optional_rank.py:33: in <module>
+    from deepreason.scheduler.scheduler import pareto_scores, run_report
+E   ImportError: cannot import name 'pareto_scores' from 'deepreason.scheduler.scheduler' (/tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/prefix-src/deepreason/scheduler/scheduler.py)
+=========================== short test summary info ============================
+ERROR tests/test_formalism_optional_rank.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.28s
+
+### B. the same tests minus that one, byte-identical otherwise, against the PRE-FIX tree
+        )
+>       assert "prose" in _frontier(with_channel, ids_with)
+E       AssertionError: assert 'prose' in ['pass']
+E        +  where ['pass'] = _frontier(<deepreason.harness.Harness object at 0x7f9fedea7150>, {'pass': 'e4e403620382e7baac676b5c73e69c632cf8cc2e9e108f537ce189fd2c4a5031', 'partial': '9f75f9642a467261cb8c56da6f84547033164eed31a71d2d836cd158b930bd3f', 'prose': '1b464b17fabc9698d3c5a44bb3068b9b50512ca48a9dfaaea9c17e9c0cccba28'})
+
+/tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py:142: AssertionError
+___ test_frontier_treats_a_missing_score_as_not_measured[scored3-expected3] ____
+
+scored = [('a', {'hv': 1.0, 'coverage': 1.0}), ('b', {'hv': 1.0})]
+expected = ['a', 'b']
+
+    @pytest.mark.parametrize(
+        "scored,expected",
+        [
+            # An axis absent from either point leaves that comparison entirely.
+            ([("a", {"hv": 1.0}), ("b", {"reach": 1.0})], ["a", "b"]),
+            # Points sharing no axis at all never dominate — this is what keeps
+            # loop.py's P1 report (every survivor scored `{}`) equal to its
+            # survivor set.
+            ([("a", {}), ("b", {}), ("c", {})], ["a", "b", "c"]),
+            # A shared axis still discriminates normally.
+            ([("a", {"hv": 1.0}), ("b", {"hv": 0.0})], ["a"]),
+            # Present-and-equal on the shared axis, absent elsewhere: neither wins.
+            ([("a", {"hv": 1.0, "coverage": 1.0}), ("b", {"hv": 1.0})], ["a", "b"]),
+        ],
+    )
+    def test_frontier_treats_a_missing_score_as_not_measured(scored, expected):
+>       assert sorted(frontier(scored, ["hv", "reach", "coverage"])) == expected
+E       AssertionError: assert ['a'] == ['a', 'b']
+E         
+E         Right contains one more item: 'b'
+E         Use -v to get more diff
+
+/tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py:169: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../../tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py::test_informal_and_formal_of_equal_standing_rank_equally
+FAILED ../../../../tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py::test_a_partly_passing_battery_is_not_out_ranked_by_nothing_to_check
+FAILED ../../../../tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py::test_kind_blindness_prose_ranks_the_same_with_and_without_a_formal_channel
+FAILED ../../../../tmp/claude-0/-home-user-DeepReason/b8393a97-3019-567c-8c83-f06948695f48/scratchpad/redtests/test_formalism_optional_rank_prefix.py::test_frontier_treats_a_missing_score_as_not_measured[scored3-expected3]
+4 failed, 6 passed in 0.76s

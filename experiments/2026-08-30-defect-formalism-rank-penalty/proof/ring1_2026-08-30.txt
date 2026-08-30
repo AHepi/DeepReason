@@ -1,0 +1,7 @@
+RING 1 (12 files that recompute or consume a Pareto frontier), fixed tree, 2026-08-30:
+python -m pytest tests/test_formalism_optional_rank.py tests/test_scheduler.py tests/test_loop.py tests/test_import_role_survivors.py tests/test_results_command.py tests/test_lifecycle_operation_parity.py tests/test_amendment_epochs.py tests/test_single_run_path.py tests/test_attached_evidence_citation.py tests/test_failure_terminal_reports_real_token_spend.py tests/test_mcp_run.py tests/test_signals.py -q
+........................................................................ [ 61%]
+.............................................                            [100%]
+117 passed in 496.39s (0:08:16)
+
+[exited with code 0]
