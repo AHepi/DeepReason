@@ -317,9 +317,11 @@ it raised will recur the next time a tranche ships a large test module.
     with the gate armed:
       {"areas": {"src": 103, "tests": 397, "docs/map": 65},
        "total_insertions": 565, "ceiling": 400, "verdict": "EXCEEDED"}
-    as delivered:
-      {"areas": {"src": 41, "tests": 224, "docs/map": 52},
-       "total_insertions": 317, "ceiling": 400, "verdict": "WITHIN"}
+    as delivered (re-run at HEAD in the skeptic pass; the figure first
+    published here was captured one commit early and is corrected):
+      {"result_type": "DIFF_BUDGET_RESULT_V1",
+       "base": "84514a0280f45d29e5066bb3be3d273ba73798db", "against": null,
+      {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "84514a0280f45d29e5066bb3be3d273ba73798db", "against": null, "areas": {"src": 34, "tests": 238, "docs/map": 68}, "total_insertions": 340, "ceiling": 400, "verdict": "WITHIN"}
 
 The observation worth keeping: when it was exceeded, `src` was 103 against a
 SPEC estimate of 102 — the production surface landed ON estimate — and the
@@ -418,7 +420,90 @@ before directory.mkdir -- at its SPEC'd position inside _require_terminal_stop
 it shadowed AMEND_PENDING_CONFLICT and AMEND_EVIDENCE_NOT_AUTHORIZED, which
 SPEC.md S2's own rationale said must not happen.
 
-End state: the gate armed, the tamper proof green, the ring green with no
-assertion weakened, and CON-run-identity.md's Traps entry REWRITTEN (never
-deleted) to say the gate landed.
+ACCEPTANCE TARGET, measured 2026-08-30 in the skeptic pass and stronger than
+the differential this tranche parked. The S3 proof used a FAILED root, where
+`continue` refuses for a reason that has nothing to do with the record, so it
+never showed a tamper-to-resume completing. On an `amend_ready` root the whole
+sequence goes through today:
+
+    python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_amend_ready.py
+
+    root: experiments/2026-08-27-pc2b-symmetric-reasoning/run
+    edit: log.jsonl[11656] 'a' -> '7'   (one byte, same length)
+    --- intact ---   verify_root []                             amend ACCEPTED epoch=1   continue ACCEPTED seq=0
+    --- forged ---   verify_root ['attempt-route','frozen-route']  amend ACCEPTED epoch=1   continue ACCEPTED seq=0
+    jailbreak_open: True
+
+That probe is the gate's acceptance test, not prose: the tranche that lands the
+gate makes its `forged` arm refuse BOTH verbs while its `intact` arm still
+passes both, and `jailbreak_open` reads False. Note what the forged arm also
+shows: the run's own published `REPLAY_VALIDATION.json` still says
+`valid: true`, so a gate reading the STORED verdict clears this forgery — Q-A
+must be answered with a RE-DERIVATION, whichever channel it names.
+
+End state: the gate armed, `forge_amend_ready.py` reading
+`jailbreak_open: False`, the ring green with no assertion weakened, and
+CON-run-identity.md's Traps entry REWRITTEN (never deleted) to say the gate
+landed.
+```
+
+---
+
+## F10 — OUT OF CONE (skeptic pass): the THIRD exit of the same `except`
+## block still records nothing
+
+WHO DECIDES: a tranche with the application cone, after F1 — the answer
+depends on whether a recovered root should carry a "cannot continue" marker at
+all.
+
+WHAT: `_worker`'s single `except (Exception, SystemExit)` block has THREE
+exits, not two. S5 and S6 gave the first two a typed
+`terminal_lifecycle_refusal`. The third — taken when
+`harness.workflow_state.current_terminal_commitment is not None` — emits a
+`failed` progress line whose `message` is the bare string
+`TERMINAL_PUBLICATION_RECOVERY_REQUIRED`, writes NO `run-result.json`, and
+records no refusal anywhere. Measured 2026-08-30 (skeptic pass, failure
+injected at `finalize_terminal_result` so a commitment is open):
+
+    run-status.json state: failed   stop_reason: operational_failure
+    run-status.json terminal_lifecycle_refusal: None
+    run-status.json message: TERMINAL_PUBLICATION_RECOVERY_REQUIRED
+
+MEASURED FAIRNESS, and the reason this is parked rather than fixed: the root is
+NOT stranded. `deepreason finalize` recovers it — `cli/main.py` ->
+`recover_terminal_result` -> `_prepare_terminal_result_locked` writes
+`run-result.json` with `state: completed`, RC 0. So the honest question is not
+"record the refusal too" but "what should a root that WILL be recovered say
+about itself in the meantime": a typed `cannot continue` left on a root that is
+then continued is a second wrong record, not a fix.
+
+```
+Route: dr-change-orchestrator, starting at dr-spec-change.
+
+One goal: decide what `_worker`'s third failure exit
+(current_terminal_commitment open) records about its own continuability, and
+implement that decision -- given that `deepreason finalize` recovers this root
+to `completed`, so whatever is written must not outlive the recovery.
+
+Read first:
+- src/deepreason/application/text_runs.py, the `except (Exception, SystemExit)`
+  block of `_worker`: three exits, the second of which is this one.
+- experiments/2026-08-30-change-checkpoint-hardening/ S5/S6 in SPEC.md and
+  VALIDATION.md -- the pattern the other two exits use (`_refusal` onto the
+  existing `terminal_lifecycle_refusal` key, no schema move).
+- docs/map/SUB-application.md, the P6 Traps entry and the failure-terminal row,
+  both of which now name this exit as unrecorded.
+
+Options to price, not to assume:
+  (a) record a typed refusal on the progress line only, and have `finalize`
+      CLEAR it when it recovers the root;
+  (b) record nothing, and make `deepreason results` name the recovery road
+      instead (the operator's actual next action);
+  (c) write the run-result.json this exit currently skips, carrying the
+      refusal, and let `finalize` supersede it.
+
+Done when: the chosen behaviour has a driven test (inject at
+`finalize_terminal_result`, assert on the real files), the map row and the P6
+Traps entry are rewritten to match, and a root taken through failure THEN
+`finalize` carries no contradictory pair of records.
 ```

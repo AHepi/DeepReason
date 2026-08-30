@@ -4,6 +4,12 @@ Every SPEC.md acceptance check, run, with what it actually produced — includin
 the four that FAILED and the items they belong to, which are parked rather than
 delivered.
 
+REVISED 2026-08-30 after an independent skeptic pass re-ran these claims and
+confirmed eight defects. Sections S7, S-BUDGET, S-RING2, S8 and S-CENSUS are
+corrected below and say what they got wrong; S-SKEPTIC, S-RING4 and S-DOCS2 are
+new. Nothing that was measured has been deleted — the earlier readings stand
+beside the corrections, which is what makes this a ledger.
+
 ## The environment fact every command here depends on
 
 The editable install's `.pth` names `/home/user/DeepReason/src`, not this
@@ -115,7 +121,7 @@ RED: `tests/test_checkpoint_hardening.py:315: KeyError: 'terminal_lifecycle_refu
 GREEN: as above. The test asserts `run-stop.json` and `checkpoint.json` are
 ABSENT, so it is testing the corrupted stop and not a tidier one.
 
-## S7 — the reader answers from the verdict it is holding. DELIVERED.
+## S7 — the reader answers from the verdict it is holding. WITHDRAWN 2026-08-30.
 
     accept: pytest tests/test_results_command.py -q  ->  0 failed
     accept: pytest tests/test_results_command.py::test_terminal_readiness_answers_the_rederived_verdict_under_verify -q  ->  1 passed
@@ -133,24 +139,70 @@ GREEN (`proof/GREEN-results-verify.txt`):
 The exact-set assertion on the six `terminal` keys did not move (P-FIX-2 held):
 `test_terminal_readiness_answers_the_amend_question` passes unchanged in ring #2.
 
+WITHDRAWN in the skeptic pass, on a measurement this lane never took. S7's
+whole justification is SPEC.md's phrase "whose `amend` (after S2) refuses" —
+and S2 never landed. With the verbs ungated the change makes the reader state
+the OPPOSITE of what they do:
+
+    $ PYTHONPATH=.../src python .../proof/forge_amend_ready.py     # WITH S7 IN PLACE
+    --- forged ---
+      verify_root_violations: ['attempt-route', 'frozen-route']
+      results_amend_ready_default: True
+      results_amend_ready_verify: False        <-- S7's answer
+      amend: ACCEPTED epoch=1
+      continue: ACCEPTED seq=0                 <-- what the verbs actually do
+
+The delivered tree, same probe, same forged byte (this is what
+`proof/forge_amend_ready.json` now holds — the S7 reading above is preserved
+here and nowhere else):
+
+      results_amend_ready_verify: True         <-- and both verbs accept
+
+At the CLI, on the same forged copy, the delivered pair of lines:
+
+    $ python -m deepreason.cli.main results <forged copy> --verify
+      verify_root verdict (...): no
+      read from: rederived
+      stands at a valid typed terminal: yes (terminal epoch 0)
+      ready for `deepreason amend` / `deepreason continue`: yes
+
+Both lines are TRUE, and together they are the disclosure the operator's clause
+needs today: the record does not verify, and the verbs will act on it anyway.
+S7 replaced the second with a false `no`. Reverted:
+
+    $ git diff --stat origin/main -- src/deepreason/application/results.py tests/test_results_command.py
+    (empty)
+
+A second, independent reason it should not stand as written: the verdict S7
+reads is not the predicate the parked gate used. See S-SKEPTIC / M4-M5 below.
+
 ## S8 — the map moves in the same commit. DELIVERED, describing what shipped.
 
 - `docs/map/SUB-amendment.md` — RESTORED to origin/main. The 22->23 move was
   made and then reverted with S2; leaving it would have been a false claim.
 - `docs/map/CON-run-identity.md` — the gate rule was written and then removed
   with S1. What remains is a Traps entry stating the MEASURED finding (terminal
-  authority is blind to a forged record; 16 of 59 roots; 4 forgeries of the
-  stored verdict undetected) and saying plainly that the gate is not shipped,
-  with a check that goes RED if the gate lands and the entry is not rewritten:
+  authority is blind to a forged record; the whole jailbreak completing on an
+  `amend_ready` root; 16 of 59 roots; 4 forgeries of the stored verdict
+  undetected) and saying plainly that the gate is not shipped.
 
-      $ python -c "import pathlib,json; c=pathlib.Path('src/deepreason/runtime/continuation.py').read_text(); a=pathlib.Path('src/deepreason/amendment/apply.py').read_text(); assert 'verify_root' not in c and 'verify_root' not in a; rows=json.loads(pathlib.Path('experiments/2026-08-30-change-checkpoint-hardening/proof/forge.json').read_text()); assert rows['undetected'] == 4 and rows['population'] == 16"
-      (exit 0)
+  CORRECTED 2026-08-30. The check first shipped here asserted the committed
+  `forge.json`'s stored numbers, so it could not fail for the reason its own
+  prose gives — mutate `terminal_authority.py` until the described blindness is
+  gone and the check stays green. It now RE-DERIVES: the second half forges
+  `valid: true` onto copies of all four blind roots and two detected ones and
+  asks `derive_terminal_authority` afresh. Both arms are in S-SKEPTIC.
 
-- `docs/map/SUB-application.md` — two new "Where to change what" rows (the two
-  failure-terminal records; which verdict the reader answers from), a new Traps
-  entry for the silent failure terminals, and the P6 entry REWRITTEN (never
-  deleted) to say which half of P2 closed and which two halves are parked. Its
-  new check:
+- `docs/map/SUB-application.md` — a new "Where to change what" row for the
+  failure-terminal records, a new Traps entry for the silent failure terminals,
+  and the P6 entry REWRITTEN (never deleted) to say which half of P2 closed and
+  which halves are parked. The second row this section originally claimed —
+  which verdict the reader answers from — went with the S7 revert. Two
+  corrections from the skeptic pass are folded in: the row said "the two
+  `except` branches of `_worker`" where there is ONE `except` block with THREE
+  exits (the third is parked as F10), and the P6 entry said 16 committed roots
+  "stop being silent", which no code change can do to an immutable root. Its
+  check:
 
       $ grep -q "TERMINAL_LIFECYCLE_NOT_TAKEN_FAILURE_TERMINAL" src/deepreason/application/text_runs.py && grep -q "TERMINAL_NO_CHECKPOINT_WRITTEN" src/deepreason/application/text_runs.py
       (exit 0)
@@ -175,20 +227,32 @@ RECORDED BELOW under S-CENSUS.
     $ git status --porcelain --untracked-files=no experiments
     (empty)
 
-`proof/` holds five instruments and their outputs: `census.py`/`census.json`,
-`forge_probe.py`/`forge.json`, `gate_probe.py`/`gate_probe.json`,
+`proof/` holds NINE instruments and the output of each:
+`census.py`/`census.json`, `forge_probe.py`/`forge.json` (with a `--witnesses`
+re-derivation mode), `gate_probe.py`/`gate_probe.json`,
 `verify_cost.py`/`verify_cost.json`, `forge_one_byte.py`/`forge_one_byte.json`,
-plus `MEASUREMENTS.md` and `gate_collisions.md`.
+and, added in the skeptic pass,
+`forge_amend_ready.py`/`forge_amend_ready.json`,
+`control_predicate_arms.py`/`control_predicate_arms.txt`,
+`two_predicates.py`/`two_predicates.json` and
+`failed_continue_codes.py`/`failed_continue_codes.json` — plus `MEASUREMENTS.md`
+and `gate_collisions.md`.
 
 ---
 
 ## S-BUDGET — the diff budget, both readings
 
+CORRECTED 2026-08-30. The figures first published here (`tests 224, total
+317`) were captured at commit `2650d3c87`, one commit before the last change to
+`tests/`, and the pasted object had been hand-trimmed — `tools/diff_budget.py`
+emits `result_type`, `base` and `against` unconditionally, so a three-key
+object cannot be its output. Both commands re-run at HEAD, verbatim:
+
     $ python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db --ceiling 400 --paths src tests docs/map
-    {"areas": {"src": 41, "tests": 224, "docs/map": 52}, "total_insertions": 317, "ceiling": 400, "verdict": "WITHIN"}
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "84514a0280f45d29e5066bb3be3d273ba73798db", "against": null, "areas": {"src": 34, "tests": 238, "docs/map": 68}, "total_insertions": 340, "ceiling": 400, "verdict": "WITHIN"}
 
     $ python tools/diff_budget.py 84514a0280f45d29e5066bb3be3d273ba73798db --ceiling 400 --paths src
-    {"areas": {"src": 41}, "total_insertions": 41, "ceiling": 400, "verdict": "WITHIN"}
+    {"result_type": "DIFF_BUDGET_RESULT_V1", "base": "84514a0280f45d29e5066bb3be3d273ba73798db", "against": null, "areas": {"src": 34}, "total_insertions": 34, "ceiling": 400, "verdict": "WITHIN"}
 
 With the gate armed this read `EXCEEDED` at 565 (src 103, tests 397, docs/map
 65) and was parked as F8; the revert withdrew it. Both figures are in PARKED.md
@@ -238,10 +302,15 @@ Files this lane changed, as measured rather than as claimed:
     experiments/2026-08-30-change-checkpoint-hardening/proof/gate_probe.py
     experiments/2026-08-30-change-checkpoint-hardening/proof/verify_cost.json
     experiments/2026-08-30-change-checkpoint-hardening/proof/verify_cost.py
-    src/deepreason/application/results.py
     src/deepreason/application/text_runs.py
     tests/test_checkpoint_hardening.py
-    tests/test_results_command.py
+
+UPDATED after the skeptic pass: `src/deepreason/application/results.py` and
+`tests/test_results_command.py` left this list with the S7 revert and are
+byte-identical to `origin/main`; five new files under `proof/` joined it
+(`forge_amend_ready`, `control_predicate_arms`, `two_predicates`,
+`failed_continue_codes`, and their outputs). ONE source file is changed by this
+lane in total.
 
 ## S-RING — ring #1, the run that stopped the gate
 
@@ -285,19 +354,30 @@ Same eleven files plus the new module and the two files S5/S6 touch:
 The one failure was THIS MODULE'S OWN control test,
 `test_committed_roots_are_byte_unchanged_by_this_module`, and it was right to
 fire and wrong in its predicate: it flagged `PARKED.md`, a tranche narrative
-document edited while the ring ran, as "a committed root moved". Its predicate
-now selects only tracked files whose own directory carries a `log.jsonl` — a
-run root — and the assertion is unchanged. Re-run:
+document edited while the ring ran, as "a committed root moved". Re-run after
+the narrowing:
 
     $ PYTHONPATH=.../src python -m pytest tests/test_checkpoint_hardening.py -q -p no:randomly
     3 passed in 5.19s
 
-MUTATION PROOF that the narrowed control is not vacuous
-(`proof/RED-byte-unchanged-mutant.txt`) — one byte appended to a committed
-root's `log.jsonl`, the test run, the byte removed:
+MUTATION PROOF of the narrowed control (`proof/RED-byte-unchanged-mutant.txt`)
+— one byte appended to a committed root's `log.jsonl`, the test run, the byte
+removed:
 
     E   AssertionError: a committed root moved: [' M experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d/log.jsonl']
     1 failed in 0.51s
+
+TWO CORRECTIONS, 2026-08-30, both from the skeptic pass. First: the sentence
+"the assertion is unchanged" was true of the `assert` line and false of the
+control. The narrowed predicate kept a status line only when the line's OWN
+directory held a `log.jsonl`, which is 1 823 of the 96 288 tracked files inside
+a committed root — every file under `blobs/` and `objects/`, the
+content-addressed evidence the record is built from, became invisible. Second:
+the mutation proof above exercises ONE class, modification, and the predicate
+was blind to the worst class, DELETION — removing `log.jsonl` removes the very
+file the filter needs. Both are repaired: the predicate is now built from git's
+INDEX (`git ls-files`) over NUL-delimited status, and six arms are proven in
+S-SKEPTIC below.
 
 P-FIX-1 was NOT needed in the delivered tree: without the gate,
 `test_continuation.py::test_a_stop_with_no_typed_receipt_refuses_continuation`
@@ -365,10 +445,15 @@ parked gate lands and the Traps entry is not rewritten with it:
 
 The empty second line is worth more than the first: `census.py` drives
 `results_summary` over all 59 committed roots on its DEFAULT path, and its
-output file is byte-identical after S7. That is an independent confirmation,
-over 59 real roots rather than one fixture, that S7's default path is
-behaviour-identical — which is what SPEC.md P-FIX-2 predicted and what allowed
-the six-key exact-set assertion to stay put.
+output file is byte-identical. When this was written it certified S7's default
+path; with S7 withdrawn it certifies something smaller and still worth having —
+that nothing this tranche shipped moved what `deepreason results` says about
+any committed root. NOTE, from the skeptic pass: this control covered the
+DEFAULT path only. The `--verify` path over committed roots was never asserted
+anywhere, and S7 changed it in BOTH directions (on 4 of 6 witness roots
+`valid_typed_terminal` moved False->True, and `amend_ready` on two of them).
+That gap is one of the reasons S7 is withdrawn rather than kept with a wider
+test.
 
 ## S-RING3 — the delivered tree, final ring, on an idle box
 
@@ -395,6 +480,200 @@ distinction rather than asserting it.
 NO FULL GATE was run by this lane. The orchestrator runs one at fan-in on an
 idle box, per the batch's own process-hygiene rule.
 
+## S-RING4 — the delivered tree after the skeptic pass
+
+Same fifteen files as ring #3, so the two are comparable:
+
+    $ PYTHONPATH=.../src python -m pytest \
+        tests/test_checkpoint_hardening.py tests/test_continuation.py \
+        tests/test_amendment_epochs.py tests/test_amendment_chain_integrity.py \
+        tests/test_lifecycle_operation_parity.py tests/test_results_command.py \
+        tests/test_terminal_lifecycle_refusal_is_recorded.py \
+        tests/test_calculus_standing.py \
+        tests/test_v6_resumed_terminal_revalidation.py \
+        tests/test_v6_terminal_commitment_authority.py \
+        tests/test_workflow_resume_lifecycle_c4.py tests/test_error_catalog.py \
+        tests/test_failure_terminal_reports_real_token_spend.py \
+        tests/test_progress.py tests/test_website_state_machine.py \
+        -q -p no:randomly --tb=short
+
+    207 passed in 641.67s (0:10:41)
+
+208 in ring #3, 207 here: the difference is exactly S7's test, removed with S7.
+
+ONE edit landed after this ring: a non-vacuity guard on the control test
+(`assert len(roots) >= 50`, because `str.startswith(())` is False for every
+path and an empty root set would make the control pass on any mutation). It is
+confined to `tests/test_checkpoint_hardening.py`, which nothing else imports,
+and that file was re-run alone:
+
+    $ PYTHONPATH=.../src python -m pytest tests/test_checkpoint_hardening.py -q -p no:randomly
+    3 passed in 4.81s
+No test was weakened, skipped or exempted to reach this number — the two source
+edits in this pass both DELETE a claim (`results.py` back to base, the
+`continue_refusal` field gone), and the one test edit REPLACES a predicate with
+a stricter one whose six arms are proven above.
+
+## S-DOCS2 — `tools/docs_verify.py` after the map repairs
+
+    $ PYTHONPATH=.../src python tools/docs_verify.py
+      FAIL SEAM-llm-x-rules.md:54
+      FAIL CON-discharge-channel.md:150
+      FAIL CON-run-identity.md:211
+      FAIL CON-run-identity.md:213
+      FAIL CON-run-identity.md:215
+      FAIL INV-frozen-surfaces.md:181
+      FAIL INV-frozen-surfaces.md:734
+      FAIL INV-signal-contract.md:243
+      FAIL SEAM-llm-x-verification.md:19
+    docs_verify: 9 failed
+
+The same nine `docs/AUDIT_BASELINES.md` predicts for a shallow clone, name for
+name — delta ZERO. The re-deriving `CON-run-identity.md` check added in this
+pass is not among them; it passes, and it costs 33 s.
+
+`Verified-at:` is NOT advanced on either map document. Both were re-run in full
+here — `CON-run-identity.md` 25 checks with 3 failing, `SUB-application.md` 30
+checks with 0 failing — and the three failures are the shallow-clone `git log` /
+`git show -M` history checks this container cannot satisfy. A stamp claiming a
+clean re-derivation would be false; a stale stamp is honest.
+
+## S-SKEPTIC — the independent pass, finding by finding, with its commands
+
+Eight findings, all confirmed by re-running them here before acting on any.
+
+### 1 (blocking) — a forged `amend_ready` root buys BOTH verbs
+
+Reproduced as a committed instrument on a COPY, never on the root:
+
+    $ PYTHONPATH=.../src python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_amend_ready.py
+    --- intact ---
+      stored_replay_valid: True
+      verify_root_violations: []
+      results_amend_ready_default: True
+      results_amend_ready_verify: True
+      amend: ACCEPTED epoch=1
+      continue: ACCEPTED seq=0
+    --- forged ---
+      stored_replay_valid: True
+      verify_root_violations: ['attempt-route', 'frozen-route']
+      results_amend_ready_default: True
+      results_amend_ready_verify: True
+      amend: ACCEPTED epoch=1
+      continue: ACCEPTED seq=0
+    edit: {'offset': 11656, 'from': 'a', 'to': '7'}
+    jailbreak_open: True
+
+Nothing in this lane's cone fixes it — the gate that would is parked. What
+changed is the PARK: F9 now carries this as its acceptance target, replacing
+the weaker endpoint differential, and `DR-CON-run-identity`'s Traps entry
+states it. Note the forged arm's first line: the root's own
+`REPLAY_VALIDATION.json` still says `valid: true`, so a gate that reads the
+STORED verdict clears this forgery.
+
+### 2 and 5 and 6 (major) — S7, and the false premise it shipped with
+
+Answered by reverting S7; see the S7 section above for the measurement and the
+`git diff --stat origin/main` that shows both files back at base. The
+docstrings that asserted "since 2026-08-30 the ACTING verbs re-derive it" went
+with them, in `results.py` and in `tests/test_results_command.py`. SPEC.md's S7
+item carries the withdrawal rather than losing it.
+
+    $ grep -c verify_root src/deepreason/runtime/continuation.py src/deepreason/amendment/apply.py
+    src/deepreason/runtime/continuation.py:0
+    src/deepreason/amendment/apply.py:0
+
+### 3 and 4 (blocking + major) — the byte-unchanged control could not see a delete
+
+The predicate kept a status line only if `Path(line[3:]).parent / "log.jsonl"`
+existed ON DISK, so deleting the log (or the root) removed the file the filter
+needed, and `blobs/`/`objects/` were never in scope at all. Rebuilt on git's
+INDEX, and mutation-proven across six arms against REAL `git status` output in
+a scratch repository built for the purpose (a committed root may not be deleted
+to watch a test fire):
+
+    $ python experiments/2026-08-30-change-checkpoint-hardening/proof/control_predicate_arms.py
+    ### modify log.jsonl (the original mutation proof)          new=True   old=True    (must be True)
+    ### delete log.jsonl                                        new=True   old=False   (must be True)
+    ### delete the whole run root                               new=True   old=False   (must be True)
+    ### modify content-addressed evidence under blobs/          new=True   old=False   (must be True)
+    ### rename a root file out of the root                      new=True   old=False   (must be True)
+    ### CONTROL: edit tranche narrative not inside any root     new=False  old=False   (must be False)
+    NEW predicate correct on all 6 arms: True
+    arms the OLD predicate MISSED (4): ['delete log.jsonl', 'delete the whole run root',
+      'modify content-addressed evidence under blobs/', 'rename a root file out of the root']
+    EXIT=0
+
+The last arm is the reason the narrowing existed and is kept: a tranche editing
+its own `PARKED.md` must not turn this control red.
+
+### 7 (blocking) — the map check could not fail for the reason its prose gives
+
+The numeric half re-read the committed `forge.json`. It now re-derives.
+Delivered tree:
+
+    $ python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_probe.py --witnesses
+    UNDETECTED current_valid_committed  .../run-0a3e93d6e8031e2e6d1d21dde2fa93cc
+    UNDETECTED current_valid_committed  .../run-9a6be78e1e79184a0bd89923b957586c
+    UNDETECTED current_valid_committed  .../run-e3f4f7007c50fe7e09b301d31851c3e7
+    UNDETECTED current_valid_committed  .../completed-epoch3-run-9175f0ecb055e57455af3c50df153c5a
+    DETECTED  invalid_incomplete  .../failed-epoch1-run-8c77c6588485304d1f73416318c62949
+    DETECTED  invalid_incomplete  .../void-inert-battery-run-6913328037a61ca6
+    re-derived: 4 still blind, 2 still detected
+    EXIT=0   (33.1s)
+
+MUTATION PROOF — the mechanism the prose names, removed
+(`terminal_authority.py`, `if result == pending_result:` -> `if False:`):
+
+    UNDETECTED -> DETECTED on all four blind roots
+    the forge measurement MOVED -- rewrite DR-CON-run-identity's Traps entry, never delete it:
+      ...run-0a3e93d6e8: forge_detected=True (the record says False); authority=invalid_incomplete
+      (and three more)
+    EXIT=1
+
+    $ git checkout -- src/deepreason/runtime/terminal_authority.py
+    $ git status --porcelain    # the mutant is gone; forge.json was never rewritten
+
+The `verify_root not in ...` half is kept unchanged: it guards the separate
+claim that the gate is not shipped.
+
+### 8 (major) — S7 moved `--verify` in both directions, and M4/M5 named the wrong predicate
+
+Moot for the shipped tree, since S7 is withdrawn. The measurement error behind
+it is not moot and is corrected in `proof/MEASUREMENTS.md`: "the re-derived
+verdict" was used for two different predicates that disagree.
+
+    $ PYTHONPATH=.../src python .../proof/two_predicates.py
+        agrees with stored under verify_root(violations non-empty): 6/6
+    agrees with stored under verify_root_report(...).summary_payload()['valid']: 2/6
+
+### 9 (minor) — S5 recorded a `continue_refusal` it did not derive
+
+The field is gone. Which code `continue` raises also depends on the cycles and
+tokens the operator later passes and on any resume decision an earlier
+continuation left, so the terminal cannot know it; 15 of the 16 committed roots
+of this shape raise `CONTINUE_TYPED_STOP_REQUIRED` and one raises
+`CONTINUE_RESUME_RECOVERY_MISMATCH`. The test did not get weaker: it still
+drives `prepare_continuation` on a copy of the root it just made and asserts
+the code actually raised.
+
+### 10 (minor) — `SUB-application.md` miscounted, and spoke for committed roots
+
+`_worker` has ONE `except (Exception, SystemExit)` block with THREE exits. Two
+now record a typed refusal; the third (`current_terminal_commitment is not
+None`) records nothing and is parked as F10, with the measured fairness note
+that `deepreason finalize` recovers that root. And "16 committed roots of that
+shape stop being silent about it" is impossible — committed roots are
+immutable; the row now says a FUTURE run of that shape records it.
+
+### also corrected
+
+- CHECKLIST.md row 12 recorded ring #2 as `0 failed | DONE` where this document
+  recorded `1 failed, 193 passed`. It now records the real outcome and points
+  the 0-failed criterion at ring #3.
+- The diff-budget transcript in three documents (VALIDATION S-BUDGET, DELIVERY,
+  PARKED F8) was stale by one commit and hand-trimmed. Re-run at HEAD above.
+
 ## Summary
 
 | SPEC item | delivered | acceptance |
@@ -405,10 +684,16 @@ idle box, per the batch's own process-hygiene rule.
 | S4 witness regression | NO — parked with S1/S2 | population preserved in `proof/census.json` |
 | S5 failure terminal records uncontinuability | YES | RED -> GREEN, in ring #3 |
 | S6 no-checkpoint terminal records it | YES | RED -> GREEN, in ring #3 |
-| S7 reader answers from the verdict it holds | YES | RED -> GREEN; census.json byte-identical over 59 roots |
-| S8 map moves in the same commit | YES | docs_verify 9 failed = baseline, delta ZERO |
-| S9 instruments committed | YES | census exit 0, population 59, tree clean |
+| S7 reader answers from the verdict it holds | NO — WITHDRAWN 2026-08-30 | it printed `amend_ready: false` where both verbs ACCEPT; `results.py` and its test are back at `origin/main` |
+| S8 map moves in the same commit | YES | docs_verify delta ZERO against the container baseline (S-DOCS2), and the numeric check now RE-DERIVES |
+| S9 instruments committed | YES | census exit 0, population 59, tree clean; two instruments added in the skeptic pass |
 
 VERDICT: **PARTIAL.** Limb two of the P2 law is delivered and proven. Limb
-three is not, and is parked with its implementation, its proof, and a
-ready-to-send re-plan.
+three is not, and is parked with its implementation, its proof, a measured
+acceptance target, and a ready-to-send re-plan.
+
+The skeptic pass narrowed what this tranche claims rather than widening it: one
+shipped item (S7) was withdrawn, one shipped field (`continue_refusal`) was
+removed, and two committed instruments were added. Nothing was weakened to stay
+green — the two source-side changes both DELETE a claim the tree could not
+support, and every test that guarded them is still driven against real records.

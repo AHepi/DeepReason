@@ -106,6 +106,20 @@ S5 (R7, R3, R4) — the ordinary worker-failure terminal records its own
       only extends it to the terminal that had nothing.
     accept: `python -m pytest tests/test_checkpoint_hardening.py::test_a_failure_terminal_records_why_it_cannot_be_continued -q` -> ends `1 passed`
 
+    AMENDED 2026-08-30, skeptic pass: `continue_refusal` is NOT recorded. It
+    was written as the constant `"CONTINUE_TYPED_STOP_REQUIRED"`, and the
+    terminal cannot derive it — which code `continue` raises also depends on
+    the cycles and tokens the operator later passes and on any resume decision
+    an earlier continuation left. Measured over the 16 committed roots of this
+    exact shape: 15 raise that code and one
+    (`.../failed-epoch1-run-8c77c6588485304d1f73416318c62949`, which carries a
+    resume decision) raises `CONTINUE_RESUME_RECOVERY_MISMATCH`. A terminal
+    naming another verb's code is the proxy the map's own rule forbids, so the
+    field is gone and the `detail` string carries what this terminal really
+    knows: it took no STOPPED lifecycle receipt. The test is unchanged in
+    strength — it still drives `prepare_continuation` on a copy of the root it
+    just produced and asserts the code actually raised.
+
 S6 (R7, R3, R4) — the no-harness failure terminal, which writes no checkpoint
     at all, says so.
     files: `src/deepreason/application/text_runs.py`
@@ -137,6 +151,32 @@ S7 (R8, R9, C4) — the reader answers from the verdict it is holding.
       the predicate.
     accept: `python -m pytest tests/test_results_command.py -q` -> ends `0 failed`
     accept: `python -m pytest tests/test_results_command.py::test_terminal_readiness_answers_the_rederived_verdict_under_verify -q` -> ends `1 passed`
+
+    WITHDRAWN 2026-08-30, skeptic pass. This item's whole `before:` rests on
+    "whose `amend` (after S2) refuses" — and S2 did not land. With the acting
+    verbs ungated, `_terminal` answering from the re-derived verdict makes
+    `deepreason results --verify` state the OPPOSITE of what the verbs do.
+    Measured on a one-byte forgery of the amend-ready root
+    `experiments/2026-08-27-pc2b-symmetric-reasoning/run`
+    (`proof/forge_amend_ready.py`): `amend` ACCEPTED epoch 1 and `continue`
+    ACCEPTED seq 0, while S7's reader printed `amend_ready: false`. At base it
+    prints `true`, which is what the verbs do, with the `verify_root` verdict
+    already on its own line above — so S7 lost a true line and gained a false
+    one on exactly the population this tranche is about. (The committed
+    `forge_amend_ready.json` records the DELIVERED tree, where that line reads
+    `true`; the S7 reading is quoted in VALIDATION.md S7.) A second reason, also
+    measured: the verdict S7 reads
+    (`verify_root_report(...).summary_payload()['valid']`, integrity+security
+    only) is NOT the predicate the parked gate used
+    (`verify_root(...)['violations']`, every channel), so S7 would not have
+    agreed with S1/S2 even had they landed (`proof/two_predicates.json`).
+    `src/deepreason/application/results.py` and
+    `tests/test_results_command.py` are restored byte-for-byte to
+    `origin/main`. Recorded rather than deleted, because the rule this item
+    cites is still right: a reporting verb must read the ACTING verb's own
+    predicate — and neither `verify_root` nor the stored verdict is that
+    predicate (`derive_terminal_authority` is, for `amend`). That is F6, and
+    widening it was never this tranche's to do.
 
 S8 (C5) — the map moves in the same commits as the code.
     files: `docs/map/SUB-amendment.md`, `docs/map/CON-run-identity.md`,

@@ -101,10 +101,26 @@ the probe writes it the way the product does.
     failed-epoch1-run-9175f0ec     594 ev  amend: PASSED  continue: REFUSED CONTINUE_TYPED_STOP_REQUIRED  verify_root 32.40s ['run-input']
 
 `amend` PASSED on 6 of 6. `continue` ACCEPTED 3 of 6, and refused the other 3
-for a reason unrelated to their records. On all six the re-derived verdict
-AGREES with the root's own stored `valid: false` — the gate this tranche adds
-recomputes the record's own published judgement, it does not invent a stricter
-one.
+for a reason unrelated to their records.
+
+CORRECTED 2026-08-30 (skeptic pass). The sentence that stood here — "on all six
+the re-derived verdict AGREES with the root's own stored `valid: false`" —
+names a predicate without saying which, and the two candidates disagree. Under
+`verify_root(root)["violations"]`, which is what the `verify_root` column above
+reports and what the parked gate refused on, the agreement is 6 of 6 — the
+sentence was TRUE of its own column. Under
+`verify_root_report(root).summary_payload()["valid"]`, which is what
+`application/results.py` publishes under `--verify` and what the withdrawn S7
+fed into `_terminal`, it is 2 of 6: a `foreign-criticism` finding is channelled
+`epistemic`, so it is a violation to the first predicate and invisible to the
+second. The defect is not the number, it is the unqualified phrase "the
+re-derived verdict" in a tranche that shipped one predicate and parked the
+other. Measured, root by root, in M8 below.
+
+What survives the correction: the parked gate recomputes the record's own
+published judgement rather than inventing a stricter one — under the predicate
+IT used. The withdrawn reader change used the other one, which is the second
+reason it should not have shipped alongside a parked gate.
 
 The probe drives only witnesses under 600 events. That is a runtime budget,
 stated as one: `verify_root` is O(run length), and the smallest witnesses
@@ -184,3 +200,86 @@ Seven names, none about containment, in a file inside frozen surface 3.
     SUB-amendment.md
     SUB-application.md
     SUB-periphery.md
+
+## M8 — the two re-derivations, measured (skeptic pass, 2026-08-30)
+
+    python experiments/2026-08-30-change-checkpoint-hardening/proof/two_predicates.py
+
+    run-e542c3c1fc266943e0260c5aa8d7c107       stored=False viol=5 summary_valid=True counts={'integrity': 0, 'security': 0, 'completion': 24, 'epistemic': 1, 'operational': 7}
+    run-9a6be78e1e79184a0bd89923b957586c       stored=False viol=1 summary_valid=False counts={'integrity': 2, 'security': 0, 'completion': 32, 'epistemic': 2, 'operational': 8}
+    run-d17935a4bf5ffa67c7f6e67b9a637a00       stored=False viol=4 summary_valid=True counts={'integrity': 0, 'security': 0, 'completion': 46, 'epistemic': 1, 'operational': 2}
+    completed-epoch2-run-9e9812feefa792179d4   stored=False viol=3 summary_valid=True counts={'integrity': 0, 'security': 0, 'completion': 33, 'epistemic': 1, 'operational': 11}
+    run-faa5feae126bc2558ea9c6d8d200a90c       stored=False viol=3 summary_valid=True counts={'integrity': 0, 'security': 0, 'completion': 42, 'epistemic': 1, 'operational': 6}
+    failed-epoch1-run-9175f0ecb055e57455af3c   stored=False viol=1 summary_valid=False counts={'integrity': 2, 'security': 0, 'completion': 62, 'epistemic': 1, 'operational': 12}
+
+    agrees with stored under verify_root(violations non-empty): 6/6
+    agrees with stored under verify_root_report(...).summary_payload()['valid']: 2/6
+    written: /home/user/dr-lanes/lane-A/experiments/2026-08-30-change-checkpoint-hardening/proof/two_predicates.json
+
+Read as: `viol` is `len(verify_root(root)["violations"])`, `summary_valid` is
+`verify_root_report(root).summary_payload()["valid"]`. Where a root has zero
+integrity and zero security findings but non-zero completion or epistemic ones,
+the two answers separate.
+
+## M9 — the full jailbreak, on an `amend_ready` root (skeptic pass, 2026-08-30)
+
+    python experiments/2026-08-30-change-checkpoint-hardening/proof/forge_amend_ready.py
+
+    root: experiments/2026-08-27-pc2b-symmetric-reasoning/run
+    edit: log.jsonl[11656] 'a' -> '7'   (one byte, same length)
+
+    arm      verify_root                        amend               continue
+    intact   []                                 ACCEPTED epoch=1    ACCEPTED seq=0
+    forged   ['attempt-route','frozen-route']   ACCEPTED epoch=1    ACCEPTED seq=0
+    jailbreak_open: True
+
+M3's differential (`forge_one_byte.py`) could not show this: its root is a
+FAILED one, where `continue` refuses `CONTINUE_TYPED_STOP_REQUIRED` whatever
+the record says. The refusal seen there was never the gate working, and this
+tranche's own S3 write-up said so — but it left the impression that a tampered
+root buys only an amendment. It buys the resumption too.
+
+Both arms run on COPIES; `git status --porcelain experiments/` is empty after.
+
+## M10 — which mutations the byte-unchanged control can see (skeptic pass)
+
+    python experiments/2026-08-30-change-checkpoint-hardening/proof/control_predicate_arms.py
+
+Six arms against real `git status` output in a scratch repository laid out as
+this one is (a committed root may not be deleted to watch a test fire). The
+predicate as first shipped saw 1 of the 5 real mutations; the predicate built
+from git's index sees 5 of 5, and both leave the sixth — a tranche editing its
+own narrative document — green. Full transcript: `control_predicate_arms.txt`.
+
+## M11 — what `continue` really raises on a failure terminal (skeptic pass)
+
+    python experiments/2026-08-30-change-checkpoint-hardening/proof/failed_continue_codes.py
+
+    [1/16] ValueError: CONTINUE_RESUME_RECOVERY_MISMATCH  experiments/2026-08-08-live-two-seat-ab-s6/home-s6/runs/failed-epoch1-run-8c77c6588485304d1f73416318c62949
+    [2/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch1-run-8e22d0431fd2b98d
+    [3/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch2-run-8e22d0431fd2b98d
+    [4/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-13-defect-controller-steering-inert/failed-epoch3-run-8e22d0431fd2b98d
+    [5/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt2-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4
+    [6/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-22-change-epoch3-second-lineage/failed-attempt3-run-bb0455384ea09b5b72664a4f6f3f0cb7a5ac227c00a93976e5c8c31873ca84f4
+    [7/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-22-live-reach-rich-run/failed-epoch1-run-40e713b30a147dfc1a0f73feb91fa67a493454f6103a452888b8e08713368c4c
+    [8/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-22-live-reach-rich-run/run
+    [9/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-24-change-rung7-wounds-falls-succession/run
+    [10/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-25-change-constructive-frontier/run
+    [11/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-25-change-constructive-frontier/void-inert-battery-run-6913328037a61ca6
+    [12/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/2026-08-26-pc2-rematch/run
+    [13/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/live_research_2026-07-29/openchallenge/runs/failed-epoch1-run-0d1f88e18779b7eb6d8c5d6af3473ba7
+    [14/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/live_research_2026-07-29/referee/runs/run-e542c3c1fc266943e0260c5aa8d7c107
+    [15/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch1-run-9175f0ecb055e57455af3c50df153c5a
+    [16/16] ValueError: CONTINUE_TYPED_STOP_REQUIRED  experiments/live_research_2026-07-29/selfstudy/runs/failed-epoch2-run-9175f0ecb055e57455af3c50df153c5a
+    population: 16
+    outcomes: {'ValueError: CONTINUE_TYPED_STOP_REQUIRED': 15, 'ValueError: CONTINUE_RESUME_RECOVERY_MISMATCH': 1}
+    complete checkpoint file set: 16
+    written: /home/user/dr-lanes/lane-A/experiments/2026-08-30-change-checkpoint-hardening/proof/failed_continue_codes.json
+
+This is the population S5's `continue_refusal` constant spoke for. It is not
+constant across it, and the outlier is not exotic: that root carries a resume
+decision from an earlier continuation, so `prepare_continuation` reaches the
+recovery branch first. The field was removed rather than derived — the code
+also depends on the cycles and tokens the operator passes, which no terminal
+can know when it writes its record.
+
