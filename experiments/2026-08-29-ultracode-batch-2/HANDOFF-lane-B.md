@@ -10,7 +10,7 @@ exists so that window needs nothing from this conversation.
     tip      fdfe8a6e4          (PUSHED to origin; local == remote)
     tree     clean (git status --porcelain empty)
     base     origin/main 84514a028, via batch commit 152c7e204
-    cone     45 paths; NO frozen surface contact
+    cone     43 paths; NO frozen surface contact
     tranche  experiments/2026-08-30-change-successor-questions/
 
 The lane found a LAWFUL ROAD that avoids `run_manifest.py` entirely, so the

@@ -12,12 +12,16 @@ Lane B's OWN verification runs are committed on `claude/b2-lane-B` at
 - `experiments/2026-08-30-change-successor-questions/VALIDATION.md` — every
   SPEC.md acceptance check with its real output, including the one recorded
   PASS-WITH-NOTE and the one predicted RED.
-- `experiments/2026-08-30-change-successor-questions/proof/` — seven mutation
-  transcripts: `law_line_pin1_red.txt`, `law_line_pin2_red.txt`,
-  `minting_mutants_red.txt`, `route_mutants_red.txt`,
-  `registry_modularity_red.txt`, `rank_tie_red.txt`,
-  `predicted_red_decommissioned_tripwire.txt`, plus the two wheel-smoke
-  transcripts.
+- `experiments/2026-08-30-change-successor-questions/proof/` — NINE files, and
+  the split matters: SIX are mutation transcripts (`law_line_pin1_red.txt`,
+  `law_line_pin2_red.txt`, `minting_mutants_red.txt`, `route_mutants_red.txt`,
+  `registry_modularity_red.txt`, `rank_tie_red.txt`), ONE records the predicted
+  red (`predicted_red_decommissioned_tripwire.txt`) and is NOT a mutation proof,
+  and TWO are wheel-smoke logs (`wheel_operational_smoke_base.txt`,
+  `wheel_operational_smoke_branch.txt`) which are not mutation transcripts at
+  all. CORRECTION: an earlier version of this file called seven of them mutation
+  transcripts, folding the predicted-red in. The lane's own DELIVERY.md claims
+  eight. Both counts were wrong; six is the measured figure.
 - `blast_radius.json` — the frozen-surface contact census, verbatim.
 
 Nothing of lane B's own measurement is unpushed. `git status --porcelain` on
