@@ -33,8 +33,10 @@ original files going red against the behaviour it guards; a seventh records the
 one predicted fixture change. (As delivered this read five files and 42 tests;
 the 2026-08-30 audit found three of those tests could not fail and one
 deliverable had no guard at all, and the repair added fourteen tests and the
-sixth file — see FINDINGS.md and the re-measurement section below.) Six map documents move in the same commit,
-including a new `DR-CON-successor-questions` and its INDEX row.
+sixth file — see FINDINGS.md and the re-measurement section below.) SEVEN map documents move in the same commit,
+including a new `DR-CON-successor-questions` and its INDEX row. (Corrected
+2026-08-30, audit F18: this read "Six" while the same tranche said "all
+seven touched documents" elsewhere; six were amended and one created.)
 
 Three of the operator's five parked questions are still open, and two of them
 bound what could ship. Q1 (a frozen-surface-4 grant) means the two per-run

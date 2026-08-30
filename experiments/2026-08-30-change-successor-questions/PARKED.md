@@ -174,3 +174,77 @@ and add to the test's docstring the supersession sentence Q5 confirms. This is
 a strictly MORE specific claim than "zero": it still fails the moment a second
 producer appears anywhere, and it additionally fails if the one producer MOVES.
 ```
+
+---
+
+## Audit disposition — 2026-08-30, after the adversarial skeptic pass
+
+The pass `HANDOFF-lane-B.md` called "the single most important thing on this
+page" ran in the pickup window and returned **35 reproduced findings** (3
+blocking, 20 major, 12 minor), recorded in full with commands and output in
+`FINDINGS.md`.
+
+**All 35 are disposed.** Thirty-four are REPAIRED in this branch — in
+`tests/` (fourteen new tests, including the six-file suite's new
+`test_successor_wire_carry.py`), in `src/deepreason/successor/` (two false
+claim strings), in the seven map documents (five checks that never ran, a false
+`Verified-at:` on all seven, two checks that could not fail), in `proof/` (two
+transcripts that declared a diff and carried none, one void exit capture), and
+in `DELIVERY.md`/`VALIDATION.md` (ten falsified numbers, each corrected with
+its original wording kept beside it). One is parked below, and it is parked
+because it is an operator decision rather than a defect.
+
+### P9B-8 — a registry row may still declare an `enforcement` nothing performs
+
+WHAT: `SuccessorDeclaration.enforcement` is documented as naming "where the row
+is actually READ, so a declaration can never claim a switch no consumer
+consults". Nothing verifies that. Audit F12 found the shipped `minting.v1` row
+declaring `Config.SUCCESSOR_MINTING_ENABLED` — an attribute `Config` does not
+carry and, while it forbids extras, cannot be given. The string is now true,
+and the property is still unenforced, so the next row can reintroduce exactly
+this defect.
+
+WHY IT IS NOT FIXED HERE: the natural check — "every gate row names a real
+`Config` field" — cannot pass today, because Q1 is unanswered and NO successor
+`Config` field exists. Writing a check that must fail, or weakening it until it
+passes, would both be worse than parking it. This is the same defect class
+`DR-INV-evidence-channels` already carries a check for, so the shape is known.
+
+READY TO APPLY THE MOMENT Q1 IS GRANTED AND THE FIELDS LAND — in the same
+commit as those fields, not later:
+
+```
+def test_every_gate_row_names_a_real_config_field():
+    """Regression (audit F12): minting.v1 declared enforcement naming
+    Config.SUCCESSOR_MINTING_ENABLED, which Config did not carry."""
+    from deepreason.config import Config
+    from deepreason.successor.registry import GATES
+    for row in GATES.values():
+        named = [w.strip(".,;'\"") for w in row.enforcement.split() if w.isupper()]
+        for field in named:
+            assert field in Config.model_fields, (row.id, field)
+```
+
+### What the audit did NOT change, and must not be read as having changed
+
+- **Q1, Q2, Q3, Q4 and Q5 are all still open**, and the audit touched none of
+  them. It sharpened the PRICE of two:
+  - Q1 is now known to cost more than "the ability to change a default". With
+    no `Config` field and `extra_forbidden` in force, R3's "movement elsewhere"
+    is provable only against a stub object; a real run cannot re-aim the
+    destination at all. `DELIVERY.md`'s R3 row is downgraded to
+    done-with-assumption A5 accordingly.
+  - Q2 is wider than the Q2 block states: neither typed disclosure has a caller
+    anywhere in `src/`, so the operator's warning text reaches no stream and no
+    record today (audit F13).
+- **P9B-7 stands exactly as written.** The one red guard test is still red,
+  still gated on Q5, and its four-line rewrite is still ready to apply. The
+  audit was asked to say whether that rewrite is correct and found nothing
+  against it.
+- **P9B-6 stands.** Strict domination is still a future tranche, live only if
+  Q4 answers STRICT. Audit F11 found the delivered LIVENESS_QUEUE arm of the
+  TIE proof was vacuous and it is now repaired, so the tie half is proven where
+  it previously only appeared to be — which makes Q4 a cleaner decision, not a
+  different one.
+- **No frozen surface was touched**, by the lane or by the repair. Re-derived
+  against all seven paths, not recalled.
