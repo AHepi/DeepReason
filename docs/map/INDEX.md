@@ -119,6 +119,7 @@ traffic at all.
 | 11 | capabilities × workflow | — not yet written |
 | 11 | manifest × workflow | — not yet written |
 | 10 | llm × scratch | — not yet written |
+| 1 | llm × verification | `SEAM-llm-x-verification.md` |
 | — | schools × scratch | `SEAM-schools-x-scratch.md` |
 | — | manifest × schools | `SEAM-manifest-x-schools.md` |
 | — | adjudication × authority | `SEAM-adjudication-x-authority.md` |
@@ -128,10 +129,9 @@ traffic at all.
 | — | harness × verification | `SEAM-harness-x-verification.md` |
 | — | periphery × verification | `SEAM-periphery-x-verification.md` |
 | — | llm × scheduler | `SEAM-llm-x-scheduler.md` |
-| — | llm × verification | `SEAM-llm-x-verification.md` |
 | — | calculus × rules | `SEAM-calculus-x-rules.md` |
 
-The last eleven carry no import-count because at least one side is a concept
+The last ten carry no import-count because at least one side is a concept
 rather than a package, the agreement is enforced without a direct import, or —
 the periphery × verification and calculus × rules cases — every import between
 the sides is function-local, which the coupling metric cannot see. The adjudication ×
@@ -147,15 +147,20 @@ carried entirely by `controller.py`, which imports nothing from `llm/` and
 reaches the leases duck-typed off the adapter. A count taken over the packages
 would have read 10 and pointed at the wrong traffic.
 
-The llm × verification case is the newest and cost the most: the two sides
-import NOTHING from each other in either direction, so the pair was absent
-from this matrix entirely — which reads as "no interaction" and is not. Their
-whole agreement is what the fields of one record MEAN, and when the
-split-budget seat protocol was written against `attempt_trace` with nothing to
-say what that list meant to its only reader, every run of a whole operating
-mode came out replay-invalid
-(`experiments/2026-08-27-defect-split-leg-recording/`). **A pair with zero
-measured traffic can still be load-bearing; absence from this table is
+The llm × verification case is the newest and cost the most. It sat here with
+a DASH until 2026-08-30, on the strength of a claim that the two sides import
+nothing from each other in either direction. That claim was false, and its own
+check said so the first time it was ever executed: the verification side names
+`deepreason.llm` once at module level (`route_fingerprint`, from
+`llm/firewall.py`) and five more times inside functions, which this metric
+cannot see, while `llm/` names the verification side nowhere. One is the
+lowest score in this table, and it reads as "no interaction" about as loudly
+as a dash did. Their whole agreement is what the fields of one record MEAN,
+and when the split-budget seat protocol was written against `attempt_trace`
+with nothing to say what that list meant to its only reader, every run of a
+whole operating mode came out replay-invalid
+(`experiments/2026-08-27-defect-split-leg-recording/`). **A pair at the bottom
+of this table — dash, zero or one — can still be load-bearing; a low score is
 evidence about the metric, not about the code.**
 
 The capabilities × channels case is the SECOND measured instance of that exact

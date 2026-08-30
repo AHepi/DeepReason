@@ -1,0 +1,10 @@
+=== D1 mutation proof -- scratch copy, repo tree untouched ===
+[1] BROKEN FORM (the committed check, on the real tree): rc=1    File "<string>", line 10, in <module> | AssertionError: ('src/deepreason/invariants.py', 'deepreason.llm.firewall')
+[2] REPAIRED FORM (on the real tree):                    rc=0  
+[3] REPAIRED FORM on an unmutated scratch copy:          rc=0  
+[4] M1 eighth forward crossing added:                    rc=1    File "<string>", line 34, in <module> | AssertionError: ['src/deepreason/invariants.py::deepreason.llm.packs::build_pack']
+[5] M2 reverse crossing added (absolute):                rc=1    File "<string>", line 36, in <module> | AssertionError: ['src/deepreason/llm/adapter.py::deepreason.invariants::verify_root']
+[6] M3 reverse crossing added (relative):                rc=1    File "<string>", line 36, in <module> | AssertionError: ['src/deepreason/llm/adapter.py::deepreason.verification.report::verification_report']
+[7] scratch copy restored:                               rc=0  
+=== repo tree status (must be clean of src/ changes) ===
+(no src/ changes)
