@@ -94,3 +94,21 @@ $ grep -rnE '^[[:space:]]*from[[:space:]]+\.' src/deepreason/ | wc -l
 
 === repo tree status (must be clean of src/ changes) ===
   (blank above = clean)
+
+=== 2026-08-30, THIRD probe: does the check survive a CARELESS WIDENING? ===
+The documented procedure for a legitimate eighth crossing is to widen
+`expected` in the same commit. That procedure alone would let a
+module-level import in, silently falsifying the body's 'one at module
+level' and INDEX.md's matrix score of 1. The repaired check carries a
+SECOND assertion for exactly that. Scratch mirror of src/ AND of the
+document; both restored afterwards.
+
+  unmutated: real tree, committed document                 rc=0  
+  M1 module-level 8th crossing, `expected` NOT widened     rc=1  AssertionError: [('src/deepreason/invariants.py', 'deepreason.llm.packs', 'build_pack', True)]
+  M2 SAME crossing, `expected` dutifully widened to match  rc=1  AssertionError: [('src/deepreason/invariants.py', 'deepreason.llm.firewall', 'route_fingerprint', True), ('src/deepreason/invariants.py', 'deepreason.
+  restored: real tree, committed document                  rc=0  
+     rc=1 on M2 is the SECOND guard firing -- the module-level COUNT claim,
+     which the set assertion alone cannot defend.
+
+=== repo tree status (must be clean of src/ changes) ===
+  (blank above = clean)

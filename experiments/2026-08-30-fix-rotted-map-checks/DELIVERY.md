@@ -686,11 +686,19 @@ amended, in the post-review round recorded in §11.
 1. **The four repairs are proven against THIS tree, not against the future.**
    D1's check pins an exact seven-element crossing set and is brittle by
    design; the document says so, but a future author who widens it carelessly
-   turns a strong check into a weak one. That is now PARTLY mechanical: the
-   check also asserts that exactly one crossing is at module level, so a
-   careless widening that adds a module-level import trips a second assertion
-   with a different message. A careless widening that adds a function-local
-   crossing still only has the author's own care standing behind it.
+   turns a strong check into a weak one. That is now PARTLY mechanical, and
+   measured rather than asserted (`proof/d1_seam_crossings.txt`, THIRD probe):
+   a module-level eighth crossing is red whether or not the widener also
+   updates `expected`, because the check separately asserts that exactly ONE
+   crossing sits at module level —
+
+       M1  module-level 8th crossing, `expected` NOT widened      rc=1
+       M2  SAME crossing, `expected` dutifully widened to match   rc=1
+
+   — so following the documented widening procedure does not buy a silent
+   falsification of the body's "one at module level" or of `INDEX.md`'s matrix
+   score of 1. A careless widening that adds a FUNCTION-LOCAL crossing still
+   has only the author's own care standing behind it.
 
 1b. **D1's enforcement was over-claimed once already, and the correction is
    §11.1 rather than a footnote.** The first replacement check missed nine of
@@ -936,4 +944,12 @@ module-level imports only. Fixed by the fourth tuple element described in
 not just for `invariants.py`. Mutations S1 (hoist `report.py`'s) and S2 (sink
 `invariants.py`'s) are both RED in the sixteen-form table; S1 was GREEN
 before.
+
+A third probe was run because the reviewer's finding implies a second failure
+mode the sixteen-form table does not reach: a widener who ADDS a module-level
+crossing and dutifully updates `expected`, exactly as the document's own
+instructions say to. The count assertion catches that too — both M1 (widened
+tree, unwidened `expected`) and M2 (both widened) are RED. Recorded in
+`proof/d1_seam_crossings.txt` under THIRD probe, with the scratch mirror of
+both `src/` and the document restored and re-verified GREEN afterwards.
 
