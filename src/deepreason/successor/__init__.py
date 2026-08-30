@@ -37,7 +37,10 @@ from deepreason.successor.route import route
 
 # The DECLARED interface. `minting_notices` and the registration helpers are
 # reachable beside it as ordinary module attributes; this tuple is the surface a
-# consumer may rely on, pinned by tests/test_successor_registry.py.
+# consumer may rely on. It is pinned by the `__all__` check in
+# docs/map/CON-successor-questions.md, which tools/docs_verify.py runs, and by
+# tests/test_successor_registry.py::test_the_declared_interface_is_exactly_six_names,
+# so dropping a name here goes red in both instruments.
 __all__ = [
     "DESTINATIONS",
     "SUCCESSOR_DESTINATION_REGISTRY_VERSION",

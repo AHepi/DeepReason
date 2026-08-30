@@ -18,10 +18,15 @@ Four claims, each with a command behind it:
 - switching the gate on DISCLOSES, in the operator's own words, and never
   refuses and never stays silent (the ungated-seats law, 2026-08-28).
 
-What did NOT change, and is asserted here rather than assumed: the producer
-lives outside `src/deepreason/rules/` and is never reached from `scan_spawns`,
-so H1's deletion -- nothing mints a problem AUTOMATICALLY FROM A REFUTATION --
-stands exactly as it was.
+What did NOT change, asserted here in BOTH halves rather than assumed: the
+producer lives outside `src/deepreason/rules/` (a check on LOCATION and on two
+literals absent from `scan_spawns`' source), and refuting a candidate and
+rescanning mints no `SpawnTrigger.SUCCESSOR` problem (a check on what the sweep
+DOES, which is what a relapse spelled around those literals would break). So
+H1's deletion -- nothing mints a problem AUTOMATICALLY FROM A REFUTATION --
+stands exactly as it was. The frontier-wide version of the same guarantee is
+`tests/test_h1_no_spawn_from_refutation.py`, which predates this trigger's
+revival.
 """
 
 from __future__ import annotations
@@ -31,7 +36,7 @@ import inspect
 import pytest
 
 from deepreason.harness import Harness
-from deepreason.ontology import Problem, ProblemProvenance
+from deepreason.ontology import Commitment, Problem, ProblemProvenance
 from deepreason.ontology.problem import SpawnTrigger
 from deepreason.ontology.event import Rule
 from deepreason.successor import mint, minting_notices
@@ -53,10 +58,18 @@ class _On:
 
 
 def _seed(harness) -> Problem:
+    # The parent carries a REAL criterion. Without one, `parent.criteria` is
+    # `[]` and the inheritance assertion below degenerates to `[] == []`, which
+    # holds for an implementation that inherits nothing -- the exact behaviour
+    # the comment at that assertion calls dangerous.
+    harness.register_commitment(
+        Commitment(id="k-tide", eval="predicate:'tide' in content")
+    )
     return harness.register_problem(
         Problem(
             id=PROBLEM_ID,
             description="explain the tide table for this harbour",
+            criteria=["k-tide"],
             provenance=ProblemProvenance.model_validate(
                 {"trigger": "seed", "from": []}
             ),
@@ -146,6 +159,7 @@ def test_the_minted_problem_carries_the_trigger_and_names_both_parents(tmp_path)
     # Criteria are inherited AT REGISTRATION because `Problem` is immutable: a
     # successor registered without them could be addressed before anything
     # could refuse it.
+    assert list(parent.criteria) == ["k-tide"]            # the comparison is real
     assert list(minted.criteria) == list(parent.criteria)
 
 
@@ -206,10 +220,16 @@ def test_the_warning_text_is_the_operators_words_on_the_registry_row():
 
 
 def test_the_producer_is_outside_scan_spawns(tmp_path):
-    """The road P9 opens is a DIFFERENT road with a different authority. H1
-    forbade minting AUTOMATICALLY FROM A REFUTATION inside `scan_spawns`, and
-    that is untouched: the mint site is a module outside `rules/`, reached only
-    by an explicit call carrying an explicit proposal."""
+    """The road P9 opens is a DIFFERENT road with a different authority: the
+    mint site is a module outside `rules/`, reached only by an explicit call
+    carrying an explicit proposal.
+
+    Scope, stated because the earlier wording overclaimed it: this test pins
+    the producer's LOCATION and the absence of two literals from the sweep's
+    source. It is a spelling check, and a relapse written around those literals
+    passes it. `test_scan_spawns_mints_no_successor_from_a_refutation` below is
+    the behavioural half.
+    """
     from deepreason.rules.spawn import scan_spawns
 
     source = inspect.getsource(scan_spawns)
@@ -222,3 +242,38 @@ def test_the_producer_is_outside_scan_spawns(tmp_path):
     producer = inspect.getsourcefile(mint).replace("\\", "/")
     assert producer.endswith("/deepreason/successor/mint.py"), producer
     assert "/deepreason/rules/" not in producer
+
+
+def test_scan_spawns_mints_no_successor_from_a_refutation(tmp_path):
+    """H1's deletion, RUN rather than spelled.
+
+    Refute the only candidate on the seed problem, rescan every structural
+    trigger, and assert no problem carrying `SpawnTrigger.SUCCESSOR` exists.
+    This is the assertion an H1 relapse cannot evade by choosing its spelling:
+    a loop reinstated as `SpawnTrigger("successor")` leaves the location and
+    literal checks above green and dies here.
+    """
+    from deepreason.config import Config
+    from deepreason.ontology import Status
+    from deepreason.rules.spawn import scan_spawns
+    from tests.conftest import attack
+
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+    candidate = harness.create_artifact(
+        "the tide follows the moon", problem_id=PROBLEM_ID
+    )
+    scan_spawns(harness, Config())
+    before = set(harness.state.problems)
+
+    attack(harness, candidate.id, "ignores solar forcing")
+    assert harness.state.status[candidate.id] == Status.REFUTED
+    scan_spawns(harness, Config())
+
+    minted = sorted(
+        pid
+        for pid, problem in harness.state.problems.items()
+        if problem.provenance.trigger == SpawnTrigger.SUCCESSOR
+    )
+    assert minted == [], minted
+    assert set(harness.state.problems) == before

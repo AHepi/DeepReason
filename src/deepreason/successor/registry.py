@@ -47,13 +47,20 @@ class SuccessorDeclaration:
     ``default`` answers exactly one question for both kinds of row -- what a
     configuration that names nothing gets. For a destination that is "this is
     the shipped fallback"; for a gate it is "this gate is on when nothing says
-    otherwise". ``enforcement`` names where the row is actually READ, so a
-    declaration can never claim a switch no consumer consults -- the failure
-    mode this repo has already paid for once, in an allocation controller whose
-    47 decisions reached no dispatch. ``routes`` is producer-agnostic on
-    purpose: it says what the row DOES, never which subsystem proposed the
-    question, because a consumer that has to know the producer has left the
-    contract (`DR-INV-signal-contract`).
+    otherwise". ``enforcement`` names where the row is actually READ, and where
+    a switch cannot yet be SET it must say so rather than name one that does not
+    exist -- the failure mode this repo has already paid for once, in an
+    allocation controller whose 47 decisions reached no dispatch. That is a
+    convention a row's author keeps, NOT an enforced property: no test and no
+    map check reads a `SuccessorDeclaration`'s ``enforcement``, so a false string
+    here goes unnoticed until a reader follows it. `DR-INV-evidence-channels`
+    carries the check this registry still lacks -- it asserts every channel row's
+    toggle is a real `Config` field, which is the assertion no gate row here
+    could satisfy while Q1 is unanswered.
+
+    ``routes`` is producer-agnostic on purpose: it says what the row DOES, never
+    which subsystem proposed the question, because a consumer that has to know
+    the producer has left the contract (`DR-INV-signal-contract`).
     """
 
     id: str
@@ -102,7 +109,14 @@ GATES: dict[str, SuccessorDeclaration] = {
             "SUCCESSOR trigger and naming both its parents"
         ),
         default=False,
-        enforcement=f"deepreason.successor.mint.mint -> Config.{SUCCESSOR_MINTING_FIELD}",
+        enforcement=(
+            "deepreason.successor.mint.mint -> registry.minting_enabled -> "
+            f"getattr(config, {SUCCESSOR_MINTING_FIELD!r}, this row's default). "
+            f"deepreason.config.Config declares no {SUCCESSOR_MINTING_FIELD} "
+            "field and forbids extras, so no run configured through it can "
+            "switch this gate on until the Q1 frozen-surface-4 grant lands "
+            "(PARKED.md Q1); today only a duck-typed configuration object can"
+        ),
         authority='operator 2026-08-29: "Switch off by default"',
         # The operator named the TEXT, not the idea, so it is carried verbatim
         # and never paraphrased: a reader checking this row against CLAUDE.md

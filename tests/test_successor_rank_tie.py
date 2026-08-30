@@ -35,18 +35,35 @@ from deepreason.scheduler.scheduler import Scheduler
 
 SEED_ID = "question-98a0e3a77a0e"
 SUCCESSOR_ID = "succ:0e26d6be54fd"
+# A second successor whose id sorts BEFORE the seed's. Live successor ids are
+# "succ:<digest>" and every one of them sorts AFTER "question-<digest>", so a
+# fixture built only from real-shaped ids cannot exercise the seed term at all
+# in LIVENESS_QUEUE mode -- the final `p.id` tie-break decides it first.
+EARLY_ID_SUCCESSOR_ID = "aaa:0e26d6be54fd"
 
 
-def _register(harness):
+def _register(harness, *, early_id_successor: bool = False):
     harness.register_commitment(Commitment(id="k-q", eval="predicate:'x' in content"))
-    # Spawn-order and id-order both favour the successor, as live: "succ:..."
-    # sorts before "question-..." and it is registered first.
+    # Registration order favours the successor. Id-order does NOT: a real
+    # "succ:..." id sorts AFTER "question-...", so the bare id tie-break
+    # already favours the seed and cannot prove the seed term on its own.
+    # `early_id_successor` adds one that DOES sort first, which is what makes
+    # the LIVENESS_QUEUE arm below able to fail.
     harness.register_problem(Problem(
         id=SUCCESSOR_ID, description="what would settle the solar term?",
         criteria=["k-q"],
         provenance=ProblemProvenance.model_validate(
             {"trigger": "successor", "from": [SEED_ID, "artifact-under-criticism"]}),
     ))
+    if early_id_successor:
+        harness.register_problem(Problem(
+            id=EARLY_ID_SUCCESSOR_ID,
+            description="what would settle the lunar term?",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "successor",
+                 "from": [SEED_ID, "artifact-under-criticism"]}),
+        ))
     harness.register_problem(Problem(
         id=SEED_ID, description="the operator's question", criteria=["k-q"],
         provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
@@ -64,10 +81,23 @@ def _register(harness):
 
 def test_a_minted_successor_loses_the_rank_tie_to_the_seed_question(tmp_path):
     """Both selection modes, at cycle 0, where every problem is never-worked
-    and the tie-break is the only thing separating them."""
+    and the tie-break is the only thing separating them.
+
+    One of the two successors carries an id that sorts BEFORE the seed's, so
+    in BOTH keys every term below the seed term now favours a successor: the
+    seed can win here only on the seed term itself. Without it this arm passed
+    with the LIVENESS_QUEUE seed term deleted, because "succ:..." sorts after
+    "question-..." and the id tie-break was quietly doing the work.
+    """
     for liveness in (True, False):
         harness = Harness(tmp_path / f"run-{liveness}")
-        _register(harness)
+        _register(harness, early_id_successor=True)
+        # The fixture is what it says it is: both rivals really do carry the
+        # trigger the seed term discriminates on.
+        assert {
+            harness.state.problems[pid].provenance.trigger
+            for pid in (SUCCESSOR_ID, EARLY_ID_SUCCESSOR_ID)
+        } == {SpawnTrigger.SUCCESSOR}
         config = Config(LIVENESS_QUEUE=liveness, N_SCHOOLS=0)
         scheduler = Scheduler(harness, LLMAdapter({}, harness.blobs), config)
 
@@ -78,17 +108,62 @@ def test_a_minted_successor_loses_the_rank_tie_to_the_seed_question(tmp_path):
         )
 
 
-def test_the_successor_trigger_sorts_after_the_seed_in_the_rank_term(tmp_path):
-    """The mechanism, asserted directly, so a reader need not re-derive it.
+def test_the_rank_term_follows_the_trigger_and_not_the_id(tmp_path):
+    """The mechanism, EXERCISED rather than re-derived: the term is a boolean
+    over the TRIGGER, so moving the seed trigger to the other problem moves the
+    winner with it, with the two ids held fixed.
 
-    The rank term is a BOOLEAN over the trigger, and this is the whole content
-    of the guarantee: a successor is not the seed, `True` sorts after `False`,
-    and no configuration can change either fact.
+    Four arms: both selection modes crossed with both placements of the seed
+    trigger. The arm where the seed holds the id-disfavoured "zzz-" id dies if
+    the seed term is deleted from that mode's key; all four die if the term is
+    kept but inverted (`not (p.provenance.trigger != SpawnTrigger.SEED)`) --
+    the edit that reverses this file's whole guarantee while leaving a
+    source-text count of it untouched.
     """
-    assert (SpawnTrigger.SEED != SpawnTrigger.SEED) is False
-    assert (SpawnTrigger.SUCCESSOR != SpawnTrigger.SEED) is True
-    assert sorted([True, False]) == [False, True]
+    low, high = "aaa-rank-probe", "zzz-rank-probe"
+    for liveness in (True, False):
+        for seed_id in (low, high):
+            other = high if seed_id == low else low
+            harness = Harness(tmp_path / f"run-{liveness}-{seed_id}")
+            harness.register_commitment(
+                Commitment(id="k-q", eval="predicate:'x' in content")
+            )
+            # The successor is registered FIRST, so registration order never
+            # decides this in the round-robin key either.
+            harness.register_problem(Problem(
+                id=other, description="the successor's question",
+                criteria=["k-q"],
+                provenance=ProblemProvenance.model_validate(
+                    {"trigger": "successor",
+                     "from": [seed_id, "artifact-under-criticism"]}),
+            ))
+            harness.register_problem(Problem(
+                id=seed_id, description="the operator's question",
+                criteria=["k-q"],
+                provenance=ProblemProvenance.model_validate(
+                    {"trigger": "seed", "from": []}),
+            ))
+            config = Config(LIVENESS_QUEUE=liveness, N_SCHOOLS=0)
+            scheduler = Scheduler(harness, LLMAdapter({}, harness.blobs), config)
 
+            first = scheduler._select_problem()
+            assert first is not None and first.id == seed_id, (
+                f"liveness={liveness}, seed on {seed_id!r}: selection went to "
+                f"{first and first.id!r} -- the winner followed the id, not "
+                "the trigger"
+            )
+
+
+def test_the_seed_term_appears_once_per_selection_mode():
+    """A TEXT pin on the term's ARITY, and nothing more.
+
+    Stated plainly because the previous version of this test claimed to assert
+    the mechanism and did not: a source count survives an edit that keeps the
+    substring and inverts its sense. The term's SENSE is carried by
+    `test_the_rank_term_follows_the_trigger_and_not_the_id` above; what this
+    adds is that a THIRD or a MISSING selection-mode key is visible here even
+    when no fixture happens to reach it.
+    """
     import pathlib
 
     source = pathlib.Path("src/deepreason/scheduler/scheduler.py").read_text()

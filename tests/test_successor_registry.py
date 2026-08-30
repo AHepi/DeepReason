@@ -73,6 +73,42 @@ def test_no_declaration_field_is_numeric():
     assert declaration_field_types(), "the model has no fields at all"  # anchor
 
 
+def test_both_receipt_families_are_declared_signals():
+    """The VERSIONED layer's other half: the two receipts this channel emits
+    are DECLARED in `signals.py`, not merely recorded.
+
+    `DR-CON-successor-questions` states this as an invariant ("its receipts are
+    declared signals with a real unit and a real staleness") and nothing was
+    failing when both declarations were deleted -- the emitters kept emitting
+    and every test stayed green. So the EXISTENCE of each declaration is pinned
+    here, keyed off the emitters' own constants so a renamed receipt cannot
+    drift away from the row that gives it meaning.
+
+    `unspecified` is the contract's own word for "predates this discipline" and
+    is rejected on both fields: a declaration that carries it is the absence
+    this test exists to catch, wearing a row.
+    """
+    from deepreason.signals import declaration
+    from deepreason.successor.mint import MINT_RECEIPT
+    from deepreason.successor.route import RECEIPT_PREFIX
+
+    # The prefix family, resolved through each of its three dispositions --
+    # every one must land on the SAME declared row, not on some longer prefix
+    # that happens to match.
+    for disposition in ("ROUTED", "UNAVAILABLE", "UNLINKED"):
+        found = declaration(RECEIPT_PREFIX + disposition)
+        assert found is not None, RECEIPT_PREFIX + disposition
+        assert found.name == RECEIPT_PREFIX, (disposition, found.name)
+        assert found.unit and found.unit != "unspecified", found.unit
+        assert found.staleness and found.staleness != "unspecified", found.staleness
+
+    minted = declaration(MINT_RECEIPT)
+    assert minted is not None, MINT_RECEIPT
+    assert minted.name == MINT_RECEIPT, minted.name
+    assert minted.unit and minted.unit != "unspecified", minted.unit
+    assert minted.staleness and minted.staleness != "unspecified", minted.staleness
+
+
 def test_the_registry_is_versioned_as_a_whole():
     """The VERSIONED layer of the signal contract: what the rows MEAN moves
     under a version, while which row a run picks is free configuration."""
@@ -201,9 +237,16 @@ def test_no_module_compares_against_a_registered_row_id():
     the interface and started knowing the subsystem, and the next destination
     would have to teach it about itself. Paired with two POSITIVE ANCHORS so a
     broken walker fails loudly instead of passing vacuously.
+
+    Two spellings, because a literal check caught only one of them: the row id
+    written out, and the registry's own exported id CONSTANT, which `route.py`
+    already imports. Comparing against `DEFAULT_DESTINATION_ID` is the same
+    offence with better manners. `registry.py` is exempt -- it owns the rows,
+    and its `unregister_destination` legitimately compares against the default.
     """
     ids = _row_ids()
     assert ids, "the registry is empty"                       # positive anchor
+    constants = {"DEFAULT_DESTINATION_ID", "MINTING_GATE_ID"}
     compares = 0
     scanned = 0
     offenders = []
@@ -218,9 +261,52 @@ def test_no_module_compares_against_a_registered_row_id():
             for operand in operands:
                 if isinstance(operand, ast.Constant) and operand.value in ids:
                     offenders.append((str(path), node.lineno, operand.value))
+                if (
+                    isinstance(operand, ast.Name)
+                    and operand.id in constants
+                    and path.name != "registry.py"
+                ):
+                    offenders.append((str(path), node.lineno, operand.id))
     assert scanned > 200, scanned                             # positive anchor
     assert compares > 100, compares                           # positive anchor
     assert not offenders, offenders
+
+
+def test_route_reaches_even_the_shipped_default_through_the_registry(
+    tmp_path, monkeypatch
+):
+    """The producer-agnostic rule as BEHAVIOUR, not as an absence.
+
+    The two source checks in this section are absences over the tree, and an
+    absence is only as good as the spellings it knows: a split literal, an
+    aliased import, a comparison against the exported constant. This one asks
+    what `route` DOES. Every dispatch goes through `writer_for`, the shipped
+    default included, so replacing that lookup with a spy must divert the
+    default route too. A `route` that served the scratchpad row from a branch
+    of its own would never consult the spy, and the real scratch block it wrote
+    instead would show up in `scratch_state`.
+    """
+    from importlib import import_module
+
+    route_module = import_module("deepreason.successor.route")
+    asked = []
+
+    def _sentinel(harness, config, *, problem_id, question, llm_call=None):
+        return "served-through-the-registry"
+
+    def _spy(destination_id):
+        asked.append(destination_id)
+        return _sentinel
+
+    monkeypatch.setattr(route_module, "writer_for", _spy)
+
+    harness = Harness(tmp_path / "run")
+    default_id = resolve(_Defaults()).id
+    out = route(harness, _Defaults(), problem_id="p-1", question="what next?")
+
+    assert asked == [default_id], asked
+    assert out == "served-through-the-registry", out
+    assert harness.scratch_state.blocks == {}
 
 
 def test_a_row_id_literal_appears_in_the_registry_and_nowhere_else():
@@ -231,3 +317,20 @@ def test_a_row_id_literal_appears_in_the_registry_and_nowhere_else():
             str(p) for p in SRC.rglob("*.py") if row_id in p.read_text(encoding="utf-8")
         )
         assert holders == ["src/deepreason/successor/registry.py"], (row_id, holders)
+
+
+def test_the_declared_interface_is_exactly_six_names():
+    """Regression (audit F29): the `__all__` tuple was documented as pinned by
+    this file and was not; a mutation dropping two names left all 42 tests of
+    the tranche green, and only docs_verify would have caught it."""
+    import deepreason.successor as s
+
+    assert set(s.__all__) == {
+        "DESTINATIONS",
+        "SUCCESSOR_DESTINATION_REGISTRY_VERSION",
+        "mint",
+        "resolve",
+        "route",
+        "unknown_destination_notices",
+    }, s.__all__
+    assert len(s.__all__) == 6, s.__all__
