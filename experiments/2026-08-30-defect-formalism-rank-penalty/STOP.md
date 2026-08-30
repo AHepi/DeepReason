@@ -165,7 +165,9 @@ share a coordinate?" — with a clean **no** that does not immediately create th
 mirror-image conflation at the top of the scale.
 
 It is **built and parked, not integrated**, on branch `claude/b2-lane-C` as its
-own clearly-labelled commit, with tests passing. Answering "a" is a merge.
+own clearly-labelled commit (`fe6b29ed2`, whose subject line begins "BUILT AND
+PARKED, NOT INTEGRATED"), with 246 tests passing across the 18 files that touch
+this machinery. Answering "a" is a merge.
 Answering "b" or "c" discards that commit and costs a fresh tranche; nothing
 about this lane's measurements or law analysis is wasted in that case, because
 they apply to whichever road you pick.

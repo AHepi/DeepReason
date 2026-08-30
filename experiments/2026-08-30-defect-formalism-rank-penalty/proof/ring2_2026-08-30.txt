@@ -1,0 +1,7 @@
+RING 2 (recon's remaining named files + everything that reads the stop decision, since frontier_delta is a StopMetrics input), fixed tree, 2026-08-30:
+python -m pytest tests/test_prose_refutation_boundaries.py tests/test_oracle.py tests/test_stop_policy.py tests/test_workflow_stop_lifecycle_c4.py tests/test_bridge_after_typed_stop.py tests/test_v6_resumed_terminal_revalidation.py -q
+........................................................................ [ 55%]
+.........................................................                [100%]
+129 passed in 269.58s (0:04:29)
+
+[exited with code 0]

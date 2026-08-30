@@ -1,0 +1,29 @@
+EVERY MAP check: THIS LANE ADDED OR CHANGED, RUN INDIVIDUALLY (docs_verify itself is the fan-in's instrument)
+
+--- [1] SUB-scheduler.md Entry points (changed: pareto_scores added) ---
+.                                                                        [100%]
+1 passed in 3.09s
+exit: 0
+
+--- [2] SUB-scheduler.md Traps (NEW) ---
+...........                                                              [100%]
+11 passed in 0.76s
+exit: 0
+
+--- [3] SUB-periphery.md Traps (NEW) ---
+.....                                                                    [100%]
+5 passed in 0.27s
+exit: 0
+
+--- [4] CON-conjecture-kinds.md 'Must never do' (NEW) ---
+....                                                                     [100%]
+4 passed in 0.54s
+exit: 0
+
+--- [5] CON-conjecture-kinds.md Traps (NEW) ---
+...........                                                              [100%]
+11 passed in 0.71s
+exit: 0
+
+--- [6] CON-conjecture-kinds.md pre-existing clause check, still true after the edit ---
+exit: 0
