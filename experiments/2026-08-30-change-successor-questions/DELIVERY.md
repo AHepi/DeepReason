@@ -1,6 +1,8 @@
 # Delivered: successor questions — optional to propose, routed by pluggable destination, minting gated off-by-default
 
-Branch: `claude/b2-lane-B` @ (see final commit; pushed, tree clean)
+Branch: `claude/b2-lane-B` @ `b690b814b` (pushed, tree clean). Two commits:
+`6ce1f202f` carries the change and the map; `b690b814b` carries the fix for a
+defect this tranche's own `docs_verify` run found in it, plus VALIDATION.md.
 Tranche: `experiments/2026-08-30-change-successor-questions/`
 Family: `dr-change-orchestrator`. Lane B of ultracode batch 2.
 

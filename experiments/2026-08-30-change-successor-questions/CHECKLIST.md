@@ -109,8 +109,7 @@ taken against the wrong tree is not a measurement.
       done-when: both counts are back at 59 and 48, the new trap check exits 0,
       and the five new test files still pass
       OUTPUT: `harness x workflow = 59`; `scratch x workflow = 48`;
-      `NEW TRAP CHECK: exit 0`; `42 passed in 2.89s` (then 43 with the added
-      enabled-workspace case)
+      `NEW TRAP CHECK: exit 0`; the five new files `42 passed in 3.36s`
 
 - [x] 16. (all) Record the PREDICTED fixture red (P-FIX-1) rather than fixing
       it: S19 is gated on Q5, which this lane may not answer.
