@@ -174,6 +174,19 @@ makes — and appears in the rendered pack's ordered block refs.
   `experiments/2026-08-30-change-successor-questions/proof/route_mutants_red.txt`.
   `check: python -m pytest tests/test_successor_questions.py::test_a_scratch_disabled_run_discloses_instead_of_discarding -q`
 
+- **Two map checks count FILES BY THE WORDS IN THEM, so a new module can move
+  them without importing anything.** `DR-SEAM-harness-x-workflow` pins the
+  number of files under `src/deepreason` containing both `harness` and
+  `workflow` at 59, and `DR-SEAM-scratch-x-workflow` pins `scratch` × `workflow`
+  at 48. `route.py` originally read the run's scratch policy from
+  `harness._workflow_manifest` and moved BOTH counts to 60 and 49 — two map
+  documents red, from one attribute name, with no import and no behavioural
+  coupling at all. It reads the policy from the CONFIGURATION instead, which is
+  where a manifest-launched run has it reconstructed anyway, so there is one
+  answer rather than two that can disagree. Found and fixed 2026-08-30 in this
+  tranche's own `docs_verify` run, before the branch was handed on.
+`check: test "$(for f in $(grep -rl harness --include=*.py src/deepreason); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 59 && test "$(for f in $(grep -rl scratch src/deepreason --include=*.py); do grep -ql workflow "$f" && echo x; done | wc -l)" -eq 48 && ! grep -q "_workflow_manifest" src/deepreason/successor/route.py && grep -q "getattr(config, \"scratchpad\", None)" src/deepreason/successor/route.py`
+
 - **`ScratchAuthoringService.author_block` is the wrong door.** Its
   `block_role` is a closed `Literal["conjecturer","synthesizer"]` that enters
   the qualification subject's pair inventory, so widening it to admit a critic

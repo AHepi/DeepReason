@@ -49,13 +49,16 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
     from deepreason.scratch.models import ScratchProvenanceV1
     from deepreason.scratch.service import ScratchService
 
-    manifest = getattr(harness, "_workflow_manifest", None)
-    if manifest is not None:
-        policy = getattr(manifest, "scratch_policy", None)
-        if policy is None or not getattr(policy, "enabled", False):
-            raise SuccessorDestinationUnavailable(
-                "this run's scratch policy is disabled"
-            )
+    # The run's own scratch policy, read at the CONFIGURATION layer like every
+    # other decision in this package: a manifest-launched run has this
+    # reconstructed onto its Config from the compiled policy, so there is one
+    # answer rather than two that can disagree. A configuration that carries no
+    # scratch policy at all says nothing, and silence is not a refusal.
+    policy = getattr(config, "scratchpad", None)
+    if policy is not None and not getattr(policy, "enabled", False):
+        raise SuccessorDestinationUnavailable(
+            "this run's scratch workspace is disabled"
+        )
     service = ScratchService(harness)
     try:
         return service.create_block(

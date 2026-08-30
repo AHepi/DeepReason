@@ -99,6 +99,19 @@ taken against the wrong tree is not a measurement.
       done-when: `python tools/docs_verify.py` names no NEW failing document
       OUTPUT: see VALIDATION.md
 
+- [x] 15b. (S9, S7) FIX A DEFECT THIS TRANCHE'S OWN docs_verify FOUND: two
+      file-level counting checks (`SEAM-harness-x-workflow.md:43`,
+      `SEAM-scratch-x-workflow.md:44`) went red because `route.py` named
+      `harness._workflow_manifest`. Read the scratch policy from the
+      CONFIGURATION instead, regenerate the four route mutation transcripts
+      against the fixed file, and record the trap in
+      `CON-successor-questions.md` with a check that pins both counts.
+      done-when: both counts are back at 59 and 48, the new trap check exits 0,
+      and the five new test files still pass
+      OUTPUT: `harness x workflow = 59`; `scratch x workflow = 48`;
+      `NEW TRAP CHECK: exit 0`; `42 passed in 2.89s` (then 43 with the added
+      enabled-workspace case)
+
 - [x] 16. (all) Record the PREDICTED fixture red (P-FIX-1) rather than fixing
       it: S19 is gated on Q5, which this lane may not answer.
       done-when: `proof/predicted_red_decommissioned_tripwire.txt` names exactly

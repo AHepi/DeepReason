@@ -262,19 +262,39 @@ def test_the_routed_block_reaches_a_conjecturer_context(bound):
 # --- a disabled workshop discloses rather than discarding ------------------ #
 
 
-def test_a_scratch_disabled_run_discloses_instead_of_discarding(tmp_path, monkeypatch):
+def test_a_scratch_disabled_run_discloses_instead_of_discarding(tmp_path):
     """Never a silent discard. A run whose workshop is off still records that a
     question was proposed and could not be placed, so an operator reading the
     record can tell the difference between "nobody proposed one" and "one was
-    proposed into a void"."""
-    manifest = _manifest(scratch_enabled=False)
-    assert manifest.scratch_policy is None or not manifest.scratch_policy.enabled
-    monkeypatch.setattr(Harness, "_load_workflow_manifest", lambda self: manifest)
+    proposed into a void".
+
+    The policy is read from the CONFIGURATION, which is where a
+    manifest-launched run has it reconstructed from the compiled policy -- one
+    answer rather than two that can disagree.
+    """
     harness = Harness(tmp_path / "run")
     _seed(harness)
+    off = _config(scratch_enabled=False)
+    assert off.scratchpad.enabled is False
 
-    assert route(harness, _Defaults(), problem_id=PROBLEM_ID, question=QUESTION) is None
+    assert route(harness, off, problem_id=PROBLEM_ID, question=QUESTION) is None
     assert harness.scratch_state.blocks == {}
     assert _receipts(harness) == [
         ["successor-question:UNAVAILABLE", "scratchpad.v1", PROBLEM_ID]
+    ]
+
+
+def test_an_enabled_workspace_routes_through_the_same_configuration(tmp_path):
+    """The other side of the same switch, so the disclosure above is not merely
+    a function that always refuses."""
+    harness = Harness(tmp_path / "run")
+    _seed(harness)
+    on = _config(scratch_enabled=True)
+    assert on.scratchpad.enabled is True
+
+    block = route(harness, on, problem_id=PROBLEM_ID, question=QUESTION)
+    assert block is not None
+    assert list(harness.scratch_state.blocks) == [block.id]
+    assert _receipts(harness) == [
+        ["successor-question:ROUTED", "scratchpad.v1", PROBLEM_ID]
     ]

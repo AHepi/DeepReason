@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: 5f7e413d6
+Verified-at: 3688713ee
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
