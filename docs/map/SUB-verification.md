@@ -208,7 +208,7 @@ when `stats` was otherwise empty.
   `/etc/hostname` and writes outside its scratch directory
   (`proof/filesystem_not_a_jail.out`). Not a live escape (the language boundary
   refuses `open`), and correcting the string is frozen-surface-3 work, parked.
-`check: python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or argv_really_carries or scratch_directory_is_the_cwd or every_declared_rlimit or environment_reaches_the_child" && test "$(grep -c 'def test_the_contained\|def test_the_network_namespace\|def test_the_code_testing_worker_environment' tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE "assert .*(ephemeral scratch workdir|network_denial)" tests/ --include=*.py`
+`check: python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or argv_really_carries or scratch_directory_is_the_cwd or every_declared_rlimit or environment_reaches_the_child" && test "$(grep -cE 'def (test_the_contained_backend_prefix_actually_denies_network|test_the_network_namespace_actually_denies_network|test_the_contained_worker_argv_really_carries_the_probed_prefix|test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive|test_the_contained_child_really_receives_every_declared_rlimit|test_the_contained_worker_environment_reaches_the_child_scrubbed|test_the_code_testing_worker_environment_reaches_the_child_scrubbed)\(' tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE 'assert .*(ephemeral scratch workdir|\["network_denial"\])' tests/ --include=*.py`
 
 - **A leg is not a repair attempt, and `attempt_trace` cannot be borrowed to
   hold one.** The split-budget seat protocol (`llm/split.py`) turns one seat

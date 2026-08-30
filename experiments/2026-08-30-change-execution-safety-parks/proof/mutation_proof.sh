@@ -27,7 +27,9 @@ mutate() {  # mutate <python-fragment-on-stdin>; echoes the mutated PYTHONPATH r
 
 run_red() {  # run_red <pythonpath-root> <pytest args...>
     root=$1; shift
-    PYTHONPATH="$root/src" python -m pytest "$@" -q 2>&1 | tail -6 || true
+    # tail -14, not -6: the assertion line is the evidence, and -6 clipped it
+    # down to "Use -v to get more diff" on M1, M2 and M7.
+    PYTHONPATH="$root/src" python -m pytest "$@" -q 2>&1 | tail -14 || true
 }
 
 echo "== BASELINE: the real subject, all three ring files =========================="
@@ -210,6 +212,8 @@ p.write_text(t.replace(old, '''_CANDIDATE_FLAGS: tuple[tuple[str, ...], ...] = (
 PY
 echo "--- RED expected ---"
 run_red "$MUT" tests/test_sandbox_guard.py -k "network_namespace_actually_denies"
+echo "--- and the contained differential stays GREEN: separate probe ---"
+run_red "$MUT" tests/test_sandbox_guard.py -k "contained_backend_prefix_actually_denies"
 rm -rf "$MUT"
 echo "--- GREEN restored ---"
 PYTHONPATH="$REPO/src" python -m pytest tests/test_sandbox_guard.py -q \

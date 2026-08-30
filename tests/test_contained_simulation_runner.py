@@ -133,18 +133,22 @@ def test_worker_environment_is_a_fixed_allowlist(monkeypatch):
 def test_containment_limits_cover_every_resource_class():
     """The declared numbers, pinned on the pure function that produces them.
 
-    What this test does NOT do any more is compare `resource_limits()` against
-    `_containment_limits()` — the same function on both sides of the equals
-    sign, which holds whether or not one `setrlimit` ever runs — or assert the
-    self-reported `"network"` and `"filesystem"` strings. Those are measured by
-    effect in `tests/test_sandbox_guard.py`:
+    `ContainedSimulationBackend.resource_limits()` reads its five limit values
+    straight out of `_containment_limits()`, so comparing the two puts the same
+    function on both sides of the equals sign — an equality that holds whether
+    or not one `setrlimit` ever reaches a child. Its `"filesystem"`, `"network"`
+    and `"network_denial"` entries are dict literals
+    (`src/deepreason/verification/contained.py:519-521`), which hold whether or
+    not the containment works. Neither shape can fail for the reason it exists,
+    so those properties are measured by EFFECT in
+    `tests/test_sandbox_guard.py`:
     `test_the_contained_child_really_receives_every_declared_rlimit` reads the
     limits back out of a real child,
     `test_the_contained_backend_prefix_actually_denies_network` runs the probe
     inside and outside the prefix, and
-    `test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive`
-    replaces the filesystem string with what is observably true of the scratch
-    directory. See `docs/map/SUB-verification.md`, the self-report Trap.
+    `test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive` pins
+    what is observably true of the scratch directory. See
+    `docs/map/SUB-verification.md`, the self-report Trap.
     """
 
     limits = _containment_limits(

@@ -101,11 +101,27 @@ which is where the two pre-existing genuine differentials already were.
 | D6 | `test_the_contained_worker_environment_reaches_the_child_scrubbed` | `os.environ` as a real child sees it, launched under the `env=` of the real contained launch |
 | D7 | `test_the_code_testing_worker_environment_reaches_the_child_scrubbed` | the same for `oracle_sandbox._worker_environment()`, which had NO test anywhere in `tests/` before this tranche |
 
-**Every differential is two-armed and cannot pass on one arm.** D1 and D2
+**Five of the seven are two-armed and cannot pass on one arm.** D1 and D2
 measure the OUTSIDE arm first and `pytest.skip` when the host itself has only
 loopback; D5 asserts every one of five limits DIFFERS between the contained and
 the bare child; D6 and D7 assert the same secret IS visible to an unscrubbed
 child before asserting it is not visible to the scrubbed one.
+
+**D3 and D4 are single-armed WIRING assertions, and are counted as such.** They
+read the real `argv` and the real `cwd`/`HOME`/`TMPDIR` of a real `verify()`
+launch, so there is no ambient value they could accidentally agree with — the
+vacuity a second arm exists to catch is a property of a PROBE run against a
+host, and neither of these runs a probe. D3 additionally guards the one empty
+case it has (`assert prefix, "containment_available() was true but the prefix is
+empty"`). Their falsifiability is shown by M2 and M4 below rather than by a
+contrast arm.
+
+That second paragraph is a CORRECTION. Until 2026-08-30 the first sentence read
+"**Every** differential is two-armed and cannot pass on one arm", which the
+enumeration immediately following it never supported — it names five of seven. A
+batch-2 skeptic re-ran the section and found the gap. Nothing in `tests/`
+changed; the over-claim was in this document, in the exact dimension this
+tranche exists to police.
 
 ## RED/GREEN — the transcript for every differential
 
@@ -126,7 +142,7 @@ transiently.
 | M4 | the ephemeral scratch directory stops being removed | **D4** | `resource_limits()["filesystem"] -> 'ephemeral scratch workdir'`, unchanged |
 | M5 | the launch stops passing `env=`, so the worker inherits ours | **D6** | `test_worker_environment_is_a_fixed_allowlist` still PASSES — it asserts the dict, not the child |
 | M6 | `oracle_sandbox._worker_environment` keeps `OLLAMA_API_KEY` | **D7** — `assert 'OLLAMA_API_KEY' not in [...]` | (no prior test existed to stay green) |
-| M7 | `sandbox_os`'s probe drops `--net` | **D2** | — and D1 stays GREEN, so neither channel's differential says anything about the other |
+| M7 | `sandbox_os`'s probe drops `--net` | **D2** | — and D1 stays GREEN (`1 passed`, in the M7 block since 2026-08-30), so neither channel's differential says anything about the other |
 
 Every mutation is followed by a `GREEN restored` line in the same transcript,
 each `1 passed`.
@@ -182,25 +198,55 @@ addressed, by what, and what residue remains.
 
     check: python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or
     argv_really_carries or scratch_directory_is_the_cwd or every_declared_rlimit or
-    environment_reaches_the_child" && test "$(grep -c 'def test_the_contained\|def
-    test_the_network_namespace\|def test_the_code_testing_worker_environment'
-    tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE "assert .*(ephemeral scratch
-    workdir|network_denial)" tests/ --include=*.py
+    environment_reaches_the_child" && test "$(grep -cE 'def
+    (test_the_contained_backend_prefix_actually_denies_network|…seven names in
+    full…|test_the_code_testing_worker_environment_reaches_the_child_scrubbed)\('
+    tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE 'assert .*(ephemeral
+    scratch workdir|\["network_denial"\])' tests/ --include=*.py
+
+The seven names are spelled out in full in the document; they are elided here
+only to keep the quote readable. `docs/map/SUB-verification.md:211` is the
+authority, and `proof/map_check_falsifiable.out` prints the check verbatim.
 
 Three clauses: the differentials pass; all seven still exist under their names;
 and no test asserts a self-reported containment string again. **The third clause
 is what makes the standard enforceable rather than merely stated** — a future
 test that re-introduces one turns the map red.
 
+**Clauses 2 and 3 were TIGHTENED on 2026-08-30**, after a batch-2 skeptic
+demonstrated that each had a false-RED mode. Clause 2 counted a NAME PREFIX
+pinned at 7, so a benign eighth `test_the_contained_*` reddened the map though
+nothing had regressed; it now names the seven functions exactly, so it fails on
+a MISSING differential and not on an added test. Clause 3 banned the bare
+substring `network_denial`, which is also inside the OS-layer helpers
+`network_denial_available` / `network_denial_prefix` — so an effect-based
+assertion on the helper, the very style this Trap demands, reddened the map too,
+and because clause 3 scans all of `tests/`, any sibling lane writing one would
+have reddened DR-SUB-verification. It now matches the FIELD ACCESS
+`["network_denial"]`. **The narrowing has a cost, stated rather than hidden:** a
+confession re-introduced through `.get("network_denial")` instead of a subscript
+would slip past clause 3. That blind spot is accepted over a check that goes red
+for the wrong reason, because a check that cries wolf is the one a later tranche
+loosens or deletes.
+
 `docs_verify --audit` refuses a check that cannot fail, so each clause is shown
-failing: `proof/map_check_falsifiable.sh`, output at
-`proof/map_check_falsifiable.out`, exit 0.
+failing — and, since 2026-08-30, each false-RED mode is shown NOT firing:
+`proof/map_check_falsifiable.sh`, output at `proof/map_check_falsifiable.out`,
+exit 0.
 
     --- unmutated: expect exit 0 ---            exit=0
     --- F1: one differential renamed away ---   exit=1 (non-zero required)
     --- F2: a self-reported filesystem string asserted again --- exit=1 (non-zero required)
+    --- F3: a benign eighth test_the_contained_* added --- exit=0 (ZERO required)
+      name-prefix census would have said: 8
+    --- F4: an effect-based assert on network_denial_available --- exit=0 (ZERO required)
+      the bare-substring ban would have matched: 1
     --- restored ---                            exit=0
     restoration: byte-identical to the pre-run file
+
+F3 and F4 print what the OLD clauses would have said (`8`, and `1` match), so
+the two false-RED modes are visible in the transcript rather than merely
+asserted to be gone.
 
 Clause 1 is not re-proved there: `proof/mutation_proof.out` already shows all
 seven of those tests going RED under source mutations, and the check runs exactly
@@ -226,6 +272,22 @@ the commit at which the checks were run, not the commit containing the text.)
 The document's declared `Verify:` ring was run too: **30 passed, 0 failed**
 (`tests/test_chaos_invariants.py tests/test_r0_terminal_verification.py
 tests/test_verifier_registry.py tests/test_cli_verifiers.py`).
+
+**Re-run 2026-08-30 after the skeptic pass changed clauses 2 and 3 of the `:211`
+check:** `proof/sub_verification_checks.sh` again, on the tree this delivery
+commits — `SUB-verification.md: 32 checks, 0 parse errors … 0 failed`, exit 0,
+with `:211` PASS. `python tools/docs_verify.py --audit` was run as well (it is a
+static parse, spawns no workers, and so is safe beside a sibling lane): **1
+finding, and it is not this document's** — `SEAM-llm-x-rules.md:54`, an
+unparseable opener last touched by `2bc7cfef9`, outside this batch's diff. The
+`:211` check parses and is not flagged vacuous.
+
+The stamp then moves in a second, stamp-only commit, and the reason is stated
+rather than hidden: the stamp names the commit whose tree the 32 checks ran
+against, and a commit cannot contain its own sha. The map CONTENT — the Trap
+text and the check — ships in the same commit as the tests it guards, which is
+what CLAUDE.md's same-commit law is for; only the self-referential stamp lags by
+one commit.
 
 **The FULL `python tools/docs_verify.py` was attempted and did NOT complete.**
 It ran for 20 minutes and was killed by its own `timeout 1200` (exit 143) with
@@ -311,7 +373,10 @@ making.
   therefore demonstrated by the vacuity section V rather than by a mutation.
 * **Two `resource_limits["network"] is False` assertions survive by design**, as
   carriage checks for `invariants.py:1854`. A reader who counts confessions will
-  find two; the comment beside each says why it is not one.
+  find two; the comment beside each says why it is not one. In the delivered
+  tree they are `tests/test_contained_simulation_runner.py:391` and
+  `tests/test_simulation_runner_default.py:331`
+  (`grep -rn 'resource_limits\["network"\]' tests/*.py` — exactly two hits).
 * **`seccomp` (`verification/_sandbox.py`) was not measured.** It is named in
   `SUB-verification.md`'s routing row for the containment shape, and no
   differential in this tranche touches it.
@@ -490,3 +555,95 @@ measuring what it claims before reading what it measured.
   the extra install line stranded. The S5 prompt therefore instructs the tranche
   that ships B to delete the line rather than leave two instructions that
   disagree.
+
+---
+
+# The batch-2 skeptic pass — what was re-run, what was wrong, what changed
+
+Independent skeptics re-ran this lane's claims against the tree on 2026-08-30
+and confirmed defects in the delivered work. Every one is recorded here with its
+disposition, because the ledger of what a tranche got wrong is part of the
+tranche. **No assertion was weakened and no claim was narrowed to dodge a
+finding**; two claims were CORRECTED downward because they were not supported,
+and two transcripts were widened so they carry the evidence they were cited for.
+
+| # | severity | finding | disposition |
+|---|---|---|---|
+| 1 | major | The cross-arm attributed to M7 by `PARKED.md` S3, this document's M7 row, and `docs/map/SUB-verification.md:205` ("and vice versa") **was not in `proof/mutation_proof.out`.** M1 and M2 carried their cross-arm; M7 carried only RED and GREEN-restored. The skeptic re-derived the underlying fact independently and found it TRUE — an evidence gap, not a false statement — but it was the sole support for the independence claim S3's park is built on, in a map document whose `Verified-at` this lane advanced. | **ACCEPTED, and the measurement was run.** `proof/mutation_proof.sh` M7 now carries the mirror of M1's cross-arm; `proof/mutation_proof.out` was regenerated and the M7 block reads `--- and the contained differential stays GREEN: separate probe --- … 1 passed, 25 deselected`. Nothing in the map document or `PARKED.md` S3 needed rewording, because the sentence is now true of the file it cites. |
+| 2 | major | `DELIVERY.md` stated the false universal "**Every** differential is two-armed and cannot pass on one arm", while its own supporting sentence enumerates five of seven. D3 and D4 have no contrast arm. | **ACCEPTED, and the claim was corrected downward.** See "The seven differentials" above: five are two-armed; D3 and D4 are single-armed WIRING assertions, said so in the document and counted as such. No test changed — the over-claim was in the prose. |
+| 3 | minor | Same as #1, from the map document's side: a map document is authenticated by re-derivation and half of its cited proof was absent from the cited file. | **Same fix as #1.** The file now contains both directions. |
+| 4 | minor | The map check's clause 2 was a NAME-PREFIX census pinned at 7, so a benign eighth `test_the_contained_*` reddened the map; clause 3 banned the bare substring `network_denial`, which also appears in `network_denial_available` / `network_denial_prefix`, so an effect-based assertion on the helper — the style this Trap demands — reddened it too, anywhere under `tests/`. | **ACCEPTED, and both clauses were tightened.** Clause 2 names the seven functions exactly; clause 3 matches `["network_denial"]`. `proof/map_check_falsifiable.sh` gains F3 and F4, which must exit ZERO, and which print what the old clauses would have said (`8`, and `1` match). F1 and F2 still exit 1. Cost of the narrowing stated above. |
+| 5 | minor | Same as #2. | **Same fix as #2.** |
+| 6 | minor | A comment-rule violation fixed in one file and left in the other: the docstring added to `tests/test_contained_simulation_runner.py` was NARRATION ("What this test does NOT do any more …", "… replaces the filesystem string …"), which CLAUDE.md's Conventions forbid. | **ACCEPTED, rewritten as a constraint.** It now states why the two shapes cannot fail — `resource_limits()` reads its five limit values out of `_containment_limits()`, and its `"filesystem"`/`"network"`/`"network_denial"` entries are dict literals at `src/deepreason/verification/contained.py:519-521` — and routes to the three tests that measure those properties by effect. No "any more", no "replaces". |
+| 7 | minor | `proof/mutation_proof.sh`'s `run_red` piped pytest through `tail -6`, which clipped the assertion line out of M1, M2 and M7, leaving `E   Use -v to get more diff`. This document quoted `assert ['eth0','ifb0','ifb1','lo'] == ['lo']` for M1 from a transcript that did not contain it. | **ACCEPTED, the transcript was widened.** `run_red` now uses `tail -14`; `proof/mutation_proof.out` was regenerated and carries `E       assert ['eth0', 'ifb0', 'ifb1', 'lo'] == ['lo']` at `:13` (M1) and `:155` (M7), `E       assert 20000 == 64` at `:71` (M3), and `E       assert 'OLLAMA_API_KEY' not in ['LC_ALL', 'OLLAMA_API_KEY', …]` at `:139` (M6) — seven `^E       assert` lines in all, one per mutation. Every quote in the M-table is now re-derivable from the cited file. |
+| 8 | minor | The lane's REPORT to the orchestrator cited the second surviving carriage assertion at `tests/test_simulation_runner_default.py:335`; it is `:331`. No committed artifact carried the wrong number. | **ACCEPTED as a reporting error.** The correct pair is now written into the residue bullet above and into this lane's report: `tests/test_contained_simulation_runner.py:391` and `tests/test_simulation_runner_default.py:331`, two hits from `grep -rn 'resource_limits\["network"\]' tests/*.py`. |
+
+**No finding was refuted.** All eight were re-derivable in this worktree, and #1
+and #2 were the two this lane would most have wanted caught: one cited a
+measurement it had not made, the other stated a universal its own next sentence
+contradicted.
+
+## Re-run after the skeptic pass, exact
+
+    $ sh proof/mutation_proof.sh > proof/mutation_proof.out    exit 0
+        M7 block now: RED (1 failed) / contained differential GREEN (1 passed)
+        / GREEN restored (1 passed)
+    $ sh proof/map_check_falsifiable.sh > proof/map_check_falsifiable.out   exit 0
+        unmutated 0 | F1 1 | F2 1 | F3 0 | F4 0 | restored 0
+        restoration: byte-identical to the pre-run file
+    $ sh proof/sub_verification_checks.sh > proof/sub_verification_checks.out   exit 0
+        SUB-verification.md: 32 checks, 0 parse errors ... 0 failed
+    $ python tools/docs_verify.py --audit
+        1 finding(s) -- SEAM-llm-x-rules.md:54, pre-existing, not this lane's
+    $ python -m pytest tests/test_sandbox_guard.py \
+        tests/test_contained_simulation_runner.py \
+        tests/test_simulation_runner_default.py \
+        tests/test_schema_carries_every_prose_rule.py -q
+        55 passed in 4.54s
+    $ ruff check tests/test_sandbox_guard.py \
+        tests/test_contained_simulation_runner.py tests/test_simulation_runner_default.py
+        All checks passed!
+
+**Mutation-proof of what the skeptic pass itself touched.** Three things changed
+that a reader could suspect of being cosmetic, so each was broken and restored:
+
+* **The M7 cross-arm** is a live pytest run, not a printed line: under M7's
+  mutation it reports `1 passed` for the CONTAINED differential in the same
+  transcript where the code-testing differential reports `1 failed`. If the two
+  probes were one subject it would read `1 failed` twice. That contrast IS the
+  measurement.
+* **The tightened map check** is shown failable by F1 and F2 (still exit 1) and
+  shown not-false-red by F3 and F4 (exit 0), in the same transcript, with the
+  old clauses' verdicts printed beside them.
+* **The rewritten docstring** carries no assertion, so it cannot be
+  mutation-proved; the test it documents
+  (`test_containment_limits_cover_every_resource_class`) is unchanged and still
+  passes, and the properties the docstring routes to are the ones M1, M3 and M4
+  turn RED.
+
+## The skeptic pass's own cone, as measured
+
+    $ git diff --name-only                       # before the fix commit
+    docs/map/SUB-verification.md
+    experiments/2026-08-30-change-execution-safety-parks/DELIVERY.md
+    experiments/2026-08-30-change-execution-safety-parks/proof/map_check_falsifiable.out
+    experiments/2026-08-30-change-execution-safety-parks/proof/map_check_falsifiable.sh
+    experiments/2026-08-30-change-execution-safety-parks/proof/mutation_proof.out
+    experiments/2026-08-30-change-execution-safety-parks/proof/mutation_proof.sh
+    tests/test_contained_simulation_runner.py
+    $ git ls-files --others --exclude-standard
+    (no output)
+
+`proof/sub_verification_checks.out` is absent from that list because re-running
+it produced a byte-identical file — the 32 checks give the same verdicts on the
+new check line, which is itself worth knowing.
+
+No `src/` file was written. Frozen-surface contact, tested against the seven
+paths CLAUDE.md names:
+
+    $ { git diff --name-only; git ls-files --others --exclude-standard; } \
+      | grep -E "src/deepreason/(capabilities/state\.py|harness\.py|invariants\.py|verification/|run_manifest\.py|qualification\.py|llm/firewall\.py)"
+    (no output)  rc=1
+
+Still not run by this lane, and still not claimed: **the full gate and the full
+`docs_verify`.** The batch's integration step owns both, on an idle box.
