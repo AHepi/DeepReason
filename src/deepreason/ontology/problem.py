@@ -19,15 +19,16 @@ POPPER_BATTERY: tuple[str, ...] = ()
 
 class SpawnTrigger(str, Enum):
     SEED = "seed"
-    # INERT VOCABULARY: producers = 0. No code path mints a problem with
-    # this trigger -- `scan_spawns` stopped on refutation (H1, Rung 3a) and
-    # `easy.py::seed_component` stopped on staged-pipeline repair (Rung 3d,
-    # the website pipeline's decommissioning). The member is retained only
-    # so pre-v2 roots still parse on replay; its presence asserts no
-    # producer and licenses no new one. The invariant is enforced by a
-    # source scan, not by this list -- see
+    # ONE producer, and where it lives is the invariant. `successor/mint.py`
+    # registers a problem from a critic's OPTIONAL proposed question, under a
+    # per-run gate that is off unless a run switches it on (operator law,
+    # 2026-08-29). What did NOT change: `scan_spawns` still mints nothing from
+    # a refutation (H1, Rung 3a), `easy.py::seed_component` still mints nothing
+    # on staged-pipeline repair, and the website pipeline stays decommissioned
+    # (operator ruling 2026-08-15, superseded for this trigger alone). The
+    # producer count is enforced by a source scan, not by this list -- see
     # tests/test_decommissioned_pipeline_stays_out.py.
-    SUCCESSOR = "successor"                    # retained for replay only
+    SUCCESSOR = "successor"
     DISCRIMINATION = "discrimination"          # >=2 surviving rivals for one pi
     REMOVE_ARBITRARINESS = "remove-arbitrariness"  # accepted with low HV
     EXPLANATION_DEBT = "explanation-debt"      # reach event

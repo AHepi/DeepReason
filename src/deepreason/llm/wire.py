@@ -2477,6 +2477,7 @@ class BatchCriticCaseWireV2(StrictWireModel):
     premise_evidence: list[QuotedEvidenceWireV1] | None = Field(
         default=None, max_length=2
     )
+    successor_question: str | None = None
 
 
 class BatchCriticWireV2(StrictWireModel):
@@ -2596,6 +2597,7 @@ class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
                         for ref in (item.premise_evidence or ())
                     ]
                     or None,
+                    successor_question=item.successor_question,
                 )
                 for item in wire.cases
             ]
@@ -2612,6 +2614,7 @@ class CompactCritic(StrictWireModel):
     premise_evidence: list[QuotedEvidenceWireV1] | None = Field(
         default=None, max_length=2
     )
+    successor_question: str | None = None
 
 
 class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
@@ -2662,6 +2665,7 @@ class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
                 for ref in (wire.premise_evidence or ())
             ]
             or None,
+            successor_question=wire.successor_question,
         )
 
 

@@ -1,5 +1,5 @@
 <!-- DR-SEAM-rules-x-scratch -->
-Verified-at: 5f7e413d6
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/rules/conj.py, src/deepreason/rules/crit.py, src/deepreason/scratch/conjecture.py
 Sides: DR-SUB-rules, DR-SUB-scratch
@@ -144,10 +144,23 @@ remove-arbitrariness, explanation-debt, connection, integration, research. (The
 `SEED` is the operator's question — set as a problem's provenance at run setup,
 never spawned by a call — and `AUDIT_CRITIC` is raised from two ladders,
 `informal/appellate.py`'s `spawn_audit_problem` and `capture/ladder.py`'s
-adjudication-ritual debt sweep.) No edge joins the two, and none should. A spawn is a
-commitment to spend the run's budget; a question in the workshop is explicitly
-allowed to be idle, wrong, or unanswerable. The same holds for the anti-relapse
-gate, which compares formal verdict vectors and never a note.
+adjudication-ritual debt sweep.) No edge joins the two AUTOMATICALLY, and none
+should. A spawn is a commitment to spend the run's budget; a question in the
+workshop is explicitly allowed to be idle, wrong, or unanswerable. The same
+holds for the anti-relapse gate, which compares formal verdict vectors and
+never a note.
+
+The word AUTOMATICALLY is doing work there, and it is new. The operator's law
+of 2026-08-29 (`DR-CON-successor-questions`) opens ONE edge from a question to
+a problem, and every property this section defended survives it because of how
+narrow that edge is: it fires from an OPTIONAL proposal a critic chose to
+write, never from a scan over the graph; it is gated by a per-run switch that
+is OFF unless a run turns it on; and its producer is a module outside
+`src/deepreason/rules/`, so `scan_spawns` still mints exactly the six triggers
+the check below pins and `spawn.py` still takes a zero-line diff. What is now
+false is only the unqualified reading — "nothing whatever may connect the two"
+— and what remains true is the reason the sentence was written: the budget is
+never spent because a note exists.
 `check: python -c "import ast,pathlib;t=ast.parse(pathlib.Path('src/deepreason/rules/spawn.py').read_text());fn=[n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='scan_spawns'][0];m={n.attr for c in ast.walk(fn) if isinstance(c,ast.Call) and ast.unparse(c.func).endswith('spawn') for n in ast.walk(c) if isinstance(n,ast.Attribute) and getattr(n.value,'id','')=='SpawnTrigger'};assert sorted(m)==['CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','REMOVE_ARBITRARINESS','RESEARCH'],sorted(m)" && python -c "from deepreason.ontology.problem import SpawnTrigger;n=sorted(t.name for t in SpawnTrigger);assert n==['AUDIT_CRITIC','CONNECTION','DISCRIMINATION','EXPLANATION_DEBT','INTEGRATION','PROMOTION','REMOVE_ARBITRARINESS','RESEARCH','SEED','SUCCESSOR'],n" && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/informal/appellate.py && grep -q "SpawnTrigger.AUDIT_CRITIC," src/deepreason/capture/ladder.py && test "$(grep -c scratch src/deepreason/rules/guards/anti_relapse.py)" -eq 0 && grep -q "^def verdict_vector(" src/deepreason/rules/guards/anti_relapse.py`
 
 **Nothing that crosses the seam leaves a mark on the formal graph.** A scratch
@@ -197,8 +210,24 @@ compare it.
 5. **Keep the exactly-once chain intact.** If you insert anything into the pack
    after allocation, it must be separately byte-accounted in a transaction
    context plan and the pack must remain an `AllocatedPack` (see Traps).
-6. **Never widen the criticism side to close the asymmetry.** The asymmetry is
-   the design. Overturning it is an operator's call, not an implementer's.
+6. **Never widen the criticism side to close the asymmetry — the operator has
+   now made that call ONCE, and its scope is the whole of it.** The asymmetry
+   is the design, and overturning it was always an operator's call rather than
+   an implementer's. On 2026-08-29 the operator made one: a criticism may
+   propose the next QUESTION, and by default that proposal becomes a scratch
+   block linked to the problem it was proposed under. What that decision did
+   NOT touch is the read direction and the pack surface, and both are still
+   enforced exactly as before: no critic contract takes scratch aliases, no
+   critic wire model carries a scratch-named field, `crit.py` imports no
+   scratch module at any scope, and neither `render_crit_pack` nor
+   `render_batch_crit_pack` gained a parameter. WHO performs the write — the
+   criticism rule itself, or something that is not criticism reading what
+   criticism recorded — is a SEPARATE question the law does not settle, and it
+   is parked for the operator in
+   `experiments/2026-08-30-change-successor-questions/PARKED.md` as Q3. Until
+   it is answered, nothing under `rules/` names the channel, and that emptiness
+   is itself checked.
+`check: python -m pytest tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question tests/test_successor_law_line.py::test_the_channel_has_no_permitted_exception_inside_a_deciding_package tests/test_prose_refutation_boundaries.py -q && test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2`
 
 What breaks first, in the order you will see it: `ConjectureContextStale` if you
 plan at the wrong fence; `"final Conj pack must contain the exact advisory
@@ -217,6 +246,20 @@ recovery), `tests/test_v6_scratch_atomicity.py` and
 `tests/test_v6_conjecture_component_atomicity.py` (partial completion).
 
 ## Traps
+
+- **A destination named on the criticism side would turn a MAP CHECK red, not
+  a test.** Two counts in this document are exact: the word `scratch` appears
+  in `src/deepreason/rules/crit.py` exactly twice and `fence` exactly six
+  times, and both are `scratch_fence_seq`'s ordering role. So a successor
+  destination reached by naming it in `crit.py` — even in a comment, even
+  inside a function-local import — fails `docs_verify` rather than the test
+  suite, and the failure names this seam rather than the change that caused
+  it. The channel is therefore reached through a neutrally-named module
+  (`DR-CON-successor-questions`), and the wire field is `successor_question`
+  rather than anything naming where it goes. Recorded 2026-08-30
+  (`experiments/2026-08-30-change-successor-questions/`); the counts have not
+  moved.
+`check: test "$(grep -c scratch src/deepreason/rules/crit.py)" -eq 2 && test "$(grep -c fence src/deepreason/rules/crit.py)" -eq 6 && python -c "import inspect;from pydantic import BaseModel;from deepreason.llm import wire;K=[getattr(wire,n) for n in dir(wire) if 'Critic' in n and inspect.isclass(getattr(wire,n))];M=[c for c in K if issubclass(c,BaseModel)];assert M;assert not [(c.__name__,f) for c in M for f in c.model_fields if 'scratch' in f];assert {'CompactCritic','BatchCriticCaseWireV2'} <= {c.__name__ for c in M if 'successor_question' in c.model_fields}"`
 
 - **`str` operations demote the `AllocatedPack` marker.** `conj.py` swaps the
   canonical scratch text for the v6 aliased render with `pack.replace(...)` and

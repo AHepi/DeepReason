@@ -1,0 +1,54 @@
+MUTATION PROOF — tests/test_successor_rank_tie.py
+Date: 2026-08-30T04:48:22Z
+Mutant: the seed tie-break term deleted from BOTH of Scheduler._select_problem's
+        sort keys. Reverted immediately; scheduler.py takes a zero-line diff in
+        this tranche.
+Mutant diff:
+diff --git a/src/deepreason/scheduler/scheduler.py b/src/deepreason/scheduler/scheduler.py
+index d774ac4dd..754ccee97 100644
+--- a/src/deepreason/scheduler/scheduler.py
++++ b/src/deepreason/scheduler/scheduler.py
+@@ -1179,7 +1179,6 @@ class Scheduler:
+                 weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
+                 return (
+                     -(age * weight),
+-                    p.provenance.trigger != SpawnTrigger.SEED,
+                     # AFTER the seed term, never before it: the operator's own
+                     # question wins every tie, and a wounded background must
+                     # not be able to outrank it.
+@@ -1201,7 +1200,6 @@ class Scheduler:
+         pool = sorted(
+             unsolved or candidates,
+             key=lambda p: (
+-                p.provenance.trigger != SpawnTrigger.SEED,
+                 -promotion_wounds.get(p.id, 0),
+                 p.id in orphaned,
+                 p.id in reflexive,
+
+Command: python -m pytest tests/test_successor_rank_tie.py -q
+Output:
+        The rank term is a BOOLEAN over the trigger, and this is the whole content
+        of the guarantee: a successor is not the seed, `True` sorts after `False`,
+        and no configuration can change either fact.
+        """
+        assert (SpawnTrigger.SEED != SpawnTrigger.SEED) is False
+        assert (SpawnTrigger.SUCCESSOR != SpawnTrigger.SEED) is True
+        assert sorted([True, False]) == [False, True]
+    
+        import pathlib
+    
+        source = pathlib.Path("src/deepreason/scheduler/scheduler.py").read_text()
+>       assert source.count("provenance.trigger != SpawnTrigger.SEED") == 2, (
+            "the seed term appears once per selection mode; a change to that count "
+            "is a change to the promise this file mirrors"
+        )
+E       AssertionError: the seed term appears once per selection mode; a change to that count is a change to the promise this file mirrors
+E       assert 0 == 2
+E        +  where 0 = <built-in method count of str object at 0x3f6005a0>('provenance.trigger != SpawnTrigger.SEED')
+E        +    where <built-in method count of str object at 0x3f6005a0> = '"""Rule-registry scheduler (spec §14).\n\nControl flow is "apply enabled rules under budget" — not a fixed node\ngrap...tention only, never a status."""\n        return run_report(self.harness, self.config, diagnostics=self.diagnostics)\n'.count
+
+tests/test_successor_rank_tie.py:95: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_rank_tie.py::test_a_minted_successor_loses_the_rank_tie_to_the_seed_question
+FAILED tests/test_successor_rank_tie.py::test_the_successor_trigger_sorts_after_the_seed_in_the_rank_term
+2 failed, 1 passed in 0.24s

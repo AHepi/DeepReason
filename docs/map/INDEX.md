@@ -1,5 +1,5 @@
 <!-- DR-INDEX -->
-Verified-at: 152c7e204
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py --links
 
 # The map — start here
@@ -75,6 +75,7 @@ than you need.
 | `CON-conjecture-kinds.md` | formal vs informal, where kind is signaled, and the R-g guardrail against ranking/admission/acceptance on kind |
 | `CON-proof-debt-and-localization.md` | what a derived judgment rests on (`KERNEL_CHECK`/`OPEN_CERTIFICATES`/`AXIOM_DEBT`), and what it takes to blame one member of a bundle |
 | `CON-discharge-channel.md` | criticism in the writer's working context, and what it takes to discharge it |
+| `CON-successor-questions.md` | the question a criticism proposes should be asked next: where it goes, and the gate that can turn it into a problem |
 
 ## Invariants and recipes
 

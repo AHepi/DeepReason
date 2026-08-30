@@ -1,5 +1,5 @@
 <!-- DR-CON-scheduler-ranking -->
-Verified-at: 6c65f95e8
+Verified-at: bc3175394
 Verify: python tools/docs_verify.py
 Owns: src/deepreason/scheduler/scheduler.py
 Seams: DR-SEAM-scheduler-x-rules
@@ -28,6 +28,29 @@ both selection modes — ranked directly after the age term, before the
 reflexive tie-break, in both the `LIVENESS_QUEUE` sort key and the
 round-robin pool's sort key.
 `check: grep -q "p.provenance.trigger != SpawnTrigger.SEED," src/deepreason/scheduler/scheduler.py && test "$(grep -c "provenance.trigger != SpawnTrigger.SEED" src/deepreason/scheduler/scheduler.py)" -eq 2`
+
+Since 2026-08-29 that promise has one more claimant to hold against.
+`SpawnTrigger.SUCCESSOR` can be minted MID-RUN, from a critic's proposed
+question behind a default-OFF switch (`DR-CON-successor-questions`), and it
+loses the tie by construction rather than by arrangement: the term is a
+boolean over the trigger, a successor is not the seed, and `False` sorts before
+`True`. No scheduler change was needed and none was made — `scheduler.py` took
+a zero-line diff in that tranche.
+`check: python -m pytest tests/test_successor_rank_tie.py -q`
+
+**And the honest residue, because a promise stated wider than it holds is worse
+than a narrow one.** The seed term decides TIES. In the `LIVENESS_QUEUE` key
+the FIRST term is `-(age * weight)`, so a freshly minted problem — never
+worked, therefore maximally aged — can out-AGE a seed that HAS been worked.
+That is true of every mid-run trigger and is not new with SUCCESSOR; what is
+new is that a critic's own words can now create one. The only mitigation on the
+tree is the wander cap, which is a CANDIDACY gate under
+`SEED_PROBLEM_BUDGET_FLOOR` and not a rank term. Whether the operator wants
+STRICT DOMINATION instead of the tie guarantee is parked, with both readings
+priced, in `experiments/2026-08-30-change-successor-questions/PARKED.md` (Q4,
+prompt P9B-6); closing it means changing this socket's rank key, which is what
+the two checks above exist to make expensive.
+`check: python -m pytest tests/test_successor_rank_tie.py::test_the_successor_still_gets_worked_once_the_question_has_been -q`
 
 Import-role admission records (attached-source records, source-
 reliability assertions) never count as a "survivor" — the aging weight

@@ -1,0 +1,207 @@
+MUTATION PROOF — tests/test_successor_questions.py
+Date: 2026-08-30T05:13:47Z
+Four mutants, each applied alone and reverted, each turning red exactly the
+assertion it exists to defend. A test that stayed green under these would be
+vacuous, which is this repo's most common recorded test defect.
+
+NOTE added 2026-08-30 by the repair pass (audit F22): the FIRST hunk of each of
+the four diffs below is NOT part of the mutant. It is the Appendix-B fix that
+changed route.py to read the scratch policy from the configuration instead of
+harness._workflow_manifest, and it is present because these transcripts were
+regenerated against the fixed file. The mutant in each case is the hunk AFTER it.
+
+=== MUTANT: link ===
+diff --git a/src/deepreason/successor/route.py b/src/deepreason/successor/route.py
+index b5defc82e..cb6242e5b 100644
+--- a/src/deepreason/successor/route.py
++++ b/src/deepreason/successor/route.py
+@@ -49,13 +49,16 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+     from deepreason.scratch.models import ScratchProvenanceV1
+     from deepreason.scratch.service import ScratchService
+ 
+-    manifest = getattr(harness, "_workflow_manifest", None)
+-    if manifest is not None:
+-        policy = getattr(manifest, "scratch_policy", None)
+-        if policy is None or not getattr(policy, "enabled", False):
+-            raise SuccessorDestinationUnavailable(
+-                "this run's scratch policy is disabled"
+-            )
++    # The run's own scratch policy, read at the CONFIGURATION layer like every
++    # other decision in this package: a manifest-launched run has this
++    # reconstructed onto its Config from the compiled policy, so there is one
++    # answer rather than two that can disagree. A configuration that carries no
++    # scratch policy at all says nothing, and silence is not a refusal.
++    policy = getattr(config, "scratchpad", None)
++    if policy is not None and not getattr(policy, "enabled", False):
++        raise SuccessorDestinationUnavailable(
++            "this run's scratch workspace is disabled"
++        )
+     service = ScratchService(harness)
+     try:
+         return service.create_block(
+@@ -66,7 +69,7 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+             {"content": question, "unfinished": "Successor question"},
+             # `llm` is the only actor an interpretive scratch action may carry;
+             # the event validator refuses a harness-authored BLOCK_CREATED.
+-            ScratchProvenanceV1(actor="llm", origin=problem_id),
++            ScratchProvenanceV1(actor="llm"),
+             llm=llm_call,
+         )
+     except ScratchReadOnly as exc:
+--- python -m pytest tests/test_successor_questions.py -q
+E       AssertionError: assert None == 'pi-successor-route'
+E        +  where None = ScratchProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]).origin
+E        +    where ScratchProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]) = ScratchBlockV1(schema_='scratch.block.v1', id='sha256:7a62a9de94db79031ef4c852de1c52a2c637e2452234b332bb60db833f0320f8...hProvenanceV1(actor=<ScratchActor.LLM: 'llm'>, origin=None, source_refs=[], formal_artifact_refs=[]), revision_of=None).provenance
+
+tests/test_successor_questions.py:199: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_filled_field_becomes_exactly_one_linked_block
+1 failed, 8 passed in 0.24s
+
+=== MUTANT: silence ===
+diff --git a/src/deepreason/successor/route.py b/src/deepreason/successor/route.py
+index b5defc82e..7bf6c6187 100644
+--- a/src/deepreason/successor/route.py
++++ b/src/deepreason/successor/route.py
+@@ -49,13 +49,16 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+     from deepreason.scratch.models import ScratchProvenanceV1
+     from deepreason.scratch.service import ScratchService
+ 
+-    manifest = getattr(harness, "_workflow_manifest", None)
+-    if manifest is not None:
+-        policy = getattr(manifest, "scratch_policy", None)
+-        if policy is None or not getattr(policy, "enabled", False):
+-            raise SuccessorDestinationUnavailable(
+-                "this run's scratch policy is disabled"
+-            )
++    # The run's own scratch policy, read at the CONFIGURATION layer like every
++    # other decision in this package: a manifest-launched run has this
++    # reconstructed onto its Config from the compiled policy, so there is one
++    # answer rather than two that can disagree. A configuration that carries no
++    # scratch policy at all says nothing, and silence is not a refusal.
++    policy = getattr(config, "scratchpad", None)
++    if policy is not None and not getattr(policy, "enabled", False):
++        raise SuccessorDestinationUnavailable(
++            "this run's scratch workspace is disabled"
++        )
+     service = ScratchService(harness)
+     try:
+         return service.create_block(
+@@ -84,9 +87,10 @@ def route(harness, config, *, problem_id, question, llm_call=None):
+     none at all for an empty one.
+     """
+     text = (question or "").strip()
++    destination = resolve(config)
+     if not text:
++        harness.record_measure(inputs=[f"{RECEIPT_PREFIX}DECLINED", destination.id])
+         return None
+-    destination = resolve(config)
+     if not problem_id:
+         # The law's own condition -- "linked to the problem it was proposed
+         # under" -- cannot be met, so nothing is routed and the absence is
+--- python -m pytest tests/test_successor_questions.py -q
+E        +  where 1 = <deepreason.harness.Harness object at 0x7f6ee2271010>._next_seq
+
+tests/test_successor_questions.py:178: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[None]
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[]
+FAILED tests/test_successor_questions.py::test_an_unfilled_field_records_nothing_at_all[   ]
+3 failed, 6 passed in 0.23s
+
+=== MUTANT: discard ===
+diff --git a/src/deepreason/successor/route.py b/src/deepreason/successor/route.py
+index b5defc82e..594518053 100644
+--- a/src/deepreason/successor/route.py
++++ b/src/deepreason/successor/route.py
+@@ -49,13 +49,16 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+     from deepreason.scratch.models import ScratchProvenanceV1
+     from deepreason.scratch.service import ScratchService
+ 
+-    manifest = getattr(harness, "_workflow_manifest", None)
+-    if manifest is not None:
+-        policy = getattr(manifest, "scratch_policy", None)
+-        if policy is None or not getattr(policy, "enabled", False):
+-            raise SuccessorDestinationUnavailable(
+-                "this run's scratch policy is disabled"
+-            )
++    # The run's own scratch policy, read at the CONFIGURATION layer like every
++    # other decision in this package: a manifest-launched run has this
++    # reconstructed onto its Config from the compiled policy, so there is one
++    # answer rather than two that can disagree. A configuration that carries no
++    # scratch policy at all says nothing, and silence is not a refusal.
++    policy = getattr(config, "scratchpad", None)
++    if policy is not None and not getattr(policy, "enabled", False):
++        raise SuccessorDestinationUnavailable(
++            "this run's scratch workspace is disabled"
++        )
+     service = ScratchService(harness)
+     try:
+         return service.create_block(
+@@ -104,9 +107,6 @@ def route(harness, config, *, problem_id, question, llm_call=None):
+             harness, config, problem_id=problem_id, question=text, llm_call=llm_call
+         )
+     except SuccessorDestinationUnavailable:
+-        harness.record_measure(
+-            inputs=[f"{RECEIPT_PREFIX}UNAVAILABLE", destination.id, problem_id]
+-        )
+         return None
+     harness.record_measure(
+         inputs=[f"{RECEIPT_PREFIX}ROUTED", destination.id, problem_id]
+--- python -m pytest tests/test_successor_questions.py -q
+E         
+E         Right contains one more item: ['successor-question:UNAVAILABLE', 'scratchpad.v1', 'pi-successor-route']
+E         Use -v to get more diff
+
+tests/test_successor_questions.py:282: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_scratch_disabled_run_discloses_instead_of_discarding
+1 failed, 8 passed in 0.23s
+
+=== MUTANT: visibility ===
+diff --git a/src/deepreason/successor/route.py b/src/deepreason/successor/route.py
+index b5defc82e..427faf79d 100644
+--- a/src/deepreason/successor/route.py
++++ b/src/deepreason/successor/route.py
+@@ -49,13 +49,16 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+     from deepreason.scratch.models import ScratchProvenanceV1
+     from deepreason.scratch.service import ScratchService
+ 
+-    manifest = getattr(harness, "_workflow_manifest", None)
+-    if manifest is not None:
+-        policy = getattr(manifest, "scratch_policy", None)
+-        if policy is None or not getattr(policy, "enabled", False):
+-            raise SuccessorDestinationUnavailable(
+-                "this run's scratch policy is disabled"
+-            )
++    # The run's own scratch policy, read at the CONFIGURATION layer like every
++    # other decision in this package: a manifest-launched run has this
++    # reconstructed onto its Config from the compiled policy, so there is one
++    # answer rather than two that can disagree. A configuration that carries no
++    # scratch policy at all says nothing, and silence is not a refusal.
++    policy = getattr(config, "scratchpad", None)
++    if policy is not None and not getattr(policy, "enabled", False):
++        raise SuccessorDestinationUnavailable(
++            "this run's scratch workspace is disabled"
++        )
+     service = ScratchService(harness)
+     try:
+         return service.create_block(
+@@ -63,7 +66,7 @@ def _write_scratch_block(harness, config, *, problem_id, question, llm_call=None
+             # stored block id (measured ff609dcc -> 248b3201 for the same
+             # content), and this is the shape `scratch/authoring.py` already
+             # uses for an unresolved question.
+-            {"content": question, "unfinished": "Successor question"},
++            {"content": "a successor question was filed", "unfinished": "Successor question"},
+             # `llm` is the only actor an interpretive scratch action may carry;
+             # the event validator refuses a harness-authored BLOCK_CREATED.
+             ScratchProvenanceV1(actor="llm", origin=problem_id),
+--- python -m pytest tests/test_successor_questions.py -q
+E        +  where 'SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handle":"B1","unfinished":"Succe...a reason merely to fill an optional field.\\nRelationships are provisional.\\nA guide is a temporary navigation aid."}' = RenderedScratchPackV1(text='SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handl...e510e898ec367a98a0c23e520fd827e9f58cb2ce'}, cluster_handles={}, link_handles={}, guide_handles={}), truncated_fields=0).text
+E        +    where RenderedScratchPackV1(text='SCRATCH_ADVISORY_CONTEXT_V1\n{"blocks":[{"content":"a successor question was filed","handl...e510e898ec367a98a0c23e520fd827e9f58cb2ce'}, cluster_handles={}, link_handles={}, guide_handles={}), truncated_fields=0) = PlannedConjectureContextV1(formal_fence_seq=2, scratch_fence_seq=2, problem_id='pi-successor-route', school_id=None, m...ection_receipt_ref=None, root_block_ids=None, expansion_request_hash=None, expansion_index=None, added_block_refs=None).rendered_context
+
+tests/test_successor_questions.py:259: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_questions.py::test_a_filled_field_becomes_exactly_one_linked_block
+FAILED tests/test_successor_questions.py::test_the_routed_block_reaches_a_conjecturer_context
+2 failed, 7 passed in 0.23s

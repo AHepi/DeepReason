@@ -1,0 +1,54 @@
+MUTATION PROOF — pin 1 of tests/test_successor_law_line.py
+Date: 2026-08-30T04:42:00Z
+Mutant: the successor destination registry wired into Scheduler._select_problem's
+        LIVENESS_QUEUE rank key (a rank bonus read from the channel).
+Mutant diff:
+diff --git a/src/deepreason/scheduler/scheduler.py b/src/deepreason/scheduler/scheduler.py
+index d774ac4dd..370661cf3 100644
+--- a/src/deepreason/scheduler/scheduler.py
++++ b/src/deepreason/scheduler/scheduler.py
+@@ -1177,8 +1177,10 @@ class Scheduler:
+             def rank(p):
+                 age = self._cycles - self._problem_worked.get(p.id, -1)
+                 weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
++                from deepreason.successor import resolve as _successor_resolve
++                bonus = 1.0 if _successor_resolve(self.config).default else 0.0
+                 return (
+-                    -(age * weight),
++                    -(age * weight) - bonus,
+                     p.provenance.trigger != SpawnTrigger.SEED,
+                     # AFTER the seed term, never before it: the operator's own
+                     # question wins every tie, and a wounded background must
+
+Command: python -m pytest tests/test_successor_law_line.py -q
+Output:
+    
+        Every negative check is paired with a POSITIVE ANCHOR on the same tree
+        (`DR-SCHEMA` check-writing rule 1): a moved or renamed package would
+        otherwise make this vacuous rather than failing.
+    
+        The bare word "successor" is deliberately NOT forbidden -- `rules/conj.py`
+        already uses it to describe `succ:*` problems as attention objects, and
+        forbidding an English word would make this test about spelling instead of
+        about coupling.
+        """
+        anchored = 0
+        offenders = []
+        for package in DECIDING_PACKAGES:
+            files = [p for p in package.rglob("*.py") if p not in PERMITTED]
+            assert files, package                              # positive anchor
+            anchored += len(files)
+            for path in files:
+                text = path.read_text()
+                for name in FORBIDDEN_NAMES:
+                    if name in text:
+                        offenders.append((str(path), name))
+        assert anchored > 20, anchored                         # positive anchor
+>       assert not offenders, offenders
+E       AssertionError: [('src/deepreason/scheduler/scheduler.py', 'deepreason.successor')]
+E       assert not [('src/deepreason/scheduler/scheduler.py', 'deepreason.successor')]
+
+tests/test_successor_law_line.py:117: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_successor_law_line.py::test_nothing_that_labels_ranks_or_admits_reads_a_successor_question
+1 failed, 7 passed in 0.18s

@@ -440,6 +440,23 @@ _PREFIX_MEANINGS: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 _DECLARED: tuple[SignalDeclaration, ...] = (
+    # The successor-question channel's mint receipt (operator law, 2026-08-29).
+    SignalDeclaration(
+        name="successor-problem-minted",
+        unit="event",
+        semantics="a problem was registered from a proposed successor question "
+                  "while the per-run minting gate was on (inputs: [signal, "
+                  "minted problem id, originating problem id, criticised "
+                  "target id]). Deterministic and idempotent: the same "
+                  "proposal registers one problem and emits one occurrence, so "
+                  "a count of these is a count of DISTINCT proposals acted on "
+                  "rather than of attempts. It is evidence that a gate was open "
+                  "and a proposal was taken, and nothing else: not evidence "
+                  "that the new problem is worth working, and never an input "
+                  "to rank -- a minted problem loses every rank tie to the "
+                  "operator's seed question by construction",
+        staleness="permanent",
+    ),
     # The v2 calculus program's three detection signals (Rung 2 / Amendment 3),
     # declared so Rung 1b-ii's allocation policy has something to consume.
     # Every one prices ATTENTION and none may reach a label.
@@ -808,6 +825,28 @@ _DISCHARGE_SIGNALS: tuple[SignalDeclaration, ...] = (
 
 
 _DECLARED_PREFIXES: tuple[SignalDeclaration, ...] = (
+    SignalDeclaration(
+        name="successor-question:",
+        unit="event",
+        semantics="how one PROPOSED successor question was DISPOSED (suffix = "
+                  "the typed disposition -- ROUTED when the selected "
+                  "destination accepted it, UNAVAILABLE when that destination "
+                  "could not accept it in this run, UNLINKED when the proposal "
+                  "had no problem to be linked to; inputs: [signal, "
+                  "destination id, problem id], and [signal, destination id] "
+                  "for UNLINKED). Emitted only where a question was actually "
+                  "filled, so its ABSENCE means none was proposed and never "
+                  "that one was dropped -- the same difference the premise "
+                  "channel's own receipt exists to record. It is evidence "
+                  "about the DISPATCH and nothing else: not evidence that the "
+                  "question is worth asking, not evidence about the criticism "
+                  "that proposed it, and never a reward or a penalty -- "
+                  "proposing costs a critic nothing and earns it nothing, so "
+                  "no label, rank, warrant or admission decision may read it. "
+                  "ROUTED says a destination accepted the text, never that "
+                  "anything acted on it",
+        staleness="permanent",
+    ),
     SignalDeclaration(
         name="discharge:",
         unit="event",
