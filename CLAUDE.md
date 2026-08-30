@@ -590,7 +590,19 @@ before treating a green soak as full coverage
   is BUILT and gated by a per-run flag, OFF by default, whose
   enablement emits the operator's own warning text; every piece is
   configuration, none is a code edit ("maximum configurable
-  surface").
+  surface"). SCOPE CONFIRMED (2026-08-30, operator verbatim:
+  "confirm"): "The P9 law of 2026-08-29 supersedes the 2026-08-15
+  decommissioning ruling FOR THE SUCCESSOR TRIGGER ALONE — one
+  producer, outside rules/, gated by a per-run flag defaulting OFF —
+  while the website development pipeline itself stays decommissioned."
+  The four implementation questions beneath the law were answered by
+  the monitor on the record (batch-2 lane B, 2026-08-30): the
+  frozen-surface-4 grant for the two Config fields GRANTED per the
+  documented recipe; the enablement warning declared on the destination
+  registry and the run's own record (road B); the criticism side stays
+  un-widened — a reader outside rules/ routes what criticism already
+  recorded (road B); and the seed-question guarantee ships as the
+  rank-TIE now, with strict domination parked as its own tranche.
 
 ## The map — `docs/map/` (read this before scoping any change)
 
