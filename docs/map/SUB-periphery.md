@@ -223,12 +223,14 @@ TARGETS would be unique for every content-addressed artifact, so SC would read
   set. What carries that is the STRICTNESS clause `any(a[x] > b[x] for x in
   shared)`, which is False over an empty `shared` — the check below is RED
   under both spellings of the real error (deleting that clause: `5 failed`;
-  short-circuiting an empty `shared` to `True`: `3 failed`) and GREEN under a
-  deleted `bool(shared)` guard, which is why the delivered code carries no such
-  guard and why an earlier wording of this entry, which named one, was wrong.
+  short-circuiting an empty `shared` to `True`: `3 failed`). An earlier wording
+  of this entry named a `bool(shared)` guard as the protection instead; deleting
+  that guard left every attached check GREEN, which is how the wording was shown
+  to be wrong. The guard is gone from the code as dead, and the check's first
+  clause pins its absence so the sentence stays re-derivable.
   Mutants and transcript:
   `experiments/2026-08-30-defect-formalism-rank-penalty/proof/pareto_mutation_2026-08-30.txt`.
-`check: python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q`
+`check: ! grep -q "bool(shared)" src/deepreason/capture/pareto.py && python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q`
 - **Adding one MCP tool moves FOUR pins, and no gate runs two of them.**
   `tests/test_mcp.py::SUPPORTED_TOOLS` and
   `tests/test_mcp_help.py::SUPPORTED_TOOL_NAMES` fail in the ordinary suite; the

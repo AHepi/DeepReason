@@ -10,31 +10,31 @@ verbatim, so the count cannot drift from the diff again.
 --- [1] CON-conjecture-kinds.md:102 ---
 python -m pytest tests/test_formalism_optional_rank.py::test_informal_and_formal_of_equal_standing_rank_equally tests/test_formalism_optional_rank.py::test_control_b_a_failed_battery_is_still_dominate ...(full text in the document)
 ....                                                                     [100%]
-4 passed in 0.59s
+4 passed in 0.39s
 exit: 0
 
 --- [2] CON-conjecture-kinds.md:242 ---
 python -m pytest tests/test_formalism_optional_rank.py -q
 ...........                                                              [100%]
-11 passed in 0.83s
+11 passed in 0.62s
 exit: 0
 
---- [3] SUB-periphery.md:231 ---
-python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_end_to_end -q
+--- [3] SUB-periphery.md:233 ---
+! grep -q "bool(shared)" src/deepreason/capture/pareto.py && python -m pytest tests/test_formalism_optional_rank.py::test_frontier_treats_a_missing_score_as_not_measured tests/test_loop.py::test_loop_ ...(full text in the document)
 .....                                                                    [100%]
-5 passed in 0.34s
+5 passed in 0.30s
 exit: 0
 
 --- [4] SUB-scheduler.md:73 ---
 grep -q "^def run_report(" src/deepreason/scheduler/scheduler.py && grep -q "^def pareto_scores(" src/deepreason/scheduler/scheduler.py && grep -q "return run_report(self.harness, self.config, diagnos ...(full text in the document)
 .                                                                        [100%]
-1 passed in 2.95s
+1 passed in 2.76s
 exit: 0
 
 --- [5] SUB-scheduler.md:177 ---
 python -m pytest tests/test_scheduler.py::test_focus_family_restricts_selection tests/test_scheduler.py::test_integration_budget_share_caps_connection_work tests/test_scheduler.py::test_multi_cycle_sp ...(full text in the document)
 ............                                                             [100%]
-12 passed in 11.04s
+12 passed in 9.61s
 exit: 0
 
 --- [6] SUB-scheduler.md:179 ---
@@ -44,7 +44,7 @@ exit: 0
 --- [7] SUB-scheduler.md:206 ---
 python -m pytest tests/test_formalism_optional_rank.py -q
 ...........                                                              [100%]
-11 passed in 0.71s
+11 passed in 0.67s
 exit: 0
 
 --- [bonus, NOT one of the seven] CON-conjecture-kinds.md's pre-existing

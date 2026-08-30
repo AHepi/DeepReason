@@ -501,7 +501,7 @@ again. All seven exit 0:
 |---|---|---|
 | 1 | `CON-conjecture-kinds.md:102` "Must never do" (NEW, four node ids) | `4 passed`, exit 0 |
 | 2 | `CON-conjecture-kinds.md:242` Traps (NEW) | `11 passed`, exit 0 |
-| 3 | `SUB-periphery.md:231` Traps (NEW) | `5 passed`, exit 0 |
+| 3 | `SUB-periphery.md:233` Traps (NEW) | `5 passed`, exit 0 |
 | 4 | `SUB-scheduler.md:73` Entry points (CHANGED — `pareto_scores` added to the grep chain) | `1 passed`, exit 0 |
 | 5 | `SUB-scheduler.md:177` "Where to change what" pytest chain (CHANGED — the new row's node id appended) | `12 passed`, exit 0 |
 | 6 | `SUB-scheduler.md:179` "Where to change what" symbol-grep chain (CHANGED — `pareto_scores` appended) | exit 0 |
@@ -674,7 +674,11 @@ Traps entry now attribute the no-shared-axis property to the STRICTNESS clause
 `any(a[x] > b[x] for x in shared)`, which is what actually carries it, and name
 the two mutations that turn the attached check RED — both run before the
 sentence was written, per the map law: deleting the strictness clause
-(`5 failed`) and short-circuiting an empty `shared` to `True` (`3 failed`).
+(`5 failed`) and short-circuiting an empty `shared` to `True` (`3 failed`). The
+entry also states that the delivered code carries no such guard, so the check
+gained a first clause, `! grep -q "bool(shared)" src/deepreason/capture/pareto.py`,
+that goes RED if anyone re-adds it — an unchecked code-state claim in a map
+document is the same defect one step removed.
 
 **Correction to the record, unfixable in place.** `fe6b29ed2`'s commit message
 carries the same wrong attribution ("Two points sharing no axis still never
