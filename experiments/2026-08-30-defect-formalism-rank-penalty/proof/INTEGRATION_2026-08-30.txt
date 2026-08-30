@@ -1,0 +1,53 @@
+INTEGRATED-TREE RE-VERIFICATION — lane C landed on the integration branch
+Branch: claude/deepreason-lane-c-b-integration-cq3u80
+Merge commit: 55658291e  (origin/main 109f2c0a1 + origin/claude/b2-lane-C 039cac0ae)
+Date: 2026-08-30. Box: 4 CPUs, otherwise idle (one instrument at a time).
+
+=== A. The 11 red-before/green-after tests ===
+$ python -m pytest tests/test_formalism_optional_rank.py -q
+11 passed in 0.43s
+
+=== B. Both architecture tests, mutation-proven ON THE INTEGRATED TREE ===
+### MUTANT 1 -- a fourth Pareto axis ('novelty') added to Config.PARETO_AXES
+353:    PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage", "novelty"])
+E         Use -v to get more diff
+
+tests/test_formalism_optional_rank.py:150: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_formalism_optional_rank.py::test_architecture_every_pareto_axis_declares_its_commitment_free_state
+1 failed, 10 passed in 0.32s
+
+### MUTANT 2 -- the penalty reintroduced: pareto_scores emits coverage 0.0 for an empty battery
+
+tests/test_formalism_optional_rank.py:161: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_formalism_optional_rank.py::test_informal_and_formal_of_equal_standing_rank_equally
+FAILED tests/test_formalism_optional_rank.py::test_a_partly_passing_battery_is_not_out_ranked_by_nothing_to_check
+FAILED tests/test_formalism_optional_rank.py::test_kind_blindness_prose_ranks_the_same_with_and_without_a_formal_channel
+FAILED tests/test_formalism_optional_rank.py::test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead
+4 failed, 7 passed in 0.32s
+
+### CONTROL -- the real integrated tree
+...........                                                              [100%]
+11 passed in 0.29s
+
+Tree restored after each mutant: `git status --short` empty (mutants never committed,
+backups held in the session scratchpad, never in the repo).
+
+=== C. RING 1 (12 files that recompute or consume a Pareto frontier) ===
+........................................................................ [ 61%]
+.............................................                            [100%]
+117 passed in 374.26s (0:06:14)
+
+=== D. RING 2 (stop-decision consumers; frontier_delta is a StopMetrics input) ===
+........................................................................ [ 55%]
+.........................................................                [100%]
+129 passed in 196.77s (0:03:16)
+
+RING TOTAL ON THE INTEGRATED TREE: 246 passed, 0 failed across 18 files.
+Identical to the lane branch's own measurement (DELIVERY.md §8: 117 + 129 = 246).
+tests/test_mcp_run.py -- the load-flaky file of finding 6 -- was GREEN here; the box
+was idle, which is the condition under which that file is green.
+
+NOTHING RED ON THE INTEGRATED TREE THAT WAS GREEN ON THE LANE BRANCH.
+drop_road_a.sh was NOT run: the operator chose landing, not the discard path.

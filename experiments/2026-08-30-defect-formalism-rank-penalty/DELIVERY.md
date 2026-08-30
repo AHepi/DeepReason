@@ -736,3 +736,63 @@ convention. Proven both ways in `proof/road_law_probe_INSTRUMENT_2026-08-30.txt`
 unchanged output and exit 0 on this tree, exit 2 against a mutant whose
 `run_report` raises.
 
+
+---
+
+## 12. THE PARK IS CLOSED — the operator answered, and road (a) is INTEGRATED (2026-08-30)
+
+`STOP.md` asked for one word. **The operator's word was "yes"** — land lane C.
+That is the MERGE AUTHORITY for this tranche, and it is the whole authority:
+nothing below reopens the fork, and no part of §5's narrowing is now a choice.
+
+What that answer settles, stated plainly so no later reader has to infer it:
+
+- Road (a) — *an axis the harness did not measure is OMITTED from the pairwise
+  comparison, never scored at its floor* — is **no longer BUILT AND PARKED. It
+  is SHIPPED.** Commit `fe6b29ed2`'s subject line, which begins "BUILT AND
+  PARKED, NOT INTEGRATED", records the state of the branch on the day it was
+  written and is now HISTORY, not status. A commit message cannot be edited
+  without rewriting the hash `STOP.md` hands the operator, so the correction
+  lives here — the same disposition finding 2 took.
+- **`drop_road_a.sh` was NOT run and must not be.** It is the discard path for
+  an answer of "b" or "c". It stays in the tranche as the proven way out that
+  finding 1 owes, not as an action anyone is expected to take.
+- The two sub-choices §5 left live are answered by the same word: road (c)'s
+  typed note is NOT added on top (the answer was "yes", not "a+c"), and
+  `STOP.md`'s two named consequences are ACCEPTED — including consequence 2,
+  that not competing on coverage also means not defending with it.
+- What the answer does NOT settle, and no one should read it as settling: the
+  `hv`/`reach` 0.0-default shape (§10, parked as L3), site (b) = P3 (`PARKED.md`
+  L2, an operator decision that was never asked here), and whether the 146
+  newly-publishable conjectures were any good. Accepted still does not mean true.
+
+### Re-verification on the INTEGRATED tree
+
+The lane's own green was measured on the lane branch. Landing re-measures it on
+the merged tree, because that is the tree that ships. Full transcript:
+`proof/INTEGRATION_2026-08-30.txt`.
+
+| instrument | lane branch | integrated tree | verdict |
+|---|---|---|---|
+| the 11 red-before/green-after tests | `11 passed` | `11 passed in 0.43s` | same |
+| architecture test 1, MUTANT 1 (a fourth axis `novelty` in `Config.PARETO_AXES`) | `1 failed, 10 passed` | `1 failed, 10 passed` — `test_architecture_every_pareto_axis_declares_its_commitment_free_state` | same |
+| architecture test 2, MUTANT 2 (the penalty reintroduced: `coverage` 0.0 on an empty battery) | `4 failed, 7 passed` | `4 failed, 7 passed` — including `test_architecture_axes_that_must_not_be_zeroed_are_omitted_instead` | same |
+| control (real tree, no mutant) | `11 passed` | `11 passed` | same |
+| RING 1 — 12 files that recompute or consume a Pareto frontier | `117 passed` | `117 passed in 374.26s` | same |
+| RING 2 — the stop-decision consumers | `129 passed` | `129 passed in 196.77s` | same |
+| **ring total** | **246 passed, 0 failed / 18 files** | **246 passed, 0 failed / 18 files** | **same** |
+
+**Nothing was red on the integrated tree that was green on the lane branch**, so
+nothing was adapted, narrowed, or silently repaired at the merge. Both mutants
+were applied to the working tree, measured, and reverted; `git status --short`
+was empty afterwards and neither mutant was ever committed.
+
+`tests/test_mcp_run.py` — finding 6's load-flaky file — was **green** here. The
+box was idle and one instrument ran at a time, which is precisely the condition
+finding 6 says that file needs. That is a confirmation of finding 6's diagnosis,
+not a refutation of it: the durable repair is still owed by a tranche that owns
+the file.
+
+The full gate and the full `docs_verify` are NOT this section's instruments; they
+are run once at the integration boundary, over both landed lanes together, and
+their transcripts live with the integration commit.
