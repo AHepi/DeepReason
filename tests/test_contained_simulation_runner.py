@@ -111,7 +111,6 @@ def test_worker_identity_is_frozen_and_fingerprinted():
     fingerprint = _backend().fingerprint()
     assert fingerprint["backend"] == "simulation-python-contained"
     assert fingerprint["worker_sha256"] == CONTAINED_WORKER_SHA256
-    assert fingerprint["network_denial"] == "namespace_unshared"
 
 
 def test_worker_environment_is_a_fixed_allowlist(monkeypatch):
@@ -132,6 +131,26 @@ def test_worker_environment_is_a_fixed_allowlist(monkeypatch):
 
 
 def test_containment_limits_cover_every_resource_class():
+    """The declared numbers, pinned on the pure function that produces them.
+
+    `ContainedSimulationBackend.resource_limits()` reads its five limit values
+    straight out of `_containment_limits()`, so comparing the two puts the same
+    function on both sides of the equals sign — an equality that holds whether
+    or not one `setrlimit` ever reaches a child. Its `"filesystem"`, `"network"`
+    and `"network_denial"` entries are dict literals
+    (`src/deepreason/verification/contained.py:519-521`), which hold whether or
+    not the containment works. Neither shape can fail for the reason it exists,
+    so those properties are measured by EFFECT in
+    `tests/test_sandbox_guard.py`:
+    `test_the_contained_child_really_receives_every_declared_rlimit` reads the
+    limits back out of a real child,
+    `test_the_contained_backend_prefix_actually_denies_network` runs the probe
+    inside and outside the prefix, and
+    `test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive` pins
+    what is observably true of the scratch directory. See
+    `docs/map/SUB-verification.md`, the self-report Trap.
+    """
+
     limits = _containment_limits(
         maximum_wall_ms=20_000, maximum_memory_bytes=512 * 1024 * 1024
     )
@@ -142,11 +161,6 @@ def test_containment_limits_cover_every_resource_class():
         "nofile": 64,
         "nproc": 2_048,
     }
-    reported = _backend().resource_limits()
-    assert reported["network"] is False
-    assert reported["filesystem"] == "ephemeral scratch workdir"
-    for key in ("cpu_seconds", "memory_bytes", "fsize_bytes", "nofile", "nproc"):
-        assert reported[key] == limits[key]
 
 
 def test_missing_network_namespace_fails_closed(monkeypatch):
@@ -373,8 +387,12 @@ def test_controller_executes_sandboxed_python_and_replay_validates(tmp_path):
     attempt = receipt.attempts[-1]
     assert attempt.fingerprint["backend"] == "simulation-python-contained"
     assert attempt.fingerprint["worker_sha256"] == CONTAINED_WORKER_SHA256
+    # CARRIAGE, not containment: `invariants.py`'s capability-receipt check
+    # fails the replay when this field is anything but False, so the receipt
+    # must keep carrying it. Whether it is TRUE is measured by effect in
+    # tests/test_sandbox_guard.py::
+    # test_the_contained_backend_prefix_actually_denies_network.
     assert receipt.resource_limits["network"] is False
-    assert receipt.resource_limits["filesystem"] == "ephemeral scratch workdir"
     records = json.loads(harness.blobs.get(attempt.output_ref))
     assert records[0]["observables"] == {"x": 72.0}
     work_order = next(iter(harness.capability_state.work_orders.values()))

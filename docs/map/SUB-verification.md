@@ -188,6 +188,27 @@ when `stats` was otherwise empty.
   neither was true of model-authored code. The committed suite asserted those
   strings. Assert a DIFFERENTIAL — run the probe inside and outside the
   containment and compare — or the test cannot fail for the reason it exists.
+  ADDRESSED 2026-08-30 (`experiments/2026-08-30-change-execution-safety-parks/`
+  discharges the 2026-08-27 PARKED.md P4): the ten self-reports across
+  `tests/test_contained_simulation_runner.py` and
+  `tests/test_simulation_runner_default.py` are converted, and seven
+  differentials now stand in `tests/test_sandbox_guard.py`'s OS-layer section —
+  network denial for EACH of the two independently probed prefixes, the worker
+  argv, the scratch cwd/env/teardown, an rlimit read-back out of a real child,
+  and both environment scrubs. Each is proved falsifiable by a source mutation
+  that turns it RED while the confession it replaced stays true
+  (`proof/mutation_proof.out`). Two properties of that proof are the reusable
+  part. A differential must be TWO-ARMED and skip when the host has nothing to
+  deny: run inside a lo-only namespace, the one-armed form the tree carried
+  PASSES while the two-armed form SKIPS. And the two prefixes are separate
+  subjects — mutating `contained.py`'s probe leaves the `sandbox_os` test
+  green, and vice versa, so neither differential says anything about the other
+  channel. RESIDUE, not fixed here: `"filesystem": "ephemeral scratch workdir"`
+  is still FALSE — the prefix carries `--net` only, and a child inside it reads
+  `/etc/hostname` and writes outside its scratch directory
+  (`proof/filesystem_not_a_jail.out`). Not a live escape (the language boundary
+  refuses `open`), and correcting the string is frozen-surface-3 work, parked.
+`check: python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or argv_really_carries or scratch_directory_is_the_cwd or every_declared_rlimit or environment_reaches_the_child" && test "$(grep -cE 'def (test_the_contained_backend_prefix_actually_denies_network|test_the_network_namespace_actually_denies_network|test_the_contained_worker_argv_really_carries_the_probed_prefix|test_the_contained_scratch_directory_is_the_cwd_and_does_not_survive|test_the_contained_child_really_receives_every_declared_rlimit|test_the_contained_worker_environment_reaches_the_child_scrubbed|test_the_code_testing_worker_environment_reaches_the_child_scrubbed)\(' tests/test_sandbox_guard.py)" -eq 7 && ! grep -rqE 'assert .*(ephemeral scratch workdir|\["network_denial"\])' tests/ --include=*.py`
 
 - **A leg is not a repair attempt, and `attempt_trace` cannot be borrowed to
   hold one.** The split-budget seat protocol (`llm/split.py`) turns one seat

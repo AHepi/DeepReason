@@ -1,0 +1,34 @@
+SUB-verification.md: 32 checks, 0 parse errors
+  PASS :41  sh -c '! grep -nE "write_text|write_bytes|open\(" src/deepreason/invaria
+  PASS :46  grep -q "def verify_root(root: Path, meter_total: int | None = None) -> 
+  PASS :65  for s in verify_root_report verify_post_commit_report _legacy_channel _t
+  PASS :73  for s in verify_root _amendment_epochs _controller_v3_history _legacy_br
+  PASS :89  python -c "import deepreason.verification as v; [getattr(v, n) for n in 
+  PASS :94  grep -q "_EXPORTS = {" src/deepreason/verification/__init__.py && python
+  PASS :102  python -m pytest "tests/test_persistence_invariants.py::test_replay_veri
+  PASS :109  grep -q "def _fresh_replay_validation" src/deepreason/runtime/terminal_a
+  PASS :117  grep -q "CONTAINED_WORKER_SHA256 = sha256_hex(CONTAINED_WORKER_SOURCE_V1
+  PASS :134  grep -q 'stats\["signal_snapshot"\] = read_signal_snapshot' src/deepreas
+  PASS :154  grep -q "_SECURITY_CHECKS = frozenset(" src/deepreason/verification/repo
+  PASS :155  grep -q "def _guard(tree: ast.AST) -> None:" src/deepreason/verification
+  PASS :176  python -m pytest tests/test_sandbox_guard.py -q -k "contained or declara
+  PASS :184  python -m pytest tests/test_sandbox_guard.py -q -k "network"
+  PASS :211  python -m pytest tests/test_sandbox_guard.py -q -k "denies_network or ar
+  PASS :235  python -m pytest tests/test_split_leg_recording.py::test_a_leg_is_never_
+  PASS :264  python -c "import inspect, re; from deepreason.invariants import verify_
+  PASS :298  grep -q "cap_envelope(knob, _configured_role_cap(knob))" src/deepreason/
+  PASS :305  python -c "import re,pathlib; inv=pathlib.Path('src/deepreason/invariant
+  PASS :330  sh -c 'grep -q "return self.integrity_valid and self.security_valid" src
+  PASS :331  python -c "
+  PASS :360  grep -q "def _declared_model_phase_deferrals(" scripts/wheel_operational
+  PASS :366  grep -q 'check == "foreign-criticism"' src/deepreason/verification/repor
+  PASS :388  python -m pytest tests/test_v6_verification_transactions.py -k "school_f
+  PASS :393  grep -q 'return {"violations": \[{"check": "open", "detail": repr(e)\[:4
+  PASS :398  python -m pytest "tests/test_verifier_registry.py::test_overrun_is_never
+  PASS :404  grep -q "verifier fingerprint changed after registration" src/deepreason
+  PASS :410  grep -q "toolchain_id must be an exact resolved coordinate" src/deepreas
+  PASS :415  grep -q "def _resolve_observable(output: dict, name: str) -> Any:" src/d
+  PASS :421  python -c "import subprocess,sys; r=[subprocess.run([sys.executable,'-m'
+  PASS :424  grep -q "    from deepreason.invariants import verify_root" src/deepreas
+  PASS :436  grep -q "artifact.provenance.role == \"import\"" src/deepreason/invarian
+SUB-verification.md: 0 failed
